@@ -1,0 +1,207 @@
+Attributes: Application, 0x11229d400, pid: 93223, label: 'DUNE'
+Element subtree:
+ →Application, 0x11229d400, pid: 93223, label: 'DUNE'
+    Window (Main), 0x11229ca00, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x11229d7c0, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x11229c000, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x11229c140, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x11229c280, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x11229c3c0, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x11229c500, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x11229c640, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x11229c780, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x104b8b840, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x104b8b200, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x104b8b480, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x104b8b980, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x104b8bd40, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x104b8bc00, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: '도구 막대'
+                              Other, 0x104b88280, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x104b8be80, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Muscle Map'
+                            Other, 0x104b88000, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x104b8bac0, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x104b8b700, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x104b8b340, {{0.0, 0.0}, {466.0, 678.0}}
+                                    Other, 0x104b8b5c0, {{0.0, 0.0}, {382.0, 678.0}}, identifier: 'activity-musclemap-detail-screen'
+                                      ScrollView, 0x104b8af80, {{0.0, 0.0}, {466.0, 334.0}}
+                                        Other, 0x104b8aa80, {{0.0, -177.0}, {382.0, 511.0}}
+                                          StaticText, 0x104b89b80, {{16.0, -154.2}, {109.7, 30.3}}, label: '모든 13개 근육군 준비 완료'
+                                          Button, 0x104b89900, {{133.7, -161.0}, {44.0, 44.0}}, identifier: 'activity-muscle-map-algorithm-info', label: '근육 지도 안내'
+                                          SegmentedControl, 0x104b8ad00, {{206.0, -154.3}, {160.0, 31.0}}, identifier: 'activity-muscle-map-mode'
+                                            Button, 0x104b8a6c0, {{206.0, -154.3}, {80.0, 32.0}}, label: '회복', Selected
+                                            Button, 0x104b8abc0, {{286.0, -154.3}, {80.0, 32.0}}, label: '세트'
+                                          Button, 0x1081d0a00, {{82.3, -39.2}, {38.2, 7.9}}, identifier: 'musclemap-body-front-traps'
+                                          Button, 0x1081d3700, {{61.1, -33.6}, {80.5, 22.6}}, identifier: 'musclemap-body-front-shoulders'
+                                          Button, 0x1081d0000, {{75.3, -30.3}, {52.0, 28.3}}, identifier: 'musclemap-body-front-chest'
+                                          Button, 0x1081d0280, {{240.3, -31.9}, {80.5, 21.1}}, identifier: 'musclemap-body-back-shoulders'
+                                          Button, 0x1081d03c0, {{250.2, -29.0}, {60.7, 21.5}}, identifier: 'musclemap-body-back-lats'
+                                          Button, 0x1081d0500, {{62.5, -14.4}, {77.8, 31.1}}, identifier: 'musclemap-body-front-triceps'
+                                          Button, 0x1081d0640, {{58.0, -9.3}, {86.6, 21.0}}, identifier: 'musclemap-body-front-biceps'
+                                          Button, 0x1081d2440, {{240.8, -15.1}, {79.5, 17.0}}, identifier: 'musclemap-body-back-triceps'
+                                          Button, 0x1081d2580, {{261.2, -35.0}, {38.7, 42.0}}, identifier: 'musclemap-body-back-traps'
+                                          Button, 0x1081d26c0, {{88.1, 8.8}, {26.4, 23.1}}, identifier: 'musclemap-body-front-core'
+                                          Button, 0x1081d2800, {{44.8, 12.5}, {113.1, 44.1}}, identifier: 'musclemap-body-front-forearms'
+                                          Button, 0x1081d2940, {{256.7, 9.8}, {47.7, 36.4}}, identifier: 'musclemap-body-back-back'
+                                          Button, 0x1081d2a80, {{226.0, 20.9}, {109.2, 36.9}}, identifier: 'musclemap-body-back-forearms'
+                                          Button, 0x1081d2bc0, {{72.7, 52.3}, {57.2, 64.2}}, identifier: 'musclemap-body-front-quadriceps'
+                                          Button, 0x1081d2d00, {{255.0, 44.9}, {51.1, 34.1}}, identifier: 'musclemap-body-back-glutes'
+                                          Button, 0x1081d2e40, {{255.2, 74.5}, {50.6, 55.8}}, identifier: 'musclemap-body-back-hamstrings'
+                                          Button, 0x1081d2f80, {{74.3, 132.9}, {54.0, 53.3}}, identifier: 'musclemap-body-front-calves'
+                                          Button, 0x1081d30c0, {{253.6, 124.2}, {54.1, 42.9}}, identifier: 'musclemap-body-back-calves'
+                                          StaticText, 0x1081d3200, {{16.0, 253.0}, {28.7, 13.3}}, identifier: 'activity-muscle-map-legend-recovery', label: '회복됨'
+                                          StaticText, 0x1081d3340, {{346.7, 253.0}, {19.3, 13.3}}, identifier: 'activity-muscle-map-legend-recovery', label: '피로'
+                                          Button, 0x1081d3480, {{129.3, 282.3}, {123.3, 35.7}}, label: '3D 근육맵', Disabled
+                                            StaticText, 0x1081d35c0, {{129.3, 282.3}, {123.3, 35.7}}, label: '3D 근육맵', Disabled
+                                            Image, 0x1122a0000, {{143.3, 290.7}, {16.7, 19.0}}, identifier: 'cube', label: '심도 효과', Disabled
+                                        Other, 0x1122a0140, {{433.0, 82.0}, {30.0, 252.0}}, label: '수직 스크롤 막대, 2페이지', value: 100%
+                                          Other, 0x1122a0280, {{460.0, 177.3}, {3.0, 153.7}}
+                                        Other, 0x1122a03c0, {{433.0, 82.0}, {30.0, 252.0}}, label: '수직 스크롤 막대, 2페이지', value: 100%
+                                          Other, 0x1122a0500, {{460.0, 177.3}, {3.0, 153.7}}
+                                      ScrollView, 0x1122a0640, {{0.0, 334.0}, {466.0, 344.0}}
+                                        Other, 0x1122a0780, {{0.0, 334.0}, {382.0, 1537.0}}
+                                          Other, 0x1122a08c0, {{16.0, 334.0}, {350.0, 317.3}}, identifier: 'musclemap-detail-selected-muscle'
+                                            Image, 0x1122a0a00, {{36.3, 354.0}, {23.3, 24.0}}, identifier: 'figure.strengthtraining.traditional', label: '전통 근력 운동을 하는 사람'
+                                            StaticText, 0x1122a0b40, {{72.0, 355.8}, {29.7, 20.3}}, label: '가슴'
+                                            StaticText, 0x1122a0c80, {{280.7, 359.3}, {14.3, 13.3}}, label: 'L1'
+                                            StaticText, 0x1122a0dc0, {{297.0, 358.8}, {45.0, 14.3}}, label: '완전 회복'
+                                            Other, 0x1122a0f00, {{40.0, 402.2}, {222.7, 90.8}}
+                                              Image, 0x1122a1040, {{41.0, 403.0}, {9.0, 11.7}}, identifier: 'flame.fill', label: '불꽃'
+                                              StaticText, 0x1122a1180, {{53.0, 402.2}, {28.7, 13.3}}, label: '피로도'
+                                              Image, 0x1122a12c0, {{204.3, 403.7}, {13.7, 10.3}}, identifier: 'chart.bar.fill', label: '막대 차트'
+                                              StaticText, 0x1122a1400, {{221.3, 402.2}, {41.3, 13.3}}, label: '주간 볼륨'
+                                              StaticText, 0x1122a1540, {{40.0, 417.7}, {51.0, 18.0}}, label: 'L1 / L10'
+                                              StaticText, 0x1122a1680, {{203.0, 417.5}, {43.0, 18.0}}, label: '3 sets'
+                                              Image, 0x1122a17c0, {{41.0, 461.0}, {11.0, 11.0}}, identifier: 'clock.fill', label: '시계'
+                                              StaticText, 0x1122a1900, {{55.0, 459.7}, {51.0, 13.3}}, label: '마지막 운동'
+                                              Image, 0x1122a1a40, {{204.0, 461.0}, {11.0, 11.0}}, identifier: 'moon.fill', label: '방해금지 모드'
+                                              StaticText, 0x1122a1b80, {{218.0, 459.7}, {41.3, 13.3}}, label: '수면 보정'
+                                              StaticText, 0x1122a1cc0, {{40.0, 475.0}, {50.0, 18.0}}, label: '1시간 전'
+                                              StaticText, 0x1122a1e00, {{203.0, 475.0}, {36.7, 18.0}}, label: '1.10×'
+                                            Button, 0x1122a1f40, {{32.0, 513.0}, {61.0, 14.3}}, identifier: 'activity-muscle-detail-calculation', label: '계산 보기'
+                                              Image, 0x1122a2080, {{33.0, 514.3}, {12.0, 12.0}}, identifier: 'info.circle', label: '정보'
+                                              StaticText, 0x1122a21c0, {{48.0, 513.0}, {45.0, 14.3}}, label: '계산 보기'
+                                            StaticText, 0x1122a2300, {{32.0, 539.3}, {26.0, 18.0}}, label: '운동'
+                                            Image, 0x1122a2440, {{34.0, 566.3}, {16.0, 16.0}}, label: 'Equipment/equipment.barbell'
+                                            StaticText, 0x1122a2580, {{60.0, 565.3}, {95.0, 18.0}}, label: '바벨 벤치프레스'
+                                            Image, 0x1122a26c0, {{34.0, 592.3}, {16.0, 16.0}}, label: 'Equipment/equipment.barbell'
+                                            StaticText, 0x1122a2800, {{60.0, 591.3}, {151.0, 18.0}}, label: '인클라인 바벨 벤치프레스'
+                                            Image, 0x1122a2940, {{34.0, 618.3}, {16.0, 16.0}}, label: 'Equipment/equipment.barbell'
+                                            StaticText, 0x1122a2a80, {{60.0, 617.3}, {151.0, 18.0}}, label: '디클라인 바벨 벤치프레스'
+                                          Image, 0x1122a2bc0, {{44.0, 685.3}, {18.7, 14.0}}, identifier: 'musclemap-detail-volume-section', label: '막대 차트'
+                                          StaticText, 0x1122a2d00, {{68.7, 683.3}, {117.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Volume Analysis'
+                                          StaticText, 0x1122a2e40, {{44.0, 819.3}, {98.7, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '근육별 주간 목표'
+                                          Stepper, 0x1122a2f80, {{150.7, 812.3}, {187.3, 32.0}}, identifier: 'musclemap-detail-volume-section', label: '15 세트', value: 15
+                                            Button, 0x1122a30c0, {{244.0, 812.3}, {47.0, 32.0}}, identifier: 'musclemap-detail-volume-section-Decrement', label: '15 세트, 감소', value: 15
+                                            Button, 0x1122a3200, {{291.0, 812.3}, {47.0, 32.0}}, identifier: 'musclemap-detail-volume-section-Increment', label: '15 세트, 증가', value: 15
+                                          StaticText, 0x1122a3340, {{32.0, 872.3}, {63.0, 20.3}}, identifier: 'musclemap-detail-volume-section', label: '근육 부위'
+                                          Image, 0x1122a3480, {{44.7, 912.3}, {11.0, 10.7}}, identifier: 'musclemap-detail-volume-section', label: '조정을 하는 사람'
+                                          StaticText, 0x1122a35c0, {{68.0, 908.7}, {13.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '등'
+                                          StaticText, 0x1122a3700, {{314.7, 910.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1122a3840, {{43.0, 960.7}, {14.0, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '전통 근력 운동을 하는 사람'
+                                          StaticText, 0x1122a3980, {{68.0, 958.7}, {26.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '가슴'
+                                          StaticText, 0x1122a3ac0, {{314.7, 960.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1122a3c00, {{45.3, 1010.7}, {9.0, 14.0}}, identifier: 'musclemap-detail-volume-section', label: '걷기'
+                                          StaticText, 0x1122a3d40, {{68.0, 1008.7}, {26.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '둔근'
+                                          StaticText, 0x1122a3e80, {{314.7, 1010.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1122a4000, {{42.7, 1063.3}, {15.0, 9.0}}, identifier: 'musclemap-detail-volume-section', label: '채워진 아령'
+                                          StaticText, 0x1122a4140, {{68.0, 1058.7}, {26.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '삼두'
+                                          StaticText, 0x1122a4280, {{314.7, 1060.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1122a43c0, {{45.3, 1110.7}, {9.0, 14.0}}, identifier: 'musclemap-detail-volume-section', label: '걷기'
+                                          StaticText, 0x1122a4500, {{68.0, 1108.7}, {52.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '대퇴사두'
+                                          StaticText, 0x1122a4640, {{314.7, 1110.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1122a4780, {{45.3, 1160.7}, {9.0, 14.0}}, identifier: 'musclemap-detail-volume-section', label: '걷기'
+                                          StaticText, 0x1122a48c0, {{68.0, 1158.7}, {52.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '햄스트링'
+                                          StaticText, 0x1122a4a00, {{314.7, 1160.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1122a4b40, {{41.0, 1214.7}, {18.0, 6.3}}, identifier: 'musclemap-detail-volume-section', label: '코어 트레이닝을 하는 사람'
+                                          StaticText, 0x1122a4c80, {{68.0, 1208.7}, {26.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '코어'
+                                          StaticText, 0x1122a4dc0, {{314.7, 1210.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '1/15'
+                                          Image, 0x1122a4f00, {{46.0, 1261.0}, {8.3, 13.3}}, identifier: 'musclemap-detail-volume-section', label: '팔을 벌린 사람'
+                                          StaticText, 0x1122a5040, {{68.0, 1258.7}, {26.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '승모'
+                                          StaticText, 0x1122a5180, {{314.7, 1260.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1122a52c0, {{46.0, 1311.0}, {8.3, 13.3}}, identifier: 'musclemap-detail-volume-section', label: '팔을 벌린 사람'
+                                          StaticText, 0x1122a5400, {{68.0, 1308.7}, {26.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '어깨'
+                                          StaticText, 0x1122a5540, {{314.7, 1310.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1122a5680, {{42.7, 1363.3}, {15.0, 9.0}}, identifier: 'musclemap-detail-volume-section', label: '채워진 아령'
+                                          StaticText, 0x1122a57c0, {{68.0, 1358.7}, {26.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '전완'
+                                          StaticText, 0x1122a5900, {{314.7, 1360.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1122a5a40, {{42.7, 1413.3}, {15.0, 9.0}}, identifier: 'musclemap-detail-volume-section', label: '채워진 아령'
+                                          StaticText, 0x1122a5b80, {{68.0, 1408.7}, {26.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '이두'
+                                          StaticText, 0x1122a5cc0, {{314.7, 1410.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1122a5e00, {{44.7, 1462.3}, {11.0, 10.7}}, identifier: 'musclemap-detail-volume-section', label: '조정을 하는 사람'
+                                          StaticText, 0x1122a5f40, {{68.0, 1458.7}, {26.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '광배'
+                                          StaticText, 0x1122a6080, {{314.7, 1460.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1122a61c0, {{45.3, 1510.7}, {9.0, 14.0}}, identifier: 'musclemap-detail-volume-section', label: '걷기'
+                                          StaticText, 0x1122a6300, {{68.0, 1508.7}, {39.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '종아리'
+                                          StaticText, 0x1122a6440, {{314.7, 1510.5}, {27.3, 14.3}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1122a6580, {{45.3, 1572.0}, {17.0, 17.0}}, identifier: 'musclemap-detail-volume-section', label: '선택됨', Selected
+                                          StaticText, 0x1122a66c0, {{71.7, 1571.5}, {95.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: '트레이닝 밸런스'
+                                          StaticText, 0x1122a6800, {{44.0, 1598.3}, {254.7, 30.3}}, identifier: 'musclemap-detail-volume-section', label: 'Your training is well-balanced across muscle groups.'
+                                          Image, 0x1122a6940, {{44.0, 1690.0}, {12.3, 18.0}}, identifier: 'musclemap-detail-recovery-section', label: '텍스트 클립보드에 있는 하트'
+                                          StaticText, 0x1122a6a80, {{62.3, 1690.0}, {55.7, 18.0}}, identifier: 'musclemap-detail-recovery-section', label: '회복 상태'
+                                          StaticText, 0x1122a6bc0, {{59.0, 1749.3}, {26.0, 24.0}}, identifier: 'musclemap-detail-recovery-section', label: '13'
+                                          StaticText, 0x1122a6d00, {{112.0, 1744.2}, {143.0, 18.0}}, identifier: 'musclemap-detail-recovery-section', label: '13/13 muscles ready'
+                                          StaticText, 0x1122a6e40, {{112.0, 1764.2}, {182.0, 14.3}}, identifier: 'musclemap-detail-recovery-section', label: 'All muscle groups are recovered'
+                                          Image, 0x1122a6f80, {{43.7, 1826.7}, {16.7, 15.0}}, identifier: 'musclemap-detail-recovery-section', label: '원형 화살표가 있는 시계'
+                                          StaticText, 0x1122a70c0, {{69.7, 1827.0}, {48.7, 14.3}}, identifier: 'musclemap-detail-recovery-section', label: '다음 준비:'
+                                          StaticText, 0x1122a7200, {{126.3, 1827.0}, {10.7, 14.3}}, identifier: 'musclemap-detail-recovery-section', label: '등'
+                                          StaticText, 0x1122a7340, {{315.0, 1827.0}, {23.0, 14.3}}, identifier: 'musclemap-detail-recovery-section', label: '22h'
+                                          Other, 0x1122a7480, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'musclemap-detail-volume-section'
+                                        Other, 0x1122a75c0, {{433.0, 334.0}, {30.0, 285.0}}, label: '수직 스크롤 막대, 5페이지', value: 0%
+                                          Other, 0x1122a7700, {{460.0, 337.0}, {3.0, 60.7}}
+                                        Other, 0x1122a7840, {{433.0, 334.0}, {30.0, 285.0}}, label: '수직 스크롤 막대, 5페이지', value: 0%
+                                          Other, 0x1122a7980, {{460.0, 337.0}, {3.0, 60.7}}
+                Other, 0x1122a7ac0, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x1122a7c00, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: '도구 막대'
+                    Other, 0x1122a7d40, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x1122a7e80, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x112294000, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x112294140, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x112294280, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x1122943c0, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x112294500, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x112294640, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x112294780, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x1122948c0, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x112294a00, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x112294b40, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x112294c80, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x112294dc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x112294f00, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x112295040, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x112295180, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1122952c0, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x112295400, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x112295540, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x112295680, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: '채워진 텍스트 클립보드에 있는 하트'
+                                          Button, 0x1122957c0, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                                            Image, 0x112295900, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: '불꽃'
+                                          Button, 0x112295a40, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x112295b80, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: '나뭇잎'
+                                          Button, 0x112295cc0, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x112295e00, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: '체크 표시가 있는 체크리스트'
+                                        Other, 0x112295f40, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x112296080, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x1122961c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x112296300, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x112296440, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x112296580, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x1122966c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x112296800, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x112296940, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x112296a80, {{396.0, 494.0}, {44.0, 58.0}}
+                                          Other, 0x112296bc0, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x112296d00, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x112296e40, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x112296f80, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x1122970c0, {{396.0, 494.0}, {44.0, 58.0}}
+                                                  Other, 0x112297200, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x112297340, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x112297480, {{396.0, 494.0}, {44.0, 58.0}}
+              Other, 0x1122975c0, {{191.0, 322.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x11229d400, pid: 93223, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x112297700, pid: 93223, label: 'DUNE'
+  }

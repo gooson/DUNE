@@ -1,0 +1,726 @@
+{
+  "status": "installed_four_a03_rows",
+  "installed": true,
+  "screen_id": "A03",
+  "scope": "A04 disables 3D entry; actual 2D map only",
+  "source_head": "d56336d346a8b6413be4e45a4d2bf8aee59d139a",
+  "validation_revision": "8274d1cb4883515019d01045807b3ca1c0082922",
+  "selector": "DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled",
+  "records": {
+    "regular": {
+      "before": {
+        "file": "assets/regular-before.png",
+        "sha256": "54f09ac30a4ffbee1f88e6f4d8bc734d4409907e4e61a442ba53a595dec28864",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a04/Health/docs/design/phone-design-map/actual/regular/images/A03.png",
+        "capture_index_entry": {
+          "row_id": "A03",
+          "evidence": "activity-musclemap-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
+          "action": "tap activity-musclemap-detail-link",
+          "timestamp": 1791816392.515,
+          "image": "AF3FC08B-779F-469B-8230-A0A45AF961B3.png",
+          "screen": "screen-0-1320x2868-tap activity-musclemap-detail-link_0_0C9B9344-EC39-434A-825E-A9999C754502.png",
+          "file": "A03.png"
+        },
+        "exact_revision_and_pose": "unknown; historical canonical entry only"
+      },
+      "after": {
+        "file": "assets/regular-after.png",
+        "sha256": "a92d91698fef9b7144819995007c9403308477eed4ab0170a00032ef829ba4cf",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/ui-phone-default-map-current/attachments/2165B4CB-F36A-4F48-87C0-371FA9C99DA3.png",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "2165B4CB-F36A-4F48-87C0-371FA9C99DA3.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-A03 default map with disabled 3D entry_0_48B3B519-40EE-40DF-9E4C-9A1C74C0FA4B.png",
+          "timestamp": 1793399347.654
+        },
+        "hierarchies": [
+          {
+            "file": "assets/proofs/regular/5FC06401-CA87-4F55-906F-03565AE3A3DE.txt",
+            "sha256": "dca9325c468b90a9f1cfa61f601b1156e6733ef25c3670a8df5d5048689203b7",
+            "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/ui-phone-default-map-current/attachments/5FC06401-CA87-4F55-906F-03565AE3A3DE.txt"
+          }
+        ]
+      },
+      "selected_supplement": {
+        "file": "assets/regular-selected_supplement.png",
+        "sha256": "d2cc8663e9bef86f24bb6c30450cb659b595d5f8418fab2f3e3a298497908005",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/ui-phone-default-map-current/attachments/6849B5D7-FDAA-42A9-8334-A353E8FD7B86.png",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "6849B5D7-FDAA-42A9-8334-A353E8FD7B86.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-A04 2D muscle selection and disabled 3D entry_0_E50799B5-9F24-4C55-A9F9-F44299B85517.png",
+          "timestamp": 1793399355.15
+        },
+        "hierarchies": [
+          {
+            "file": "assets/proofs/regular/0D8E7BE8-C311-4B96-8887-49E9A3ACC1A8.txt",
+            "sha256": "b676a5997f8aa7c4c86f17eab5026f883c9ac4e00287be976419e82e7758a226",
+            "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/ui-phone-default-map-current/attachments/0D8E7BE8-C311-4B96-8887-49E9A3ACC1A8.txt"
+          }
+        ]
+      },
+      "status": "reviewed_pass",
+      "selector": "DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled",
+      "result_file": "assets/proofs/regular/result.json",
+      "revision": "1f7f99006aedf4a1b4d88f16e2fe675aca8949d3",
+      "visual_reviewed": true,
+      "tests_file": "assets/proofs/regular/tests.json",
+      "provenance_file": "assets/proofs/regular/provenance.json"
+    },
+    "ipad": {
+      "before": {
+        "file": "assets/ipad-before.png",
+        "sha256": "ed643ac27cca1b1972f3d74f802bbaad039f398966eccb1cf36a6686d2532cc4",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a04/Health/docs/design/phone-design-map/actual/ipad/images/A03.png",
+        "capture_index_entry": {
+          "row_id": "A03",
+          "evidence": "activity-musclemap-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
+          "action": "tap activity-musclemap-detail-link",
+          "timestamp": 1791837834.467,
+          "image": "104AB192-DCCD-4196-9CE6-E16205632148.png",
+          "screen": "screen-0-2064x2752-tap activity-musclemap-detail-link_0_45B4F3DA-A592-4982-9875-B14D3ED1C326.png",
+          "file": "A03.png"
+        },
+        "exact_revision_and_pose": "unknown; historical canonical entry only"
+      },
+      "after": {
+        "file": "assets/ipad-after.png",
+        "sha256": "548c9790e636805b09a567f109b759f63d22fa35341704ae8f2d0944435dea6f",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/ipad-disabled-entry-8274d1cb/attachments/425926F2-95AD-46A8-97F9-9B08BDDA6F85.png",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "F2AFF70D-8413-4295-A47E-76D24E087141",
+          "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "425926F2-95AD-46A8-97F9-9B08BDDA6F85.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-2064x2752-A03 default map with disabled 3D entry_0_0E7F62F9-552D-4E9D-9425-F98B56F4ADA1.png",
+          "timestamp": 1793634624.312
+        },
+        "hierarchies": [
+          {
+            "file": "assets/proofs/ipad/0F6199A5-3E12-42F9-876E-B69E9CF7809B.txt",
+            "sha256": "3b8dc910737f52f1369c9915fdf4997c1b779dd61f1d9518181ffd474ee5efdd",
+            "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/ipad-disabled-entry-8274d1cb/attachments/0F6199A5-3E12-42F9-876E-B69E9CF7809B.txt"
+          }
+        ]
+      },
+      "selected_supplement": {
+        "file": "assets/ipad-selected_supplement.png",
+        "sha256": "3deb8ba8b05c7b4c92943b97d3c3e034ba810a99240425f5af1326c65efa0042",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/ipad-disabled-entry-8274d1cb/attachments/DC6FE2E6-DF7C-4AF0-B619-CC99D8E192C6.png",
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "F2AFF70D-8413-4295-A47E-76D24E087141",
+          "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "DC6FE2E6-DF7C-4AF0-B619-CC99D8E192C6.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-2064x2752-A04 2D muscle selection and disabled 3D entry_0_CFD11519-AA49-414E-A0E1-56438A923311.png",
+          "timestamp": 1793634631.128
+        },
+        "hierarchies": [
+          {
+            "file": "assets/proofs/ipad/2F6B5FFB-57B0-41CA-A70B-79D4C2D1A2D0.txt",
+            "sha256": "c80dcaf02eac47182d70057d1fc9c2509e863e3a8ea8006bbb069afcc5e3f1ae",
+            "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/ipad-disabled-entry-8274d1cb/attachments/2F6B5FFB-57B0-41CA-A70B-79D4C2D1A2D0.txt"
+          }
+        ]
+      },
+      "status": "reviewed_pass",
+      "selector": "DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled",
+      "result_file": "assets/proofs/ipad/result.json",
+      "revision": "8274d1cb4883515019d01045807b3ca1c0082922",
+      "visual_reviewed": true,
+      "tests_file": "assets/proofs/ipad/tests.json",
+      "provenance_file": "assets/proofs/ipad/provenance.json"
+    },
+    "duo": {
+      "before": {
+        "file": "assets/duo-before.png",
+        "sha256": "d00d048e28f1334c84c60956d07241dcd1dde2de602191d32c09c47d71eba2fd",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a04/Health/docs/design/phone-design-map/actual/duo/images/A03.png",
+        "capture_index_entry": {
+          "row_id": "A03",
+          "evidence": "activity-musclemap-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
+          "action": "tap activity-musclemap-detail-link",
+          "timestamp": 1791839824.086,
+          "image": "F290E6ED-923B-45DD-9721-9C6FB77C0C8D.png",
+          "screen": "screen-0-1398x2034-tap activity-musclemap-detail-link_0_3114C74B-59FA-4347-BF74-DD5DC77DE052.png",
+          "file": "A03.png"
+        },
+        "exact_revision_and_pose": "unknown; historical canonical entry only"
+      },
+      "after": {
+        "file": "assets/duo-after.png",
+        "sha256": "ce81aeb0f6e7ecaf05b2059222d268dee546c55e6cc3226f72ed9c591763263b",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/attachments/4A59A430-F6C3-43B0-BC78-2765972C3864.png",
+        "attachment": {
+          "configurationName": "Duo Visual Audit",
+          "deviceId": "D9AD7AD9-B767-4A6F-AD34-FF76A27A19C8",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "4A59A430-F6C3-43B0-BC78-2765972C3864.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "A03 default map with disabled 3D entry_0_F7967A93-B648-4EFF-8F09-9D304E692292.png",
+          "timestamp": 1793636087.027
+        },
+        "hierarchies": [
+          {
+            "file": "assets/proofs/duo/paired-host/002-hierarchy.txt",
+            "sha256": "96ebbdf4c42fb493e4080f0dc5af202bbdf45850965ebfe90f3e9c1d708a8aac",
+            "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/002-hierarchy.txt",
+            "checkpoint_sequence": 2,
+            "checkpoint_action": "DUNE_VISUAL_AUDIT_READY A03 default map with disabled 3D entry [DUNEUITests/ActivityMuscleMapRegressionTests.swift:43] DEADLINE=1793636118.298955"
+          }
+        ]
+      },
+      "selected_supplement": {
+        "file": "assets/duo-selected_supplement.png",
+        "sha256": "a49979959585fd571599bc39511918ef61d33adb103dc7c09f06aa190d703069",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/attachments/B37B6BE5-A504-40F9-BB7A-ADC4A66C23BB.png",
+        "attachment": {
+          "configurationName": "Duo Visual Audit",
+          "deviceId": "D9AD7AD9-B767-4A6F-AD34-FF76A27A19C8",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "B37B6BE5-A504-40F9-BB7A-ADC4A66C23BB.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "A04 2D muscle selection and disabled 3D entry_0_EEBBE6EE-9D98-4BEA-861F-019351C1DEDC.png",
+          "timestamp": 1793636097.718
+        },
+        "hierarchies": [
+          {
+            "file": "assets/proofs/duo/paired-host/003-hierarchy.txt",
+            "sha256": "d7404bd7d74f7921c26e8fc7b768537e1cfe506c06cbbcba98eac548baed1b47",
+            "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/003-hierarchy.txt",
+            "checkpoint_sequence": 3,
+            "checkpoint_action": "DUNE_VISUAL_AUDIT_READY A04 2D muscle selection and disabled 3D entry [DUNEUITests/ActivityMuscleMapRegressionTests.swift:61] DEADLINE=1793636128.952122"
+          }
+        ]
+      },
+      "status": "reviewed_pass",
+      "raw_proofs": [
+        {
+          "file": "assets/proofs/duo/provenance.json",
+          "sha256": "7b25d31241cffdcb371044498596b42558ce17fa46c2d1c99c1a9b8101deb840",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/provenance.json"
+        },
+        {
+          "file": "assets/proofs/duo/result.json",
+          "sha256": "b43659b10d2fe2b3d2baf24232659c5d14d9fac32f28db159305e2fe51fa2d1f",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/result.json"
+        },
+        {
+          "file": "assets/proofs/duo/summary.json",
+          "sha256": "53c862939760e3785d2810a6c69fe9cf7c4fd40a9db6ba1482282db87057836e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/summary.json"
+        },
+        {
+          "file": "assets/proofs/duo/tests.json",
+          "sha256": "8f326573f8c4135125dffe3c98d63b0393a8a45bd2a356dbf15556cb1c860da8",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/tests.json"
+        },
+        {
+          "file": "assets/proofs/duo/parent-observation.json",
+          "sha256": "a4720dc032efdb4db1e2b99e5eaaf23c3a23f937c33e3c14aa4d1f18a356e7ba",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/parent-observation.json"
+        },
+        {
+          "file": "assets/proofs/duo/attachments/manifest.json",
+          "sha256": "769e1bd7575499d4ca1bf0052a92fc3c045fe26dbb9c06079d93ae3bbaeee4be",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/attachments/manifest.json"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/001-1398x2034.png",
+          "sha256": "b5d8143e50798c7b3950edf3848cb176d27e2b04ca2837f04b7f5507cb50b9a9",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/001-1398x2034.png"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/001-2007x2853.png",
+          "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/001-2007x2853.png"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/001-hierarchy.txt",
+          "sha256": "4905a3ee99a7906b5ca263cc948a6c154ebef129d40b4fb5162182ab2e530f11",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/001-hierarchy.txt"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/002-1398x2034.png",
+          "sha256": "26916ec5e264c00d3f049a2f3813a83214d7c02ab6985420a8893e7afbd092d9",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/002-1398x2034.png"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/002-2007x2853.png",
+          "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/002-2007x2853.png"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/002-hierarchy.txt",
+          "sha256": "96ebbdf4c42fb493e4080f0dc5af202bbdf45850965ebfe90f3e9c1d708a8aac",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/002-hierarchy.txt"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/003-1398x2034.png",
+          "sha256": "123b645937f803087ad9e254d752beb43b64f84b6eb91b5fb5b36e77d8e6d82a",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/003-1398x2034.png"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/003-2007x2853.png",
+          "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/003-2007x2853.png"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/003-hierarchy.txt",
+          "sha256": "d7404bd7d74f7921c26e8fc7b768537e1cfe506c06cbbcba98eac548baed1b47",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/003-hierarchy.txt"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/004-1398x2034.png",
+          "sha256": "251f40f0bd4210052df44ac480fc92801a441dc49c95ff632b8ac48c57294b69",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/004-1398x2034.png"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/004-2007x2853.png",
+          "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/004-2007x2853.png"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/004-hierarchy.txt",
+          "sha256": "36cd6d19005a30626de802b281d72f8cab8e0bd815a5f14c687ede1c2ccabc59",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/004-hierarchy.txt"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/angle-after.txt",
+          "sha256": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/angle-after.txt"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/angle-before.txt",
+          "sha256": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/angle-before.txt"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/captures.tsv",
+          "sha256": "8eb608052372dd344950bcfa37bbabda84799646ad91e9e2833a733c44d8b7d2",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/captures.tsv"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/checkpoints.jsonl",
+          "sha256": "93ddce0f5fcd4b579cc0fe008c59069e3d68bc59bdd21057e1ed43eef7fe4c31",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/checkpoints.jsonl"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/displays-after.json",
+          "sha256": "f148758a5d44a3e60f316766b34a97fb82a77aa184264ca8a1ccb61ffe404f4f",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/displays-after.json"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/displays-before.json",
+          "sha256": "f148758a5d44a3e60f316766b34a97fb82a77aa184264ca8a1ccb61ffe404f4f",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/displays-before.json"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/pose-proof.json",
+          "sha256": "2ab04d76b0e8ea2b9894ca8063c5a42e178edfd0b67cf46891d1dd8dfb252a3e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/pose-proof.json"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/run.log",
+          "sha256": "df349ee57b21ff75483fb555536d5564112152f3339d783213109e4db34c47fc",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/run.log"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/runner-result.json",
+          "sha256": "76ad52c017a5144f85399d3b4dca4047865f63adb6fcee81a44cde547733b2f0",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/runner-result.json"
+        },
+        {
+          "file": "assets/proofs/duo/paired-host/set.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-closed-disabled-entry-8274d1cb/paired-host/set.log"
+        }
+      ],
+      "ack_count": 4,
+      "pose": "0 degrees; LCD active",
+      "selector": "DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled",
+      "result_file": "assets/proofs/duo/result.json",
+      "revision": "8274d1cb4883515019d01045807b3ca1c0082922",
+      "visual_reviewed": true,
+      "pose_proof": "assets/proofs/duo/paired-host/pose-proof.json",
+      "checkpoints_file": "assets/proofs/duo/paired-host/checkpoints.jsonl",
+      "captures_tsv": "assets/proofs/duo/paired-host/captures.tsv",
+      "parent_observation": "assets/proofs/duo/parent-observation.json",
+      "pose_reviewed": true,
+      "tests_file": "assets/proofs/duo/tests.json",
+      "provenance_file": "assets/proofs/duo/provenance.json"
+    },
+    "duo-open": {
+      "before": {
+        "file": "assets/duo-open-before.png",
+        "sha256": "2f1be9f4a0f8190f2bf67b2da0e5712b4f14bd6b9440245a88b1b0bb993b190b",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a04/Health/docs/design/phone-design-map/actual/duo-open/images/A03.png",
+        "capture_index_entry": {
+          "row_id": "A03",
+          "evidence": "activity-musclemap-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
+          "action": "tap activity-musclemap-detail-link",
+          "timestamp": 1791832056.945,
+          "image": "DB839447-CA63-4268-A093-3A978E99D535.png",
+          "screen": "screen-1-2006x2852-tap activity-musclemap-detail-link_1_D141F58B-28AD-435E-8CC7-CE426D5A352C.png",
+          "file": "A03.png"
+        },
+        "exact_revision_and_pose": "unknown; historical canonical entry only"
+      },
+      "after": {
+        "file": "assets/duo-open-after.png",
+        "sha256": "0a723067e757a8813d944d91df02bb8942b961947f2e134ce656987ad38c5b86",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/002-2007x2853.png",
+        "capture_kind": "paired_host_active_LCD-1",
+        "checkpoint_sequence": 2,
+        "checkpoint_action": "DUNE_VISUAL_AUDIT_READY A03 default map with disabled 3D entry [DUNEUITests/ActivityMuscleMapRegressionTests.swift:43] DEADLINE=1793636272.973819",
+        "hierarchies": [
+          {
+            "file": "assets/proofs/duo-open/002-hierarchy.txt",
+            "sha256": "3072fe8ea846df591fa0b3a59032d73e82f02a02c9b56d0543fbf82f8980c36f",
+            "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/002-hierarchy.txt"
+          }
+        ]
+      },
+      "selected_supplement": {
+        "file": "assets/duo-open-selected_supplement.png",
+        "sha256": "9c0b43039e6684b1de1b41d28e67a4b7c3cd57a8d3350dc6bbf7ede92df0d179",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/003-2007x2853.png",
+        "capture_kind": "paired_host_active_LCD-1",
+        "checkpoint_sequence": 3,
+        "checkpoint_action": "DUNE_VISUAL_AUDIT_READY A04 2D muscle selection and disabled 3D entry [DUNEUITests/ActivityMuscleMapRegressionTests.swift:61] DEADLINE=1793636281.7452059",
+        "hierarchies": [
+          {
+            "file": "assets/proofs/duo-open/003-hierarchy.txt",
+            "sha256": "72de6464ef6aaefd73a19fbd1e5f285331dd1c1586ccfb9abc74fb40ecd1812e",
+            "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/003-hierarchy.txt"
+          }
+        ]
+      },
+      "status": "reviewed_pass",
+      "raw_proofs": [
+        {
+          "file": "assets/proofs/duo-open/provenance.json",
+          "sha256": "8383285f26dfbab0d08b5726028be3194aba0be247476069fa94d0f112379e06",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/provenance.json"
+        },
+        {
+          "file": "assets/proofs/duo-open/result.json",
+          "sha256": "5ea556c044596bfa30c9b7a5cee886fdc0d412e44e87dddeacb0d65472b1f038",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/result.json"
+        },
+        {
+          "file": "assets/proofs/duo-open/summary.json",
+          "sha256": "7cb5653a36ee94106a5de6ad04cd6f74dabceaec2481064f8ad8ee5da5db409e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/summary.json"
+        },
+        {
+          "file": "assets/proofs/duo-open/tests.json",
+          "sha256": "14410fc3666be05c8292212efc5b30d8a777b81658a14edbb68360aa1a8144bf",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/tests.json"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/001-1398x2034.png",
+          "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/001-1398x2034.png"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/001-2007x2853.png",
+          "sha256": "fa937f511dfa9093ac69689d79932f5dc20870abb210e12c5d1ac82eb040ba92",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/001-2007x2853.png"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/001-hierarchy.txt",
+          "sha256": "4c3b1c04eb61ceacc031b7f7f2fcef46fced7b1e38c255ee24bce96d3a3d0917",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/001-hierarchy.txt"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/002-1398x2034.png",
+          "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/002-1398x2034.png"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/002-2007x2853.png",
+          "sha256": "0a723067e757a8813d944d91df02bb8942b961947f2e134ce656987ad38c5b86",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/002-2007x2853.png"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/002-hierarchy.txt",
+          "sha256": "3072fe8ea846df591fa0b3a59032d73e82f02a02c9b56d0543fbf82f8980c36f",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/002-hierarchy.txt"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/003-1398x2034.png",
+          "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/003-1398x2034.png"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/003-2007x2853.png",
+          "sha256": "9c0b43039e6684b1de1b41d28e67a4b7c3cd57a8d3350dc6bbf7ede92df0d179",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/003-2007x2853.png"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/003-hierarchy.txt",
+          "sha256": "72de6464ef6aaefd73a19fbd1e5f285331dd1c1586ccfb9abc74fb40ecd1812e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/003-hierarchy.txt"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/004-1398x2034.png",
+          "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/004-1398x2034.png"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/004-2007x2853.png",
+          "sha256": "1513728b2dfc294a505c43ca06d859392d9f7ebf3f4f1e0ae04c74578e2a9739",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/004-2007x2853.png"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/004-hierarchy.txt",
+          "sha256": "e73a7c24ef1a3d83f017685767a8556fe965763238f19486a0c7431cbb21c1e9",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/004-hierarchy.txt"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/angle-after.txt",
+          "sha256": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/angle-after.txt"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/angle-before.txt",
+          "sha256": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/angle-before.txt"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/captures.tsv",
+          "sha256": "f2499e27a2efcf9539424718d642641d1ca83555d780ade8d9f9b8090b14fa6d",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/captures.tsv"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/checkpoints.jsonl",
+          "sha256": "35ad4caa60f2e0d84f56c496e60486e3ac886a93c349a1ad87e0af482aac1624",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/checkpoints.jsonl"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/displays-after.json",
+          "sha256": "5132a525f01440a2cd7f6899f2984132e946273e7ce996eb1a0941f7d1599a91",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/displays-after.json"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/displays-before.json",
+          "sha256": "5132a525f01440a2cd7f6899f2984132e946273e7ce996eb1a0941f7d1599a91",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/displays-before.json"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/pose-proof.json",
+          "sha256": "0957ca69ae22e578268751499ef13f2815cfb1b6595b1480dd29a7b88b327580",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/pose-proof.json"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/run.log",
+          "sha256": "86f3c6dacccf67a3e5e0a43b467ef7b1c31304391d73ae40f29307d779647272",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/run.log"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/runner-result.json",
+          "sha256": "d3be01e68d593b13a8be4ff147696d5e351331b17e55a04747ee434a883d728e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/runner-result.json"
+        },
+        {
+          "file": "assets/proofs/duo-open/paired-host/set.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/paired-host/set.log"
+        },
+        {
+          "file": "assets/proofs/duo-open/attachments/1A407ADB-A7A9-43C2-A869-6638F327D240.txt",
+          "sha256": "72de6464ef6aaefd73a19fbd1e5f285331dd1c1586ccfb9abc74fb40ecd1812e",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/attachments/1A407ADB-A7A9-43C2-A869-6638F327D240.txt"
+        },
+        {
+          "file": "assets/proofs/duo-open/attachments/54432B16-2BF8-499C-9381-83A13AA948D5.png",
+          "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/attachments/54432B16-2BF8-499C-9381-83A13AA948D5.png"
+        },
+        {
+          "file": "assets/proofs/duo-open/attachments/66D261B8-E03B-4427-A4BB-D0369E4460FA.txt",
+          "sha256": "4c3b1c04eb61ceacc031b7f7f2fcef46fced7b1e38c255ee24bce96d3a3d0917",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/attachments/66D261B8-E03B-4427-A4BB-D0369E4460FA.txt"
+        },
+        {
+          "file": "assets/proofs/duo-open/attachments/AE983E4B-E88F-470D-BBB5-A48E3B2763BE.png",
+          "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/attachments/AE983E4B-E88F-470D-BBB5-A48E3B2763BE.png"
+        },
+        {
+          "file": "assets/proofs/duo-open/attachments/AFD61E3F-6E2D-4189-982E-CE59F6BB1D01.txt",
+          "sha256": "e73a7c24ef1a3d83f017685767a8556fe965763238f19486a0c7431cbb21c1e9",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/attachments/AFD61E3F-6E2D-4189-982E-CE59F6BB1D01.txt"
+        },
+        {
+          "file": "assets/proofs/duo-open/attachments/D2272ED1-7FCA-46EC-B3E9-1D9272626679.txt",
+          "sha256": "3072fe8ea846df591fa0b3a59032d73e82f02a02c9b56d0543fbf82f8980c36f",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/attachments/D2272ED1-7FCA-46EC-B3E9-1D9272626679.txt"
+        },
+        {
+          "file": "assets/proofs/duo-open/attachments/manifest.json",
+          "sha256": "cca97805bbda91f71bf0a03fc06fa989acdb17bd2762655b9394a727ac7838bf",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a04/evidence/duo-open-disabled-entry-8274d1cb/attachments/manifest.json"
+        }
+      ],
+      "ack_count": 4,
+      "pose": "180 degrees; LCD-1 active",
+      "black_inactive_xctest_attachments": "retained as raw only, never after images",
+      "parent_observation": "assets/proofs/duo-open/parent-observation.json",
+      "selector": "DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled",
+      "result_file": "assets/proofs/duo-open/result.json",
+      "revision": "8274d1cb4883515019d01045807b3ca1c0082922",
+      "visual_reviewed": true,
+      "pose_proof": "assets/proofs/duo-open/paired-host/pose-proof.json",
+      "checkpoints_file": "assets/proofs/duo-open/paired-host/checkpoints.jsonl",
+      "captures_tsv": "assets/proofs/duo-open/paired-host/captures.tsv",
+      "pose_reviewed": true,
+      "device_udid": "D9AD7AD9-B767-4A6F-AD34-FF76A27A19C8",
+      "host_capture_timestamp": 1793636243.9685216,
+      "host_capture_timestamp_kind": "host_file_mtime",
+      "tests_file": "assets/proofs/duo-open/tests.json",
+      "provenance_file": "assets/proofs/duo-open/provenance.json"
+    }
+  },
+  "pending": [],
+  "limitations": [
+    "Phone is clean historical 1f7 run; scoped reuse closure, not fresh d563 run",
+    "Phone default top viewport does not show cube",
+    "Original old image per-image source and old Duo pose unverified",
+    "3D viewer remains historical and untested; do not update its row",
+    "No full regression or CI claim"
+  ],
+  "source_sha256": {
+    "DUNE/Presentation/Activity/MuscleMap/MuscleMapDetailView.swift": "2caa64758a280ed66d280b1ca3d38c16e3b67439baff2927ce2437dd1134925a",
+    "DUNEUITests/Full/ActivityMuscleMapRegressionTests.swift": "42817ce49f4c425b5da92f123c73d820cbff0882f1891569fde0768682a253d7",
+    "DUNE/Presentation/Activity/MuscleMap/MuscleMapDetailViewModel.swift": "761c8f13add5a8b32d2c9e0a8e9489daa3e5053a38e7268c16c19533efdf1964",
+    "DUNE/Presentation/Activity/Components/MuscleRecoveryMapView.swift": "f541fccf30d12bafe3b576ef9a7519287be9e8e2336c2a7f13c460fe2acd7e14",
+    "DUNE/Presentation/Activity/Components/MuscleDetailPopover.swift": "53521393ad0c9f2c2599c204b7ce435cbddae82fa2f5be5f7c252edf5efca256",
+    "DUNE/Presentation/Activity/ActivityView.swift": "6fe3269bbc25cf414aa36f4a4c496a676faa1cc6c147e355d1714af6a86229db"
+  },
+  "renderer_sha256": "6245de4341dd88fe15c12ffa0ca38a58ce8344f074efc1c2cfcfef2d8e79eff2",
+  "proof_sha256": {
+    "assets/proofs/phone-reuse-closure.md": "bdad98fd9eb07c60461a4464301d562e185fa4387aba8269db4ad3c55f9168a6",
+    "assets/proofs/duo-open/summary.json": "7cb5653a36ee94106a5de6ad04cd6f74dabceaec2481064f8ad8ee5da5db409e",
+    "assets/proofs/duo-open/002-hierarchy.txt": "3072fe8ea846df591fa0b3a59032d73e82f02a02c9b56d0543fbf82f8980c36f",
+    "assets/proofs/duo-open/tests.json": "14410fc3666be05c8292212efc5b30d8a777b81658a14edbb68360aa1a8144bf",
+    "assets/proofs/duo-open/provenance.json": "8383285f26dfbab0d08b5726028be3194aba0be247476069fa94d0f112379e06",
+    "assets/proofs/duo-open/result.json": "5ea556c044596bfa30c9b7a5cee886fdc0d412e44e87dddeacb0d65472b1f038",
+    "assets/proofs/duo-open/003-hierarchy.txt": "72de6464ef6aaefd73a19fbd1e5f285331dd1c1586ccfb9abc74fb40ecd1812e",
+    "assets/proofs/ipad/summary.json": "e9cbaa1df50c0f7f7c79fd463bf750c065678969d8b6ed22981cb06febfcd893",
+    "assets/proofs/ipad/0F6199A5-3E12-42F9-876E-B69E9CF7809B.txt": "3b8dc910737f52f1369c9915fdf4997c1b779dd61f1d9518181ffd474ee5efdd",
+    "assets/proofs/ipad/tests.json": "ff37c02edc6282f29939421e5cc9d4b8d1a7e29fae80bf12495dc091a7e57fb9",
+    "assets/proofs/ipad/provenance.json": "a307aafeba20c67c184dfaa26b6cdf1c81558d1bb4a48215f4d4daf3cd17bfd8",
+    "assets/proofs/ipad/result.json": "c80f549dcab8111437d4d76544370316921d15e6bed3c3973058ddbee0f4e35e",
+    "assets/proofs/ipad/2F6B5FFB-57B0-41CA-A70B-79D4C2D1A2D0.txt": "c80dcaf02eac47182d70057d1fc9c2509e863e3a8ea8006bbb069afcc5e3f1ae",
+    "assets/proofs/regular/summary.json": "8e87eb8ae6b5f8b9d1e47b4c0544320990a3bcfaeb860056aca25061af00b17f",
+    "assets/proofs/regular/tests.json": "0534f1873e4d0d8390bd7099c1650af7b65953a48be057aef647e84ab5ef18db",
+    "assets/proofs/regular/provenance.json": "813d6e921bb53dc475198827cc2bf7c0c2c7de13eca1f24028a2f0d1d9298676",
+    "assets/proofs/regular/result.json": "8c52fdab316e6cba3a10b34fd0c698c3222cfe5ab449306818e9d462270d5dd3",
+    "assets/proofs/regular/0D8E7BE8-C311-4B96-8887-49E9A3ACC1A8.txt": "b676a5997f8aa7c4c86f17eab5026f883c9ac4e00287be976419e82e7758a226",
+    "assets/proofs/regular/5FC06401-CA87-4F55-906F-03565AE3A3DE.txt": "dca9325c468b90a9f1cfa61f601b1156e6733ef25c3670a8df5d5048689203b7",
+    "assets/proofs/duo/summary.json": "53c862939760e3785d2810a6c69fe9cf7c4fd40a9db6ba1482282db87057836e",
+    "assets/proofs/duo/tests.json": "8f326573f8c4135125dffe3c98d63b0393a8a45bd2a356dbf15556cb1c860da8",
+    "assets/proofs/duo/provenance.json": "7b25d31241cffdcb371044498596b42558ce17fa46c2d1c99c1a9b8101deb840",
+    "assets/proofs/duo/result.json": "b43659b10d2fe2b3d2baf24232659c5d14d9fac32f28db159305e2fe51fa2d1f",
+    "assets/proofs/duo/parent-observation.json": "a4720dc032efdb4db1e2b99e5eaaf23c3a23f937c33e3c14aa4d1f18a356e7ba",
+    "assets/proofs/duo/paired-host/displays-before.json": "f148758a5d44a3e60f316766b34a97fb82a77aa184264ca8a1ccb61ffe404f4f",
+    "assets/proofs/duo/paired-host/runner-result.json": "76ad52c017a5144f85399d3b4dca4047865f63adb6fcee81a44cde547733b2f0",
+    "assets/proofs/duo/paired-host/003-1398x2034.png": "123b645937f803087ad9e254d752beb43b64f84b6eb91b5fb5b36e77d8e6d82a",
+    "assets/proofs/duo/paired-host/002-hierarchy.txt": "96ebbdf4c42fb493e4080f0dc5af202bbdf45850965ebfe90f3e9c1d708a8aac",
+    "assets/proofs/duo/paired-host/001-hierarchy.txt": "4905a3ee99a7906b5ca263cc948a6c154ebef129d40b4fb5162182ab2e530f11",
+    "assets/proofs/duo/paired-host/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/duo/paired-host/004-1398x2034.png": "251f40f0bd4210052df44ac480fc92801a441dc49c95ff632b8ac48c57294b69",
+    "assets/proofs/duo/paired-host/set.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "assets/proofs/duo/paired-host/run.log": "df349ee57b21ff75483fb555536d5564112152f3339d783213109e4db34c47fc",
+    "assets/proofs/duo/paired-host/003-2007x2853.png": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+    "assets/proofs/duo/paired-host/captures.tsv": "8eb608052372dd344950bcfa37bbabda84799646ad91e9e2833a733c44d8b7d2",
+    "assets/proofs/duo/paired-host/004-2007x2853.png": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+    "assets/proofs/duo/paired-host/angle-after.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/duo/paired-host/001-2007x2853.png": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+    "assets/proofs/duo/paired-host/displays-after.json": "f148758a5d44a3e60f316766b34a97fb82a77aa184264ca8a1ccb61ffe404f4f",
+    "assets/proofs/duo/paired-host/checkpoints.jsonl": "93ddce0f5fcd4b579cc0fe008c59069e3d68bc59bdd21057e1ed43eef7fe4c31",
+    "assets/proofs/duo/paired-host/002-2007x2853.png": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+    "assets/proofs/duo/paired-host/004-hierarchy.txt": "36cd6d19005a30626de802b281d72f8cab8e0bd815a5f14c687ede1c2ccabc59",
+    "assets/proofs/duo/paired-host/001-1398x2034.png": "b5d8143e50798c7b3950edf3848cb176d27e2b04ca2837f04b7f5507cb50b9a9",
+    "assets/proofs/duo/paired-host/002-1398x2034.png": "26916ec5e264c00d3f049a2f3813a83214d7c02ab6985420a8893e7afbd092d9",
+    "assets/proofs/duo/paired-host/pose-proof.json": "2ab04d76b0e8ea2b9894ca8063c5a42e178edfd0b67cf46891d1dd8dfb252a3e",
+    "assets/proofs/duo/paired-host/003-hierarchy.txt": "d7404bd7d74f7921c26e8fc7b768537e1cfe506c06cbbcba98eac548baed1b47",
+    "assets/proofs/duo/attachments/manifest.json": "769e1bd7575499d4ca1bf0052a92fc3c045fe26dbb9c06079d93ae3bbaeee4be",
+    "assets/proofs/regular/attachments/manifest.json": "9940091024cd0ebe0bcc15dfc999dc4f65eeaa06bd4c7c367753f74baba93bf9",
+    "assets/proofs/ipad/attachments/manifest.json": "3c184a040ff258e06e4a1e9f0d4e2d962d3e2c6b5684b9aaff00a1d1fbec0729",
+    "assets/proofs/duo-open/paired-host/displays-before.json": "5132a525f01440a2cd7f6899f2984132e946273e7ce996eb1a0941f7d1599a91",
+    "assets/proofs/duo-open/paired-host/runner-result.json": "d3be01e68d593b13a8be4ff147696d5e351331b17e55a04747ee434a883d728e",
+    "assets/proofs/duo-open/paired-host/003-1398x2034.png": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+    "assets/proofs/duo-open/paired-host/002-hierarchy.txt": "3072fe8ea846df591fa0b3a59032d73e82f02a02c9b56d0543fbf82f8980c36f",
+    "assets/proofs/duo-open/paired-host/001-hierarchy.txt": "4c3b1c04eb61ceacc031b7f7f2fcef46fced7b1e38c255ee24bce96d3a3d0917",
+    "assets/proofs/duo-open/paired-host/angle-before.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "assets/proofs/duo-open/paired-host/004-1398x2034.png": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+    "assets/proofs/duo-open/paired-host/set.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "assets/proofs/duo-open/paired-host/run.log": "86f3c6dacccf67a3e5e0a43b467ef7b1c31304391d73ae40f29307d779647272",
+    "assets/proofs/duo-open/paired-host/003-2007x2853.png": "9c0b43039e6684b1de1b41d28e67a4b7c3cd57a8d3350dc6bbf7ede92df0d179",
+    "assets/proofs/duo-open/paired-host/captures.tsv": "f2499e27a2efcf9539424718d642641d1ca83555d780ade8d9f9b8090b14fa6d",
+    "assets/proofs/duo-open/paired-host/004-2007x2853.png": "1513728b2dfc294a505c43ca06d859392d9f7ebf3f4f1e0ae04c74578e2a9739",
+    "assets/proofs/duo-open/paired-host/angle-after.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "assets/proofs/duo-open/paired-host/001-2007x2853.png": "fa937f511dfa9093ac69689d79932f5dc20870abb210e12c5d1ac82eb040ba92",
+    "assets/proofs/duo-open/paired-host/displays-after.json": "5132a525f01440a2cd7f6899f2984132e946273e7ce996eb1a0941f7d1599a91",
+    "assets/proofs/duo-open/paired-host/checkpoints.jsonl": "35ad4caa60f2e0d84f56c496e60486e3ac886a93c349a1ad87e0af482aac1624",
+    "assets/proofs/duo-open/paired-host/002-2007x2853.png": "0a723067e757a8813d944d91df02bb8942b961947f2e134ce656987ad38c5b86",
+    "assets/proofs/duo-open/paired-host/004-hierarchy.txt": "e73a7c24ef1a3d83f017685767a8556fe965763238f19486a0c7431cbb21c1e9",
+    "assets/proofs/duo-open/paired-host/001-1398x2034.png": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+    "assets/proofs/duo-open/paired-host/002-1398x2034.png": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+    "assets/proofs/duo-open/paired-host/pose-proof.json": "0957ca69ae22e578268751499ef13f2815cfb1b6595b1480dd29a7b88b327580",
+    "assets/proofs/duo-open/paired-host/003-hierarchy.txt": "72de6464ef6aaefd73a19fbd1e5f285331dd1c1586ccfb9abc74fb40ecd1812e",
+    "assets/proofs/duo-open/attachments/D2272ED1-7FCA-46EC-B3E9-1D9272626679.txt": "3072fe8ea846df591fa0b3a59032d73e82f02a02c9b56d0543fbf82f8980c36f",
+    "assets/proofs/duo-open/attachments/AE983E4B-E88F-470D-BBB5-A48E3B2763BE.png": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+    "assets/proofs/duo-open/attachments/66D261B8-E03B-4427-A4BB-D0369E4460FA.txt": "4c3b1c04eb61ceacc031b7f7f2fcef46fced7b1e38c255ee24bce96d3a3d0917",
+    "assets/proofs/duo-open/attachments/manifest.json": "cca97805bbda91f71bf0a03fc06fa989acdb17bd2762655b9394a727ac7838bf",
+    "assets/proofs/duo-open/attachments/AFD61E3F-6E2D-4189-982E-CE59F6BB1D01.txt": "e73a7c24ef1a3d83f017685767a8556fe965763238f19486a0c7431cbb21c1e9",
+    "assets/proofs/duo-open/attachments/54432B16-2BF8-499C-9381-83A13AA948D5.png": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+    "assets/proofs/duo-open/attachments/1A407ADB-A7A9-43C2-A869-6638F327D240.txt": "72de6464ef6aaefd73a19fbd1e5f285331dd1c1586ccfb9abc74fb40ecd1812e",
+    "assets/proofs/duo-open/parent-observation.json": "d13eed7d85143d06b53940e988462af59bf48a9999c9f49194cfa1e5faacabae",
+    "assets/proofs/app-device-build-8274d1cb.log": "375941fd145dc900ef4ac5e7ae2a887239aaf36e0ad6280ec4c762609ee2eba2",
+    "assets/proofs/current-candidate-source.json": "2a84a6fe0e96dec2bb894ddba07355e176b22faa6310d4800ce565c67e732cfd",
+    "assets/proofs/pr891-quality-final.md": "94e086384f408a44176c3480892edbca9c8a1d97ec1a7eb7a67ac110f483b7bb",
+    "assets/proofs/source-closure.json": "7996bd00466bfa3e5c4022402981053d19d8af55060ef9d940f8b2d902f13cc9"
+  },
+  "output_baseline_sha256": {
+    "docs/design/phone-design-map/actual/index.html": "6aed6efd5cbfed47756d89e2f9898088c2f7cc2c1062fe98639666fe7c2cedbb",
+    "docs/design/phone-design-map/actual/compare.html": "ae376d0907439b8cc6ff41c892a0c7c286196cee6075b11b5d233013867e33ec",
+    "docs/design/phone-design-map/README.md": "1fade779b5953e5efdf159a0973d9360e1945880506ef8de1a21187767195af1",
+    "docs/design/phone-design-map/actual/regular/capture-index.json": "c35bb468cb91adf5aac0e622f0273571a6f4605cc07e599d7d1819261245f685",
+    "docs/design/phone-design-map/actual/regular/index.html": "9e782115cea36e28e2ec9a7477356ff955def2f02f634fa528a7d63328687f78",
+    "docs/design/phone-design-map/actual/regular/images/A03.png": "54f09ac30a4ffbee1f88e6f4d8bc734d4409907e4e61a442ba53a595dec28864",
+    "docs/design/phone-design-map/actual/regular/boards/02-활동.png": "3d3a9f3e8e22018d833b53e88f746d09087a2c60c5dce906c133dfaf13b71214",
+    "docs/design/phone-design-map/actual/ipad/capture-index.json": "b89ad623dba4d63f904d496e27bd857b65cef44fe02355e87da6404b526ccf53",
+    "docs/design/phone-design-map/actual/ipad/index.html": "6c00951da7cadebcc07b355d89cff7b6092f3ea801acbf7671d9f07ef32a00f8",
+    "docs/design/phone-design-map/actual/ipad/images/A03.png": "ed643ac27cca1b1972f3d74f802bbaad039f398966eccb1cf36a6686d2532cc4",
+    "docs/design/phone-design-map/actual/ipad/boards/02-활동.png": "aa806174d94af9aed197c38c3b38b005d2db71c001bc53c99af82d35fa462994",
+    "docs/design/phone-design-map/actual/duo/capture-index.json": "29b85783cc39f2d3262398852223d4d2c31e03f1b0d31c3ffc723cf8e9ed14ea",
+    "docs/design/phone-design-map/actual/duo/index.html": "602bd9e7aba9eb15257b0db494b652bd0fbb0ec40a2eae0501a205632ece373e",
+    "docs/design/phone-design-map/actual/duo/images/A03.png": "d00d048e28f1334c84c60956d07241dcd1dde2de602191d32c09c47d71eba2fd",
+    "docs/design/phone-design-map/actual/duo/boards/02-활동.png": "cb4bd649b204c22061a395222b21692ebfce80ff6f3612908f12978eb6719977",
+    "docs/design/phone-design-map/actual/duo-open/capture-index.json": "33bb56d910912cf43abaeadc2897038d48b15701a12ad084720926c85e8945fd",
+    "docs/design/phone-design-map/actual/duo-open/index.html": "057aee87e57c6019d022880e116d6ddd8a371a7b6241fbe5f2eb8e4b9be464dd",
+    "docs/design/phone-design-map/actual/duo-open/images/A03.png": "2f1be9f4a0f8190f2bf67b2da0e5712b4f14bd6b9440245a88b1b0bb993b190b",
+    "docs/design/phone-design-map/actual/duo-open/boards/02-활동.png": "fde393c8bef45595494bd6a0b121231a8ff50bbc29211d36aa568747c41a541c"
+  },
+  "quality_reviewed": true,
+  "phone_reuse_closure_reviewed": true,
+  "three_d_viewer_unchanged": true,
+  "quality_report": "assets/proofs/pr891-quality-final.md",
+  "source_closure": "assets/proofs/source-closure.json"
+}
