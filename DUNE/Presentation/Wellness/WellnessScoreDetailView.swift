@@ -328,11 +328,20 @@ private struct H02WellnessDetailHero: View {
     private func evidenceRow(_ item: Evidence) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             HStack(spacing: DS.Spacing.sm) {
-                Image(systemName: item.icon)
-                    .font(.caption)
-                    .foregroundStyle(palette.ink)
-                    .frame(width: 20)
-                    .accessibilityHidden(true)
+                Group {
+                    if dynamicTypeSize.isAccessibilitySize {
+                        Image(systemName: item.icon)
+                            .font(.system(size: 16))
+                            .frame(width: 26)
+                            .clipped()
+                    } else {
+                        Image(systemName: item.icon)
+                            .font(.caption)
+                            .frame(width: 20)
+                    }
+                }
+                .foregroundStyle(palette.ink)
+                .accessibilityHidden(true)
                 Text(item.title)
                     .font(.subheadline)
                     .foregroundStyle(palette.ink)
