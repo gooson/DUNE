@@ -33,6 +33,7 @@ struct MuscleMapDetailView: View {
                         MuscleRecoveryMapView(
                             fatigueStates: fatigueStates,
                             isExpanded: true,
+                            recoverySummaryStates: observedRecoveryStates,
                             onMuscleSelected: { muscle in
                                 withAnimation(reduceMotion ? nil : DS.Animation.snappy) {
                                     viewModel.selectedMuscle = viewModel.selectedMuscle == muscle ? nil : muscle
@@ -109,10 +110,12 @@ struct MuscleMapDetailView: View {
                 // Recovery Overview
                 SectionGroup(title: "Recovery Status", icon: "heart.text.clipboard", iconColor: DS.Color.activity) {
                     RecoveryOverviewSection(
-                        fatigueStates: fatigueStates,
-                        recoveredCount: viewModel.recoveredCount,
+                        fatigueStates: observedRecoveryStates,
+                        recoveredCount: observedRecoveredCount,
                         overworkedMuscles: viewModel.overworkedMuscles,
-                        nextRecovery: viewModel.nextRecovery
+                        nextRecovery: viewModel.nextRecovery.flatMap { next in
+                            observedRecoveryStates.contains { $0.muscle == next.muscle } ? next : nil
+                        }
                     )
                 }
                 .accessibilityIdentifier("musclemap-detail-recovery-section")
@@ -139,20 +142,26 @@ struct MuscleMapDetailView: View {
         }
     }
 
+    private var observedRecoveryStates: [MuscleFatigueState] {
+        fatigueStates.filter { $0.fatigueLevel != .noData }
+    }
+
+    private var observedRecoveredCount: Int {
+        observedRecoveryStates.filter(\.isRecovered).count
+    }
+
     private var recoveryHeader: some View {
         A03MuscleMapHeader(
-            recoveredCount: viewModel.recoveredCount,
-            observedCount: fatigueStates.count,
-            isLoaded: fatigueStates.isEmpty || !viewModel.fatigueByMuscle.isEmpty
+            recoveredCount: observedRecoveredCount,
+            observedCount: observedRecoveryStates.count
         )
     }
 }
 
-/// A03's local recovery summary uses only the observed states and existing VM count.
+/// A03's local recovery summary reads both counts from the same observed states.
 private struct A03MuscleMapHeader: View {
     let recoveredCount: Int
     let observedCount: Int
-    let isLoaded: Bool
 
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
@@ -177,14 +186,11 @@ private struct A03MuscleMapHeader: View {
                         .font(.headline)
                         .foregroundStyle(palette.ink)
                         .fixedSize(horizontal: false, vertical: true)
-                } else if isLoaded {
+                } else {
                     Text("\(recoveredCount.formatted())/\(observedCount.formatted()) muscles ready")
                         .font(.title.weight(.bold).monospacedDigit())
                         .foregroundStyle(palette.ink)
                         .fixedSize(horizontal: false, vertical: true)
-                } else {
-                    ProgressView()
-                        .tint(palette.ink)
                 }
             }
             Spacer(minLength: 0)

@@ -6,6 +6,7 @@ import SwiftUI
 struct MuscleRecoveryMapView: View {
     let fatigueStates: [MuscleFatigueState]
     var isExpanded: Bool = false
+    var recoverySummaryStates: [MuscleFatigueState]? = nil
     let onMuscleSelected: (MuscleGroup) -> Void
 
     // MARK: - Mode
@@ -97,10 +98,12 @@ struct MuscleRecoveryMapView: View {
     private var subtitle: String {
         switch mode {
         case .recovery:
-            let total = fatigueStates.count
+            let states = recoverySummaryStates ?? fatigueStates
+            let total = states.count
+            let ready = recoverySummaryStates.map { $0.filter(\.isRecovered).count } ?? recoveredCount
             guard total > 0 else { return String(localized: "Start training to track recovery") }
-            if recoveredCount == total { return String(localized: "All \(total) muscle groups ready") }
-            return String(localized: "\(recoveredCount)/\(total) muscle groups ready")
+            if ready == total { return String(localized: "All \(total) muscle groups ready") }
+            return String(localized: "\(ready)/\(total) muscle groups ready")
         case .volume:
             guard trainedCount > 0 else { return String(localized: "Start recording workouts to see volume") }
             return String(localized: "\(trainedCount) muscles trained this week")
