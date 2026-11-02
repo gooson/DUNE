@@ -1,0 +1,507 @@
+Host state context: .xcodebuild/a09-duo-closed-0d789a1e.log.host.json
+Ensuring requested iOS simulator '660D2333-018C-4631-ACB4-222093B3AE5E' is booted...
+Waiting for iOS simulator [660D2333-018C-4631-ACB4-222093B3AE5E] to boot (timeout=120s, retries=1)...
+iOS simulator already booted.
+Running UI tests with scheme 'DUNEUITests' for destination 'id=660D2333-018C-4631-ACB4-222093B3AE5E'...
+Using test plan: DUNEUITests-DuoAudit
+Only testing: DUNEUITests/ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen
+Streaming logs to console and .xcodebuild/a09-duo-closed-0d789a1e.log
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination id=660D2333-018C-4631-ACB4-222093B3AE5E -derivedDataPath .deriveddata/ui-tests -jobs 2 COMPILER_INDEX_STORE_ENABLE=NO -parallel-testing-enabled NO -test-timeouts-enabled YES -default-test-execution-time-allowance 300 -maximum-test-execution-time-allowance 600 CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO -testPlan DUNEUITests-DuoAudit -only-testing DUNEUITests/ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+    CODE_SIGNING_REQUIRED = NO
+    COMPILER_INDEX_STORE_ENABLE = NO
+
+Build Preparation
+Build task concurrency set to 2 via user default IDEBuildOperationMaxNumberOfConcurrentCompileTasks
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (4 targets)
+    Target 'DUNEUITests' in project 'DUNE'
+        ➜ Explicit dependency on target 'DUNE' in project 'DUNE'
+    Target 'DUNE' in project 'DUNE'
+        ➜ Explicit dependency on target 'DUNEWatch' in project 'DUNE'
+        ➜ Explicit dependency on target 'DUNEWidget' in project 'DUNE'
+    Target 'DUNEWidget' in project 'DUNE' (no dependencies)
+    Target 'DUNEWatch' in project 'DUNE' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNEWatch/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/xcstringstool compile --dry-run --output-directory /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Localizable.xcstrings
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/xcstringstool compile --dry-run --output-directory /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNEWatch/Resources/InfoPlist.xcstrings
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/xcstringstool compile --dry-run --output-directory /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE/Resources/AppShortcuts.xcstrings
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/xcstringstool compile --dry-run --output-directory /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Localizable.xcstrings
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/xcstringstool compile --dry-run --output-directory /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNEWatch/Resources/Localizable.xcstrings
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 5f6b531d3adee4d3d09668f0d4f98b05
+Build description path: /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/XCBuildData/5f6b531d3adee4d3d09668f0d4f98b05.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/SDKStatCaches.noindex/watchsimulator27.2-24S118-b9fa32cfc2bdb801fba35bd912eef9f2.sdkstatcache
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE/DUNE.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk -o /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/SDKStatCaches.noindex/watchsimulator27.2-24S118-b9fa32cfc2bdb801fba35bd912eef9f2.sdkstatcache
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-cc78df9d8a9de6526dea716b1c70fd8e.sdkstatcache
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE/DUNE.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -o /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-cc78df9d8a9de6526dea716b1c70fd8e.sdkstatcache
+
+CompileAssetCatalogVariant thinned /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNEWatch/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets (in target 'DUNEWatch' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNEWatch/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets --compile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --filter-for-thinning-device-configuration iPhone19,4 --filter-for-device-os-version 27.2 --development-region en --target-device watch --minimum-deployment-target 27.0 --platform watchsimulator
+/* com.apple.actool.compilation-results */
+/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist_thinned
+/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_output/thinned/Assets.car
+
+
+LinkAssetCatalog /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNEWatch/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets (in target 'DUNEWatch' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-linkAssetCatalog --thinned /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_output/thinned --thinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist_unthinned --output /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app --plist-output /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Assets.car (in target 'DUNEWatch' from project 'DUNE')
+
+ProcessInfoPlistFile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Info.plist /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNEWatch/Resources/Info.plist (in target 'DUNEWatch' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-infoPlistUtility /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNEWatch/Resources/Info.plist -producttype com.apple.product-type.application -genpkginfo /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/PkgInfo -expandbuildsettings -format binary -platform watchsimulator -additionalcontentfile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist -o /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Info.plist
+
+CopySwiftLibs /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app (in target 'DUNEWatch' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/DUNEWatch.debug.dylib --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Frameworks --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/PlugIns --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/SystemExtensions --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Extensions --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk/System/Library/Frameworks/HealthKit.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk/System/Library/Frameworks/WatchConnectivity.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework --platform watchsimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+Ignoring --strip-bitcode because --sign was not passed
+
+CompileAssetCatalogVariant thinned /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets (in target 'DUNEWidget' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets --compile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist_thinned --compress-pngs --enable-on-demand-resources NO --standalone-icon-behavior all --filter-for-thinning-device-configuration iPhone19,4 --filter-for-device-os-version 27.2 --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 27.0 --platform iphonesimulator
+/* com.apple.actool.compilation-results */
+/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist_thinned
+/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_output/thinned/Assets.car
+
+
+LinkAssetCatalog /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets (in target 'DUNEWidget' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-linkAssetCatalog --thinned /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_output/thinned --thinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist_unthinned --output /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex --plist-output /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex/Assets.car (in target 'DUNEWidget' from project 'DUNE')
+
+ProcessInfoPlistFile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex/Info.plist /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNEWidget/Resources/Info.plist (in target 'DUNEWidget' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-infoPlistUtility /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNEWidget/Resources/Info.plist -producttype com.apple.product-type.app-extension -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist -o /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex/Info.plist
+
+CompileAssetCatalogVariant thinned /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets --compile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --filter-for-thinning-device-configuration iPhone19,4 --filter-for-device-os-version 27.2 --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 27.0 --platform iphonesimulator
+/* com.apple.actool.compilation-results */
+/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist_thinned
+/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/thinned/AppIcon60x60@2x.png
+/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/thinned/AppIcon76x76@2x~ipad.png
+/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/thinned/Assets.car
+
+
+LinkAssetCatalog /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/Shared/Resources/Colors.xcassets (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-linkAssetCatalog --thinned /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/thinned --thinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist_unthinned --output /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app --plist-output /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/AppIcon60x60@2x.png (in target 'DUNE' from project 'DUNE')
+note: Emplaced /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Assets.car (in target 'DUNE' from project 'DUNE')
+note: Emplaced /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/AppIcon76x76@2x~ipad.png (in target 'DUNE' from project 'DUNE')
+
+Copy /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns/DUNEWidget.appex /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks -remove-static-executable /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns
+
+Copy /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Watch/DUNEWatch.app /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks -remove-static-executable /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Watch
+
+ProcessInfoPlistFile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Info.plist /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE/Resources/Info.plist (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-infoPlistUtility /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE/Resources/Info.plist -producttype com.apple.product-type.application -genpkginfo /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist -scanforprivacyfile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns/DUNEWidget.appex -scanforprivacyfile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Watch/DUNEWatch.app -o /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Info.plist
+
+CopySwiftLibs /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/DUNE.debug.dylib --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Frameworks --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/SystemExtensions --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Extensions --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/HealthKit.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/GroupActivities.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+Ignoring --strip-bitcode because --sign was not passed
+
+ValidateEmbeddedBinary /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Watch/DUNEWatch.app (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    /Applications/Xcode.app/Contents/Developer/usr/bin/embeddedBinaryValidationUtility /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Watch/DUNEWatch.app -info-plist-path /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Info.plist
+
+ValidateEmbeddedBinary /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns/DUNEWidget.appex (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    /Applications/Xcode.app/Contents/Developer/usr/bin/embeddedBinaryValidationUtility /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns/DUNEWidget.appex -info-plist-path /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Info.plist
+
+ProcessInfoPlistFile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/Info.plist /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEUITests.build/empty-DUNEUITests.plist (in target 'DUNEUITests' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-infoPlistUtility /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEUITests.build/empty-DUNEUITests.plist -producttype com.apple.product-type.bundle.ui-testing -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEUITests.build/ProductTypeInfoPlistAdditions.plist -o /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/Info.plist
+
+CopySwiftLibs /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest (in target 'DUNEUITests' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/DUNE
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/DUNEUITests --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/Frameworks --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/PlugIns --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/SystemExtensions --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEUITests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+Ignoring --strip-bitcode because --sign was not passed
+
+PruneExplicitPrecompiledModules /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/SDKExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+2026-11-03 08:25:21.253 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 08:25:33.946238+0900 DUNEUITests-Runner[72077:23679955] [Default] Running tests...
+objc[72077]: Class UIAccessibilityLoaderWebShared is implemented in both /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.2.91016.19.Arupr1/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x1089ec310) and /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.2.91016.19.Arupr1/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x108ab8398). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-11-03 08:25:39.504.
+Test Suite 'DUNEUITests.xctest' started at 2026-11-03 08:25:39.504.
+Test Suite 'ActivityExerciseRegressionTests' started at 2026-11-03 08:25:39.504.
+Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testActivityRiskAndReportRoutesOpen]' started.
+    t =     0.00s Start Test at 2026-11-03 08:25:39.507
+    t =     0.40s Set Up
+    t =     0.41s     Open com.raftel.dailve
+    t =     0.41s         Launch com.raftel.dailve
+2026-11-03 08:25:40.212 xcodebuild[71251:23674706] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-03 08:25:40.212 xcodebuild[71251:23674706] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-03 08:25:40.349 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+    t =     2.38s             Setting up automation session
+    t =     5.34s             Wait for com.raftel.dailve to idle
+    t =    10.29s     Checking existence of `"workout-insights-close" Button`
+    t =    11.89s     Checking `Expect predicate `BLOCKPREDICATE(0x1085f0ae0)` for object Target Application 'com.raftel.dailve'`
+    t =    11.89s         Checking existence of `TabBar (First Match)`
+    t =    12.14s         Checking existence of `Any (First Match)`
+    t =    13.11s     Requesting snapshot of accessibility hierarchy for app with pid 72226
+    t =    13.93s     Requesting snapshot of accessibility hierarchy for app with pid 72226
+DUNE_VISUAL_AUDIT_READY root after setup -[ActivityExerciseRegressionTests testActivityRiskAndReportRoutesOpen] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793661983.631703 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/660D2333-018C-4631-ACB4-222093B3AE5E/data/Containers/Data/Application/E209D777-AF25-4603-ADBB-20E3D0D6A291/tmp/dune-visual-audit-CE5F2AAC-6E99-4FEF-B4BC-CA416321D4C8.ack
+    t =    16.91s     Visual audit: root after setup -[ActivityExerciseRegressionTests testActivityRiskAndReportRoutesOpen] [DUNEUITests/UITestBaseCase.swift:145]
+    t =    16.92s Terminate com.raftel.dailve:72226
+2026-11-03 08:25:56.450 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 08:25:56.450 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 08:25:56.453 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+    t =    18.02s Wait for com.raftel.dailve to become Not Running
+    t =    18.02s Open com.raftel.dailve
+    t =    18.02s     Launch com.raftel.dailve
+2026-11-03 08:25:57.527 xcodebuild[71251:23674706] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-03 08:25:57.527 xcodebuild[71251:23674706] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-03 08:25:57.574 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+    t =    18.24s         Setting up automation session
+    t =    20.98s         Wait for com.raftel.dailve to idle
+    t =    24.49s Checking existence of `"workout-insights-close" Button`
+    t =    24.91s Waiting 5.0s for "activity-root-scroll" ScrollView to exist
+    t =    25.95s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-root-scroll" ScrollView`
+    t =    25.95s         Checking existence of `"activity-root-scroll" ScrollView`
+    t =    25.98s Find the "activity-injuryrisk-detail-link" Any
+    t =    26.13s Swipe up "activity-root-scroll" ScrollView
+    t =    26.13s     Wait for com.raftel.dailve to idle
+    t =    26.14s     Find the "activity-root-scroll" ScrollView
+    t =    26.17s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    26.31s         Wait for com.apple.springboard to idle
+    t =    26.50s     Synthesize event
+    t =    27.19s     Wait for com.raftel.dailve to idle
+    t =    29.12s Find the "activity-injuryrisk-detail-link" Button
+    t =    29.21s Find the "activity-injuryrisk-detail-link" Button
+    t =    29.30s Find the "activity-injuryrisk-detail-link" Button
+    t =    29.38s Find the "activity-injuryrisk-detail-link" Button
+    t =    29.48s Find the "activity-injuryrisk-detail-link" Button
+    t =    29.60s Find the "activity-injuryrisk-detail-link" Button
+    t =    29.71s Find the "activity-injuryrisk-detail-link" Button
+    t =    29.83s Find the "activity-injuryrisk-detail-link" Button
+    t =    29.93s Find the "activity-injuryrisk-detail-link" Button
+    t =    30.14s Find the "activity-injuryrisk-detail-link" Button
+    t =    30.28s Find the "activity-injuryrisk-detail-link" Button
+    t =    30.36s Find the "activity-injuryrisk-detail-link" Button
+    t =    30.44s Find the "activity-injuryrisk-detail-link" Button
+    t =    30.52s Find the "activity-injuryrisk-detail-link" Button
+    t =    30.61s Find the "activity-injuryrisk-detail-link" Button
+    t =    30.73s Find the "activity-injuryrisk-detail-link" Button
+    t =    30.83s Find the "activity-injuryrisk-detail-link" Button
+    t =    30.92s Find the "activity-injuryrisk-detail-link" Button
+    t =    31.00s Find the "activity-injuryrisk-detail-link" Button
+    t =    31.07s Find the "activity-injuryrisk-detail-link" Button
+    t =    31.19s Find the "activity-injuryrisk-detail-link" Button
+    t =    31.27s Find the "activity-injuryrisk-detail-link" Button
+    t =    31.35s Find the "activity-injuryrisk-detail-link" Button
+    t =    31.43s Find the "activity-injuryrisk-detail-link" Button
+    t =    31.50s Waiting 5.0s for "activity-injuryrisk-detail-link" Any to exist
+    t =    32.53s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-injuryrisk-detail-link" Any`
+    t =    32.58s         Checking existence of `"activity-injuryrisk-detail-link" Any`
+    t =    32.72s Find the "activity-injuryrisk-detail-link" Any
+    t =    32.78s Find the "activity-injuryrisk-detail-link" Button
+    t =    32.85s Tap "activity-injuryrisk-detail-link" Button
+    t =    32.85s     Wait for com.raftel.dailve to idle
+    t =    32.85s     Find the "activity-injuryrisk-detail-link" Button
+    t =    32.92s     Check for interrupting elements affecting "activity-injuryrisk-detail-link" Button
+    t =    33.01s         Wait for com.apple.springboard to idle
+    t =    33.07s     Synthesize event
+    t =    33.38s     Wait for com.raftel.dailve to idle
+    t =    34.70s Requesting snapshot of accessibility hierarchy for app with pid 72466
+    t =    34.94s Requesting snapshot of accessibility hierarchy for app with pid 72466
+DUNE_VISUAL_AUDIT_READY tap activity-injuryrisk-detail-link [DUNEUITests/ActivityExerciseRegressionTests.swift:763] DEADLINE=1793662004.50249 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/660D2333-018C-4631-ACB4-222093B3AE5E/data/Containers/Data/Application/E209D777-AF25-4603-ADBB-20E3D0D6A291/tmp/dune-visual-audit-DB524F99-3663-40AC-B66D-82C6922215D4.ack
+    t =    37.71s Visual audit: tap activity-injuryrisk-detail-link [DUNEUITests/ActivityExerciseRegressionTests.swift:763]
+    t =    37.71s Waiting 10.0s for "activity-injury-risk-detail-screen" Any to exist
+    t =    38.77s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-injury-risk-detail-screen" Any`
+    t =    38.77s         Checking existence of `"activity-injury-risk-detail-screen" Any`
+    t =    38.83s Waiting 10.0s for "activity-injury-risk-score" StaticText to exist
+    t =    39.90s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-injury-risk-score" StaticText`
+    t =    39.91s         Checking existence of `"activity-injury-risk-score" StaticText`
+    t =    40.01s Find the "activity-injury-risk-score" StaticText
+    t =    40.09s Get number of matches for: Elements matching predicate 'identifier BEGINSWITH "activity-injury-risk-factor-"'
+    t =    40.13s Waiting 5.0s for "activity-injury-risk-factor-muscleFatigue" Any to exist
+    t =    41.18s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-injury-risk-factor-muscleFatigue" Any`
+    t =    41.18s         Checking existence of `"activity-injury-risk-factor-muscleFatigue" Any`
+    t =    41.27s Find the "activity-injury-risk-contribution-muscleFatigue" StaticText
+    t =    41.32s Waiting 5.0s for "activity-injury-risk-factor-sleepDeficit" Any to exist
+    t =    42.37s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-injury-risk-factor-sleepDeficit" Any`
+    t =    42.37s         Checking existence of `"activity-injury-risk-factor-sleepDeficit" Any`
+    t =    42.45s Find the "activity-injury-risk-contribution-sleepDeficit" StaticText
+    t =    42.51s Waiting 5.0s for "activity-injury-risk-recommendations" Any to exist
+    t =    43.57s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-injury-risk-recommendations" Any`
+    t =    43.57s         Checking existence of `"activity-injury-risk-recommendations" Any`
+    t =    43.64s Find the Target Application 'com.raftel.dailve'
+    t =    43.90s Added attachment named 'Injury Risk loaded DEBUG route assessment'
+    t =    44.70s Requesting snapshot of accessibility hierarchy for app with pid 72466
+    t =    45.06s Requesting snapshot of accessibility hierarchy for app with pid 72466
+DUNE_VISUAL_AUDIT_READY Injury Risk loaded DEBUG route assessment [DUNEUITests/ActivityExerciseRegressionTests.swift:784] DEADLINE=1793662014.621588 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/660D2333-018C-4631-ACB4-222093B3AE5E/data/Containers/Data/Application/E209D777-AF25-4603-ADBB-20E3D0D6A291/tmp/dune-visual-audit-EC1CB61D-49C3-4140-8001-A82455E6CB67.ack
+    t =    47.49s Visual audit: Injury Risk loaded DEBUG route assessment [DUNEUITests/ActivityExerciseRegressionTests.swift:784]
+    t =    47.49s Checking existence of `"BackButton" Button`
+    t =    47.52s Find the "BackButton" Button
+    t =    47.55s Find the "BackButton" Button
+    t =    47.58s Find the "BackButton" Button
+    t =    47.60s Tap "BackButton" Button
+    t =    47.60s     Wait for com.raftel.dailve to idle
+    t =    47.61s     Find the "BackButton" Button
+    t =    47.63s     Check for interrupting elements affecting "BackButton" Button
+    t =    47.66s         Wait for com.apple.springboard to idle
+    t =    47.70s     Synthesize event
+    t =    47.99s     Wait for com.raftel.dailve to idle
+    t =    49.34s Requesting snapshot of accessibility hierarchy for app with pid 72466
+    t =    50.07s Requesting snapshot of accessibility hierarchy for app with pid 72466
+DUNE_VISUAL_AUDIT_READY tap BackButton [DUNEUITests/ActivityExerciseRegressionTests.swift:3058] DEADLINE=1793662019.774853 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/660D2333-018C-4631-ACB4-222093B3AE5E/data/Containers/Data/Application/E209D777-AF25-4603-ADBB-20E3D0D6A291/tmp/dune-visual-audit-AA4685FF-F40A-48CB-95D3-5EDA1FD25AC3.ack
+    t =    52.61s Visual audit: tap BackButton [DUNEUITests/ActivityExerciseRegressionTests.swift:3058]
+    t =    52.61s Waiting 3.0s for "activity-toolbar-add" Any to exist
+    t =    53.66s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-toolbar-add" Any`
+    t =    53.66s         Checking existence of `"activity-toolbar-add" Any`
+    t =    53.79s Waiting 15.0s for "activity-hero-readiness" Any to exist
+    t =    54.83s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-hero-readiness" Any`
+    t =    54.83s         Checking existence of `"activity-hero-readiness" Any`
+    t =    54.89s Waiting 5.0s for "activity-toolbar-add" Any to exist
+    t =    55.93s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-toolbar-add" Any`
+    t =    55.93s         Checking existence of `"activity-toolbar-add" Any`
+    t =    56.08s Find the "activity-weeklyreport-detail-link" Any
+    t =    56.18s Swipe up "activity-root-scroll" ScrollView
+    t =    56.18s     Wait for com.raftel.dailve to idle
+    t =    56.18s     Find the "activity-root-scroll" ScrollView
+    t =    56.20s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    56.29s         Wait for com.apple.springboard to idle
+    t =    56.32s     Synthesize event
+    t =    56.85s     Wait for com.raftel.dailve to idle
+    t =    58.81s Find the "activity-weeklyreport-detail-link" Button
+    t =    58.90s Swipe up "activity-root-scroll" ScrollView
+    t =    58.91s     Wait for com.raftel.dailve to idle
+    t =    58.91s     Find the "activity-root-scroll" ScrollView
+    t =    58.93s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    59.02s         Wait for com.apple.springboard to idle
+    t =    59.06s     Synthesize event
+    t =    59.59s     Wait for com.raftel.dailve to idle
+    t =    61.52s Find the "activity-weeklyreport-detail-link" Button
+    t =    61.66s Swipe up "activity-root-scroll" ScrollView
+    t =    61.66s     Wait for com.raftel.dailve to idle
+    t =    61.66s     Find the "activity-root-scroll" ScrollView
+    t =    61.68s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    61.78s         Wait for com.apple.springboard to idle
+    t =    61.82s     Synthesize event
+    t =    62.34s     Wait for com.raftel.dailve to idle
+    t =    64.30s Find the "activity-weeklyreport-detail-link" Button
+    t =    64.42s Swipe up "activity-root-scroll" ScrollView
+    t =    64.42s     Wait for com.raftel.dailve to idle
+    t =    64.42s     Find the "activity-root-scroll" ScrollView
+    t =    64.45s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    64.55s         Wait for com.apple.springboard to idle
+    t =    64.58s     Synthesize event
+    t =    65.11s     Wait for com.raftel.dailve to idle
+    t =    67.05s Find the "activity-weeklyreport-detail-link" Button
+    t =    67.16s Swipe up "activity-root-scroll" ScrollView
+    t =    67.17s     Wait for com.raftel.dailve to idle
+    t =    67.17s     Find the "activity-root-scroll" ScrollView
+    t =    67.19s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    67.29s         Wait for com.apple.springboard to idle
+    t =    67.33s     Synthesize event
+    t =    67.85s     Wait for com.raftel.dailve to idle
+    t =    69.78s Find the "activity-weeklyreport-detail-link" Button
+    t =    69.90s Swipe up "activity-root-scroll" ScrollView
+    t =    69.90s     Wait for com.raftel.dailve to idle
+    t =    69.90s     Find the "activity-root-scroll" ScrollView
+    t =    69.93s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    70.04s         Wait for com.apple.springboard to idle
+    t =    70.08s     Synthesize event
+    t =    70.60s     Wait for com.raftel.dailve to idle
+    t =    72.53s Find the "activity-weeklyreport-detail-link" Button
+    t =    72.64s Find the "activity-weeklyreport-detail-link" Button
+    t =    72.75s Find the "activity-weeklyreport-detail-link" Button
+    t =    72.85s Find the "activity-weeklyreport-detail-link" Button
+    t =    72.95s Find the "activity-weeklyreport-detail-link" Button
+    t =    73.06s Find the "activity-weeklyreport-detail-link" Button
+    t =    73.15s Find the "activity-weeklyreport-detail-link" Button
+    t =    73.25s Find the "activity-weeklyreport-detail-link" Button
+    t =    73.35s Find the "activity-weeklyreport-detail-link" Button
+    t =    73.45s Find the "activity-weeklyreport-detail-link" Button
+    t =    73.55s Find the "activity-weeklyreport-detail-link" Button
+    t =    73.65s Find the "activity-weeklyreport-detail-link" Button
+    t =    73.76s Find the "activity-weeklyreport-detail-link" Button
+    t =    73.87s Find the "activity-weeklyreport-detail-link" Button
+    t =    73.98s Find the "activity-weeklyreport-detail-link" Button
+    t =    74.08s Find the "activity-weeklyreport-detail-link" Button
+    t =    74.18s Find the "activity-weeklyreport-detail-link" Button
+    t =    74.29s Find the "activity-weeklyreport-detail-link" Button
+    t =    74.40s Find the "activity-weeklyreport-detail-link" Button
+    t =    74.61s Waiting 5.0s for "activity-weeklyreport-detail-link" Any to exist
+    t =    75.63s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-weeklyreport-detail-link" Any`
+    t =    75.63s         Checking existence of `"activity-weeklyreport-detail-link" Any`
+    t =    75.79s Find the "activity-weeklyreport-detail-link" Any
+    t =    75.89s Find the "activity-weeklyreport-detail-link" Button
+    t =    75.99s Tap "activity-weeklyreport-detail-link" Button
+    t =    75.99s     Wait for com.raftel.dailve to idle
+    t =    75.99s     Find the "activity-weeklyreport-detail-link" Button
+    t =    76.09s     Check for interrupting elements affecting "activity-weeklyreport-detail-link" Button
+    t =    76.20s         Wait for com.apple.springboard to idle
+    t =    76.26s     Synthesize event
+    t =    76.56s     Wait for com.raftel.dailve to idle
+    t =    77.84s Requesting snapshot of accessibility hierarchy for app with pid 72466
+    t =    78.01s Requesting snapshot of accessibility hierarchy for app with pid 72466
+DUNE_VISUAL_AUDIT_READY tap activity-weeklyreport-detail-link [DUNEUITests/ActivityExerciseRegressionTests.swift:792] DEADLINE=1793662047.562008 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/660D2333-018C-4631-ACB4-222093B3AE5E/data/Containers/Data/Application/E209D777-AF25-4603-ADBB-20E3D0D6A291/tmp/dune-visual-audit-019D4D2F-D9FC-46E6-A199-20AA915B84C1.ack
+    t =    80.29s Visual audit: tap activity-weeklyreport-detail-link [DUNEUITests/ActivityExerciseRegressionTests.swift:792]
+    t =    80.29s Waiting 10.0s for "activity-weekly-report-detail-screen" Any to exist
+    t =    81.35s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-weekly-report-detail-screen" Any`
+    t =    81.35s         Checking existence of `"activity-weekly-report-detail-screen" Any`
+    t =    81.40s Find the "activity-weekly-report-volume" StaticText
+    t =    81.45s Find the "activity-weekly-report-sessions" StaticText
+    t =    81.51s Find the "activity-weekly-report-active-days" StaticText
+    t =    81.58s Find the "activity-weekly-report-duration" StaticText
+    t =    81.64s Find the "activity-weekly-report-intensity" StaticText
+    t =    81.67s Find the "activity-weekly-report-change" StaticText
+    t =    81.71s Find the "activity-weekly-report-date" StaticText
+    t =    81.76s Find the Target Application 'com.raftel.dailve'
+    t =    81.89s Added attachment named 'Activity Weekly Report A09 loaded hero'
+    t =    82.70s Requesting snapshot of accessibility hierarchy for app with pid 72466
+    t =    82.92s Requesting snapshot of accessibility hierarchy for app with pid 72466
+DUNE_VISUAL_AUDIT_READY Activity Weekly Report A09 loaded hero [DUNEUITests/ActivityExerciseRegressionTests.swift:803] DEADLINE=1793662052.483296 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/660D2333-018C-4631-ACB4-222093B3AE5E/data/Containers/Data/Application/E209D777-AF25-4603-ADBB-20E3D0D6A291/tmp/dune-visual-audit-339A433D-32FD-4290-AA02-06F361081382.ack
+    t =    85.15s Visual audit: Activity Weekly Report A09 loaded hero [DUNEUITests/ActivityExerciseRegressionTests.swift:803]
+    t =    85.15s Checking existence of `"activity-weekly-report-summary" StaticText`
+    t =    85.19s Find the "activity-weekly-report-summary" StaticText
+    t =    85.22s Checking existence of `"activity-weekly-report-highlight" StaticText`
+    t =    85.26s Find the "activity-weekly-report-highlight" StaticText
+    t =    85.30s Get number of matches for: Elements matching predicate '"activity-weekly-report-muscle-volume" IN identifiers'
+    t =    85.33s Get number of matches for: Elements matching predicate '"activity-weekly-report-muscle-volume" IN identifiers'
+    t =    85.36s Find the "activity-weekly-report-muscle-volume" StaticText
+    t =    85.40s Find the "activity-weekly-report-muscle-volume" StaticText
+    t =    85.44s Waiting 1.0s for "activity-weekly-report-muscle-volume" Any to exist
+    t =    86.44s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-weekly-report-muscle-volume" Any`
+    t =    86.44s         Checking existence of `"activity-weekly-report-muscle-volume" Any`
+    t =    86.51s     Checking existence of `"activity-weekly-report-muscle-volume" Any`
+    t =    86.58s Checking existence of `"activity-weekly-report-muscle-volume" Any`
+    t =    86.65s Find the "activity-weekly-report-muscle-volume" Any
+    t =    86.73s Checking existence of `"picker-root-list" Table`
+    t =    86.78s Checking existence of `"activity-root-scroll" Any`
+    t =    86.91s Checking existence of `"picker-root-list" Table`
+    t =    86.97s Checking existence of `"activity-root-scroll" Any`
+    t =    87.09s Get all elements bound by index for: Descendants matching type Table
+    t =    87.12s Get all elements bound by index for: Descendants matching type ScrollView
+    t =    87.14s Checking existence of `ScrollView (Element at index 0)`
+    t =    87.17s Find the ScrollView (Element at index 0)
+    t =    87.21s Swipe up "activity-weekly-report-detail-screen" ScrollView
+    t =    87.21s     Wait for com.raftel.dailve to idle
+    t =    87.21s     Find the "activity-weekly-report-detail-screen" ScrollView
+    t =    87.24s     Check for interrupting elements affecting "activity-weekly-report-detail-screen" ScrollView
+    t =    87.27s         Wait for com.apple.springboard to idle
+    t =    87.30s     Synthesize event
+    t =    87.76s     Wait for com.raftel.dailve to idle
+    t =    88.27s Checking existence of `"activity-weekly-report-muscle-volume" StaticText`
+    t =    88.34s Find the "activity-weekly-report-muscle-volume" StaticText
+    t =    88.41s Find the Target Application 'com.raftel.dailve'
+    t =    88.54s Added attachment named 'Activity Weekly Report A09 highlights and muscle breakdown'
+    t =    89.34s Requesting snapshot of accessibility hierarchy for app with pid 72466
+    t =    89.54s Requesting snapshot of accessibility hierarchy for app with pid 72466
+DUNE_VISUAL_AUDIT_READY Activity Weekly Report A09 highlights and muscle breakdown [DUNEUITests/ActivityExerciseRegressionTests.swift:817] DEADLINE=1793662059.08954 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/660D2333-018C-4631-ACB4-222093B3AE5E/data/Containers/Data/Application/E209D777-AF25-4603-ADBB-20E3D0D6A291/tmp/dune-visual-audit-2D3B9025-8944-4388-87CD-632A09843C5C.ack
+    t =    91.97s Visual audit: Activity Weekly Report A09 highlights and muscle breakdown [DUNEUITests/ActivityExerciseRegressionTests.swift:817]
+    t =    91.97s Checking existence of `"BackButton" Button`
+    t =    92.00s Find the "BackButton" Button
+    t =    92.05s Find the "BackButton" Button
+    t =    92.07s Find the "BackButton" Button
+    t =    92.10s Tap "BackButton" Button
+    t =    92.10s     Wait for com.raftel.dailve to idle
+    t =    92.10s     Find the "BackButton" Button
+    t =    92.12s     Check for interrupting elements affecting "BackButton" Button
+    t =    92.15s         Wait for com.apple.springboard to idle
+    t =    92.18s     Synthesize event
+    t =    92.47s     Wait for com.raftel.dailve to idle
+    t =    93.68s Requesting snapshot of accessibility hierarchy for app with pid 72466
+    t =    94.15s Requesting snapshot of accessibility hierarchy for app with pid 72466
+DUNE_VISUAL_AUDIT_READY tap BackButton [DUNEUITests/ActivityExerciseRegressionTests.swift:3058] DEADLINE=1793662063.8443022 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/660D2333-018C-4631-ACB4-222093B3AE5E/data/Containers/Data/Application/E209D777-AF25-4603-ADBB-20E3D0D6A291/tmp/dune-visual-audit-175681E5-7092-44BF-A1FB-53D0A4FA3C1A.ack
+    t =    96.58s Visual audit: tap BackButton [DUNEUITests/ActivityExerciseRegressionTests.swift:3058]
+    t =    96.58s Waiting 3.0s for "activity-toolbar-add" Any to exist
+    t =    97.62s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-toolbar-add" Any`
+    t =    97.62s         Checking existence of `"activity-toolbar-add" Any`
+    t =    97.74s Waiting 15.0s for "activity-hero-readiness" Any to exist
+    t =    98.77s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-hero-readiness" Any`
+    t =    98.77s         Checking existence of `"activity-hero-readiness" Any`
+    t =    98.84s Waiting 5.0s for "activity-toolbar-add" Any to exist
+    t =    99.88s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-toolbar-add" Any`
+    t =    99.88s         Checking existence of `"activity-toolbar-add" Any`
+    t =   100.01s Tear Down
+    t =   100.83s     Requesting snapshot of accessibility hierarchy for app with pid 72466
+    t =   101.29s     Requesting snapshot of accessibility hierarchy for app with pid 72466
+DUNE_VISUAL_AUDIT_READY before teardown -[ActivityExerciseRegressionTests testActivityRiskAndReportRoutesOpen] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793662070.988354 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/660D2333-018C-4631-ACB4-222093B3AE5E/data/Containers/Data/Application/E209D777-AF25-4603-ADBB-20E3D0D6A291/tmp/dune-visual-audit-3E9097BF-BF68-4B99-8F27-4FBC3B40638F.ack
+    t =   103.66s     Visual audit: before teardown -[ActivityExerciseRegressionTests testActivityRiskAndReportRoutesOpen] [DUNEUITests/UITestBaseCase.swift:120]
+    t =   103.66s     Terminate com.raftel.dailve:72466
+2026-11-03 08:27:23.192 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 08:27:23.193 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 08:27:23.193 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+    t =   104.70s     Wait for com.raftel.dailve to become Not Running
+Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testActivityRiskAndReportRoutesOpen]' passed (104.979 seconds).
+Test Suite 'ActivityExerciseRegressionTests' passed at 2026-11-03 08:27:24.486.
+	 Executed 1 test, with 0 failures (0 unexpected) in 104.979 (104.982) seconds
+Test Suite 'DUNEUITests.xctest' passed at 2026-11-03 08:27:24.486.
+	 Executed 1 test, with 0 failures (0 unexpected) in 104.979 (104.982) seconds
+Test Suite 'Selected tests' passed at 2026-11-03 08:27:24.487.
+	 Executed 1 test, with 0 failures (0 unexpected) in 104.979 (104.983) seconds
+2026-11-03 08:27:24.522 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 08:27:24.522 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 08:27:24.522 xcodebuild[71251:23674706] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 08:27:24.800 xcodebuild[71251:23674706] [MT] IDETestOperationsObserverDebug: 125.380 elapsed -- Testing started completed.
+2026-11-03 08:27:24.800 xcodebuild[71251:23674706] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-11-03 08:27:24.800 xcodebuild[71251:23674706] [MT] IDETestOperationsObserverDebug: 125.380 sec, +125.380 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.03_08-24-40-+0900.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started
+UI tests: passed
+Last reported test count: 1
+Last reported failures: 0
+Full log: /Users/shanks/.codex/worktrees/detail-redesign-a09/Health/.xcodebuild/a09-duo-closed-0d789a1e.log
+Verified UI test execution: 1 reported, 1 passed cases

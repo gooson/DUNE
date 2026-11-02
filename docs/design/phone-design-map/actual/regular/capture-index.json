@@ -723,12 +723,21 @@
     "A09": {
       "row_id": "A09",
       "evidence": "activity-weekly-report-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
-      "action": "tap activity-weeklyreport-detail-link",
-      "timestamp": 1791835697.775,
-      "image": "51E29D45-001C-4433-83C7-149CF81E882E.png",
-      "screen": "screen-0-1320x2868-tap activity-weeklyreport-detail-link_0_E6AFE723-1B2D-4508-B7BD-DCC633FB48F8.png",
-      "file": "A09.png"
+      "test": "DUNEUITests/ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen",
+      "action": "Activity Weekly Report A09 loaded hero",
+      "timestamp": 1793661550.718,
+      "timestamp_kind": "native-XCTest-attachment",
+      "capture_kind": "native-XCTest-attachment",
+      "image": "A17D10D0-4E63-41FA-8FA6-D6E6AAD48144.png",
+      "screen": "Activity Weekly Report A09 loaded hero",
+      "file": "A09.png",
+      "source_revision": "0d789a1ea11e777f663f52aad44a760684e27acc",
+      "source_worktree_dirty": false,
+      "device_udid": "4E536189-CD0D-4DAE-900B-47713D5EB61F",
+      "sha256": "e7c1a5d2e64e57896f856bb126d5457df63e99556bd9ec7b4ef7a290a986f8e3",
+      "source_json": "../../../full-redesign-map/review/a09-weekly-report-native-2026-11-03/evidence.json",
+      "source_record": "records.regular.after",
+      "capture_scope": "A09 DEBUG fixture; five current cases; 5400 minutes"
     },
     "A08": {
       "row_id": "A08",

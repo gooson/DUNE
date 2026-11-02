@@ -1,0 +1,131 @@
+{
+  "scope": "A09 old map visually inspected; original A20 separate",
+  "map_references": [
+    {
+      "tier": "regular",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/docs/design/phone-design-map/actual/regular/images/A09.png",
+      "sha256": "5a2e5616d0e5cbb8c1855a8d4a02590980a89a224a64c61ca20428e985a95452",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/docs/design/phone-design-map/actual/regular/capture-index.json",
+      "index_sha256": "23c140c87b404d2bf8ed3aab12f2720fdcd55a623e186687f8c3102f2401e693",
+      "index_entry": {
+        "row_id": "A09",
+        "evidence": "activity-weekly-report-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+        "action": "tap activity-weeklyreport-detail-link",
+        "timestamp": 1791835697.775,
+        "image": "51E29D45-001C-4433-83C7-149CF81E882E.png",
+        "screen": "screen-0-1320x2868-tap activity-weeklyreport-detail-link_0_E6AFE723-1B2D-4508-B7BD-DCC633FB48F8.png",
+        "file": "A09.png"
+      },
+      "visual_observation": "Weekly Report; 5400 min, 2.4k, 3 sessions, 3 days, 72%, +12%",
+      "source_revision": "per-image unknown",
+      "device_model": "unknown",
+      "paired_ax": "unknown",
+      "duo_pose": "not applicable"
+    },
+    {
+      "tier": "ipad",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/docs/design/phone-design-map/actual/ipad/images/A09.png",
+      "sha256": "9beec8df33348a464c01e5e7ccf7fad47588f2d8ae5e12f553d2806762ef0f15",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/docs/design/phone-design-map/actual/ipad/capture-index.json",
+      "index_sha256": "cb088705bf5b3c6d419c158f22b59a3f04d0609c0cc6cd16972443e6e3088a7d",
+      "index_entry": {
+        "row_id": "A09",
+        "evidence": "activity-weekly-report-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+        "action": "tap activity-weeklyreport-detail-link",
+        "timestamp": 1791837926.396,
+        "image": "22C6C20C-2DAC-45CE-A831-BEFDE303E060.png",
+        "screen": "screen-0-2064x2752-tap activity-weeklyreport-detail-link_0_48F5FDF9-4EC3-40C8-9EDB-52299B1DD8B4.png",
+        "file": "A09.png"
+      },
+      "visual_observation": "Weekly Report; 5400 min, 2.4k, 3 sessions, 3 days, 72%, +12%",
+      "source_revision": "per-image unknown",
+      "device_model": "unknown",
+      "paired_ax": "unknown",
+      "duo_pose": "not applicable"
+    },
+    {
+      "tier": "duo",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/docs/design/phone-design-map/actual/duo/images/A09.png",
+      "sha256": "4700b4eb2f6eefe667d414db796568a843d4917875ba01a03828f276af1f5925",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/docs/design/phone-design-map/actual/duo/capture-index.json",
+      "index_sha256": "a3d5dca5428e19af14ac2efed34e9729d48acbf9a421a7d26c6496971593c0dd",
+      "index_entry": {
+        "row_id": "A09",
+        "evidence": "activity-weekly-report-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+        "action": "tap activity-weeklyreport-detail-link",
+        "timestamp": 1791855167.355,
+        "image": "4FD75746-E65B-4253-8FA5-10A22518D6B7.png",
+        "screen": "screen-0-1398x2034-tap activity-weeklyreport-detail-link_0_24B14B79-DF6F-4B0D-873B-FEB23AD3187C.png",
+        "file": "A09.png"
+      },
+      "visual_observation": "Weekly Report; 5400 min, 2.4k, 3 sessions, 3 days, 72%, +12%; Duo lower area partly covered by tab bar",
+      "source_revision": "per-image unknown",
+      "device_model": "unknown",
+      "paired_ax": "unknown",
+      "duo_pose": "unknown"
+    },
+    {
+      "tier": "duo-open",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/docs/design/phone-design-map/actual/duo-open/images/A09.png",
+      "sha256": "5bd7d520e91a94158755d87665f04f9722e90c5d474d11aecd41321677cfb9d8",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a09/Health/docs/design/phone-design-map/actual/duo-open/capture-index.json",
+      "index_sha256": "df3a464037a58a4c8150cdc29aefd59980838f95d31cd1b4a087b3781620b41e",
+      "index_entry": {
+        "row_id": "A09",
+        "evidence": "activity-weekly-report-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+        "action": "tap activity-weeklyreport-detail-link",
+        "timestamp": 1791834625.768,
+        "image": "F42A3801-5806-4BD9-92C0-2DE9E91A8FAF.png",
+        "screen": "screen-1-2006x2852-tap activity-weeklyreport-detail-link_1_0988CE6B-DD18-462C-8DDB-AFD3EF0BB9FC.png",
+        "file": "A09.png"
+      },
+      "visual_observation": "Weekly Report; 5400 min, 2.4k, 3 sessions, 3 days, 72%, +12%; Duo lower area partly covered by tab bar",
+      "source_revision": "per-image unknown",
+      "device_model": "unknown",
+      "paired_ax": "unknown",
+      "duo_pose": "unknown"
+    }
+  ],
+  "ipad_original": {
+    "files": {
+      "image": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/87B3CA7E-CBAA-48B8-A669-59188561830E.png",
+        "sha256": "b63cc6079c76b29ed95c5cbaa4e83db4cff250fed945d3b7f8f33f91e535a561"
+      },
+      "ax": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/0E853648-6363-478D-AC4D-CB9EF22B2DBC.txt",
+        "sha256": "3d74ed0019d2965294c3fa51ba53410ca28da0838a55d27d5ee5b82321fbb9fb"
+      },
+      "manifest": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/manifest.json",
+        "sha256": "e24e1482b973feb98b3b53ff6f2e4166e18d9ba8326bf163261cdaddef3c84c7"
+      },
+      "provenance": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/provenance.json",
+        "sha256": "5b65ae64ebd026f159c437391f6ff4779976f93776bf1b5bec3d5a58bab143fe"
+      },
+      "result": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/result.json",
+        "sha256": "c54829711410cd88c4c7334a9e5c6506234a3cbe779d76bfc15dc64019716b57"
+      },
+      "tests": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/tests.json",
+        "sha256": "b1d98a1ffe2646ad78f1c5c1cb84c4049c8d062488ae108c3c65760548423672"
+      },
+      "summary": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/summary.json",
+        "sha256": "60d591e4f05cfe0891ce9f2b5e0ec9e2a7e20de9a9f0f7ae35cba4735211eb09"
+      }
+    },
+    "revision": "936b87b4",
+    "device_id": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+    "selector": "DUNEUITests/ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen",
+    "action": "tap activity-weeklyreport-detail-link",
+    "checkpoint": "D999AB03-D6D4-4C3B-9920-C0EDAEF8B38F",
+    "claim": "Original A20 individually passed report selector in clean 936 2/2 batch; later 58ac used same simulator instance; current 0d uses another."
+  }
+}
