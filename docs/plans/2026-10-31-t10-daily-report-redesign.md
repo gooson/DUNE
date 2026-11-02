@@ -1,7 +1,7 @@
 ---
 topic: T10 daily health report redesign
 date: 2026-10-31
-status: approved
+status: verified-pending-ship
 confidence: high
 related_solutions: [docs/solutions/architecture/2026-03-29-today-phase2-enhancements.md, docs/solutions/architecture/2026-10-28-vital-card-history-observation.md]
 related_brainstorms: []
@@ -55,3 +55,10 @@ Build a report-specific composition in `DailyDigestNotificationView` while retai
 - The shared card remains a Today consumer; report-specific disclosure must preserve its first-sentence preview semantics while not altering the dashboard card.
 - Test fixture values are observed seeded data only. Dynamic content and partial data can change section height; verify full title and frame visibility rather than requiring long paragraphs to fit one viewport.
 - Scope is T10 iOS destination. Watch has no T10 view. The actual map cannot be marked current until new native captures are produced.
+
+
+## 2026-11-02 검증 범위와 보완
+
+최신 main 8409827a를 실제 merge했고 네 문서 충돌에서 양쪽 화면 항목과 최신 정적 카탈로그·병합 manifest를 보존했다. 독립 다섯 소스 리뷰에서 발견한 원래 펼침/접힘 chevron 누락을 fd888f13에서 복원했다. 이 실제 배치 변경을 검증하기 위해 report method 한 개씩을 iPhone·iPad에서 실행하여 f9c956e1 기준 각각 1/1 PASS를 확인했다. 한 메서드 안에서 기본·dark 최대 접근성 글씨, 원문 보존과 실제 펼치기를 검증한다. 이전 route+report 2/2 통과와 별도 최초 그룹의 deferred-readiness 부분 양성은 소스 일치로만 재사용한다. Duo 접힘 첫 실행의 native back 조회 실패를 보존하고, NavigationBar 밖 BackButton을 찾도록 테스트만 수정했다. ae2598a6에서 같은 ID로 한 번 조건부 재검증하여 1/1·엄격 ACK 2개·전후 0° LCD·실제 back 및 Today 복귀를 확인했다. 펼침 report 한 건도 ae2598a6에서 1/1·엄격 ACK 7개·전후 180° LCD-1 통과했다. 전체 UI/단위 회귀나 Watch 검사를 추가하지 않으며 기존 CI는 그대로 유지한다. 새 실제 맵은 네 상태의 원본 PNG와 촬영·소스·검사 범위를 모은 뒤 T10만 갱신한다.
+
+최종 제품 코드 fd888f13의 원격 앱 빌드와 iOS 2,734개/302 suites가 통과했다. 이후 27d12c40은 테스트 뒤로 버튼 조회만 변경했으며 접힘 검사에서 해당 변경을 실행했다. Watch CI는 실행 전 빈 destination ID로 exit64이며 통과로 표시하지 않는다. T10 네 행과 25개 PNG 전후·기본/큰 글씨 보충 자료를 정식 맵에 설치하고 이미지·출처·기기·스크롤 상태 차이를 구분했다. 로컬 전체 회귀와 중복 앱 빌드는 실행하지 않았다.
