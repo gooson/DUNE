@@ -1,7 +1,7 @@
 import SwiftUI
 import Charts
 
-/// Stacked bar chart showing daily exercise volume breakdown by type.
+/// Stacked bar chart showing daily exercise duration in minutes by type.
 struct StackedVolumeBarChartView: View {
     let dailyBreakdown: [DailyVolumePoint]
     let topTypeKeys: [String] // Top 5 type keys for color assignment
@@ -19,7 +19,7 @@ struct StackedVolumeBarChartView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Daily Volume")
+                Text("Daily Duration")
                     .font(.subheadline.weight(.semibold))
 
                 if isScrollable {
@@ -195,7 +195,7 @@ struct StackedVolumeBarChartView: View {
     private var chartAccessibilitySurface: some View {
         ChartUITestSurface(
             identifier: "training-volume-chart-daily-volume",
-            label: String(localized: "Daily Volume"),
+            label: String(localized: "Daily Duration"),
             value: isScrollable ? visibleRangeLabel : ""
         )
     }
@@ -228,7 +228,7 @@ struct StackedVolumeBarChartView: View {
             Image(systemName: "chart.bar.fill")
                 .font(.title2)
                 .foregroundStyle(.tertiary)
-            Text("Daily volume will appear as you exercise")
+            Text("No daily workout duration for this period")
                 .font(.caption)
                 .foregroundStyle(DS.Color.textSecondary)
         }

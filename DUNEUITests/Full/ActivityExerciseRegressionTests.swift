@@ -350,6 +350,13 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         app.buttons[AXID.activitySectionVolume].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen]
             .firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityTrainingVolumeOverview]
+            .firstMatch.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.descendants(matching: .any)["activity-training-volume-current-active-days"]
+            .firstMatch.waitForExistence(timeout: 15))
+        VisualAudit.capture("Maximum AX training volume detail overview")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-training-volume-previous-period", maxSwipes: 8))
+        VisualAudit.capture("Maximum AX training volume previous comparison")
     }
 
     func testExerciseHistoryAtMaximumAccessibilityTextSize() throws {

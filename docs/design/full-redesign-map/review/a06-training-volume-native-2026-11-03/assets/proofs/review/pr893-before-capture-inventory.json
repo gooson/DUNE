@@ -1,0 +1,110 @@
+{
+  "scope": "Original indexed A06 weekly images; no canonical before certification",
+  "rows": [
+    {
+      "tier": "regular",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/docs/design/phone-design-map/actual/regular/images/A06.png",
+      "sha256": "2d79a098edc8392401d621cf3dbf04c1bd2984d676eea5a5836de2327686fbbd",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/docs/design/phone-design-map/actual/regular/capture-index.json",
+      "index_entry": {
+        "row_id": "A06",
+        "evidence": "activity-training-volume-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
+        "action": "tap activity-section-volume",
+        "timestamp": 1791816416.811,
+        "image": "6CB2615B-4E7F-4863-8B5D-B23B490145A5.png",
+        "screen": "screen-0-1320x2868-tap activity-section-volume_0_5B3EE6A2-DB59-4A4D-B663-303033F0D03A.png",
+        "file": "A06.png"
+      },
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "index_source_dirty": true,
+      "visual_review": "A06 Training Volume, week selected; actual Korean UI; screenshot pixels inspected",
+      "exact_device": "not recorded in A06 entry",
+      "locale": "Korean visible; locale identifier unverified",
+      "paired_ax": "not located in indexed entry; unverified",
+      "comparison_limit": "Historical visual A06 week reference only; exact source, simulator model, AX, locale identifier and matching pose remain unverified. Do not treat 443a32ca bundle metadata as exact per-image source.",
+      "index_source_revision_note": "Index-wide historical bundle revision, explicitly not proven as this image execution revision.",
+      "device_family": "Indexed iPhone; exact model and verified pose unknown.",
+      "provenance_search": "A06 validation archive contains implementation failure only; original-three-screen iPad archive has no volume checkpoint. Absolute indexed xcresult paths unavailable. Index-wide candidate paths do not associate an xcresult with this A06 image. No paired hierarchy recovered."
+    },
+    {
+      "tier": "ipad",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/docs/design/phone-design-map/actual/ipad/images/A06.png",
+      "sha256": "9c3e75ae8cad84d46d9a58bbf99c92d12752de2c73cb8f19d62311e408397251",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/docs/design/phone-design-map/actual/ipad/capture-index.json",
+      "index_entry": {
+        "row_id": "A06",
+        "evidence": "activity-training-volume-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+        "action": "tap activity-section-volume",
+        "timestamp": 1791821714.04,
+        "image": "A0077A37-C724-4184-BE37-196E2B4BA424.png",
+        "screen": "screen-0-2064x2752-tap activity-section-volume_0_6E53A2BF-E205-42A1-8F8B-C3F2B8536DC9.png",
+        "file": "A06.png"
+      },
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "index_source_dirty": true,
+      "visual_review": "A06 Training Volume, week selected; actual Korean UI; screenshot pixels inspected",
+      "exact_device": "not recorded in A06 entry",
+      "locale": "Korean visible; locale identifier unverified",
+      "paired_ax": "not located in indexed entry; unverified",
+      "comparison_limit": "Historical visual A06 week reference only; exact source, simulator model, AX, locale identifier and matching pose remain unverified. Do not treat 443a32ca bundle metadata as exact per-image source.",
+      "index_source_revision_note": "Index-wide historical bundle revision, explicitly not proven as this image execution revision.",
+      "device_family": "Indexed iPad; exact model and verified pose unknown.",
+      "provenance_search": "A06 validation archive contains implementation failure only; original-three-screen iPad archive has no volume checkpoint. Absolute indexed xcresult paths unavailable. Index-wide candidate paths do not associate an xcresult with this A06 image. No paired hierarchy recovered."
+    },
+    {
+      "tier": "duo",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/docs/design/phone-design-map/actual/duo/images/A06.png",
+      "sha256": "3ac01bb748db2a9acfae5929a8beb031b67a779f3ee6e852b21ec94e4390f160",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/docs/design/phone-design-map/actual/duo/capture-index.json",
+      "index_entry": {
+        "row_id": "A06",
+        "evidence": "activity-training-volume-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+        "action": "tap activity-section-volume",
+        "timestamp": 1792598535.77,
+        "image": "C1C41B5E-4386-41FC-A9E8-ED25C086E115.png",
+        "screen": "screen-0-1398x2034-tap activity-section-volume_0_CCBB9F93-5A76-4753-9B86-B67079E796E5.png",
+        "file": "A06.png"
+      },
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "index_source_dirty": true,
+      "visual_review": "A06 Training Volume, week selected; actual Korean UI; screenshot pixels inspected",
+      "exact_device": "not recorded in A06 entry",
+      "locale": "Korean visible; locale identifier unverified",
+      "paired_ax": "not located in indexed entry; unverified",
+      "comparison_limit": "Historical visual A06 week reference only; exact source, simulator model, AX, locale identifier and matching pose remain unverified. Do not treat 443a32ca bundle metadata as exact per-image source.",
+      "index_source_revision_note": "Index-wide historical bundle revision, explicitly not proven as this image execution revision.",
+      "device_family": "Indexed Duo external; exact model and verified pose unknown.",
+      "provenance_search": "A06 validation archive contains implementation failure only; original-three-screen iPad archive has no volume checkpoint. Absolute indexed xcresult paths unavailable. Index-wide candidate paths do not associate an xcresult with this A06 image. No paired hierarchy recovered."
+    },
+    {
+      "tier": "duo-open",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/docs/design/phone-design-map/actual/duo-open/images/A06.png",
+      "sha256": "e14fafcccbd8a751230f44b52ec82cdb07eb14c17f90391c60fc8a63807e07ff",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/docs/design/phone-design-map/actual/duo-open/capture-index.json",
+      "index_entry": {
+        "row_id": "A06",
+        "evidence": "activity-training-volume-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+        "action": "tap activity-section-volume",
+        "timestamp": 1792389248.723,
+        "image": "6C5C9119-ADB0-4C58-BCEF-2915325CE29F.png",
+        "screen": "screen-1-2006x2852-tap activity-section-volume_1_5A7246B0-D906-4798-9BDD-00C3AA0B84AD.png",
+        "file": "A06.png"
+      },
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "index_source_dirty": true,
+      "visual_review": "A06 Training Volume, week selected; actual Korean UI; screenshot pixels inspected",
+      "exact_device": "not recorded in A06 entry",
+      "locale": "Korean visible; locale identifier unverified",
+      "paired_ax": "not located in indexed entry; unverified",
+      "comparison_limit": "Historical visual A06 week reference only; exact source, simulator model, AX, locale identifier and matching pose remain unverified. Do not treat 443a32ca bundle metadata as exact per-image source.",
+      "index_source_revision_note": "Index-wide historical bundle revision, explicitly not proven as this image execution revision.",
+      "device_family": "Indexed Duo internal; exact model and verified pose unknown.",
+      "provenance_search": "A06 validation archive contains implementation failure only; original-three-screen iPad archive has no volume checkpoint. Absolute indexed xcresult paths unavailable. Index-wide candidate paths do not associate an xcresult with this A06 image. No paired hierarchy recovered."
+    }
+  ],
+  "search_note": "Searched A06 validation archive, original-three-screen iPad manifest, original capture indexes and relevant indexed absolute xcresult paths. No exact image-to-manifest linkage recovered; no original rerun."
+}

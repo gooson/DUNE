@@ -1,0 +1,350 @@
+Attributes: Application, 0x1057a0f00, pid: 15110, label: 'DUNE'
+Element subtree:
+ →Application, 0x1057a0f00, pid: 15110, label: 'DUNE'
+    Window (Main), 0x1057a1400, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x1057a1680, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x1057a17c0, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x1057a1900, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x1057a1540, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x1057a1a40, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x1057a1b80, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x1057a1cc0, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x1057a2080, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x1057a1f40, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x1057a2440, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x1057a2800, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x1057a2940, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x1057a2580, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x1057a26c0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: '도구 막대'
+                              Other, 0x1057a2a80, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x1057a2d00, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Activity'
+                              StaticText, 0x1057a2bc0, {{20.0, 31.0}, {100.7, 34.0}}, label: 'Activity'
+                            Other, 0x1057a2e40, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x1057a30c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x1057a3200, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x1057a2f80, {{0.0, 0.0}, {466.0, 678.0}}
+                                    ScrollView, 0x1057a3340, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'activity-root-scroll'
+                                      Other, 0x1057a35c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                        Other, 0x1057a3700, {{0.0, 0.0}, {466.0, 122.0}}
+                                      Other, 0x1057a3480, {{0.0, 0.0}, {466.0, 678.0}}
+                                      Other, 0x1057a3840, {{0.0, 82.0}, {382.0, 5258.3}}
+                                        Button, 0x1057a3ac0, {{36.0, 126.0}, {310.0, 166.0}}, identifier: 'activity-hero-readiness', label: 'READINESS, 트레이닝 준비도 77, 보통, 보통, 일반 훈련 가능 — HRV에 주의가 필요합니다'
+                                          StaticText, 0x1057a3c00, {{36.0, 126.0}, {310.0, 44.0}}, identifier: 'card-navigation-header', label: 'READINESS'
+                                            StaticText, 0x1057a3980, {{36.0, 126.0}, {310.0, 44.0}}, identifier: 'activity-hero-heading', label: 'READINESS'
+                                            Image, 0x1057a3d40, {{124.7, 142.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                          Other, 0x1057a3e80, {{36.0, 188.0}, {104.0, 104.0}}, identifier: 'activity-hero-ring', label: '트레이닝 준비도 77, 보통'
+                                            StaticText, 0x1057a0280, {{64.8, 218.5}, {46.3, 43.0}}, label: '77'
+                                          StaticText, 0x1057a0000, {{158.0, 207.0}, {34.7, 24.0}}, label: '보통'
+                                          StaticText, 0x108984000, {{158.0, 235.0}, {154.0, 38.0}}, label: '일반 훈련 가능 — HRV에 주의가 필요합니다'
+                                        Other, 0x108984140, {{36.0, 310.0}, {310.0, 129.0}}, identifier: 'activity-hero-components'
+                                          StaticText, 0x108984280, {{36.0, 322.3}, {110.7, 14.3}}, label: '구성 점수 · 100점 기준'
+                                          StaticText, 0x1089843c0, {{36.0, 348.7}, {310.0, 18.0}}, label: 'HRV, 54, /100'
+                                            StaticText, 0x108984500, {{36.0, 350.5}, {24.7, 14.3}}, label: 'HRV'
+                                            Other, 0x108984640, {{108.0, 354.3}, {162.0, 7.0}}
+                                            StaticText, 0x108984780, {{300.0, 348.7}, {19.3, 18.0}}, label: '54'
+                                            StaticText, 0x1089848c0, {{321.3, 352.7}, {24.7, 13.3}}, label: '/100'
+                                          StaticText, 0x108984a00, {{36.0, 378.7}, {310.0, 18.0}}, label: '수면, 82, /100'
+                                            StaticText, 0x108984b40, {{36.0, 380.5}, {21.0, 14.3}}, label: '수면'
+                                            Other, 0x108984c80, {{108.0, 384.3}, {162.0, 7.0}}
+                                            StaticText, 0x108984dc0, {{300.0, 378.7}, {19.3, 18.0}}, label: '82'
+                                            StaticText, 0x108984f00, {{321.3, 382.7}, {24.7, 13.3}}, label: '/100'
+                                          StaticText, 0x108985040, {{36.0, 408.7}, {310.0, 18.0}}, label: '회복, 82, /100'
+                                            StaticText, 0x108985180, {{36.0, 410.5}, {21.0, 14.3}}, label: '회복'
+                                            Other, 0x1089852c0, {{108.0, 414.3}, {162.0, 7.0}}
+                                            StaticText, 0x108985400, {{300.0, 408.7}, {19.3, 18.0}}, label: '82'
+                                            StaticText, 0x108985540, {{321.3, 412.7}, {24.7, 13.3}}, label: '/100'
+                                        Button, 0x108985680, {{36.0, 457.0}, {310.0, 44.0}}, identifier: 'activity-hero-history-disclosure', label: '준비도 변화와 근거', value: 접힘
+                                          StaticText, 0x1089857c0, {{36.0, 471.8}, {89.7, 14.3}}, label: '준비도 변화와 근거'
+                                          Image, 0x108985900, {{334.0, 476.0}, {10.7, 6.3}}, identifier: 'chevron.down', label: '아래로 이동'
+                                        Other, 0x108985a40, {{16.0, 537.0}, {350.0, 413.3}}, identifier: 'activity-section-musclemap'
+                                          Button, 0x108985b80, {{36.0, 553.0}, {310.0, 44.0}}, identifier: 'activity-musclemap-detail-link', label: '근육 지도'
+                                            Image, 0x108985cc0, {{44.0, 567.0}, {7.0, 16.3}}, identifier: 'figure.stand', label: '똑바로 서 있는 사람'
+                                            StaticText, 0x108985e00, {{57.0, 566.0}, {55.7, 18.0}}, label: '근육 지도'
+                                            Image, 0x108985f40, {{119.0, 570.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x108986080, {{32.0, 615.8}, {85.7, 30.3}}, label: '모든 13개 근육군 준비 완료'
+                                          Button, 0x1089861c0, {{125.7, 609.0}, {44.0, 44.0}}, identifier: 'activity-muscle-map-algorithm-info', label: '근육 지도 안내'
+                                          SegmentedControl, 0x108986300, {{195.0, 615.7}, {155.0, 31.0}}, identifier: 'activity-muscle-map-mode'
+                                            Button, 0x108986440, {{195.0, 615.7}, {77.5, 32.0}}, label: '회복', Selected
+                                            Button, 0x108986580, {{272.5, 615.7}, {77.5, 32.0}}, label: '세트'
+                                          Button, 0x1089866c0, {{98.7, 715.0}, {56.7, 16.0}}, identifier: 'musclemap-body-front-shoulders'
+                                          Button, 0x108986800, {{108.7, 717.3}, {36.6, 20.0}}, identifier: 'musclemap-body-front-chest'
+                                          Button, 0x108986940, {{113.6, 711.1}, {26.9, 5.7}}, identifier: 'musclemap-body-front-traps'
+                                          Button, 0x108986a80, {{226.6, 716.2}, {56.6, 14.9}}, identifier: 'musclemap-body-back-shoulders'
+                                          Button, 0x108986bc0, {{233.5, 718.2}, {42.8, 15.2}}, identifier: 'musclemap-body-back-lats'
+                                          Button, 0x108986d00, {{241.3, 714.0}, {27.3, 29.6}}, identifier: 'musclemap-body-back-traps'
+                                          Button, 0x108986e40, {{96.5, 732.1}, {60.9, 14.9}}, identifier: 'musclemap-body-front-biceps'
+                                          Button, 0x108986f80, {{99.7, 728.5}, {54.7, 22.0}}, identifier: 'musclemap-body-front-triceps'
+                                          Button, 0x1089870c0, {{227.0, 728.0}, {55.9, 12.1}}, identifier: 'musclemap-body-back-triceps'
+                                          Button, 0x108987200, {{87.2, 747.4}, {79.5, 31.1}}, identifier: 'musclemap-body-front-forearms'
+                                          Button, 0x108987340, {{117.7, 744.8}, {18.7, 16.4}}, identifier: 'musclemap-body-front-core'
+                                          Button, 0x108987480, {{216.5, 753.3}, {76.8, 26.0}}, identifier: 'musclemap-body-back-forearms'
+                                          Button, 0x1089875c0, {{238.1, 745.5}, {33.6, 25.7}}, identifier: 'musclemap-body-back-back'
+                                          Button, 0x108987700, {{106.9, 775.3}, {40.3, 45.2}}, identifier: 'musclemap-body-front-quadriceps'
+                                          Button, 0x108987840, {{236.9, 770.1}, {36.0, 24.1}}, identifier: 'musclemap-body-back-glutes'
+                                          Button, 0x108987980, {{237.1, 790.9}, {35.7, 39.3}}, identifier: 'musclemap-body-back-hamstrings'
+                                          Button, 0x108987ac0, {{108.0, 831.8}, {38.0, 37.6}}, identifier: 'musclemap-body-front-calves'
+                                          Button, 0x108987c00, {{235.9, 825.8}, {38.1, 30.3}}, identifier: 'musclemap-body-back-calves'
+                                          StaticText, 0x108987d40, {{32.0, 921.0}, {28.7, 13.3}}, identifier: 'activity-muscle-map-legend-recovery', label: '회복됨'
+                                          StaticText, 0x108987e80, {{330.7, 921.0}, {19.3, 13.3}}, identifier: 'activity-muscle-map-legend-recovery', label: '피로'
+                                        Button, 0x108988000, {{36.0, 982.3}, {310.0, 44.0}}, identifier: 'activity-injuryrisk-detail-link', label: '훈련 부담 점검'
+                                          Image, 0x108988140, {{44.0, 996.7}, {12.3, 15.0}}, identifier: 'shield.checkered', label: '체크 무늬가 있는 방패'
+                                          StaticText, 0x108988280, {{62.3, 995.3}, {85.7, 18.0}}, identifier: 'activity-section-injuryrisk', label: '훈련 부담 점검'
+                                          Image, 0x1089883c0, {{154.3, 1000.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                        Button, 0x108988500, {{32.0, 1038.3}, {318.0, 338.0}}, identifier: 'activity-injuryrisk-detail-content', label: '3, 낮은 위험, 안전하게 훈련 중이에요 — 계속 이어가세요, 함께 살펴본 훈련 기록, 근력 볼륨, 6,360 kg, 연속 훈련, 3일, 근육 회복, 회복됨, 함께 살펴본 기록이에요. 모든 항목이 부담을 높이는 요인은 아니에요., 1개 활성 부상'
+                                          StaticText, 0x108988640, {{67.0, 1065.5}, {18.0, 33.7}}, label: '3'
+                                          StaticText, 0x108988780, {{116.0, 1065.2}, {55.7, 18.0}}, label: '낮은 위험'
+                                          StaticText, 0x1089888c0, {{116.0, 1085.2}, {204.0, 14.3}}, label: '안전하게 훈련 중이에요 — 계속 이어가세요'
+                                          StaticText, 0x108988a00, {{48.0, 1122.3}, {103.7, 14.3}}, label: '함께 살펴본 훈련 기록'
+                                          StaticText, 0x108988b40, {{48.0, 1148.7}, {286.0, 40.7}}, label: '근력 볼륨, 6,360 kg'
+                                            StaticText, 0x108988c80, {{49.3, 1153.0}, {69.3, 14.3}}, label: '근력 볼륨'
+                                            Image, 0x108988dc0, {{49.3, 1154.7}, {15.0, 11.0}}, identifier: 'chart.bar.fill', label: '막대 차트'
+                                            StaticText, 0x108988f00, {{48.0, 1171.3}, {64.3, 18.0}}, label: '6,360 kg'
+                                          StaticText, 0x108989040, {{48.0, 1201.3}, {286.0, 40.7}}, label: '연속 훈련, 3일'
+                                            StaticText, 0x108989180, {{49.3, 1205.7}, {66.3, 14.3}}, label: '연속 훈련'
+                                            Image, 0x1089892c0, {{49.3, 1207.3}, {12.0, 11.0}}, identifier: 'calendar', label: '캘린더'
+                                            StaticText, 0x108989400, {{48.0, 1224.0}, {22.7, 18.0}}, label: '3일'
+                                          StaticText, 0x108989540, {{48.0, 1254.0}, {286.0, 41.7}}, label: '근육 회복, 회복됨'
+                                            StaticText, 0x108989680, {{49.3, 1259.1}, {60.0, 14.3}}, label: '근육 회복'
+                                            Image, 0x1089897c0, {{49.3, 1259.3}, {5.7, 13.3}}, identifier: 'figure.stand', label: '똑바로 서 있는 사람'
+                                            StaticText, 0x108989900, {{48.0, 1277.7}, {39.0, 18.0}}, label: '회복됨'
+                                          StaticText, 0x108989a40, {{48.0, 1307.7}, {257.0, 26.3}}, label: '함께 살펴본 기록이에요. 모든 항목이 부담을 높이는 요인은 아니에요.'
+                                          Image, 0x108989b80, {{50.0, 1347.3}, {12.0, 12.0}}, identifier: 'bandage', label: '접착 밴드 스트립'
+                                          StaticText, 0x108989cc0, {{68.0, 1346.0}, {64.3, 14.3}}, label: '1개 활성 부상'
+                                        Image, 0x108989e00, {{43.3, 1425.7}, {13.7, 17.0}}, identifier: 'sparkles', label: '반짝반짝'
+                                        StaticText, 0x108989f40, {{62.3, 1425.2}, {55.7, 18.0}}, identifier: 'activity-section-suggested', label: '추천 운동'
+                                        Image, 0x10898a080, {{45.7, 1467.7}, {14.3, 14.7}}, identifier: 'magnifyingglass', label: '검색'
+                                        TextField, 0x10898a1c0, {{69.7, 1464.0}, {268.3, 22.0}}, identifier: 'activity-exercise-search', placeholderValue: '운동 검색'
+                                        SegmentedControl, 0x10898a300, {{48.0, 1518.0}, {286.0, 31.0}}
+                                          Button, 0x10898a440, {{48.0, 1518.0}, {143.0, 32.0}}, label: '헬스장', Selected
+                                          Button, 0x10898a580, {{191.0, 1518.0}, {143.0, 32.0}}, label: '홈트'
+                                        Button, 0x10898a6c0, {{48.0, 1557.0}, {286.0, 14.3}}, identifier: 'activity-recommendation-equipment-info', label: '장비, 24개 선택'
+                                          Image, 0x10898a800, {{49.3, 1559.7}, {15.0, 9.0}}, identifier: 'dumbbell.fill', label: '채워진 아령'
+                                          StaticText, 0x10898a940, {{69.7, 1557.0}, {21.0, 14.3}}, label: '장비'
+                                          StaticText, 0x10898aa80, {{276.3, 1557.5}, {45.7, 13.3}}, label: '24개 선택'
+                                          Image, 0x10898abc0, {{328.0, 1559.7}, {5.3, 9.3}}, identifier: 'chevron.right', label: '앞으로'
+                                        StaticText, 0x10898ad00, {{56.0, 1613.3}, {19.3, 13.3}}, label: '어깨'
+                                        StaticText, 0x10898ae40, {{95.3, 1613.3}, {19.3, 13.3}}, label: '이두'
+                                        StaticText, 0x10898af80, {{134.7, 1613.3}, {19.3, 13.3}}, label: '전완'
+                                        Button, 0x10898b0c0, {{32.0, 1941.7}, {318.0, 70.3}}, identifier: 'activity-ai-workout-builder', label: 'AI 운동 빌더, 원하는 운동을 자연어로 설명하면 바로 사용할 수 있는 템플릿이 즉시 생성됩니다.'
+                                          StaticText, 0x10898b200, {{70.7, 1953.7}, {267.3, 18.0}}, identifier: 'card-navigation-header', label: 'AI 운동 빌더'
+                                            StaticText, 0x10898b340, {{70.7, 1953.7}, {267.3, 18.0}}, label: 'AI 운동 빌더'
+                                            Image, 0x10898b480, {{151.3, 1958.3}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                          Image, 0x10898b5c0, {{45.3, 1962.7}, {15.3, 15.3}}, identifier: 'wand.and.stars', label: '별이 있는 마술 지팡이'
+                                          StaticText, 0x10898b700, {{70.7, 1973.7}, {263.3, 13.3}}, label: '원하는 운동을 자연어로 설명하면 바로 사용할 수 있는 템플릿이 즉시 생성됩니다.'
+                                        Button, 0x10898b840, {{32.0, 2020.0}, {45.0, 14.3}}, label: '전체 운동'
+                                        Button, 0x10898b980, {{36.0, 2082.3}, {310.0, 44.0}}, identifier: 'activity-recent-seeall', label: '최근 운동'
+                                          Image, 0x10898bac0, {{41.7, 2097.0}, {16.7, 15.0}}, identifier: 'clock.arrow.circlepath', label: '원형 화살표가 있는 시계'
+                                          StaticText, 0x10898bc00, {{63.7, 2095.3}, {55.7, 18.0}}, identifier: 'activity-section-recent', label: '최근 운동'
+                                          Image, 0x10898bd40, {{125.7, 2100.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                        Button, 0x10898be80, {{32.0, 2138.3}, {318.0, 95.7}}, identifier: 'activity-recent-workout-165286A3-9268-4BC8-A27C-25FD0D482828', label: '바벨 벤치프레스, (화요일) 00:00, 3 세트 · 60kg · 30 회, 가슴, 삼두, 30분, ~200 kcal'
+                                          StaticText, 0x10899c000, {{84.0, 2150.3}, {95.0, 18.0}}, label: '바벨 벤치프레스'
+                                          Image, 0x10899c140, {{44.0, 2172.0}, {28.0, 28.0}}, label: 'Equipment/equipment.barbell'
+                                          StaticText, 0x10899c280, {{84.0, 2172.3}, {77.7, 14.3}}, label: '(화요일) 00:00'
+                                          StaticText, 0x10899c3c0, {{306.0, 2169.0}, {32.0, 18.0}}, label: '30분'
+                                          StaticText, 0x10899c500, {{84.0, 2190.7}, {110.0, 14.3}}, label: '3 세트 · 60kg · 30 회'
+                                          StaticText, 0x10899c640, {{282.0, 2189.0}, {56.0, 14.3}}, label: '~200 kcal'
+                                          StaticText, 0x10899c780, {{88.0, 2210.0}, {15.7, 11.0}}, label: '가슴'
+                                          StaticText, 0x10899c8c0, {{113.7, 2210.0}, {15.7, 11.0}}, label: '삼두'
+                                        Button, 0x10899ca00, {{31.2, 2241.2}, {319.5, 129.5}}, identifier: 'activity-recent-workout-mock-workout-running-tempo', label: 'Tempo Run, Apple 건강에서 가져온 기록, (월요일) 05:02, 평균 심박수: 154 bpm, 평균 심박수: 154 bpm, 달성: 10K, 개인 기록: 최고 페이스, 최고 칼로리, 최고 고도, 최장 거리, 최장 시간, 달성: 새 PR 배지 5개 획득, 48분, 612 kcal'
+                                          StaticText, 0x10899cb40, {{84.0, 2254.0}, {79.0, 18.0}}, label: 'Tempo Run'
+                                          Image, 0x10899cc80, {{167.0, 2257.7}, {9.3, 10.7}}, identifier: 'apple.logo', label: 'Apple 건강에서 가져온 기록'
+                                          StaticText, 0x10899cdc0, {{84.0, 2276.0}, {77.3, 14.3}}, label: '(월요일) 05:02'
+                                          Image, 0x10899cf00, {{170.7, 2277.7}, {11.7, 11.0}}, identifier: 'heart.fill', label: '평균 심박수: 154 bpm'
+                                          StaticText, 0x10899d040, {{185.7, 2276.0}, {23.0, 14.3}}, label: '평균 심박수: 154 bpm'
+                                          Image, 0x10899d180, {{49.3, 2294.7}, {17.7, 22.7}}, identifier: 'figure.run', label: '달리기'
+                                          Other, 0x10899d2c0, {{85.3, 2295.0}, {36.7, 13.3}}, label: '달성: 10K'
+                                            Image, 0x10899d400, {{85.3, 2295.3}, {10.7, 12.7}}, identifier: 'medal.fill', label: '메달, 채워짐'
+                                            StaticText, 0x10899d540, {{101.3, 2295.0}, {20.7, 13.3}}, label: '10K'
+                                          StaticText, 0x10899d680, {{305.7, 2288.8}, {32.3, 18.0}}, label: '48분'
+                                          Other, 0x10899d7c0, {{85.3, 2313.0}, {153.0, 26.3}}, label: '개인 기록: 최고 페이스, 최고 칼로리, 최고 고도, 최장 거리, 최장 시간'
+                                            Image, 0x10899d900, {{85.3, 2320.0}, {11.0, 12.3}}, identifier: 'trophy.fill', label: '채워진 트로피 컵'
+                                            StaticText, 0x10899da40, {{101.7, 2313.0}, {136.7, 26.3}}, label: '최고 페이스, 최고 칼로리, 최고 고도, 최장 거리, 최장 시간'
+                                          StaticText, 0x10899db80, {{291.3, 2308.8}, {46.7, 14.3}}, label: '612 kcal'
+                                          Other, 0x10899dcc0, {{85.3, 2344.0}, {107.3, 13.3}}, label: '달성: 새 PR 배지 5개 획득'
+                                            Image, 0x10899de00, {{85.3, 2344.3}, {10.7, 12.7}}, identifier: 'medal.fill', label: '메달, 채워짐'
+                                            StaticText, 0x10899df40, {{101.3, 2344.0}, {91.3, 13.3}}, label: '새 PR 배지 5개 획득'
+                                        Button, 0x10899e080, {{32.0, 2378.0}, {318.0, 26.0}}, identifier: 'activity-recent-earlier', label: '이전 운동'
+                                          StaticText, 0x10899e1c0, {{32.0, 2378.0}, {318.0, 26.0}}, label: '이전 운동'
+                                          Image, 0x10899e300, {{342.3, 2385.0}, {7.0, 12.0}}, identifier: 'collapsed'
+                                        Button, 0x10899e440, {{36.0, 2452.0}, {262.0, 44.0}}, identifier: 'activity-section-pr', label: '개인 기록'
+                                          Image, 0x10899e580, {{44.0, 2466.0}, {14.3, 16.3}}, identifier: 'trophy.fill', label: '채워진 트로피 컵'
+                                          StaticText, 0x10899e6c0, {{64.3, 2465.0}, {55.7, 18.0}}, label: '개인 기록'
+                                          Image, 0x10899e800, {{126.3, 2469.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                        Button, 0x10899e940, {{302.0, 2452.0}, {44.0, 44.0}}, identifier: 'activity-pr-info', label: '정보'
+                                        Button, 0x10899ea80, {{32.0, 2508.0}, {318.0, 973.3}}, identifier: 'activity-section-pr-content', label: '레벨 6, 배지 18개, 1,120포인트'
+                                          StaticText, 0x10899ebc0, {{57.0, 2528.1}, {53.3, 14.3}}, label: '레벨 6'
+                                          Image, 0x10899ed00, {{57.0, 2529.0}, {12.3, 12.3}}, identifier: 'star.circle.fill', label: '즐겨찾기'
+                                          StaticText, 0x10899ee40, {{127.7, 2524.7}, {63.7, 13.3}}, label: '배지 18개'
+                                          Image, 0x10899ef80, {{127.7, 2525.0}, {10.3, 12.3}}, identifier: 'medal.fill', label: '메달, 채워짐'
+                                          StaticText, 0x10899f0c0, {{199.3, 2524.0}, {57.0, 13.3}}, label: '1,120포인트'
+                                          Other, 0x10899f200, {{0.0, 0.0}, {0.0, 0.0}}
+                                        Button, 0x10899f340, {{36.0, 3529.3}, {310.0, 44.0}}, identifier: 'activity-section-achievement', label: '달성 히스토리'
+                                          Image, 0x10899f480, {{44.0, 3543.0}, {14.3, 16.7}}, identifier: 'medal.fill', label: '메달, 채워짐'
+                                          StaticText, 0x10899f5c0, {{64.3, 3542.4}, {81.7, 18.0}}, label: '달성 히스토리'
+                                          Image, 0x10899f700, {{152.3, 3547.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                        Button, 0x10899f840, {{32.0, 3585.3}, {318.0, 150.0}}, identifier: 'activity-section-achievement-content', label: '마일스톤 달성, 달리기: 10K, 2026년 11월 2일, 새 배지 획득, 달리기: 10K, 2026년 11월 2일, 개인 기록 갱신, 달리기: 최고 페이스, 최고 칼로리, 최고 고도, 최장 거리, 최장 시간, 2026년 11월 2일'
+                                          Image, 0x10899f980, {{50.7, 3602.3}, {11.0, 11.0}}, identifier: 'flag.checkered.circle.fill', label: '채워진 원 안에 있는 체크 무늬 깃발'
+                                          StaticText, 0x10899fac0, {{68.0, 3601.4}, {65.7, 14.3}}, label: '마일스톤 달성'
+                                          StaticText, 0x10899fc00, {{254.3, 3601.4}, {79.7, 13.3}}, label: '2026년 11월 2일'
+                                          StaticText, 0x10899fd40, {{68.0, 3617.7}, {54.7, 13.3}}, label: '달리기: 10K'
+                                          Image, 0x10899fe80, {{51.0, 3640.0}, {10.3, 12.3}}, identifier: 'medal.fill', label: '메달, 채워짐'
+                                          StaticText, 0x1089a4000, {{68.0, 3639.1}, {58.3, 14.3}}, label: '새 배지 획득'
+                                          StaticText, 0x1089a4140, {{254.3, 3639.1}, {79.7, 13.3}}, label: '2026년 11월 2일'
+                                          StaticText, 0x1089a4280, {{68.0, 3655.4}, {54.7, 13.3}}, label: '달리기: 10K'
+                                          Image, 0x1089a43c0, {{50.7, 3677.7}, {10.7, 12.0}}, identifier: 'trophy.fill', label: '채워진 트로피 컵'
+                                          StaticText, 0x1089a4500, {{68.0, 3676.7}, {69.0, 14.3}}, label: '개인 기록 갱신'
+                                          StaticText, 0x1089a4640, {{254.3, 3676.7}, {79.7, 13.3}}, label: '2026년 11월 2일'
+                                          StaticText, 0x1089a4780, {{68.0, 3693.1}, {171.7, 26.3}}, label: '달리기: 최고 페이스, 최고 칼로리, 최고 고도, 최장 거리, 최장 시간'
+                                        Button, 0x1089a48c0, {{36.0, 3783.3}, {310.0, 44.0}}, identifier: 'activity-section-weeklystats', label: '주간 운동'
+                                          Image, 0x1089a4a00, {{44.0, 3798.3}, {18.7, 14.0}}, identifier: 'chart.bar.fill', label: '막대 차트'
+                                          StaticText, 0x1089a4b40, {{68.7, 3796.4}, {55.7, 18.0}}, label: '주간 운동'
+                                          Image, 0x1089a4c80, {{130.7, 3801.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                        Image, 0x1089a4dc0, {{44.0, 4073.7}, {12.3, 16.0}}, identifier: 'doc.text', label: '일반 텍스트 문서'
+                                        StaticText, 0x1089a4f00, {{62.3, 4072.7}, {68.7, 18.0}}, identifier: 'activity-section-weeklyreport', label: '주간 리포트'
+                                        Image, 0x1089a5040, {{182.7, 4132.7}, {16.7, 21.0}}, identifier: 'doc.text', label: '일반 텍스트 문서'
+                                        StaticText, 0x1089a5180, {{82.2, 4163.4}, {217.7, 14.3}}, label: '운동을 몇 번 하면 주간 리포트를 볼 수 있어요.'
+                                        Button, 0x1089a52c0, {{36.0, 4253.7}, {262.0, 44.0}}, identifier: 'activity-section-consistency', label: '운동 페이스'
+                                          Image, 0x1089a5400, {{43.3, 4267.7}, {12.3, 16.0}}, identifier: 'flame.fill', label: '불꽃'
+                                          StaticText, 0x1089a5540, {{61.0, 4266.7}, {68.7, 18.0}}, label: '운동 페이스'
+                                          Image, 0x1089a5680, {{136.0, 4271.3}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                        Button, 0x1089a57c0, {{302.0, 4253.7}, {44.0, 44.0}}, identifier: 'activity-consistency-info', label: '정보'
+                                        Button, 0x1089a5900, {{32.0, 4309.7}, {318.0, 142.7}}, identifier: 'activity-section-consistency-content', label: '월 운동일 목표, 3/16, 월 운동일 목표, 현재 연속, 3, 일, 최장 연속, 3, 일', value: 16일 중 3일
+                                          StaticText, 0x1089a5a40, {{48.0, 4326.9}, {85.7, 18.0}}, label: '월 운동일 목표'
+                                          StaticText, 0x1089a5b80, {{296.7, 4325.7}, {37.3, 20.3}}, label: '3/16'
+                                          Other, 0x1089a5cc0, {{48.0, 4350.0}, {286.0, 10.0}}, label: '월 운동일 목표', value: 16일 중 3일
+                                          StaticText, 0x1089a5e00, {{48.0, 4384.4}, {45.0, 14.3}}, label: '현재 연속'
+                                          StaticText, 0x1089a5f40, {{207.2, 4384.4}, {45.0, 14.3}}, label: '최장 연속'
+                                          StaticText, 0x1089a6080, {{48.0, 4400.7}, {18.7, 33.7}}, label: '3'
+                                          StaticText, 0x1089a61c0, {{207.2, 4400.7}, {18.7, 33.7}}, label: '3'
+                                          StaticText, 0x1089a6300, {{68.7, 4416.1}, {10.7, 14.3}}, label: '일'
+                                          StaticText, 0x1089a6440, {{227.8, 4416.1}, {10.7, 14.3}}, label: '일'
+                                        Button, 0x1089a6580, {{36.0, 4500.3}, {310.0, 44.0}}, identifier: 'activity-section-volume', label: '트레이닝 부하'
+                                          Image, 0x1089a66c0, {{44.0, 4515.7}, {16.0, 13.7}}, identifier: 'chart.line.uptrend.xyaxis', label: '차트 선'
+                                          StaticText, 0x1089a6800, {{66.0, 4513.4}, {81.7, 18.0}}, label: '트레이닝 부하'
+                                          Image, 0x1089a6940, {{154.0, 4518.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                        Button, 0x1089a6a80, {{32.0, 4556.3}, {318.0, 260.0}}, identifier: 'activity-section-volume-content', label: '최근 운동일 · 2026년 11월 2일 합계, 운동 시간, 48, 분, 소모 칼로리, 612, kcal, 최근 28일 훈련 부하'
+                                          StaticText, 0x1089a6bc0, {{48.0, 4572.4}, {176.0, 14.3}}, label: '최근 운동일 · 2026년 11월 2일 합계'
+                                          StaticText, 0x1089a6d00, {{61.0, 4610.8}, {66.3, 14.3}}, label: '운동 시간'
+                                          Image, 0x1089a6e40, {{61.0, 4611.7}, {12.3, 12.3}}, identifier: 'timer', label: '타이머'
+                                          StaticText, 0x1089a6f80, {{208.0, 4611.7}, {74.7, 14.5}}, label: '소모 칼로리'
+                                          Image, 0x1089a70c0, {{208.0, 4611.7}, {10.3, 13.0}}, identifier: 'flame.fill', label: '불꽃'
+                                          StaticText, 0x1089a7200, {{60.0, 4633.1}, {37.0, 33.7}}, identifier: 'activity-load-timer-value', label: '48'
+                                          StaticText, 0x1089a7340, {{207.0, 4634.1}, {55.7, 33.7}}, identifier: 'activity-load-flame.fill-value', label: '612'
+                                          StaticText, 0x1089a7480, {{101.0, 4648.5}, {10.7, 14.3}}, label: '분'
+                                          StaticText, 0x1089a75c0, {{266.7, 4649.5}, {22.7, 14.3}}, label: 'kcal'
+                                          StaticText, 0x1089a7700, {{48.0, 4704.1}, {98.0, 14.3}}, label: '최근 28일 훈련 부하'
+                                          Other, 0x1089a7840, {{48.0, 4730.3}, {286.0, 70.0}}
+                                            Other, 0x1089a7980, {{48.0, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 7일 0시에서 2026년 10월 9일 0시 사이', value: 0에서 0 사이, 2개의 값
+                                            Other, 0x1089a7ac0, {{68.4, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 9일 0시에서 2026년 10월 11일 0시 사이', value: 4.9에서 0 사이, 2개의 값
+                                            Other, 0x1089a7c00, {{88.9, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 11일 0시에서 2026년 10월 13일 0시 사이', value: 0에서 0 사이, 2개의 값
+                                            Other, 0x1089a7d40, {{109.3, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 13일 0시에서 2026년 10월 15일 0시 사이', value: 3.9에서 0 사이, 2개의 값
+                                            Other, 0x1089a7e80, {{129.7, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 15일 0시에서 2026년 10월 17일 0시 사이', value: 0에서 10 사이, 2개의 값
+                                            Other, 0x1089ac000, {{150.1, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 17일 0시에서 2026년 10월 19일 0시 사이', value: 0에서 0 사이, 2개의 값
+                                            Other, 0x1089ac140, {{170.6, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 19일 0시에서 2026년 10월 21일 0시 사이', value: 5.1에서 0 사이, 2개의 값
+                                            Other, 0x1089ac280, {{191.0, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 21일 0시에서 2026년 10월 23일 0시 사이', value: 0에서 0 사이, 2개의 값
+                                            Other, 0x1089ac3c0, {{211.4, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 23일 0시에서 2026년 10월 25일 0시 사이', value: 16.9에서 0 사이, 2개의 값
+                                            Other, 0x1089ac500, {{231.9, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 25일 0시에서 2026년 10월 27일 0시 사이', value: 0에서 5.1 사이, 2개의 값
+                                            Other, 0x1089ac640, {{252.3, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 27일 0시에서 2026년 10월 29일 0시 사이', value: 0에서 5.2 사이, 2개의 값
+                                            Other, 0x1089ac780, {{272.7, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 29일 0시에서 2026년 10월 31일 0시 사이', value: 0에서 11.8 사이, 2개의 값
+                                            Other, 0x1089ac8c0, {{293.1, 4730.3}, {20.4, 52.0}}, label: '2026년 10월 31일 0시에서 2026년 11월 2일 0시 사이', value: 0에서 10.4 사이, 2개의 값
+                                            Other, 0x1089aca00, {{313.6, 4730.3}, {20.4, 52.0}}, label: '2026년 11월 2일 0시에서 2026년 11월 4일 0시 사이', value: 6.7에서 0 사이, 2개의 값
+                                        Button, 0x1089acb40, {{36.0, 4864.3}, {262.0, 44.0}}, identifier: 'activity-section-exercisemix', label: '운동 구성'
+                                          Image, 0x1089acc80, {{44.0, 4879.7}, {16.3, 13.7}}, identifier: 'chart.bar.xaxis', label: 'X축이 있는 막대 차트'
+                                          StaticText, 0x1089acdc0, {{66.3, 4877.5}, {55.7, 18.0}}, label: '운동 구성'
+                                          Image, 0x1089acf00, {{128.3, 4882.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                        Button, 0x1089ad040, {{302.0, 4864.3}, {44.0, 44.0}}, identifier: 'activity-exercise-mix-info', label: '정보'
+                                        Button, 0x1089ad180, {{32.0, 4920.3}, {318.0, 388.0}}, identifier: 'activity-section-exercisemix-content', label: '최근 28일 · 운동 기록 수 기준, 근력, 38%, 5 / 13, 유산소, 62%, 8 / 13, 주요 부위 · 완료 세트, 등, 17%, 가슴, 17%, 둔근, 17%, Recovery Walk, 1회, Tempo Run, 1회, Lower Strength, 1회, 바벨 벤치프레스, 1회, 바벨 스쿼트, 1회, Ridge Hike, 1회'
+                                          StaticText, 0x1089ad2c0, {{48.0, 4936.5}, {142.7, 14.3}}, label: '최근 28일 · 운동 기록 수 기준'
+                                          StaticText, 0x1089ad400, {{49.3, 4958.8}, {46.7, 14.3}}, label: '근력'
+                                          Image, 0x1089ad540, {{49.3, 4961.0}, {16.3, 9.3}}, identifier: 'dumbbell.fill', label: '채워진 아령'
+                                          StaticText, 0x1089ad680, {{198.3, 4959.5}, {51.0, 14.3}}, label: '유산소'
+                                          Image, 0x1089ad7c0, {{198.3, 4959.7}, {10.3, 13.3}}, identifier: 'figure.run', label: '달리기'
+                                          StaticText, 0x1089ad900, {{48.0, 4977.1}, {62.3, 33.7}}, identifier: 'activity-mix-dumbbell.fill-percent', label: '38%'
+                                          StaticText, 0x1089ada40, {{197.0, 4978.1}, {62.3, 33.7}}, identifier: 'activity-mix-figure.run-percent', label: '62%'
+                                          StaticText, 0x1089adb80, {{48.0, 5014.8}, {33.3, 14.3}}, label: '5 / 13'
+                                          StaticText, 0x1089adcc0, {{197.0, 5015.8}, {33.3, 14.3}}, label: '8 / 13'
+                                          Other, 0x1089ade00, {{48.0, 5038.0}, {286.0, 16.0}}
+                                          StaticText, 0x1089adf40, {{48.0, 5070.5}, {92.3, 13.3}}, label: '주요 부위 · 완료 세트'
+                                          StaticText, 0x1089ae080, {{56.0, 5095.8}, {10.7, 14.3}}, label: '등'
+                                          StaticText, 0x1089ae1c0, {{70.7, 5095.8}, {27.3, 14.3}}, label: '17%'
+                                          StaticText, 0x1089ae300, {{118.0, 5095.8}, {21.0, 14.3}}, label: '가슴'
+                                          StaticText, 0x1089ae440, {{143.0, 5095.8}, {27.3, 14.3}}, label: '17%'
+                                          StaticText, 0x1089ae580, {{190.3, 5095.8}, {21.0, 14.3}}, label: '둔근'
+                                          StaticText, 0x1089ae6c0, {{215.3, 5095.8}, {27.3, 14.3}}, label: '17%'
+                                          StaticText, 0x1089ae800, {{48.0, 5130.5}, {85.0, 14.3}}, label: 'Recovery Walk'
+                                          StaticText, 0x1089ae940, {{316.0, 5130.5}, {18.0, 14.3}}, label: '1회'
+                                          StaticText, 0x1089aea80, {{48.0, 5158.8}, {64.7, 14.3}}, label: 'Tempo Run'
+                                          StaticText, 0x1089aebc0, {{316.0, 5158.8}, {18.0, 14.3}}, label: '1회'
+                                          StaticText, 0x1089aed00, {{48.0, 5187.1}, {88.7, 14.3}}, label: 'Lower Strength'
+                                          StaticText, 0x1089aee40, {{316.0, 5187.1}, {18.0, 14.3}}, label: '1회'
+                                          StaticText, 0x1089aef80, {{48.0, 5215.5}, {76.0, 14.3}}, label: '바벨 벤치프레스'
+                                          StaticText, 0x1089af0c0, {{316.0, 5215.5}, {18.0, 14.3}}, label: '1회'
+                                          StaticText, 0x1089af200, {{48.0, 5243.8}, {55.3, 14.3}}, label: '바벨 스쿼트'
+                                          StaticText, 0x1089af340, {{316.0, 5243.8}, {18.0, 14.3}}, label: '1회'
+                                          StaticText, 0x1089af480, {{48.0, 5272.1}, {62.3, 14.3}}, label: 'Ridge Hike'
+                                          StaticText, 0x1089af5c0, {{316.0, 5272.1}, {18.0, 14.3}}, label: '1회'
+                                        Other, 0x1089af700, {{0.0, 0.0}, {0.0, 0.0}}
+                                        Button, 0x1089af840, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'activity-section-weeklystats-content'
+                                      Other, 0x1089af980, {{433.0, 82.0}, {30.0, 537.0}}, label: '수직 스크롤 막대, 10페이지', value: 0%
+                                        Other, 0x1089afac0, {{460.0, 369.0}, {3.0, 247.0}}
+                                      Other, 0x1089afc00, {{433.0, 82.0}, {30.0, 537.0}}, label: '수직 스크롤 막대, 10페이지', value: 0%
+                                        Other, 0x1089afd40, {{460.0, 369.0}, {3.0, 247.0}}
+                                    Button, 0x1089afe80, {{161.0, 198.0}, {60.0, 24.0}}, identifier: 'wave-refresh-test-trigger', label: 'Trigger Refresh', value: 0
+                                    Other, 0x1089b4000, {{191.0, 363.0}, {0.0, 0.0}}
+                Other, 0x1089b4140, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x1089b4280, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: '도구 막대'
+                    Other, 0x1089b43c0, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x1089b4500, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x1089b4640, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x1089b4780, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1089b48c0, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x1089b4a00, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x1089b4b40, {{399.0, 180.0}, {38.0, 36.0}}
+                                  Other, 0x1089b4c80, {{399.0, 180.0}, {38.0, 36.0}}
+                                    Other, 0x1089b4dc0, {{399.0, 180.0}, {38.0, 36.0}}
+                                      Other, 0x1089b4f00, {{399.0, 180.0}, {38.0, 36.0}}
+                                        Button, 0x1089b5040, {{405.3, 180.0}, {25.3, 36.0}}, identifier: 'activity-toolbar-add', label: '추가'
+                        Other, 0x1089b5180, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x1089b52c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1089b5400, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x1089b5540, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x1089b5680, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x1089b57c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x1089b5900, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x1089b5a40, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1089b5b80, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x1089b5cc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x1089b5e00, {{396.0, 444.0}, {44.0, 58.0}}, label: 'Today'
+                                            Image, 0x1089b5f40, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: '채워진 텍스트 클립보드에 있는 하트'
+                                          Button, 0x1089b6080, {{396.0, 494.0}, {44.0, 58.0}}, label: 'Activity', Selected
+                                            Image, 0x1089b61c0, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: '불꽃'
+                                          Button, 0x1089b6300, {{396.0, 544.0}, {44.0, 58.0}}, label: 'Wellness'
+                                            Image, 0x1089b6440, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: '나뭇잎'
+                                          Button, 0x1089b6580, {{396.0, 594.0}, {44.0, 58.0}}, label: 'Life'
+                                            Image, 0x1089b66c0, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: '체크 표시가 있는 체크리스트'
+                                        Other, 0x1089b6800, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1089b6940, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x1089b6a80, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x1089b6bc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x1089b6d00, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x1089b6e40, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x1089b6f80, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x1089b70c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x1089b7200, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1089b7340, {{396.0, 494.0}, {44.0, 58.0}}
+                                          Other, 0x1089b7480, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x1089b75c0, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x1089b7700, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x1089b7840, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x1089b7980, {{396.0, 494.0}, {44.0, 58.0}}
+                                                  Other, 0x1089b7ac0, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x1089b7c00, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x1089b7d40, {{396.0, 494.0}, {44.0, 58.0}}
+              Other, 0x1089b7e80, {{191.0, 322.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x1057a0f00, pid: 15110, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x112970000, pid: 15110, label: 'DUNE'
+  }
