@@ -1,7 +1,7 @@
 ---
 topic: A09 weekly workout report detail redesign
 date: 2026-10-31
-status: draft
+status: implemented
 confidence: medium
 related_solutions:
   - docs/solutions/general/2026-03-22-weekly-report-healthkit-data-gap.md
@@ -109,3 +109,40 @@ Refactor only `WorkoutReportDetailView`: a private opaque hero presents the actu
 
 - **Overall**: Medium.
 - **Reasoning**: Report source, math, conditional sections, DEBUG fixture and route capture timing are authenticated. Fresh original iPad A09 loaded image and AX are confirmed; original phone/Duo and redesigned device/AX readability remain pending native evidence.
+
+
+## 2026-11-03 검증 및 구현 정정
+
+> 현재 앱·검사 소스 `0d789a1ea11e777f663f52aad44a760684e27acc`, 기준 main `97ff66f2d1df59e1a88a6284504ba95b3a1609c7`. 구현·네이티브 검증·실제 맵 설치를 완료했다. 머지는 별도 Ship 기록에서 확인한다.
+
+### 구현 범위와 단위
+
+- `WorkoutReportDetailView`는 기존 `58ac`의 불투명 hero, 적응형 통계와 요약·하이라이트·상대 근육 막대를 유지한다. 현재 `0d`의 시각 정리는 볼륨 `scalemass`, 시간 `timer`, 근육 행의 기존 `stat.muscleGroup.iconName` 선행 glyph다.
+- 모델, Activity ViewModel, use case 및 formatter는 변경하지 않았다. `totalDuration`은 분 단위이며 DEBUG fixture의 원래 값은 **5400 min**이다. 90분으로 환산하지 않는다. 2.4k, 세 세션, 세 활동일, 72%, +12%, 가슴 1.1k와 대퇴사두 1.3k도 기존 DEBUG fixture 값이다.
+- A08 위험 검사 및 뒤로 가기를 공유 selector에 보존한다. 새 기간 제어, AI 호출, 새 계산 또는 테스트용 제품 fallback을 추가하지 않는다. nil/빈 상태와 보고서 기간을 소스 수준에서 보존하지만 아래 캡처 결과를 모든 상태의 런타임 검증으로 확대하지 않는다.
+- 다섯 소스 리뷰는 각 P1/P2/P3 0이다. 소스 검토와 네이티브 결과는 별도다.
+
+### 현재 소스의 네이티브 결과
+
+| 기기 / 케이스 | 결과 및 제한 |
+|---|---|
+| iPad mini A20 일반 + dark MAX | `ipad-normal-max-0d789a1e` 2/2 통과. 일반 hero/하단과 MAX hero·duration·summary·highlight·muscle 5개 PNG/AX 확인. MAX의 각 스크롤 캡처가 모든 항목의 동시 표시를 뜻하지 않는다. |
+| Phone 일반 | `phone-normal-report-0d789a1e` 1/1 통과. hero와 하단 PNG/AX 확인. Phone MAX는 검증하지 않았다. |
+| Duo Closed 일반 | `duo-closed-report-0d789a1e` 1/1 통과, 9/9 ACK 및 전후 0°/LCD. host PNG와 manifest AX 대조. |
+| Duo Open 일반 | `duo-open-report-0d789a1e` 1/1 통과, 9/9 ACK 및 전후 180°/LCD-1. 활성 host PNG와 manifest AX 대조. |
+
+현재 5/5 케이스 통과와 일반 hero 4쌍, 일반 하단 4쌍, iPad MAX 5쌍 총 13쌍의 독립 품질 검토가 확인되었다. 최종 판정은 PASS WITH NOTES, P1/P2/P3 0이다. 소유 기기 세 대는 삭제되어 registry는 비어 있다. Duo 원본 Xcode의 일반 `modelName`은 `iPhone`이므로 실제 archived legacy record의 `iPhone19,4`와 `com.apple.iphone-duo-9`, 소유 기기 식별자 및 display readback을 함께 결합한다. 폴드 중 연속 동작이나 live VoiceOver는 검증 범위에 포함하지 않는다.
+
+### 이전 근거와 실제 맵
+
+- 원본 `936b87b4` A20의 report-link PNG `87B3CA7E…`와 AX `0E853648…`는 통과한 report selector의 동일 checkpoint에 속한다. 원본의 `5400 min`은 현재 fixture와 같은 분 단위 표시다.
+- 기존 맵의 네 A09 이미지가 주간 리포트임을 확인했다. 개별 이전 기기·실행 버전·AX와 Duo 자세는 확인되지 않아 그 범위로만 표기한다. 별도 검증된 A20 이전 화면과 맵 원본은 분리 보존한다.
+- `58ac` A20 일반/MAX 2/2는 아이콘 변경 전 이력으로만 보관한다. 현재 `0d` iPad 실행과 혼동하거나 현재 후속 캡처로 재사용하지 않는다.
+- 갤러리 설치는 실제 exit 0으로 완료했다. 18개 소스와 19개 출력의 고정 값 및 네 A09 행·활동 보드만 반영하고 다른 행·Watch·기존 갤러리 보존을 설치기에서 확인했다. 갤러리는 298파일·126 PNG이며 inventory SHA-256은 `49a20c82faeb0182f190374772c282920efaa0dc1ec7086a123bc8c05f06e04d`다.
+
+### 마무리 전 확인
+
+1. 완료된 Duo Open 1/1, 9/9 ACK, 180°/LCD-1과 13쌍 품질 판정의 원본을 보존한다.
+2. 실제 설치 exit 0, 고정 19개 출력과 기존 행·갤러리·Watch 보존을 확인했다.
+3. CI Build 성공. iOS unit job `125608087094`의 테스트 단계는 취소로 표시되며 결과 업로드 중이다. 전체 unit 통과를 주장하지 않는다. Watch job `125608087511`, run `41541957500`은 테스트 전 destination ID 누락으로 exit 64이며 실행 수는 미확인이다. 이 변경에는 Watch 코드와 runner 수정이 없다. 별도 전체 재실행을 하지 않았다.
+4. 최종 PR 리뷰와 GitHub 머지는 별도 Ship 단계에 기록한다.
