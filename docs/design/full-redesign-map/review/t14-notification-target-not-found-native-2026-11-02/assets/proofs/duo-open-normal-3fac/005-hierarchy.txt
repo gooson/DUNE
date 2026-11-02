@@ -1,0 +1,92 @@
+Attributes: Application, 0x108580780, pid: 27953, label: 'DUNE'
+Element subtree:
+ →Application, 0x108580780, pid: 27953, label: 'DUNE'
+    Window, 0x1085808c0, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x108580a00, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x108580b40, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x108582800, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x108582940, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x108582a80, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x108581f40, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x108582080, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x1085821c0, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x108582440, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x1085812c0, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x108581900, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x108582580, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x108581e00, {{0.0, -0.0}, {951.0, 669.0}}
+                            NavigationBar, 0x1085826c0, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Notification'
+                              StaticText, 0x108580640, {{20.0, 31.0}, {153.7, 34.0}}, label: 'Notification'
+                            Toolbar, 0x104f90c80, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x104f90dc0, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x104f91680, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x104f91400, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x104f91900, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x104f91a40, {{0.0, -0.0}, {951.0, 669.0}}
+                                    ScrollView, 0x104f91b80, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'notification-target-not-found-screen'
+                                      Other, 0x104f91f40, {{0.0, -0.0}, {951.0, 669.0}}
+                                        Other, 0x104f91cc0, {{0.0, -0.0}, {951.0, 122.0}}
+                                      Other, 0x104f91e00, {{0.0, -0.0}, {951.0, 669.0}}
+                                      Other, 0x104f92bc0, {{0.0, 82.0}, {867.0, 259.0}}
+                                        Other, 0x104f930c0, {{153.7, 98.0}, {560.0, 188.7}}, identifier: 'notification-target-not-found-hero'
+                                          Image, 0x104f93200, {{183.0, 126.3}, {46.3, 47.0}}, identifier: 'exclamationmark.magnifyingglass', label: 'Exclamation Mark In A Magnifying Glass'
+                                          StaticText, 0x104f93700, {{177.5, 189.7}, {292.0, 40.7}}, identifier: 'notification-target-not-found-title', label: 'Exercise not found'
+                                          StaticText, 0x104f90000, {{177.5, 242.3}, {433.3, 20.3}}, identifier: 'notification-target-not-found-message', label: 'The notification target has been deleted or is not synced.'
+                                        StaticText, 0x104f93980, {{137.7, 294.7}, {234.0, 46.3}}, identifier: 'notification-target-not-found-id', label: 'ID: ui-test-activity-workout-missing'
+                                      Other, 0x104f92d00, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x104f92300, {{945.0, 379.0}, {3.0, 236.3}}
+                                      Other, 0x104f912c0, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x104f917c0, {{945.0, 379.0}, {3.0, 236.3}}
+                Other, 0x104f926c0, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x104f93d40, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x104f92940, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x104f93340, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x104f935c0, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x104f92f80, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x104f93840, {{879.0, 124.0}, {48.0, 48.0}}
+                              Other, 0x104f93ac0, {{879.0, 124.0}, {48.0, 48.0}}
+                                Other, 0x104f93c00, {{884.0, 129.0}, {38.0, 38.0}}
+                                  Other, 0x104f93e80, {{884.0, 129.0}, {38.0, 38.0}}
+                                    Button, 0x104f93480, {{884.0, 129.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x104f90280, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x104f92e40, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x104f92a80, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x104f921c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x104f92580, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x104f91540, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x104e73e80, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x104e73d40, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x104e73700, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x104e73ac0, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x104e73980, {{881.0, 435.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x104e71180, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x112784000, {{881.0, 485.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                                            Image, 0x112784140, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x112784280, {{881.0, 535.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x1127843c0, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x112784500, {{881.0, 585.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x112784640, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x112784780, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x1127848c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x112784a00, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x112784b40, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x112784c80, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x112784dc0, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x112784f00, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x112785040, {{881.0, 485.0}, {44.0, 58.0}}
+                                          Other, 0x112785180, {{881.0, 485.0}, {44.0, 58.0}}
+                                            Other, 0x1127852c0, {{881.0, 485.0}, {44.0, 58.0}}
+                                            Other, 0x112785400, {{881.0, 485.0}, {44.0, 58.0}}
+                                              Other, 0x112785540, {{881.0, 485.0}, {44.0, 58.0}}
+                                                Other, 0x112785680, {{881.0, 485.0}, {44.0, 58.0}}
+                                                  Other, 0x1127857c0, {{881.0, 485.0}, {44.0, 58.0}}
+                                                Other, 0x112785900, {{881.0, 485.0}, {44.0, 58.0}}
+                                              Other, 0x112785a40, {{881.0, 485.0}, {44.0, 58.0}}
+              Other, 0x112785b80, {{433.5, 317.5}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x108580780, pid: 27953, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x112785cc0, pid: 27953, label: 'DUNE'
+  }

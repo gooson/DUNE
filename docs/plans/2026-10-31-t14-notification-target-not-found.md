@@ -1,7 +1,7 @@
 ---
 topic: T14 notification workout target fallback
 date: 2026-10-31
-status: approved
+status: implemented
 confidence: high
 related_solutions:
   - architecture/2026-03-03-notification-inbox-routing.md
@@ -76,3 +76,8 @@ The corrected test target now compiles with the unchanged standard build-target 
 The user approved the corrected ID MAX case once, then explicitly authorized one additional execution for every pending necessary validation and completion through merge. These are the same new T14 allowance, not two. Record a separate2026-11-02-pending-extra-once/T14PhoneMAX_IDGeometry slot approved1/consumed0, retaining the old approvedextraFAILED1/consumed1remaining0 and originalt14-ui-missing-workout twoFAILED records unchanged. Consume the new slot before its exact single MAX dispatch; no refund or automatic repeat. Other pending-case allowances stay separate and are not consumed by T14.
 
 Integrate actualmainb7d (completed H02#887). Source closure proves the T14 app, relevant consumers/seed/store/palette and seven normal/MAX/reveal/Back methods exact frozenvalidation6bfe. WholeActivitytestfile differs for unrelated future tests. H02 View and fullH02test also equal6bfe; currenttargetcompile already succeeded at6bfe, so do not repeat standalonebuild. Existing normalPhone/iPad/Duo evidence remains valid for unchanged T14 product and normal case; the correctedMAX still requires the newly authorized exactone run. Preserve all completed H02 source/maps and source/date/model provenance.
+
+
+## Final targeted verification
+
+The clean90709 Phone maximum-text original selector passed1/1 after real native Back, fallback disappearance, hittable Activity and three seconds of sampled stability. Original failure histories remain unchanged and the cause of the prior Back failure is unproven. Historical four-tier normal rendering/route-arrival proofs are bounded separately; they do not execute current Back assertions. The post-main1fb integration preserves the reviewed/executed route, fallback and test source. Source reviews close new P1/P2; the existing viewport-helper duplication P3 is deferred. See the actual review gallery for source, device, state and pose limits.

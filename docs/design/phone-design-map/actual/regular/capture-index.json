@@ -364,12 +364,21 @@
     "T14": {
       "row_id": "T14",
       "evidence": "notification-target-not-found-screen",
-      "test": "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback()",
-      "action": "tap notification-row-workout-ui-test-activity-workout-missing",
-      "timestamp": 1791818336.578,
-      "image": "D6A7D3AE-5365-4CE8-B5F0-F08709136A29.png",
-      "screen": "screen-0-1320x2868-tap notification-row-workout-ui-test-activity-workout-missing_0_AEC55492-5D44-4836-9E40-C976A23FCC01.png",
-      "file": "T14.png"
+      "test": "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+      "action": "T14 missing workout target before Back_0_4274E9CE-89BF-4C37-9DF7-823AED5DF131.png",
+      "timestamp": 1793398690.027,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "46E01FF5-CB3C-4572-ACDF-8229C47FD7E1.png",
+      "screen": "T14 missing workout target before Back_0_4274E9CE-89BF-4C37-9DF7-823AED5DF131.png",
+      "file": "T14.png",
+      "source_revision": "d3109533",
+      "source_worktree_dirty": null,
+      "device_udid": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+      "sha256": "7a3582432358ffa9c23d4a186e2858757b3f2311fc87bd5b3f432c98663980b2",
+      "source_json": "../../../full-redesign-map/review/t14-notification-target-not-found-native-2026-11-02/evidence.json",
+      "source_record": "pairs.regular.after",
+      "capture_scope": "Historical normal fallback visual and payload only; Phone MAX Back separate",
+      "pose_readback_verified": false
     },
     "W28": {
       "row_id": "W28",
