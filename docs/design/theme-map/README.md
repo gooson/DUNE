@@ -9,6 +9,8 @@ status: in-progress
 
 T14 운동 기록 없음 화면은 [방향 시안](themes/dune-notification-target-not-found-t14.html)과 [배치 계약](../layout-map/notification-target-not-found-t14.html)을 따른다. 기존 DUNE 팔레트의 불투명 히어로와 원래 문구·아이콘·실제 ID를 보존한다. 이 브라우저 시안은 네이티브 캡처가 아니다.
 
+H03 오늘 밤 수면 예측 상세와 T15 로드 완료 소비자는 [수면 상세 방향 시안](themes/dune-sleep-prediction-detail-h03.html)과 [배치 계약](../layout-map/sleep-prediction-detail-h03.html)을 따른다. 기존 DUNE sleep 팔레트·공유 링·원래 요인/팁 아이콘을 유지한다. HTML은 실제 앱 캡처가 아니다.
+
 ## T12 알림 메시지 상세 · 2026-10-31
 
 [밝음·어두움 브라우저 제안](themes/dune-notification-message-detail.html)은 실제 알림의 저장된 제목·본문만 쓰는 불투명한 어두운 제목 히어로와 밝은 본문 카드를 결합한 한 열 문서형 상세를 보여 준다. [배치·데이터 계약](../layout-map/notification-message-detail-proposal.md)에 680pt 읽기 폭과 큰 글씨·원문 보존을 기록했다. 문구는 테스트 fixture 예시이며 실제 앱 캡처가 아니다. 네이티브 소스 변경 후 iPhone·iPad·Duo 실제 T12 캡처와 런타임 검증은 별도로 갱신한다.
@@ -222,3 +224,7 @@ T09 네이티브 최대 접근성 글씨는 원래 아이콘을 위로 옮겨 �
 ## H02 웰니스 점수 상세 · 2026-10-31
 
 [밝음·어두움 표현 방향](themes/dune-h02-wellness-score-detail.html)과 [상태·배치 계약](../layout-map/h02-wellness-score-detail-proposal.md)은 T04/H01의 불투명 히어로 언어를 H02에 잇는다. 상태별 아이콘과 실제 점수·평가 시각·네 선택적 구성, 시간대 조정, 기간·추세·요약, 계산 설명을 보존한다. 시안의 93점·구성·차트·날짜는 모두 예시이며 네이티브 구현이나 실제 캡처 완료를 뜻하지 않는다.
+
+## A02 훈련 준비도 상세 방향 시안 · 2026-10-31
+
+[밝음·어두움 보존 시안](themes/dune-training-readiness-detail-a02.html)과 [화면별 배치·데이터 계약](../layout-map/training-readiness-detail-a02.html)을 연결한다. 불투명 히어로·원본 상태 SF Symbol·실제 모델에서 읽을 다섯 계산 구성 점수와 별도 30/25/20/15/10 가중치, 기존 시간 조정·5기간/차트/요약·비-일간 세 원천 추세·계산 설명의 배치 방향이다. 히어로 제목은 기존 번역 키 “Score Composition”을 쓰며 중립 대체 점수를 센서 관측의 증거로 표현하지 않는다. 본문은 중앙 정렬 최대 680pt이며 큰 글씨에서는 요약도 세로로 배치한다. HTML의 75점·요인 수치·차트는 명시적인 설명용 예시다. 원본 iPhone 영어/max-AX와 iPad 영어/max-AX 및 일반 글씨 selector가 통과했다. 일반 글씨 iPhone과 Duo는 미검증이다. 새 네이티브 실제 화면 캡처는 실제 화면맵에 별도로 기록한다.

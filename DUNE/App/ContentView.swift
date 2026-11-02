@@ -687,6 +687,7 @@ struct NotificationSleepDetailPushView: View {
                 )
             }
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("notification-sleep-detail-screen")
         .task {
             viewModel.loadData()

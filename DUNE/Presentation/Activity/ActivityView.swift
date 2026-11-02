@@ -105,6 +105,8 @@ struct ActivityView: View {
     @State private var showingPRInfo = false
     @State private var showingConsistencyInfo = false
     @State private var showingExerciseMixInfo = false
+    @State private var handledNotificationRouteSignal: Int?
+    @State private var activeNotificationRouteSignal: Int?
     @State private var notificationWorkoutDestinationID: String?
     @State private var notificationWorkoutLookup: [String: WorkoutSummary] = [:]
     @State private var notificationActivityDestination: NotificationActivityDestination?
@@ -959,14 +961,16 @@ struct ActivityView: View {
     }
 
     private func handleExternalNotificationRoute() async {
-        guard notificationRouteSignal > 0,
+        let routeSignal = notificationRouteSignal
+        guard !Task.isCancelled, routeSignal > 0 else { return }
+        activeNotificationRouteSignal = routeSignal
+        guard handledNotificationRouteSignal != routeSignal,
               let targetWorkoutID = notificationWorkoutID,
-              !targetWorkoutID.isEmpty else {
-            return
-        }
+              !targetWorkoutID.isEmpty else { return }
 
         if let current = viewModel.recentWorkouts.first(where: { $0.id == targetWorkoutID }) {
             notificationWorkoutLookup[targetWorkoutID] = current
+            handledNotificationRouteSignal = routeSignal
             notificationWorkoutDestinationID = targetWorkoutID
             return
         }
@@ -975,6 +979,7 @@ struct ActivityView: View {
         let scenario = UITestSeedScenario.current()
         if let mocked = TestDataSeeder.mockWorkoutSummary(for: scenario, workoutID: targetWorkoutID) {
             notificationWorkoutLookup[targetWorkoutID] = mocked
+            handledNotificationRouteSignal = routeSignal
             notificationWorkoutDestinationID = targetWorkoutID
             return
         }
@@ -982,9 +987,13 @@ struct ActivityView: View {
 
         // Retry once after forcing a refresh to absorb timing gaps on cold launch.
         await viewModel.loadActivityData()
+        guard !Task.isCancelled,
+              activeNotificationRouteSignal == routeSignal,
+              handledNotificationRouteSignal != routeSignal else { return }
 
         if let refreshed = viewModel.recentWorkouts.first(where: { $0.id == targetWorkoutID }) {
             notificationWorkoutLookup[targetWorkoutID] = refreshed
+            handledNotificationRouteSignal = routeSignal
             notificationWorkoutDestinationID = targetWorkoutID
             return
         }
@@ -995,11 +1004,13 @@ struct ActivityView: View {
             workoutID: targetWorkoutID
         ) {
             notificationWorkoutLookup[targetWorkoutID] = mocked
+            handledNotificationRouteSignal = routeSignal
             notificationWorkoutDestinationID = targetWorkoutID
             return
         }
 #endif
 
+        handledNotificationRouteSignal = routeSignal
         missingNotificationWorkoutID = targetWorkoutID
     }
 

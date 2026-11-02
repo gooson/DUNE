@@ -182,6 +182,17 @@
       }
     },
     {
+      "id": "training-readiness-detail-a02",
+      "name": "A02 훈련 준비도 상세",
+      "title": "Training Readiness · Opaque Score Hero",
+      "file": "dune-training-readiness-detail-a02.html",
+      "detail": "2026-10-31 A02 화면별 브라우저 방향 시안. 밝음/어두움의 불투명 히어로·모델 상태 심볼·링과 다섯 계산 구성 점수/가중치, 시간 조정, 기존 5기간 차트·3원천 비-일간 근사 이력을 표현한다. 수치·그래프는 명시적인 예시이며 실제 센서 관측이나 앱 캡처가 아니다. 원본 iPhone 영어/max-AX, iPad 영어/max-AX 및 일반 글씨 통과. 일반 글씨 iPhone/Duo 미검증.",
+      "implementation": {
+        "layout": "../layout-map/training-readiness-detail-a02.html",
+        "status": "native-source-written-runtime-validation-pending"
+      }
+    },
+    {
       "id": "notification-unavailable-t13",
       "name": "T13 · 알림 대상 없음",
       "title": "대상 없음 · 밝음/어두움",
@@ -425,6 +436,17 @@
       "implementation": {
         "layout": "../layout-map/h02-wellness-score-detail-proposal.md",
         "status": "proposal-only"
+      }
+    },
+    {
+      "id": "sleep-prediction-detail-h03",
+      "name": "H03 · 오늘 밤 수면 예측 상세",
+      "title": "DUNE 수면 링·신뢰도·요인",
+      "file": "dune-sleep-prediction-detail-h03.html",
+      "detail": "기존 DetailScoreHero 링과 sleep 색상, 실제 low/medium/high 신뢰도 1/2/3 정성 마크, 원래 요인·팁 아이콘과 문구를 보존하는 H03/T15 공유 상세 방향. 브라우저 시안이며 앱 캡처나 새로운 확률·기록이 아니다.",
+      "implementation": {
+        "layout": "../layout-map/sleep-prediction-detail-h03.html",
+        "status": "source-contract-pending-native-validation"
       }
     }
   ]

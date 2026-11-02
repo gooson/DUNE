@@ -1,0 +1,63 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "32445145-0527-492A-88DA-BEE75911299E",
+      "deviceName" : "iPhone Duo-wt-Health-detail-redesign-validation-644069bf7efc",
+      "modelName" : "iPhone",
+      "osBuildNumber" : "24B91016s",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertTrue failed",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/NotificationRoutingRegressionTests.swift",
+                        "lineNumber" : 29
+                      }
+                    }
+                  ],
+                  "duration" : "39초",
+                  "durationInSeconds" : 39.01518893241882,
+                  "name" : "testBedtimeReminderPushesFromNotificationHub()",
+                  "nodeIdentifier" : "NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "NotificationRoutingRegressionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/NotificationRoutingRegressionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "DUNEUITests-DuoAudit",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Duo Visual Audit"
+    }
+  ]
+}

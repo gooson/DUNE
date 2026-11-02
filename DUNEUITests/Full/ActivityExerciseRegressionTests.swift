@@ -2256,8 +2256,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("T14 dark maximum text actual ID before Back")
 
         tapBackButton()
-        XCTAssertTrue(app.scrollViews[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 8),
-                      "Native Back should return to Activity")
+        XCTAssertTrue(scroll.waitForNonExistence(timeout: 8),
+                      "Native Back should dismiss the missing workout fallback")
+        let activityRoot = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(activityRoot.waitForExistence(timeout: 8), "Native Back should return to Activity")
+        XCTAssertTrue(activityRoot.isHittable, "Activity should be frontmost and interactive")
+
+        let replay = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in scroll.exists || !activityRoot.exists || !activityRoot.isHittable },
+            object: nil
+        )
+        replay.isInverted = true
+        XCTAssertEqual(XCTWaiter.wait(for: [replay], timeout: 3), .completed,
+                       "The fallback must remain dismissed and Activity interactive while navigation settles")
     }
 
     private func t14RevealMissingWorkoutRouteRow(_ row: XCUIElement) -> Bool {
