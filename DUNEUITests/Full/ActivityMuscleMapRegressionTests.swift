@@ -79,7 +79,17 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         XCTAssertFalse(screen3D.exists, "Muscle selection should not open the 3D viewer")
         let primaryScroll = app.scrollViews.firstMatch
         let visibleMap = primaryScroll.frame.intersection(app.windows.firstMatch.frame)
-        for _ in 0..<8 where !visibleMap.contains(open3D.frame) { primaryScroll.swipeUp() }
+        for _ in 0..<8 {
+            let entryFrame = open3D.frame
+            if visibleMap.contains(entryFrame) { break }
+            // A single compact scroll also contains the summary. Reveal the entry in either
+            // direction with a short drag so a long swipe cannot repeatedly overshoot it.
+            let start = primaryScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.4, dy: 0.5))
+            let end = primaryScroll.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.4, dy: entryFrame.minY < visibleMap.minY ? 0.7 : 0.3
+            ))
+            start.press(forDuration: 0.1, thenDragTo: end)
+        }
         XCTAssertTrue(visibleMap.contains(open3D.frame), "The disabled 3D entry should remain visible on the map")
         XCTAssertFalse(open3D.isEnabled, "Selecting a 2D muscle should not enable the 3D entry")
         addScreenshotAttachment(named: "A03 2D muscle selection and disabled 3D entry")
