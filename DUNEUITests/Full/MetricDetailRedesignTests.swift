@@ -17,6 +17,15 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         ]
     }
 
+    override func waitForInitialScreenReady() throws {
+        let key = selectedKey
+        let category = ["exercise-min", "exercise-km", "exercise-m"].contains(key) ? "exercise" : key
+        let identifier = "metric-detail-screen-\(category)"
+        guard app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: 15) else {
+            throw VisualAudit.unavailable("Initial T06 metric route \(key) not found: \(identifier)")
+        }
+    }
+
     func testSelectedMetricIdentityAndCapture() throws {
         guard let expected = Self.matrix[selectedKey] else {
             XCTFail("Unknown T06 matrix key: \(selectedKey)")
