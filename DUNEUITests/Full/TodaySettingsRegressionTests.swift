@@ -669,12 +669,152 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         captureTodayAuditScroll("Today cumulative stress")
     }
 
-    func testVisualAuditMorningBriefing() throws {
-        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
-        // Reset only this scenario's presentation gate. At night the manual
-        // entry is hidden, and an earlier test may already have marked today.
+    func testMorningBriefingSectionsAndDismissal() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments += [
+            "--ui-dashboard-hour", "6",
+            "-lastBriefingDate", "1900-01-01", "-morningBriefingDisabled", "NO"
+        ]
+        launchApp(with: configuration)
+
+        let briefing = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        XCTAssertTrue(briefing.waitForExistence(timeout: 8), "Seeded Today should present the briefing")
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-morning-briefing-hero"].firstMatch.exists)
+        let scroll = briefing.descendants(matching: .scrollView).firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Briefing needs its own scroll view")
+        VisualAudit.capture("T09 briefing hero")
+        for section in ["recovery", "guide", "weekly", "weather"] {
+            let title = app.descendants(matching: .any)["dashboard-morning-briefing-\(section)-title"].firstMatch
+            XCTAssertTrue(title.waitForExistence(timeout: 5), "\(section) card title should exist")
+            XCTAssertTrue(revealBriefingText(title, in: briefing, scroll: scroll, whole: true),
+                          "\(section) title must fit above the sheet toolbar")
+            VisualAudit.capture("T09 briefing \(section) title")
+            addScreenshotAttachment(named: "T09 briefing \(section) title")
+        }
+        assertBriefingDoneReachable()
+        XCTAssertTrue(app.waitAndTap(AXID.dashboardMorningBriefingDismiss))
+        expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: briefing)
+        waitForExpectations(timeout: 3)
+    }
+
+    func testMorningBriefingAtDarkMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-dashboard-hour", "6",
+            "--ui-test-theme", "desertWarm", "--ui-test-style", "dark",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
+            "-lastBriefingDate", "1900-01-01", "-morningBriefingDisabled", "NO"
+        ]
+        launchApp(with: configuration)
+
+        let briefing = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        XCTAssertTrue(briefing.waitForExistence(timeout: 8))
+        let scroll = briefing.descendants(matching: .scrollView).firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Briefing needs its own scroll view")
+        let hero = app.descendants(matching: .any)["dashboard-morning-briefing-hero"].firstMatch
+        XCTAssertTrue(hero.exists)
+        let heading = app.descendants(matching: .any)["dashboard-morning-briefing-heading"].firstMatch
+        XCTAssertTrue(heading.waitForExistence(timeout: 5) && !heading.label.isEmpty)
+        XCTAssertTrue(revealBriefingText(heading, in: briefing, scroll: scroll, whole: true))
+        VisualAudit.capture("T09 dark maximum text hero")
+        addScreenshotAttachment(named: "T09 dark maximum text hero")
+
+        for section in ["recovery", "guide", "weekly", "weather"] {
+            let cardID = "dashboard-morning-briefing-\(section)"
+            let card = app.descendants(matching: .any)[cardID].firstMatch
+            XCTAssertTrue(card.waitForExistence(timeout: 5), "\(section) card should exist")
+            let title = app.descendants(matching: .any)["\(cardID)-title"].firstMatch
+            XCTAssertTrue(title.waitForExistence(timeout: 5) && !title.label.isEmpty)
+            XCTAssertTrue(revealBriefingText(title, in: briefing, scroll: scroll, whole: true),
+                          "\(section) title must fit inside the visible sheet content")
+            VisualAudit.capture("T09 dark maximum text \(section) title")
+            addScreenshotAttachment(named: "T09 dark maximum text \(section) title")
+
+            let message = card.descendants(matching: .staticText)
+                .matching(NSPredicate(format: "identifier != %@", "\(cardID)-title")).firstMatch
+            XCTAssertTrue(message.waitForExistence(timeout: 5) && !message.label.isEmpty,
+                          "\(section) message should remain accessible")
+            XCTAssertTrue(revealBriefingText(message, in: briefing, scroll: scroll, whole: false),
+                          "\(section) message needs a readable visible portion")
+            VisualAudit.capture("T09 dark maximum text \(section) message")
+            addScreenshotAttachment(named: "T09 dark maximum text \(section) message")
+        }
+        assertBriefingDoneReachable()
+        XCTAssertTrue(app.waitAndTap(AXID.dashboardMorningBriefingDismiss))
+    }
+
+    private func briefingContentViewport(in briefing: XCUIElement, scroll: XCUIElement) -> CGRect {
+        let window = app.windows.firstMatch.frame
+        let scrollFrame = scroll.frame.intersection(window)
+        let navigation = briefing.descendants(matching: .navigationBar).firstMatch
+        let done = app.buttons[AXID.dashboardMorningBriefingDismiss].firstMatch
+        let navigationBottom = navigation.exists ? navigation.frame.maxY : scrollFrame.minY
+        let doneBottom = done.exists ? done.frame.maxY : scrollFrame.minY
+        let toolbarBottom = max(navigationBottom, doneBottom)
+        let top = max(scrollFrame.minY, toolbarBottom + 8)
+        return CGRect(x: scrollFrame.minX, y: top, width: scrollFrame.width,
+                      height: max(0, scrollFrame.maxY - top - 8))
+    }
+
+    private func revealBriefingText(
+        _ text: XCUIElement, in briefing: XCUIElement, scroll: XCUIElement, whole: Bool
+    ) -> Bool {
+        for _ in 0..<10 {
+            let viewport = briefingContentViewport(in: briefing, scroll: scroll)
+            let frame = text.frame
+            let visibleHeight = frame.intersection(viewport).height
+            let fitsVertically = whole ? viewport.contains(frame) : visibleHeight >= 24
+            let fitsHorizontally = frame.minX >= viewport.minX - 2 && frame.maxX <= viewport.maxX + 2
+            if fitsVertically && fitsHorizontally && (!whole || text.isHittable) { return true }
+            guard viewport.height > 100, scroll.frame.height > 0 else { return false }
+            let movingUp = frame.midY >= viewport.midY
+            let startY = movingUp ? viewport.maxY - 24 : viewport.minY + 24
+            let endY = movingUp ? viewport.minY + 24 : viewport.maxY - 24
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.5, dy: (startY - scroll.frame.minY) / scroll.frame.height
+            ))
+            let end = scroll.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.5, dy: (endY - scroll.frame.minY) / scroll.frame.height
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        return false
+    }
+
+    private func assertBriefingDoneReachable() {
+        let done = app.buttons[AXID.dashboardMorningBriefingDismiss].firstMatch
+        let briefing = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        let scroll = briefing.scrollViews.firstMatch
+        // Compact sheets can collapse their toolbar while scrolling through the cards.
+        for _ in 0..<6 {
+            if done.exists && done.isHittable { break }
+            guard scroll.exists else { break }
+            let viewport = briefingContentViewport(in: briefing, scroll: scroll)
+            let scrollFrame = scroll.frame
+            guard viewport.height > 100, scrollFrame.height > 0 else { break }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.5, dy: (viewport.minY + viewport.height * 0.35 - scrollFrame.minY) / scrollFrame.height
+            ))
+            let end = scroll.coordinate(withNormalizedOffset: CGVector(
+                dx: 0.5, dy: (viewport.minY + viewport.height * 0.65 - scrollFrame.minY) / scrollFrame.height
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        guard done.waitForExistence(timeout: 5) else {
+            XCTFail("Done must exist after restoring the sheet toolbar")
+            return
+        }
+        XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: -2, dy: -2).contains(done.frame)
+                      && done.isHittable, "Done must remain fully visible and tappable")
+    }
+
+    func testVisualAuditMorningBriefing() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
+        // Pin the local morning and reset only this scenario's presentation gate.
+        // The briefing must not auto-present outside the morning window.
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-dashboard-hour", "6",
             "-lastBriefingDate", "1900-01-01", "-morningBriefingDisabled", "NO"
         ]
         launchApp(with: configuration)

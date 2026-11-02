@@ -1,0 +1,1231 @@
+{
+  "schema_version": 1,
+  "screen": "T10",
+  "kind": "installed actual native comparison; four canonical T10 rows only",
+  "stage_status": "installed; final PR/CI tracked separately",
+  "installed": true,
+  "target_install_directory": "docs/design/full-redesign-map/review/t10-daily-report-native-2026-11-02",
+  "source_checkout_parent_declared": "/Users/shanks/.codex/worktrees/detail-redesign-t10/Health",
+  "pairs": {
+    "regular": {
+      "before": {
+        "capture_timestamp": 1793032887.164,
+        "timestamp_kind": "original gallery capture timestamp; method retained in original_capture",
+        "revision": "4f09dff36c0ad6de878bb097c4e8d8f923d9888a",
+        "source_worktree_dirty": null,
+        "app_source_sha256": "70be3deb0b1ebf86555e68a108c1c80522b1aad3615165f4f403b53408c5b957",
+        "selector": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+        "action": "T03-notification-digest-collapsed",
+        "device_udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+        "original_capture": {
+          "file": "images/iphone-T03-notification-digest-collapsed.png",
+          "sha256": "0a1735d2edd4984c1eb617f8b8f91f6ed4b8bbcd21e9e0a833871a272d34806a",
+          "pixels": [
+            1206,
+            2622
+          ],
+          "device": "iphone",
+          "screen": "T10",
+          "action": "T03-notification-digest-collapsed",
+          "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+          "timestamp": 1793032887.164,
+          "udid": "3712F209-B644-45C4-9726-44D5BF835B0B",
+          "source_export_file": "8D8439BF-E363-43E1-BB9B-54A5DD77837A.png",
+          "result_bundle": "Test-DUNEUITests-2026.10.27_01-38-33-+0900.xcresult",
+          "active": true,
+          "method": "XCTest app.screenshot attachment from passed selector",
+          "text_size": "default",
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/iphone-T03-notification-digest-collapsed.png"
+        },
+        "pose_readback_verified": false,
+        "numeric_hinge_angle": "unverified",
+        "physical_rotation": "unverified",
+        "caveat": "Original Phone navigation/header overlap or Duo sideways status/window artifact preserved; different historical device/date. No new-pose claim.",
+        "image": "assets/regular-oct27-collapsed-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/iphone-T03-notification-digest-collapsed.png",
+        "sha256": "0a1735d2edd4984c1eb617f8b8f91f6ed4b8bbcd21e9e0a833871a272d34806a",
+        "pixels": [
+          1206,
+          2622
+        ],
+        "exif_orientation": 1,
+        "label": "일반 iPhone · 10월 27일 기존",
+        "kind": "historical-before-native",
+        "identity_review": "Actual PNG viewed: notification Today Summary digest card and separate sleep metric; T10 consumer family, not T03 Today feed.",
+        "capture_time_kst": "2026-10-27T01:41:27.164000+09:00"
+      },
+      "after": {
+        "image": "assets/phone-after-274F3274-4D35-44F5-BA3F-4D65C1FCE799.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-phone-report-chevron-final-2026-11-02/attachments/274F3274-4D35-44F5-BA3F-4D65C1FCE799.png",
+        "sha256": "63b0f54b3fcce20430dc8353a7ae72850146a4dc3da97e9ca1d6cb5b4d5fed0a",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "revision": "f9c956e1",
+        "source_worktree_dirty": false,
+        "capture_timestamp": 1793609899.48,
+        "capture_time_kst": "2026-11-02T17:58:19.480000+09:00",
+        "timestamp_kind": "native-XCTest-attachment",
+        "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+        "action": "T10-notification-report-collapsed_0_87526454-DDB7-4444-8FE1-FFF8488E9035.png",
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "0E3F3405-768C-4C2B-A998-37192D11574C",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "274F3274-4D35-44F5-BA3F-4D65C1FCE799.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T10-notification-report-collapsed_0_87526454-DDB7-4444-8FE1-FFF8488E9035.png",
+          "timestamp": 1793609899.48
+        },
+        "device_udid": "0E3F3405-768C-4C2B-A998-37192D11574C",
+        "label": "일반 iPhone · 개편 · collapsed · 스크롤된 본문 (상단 표지 없음)",
+        "kind": "native-after",
+        "viewport_state": "scrolled content; cover offscreen",
+        "caveat": "Native source f9c956e1; public app patch fd888f13 is a separate source-closure observation. Not relabeled as public revision."
+      },
+      "status": "available native pair; different historical date/device/viewport disclosed",
+      "comparison_note": "Oct27 before is1206×2622 differentPhone; current1320×2868 collapsed attachment is scrolled without cover. DarkMAX title supplement shows actual cover; no extra execution requested."
+    },
+    "ipad": {
+      "before": {
+        "capture_timestamp": 1793419955.826,
+        "timestamp_kind": "native-XCTest-attachment",
+        "revision": "1f7f9900",
+        "source_worktree_dirty": null,
+        "selector": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+        "action": "T03-notification-digest-collapsed_0_80859D97-11F6-4D46-8191-7466E0F439F4.png",
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "4D786170-081D-4BFE-B378-1D4FCCA0A58A.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T03-notification-digest-collapsed_0_80859D97-11F6-4D46-8191-7466E0F439F4.png",
+          "timestamp": 1793419955.826
+        },
+        "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "pose_readback_verified": false,
+        "caveat": "Historical Oct31 iPad mini C8B44B9E differs from current Pro13 26B2FDC3; date/viewport differ. Source dirty unknown, not inferred clean.",
+        "image": "assets/ipad-oct31-collapsed-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-briefing-digest-hub-message-current/attachments/4D786170-081D-4BFE-B378-1D4FCCA0A58A.png",
+        "sha256": "bcdbbc4adf5938e0853d0f51824706559cb00d3003079c8eb0d6fc2c01d0e940",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "exif_orientation": 1,
+        "label": "iPad · 10월 31일 기존 · 접힘",
+        "kind": "historical-before-native",
+        "identity_review": "Actual PNG viewed: notification Today Summary digest card and separate sleep metric; T10 consumer family, not T03 Today feed.",
+        "capture_time_kst": "2026-10-31T13:12:35.826000+09:00"
+      },
+      "after": {
+        "image": "assets/ipad-after-640CA390-CB62-4845-9063-EBF9B9DFCD04.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-ipad-report-chevron-final-2026-11-02/attachments/640CA390-CB62-4845-9063-EBF9B9DFCD04.png",
+        "sha256": "44feecf6d5ef8269ae6f4da79d301192ff983ba947ed2ed9000023a890547145",
+        "pixels": [
+          2064,
+          2752
+        ],
+        "exif_orientation": 1,
+        "revision": "f9c956e1",
+        "source_worktree_dirty": false,
+        "capture_timestamp": 1793609543.358,
+        "capture_time_kst": "2026-11-02T17:52:23.358000+09:00",
+        "timestamp_kind": "native-XCTest-attachment",
+        "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+        "action": "T10-notification-report-collapsed_0_576AC719-A339-4ED3-9DBE-37D5B0E290F7.png",
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "26B2FDC3-737B-4473-9A20-A03AFBD6D2A9",
+          "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "640CA390-CB62-4845-9063-EBF9B9DFCD04.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T10-notification-report-collapsed_0_576AC719-A339-4ED3-9DBE-37D5B0E290F7.png",
+          "timestamp": 1793609543.358
+        },
+        "device_udid": "26B2FDC3-737B-4473-9A20-A03AFBD6D2A9",
+        "label": "iPad · 개편 · collapsed",
+        "kind": "native-after",
+        "viewport_state": "collapsed",
+        "caveat": "Native source f9c956e1; public app patch fd888f13 is a separate source-closure observation. Not relabeled as public revision."
+      },
+      "status": "available native pair; different historical date/device/viewport disclosed",
+      "comparison_note": "Different iPad model/UDID/viewport and date; not a same-device before/after."
+    },
+    "duo": {
+      "before": {
+        "capture_timestamp": 1793033728.9543586,
+        "timestamp_kind": "original gallery capture timestamp; method retained in original_capture",
+        "revision": "4f09dff36c0ad6de878bb097c4e8d8f923d9888a",
+        "source_worktree_dirty": null,
+        "app_source_sha256": "70be3deb0b1ebf86555e68a108c1c80522b1aad3615165f4f403b53408c5b957",
+        "selector": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+        "action": "T03-notification-digest-collapsed",
+        "device_udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+        "original_capture": {
+          "file": "images/duo-closed-007-1398x2034.png",
+          "sha256": "1bfc35c681d1c3234c3017e684fc43d8d7cec5bad0c98acc5d83ef774d0b1626",
+          "pixels": [
+            1398,
+            2034
+          ],
+          "device": "duo-closed",
+          "screen": "T10",
+          "action": "T03-notification-digest-collapsed",
+          "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+          "timestamp": 1793033728.9543586,
+          "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+          "active": true,
+          "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+          "runner_exit": 0,
+          "test_outcome": "passed",
+          "hierarchy": "proof/duo-closed-007-hierarchy.txt",
+          "window": "Window (Main), 0x104fea940, {{0.0, 0.0}, {466.0, 678.0}}",
+          "text_size": "default",
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/duo-closed-007-1398x2034.png"
+        },
+        "pose_readback_verified": false,
+        "numeric_hinge_angle": "unverified",
+        "physical_rotation": "unverified",
+        "caveat": "Original Phone navigation/header overlap or Duo sideways status/window artifact preserved; different historical device/date. No new-pose claim.",
+        "image": "assets/duo-oct27-collapsed-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/duo-closed-007-1398x2034.png",
+        "sha256": "1bfc35c681d1c3234c3017e684fc43d8d7cec5bad0c98acc5d83ef774d0b1626",
+        "pixels": [
+          1398,
+          2034
+        ],
+        "exif_orientation": 1,
+        "label": "Duo 접힘 · 10월 27일 기존",
+        "kind": "historical-before-native",
+        "identity_review": "Actual PNG viewed: notification Today Summary digest card and separate sleep metric; T10 consumer family, not T03 Today feed.",
+        "capture_time_kst": "2026-10-27T01:55:28.954359+09:00"
+      },
+      "after": {
+        "image": "assets/duo-after-001-1398x2034.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-duo-closed-native-back-final-2026-11-02/paired-host/001-1398x2034.png",
+        "sha256": "8454c72436c8e3604e0344226c3826e6d09d6008621183080e6dd6457133bb9c",
+        "pixels": [
+          1398,
+          2034
+        ],
+        "exif_orientation": 1,
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "capture_timestamp": 1793610783.8789213,
+        "capture_time_kst": "2026-11-02T18:13:03.878921+09:00",
+        "timestamp_kind": "host-file-mtime of paired native PNG; not attachment timestamp or checkpoint deadline",
+        "selector": "DUNEUITests/NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday",
+        "action": "DUNE_VISUAL_AUDIT_READY root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793610811.444663",
+        "device_udid": "8CDB79FE-DB1A-4076-8BCD-2701B5D699EA",
+        "label": "Duo 접힘 · 개편 · report entry cover + native rail back",
+        "kind": "native-after",
+        "viewport_state": "report entry cover + native rail back",
+        "sequence": 1,
+        "angle_before": 0,
+        "angle_after": 0,
+        "active_display": "LCD",
+        "pose_readback_verified": true,
+        "strict_ack_count": 2,
+        "caveat": "Original active display PNG; retained native revision ae2598a6. Scrolled body is not initial top; source closure is relevant app/test only, not whole-tree equality."
+      },
+      "status": "available native pair; historical device/date/pose differences disclosed"
+    },
+    "duo-open": {
+      "before": {
+        "capture_timestamp": 1793035482.676728,
+        "timestamp_kind": "original gallery capture timestamp; method retained in original_capture",
+        "revision": "4f09dff36c0ad6de878bb097c4e8d8f923d9888a",
+        "source_worktree_dirty": null,
+        "app_source_sha256": "70be3deb0b1ebf86555e68a108c1c80522b1aad3615165f4f403b53408c5b957",
+        "selector": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+        "action": "T03-notification-digest-collapsed",
+        "device_udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+        "original_capture": {
+          "file": "images/duo-open-007-2007x2853.png",
+          "sha256": "0e67aecc5b57e031a4e77ecd36a197fdd9058a6748b2eb66931f8c378325c963",
+          "pixels": [
+            2853,
+            2007
+          ],
+          "device": "duo-open",
+          "screen": "T10",
+          "action": "T03-notification-digest-collapsed",
+          "test": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard",
+          "timestamp": 1793035482.676728,
+          "udid": "082E3835-4ED0-4323-874A-17DC5FCB194C",
+          "active": true,
+          "method": "native simctl screenshot at held XCTest checkpoint; paired displays",
+          "runner_exit": 0,
+          "test_outcome": "passed",
+          "hierarchy": "proof/duo-open-007-hierarchy.txt",
+          "window": "Window, 0x11428a080, {{0.0, -0.0}, {951.0, 669.0}}",
+          "text_size": "default",
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/duo-open-007-2007x2853.png"
+        },
+        "pose_readback_verified": false,
+        "numeric_hinge_angle": "unverified",
+        "physical_rotation": "unverified",
+        "caveat": "Original Phone navigation/header overlap or Duo sideways status/window artifact preserved; different historical device/date. No new-pose claim.",
+        "image": "assets/duo-open-oct27-collapsed-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/docs/design/full-redesign-map/review/daily-summary-reading-2026-10-27/images/duo-open-007-2007x2853.png",
+        "sha256": "0e67aecc5b57e031a4e77ecd36a197fdd9058a6748b2eb66931f8c378325c963",
+        "pixels": [
+          2853,
+          2007
+        ],
+        "exif_orientation": 1,
+        "label": "Duo 펼침 · 10월 27일 기존",
+        "kind": "historical-before-native",
+        "identity_review": "Actual PNG viewed: notification Today Summary digest card and separate sleep metric; T10 consumer family, not T03 Today feed.",
+        "capture_time_kst": "2026-10-27T02:24:42.676728+09:00"
+      },
+      "after": {
+        "image": "assets/duo-open-after-002-2007x2853.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-duo-open-report-final-2026-11-02/paired-host/002-2007x2853.png",
+        "sha256": "51081819aee86a9c3cca6f71c61076e97470a6cb98fcddce0f713b3c3f38660d",
+        "pixels": [
+          2853,
+          2007
+        ],
+        "exif_orientation": 1,
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "capture_timestamp": 1793610939.430086,
+        "capture_time_kst": "2026-11-02T18:15:39.430086+09:00",
+        "timestamp_kind": "host-file-mtime of paired native PNG; not attachment timestamp or checkpoint deadline",
+        "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+        "action": "DUNE_VISUAL_AUDIT_READY T10-notification-report-collapsed [DUNEUITests/TodayReadingUITests.swift:117] DEADLINE=1793610968.256969",
+        "device_udid": "8CDB79FE-DB1A-4076-8BCD-2701B5D699EA",
+        "label": "Duo 펼침 · 개편 · normal collapsed · scrolled body without cover",
+        "kind": "native-after",
+        "viewport_state": "normal collapsed · scrolled body without cover",
+        "sequence": 2,
+        "angle_before": 180,
+        "angle_after": 180,
+        "active_display": "LCD-1",
+        "pose_readback_verified": true,
+        "strict_ack_count": 7,
+        "caveat": "Original active display PNG; retained native revision ae2598a6. Scrolled body is not initial top; source closure is relevant app/test only, not whole-tree equality."
+      },
+      "status": "available native pair; historical device/date/pose differences disclosed"
+    }
+  },
+  "historical_canonical_before": {
+    "regular": {
+      "capture_timestamp": 1792066828.873,
+      "timestamp_kind": "original canonical capture-index timestamp",
+      "revision": "1f49c921512a8fbf33eb26221c527d03c54b136f",
+      "source_worktree_dirty": true,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "selector": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+      "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+      "original_capture_row": {
+        "row_id": "T10",
+        "evidence": "notification-daily-digest-screen",
+        "test": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+        "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+        "timestamp": 1792066828.873,
+        "image": "8A5F83B8-2A2B-40A4-935F-A4F1C83F6FCC.png",
+        "screen": "screen-0-1320x2868-root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]_0_9601F290-6AAB-486E-A745-1BDBC9F8E333.png",
+        "file": "T10.png",
+        "source_revision": "1f49c921512a8fbf33eb26221c527d03c54b136f",
+        "source_worktree_dirty": true,
+        "xcresult": "/Users/shanks/.codex/worktrees/cccd/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.15_21-19-25-+0900.xcresult",
+        "sha256": "b03de4b48e33f6ed715d45afc67ab2c01771aa1b79054929e688ffc0eab6f2a2",
+        "visual_review": "accepted",
+        "source_test_result": "Passed"
+      },
+      "pose_readback_verified": false,
+      "caveat": "Historical native original; old Duo status/window rotation artifact and hinge angle unverified; not current pose proof.",
+      "image": "assets/canonical-regular-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t10/Health/docs/design/phone-design-map/actual/regular/images/T10.png",
+      "sha256": "b03de4b48e33f6ed715d45afc67ab2c01771aa1b79054929e688ffc0eab6f2a2",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "label": "일반 iPhone · 정식 맵 역사 원본",
+      "kind": "historical-before-native",
+      "identity_review": "Actual PNG viewed: notification Today Summary digest card and separate sleep metric; T10 consumer family, not T03 Today feed.",
+      "capture_time_kst": "2026-10-15T21:20:28.873000+09:00"
+    },
+    "ipad": {
+      "capture_timestamp": 1792066949.445,
+      "timestamp_kind": "original canonical capture-index timestamp",
+      "revision": "1f49c921512a8fbf33eb26221c527d03c54b136f",
+      "source_worktree_dirty": true,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "selector": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+      "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+      "original_capture_row": {
+        "row_id": "T10",
+        "evidence": "notification-daily-digest-screen",
+        "test": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+        "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+        "timestamp": 1792066949.445,
+        "image": "CF43E685-F3A5-4786-A08E-8B9188080256.png",
+        "screen": "screen-0-2064x2752-root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]_0_5D7EFBEE-B934-4E23-AD20-F104815E850D.png",
+        "file": "T10.png",
+        "source_revision": "1f49c921512a8fbf33eb26221c527d03c54b136f",
+        "source_worktree_dirty": true,
+        "xcresult": "/Users/shanks/.codex/worktrees/cccd/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.15_21-21-36-+0900.xcresult",
+        "sha256": "b8656c52b26c0467fb56244726200571dcde5c4b18b437a02d6d10d529300b8b",
+        "visual_review": "accepted",
+        "source_test_result": "Passed"
+      },
+      "pose_readback_verified": false,
+      "caveat": "Historical native original; old Duo status/window rotation artifact and hinge angle unverified; not current pose proof.",
+      "image": "assets/canonical-ipad-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t10/Health/docs/design/phone-design-map/actual/ipad/images/T10.png",
+      "sha256": "b8656c52b26c0467fb56244726200571dcde5c4b18b437a02d6d10d529300b8b",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "label": "iPad · 정식 맵 역사 원본",
+      "kind": "historical-before-native",
+      "identity_review": "Actual PNG viewed: notification Today Summary digest card and separate sleep metric; T10 consumer family, not T03 Today feed.",
+      "capture_time_kst": "2026-10-15T21:22:29.445000+09:00"
+    },
+    "duo": {
+      "capture_timestamp": 1791824239.204,
+      "timestamp_kind": "original canonical capture-index timestamp",
+      "revision": null,
+      "source_worktree_dirty": null,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "selector": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+      "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+      "original_capture_row": {
+        "row_id": "T10",
+        "evidence": "notification-daily-digest-screen",
+        "test": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+        "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+        "timestamp": 1791824239.204,
+        "image": "D4E0BBBE-C9BA-4E8D-AC1D-6ECA65EB8C01.png",
+        "screen": "screen-0-1398x2034-root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]_0_09663F17-31A0-47E3-9277-AE538B91DEE0.png",
+        "file": "T10.png",
+        "current_verification": "pending",
+        "current_verification_note": "T10의 이 기기 인덱스는 2026-10-15 변경 전 캡처를 보존합니다. 2026-10-27 최신 구현은 별도 전용 Duo 외부·내부에서 관련 검사를 각각2/2 통과했고 daily-summary-reading-2026-10-27 갤러리에 새 T03/T10 원본을 보존했습니다. 이 과거 기기의 이미지는 새 출처로 대체하지 않았습니다."
+      },
+      "pose_readback_verified": false,
+      "caveat": "Historical native original; old Duo status/window rotation artifact and hinge angle unverified; not current pose proof.",
+      "image": "assets/canonical-duo-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t10/Health/docs/design/phone-design-map/actual/duo/images/T10.png",
+      "sha256": "9f7d4d71b6d5347545cf96d0a8389e7685814e3633cee667a292c91966f6d5ee",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "label": "Duo 접힘 · 정식 맵 역사 원본",
+      "kind": "historical-before-native",
+      "identity_review": "Actual PNG viewed: notification Today Summary digest card and separate sleep metric; T10 consumer family, not T03 Today feed.",
+      "capture_time_kst": "2026-10-13T01:57:19.204000+09:00"
+    },
+    "duo-open": {
+      "capture_timestamp": 1791827321.042,
+      "timestamp_kind": "original canonical capture-index timestamp",
+      "revision": null,
+      "source_worktree_dirty": null,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "selector": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+      "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+      "original_capture_row": {
+        "row_id": "T10",
+        "evidence": "notification-daily-digest-screen",
+        "test": "NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday()",
+        "action": "root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]",
+        "timestamp": 1791827321.042,
+        "image": "2C5DF763-3B4D-447F-B6B6-04ED26553558.png",
+        "screen": "screen-1-2006x2852-root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday]_1_9C4A0EB6-2C5D-4B13-9FB6-379E16AAA6F5.png",
+        "file": "T10.png",
+        "current_verification": "pending",
+        "current_verification_note": "T10의 이 기기 인덱스는 2026-10-15 변경 전 캡처를 보존합니다. 2026-10-27 최신 구현은 별도 전용 Duo 외부·내부에서 관련 검사를 각각2/2 통과했고 daily-summary-reading-2026-10-27 갤러리에 새 T03/T10 원본을 보존했습니다. 이 과거 기기의 이미지는 새 출처로 대체하지 않았습니다."
+      },
+      "pose_readback_verified": false,
+      "caveat": "Historical native original; old Duo status/window rotation artifact and hinge angle unverified; not current pose proof.",
+      "image": "assets/canonical-duo-open-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t10/Health/docs/design/phone-design-map/actual/duo-open/images/T10.png",
+      "sha256": "a0517e77eb50e50afc5190beda8fbf8fbeb40893aa56dceabd6304375f521f2c",
+      "pixels": [
+        2006,
+        2852
+      ],
+      "exif_orientation": 6,
+      "label": "Duo 펼침 · 정식 맵 역사 원본",
+      "kind": "historical-before-native",
+      "identity_review": "Actual PNG viewed: notification Today Summary digest card and separate sleep metric; T10 consumer family, not T03 Today feed.",
+      "capture_time_kst": "2026-10-13T02:48:41.042000+09:00"
+    }
+  },
+  "extra_states": [
+    {
+      "capture_timestamp": 1793419960.852,
+      "timestamp_kind": "native-XCTest-attachment",
+      "revision": "1f7f9900",
+      "source_worktree_dirty": null,
+      "selector": "TodayReadingUITests/testNotificationDigestUsesSameExpandableCard()",
+      "action": "T03-notification-digest-expanded_0_6F976397-891F-4A9A-8D46-2B3D32E60CCF.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "5CC23FFD-2851-49FE-809B-A19D2970F59A.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T03-notification-digest-expanded_0_6F976397-891F-4A9A-8D46-2B3D32E60CCF.png",
+        "timestamp": 1793419960.852
+      },
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "pose_readback_verified": false,
+      "caveat": "Matched historical iPad device; October31 data/date differs from future after. Original provenance does not assert clean; not inferred.",
+      "image": "assets/ipad-oct31-expanded-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-briefing-digest-hub-message-current/attachments/5CC23FFD-2851-49FE-809B-A19D2970F59A.png",
+      "sha256": "fd73237661bb6215437073ad2c842f3869dc621275a2149f102fe16aa643cf48",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "exif_orientation": 1,
+      "label": "iPad · 10월 31일 기존 · 펼침",
+      "kind": "historical-before-native",
+      "identity_review": "Actual PNG viewed: notification Today Summary digest card and separate sleep metric; T10 consumer family, not T03 Today feed.",
+      "capture_time_kst": "2026-10-31T13:12:40.852000+09:00"
+    },
+    {
+      "image": "assets/ipad-after-CED2B2FD-C823-4EF4-9C05-3111787F65EE.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-ipad-report-chevron-final-2026-11-02/attachments/CED2B2FD-C823-4EF4-9C05-3111787F65EE.png",
+      "sha256": "17b3ab8e4fc1afc285a784e4dc83d9d52d4d9ab13b1f9b801c6d7b9cae439d23",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": "f9c956e1",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793609571.084,
+      "capture_time_kst": "2026-11-02T17:52:51.084000+09:00",
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "T10-notification-report-dark-ax_0_4881A4F5-3739-4C76-BD89-D9D0E2C8E1E6.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "26B2FDC3-737B-4473-9A20-A03AFBD6D2A9",
+        "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "CED2B2FD-C823-4EF4-9C05-3111787F65EE.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-dark-ax_0_4881A4F5-3739-4C76-BD89-D9D0E2C8E1E6.png",
+        "timestamp": 1793609571.084
+      },
+      "device_udid": "26B2FDC3-737B-4473-9A20-A03AFBD6D2A9",
+      "label": "iPad · 개편 · dark-ax",
+      "kind": "native-after",
+      "viewport_state": "dark-ax",
+      "caveat": "Native source f9c956e1; public app patch fd888f13 is a separate source-closure observation. Not relabeled as public revision."
+    },
+    {
+      "image": "assets/ipad-after-DB28367D-A826-46F7-B085-CEDF1CEAD60B.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-ipad-report-chevron-final-2026-11-02/attachments/DB28367D-A826-46F7-B085-CEDF1CEAD60B.png",
+      "sha256": "3c239e119d147fc337e552d2ed059cef43d5c14ad9ed8c21cb404520af06c505",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": "f9c956e1",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793609569.024,
+      "capture_time_kst": "2026-11-02T17:52:49.024000+09:00",
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "T10-notification-report-dark-ax-control_0_413129D5-C536-4F00-9044-80E9306497B8.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "26B2FDC3-737B-4473-9A20-A03AFBD6D2A9",
+        "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "DB28367D-A826-46F7-B085-CEDF1CEAD60B.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-dark-ax-control_0_413129D5-C536-4F00-9044-80E9306497B8.png",
+        "timestamp": 1793609569.024
+      },
+      "device_udid": "26B2FDC3-737B-4473-9A20-A03AFBD6D2A9",
+      "label": "iPad · 개편 · dark-ax-control",
+      "kind": "native-after",
+      "viewport_state": "dark-ax-control",
+      "caveat": "Native source f9c956e1; public app patch fd888f13 is a separate source-closure observation. Not relabeled as public revision."
+    },
+    {
+      "image": "assets/ipad-after-0375521B-38A7-4B21-8C59-131553C51E2E.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-ipad-report-chevron-final-2026-11-02/attachments/0375521B-38A7-4B21-8C59-131553C51E2E.png",
+      "sha256": "ef625ee74404b6b36648847913bb60f196898378d69b207fa3c04bf16efe24fe",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": "f9c956e1",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793609559.272,
+      "capture_time_kst": "2026-11-02T17:52:39.272000+09:00",
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "T10-notification-report-dark-ax-title_0_952B7E09-FCC3-415C-9451-1A2C9EE058CA.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "26B2FDC3-737B-4473-9A20-A03AFBD6D2A9",
+        "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "0375521B-38A7-4B21-8C59-131553C51E2E.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-dark-ax-title_0_952B7E09-FCC3-415C-9451-1A2C9EE058CA.png",
+        "timestamp": 1793609559.272
+      },
+      "device_udid": "26B2FDC3-737B-4473-9A20-A03AFBD6D2A9",
+      "label": "iPad · 개편 · dark-ax-title",
+      "kind": "native-after",
+      "viewport_state": "dark-ax-title",
+      "caveat": "Native source f9c956e1; public app patch fd888f13 is a separate source-closure observation. Not relabeled as public revision."
+    },
+    {
+      "image": "assets/ipad-after-206666EF-D9A3-4E9E-BA74-702124D133D6.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-ipad-report-chevron-final-2026-11-02/attachments/206666EF-D9A3-4E9E-BA74-702124D133D6.png",
+      "sha256": "e3e59af133312eaa7b130aada17942bf5ebbafbc23ce5f495c58bfb4fe677366",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": "f9c956e1",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793609548.693,
+      "capture_time_kst": "2026-11-02T17:52:28.693000+09:00",
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "T10-notification-report-expanded_0_7CE78CFA-7E8C-40A0-8B51-9D30FADEA3E5.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "26B2FDC3-737B-4473-9A20-A03AFBD6D2A9",
+        "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "206666EF-D9A3-4E9E-BA74-702124D133D6.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-expanded_0_7CE78CFA-7E8C-40A0-8B51-9D30FADEA3E5.png",
+        "timestamp": 1793609548.693
+      },
+      "device_udid": "26B2FDC3-737B-4473-9A20-A03AFBD6D2A9",
+      "label": "iPad · 개편 · expanded",
+      "kind": "native-after",
+      "viewport_state": "expanded",
+      "caveat": "Native source f9c956e1; public app patch fd888f13 is a separate source-closure observation. Not relabeled as public revision."
+    },
+    {
+      "image": "assets/phone-after-F5B75878-711B-41D3-B136-054E0E366589.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-phone-report-chevron-final-2026-11-02/attachments/F5B75878-711B-41D3-B136-054E0E366589.png",
+      "sha256": "5c460fb7a7966d223eaf3156eb9f4c89a73a144cb0006e81d22a7acf5439d9b7",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": "f9c956e1",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793609928.704,
+      "capture_time_kst": "2026-11-02T17:58:48.704000+09:00",
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "T10-notification-report-dark-ax_0_29C7851C-D18F-43AA-9163-DC3967A129DA.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "0E3F3405-768C-4C2B-A998-37192D11574C",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "F5B75878-711B-41D3-B136-054E0E366589.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-dark-ax_0_29C7851C-D18F-43AA-9163-DC3967A129DA.png",
+        "timestamp": 1793609928.704
+      },
+      "device_udid": "0E3F3405-768C-4C2B-A998-37192D11574C",
+      "label": "일반 iPhone · 개편 · dark-ax",
+      "kind": "native-after",
+      "viewport_state": "dark-ax",
+      "caveat": "Native source f9c956e1; public app patch fd888f13 is a separate source-closure observation. Not relabeled as public revision."
+    },
+    {
+      "image": "assets/phone-after-B95926AA-B7FB-4C50-8E4E-9D90AFF304C3.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-phone-report-chevron-final-2026-11-02/attachments/B95926AA-B7FB-4C50-8E4E-9D90AFF304C3.png",
+      "sha256": "c7f9987817b550df67872a11a52246be0c92f3dddf4b84b9b3d6436db407f35a",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": "f9c956e1",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793609926.672,
+      "capture_time_kst": "2026-11-02T17:58:46.672000+09:00",
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "T10-notification-report-dark-ax-control_0_CD91B7DE-40F1-4F04-869A-A28640005F19.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "0E3F3405-768C-4C2B-A998-37192D11574C",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "B95926AA-B7FB-4C50-8E4E-9D90AFF304C3.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-dark-ax-control_0_CD91B7DE-40F1-4F04-869A-A28640005F19.png",
+        "timestamp": 1793609926.672
+      },
+      "device_udid": "0E3F3405-768C-4C2B-A998-37192D11574C",
+      "label": "일반 iPhone · 개편 · dark-ax-control",
+      "kind": "native-after",
+      "viewport_state": "dark-ax-control",
+      "caveat": "Native source f9c956e1; public app patch fd888f13 is a separate source-closure observation. Not relabeled as public revision."
+    },
+    {
+      "image": "assets/phone-after-8F4EE145-7A58-4877-8CC2-80A2DFC3C2A1.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-phone-report-chevron-final-2026-11-02/attachments/8F4EE145-7A58-4877-8CC2-80A2DFC3C2A1.png",
+      "sha256": "60c5af6d598553b57c00c557ec544693cbf97635bd23a030a9925c7710c7e74b",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": "f9c956e1",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793609915.087,
+      "capture_time_kst": "2026-11-02T17:58:35.087000+09:00",
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "T10-notification-report-dark-ax-title_0_E54CAF66-B2C1-42D3-B0F8-8E59E29EA22D.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "0E3F3405-768C-4C2B-A998-37192D11574C",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "8F4EE145-7A58-4877-8CC2-80A2DFC3C2A1.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-dark-ax-title_0_E54CAF66-B2C1-42D3-B0F8-8E59E29EA22D.png",
+        "timestamp": 1793609915.087
+      },
+      "device_udid": "0E3F3405-768C-4C2B-A998-37192D11574C",
+      "label": "일반 iPhone · 개편 · dark-ax-title · 표지 확인 보충",
+      "kind": "native-after",
+      "viewport_state": "dark-ax-title",
+      "caveat": "Native source f9c956e1; public app patch fd888f13 is a separate source-closure observation. Not relabeled as public revision."
+    },
+    {
+      "image": "assets/phone-after-A963812D-386A-4DD1-8D9A-ECD17268DE3C.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-phone-report-chevron-final-2026-11-02/attachments/A963812D-386A-4DD1-8D9A-ECD17268DE3C.png",
+      "sha256": "3f0f85e37442e980c0a9a9aa65bf4b1e7607fea9af47043aa6ac8a13693dcd9a",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": "f9c956e1",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793609904.738,
+      "capture_time_kst": "2026-11-02T17:58:24.738000+09:00",
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "T10-notification-report-expanded_0_D8982C41-FAA3-4231-9743-C27227D22AB9.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "0E3F3405-768C-4C2B-A998-37192D11574C",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "A963812D-386A-4DD1-8D9A-ECD17268DE3C.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T10-notification-report-expanded_0_D8982C41-FAA3-4231-9743-C27227D22AB9.png",
+        "timestamp": 1793609904.738
+      },
+      "device_udid": "0E3F3405-768C-4C2B-A998-37192D11574C",
+      "label": "일반 iPhone · 개편 · expanded",
+      "kind": "native-after",
+      "viewport_state": "expanded",
+      "caveat": "Native source f9c956e1; public app patch fd888f13 is a separate source-closure observation. Not relabeled as public revision."
+    },
+    {
+      "image": "assets/duo-open-after-003-2007x2853.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-duo-open-report-final-2026-11-02/paired-host/003-2007x2853.png",
+      "sha256": "5ef2d68e3d685fdbdf3b2e5adf21d6c5e4af470ee6b385732157f5aecdea280f",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793610948.8421614,
+      "capture_time_kst": "2026-11-02T18:15:48.842161+09:00",
+      "timestamp_kind": "host-file-mtime of paired native PNG; not attachment timestamp or checkpoint deadline",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "DUNE_VISUAL_AUDIT_READY T10-notification-report-expanded [DUNEUITests/TodayReadingUITests.swift:117] DEADLINE=1793610978.164171",
+      "device_udid": "8CDB79FE-DB1A-4076-8BCD-2701B5D699EA",
+      "label": "Duo 펼침 · 개편 · normal expanded · scrolled body",
+      "kind": "native-after",
+      "viewport_state": "normal expanded · scrolled body",
+      "sequence": 3,
+      "angle_before": 180,
+      "angle_after": 180,
+      "active_display": "LCD-1",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "caveat": "Original active display PNG; retained native revision ae2598a6. Scrolled body is not initial top; source closure is relevant app/test only, not whole-tree equality."
+    },
+    {
+      "image": "assets/duo-open-after-004-2007x2853.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-duo-open-report-final-2026-11-02/paired-host/004-2007x2853.png",
+      "sha256": "10d72287307f3ed179e3226acbb1278286bf975d391e5dce6060036467d74fa4",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793610962.2012508,
+      "capture_time_kst": "2026-11-02T18:16:02.201251+09:00",
+      "timestamp_kind": "host-file-mtime of paired native PNG; not attachment timestamp or checkpoint deadline",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "DUNE_VISUAL_AUDIT_READY T10-notification-report-dark-ax-title [DUNEUITests/TodayReadingUITests.swift:117] DEADLINE=1793610991.3657851",
+      "device_udid": "8CDB79FE-DB1A-4076-8BCD-2701B5D699EA",
+      "label": "Duo 펼침 · 개편 · dark maximum text · cover",
+      "kind": "native-after",
+      "viewport_state": "dark maximum text · cover",
+      "sequence": 4,
+      "angle_before": 180,
+      "angle_after": 180,
+      "active_display": "LCD-1",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "caveat": "Original active display PNG; retained native revision ae2598a6. Scrolled body is not initial top; source closure is relevant app/test only, not whole-tree equality."
+    },
+    {
+      "image": "assets/duo-open-after-005-2007x2853.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-duo-open-report-final-2026-11-02/paired-host/005-2007x2853.png",
+      "sha256": "2248e8fae93601861d3ba421fbc7888f13c0de09ec2c75620c5862212e720f1d",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793610977.4931748,
+      "capture_time_kst": "2026-11-02T18:16:17.493175+09:00",
+      "timestamp_kind": "host-file-mtime of paired native PNG; not attachment timestamp or checkpoint deadline",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "DUNE_VISUAL_AUDIT_READY T10-notification-report-dark-ax-control [DUNEUITests/TodayReadingUITests.swift:117] DEADLINE=1793611006.633541",
+      "device_udid": "8CDB79FE-DB1A-4076-8BCD-2701B5D699EA",
+      "label": "Duo 펼침 · 개편 · dark maximum text · disclosure control",
+      "kind": "native-after",
+      "viewport_state": "dark maximum text · disclosure control",
+      "sequence": 5,
+      "angle_before": 180,
+      "angle_after": 180,
+      "active_display": "LCD-1",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "caveat": "Original active display PNG; retained native revision ae2598a6. Scrolled body is not initial top; source closure is relevant app/test only, not whole-tree equality."
+    },
+    {
+      "image": "assets/duo-open-after-006-2007x2853.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-duo-open-report-final-2026-11-02/paired-host/006-2007x2853.png",
+      "sha256": "68e404fd954ebfb35ab0c834b9701e79ddd519cfaed693f5961e3a4ed128cc38",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "capture_timestamp": 1793610982.6533184,
+      "capture_time_kst": "2026-11-02T18:16:22.653318+09:00",
+      "timestamp_kind": "host-file-mtime of paired native PNG; not attachment timestamp or checkpoint deadline",
+      "selector": "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure",
+      "action": "DUNE_VISUAL_AUDIT_READY T10-notification-report-dark-ax [DUNEUITests/TodayReadingUITests.swift:117] DEADLINE=1793611011.9937038",
+      "device_udid": "8CDB79FE-DB1A-4076-8BCD-2701B5D699EA",
+      "label": "Duo 펼침 · 개편 · dark maximum text · full narrative",
+      "kind": "native-after",
+      "viewport_state": "dark maximum text · full narrative",
+      "sequence": 6,
+      "angle_before": 180,
+      "angle_after": 180,
+      "active_display": "LCD-1",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "caveat": "Original active display PNG; retained native revision ae2598a6. Scrolled body is not initial top; source closure is relevant app/test only, not whole-tree equality."
+    }
+  ],
+  "bundles": {
+    "ipad_after": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-ipad-report-chevron-final-2026-11-02",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t10-ipad-report-f9c956e1.log"
+      },
+      "provenance": {
+        "revision": "f9c956e1",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_17-50-49-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "attachment_manifest": "assets/proofs/ipad-after/manifest.json",
+      "named_T10_png_count": 5
+    },
+    "phone_after": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-phone-report-chevron-final-2026-11-02",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t10-phone-report-f9c956e1.log"
+      },
+      "provenance": {
+        "revision": "f9c956e1",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_17-56-44-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "attachment_manifest": "assets/proofs/phone-after/manifest.json",
+      "named_T10_png_count": 5
+    },
+    "duo_after": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-duo-closed-native-back-final-2026-11-02",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/NotificationResponseRoutingUITests/testNotificationResponseOpensSummaryAndBackReturnsToToday"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t10-duo-closed-ae2598a6.log"
+      },
+      "provenance": {
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_18-12-39-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DuoAudit",
+        "device_udid": "8CDB79FE-DB1A-4076-8BCD-2701B5D699EA",
+        "pose_before": 0,
+        "pose_after": 0,
+        "parent_observation": "001 activeLCD reportcover,condition84/+3,steps8200,workoutreadable;nativefloatingbackvisible; actualtap+TodaytoolbarreturnPASS.002 ispostbackTodaynotT10"
+      },
+      "pose": {
+        "revision": "ae2598a6",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793610798.967786,
+        "native_visual_review": "pending-parent"
+      },
+      "strict_checkpoints": [
+        {
+          "sequence": 1,
+          "action": "DUNE_VISUAL_AUDIT_READY root after setup -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793610811.444663",
+          "elapsed_seconds": 2.445,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 2,
+          "action": "DUNE_VISUAL_AUDIT_READY before teardown -[NotificationResponseRoutingUITests testNotificationResponseOpensSummaryAndBackReturnsToToday] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793610822.625323",
+          "elapsed_seconds": 2.129,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        }
+      ],
+      "included_gallery_sequences": [
+        1
+      ],
+      "excluded_sequences": [
+        2
+      ],
+      "exclusion_note": "Closed002 is post-back Today; Open001 setup Today. Open007 remains valid T10 expanded but optional duplicate not copied."
+    },
+    "duo_open_after": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/evidence/pr882-duo-open-report-final-2026-11-02",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodayReadingUITests/testNotificationDigestReportPreservesDataAndDisclosure"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t10-duo-open-ae2598a6.log"
+      },
+      "provenance": {
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_18-14-54-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DuoAudit",
+        "device_udid": "8CDB79FE-DB1A-4076-8BCD-2701B5D699EA",
+        "pose_before": 180,
+        "pose_after": 180,
+        "parent_observation": "002 normalSCROLLEDreadstate,004 darkMAXcover,005 expandedcontrol+chevron visible,006 fullsummary readablehorizontal;007 stillreportexpandednotToday.001setupToday excluded"
+      },
+      "pose": {
+        "revision": "ae2598a6",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793610991.311871,
+        "native_visual_review": "pending-parent"
+      },
+      "strict_checkpoints": [
+        {
+          "sequence": 1,
+          "action": "DUNE_VISUAL_AUDIT_READY root after setup -[TodayReadingUITests testNotificationDigestReportPreservesDataAndDisclosure] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793610943.0882049",
+          "elapsed_seconds": 2.398,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 2,
+          "action": "DUNE_VISUAL_AUDIT_READY T10-notification-report-collapsed [DUNEUITests/TodayReadingUITests.swift:117] DEADLINE=1793610968.256969",
+          "elapsed_seconds": 3.359,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 3,
+          "action": "DUNE_VISUAL_AUDIT_READY T10-notification-report-expanded [DUNEUITests/TodayReadingUITests.swift:117] DEADLINE=1793610978.164171",
+          "elapsed_seconds": 2.171,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 4,
+          "action": "DUNE_VISUAL_AUDIT_READY T10-notification-report-dark-ax-title [DUNEUITests/TodayReadingUITests.swift:117] DEADLINE=1793610991.3657851",
+          "elapsed_seconds": 2.301,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 5,
+          "action": "DUNE_VISUAL_AUDIT_READY T10-notification-report-dark-ax-control [DUNEUITests/TodayReadingUITests.swift:117] DEADLINE=1793611006.633541",
+          "elapsed_seconds": 2.378,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 6,
+          "action": "DUNE_VISUAL_AUDIT_READY T10-notification-report-dark-ax [DUNEUITests/TodayReadingUITests.swift:117] DEADLINE=1793611011.9937038",
+          "elapsed_seconds": 2.123,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        {
+          "sequence": 7,
+          "action": "DUNE_VISUAL_AUDIT_READY before teardown -[TodayReadingUITests testNotificationDigestReportPreservesDataAndDisclosure] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793611015.152946",
+          "elapsed_seconds": 2.27,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        }
+      ],
+      "included_gallery_sequences": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "excluded_sequences": [
+        1
+      ],
+      "exclusion_note": "Closed002 is post-back Today; Open001 setup Today. Open007 remains valid T10 expanded but optional duplicate not copied."
+    }
+  },
+  "proof_sha256": {
+    "assets/proofs/minimal-quality-prep.json": "47e2d63b3fbdcfbc171c5ff683841f1898dd6bb3cca4240fafb5d099fe28a25f",
+    "assets/proofs/oct27-captures.json": "13a0a98206693e6307ff0b23d5bf082a827f47d2c75cf1dce8f5553d62cac4da",
+    "assets/proofs/ipad-original-provenance.json": "5079b1d2d598657514ae2ac54b8d1c382648724774eec6822e2b4c84b38b0e73",
+    "assets/proofs/ipad-original-result.json": "18caa95af13997684aaf9e9f8f01bc0e370cc016f7450a69a01df18ca4d31447",
+    "assets/proofs/ipad-after/provenance.json": "099d8318a72d0a76a83a814660c30786ee760e30c0b3d66c65c2ef8526048147",
+    "assets/proofs/ipad-after/result.json": "487a0bcc04d308a8caeb94b6c81272270bb1f59970ad17cd59579a44e07066db",
+    "assets/proofs/ipad-after/summary.json": "51ffceb166a48f76f673563bc68dc7a3b991a299a1dbebe6ebca54f7043201a2",
+    "assets/proofs/ipad-after/tests.json": "ecc37c0722f0fba1b8451c620cfee3b264cde4a2c45e2dc931d1fe8056b1f14c",
+    "assets/proofs/ipad-after/manifest.json": "29c0d4585593461800363dfccfac4f8ca4216609fef505034e635bab10a4ceea",
+    "assets/proofs/phone-after/provenance.json": "2a8f6f8f99d7feee8b8b08a0f3db9a1681aa75581fe1648c53e8add8b8c83e3f",
+    "assets/proofs/phone-after/result.json": "a85802ffd5210858f0f69bc004280cec442d9ea37b1007c03c2040226926a57b",
+    "assets/proofs/phone-after/summary.json": "eb089056cbbeec073bcf03d24226385a24ba159761c0a367b9f58e9bb1f2147f",
+    "assets/proofs/phone-after/tests.json": "4063a53b234882197b592f48373689f505da557dbcc53b049556dd96a1f2e215",
+    "assets/proofs/phone-after/manifest.json": "45ee5d63bf4647d9a4910e906a009bdcbe7f55099c5ec4ba87ed6179036ee422",
+    "assets/proofs/ipad-native-quality.md": "bd84f4d516deb362f9113f5cb6329047a502851cf7b670026a9c721803c87abb",
+    "assets/proofs/duo/result.json": "1c5a26f33d11e1d4ec1b14a7e19d478abb14e8ef86c88a36af13de16b87bd554",
+    "assets/proofs/duo/provenance.json": "44a2a894c1f05f7c3acb5999443996232b8e34dc08ea5a41785347247410e22d",
+    "assets/proofs/duo/summary.json": "30f1ead575fa533c349efbd541294050ac73b7a2ae7b965d0fef66e2015e0b6c",
+    "assets/proofs/duo/tests.json": "24896d849fe59837d0e631ff235b252a7b524550687b20398517741ae792eac8",
+    "assets/proofs/duo/pose-proof.json": "0df12044649427ab30a87f69b89d4f2e4ddb71bb71d23d3db12ec0e102d936b8",
+    "assets/proofs/duo/runner-result.json": "3c0c9a882ed79829cce474cb147c50e7a5b66b6018ab88c35893d4fc04a6c050",
+    "assets/proofs/duo/checkpoints.jsonl": "b36b9bd98a0ac39c9555b5e8021dfc939ee8be3fcc0c8a1a1604a9ae41f4d2d1",
+    "assets/proofs/duo/captures.tsv": "9657ee170bf168e99846998fc355ee0be47ab837eaf8ebbe833b0c7c80caa8df",
+    "assets/proofs/duo/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/duo/angle-after.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/duo/displays-before.json": "f01d92ceae2834a639d5f7d8baa74a47dcd0f13bfb09ca98bde621c56e303049",
+    "assets/proofs/duo/displays-after.json": "f01d92ceae2834a639d5f7d8baa74a47dcd0f13bfb09ca98bde621c56e303049",
+    "assets/proofs/duo/001-hierarchy.txt": "79b09cb8d2a2fed2f67a0d332b822484ace4c00eb6f7f64ee41af02dcd945adb",
+    "assets/proofs/duo-open/result.json": "fe57d045f22cf1a08489d4cc82f3c626594aa009537d9436dd9c04f506291130",
+    "assets/proofs/duo-open/provenance.json": "1e47eb7d2157663050acd706ce52e8bb34d3be671a06ffc280f07cd945f9bbb0",
+    "assets/proofs/duo-open/summary.json": "da454d983a749fcc556dc4aa4f1cfc8f2b76c2d0879dcde00df46f181b6eab94",
+    "assets/proofs/duo-open/tests.json": "46234e2a7d0c6db08754ca165860d510d48f96bbb2f2f4c9d630502d104005d5",
+    "assets/proofs/duo-open/pose-proof.json": "d710cd9008a76f222606834ec1894487c707385d4c920011492c9f79aa2a3ff4",
+    "assets/proofs/duo-open/runner-result.json": "d7fc1957d3a816ec82f891cecafcfd197efc8dbfbc8a87c02c9ce30a4e734459",
+    "assets/proofs/duo-open/checkpoints.jsonl": "3ef16b7b73e3ef51c0ab5a50e0886b19a46665af341505d950d3dcf281d0968b",
+    "assets/proofs/duo-open/captures.tsv": "d0e275b2884e2cc92e0904d2f87414e885573ed4ef7965ad72586ccf59160ffd",
+    "assets/proofs/duo-open/angle-before.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "assets/proofs/duo-open/angle-after.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "assets/proofs/duo-open/displays-before.json": "fa34a8b8b5e3cd4fea0820e35b43ec9c8559ee30354232bb649fdc2a9ef9921c",
+    "assets/proofs/duo-open/displays-after.json": "fa34a8b8b5e3cd4fea0820e35b43ec9c8559ee30354232bb649fdc2a9ef9921c",
+    "assets/proofs/duo-open/002-hierarchy.txt": "6c36b5413bbd805d7490918303db26353ae3cb9249519c7186027d18d6787560",
+    "assets/proofs/duo-open/003-hierarchy.txt": "07d22105fd3b4b149c3c58759a05e602ffbdf203e7316529815812a882c4ef70",
+    "assets/proofs/duo-open/004-hierarchy.txt": "b6ddef5870267f63f809790f75cb0ca8d6b279a987a9a152d7aea24d9b98a004",
+    "assets/proofs/duo-open/005-hierarchy.txt": "af6f2002f98969072cf52b56bb1a35a83b1f8d352c4f9d15bd000944f75c128c",
+    "assets/proofs/duo-open/006-hierarchy.txt": "4448daf50e0b455184d75bcb01f774dbbe2b0bf561d71606cc9a75632d754298",
+    "assets/proofs/native-back-query-review.md": "3ea149e24b57b0f15d5fc554977daec1107df5d4a595b30cf8116da4c7582496"
+  },
+  "limits": [
+    "Installed publication: four canonical T10 rows/images and related rendered pages/boards updated; non-T10 rows/images and Watch preserved.",
+    "All four current after pairs available: Phone+iPad report1PASS each nativef9c956e1; Closedroute1PASS nativeae2598a6 2ACK0LCD; Openreport1PASS nativeae2598a6 7ACK180LCD-1. Not a full matrix.",
+    "Historical original identities verified visually. Same T10 notification-consumer family; dates, devices and layouts differ.",
+    "Canonical Phone/iPad have specific dirty1f49c921 attribution and October15 timestamps; global443a32ca is separate collection provenance. Canonical Duo exact revision unknown, October13, historical global443dirty only.",
+    "Oct27 alternatives use gallery source4f09dff and original app hash; dirty state unspecified. Duo numeric hinge/physical rotation unverified and original artifacts remain.",
+    "Preferred iPad Oct31 collapsed/expanded uses1f7f9900 native timestamps and deviceC8B44B9E; source dirty unknown. Four-case original receipt is not four T10 tests.",
+    "The gallery publisher performed no new native tests/builds/device/UI actions; parent actual native runs are separately recorded. PNG and raw-proof bytes were copied unchanged. Static link/hash checks are not browser-render QA.",
+    "Installed T10-only publication. Phone normal is scrolled; heroMAX is supplemental, not a normal initial viewport. Exact native sources and original artifact/date/device/pose differences retained."
+  ],
+  "model_note": "Available gpt-6.1-sol medium fallback, unavailable older6Sol not executed.",
+  "visual_review_correction": {
+    "source_report": "assets/proofs/ipad-native-quality.md",
+    "final_findings": {
+      "P1": 0,
+      "P2": 0,
+      "P3": 0
+    },
+    "withdrawn_claim": "Initial iPad P3 card/body absence claim withdrawn after decoded pixel comparison; CED/D9 identical below y418. Both originals valid; D9 optional supplement, not required replacement.",
+    "no_source_or_capture_fix_required": true
+  },
+  "native_back_retry_history": {
+    "first_failure_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t10/duo-closed-f9c956e1",
+    "cause": "old navigation-bar-only query missed actual native rail BackButton",
+    "conditioned_retries_consumed": 1,
+    "same_cause_remaining": 0,
+    "retry_result": "passed at ae2598a6; first failed evidence retained",
+    "review": "assets/proofs/native-back-query-review.md"
+  },
+  "post_collection_duo_review": {
+    "runtime": "gpt-6.1-sol medium fallback",
+    "lenses": [
+      "SwiftUI",
+      "Apple native UX",
+      "UI test evidence"
+    ],
+    "viewed_originals": [
+      "Closed001 activeLCD",
+      "Open002/003/004/005/006 activeLCD-1"
+    ],
+    "findings": {
+      "P1": 0,
+      "P2": 0,
+      "P3": 0
+    },
+    "observation": "Readable native report cover/scalars/paragraphs; meaningful symbols retained. Open002 normal intentionally scrolled,004 MAXcover,005 visible control+chevron,006 complete full text label/viewport continuation. Closed actual native-back tap and Today return are receipt-backed. Raw pose pending-parent unchanged."
+  },
+  "publication": {
+    "date": "2026-11-02",
+    "canonical_screen": "T10",
+    "all_other_rows_images_preserved": true,
+    "watch_preserved": true,
+    "app_test_tool_changes_by_publisher": false
+  }
+}
