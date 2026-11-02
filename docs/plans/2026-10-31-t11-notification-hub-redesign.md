@@ -2,7 +2,7 @@
 tags: [design, notification, t11]
 date: 2026-10-31
 category: plan
-status: approved
+status: verified
 confidence: high
 related_solutions: [2026-03-03-notification-inbox-routing, 2026-03-08-notification-root-push-from-current-screen]
 ---
@@ -69,3 +69,14 @@ Parent may add one dark-state and Duo/iPad focused visual selector where needed 
 ## Confidence
 
 High for source scope and behavior preservation; native layout confidence remains pending the parent-owned captures and focused UI results.
+
+
+## Final verification — 2026-11-02
+
+- Public app/test source `bfed37ab` integrates current main without changing its T12/T13 declarations. Native validation `ae2598a6` has the exact T11 prefix and relevant methods/helpers; its future T12/T13 tail differs, so whole-tree equality is not claimed.
+- Reused clean `7be65148` normal Phone controls PASS on that same T11 prefix. Fresh approved Phone dark/MAX selector: 1/1 PASS; consumed1/remaining0. Original `t11-ui-hub` two failed attempts and exact selector remain preserved; no renamed/reset budget.
+- Fresh iPad normal controls: 1/1 PASS. Fresh Duo closed/open controls: 1/1 PASS each, strict ACK7 each, actual before/after 0° LCD and 180° LCD-1. Parent and independent native reviewers inspected original states; all three UI quality lenses have zero actionable findings. No extra MAX/all-suite run was added.
+- Actual public `bfed37ab` CI: app build PASS; iOS Swift Testing 2,734/302 suites plus XCTest 12 PASS; Watch 213/29 suites PASS. Final publication changes documentation only.
+- Five distinct source reviewers found P1/P2/P3=0. Native reports, prior failures, approval consumption and original pose records are retained; final PR integration review is recorded separately.
+- [Installed actual comparisons](../design/full-redesign-map/review/t11-notification-hub-native-2026-11-02/index.html): 30 original PNGs; only four canonical T11 images/rows and their rendered pages/Today boards updated. Other rows/images and Watch preserved by hash comparison. Historical matched Phone normal pair and new MAX supplements are distinguished; old canonical News-only capture remains an explicit fallback. iPad mini/Pro13 viewport and old Duo unknown-pose differences are stated. Health-empty means that filter only.
+- [Compound solution](../solutions/testing/2026-11-02-notification-hub-native-list-accessibility.md) documents large-type layout, virtualized frame queries, native controls and retry/source provenance. No `.claude` originals or common execution settings changed. All owned verification simulators were deleted, one at a time; registry now empty.

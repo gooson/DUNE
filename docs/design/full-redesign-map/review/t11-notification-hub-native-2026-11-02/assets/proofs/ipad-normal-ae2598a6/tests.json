@@ -1,0 +1,53 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "8FF0195E-1053-483E-9B03-C82FC55C0092",
+      "deviceName" : "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "modelName" : "iPad Pro 13-inch (M5)",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "54초",
+                  "durationInSeconds" : 54.36383497714996,
+                  "name" : "testNotificationHubControlsTransitionToEmptyState()",
+                  "nodeIdentifier" : "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "TodaySettingsRegressionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/TodaySettingsRegressionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "DUNEUITests-DesignCapture",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Design Capture"
+    }
+  ]
+}

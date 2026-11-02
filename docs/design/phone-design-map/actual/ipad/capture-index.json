@@ -99,12 +99,21 @@
     "T11": {
       "row_id": "T11",
       "evidence": "notification-hub-screen",
-      "test": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
-      "action": "tap dashboard-toolbar-notifications",
-      "timestamp": 1791820758.738,
-      "image": "F3FBB84B-3794-4D48-B302-6EBC3F1022FA.png",
-      "screen": "screen-0-2064x2752-tap dashboard-toolbar-notifications_0_D3D78A80-5D5B-4D11-BC7B-2A65267749C8.png",
-      "file": "T11.png"
+      "test": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "screen-0-2064x2752-tap dashboard-toolbar-notifications_0_D372B6EB-AF8C-4988-9A3E-596D48345429.png",
+      "timestamp": 1793613880.792,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "0F200A67-F35A-4DC8-AB49-ECEE8DCC06FF.png",
+      "screen": "screen-0-2064x2752-tap dashboard-toolbar-notifications_0_D372B6EB-AF8C-4988-9A3E-596D48345429.png",
+      "file": "T11.png",
+      "source_revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "device_udid": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+      "sha256": "332802b3eb15440a8c300d74afdb9e81eb02ca065a1265a7d0f91627b2914ad5",
+      "source_json": "../../../full-redesign-map/review/t11-notification-hub-native-2026-11-02/evidence.json",
+      "source_record": "pairs.ipad.after",
+      "capture_scope": "Scoped native T11 controls; historical normalPhone and fresh MAX distinguished",
+      "pose_readback_verified": false
     },
     "T18": {
       "row_id": "T18",

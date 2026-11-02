@@ -227,3 +227,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-11-02 T10 오늘의 리포트: [네 기기 실제 전후 비교와 원문·최대 접근성 글씨](../full-redesign-map/review/t10-daily-report-native-2026-11-02/index.html). 정식 맵의 T10만 갱신했다. iPhone·iPad는 f9c956e1, Duo 접힘·펼침은 ae2598a6의 실제 캡처다. Phone·펼침 기본 이미지는 스크롤 후 본문이며 최대 글씨 표지를 보충 자료로 구분했다. iPad 전후 모델·viewport 차이와 역사적 원본 출처를 명시했다. 새 Duo 각도·활성 화면·ACK 원문을 보존했다. 전체 회귀 통과를 뜻하지 않는다.
+
+
+2026-11-02 T11 알림함: [네 기기 실제 전후와 Phone MAX](../full-redesign-map/review/t11-notification-hub-native-2026-11-02/index.html). T11 네 행만 갱신했다. 역사적 Phone 기본 7be와 fresh MAX ae를 구분하고, iPad mini/Pro13 차이 및 Duo 각도·활성 LCD·원문 ACK를 보존했다. Health empty는 전체 inbox empty가 아니다. 승인된 MAX 추가1회는 consumed1/remaining0이며 원래 실패를 유지한다. 전체 회귀 통과를 뜻하지 않는다.
