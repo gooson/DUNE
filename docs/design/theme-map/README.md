@@ -72,6 +72,8 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 2026-10-31 [T13 알림 대상 없음 테마 표현 연구](themes/dune-notification-unavailable-t13.html)는 기존 DUNE 팔레트와 `ScoreHeroPalette`의 밝음·어두움 정적 해석이다. [T13 배치 계약](../layout-map/notification-destination-unavailable-t13.html)의 기존 문구·동작·ID를 따른다. 실제 앱 캡처가 아니다.
 
+2026-10-31 [A07 운동 종류 상세 DUNE 표현 제안](themes/dune-exercise-type-detail-a07.html)은 원래 유형·장비 아이콘, 선택한 종류의 실제 시간·칼로리·세션 및 조건부 거리/무게 볼륨을 불투명한 히어로에 배치한 밝음·어두움 정적 시안이다. 수치와 웹 기호는 설명용이며 실제 앱 캡처가 아니다. [A07 배치 계약](../layout-map/activity-exercise-type-detail-a07.html)과 구분한다.
+
 ## 갱신 방법
 
 2026-10-31 [A06 Training Volume 상세 표현 시안](themes/dune-training-volume-detail-a06.html)은 기존 DUNE 불투명 히어로·1W 주간 목표 링과 긴 기간의 실제 활동일 건수·밝음/어두움·원래 지표 의미색의 정적 제안이다. 값과 막대는 설명용이며 실제 네이티브 캡처가 아니다. [배치·데이터 계약](../layout-map/activity-training-volume-detail-a06.html)을 따른다.

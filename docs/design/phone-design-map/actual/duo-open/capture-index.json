@@ -255,12 +255,21 @@
     "A07": {
       "row_id": "A07",
       "evidence": "activity-exercise-type-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
-      "action": "tap 1개월",
-      "timestamp": 1792389269.817,
-      "image": "10710C77-FE7E-4F95-9619-3C054E9343F6.png",
-      "screen": "screen-1-2006x2852-tap 1개월_1_1741E41B-A779-46E8-AF33-3D5D5A6AC023.png",
-      "file": "A07.png"
+      "test": "DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface",
+      "action": "Exercise type manual strength Month loaded",
+      "timestamp": 1793655934.7337294,
+      "timestamp_kind": "host-file-mtime",
+      "capture_kind": "paired-host",
+      "image": "007-2007x2853.png",
+      "screen": "Exercise type manual strength Month loaded",
+      "file": "A07.png",
+      "source_revision": "aedf464d9972acba89c77b2ddbe4b662231d1588",
+      "source_worktree_dirty": false,
+      "device_udid": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+      "sha256": "c9a99eb6f77ad3a97b99fecb06172812bfe56a2afd75ea7ecf9055735fc4915c",
+      "source_json": "../../../full-redesign-map/review/a07-exercise-type-native-2026-11-03/evidence.json",
+      "source_record": "records.duo-open.after",
+      "capture_scope": "A07 manual Month; HK variants and iPad MAX supplemental"
     },
     "A06": {
       "row_id": "A06",
