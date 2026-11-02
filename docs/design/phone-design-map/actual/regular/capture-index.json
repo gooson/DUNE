@@ -249,13 +249,21 @@
     },
     "T06": {
       "row_id": "T06",
-      "evidence": "metric-detail-screen-sleep",
-      "test": "TodaySettingsRegressionTests/testSleepMetricOpensMetricDetailAndAllData()",
-      "action": "tap dashboard-metric-sleep",
-      "timestamp": 1791817748.762,
-      "image": "34973E09-4205-464D-9C2E-4B26FC4FFE17.png",
-      "screen": "screen-0-1320x2868-tap dashboard-metric-sleep_0_6D2DA302-E5FF-4FD2-AAC4-D5AF9F96C59E.png",
-      "file": "T06.png"
+      "evidence": "metric-detail-screen-hrv",
+      "test": "DUNEUITests/MetricDetailRedesignTests/testSelectedMetricIdentityAndCapture",
+      "action": "T06-hrv-initial",
+      "timestamp": 1793600657.503,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "CB183561-BF9D-4DD8-8C68-F3E625C2A5CF.png",
+      "screen": "T06-hrv-initial_0_D58B6683-13DF-47C9-BB1C-36EDD0FC9C2F.png",
+      "file": "T06.png",
+      "source_revision": "c0b51078",
+      "source_worktree_dirty": false,
+      "device_udid": "D7BDC13D-6BF8-4C69-B6B3-409D03298E12",
+      "sha256": "fcb145b45f193203aa904f7d9a0f5382d1bd8fdc9f8dd6bd54b033658ab5bb68",
+      "source_json": "../../../full-redesign-map/review/t06-metric-matrix-native-2026-11-02/evidence.json",
+      "scope": "HRV after capture; 18identity historical matrix remains iPad-only",
+      "capture_historical": false
     },
     "T05": {
       "row_id": "T05",
@@ -1176,9 +1184,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "edad6355",
+  "last_refresh_revision": "c0b51078",
   "last_refresh_screens": [
-    "T05"
+    "T06"
   ],
-  "last_refresh_note": "T05 native redesign only; all unrelated records and original global provenance preserved."
+  "last_refresh_note": "T06 HRV only; all unrelated records including T05 and original global provenance preserved. iPad capture is historical Oct31."
 }

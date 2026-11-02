@@ -24,13 +24,21 @@
     },
     "T06": {
       "row_id": "T06",
-      "evidence": "metric-detail-screen-sleep",
-      "test": "TodaySettingsRegressionTests/testSleepMetricOpensMetricDetailAndAllData()",
-      "action": "tap dashboard-metric-sleep",
-      "timestamp": 1791824846.24,
-      "image": "B87CAFBE-5817-49DD-9C82-3681319D8285.png",
-      "screen": "screen-0-1398x2034-tap dashboard-metric-sleep_0_A3A8C485-EF45-48A9-B567-177DFD3F66CD.png",
-      "file": "T06.png"
+      "evidence": "metric-detail-screen-hrv",
+      "test": "DUNEUITests/MetricDetailRedesignTests/testSelectedMetricIdentityAndCapture",
+      "action": "DUNE_VISUAL_AUDIT_READY root after setup -[MetricDetailRedesignTests testSelectedMetricIdentityAndCapture] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793600086.310931",
+      "timestamp": 1793600058.644877,
+      "timestamp_kind": "host-PNG-file-mtime",
+      "image": "001-1398x2034.png",
+      "screen": "001-1398x2034.png",
+      "file": "T06.png",
+      "source_revision": "c0b51078",
+      "source_worktree_dirty": false,
+      "device_udid": "FB085D5F-FE6C-4DD2-9616-908C204FB50F",
+      "sha256": "e83990ad8809df64073298cf882c83cc0febdda7c8a9bcbd2e07b56b9c3d957d",
+      "source_json": "../../../full-redesign-map/review/t06-metric-matrix-native-2026-11-02/evidence.json",
+      "scope": "HRV after capture; 18identity historical matrix remains iPad-only",
+      "capture_historical": false
     },
     "T10": {
       "row_id": "T10",
@@ -1155,9 +1163,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "af8ab656",
+  "last_refresh_revision": "c0b51078",
   "last_refresh_screens": [
-    "T05"
+    "T06"
   ],
-  "last_refresh_note": "T05 native redesign only; all unrelated records and original global provenance preserved."
+  "last_refresh_note": "T06 HRV only; all unrelated records including T05 and original global provenance preserved. iPad capture is historical Oct31."
 }

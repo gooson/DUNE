@@ -176,6 +176,7 @@ struct ContentView: View {
     private let shortcutTemplateSignal: Int
     #if DEBUG
     @State private var didOpenUITestNotification = false
+    @State private var didOpenT06MetricFixture = false
     #endif
     private let notificationInboxManager = NotificationInboxManager.shared
 
@@ -437,6 +438,7 @@ struct ContentView: View {
             #if DEBUG
             await MainActor.run {
                 openUITestNotificationIfRequested()
+                openT06MetricFixtureIfRequested()
             }
             #endif
         }
@@ -567,6 +569,27 @@ struct ContentView: View {
     }
 
     #if DEBUG
+    /// Opt-in capture route. It uses DashboardView's existing HealthMetric destination,
+    /// leaving MetricDetailView and its real data-loading behavior unchanged.
+    @MainActor
+    private func openT06MetricFixtureIfRequested() {
+        guard !didOpenT06MetricFixture else { return }
+        let arguments = ProcessInfo.processInfo.arguments
+        guard arguments.contains("--uitesting"),
+              let index = arguments.firstIndex(of: "--ui-t06-metric"),
+              arguments.indices.contains(index + 1),
+              let fixture = T06MetricCaptureFixture.make(arguments[index + 1]) else { return }
+        if fixture.category == .weight && arguments.contains("--ui-t06-reset-peer-criteria") {
+            // Keep this opt-in capture independent from previously saved comparison criteria.
+            UserDefaults.standard.removeObject(forKey: "bodyPeerReference.ageGroup")
+            UserDefaults.standard.removeObject(forKey: "bodyPeerReference.surveySex")
+        }
+        didOpenT06MetricFixture = true
+        selectedSection = .today
+        todayNavPath = NavigationPath()
+        todayNavPath.append(fixture)
+    }
+
     @MainActor
     private func openUITestNotificationIfRequested() {
         guard !didOpenUITestNotification else { return }
@@ -582,6 +605,49 @@ struct ContentView: View {
     }
     #endif
 }
+
+#if DEBUG
+/// Capture input only. These readings are synthetic and never represent a user profile.
+private enum T06MetricCaptureFixture {
+    static func make(_ key: String) -> HealthMetric? {
+        let categoryKey = ["exercise-km", "exercise-min", "exercise-m"].contains(key) ? "exercise" : key
+        guard let category = HealthMetric.Category(rawValue: categoryKey) else { return nil }
+        let value: Double? = switch key {
+        case "hrv": 75.2
+        case "rhr": 52
+        case "heartRate": 72
+        case "sleep": 474
+        case "exercise-km": 10.2
+        case "exercise-m": 1314
+        case "exercise", "exercise-min": 42
+        case "steps": 8_200
+        case "weight": 78.4
+        case "bmi": 24.7
+        case "bodyFat": 17.8
+        case "leanBodyMass": 63.1
+        case "spo2": 0.98
+        case "respiratoryRate": 15.2
+        case "vo2Max": 44.7
+        case "heartRateRecovery": 24
+        case "wristTemperature": -0.3
+        case "breathingDisturbances": 1.2
+        default: nil
+        }
+        guard let value else { return nil }
+        let unit = key == "exercise-km" ? "km" : (key == "exercise-m" ? "m" : category.unitLabel)
+        return HealthMetric(
+            id: "t06-capture-\(key)",
+            name: category.displayName,
+            value: value,
+            unit: unit,
+            change: nil,
+            date: Date(),
+            category: category,
+            workoutTypeKey: key == "exercise-km" ? "Running" : (key == "exercise-m" ? "Swimming" : nil)
+        )
+    }
+}
+#endif
 
 struct NotificationSleepDetailPushView: View {
     @State private var viewModel: WellnessViewModel
