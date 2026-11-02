@@ -79,6 +79,10 @@ MainActor fetch는 동기 구간이며 날짜 분할이 무제한 duplicate에 �
 Overall high on source contracts; runtime/UI 품질은 실제 검사 전까지 미검증이다.
 
 
-### 2026-11-02 quality resolution in progress
+### 2026-11-02 품질 수정 및 검증 상태
 
-Actual iPad review found faint legend intervals (current about1.78:1, inactive about1.49:1). Replace tertiary interval text with the existing opaque TextSecondary asset and remove whole-row opacity. Keep all values, symbols, guidance and current-level bold/badge. Fresh post-fix light/dark capture verification remains pending; the6phone functional baseline atc763passed before this style-only fix.
+실제 iPad 검토에서 구간 숫자의 낮은 대비를 확인했다(현재 단계 약 1.78:1, 비활성 단계 약 1.49:1). 숫자를 기존 불투명 `DS.Color.textSecondary`로 바꾸고 행 전체 opacity를 제거했다. 값·심벌·안내·현재 단계의 굵은 제목과 배지를 보존했다. `af8ab656`의 범례 전용 검사 1개와 12개 strict PNG/AX 쌍에서 네 구간의 밝음·어두움 실제 노출을 확인했으며, 최소 대비는 각각 **6.097:1 / 11.184:1**이다. 범례 대비 P2는 닫았다.
+
+실행 범위는 구분해 보존한다. iPhone 기능 기준 6개는 `c763a55b`에서 대비 수정 전에 통과했고, 수정 후 밝음·어두움 2개는 `edad6355`에서 통과했다. Duo 펼침 핵심 검사는 `edad6355`에서 native 1개 통과·유효한 8쌍을 확보했으나 cache-only fingerprint 실패 영수증과 독립 소스 동등성 근거를 별도로 유지한다. 새 범례 검사는 `af8ab656`에서 1개 통과·12쌍·pipeline 성공을 확인했다. 같은 `af8ab656`에서 관련 unit 3개 suite·27개 검사와 최종 iPad 밝은 핵심 검사 1개도 통과했다. 실제 main 병합 `468df320`의 T05 코드·테스트 11개 경로가 이 검증 소스와 byte-identical임을 확인했다. 이는 각 선택 범위의 증거이며 전체 suite나 새 main의 모든 소비자 통과가 아니다.
+
+Duo 접힘 추가 실행 예외·캡처와 네 기기 실제 디자인맵 갱신은 아직 남아 있다. 공통 날짜 축 문제는 TODO 158에 미해결로 유지한다. 승인된 mask 진단 1회는 음성 결과였고 원본을 복원했으며 잔여 실행은 0회다. 전체 PR 완료·Ship는 남은 게이트가 실제로 닫힌 뒤 별도로 기록한다.
