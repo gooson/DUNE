@@ -6,7 +6,9 @@ private struct MockExerciseTypeWorkoutService: WorkoutQuerying {
     var workouts: [WorkoutSummary] = []
 
     func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] { workouts }
-    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] { workouts }
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
+        workouts.filter { $0.date >= start && $0.date <= end }
+    }
 }
 
 @Suite("ExerciseTypeDetailViewModel")
@@ -40,6 +42,25 @@ struct ExerciseTypeDetailViewModelTests {
             totalDistance: 10_000,
             totalVolume: nil
         )
+    }
+
+    @Test("Type summary and trend use calendar dates while recent sessions retain the rolling lookback")
+    func calendarSummaryAndRecentLookback() async throws {
+        let reference = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: Date())!
+        let today = calendar.startOfDay(for: reference)
+        func item(_ id: String, _ date: Date) -> WorkoutSummary {
+            WorkoutSummary(id: id, type: "Running", activityType: .running, duration: 600, calories: 100, distance: nil, date: date)
+        }
+        let current = calendar.date(byAdding: .day, value: -6, to: today)!
+        let previous = calendar.date(byAdding: .day, value: -7, to: today)!
+        let recentOnly = calendar.date(byAdding: .day, value: -14, to: reference)!.addingTimeInterval(60)
+        let vm = ExerciseTypeDetailViewModel(typeKey: WorkoutActivityType.running.rawValue, displayName: "Running", workoutService: MockExerciseTypeWorkoutService(workouts: [item("current", current), item("previous", previous), item("recent", recentOnly)]))
+        await vm.loadData(manualRecords: [], referenceDate: reference)
+        #expect(vm.currentSummary?.sessionCount == 1)
+        #expect(vm.previousSummary?.sessionCount == 1)
+        #expect(vm.trendData.count == 7)
+        #expect(vm.trendData.reduce(0) { $0 + $1.value } == 10)
+        #expect(vm.recentWorkouts.map(\.id) == ["current", "previous", "recent"])
     }
 
     @Test("loadData filters workouts by typeKey and builds trend/recent lists")

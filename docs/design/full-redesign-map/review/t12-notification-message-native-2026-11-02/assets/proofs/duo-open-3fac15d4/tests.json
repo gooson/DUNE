@@ -1,0 +1,53 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "C34568F0-90E0-4FBB-9D7A-14B3B81CEE3D",
+      "deviceName" : "iPhone Duo-wt-Health-detail-redesign-validation-644069bf7efc",
+      "modelName" : "iPhone",
+      "osBuildNumber" : "24B91016s",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "55초",
+                  "durationInSeconds" : 55.5452299118042,
+                  "name" : "testNotificationMessageDetail()",
+                  "nodeIdentifier" : "DesignMapNotificationDetailTests/testNotificationMessageDetail()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapNotificationDetailTests/testNotificationMessageDetail",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "DesignMapNotificationDetailTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapNotificationDetailTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "DUNEUITests-DuoAudit",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Duo Visual Audit"
+    }
+  ]
+}

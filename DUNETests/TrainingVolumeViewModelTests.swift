@@ -21,6 +21,17 @@ private struct MockTrainingVolumeWorkoutService: WorkoutQuerying {
     }
 }
 
+private actor RangeTrainingWorkoutService: WorkoutQuerying {
+    let workouts: [WorkoutSummary]
+    var calls: [(Date, Date)] = []
+    init(workouts: [WorkoutSummary]) { self.workouts = workouts }
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] { workouts }
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
+        calls.append((start, end))
+        return workouts.filter { $0.date >= start && $0.date <= end }
+    }
+}
+
 private struct MockTrainingVolumeStepsService: StepsQuerying {
     func fetchSteps(for date: Date) async throws -> Double? { nil }
     func fetchLatestSteps(withinDays days: Int) async throws -> (value: Double, date: Date)? { nil }
@@ -108,6 +119,23 @@ struct TrainingVolumeViewModelTests {
         #expect(vm.chartDailyBreakdown.count == 14)
         #expect(vm.trainingLoadData.contains { $0.load > 0 })
         #expect(vm.comparison != nil)
+    }
+
+    @Test("Overview fetches the first previous morning for both sources")
+    func previousMorningFetch() async throws {
+        let reference = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: Date())!
+        let bounds = try #require(TrainingVolumeAnalysisService.CalendarBounds.inclusiveDays(period: .week, referenceDate: reference))
+        let morning = bounds.previousStart.addingTimeInterval(9 * 3600)
+        let workout = WorkoutSummary(id: "first", type: "Running", activityType: .running, duration: 600, calories: 100, distance: nil, date: morning)
+        let service = RangeTrainingWorkoutService(workouts: [workout])
+        let vm = TrainingVolumeViewModel(workoutService: service, stepsService: MockTrainingVolumeStepsService(), hrvService: MockTrainingVolumeHRVService())
+        let manual = ExerciseRecord(date: morning, exerciseType: "Squat", duration: 600)
+        await vm.loadData(manualRecords: [manual], referenceDate: reference)
+        let calls = await service.calls
+        #expect(calls.contains { $0.0 == bounds.previousStart && $0.1 == reference })
+        #expect(vm.comparison?.previous?.totalSessions == 2)
+        #expect(vm.comparison?.previous?.totalDuration == 1200)
+        #expect(vm.comparison?.current.endDate == reference)
     }
 
     @Test("Changing selectedPeriod clears cached comparison")

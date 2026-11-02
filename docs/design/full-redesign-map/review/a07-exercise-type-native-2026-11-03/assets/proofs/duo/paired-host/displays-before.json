@@ -1,0 +1,106 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "info",
+      "displays",
+      "--device",
+      "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+      "--timeout",
+      "20",
+      "--quiet",
+      "--json-output",
+      "-"
+    ],
+    "commandType" : "devicectl.device.info.displays",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 5,
+    "outcome" : "success",
+    "version" : "651.32"
+  },
+  "result" : {
+    "backlightState" : "activeOn",
+    "displays" : [
+      {
+        "active" : true,
+        "backlightState" : "activeOn",
+        "bounds" : [
+          [
+            0,
+            0
+          ],
+          [
+            1398,
+            2034
+          ]
+        ],
+        "chromeIdentifier" : "com.apple.dt.devicekit.chrome.phone15",
+        "currentOrientation" : "rot0",
+        "displayId" : 1,
+        "framebufferMaskIdentifier" : "1C896A2B-F0D7-405C-8D0F-66E4B80AD044",
+        "name" : "LCD",
+        "nativeOrientation" : "rot0",
+        "nativeSize" : [
+          1398,
+          2034
+        ],
+        "physicalSize" : [
+          3.039130449295044,
+          4.421739101409912
+        ],
+        "pointScale" : 3,
+        "primary" : true,
+        "type" : {
+          "integrated" : {
+
+          }
+        },
+        "uniqueId" : "D03FEDE6-5CB9-4391-8D69-014B4150C6D8"
+      },
+      {
+        "active" : false,
+        "backlightState" : "activeOn",
+        "bounds" : [
+          [
+            0,
+            0
+          ],
+          [
+            2007,
+            2853
+          ]
+        ],
+        "chromeIdentifier" : "com.apple.dt.devicekit.chrome.phone14",
+        "currentOrientation" : "rot90",
+        "displayId" : 3,
+        "framebufferMaskIdentifier" : "BF0DC480-5EE2-4EC1-B02B-C75E94759832",
+        "name" : "LCD-1",
+        "nativeOrientation" : "rot0",
+        "nativeSize" : [
+          2007,
+          2853
+        ],
+        "physicalSize" : [
+          4.363043308258057,
+          6.202173709869385
+        ],
+        "pointScale" : 3,
+        "primary" : false,
+        "type" : {
+          "integrated" : {
+
+          }
+        },
+        "uniqueId" : "0FD95157-2F88-43BB-AC65-14278BAF3D11"
+      }
+    ],
+    "orientation" : {
+      "currentDeviceNonFlatOrientation" : "portrait",
+      "currentDeviceOrientation" : "portrait",
+      "currentDeviceOrientationLocked" : false
+    }
+  }
+}

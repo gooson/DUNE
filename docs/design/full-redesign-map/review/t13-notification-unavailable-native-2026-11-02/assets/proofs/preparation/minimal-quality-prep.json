@@ -1,0 +1,329 @@
+{
+  "status": "preparation_only_T12_pending_not_T13_ready",
+  "branch": "codex/t13-notification-unavailable-redesign",
+  "tip": "734db23d5fe21b9c26ce49ea9e3891185450ab67",
+  "registeredT13Worktree": false,
+  "segment_sha256": {
+    "734db23d": {
+      "T11prefix": "c724e85a0e0d94d9276ee9aab918bfb124b26bf52f3746b49b2a18b031c5775d",
+      "T12message": "c2aa93fe18e163327962525d3609b7d33fad2bdccf43cbd0e5e50b97289bde47",
+      "T13unavailable": "e76ae8d59d061a8bb39c3649edfa8e13c0b253fc5c8683941bee9b494f1d0cd5"
+    },
+    "0862f70f": {
+      "T11prefix": "43addd7e052fef21fa6f129e26067a3a7a2470729a9001e0925868a9ba38e625",
+      "T12message": "218a3a642da88f0580bd296b2d477a622d15b2dea241aa0f89d0236024e5e774",
+      "T13unavailable": "57866a5dd8bc6616f567100d0c61c00f2d9f9f8fb8aec7037422915114876dac"
+    },
+    "3fac15d4": {
+      "T11prefix": "43addd7e052fef21fa6f129e26067a3a7a2470729a9001e0925868a9ba38e625",
+      "T12message": "218a3a642da88f0580bd296b2d477a622d15b2dea241aa0f89d0236024e5e774",
+      "T13unavailable": "e76ae8d59d061a8bb39c3649edfa8e13c0b253fc5c8683941bee9b494f1d0cd5"
+    }
+  },
+  "T13_test_range_sha256": {
+    "734db23d": "dcece5383a90beb47d4c5aa1dce2204253ac7e79b360fb1cae2e8e62f26b9dad",
+    "0862f70f": "b31eb3c94559da6dffbec1121d860e6c0e6be39800c02d3b14153ff99ded4465",
+    "3fac15d4": "dcece5383a90beb47d4c5aa1dce2204253ac7e79b360fb1cae2e8e62f26b9dad"
+  },
+  "originalPhoneHistory": {
+    "attempts": [
+      {
+        "after": "ba4a7421ea219ba0e43aab0e7a79c9e8ebd2cb5b9ee0f9b0937d5e448ec260c0",
+        "after_content": "07852509ae8419e55d135b1a526733b5cdc27a0c9b11fc328445e6cb746d4afb",
+        "before": "ba4a7421ea219ba0e43aab0e7a79c9e8ebd2cb5b9ee0f9b0937d5e448ec260c0",
+        "before_content": "07852509ae8419e55d135b1a526733b5cdc27a0c9b11fc328445e6cb746d4afb",
+        "child_pgid": 70795,
+        "child_pid": 70795,
+        "command": [
+          "scripts/test-ui.sh",
+          "--no-regen",
+          "--test-plan",
+          "DUNEUITests-DesignCapture",
+          "--simulator-udid",
+          "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "--only-testing",
+          "DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailable",
+          "--only-testing",
+          "DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailableDarkMaximumAccessibilitySize",
+          "--log-file",
+          ".xcodebuild/t13-iphone-734db23d.log"
+        ],
+        "content_only": false,
+        "context": "Xcode27.2-validationWT-owned340663-734db23d-phone-English-light-darkmaxAX-oneVM",
+        "ended": 1793396430.959361,
+        "exit_code": 0,
+        "log": "check-ea69e6c870f58fe2ede5a0fd-101c9379920b43a5a0439e86c08e0081.log",
+        "log_hash": "aa7c85ea8957fb9fcdcfce1e799edbfb6920fd5250a876adaed535126872a4ec",
+        "scope": "T13-real-unavailable-destination-exact-copy-ID-normal-and-dark-maxAX-native-return",
+        "started": 1793396290.451338,
+        "status": "success"
+      }
+    ],
+    "id": "t13-ui-unavailable",
+    "schema_version": 1,
+    "worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health"
+  },
+  "originalPhoneHistorySHA256": "49f963cd2d1f97f1afee33554364d76096dc8c1d9d6049a541dae4af0225bbe1",
+  "originalIPadBaselineHistory": {
+    "attempts": [
+      {
+        "after": "f057022e690547b3e9bedefa614212bba3c53da66e30afaea05103e82b6a4d4f",
+        "after_content": "2e2f01717e82cb6d2739b01bf80b88bb23e37ffff83a81ea6993c73239f73cf2",
+        "before": "f057022e690547b3e9bedefa614212bba3c53da66e30afaea05103e82b6a4d4f",
+        "before_content": "2e2f01717e82cb6d2739b01bf80b88bb23e37ffff83a81ea6993c73239f73cf2",
+        "child_pgid": 50962,
+        "child_pid": 50962,
+        "command": [
+          "scripts/test-ui.sh",
+          "--no-regen",
+          "--test-plan",
+          "DUNEUITests-DesignCapture",
+          "--simulator-udid",
+          "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+          "--only-testing",
+          "DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailable",
+          "--only-testing",
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+          "--only-testing",
+          "DUNEUITests/DesignMapAdditionalRoutesTests/testSleepPredictionOpensFromWellness",
+          "--only-testing",
+          "DUNEUITests/NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub",
+          "--only-testing",
+          "DUNEUITests/ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens",
+          "--only-testing",
+          "DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface",
+          "--log-file",
+          ".xcodebuild/original-ipad-unavailable-workout-sleep-volume-types-1f7f9900.log"
+        ],
+        "content_only": false,
+        "context": "original1f7-main672-old-ui",
+        "ended": 1793422058.796662,
+        "exit_code": 65,
+        "log": "check-bbde32cd2904f77eb870216d-b0652824184446ef97463700fbda5eaf.log",
+        "log_hash": "bdd3efc4774bf3a8b7e4f99d481e0b5614ccc52e95b41780c9fd8d92f8be756d",
+        "scope": "six-selected-original-capture-roles",
+        "started": 1793421741.277017,
+        "status": "failed"
+      }
+    ],
+    "id": "original-ui-ipad-unavailable-workout-sleep-volume-types",
+    "schema_version": 1,
+    "worktree": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health"
+  },
+  "selectedImages": {
+    "phoneAfter": {
+      "provenance": {
+        "revision": "734db23d",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_06-38-13-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "images": [
+        {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "BE8FDC78-96AA-4FFA-9DE1-0331E7010721.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T13 unavailable destination verified before Back_0_A3EA4941-75D1-4269-899D-7E8E36D5677E.png",
+          "timestamp": 1793396351.832,
+          "absolute_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t13/evidence/ui-phone-unavailable-current/attachments/BE8FDC78-96AA-4FFA-9DE1-0331E7010721.png",
+          "sha256": "d5ccfb90f0dcb9bc69f7ea9d9bad93ae108e11334cc0deaec197337a0782abae"
+        },
+        {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "2A898B85-B75E-41AA-9A34-1CE35104CD60.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T13 dark maximum text inbox ID_0_BFF2F2E4-513C-4856-A3A8-54644C7499F8.png",
+          "timestamp": 1793396406.987,
+          "absolute_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t13/evidence/ui-phone-unavailable-current/attachments/2A898B85-B75E-41AA-9A34-1CE35104CD60.png",
+          "sha256": "187d2e6d4b867cd09ea957193340445cf24c73648443e919e0693c3180bd68c9"
+        },
+        {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "DD3D2EDA-C9D8-4DD7-A248-4E51AE50AD44.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "T13 dark maximum text unavailable title_0_ACB6AECD-4643-4DA2-9D3B-D6E5CEC7862A.png",
+          "timestamp": 1793396396.715,
+          "absolute_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t13/evidence/ui-phone-unavailable-current/attachments/DD3D2EDA-C9D8-4DD7-A248-4E51AE50AD44.png",
+          "sha256": "4116d42406685667469e8d2d9f023079f47989ec51b4d4956e4c19a8fd5af3fb"
+        }
+      ],
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailable",
+          "DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailableDarkMaximumAccessibilitySize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 2,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t13-iphone-734db23d.log"
+      }
+    },
+    "ipadBefore": {
+      "provenance": {
+        "revision": "1f7f9900",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_13-42-24-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "images": [
+        {
+          "configurationName": "Design Capture",
+          "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "12EF1CD1-1FA8-4805-BC60-B75A7904423B.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1512x2316-Unavailable Route Fixture_0_26395445-3321-4FC4-87F2-3AC0DCC43EEA.png",
+          "timestamp": 1793422012.173,
+          "absolute_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/attachments/12EF1CD1-1FA8-4805-BC60-B75A7904423B.png",
+          "sha256": "77f65ee83ee8272e5d0808dce390b03004366d2cd1b3cdcdc4267c02884627e4"
+        }
+      ],
+      "result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailable",
+          "DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteShowsFallback",
+          "DUNEUITests/DesignMapAdditionalRoutesTests/testSleepPredictionOpensFromWellness",
+          "DUNEUITests/NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub",
+          "DUNEUITests/ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens",
+          "DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 6,
+          "passed": 5,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 5,
+        "failures": [
+          "1077: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/NotificationRoutingRegressionTests.swift:19: error: -[DUNEUITests.NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub] : Failed to get matching snapshot: No matches found for Descendants mat…",
+          "1116: Test Case '-[DUNEUITests.NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]' failed (32.730 seconds).",
+          "1117: Test Suite 'NotificationRoutingRegressionTests' failed at 2026-10-31 13:47:30.222.",
+          "1119: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 13:47:30.222.",
+          "1121: Test Suite 'Selected tests' failed at 2026-10-31 13:47:30.223.",
+          "1133: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 1 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/original-ipad-unavailable-workout-sleep-volume-types-1f7f9900.log"
+      }
+    }
+  },
+  "canonicalBeforeFallback": {
+    "regular": {
+      "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_worktree_dirty": true,
+      "row": {
+        "row_id": "T13",
+        "evidence": "notification-destination-unavailable-screen",
+        "test": "DesignMapNotificationDetailTests/testNotificationDestinationUnavailable()",
+        "action": "tap Unavailable Route Fixture",
+        "timestamp": 1791837119.814,
+        "image": "0DD64059-7B5D-4D33-8451-A5CCDD32DDE0.png",
+        "screen": "screen-0-1320x2868-tap Unavailable Route Fixture_0_0F4FBB05-D59B-4711-8536-CF56F455461F.png",
+        "file": "T13.png"
+      },
+      "current_validation_file_sha256": "9e96a1d2150ee27cdd9e28f9f80ba9d29d99427eeff16c19a03409063fec294e",
+      "limitation": "Historical canonical same-family fallback; row does not independently establish a modern pose or clean source."
+    },
+    "ipad": {
+      "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_worktree_dirty": true,
+      "row": {
+        "row_id": "T13",
+        "evidence": "notification-destination-unavailable-screen",
+        "test": "DesignMapNotificationDetailTests/testNotificationDestinationUnavailable()",
+        "action": "tap Unavailable Route Fixture",
+        "timestamp": 1791839153.094,
+        "image": "14B8BC20-54F8-40E2-9929-A09AD6BC7803.png",
+        "screen": "screen-0-2064x2752-tap Unavailable Route Fixture_0_81270874-B5DB-4FA7-8289-4FD64E06E178.png",
+        "file": "T13.png"
+      },
+      "current_validation_file_sha256": "5858042aa3aa9138981aadd2de8ba6b9cdeffca7f5a3e19d6bc3f62a7f4cf7eb",
+      "limitation": "Historical canonical same-family fallback; row does not independently establish a modern pose or clean source."
+    },
+    "duo": {
+      "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_worktree_dirty": true,
+      "row": {
+        "row_id": "T13",
+        "evidence": "notification-destination-unavailable-screen",
+        "test": "DesignMapNotificationDetailTests/testNotificationDestinationUnavailable()",
+        "action": "tap Unavailable Route Fixture",
+        "timestamp": 1791853710.33,
+        "image": "B17D12C7-CEA6-4A23-B381-B18301BA3E2E.png",
+        "screen": "screen-0-1398x2034-tap Unavailable Route Fixture_0_F3CCC7C9-EFD8-4154-BB98-125A1837D8AE.png",
+        "file": "T13.png"
+      },
+      "current_validation_file_sha256": "7ca557c341d85f94b245701b28695e270b2cebe7d2ea3eea1a03163ced539e9f",
+      "limitation": "Historical canonical same-family fallback; row does not independently establish a modern pose or clean source."
+    },
+    "duo-open": {
+      "global_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_worktree_dirty": true,
+      "row": {
+        "row_id": "T13",
+        "evidence": "notification-destination-unavailable-screen",
+        "test": "DesignMapNotificationDetailTests/testNotificationDestinationUnavailable()",
+        "action": "tap Unavailable Route Fixture",
+        "timestamp": 1791834036.226,
+        "image": "84BC332C-41C0-4A4E-B399-D0BC021ED16E.png",
+        "screen": "screen-1-2006x2852-tap Unavailable Route Fixture_1_16DE9C4E-5FA6-4B61-B3D3-D27305E0DC68.png",
+        "file": "T13.png"
+      },
+      "current_validation_file_sha256": "cbd2a6a23db9dc91f5cda267281c151efb2d5469e54a814b1e55a7bf60f11f8e",
+      "limitation": "Historical canonical same-family fallback; row does not independently establish a modern pose or clean source."
+    }
+  },
+  "minimumAfterClosure": [
+    "reuse original Phone normal+MAX2PASS if exact relevant source/test/consumer closure",
+    "one owned iPad normal selector",
+    "one owned Duo closed normal selector",
+    "one owned Duo open normal selector"
+  ],
+  "selector": "DUNEUITests/DesignMapNotificationDetailTests/testNotificationDestinationUnavailable",
+  "newT13iPadDuoHistory": "No redesigned after record located in validation pipeline/T13 evidence; unknown != zero; parent must retain durable counters if found. Baseline original iPad group has one failure outside this case.",
+  "backRisk": "Normal uses explicit notification-destination-unavailable-back-button calling dismiss; no navigationBars-only Back selector to patch. Keep actual tap/hub assertion.",
+  "checkpoint": "Already VisualAudit.capture before Go Back, after exact copy/UUID checks. No new capture checkpoint required by source.",
+  "T14PhoneMAX": {
+    "approvedExtra": 1,
+    "consumed": 0,
+    "separate": true
+  },
+  "remainingQueue": "Broad original goal and remaining 13 queue remain parent-owned; T12 source/native/captures/merge still pending at prep snapshot."
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "386: /Users/shanks/.codex/worktrees/detail-redesign-a03/Health/DUNEUITests/Full/ActivityMuscleMapRegressionTests.swift:83: error: -[DUNEUITests.ActivityMuscleMapRegressionTests testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled] : XCTAssertTrue failed - The disabled 3D entry should remain visible on …",
+    "399: Test Case '-[DUNEUITests.ActivityMuscleMapRegressionTests testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled]' failed (51.651 seconds).",
+    "400: Test Suite 'ActivityMuscleMapRegressionTests' failed at 2026-11-03 02:46:19.530.",
+    "402: Test Suite 'DUNEUITests.xctest' failed at 2026-11-03 02:46:19.530.",
+    "404: Test Suite 'Selected tests' failed at 2026-11-03 02:46:19.531.",
+    "419: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a03/Health/.xcodebuild/a03-duo-closed-1b4dc60b.log"
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "259: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/NotificationRoutingRegressionTests.swift:29: error: -[DUNEUITests.NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub] : XCTAssertTrue failed",
+    "272: Test Case '-[DUNEUITests.NotificationRoutingRegressionTests testBedtimeReminderPushesFromNotificationHub]' failed (39.015 seconds).",
+    "273: Test Suite 'NotificationRoutingRegressionTests' failed at 2026-11-02 23:40:27.899.",
+    "275: Test Suite 'DUNEUITests.xctest' failed at 2026-11-02 23:40:27.901.",
+    "277: Test Suite 'Selected tests' failed at 2026-11-02 23:40:27.902.",
+    "292: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h03-duo-closed-0e6cb013.log"
+}

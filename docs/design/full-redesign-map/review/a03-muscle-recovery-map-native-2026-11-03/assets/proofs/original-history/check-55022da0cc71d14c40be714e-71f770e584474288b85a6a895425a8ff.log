@@ -1,0 +1,20 @@
+Host state context: .xcodebuild/a03-ipad-locale-title-conditional-37acdb37.log.host.json
+Ensuring requested iOS simulator 'C8B44B9E-4C42-4CB0-845E-0F5E7C74F162' is booted...
+Waiting for iOS simulator [C8B44B9E-4C42-4CB0-845E-0F5E7C74F162] to boot (timeout=120s, retries=1)...
+iOS simulator already booted.
+Running UI tests with scheme 'DUNEUITests' for destination 'id=C8B44B9E-4C42-4CB0-845E-0F5E7C74F162'...
+Using test plan: DUNEUITests-DesignCapture
+Only testing: DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled
+UI tests: failed (exit 65)
+Last reported test count: 1
+Last reported failures: 1
+Failure details:
+  333: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/ActivityMuscleMapRegressionTests.swift:82: error: -[DUNEUITests.ActivityMuscleMapRegressionTests testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled] : XCTAssertTrue failed - Calculation should use a native sheet
+  344: Test Case '-[DUNEUITests.ActivityMuscleMapRegressionTests testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled]' failed (64.606 seconds).
+  345: Test Suite 'ActivityMuscleMapRegressionTests' failed at 2026-10-31 12:49:05.474.
+  347: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 12:49:05.482.
+  349: Test Suite 'Selected tests' failed at 2026-10-31 12:49:05.482.
+  361: ** TEST FAILED **
+Full log: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/a03-ipad-locale-title-conditional-37acdb37.log
+UI test verification failed: 333: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/ActivityMuscleMapRegressionTests.swift:82: error: -[DUNEUITests.ActivityMuscleMapRegressionTests testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled] : XCTAssertTrue failed - Calculation should use a native sheet; 344: Test Case '-[DUNEUITests.ActivityMuscleMapRegressionTests testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled]' failed (64.606 seconds).; 345: Test Suite 'ActivityMuscleMapRegressionTests' failed at 2026-10-31 12:49:05.474.; 347: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 12:49:05.482.; 349: Test Suite 'Selected tests' failed at 2026-10-31 12:49:05.482.; 361: ** TEST FAILED **; xcodebuild exited 65; UI test log has no positive passed-test count; UI test log has no identifiable passed UI test cases; requested UI test selector has no execution evidence
+Missing: DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled

@@ -1,0 +1,7 @@
+CLEAR for the single AEDF A07 iPad MAX case under guard SHA-256 `c6461c3827a0757496df00a1d63656e9cf6d2b8794fad0ded23b359167279ad1`. Open P1/P2/P3 are zero.
+
+All 29 source, 14 historical, 25 proof and eight current normal-run pins match. The directly read pipeline has two distinct successful contexts: the old 3f2ff74b pre-polish normal run and the current aedf464d run. The latest raw receipt, exact passed manual/HK nodes, archived provenance (clean aedf464d), single device and log hash agree. The guard checks exactly six replacements in the exercise type detail view and preserves the existing recent-session clock. The 3f2 normal images remain historical to that change.
+
+Fresh, separate Dark proof SHA-256 `6e45bb067be3eed9d1a418bd0ddb1cad003d6862459868445446e86ab3794d6b` records the registered A07 A20 at 1793653567.898491; the appearance file matches. The sole registered UID and DerivedData workspace are the expected A07 pair. The current ledger has A07 1/0/1, A05 and A06 1/1/0; neither A07 guard has a consumed marker. Original MAX failures and bounded A06 unit/CI evidence retain their prior meaning.
+
+Under the shared flock, the guard revalidates source, pins, freshness and live Dark, debits the original logical case durably, then exclusively creates and fsyncs the AEDF marker before one exact MAX dispatch. There is no refund or retry path. This was independent static readback only; no guard, device, Git or ledger operation was executed.

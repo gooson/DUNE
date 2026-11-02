@@ -1,0 +1,191 @@
+Attributes: Application, 0x104e5b480, pid: 3347, label: 'DUNE'
+Element subtree:
+ →Application, 0x104e5b480, pid: 3347, label: 'DUNE'
+    Window (Main), 0x104e59040, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x104e588c0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x104fcdf40, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x104fcd180, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x104fcf480, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x104fcf980, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x104fcf700, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x104fcde00, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x104fcda40, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x104fce300, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x104fcebc0, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x104fcee40, {{0.0, 0.0}, {756.0, 1158.0}}
+                          Other, 0x104fcd900, {{0.0, 0.0}, {756.0, 1158.0}}
+                            NavigationBar, 0x104fcdb80, {{0.0, 96.0}, {756.0, 113.0}}, identifier: 'Training Readiness'
+                              Button, 0x104fcd7c0, {{10.0, 96.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Activity'
+                              StaticText, 0x104fcf200, {{287.5, 164.0}, {181.0, 26.0}}, label: 'Training Readiness'
+                            Other, 0x104fcca00, {{0.0, 0.0}, {756.0, 1158.0}}
+                              Other, 0x104fcf340, {{0.0, 0.0}, {756.0, 1158.0}}
+                                Other, 0x104fcfd40, {{0.0, 0.0}, {756.0, 1158.0}}
+                                  Other, 0x104fccb40, {{0.0, 0.0}, {756.0, 1158.0}}
+                                    ScrollView, 0x104fcfac0, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'activity-training-readiness-detail-screen'
+                                      Other, 0x104fcd2c0, {{0.0, -1350.5}, {756.0, 5207.0}}
+                                        StaticText, 0x1122eabc0, {{24.0, -1326.5}, {708.0, 490.0}}, label: 'Readiness score 75, Moderate'
+                                          StaticText, 0x1122eaf80, {{341.8, -1263.5}, {72.5, 72.0}}, label: '75'
+                                          StaticText, 0x1122eb0c0, {{344.2, -1189.5}, {67.5, 12.0}}, label: 'READINESS'
+                                          Image, 0x1122eb200, {{238.0, -1114.0}, {38.5, 61.0}}, identifier: 'figure.walk', label: 'Walk'
+                                          StaticText, 0x1122eb340, {{286.8, -1116.5}, {236.5, 66.0}}, label: 'Moderate'
+                                          StaticText, 0x1122eb480, {{148.0, -1036.5}, {460.0, 58.5}}, label: 'Normal training is fine.'
+                                          StaticText, 0x1122eb5c0, {{96.2, -966.0}, {69.5, 63.5}}, label: '54'
+                                          StaticText, 0x1122eb700, {{190.2, -966.0}, {69.5, 63.5}}, label: '82'
+                                          StaticText, 0x1122eb840, {{293.5, -966.0}, {69.5, 63.5}}, label: '82'
+                                          StaticText, 0x1122eb980, {{437.8, -966.0}, {69.5, 63.5}}, label: '91'
+                                          StaticText, 0x1122ebac0, {{581.5, -966.0}, {69.5, 63.5}}, label: '55'
+                                          StaticText, 0x1122ebc00, {{91.8, -900.5}, {78.5, 48.0}}, label: 'HRV'
+                                          StaticText, 0x1122ebd40, {{186.2, -900.5}, {77.5, 48.0}}, label: 'RHR'
+                                          StaticText, 0x1122ebe80, {{279.8, -900.5}, {97.0, 48.0}}, label: 'Sleep'
+                                          StaticText, 0x1122e9400, {{392.8, -900.5}, {159.5, 48.0}}, label: 'Recovery'
+                                          StaticText, 0x1122e9540, {{568.2, -900.5}, {96.0, 48.0}}, label: 'Trend'
+                                        StaticText, 0x1122e9680, {{44.0, -792.5}, {416.0, 58.5}}, label: 'Time-of-day Effect'
+                                        StaticText, 0x1122e97c0, {{44.0, -726.0}, {414.0, 51.5}}, label: 'Current adjustment +3'
+                                        StaticText, 0x1122e9900, {{77.5, -666.5}, {94.0, 48.0}}, label: 'Night'
+                                        StaticText, 0x1122e9a40, {{222.5, -666.5}, {142.0, 48.0}}, label: 'Morning'
+                                        StaticText, 0x1122e9b80, {{416.0, -666.5}, {93.0, 48.0}}, label: 'Noon'
+                                        StaticText, 0x1122e9cc0, {{563.2, -666.5}, {136.5, 48.0}}, label: 'Evening'
+                                        StaticText, 0x1122e9e00, {{96.8, -616.5}, {55.5, 51.5}}, label: '78'
+                                        StaticText, 0x1122e9f40, {{265.8, -616.5}, {55.5, 51.5}}, label: '75'
+                                        StaticText, 0x1122ea080, {{434.8, -616.5}, {55.5, 51.5}}, label: '72'
+                                        StaticText, 0x1122ea1c0, {{603.8, -616.5}, {55.5, 51.5}}, label: '69'
+                                        SegmentedControl, 0x1122ea300, {{24.0, -521.0}, {708.0, 31.0}}, identifier: 'training-readiness-period-picker'
+                                          Button, 0x1122ea440, {{24.0, -521.0}, {141.6, 32.0}}, label: 'D'
+                                          Button, 0x1122ea580, {{165.6, -521.0}, {141.6, 32.0}}, label: 'W', Selected
+                                          Button, 0x1122ea6c0, {{307.2, -521.0}, {141.6, 32.0}}, label: 'M'
+                                          Button, 0x1122ea800, {{448.8, -521.0}, {141.6, 32.0}}, label: '6M'
+                                          Button, 0x1122ea940, {{590.4, -521.0}, {141.6, 32.0}}, label: 'Y'
+                                        StaticText, 0x1122eaa80, {{24.0, -465.5}, {295.0, 58.5}}, identifier: 'score-detail-chart-visible-range', label: '10/25 – 10/31'
+                                        Other, 0x1122dc000, {{44.0, -492.5}, {668.0, 620.0}}, identifier: 'trainingreadiness-chart-trend', label: 'trend-endpoints:none'
+                                        Other, 0x1122dc140, {{44.0, -492.5}, {668.0, 620.0}}, identifier: 'trainingreadiness-chart-trend', label: 'none'
+                                        Other, 0x1122dc280, {{44.0, -492.5}, {668.0, 620.0}}, identifier: 'trainingreadiness-chart-trend'
+                                        ScrollView, 0x1122dc3c0, {{98.0, -492.5}, {614.0, 568.0}}, identifier: 'trainingreadiness-chart-trend'
+                                          Other, 0x1122dc500, {{-2358.0, -492.5}, {3070.0, 568.0}}
+                                            Other, 0x1122dc640, {{-3022.0, -542.5}, {4398.0, 680.0}}
+                                              Other, 0x1122dc780, {{-2358.0, -467.0}, {614.0, 517.0}}, label: 'Sep 27, 2026 at 00 to Oct 4, 2026 at 00', value: 51.1 to 52, increa...
+                                              Other, 0x1122dc8c0, {{-1744.0, -467.0}, {614.0, 517.0}}, label: 'Oct 4, 2026 at 00 to Oct 11, 2026 at 00', value: starts at 51, vari...
+                                              Other, 0x1122dca00, {{-1130.0, -467.0}, {614.0, 517.0}}, label: 'Oct 11, 2026 at 00 to Oct 18, 2026 at 00', value: 49.9 to 65.6, incr...
+                                              Other, 0x1122dcb40, {{-516.0, -467.0}, {614.0, 517.0}}, label: 'Oct 18, 2026 at 00 to Oct 25, 2026 at 00', value: starts at 64.7, va...
+                                              Other, 0x1122dcc80, {{98.0, -467.0}, {614.0, 517.0}}, label: 'Oct 25, 2026 at 00 to Nov 1, 2026 at 00', value: starts at 70.2, va...
+                                              Other, 0x1122dcdc0, {{-2358.0, -15.8}, {3070.0, 1.0}}, value: 50
+                                        Button, 0x1122dcf00, {{566.0, -462.0}, {158.0, 51.5}}, identifier: 'score-chart-trend-toggle', label: 'Trend'
+                                          Image, 0x1122dd040, {{566.0, -455.5}, {45.5, 39.0}}, identifier: 'chart.line.uptrend.xyaxis', label: 'Chart Line'
+                                          StaticText, 0x1122dd180, {{621.0, -462.0}, {103.0, 51.5}}, label: 'Trend'
+                                        StaticText, 0x1122dd2c0, {{44.0, 61.5}, {302.0, 51.5}}, label: 'Period Summary'
+                                        StaticText, 0x1122dd400, {{386.0, 41.5}, {225.5, 58.5}}, label: 'Highlights'
+                                        StaticText, 0x1122dd540, {{44.0, 121.0}, {43.5, 96.0}}, label: 'Avg'
+                                        StaticText, 0x1122dd680, {{120.5, 121.0}, {42.5, 96.0}}, label: 'Min'
+                                        StaticText, 0x1122dd7c0, {{196.8, 150.0}, {53.5, 96.0}}, label: 'Max'
+                                        StaticText, 0x1122dd900, {{50.0, 219.0}, {31.5, 116.5}}, label: '76'
+                                        StaticText, 0x1122dda40, {{126.0, 219.0}, {31.5, 116.5}}, label: '66'
+                                        Image, 0x1122ddb80, {{296.0, 214.0}, {29.5, 29.0}}, identifier: 'arrow.up.right', label: 'Up-Right Diagonal Arrow'
+                                        StaticText, 0x1122ddcc0, {{196.0, 248.0}, {55.0, 58.5}}, label: '81'
+                                        StaticText, 0x1122dde00, {{332.5, 156.2}, {17.5, 144.0}}, label: '25%'
+                                        Image, 0x1122ddf40, {{387.5, 179.0}, {53.0, 53.0}}, identifier: 'arrow.up.circle.fill', label: 'Arrow Up Circle'
+                                        StaticText, 0x1122de080, {{438.0, 124.0}, {92.0, 102.5}}, label: 'Best day'
+                                        StaticText, 0x1122de1c0, {{594.5, 179.8}, {121.5, 51.5}}, label: 'Oct 31'
+                                        StaticText, 0x1122de300, {{438.0, 228.5}, {53.5, 58.5}}, label: '81'
+                                        Image, 0x1122de440, {{387.5, 382.0}, {53.0, 53.0}}, identifier: 'arrow.down.circle.fill', label: 'Arrow Down Circle'
+                                        StaticText, 0x1122de580, {{438.0, 327.0}, {142.0, 102.5}}, label: 'Lowest day'
+                                        StaticText, 0x1122de6c0, {{639.5, 357.2}, {76.5, 102.5}}, label: 'Oct 26'
+                                        StaticText, 0x1122de800, {{438.0, 431.5}, {62.5, 58.5}}, label: '66'
+                                        Image, 0x1122de940, {{386.0, 587.5}, {56.0, 48.0}}, identifier: 'chart.line.uptrend.xyaxis', label: 'Chart Line'
+                                        StaticText, 0x1122dea80, {{438.0, 530.0}, {121.5, 102.5}}, label: 'Trending up'
+                                        StaticText, 0x1122debc0, {{594.5, 585.8}, {121.5, 51.5}}, label: 'Oct 31'
+                                        StaticText, 0x1122ded00, {{438.0, 634.5}, {54.0, 58.5}}, label: '10'
+                                        Other, 0x1122dee40, {{24.0, 733.0}, {708.0, 589.0}}, identifier: 'training-readiness-subscore-hrv'
+                                          StaticText, 0x1122def80, {{36.0, 745.0}, {99.0, 58.5}}, label: 'HRV'
+                                          StaticText, 0x1122df0c0, {{36.0, 807.5}, {193.5, 51.5}}, label: 'Avg 75 ms'
+                                          Other, 0x1122df200, {{36.0, 867.0}, {684.0, 443.0}}, identifier: 'subscore-trend-plot'
+                                            Other, 0x1122df340, {{36.0, 867.0}, {90.3, 391.0}}, label: 'Oct 25, 2026 at 00 to Oct 26, 2026 at 00', value: 73.3 to 73.3, 2 va...
+                                            Other, 0x1122df480, {{126.3, 867.0}, {90.3, 391.0}}, label: 'Oct 26, 2026 at 00 to Oct 27, 2026 at 00', value: 72.45 to 72.45, 2 ...
+                                            Other, 0x1122df5c0, {{216.6, 867.0}, {90.3, 391.0}}, label: 'Oct 27, 2026 at 00 to Oct 28, 2026 at 00', value: 78.6 to 78.6, 2 va...
+                                            Other, 0x1122df700, {{306.9, 867.0}, {90.3, 391.0}}, label: 'Oct 28, 2026 at 00 to Oct 29, 2026 at 00', value: 77.75 to 77.75, 2 ...
+                                            Other, 0x1122df840, {{397.1, 867.0}, {90.3, 391.0}}, label: 'Oct 29, 2026 at 00 to Oct 30, 2026 at 00', value: 76.9 to 76.9, 2 va...
+                                            Other, 0x1122df980, {{487.4, 867.0}, {90.3, 391.0}}, label: 'Oct 30, 2026 at 00 to Oct 31, 2026 at 00', value: 76.05 to 76.05, 2 ...
+                                            Other, 0x1122dfac0, {{577.7, 867.0}, {90.3, 391.0}}, label: 'Oct 31, 2026 at 00 to Nov 1, 2026 at 00', value: 75.2 to 75.2, 2 va...
+                                          Other, 0x1122dfc00, {{36.0, 867.0}, {684.0, 443.0}}, identifier: 'subscore-trend-plot'
+                                        Other, 0x1122dfd40, {{24.0, 1346.0}, {708.0, 589.0}}, identifier: 'training-readiness-subscore-rhr'
+                                          StaticText, 0x1122dfe80, {{36.0, 1358.0}, {410.5, 58.5}}, label: 'Resting Heart Rate'
+                                          StaticText, 0x1122e0000, {{36.0, 1420.5}, {222.0, 51.5}}, label: 'Avg 52 bpm'
+                                          Other, 0x1122e0140, {{36.0, 1480.0}, {684.0, 443.0}}, identifier: 'subscore-trend-plot'
+                                            Other, 0x1122e0280, {{36.0, 1480.0}, {90.0, 391.0}}, label: 'Oct 25, 2026 at 00 to Oct 26, 2026 at 00', value: 53.6 to 53.6, 2 va...
+                                            Other, 0x1122e03c0, {{126.0, 1480.0}, {90.0, 391.0}}, label: 'Oct 26, 2026 at 00 to Oct 27, 2026 at 00', value: 55 to 55, 2 values
+                                            Other, 0x1122e0500, {{216.0, 1480.0}, {90.0, 391.0}}, label: 'Oct 27, 2026 at 00 to Oct 28, 2026 at 00', value: 53.4 to 53.4, 2 va...
+                                            Other, 0x1122e0640, {{306.0, 1480.0}, {90.0, 391.0}}, label: 'Oct 28, 2026 at 00 to Oct 29, 2026 at 00', value: 51.8 to 51.8, 2 va...
+                                            Other, 0x1122e0780, {{396.0, 1480.0}, {90.0, 391.0}}, label: 'Oct 29, 2026 at 00 to Oct 30, 2026 at 00', value: 53.2 to 53.2, 2 va...
+                                            Other, 0x1122e08c0, {{486.0, 1480.0}, {90.0, 391.0}}, label: 'Oct 30, 2026 at 00 to Oct 31, 2026 at 00', value: 51.6 to 51.6, 2 va...
+                                            Other, 0x1122e0a00, {{576.0, 1480.0}, {90.0, 391.0}}, label: 'Oct 31, 2026 at 00 to Nov 1, 2026 at 00', value: 50 to 50, 2 values
+                                          Other, 0x1122e0b40, {{36.0, 1480.0}, {684.0, 443.0}}, identifier: 'subscore-trend-plot'
+                                        Other, 0x1122e0c80, {{24.0, 1959.0}, {708.0, 589.0}}, identifier: 'training-readiness-subscore-sleep'
+                                          StaticText, 0x1122e0dc0, {{36.0, 1971.0}, {323.0, 58.5}}, label: 'Sleep Duration'
+                                          StaticText, 0x1122e0f00, {{36.0, 2033.5}, {202.5, 51.5}}, label: 'Avg 7.4 hrs'
+                                          Other, 0x1122e1040, {{36.0, 2093.0}, {684.0, 443.0}}, identifier: 'subscore-trend-plot'
+                                            Other, 0x1122e1180, {{36.0, 2093.0}, {88.7, 391.0}}, label: 'Oct 25, 2026 at 00 to Oct 26, 2026 at 00', value: 7.35 to 7.35, 2 va...
+                                            Other, 0x1122e12c0, {{124.7, 2093.0}, {88.7, 391.0}}, label: 'Oct 26, 2026 at 00 to Oct 27, 2026 at 00', value: 7.15 to 7.15, 2 va...
+                                            Other, 0x1122e1400, {{213.4, 2093.0}, {88.7, 391.0}}, label: 'Oct 27, 2026 at 00 to Oct 28, 2026 at 00', value: 7.1 to 7.1, 2 values
+                                            Other, 0x1122e1540, {{302.1, 2093.0}, {88.7, 391.0}}, label: 'Oct 28, 2026 at 00 to Oct 29, 2026 at 00', value: 7.3 to 7.3, 2 values
+                                            Other, 0x1122e1680, {{390.9, 2093.0}, {88.7, 391.0}}, label: 'Oct 29, 2026 at 00 to Oct 30, 2026 at 00', value: 7.5 to 7.5, 2 values
+                                            Other, 0x1122e17c0, {{479.6, 2093.0}, {88.7, 391.0}}, label: 'Oct 30, 2026 at 00 to Oct 31, 2026 at 00', value: 7.7 to 7.7, 2 values
+                                            Other, 0x1122e1900, {{568.3, 2093.0}, {88.7, 391.0}}, label: 'Oct 31, 2026 at 00 to Nov 1, 2026 at 00', value: 7.9 to 7.9, 2 values
+                                          Other, 0x1122e1a40, {{36.0, 2093.0}, {684.0, 443.0}}, identifier: 'subscore-trend-plot'
+                                        Other, 0x1122e1b80, {{24.0, 2572.0}, {708.0, 692.5}}, identifier: 'score-composition-card'
+                                          StaticText, 0x1122e1cc0, {{36.0, 2584.0}, {418.0, 58.5}}, label: 'Score Composition'
+                                          StaticText, 0x1122e1e00, {{36.0, 2650.5}, {684.0, 114.0}}, label: 'HRV Variability, 30%, 54'
+                                            StaticText, 0x1122e1f40, {{36.0, 2650.5}, {307.5, 58.5}}, label: 'HRV Variability'
+                                            StaticText, 0x1122e2080, {{36.0, 2713.0}, {87.5, 51.5}}, label: '30%'
+                                            StaticText, 0x1122e21c0, {{665.5, 2713.0}, {54.5, 51.5}}, label: '54'
+                                          StaticText, 0x1122e2300, {{36.0, 2772.5}, {684.0, 114.0}}, label: 'Sleep Quality, 25%, 82'
+                                            StaticText, 0x1122e2440, {{36.0, 2772.5}, {276.0, 58.5}}, label: 'Sleep Quality'
+                                            StaticText, 0x1122e2580, {{36.0, 2835.0}, {85.5, 51.5}}, label: '25%'
+                                            StaticText, 0x1122e26c0, {{665.5, 2835.0}, {54.5, 51.5}}, label: '82'
+                                          StaticText, 0x1122e2800, {{36.0, 2894.5}, {684.0, 114.0}}, label: 'Resting Heart Rate, 20%, 82'
+                                            StaticText, 0x1122e2940, {{36.0, 2894.5}, {389.0, 58.5}}, label: 'Resting Heart Rate'
+                                            StaticText, 0x1122e2a80, {{36.0, 2957.0}, {86.5, 51.5}}, label: '20%'
+                                            StaticText, 0x1122e2bc0, {{665.5, 2957.0}, {54.5, 51.5}}, label: '82'
+                                          StaticText, 0x1122e2d00, {{36.0, 3016.5}, {684.0, 114.0}}, label: 'Recovery Status, 15%, 91'
+                                            StaticText, 0x1122e2e40, {{36.0, 3016.5}, {338.0, 58.5}}, label: 'Recovery Status'
+                                            StaticText, 0x1122e2f80, {{36.0, 3079.0}, {80.5, 51.5}}, label: '15%'
+                                            StaticText, 0x1122e30c0, {{665.5, 3079.0}, {54.5, 51.5}}, label: '91'
+                                          StaticText, 0x1122e3200, {{36.0, 3138.5}, {684.0, 114.0}}, label: 'Trend Bonus, 10%, 55'
+                                            StaticText, 0x1122e3340, {{36.0, 3138.5}, {259.0, 58.5}}, label: 'Trend Bonus'
+                                            StaticText, 0x1122e3480, {{36.0, 3201.0}, {81.0, 51.5}}, label: '10%'
+                                            StaticText, 0x1122e35c0, {{665.5, 3201.0}, {54.5, 51.5}}, label: '55'
+                                        Image, 0x1122e3700, {{50.5, 3318.5}, {69.5, 38.5}}, identifier: 'function', label: 'Function'
+                                        StaticText, 0x1122e3840, {{134.5, 3308.5}, {428.5, 58.5}}, label: 'Calculation Method'
+                                        StaticText, 0x1122e3980, {{56.0, 3379.0}, {546.0, 153.5}}, label: 'Final score = HRV(30%) + RHR(20%) + Sleep(25%) + Recovery(15%) + Trend(10%).'
+                                        StaticText, 0x1122e3ac0, {{56.0, 3544.5}, {613.0, 102.5}}, label: 'Each component is normalized to 0-100 before weighting.'
+                                        StaticText, 0x1122e3c00, {{56.0, 3659.0}, {588.5, 153.5}}, label: 'HRV/RHR are compared against your personal baseline; positive trend increases score.'
+                                      Other, 0x1122e3d40, {{0.0, 0.0}, {756.0, 1158.0}}
+                                        Other, 0x1122e3e80, {{0.0, 0.0}, {756.0, 249.0}}
+                                      Other, 0x1122e4000, {{0.0, 0.0}, {756.0, 1158.0}}
+                                        Other, 0x1122e4140, {{0.0, 0.0}, {756.0, 249.0}}
+                                      Other, 0x1122e4280, {{723.0, 209.0}, {30.0, 902.0}}, label: 'Vertical scroll bar, 6 pages', value: 36%
+                                        Other, 0x1122e43c0, {{750.0, 469.0}, {3.0, 191.0}}
+                                      Other, 0x1122e4500, {{723.0, 209.0}, {30.0, 902.0}}, label: 'Vertical scroll bar, 6 pages', value: 36%
+                                        Other, 0x1122e4640, {{750.0, 469.0}, {3.0, 191.0}}
+                            Toolbar, 0x1122e4780, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x1122e48c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x1122e4a00, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1122e4b40, {{0.0, 28.0}, {756.0, 49.0}}
+                    Button, 0x1122e4c80, {{159.8, 32.0}, {61.5, 41.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x1122e4dc0, {{221.2, 32.0}, {89.0, 41.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x1122e4f00, {{221.2, 32.0}, {89.0, 41.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x1122e5040, {{310.2, 32.0}, {103.0, 41.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                      Button, 0x1122e5180, {{310.2, 32.0}, {103.0, 41.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                    Button, 0x1122e52c0, {{413.2, 32.0}, {116.5, 41.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                      Button, 0x1122e5400, {{413.2, 32.0}, {116.5, 41.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                    Button, 0x1122e5540, {{529.8, 32.0}, {66.5, 41.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x1122e5680, {{529.8, 32.0}, {66.5, 41.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x1122e57c0, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x1122e5900, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x1122e5a40, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1122e5b80, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1122e5cc0, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x104e5b480, pid: 3347, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1122e5e00, pid: 3347, label: 'DUNE'
+  }

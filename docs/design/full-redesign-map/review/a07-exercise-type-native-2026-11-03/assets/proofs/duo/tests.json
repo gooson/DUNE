@@ -1,0 +1,70 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+      "deviceName" : "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+      "modelName" : "iPhone",
+      "osBuildNumber" : "24B91016s",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "2분 7초",
+                  "durationInSeconds" : 127.2600849866867,
+                  "name" : "testExerciseTypeDetailShowsTrendSurface()",
+                  "nodeIdentifier" : "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ActivityExerciseRegressionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "1분 49초",
+                  "durationInSeconds" : 109.09094893932343,
+                  "name" : "testExistingHealthKitTypesOpenWeekDetailAndCapture()",
+                  "nodeIdentifier" : "ExerciseTypeHealthKitVariantUITests/testExistingHealthKitTypesOpenWeekDetailAndCapture()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ExerciseTypeHealthKitVariantUITests/testExistingHealthKitTypesOpenWeekDetailAndCapture",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ExerciseTypeHealthKitVariantUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ExerciseTypeHealthKitVariantUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "DUNEUITests-DuoAudit",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Duo Visual Audit"
+    }
+  ]
+}

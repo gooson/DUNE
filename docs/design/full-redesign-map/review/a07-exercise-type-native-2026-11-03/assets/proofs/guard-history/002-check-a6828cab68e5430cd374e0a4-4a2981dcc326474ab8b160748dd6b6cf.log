@@ -1,0 +1,20 @@
+Host state context: .xcodebuild/a07-ipad-conditional-dark-AX-25ad7839.log.host.json
+Ensuring requested iOS simulator 'C8B44B9E-4C42-4CB0-845E-0F5E7C74F162' is booted...
+Waiting for iOS simulator [C8B44B9E-4C42-4CB0-845E-0F5E7C74F162] to boot (timeout=120s, retries=1)...
+iOS simulator already booted.
+Running UI tests with scheme 'DUNEUITests' for destination 'id=C8B44B9E-4C42-4CB0-845E-0F5E7C74F162'...
+Using test plan: DUNEUITests-DesignCapture
+Only testing: DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailAtMaximumAccessibilityTextSize
+UI tests: failed (exit 65)
+Last reported test count: 1
+Last reported failures: 1
+Failure details:
+  717: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:2322: error: -[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailAtMaximumAccessibilityTextSize] : XCTAssertTrue failed
+  728: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailAtMaximumAccessibilityTextSize]' failed (89.557 seconds).
+  729: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-31 15:59:06.155.
+  731: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 15:59:06.155.
+  733: Test Suite 'Selected tests' failed at 2026-10-31 15:59:06.156.
+  745: ** TEST FAILED **
+Full log: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/a07-ipad-conditional-dark-AX-25ad7839.log
+UI test verification failed: 717: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:2322: error: -[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailAtMaximumAccessibilityTextSize] : XCTAssertTrue failed; 728: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailAtMaximumAccessibilityTextSize]' failed (89.557 seconds).; 729: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-31 15:59:06.155.; 731: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 15:59:06.155.; 733: Test Suite 'Selected tests' failed at 2026-10-31 15:59:06.156.; 745: ** TEST FAILED **; xcodebuild exited 65; UI test log has no positive passed-test count; UI test log has no identifiable passed UI test cases; requested UI test selector has no execution evidence
+Missing: DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailAtMaximumAccessibilityTextSize

@@ -94,6 +94,17 @@ struct AICoachingMessageServiceTests {
 
     // MARK: - Protocol Conformance
 
+    @Test("Prompt uses local time and disallows nighttime workout suggestions")
+    func promptUsesLocalNight() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let now = calendar.date(from: DateComponents(year: 2026, month: 10, day: 31, hour: 0))!
+        let prompt = sut.buildPrompt(insight: makeTestInsight(), context: makeTestInput(), now: now, calendar: calendar)
+        #expect(prompt.contains("Current local hour: 0 (Asia/Seoul); period: night"))
+        #expect(prompt.contains("Do not add greetings"))
+        #expect(prompt.contains("do not recommend starting a workout now"))
+    }
+
     @Test("Mock enhancer can replace messages")
     func mockEnhancerReplacesMessages() async {
         let mock = MockCoachingMessageEnhancer(enhancedMessage: "AI says: rest well!")

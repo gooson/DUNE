@@ -1,0 +1,3242 @@
+{
+  "status": "installed_four_a07_rows",
+  "installed": true,
+  "screen_id": "A07",
+  "source_head": "aedf464d9972acba89c77b2ddbe4b662231d1588",
+  "source_sha256": {
+    "DUNE/Presentation/Activity/TrainingVolume/ExerciseTypeDetailView.swift": "75840754a3fe93c7d10fa9e5c6d3d14451252a0bde7174b7acea67af4b6b4e74",
+    "DUNE/Presentation/Activity/TrainingVolume/ExerciseTypeDetailViewModel.swift": "485d3f95757d9e27128ebce9f125b60a2c4259f2610ecf66a6042e108187a31e",
+    "DUNE/Presentation/Activity/TrainingVolume/TrainingVolumeViewModel.swift": "bbe5234af78cabc32e62f1da17deedb02c3cc02df82d4d287fc4e83e869ad075",
+    "DUNE/Domain/UseCases/TrainingVolumeAnalysisService.swift": "92d7d9303b167161c02456ff7b499ce42861bc5ab73cfa5ebe5da6886f5d36bd",
+    "DUNE/Domain/Models/TrainingVolume.swift": "e85f82e3ff6d18d9e9abdf795e381147a208de9f19b655e2e439595812258bcb",
+    "DUNE/Presentation/Activity/ActivityView.swift": "9f985b8a15aff300eae065162153060d2c5e8e7cba54213035b0bc5d2ba01cc2",
+    "DUNE/App/ContentView.swift": "1f99acd7c7ae1f91f300d3f82de18f255ecb7061ebe9143cd7c1bffe76229cc0",
+    "DUNE/App/TestDataSeeder.swift": "aeec211b427297c1fcca5e2573515182076e38570bdbdf9e3048de14885e76bb",
+    "DUNEUITests/Full/ActivityExerciseRegressionTests.swift": "b77ed5d43620a898247e5552624cc84a8f16edff33923f8d3b552594f47c7bfd",
+    "DUNEUITests/Full/ExerciseTypeHealthKitVariantUITests.swift": "81ced0321881ea54dcf9c54c6ffeb8eb0555bc1e11d64afb7f7c8d4c8aad46a1",
+    "DUNEUITests/Helpers/UITestBaseCase.swift": "1299e3efbe08b78ebcda033b0abf0b31d1d9635b2822e45a04b5df840b3f7f1e",
+    "DUNEUITests/Helpers/UITestHelpers.swift": "1543b51342c33b2d607f910fe4f43cbf382d578c9331623b911f96603b2cef6c",
+    "DUNEUITests/DUNEUITests-DesignCapture.xctestplan": "43b6845f3a9ce24fa8c2a9efeb27d569e0ee2cd81a1d87fe7283aeb091588256",
+    "DUNETests/TrainingVolumeAnalysisServiceTests.swift": "25a75007dbdc7dfce6a086d7569919fac418209a6e447c1f442eef10f846f16c",
+    "DUNETests/TrainingVolumeViewModelTests.swift": "130c62b792e0eefde639ebbb651ec18421b2e1f90446d8d9959391e1d8685f80",
+    "DUNETests/ExerciseTypeDetailViewModelTests.swift": "b07880e2be0f933c8890e84fb6966e373012591c4e37867563a8dd35440497d5",
+    "scripts/test-ui.sh": "2289203358eebb3bd32522b731623103925c11bfffda65b273e55f0a02a54d59",
+    "scripts/codex-pipeline.py": "2d12b83aefb64bf03ecb4551faf00dff9be3f71667bf243f33d4390192bda53c",
+    "scripts/lib/simulator-test-lock.py": "f1f57a001e1b7414da39b8e7085ee7f4d68c23428848c208e00ea40e81e9a407",
+    "DUNE/Presentation/Activity/TrainingVolume/Components/ActivityRingView.swift": "e455cada7dd6ee2675cd18f489685ca6a054dd7476701d4a046601ff8da465d7",
+    "DUNE/Presentation/Activity/TrainingVolume/Components/ExerciseTypeSummaryRow.swift": "e9de6a313b501c85912622fd765850fafd28a506d0219b4cef7f36f0bddb596e",
+    "DUNE/Presentation/Activity/TrainingVolume/Components/PeriodComparisonView.swift": "543e3956648f6a07bbcec5b85d2c33b562e910f6a10f463c680d0ede3cf75aa3",
+    "DUNE/Presentation/Activity/TrainingVolume/Components/StackedVolumeBarChartView.swift": "a67d65468bfdad2f31c7074309eacce8f01def6d15346d2aa39b2f2fb6f1d91e",
+    "DUNE/Presentation/Activity/TrainingVolume/Components/TrainingVolumeSummaryCard.swift": "d5a95161a626c2a8a531f8e1653cbef1820475df80a6fd17d443249ae7a325c1",
+    "DUNE/Presentation/Activity/TrainingVolume/Components/VolumeDonutChartView.swift": "05b7ab22310360aee4d39710d498bb0dfa3c8f161cc167506fad1b79a90fdb46",
+    "DUNE/Domain/Models/Equipment.swift": "ca0cc79034ba7835dfa0ec39dc0c24d2529bf01ac3c07a5345dfa1ccf2260fe2",
+    "DUNE/Presentation/Shared/Extensions/Equipment+View.swift": "6eeda7b91f6b5893d55e1c88d59a6f1e8c0eeb8cf4c5da2805d7a91743ef63b9",
+    "DUNE/Presentation/Shared/Components/ChangeBadge.swift": "c738dd68fc609f53f93a0bd6b8067bc9009c4e8ba551e658cee1294319a3a325",
+    "DUNE/Presentation/Shared/Charts/ChartSelectionInteraction.swift": "c480b3e8ae4a966149f953ff630e75aa443b1f1d71280e922880600c69ba8d13"
+  },
+  "source_closure": "source-closure.json",
+  "records": {
+    "regular": {
+      "map_before": {
+        "file": "assets/regular-map-before.png",
+        "sha256": "f959a22b4c00ecaa0099ddee2614b00f8ac46937df779172f8ea80046dc5d6ea",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/regular/images/A07.png"
+      },
+      "map_before_context": {
+        "tier": "regular",
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/regular/images/A07.png",
+        "sha256": "f959a22b4c00ecaa0099ddee2614b00f8ac46937df779172f8ea80046dc5d6ea",
+        "index": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/regular/capture-index.json",
+        "index_entry": {
+          "row_id": "A07",
+          "evidence": "activity-exercise-type-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+          "action": "tap activity-training-volume-row-manual-strength",
+          "timestamp": 1791818168.971,
+          "image": "F4B1D095-ACCA-427F-BD03-CE0A3CE40DB1.png",
+          "screen": "screen-0-1320x2868-tap activity-training-volume-row-manual-strength_0_FCD61171-D1AF-47EB-9EC4-892A9A4FD742.png",
+          "file": "A07.png"
+        },
+        "visible_type": "manual strength",
+        "visible_period": "week",
+        "paired_ax": "not established",
+        "exact_device_model": "unknown",
+        "locale": "Korean UI visible; exact locale unknown",
+        "source_revision": "unknown for image; index 443a32ca is historical bundle, not per-image proof",
+        "pose": "unknown; Duo images show right-side chrome",
+        "usage": "Duo images are month, do not present as matching week before."
+      },
+      "before": {
+        "file": "assets/regular-before.png",
+        "sha256": "f959a22b4c00ecaa0099ddee2614b00f8ac46937df779172f8ea80046dc5d6ea",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/regular/images/A07.png"
+      },
+      "before_label": "기존 A07 실제 화면 · 과거 캡처, 기기/실행 버전 미확인",
+      "before_context": {
+        "tier": "regular",
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/regular/images/A07.png",
+        "sha256": "f959a22b4c00ecaa0099ddee2614b00f8ac46937df779172f8ea80046dc5d6ea",
+        "index": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/regular/capture-index.json",
+        "index_entry": {
+          "row_id": "A07",
+          "evidence": "activity-exercise-type-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+          "action": "tap activity-training-volume-row-manual-strength",
+          "timestamp": 1791818168.971,
+          "image": "F4B1D095-ACCA-427F-BD03-CE0A3CE40DB1.png",
+          "screen": "screen-0-1320x2868-tap activity-training-volume-row-manual-strength_0_FCD61171-D1AF-47EB-9EC4-892A9A4FD742.png",
+          "file": "A07.png"
+        },
+        "visible_type": "manual strength",
+        "visible_period": "week",
+        "paired_ax": "not established",
+        "exact_device_model": "unknown",
+        "locale": "Korean UI visible; exact locale unknown",
+        "source_revision": "unknown for image; index 443a32ca is historical bundle, not per-image proof",
+        "pose": "unknown; Duo images show right-side chrome",
+        "usage": "Duo images are month, do not present as matching week before."
+      },
+      "after": {
+        "image": {
+          "file": "assets/regular-after.png",
+          "sha256": "1bb51dbbd0c512968380fd8fe123960f60efa0ec13e3ab6dff246f7f271ab067",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/EAFCDA44-DCA4-4BF9-974B-8364B05EBA2B.png"
+        },
+        "ax": {
+          "file": "assets/ax/regular-after.txt",
+          "sha256": "caefb4ce25340933dbc144580d8817d9943d07f1411370cc5dc0d28634758222",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/6AE2D8D7-ABB8-49E8-A784-AD45F0A5E42D.txt"
+        },
+        "kind": "native-XCTest-attachment",
+        "action": "Exercise type manual strength Week loaded",
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+          "modelName": "iPhone 18 Pro Max",
+          "osBuildNumber": "24B8117",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        },
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+          "exportedFileName": "EAFCDA44-DCA4-4BF9-974B-8364B05EBA2B.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-Exercise type manual strength Week loaded_0_6ECBBD7A-FD1D-4D17-B9CB-628DCE89D9F5.png",
+          "timestamp": 1793654819.769
+        },
+        "checkpoint": null,
+        "pose": null
+      },
+      "revision": "aedf464d9972acba89c77b2ddbe4b662231d1588",
+      "period": "Week",
+      "visual_reviewed": true
+    },
+    "ipad": {
+      "map_before": {
+        "file": "assets/ipad-map-before.png",
+        "sha256": "02a19b17aa6d9446ec55d89824dc874bb5e5cc1f3f9b147a6f80274327b24693",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/ipad/images/A07.png"
+      },
+      "map_before_context": {
+        "tier": "ipad",
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/ipad/images/A07.png",
+        "sha256": "02a19b17aa6d9446ec55d89824dc874bb5e5cc1f3f9b147a6f80274327b24693",
+        "index": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/ipad/capture-index.json",
+        "index_entry": {
+          "row_id": "A07",
+          "evidence": "activity-exercise-type-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+          "action": "tap activity-training-volume-row-manual-strength",
+          "timestamp": 1791821721.823,
+          "image": "BE18DB5B-5D43-48CE-9156-76F355E39931.png",
+          "screen": "screen-0-2064x2752-tap activity-training-volume-row-manual-strength_0_1772D847-7DE5-4DEB-AD53-9876E3034448.png",
+          "file": "A07.png"
+        },
+        "visible_type": "manual strength",
+        "visible_period": "week",
+        "paired_ax": "not established",
+        "exact_device_model": "unknown",
+        "locale": "Korean UI visible; exact locale unknown",
+        "source_revision": "unknown for image; index 443a32ca is historical bundle, not per-image proof",
+        "pose": "unknown; Duo images show right-side chrome",
+        "usage": "Duo images are month, do not present as matching week before."
+      },
+      "before": {
+        "file": "assets/ipad-before.png",
+        "sha256": "e28bcc25e515368c6fa3a0d1a958ab4ef1688f82349a93252a3f51fda1e66d22",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/attachments/B23D99D5-CD0A-47F5-9A7E-D31995A6C510.png"
+      },
+      "before_label": "A20 원본 수동 운동 · Week",
+      "before_context": {
+        "type": "manual_strength",
+        "period": "week selected (AX and pixels)",
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/attachments/B23D99D5-CD0A-47F5-9A7E-D31995A6C510.png",
+        "image_sha256": "e28bcc25e515368c6fa3a0d1a958ab4ef1688f82349a93252a3f51fda1e66d22",
+        "paired_ax": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/attachments/105722C8-F89A-4DAF-865C-B7A3B9B1DD9F.txt",
+        "ax_sha256": "f9c9c78ce7e55ffd1b3f3b678d01cd40d65b77592c8ccbecb80fbfa3e421671d",
+        "manifest": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/attachments/manifest.json",
+        "provenance": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/provenance.json",
+        "summary": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/summary.json",
+        "tests": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/tests.json",
+        "source_revision": "1f7f9900",
+        "source_dirty": false,
+        "device": "iPad mini (A20 Pro)",
+        "device_id": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "os": "27.2 (24B8117)",
+        "locale": "Korean UI visible; exact locale identifier unknown",
+        "result": "individual selector Passed; six-test group 5 passed, 1 failed",
+        "note": "Original pre-redesign image; no current-source runtime claim."
+      },
+      "after": {
+        "image": {
+          "file": "assets/ipad-after.png",
+          "sha256": "17f29bf6bab3fea793afc534c772035aa73450250db31e57eddcba94444e904d",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/62D6A243-37E4-4CE7-9F87-EB193B332D70.png"
+        },
+        "ax": {
+          "file": "assets/ax/ipad-after.txt",
+          "sha256": "17e119f0fffaf9c918eefc0d64d86b20147003a5e7c5ef85afd34952efb5ee7a",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/9BBF579E-7E97-4BD7-BEF8-6FFA6BD800DB.txt"
+        },
+        "kind": "native-XCTest-attachment",
+        "action": "Exercise type manual strength Week loaded",
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+          "modelName": "iPad mini (A20 Pro)",
+          "osBuildNumber": "24B8117",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        },
+        "attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+          "exportedFileName": "62D6A243-37E4-4CE7-9F87-EB193B332D70.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1512x2316-Exercise type manual strength Week loaded_0_465CDE1C-CFF0-40BC-A2B7-C94EE7C91057.png",
+          "timestamp": 1793653399.674
+        },
+        "checkpoint": null,
+        "pose": null
+      },
+      "revision": "aedf464d9972acba89c77b2ddbe4b662231d1588",
+      "period": "Week",
+      "visual_reviewed": true
+    },
+    "duo": {
+      "map_before": {
+        "file": "assets/duo-map-before.png",
+        "sha256": "1522d3a8017f4f2d97e20519a96c63d051423da3d87cf8009d055665acc4983e",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo/images/A07.png"
+      },
+      "map_before_context": {
+        "tier": "duo",
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo/images/A07.png",
+        "sha256": "1522d3a8017f4f2d97e20519a96c63d051423da3d87cf8009d055665acc4983e",
+        "index": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo/capture-index.json",
+        "index_entry": {
+          "row_id": "A07",
+          "evidence": "activity-exercise-type-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+          "action": "tap 1개월",
+          "timestamp": 1792598621.527,
+          "image": "E056C80A-E50E-47A6-BA58-F7071C4C1012.png",
+          "screen": "screen-0-1398x2034-tap 1개월_0_3CA09BAE-8738-482D-8428-46CB05988A6A.png",
+          "file": "A07.png"
+        },
+        "visible_type": "manual strength",
+        "visible_period": "month",
+        "paired_ax": "not established",
+        "exact_device_model": "unknown",
+        "locale": "Korean UI visible; exact locale unknown",
+        "source_revision": "unknown for image; index 443a32ca is historical bundle, not per-image proof",
+        "pose": "unknown; Duo images show right-side chrome",
+        "usage": "Duo images are month, do not present as matching week before."
+      },
+      "before": {
+        "file": "assets/duo-before.png",
+        "sha256": "1522d3a8017f4f2d97e20519a96c63d051423da3d87cf8009d055665acc4983e",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo/images/A07.png"
+      },
+      "before_label": "기존 A07 실제 화면 · 과거 캡처, 기기/실행 버전 미확인",
+      "before_context": {
+        "tier": "duo",
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo/images/A07.png",
+        "sha256": "1522d3a8017f4f2d97e20519a96c63d051423da3d87cf8009d055665acc4983e",
+        "index": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo/capture-index.json",
+        "index_entry": {
+          "row_id": "A07",
+          "evidence": "activity-exercise-type-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+          "action": "tap 1개월",
+          "timestamp": 1792598621.527,
+          "image": "E056C80A-E50E-47A6-BA58-F7071C4C1012.png",
+          "screen": "screen-0-1398x2034-tap 1개월_0_3CA09BAE-8738-482D-8428-46CB05988A6A.png",
+          "file": "A07.png"
+        },
+        "visible_type": "manual strength",
+        "visible_period": "month",
+        "paired_ax": "not established",
+        "exact_device_model": "unknown",
+        "locale": "Korean UI visible; exact locale unknown",
+        "source_revision": "unknown for image; index 443a32ca is historical bundle, not per-image proof",
+        "pose": "unknown; Duo images show right-side chrome",
+        "usage": "Duo images are month, do not present as matching week before."
+      },
+      "after": {
+        "image": {
+          "file": "assets/duo-after.png",
+          "sha256": "d3587fa9b089c2147540d1927315d368c3b0ae62b207093c854027dd0c98c1b4",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/007-1398x2034.png"
+        },
+        "ax": {
+          "file": "assets/ax/duo-after.txt",
+          "sha256": "e240321d0d408982b622815240c0c38130390f4ff086838ba107228c0512da85",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/007-hierarchy.txt"
+        },
+        "kind": "paired-host",
+        "action": "Exercise type manual strength Month loaded",
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+          "modelName": "iPhone",
+          "osBuildNumber": "24B91016s",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        },
+        "attachment": null,
+        "checkpoint": {
+          "sequence": 7,
+          "action": "DUNE_VISUAL_AUDIT_READY Exercise type manual strength Month loaded [DUNEUITests/ActivityExerciseRegressionTests.swift:1006] DEADLINE=1793655694.281357",
+          "elapsed_seconds": 2.177,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        "pose": {
+          "revision": "aedf464d",
+          "target": 0.0,
+          "angle_before": 0.0,
+          "angle_after": 0.0,
+          "active_display": "LCD",
+          "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+          "captured_at": 1793655783.761794,
+          "native_visual_review": "pending-parent"
+        }
+      },
+      "revision": "aedf464d9972acba89c77b2ddbe4b662231d1588",
+      "period": "Month",
+      "visual_reviewed": true
+    },
+    "duo-open": {
+      "map_before": {
+        "file": "assets/duo-open-map-before.png",
+        "sha256": "e657c94703cccd43438a37924b7cf2e4575501e6299b7a82d3581c35a03bf839",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo-open/images/A07.png"
+      },
+      "map_before_context": {
+        "tier": "duo-open",
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo-open/images/A07.png",
+        "sha256": "e657c94703cccd43438a37924b7cf2e4575501e6299b7a82d3581c35a03bf839",
+        "index": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo-open/capture-index.json",
+        "index_entry": {
+          "row_id": "A07",
+          "evidence": "activity-exercise-type-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+          "action": "tap 1개월",
+          "timestamp": 1792389269.817,
+          "image": "10710C77-FE7E-4F95-9619-3C054E9343F6.png",
+          "screen": "screen-1-2006x2852-tap 1개월_1_1741E41B-A779-46E8-AF33-3D5D5A6AC023.png",
+          "file": "A07.png"
+        },
+        "visible_type": "manual strength",
+        "visible_period": "month",
+        "paired_ax": "not established",
+        "exact_device_model": "unknown",
+        "locale": "Korean UI visible; exact locale unknown",
+        "source_revision": "unknown for image; index 443a32ca is historical bundle, not per-image proof",
+        "pose": "unknown; Duo images show right-side chrome",
+        "usage": "Duo images are month, do not present as matching week before."
+      },
+      "before": {
+        "file": "assets/duo-open-before.png",
+        "sha256": "e657c94703cccd43438a37924b7cf2e4575501e6299b7a82d3581c35a03bf839",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo-open/images/A07.png"
+      },
+      "before_label": "기존 A07 실제 화면 · 과거 캡처, 기기/실행 버전 미확인",
+      "before_context": {
+        "tier": "duo-open",
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo-open/images/A07.png",
+        "sha256": "e657c94703cccd43438a37924b7cf2e4575501e6299b7a82d3581c35a03bf839",
+        "index": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/docs/design/phone-design-map/actual/duo-open/capture-index.json",
+        "index_entry": {
+          "row_id": "A07",
+          "evidence": "activity-exercise-type-detail-screen",
+          "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
+          "action": "tap 1개월",
+          "timestamp": 1792389269.817,
+          "image": "10710C77-FE7E-4F95-9619-3C054E9343F6.png",
+          "screen": "screen-1-2006x2852-tap 1개월_1_1741E41B-A779-46E8-AF33-3D5D5A6AC023.png",
+          "file": "A07.png"
+        },
+        "visible_type": "manual strength",
+        "visible_period": "month",
+        "paired_ax": "not established",
+        "exact_device_model": "unknown",
+        "locale": "Korean UI visible; exact locale unknown",
+        "source_revision": "unknown for image; index 443a32ca is historical bundle, not per-image proof",
+        "pose": "unknown; Duo images show right-side chrome",
+        "usage": "Duo images are month, do not present as matching week before."
+      },
+      "after": {
+        "image": {
+          "file": "assets/duo-open-after.png",
+          "sha256": "c9a99eb6f77ad3a97b99fecb06172812bfe56a2afd75ea7ecf9055735fc4915c",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/007-2007x2853.png"
+        },
+        "ax": {
+          "file": "assets/ax/duo-open-after.txt",
+          "sha256": "aa93a3d2685bd3192eda71faad8987128eeaf2023098df3fb7434cf1c1aab8be",
+          "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/007-hierarchy.txt"
+        },
+        "kind": "paired-host",
+        "action": "Exercise type manual strength Month loaded",
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+          "modelName": "iPhone",
+          "osBuildNumber": "24B91016s",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        },
+        "attachment": null,
+        "checkpoint": {
+          "sequence": 7,
+          "action": "DUNE_VISUAL_AUDIT_READY Exercise type manual strength Month loaded [DUNEUITests/ActivityExerciseRegressionTests.swift:1006] DEADLINE=1793655964.0581331",
+          "elapsed_seconds": 2.175,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        "pose": {
+          "revision": "aedf464d",
+          "target": 180.0,
+          "angle_before": 180.0,
+          "angle_after": 180.0,
+          "active_display": "LCD-1",
+          "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+          "captured_at": 1793656040.767929,
+          "native_visual_review": "pending-parent"
+        }
+      },
+      "revision": "aedf464d9972acba89c77b2ddbe4b662231d1588",
+      "period": "Month",
+      "visual_reviewed": true
+    }
+  },
+  "supplemental": [
+    {
+      "label": "regular manual Week",
+      "tier": "regular",
+      "image": {
+        "file": "assets/supplement/00.png",
+        "sha256": "1bb51dbbd0c512968380fd8fe123960f60efa0ec13e3ab6dff246f7f271ab067",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/EAFCDA44-DCA4-4BF9-974B-8364B05EBA2B.png"
+      },
+      "ax": {
+        "file": "assets/ax/00.txt",
+        "sha256": "caefb4ce25340933dbc144580d8817d9943d07f1411370cc5dc0d28634758222",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/6AE2D8D7-ABB8-49E8-A784-AD45F0A5E42D.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type manual strength Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone 18 Pro Max",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "EAFCDA44-DCA4-4BF9-974B-8364B05EBA2B.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1320x2868-Exercise type manual strength Week loaded_0_6ECBBD7A-FD1D-4D17-B9CB-628DCE89D9F5.png",
+        "timestamp": 1793654819.769
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "regular manual Month",
+      "tier": "regular",
+      "image": {
+        "file": "assets/supplement/01.png",
+        "sha256": "6f754b4d71f4048e9b7110b260a1585733920d96afe172426450a25271d62d2f",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/A95AE1C7-B706-40A9-A7A5-0F51703643C5.png"
+      },
+      "ax": {
+        "file": "assets/ax/01.txt",
+        "sha256": "7c4540e9ed8f8e8294537e3d9c0c96f56d380236c29bad124e9dbc1d0649b1e9",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/5F549394-5F93-40CD-AC22-300C158769B8.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type manual strength Month loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone 18 Pro Max",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "A95AE1C7-B706-40A9-A7A5-0F51703643C5.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1320x2868-Exercise type manual strength Month loaded_0_2BD81293-30EC-47D4-82B7-D26A564627D4.png",
+        "timestamp": 1793654836.548
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "regular running Week",
+      "tier": "regular",
+      "image": {
+        "file": "assets/supplement/02.png",
+        "sha256": "c67b3b7d663527904037fabab344a6d84aa2dbe63dcc99d85c4f2bf70c9fc330",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/051A0CF7-074B-49F0-B1AA-8E6251975B73.png"
+      },
+      "ax": {
+        "file": "assets/ax/02.txt",
+        "sha256": "4ee39adc85dd2ebfb03f982a61f6f99de656d5b8f1eef87f14d2ddf59a316807",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/B541BA19-35CB-4540-BFCD-27DEA4923EA7.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type running Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone 18 Pro Max",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "051A0CF7-074B-49F0-B1AA-8E6251975B73.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1320x2868-Exercise type running Week loaded_0_FAEA6CF5-07C8-47C0-A268-26771D209B67.png",
+        "timestamp": 1793654898.082
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "regular cycling Week",
+      "tier": "regular",
+      "image": {
+        "file": "assets/supplement/03.png",
+        "sha256": "0dfa9630c24673b8aa97e1605f72f096ec4231533d6c8297ed1f32081ad739fd",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/8A7391FB-834A-4A97-A1F4-A051CF4D2411.png"
+      },
+      "ax": {
+        "file": "assets/ax/03.txt",
+        "sha256": "c9458a8ac6c8a479be505d1eaf03c30e902500bff44709bc560a157cf2039c95",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/B69DC5CE-D484-46EF-961B-CD23A0A2B5F2.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type cycling Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone 18 Pro Max",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "8A7391FB-834A-4A97-A1F4-A051CF4D2411.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1320x2868-Exercise type cycling Week loaded_0_E4A944CD-E91B-4AA6-A361-B4AFD7FFDD5C.png",
+        "timestamp": 1793654908.876
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "regular stairStepper Week",
+      "tier": "regular",
+      "image": {
+        "file": "assets/supplement/04.png",
+        "sha256": "e96bc4584e35184dd1a10b1d30a4cd83544a03c645573018c89c9164cafc580c",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/BD6BA299-FEC6-4BC0-8BF6-1F3DD585C207.png"
+      },
+      "ax": {
+        "file": "assets/ax/04.txt",
+        "sha256": "015ed1e495d795466fac01e3c82e06c907bf360da381d3090cd781f2f249d146",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/6076A1AC-FBE2-4035-9C7C-AA7E3EFE3BDA.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type stairStepper Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone 18 Pro Max",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "BD6BA299-FEC6-4BC0-8BF6-1F3DD585C207.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1320x2868-Exercise type stairStepper Week loaded_0_5D5A2314-CF20-4106-B5E2-EEEBF6BBB97D.png",
+        "timestamp": 1793654919.914
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "regular traditionalStrengthTraining Week",
+      "tier": "regular",
+      "image": {
+        "file": "assets/supplement/05.png",
+        "sha256": "8b614997a532a7861919a58c5576f9a440ba55ba34690c7f675bbca4d43eeba0",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/492E0B51-9E9B-45E0-90D0-0F3BBB82E158.png"
+      },
+      "ax": {
+        "file": "assets/ax/05.txt",
+        "sha256": "0c87c7d4dc0650ff59d5e6c3d564ddd652927f419ee1330a9559b2f11ff8e1be",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/8414A374-318E-406C-A8E8-22EA9C1E11BE.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type traditionalStrengthTraining Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone 18 Pro Max",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "492E0B51-9E9B-45E0-90D0-0F3BBB82E158.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1320x2868-Exercise type traditionalStrengthTraining Week loaded_0_6AE95BB5-657A-4C40-8EC2-839FD2D685DF.png",
+        "timestamp": 1793654930.793
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "ipad manual Week",
+      "tier": "ipad",
+      "image": {
+        "file": "assets/supplement/06.png",
+        "sha256": "17f29bf6bab3fea793afc534c772035aa73450250db31e57eddcba94444e904d",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/62D6A243-37E4-4CE7-9F87-EB193B332D70.png"
+      },
+      "ax": {
+        "file": "assets/ax/06.txt",
+        "sha256": "17e119f0fffaf9c918eefc0d64d86b20147003a5e7c5ef85afd34952efb5ee7a",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/9BBF579E-7E97-4BD7-BEF8-6FFA6BD800DB.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type manual strength Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPad mini (A20 Pro)",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "62D6A243-37E4-4CE7-9F87-EB193B332D70.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Exercise type manual strength Week loaded_0_465CDE1C-CFF0-40BC-A2B7-C94EE7C91057.png",
+        "timestamp": 1793653399.674
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "ipad manual Month",
+      "tier": "ipad",
+      "image": {
+        "file": "assets/supplement/07.png",
+        "sha256": "40476cb773ee8c57cb5095fb40812e46eafd8b9b04e7e540e3a466cef9a35894",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/6C9A325E-5B6F-4E5D-92E6-9A5651275774.png"
+      },
+      "ax": {
+        "file": "assets/ax/07.txt",
+        "sha256": "13706fc855807dfc14df8c79edf5cd3df37e84682b56ea08dbc63322fea6fe29",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/6E54BDBE-8D08-4917-8201-E2E3CF767A27.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type manual strength Month loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPad mini (A20 Pro)",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "6C9A325E-5B6F-4E5D-92E6-9A5651275774.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Exercise type manual strength Month loaded_0_68837F57-3755-4E6C-A9C5-EABBBF54D1B8.png",
+        "timestamp": 1793653411.367
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "ipad running Week",
+      "tier": "ipad",
+      "image": {
+        "file": "assets/supplement/08.png",
+        "sha256": "6e6eb0872a65d544491aa80665a1ef932bba759217a99548d40cfd63676218a2",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/ED483985-2E27-4C12-86C9-B1CC7C59F1E8.png"
+      },
+      "ax": {
+        "file": "assets/ax/08.txt",
+        "sha256": "64f88a303cf9ca76d3f273e6075a686aba81c1e8d17a6221b639039139bcb9dc",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/67014FEF-85B6-49CB-8DB4-7B3EB0F61A7D.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type running Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPad mini (A20 Pro)",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "ED483985-2E27-4C12-86C9-B1CC7C59F1E8.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Exercise type running Week loaded_0_40E0DC41-04F3-4425-9751-9B8E3E04A1AB.png",
+        "timestamp": 1793653454.915
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "ipad cycling Week",
+      "tier": "ipad",
+      "image": {
+        "file": "assets/supplement/09.png",
+        "sha256": "3d2cdbcd938c0db5aa6df1260d24c235aa3e8dfff74fae7aa5b865cee9da9ab8",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/AF65ED1B-010F-4AFF-AE1A-1E759815B55D.png"
+      },
+      "ax": {
+        "file": "assets/ax/09.txt",
+        "sha256": "3bb31383cb7f9f281021993ba144d94b7d28be14bd5ee21855145d841a18ef6a",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/A1E8A5C1-EF4E-4F5A-A189-675AAB31EF68.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type cycling Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPad mini (A20 Pro)",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "AF65ED1B-010F-4AFF-AE1A-1E759815B55D.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Exercise type cycling Week loaded_0_4FE62F24-38B0-46E1-8D19-C8D226ED09CE.png",
+        "timestamp": 1793653465.65
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "ipad stairStepper Week",
+      "tier": "ipad",
+      "image": {
+        "file": "assets/supplement/10.png",
+        "sha256": "76992886db8a212c7f6035a2cbfe8ed24abe170ed4153eedeaa6c64a1e80b1a1",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/156FB289-E380-4193-8736-CCFE1F40277F.png"
+      },
+      "ax": {
+        "file": "assets/ax/10.txt",
+        "sha256": "2f6e7fbfbce41c745484178f0bf2099f973b6ca2a869ce140b46cc3447eac7b8",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/CBCB17ED-85B5-4D11-AE62-1C05F3233F73.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type stairStepper Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPad mini (A20 Pro)",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "156FB289-E380-4193-8736-CCFE1F40277F.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Exercise type stairStepper Week loaded_0_66BA75BD-D799-4A14-9967-47A4116519CA.png",
+        "timestamp": 1793653476.497
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "ipad traditionalStrengthTraining Week",
+      "tier": "ipad",
+      "image": {
+        "file": "assets/supplement/11.png",
+        "sha256": "67c703cafcca98fa956b0d9cdae52ee6cb589cd4ebd854422b3ba6b3059596e7",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/A17FDAA7-8925-45AD-A98A-1F02EBECED36.png"
+      },
+      "ax": {
+        "file": "assets/ax/11.txt",
+        "sha256": "44a70da63ca631714fbb83f10df26a8773475dd474c75396467bd4d9828aa43c",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/A675896B-D2F3-4175-A455-98DAF5659C63.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type traditionalStrengthTraining Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPad mini (A20 Pro)",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "A17FDAA7-8925-45AD-A98A-1F02EBECED36.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Exercise type traditionalStrengthTraining Week loaded_0_F45C24EE-6E50-4670-AD38-749C781BAD5C.png",
+        "timestamp": 1793653487.272
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "duo manual Week",
+      "tier": "duo",
+      "image": {
+        "file": "assets/supplement/12.png",
+        "sha256": "99a7eb0919b2c3e9c8158b76bb08ad93092d0ca712d68d1d41ed90935e3d414d",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/004-1398x2034.png"
+      },
+      "ax": {
+        "file": "assets/ax/12.txt",
+        "sha256": "e79f5521281da203b98c788b915447b4910c9923639cb79d69365934cb9c0456",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/004-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type manual strength Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 4,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type manual strength Week loaded [DUNEUITests/ActivityExerciseRegressionTests.swift:975] DEADLINE=1793655669.869783",
+        "elapsed_seconds": 2.157,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793655783.761794,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo manual Month",
+      "tier": "duo",
+      "image": {
+        "file": "assets/supplement/13.png",
+        "sha256": "d3587fa9b089c2147540d1927315d368c3b0ae62b207093c854027dd0c98c1b4",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/007-1398x2034.png"
+      },
+      "ax": {
+        "file": "assets/ax/13.txt",
+        "sha256": "e240321d0d408982b622815240c0c38130390f4ff086838ba107228c0512da85",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/007-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type manual strength Month loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type manual strength Month loaded [DUNEUITests/ActivityExerciseRegressionTests.swift:1006] DEADLINE=1793655694.281357",
+        "elapsed_seconds": 2.177,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793655783.761794,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo running Week",
+      "tier": "duo",
+      "image": {
+        "file": "assets/supplement/14.png",
+        "sha256": "7ed78e01c7130426e54f5c05e0f414d4ea6aa8ef13c1bd0d890c105f50497a6d",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/010-1398x2034.png"
+      },
+      "ax": {
+        "file": "assets/ax/14.txt",
+        "sha256": "78f77b93d6c4d85bd1eb744d0e9fac992a96afd5af60387c21b3fae24b0bd3c1",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/010-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type running Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 10,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type running Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793655756.916374",
+        "elapsed_seconds": 2.35,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793655783.761794,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo cycling Week",
+      "tier": "duo",
+      "image": {
+        "file": "assets/supplement/15.png",
+        "sha256": "3b0e30e2746e338def3651063f70b7bf9a99a6d2d1e01dcc5b84ec6ff9135804",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/011-1398x2034.png"
+      },
+      "ax": {
+        "file": "assets/ax/15.txt",
+        "sha256": "133e851754057ef37c4005fc5e552ad4ce8916f4e382d64c68198c417ff4c264",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/011-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type cycling Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 11,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type cycling Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793655769.921068",
+        "elapsed_seconds": 2.21,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793655783.761794,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo stairStepper Week",
+      "tier": "duo",
+      "image": {
+        "file": "assets/supplement/16.png",
+        "sha256": "637df94a48634a10707153948bb8dfe5d749efcd86d72932c6cce5c07557cb9a",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/012-1398x2034.png"
+      },
+      "ax": {
+        "file": "assets/ax/16.txt",
+        "sha256": "6546c20fee9cb291b2c859aa9253013a51c0839c0ea38845f78dabd897386c75",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/012-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type stairStepper Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 12,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type stairStepper Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793655782.7108212",
+        "elapsed_seconds": 2.274,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793655783.761794,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo traditionalStrengthTraining Week",
+      "tier": "duo",
+      "image": {
+        "file": "assets/supplement/17.png",
+        "sha256": "8db2a54e3880099e7467b947943853a03575be224c6e8eb533fa4c12c4f89c05",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/013-1398x2034.png"
+      },
+      "ax": {
+        "file": "assets/ax/17.txt",
+        "sha256": "c0d244d2c8f62212c8efe43d443e2c28cb231c50254c74271fa9fd5581707cf8",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/013-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type traditionalStrengthTraining Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 13,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type traditionalStrengthTraining Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793655795.606488",
+        "elapsed_seconds": 2.334,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793655783.761794,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo-open manual Week",
+      "tier": "duo-open",
+      "image": {
+        "file": "assets/supplement/18.png",
+        "sha256": "7ceae4ac8ef6cb6ab01044c7ccb5c53996b2785cbe6ac01c2f51872bb815b7ac",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/004-2007x2853.png"
+      },
+      "ax": {
+        "file": "assets/ax/18.txt",
+        "sha256": "025576c179bcf65e6ad2c267354db456c8770955a137323b34f57e290878c4f1",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/004-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type manual strength Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 4,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type manual strength Week loaded [DUNEUITests/ActivityExerciseRegressionTests.swift:975] DEADLINE=1793655941.408133",
+        "elapsed_seconds": 2.381,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793656040.767929,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo-open manual Month",
+      "tier": "duo-open",
+      "image": {
+        "file": "assets/supplement/19.png",
+        "sha256": "c9a99eb6f77ad3a97b99fecb06172812bfe56a2afd75ea7ecf9055735fc4915c",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/007-2007x2853.png"
+      },
+      "ax": {
+        "file": "assets/ax/19.txt",
+        "sha256": "aa93a3d2685bd3192eda71faad8987128eeaf2023098df3fb7434cf1c1aab8be",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/007-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type manual strength Month loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type manual strength Month loaded [DUNEUITests/ActivityExerciseRegressionTests.swift:1006] DEADLINE=1793655964.0581331",
+        "elapsed_seconds": 2.175,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793656040.767929,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo-open running Week",
+      "tier": "duo-open",
+      "image": {
+        "file": "assets/supplement/20.png",
+        "sha256": "3d7a291030ac31f6178b5e2caeb0f50bd264ddb5ca51669834406cb903d50a73",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/010-2007x2853.png"
+      },
+      "ax": {
+        "file": "assets/ax/20.txt",
+        "sha256": "eef7fc59059b33d63cb8a4f568c32aa446d8fb3bc6b4f9879f53c03c93387628",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/010-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type running Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 10,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type running Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793656019.615674",
+        "elapsed_seconds": 2.236,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793656040.767929,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo-open cycling Week",
+      "tier": "duo-open",
+      "image": {
+        "file": "assets/supplement/21.png",
+        "sha256": "81bbd0ca0ed254ebf750a10755b3ec82ac494155c4aedc2f5bf23e64ec6cae27",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/011-2007x2853.png"
+      },
+      "ax": {
+        "file": "assets/ax/21.txt",
+        "sha256": "03976f9469df46ea2268ded7ac3d4c92a4ca583eb2e4af2eadae64f0a3e419cb",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/011-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type cycling Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 11,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type cycling Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793656032.706633",
+        "elapsed_seconds": 2.236,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793656040.767929,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo-open stairStepper Week",
+      "tier": "duo-open",
+      "image": {
+        "file": "assets/supplement/22.png",
+        "sha256": "0eceaffa74d2f3a4e1d9a8363f20a88207a6f434adc41c30dc6c079d465e9bce",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/012-2007x2853.png"
+      },
+      "ax": {
+        "file": "assets/ax/22.txt",
+        "sha256": "c9d48a3b18758e4eb84ea53543e8f5eed0efc0019a94d8e500abae531a86ca84",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/012-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type stairStepper Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 12,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type stairStepper Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793656045.838605",
+        "elapsed_seconds": 2.209,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793656040.767929,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "duo-open traditionalStrengthTraining Week",
+      "tier": "duo-open",
+      "image": {
+        "file": "assets/supplement/23.png",
+        "sha256": "46f7f93a82507c94b0852253133a65ed6e9399fe266b30e8792878bbba0415e9",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/013-2007x2853.png"
+      },
+      "ax": {
+        "file": "assets/ax/23.txt",
+        "sha256": "c6a797aabe6aabcdee9aa38e394b0dfae6113395d5830c7172f09be4a406c564",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/013-hierarchy.txt"
+      },
+      "kind": "paired-host",
+      "action": "Exercise type traditionalStrengthTraining Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "9CE87DD6-57CF-42A1-81D4-1B915C3A82C4",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPhone",
+        "osBuildNumber": "24B91016s",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": null,
+      "checkpoint": {
+        "sequence": 13,
+        "action": "DUNE_VISUAL_AUDIT_READY Exercise type traditionalStrengthTraining Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793656058.848592",
+        "elapsed_seconds": 2.358,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "pose": {
+        "revision": "aedf464d",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+        "captured_at": 1793656040.767929,
+        "native_visual_review": "pending-parent"
+      }
+    },
+    {
+      "label": "iPad dark MAX Exercise type manual strength Week loaded",
+      "tier": "ipad-max",
+      "image": {
+        "file": "assets/supplement/24.png",
+        "sha256": "fc864c28858da96c2dac9e82471f1d2440d88493aa16e2fccee514f9f63b41ea",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/8821A60B-4C79-4D46-B026-F5994904C944.png"
+      },
+      "ax": {
+        "file": "assets/ax/24.txt",
+        "sha256": "6f41ead3d9f32a5ec05c380425e85d4f46cb07ee201f7f963d4cfd24aa0bd56f",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/2B79C5C0-55F2-4DB5-9951-6944900CEE50.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type manual strength Week loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPad mini (A20 Pro)",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "8821A60B-4C79-4D46-B026-F5994904C944.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Exercise type manual strength Week loaded_0_81FD60DC-F633-43DE-BF2C-9DAC94FA1F54.png",
+        "timestamp": 1793653985.853
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "iPad dark MAX Exercise type manual strength Week comparison",
+      "tier": "ipad-max",
+      "image": {
+        "file": "assets/supplement/25.png",
+        "sha256": "638508532b28a9d4c0ce329faaa3923c155dacfdbb50d12ab4702d3858e01b4c",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/361C2F49-1BE1-4A11-BEAD-5C6E69B8D5A5.png"
+      },
+      "ax": {
+        "file": "assets/ax/25.txt",
+        "sha256": "73165f31ea148afb87e0f44982a5825ea9f66bc4ce78636b1305ef64740119f2",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/2E127122-C62A-4461-82D9-97473A123A17.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type manual strength Week comparison",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPad mini (A20 Pro)",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "361C2F49-1BE1-4A11-BEAD-5C6E69B8D5A5.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Exercise type manual strength Week comparison_0_43C9B0A2-A9A0-445D-BE6A-688E3C425591.png",
+        "timestamp": 1793653997.521
+      },
+      "checkpoint": null,
+      "pose": null
+    },
+    {
+      "label": "iPad dark MAX Exercise type manual strength Month loaded",
+      "tier": "ipad-max",
+      "image": {
+        "file": "assets/supplement/26.png",
+        "sha256": "f91ecff42f0867520f77acfca66a466f48aae42a10f3f53c18571873010a4b7c",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/06ECA2A6-1847-4817-AAAB-5061AA651C92.png"
+      },
+      "ax": {
+        "file": "assets/ax/26.txt",
+        "sha256": "90f9028092056ea8c175faa968624771c4adbc7f432cb999417887ead44b2be1",
+        "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/D0FD990D-674A-428B-A849-DED82B3AD5D1.txt"
+      },
+      "kind": "native-XCTest-attachment",
+      "action": "Exercise type manual strength Month loaded",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "modelName": "iPad mini (A20 Pro)",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "24958C4B-4C06-41E6-8F69-27BA864B37E7",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a07-5b4b7e5bf912",
+        "exportedFileName": "06ECA2A6-1847-4817-AAAB-5061AA651C92.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Exercise type manual strength Month loaded_0_F6413AFC-1196-423D-A88E-102E178FAB30.png",
+        "timestamp": 1793654014.847
+      },
+      "checkpoint": null,
+      "pose": null
+    }
+  ],
+  "ipad_hk_original_pairs": [
+    {
+      "type": "running",
+      "before": "assets/proofs/original-ipad/running/image.png",
+      "before_ax": "assets/proofs/original-ipad/running/paired_ax.txt",
+      "after": "assets/supplement/08.png",
+      "after_ax": "assets/ax/08.txt"
+    },
+    {
+      "type": "cycling",
+      "before": "assets/proofs/original-ipad/cycling/image.png",
+      "before_ax": "assets/proofs/original-ipad/cycling/paired_ax.txt",
+      "after": "assets/supplement/09.png",
+      "after_ax": "assets/ax/09.txt"
+    },
+    {
+      "type": "stairStepper",
+      "before": "assets/proofs/original-ipad/stairStepper/image.png",
+      "before_ax": "assets/proofs/original-ipad/stairStepper/paired_ax.txt",
+      "after": "assets/supplement/10.png",
+      "after_ax": "assets/ax/10.txt"
+    },
+    {
+      "type": "traditionalStrengthTraining",
+      "before": "assets/proofs/original-ipad/traditionalStrengthTraining/image.png",
+      "before_ax": "assets/proofs/original-ipad/traditionalStrengthTraining/paired_ax.txt",
+      "after": "assets/supplement/11.png",
+      "after_ax": "assets/ax/11.txt"
+    }
+  ],
+  "proofs": [
+    {
+      "file": "assets/proofs/original-ipad/manual_strength/image.png",
+      "sha256": "e28bcc25e515368c6fa3a0d1a958ab4ef1688f82349a93252a3f51fda1e66d22",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/attachments/B23D99D5-CD0A-47F5-9A7E-D31995A6C510.png"
+    },
+    {
+      "file": "assets/proofs/original-ipad/manual_strength/paired_ax.txt",
+      "sha256": "f9c9c78ce7e55ffd1b3f3b678d01cd40d65b77592c8ccbecb80fbfa3e421671d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/attachments/105722C8-F89A-4DAF-865C-B7A3B9B1DD9F.txt"
+    },
+    {
+      "file": "assets/proofs/original-ipad/manual_strength/manifest.json",
+      "sha256": "a1224d0367a2afe9e85912f42817dec92e747288ba449f53d906d39e029a5cc4",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/attachments/manifest.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/manual_strength/provenance.json",
+      "sha256": "6a88aa864f1f5ede273381a4d0a598a1b413366ca7db0249ba5422c8e08f5e8e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/provenance.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/manual_strength/summary.json",
+      "sha256": "f6f34bd0ea754822ea866f579b4969c059b0bbaa989e1c2aad77948d22f0057b",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/summary.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/manual_strength/tests.json",
+      "sha256": "d704fe0981a0fddf87a6349f3e25b4bb8a7810cdb45faf50174a9669e64dce02",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-unavailable-workout-sleep-volume-types-initial/tests.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/running/image.png",
+      "sha256": "b6426d90f4c2f6a5d81258321045a323dc44741b6177277f53a2d4e77ce72697",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/3E33BD4B-0B3B-4825-9ABC-C490F93F2E08.png"
+    },
+    {
+      "file": "assets/proofs/original-ipad/running/paired_ax.txt",
+      "sha256": "1e778ff30ad9e2ec656c3fe05f1c32b5835f26a92c56fb0ab55cca71b312bd44",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/6442940B-9657-443A-9838-5B2C983C5A8A.txt"
+    },
+    {
+      "file": "assets/proofs/original-ipad/running/manifest.json",
+      "sha256": "e24e1482b973feb98b3b53ff6f2e4166e18d9ba8326bf163261cdaddef3c84c7",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/manifest.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/running/provenance.json",
+      "sha256": "5b65ae64ebd026f159c437391f6ff4779976f93776bf1b5bec3d5a58bab143fe",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/provenance.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/running/summary.json",
+      "sha256": "60d591e4f05cfe0891ce9f2b5e0ec9e2a7e20de9a9f0f7ae35cba4735211eb09",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/summary.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/running/tests.json",
+      "sha256": "b1d98a1ffe2646ad78f1c5c1cb84c4049c8d062488ae108c3c65760548423672",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/tests.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/cycling/image.png",
+      "sha256": "79078940627e359baa045929d05cf5a04817e2f40302ebd74eb27591c96a9dd5",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/D79C988D-011D-4305-91BB-6DA3C84EDDF4.png"
+    },
+    {
+      "file": "assets/proofs/original-ipad/cycling/paired_ax.txt",
+      "sha256": "d36345f48a0edebd6adeb06307c81a25bf8cb09239121bde8254c8f5f481c003",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/79F96FE2-298C-4195-9E93-7855C7DFE974.txt"
+    },
+    {
+      "file": "assets/proofs/original-ipad/cycling/manifest.json",
+      "sha256": "e24e1482b973feb98b3b53ff6f2e4166e18d9ba8326bf163261cdaddef3c84c7",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/manifest.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/cycling/provenance.json",
+      "sha256": "5b65ae64ebd026f159c437391f6ff4779976f93776bf1b5bec3d5a58bab143fe",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/provenance.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/cycling/summary.json",
+      "sha256": "60d591e4f05cfe0891ce9f2b5e0ec9e2a7e20de9a9f0f7ae35cba4735211eb09",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/summary.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/cycling/tests.json",
+      "sha256": "b1d98a1ffe2646ad78f1c5c1cb84c4049c8d062488ae108c3c65760548423672",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/tests.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/stairStepper/image.png",
+      "sha256": "0428437083fb31e08e00496d3d528d81adb74046a46028308c139c4b8685dc53",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/712DA4E1-8D88-4680-87B1-B9C8CCAC4E49.png"
+    },
+    {
+      "file": "assets/proofs/original-ipad/stairStepper/paired_ax.txt",
+      "sha256": "c5720dc2561f8612c35a5a3a76c0b24c32f19300c2613af429be4a76ad0520b0",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/55A79507-B516-482E-B81E-E85A6FB4BCD1.txt"
+    },
+    {
+      "file": "assets/proofs/original-ipad/stairStepper/manifest.json",
+      "sha256": "e24e1482b973feb98b3b53ff6f2e4166e18d9ba8326bf163261cdaddef3c84c7",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/manifest.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/stairStepper/provenance.json",
+      "sha256": "5b65ae64ebd026f159c437391f6ff4779976f93776bf1b5bec3d5a58bab143fe",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/provenance.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/stairStepper/summary.json",
+      "sha256": "60d591e4f05cfe0891ce9f2b5e0ec9e2a7e20de9a9f0f7ae35cba4735211eb09",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/summary.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/stairStepper/tests.json",
+      "sha256": "b1d98a1ffe2646ad78f1c5c1cb84c4049c8d062488ae108c3c65760548423672",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/tests.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/traditionalStrengthTraining/image.png",
+      "sha256": "7588ff626cf3027b886da9b3395a882f8403e9831ac68ce9c70ca7fb1e1bbfcf",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/62C1FFFF-AD78-438C-8A68-3151E87AFC1C.png"
+    },
+    {
+      "file": "assets/proofs/original-ipad/traditionalStrengthTraining/paired_ax.txt",
+      "sha256": "c8d1c3e0053fd340920aa77826503f4bdb9d16e137d2f034399543cdd8b82b54",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/6D2FCB63-E271-4D4E-9E80-52FA84015208.txt"
+    },
+    {
+      "file": "assets/proofs/original-ipad/traditionalStrengthTraining/manifest.json",
+      "sha256": "e24e1482b973feb98b3b53ff6f2e4166e18d9ba8326bf163261cdaddef3c84c7",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/manifest.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/traditionalStrengthTraining/provenance.json",
+      "sha256": "5b65ae64ebd026f159c437391f6ff4779976f93776bf1b5bec3d5a58bab143fe",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/provenance.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/traditionalStrengthTraining/summary.json",
+      "sha256": "60d591e4f05cfe0891ce9f2b5e0ec9e2a7e20de9a9f0f7ae35cba4735211eb09",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/summary.json"
+    },
+    {
+      "file": "assets/proofs/original-ipad/traditionalStrengthTraining/tests.json",
+      "sha256": "b1d98a1ffe2646ad78f1c5c1cb84c4049c8d062488ae108c3c65760548423672",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/tests.json"
+    },
+    {
+      "file": "assets/proofs/regular/summary.json",
+      "sha256": "82bd4f4c38985de7af6db8c651476fb32b1420ac54c9f970736ceea1963dcba3",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/summary.json"
+    },
+    {
+      "file": "assets/proofs/regular/tests.json",
+      "sha256": "3cf213de51abe520dc8ebfe7e616aa45d706e0a4dad1aec054e67f632b96f0ab",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/tests.json"
+    },
+    {
+      "file": "assets/proofs/regular/provenance.json",
+      "sha256": "d385238435d28e971d43b6cdaea5f052cc5688b5e673bbd8b5a71adae01f05ee",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/provenance.json"
+    },
+    {
+      "file": "assets/proofs/regular/result.json",
+      "sha256": "db737965dd147dc666fdb251d1c8505b474ae08dc57b61e8c86422f77b6488d4",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/result.json"
+    },
+    {
+      "file": "assets/proofs/regular/pipeline-receipt.json",
+      "sha256": "14db074aeb283805041ad033fdada9278239dc739851c7473a6230bd234ac657",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/pipeline-receipt.json"
+    },
+    {
+      "file": "assets/proofs/regular/run.log.gz",
+      "sha256": "359a80a29837248e4d22910cb5781413433e98c0b1147f6da3562cce514b3122",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/run.log.gz"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/492E0B51-9E9B-45E0-90D0-0F3BBB82E158.png",
+      "sha256": "8b614997a532a7861919a58c5576f9a440ba55ba34690c7f675bbca4d43eeba0",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/492E0B51-9E9B-45E0-90D0-0F3BBB82E158.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/EAFCDA44-DCA4-4BF9-974B-8364B05EBA2B.png",
+      "sha256": "1bb51dbbd0c512968380fd8fe123960f60efa0ec13e3ab6dff246f7f271ab067",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/EAFCDA44-DCA4-4BF9-974B-8364B05EBA2B.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/994BE9CE-1C2F-424E-81A6-F8D3CBCEE84B.png",
+      "sha256": "0280dc99b5896521710a4593bb4303c1b88b79a774a80eea986d45860f8c86de",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/994BE9CE-1C2F-424E-81A6-F8D3CBCEE84B.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/051A0CF7-074B-49F0-B1AA-8E6251975B73.png",
+      "sha256": "c67b3b7d663527904037fabab344a6d84aa2dbe63dcc99d85c4f2bf70c9fc330",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/051A0CF7-074B-49F0-B1AA-8E6251975B73.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/D1E4F006-50BA-4406-B059-49785E8397FE.png",
+      "sha256": "8999c24164d5c29fdaf7df582ce87c296fa47642f03bdc73ffd6e0bb624fc1c3",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/D1E4F006-50BA-4406-B059-49785E8397FE.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/8414A374-318E-406C-A8E8-22EA9C1E11BE.txt",
+      "sha256": "0c87c7d4dc0650ff59d5e6c3d564ddd652927f419ee1330a9559b2f11ff8e1be",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/8414A374-318E-406C-A8E8-22EA9C1E11BE.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/B8F52188-5574-454C-A8F6-8CCA7D740AAA.png",
+      "sha256": "de810d6f29503bc624a74d31d86b311a0c77d72584ebf4224bc6b5c2e56721a5",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/B8F52188-5574-454C-A8F6-8CCA7D740AAA.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/B5543E6D-4D1E-4B8B-A5FF-EB4EF1092BEB.png",
+      "sha256": "54f76397bc40076e3eeacdd3a70788366173f4190c3a305d4da738f0c7fe1927",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/B5543E6D-4D1E-4B8B-A5FF-EB4EF1092BEB.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/124237B9-7B06-4F5D-ACBA-30BE164E2663.txt",
+      "sha256": "49dd8e14c71a45871ab10a0b16bc51d1c8e23b5d42b042739e0e068c5ab6ec8f",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/124237B9-7B06-4F5D-ACBA-30BE164E2663.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/7A3A3696-8350-4E6C-8EA1-D09E274420E7.txt",
+      "sha256": "8f22a66f38c4f6a88a8cf9a0eb92a3765d674d0a35698bca0296f6bdd3e068ae",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/7A3A3696-8350-4E6C-8EA1-D09E274420E7.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/BD6BA299-FEC6-4BC0-8BF6-1F3DD585C207.png",
+      "sha256": "e96bc4584e35184dd1a10b1d30a4cd83544a03c645573018c89c9164cafc580c",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/BD6BA299-FEC6-4BC0-8BF6-1F3DD585C207.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/D457F964-5F97-409E-9F4A-CDA183AB5E14.txt",
+      "sha256": "9c8f93c6b78c1c3ae19b06ff2785d6b48e80a01724c0696734337dd78f798dad",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/D457F964-5F97-409E-9F4A-CDA183AB5E14.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/45EFE2BC-E357-462B-A779-AB1F01A5CC9E.txt",
+      "sha256": "89d2f79cafed29609abcf2c919c663c668c19bf1a4f3c1ea6f112d56bbcca1ac",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/45EFE2BC-E357-462B-A779-AB1F01A5CC9E.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/D715D9F3-EE00-4548-AE56-5A1C8E8A4598.png",
+      "sha256": "f760a405bf34cf8937703e574042a890d0682274a3deba2ad7e7e8cd82b5672f",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/D715D9F3-EE00-4548-AE56-5A1C8E8A4598.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/5F549394-5F93-40CD-AC22-300C158769B8.txt",
+      "sha256": "7c4540e9ed8f8e8294537e3d9c0c96f56d380236c29bad124e9dbc1d0649b1e9",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/5F549394-5F93-40CD-AC22-300C158769B8.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/A95AE1C7-B706-40A9-A7A5-0F51703643C5.png",
+      "sha256": "6f754b4d71f4048e9b7110b260a1585733920d96afe172426450a25271d62d2f",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/A95AE1C7-B706-40A9-A7A5-0F51703643C5.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/92DE505E-E21D-41F8-930D-27004D0B991B.png",
+      "sha256": "20efe9a333d5f81719a92c8f9bbf8d4026d4c1ccb2d1873b325831d016ff8dd3",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/92DE505E-E21D-41F8-930D-27004D0B991B.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/CB90FA40-8ABB-460F-8EA3-F5256E4B09F0.png",
+      "sha256": "0b09103d70627be325d25642f914340e9acc87f84f8a321c891bad0c1d5f4964",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/CB90FA40-8ABB-460F-8EA3-F5256E4B09F0.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/8A7391FB-834A-4A97-A1F4-A051CF4D2411.png",
+      "sha256": "0dfa9630c24673b8aa97e1605f72f096ec4231533d6c8297ed1f32081ad739fd",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/8A7391FB-834A-4A97-A1F4-A051CF4D2411.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/2C9DA17F-1A4C-4E31-A60E-D9D662BD2CB2.txt",
+      "sha256": "84ed6704f04e23dc270c36147bfc96cd93bdb50dd5f825ecf294ce0096211886",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/2C9DA17F-1A4C-4E31-A60E-D9D662BD2CB2.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/C82FA3C3-CB09-4BA6-BB7E-A2DBE5EB995E.png",
+      "sha256": "b3ee8ae8c7ed348d9524f45e33ed7a263b59b60d83591cb32457a9b366a68e27",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/C82FA3C3-CB09-4BA6-BB7E-A2DBE5EB995E.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/08068FEE-D3EB-4183-B4CE-D2610DA1C75D.txt",
+      "sha256": "407b88eee47322a5f1b9e30cf8a01ecfb42426c9487400ceaa7f4091b5f4b49d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/08068FEE-D3EB-4183-B4CE-D2610DA1C75D.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/757CE0F1-AB03-4404-816D-C086B57B9089.png",
+      "sha256": "b3a8900b0da5858728987ccc1f1db9d1c7d7de286675e53426d7d9b8953a422e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/757CE0F1-AB03-4404-816D-C086B57B9089.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/B69DC5CE-D484-46EF-961B-CD23A0A2B5F2.txt",
+      "sha256": "c9458a8ac6c8a479be505d1eaf03c30e902500bff44709bc560a157cf2039c95",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/B69DC5CE-D484-46EF-961B-CD23A0A2B5F2.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/95B4DF65-5974-4869-A46F-A55B70BFA2FE.txt",
+      "sha256": "df768ab101c17c39ccf6802e4f5befe57eef433beed21c7f3a42f3358a10e95b",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/95B4DF65-5974-4869-A46F-A55B70BFA2FE.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/manifest.json",
+      "sha256": "814c584db4e4ba9e546ccba9955e2aa7e88b2f17c9ae9c32967b16665d9daebd",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/manifest.json"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/0A0CA543-E90D-4DC9-96F1-CE164FDB97FF.png",
+      "sha256": "634bcec8d65bde4730cac1a6946ded88b5616275bda429295a17dbc721c406e7",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/0A0CA543-E90D-4DC9-96F1-CE164FDB97FF.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/1D9EE931-091B-45EB-8485-A280C60ACE80.png",
+      "sha256": "022326afa0a5aa2d5161555b15774ba4cebab29f87287c323afa9a652187ade8",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/1D9EE931-091B-45EB-8485-A280C60ACE80.png"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/6AE2D8D7-ABB8-49E8-A784-AD45F0A5E42D.txt",
+      "sha256": "caefb4ce25340933dbc144580d8817d9943d07f1411370cc5dc0d28634758222",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/6AE2D8D7-ABB8-49E8-A784-AD45F0A5E42D.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/6076A1AC-FBE2-4035-9C7C-AA7E3EFE3BDA.txt",
+      "sha256": "015ed1e495d795466fac01e3c82e06c907bf360da381d3090cd781f2f249d146",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/6076A1AC-FBE2-4035-9C7C-AA7E3EFE3BDA.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/B541BA19-35CB-4540-BFCD-27DEA4923EA7.txt",
+      "sha256": "4ee39adc85dd2ebfb03f982a61f6f99de656d5b8f1eef87f14d2ddf59a316807",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/B541BA19-35CB-4540-BFCD-27DEA4923EA7.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/5045E682-04E8-4E5F-B792-9ED938552E02.txt",
+      "sha256": "b7884574e89f9bdb6eb7e66620d981af2a1db6bdd621fd137519151ee78c6553",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/5045E682-04E8-4E5F-B792-9ED938552E02.txt"
+    },
+    {
+      "file": "assets/proofs/regular/attachments/F0BBF1A9-83FA-41D7-B5B5-9E3F7B24BA4A.png",
+      "sha256": "9aa1dc69d3fe19e4d46f3b98a0c244d513c06fce3bb654be98446f97d9ec962a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/phone-normal-manual-hk-types-aedf464d/attachments/F0BBF1A9-83FA-41D7-B5B5-9E3F7B24BA4A.png"
+    },
+    {
+      "file": "assets/proofs/ipad/summary.json",
+      "sha256": "e6b3fcbea1a5dab5f7259b54cd3476e60cf149e11bc71c24a182e51fcd0364f0",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/summary.json"
+    },
+    {
+      "file": "assets/proofs/ipad/tests.json",
+      "sha256": "3988959f9f566b67ba09bc614d9cb140ac585f8603b36cfcd8f809982ecc3f24",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/tests.json"
+    },
+    {
+      "file": "assets/proofs/ipad/provenance.json",
+      "sha256": "728cbeed99c57b943ccdc1992db88dd53a12908dbdf3dded9296ad46d16bf357",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/provenance.json"
+    },
+    {
+      "file": "assets/proofs/ipad/result.json",
+      "sha256": "d3b1bc14747fb234cfd6bdcf851caddf811b796ca153245e66db4e557d744013",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/result.json"
+    },
+    {
+      "file": "assets/proofs/ipad/run.log.gz",
+      "sha256": "4ca4958f6ac562d693e0f9ec29585314b06d86da3b1c0367010cb1c972c548f3",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/run.log.gz"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/A17FDAA7-8925-45AD-A98A-1F02EBECED36.png",
+      "sha256": "67c703cafcca98fa956b0d9cdae52ee6cb589cd4ebd854422b3ba6b3059596e7",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/A17FDAA7-8925-45AD-A98A-1F02EBECED36.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/A675896B-D2F3-4175-A455-98DAF5659C63.txt",
+      "sha256": "44a70da63ca631714fbb83f10df26a8773475dd474c75396467bd4d9828aa43c",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/A675896B-D2F3-4175-A455-98DAF5659C63.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/E6D4947B-98E1-4C69-9B82-D687492D638C.txt",
+      "sha256": "19c73253ae6ae9a2e690cc8654e39074332adf986978ff9abb4e7b4dfe2e9996",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/E6D4947B-98E1-4C69-9B82-D687492D638C.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/62D6A243-37E4-4CE7-9F87-EB193B332D70.png",
+      "sha256": "17f29bf6bab3fea793afc534c772035aa73450250db31e57eddcba94444e904d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/62D6A243-37E4-4CE7-9F87-EB193B332D70.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/45BD70E5-6F1E-4306-96C3-CBCE8221BB98.png",
+      "sha256": "692b57609fe3208b1c5e6d8bbdf30f6c97bb6f7abeb4dfdf26beeab964ffe591",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/45BD70E5-6F1E-4306-96C3-CBCE8221BB98.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/67014FEF-85B6-49CB-8DB4-7B3EB0F61A7D.txt",
+      "sha256": "64f88a303cf9ca76d3f273e6075a686aba81c1e8d17a6221b639039139bcb9dc",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/67014FEF-85B6-49CB-8DB4-7B3EB0F61A7D.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/4E17DBE8-A689-498F-88E2-E337D74B82EF.png",
+      "sha256": "3a7694b86bd90c478397d1825d568abc7985141771217e04a6aaad413d2d1186",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/4E17DBE8-A689-498F-88E2-E337D74B82EF.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/9BBF579E-7E97-4BD7-BEF8-6FFA6BD800DB.txt",
+      "sha256": "17e119f0fffaf9c918eefc0d64d86b20147003a5e7c5ef85afd34952efb5ee7a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/9BBF579E-7E97-4BD7-BEF8-6FFA6BD800DB.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/B3F984E0-23EB-4283-8B35-5655367BCEBA.png",
+      "sha256": "6ee82c69ce0f9d32f189ed194f3bddb09d214b3474ddebdefbedae1bba4392a2",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/B3F984E0-23EB-4283-8B35-5655367BCEBA.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/E0FC0023-7C3F-493E-A484-65F7DE83A4FC.txt",
+      "sha256": "4f3d118e0e2e16f3a01ccd08a60c906e94669a40335efe7b357cdf09b8a824e1",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/E0FC0023-7C3F-493E-A484-65F7DE83A4FC.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/4ECD8AF6-A901-45E2-8995-8C2ABD5EC77E.txt",
+      "sha256": "dd6060970aa4bcc0daf2f53b664d779f1e9da8b0cdf8a8e4da7c47e88b48ffa3",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/4ECD8AF6-A901-45E2-8995-8C2ABD5EC77E.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/AF65ED1B-010F-4AFF-AE1A-1E759815B55D.png",
+      "sha256": "3d2cdbcd938c0db5aa6df1260d24c235aa3e8dfff74fae7aa5b865cee9da9ab8",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/AF65ED1B-010F-4AFF-AE1A-1E759815B55D.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/D04FBBDF-C1A2-4E0B-A8AE-125A5B96CD87.txt",
+      "sha256": "1ddd65f9a69f71f1fa5e87e00ce473696054edeba46a290fcd3eddc69bf7bf02",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/D04FBBDF-C1A2-4E0B-A8AE-125A5B96CD87.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/B00FD242-C826-49EB-AC50-98F70827C33D.png",
+      "sha256": "bee847a697b1e5b5f8a306475a5873d81de75b79c6e4b029100e6ba0095a78e2",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/B00FD242-C826-49EB-AC50-98F70827C33D.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/4CD600EF-BBD2-4768-AB0F-03F165B1C4F9.png",
+      "sha256": "0359c05434d385b8b3eb24f8a7e46195b07eed5876d6f32fb18ae137f430fce7",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/4CD600EF-BBD2-4768-AB0F-03F165B1C4F9.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/EB3ED93F-EB07-4658-BD85-56E2406453AF.png",
+      "sha256": "78065837920fc454f4386d3060af5582f871330c50daa2722388d07402cf18ff",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/EB3ED93F-EB07-4658-BD85-56E2406453AF.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/156FB289-E380-4193-8736-CCFE1F40277F.png",
+      "sha256": "76992886db8a212c7f6035a2cbfe8ed24abe170ed4153eedeaa6c64a1e80b1a1",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/156FB289-E380-4193-8736-CCFE1F40277F.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/B442F823-7701-4EF0-B2CA-2EBB3413F61C.png",
+      "sha256": "b918b62465545fb597bcdb397b8b3b9c9c24cd201b4995b179caa59353c811b5",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/B442F823-7701-4EF0-B2CA-2EBB3413F61C.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/ED483985-2E27-4C12-86C9-B1CC7C59F1E8.png",
+      "sha256": "6e6eb0872a65d544491aa80665a1ef932bba759217a99548d40cfd63676218a2",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/ED483985-2E27-4C12-86C9-B1CC7C59F1E8.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/021883C5-546D-40F7-A11A-4E969C70B8EA.txt",
+      "sha256": "5de5e6c89e41693d2eb00d53ca2f3227a549d8730a9a7f0252c31154f32b00ed",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/021883C5-546D-40F7-A11A-4E969C70B8EA.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/6E54BDBE-8D08-4917-8201-E2E3CF767A27.txt",
+      "sha256": "13706fc855807dfc14df8c79edf5cd3df37e84682b56ea08dbc63322fea6fe29",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/6E54BDBE-8D08-4917-8201-E2E3CF767A27.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/manifest.json",
+      "sha256": "50582f8dc7c33e035e737d7f0822c8e1eb326f7b1ef13cb96392f2294dc52d52",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/manifest.json"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/D07C20D0-14C6-47FB-9444-822502AE08BC.txt",
+      "sha256": "5a701401fd5ca830748adec75603176ce4f5297abf650a308aa3c8a79c8e8068",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/D07C20D0-14C6-47FB-9444-822502AE08BC.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/A0C8DD84-0F7A-4931-83D8-F023E4FCC562.txt",
+      "sha256": "f02b33330eec7eb712a6c0e4cadd80502be9fb2624cc9ca6a402d0c44afb88a6",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/A0C8DD84-0F7A-4931-83D8-F023E4FCC562.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/3DF5E2A9-AAEE-413E-AE1B-1232A94C633F.png",
+      "sha256": "649d86fd84b1f9253d99693bf045c4d61f93632c9b6578fea3491c1c21af3506",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/3DF5E2A9-AAEE-413E-AE1B-1232A94C633F.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/7089D760-04CA-4250-A26B-C78CFC58416F.png",
+      "sha256": "580b2a5eecb3bc8f6d0e323297c8caee5513be93db9271398ac1a068184d57d3",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/7089D760-04CA-4250-A26B-C78CFC58416F.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/1C30106F-91FE-47A6-82ED-9C1AD2050638.png",
+      "sha256": "23a3a12201b7af4672d4b6ebc28b3cc1a09cc904458fc1524c3f1eac5417a9bb",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/1C30106F-91FE-47A6-82ED-9C1AD2050638.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/6C9A325E-5B6F-4E5D-92E6-9A5651275774.png",
+      "sha256": "40476cb773ee8c57cb5095fb40812e46eafd8b9b04e7e540e3a466cef9a35894",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/6C9A325E-5B6F-4E5D-92E6-9A5651275774.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/A1D6DB2A-4BD1-4735-9364-A74642662EA0.txt",
+      "sha256": "99179ffd80cf08f9e46c845d67be53e8d8747d498eec00888375e77a6bb668ad",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/A1D6DB2A-4BD1-4735-9364-A74642662EA0.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/90E26802-1EB5-4DD5-9758-381E6E298D3A.png",
+      "sha256": "980cf0668cd0a811796e6312a6224fc6e518b8e60a7df0027811dc9b67788f52",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/90E26802-1EB5-4DD5-9758-381E6E298D3A.png"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/CBCB17ED-85B5-4D11-AE62-1C05F3233F73.txt",
+      "sha256": "2f6e7fbfbce41c745484178f0bf2099f973b6ca2a869ce140b46cc3447eac7b8",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/CBCB17ED-85B5-4D11-AE62-1C05F3233F73.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/A1E8A5C1-EF4E-4F5A-A189-675AAB31EF68.txt",
+      "sha256": "3bb31383cb7f9f281021993ba144d94b7d28be14bd5ee21855145d841a18ef6a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/A1E8A5C1-EF4E-4F5A-A189-675AAB31EF68.txt"
+    },
+    {
+      "file": "assets/proofs/ipad/attachments/68754AAA-6CFB-42C2-B240-74D9B951ABAB.png",
+      "sha256": "3a12b07b7d5c40bf30c2467035e4e029e95753c1195b678eca62091af091f36d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-aedf464d/attachments/68754AAA-6CFB-42C2-B240-74D9B951ABAB.png"
+    },
+    {
+      "file": "assets/proofs/duo/summary.json",
+      "sha256": "08fbb3a5426e0ade8a58ef780a12adb3209594cd592a8c36645f3fc5f735b979",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/summary.json"
+    },
+    {
+      "file": "assets/proofs/duo/tests.json",
+      "sha256": "bbe6275c07968eba034bdf9301d04d95edb8bfc5cacbeb7c6ee2e39856842f85",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/tests.json"
+    },
+    {
+      "file": "assets/proofs/duo/provenance.json",
+      "sha256": "28843adf598d092740098fe681111da919360f002fbf83e2cac8940eeffd5e99",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/provenance.json"
+    },
+    {
+      "file": "assets/proofs/duo/result.json",
+      "sha256": "3887281b4a25b7f416e6280853ae86c2618c034aee0c4d25aa2be421447b2071",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/result.json"
+    },
+    {
+      "file": "assets/proofs/duo/pipeline-receipt.json",
+      "sha256": "5b5e533763405a88a8371776841379a73a0fbd6fbe39919351113fd0574024b6",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/pipeline-receipt.json"
+    },
+    {
+      "file": "assets/proofs/duo/run.log.gz",
+      "sha256": "7fd904b4f7acc84d414c5c4ceb1819c2bda5c1658f152b4da14ce704748e4506",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/run.log.gz"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/displays-before.json",
+      "sha256": "d2a23c8bb56e68d0059adbfcd1f0e98b355735c26fafb8851824dce3627e72c1",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/displays-before.json"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/runner-result.json",
+      "sha256": "82fed658d1853871e8c1a6648221ec8424017bd98d4d4192633e23de0859b235",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/runner-result.json"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/014-1398x2034.png",
+      "sha256": "9dcf9c06a4eedaa8e3be29961dac653337b9c7ea02276a67b3a98d02fde0851f",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/014-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/003-1398x2034.png",
+      "sha256": "d8e617a3cab671944233ad9d6c3309636b79e36d781a41fbd972195a1d03171e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/003-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/007-1398x2034.png",
+      "sha256": "d3587fa9b089c2147540d1927315d368c3b0ae62b207093c854027dd0c98c1b4",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/007-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/010-1398x2034.png",
+      "sha256": "7ed78e01c7130426e54f5c05e0f414d4ea6aa8ef13c1bd0d890c105f50497a6d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/010-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/002-hierarchy.txt",
+      "sha256": "201c20c441794c8d38813b78a3370215ce37091c39dbde35b091ad1cb5f30798",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/002-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/011-hierarchy.txt",
+      "sha256": "133e851754057ef37c4005fc5e552ad4ce8916f4e382d64c68198c417ff4c264",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/011-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/006-hierarchy.txt",
+      "sha256": "33035e2dc7709be6269bccb04704d04fbbe90b6a7a87d25462ca1d9ba2d60fb4",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/006-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/001-hierarchy.txt",
+      "sha256": "714cf0f25703b7b225390a3448429ede74c9d6218ef92ed21eaf8ed1d7ae6f2a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/001-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/009-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/009-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/005-hierarchy.txt",
+      "sha256": "16f23b1c1055bb5a75e8ffad7ac0041d2da8aeb08ed951c7af6a51482edb86a9",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/005-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/012-hierarchy.txt",
+      "sha256": "6546c20fee9cb291b2c859aa9253013a51c0839c0ea38845f78dabd897386c75",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/012-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/angle-before.txt",
+      "sha256": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/angle-before.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/013-1398x2034.png",
+      "sha256": "8db2a54e3880099e7467b947943853a03575be224c6e8eb533fa4c12c4f89c05",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/013-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/004-1398x2034.png",
+      "sha256": "99a7eb0919b2c3e9c8158b76bb08ad93092d0ca712d68d1d41ed90935e3d414d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/004-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/set.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/set.log"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/run.log",
+      "sha256": "3c2515ef8a619452396a9929c4a22c13e51cc0005157b8123a03c5bbdaffc29d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/run.log"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/010-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/010-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/007-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/007-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/003-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/003-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/014-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/014-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/captures.tsv",
+      "sha256": "f5ac61e7255485fdfc80920e64c017420aeadb9f8936477f3f13fadea79c6a57",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/captures.tsv"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/004-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/004-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/013-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/013-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/008-hierarchy.txt",
+      "sha256": "916060059e04250100eda145d0ed9584797551773af30d51ec55aad4b3b9e670",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/008-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/009-1398x2034.png",
+      "sha256": "63822c60699f75d321d45a72a4d8b1fd32d376a9672318ba8163a4056a183f22",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/009-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/angle-after.txt",
+      "sha256": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/angle-after.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/009-hierarchy.txt",
+      "sha256": "39b090e20685ff20eaa5adca583dc77644cae9c13bd81f45732ed44d5891593a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/009-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/001-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/001-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/displays-after.json",
+      "sha256": "2d8a7e05db8a2b03a77f9989eeaa8bfcebc767d4bc170079f1d3226e50b98253",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/displays-after.json"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/012-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/012-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/005-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/005-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/008-1398x2034.png",
+      "sha256": "c91e26a4134201e9e1de22c992a45a4dff861a4df56dfc9cad09e27326cfcfc6",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/008-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/checkpoints.jsonl",
+      "sha256": "36ca94ce11785cb4010464f68bed8891086256137cdbdc588bf160da3c581054",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/checkpoints.jsonl"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/002-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/002-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/006-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/006-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/011-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/011-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/013-hierarchy.txt",
+      "sha256": "c0d244d2c8f62212c8efe43d443e2c28cb231c50254c74271fa9fd5581707cf8",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/013-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/004-hierarchy.txt",
+      "sha256": "e79f5521281da203b98c788b915447b4910c9923639cb79d69365934cb9c0456",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/004-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/008-2007x2853.png",
+      "sha256": "fcff7a2e8fa497896c052294baebf0359f7c3055768d0b8b60dd8b7749f9ad0e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/008-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/005-1398x2034.png",
+      "sha256": "a1cbaa94aa58bf75742679b51c3cbac93426798fd4f49f4e6192020ce64b2897",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/005-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/012-1398x2034.png",
+      "sha256": "637df94a48634a10707153948bb8dfe5d749efcd86d72932c6cce5c07557cb9a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/012-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/001-1398x2034.png",
+      "sha256": "47229f8916b657aed4521d9b52bed8c5ee9151b1a0dfea54e9b8af6ec7af0551",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/001-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/011-1398x2034.png",
+      "sha256": "3b0e30e2746e338def3651063f70b7bf9a99a6d2d1e01dcc5b84ec6ff9135804",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/011-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/006-1398x2034.png",
+      "sha256": "fcf755580acfefaa6a82e2bc410db7b9cdbea19ab29f26d2a86de230d76db412",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/006-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/002-1398x2034.png",
+      "sha256": "28b5e45977af785d950d67719d1bae828a8f27561933717e2a3846df44fdee63",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/002-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/007-hierarchy.txt",
+      "sha256": "e240321d0d408982b622815240c0c38130390f4ff086838ba107228c0512da85",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/007-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/pose-proof.json",
+      "sha256": "57b3e8bc189b147481bfc2acddb7081bafeae927764d726cb26bd9f61a1be750",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/pose-proof.json"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/collector.sh",
+      "sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/collector.sh"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/010-hierarchy.txt",
+      "sha256": "78f77b93d6c4d85bd1eb744d0e9fac992a96afd5af60387c21b3fae24b0bd3c1",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/010-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/014-hierarchy.txt",
+      "sha256": "2950b60f91f0b71814f5e2e6d056ef2331e78900d36d57e49f842a0639e1a3eb",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/014-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/paired-host/003-hierarchy.txt",
+      "sha256": "447e196df48b56f8280cb649184c557b64dfed022b185cd9633c36c77db17eeb",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/paired-host/003-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/DDDBBC58-ADF2-4762-924A-0927410565E0.png",
+      "sha256": "1ff9ddd57aabd058ff46260ce0a6cdfefea52adc67b907275a8f712a2d028354",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/DDDBBC58-ADF2-4762-924A-0927410565E0.png"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/B75DD140-2555-4FD8-A749-D25BF0ACF0F0.txt",
+      "sha256": "e240321d0d408982b622815240c0c38130390f4ff086838ba107228c0512da85",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/B75DD140-2555-4FD8-A749-D25BF0ACF0F0.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/BB3F2766-D980-4E82-91C0-B183554FD655.txt",
+      "sha256": "714cf0f25703b7b225390a3448429ede74c9d6218ef92ed21eaf8ed1d7ae6f2a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/BB3F2766-D980-4E82-91C0-B183554FD655.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/00646D7E-77D2-41FA-B9F2-B6B6803EB0FD.txt",
+      "sha256": "447e196df48b56f8280cb649184c557b64dfed022b185cd9633c36c77db17eeb",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/00646D7E-77D2-41FA-B9F2-B6B6803EB0FD.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/E1DF8F0B-55AD-4CB5-A5CA-1ADB06F884D7.txt",
+      "sha256": "39b090e20685ff20eaa5adca583dc77644cae9c13bd81f45732ed44d5891593a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/E1DF8F0B-55AD-4CB5-A5CA-1ADB06F884D7.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/86F3233E-CCD2-4EDC-B33A-5B9C20E464F0.txt",
+      "sha256": "e79f5521281da203b98c788b915447b4910c9923639cb79d69365934cb9c0456",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/86F3233E-CCD2-4EDC-B33A-5B9C20E464F0.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/C2A69089-F5F7-4177-8EDD-2EB6B22F4FD9.txt",
+      "sha256": "916060059e04250100eda145d0ed9584797551773af30d51ec55aad4b3b9e670",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/C2A69089-F5F7-4177-8EDD-2EB6B22F4FD9.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/DF19BB5F-1EE9-4DBA-8FF3-F3155389A228.png",
+      "sha256": "50527778f65fd1c34ad046de234573cfa0787cb34bec84c93346c514afcba2b9",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/DF19BB5F-1EE9-4DBA-8FF3-F3155389A228.png"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/C655D428-F0F2-40B8-9621-286347A68A80.txt",
+      "sha256": "2950b60f91f0b71814f5e2e6d056ef2331e78900d36d57e49f842a0639e1a3eb",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/C655D428-F0F2-40B8-9621-286347A68A80.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/6DD23871-13DC-4D99-B883-1EB1960CEF48.txt",
+      "sha256": "78f77b93d6c4d85bd1eb744d0e9fac992a96afd5af60387c21b3fae24b0bd3c1",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/6DD23871-13DC-4D99-B883-1EB1960CEF48.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/03897747-00B4-4B0B-B32E-3F5F30114E4A.txt",
+      "sha256": "133e851754057ef37c4005fc5e552ad4ce8916f4e382d64c68198c417ff4c264",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/03897747-00B4-4B0B-B32E-3F5F30114E4A.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/8643AF36-895F-494B-A8D4-7031850E1220.txt",
+      "sha256": "201c20c441794c8d38813b78a3370215ce37091c39dbde35b091ad1cb5f30798",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/8643AF36-895F-494B-A8D4-7031850E1220.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/89E3AB57-F57F-4F64-B7E4-4E5BF3DAAEB9.png",
+      "sha256": "82444d9ebc0f6f952729a3f6c6f7e401e92822ed34f8f534e97a38b27ab6f411",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/89E3AB57-F57F-4F64-B7E4-4E5BF3DAAEB9.png"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/manifest.json",
+      "sha256": "59195afa8c4ed2a5ad229a2693d818d551c7dc0dab3588dddf664fcb946971a2",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/manifest.json"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/C8CF5957-4189-42F4-8457-EA01E73F50A4.txt",
+      "sha256": "33035e2dc7709be6269bccb04704d04fbbe90b6a7a87d25462ca1d9ba2d60fb4",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/C8CF5957-4189-42F4-8457-EA01E73F50A4.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/00311A41-9953-4BDF-B138-A7F36EC2E5B1.txt",
+      "sha256": "16f23b1c1055bb5a75e8ffad7ac0041d2da8aeb08ed951c7af6a51482edb86a9",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/00311A41-9953-4BDF-B138-A7F36EC2E5B1.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/51F6E5ED-4936-4FD1-B804-D1C433C44314.png",
+      "sha256": "2ae5dbef1d3b5d435cff430cafa73a2e13fb96f8269b46992274227e41a22c96",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/51F6E5ED-4936-4FD1-B804-D1C433C44314.png"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/1C257D48-8770-447F-9191-60865572E16C.txt",
+      "sha256": "c0d244d2c8f62212c8efe43d443e2c28cb231c50254c74271fa9fd5581707cf8",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/1C257D48-8770-447F-9191-60865572E16C.txt"
+    },
+    {
+      "file": "assets/proofs/duo/attachments/21E5225D-701A-4D72-A243-8B8B4880350C.txt",
+      "sha256": "6546c20fee9cb291b2c859aa9253013a51c0839c0ea38845f78dabd897386c75",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-closed-manual-hk-types-aedf464d/attachments/21E5225D-701A-4D72-A243-8B8B4880350C.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/summary.json",
+      "sha256": "51611d6342e5d5c0d4942fe55cb783ab263095e3b0dd61e9a2d9b0ba3d904f4a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/summary.json"
+    },
+    {
+      "file": "assets/proofs/duo-open/tests.json",
+      "sha256": "95d15159f64d79cc35e99f37df4fd1eace1566dff885b43057e4a6410e9c50f5",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/tests.json"
+    },
+    {
+      "file": "assets/proofs/duo-open/provenance.json",
+      "sha256": "54ee019cb82f396371ca028148ef5f4afba7f2c5e2a964658b19b7a1a04964db",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/provenance.json"
+    },
+    {
+      "file": "assets/proofs/duo-open/result.json",
+      "sha256": "c82e80354e5ca77a305d56ff271baad5d14d2aed62266266cda6cf5882578150",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/result.json"
+    },
+    {
+      "file": "assets/proofs/duo-open/pipeline-receipt.json",
+      "sha256": "5dad0276b21fccfc88b54dad1a0262997d7c4f54085e3a4c8f45bae42e183fdf",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/pipeline-receipt.json"
+    },
+    {
+      "file": "assets/proofs/duo-open/run.log.gz",
+      "sha256": "7046fdca1ea2c4600244bd8ce7e91a2b5c1d5aaf712160e1e2077f4f1cae98b2",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/run.log.gz"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/displays-before.json",
+      "sha256": "e7486dfce16f0faabd3878330ab8707ae75e603dc5470e0f4bebc6c9ea2fe5a2",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/displays-before.json"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/runner-result.json",
+      "sha256": "96419d16d7ff4291458a133a4bd847cb4b2a49e3d18abab0386072e5f0cdc71a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/runner-result.json"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/014-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/014-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/003-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/003-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/007-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/007-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/010-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/010-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/002-hierarchy.txt",
+      "sha256": "336dafe423408c3ac1a80313e4f2a3b8a2573240405667c772ceee3d98a4f255",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/002-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/011-hierarchy.txt",
+      "sha256": "03976f9469df46ea2268ded7ac3d4c92a4ca583eb2e4af2eadae64f0a3e419cb",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/011-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/006-hierarchy.txt",
+      "sha256": "df3cabf33accd02aa2715ced909b4a80428c8c80f1d4585c5cb110cdb4be9461",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/006-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/001-hierarchy.txt",
+      "sha256": "672227c2cfbc55e9b6389392797b7d843350ca06823b9c93e01b47442d1d0e44",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/001-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/009-2007x2853.png",
+      "sha256": "717197f55e664898d6263a5cfcc8c3201ea410c8bd44de4ddb2fb08ec8a52a14",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/009-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/005-hierarchy.txt",
+      "sha256": "b3f966235f8e9b45cac416597477544833a745c99cf912c9a3e15676248edab9",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/005-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/012-hierarchy.txt",
+      "sha256": "c9d48a3b18758e4eb84ea53543e8f5eed0efc0019a94d8e500abae531a86ca84",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/012-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/angle-before.txt",
+      "sha256": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/angle-before.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/013-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/013-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/004-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/004-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/set.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/set.log"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/run.log",
+      "sha256": "0ffe2d41781b5d26f4d8f1dfbc946fb1b8a4566b88509927f4ca52311e8ff310",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/run.log"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/010-2007x2853.png",
+      "sha256": "3d7a291030ac31f6178b5e2caeb0f50bd264ddb5ca51669834406cb903d50a73",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/010-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/007-2007x2853.png",
+      "sha256": "c9a99eb6f77ad3a97b99fecb06172812bfe56a2afd75ea7ecf9055735fc4915c",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/007-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/003-2007x2853.png",
+      "sha256": "b85f23ead855f496be92947235c1063f90e6de268342d9596621551713c13cb8",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/003-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/014-2007x2853.png",
+      "sha256": "b5b112552aaada385cd860d08a39c90dae6f31eac96ebf4008a58bc3b9578f10",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/014-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/captures.tsv",
+      "sha256": "68188d4ac4578c110da5c81ec03a4987d3fb056052852295e4191241111956ce",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/captures.tsv"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/004-2007x2853.png",
+      "sha256": "7ceae4ac8ef6cb6ab01044c7ccb5c53996b2785cbe6ac01c2f51872bb815b7ac",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/004-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/013-2007x2853.png",
+      "sha256": "46f7f93a82507c94b0852253133a65ed6e9399fe266b30e8792878bbba0415e9",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/013-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/008-hierarchy.txt",
+      "sha256": "6ec60857a1f4a124b0fae42c4e5f1999ded6b6d0fb3c99a66704e91411acac63",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/008-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/009-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/009-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/angle-after.txt",
+      "sha256": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/angle-after.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/009-hierarchy.txt",
+      "sha256": "2e357ca9c8a5677ba737830ded474b07ac1e27a58186a63382028259bcc05790",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/009-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/001-2007x2853.png",
+      "sha256": "84d6bdb3950aa5202d426a96fa862e11fcd557540169d99229b0b0413c61a3de",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/001-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/displays-after.json",
+      "sha256": "e7486dfce16f0faabd3878330ab8707ae75e603dc5470e0f4bebc6c9ea2fe5a2",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/displays-after.json"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/012-2007x2853.png",
+      "sha256": "0eceaffa74d2f3a4e1d9a8363f20a88207a6f434adc41c30dc6c079d465e9bce",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/012-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/005-2007x2853.png",
+      "sha256": "3c5770b3e70d549f7ad2c6c5850fa528c464414002d0fc8de0b92cfc938eda59",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/005-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/008-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/008-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/checkpoints.jsonl",
+      "sha256": "a0ea546a75bfe817c71bb1ebe44e2917da30885971ea7084723b589731adca08",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/checkpoints.jsonl"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/002-2007x2853.png",
+      "sha256": "a40bc5e39179ec6a10b8ded07c9213c8d81c1d434be056a02c0a5f1e6bccebcc",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/002-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/006-2007x2853.png",
+      "sha256": "1dfe0015fe1508775e3ef56ca498f6951d59c6fc4c95c3486418adb0cf0afefc",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/006-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/011-2007x2853.png",
+      "sha256": "81bbd0ca0ed254ebf750a10755b3ec82ac494155c4aedc2f5bf23e64ec6cae27",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/011-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/013-hierarchy.txt",
+      "sha256": "c6a797aabe6aabcdee9aa38e394b0dfae6113395d5830c7172f09be4a406c564",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/013-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/004-hierarchy.txt",
+      "sha256": "025576c179bcf65e6ad2c267354db456c8770955a137323b34f57e290878c4f1",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/004-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/008-2007x2853.png",
+      "sha256": "666027af3308c945d332778a93ade792cb32820b9a2b00522c1aeecb8c5a2f86",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/008-2007x2853.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/005-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/005-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/012-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/012-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/001-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/001-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/011-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/011-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/006-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/006-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/002-1398x2034.png",
+      "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/002-1398x2034.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/007-hierarchy.txt",
+      "sha256": "aa93a3d2685bd3192eda71faad8987128eeaf2023098df3fb7434cf1c1aab8be",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/007-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/pose-proof.json",
+      "sha256": "9034a02b8231aac1bdc89dec23dc45d91eeaeb96de42292598f9b83953b69c7d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/pose-proof.json"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/collector.sh",
+      "sha256": "646d27986b2eff715a21022692df98b4b390a81b9d5dbad150d2347ba0e772bb",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/collector.sh"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/010-hierarchy.txt",
+      "sha256": "eef7fc59059b33d63cb8a4f568c32aa446d8fb3bc6b4f9879f53c03c93387628",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/010-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/014-hierarchy.txt",
+      "sha256": "79d190379b0acc6d6e9fe0022c87baea50cd98b84975590a5c0b2c6f72ad79ae",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/014-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/paired-host/003-hierarchy.txt",
+      "sha256": "e4190944095c44429bb8818f113c2261b782e2cc4a7f1dcdcf8aa2517bc68639",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/paired-host/003-hierarchy.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/42D05B7D-51A5-4C2E-B295-6A0EA14EF38A.png",
+      "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/42D05B7D-51A5-4C2E-B295-6A0EA14EF38A.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/027943E8-6C6B-4B66-BF60-A2ECF01DB8C1.txt",
+      "sha256": "672227c2cfbc55e9b6389392797b7d843350ca06823b9c93e01b47442d1d0e44",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/027943E8-6C6B-4B66-BF60-A2ECF01DB8C1.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/DD45E1B5-265F-4BC7-BC3B-9296022B4ECD.txt",
+      "sha256": "03976f9469df46ea2268ded7ac3d4c92a4ca583eb2e4af2eadae64f0a3e419cb",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/DD45E1B5-265F-4BC7-BC3B-9296022B4ECD.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/D0F2BE73-2153-4283-9E43-02B3138765E9.png",
+      "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/D0F2BE73-2153-4283-9E43-02B3138765E9.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/0F8622D6-A4E7-4CC7-9C9A-8BA4B51A78F3.txt",
+      "sha256": "b3f966235f8e9b45cac416597477544833a745c99cf912c9a3e15676248edab9",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/0F8622D6-A4E7-4CC7-9C9A-8BA4B51A78F3.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/7954CC8E-23D1-4B02-8E08-9EBDB5339560.txt",
+      "sha256": "eef7fc59059b33d63cb8a4f568c32aa446d8fb3bc6b4f9879f53c03c93387628",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/7954CC8E-23D1-4B02-8E08-9EBDB5339560.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/65F355F1-F527-46C8-8770-D75BA380FAE0.txt",
+      "sha256": "2e357ca9c8a5677ba737830ded474b07ac1e27a58186a63382028259bcc05790",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/65F355F1-F527-46C8-8770-D75BA380FAE0.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/0E21AA28-0950-4872-BFC7-FE8132E4A0D2.txt",
+      "sha256": "c9d48a3b18758e4eb84ea53543e8f5eed0efc0019a94d8e500abae531a86ca84",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/0E21AA28-0950-4872-BFC7-FE8132E4A0D2.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/4E1E2181-69DA-4D01-9574-6A53C401EFFC.txt",
+      "sha256": "c6a797aabe6aabcdee9aa38e394b0dfae6113395d5830c7172f09be4a406c564",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/4E1E2181-69DA-4D01-9574-6A53C401EFFC.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/364B6659-B242-49ED-BAE6-650583910EC3.png",
+      "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/364B6659-B242-49ED-BAE6-650583910EC3.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/1598B3AD-D0DB-415C-BA1A-40763610055B.txt",
+      "sha256": "df3cabf33accd02aa2715ced909b4a80428c8c80f1d4585c5cb110cdb4be9461",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/1598B3AD-D0DB-415C-BA1A-40763610055B.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/FAD6D51A-9404-4417-BA6B-717B25E31B05.txt",
+      "sha256": "aa93a3d2685bd3192eda71faad8987128eeaf2023098df3fb7434cf1c1aab8be",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/FAD6D51A-9404-4417-BA6B-717B25E31B05.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/manifest.json",
+      "sha256": "9326b822df1c65072125f22342eb474f8834b5a14cafc85b9bf98cf2ec05e4e4",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/manifest.json"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/2F12B2DF-AA41-4CA7-886F-AA8DAC2B8DD3.txt",
+      "sha256": "e4190944095c44429bb8818f113c2261b782e2cc4a7f1dcdcf8aa2517bc68639",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/2F12B2DF-AA41-4CA7-886F-AA8DAC2B8DD3.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/72E0B675-EE80-4B2E-ADCE-60878FDEA8FE.png",
+      "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/72E0B675-EE80-4B2E-ADCE-60878FDEA8FE.png"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/4C560D78-A03C-4B40-B58B-65732720DD87.txt",
+      "sha256": "025576c179bcf65e6ad2c267354db456c8770955a137323b34f57e290878c4f1",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/4C560D78-A03C-4B40-B58B-65732720DD87.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/DAAE0E7A-D55E-4B5B-8A62-9C0222145D53.txt",
+      "sha256": "336dafe423408c3ac1a80313e4f2a3b8a2573240405667c772ceee3d98a4f255",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/DAAE0E7A-D55E-4B5B-8A62-9C0222145D53.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/625574DB-EE46-4958-A8A5-0F1BAAA9A8E5.txt",
+      "sha256": "6ec60857a1f4a124b0fae42c4e5f1999ded6b6d0fb3c99a66704e91411acac63",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/625574DB-EE46-4958-A8A5-0F1BAAA9A8E5.txt"
+    },
+    {
+      "file": "assets/proofs/duo-open/attachments/127CCBEE-49F4-4518-819F-AABE6E8540FC.txt",
+      "sha256": "79d190379b0acc6d6e9fe0022c87baea50cd98b84975590a5c0b2c6f72ad79ae",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/duo-open-manual-hk-types-aedf464d/attachments/127CCBEE-49F4-4518-819F-AABE6E8540FC.txt"
+    },
+    {
+      "file": "assets/proofs/ipad-max/ipad-max-approved-extra-aedf464d-consumed.json",
+      "sha256": "a4df5da25433d755a36b40d06db6fd554f982c729c1f5d44a7042b3f9efd4953",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/ipad-max-approved-extra-aedf464d-consumed.json"
+    },
+    {
+      "file": "assets/proofs/ipad-max/summary.json",
+      "sha256": "9cc1486a2f74b3a9e84045111fe21c42a70fc7b8ff3f1e08c4f0c627705e99b6",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/summary.json"
+    },
+    {
+      "file": "assets/proofs/ipad-max/pinned-file-inventory.json",
+      "sha256": "0f053c544430c8449978e29e4832c7872ed0e605c62c3b27f62e1d2b59ee0ff0",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/pinned-file-inventory.json"
+    },
+    {
+      "file": "assets/proofs/ipad-max/tests.json",
+      "sha256": "9279d62787f3dd146b316042b3fa584999f19cf70633e38b5094aec28f7e3b76",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/tests.json"
+    },
+    {
+      "file": "assets/proofs/ipad-max/provenance.json",
+      "sha256": "0ddb1db5fbab08e8204e09e099d85d99716a02ee77581a475d997ec4449ea9b6",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/provenance.json"
+    },
+    {
+      "file": "assets/proofs/ipad-max/result.json",
+      "sha256": "4b75d51e68ba596694fb2259fbcfb75a50d0529d87ada59da2f26aec20eb1312",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/result.json"
+    },
+    {
+      "file": "assets/proofs/ipad-max/run.log.gz",
+      "sha256": "9bc370a17edfb9fc4d25ed8ed23b028f7c9c04eda30d8da39380aeb52c6928bc",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/run.log.gz"
+    },
+    {
+      "file": "assets/proofs/ipad-max/pr894-ipad-max-approved-once.py",
+      "sha256": "c6461c3827a0757496df00a1d63656e9cf6d2b8794fad0ded23b359167279ad1",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/pr894-ipad-max-approved-once.py"
+    },
+    {
+      "file": "assets/proofs/ipad-max/infra-proof.json",
+      "sha256": "6e45bb067be3eed9d1a418bd0ddb1cad003d6862459868445446e86ab3794d6b",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/infra-proof.json"
+    },
+    {
+      "file": "assets/proofs/ipad-max/pr894-ipad-max-guard-independent-review-aedf.md",
+      "sha256": "ad450d19d14ae286b6443a04080dfa89a460f92e83b158f8680ece4cda144eac",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/pr894-ipad-max-guard-independent-review-aedf.md"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/D06BF985-09A6-4BBA-A603-E1C074AEAA7A.txt",
+      "sha256": "184a617bf39a86828976e70088780589c03cc50701122c641208dcd57f6ec224",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/D06BF985-09A6-4BBA-A603-E1C074AEAA7A.txt"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/FE6A99E8-7B50-4522-92DE-E6A6D2C095B8.txt",
+      "sha256": "1135fc1ff75a265f33177a4dd813ffffbe2d2507baf48eeb5d220ea01391dba7",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/FE6A99E8-7B50-4522-92DE-E6A6D2C095B8.txt"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/6CD64915-927D-4846-BA7A-5BA53EE5F64D.txt",
+      "sha256": "e196ac8bb8eaf16c21ad743d0e98e3478306ce716f55749bb810831a42050e2a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/6CD64915-927D-4846-BA7A-5BA53EE5F64D.txt"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/D0FD990D-674A-428B-A849-DED82B3AD5D1.txt",
+      "sha256": "90f9028092056ea8c175faa968624771c4adbc7f432cb999417887ead44b2be1",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/D0FD990D-674A-428B-A849-DED82B3AD5D1.txt"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/E758D619-1DFB-4BE4-ACC6-DB0F45B97762.txt",
+      "sha256": "76bd6c260fb19c24e3e919e61109e3a88b986cb1b72fe7f11d05a67b38fa8f09",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/E758D619-1DFB-4BE4-ACC6-DB0F45B97762.txt"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/5D9DEF4F-8013-448A-8793-D53A44905635.png",
+      "sha256": "2c4fbe63c8294c269abcc805fec17e5856d9bf3a8bce5217441f4c27abd2952e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/5D9DEF4F-8013-448A-8793-D53A44905635.png"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/06ECA2A6-1847-4817-AAAB-5061AA651C92.png",
+      "sha256": "f91ecff42f0867520f77acfca66a466f48aae42a10f3f53c18571873010a4b7c",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/06ECA2A6-1847-4817-AAAB-5061AA651C92.png"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/361C2F49-1BE1-4A11-BEAD-5C6E69B8D5A5.png",
+      "sha256": "638508532b28a9d4c0ce329faaa3923c155dacfdbb50d12ab4702d3858e01b4c",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/361C2F49-1BE1-4A11-BEAD-5C6E69B8D5A5.png"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/2B79C5C0-55F2-4DB5-9951-6944900CEE50.txt",
+      "sha256": "6f41ead3d9f32a5ec05c380425e85d4f46cb07ee201f7f963d4cfd24aa0bd56f",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/2B79C5C0-55F2-4DB5-9951-6944900CEE50.txt"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/090BF24B-EC6A-4068-9FA1-F0C589E9B6A8.png",
+      "sha256": "985101a1ceaf6cc0bdfa92db5a3e83e0dcc104f0df4a831dc7ca5e02f77de5ca",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/090BF24B-EC6A-4068-9FA1-F0C589E9B6A8.png"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/34ABAFEF-9DAC-481C-B4DB-1263242CF82D.png",
+      "sha256": "f0b744300885e50ce1528332a8be2286b7e672cc8c44de7bd039092989a681b9",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/34ABAFEF-9DAC-481C-B4DB-1263242CF82D.png"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/2E127122-C62A-4461-82D9-97473A123A17.txt",
+      "sha256": "73165f31ea148afb87e0f44982a5825ea9f66bc4ce78636b1305ef64740119f2",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/2E127122-C62A-4461-82D9-97473A123A17.txt"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/C7E3B8A5-3136-4772-A630-B2EA6DB85C14.png",
+      "sha256": "8b0cf856be6880d0dc0a2fa53a1b892ffd1acd6c24e1a793b6d2f728684c6015",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/C7E3B8A5-3136-4772-A630-B2EA6DB85C14.png"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/A422FDD2-C834-46A8-948C-0E8766EF99A3.png",
+      "sha256": "23356ef7829d8af10dc1893a094a4c6ca43088fe4866043d04683ac729c3c66d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/A422FDD2-C834-46A8-948C-0E8766EF99A3.png"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/manifest.json",
+      "sha256": "30d3c526e69da43f1fd7a70345867b879e546f79d961bb26337a97143251690f",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/manifest.json"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/8821A60B-4C79-4D46-B026-F5994904C944.png",
+      "sha256": "fc864c28858da96c2dac9e82471f1d2440d88493aa16e2fccee514f9f63b41ea",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/8821A60B-4C79-4D46-B026-F5994904C944.png"
+    },
+    {
+      "file": "assets/proofs/ipad-max/attachments/ACD081FD-27E3-46E4-A1CE-833CDFBF7339.txt",
+      "sha256": "6ae4f95e30def46aa1a8c41b051d9acfe7e94179d3849bb456fd5c8a579a43fc",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-dark-max-approved-extra-aedf464d/attachments/ACD081FD-27E3-46E4-A1CE-833CDFBF7339.txt"
+    },
+    {
+      "file": "assets/proofs/guard-history/000-check-a6828cab68e5430cd374e0a4.json",
+      "sha256": "1f827db523bd641cba5dc80f34ad8b8676a003b7750fb3c7b575ce264d5b3658",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-a6828cab68e5430cd374e0a4.json"
+    },
+    {
+      "file": "assets/proofs/guard-history/001-check-a6828cab68e5430cd374e0a4-10766d5f8e6c416ea80212e6c2ca37c2.log",
+      "sha256": "dedc5d5e686ea0684feb4fcf14a2baec3cda71cd9e238fc790fda40913e9687b",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-a6828cab68e5430cd374e0a4-10766d5f8e6c416ea80212e6c2ca37c2.log"
+    },
+    {
+      "file": "assets/proofs/guard-history/002-check-a6828cab68e5430cd374e0a4-4a2981dcc326474ab8b160748dd6b6cf.log",
+      "sha256": "2d947ad32469d24142d5b0b035eee7877a268973e4aebc14d8f7f0641b9679ee",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-a6828cab68e5430cd374e0a4-4a2981dcc326474ab8b160748dd6b6cf.log"
+    },
+    {
+      "file": "assets/proofs/guard-history/003-cause-remediation.json",
+      "sha256": "d05cbeee79327113e60e6b7fef019bcb05e3e5015a78fb69ac352d895b790fe8",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/retry-proof/cause-remediation.json"
+    },
+    {
+      "file": "assets/proofs/guard-history/004-result.json",
+      "sha256": "12afd8675dbc7f3543dfa75aba4ad8521e446bd9fd44855d5b8d31c7fd83c868",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/evidence/ui-ipad-normal-types-and-initial-AX-failure/result.json"
+    },
+    {
+      "file": "assets/proofs/guard-history/005-tests.json",
+      "sha256": "0cff39d6d8004b0fa599b12da79a0a7f701ffb6009ce0d2bb1800622a213331c",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/evidence/ui-ipad-normal-types-and-initial-AX-failure/tests.json"
+    },
+    {
+      "file": "assets/proofs/guard-history/006-summary.json",
+      "sha256": "9c5952bc4680f0ce93914c8dda2b4b0b4aa8ada8999b4773f4f6f4260bdebd04",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/evidence/ui-ipad-normal-types-and-initial-AX-failure/summary.json"
+    },
+    {
+      "file": "assets/proofs/guard-history/007-provenance.json",
+      "sha256": "14a6ef30b787e2bdb969c7637d408f06c5758b42677b925add21243c38d6bf55",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/evidence/ui-ipad-normal-types-and-initial-AX-failure/provenance.json"
+    },
+    {
+      "file": "assets/proofs/guard-history/008-run.log.gz",
+      "sha256": "9c26420a33d3117f3fcc1c30a32f06eedce2a212f91aa01827df125ab2790414",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/evidence/ui-ipad-normal-types-and-initial-AX-failure/run.log.gz"
+    },
+    {
+      "file": "assets/proofs/guard-history/009-result.json",
+      "sha256": "52b497305b9d553d563245dca5bebf66d4049da5f65673929a35dd18e5473a77",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/evidence/ui-ipad-conditional-AX-entry-viewport-failure/result.json"
+    },
+    {
+      "file": "assets/proofs/guard-history/010-tests.json",
+      "sha256": "c2c690b0f067f2a829ab23300370f1bf1f88a93fd2a389627cbd168dce7f3e1d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/evidence/ui-ipad-conditional-AX-entry-viewport-failure/tests.json"
+    },
+    {
+      "file": "assets/proofs/guard-history/011-summary.json",
+      "sha256": "b81965b3d700d74f41964d749149d898e16c06bae40ccd0cabf41127fcfd27a4",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/evidence/ui-ipad-conditional-AX-entry-viewport-failure/summary.json"
+    },
+    {
+      "file": "assets/proofs/guard-history/012-provenance.json",
+      "sha256": "bf0bc8b3ab443ef0178a9fde7bc496ec165221348d90fc921bb8a2eabf8a92ce",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/evidence/ui-ipad-conditional-AX-entry-viewport-failure/provenance.json"
+    },
+    {
+      "file": "assets/proofs/guard-history/013-run.log.gz",
+      "sha256": "83d71dc462e6a571e9d2314f26c846ad8420a8c0cb5a3f45d8f5e6852c1d4efc",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a07/evidence/ui-ipad-conditional-AX-entry-viewport-failure/run.log.gz"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/000-pr894-review-security.md",
+      "sha256": "bc207ca3f2667460b82eb52b81d105e8b3b24eaae1c450418e7f19ab07d12d04",
+      "source": "/private/tmp/pr894-review-security.md"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/001-pr894-review-performance.md",
+      "sha256": "1ba3cf70ca244d180a39fc215cfcedc946b80dc9c6116d3e1a5171dcce355acd",
+      "source": "/private/tmp/pr894-review-performance.md"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/002-pr894-review-data.md",
+      "sha256": "a941e9639762ee146b7e31b95ae13648b2e9ec636a861437a36d8ecd9a34e5de",
+      "source": "/private/tmp/pr894-review-data.md"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/003-pr894-review-architecture.md",
+      "sha256": "0380722277fb7e554d7e77d23cc11352a718e6cebb86afa70f74bce970d7ab27",
+      "source": "/private/tmp/pr894-review-architecture.md"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/004-pr894-review-simplicity.md",
+      "sha256": "0da21a7557941d845c2d86bddb2023fe7e99cdc3356edb5a46686a6429f16ea7",
+      "source": "/private/tmp/pr894-review-simplicity.md"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/005-review-resolution.md",
+      "sha256": "9c4b37cda010b41339b3e3308db4b205e485dade6df9f0d7eabacd9d0e77b496",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/review-resolution.md"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/006-summary.json",
+      "sha256": "dce6f16dc7c914b50ef93d1dfe7436d31f7e963ff8d824c6822f428a62f52c31",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/summary.json"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/007-tests.json",
+      "sha256": "bd4b0b778d04a39a6b200c53adbc8ed8eb975bc7b79e3920780d71def28c2b84",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/tests.json"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/008-pipeline-receipt.json",
+      "sha256": "ab9f1b05567c763cbba5316f59c2576eeaeb500bdf91266f80e453503bfd8feb",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/pipeline-receipt.json"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/009-pipeline-output.log",
+      "sha256": "39edb3b0c128a6cc35cb2cc0537c36f0eb2e240651f25da7a090e35132aa7a2d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/pipeline-output.log"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/010-provenance.json",
+      "sha256": "a37013d4af178a1c1df5dd65192c815cb034ab59a7273bf3a3f42a8d137c950c",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/provenance.json"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/011-run.log.gz",
+      "sha256": "28b49e8ebf029715fe99db7333821e10deb11ea164669a879a73dbc81bce017a",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/run.log.gz"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/012-ci-final-jobs.json",
+      "sha256": "b1eab07a2da25a4bd456e05240e2414937add9c8449e32535bff2895df3058f9",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/detail-rollout/quality-queue/pr893/ci-final-jobs.json"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/013-pr894-metric-icon-consistency.patch",
+      "sha256": "01bdd255b29d8e0239a43b8ff978e80f6d48ad1aff0366e250dfba994a586195",
+      "source": "/private/tmp/pr894-metric-icon-consistency.patch"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/014-pr894-metric-icon-consistency.md",
+      "sha256": "e57dfd5b30a9b04ecf21dc2ca58ad723d865d7cbc93d4e6179e15857206252a7",
+      "source": "/private/tmp/pr894-metric-icon-consistency.md"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/015-pr894-metric-icon-consistency-review.md",
+      "sha256": "35b4b86458e8680f2b8e30e5fb7a3a2a849cebbf6111d60db0ba21d969949882",
+      "source": "/private/tmp/pr894-metric-icon-consistency-review.md"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/016-pipeline-receipt.json",
+      "sha256": "4f7d6ae644dafd685bc874285630f22e8905b27fac6956abc9a7b8ce4cd19f6d",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-3f2ff74b/pipeline-receipt.json"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/017-pipeline-output.log",
+      "sha256": "42e649b756ce2195e1665c3a73291b52466d02040daec400357f1f54ab79748f",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-3f2ff74b/pipeline-output.log"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/018-pre-icon-polish-status.json",
+      "sha256": "a61bedae7041a3a0184abfc4b53552565b04b8986680fb2ec9ff49ff6b96e0d6",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-3f2ff74b/pre-icon-polish-status.json"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/019-result.json",
+      "sha256": "bfaa48d5792080de0be643e84c41729a5db1f6dc7a146bc30927163b62dbbf9e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-3f2ff74b/result.json"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/020-tests.json",
+      "sha256": "90e6fff4742c5c614650428e53a2a16c84b81b6674d73a27ae040bad912dd38e",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-3f2ff74b/tests.json"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/021-provenance.json",
+      "sha256": "d330c1f7c4a82ad45caa9fd6200805a62fe9a125e971893116770ee5dda206ec",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-3f2ff74b/provenance.json"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/022-run.log.gz",
+      "sha256": "3f95c3c3b22c85dfe2ab4966c4241043a3baf17d95b4cd2f96318b63adf4caa9",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-3f2ff74b/run.log.gz"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/023-pr894-ipad-max-approved-once.py",
+      "sha256": "a0249f434ab93140306ac767d869ac9e1656a67c4ed41efe813169175304e507",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-3f2ff74b/pr894-ipad-max-approved-once.py"
+    },
+    {
+      "file": "assets/proofs/guard-proofs/024-pr894-ipad-max-guard-independent-review.md",
+      "sha256": "aef9e6e07f3740e8a84685989fcd3f0848aafe60ce586aed931e9f9477b09ad6",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/evidence/ipad-normal-manual-hk-types-3f2ff74b/pr894-ipad-max-guard-independent-review.md"
+    },
+    {
+      "file": "assets/proofs/review/pr894-quality-final.md",
+      "sha256": "202b34fdc21e2d0d49790483e20801469c35a7c896c0f2f6b3bb48b4ce6ba8af",
+      "source": "/private/tmp/pr894-quality-final.md"
+    },
+    {
+      "file": "assets/proofs/review/pr894-before-capture-inventory.json",
+      "sha256": "5a692400d80783e765fe53fe029412f986f9a6506135cc120fa685ec5c6be002",
+      "source": "/private/tmp/pr894-before-capture-inventory.json"
+    },
+    {
+      "file": "assets/proofs/review/pr894-ipad-max-approved-once.py",
+      "sha256": "c6461c3827a0757496df00a1d63656e9cf6d2b8794fad0ded23b359167279ad1",
+      "source": "/private/tmp/pr894-ipad-max-approved-once.py"
+    },
+    {
+      "file": "assets/proofs/review/duo-creation-aedf464d.json",
+      "sha256": "af0719d40d6eb8f38f7bcf7e85d7044755b46ca938a238651de804e797576a1b",
+      "source": "/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.codex-checks/a07/duo-creation-aedf464d.json"
+    },
+    {
+      "file": "source-closure.json",
+      "sha256": "a968c05e1907ca88a0d90b31044bf0a45246d7ccdd8b47e0995b833f32c17227",
+      "source": "git blob equality"
+    }
+  ],
+  "quality_report": "assets/proofs/review/pr894-quality-final.md",
+  "quality_reviewed": true,
+  "output_baseline_sha256": {
+    "docs/design/phone-design-map/actual/index.html": "19a6f9fb7c952f2740c071139ffee85987ec86adfc17716457998480b7799edd",
+    "docs/design/phone-design-map/actual/compare.html": "aedfae74b75f808df5bf47f01d386b8979b22160c550d963f77f00e0a73d6063",
+    "docs/design/phone-design-map/README.md": "a112aa2d8128d9673f7f9da2abce0e69a383c40d4f76ebbb2bcd8362f85950af",
+    "docs/design/phone-design-map/actual/regular/capture-index.json": "a2b619cc33dd22b4edb4bc71752f07a8ac0a656637c7c9b97f011a9e54494e7f",
+    "docs/design/phone-design-map/actual/regular/index.html": "8230c1f3817ab41d47dea59633d5823a9692a92bf443f76d4473adf5eecd6a2f",
+    "docs/design/phone-design-map/actual/regular/images/A07.png": "f959a22b4c00ecaa0099ddee2614b00f8ac46937df779172f8ea80046dc5d6ea",
+    "docs/design/phone-design-map/actual/regular/boards/02-활동.png": "633f3e20cf083f3c91c2d03a1925f5367d6ccbfa8c5927dd7569d251a2875042",
+    "docs/design/phone-design-map/actual/ipad/capture-index.json": "d97e5d51287fdfcad1ebadf90eec09ddd5100e3bb3b4e85c375d792a31445769",
+    "docs/design/phone-design-map/actual/ipad/index.html": "122d100968cf20c55690411de0bcaa7fbc17498b1c28f065591a0da13a2507f9",
+    "docs/design/phone-design-map/actual/ipad/images/A07.png": "02a19b17aa6d9446ec55d89824dc874bb5e5cc1f3f9b147a6f80274327b24693",
+    "docs/design/phone-design-map/actual/ipad/boards/02-활동.png": "c7181e258088e708b953f33780ec45662ff311e0ab89f0f0ad7ac24798613071",
+    "docs/design/phone-design-map/actual/duo/capture-index.json": "0b09bba4063f6e26d1984f29eadcf27004711b4c16ae31cef12f24c7bc6c835f",
+    "docs/design/phone-design-map/actual/duo/index.html": "3523d91892e1799ca5d9bd3ef84e4f2521508ce207b831bb5636fa755e22df27",
+    "docs/design/phone-design-map/actual/duo/images/A07.png": "1522d3a8017f4f2d97e20519a96c63d051423da3d87cf8009d055665acc4983e",
+    "docs/design/phone-design-map/actual/duo/boards/02-활동.png": "4683ff80454df8eec7d13188cdbf1faae6a316d7b80dfd547d18ab5d02e5f339",
+    "docs/design/phone-design-map/actual/duo-open/capture-index.json": "980f306066f2146185ffcb1ca4e62aed813d47c61caefa4ae265213d9270deb3",
+    "docs/design/phone-design-map/actual/duo-open/index.html": "727d839cbe22daadd364143069b796315240a758788ca44e4aeedb78bfc334a3",
+    "docs/design/phone-design-map/actual/duo-open/images/A07.png": "e657c94703cccd43438a37924b7cf2e4575501e6299b7a82d3581c35a03bf839",
+    "docs/design/phone-design-map/actual/duo-open/boards/02-활동.png": "d2710bdd995262e986f409df945fbbe4f5ec0629aee98fc7020c80f44a5844cc"
+  },
+  "renderer_sha256": "6245de4341dd88fe15c12ffa0ca38a58ce8344f074efc1c2cfcfef2d8e79eff2",
+  "missing": [],
+  "notes": "Phone/iPad Week, Duo Month canonical; other native states supplemental. Prior 3f2 captures predate glyph change. Original two MAX failures retained; approved AEDF extra passed. Prior 34 unit tests and A06 CI are reused with seven-file source closure; no new A07 unit run claimed. Non-iPad before model, revision, AX and Duo pose unverified."
+}

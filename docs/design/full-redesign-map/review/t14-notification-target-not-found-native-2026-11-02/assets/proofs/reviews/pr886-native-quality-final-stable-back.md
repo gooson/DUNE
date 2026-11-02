@@ -1,0 +1,11 @@
+# T14 final scoped native quality delta
+
+Verdict: PASS WITH NOTES for the agreed T14 visual and Phone MAX stable-Back scope. No new actionable SwiftUI, Apple UX or UI-test P1/P2/P3; earlier simplicity P3 helper maintenance remains separately deferred. Publication/source closure/final PR and CI remain separate.
+
+SwiftUI: Directly inspected original 3D486447, 922E8164, 75A4E754, 87B13B43 and 0E714D40 PNGs. Maximum text title and explanatory message wrap without observed overlap; 87B13B43 shows the complete actual identifier on two lines inside the viewport. The distinct 0E714D40 teardown shows Activity, not a fallback screenshot. AX preserves exact title, message and ID; the ID element's x=0 origin reflects selectable text's documented AX geometry, with visible glyphs within the window.
+
+Apple UX: Existing native Back, explanatory copy, real ID and Activity context remain. This observed Phone MAX case supports readable content and real return within this scenario; it does not establish VoiceOver, selection-menu behavior, numerical contrast, other languages, or all text sizes and device widths.
+
+UI test: Independently read `phone-max-stable-back-90709df2/result.json`: exact original MAX selector executed 1/passed 1/failed 0/skipped 0, exit 0. Current method retains content, ID/geometry and real Back action, then requires fallback disappearance, Activity root existence and hittability, and a three-second inverted expectation against replay/root loss. Paired AX contains actual fallback payload before Back and Activity root after. This is positive current Phone MAX evidence, bounded to the sampled three-second interval, not proof that replay was the original failed run's cause. Prior original two failures and both 3fac/6bfe extra failures remain preserved; parent reports the new separately approved attempt consumed 1/remaining 0. No new native execution performed by reviewer.
+
+Holistic: Historical normal Phone/iPad/Duo evidence remains bounded to visual payload/route arrival; it does not prove current Back in those poses. The route-consumption change is not device-width-specific, and this scoped gate does not demand repeated normal runs. No full regression, all-platform behavior or source-tree equivalence beyond separately established closure is asserted. No build, test, device, source or Git mutation occurred in this review.

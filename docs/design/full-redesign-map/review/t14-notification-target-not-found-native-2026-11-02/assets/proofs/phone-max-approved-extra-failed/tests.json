@@ -1,0 +1,63 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "E990FD83-9610-4AFC-8CDA-7703456B2B17",
+      "deviceName" : "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertGreaterThanOrEqual failed: (\"0.0\") is less than (\"4.0\") - Text should fit horizontally",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift",
+                        "lineNumber" : 2681
+                      }
+                    }
+                  ],
+                  "duration" : "1분 27초",
+                  "durationInSeconds" : 87.55727100372314,
+                  "name" : "testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize()",
+                  "nodeIdentifier" : "ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "ActivityExerciseRegressionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "DUNEUITests-DesignCapture",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Design Capture"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "deviceName" : "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "modelName" : "iPad mini (A20 Pro)",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "1분 10초",
+                  "durationInSeconds" : 70.43506395816803,
+                  "name" : "testActivityDetailRoutesOpenExpectedScreens()",
+                  "nodeIdentifier" : "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ActivityExerciseRegressionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "58초",
+                  "durationInSeconds" : 58.34011900424957,
+                  "name" : "testTrainingVolumeDailyVolumeChartScrollsToPastData()",
+                  "nodeIdentifier" : "ChartInteractionRegressionUITests/testTrainingVolumeDailyVolumeChartScrollsToPastData()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeDailyVolumeChartScrollsToPastData",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertTrue failed - The current count should identify the selected week",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Regression/ChartInteractionRegressionUITests.swift",
+                        "lineNumber" : 306
+                      }
+                    }
+                  ],
+                  "duration" : "38초",
+                  "durationInSeconds" : 38.34421396255493,
+                  "name" : "testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods()",
+                  "nodeIdentifier" : "ChartInteractionRegressionUITests/testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "duration" : "44초",
+                  "durationInSeconds" : 44.26765501499176,
+                  "name" : "testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList()",
+                  "nodeIdentifier" : "ChartInteractionRegressionUITests/testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "45초",
+                  "durationInSeconds" : 45.244199991226196,
+                  "name" : "testTrainingVolumeTrainingLoadChartScrollsToPastData()",
+                  "nodeIdentifier" : "ChartInteractionRegressionUITests/testTrainingVolumeTrainingLoadChartScrollsToPastData()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeTrainingLoadChartScrollsToPastData",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "42초",
+                  "durationInSeconds" : 42.28672194480896,
+                  "name" : "testTrainingVolumeTrainingLoadLongPressKeepsVisibleRangeAndActivatesSelection()",
+                  "nodeIdentifier" : "ChartInteractionRegressionUITests/testTrainingVolumeTrainingLoadLongPressKeepsVisibleRangeAndActivatesSelection()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeTrainingLoadLongPressKeepsVisibleRangeAndActivatesSelection",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ChartInteractionRegressionUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ChartInteractionRegressionUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "DUNEUITests-DesignCapture",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Design Capture"
+    }
+  ]
+}
