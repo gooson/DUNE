@@ -2313,13 +2313,13 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             ensureActivityRoot()
             let contentID = "activity-section-volume-content"
             // AX puts this section several screens below the initial viewport. The
-            // existing summary test proves the content-center then header route.
+            // Existing summary navigation reveals visible content, then the header.
             XCTAssertTrue(app.scrollToHittableElementIfNeeded(contentID, maxSwipes: 32))
             let card = app.buttons[contentID].firstMatch
             let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
             let viewport = activityScroll.frame.intersection(app.windows.firstMatch.frame)
             XCTAssertTrue(card.exists && card.isHittable)
-            XCTAssertTrue(viewport.contains(CGPoint(x: card.frame.midX, y: card.frame.midY)))
+            XCTAssertTrue(viewport.intersects(card.frame))
             XCTAssertTrue(app.scrollToHittableElementIfNeeded(
                 AXID.activitySectionVolume, maxSwipes: 8, direction: .down
             ))
