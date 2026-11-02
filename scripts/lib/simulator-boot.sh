@@ -90,8 +90,18 @@ wait_for_simulator_boot() {
 
     echo "Waiting for ${label} simulator [$udid] to boot (timeout=${timeout}s, retries=${max_retries})..."
 
-    # Pre-flight: verify the device exists (anchored grep)
-    if ! python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 30 -- xcrun simctl list devices 2>/dev/null | grep -qF "$udid"; then
+    # Collect the complete listing so grep cannot close the producer's pipe
+    # early. A failed/timed-out query does not prove that the device is absent.
+    local device_list
+    local lookup_status=0
+    device_list=$(python3 "$ROOT_DIR/scripts/lib/command-deadline.py" --seconds 30 -- xcrun simctl list devices) || lookup_status=$?
+    if [[ "$lookup_status" -ne 0 ]]; then
+        echo "ERROR: Simulator device lookup failed for [$udid] (exit $lookup_status)."
+        printf '%s\n' "${device_list: -2000}"
+        _dump_simulator_diagnostics "$udid"
+        exit 1
+    fi
+    if ! grep -F "$udid" >/dev/null <<<"$device_list"; then
         echo "ERROR: Simulator UDID [$udid] not found in device list."
         _dump_simulator_diagnostics "$udid"
         exit 1

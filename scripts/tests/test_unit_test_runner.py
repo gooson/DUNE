@@ -90,7 +90,8 @@ class UnitRunnerTests(unittest.TestCase):
                 self.assertEqual(commands, [])
 
     def fake_run(self, directory: Path, *args: str, log_text: str = "Executed 1 test, with 0 failures\n",
-                 build_exit: int = 0) -> tuple[subprocess.CompletedProcess[str], list[list[str]]]:
+                 build_exit: int = 0, with_boot: bool = False,
+                 watch_lookup_exit: int = 0) -> tuple[subprocess.CompletedProcess[str], list[list[str]]]:
         fake_bin = directory / "bin"
         fake_bin.mkdir()
         python = fake_bin / "python3"
@@ -106,6 +107,9 @@ class UnitRunnerTests(unittest.TestCase):
                               "import json, os, sys\n"
                               "with open(os.environ['FAKE_ARGV'], 'a') as output:\n"
                               "    output.write(json.dumps(sys.argv[1:]) + '\\n')\n"
+                              "if os.environ.get('FAKE_EVENTS'):\n"
+                              "    with open(os.environ['FAKE_EVENTS'], 'a') as output:\n"
+                              "        output.write(sys.argv[sys.argv.index('-scheme') + 1] + '\\n')\n"
                               "print(os.environ['FAKE_LOG'])\n"
                               "sys.exit(int(os.environ['FAKE_EXIT']))\n")
         xcodebuild.chmod(0o755)
@@ -115,10 +119,66 @@ class UnitRunnerTests(unittest.TestCase):
                "DUNE_SIM_TEST_LOCK_FD": "fixture", "DAILVE_IOS_DESTINATION": "platform=iOS Simulator,name=Fixture",
                "DAILVE_WATCH_DESTINATION": "platform=watchOS Simulator,name=Fixture",
                "FAKE_ARGV": str(argv_file), "FAKE_LOG": log_text, "FAKE_EXIT": str(build_exit)}
+        if with_boot:
+            # Exercise real boot/destination helpers against fake tools only.
+            git = fake_bin / "git"
+            git.write_text("#!/bin/sh\nexit 1\n")
+            git.chmod(0o755)
+            xcrun = fake_bin / "xcrun"
+            xcrun.write_text(f"#!{sys.executable}\n"
+                              "import os, sys\n"
+                              "from pathlib import Path\n"
+                              "events = Path(os.environ['FAKE_EVENTS'])\n"
+                              "command = sys.argv[2]\n"
+                              "if command == 'list':\n"
+                              "    if (int(os.environ['FAKE_WATCH_LOOKUP_EXIT']) and\n"
+                              "            events.exists() and 'DUNETests' in events.read_text()):\n"
+                              "        sys.exit(int(os.environ['FAKE_WATCH_LOOKUP_EXIT']))\n"
+                              "    print('AAAA-1111 (Shutdown)\\nBBBB-2222 (Shutdown)')\n"
+                              "elif command == 'boot':\n"
+                              "    with events.open('a') as output:\n"
+                              "        output.write('boot:' + sys.argv[3] + '\\n')\n"
+                              "elif command != 'bootstatus':\n"
+                              "    sys.exit(99)\n")
+            xcrun.chmod(0o755)
+            env.update({"DAILVE_IOS_DESTINATION": "platform=iOS Simulator,id=AAAA-1111",
+                        "DAILVE_WATCH_DESTINATION": "platform=watchOS Simulator,id=BBBB-2222",
+                        "FAKE_EVENTS": str(directory / "events.log"),
+                        "FAKE_WATCH_LOOKUP_EXIT": str(watch_lookup_exit),
+                        "SIMULATOR_BOOT_RETRIES": "0", "SIMULATOR_BOOT_TIMEOUT": "3"})
         result = subprocess.run(["bash", str(RUNNER), "--no-regen", "--log-file", str(log_file), *args],
                                 cwd=ROOT, env=env, capture_output=True, text=True, timeout=15)
         commands = [json.loads(line) for line in argv_file.read_text().splitlines()] if argv_file.exists() else []
         return result, commands
+
+    def test_each_platform_boots_immediately_before_its_suite(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            result, commands = self.fake_run(path, with_boot=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual(len(commands), 2)
+            self.assertEqual((path / "events.log").read_text().splitlines(),
+                             ["boot:AAAA-1111", "DUNETests", "boot:BBBB-2222", "DUNEWatchTests"])
+
+    def test_watch_preflight_failure_preserves_completed_ios_suite(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            result, commands = self.fake_run(path, with_boot=True, watch_lookup_exit=17)
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertEqual([option_values(command, "-scheme") for command in commands], [["DUNETests"]])
+            self.assertIn("device lookup failed", result.stdout)
+            self.assertIn("exit 17", result.stdout)
+            self.assertIn("Executed 1 test", (path / "unit test.log").read_text())
+
+    def test_single_platform_does_not_boot_the_other(self) -> None:
+        for mode, device, suite in (("--ios-only", "AAAA-1111", "DUNETests"),
+                                    ("--watch-only", "BBBB-2222", "DUNEWatchTests")):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
+                path = Path(directory)
+                result, commands = self.fake_run(path, mode, with_boot=True)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                self.assertEqual(len(commands), 1)
+                self.assertEqual((path / "events.log").read_text().splitlines(), [f"boot:{device}", suite])
 
     def test_fake_execution_preserves_routing_and_split_logs(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
