@@ -270,6 +270,8 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             "Exercise type list should exist in the training volume detail surface"
         )
 
+        VisualAudit.capture("Training volume detail default week")
+
         let periodPicker = waitForElement(AXID.activityTrainingVolumePeriodPicker, timeout: 15)
         let initialPeriod = periodPicker.value as? String
         tapSegment(in: AXID.activityTrainingVolumePeriodPicker, index: 1, timeout: 10)
