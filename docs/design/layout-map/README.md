@@ -151,3 +151,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 
 - [T05 누적 스트레스 상세 개편](cumulative-stress-redesign-proposal.md): 동일 히어로·통합 기간/통계·요인 막대·하나의 계산 펼침.
 - [T06 건강 지표 상세 개편](health-metric-detail-redesign-proposal.md):16개 지표의 실제 단위/기능 보존, 통합 추세, 검증된 선택형 비교와 정확한 전후 화면 식별.
+
+2026-10-31 [A02 훈련 준비도 상세 배치·데이터 계약](training-readiness-detail-a02.html)은 원본 다섯 구성 점수/가중치, 모델 상태 심볼, 시간 조정, 5기간 실제 차트와 비-일간 세 원천 근사 이력을 분리한다. 브라우저의 값은 설명용이며 앱 캡처가 아니다. 원본 iPhone 영어/max-AX selector 1개와 iPad 첫 max-AX 사례만 통과했다. iPad 배치는 진행 중이며 일반 글씨 원본과 Duo는 미검증이다.

@@ -1,0 +1,55 @@
+{
+  "public_product_checkpoint": "d48bf7930bf1b6c0704816f7a8a1b0ba7564ce38",
+  "validation_revision": "2ea9688d2ffa330c25ba95a6bfaefe983c61fbfb",
+  "files": {
+    "DUNE/Presentation/Activity/TrainingReadiness/TrainingReadinessDetailView.swift": {
+      "public_sha256": "47654d782d6dcbf5f0c8beb9e0207e2e99dda9ec07fc1ab923ea6ad9746bfe7e",
+      "validation_sha256": "47654d782d6dcbf5f0c8beb9e0207e2e99dda9ec07fc1ab923ea6ad9746bfe7e",
+      "equal": true
+    },
+    "DUNE/Presentation/Activity/TrainingReadiness/TrainingReadinessDetailViewModel.swift": {
+      "public_sha256": "ce05fcb2e053a716614ba1723d344becd4beb847fa4dc9051a26e96c00b7acbd",
+      "validation_sha256": "ce05fcb2e053a716614ba1723d344becd4beb847fa4dc9051a26e96c00b7acbd",
+      "equal": true
+    },
+    "DUNE/Domain/Models/TrainingReadiness.swift": {
+      "public_sha256": "b33f12fe569e4064a6246be6ef7ceb13e54c6d7f0f9413d735cba3410c98ea5d",
+      "validation_sha256": "b33f12fe569e4064a6246be6ef7ceb13e54c6d7f0f9413d735cba3410c98ea5d",
+      "equal": true
+    },
+    "DUNE/Domain/UseCases/CalculateTrainingReadinessUseCase.swift": {
+      "public_sha256": "8c0802c10cff2d8983ef8966e4ca863c3ad41727b4c6187ffc0084d9eb95d4fc",
+      "validation_sha256": "8c0802c10cff2d8983ef8966e4ca863c3ad41727b4c6187ffc0084d9eb95d4fc",
+      "equal": true
+    },
+    "DUNE/App/TestDataSeeder.swift": {
+      "public_sha256": "aeec211b427297c1fcca5e2573515182076e38570bdbdf9e3048de14885e76bb",
+      "validation_sha256": "aeec211b427297c1fcca5e2573515182076e38570bdbdf9e3048de14885e76bb",
+      "equal": true
+    },
+    "DUNEUITests/Helpers/UITestBaseCase.swift": {
+      "public_sha256": "1299e3efbe08b78ebcda033b0abf0b31d1d9635b2822e45a04b5df840b3f7f1e",
+      "validation_sha256": "1299e3efbe08b78ebcda033b0abf0b31d1d9635b2822e45a04b5df840b3f7f1e",
+      "equal": true
+    },
+    "DUNEUITests/Helpers/UITestHelpers.swift": {
+      "public_sha256": "1543b51342c33b2d607f910fe4f43cbf382d578c9331623b911f96603b2cef6c",
+      "validation_sha256": "1543b51342c33b2d607f910fe4f43cbf382d578c9331623b911f96603b2cef6c",
+      "equal": true
+    },
+    "DUNEUITests/Full/TrainingReadinessDetailRedesignTests.swift": {
+      "public_sha256": "a06f6956bd7b98c71f39cdf577a8eb9eac23ae9bcb90c07e78577cbd1f9d9808",
+      "validation_sha256": "a06f6956bd7b98c71f39cdf577a8eb9eac23ae9bcb90c07e78577cbd1f9d9808",
+      "equal": true
+    },
+    "docs/design/phone-design-map/collect-real-captures.py": {
+      "public_sha256": "6245de4341dd88fe15c12ffa0ca38a58ce8344f074efc1c2cfcfef2d8e79eff2",
+      "validation_sha256": "6245de4341dd88fe15c12ffa0ca38a58ce8344f074efc1c2cfcfef2d8e79eff2",
+      "equal": true
+    }
+  },
+  "whole_tree_equal": false,
+  "normal_and_MAX_test_file_exact": true,
+  "current_public_untracked_Compounddoc_only": true,
+  "runtime_scope": "Fresh Phone exact2/2PASS normal+MAX, each actualBack; no alltests claim"
+}
