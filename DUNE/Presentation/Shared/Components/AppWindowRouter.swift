@@ -26,7 +26,8 @@ final class AppWindowRouter: NSObject {
         let requestID = UUID()
         let insights: UISceneSession
         var primaryID: String?
-        var isDestroying = false
+        let dismissWindow: DismissWindowAction
+        var dismissalRequested = false
         let onFailure: @MainActor (String) -> Void
     }
 
@@ -66,7 +67,7 @@ final class AppWindowRouter: NSObject {
                 pendingClose?.primaryID = session.persistentIdentifier
                 activatePrimary(session)
             }
-            finishCloseIfPrimaryIsActive()
+            scheduleDismissalIfPrimaryIsActive()
         }
     }
 
@@ -151,7 +152,10 @@ final class AppWindowRouter: NSObject {
             dismissWindow()
             return
         }
-        let request = PendingClose(insights: insights, primaryID: primary?.persistentIdentifier, onFailure: onFailure)
+        let request = PendingClose(
+            insights: insights, primaryID: primary?.persistentIdentifier,
+            dismissWindow: dismissWindow, onFailure: onFailure
+        )
         pendingClose = request
         logClose("started", request)
         let requestID = request.requestID
@@ -179,64 +183,52 @@ final class AppWindowRouter: NSObject {
         UIApplication.shared.activateSceneSession(for: UISceneSessionActivationRequest(session: session)) { [weak self] error in
             Task { @MainActor in
                 guard let self, let current = self.pendingClose, current.requestID == requestID,
-                      !current.isDestroying else { return }
+                      !current.dismissalRequested else { return }
                 self.logClose("owner activation error", current)
                 self.failClose(requestID: requestID, message: error.localizedDescription)
             }
         }
-        finishCloseIfPrimaryIsActive()
+        scheduleDismissalIfPrimaryIsActive()
     }
 
-    private func finishCloseIfPrimaryIsActive() {
-        guard let request = pendingClose, !request.isDestroying,
-              let primaryID = request.primaryID,
-              UIApplication.shared.connectedScenes.contains(where: {
-                  $0.session.persistentIdentifier == primaryID && $0.activationState == .foregroundActive
-              }) else { return }
-        destroyInsights(for: request)
-    }
-
-    private func destroyInsights(for request: PendingClose) {
-        guard var current = pendingClose, current.requestID == request.requestID, !current.isDestroying,
-              let ownerID = current.primaryID, ownerID != current.insights.persistentIdentifier else { return }
-        current.isDestroying = true
-        pendingClose = current
-        logClose("request auxiliary destruction", current)
+    private func scheduleDismissalIfPrimaryIsActive() {
+        guard let request = pendingClose, !request.dismissalRequested else { return }
         let requestID = request.requestID
-        UIApplication.shared.requestSceneSessionDestruction(request.insights, options: nil) { [weak self] error in
-            Task { @MainActor in
-                guard let self, let current = self.pendingClose, current.requestID == requestID else { return }
-                self.logClose("auxiliary destruction error", current)
-                self.failClose(requestID: requestID, message: error.localizedDescription)
-            }
+        // Let UIKit finish delivering the owner's activation before closing the other window.
+        DispatchQueue.main.async { [weak self] in
+            guard let self, var current = self.pendingClose, current.requestID == requestID,
+                  !current.dismissalRequested, let ownerID = current.primaryID,
+                  ownerID != current.insights.persistentIdentifier,
+                  UIApplication.shared.connectedScenes.contains(where: {
+                      $0.session.persistentIdentifier == ownerID && $0.activationState == .foregroundActive
+                  }) else { return }
+            current.dismissalRequested = true
+            self.pendingClose = current
+            self.logClose("invoke Insights window dismissal", current)
+            // This environment action came from the Close button in this particular Insights window.
+            current.dismissWindow()
         }
     }
 
     @objc private func sceneDidActivate(_ notification: Notification) {
         guard let scene = notification.object as? UIWindowScene, let request = pendingClose,
-              !request.isDestroying, scene.session.persistentIdentifier == request.primaryID else { return }
-        // The owner's activation notification is the transition itself. A rescan of
-        // connectedScenes inside the notification need not witness that same transition.
+              !request.dismissalRequested, scene.session.persistentIdentifier == request.primaryID else { return }
         logClose("owner activated", request)
-        destroyInsights(for: request)
+        scheduleDismissalIfPrimaryIsActive()
     }
 
     @objc private func ownerWindowDidBecomeKey(_ notification: Notification) {
         guard let window = notification.object as? UIWindow, window.windowLevel == .normal,
-              let scene = window.windowScene, let request = pendingClose, !request.isDestroying,
+              let scene = window.windowScene, let request = pendingClose, !request.dismissalRequested,
               scene.session.persistentIdentifier == request.primaryID else { return }
         logClose("owner window became key", request)
-        let requestID = request.requestID
-        // Key status is local to this scene. Recheck activation after the event has unwound.
-        DispatchQueue.main.async { [weak self] in
-            guard let self, self.pendingClose?.requestID == requestID else { return }
-            self.finishCloseIfPrimaryIsActive()
-        }
+        // Key status is local to this scene; the deferred check still requires an active owner.
+        scheduleDismissalIfPrimaryIsActive()
     }
 
     @objc private func sceneDidDisconnect(_ notification: Notification) {
         guard let scene = notification.object as? UIScene,
-              let request = pendingClose, request.isDestroying,
+              let request = pendingClose, request.dismissalRequested,
               scene.session.persistentIdentifier == request.insights.persistentIdentifier else { return }
         logClose("auxiliary disconnected", request)
         let requestID = request.requestID
@@ -249,7 +241,7 @@ final class AppWindowRouter: NSObject {
     // A disconnected scene can stay archived. Only disappearance of its session confirms removal.
     @discardableResult
     private func finishCloseIfDiscarded() -> String? {
-        guard let request = pendingClose, request.isDestroying else { return nil }
+        guard let request = pendingClose, request.dismissalRequested else { return nil }
         let auxiliaryID = request.insights.persistentIdentifier
         guard !UIApplication.shared.openSessions.contains(where: {
             $0.persistentIdentifier == auxiliaryID
@@ -265,8 +257,9 @@ final class AppWindowRouter: NSObject {
             $0.session.persistentIdentifier == owner
         }?.activationState.rawValue ?? UIScene.ActivationState.unattached.rawValue
         let auxiliary = request.insights.persistentIdentifier
+        let auxiliaryState = request.insights.scene?.activationState.rawValue ?? UIScene.ActivationState.unattached.rawValue
         AppLogger.ui.info(
-            "Insights close \(event, privacy: .public) request=\(request.requestID.uuidString, privacy: .public) owner=\(owner, privacy: .private(mask: .hash)) ownerState=\(ownerState) insights=\(auxiliary, privacy: .private(mask: .hash)) destroying=\(request.isDestroying)"
+            "Insights close \(event, privacy: .public) request=\(request.requestID.uuidString, privacy: .public) owner=\(owner, privacy: .private(mask: .hash)) ownerState=\(ownerState) insights=\(auxiliary, privacy: .private(mask: .hash)) auxiliaryState=\(auxiliaryState) dismissalRequested=\(request.dismissalRequested)"
         )
     }
 
