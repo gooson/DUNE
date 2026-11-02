@@ -1247,8 +1247,18 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         if VisualAudit.isEnabled {
             let scroll = app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch
             XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Personal Records should own its scroll viewport")
+            let best = app.staticTexts["activity-personal-records-best-value"].firstMatch
+            XCTAssertTrue(best.waitForExistence(timeout: 10))
+            XCTAssertFalse(best.label.isEmpty)
+            for _ in 0..<12 where !scroll.frame.intersection(app.windows.firstMatch.frame).contains(best.frame) {
+                if best.frame.midY < scroll.frame.midY { scroll.swipeDown(velocity: .slow) }
+                else { scroll.swipeUp(velocity: .slow) }
+            }
+            XCTAssertTrue(scroll.frame.intersection(app.windows.firstMatch.frame).contains(best.frame),
+                          "The complete best value should fit in the maximum-size viewport")
+            VisualAudit.capture("Personal Records maximum AX best value viewport")
             for (identifier, checkpoint) in [
-                (AXID.activityPersonalRecordsTimelineChart, "timeline endpoint and axes"),
+                ("personal-records-timeline-latest-value", "timeline latest value"),
                 (AXID.activityPersonalRecordsRewardProgress, "reward progress"),
                 (AXID.activityPersonalRecordsAchievementHistory, "achievement history")
             ] {
@@ -1281,12 +1291,67 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         for _ in 0..<6 where !paceChip.isHittable { chipBar.swipeLeft() }
         XCTAssertTrue(paceChip.isHittable)
         paceChip.tap()
-        tapSegment(in: AXID.activityPersonalRecordsPeriodPicker, index: 0, timeout: 10)
+        let best = app.staticTexts["activity-personal-records-best-value"].firstMatch
+        XCTAssertTrue(best.waitForExistence(timeout: 10), "The selected pace should have an all-time best")
+        let allTimeBest = best.label
+        XCTAssertFalse(allTimeBest.isEmpty)
+
+        let scroll = app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        let sixMonths = app.buttons["activity-personal-records-period-6M"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-personal-records-period-6M", maxSwipes: 8))
+        sixMonths.tap()
+        XCTAssertTrue(sixMonths.isSelected)
+        let hero = app.descendants(matching: .any)["activity-personal-records-current-best"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 5))
+        for _ in 0..<12 where !scroll.frame.intersection(app.windows.firstMatch.frame).contains(hero.frame) {
+            if hero.frame.midY < scroll.frame.midY { scroll.swipeDown(velocity: .slow) }
+            else { scroll.swipeUp(velocity: .slow) }
+        }
+        XCTAssertTrue(scroll.frame.intersection(app.windows.firstMatch.frame).contains(hero.frame),
+                      "The normal-size canonical hero should be fully visible")
+        VisualAudit.capture("Personal Records A10 fastest pace six-month hero")
+        addScreenshotAttachment(named: "Personal Records A10 fastest pace six-month hero")
+
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-personal-records-period-D", maxSwipes: 8))
+        let range = app.staticTexts["activity-personal-records-chart-range"].firstMatch
+        XCTAssertTrue(range.waitForExistence(timeout: 5))
+        var dayRange = ""
+        for period in ["D", "W", "M", "6M", "Y"] {
+            let control = app.buttons["activity-personal-records-period-\(period)"].firstMatch
+            XCTAssertTrue(control.waitForExistence(timeout: 5), "The \(period) period should be available")
+            control.tap()
+            XCTAssertTrue(control.isSelected, "The \(period) period should become selected")
+            XCTAssertEqual(best.label, allTimeBest, "Changing chart period must not change the all-time best")
+            XCTAssertFalse(range.label.isEmpty, "The selected period should show its date range")
+            if period == "D" { dayRange = range.label }
+            if period == "M" { XCTAssertNotEqual(range.label, dayRange, "Day and month ranges should differ") }
+        }
+        let month = app.buttons["activity-personal-records-period-M"].firstMatch
+        month.tap()
 
         let pacePoint = app.descendants(matching: .any)["personal-records-timeline-latest-value"].firstMatch
         XCTAssertTrue(pacePoint.waitForExistence(timeout: 10),
                       "A recent workout pace should appear in the monthly chart")
         VisualAudit.capture("Personal Records pace history")
+
+        let rewardInfo = app.buttons["activity-personal-records-reward-info"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-personal-records-reward-info", maxSwipes: 16),
+                      "The seeded reward progress should be reachable")
+        XCTAssertTrue(rewardInfo.isHittable)
+        VisualAudit.capture("Personal Records A10 reward progress")
+        addScreenshotAttachment(named: "Personal Records A10 reward progress")
+
+        let historyID = AXID.activityPersonalRecordsAchievementHistory
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(historyID, maxSwipes: 20),
+                      "Achievement history should be reachable")
+        let history = app.descendants(matching: .any)[historyID].firstMatch
+        XCTAssertTrue(history.isHittable)
+        VisualAudit.capture("Personal Records A10 achievement history")
+        addScreenshotAttachment(named: "Personal Records A10 achievement history")
+
+        tapBackButton()
+        ensureActivityRoot()
     }
 
     func testConsistencyDetailShowsCalendarAndHistorySections() throws {

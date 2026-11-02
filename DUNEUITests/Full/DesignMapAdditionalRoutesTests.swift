@@ -451,6 +451,46 @@ final class DesignMapNotificationDetailTests: SeededUITestBaseCase {
     func testNotificationPersonalRecordsPush() throws {
         openNotificationDetail(title: "Personal Records Route Fixture",
                                screen: "activity-personal-records-detail-screen")
+        let picker = app.descendants(matching: .any)["activity-personal-records-period-picker"].firstMatch
+        XCTAssertTrue(picker.waitForExistence(timeout: 10), "The notification destination should finish loading")
+        let pace = app.buttons["activity-personal-records-kind-fastestPace"].firstMatch
+        XCTAssertTrue(pace.waitForExistence(timeout: 10))
+        let chips = app.scrollViews["activity-personal-records-chip-bar"].firstMatch
+        XCTAssertTrue(chips.waitForExistence(timeout: 5))
+        for _ in 0..<6 where !pace.isHittable { chips.swipeLeft() }
+        XCTAssertTrue(pace.isHittable)
+        pace.tap()
+        let sixMonths = app.buttons["activity-personal-records-period-6M"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-personal-records-period-6M", maxSwipes: 8))
+        sixMonths.tap()
+        XCTAssertTrue(sixMonths.isSelected)
+        let scroll = app.scrollViews["activity-personal-records-detail-screen"].firstMatch
+        let best = app.staticTexts["activity-personal-records-best-value"].firstMatch
+        XCTAssertTrue(best.waitForExistence(timeout: 10))
+        let hero = app.descendants(matching: .any)["activity-personal-records-current-best"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 5))
+        for _ in 0..<12 where !scroll.frame.intersection(app.windows.firstMatch.frame).contains(hero.frame) {
+            if hero.frame.midY < scroll.frame.midY { scroll.swipeDown(velocity: .slow) }
+            else { scroll.swipeUp(velocity: .slow) }
+        }
+        XCTAssertTrue(scroll.frame.intersection(app.windows.firstMatch.frame).contains(hero.frame),
+                      "The normal-size canonical hero should be fully visible")
+        VisualAudit.capture("Personal Records T16 fastest pace six-month hero")
+        addScreenshotAttachment(named: "Personal Records T16 fastest pace six-month hero")
+
+        // Duo exposes the system rail outside navigationBars; other devices use the navigation bar.
+        let railBack = app.buttons["BackButton"].firstMatch
+        let navigationBack = app.navigationBars.buttons.matching(
+            NSPredicate(format: "identifier == %@ OR label == %@ OR label == %@", "BackButton", "Back", "Notifications")
+        ).firstMatch
+        let back = railBack.exists && railBack.isHittable ? railBack : navigationBack
+        XCTAssertTrue(back.waitForExistence(timeout: 5) && back.isHittable,
+                      "The native back button should remain usable")
+        back.tap()
+        XCTAssertTrue(app.descendants(matching: .any)["activity-personal-records-detail-screen"].firstMatch
+            .waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+            .waitForExistence(timeout: 5), "Back should return to the notification hub")
     }
 
     func testNotificationSleepDetailLoadsSharedPrediction() throws {
