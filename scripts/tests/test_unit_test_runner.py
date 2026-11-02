@@ -21,9 +21,16 @@ def option_values(command: list[str], flag: str) -> list[str]:
 
 
 class UnitRunnerTests(unittest.TestCase):
-    def dry_run(self, *args: str) -> tuple[subprocess.CompletedProcess[str], list[list[str]]]:
+    def dry_run(
+        self, *args: str, env_overrides: dict[str, str] | None = None
+    ) -> tuple[subprocess.CompletedProcess[str], list[list[str]]]:
+        env = dict(os.environ)
+        for key in ("DAILVE_WATCH_DESTINATION", "DUNE_WATCH_SIM_NAME", "DUNE_WATCH_SIM_OS"):
+            env.pop(key, None)
+        env["DUNE_SIM_TEST_LOCK_FD"] = "invalid"
+        env.update(env_overrides or {})
         result = subprocess.run(["bash", str(RUNNER), "--dry-run", *args], cwd=ROOT,
-                                env={**os.environ, "DUNE_SIM_TEST_LOCK_FD": "invalid"},
+                                env=env,
                                 capture_output=True, text=True, timeout=10)
         commands = [shlex.split(line.removeprefix("DRY_RUN_COMMAND="))
                     for line in result.stdout.splitlines() if line.startswith("DRY_RUN_COMMAND=")]
@@ -36,6 +43,40 @@ class UnitRunnerTests(unittest.TestCase):
                          [["DUNETests"], ["DUNEWatchTests"]])
         self.assertEqual([option_values(command, "-only-testing") for command in commands],
                          [["DUNETests"], ["DUNEWatchTests"]])
+
+    def test_watch_only_default_destination_uses_current_ci_device(self) -> None:
+        result, commands = self.dry_run("--watch-only")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(len(commands), 1)
+        self.assertEqual(option_values(commands[0], "-scheme"), ["DUNEWatchTests"])
+        self.assertEqual(option_values(commands[0], "-only-testing"), ["DUNEWatchTests"])
+        self.assertEqual(option_values(commands[0], "-destination"),
+                         ["platform=watchOS Simulator,name=Apple Watch Series 12 (46mm),OS=27.0"])
+
+    def test_watch_only_preserves_explicit_name_and_os(self) -> None:
+        result, commands = self.dry_run("--watch-only", env_overrides={
+            "DUNE_WATCH_SIM_NAME": "Apple Watch Ultra 4 (49mm)",
+            "DUNE_WATCH_SIM_OS": "27.1"
+        })
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(len(commands), 1)
+        self.assertEqual(option_values(commands[0], "-scheme"), ["DUNEWatchTests"])
+        self.assertEqual(option_values(commands[0], "-only-testing"), ["DUNEWatchTests"])
+        self.assertEqual(option_values(commands[0], "-destination"),
+                         ["platform=watchOS Simulator,name=Apple Watch Ultra 4 (49mm),OS=27.1"])
+
+    def test_watch_only_full_destination_overrides_name_and_os(self) -> None:
+        destination = "platform=watchOS Simulator,id=22222222-2222-2222-2222-222222222222"
+        result, commands = self.dry_run("--watch-only", env_overrides={
+            "DAILVE_WATCH_DESTINATION": destination,
+            "DUNE_WATCH_SIM_NAME": "Apple Watch Ultra 4 (49mm)",
+            "DUNE_WATCH_SIM_OS": "27.1"
+        })
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(len(commands), 1)
+        self.assertEqual(option_values(commands[0], "-scheme"), ["DUNEWatchTests"])
+        self.assertEqual(option_values(commands[0], "-only-testing"), ["DUNEWatchTests"])
+        self.assertEqual(option_values(commands[0], "-destination"), [destination])
 
     def test_uncompiled_ios_test_source_is_rejected(self) -> None:
         result, commands = self.dry_run("--only-testing", "DUNETests/PredictSleepDebtRecoveryUseCaseTests")
