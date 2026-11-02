@@ -1,0 +1,10 @@
+Waiting for a06 Duo simulator [E0E533E3-6D7D-4D1F-8E38-DCF17D4830DD] to boot (timeout=120s, retries=1)...
+a06 Duo simulator already booted.
+Test Case '-[DUNEUITests.ChartInteractionRegressionUITests testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList]' started.
+capture 001: DUNE_VISUAL_AUDIT_READY root after setup -[ChartInteractionRegressionUITests testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793650391.9857578
+capture 002: DUNE_VISUAL_AUDIT_READY Training volume detail default week [DUNEUITests/ChartInteractionRegressionUITests.swift:273] DEADLINE=1793650425.0142322
+capture 003: DUNE_VISUAL_AUDIT_READY tap 1개월 [DUNEUITests/UITestBaseCase.swift:232] DEADLINE=1793650434.330008
+capture 004: DUNE_VISUAL_AUDIT_READY before teardown -[ChartInteractionRegressionUITests testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793650439.1517549
+Test Case '-[DUNEUITests.ChartInteractionRegressionUITests testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList]' passed (65.241 seconds).
+** TEST SUCCEEDED **
+Verified actual angle and active display before/after; inspect new native PNG and AX

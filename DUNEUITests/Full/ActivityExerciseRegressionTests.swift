@@ -350,6 +350,13 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         app.buttons[AXID.activitySectionVolume].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen]
             .firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityTrainingVolumeOverview]
+            .firstMatch.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.descendants(matching: .any)["activity-training-volume-current-active-days"]
+            .firstMatch.waitForExistence(timeout: 15))
+        VisualAudit.capture("Maximum AX training volume detail overview")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-training-volume-previous-period", maxSwipes: 8))
+        VisualAudit.capture("Maximum AX training volume previous comparison")
     }
 
     func testExerciseHistoryAtMaximumAccessibilityTextSize() throws {
@@ -757,6 +764,25 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(app.descendants(matching: .any)["activity-injury-risk-detail-screen"].firstMatch
             .waitForExistence(timeout: 10))
 
+        // This score and two factors are the existing DEBUG route fixture, not production risk inputs.
+        let score = app.staticTexts["activity-injury-risk-score"].firstMatch
+        XCTAssertTrue(score.waitForExistence(timeout: 10))
+        XCTAssertEqual(score.label, "42")
+        let rows = app.descendants(matching: .any).matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", "activity-injury-risk-factor-"
+        ))
+        XCTAssertEqual(rows.count, 2, "The route fixture supplies exactly two risk factors")
+        for (type, value) in [("muscleFatigue", "+24"), ("sleepDeficit", "+18")] {
+            XCTAssertTrue(app.descendants(matching: .any)["activity-injury-risk-factor-\(type)"]
+                .firstMatch.waitForExistence(timeout: 5))
+            let contribution = app.staticTexts["activity-injury-risk-contribution-\(type)"].firstMatch
+            XCTAssertEqual(contribution.label, value)
+        }
+        XCTAssertTrue(app.descendants(matching: .any)["activity-injury-risk-recommendations"]
+            .firstMatch.waitForExistence(timeout: 5))
+        addScreenshotAttachment(named: "Injury Risk loaded DEBUG route assessment")
+        VisualAudit.capture("Injury Risk loaded DEBUG route assessment")
+
         tapBackButton()
         ensureActivityRoot()
 
@@ -884,6 +910,77 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         ensureActivityRoot()
     }
 
+    func testInjuryRiskAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "--ui-design-map-activity-routes",
+            "--ui-test-style", "dark",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+
+        let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        let riskLink = app.descendants(matching: .any)["activity-injuryrisk-detail-link"].firstMatch
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
+        for _ in 0..<24 where !riskLink.isHittable { activityScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(riskLink.isHittable)
+        riskLink.auditTap()
+
+        let riskScroll = app.scrollViews["activity-injury-risk-detail-screen"].firstMatch
+        XCTAssertTrue(riskScroll.waitForExistence(timeout: 10))
+        let window = app.windows.firstMatch
+        XCTAssertTrue(window.exists)
+
+        func revealInRiskScroll(_ element: XCUIElement, name: String) {
+            for _ in 0..<10 {
+                let viewport = riskScroll.frame.intersection(window.frame)
+                if element.exists && element.isHittable && viewport.contains(element.frame) { return }
+                if element.exists && element.frame.midY < viewport.midY {
+                    riskScroll.swipeDown(velocity: .slow)
+                } else {
+                    riskScroll.swipeUp(velocity: .slow)
+                }
+            }
+            let viewport = riskScroll.frame.intersection(window.frame)
+            XCTAssertTrue(element.exists && element.isHittable && viewport.contains(element.frame),
+                          "\(name) should fit within the Injury Risk detail scroll viewport")
+        }
+
+        // These values belong only to the existing DEBUG route assessment.
+        let score = app.staticTexts["activity-injury-risk-score"].firstMatch
+        XCTAssertTrue(score.waitForExistence(timeout: 10))
+        XCTAssertEqual(score.label, "42")
+        revealInRiskScroll(score, name: "Risk score")
+        XCTAssertTrue(app.descendants(matching: .any)["activity-injury-risk-level"].firstMatch.exists)
+        addScreenshotAttachment(named: "Injury Risk A08 dark maximum AX hero")
+        VisualAudit.capture("Injury Risk A08 dark maximum AX hero")
+
+        let factors = app.descendants(matching: .any).matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", "activity-injury-risk-factor-"
+        ))
+        XCTAssertEqual(factors.count, 2)
+        for (type, value) in [("muscleFatigue", "+24"), ("sleepDeficit", "+18")] {
+            let row = app.descendants(matching: .any)["activity-injury-risk-factor-\(type)"].firstMatch
+            XCTAssertTrue(row.waitForExistence(timeout: 5))
+            revealInRiskScroll(row, name: "\(type) factor")
+            XCTAssertEqual(app.staticTexts["activity-injury-risk-contribution-\(type)"].firstMatch.label, value)
+        }
+        addScreenshotAttachment(named: "Injury Risk A08 dark maximum AX factors")
+        VisualAudit.capture("Injury Risk A08 dark maximum AX factors")
+
+        let recommendations = app.descendants(matching: .any)["activity-injury-risk-recommendations"].firstMatch
+        XCTAssertTrue(recommendations.waitForExistence(timeout: 5))
+        let lastRecommendation = app.staticTexts["activity-injury-risk-recommendation-2"].firstMatch
+        XCTAssertTrue(lastRecommendation.waitForExistence(timeout: 5))
+        revealInRiskScroll(lastRecommendation, name: "Last recommendation")
+        XCTAssertFalse(lastRecommendation.label.isEmpty)
+        addScreenshotAttachment(named: "Injury Risk A08 dark maximum AX last recommendation")
+        VisualAudit.capture("Injury Risk A08 dark maximum AX last recommendation")
+
+        tapBackButton()
+        ensureActivityRoot()
+    }
+
     func testVisualAuditPersonalRecordsExplanation() throws {
         openActivityInfo(button: "activity-pr-info", sheet: "activity-personal-records-info-sheet")
     }
@@ -992,16 +1089,69 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testExerciseTypeDetailShowsTrendSurface() throws {
-        openTrainingVolumeDetailSurface()
+        try verifyManualExerciseTypeDetailAndCapture()
+    }
 
-        XCTAssertTrue(
-            app.scrollToElementIfNeeded(AXID.activityTrainingVolumeTypeList, maxSwipes: 10),
-            "Exercise type list should be reachable in Training Volume detail"
-        )
-        XCTAssertTrue(
-            app.scrollToHittableElementIfNeeded(AXID.activityTrainingVolumeRow(Fixture.manualStrengthTypeKey), maxSwipes: 10),
-            "Manual strength row should be reachable in Training Volume detail"
-        )
+    func testExerciseTypeDetailAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
+            "--ui-test-style", "dark"
+        ]
+        launchApp(with: configuration)
+        try verifyManualExerciseTypeDetailAndCapture(maximumAccessibilitySize: true)
+    }
+
+    private func verifyManualExerciseTypeDetailAndCapture(maximumAccessibilitySize: Bool = false) throws {
+        openTrainingVolumeDetailSurface(maximumAccessibilitySize: maximumAccessibilitySize)
+
+        // On the AX route, scope later reveals to the pushed detail scrolls. Activity's
+        // root scroll can remain in the accessibility tree behind a navigation push.
+        func revealInDetailScroll(_ scrollID: String, targetID: String, maxSwipes: Int = 12) -> Bool {
+            let scroll = app.scrollViews[scrollID].firstMatch
+            guard scroll.waitForExistence(timeout: 5) else { return false }
+            let target = app.descendants(matching: .any)[targetID].firstMatch
+            let window = app.windows.firstMatch
+            for _ in 0..<maxSwipes {
+                let viewport = scroll.frame.intersection(window.frame)
+                if target.exists && target.isHittable
+                    && viewport.contains(CGPoint(x: target.frame.midX, y: target.frame.midY)) {
+                    return true
+                }
+                if target.exists && target.frame.midY < viewport.midY {
+                    scroll.swipeDown(velocity: .slow)
+                } else {
+                    scroll.swipeUp(velocity: .slow)
+                }
+            }
+            let viewport = scroll.frame.intersection(window.frame)
+            return target.exists && target.isHittable
+                && viewport.contains(CGPoint(x: target.frame.midX, y: target.frame.midY))
+        }
+
+        if maximumAccessibilitySize {
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.activityTrainingVolumeTypeList]
+                .firstMatch.waitForExistence(timeout: 10),
+                "Exercise type list should exist in Training Volume detail")
+            XCTAssertTrue(
+                revealInDetailScroll(
+                    AXID.activityTrainingVolumeDetailScreen,
+                    targetID: AXID.activityTrainingVolumeRow(Fixture.manualStrengthTypeKey)
+                ),
+                "Manual strength row should be reachable in Training Volume detail"
+            )
+        } else {
+            XCTAssertTrue(
+                app.scrollToElementIfNeeded(AXID.activityTrainingVolumeTypeList, maxSwipes: 10),
+                "Exercise type list should be reachable in Training Volume detail"
+            )
+            XCTAssertTrue(
+                app.scrollToHittableElementIfNeeded(
+                    AXID.activityTrainingVolumeRow(Fixture.manualStrengthTypeKey), maxSwipes: 10
+                ),
+                "Manual strength row should be reachable in Training Volume detail"
+            )
+        }
         let row = app.descendants(matching: .any)[AXID.activityTrainingVolumeRow(Fixture.manualStrengthTypeKey)].firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 8), "Manual strength row should exist in Training Volume detail")
         row.auditTap()
@@ -1019,12 +1169,47 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             "Exercise type detail should render the trend chart"
         )
 
+        let primaryValue = app.staticTexts["activity-exercise-type-primary-value"].firstMatch
+        let comparisonVolume = app.staticTexts["activity-exercise-type-comparison-current-volume"].firstMatch
+        XCTAssertTrue(primaryValue.waitForExistence(timeout: 15), "Seeded manual strength hero must finish loading")
+        XCTAssertEqual(primaryValue.label, "6.4t", "The actual completed-set weight × reps total should lead")
+        XCTAssertTrue(comparisonVolume.waitForExistence(timeout: 5))
+        XCTAssertEqual(comparisonVolume.label, primaryValue.label,
+                       "Hero and comparison must use the same selected type total")
+        XCTAssertFalse(app.descendants(matching: .any)[AXID.activityExerciseTypeRecentSessions].firstMatch.exists,
+                       "A manual type must not invent HealthKit workout history")
+        VisualAudit.capture("Exercise type manual strength Week loaded")
+        XCTAssertTrue(
+            maximumAccessibilitySize
+                ? revealInDetailScroll(
+                    AXID.activityExerciseTypeDetailScreen,
+                    targetID: "activity-exercise-type-comparison-row-volume"
+                )
+                : app.scrollToHittableElementIfNeeded("activity-exercise-type-comparison-row-volume", maxSwipes: 8),
+            "The real weighted-volume comparison should be reachable"
+        )
+        VisualAudit.capture("Exercise type manual strength Week comparison")
+
+        XCTAssertTrue(
+            maximumAccessibilitySize
+                ? revealInDetailScroll(
+                    AXID.activityExerciseTypeDetailScreen,
+                    targetID: AXID.activityExerciseTypePeriodPicker
+                )
+                : app.scrollToHittableElementIfNeeded(
+                    AXID.activityExerciseTypePeriodPicker, maxSwipes: 8, direction: .down
+                ),
+            "The exercise type period control should remain reachable after comparison"
+        )
         tapSegment(in: AXID.activityExerciseTypePeriodPicker, index: 1, timeout: 10)
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.activityExerciseTypeTrendChart].firstMatch.waitForExistence(timeout: 15),
             "Exercise type detail should keep the trend chart visible after period switching"
         )
+        XCTAssertEqual(primaryValue.label, "6.4t",
+                       "The seeded three manual sessions remain in the Month window")
+        VisualAudit.capture("Exercise type manual strength Month loaded")
     }
 
     func testPersonalRecordsDetailShowsTimelineRewardsAndHistory() throws {
@@ -2311,6 +2496,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testNotificationMissingWorkoutRouteShowsFallback() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        launchApp(with: configuration)
         openNotificationHub()
 
         let missingRouteRow = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationMissingRouteID)].firstMatch
@@ -2321,6 +2509,167 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.notificationTargetNotFoundScreen].firstMatch.waitForExistence(timeout: 10),
             "Missing workout route should open fallback screen"
         )
+        XCTAssertEqual(app.staticTexts["notification-target-not-found-title"].firstMatch.label,
+                       "Exercise not found")
+        XCTAssertEqual(app.staticTexts["notification-target-not-found-message"].firstMatch.label,
+                       "The notification target has been deleted or is not synced.")
+        XCTAssertEqual(app.staticTexts["notification-target-not-found-id"].firstMatch.label,
+                       "ID: \(Fixture.notificationMissingRouteID)")
+        addScreenshotAttachment(named: "T14 missing workout target before Back")
+        VisualAudit.capture("T14 missing workout target before Back")
+    }
+
+    func testNotificationMissingWorkoutRouteDarkMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "--ui-test-style", "dark",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openNotificationHub()
+
+        let missingRouteRow = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationMissingRouteID)].firstMatch
+        XCTAssertTrue(t14RevealMissingWorkoutRouteRow(missingRouteRow),
+                      "The missing workout notification should be reachable in the front hub list")
+        missingRouteRow.auditTap()
+
+        let scroll = app.scrollViews[AXID.notificationTargetNotFoundScreen].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 10), "The front fallback scroll should open")
+        let title = app.staticTexts["notification-target-not-found-title"].firstMatch
+        let message = app.staticTexts["notification-target-not-found-message"].firstMatch
+        let identifier = app.staticTexts["notification-target-not-found-id"].firstMatch
+        XCTAssertEqual(title.label, "Exercise not found")
+        XCTAssertEqual(message.label, "The notification target has been deleted or is not synced.")
+        XCTAssertEqual(identifier.label, "ID: \(Fixture.notificationMissingRouteID)")
+
+        t14RevealFallbackText(title, in: scroll, position: .whole)
+        addScreenshotAttachment(named: "T14 dark maximum text title")
+        VisualAudit.capture("T14 dark maximum text title")
+        t14RevealFallbackText(message, in: scroll, position: .start)
+        addScreenshotAttachment(named: "T14 dark maximum text message start")
+        t14RevealFallbackText(message, in: scroll, position: .end)
+        addScreenshotAttachment(named: "T14 dark maximum text message end")
+        // Selectable Text reports its AX origin at the scroll edge despite inset glyphs.
+        // Keep the ID inside the actual clip bounds without a synthetic 4-point inset.
+        t14RevealFallbackText(identifier, in: scroll, position: .whole, horizontalInset: 0)
+        addScreenshotAttachment(named: "T14 dark maximum text actual ID before Back")
+        VisualAudit.capture("T14 dark maximum text actual ID before Back")
+
+        tapBackButton()
+        XCTAssertTrue(scroll.waitForNonExistence(timeout: 8),
+                      "Native Back should dismiss the missing workout fallback")
+        let activityRoot = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(activityRoot.waitForExistence(timeout: 8), "Native Back should return to Activity")
+        XCTAssertTrue(activityRoot.isHittable, "Activity should be frontmost and interactive")
+
+        let replay = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in scroll.exists || !activityRoot.exists || !activityRoot.isHittable },
+            object: nil
+        )
+        replay.isInverted = true
+        XCTAssertEqual(XCTWaiter.wait(for: [replay], timeout: 3), .completed,
+                       "The fallback must remain dismissed and Activity interactive while navigation settles")
+    }
+
+    private func t14RevealMissingWorkoutRouteRow(_ row: XCUIElement) -> Bool {
+        let hub = app.collectionViews[AXID.notificationHubScreen].firstMatch
+        guard hub.exists else { return false }
+        let window = app.windows.firstMatch.frame
+        let navigationBar = app.navigationBars["Notifications"].firstMatch
+        let tabBar = app.tabBars.firstMatch
+        let top = max(window.minY, navigationBar.exists ? navigationBar.frame.maxY : window.minY)
+        let bottom = tabBar.exists && tabBar.isHittable && tabBar.frame.minY > window.midY
+            ? min(window.maxY, tabBar.frame.minY) : window.maxY
+        let viewport = hub.frame.intersection(CGRect(x: window.minX, y: top,
+                                                     width: window.width, height: max(0, bottom - top)))
+            .insetBy(dx: 0, dy: 4)
+        guard !viewport.isNull && viewport.height > 80 && hub.frame.height > 0 else { return false }
+
+        for attempt in 0..<10 {
+            if row.exists {
+                let frame = row.frame
+                if viewport.contains(frame) && row.isHittable { return true }
+            }
+            if attempt == 9 { break }
+            let startY = viewport.minY + viewport.height * 0.75
+            let endY = viewport.minY + viewport.height * 0.35
+            let start = hub.coordinate(withNormalizedOffset:
+                CGVector(dx: 0.5, dy: (startY - hub.frame.minY) / hub.frame.height))
+            let end = hub.coordinate(withNormalizedOffset:
+                CGVector(dx: 0.5, dy: (endY - hub.frame.minY) / hub.frame.height))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        return false
+    }
+
+    private enum T14FallbackTextPosition { case whole, start, end }
+
+    private func t14FallbackViewport(for scroll: XCUIElement, horizontalInset: CGFloat = 4) -> CGRect {
+        let scrollFrame = scroll.frame
+        var viewport = scrollFrame.intersection(app.windows.firstMatch.frame).insetBy(dx: horizontalInset, dy: 0)
+        let navigationBar = app.navigationBars["Notification"].firstMatch
+        if navigationBar.exists && navigationBar.frame.maxY < scrollFrame.midY {
+            let bottom = viewport.maxY
+            viewport.origin.y = max(viewport.minY, navigationBar.frame.maxY + 4)
+            viewport.size.height = max(0, bottom - viewport.minY)
+        }
+        let tabBar = app.tabBars.firstMatch
+        if tabBar.exists && tabBar.isHittable && tabBar.frame.minY > scrollFrame.midY {
+            viewport.size.height = max(0, min(viewport.maxY, tabBar.frame.minY - 4) - viewport.minY)
+        }
+        return viewport
+    }
+
+    private func t14RevealFallbackText(_ element: XCUIElement, in scroll: XCUIElement,
+                                       position: T14FallbackTextPosition, horizontalInset: CGFloat = 4) {
+        XCTAssertTrue(element.waitForExistence(timeout: 5))
+        for _ in 0..<12 {
+            let viewport = t14FallbackViewport(for: scroll, horizontalInset: horizontalInset)
+            XCTAssertGreaterThan(viewport.height, 72, "The fallback should have a readable viewport")
+            let frame = element.frame
+            let horizontalFit = frame.minX >= viewport.minX && frame.maxX <= viewport.maxX
+            let reached: Bool
+            switch position {
+            case .whole:
+                reached = viewport.contains(frame) && element.isHittable
+            case .start:
+                reached = horizontalFit && frame.minY >= viewport.minY
+                    && frame.intersection(viewport).height >= 24
+            case .end:
+                reached = horizontalFit && frame.maxY <= viewport.maxY
+                    && frame.intersection(viewport).height >= 24
+            }
+            if reached { return }
+
+            let moveUp: Bool
+            switch position {
+            case .whole, .start: moveUp = frame.minY >= viewport.midY
+            case .end: moveUp = frame.maxY > viewport.maxY
+            }
+            let startY = moveUp ? viewport.maxY - 24 : viewport.minY + 24
+            let endY = moveUp ? viewport.minY + 36 : viewport.maxY - 36
+            let start = scroll.coordinate(withNormalizedOffset:
+                CGVector(dx: 0.5, dy: (startY - scroll.frame.minY) / scroll.frame.height))
+            let end = scroll.coordinate(withNormalizedOffset:
+                CGVector(dx: 0.5, dy: (endY - scroll.frame.minY) / scroll.frame.height))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        let viewport = t14FallbackViewport(for: scroll, horizontalInset: horizontalInset)
+        let frame = element.frame
+        XCTAssertGreaterThanOrEqual(frame.minX, viewport.minX, "Text should fit horizontally")
+        XCTAssertLessThanOrEqual(frame.maxX, viewport.maxX, "Text should fit horizontally")
+        switch position {
+        case .whole:
+            XCTAssertTrue(viewport.contains(frame) && element.isHittable,
+                          "The whole title or ID should be readable")
+        case .start:
+            XCTAssertGreaterThanOrEqual(frame.minY, viewport.minY)
+            XCTAssertGreaterThanOrEqual(frame.intersection(viewport).height, 24)
+        case .end:
+            XCTAssertLessThanOrEqual(frame.maxY, viewport.maxY)
+            XCTAssertGreaterThanOrEqual(frame.intersection(viewport).height, 24)
+        }
     }
 
     // MARK: - Helpers
@@ -2336,12 +2685,31 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
     }
 
-    private func openTrainingVolumeDetailSurface() {
-        openActivityDetail(
-            sectionIdentifier: AXID.activitySectionVolume,
-            destinationIdentifier: AXID.activityTrainingVolumeDetailScreen,
-            maxSwipes: 8
-        )
+    private func openTrainingVolumeDetailSurface(maximumAccessibilitySize: Bool = false) {
+        if maximumAccessibilitySize {
+            ensureActivityRoot()
+            let contentID = "activity-section-volume-content"
+            // AX puts this section several screens below the initial viewport. The
+            // Existing summary navigation reveals visible content, then the header.
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(contentID, maxSwipes: 32))
+            let card = app.buttons[contentID].firstMatch
+            let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+            let viewport = activityScroll.frame.intersection(app.windows.firstMatch.frame)
+            XCTAssertTrue(card.exists && card.isHittable)
+            XCTAssertTrue(viewport.intersects(card.frame))
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(
+                AXID.activitySectionVolume, maxSwipes: 8, direction: .down
+            ))
+            app.buttons[AXID.activitySectionVolume].firstMatch.auditTap()
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen]
+                .firstMatch.waitForExistence(timeout: 10))
+        } else {
+            openActivityDetail(
+                sectionIdentifier: AXID.activitySectionVolume,
+                destinationIdentifier: AXID.activityTrainingVolumeDetailScreen,
+                maxSwipes: 8
+            )
+        }
     }
 
     private func openActivityDetail(

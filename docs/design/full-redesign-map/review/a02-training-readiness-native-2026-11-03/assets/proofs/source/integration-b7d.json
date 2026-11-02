@@ -1,0 +1,18 @@
+{
+  "original_head": "945d1a598a1355419a9cf34c3263e73b9d67bef2",
+  "merge_head": "b7d057bafb7397b216a952038199c1eced405dd4",
+  "status": "merge_in_progress_conflicts_resolved_uncommitted",
+  "unmerged_paths": [],
+  "app_view_blob": "1baf6d45beeba4ff32debf42a7e8d1df3d5a960b",
+  "focused_test_blob": "d83e06ad33750b41657680d95b850fdc0ae27e3c",
+  "blob_closure": "Both index blobs match original HEAD and frozen validation 59fdf; broader dependency and final-main closure pending.",
+  "map_resolution": "main manifest 10 themes and 24 studies preserved exactly; original A02 study added; main layout links and README text retained; generated theme index current.",
+  "verification": [
+    "git diff --cached --check passed",
+    "theme map generator --check passed",
+    "no unmerged paths",
+    "no .claude changes versus b7d"
+  ],
+  "compile": "pending; no build, test, device or compiler invoked",
+  "next": "Independent reviews, final main integration after H03, targeted validation and actual captures remain; no commit or push."
+}

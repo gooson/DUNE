@@ -1,0 +1,37 @@
+{
+  "publicOriginal": "745737b5",
+  "main": "b7d057ba",
+  "validation": "59fdf60fa3da4a87bad0da59c07df076d0509fe9",
+  "appFiles": {
+    "DUNE/Presentation/Wellness/SleepPredictionDetail/SleepPredictionDetailView.swift": "5d128c792c95689521e1904c1f63d0e72ea2778a2097eb8b4148cedc2182dc77",
+    "DUNE/App/ContentView.swift": "1f99acd7c7ae1f91f300d3f82de18f255ecb7061ebe9143cd7c1bffe76229cc0"
+  },
+  "methods": {
+    "h03TapNativeBack": {
+      "file": "DUNEUITests/Full/DesignMapAdditionalRoutesTests.swift",
+      "SHA": "cbc82300b874eb2b2925634e86428f5abe2c6caec781b531e43ca8eb6f58b427",
+      "equalCurrentValidation": true
+    },
+    "testSleepPredictionOpensFromWellness": {
+      "file": "DUNEUITests/Full/DesignMapAdditionalRoutesTests.swift",
+      "SHA": "d06590d7e0f159988fd09e9d28570d107441162109fe568dc27430335934de4c",
+      "equalCurrentValidation": true
+    },
+    "testSleepPredictionDarkMaximumAccessibilityKeepsContentReachable": {
+      "file": "DUNEUITests/Full/DesignMapAdditionalRoutesTests.swift",
+      "SHA": "8f22070d7534ec91774a35124b78c2e04f832f4b91b92ad52192508a20330de7",
+      "equalCurrentValidation": true
+    },
+    "testNotificationSleepDetailLoadsSharedPrediction": {
+      "file": "DUNEUITests/Full/DesignMapAdditionalRoutesTests.swift",
+      "SHA": "ae17104a9b14e97f0fffbbb0251b444f42d18190f4c62dc3f3fe0f8201ccfae9",
+      "equalCurrentValidation": true
+    },
+    "testBedtimeReminderPushesFromNotificationHub": {
+      "file": "DUNEUITests/Full/NotificationRoutingRegressionTests.swift",
+      "SHA": "0668091c0d6dfe7896ed383a48dc5f4298a12291d23f2e385e238babbb5480ff",
+      "equalCurrentValidation": true
+    }
+  },
+  "kind": "actualUI targetcompilePASS; newH03runtimepending"
+}

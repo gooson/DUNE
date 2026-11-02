@@ -1,0 +1,114 @@
+{
+  "unit_revision": "aeabdd7d88e89e2f87123ac63b76551b989eba6e",
+  "base_revision": "e206c0f30b18532c509bc7aa554c3825a6711ba2",
+  "current_revision": "844dacaae8d1bed1c467b92bb3f21d7b07e449a4",
+  "base_to_current_changed": [
+    "DUNEUITests/Regression/ChartInteractionRegressionUITests.swift"
+  ],
+  "unchanged_blobs": {
+    "DUNE/Domain/UseCases/TrainingVolumeAnalysisService.swift": {
+      "unit": "79d5ea12394ab3fa481727050726e9cff05e89c5",
+      "current": "79d5ea12394ab3fa481727050726e9cff05e89c5"
+    },
+    "DUNE/Domain/Models/TrainingVolume.swift": {
+      "unit": "e9fb5e77d2a1bbbd3c118f1ae15309e450db0618",
+      "current": "e9fb5e77d2a1bbbd3c118f1ae15309e450db0618"
+    },
+    "DUNE/Presentation/Activity/TrainingVolume/TrainingVolumeViewModel.swift": {
+      "unit": "18030bc1eb839f1439fd6fc727ea3722191fd2b0",
+      "current": "18030bc1eb839f1439fd6fc727ea3722191fd2b0"
+    },
+    "DUNE/Presentation/Activity/TrainingVolume/ExerciseTypeDetailViewModel.swift": {
+      "unit": "12db06ab60c9115999b88f5de4e326839f70ff76",
+      "current": "12db06ab60c9115999b88f5de4e326839f70ff76"
+    },
+    "DUNE/Presentation/Activity/TrainingVolume/TrainingVolumeDetailView.swift": {
+      "unit": "fc1fdfd7692b9f6b46d2c938ea9bb2712863a3e9",
+      "current": "fc1fdfd7692b9f6b46d2c938ea9bb2712863a3e9"
+    },
+    "DUNE/Presentation/Activity/TrainingVolume/ExerciseTypeDetailView.swift": {
+      "unit": "fb9085193e8c5e4d810d98f2b0b87577fe74c666",
+      "current": "fb9085193e8c5e4d810d98f2b0b87577fe74c666"
+    },
+    "DUNE/Presentation/Shared/Components/ChangeBadge.swift": {
+      "unit": "0ff26e0c78c121af383372607a469a5bd5905d19",
+      "current": "0ff26e0c78c121af383372607a469a5bd5905d19"
+    },
+    "DUNE/Presentation/Activity/ActivityView.swift": {
+      "unit": "07c2d6a47a8f068ef7211f55c445a24fc3167185",
+      "current": "07c2d6a47a8f068ef7211f55c445a24fc3167185"
+    },
+    "DUNE/App/ContentView.swift": {
+      "unit": "2c8d44f6b047b9577a4587fb82a01d1d5476e002",
+      "current": "2c8d44f6b047b9577a4587fb82a01d1d5476e002"
+    },
+    "DUNE/App/TestDataSeeder.swift": {
+      "unit": "2c490c1ab1015a8103e2a89c7334bcb3fea58614",
+      "current": "2c490c1ab1015a8103e2a89c7334bcb3fea58614"
+    },
+    "DUNEUITests/Helpers/UITestBaseCase.swift": {
+      "unit": "19071580e5de2b8b9645964e98ee514dcbdd01e8",
+      "current": "19071580e5de2b8b9645964e98ee514dcbdd01e8"
+    },
+    "DUNEUITests/Helpers/UITestHelpers.swift": {
+      "unit": "3f0c39a5af7a7aa9230329fcd6755ed18173d9d4",
+      "current": "3f0c39a5af7a7aa9230329fcd6755ed18173d9d4"
+    },
+    "DUNEUITests/DUNEUITests-DesignCapture.xctestplan": {
+      "unit": "fd8a0f9abdcfc650030ef60acd82091459c6d41e",
+      "current": "fd8a0f9abdcfc650030ef60acd82091459c6d41e"
+    },
+    "DUNETests/TrainingVolumeAnalysisServiceTests.swift": {
+      "unit": "0ccacbc690108718ba9bd3990bafe6cf11a8211c",
+      "current": "0ccacbc690108718ba9bd3990bafe6cf11a8211c"
+    },
+    "DUNETests/TrainingVolumeViewModelTests.swift": {
+      "unit": "38fa2c7a84e2e80e7143bfa08715ab41d739e1a4",
+      "current": "38fa2c7a84e2e80e7143bfa08715ab41d739e1a4"
+    },
+    "DUNETests/ExerciseTypeDetailViewModelTests.swift": {
+      "unit": "5663836b13d356e1e33f389aee7f73f228f92c2e",
+      "current": "5663836b13d356e1e33f389aee7f73f228f92c2e"
+    },
+    "scripts/test-ui.sh": {
+      "unit": "94b854501036594fbffc61d20e1586b2a8a5fb8b",
+      "current": "94b854501036594fbffc61d20e1586b2a8a5fb8b"
+    },
+    "scripts/codex-pipeline.py": {
+      "unit": "11f05ae97cc6d65b97e4af46120ee172bd231114",
+      "current": "11f05ae97cc6d65b97e4af46120ee172bd231114"
+    },
+    "scripts/lib/simulator-test-lock.py": {
+      "unit": "51d0ed925ed46e24ee8c1229872a46ec9b3e914a",
+      "current": "51d0ed925ed46e24ee8c1229872a46ec9b3e914a"
+    },
+    "DUNE/Presentation/Activity/TrainingVolume/Components/ActivityRingView.swift": {
+      "unit": "2869891918acaa7a6cacc47bc6f87f716a9e3c67",
+      "current": "2869891918acaa7a6cacc47bc6f87f716a9e3c67"
+    },
+    "DUNE/Presentation/Activity/TrainingVolume/Components/ExerciseTypeSummaryRow.swift": {
+      "unit": "50a5d761d393389265e1bdfd526b4ca353273a59",
+      "current": "50a5d761d393389265e1bdfd526b4ca353273a59"
+    },
+    "DUNE/Presentation/Activity/TrainingVolume/Components/PeriodComparisonView.swift": {
+      "unit": "65a99d75dbd2b12bd372947f046f6e4da5739122",
+      "current": "65a99d75dbd2b12bd372947f046f6e4da5739122"
+    },
+    "DUNE/Presentation/Activity/TrainingVolume/Components/StackedVolumeBarChartView.swift": {
+      "unit": "02e4cc4f4eb02c838bbb152b7163b231a9cf6ea7",
+      "current": "02e4cc4f4eb02c838bbb152b7163b231a9cf6ea7"
+    },
+    "DUNE/Presentation/Activity/TrainingVolume/Components/TrainingVolumeSummaryCard.swift": {
+      "unit": "e02b47976fb30a47c443848b5d130a7815a6bb55",
+      "current": "e02b47976fb30a47c443848b5d130a7815a6bb55"
+    },
+    "DUNE/Presentation/Activity/TrainingVolume/Components/VolumeDonutChartView.swift": {
+      "unit": "5b7c01ed461bba080e6aff5f5cd146e1efcd6486",
+      "current": "5b7c01ed461bba080e6aff5f5cd146e1efcd6486"
+    }
+  },
+  "changed_ui_capture_files": [
+    "DUNEUITests/Full/ActivityExerciseRegressionTests.swift",
+    "DUNEUITests/Regression/ChartInteractionRegressionUITests.swift"
+  ]
+}

@@ -1,0 +1,13 @@
+Host state context: .xcodebuild/a08-ipad-risk-and-dark-AX-74a17b94.log.host.json
+Ensuring requested iOS simulator 'C8B44B9E-4C42-4CB0-845E-0F5E7C74F162' is booted...
+Waiting for iOS simulator [C8B44B9E-4C42-4CB0-845E-0F5E7C74F162] to boot (timeout=120s, retries=1)...
+iOS simulator already booted.
+Running UI tests with scheme 'DUNEUITests' for destination 'id=C8B44B9E-4C42-4CB0-845E-0F5E7C74F162'...
+Using test plan: DUNEUITests-DesignCapture
+Only testing: DUNEUITests/ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen
+Only testing: DUNEUITests/ActivityExerciseRegressionTests/testInjuryRiskAtMaximumAccessibilityTextSize
+UI tests: passed
+Last reported test count: 2
+Last reported failures: 0
+Full log: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/a08-ipad-risk-and-dark-AX-74a17b94.log
+Verified UI test execution: 2 reported, 2 passed cases

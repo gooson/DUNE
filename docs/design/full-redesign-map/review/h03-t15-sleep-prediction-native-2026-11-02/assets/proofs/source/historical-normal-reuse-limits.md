@@ -1,0 +1,5 @@
+# Historical normal reuse limits
+
+H03 ordinary normal branch in Phone c243 and iPad d5ed precedes final745 decorative MAX-only factor/tip glyph16/26 slot fix. Current H03View equals745/validation59fdf, not whole c243/d5ed. Prediction model/usecase/Wellness consumers unchanged; preserve source/data/revision differences. Historical H03 nativeBack used original navbar helper; new rail preference was not executed in these historical methods. Historical defaultT15 method checked wrapper+Today only: its loaded72/Good/Medium/five-factor PNG+AX is genuine visual evidence after individual inspection, but is NOT current strengthened loaded-score/Back contract runtime evidence. StrictT15 fixture78/twofactor is supplemental and cannot replace default canonicalT15. Fresh Duo cases must cover the edited queries/loaded-state/realBack assertions. No full-tree or all-platform current-source PASS is claimed.
+
+Assembler independently viewed four historical selected after originals and their exact labels; they show H03strict78/Excellent/Medium/twofactors, T15computed72/Good/Medium/fivefactors. PhoneT15 tip lies partly below tab; no complete-simultaneous-content claim.

@@ -148,9 +148,94 @@
       ],
       "motif": "기존 DUNE 팔레트·원래 심볼",
       "motion": "정적 브라우저 검토 캡처 보존본"
+    },
+    {
+      "id": "cumulative-stress-detail-redesign",
+      "name": "누적 스트레스 상세 개편",
+      "title": "T05 · Cumulative Stress",
+      "file": "dune-cumulative-stress-redesign.html",
+      "detail": "사용자 검토 원본 JSON과 구현 전 밝음·어두움·큰 글씨 배치. 동일 링/팔레트·요인별 막대·통합 기간/통계·구성과 계산의 단일 펼침. 예시 자료이며 실제 캡처가 아님.",
+      "implementation": {
+        "layout": "../layout-map/cumulative-stress-redesign-proposal.md",
+        "status": "native-implementation-in-progress"
+      },
+      "colors": [
+        "#302b2a",
+        "#b2854c",
+        "#e1b453",
+        "#f5d778"
+      ],
+      "motif": "기존 DUNE 링·능선·원래 요인 심볼",
+      "motion": "정적 장식·시스템 펼침/기간 선택; Reduce Motion 존중"
     }
   ],
   "studies": [
+    {
+      "id": "training-volume-detail-a06",
+      "name": "A06 · Training Volume 상세",
+      "title": "현재 지표·이전 기간·분 단위 차트",
+      "file": "dune-training-volume-detail-a06.html",
+      "detail": "2026-10-31 DUNE 밝음/어두움 정적 제안. 실제 네 지표·1W 주간 목표와 긴 기간 실제 활동일 건수의 구별·이전 기간 날짜 한 번·운동 시간(분) 차트를 시각화한다. 값·막대·웹 아이콘은 설명용이며 네이티브 캡처 또는 실제 HealthKit 데이터가 아니다. A03 근육 세트 목표는 A06에 포함하지 않는다.",
+      "implementation": {
+        "layout": "../layout-map/activity-training-volume-detail-a06.html",
+        "status": "native-source-prepared-runtime-validation-pending"
+      }
+    },
+    {
+      "id": "muscle-map-detail-a03",
+      "name": "A03 · 근육 지도 2D 상세",
+      "title": "Muscle Map · Recovery and Sets",
+      "file": "dune-muscle-map-detail-a03.html",
+      "detail": "A04 1f7f9900의 비활성 3D 진입을 유지하며 앞/뒤 실제 SVG 지도, 원래 Recovery 10단계와 Sets 5구간 범례, 선택 근육·13그룹 볼륨·관측 상태 회복을 정돈하는 밝음/어두움 제안. 히어로는 실제 recoveredCount/관측 상태 수를 쓰며 로딩·빈 상태를 구분하고, regular에서는 secondary 첫 항목·compact에서는 primary 지도 위에 둔다. 브라우저 인체 그림과 막대는 설명용이며 실제 건강 수치나 앱 캡처가 아니다. A04 phone/iPad 기본·선택 before는 원본 소스와 일치; Duo before와 수정된 A03 after는 대기 중.",
+      "implementation": {
+        "layout": "../layout-map/activity-muscle-map-detail-a03.html",
+        "status": "native-source-prepared-runtime-validation-pending"
+      }
+    },
+    {
+      "id": "notification-target-not-found-t14",
+      "name": "T14 · 운동 기록 없음",
+      "title": "알림 목적지 상세 · 밝음/어두움",
+      "file": "dune-notification-target-not-found-t14.html",
+      "detail": "기존 DUNE ScoreHeroPalette의 불투명 히어로와 원래 알림 문구·돋보기 SF Symbol·실제 workoutID를 사용하는 T14 화면별 정적 방향. 브라우저 그림은 앱 캡처가 아니며 새 테마/움직임/가짜 기록/재시도 동작을 추가하지 않는다.",
+      "implementation": {
+        "layout": "../layout-map/notification-target-not-found-t14.html",
+        "status": "source-contract-pending-native-validation"
+      }
+    },
+    {
+      "id": "training-readiness-detail-a02",
+      "name": "A02 훈련 준비도 상세",
+      "title": "Training Readiness · Opaque Score Hero",
+      "file": "dune-training-readiness-detail-a02.html",
+      "detail": "2026-10-31 A02 화면별 브라우저 방향 시안. 밝음/어두움의 불투명 히어로·모델 상태 심볼·링과 다섯 계산 구성 점수/가중치, 시간 조정, 기존 5기간 차트·3원천 비-일간 근사 이력을 표현한다. 수치·그래프는 명시적인 예시이며 실제 센서 관측이나 앱 캡처가 아니다. 원본 iPhone 영어/max-AX, iPad 영어/max-AX 및 일반 글씨 통과. 일반 글씨 iPhone/Duo 미검증.",
+      "implementation": {
+        "layout": "../layout-map/training-readiness-detail-a02.html",
+        "status": "native-source-written-runtime-validation-pending"
+      }
+    },
+    {
+      "id": "notification-unavailable-t13",
+      "name": "T13 · 알림 대상 없음",
+      "title": "대상 없음 · 밝음/어두움",
+      "file": "dune-notification-unavailable-t13.html",
+      "detail": "기존 DUNE ScoreHeroPalette와 DetailWaveBackground를 이용한 T13 정적 표현. 아이콘·기존 문구·Go Back·실제 ID를 보존하며 새 테마·움직임·허구 데이터는 추가하지 않는다. 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/notification-destination-unavailable-t13.html",
+        "status": "native-source-pending-captures"
+      }
+    },
+    {
+      "id": "notification-message-detail",
+      "name": "T12 알림 메시지 상세",
+      "title": "Notification Message · Reading Detail",
+      "file": "dune-notification-message-detail.html",
+      "detail": "2026-10-31 T12 저장 제목·본문만으로 구성한 밝음·어두움 읽기 시안. 원본 알림 심볼과 테마별 불투명 어두운 히어로, 한 열·680pt 읽기 폭을 제안한다. 테스트 fixture 문구는 예시이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/notification-message-detail-proposal.md",
+        "status": "native-source-implemented-pending-runtime-validation"
+      }
+    },
     {
       "id": "crest-language",
       "name": "공통 능선 언어",
@@ -281,11 +366,44 @@
       }
     },
     {
+      "id": "health-metric-detail-redesign",
+      "name": "건강 지표 상세 개편",
+      "title": "T06 · 16가지 실제 수치와 통합 추세",
+      "file": "dune-health-metric-detail-redesign.html",
+      "detail": "검토한16개 지표 시안의 실제 단위·원래 아이콘·큰 수치 히어로·단일 기간/차트/요약 계약. 예시 기록의 방향 시안이며 실제 앱 캡처가 아니다. 선택형 체중/BMI 참조는 명시적인 미국 조사 평균, MCST 수치와 임의30대/남성 프로필은 제품에 이식하지 않는다. 체지방·제지방 또래 비교는 미제공 상태.",
+      "implementation": {
+        "layout": "../layout-map/health-metric-detail-redesign-proposal.md",
+        "status": "proposal-only"
+      }
+    },
+    {
+      "id": "all-data-detail-t07",
+      "name": "전체 데이터 상세 방향",
+      "title": "T07 · 16개 범주의 실제 날짜·시간·값 행",
+      "file": "dune-all-data-detail-t07.html",
+      "detail": "2026-10-31 구현 전 브라우저 방향 시안. T06 불투명 ScoreHeroPalette를 이어 받은 범주 이름·원래 SF Symbol 히어로, 정적 능선과 기존 insetGrouped List의 날짜/시간/값 위계, 제한 이력과 빈 상태, 큰 글씨의 세로 행을 제안한다. 도식의 수치·날짜·기호는 예시이며 실제 HealthKit 데이터·앱 캡처가 아니다. 16개 범주의 기존 데이터/서식/페이징과 시스템 내비게이션을 보존한다.",
+      "implementation": {
+        "layout": "../layout-map/all-data-detail-t07.html",
+        "status": "proposal-only"
+      }
+    },
+    {
       "id": "siri-health-queries",
       "name": "Siri 건강 정보 · 기능별 비주얼 시안",
       "title": "DUNE · 기록 조회와 근거 있는 설명",
       "file": "dune-siri-health-queries.html",
       "detail": "2026-10-30 제안. SQ01–SQ14 최근 운동·기간 집계·근력 세트·개인 기록·유산소·신체 최신값/추세·수면·컨디션·지표 비교·화면 문맥·메모 검색·보고서 공유·긴 분석. V1 기본과 V2 비주얼 강조, 밝음/어두움·320/402/466/951/1032 폭·100/160/200% 글씨·8개 데이터 상태. 큰 수치·골드·바벨/메달·측정 표본·수면 단계와 Watch 응답 3개. 합성 fixture의 로컬 인터랙션이며 실제 Siri/HealthKit/모델/공유 실행·앱 캡처가 아님. 배치 계약: ../layout-map/siri-health-queries-proposal.md."
+    },
+    {
+      "id": "morning-briefing",
+      "name": "아침 브리핑",
+      "title": "T09 · Sunrise Briefing",
+      "file": "dune-morning-briefing.html",
+      "detail": "2026-10-31 승인된 T09 일출 히어로와 회복·가이드·주간·조건부 날씨 섹션 시안. 밝음·어두움·큰 글씨·날씨 유무를 비교한다. 수치는 예시이며 네이티브 구현과 실제 앱 캡처의 증거가 아니다. 최대 접근성 글씨에서는 아이콘 위·본문 아래 배치로 전체 읽기 폭을 확보한다.",
+      "implementation": {
+        "layout": "../layout-map/morning-briefing-proposal.md",
+        "status": "native-source-in-progress"
+      }
     },
     {
       "id": "weather-detail-redesign",
@@ -307,6 +425,72 @@
       "implementation": {
         "layout": "../layout-map/cloud-sync-consent-t02.html",
         "status": "native-source-ready-captures-pending"
+      }
+    },
+    {
+      "id": "daily-report-redesign",
+      "name": "오늘의 건강 리포트",
+      "title": "T10 · Today’s Report",
+      "file": "dune-daily-report.html",
+      "detail": "2026-10-31 T10 알림 목적지 보고서 방향 보존. 불투명 골드 표지와 컨디션·활동·수면·하루 돌아보기 분리. 수치는 예시이며 실제 앱 캡처나 건강 데이터가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/daily-report-proposal.md",
+        "status": "native-source-in-progress-capture-pending"
+      }
+    },
+    {
+      "id": "notification-hub-redesign",
+      "name": "T11 알림함 · 상태와 행",
+      "title": "Unread status · native filters · icon-leading rows",
+      "file": "dune-notification-hub-redesign.html",
+      "detail": "2026-10-31 보존한 밝음·어두움 T11 브라우저 배치 시안. 실제 미독수는 건강 알림과 최신 출시 소식으로만 계산하고, All/Health/News 분류·원래 타입 아이콘 선행 행·읽음/설정/삭제 행동·빈 상태를 유지한다. 예시 수치와 알림은 앱 데이터나 실제 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/notification-inbox-proposal.md",
+        "status": "native-source-in-progress-capture-pending"
+      }
+    },
+    {
+      "id": "h02-wellness-score-detail",
+      "name": "H02 웰니스 점수 상세",
+      "title": "실제 점수·네 구성·시간대와 통합 추세",
+      "file": "dune-h02-wellness-score-detail.html",
+      "detail": "2026-10-31 구현 전 밝음·어두움 브라우저 시안. T04/H01 불투명 ScoreHeroPalette와 상태별 아이콘, 네 optional 구성, 한 카드의 기간·가시 날짜·Trend·차트·요약 방향. 93점과 날짜·그래프는 전부 예시이며 앱/HealthKit 데이터나 실제 캡처가 아니다. 계산·하위 추세와 조건부 설명은 기존 View 계약을 유지한다.",
+      "implementation": {
+        "layout": "../layout-map/h02-wellness-score-detail-proposal.md",
+        "status": "proposal-only"
+      }
+    },
+    {
+      "id": "sleep-prediction-detail-h03",
+      "name": "H03 · 오늘 밤 수면 예측 상세",
+      "title": "DUNE 수면 링·신뢰도·요인",
+      "file": "dune-sleep-prediction-detail-h03.html",
+      "detail": "기존 DetailScoreHero 링과 sleep 색상, 실제 low/medium/high 신뢰도 1/2/3 정성 마크, 원래 요인·팁 아이콘과 문구를 보존하는 H03/T15 공유 상세 방향. 브라우저 시안이며 앱 캡처나 새로운 확률·기록이 아니다.",
+      "implementation": {
+        "layout": "../layout-map/sleep-prediction-detail-h03.html",
+        "status": "source-contract-pending-native-validation"
+      }
+    },
+    {
+      "id": "exercise-type-detail-a07",
+      "name": "A07 · 운동 종류 상세",
+      "title": "DUNE 운동 종류 상세 · 밝음/어두움",
+      "file": "dune-exercise-type-detail-a07.html",
+      "detail": "원본 유형·장비 식별 아이콘, 실제 유형별 값과 조건부 거리/무게 볼륨을 위한 화면별 정적 제안. 예시 값과 웹 기호는 실제 앱 데이터·SF Symbol·네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/activity-exercise-type-detail-a07.html",
+        "status": "proposal-only-original-native-capture-pending"
+      }
+    },
+    {
+      "id": "injury-risk-detail-a08",
+      "name": "A08 · 부상 위험 상세",
+      "title": "DUNE 부상 위험 상세 · 밝음/어두움",
+      "file": "dune-injury-risk-detail-a08.html",
+      "detail": "원본 평가 점수·위험 단계 아이콘, 실제 공급된 요인의 상대 기여, 원래 권장 문구를 위한 화면별 정적 제안. 수치/웹 기호는 실제 평가나 네이티브 캡처가 아니다. DEBUG 점수42/두 요인은 제품 공식이 아니다.",
+      "implementation": {
+        "layout": "../layout-map/activity-injury-risk-detail-a08.html",
+        "status": "proposal-only-original-native-capture-pending"
       }
     },
     {

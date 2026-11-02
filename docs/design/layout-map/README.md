@@ -7,6 +7,10 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+H03 수면 예측 상세와 이를 공유하는 T15 알림 수면 상세의 로드 완료 상태는 [전용 배치 계약](sleep-prediction-detail-h03.html)을 따른다. 기존 링·신뢰도·요인·팁을 한 열에서 읽고 큰 글씨에서는 세로로 쌓는다. 이 HTML은 시안이며 실제 앱 캡처가 아니다.
+
+T14 운동 알림의 누락된 대상 화면은 [전용 배치 계약](notification-target-not-found-t14.html)을 따른다. 원래 문구·아이콘·선택 가능한 실제 ID와 시스템 뒤로가기를 보존하며, iPhone·iPad·Duo의 큰 글씨에서도 한 열 스크롤로 읽는다. 이 HTML은 시안이며 새 실제 앱 캡처가 아니다.
+
 2026-10-28 Today 지표의 Wellness 표현과 동일 행 높이는 [상태/배치 계약](today-case-matrix.md), [새 실제 화면](../full-redesign-map/review/today-wellness-metrics-2026-10-28/index.html)을 따른다. 큰 글씨 한 열과 홀수 전체 폭은 유지한다.
 
 2026-10-28 H01 오늘 밤 수면은 큰 예측 점수·달 상징·0–100 가로 게이지와 실제3단계 신뢰도 배지·팁 영역을 사용한다. [배치 계약](wellness-redesign-proposal.md)과 [실제 화면](../full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html)을 함께 따른다. 큰 글씨는 세로 전환한다.
@@ -35,9 +39,21 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 [Activity·Life 히어로 흐름과 근거 승인안](activity-life-hero-proposal.md)은 공통 링에 구성 점수·저장된 준비도·습관 완료 기록을 더하는 2026-10-25 구현 대상이다. 과거 습관 분모는 복원하지 않는다.
 
+2026-10-31 [A07 운동 종류 상세 배치](activity-exercise-type-detail-a07.html)는 실제 유형별 시간·칼로리·세션, 조건부 거리/무게 볼륨, 4기간 분 추세, 건강 앱 최근 세션의 읽기 순서를 제안한다. 수치·도형은 설명용이며 원본 네이티브 Week/Month 캡처는 현재 확인 대기다. [테마 표현](../theme-map/themes/dune-exercise-type-detail-a07.html)은 별도 정적 시안이다.
+
+2026-10-31 [A08 부상 위험 상세 배치](activity-injury-risk-detail-a08.html)는 실제 평가 점수·단계, 공급된 요인과 최대 요인 대비 상대 막대, 원래 권장 문구 및 nil/0점 분기를 구분한다. [DUNE 밝음·어두움 표현](../theme-map/themes/dune-injury-risk-detail-a08.html)은 정적 제안이다. DEBUG 점수42/두 요인은 라우트 검증용이고 원본 네이티브 캡처는 아직 확인 대기다.
+
 2026-10-31 [A09 주간 운동 보고서 배치](activity-weekly-report-detail-a09.html)는 실제 기간·총 kg/분/세션/활동일/정규화 강도와 조건부 요약·하이라이트·근육별 바를 제안한다. [DUNE 테마 표현](../theme-map/themes/dune-weekly-report-detail-a09.html)은 정적 시안이다. 원본 iPad의 DEBUG 보고서 화면은 별도 실제 이미지로 확인됐으며 시안의 값은 그 이미지가 아니다.
 
 ## 화면별 맵 목록
+
+2026-10-31 [A06 Training Volume 상세 배치](activity-training-volume-detail-a06.html)는 실제 네 기간·네 현재/이전 지표·1W 주간 목표 링과 긴 기간의 실제 활동일 건수/별도 주간 참고·한 날짜 범위·도넛 세 모드·분 단위 일별 차트와 조건부 하위 그래프를 보존하는 제안이다. HTML 숫자는 예시이며 실제 앱 캡처가 아니다. [구현 계획](../../plans/2026-10-31-a06-training-volume-detail-redesign.md)과 [테마 표현](../theme-map/themes/dune-training-volume-detail-a06.html)을 함께 본다.
+
+2026-10-31 [A03 근육 지도 상세 · A04 3D 진입 비활성화](activity-muscle-map-detail-a04.md)는 2D 선택, compact/regular 배치와 기존 테마 유지 계약이다. 실제 화면 캡처와 구분한다.
+
+2026-10-31 [T13 알림 대상 없음 배치](notification-destination-unavailable-t13.html)는 기존 설명·뒤로 가기·실제 알림 ID를 유지하는 상세 화면의 한 열 계약이다. 정적 시안이며 실제 캡처가 아니다.
+
+2026-10-31 [T09 아침 브리핑 배치 계약](morning-briefing-proposal.md)은 일출 히어로 뒤에 회복·가이드·주간·조건부 날씨를 배치한다. [보존 시안](../theme-map/themes/dune-morning-briefing.html)은 예시로, 실제 앱 캡처와 구분한다.
 
 2026-10-31 [T02 iCloud 동기화 동의 배치](cloud-sync-consent-t02.html)는 앱 시작 시트의 히어로→세 설명→두 선택, 폭·큰 글씨·동작 계약을 정한다. HTML은 구현 기준 시안이며 실제 앱 캡처가 아니다.
 
@@ -57,6 +73,7 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 | Today 하단 읽기 위계 | [회복·스트레스·요약 V2](today-reading-proposal.md) · [원본 대비 시안](../theme-map/themes/dune-today-reading.html) |
 | Today T03 요약 · 본문 더 보기 선택 후 | [세부 배치·펼침 기준](digest-read-more-refinement.md) · [핵심 먼저·한 문장 먼저·지표 행 비교](digest-read-more-refinement.html) |
 | Today 알림함·새로운 소식 | [알림함 배치·상태·목적지](notification-inbox-proposal.md) · [시안의 종 아이콘](../theme-map/themes/dune-final-four-tab.html) |
+| Activity A03 근육 지도 상세 · A04 진입 | [2D 선택·3D 진입 비활성화 계약](activity-muscle-map-detail-a04.md) |
 | Activity 운동 구성 상세 | [근력·유산소와 부위별 구성 배치](exercise-mix-detail-proposal.md) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) |
 | Activity·Wellness·Life 기록 진입 | [상단 추가 버튼·메뉴 배치](record-entry-navigation.md) · [4탭 시안](../theme-map/themes/dune-final-four-tab.html) |
 | iOS 위젯·휴식 라이브 액티비티 | [크기·상태별 배치 기준](widget-live-activity-proposal.md) · [DESERT HORIZON 추가 시안](../theme-map/themes/dune-widget-live-activity.html) |
@@ -141,3 +158,10 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 [WLA01 골드 임팩트 · 종목별 지표 선택](live-activity-size-state-proposal.md) · [보존 시안](../theme-map/themes/dune-live-activity-size-state.html) · 네이티브 구현·검증 진행 중.
 
 - [T04 컨디션 상세 개편](condition-detail-redesign-proposal.md): 링·실측 기여·기간/차트/통계·단일 설명 펼침의 화면별 native 계약.
+
+- [T05 누적 스트레스 상세 개편](cumulative-stress-redesign-proposal.md): 동일 히어로·통합 기간/통계·요인 막대·하나의 계산 펼침.
+- [T06 건강 지표 상세 개편](health-metric-detail-redesign-proposal.md):16개 지표의 실제 단위/기능 보존, 통합 추세, 검증된 선택형 비교와 정확한 전후 화면 식별.
+
+2026-10-31 [A02 훈련 준비도 상세 배치·데이터 계약](training-readiness-detail-a02.html)은 원본 다섯 구성 점수/가중치, 모델 상태 심볼, 시간 조정, 5기간 실제 차트와 비-일간 세 원천 근사 이력을 분리한다. 브라우저의 값은 설명용이며 앱 캡처가 아니다. 원본 iPhone 영어/max-AX selector 1개와 iPad 첫 max-AX 사례만 통과했다. iPad 배치는 진행 중이며 일반 글씨 원본과 Duo는 미검증이다.
+
+2026-10-31 [A03 2D 근육 지도 상세 배치 시안](activity-muscle-map-detail-a03.html)은 A04의 비활성 3D 진입을 보존하면서 실제 앞/뒤 SVG 지도·Recovery/Sets 범례·선택 근육·볼륨·회복 정보의 새 위계를 정한다. 실제 iPad 기본 캡처의 종아리 가림을 반영해 regular에서는 회복 히어로를 secondary 첫 항목으로, compact에서는 primary 지도 위로 둔다. 도식의 몸체와 막대는 설명용이며 네이티브 캡처·측정값이 아니다.

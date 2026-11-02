@@ -1,0 +1,125 @@
+Attributes: Application, 0x10666f980, pid: 74854, label: 'DUNE'
+Element subtree:
+ →Application, 0x10666f980, pid: 74854, label: 'DUNE'
+    Window, 0x10666c8c0, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x10ad53c00, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x10ad53d40, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x10ad53e80, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x10ad51e00, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x10ad51f40, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x10ad52080, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x10ad521c0, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x10ad52300, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x10ad52440, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x10ad52580, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x10ad526c0, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x10ad52800, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x10ad52940, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x10ad52a80, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x10ad52bc0, {{0.0, -0.0}, {951.0, 669.0}}
+                                Toolbar, 0x10ad52d00, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: '도구 막대'
+                                  Other, 0x10ad52e40, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x10ad52f80, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x10ad530c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                    Other, 0x10ad53200, {{0.0, -0.0}, {951.0, 669.0}}
+                                      Other, 0x10ad53340, {{0.0, -0.0}, {951.0, 669.0}}
+                                        NavigationBar, 0x10ad53480, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Today's Report'
+                                        Toolbar, 0x10ad535c0, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: '도구 막대'
+                                          Other, 0x113faef80, {{0.0, -0.0}, {951.0, 669.0}}
+                                        Other, 0x113fac3c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                          Other, 0x113fac500, {{0.0, -0.0}, {951.0, 669.0}}
+                                            Other, 0x113fac640, {{0.0, -0.0}, {951.0, 669.0}}
+                                              Other, 0x113fac780, {{0.0, -0.0}, {951.0, 669.0}}
+                                                ScrollView, 0x106796a80, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'notification-daily-digest-screen'
+                                                  Other, 0x1067975c0, {{0.0, -959.0}, {867.0, 1718.3}}
+                                                    Other, 0x106797480, {{93.7, -943.0}, {680.0, 1686.3}}, identifier: 'dashboard-daily-digest'
+                                                      Other, 0x106795b80, {{93.7, -943.0}, {680.0, 199.7}}, identifier: 'notification-daily-digest-cover'
+                                                        StaticText, 0x106797d40, {{117.5, -919.0}, {170.7, 58.7}}, identifier: 'dashboard-digest-date', label: '11월 2일'
+                                                        Image, 0x106797340, {{681.7, -919.0}, {68.0, 68.0}}, identifier: 'doc.text', label: '일반 텍스트 문서'
+                                                        StaticText, 0x106797ac0, {{117.5, -839.0}, {323.7, 71.7}}, identifier: 'dashboard-digest-header', label: '오늘의 리포트'
+                                                      Other, 0x106796bc0, {{93.7, -731.3}, {680.0, 278.0}}, identifier: 'notification-daily-digest-condition'
+                                                        StaticText, 0x106797840, {{120.7, -706.7}, {204.5, 67.7}}, label: '컨디션'
+                                                        Image, 0x106797c00, {{120.7, -706.7}, {46.7, 66.3}}, identifier: 'heart.text.clipboard', label: '텍스트 클립보드에 있는 하트'
+                                                        StaticText, 0x1067970c0, {{113.5, -619.7}, {78.3, 71.7}}, identifier: 'dashboard-digest-condition', label: '84'
+                                                        StaticText, 0x106794dc0, {{113.5, -532.0}, {239.3, 58.7}}, label: '어제보다 +3'
+                                                      Other, 0x106797e80, {{93.7, -441.3}, {680.0, 397.3}}, identifier: 'notification-daily-digest-activity'
+                                                        StaticText, 0x1067966c0, {{118.7, -417.0}, {151.5, 65.7}}, label: '활동'
+                                                        Image, 0x106795540, {{118.7, -416.7}, {41.3, 65.3}}, identifier: 'figure.walk', label: '걷기'
+                                                        StaticText, 0x106795a40, {{113.5, -330.7}, {121.0, 51.3}}, label: '걸음 수'
+                                                        StaticText, 0x106796f80, {{113.5, -277.3}, {173.3, 71.7}}, identifier: 'dashboard-digest-steps', label: '8,200'
+                                                        Other, 0x106797980, {{113.5, -187.7}, {168.0, 123.7}}, identifier: 'notification-daily-digest-workout'
+                                                          Image, 0x106795e00, {{119.3, -185.3}, {42.0, 54.3}}, identifier: 'figure.run', label: '달리기'
+                                                          StaticText, 0x106796580, {{119.3, -187.7}, {140.5, 58.7}}, label: '운동'
+                                                          StaticText, 0x1067943c0, {{113.5, -122.7}, {168.0, 58.7}}, label: 'workout'
+                                                      Other, 0x113fa0000, {{93.7, -32.0}, {680.0, 193.3}}, identifier: 'notification-daily-digest-sleep'
+                                                        Image, 0x113fa0140, {{118.3, -7.3}, {55.3, 55.7}}, identifier: 'moon.fill', label: '방해금지 모드'
+                                                        StaticText, 0x113fa0280, {{118.3, -12.0}, {162.5, 65.7}}, label: '수면'
+                                                        StaticText, 0x113fa03c0, {{113.5, 69.7}, {271.0, 71.7}}, label: '7시간 10분'
+                                                      Other, 0x113fa0500, {{93.7, 173.3}, {680.0, 570.0}}, identifier: 'notification-daily-digest-narrative'
+                                                        StaticText, 0x113fa0640, {{120.7, 193.4}, {368.2, 65.7}}, label: '하루 돌아보기'
+                                                        Image, 0x113fa0780, {{120.7, 202.3}, {56.3, 48.0}}, identifier: 'text.alignleft', label: '왼쪽 정렬'
+                                                        StaticText, 0x113fa08c0, {{113.5, 275.0}, {599.3, 373.7}}, identifier: 'dashboard-digest-full-summary', label: '오늘 컨디션 점수는 84점이었습니다 (어제 대비 +3). workout 운동을 완료했습니다. 어젯밤 수면: 7시간 10분. 오늘 8,200걸음. 스트레스가 보통 수준입니다.'
+                                                        Button, 0x113fa0a00, {{113.7, 664.7}, {640.0, 58.7}}, identifier: 'dashboard-digest-summary-toggle', label: '요약 접기', value: 펼쳐짐
+                                                          StaticText, 0x113fa0b40, {{113.7, 664.7}, {640.0, 58.7}}, label: '요약 접기'
+                                                          Image, 0x113fa0c80, {{303.0, 683.0}, {38.0, 22.0}}, identifier: 'chevron.up', label: '위로 이동'
+                                                  Other, 0x113fa0dc0, {{918.0, 82.0}, {30.0, 532.0}}, label: '수직 스크롤 막대, 3페이지', value: 89%
+                                                    Other, 0x113fa0f00, {{945.0, 398.0}, {3.0, 213.0}}
+                                                  Other, 0x113fa1040, {{918.0, 82.0}, {30.0, 532.0}}, label: '수직 스크롤 막대, 3페이지', value: 89%
+                                                    Other, 0x113fa1180, {{945.0, 398.0}, {3.0, 213.0}}
+                            Other, 0x113fa12c0, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x113fa1400, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x113fa1540, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x113fa1680, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: '도구 막대'
+                    Other, 0x113fa17c0, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x113fa1900, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x113fa1a40, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x113fa1b80, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x113fa1cc0, {{879.0, 124.0}, {48.0, 48.0}}
+                              Other, 0x113fa1e00, {{879.0, 124.0}, {48.0, 48.0}}
+                                Other, 0x113fa1f40, {{884.0, 129.0}, {38.0, 38.0}}
+                                  Other, 0x113fa2080, {{884.0, 129.0}, {38.0, 38.0}}
+                                    Button, 0x113fa21c0, {{884.0, 129.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x113fa2300, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x113fa2440, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x113fa2580, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x113fa26c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x113fa2800, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x113fa2940, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x113fa2a80, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x113fa2bc0, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x113fa2d00, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x113fa2e40, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x113fa2f80, {{881.0, 435.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today', Selected
+                                            Image, 0x113fa30c0, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: '채워진 텍스트 클립보드에 있는 하트'
+                                          Button, 0x113fa3200, {{881.0, 485.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x113fa3340, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: '불꽃'
+                                          Button, 0x113fa3480, {{881.0, 535.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x113fa35c0, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: '나뭇잎'
+                                          Button, 0x113fa3700, {{881.0, 585.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x113fa3840, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: '체크 표시가 있는 체크리스트'
+                                        Other, 0x113fa3980, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x113fa3ac0, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x113fa3c00, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x113fa3d40, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x113fa3e80, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x10ad4c000, {{879.0, 433.0}, {48.0, 212.0}}
+                                                  Other, 0x10ad4c140, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x10ad4c280, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x10ad4c3c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x10ad4c500, {{881.0, 435.0}, {44.0, 58.0}}
+                                          Other, 0x10ad4c640, {{881.0, 435.0}, {44.0, 58.0}}
+                                            Other, 0x10ad4c780, {{881.0, 435.0}, {44.0, 58.0}}
+                                            Other, 0x10ad4c8c0, {{881.0, 435.0}, {44.0, 58.0}}
+                                              Other, 0x10ad4ca00, {{881.0, 435.0}, {44.0, 58.0}}
+                                                Other, 0x10ad4cb40, {{881.0, 435.0}, {44.0, 58.0}}
+                                                  Other, 0x10ad4cc80, {{881.0, 435.0}, {44.0, 58.0}}
+                                                Other, 0x10ad4cdc0, {{881.0, 435.0}, {44.0, 58.0}}
+                                              Other, 0x10ad4cf00, {{881.0, 435.0}, {44.0, 58.0}}
+              Other, 0x10ad4d040, {{433.5, 317.5}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x10666f980, pid: 74854, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10ad4d180, pid: 74854, label: 'DUNE'
+  }

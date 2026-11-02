@@ -15,31 +15,57 @@ enum TrainingVolumeAnalysisService {
         workouts: [WorkoutSummary],
         manualRecords: [ManualExerciseSnapshot],
         period: VolumePeriod,
-        referenceDate: Date = Date()
+        referenceDate: Date = Date(),
+        calendar: Calendar = .current
+    ) -> PeriodComparison {
+        let today = calendar.startOfDay(for: referenceDate)
+        guard let currentStart = calendar.date(byAdding: .day, value: -period.days, to: today),
+              let previousStart = calendar.date(byAdding: .day, value: -(period.days * 2), to: today),
+              let previousEnd = calendar.date(byAdding: .day, value: -1, to: currentStart) else {
+            return PeriodComparison(current: emptySummary(period: period, start: today, end: today), previous: nil)
+        }
+        return analyze(workouts: workouts, manualRecords: manualRecords, period: period,
+                       bounds: CalendarBounds(previousStart: previousStart,
+                                              currentStart: currentStart,
+                                              previousEnd: previousEnd,
+                                              referenceDate: referenceDate, calendar: calendar))
+    }
+
+    struct CalendarBounds {
+        let previousStart: Date
+        let currentStart: Date
+        let previousEnd: Date
+        let referenceDate: Date
+        let calendar: Calendar
+
+        static func inclusiveDays(period: VolumePeriod, referenceDate: Date, calendar: Calendar = .current) -> Self? {
+            let today = calendar.startOfDay(for: referenceDate)
+            guard let current = calendar.date(byAdding: .day, value: -(period.days - 1), to: today),
+                  let previous = calendar.date(byAdding: .day, value: -period.days, to: current),
+                  let end = calendar.date(byAdding: .day, value: -1, to: current) else { return nil }
+            return Self(previousStart: calendar.startOfDay(for: previous),
+                        currentStart: calendar.startOfDay(for: current),
+                        previousEnd: calendar.startOfDay(for: end),
+                        referenceDate: referenceDate, calendar: calendar)
+        }
+    }
+
+    static func analyze(
+        workouts: [WorkoutSummary], manualRecords: [ManualExerciseSnapshot],
+        period: VolumePeriod, bounds: CalendarBounds
     ) -> PeriodComparison {
         let workouts = excludingLinkedWorkouts(workouts, manualRecords: manualRecords)
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: referenceDate)
-        let days = period.days
-
-        guard let currentStart = calendar.date(byAdding: .day, value: -days, to: today),
-              let previousStart = calendar.date(byAdding: .day, value: -(days * 2), to: today),
-              let previousEnd = calendar.date(byAdding: .day, value: -1, to: currentStart)
-        else {
-            return PeriodComparison(
-                current: emptySummary(period: period, start: today, end: today),
-                previous: nil
-            )
-        }
-
-        let currentEnd = referenceDate
+        let currentStart = bounds.currentStart
+        let previousStart = bounds.previousStart
+        let previousEnd = bounds.previousEnd
+        let currentEnd = bounds.referenceDate
 
         let currentSummary = buildSummary(
             workouts: workouts.filter { $0.date >= currentStart && $0.date <= currentEnd },
             manualRecords: manualRecords.filter { $0.date >= currentStart && $0.date <= currentEnd },
             period: period,
             start: currentStart,
-            end: currentEnd
+            end: currentEnd, calendar: bounds.calendar
         )
 
         // Filter uses `< currentStart` (exclusive) to avoid boundary gap.
@@ -49,7 +75,7 @@ enum TrainingVolumeAnalysisService {
             manualRecords: manualRecords.filter { $0.date >= previousStart && $0.date < currentStart },
             period: period,
             start: previousStart,
-            end: previousEnd
+            end: previousEnd, calendar: bounds.calendar
         )
 
         return PeriodComparison(current: currentSummary, previous: previousSummary)
@@ -59,13 +85,14 @@ enum TrainingVolumeAnalysisService {
         workouts: [WorkoutSummary],
         manualRecords: [ManualExerciseSnapshot],
         start: Date,
-        end: Date
+        end: Date,
+        calendar: Calendar = .current
     ) -> [DailyVolumePoint] {
         buildDailyBreakdown(
             workouts: excludingLinkedWorkouts(workouts, manualRecords: manualRecords),
             manualRecords: manualRecords,
             start: start,
-            end: end
+            end: end, calendar: calendar
         )
     }
 
@@ -76,9 +103,9 @@ enum TrainingVolumeAnalysisService {
         manualRecords: [ManualExerciseSnapshot],
         period: VolumePeriod,
         start: Date,
-        end: Date
+        end: Date,
+        calendar: Calendar
     ) -> VolumePeriodSummary {
-        let calendar = Calendar.current
         var typeAggregates: [String: TypeAggregate] = [:]
         var activeDaySet = Set<Date>()
 
@@ -153,7 +180,7 @@ enum TrainingVolumeAnalysisService {
             workouts: workouts,
             manualRecords: manualRecords,
             start: start,
-            end: end
+            end: end, calendar: calendar
         )
 
         return VolumePeriodSummary(
@@ -175,9 +202,9 @@ enum TrainingVolumeAnalysisService {
         workouts: [WorkoutSummary],
         manualRecords: [ManualExerciseSnapshot],
         start: Date,
-        end: Date
+        end: Date,
+        calendar: Calendar
     ) -> [DailyVolumePoint] {
-        let calendar = Calendar.current
         var dailySegments: [Date: [String: TimeInterval]] = [:]
         var dailyVolume: [Date: Double] = [:]
 
@@ -214,7 +241,7 @@ enum TrainingVolumeAnalysisService {
                 totalVolume: dailyVolume[current] ?? 0
             ))
             guard let next = calendar.date(byAdding: .day, value: 1, to: current) else { break }
-            current = next
+            current = calendar.startOfDay(for: next)
         }
         return result
     }

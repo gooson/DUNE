@@ -35,6 +35,19 @@ struct BreathingDisturbanceQueryService: BreathingDisturbanceQuerying, Sendable 
     }
 
     func fetchNightlyDisturbances(start: Date, end: Date) async throws -> [BreathingDisturbanceSample] {
+        #if DEBUG && targetEnvironment(simulator)
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("--uitesting"), arguments.contains("--seed-mock"),
+           let index = arguments.firstIndex(of: "--ui-t07-all-data"),
+           arguments.indices.contains(index + 1),
+           arguments[index + 1] == HealthMetric.Category.breathingDisturbances.rawValue,
+           let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return Self.t07BaselineSamples(
+                referenceDate: mockData.referenceDate, start: start, end: end,
+                isEmpty: arguments.contains("--ui-test-wellness-records-only")
+            )
+        }
+        #endif
         let quantityType = HKQuantityType(.appleSleepingBreathingDisturbances)
         try await manager.ensureNotDenied(for: quantityType)
         let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)
@@ -47,6 +60,18 @@ struct BreathingDisturbanceQueryService: BreathingDisturbanceQuerying, Sendable 
 
         return results.compactMap { disturbanceSample(from: $0) }
     }
+
+    #if DEBUG && targetEnvironment(simulator)
+    static func t07BaselineSamples(referenceDate: Date, start: Date, end: Date,
+                                   isEmpty: Bool) -> [BreathingDisturbanceSample] {
+        guard !isEmpty else { return [] }
+        let date = Calendar.current.date(byAdding: .hour, value: 1,
+                                         to: Calendar.current.startOfDay(for: referenceDate))
+            ?? referenceDate
+        guard start <= date, date < end else { return [] }
+        return [BreathingDisturbanceSample(value: 1.2, date: date, isElevated: false)]
+    }
+    #endif
 
     func disturbanceSample(from sample: HKQuantitySample) -> BreathingDisturbanceSample? {
         // HealthKit stores this metric in count units, despite its per-hour display meaning.

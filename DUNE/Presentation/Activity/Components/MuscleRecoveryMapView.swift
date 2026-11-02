@@ -6,6 +6,8 @@ import SwiftUI
 struct MuscleRecoveryMapView: View {
     let fatigueStates: [MuscleFatigueState]
     var isExpanded: Bool = false
+    var recoverySummaryStates: [MuscleFatigueState]? = nil
+    var modeSelection: Binding<MapMode>? = nil
     let onMuscleSelected: (MuscleGroup) -> Void
 
     // MARK: - Mode
@@ -31,12 +33,14 @@ struct MuscleRecoveryMapView: View {
     @State private var recoveredCount = 0
     @State private var trainedCount = 0
 
+    private var selectedMode: MapMode { modeSelection?.wrappedValue ?? mode }
+
     var body: some View {
         VStack(spacing: DS.Spacing.md) {
             headerSection
             bodyDiagramSection
         }
-        .animation(.easeInOut(duration: 0.3), value: mode)
+        .animation(.easeInOut(duration: 0.3), value: selectedMode)
         .onAppear { rebuildFatigueIndex() }
         .onChange(of: fatigueStates.count) { _, _ in rebuildFatigueIndex() }
     }
@@ -61,7 +65,7 @@ struct MuscleRecoveryMapView: View {
                 .contentTransition(.numericText())
 
             Button {
-                switch mode {
+                switch selectedMode {
                 case .recovery: showingRecoveryInfoSheet = true
                 case .volume: showingVolumeInfoSheet = true
                 }
@@ -77,7 +81,7 @@ struct MuscleRecoveryMapView: View {
             Spacer()
             }
 
-            Picker("Mode", selection: $mode) {
+            Picker("Mode", selection: modeSelection ?? $mode) {
                 ForEach(MapMode.allCases, id: \.rawValue) { m in
                     Text(m.label).tag(m)
                 }
@@ -95,12 +99,14 @@ struct MuscleRecoveryMapView: View {
     }
 
     private var subtitle: String {
-        switch mode {
+        switch selectedMode {
         case .recovery:
-            let total = fatigueStates.count
+            let states = recoverySummaryStates ?? fatigueStates
+            let total = states.count
+            let ready = recoverySummaryStates.map { $0.filter(\.isRecovered).count } ?? recoveredCount
             guard total > 0 else { return String(localized: "Start training to track recovery") }
-            if recoveredCount == total { return String(localized: "All \(total) muscle groups ready") }
-            return String(localized: "\(recoveredCount)/\(total) muscle groups ready")
+            if ready == total { return String(localized: "All \(total) muscle groups ready") }
+            return String(localized: "\(ready)/\(total) muscle groups ready")
         case .volume:
             guard trainedCount > 0 else { return String(localized: "Start recording workouts to see volume") }
             return String(localized: "\(trainedCount) muscles trained this week")
@@ -177,7 +183,7 @@ struct MuscleRecoveryMapView: View {
 
     @ViewBuilder
     private var legendRow: some View {
-        switch mode {
+        switch selectedMode {
         case .recovery:
             FatigueLegendView(onTap: { showingRecoveryInfoSheet = true })
                 .accessibilityIdentifier("activity-muscle-map-legend-recovery")
@@ -190,7 +196,7 @@ struct MuscleRecoveryMapView: View {
     // MARK: - Colors (mode-dependent)
 
     private func muscleColors(for muscle: MuscleGroup) -> (fill: Color, stroke: Color) {
-        switch mode {
+        switch selectedMode {
         case .recovery:
             return (recoveryColor(for: muscle), recoveryStrokeColor(for: muscle))
         case .volume:

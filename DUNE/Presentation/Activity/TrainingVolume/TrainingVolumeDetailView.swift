@@ -7,6 +7,13 @@ struct TrainingVolumeDetailView: View {
     @State private var viewModel = TrainingVolumeViewModel()
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var exerciseRecords: [ExerciseRecord]
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+    private var weeklyGoalLabel: String {
+        String.localizedStringWithFormat(String(localized: "Weekly goal: %lld days"), Int64(viewModel.weeklyGoal))
+    }
 
     var body: some View {
         ScrollView {
@@ -31,6 +38,8 @@ struct TrainingVolumeDetailView: View {
                 }
             }
             .padding()
+            .frame(maxWidth: 680)
+            .frame(maxWidth: .infinity)
         }
         .accessibilityIdentifier("activity-training-volume-detail-screen")
         .background { DetailWaveBackground() }
@@ -58,9 +67,10 @@ struct TrainingVolumeDetailView: View {
 
     @ViewBuilder
     private func content(_ comparison: PeriodComparison) -> some View {
-        // Combined summary + comparison header
-        combinedHeader(comparison)
+        currentSummary(comparison)
             .staggeredAppear(index: 1)
+        previousSummary(comparison.previous)
+            .staggeredAppear(index: 2)
 
         // Donut chart
         VolumeDonutChartView(exerciseTypes: comparison.current.exerciseTypes)
@@ -99,69 +109,176 @@ struct TrainingVolumeDetailView: View {
             .staggeredAppear(index: 6)
     }
 
-    // MARK: - Summary Header
+    // MARK: - Current and Previous Periods
 
-    private func combinedHeader(_ comparison: PeriodComparison) -> some View {
-        HStack(spacing: DS.Spacing.lg) {
-            LabeledActivityRingView(
-                progress: viewModel.weeklyGoal > 0
-                    ? Double(comparison.current.activeDays) / Double(viewModel.weeklyGoal)
-                    : 0,
-                ringColor: theme.accentColor,
-                lineWidth: 8,
-                size: 80
-            ) {
-                VStack(spacing: 2) {
+    private func currentSummary(_ comparison: PeriodComparison) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            let topLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+                : AnyLayout(HStackLayout(alignment: .center, spacing: DS.Spacing.lg))
+            topLayout {
+                if viewModel.selectedPeriod == .week && !dynamicTypeSize.isAccessibilitySize {
+                    LabeledActivityRingView(
+                        progress: viewModel.weeklyGoal > 0
+                            ? Double(comparison.current.activeDays) / Double(viewModel.weeklyGoal)
+                            : 0,
+                        ringColor: palette.heroHighlight,
+                        lineWidth: 8,
+                        size: 88
+                    ) {
+                        VStack(spacing: 2) {
+                            Text("\(comparison.current.activeDays)")
+                                .font(.title3.bold())
+                                .foregroundStyle(palette.ink)
+                            Text("/ \(viewModel.weeklyGoal)")
+                                .font(.caption2)
+                                .foregroundStyle(palette.muted)
+                        }
+                    }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text(verbatim: "\(viewModel.selectedPeriod.displayName), \(String(localized: "Active Days"))"))
+                    .accessibilityValue("\(comparison.current.activeDays)")
+                    .accessibilityIdentifier("activity-training-volume-current-active-days")
+                } else {
                     Text("\(comparison.current.activeDays)")
-                        .font(.title3.bold())
-                        .foregroundStyle(theme.heroTextGradient)
-                    Text("/ \(viewModel.weeklyGoal)")
-                        .font(.caption2)
-                        .foregroundStyle(DS.Color.textSecondary)
+                        .font(DS.Typography.heroScore)
+                        .monospacedDigit()
+                        .foregroundStyle(palette.ink)
+                        .accessibilityLabel(Text(verbatim: "\(viewModel.selectedPeriod.displayName), \(String(localized: "Active Days"))"))
+                        .accessibilityValue("\(comparison.current.activeDays)")
+                        .accessibilityIdentifier("activity-training-volume-current-active-days")
                 }
+
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text(viewModel.selectedPeriod.displayName)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(palette.muted)
+                    HStack(spacing: DS.Spacing.sm) {
+                        Image(systemName: "calendar")
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundStyle(DS.Color.activity)
+                            .frame(width: 24)
+                            .accessibilityHidden(true)
+                        Text("Active Days")
+                            .font(.title3.weight(.semibold))
+                            .foregroundStyle(palette.ink)
+                    }
+                    Text(weeklyGoalLabel)
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(palette.ink)
+                        .padding(.horizontal, DS.Spacing.sm)
+                        .padding(.vertical, DS.Spacing.xs)
+                        .background(palette.ink.opacity(0.11), in: Capsule())
+                        .accessibilityIdentifier("activity-training-volume-weekly-goal-reference")
+                    ChangeBadge(change: comparison.activeDaysChange, foregroundColor: palette.ink)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                statRow(
-                    label: "Active Days",
-                    value: "\(comparison.current.activeDays) of \(viewModel.weeklyGoal)",
-                    change: comparison.activeDaysChange
-                )
-                statRow(
-                    label: "Duration",
-                    value: comparison.current.totalDuration.formattedDuration(),
-                    change: comparison.durationChange
-                )
-                statRow(
-                    label: "Calories",
-                    value: "\(comparison.current.totalCalories.formattedWithSeparator()) kcal",
-                    change: comparison.calorieChange
-                )
-                statRow(
-                    label: "Sessions",
-                    value: comparison.current.totalSessions.formattedWithSeparator,
-                    change: comparison.sessionChange
-                )
-            }
-
-            Spacer(minLength: 0)
+            Divider().overlay(palette.border)
+            currentMetricRow(label: "Duration", icon: "timer", iconColor: DS.Color.fitness, value: comparison.current.totalDuration.formattedDuration(),
+                             change: comparison.durationChange)
+            currentMetricRow(label: "Calories", icon: "flame.fill", iconColor: .orange,
+                             value: "\(comparison.current.totalCalories.formattedWithSeparator()) kcal",
+                             change: comparison.calorieChange)
+            currentMetricRow(label: "Sessions", icon: "figure.strengthtraining.traditional", iconColor: DS.Color.activity,
+                             value: comparison.current.totalSessions.formattedWithSeparator,
+                             change: comparison.sessionChange)
         }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .padding(DS.Spacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                .fill(palette.surface)
+                .overlay {
+                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                        .strokeBorder(palette.border, lineWidth: 1)
+                }
+                .allowsHitTesting(false)
+        }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-training-volume-overview")
     }
 
-    private func statRow(label: LocalizedStringKey, value: String, change: Double?) -> some View {
-        HStack(spacing: DS.Spacing.sm) {
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(DS.Color.textSecondary)
-                .frame(width: 80, alignment: .leading)
+    private func currentMetricRow(label: LocalizedStringKey, icon: String, iconColor: Color, value: String, change: Double?) -> some View {
+        let rowLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: DS.Spacing.sm))
+        return rowLayout {
+            HStack(spacing: DS.Spacing.sm) {
+                Image(systemName: icon)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(iconColor)
+                    .frame(width: 24)
+                    .accessibilityHidden(true)
+                Text(label)
+                    .font(.subheadline)
+                    .foregroundStyle(palette.muted)
+            }
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
             Text(value)
-                .font(.subheadline.weight(.semibold))
-                .monospacedDigit()
-                .foregroundStyle(theme.heroTextGradient)
-            ChangeBadge(change: change)
+                .font(.subheadline.weight(.semibold).monospacedDigit())
+                .foregroundStyle(palette.ink)
+                .fixedSize(horizontal: false, vertical: true)
+            ChangeBadge(change: change, foregroundColor: palette.ink)
+        }
+    }
+
+    private func previousSummary(_ previous: VolumePeriodSummary?) -> some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Text("Previous")
+                    .font(DS.Typography.sectionTitle)
+                    .accessibilityAddTraits(.isHeader)
+                if let previous {
+                    Text(verbatim: "\(previous.startDate.formatted(date: .abbreviated, time: .omitted)) – \(previous.endDate.formatted(date: .abbreviated, time: .omitted))")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("activity-training-volume-previous-period")
+                    previousMetricRow(label: "Active Days", icon: "calendar", iconColor: DS.Color.activity,
+                                      value: previous.activeDays.formattedWithSeparator,
+                                      identifier: "active-days")
+                    previousMetricRow(label: "Duration", icon: "timer", iconColor: DS.Color.fitness,
+                                      value: previous.totalDuration.formattedDuration(),
+                                      identifier: "duration")
+                    previousMetricRow(label: "Calories", icon: "flame.fill", iconColor: .orange,
+                                      value: "\(previous.totalCalories.formattedWithSeparator()) kcal",
+                                      identifier: "calories")
+                    previousMetricRow(label: "Sessions", icon: "figure.strengthtraining.traditional", iconColor: DS.Color.activity,
+                                      value: previous.totalSessions.formattedWithSeparator,
+                                      identifier: "sessions")
+                } else {
+                    Text("No Data")
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("activity-training-volume-previous-comparison")
+    }
+
+    private func previousMetricRow(label: LocalizedStringKey, icon: String, iconColor: Color, value: String, identifier: String) -> some View {
+        let rowLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: DS.Spacing.sm))
+        return rowLayout {
+            HStack(spacing: DS.Spacing.sm) {
+                Image(systemName: icon)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(iconColor)
+                    .frame(width: 24)
+                    .accessibilityHidden(true)
+                Text(label)
+                    .font(.subheadline)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
+            Text(value)
+                .font(.subheadline.weight(.semibold).monospacedDigit())
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("activity-training-volume-previous-value-\(identifier)")
         }
     }
 

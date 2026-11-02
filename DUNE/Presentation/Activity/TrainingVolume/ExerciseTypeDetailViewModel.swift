@@ -34,7 +34,7 @@ final class ExerciseTypeDetailViewModel {
 
     // MARK: - Loading
 
-    func loadData(manualRecords: [ExerciseRecord]) async {
+    func loadData(manualRecords: [ExerciseRecord], referenceDate: Date = Date()) async {
         let requestID = beginLoadRequest()
         isLoading = true
         defer { finishLoadRequest(requestID) }
@@ -55,10 +55,12 @@ final class ExerciseTypeDetailViewModel {
             }
 
         let period = selectedPeriod
-        let fetchDays = period.days * 2
+        guard let bounds = TrainingVolumeAnalysisService.CalendarBounds.inclusiveDays(
+            period: period, referenceDate: referenceDate
+        ), let recentStart = Calendar.current.date(byAdding: .day, value: -(period.days * 2), to: referenceDate) else { return }
 
         do {
-            let workouts = try await workoutService.fetchWorkouts(days: fetchDays)
+            let workouts = try await workoutService.fetchWorkouts(start: recentStart, end: referenceDate)
 
             guard isCurrentLoadRequest(requestID) else { return }
 
@@ -71,7 +73,7 @@ final class ExerciseTypeDetailViewModel {
             let comparison = TrainingVolumeAnalysisService.analyze(
                 workouts: filtered,
                 manualRecords: snapshots,
-                period: period
+                period: period, bounds: bounds
             )
 
             guard isCurrentLoadRequest(requestID) else { return }
