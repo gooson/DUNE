@@ -141,10 +141,15 @@ class UITestBaseCase: XCTestCase {
             XCUIDevice.shared.orientation = .landscapeLeft
         }
 
+        try waitForInitialScreenReady()
+        VisualAudit.capture("root after setup \(name)")
+    }
+
+    /// Standalone launch routes may override readiness with their exact screen identity.
+    func waitForInitialScreenReady() throws {
         if !app.hasPrimaryNavigation(timeout: 8) {
             throw VisualAudit.unavailable("Primary navigation (tab bar/sidebar) not found")
         }
-        VisualAudit.capture("root after setup \(name)")
     }
 
     func launchApp(with configuration: LaunchConfiguration? = nil) {

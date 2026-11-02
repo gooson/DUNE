@@ -1,0 +1,119 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+      "deviceName" : "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "33초",
+                  "durationInSeconds" : 33.42711699008942,
+                  "name" : "testActualScoreComponentsAndNativeBack()",
+                  "nodeIdentifier" : "WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertTrue failed",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/WellnessScoreDetailRedesignTests.swift",
+                        "lineNumber" : 142
+                      }
+                    }
+                  ],
+                  "duration" : "34초",
+                  "durationInSeconds" : 34.350182056427,
+                  "name" : "testConditionCalculationPositiveFixtureKeepsMeasuredBranches()",
+                  "nodeIdentifier" : "WellnessScoreDetailRedesignTests/testConditionCalculationPositiveFixtureKeepsMeasuredBranches()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testConditionCalculationPositiveFixtureKeepsMeasuredBranches",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "duration" : "1분 52초",
+                  "durationInSeconds" : 112.196692943573,
+                  "name" : "testDarkMaximumAccessibilityWholeContentReachability()",
+                  "nodeIdentifier" : "WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertTrue failed",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/WellnessScoreDetailRedesignTests.swift",
+                        "lineNumber" : 189
+                      }
+                    }
+                  ],
+                  "duration" : "25초",
+                  "durationInSeconds" : 25.252017974853516,
+                  "name" : "testExistingChartPointSelectionRemainsAvailable()",
+                  "nodeIdentifier" : "WellnessScoreDetailRedesignTests/testExistingChartPointSelectionRemainsAvailable()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testExistingChartPointSelectionRemainsAvailable",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertTrue failed",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/WellnessScoreDetailRedesignTests.swift",
+                        "lineNumber" : 88
+                      }
+                    }
+                  ],
+                  "duration" : "39초",
+                  "durationInSeconds" : 39.57582998275757,
+                  "name" : "testFivePeriodsTrendAndConditionalExplanation()",
+                  "nodeIdentifier" : "WellnessScoreDetailRedesignTests/testFivePeriodsTrendAndConditionalExplanation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests/testFivePeriodsTrendAndConditionalExplanation",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "WellnessScoreDetailRedesignTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/WellnessScoreDetailRedesignTests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "DUNEUITests-DesignCapture",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Design Capture"
+    }
+  ]
+}

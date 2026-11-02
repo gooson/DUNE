@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WellnessScoreDetailRedesignTests/testActualScoreComponentsAndNativeBack",
+    "DUNEUITests/WellnessScoreDetailRedesignTests/testFivePeriodsTrendAndConditionalExplanation",
+    "DUNEUITests/WellnessScoreDetailRedesignTests/testConditionCalculationPositiveFixtureKeepsMeasuredBranches",
+    "DUNEUITests/WellnessScoreDetailRedesignTests/testDarkMaximumAccessibilityWholeContentReachability",
+    "DUNEUITests/WellnessScoreDetailRedesignTests/testExistingChartPointSelectionRemainsAvailable"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 5,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 3
+  },
+  "passed_cases": 2,
+  "failures": [
+    "6615: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/WellnessScoreDetailRedesignTests.swift:142: error: -[DUNEUITests.WellnessScoreDetailRedesignTests testConditionCalculationPositiveFixtureKeepsMeasuredBranches] : XCTAssertTrue failed",
+    "6626: Test Case '-[DUNEUITests.WellnessScoreDetailRedesignTests testConditionCalculationPositiveFixtureKeepsMeasuredBranches]' failed (34.350 seconds).",
+    "7456: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/WellnessScoreDetailRedesignTests.swift:189: error: -[DUNEUITests.WellnessScoreDetailRedesignTests testExistingChartPointSelectionRemainsAvailable] : XCTAssertTrue failed",
+    "7467: Test Case '-[DUNEUITests.WellnessScoreDetailRedesignTests testExistingChartPointSelectionRemainsAvailable]' failed (25.252 seconds).",
+    "7553: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/WellnessScoreDetailRedesignTests.swift:88: error: -[DUNEUITests.WellnessScoreDetailRedesignTests testFivePeriodsTrendAndConditionalExplanation] : XCTAssertTrue failed",
+    "7564: Test Case '-[DUNEUITests.WellnessScoreDetailRedesignTests testFivePeriodsTrendAndConditionalExplanation]' failed (39.576 seconds).",
+    "7565: Test Suite 'WellnessScoreDetailRedesignTests' failed at 2026-10-31 09:34:32.677.",
+    "7567: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 09:34:32.678.",
+    "7569: Test Suite 'Selected tests' failed at 2026-10-31 09:34:32.679.",
+    "7583: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 3 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WellnessScoreDetailRedesignTests/testFivePeriodsTrendAndConditionalExplanation",
+    "DUNEUITests/WellnessScoreDetailRedesignTests/testConditionCalculationPositiveFixtureKeepsMeasuredBranches",
+    "DUNEUITests/WellnessScoreDetailRedesignTests/testExistingChartPointSelectionRemainsAvailable"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h02-phone-score-detail-c7cfa366.log"
+}

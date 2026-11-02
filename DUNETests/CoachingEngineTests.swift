@@ -46,6 +46,42 @@ struct CoachingEngineTests {
 
     // MARK: - Always produces output
 
+    @Test("Night insights replace workout and favorable-weather prompts with rest", arguments: [0, 5, 22, 23])
+    func nightInsightsFavorRest(hour: Int) {
+        let output = engine.generate(from: makeInput(
+            conditionScore: ConditionScore(score: 95, date: Date()),
+            activeDaysThisWeek: 4,
+            daysSinceLastWorkout: 4,
+            weather: makeWeather()
+        ), localHour: hour)
+        let insights = [output.focusInsight] + output.insightCards
+        #expect(insights.contains { $0.id == "night-rest" })
+        #expect(!insights.contains { $0.category == .training || $0.id == "weather-outdoor-favorable" })
+    }
+
+    @Test("Night filtering preserves recovery warnings and extreme weather")
+    func nightInsightsPreserveWarnings() {
+        let output = engine.generate(from: makeInput(
+            conditionScore: ConditionScore(score: 15, date: Date()),
+            weather: makeWeather(feelsLike: 40)
+        ), localHour: 0)
+        let insights = [output.focusInsight] + output.insightCards
+        #expect(output.focusInsight.priority == .critical)
+        #expect(insights.contains { $0.id == "weather-extreme-heat" })
+        #expect(insights.contains { $0.id == "night-rest" })
+    }
+
+    @Test("Daytime keeps ordinary outdoor and training insights")
+    func daytimeKeepsWorkoutInsights() {
+        let output = engine.generate(from: makeInput(
+            conditionScore: ConditionScore(score: 95, date: Date()),
+            weather: makeWeather()
+        ), localHour: 11)
+        let insights = [output.focusInsight] + output.insightCards
+        #expect(insights.contains { $0.id == "weather-outdoor-favorable" })
+        #expect(!insights.contains { $0.id == "night-rest" })
+    }
+
     @Test("Always returns a focus insight even with minimal input")
     func alwaysReturnsFocus() {
         let output = engine.generate(from: makeInput())

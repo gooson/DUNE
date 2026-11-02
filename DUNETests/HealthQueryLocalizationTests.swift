@@ -60,6 +60,43 @@ struct HealthQueryLocalizationTests {
         #expect(korean != english)
     }
 
+    @Test("Response titles use the request language independently of app preferences",
+          .enabled(if: Bundle.main.localizations.contains("ko") && Bundle.main.localizations.contains("ja"),
+                   "Requires app localization resources"))
+    func requestLanguageLookup() {
+        for (identifier, expected) in [("en_US", "Latest Workout"),
+                                       ("ko_KR", "최근 운동"),
+                                       ("ja_JP", "最近のワークアウト")] {
+            let title = HealthQueryLocalization.$locale.withValue(Locale(identifier: identifier)) {
+                HealthQueryService.title(for: .latestWorkout)
+            }
+            #expect(title == expected)
+        }
+    }
+
+    @Test("Concurrent translated responses keep their request language across actor hops",
+          .enabled(if: Bundle.main.localizations.contains("ko"), "Requires app localization resources"))
+    func concurrentResponseLanguages() async throws {
+        let service = HealthQueryService(protectedDataProvider: { false })
+        let titles = try await withThrowingTaskGroup(of: (String, String).self,
+                                                    returning: [String: String].self) { group in
+            for identifier in ["en_US", "ko_KR"] {
+                group.addTask {
+                    try await HealthQueryLocalization.$locale.withValue(Locale(identifier: identifier)) {
+                        await Task.yield()
+                        let result = try await service.execute(HealthQueryRequest(kind: .latestWorkout))
+                        return (identifier, result.title)
+                    }
+                }
+            }
+            var results: [String: String] = [:]
+            for try await (identifier, title) in group { results[identifier] = title }
+            return results
+        }
+        #expect(titles["en_US"] == "Latest Workout")
+        #expect(titles["ko_KR"] == "최근 운동")
+    }
+
     @Test("Spoken measurements use Korean natural units",
           .enabled(if: Bundle.main.localizations.contains("ko"), "Requires app localization resources"))
     func koreanSpokenUnits() {

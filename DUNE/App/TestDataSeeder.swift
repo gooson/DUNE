@@ -291,6 +291,9 @@ enum TestDataSeeder {
         if ProcessInfo.processInfo.arguments.contains("--ui-hero-rhythm-fixtures") {
             seedHeroRhythmHistory(into: context)
         }
+        if ProcessInfo.processInfo.arguments.contains("--ui-visual-cumulative-stress-fixture") {
+            seedCumulativeStressHistory(into: context)
+        }
         if ProcessInfo.processInfo.arguments.contains("--ui-workout-board-goal-fixture") {
             let goal = HabitDefinition(
                 name: "Weekly Move",
@@ -340,6 +343,29 @@ enum TestDataSeeder {
                 let log = HabitLog(date: day, value: habit.goalValue, completedAt: day)
                 context.insert(log)
                 log.habitDefinition = habit
+            }
+        }
+    }
+
+    /// Opt-in, nonzero stress history for real Today-to-detail visual and period tests.
+    /// Daily averages rise with age, so paging a week must change its summary.
+    @MainActor
+    private static func seedCumulativeStressHistory(into context: ModelContext) {
+        let calendar = Calendar.current
+        let now = Date()
+        let today = calendar.startOfDay(for: now)
+        let currentHour = calendar.component(.hour, from: now)
+        for daysAgo in 0..<24 {
+            guard let day = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
+            let hours = daysAgo == 0
+                ? (currentHour > 1 ? [0, min(currentHour - 1, 18)] : [0])
+                : [9, 18]
+            for (index, hour) in hours.enumerated() {
+                guard let instant = calendar.date(byAdding: .hour, value: hour, to: day) else { continue }
+                context.insert(HourlyScoreSnapshot(
+                    date: instant,
+                    stressScore: 30 + Double(daysAgo) + Double(index * 10)
+                ))
             }
         }
     }

@@ -1,0 +1,3 @@
+# Selected historical actual images
+
+Assembler personally opened Phone H03 1AD08A43 and defaultT15 C1C865AD, iPad H03 4B935BD9 and defaultT15 76AFA966. All show loaded shared prediction, not spinner/empty/hub. H03 is strict78/Medium/twofactors; T15 is actual computed72/Good/Medium/fivefactors. Phone default tip partly extends below tab chrome; screenshot is honest initial viewport. OldT15 teardown is still detail because old method did not tapBack. New default method does, so new teardown must not be selected. Viewport/input/source/time/device differences remain explicit. This limited image review is not final gallery/native quality or current Back-contract certification.
