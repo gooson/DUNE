@@ -1,7 +1,7 @@
 ---
 topic: a06-training-volume-detail-redesign
 date: 2026-10-31
-status: planned
+status: implemented
 confidence: medium
 tags: [activity, training-volume, detail, design]
 category: plan
@@ -13,6 +13,8 @@ related_brainstorms:
 ---
 
 # Implementation Plan: A06 훈련량 상세 재설계
+
+> Implementation record (2026-11-03): the original plan below is retained as planning history. The final amendment at the end supersedes the original VM/domain non-change constraint and records the calendar-window fixes and actual validation.
 
 ## Context
 
@@ -122,3 +124,13 @@ Activity의 Training Load에서 열리는 Training Volume 상세는 이미 실�
 
 - **Overall**: Medium.
 - **Reasoning**: 원본 blob과 데이터/제스처 계약은 확인했다. 실제 before 화면 상태, previous fixture oracle, 기기별 밀도는 네이티브 검증 전이다.
+
+
+## A06 plan amendment · 2026-11-03
+
+The earlier plan's statement that the view model and domain would remain unchanged is historical and superseded by the independent data/architecture findings. A06's overview and linked/direct exercise-type detail now use explicit 7/30/90/180 inclusive local-calendar-date windows. A single captured reference and calendar bind the overview's first-previous-day HealthKit query, manual records, comparison and chart; the selected exercise type uses the same summary/trend bounds while preserving its rolling 2N-day newest-ten query. Day bounds and daily bucket advancement are normalized for midnight DST transitions. The shared analyzer retains its original legacy `referenceDate` offsets and instants for A05; its default is not globally migrated.
+
+Tests cover all four periods, first-day HealthKit/manual inclusion, outside-bound exclusion, seven-date weekly goal, Santiago midnight DST, and type trend/recent lookback. The 1W previous-caption assertion now checks D−13 through D−7; existing goal and day checks remain. Three focused unit suites passed 34 tests at aeabdd7d, with app/model inputs unchanged at e206c0f3. On e206 the actual iPad normal overview and approved dark normal-text Goal selectors each passed 1/1. Original first group compilation failure with no tests and second group five passes/one Goal failure remain preserved. Phone normal/MAX passed 2/2 at e206; Duo closed passed 1/1 at e206 with four valid checkpoints and 0°/LCD before and after. Duo open first failed before detail entry; the existing test targeted the Activity scroll owner without changing its 8/3 limits or assertions, and one conditional same-ID retry passed 1/1 at 844dacaa with four valid checkpoints and 180°/LCD-1. The app source is unchanged from e206 to 844; those earlier captures are bounded source evidence, not fresh 844 runs. All three owned devices were deleted after evidence preservation. Final native quality is PASS WITH NOTES, with zero actionable new P1/P2/P3. Four actual A06 map rows and Activity boards are updated, and every other row, prior gallery and Watch image is preserved. The gallery labels original device/execution/AX/Duo-pose uncertainty, including the historical iPad 2064×2752 versus new A20 1512×2316. The pre-existing donut hour/minute label mismatch remains deferred; MAX evidence does not visually cover every previous row, and no live VoiceOver, live fold continuity, month MAX, full local regression or fresh native 3M/6M is claimed.
+
+
+[Actual four-tier before/after and verification evidence](../design/full-redesign-map/review/a06-training-volume-native-2026-11-03/index.html).

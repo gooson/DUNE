@@ -242,12 +242,21 @@
     "A06": {
       "row_id": "A06",
       "evidence": "activity-training-volume-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
-      "action": "tap activity-section-volume",
-      "timestamp": 1792598535.77,
-      "image": "C1C41B5E-4386-41FC-A9E8-ED25C086E115.png",
-      "screen": "screen-0-1398x2034-tap activity-section-volume_0_CCBB9F93-5A76-4753-9B86-B67079E796E5.png",
-      "file": "A06.png"
+      "test": "DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList",
+      "action": "DUNE_VISUAL_AUDIT_READY Training volume detail default week [DUNEUITests/ChartInteractionRegressionUITests.swift:273] DEADLINE=1793649855.943519",
+      "timestamp": 1793649828.4634109,
+      "timestamp_kind": "host-file-mtime",
+      "capture_kind": "paired-host",
+      "image": "002-1398x2034.png",
+      "screen": "DUNE_VISUAL_AUDIT_READY Training volume detail default week [DUNEUITests/ChartInteractionRegressionUITests.swift:273] DEADLINE=1793649855.943519",
+      "file": "A06.png",
+      "source_revision": "e206c0f30b18532c509bc7aa554c3825a6711ba2",
+      "source_worktree_dirty": false,
+      "device_udid": "E0E533E3-6D7D-4D1F-8E38-DCF17D4830DD",
+      "sha256": "fcb53161f77594dfc4ebaf8fcc50e4d4fac371956fdcd7c0cd94424d7fe588fe",
+      "source_json": "../../../full-redesign-map/review/a06-training-volume-native-2026-11-03/evidence.json",
+      "source_record": "records.duo.after",
+      "capture_scope": "A06 default week; Phone MAX and iPad dark Goal supplemental"
     },
     "W05": {
       "row_id": "W05",
