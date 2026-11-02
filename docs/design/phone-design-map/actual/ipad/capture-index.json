@@ -750,12 +750,21 @@
     "A08": {
       "row_id": "A08",
       "evidence": "activity-injury-risk-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
-      "action": "tap activity-injuryrisk-detail-link",
-      "timestamp": 1791837907.853,
-      "image": "9BE80715-E328-4E31-910A-5CB81912B0C2.png",
-      "screen": "screen-0-2064x2752-tap activity-injuryrisk-detail-link_0_F41A120F-0B39-411D-AD3E-AA716F402213.png",
-      "file": "A08.png"
+      "test": "DUNEUITests/ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen",
+      "action": "Injury Risk loaded DEBUG route assessment",
+      "timestamp": 1793430663.564,
+      "timestamp_kind": "native-XCTest-attachment",
+      "capture_kind": "native-XCTest-attachment",
+      "image": "6661A77D-76EE-4ED4-BD2F-A08590120847.png",
+      "screen": "Injury Risk loaded DEBUG route assessment",
+      "file": "A08.png",
+      "source_revision": "74a17b947ed201e1cc41441c269db750476751d9",
+      "source_worktree_dirty": false,
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "sha256": "ed800ab92d6cc20999d2de440568055b8484cc8da07f4dc971dd69616b769e9b",
+      "source_json": "../../../full-redesign-map/review/a08-injury-risk-native-2026-11-03/evidence.json",
+      "source_record": "records.ipad.after",
+      "capture_scope": "A08 DEBUG fixture; historical 74a iPad rendering/AX only"
     },
     "A11": {
       "row_id": "A11",

@@ -1,7 +1,7 @@
 ---
 topic: A08 injury risk detail redesign
 date: 2026-10-31
-status: draft
+status: implemented
 confidence: medium
 related_solutions:
   - docs/solutions/architecture/2026-02-20-injury-tracking-review-fixes.md
@@ -108,3 +108,14 @@ Keep `InjuryRiskDetailView` as a pure View of the passed assessment. Replace onl
 
 - **Overall**: Medium.
 - **Reasoning**: Original route, score thresholds, factor math/icons, conditional states and fixture provenance are source-authenticated. The fresh original native capture and after-device readability have not yet been produced or reviewed.
+
+
+## 최종 구현·검증 부록 · 2026-11-03
+
+계획 당시 baseline/검증 대기 설명은 과거 상태다. 현재 main573을 통합한 CA888에서 View는 원래 구현74a와 동일하게 유지하며 모델·계산·VM·공통 Hero를 변경하지 않았다. 위험 단계 색과 원래 아이콘, 모든 요인/권장 행동, 가장 큰 기여 대비 상대 막대 및 nil/zero 구분을 보존한다. 단계나 기여를 확률·진단으로 표시하지 않는다.
+
+iPhone·Duo 접힘·펼침에서 현재 같은 직접 경로 selector 각1개가 통과했다. 기존 DEBUG42/24/18 입력, 상세와 Back·Weekly Report를 확인했다. 과거 iPad 일반+darkMAX2/2는 clean74a 실행이며 현재 iPad 실행으로 바꾸어 표시하지 않는다. 36Gitobject, 5method, 20cataloglookup과 8PNG/AX를 대조한 독립 렌더링 동일성 검토로 범위를 한정해 재사용한다. 현재 iPad 진입/Back, 모든 단계·factor·nil 조합 또는 실사용 중 접힘 연속성은 새로 검증했다고 주장하지 않는다.
+
+A20 원본936과의 실제 전후 비교, 4개 A08 행 및 Activity 보드, 소유 기기·리비전·raw manifest/AX와 실제 Duo 각도/display 증거를 공개한다. 원래 map-before 및 다른 화면/갤러리/Watch는 보존한다. 두 소유 기기는 순서대로 사용한 뒤 삭제했다. 소스5관점 및 native/출처/최종 PR 검토 결과와 남은 제한은 실제 보고서로 기록한다.
+
+[해결책과 재사용 범위](../solutions/testing/2026-11-03-injury-risk-native-capture-source-closure.md).

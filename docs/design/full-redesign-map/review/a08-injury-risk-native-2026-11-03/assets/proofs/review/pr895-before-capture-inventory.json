@@ -1,0 +1,135 @@
+{
+  "scope": "A08 old map rows inspected; strong original A20 separately authenticated",
+  "map_references": [
+    {
+      "tier": "regular",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a08/Health/docs/design/phone-design-map/actual/regular/images/A08.png",
+      "sha256": "193d838736f729e783c7d0acca4d60bfb6da92317926672c5f7635102f5875ec",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a08/Health/docs/design/phone-design-map/actual/regular/capture-index.json",
+      "index_sha256": "392a08c7a3c54677565055886939b76cbaed441d048e50283282cedab453f0a9",
+      "index_entry": {
+        "row_id": "A08",
+        "evidence": "activity-injury-risk-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+        "action": "tap activity-injuryrisk-detail-link",
+        "timestamp": 1791835679.202,
+        "image": "7C066F17-7B28-4942-A4AF-702C733781B4.png",
+        "screen": "screen-0-1320x2868-tap activity-injuryrisk-detail-link_0_C0878815-38E5-49FA-A5B4-87DE8A6C0375.png",
+        "file": "A08.png"
+      },
+      "visual_observation": "Injury Risk 42, moderate, muscle fatigue +24 and sleep deficit +18; actual map PNG visually inspected",
+      "source_revision": "per-image unknown",
+      "device_model": "unknown",
+      "paired_ax": "unknown",
+      "duo_pose": "not applicable",
+      "limitation": "historical visual reference; index-wide metadata does not establish this image source, model, AX or Duo pose"
+    },
+    {
+      "tier": "ipad",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a08/Health/docs/design/phone-design-map/actual/ipad/images/A08.png",
+      "sha256": "5526913ef801104659cc46adbfd9c4e96e28bedde121f9d81ebf7d8f82f1d973",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a08/Health/docs/design/phone-design-map/actual/ipad/capture-index.json",
+      "index_sha256": "1647b30821f06ae1509dce8725829afabc7da3decc68219daf57cb21770b1be7",
+      "index_entry": {
+        "row_id": "A08",
+        "evidence": "activity-injury-risk-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+        "action": "tap activity-injuryrisk-detail-link",
+        "timestamp": 1791837907.853,
+        "image": "9BE80715-E328-4E31-910A-5CB81912B0C2.png",
+        "screen": "screen-0-2064x2752-tap activity-injuryrisk-detail-link_0_F41A120F-0B39-411D-AD3E-AA716F402213.png",
+        "file": "A08.png"
+      },
+      "visual_observation": "Injury Risk 42, moderate, muscle fatigue +24 and sleep deficit +18; actual map PNG visually inspected",
+      "source_revision": "per-image unknown",
+      "device_model": "unknown",
+      "paired_ax": "unknown",
+      "duo_pose": "not applicable",
+      "limitation": "historical visual reference; index-wide metadata does not establish this image source, model, AX or Duo pose"
+    },
+    {
+      "tier": "duo",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a08/Health/docs/design/phone-design-map/actual/duo/images/A08.png",
+      "sha256": "2037f26cadec3f4cd0c3f2fe96a38179fa1607c7fca8ac0c1110513d2351ed50",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a08/Health/docs/design/phone-design-map/actual/duo/capture-index.json",
+      "index_sha256": "14387a9bac8aa709c10e259e2cd692f9c7b3c5504623ab7fef9be9ae60656b1c",
+      "index_entry": {
+        "row_id": "A08",
+        "evidence": "activity-injury-risk-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+        "action": "tap activity-injuryrisk-detail-link",
+        "timestamp": 1791855147.537,
+        "image": "E839BFEB-8DC8-4B6D-8C8F-6C647820D4CC.png",
+        "screen": "screen-0-1398x2034-tap activity-injuryrisk-detail-link_0_A81D31E8-AA62-4904-87F6-54A5488A325F.png",
+        "file": "A08.png"
+      },
+      "visual_observation": "Injury Risk 42, moderate, muscle fatigue +24 and sleep deficit +18; actual map PNG visually inspected",
+      "source_revision": "per-image unknown",
+      "device_model": "unknown",
+      "paired_ax": "unknown",
+      "duo_pose": "unknown",
+      "limitation": "historical visual reference; index-wide metadata does not establish this image source, model, AX or Duo pose"
+    },
+    {
+      "tier": "duo-open",
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a08/Health/docs/design/phone-design-map/actual/duo-open/images/A08.png",
+      "sha256": "7fa532ef71298d786efbe1bba749b9bbae205cf39a2aba627b2e029923daa89e",
+      "index": "/Users/shanks/.codex/worktrees/detail-redesign-a08/Health/docs/design/phone-design-map/actual/duo-open/capture-index.json",
+      "index_sha256": "2f14a95d72d926f402438f369f8a497b7ac463d5f15e4970d30ec89d3b2cdc7e",
+      "index_entry": {
+        "row_id": "A08",
+        "evidence": "activity-injury-risk-detail-screen",
+        "test": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+        "action": "tap activity-injuryrisk-detail-link",
+        "timestamp": 1791834606.341,
+        "image": "36874429-510A-4788-AF46-412FB89CD1DC.png",
+        "screen": "screen-1-2006x2852-tap activity-injuryrisk-detail-link_1_D27808B6-EB04-4549-A0A7-C4F695891751.png",
+        "file": "A08.png"
+      },
+      "visual_observation": "Injury Risk 42, moderate, muscle fatigue +24 and sleep deficit +18; actual map PNG visually inspected",
+      "source_revision": "per-image unknown",
+      "device_model": "unknown",
+      "paired_ax": "unknown",
+      "duo_pose": "unknown",
+      "limitation": "historical visual reference; index-wide metadata does not establish this image source, model, AX or Duo pose"
+    }
+  ],
+  "ipad_original": {
+    "files": {
+      "image": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/6A2FFFA4-8A50-4C0D-9919-C9D0E34D668B.png",
+        "sha256": "1c704a5b0df5f8053daa024dc3d1dd1579d3972b5f8b5eb99d152a9cc499c389"
+      },
+      "ax": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/12FDEE69-E8B5-4385-88B8-8A289DB353AE.txt",
+        "sha256": "b63aa7f5b45b51f735a3121c170a6dd26d513f98185dff279a34f95f822f1501"
+      },
+      "manifest": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/attachments/manifest.json",
+        "sha256": "e24e1482b973feb98b3b53ff6f2e4166e18d9ba8326bf163261cdaddef3c84c7"
+      },
+      "provenance": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/provenance.json",
+        "sha256": "5b65ae64ebd026f159c437391f6ff4779976f93776bf1b5bec3d5a58bab143fe"
+      },
+      "result": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/result.json",
+        "sha256": "c54829711410cd88c4c7334a9e5c6506234a3cbe779d76bfc15dc64019716b57"
+      },
+      "tests": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/tests.json",
+        "sha256": "b1d98a1ffe2646ad78f1c5c1cb84c4049c8d062488ae108c3c65760548423672"
+      },
+      "summary": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-hk-types-risk-report-current/summary.json",
+        "sha256": "60d591e4f05cfe0891ce9f2b5e0ec9e2a7e20de9a9f0f7ae35cba4735211eb09"
+      }
+    },
+    "revision": "936b87b4",
+    "device_id": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+    "selector": "DUNEUITests/ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen",
+    "action": "tap activity-injuryrisk-detail-link",
+    "checkpoint": "16725392-49FC-4DC4-A630-FCA0605BC548",
+    "claim": "original A20 individual risk selector passed in 2/2 batch; matches original A08 view blob; distinct simulator instance from later iPad"
+  }
+}

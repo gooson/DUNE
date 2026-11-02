@@ -1,0 +1,400 @@
+{
+  "archive": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a08/evidence/ui-ipad-normal-and-dark-maxAX-current",
+  "archive_inputs_sha256": {
+    "attachments/manifest.json": "f130c148c5fb0daadc83b4b8f63ffdadfe575256b713d6b954f8ed029ecb4c1c",
+    "pipeline-history/check-66e218b7a44894de3a0700ab.json": "f492d728e4a3c61a41aa6953c09069029e99e535f96fe3732cb8f4c2b527b8cf",
+    "provenance.json": "f520f7b5c30219d3e4a27def4facbf803e7fb87936ee1ac5a74980e97136d5f4",
+    "result.json": "2919b7c67dba9e76e5a622f0e8133257a73680e0e8e7436d535dc5c92cc694a5",
+    "summary.json": "8936c1c5e693f9b580d0ff89e3e6d0248b1097c3ffa2aa5d59e65f5096885c44",
+    "tests.json": "35da5b30bfb029b1ee6a8c49c750241c280ff9d8d788645e8e6bec1837528734"
+  },
+  "catalog_entries": {
+    "%lld": null,
+    "+%lld": null,
+    "Activity": {
+      "entry_sha256": "9a3a9f9613bfa4ed7f92c6805ce93699d00e556fa1aab15e6ec5ce1ad43e3e1d",
+      "source": "en",
+      "translations": {
+        "ja": "アクティビティ",
+        "ko": "활동"
+      }
+    },
+    "Allow adequate rest between sessions": {
+      "entry_sha256": "042a587338e41fc48d94135aa1fc595aa61e083725b57cae226ea431b9e52214",
+      "source": "en",
+      "translations": {
+        "ja": "セッション間に十分な休息を取ってください",
+        "ko": "세션 간 충분한 휴식을 취하세요"
+      }
+    },
+    "DUNE": {
+      "entry_sha256": "1893a666bdb9a072da7727971401af78909666898bbe0262c0eda85d6c7f7c86",
+      "source": "en",
+      "translations": {
+        "ja": "DUNE",
+        "ko": "DUNE"
+      }
+    },
+    "Include stretching and mobility work": {
+      "entry_sha256": "445dca440d60fdec8883b87becf4ab115e3a4f67b697395692456ce36b6f6b44",
+      "source": "en",
+      "translations": {
+        "ja": "ストレッチと可動性トレーニングを取り入れてください",
+        "ko": "스트레칭과 가동성 운동을 포함하세요"
+      }
+    },
+    "Injury Risk": {
+      "entry_sha256": "b0fd4a51a3b69c4c7ef2c07ace899eedc996df0d27bf0b4229578cd6a0c84a03",
+      "source": "en",
+      "translations": {
+        "ja": "怪我リスク",
+        "ko": "부상 위험도"
+      }
+    },
+    "Life": {
+      "entry_sha256": "3e44f1e3ef91acb143c9883dd7483b3dcb098a146198a5a640d6c5eb62160a78",
+      "source": "en",
+      "translations": {
+        "ja": "ライフ",
+        "ko": "라이프"
+      }
+    },
+    "Moderate Risk": {
+      "entry_sha256": "376d9d65128b16b40abed5d0e67922c6b17f85f2bec9788bbc7d56f9cd80cfab",
+      "source": "en",
+      "translations": {
+        "ja": "中リスク",
+        "ko": "보통 위험"
+      }
+    },
+    "Monitor any muscle soreness closely": {
+      "entry_sha256": "d0ef53a09d97c4f6e7cb2cc3d09ca853f560ed7f4efb72fddba363221e8a323a",
+      "source": "en",
+      "translations": {
+        "ja": "筋肉の痛みを注意深く観察してください",
+        "ko": "근육 통증을 주의 깊게 관찰하세요"
+      }
+    },
+    "Muscle Fatigue": {
+      "entry_sha256": "ba794fe3ce1f95fded2a73e3b308f27f5591646ef3f72d559e8ea09b108362dd",
+      "source": "en",
+      "translations": {
+        "ja": "筋肉疲労",
+        "ko": "근육 피로"
+      }
+    },
+    "RISK": null,
+    "Recent sleep duration": null,
+    "Recent strength training load": null,
+    "Recommended Actions": {
+      "entry_sha256": "1feb680f400a7be5ec13068d82f9186b8faff1e08451bd62771c81628e5d0d63",
+      "source": "en",
+      "translations": {
+        "ja": "推奨アクション",
+        "ko": "권장 조치"
+      }
+    },
+    "Risk Factors": {
+      "entry_sha256": "4f3d761df597ff38674b2179782d26109051f6b22a2733ef879625f298befefe",
+      "source": "en",
+      "translations": {
+        "ja": "リスク要因",
+        "ko": "위험 요소"
+      }
+    },
+    "Sleep Deficit": {
+      "entry_sha256": "d2e1b8cf6b16963d1b36ff28638a7a3ed5474cd1fca477a6ab955c906f143f53",
+      "source": "en",
+      "translations": {
+        "ja": "睡眠不足",
+        "ko": "수면 부족"
+      }
+    },
+    "Today": {
+      "entry_sha256": "b86533a9e791efe88ea444f3cbca130d7d93d331f5908d36a7c1b6fbd230aed1",
+      "source": "en",
+      "translations": {
+        "ja": "今日",
+        "ko": "오늘"
+      }
+    },
+    "Watch your recovery between sessions": {
+      "entry_sha256": "0db1c825316fece21ed58b6ec2fd894d696fd296f3f7cea772fbd50abc8d4348",
+      "source": "en",
+      "translations": {
+        "ja": "セッション間の回復に注意してください",
+        "ko": "세션 사이 회복에 신경 쓰세요"
+      }
+    },
+    "Wellness": {
+      "entry_sha256": "9ff74bb6886f73d0e3af99230e3f2385d0ee262d99b73efa9c777cdd70a283be",
+      "source": "en",
+      "translations": {
+        "ja": "ウェルネス",
+        "ko": "웰니스"
+      }
+    }
+  },
+  "catalog_entry_digest_encoding": "SHA-256 of UTF-8 sorted compact canonical JSON full entry; null means absent on both commits, not a translated entry.",
+  "compared_source": "ca88892a2e115f54c242e2bc64d73f74a0b28420",
+  "git_object_ids": {
+    "DUNE/App/ContentView.swift": {
+      "current": "2c8d44f6b047b9577a4587fb82a01d1d5476e002",
+      "original": "1bbae4ebd25e403059c89116538dfa060c2dab5f"
+    },
+    "DUNE/App/DUNEApp.swift": {
+      "current": "e640a83a947e7c321baeebd00ca778b6dbac64d3",
+      "original": "e640a83a947e7c321baeebd00ca778b6dbac64d3"
+    },
+    "DUNE/App/TestDataSeeder.swift": {
+      "current": "2c490c1ab1015a8103e2a89c7334bcb3fea58614",
+      "original": "1d2775f3cdec0e6928b044afd6e41e11e1b2e27c"
+    },
+    "DUNE/DUNE.xcodeproj/project.pbxproj": {
+      "current": "76ea7b00beebc48570a72a1955afef0b0dab92a0",
+      "original": "d57a14919843682b924eb59ff4bbd4b2c3a0a4a9"
+    },
+    "DUNE/Domain/Models/AppTheme.swift": {
+      "current": "8d615ae6638a4a7cbf67d61188aeb9e47e08b62f",
+      "original": "8d615ae6638a4a7cbf67d61188aeb9e47e08b62f"
+    },
+    "DUNE/Domain/Models/InjuryRiskAssessment.swift": {
+      "current": "6735272cf0354d775a33a2c37793e8f6cd9ab5d5",
+      "original": "6735272cf0354d775a33a2c37793e8f6cd9ab5d5"
+    },
+    "DUNE/Domain/UseCases/CalculateInjuryRiskUseCase.swift": {
+      "current": "ffd0b7af90f9328c770bc72cfcccaafc25388a5d",
+      "original": "ffd0b7af90f9328c770bc72cfcccaafc25388a5d"
+    },
+    "DUNE/Presentation/Activity/ActivityView.swift": {
+      "current": "07c2d6a47a8f068ef7211f55c445a24fc3167185",
+      "original": "b5c8d1da9f1e22aa7bc9d3b9232e46169be18e43"
+    },
+    "DUNE/Presentation/Activity/ActivityViewModel.swift": {
+      "current": "19501095e6e6b780d7fec9b03dabf447410cd4b1",
+      "original": "19501095e6e6b780d7fec9b03dabf447410cd4b1"
+    },
+    "DUNE/Presentation/Activity/InjuryRiskDetail/InjuryRiskDetailView.swift": {
+      "current": "48be6e84315ccca531baa93578aa783461c6c578",
+      "original": "48be6e84315ccca531baa93578aa783461c6c578"
+    },
+    "DUNE/Presentation/Shared/Components/DesertDuneShape.swift": {
+      "current": "d958eb0a56c1aa489cfad065f6dda1539d29a78f",
+      "original": "d958eb0a56c1aa489cfad065f6dda1539d29a78f"
+    },
+    "DUNE/Presentation/Shared/Components/DesertWaveBackground.swift": {
+      "current": "52c03855151d742ab8ea05796b780c53581b2d95",
+      "original": "52c03855151d742ab8ea05796b780c53581b2d95"
+    },
+    "DUNE/Presentation/Shared/Components/OceanWaveShape.swift": {
+      "current": "abb0da481632ec64436d67f59861aaacb747b95e",
+      "original": "abb0da481632ec64436d67f59861aaacb747b95e"
+    },
+    "DUNE/Presentation/Shared/Components/ScoreHeroPalette.swift": {
+      "current": "21bf23d48c4dae498f8130d3b97eb13ff3086a09",
+      "original": "21bf23d48c4dae498f8130d3b97eb13ff3086a09"
+    },
+    "DUNE/Presentation/Shared/Components/WavePreset.swift": {
+      "current": "af1ed7ddc2277c0abc070eba88bb2a6b8e4c7bc4",
+      "original": "af1ed7ddc2277c0abc070eba88bb2a6b8e4c7bc4"
+    },
+    "DUNE/Presentation/Shared/Components/WaveShape.swift": {
+      "current": "5e942085167ea8a4329f0a8e59ad7caab0af2020",
+      "original": "5e942085167ea8a4329f0a8e59ad7caab0af2020"
+    },
+    "DUNE/Presentation/Shared/DesignSystem.swift": {
+      "current": "ad0086e23eb44700fc55843158a1532be7101e5a",
+      "original": "ad0086e23eb44700fc55843158a1532be7101e5a"
+    },
+    "DUNE/Presentation/Shared/Extensions/AppTheme+View.swift": {
+      "current": "42b78206f89dbc52f8ac6d242807ca6c2e8c5e8a",
+      "original": "42b78206f89dbc52f8ac6d242807ca6c2e8c5e8a"
+    },
+    "DUNE/Presentation/Shared/Extensions/InjuryRiskAssessment+View.swift": {
+      "current": "5c29e73a9466e7cec4e3c03d385ece475db21f95",
+      "original": "5c29e73a9466e7cec4e3c03d385ece475db21f95"
+    },
+    "DUNE/Presentation/Shared/Extensions/View+BottomFadeMask.swift": {
+      "current": "83b8fc02c1f7fab87ad10dd984a7c0d895bca3ce",
+      "original": "83b8fc02c1f7fab87ad10dd984a7c0d895bca3ce"
+    },
+    "DUNE/Presentation/Shared/Extensions/View+NavigationTitlePolicy.swift": {
+      "current": "fd9455351374a56448ed085159981ed8ce489c73",
+      "original": "fd9455351374a56448ed085159981ed8ce489c73"
+    },
+    "DUNE/Resources/Assets.xcassets": {
+      "current": "53786b7c2abdb9270f510547f9a3d5dddaa239db",
+      "original": "53786b7c2abdb9270f510547f9a3d5dddaa239db"
+    },
+    "DUNE/project.yml": {
+      "current": "3588e8093bf6970fb73b800bffe4913bc97a1d32",
+      "original": "66823b8360785a9b61a312c6c80627cc2ca11ca9"
+    },
+    "DUNEUITests/DUNEUITests-DesignCapture.xctestplan": {
+      "current": "fd8a0f9abdcfc650030ef60acd82091459c6d41e",
+      "original": "fd8a0f9abdcfc650030ef60acd82091459c6d41e"
+    },
+    "DUNEUITests/Full/ActivityExerciseRegressionTests.swift": {
+      "current": "479bea7fd37b4120faeb17de3d804d0fbfae798c",
+      "original": "7d1555691033907b688f03b4a70702ee7c9190f8"
+    },
+    "DUNEUITests/Helpers/UITestBaseCase.swift": {
+      "current": "19071580e5de2b8b9645964e98ee514dcbdd01e8",
+      "original": "6b6e04940240e4bd9425fd828cdb96165142ef7c"
+    },
+    "DUNEUITests/Helpers/UITestHelpers.swift": {
+      "current": "3f0c39a5af7a7aa9230329fcd6755ed18173d9d4",
+      "original": "3f0c39a5af7a7aa9230329fcd6755ed18173d9d4"
+    },
+    "Shared/Resources/Colors.xcassets": {
+      "current": "aebe2d2ff2108beb6adc99209a736c8b72d4f3b4",
+      "original": "aebe2d2ff2108beb6adc99209a736c8b72d4f3b4"
+    },
+    "Shared/Resources/Colors.xcassets/AccentColor.colorset/Contents.json": {
+      "current": "fc50af97c1ea981786cabf622c5977e4756c0ca9",
+      "original": "fc50af97c1ea981786cabf622c5977e4756c0ca9"
+    },
+    "Shared/Resources/Colors.xcassets/Caution.colorset/Contents.json": {
+      "current": "4f5eec6f43af99bc5acf43330e9e1d0b47692d22",
+      "original": "4f5eec6f43af99bc5acf43330e9e1d0b47692d22"
+    },
+    "Shared/Resources/Colors.xcassets/MetricActivity.colorset/Contents.json": {
+      "current": "62a233853ec5b4d2adfc68db70991ddb60819d8c",
+      "original": "62a233853ec5b4d2adfc68db70991ddb60819d8c"
+    },
+    "Shared/Resources/Colors.xcassets/SandMuted.colorset/Contents.json": {
+      "current": "372f93c7909d1f2cc601814329a8955dc50b0a54",
+      "original": "372f93c7909d1f2cc601814329a8955dc50b0a54"
+    },
+    "Shared/Resources/Colors.xcassets/TabTrain.colorset/Contents.json": {
+      "current": "9e8b8a05f0f422b5c23c54e4f2359755d161edfe",
+      "original": "9e8b8a05f0f422b5c23c54e4f2359755d161edfe"
+    },
+    "Shared/Resources/Colors.xcassets/TextSecondary.colorset/Contents.json": {
+      "current": "5d14bf336a971bd921ab69b0d9511d6e7c68033b",
+      "original": "5d14bf336a971bd921ab69b0d9511d6e7c68033b"
+    },
+    "Shared/Resources/Localizable.xcstrings": {
+      "current": "66a96e8e9115114410b3e23a8c74cac52b38b01c",
+      "original": "95a95e07513d6291b39c3b2ded7afdf9276ae764"
+    },
+    "scripts/test-ui.sh": {
+      "current": "94b854501036594fbffc61d20e1586b2a8a5fb8b",
+      "original": "94b854501036594fbffc61d20e1586b2a8a5fb8b"
+    }
+  },
+  "historical_source": "74a17b947ed201e1cc41441c269db750476751d9",
+  "matched_checkpoint_files": {
+    "33FC8E0B-56D6-424C-8E3A-41B9EC8C879A.txt": {
+      "configurationName": "Design Capture",
+      "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "exportedFileName": "33FC8E0B-56D6-424C-8E3A-41B9EC8C879A.txt",
+      "isAssociatedWithFailure": false,
+      "sha256": "60f0a0cb03cb77fabcb223610bd9964ec8d0afd20c04d59567e50172add15c90",
+      "suggestedHumanReadableName": "hierarchy-Injury Risk A08 dark maximum AX last recommendation-DUNEUITestsActivityExerciseRegressionTests_1_95776B1C-658F-4B1A-9E4D-2246BB9C912A.swift-855",
+      "testIdentifier": "ActivityExerciseRegressionTests/testInjuryRiskAtMaximumAccessibilityTextSize()",
+      "timestamp": 1793430727.804
+    },
+    "45D22A84-E0B0-4063-AFD5-7421E0B7E675.txt": {
+      "configurationName": "Design Capture",
+      "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "exportedFileName": "45D22A84-E0B0-4063-AFD5-7421E0B7E675.txt",
+      "isAssociatedWithFailure": false,
+      "sha256": "25623fd9bd30199747b2925ca362212991b178c1c43693f5f577fc0c3dbcd7ee",
+      "suggestedHumanReadableName": "hierarchy-Injury Risk loaded DEBUG route assessment-DUNEUITestsActivityExerciseRegressionTests_1_9D8F38D1-434C-4E3A-9041-2A711172EBAC.swift-777",
+      "testIdentifier": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+      "timestamp": 1793430663.564
+    },
+    "6661A77D-76EE-4ED4-BD2F-A08590120847.png": {
+      "configurationName": "Design Capture",
+      "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "exportedFileName": "6661A77D-76EE-4ED4-BD2F-A08590120847.png",
+      "isAssociatedWithFailure": false,
+      "sha256": "ed800ab92d6cc20999d2de440568055b8484cc8da07f4dc971dd69616b769e9b",
+      "suggestedHumanReadableName": "screen-0-1512x2316-Injury Risk loaded DEBUG route assessment_0_9D8F38D1-434C-4E3A-9041-2A711172EBAC.png",
+      "testIdentifier": "ActivityExerciseRegressionTests/testActivityRiskAndReportRoutesOpen()",
+      "timestamp": 1793430663.564
+    },
+    "98210470-31A0-491A-A021-58F9E7F17D41.png": {
+      "configurationName": "Design Capture",
+      "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "exportedFileName": "98210470-31A0-491A-A021-58F9E7F17D41.png",
+      "isAssociatedWithFailure": false,
+      "sha256": "a4f81cf1f4eb8a7b15f74cf219fc7defc42aa31da02e853b6d9022bb72c1940e",
+      "suggestedHumanReadableName": "screen-0-1512x2316-Injury Risk A08 dark maximum AX factors_0_21596AD3-6744-42BE-BF2E-7F46C0FCD267.png",
+      "testIdentifier": "ActivityExerciseRegressionTests/testInjuryRiskAtMaximumAccessibilityTextSize()",
+      "timestamp": 1793430724.103
+    },
+    "A46B298A-346C-43A1-8B30-86E37E3302DB.txt": {
+      "configurationName": "Design Capture",
+      "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "exportedFileName": "A46B298A-346C-43A1-8B30-86E37E3302DB.txt",
+      "isAssociatedWithFailure": false,
+      "sha256": "a8d9210ba90366efd523b181e9bee459f97608bc5f3b236983ae628b03459ba5",
+      "suggestedHumanReadableName": "hierarchy-Injury Risk A08 dark maximum AX hero-DUNEUITestsActivityExerciseRegressionTests_1_5CE14E2B-45EE-4327-BDE7-0B625DEABAE6.swift-833",
+      "testIdentifier": "ActivityExerciseRegressionTests/testInjuryRiskAtMaximumAccessibilityTextSize()",
+      "timestamp": 1793430717.086
+    },
+    "C57699DE-A314-475D-B8F7-7433060C3B6C.png": {
+      "configurationName": "Design Capture",
+      "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "exportedFileName": "C57699DE-A314-475D-B8F7-7433060C3B6C.png",
+      "isAssociatedWithFailure": false,
+      "sha256": "ef2df2db4e3b067185f39e871d1b1ef4d137efc078d2116c512b41824288727f",
+      "suggestedHumanReadableName": "screen-0-1512x2316-Injury Risk A08 dark maximum AX hero_0_5CE14E2B-45EE-4327-BDE7-0B625DEABAE6.png",
+      "testIdentifier": "ActivityExerciseRegressionTests/testInjuryRiskAtMaximumAccessibilityTextSize()",
+      "timestamp": 1793430717.086
+    },
+    "D293F414-4CF5-4C76-B11A-81D3FFB24C1B.txt": {
+      "configurationName": "Design Capture",
+      "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "exportedFileName": "D293F414-4CF5-4C76-B11A-81D3FFB24C1B.txt",
+      "isAssociatedWithFailure": false,
+      "sha256": "67e56a4e2cdf57d236fc9f2a48ae5b916df738587047a1cbc60f64268aa9cc88",
+      "suggestedHumanReadableName": "hierarchy-Injury Risk A08 dark maximum AX factors-DUNEUITestsActivityExerciseRegressionTests_1_21596AD3-6744-42BE-BF2E-7F46C0FCD267.swift-846",
+      "testIdentifier": "ActivityExerciseRegressionTests/testInjuryRiskAtMaximumAccessibilityTextSize()",
+      "timestamp": 1793430724.103
+    },
+    "E030546D-0956-48FA-B5B9-E3F3ED893FEE.png": {
+      "configurationName": "Design Capture",
+      "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "exportedFileName": "E030546D-0956-48FA-B5B9-E3F3ED893FEE.png",
+      "isAssociatedWithFailure": false,
+      "sha256": "efae1a0a039cd7f8298950972061f42c9eaf9081f2f2bf4c7073cf75907fc92b",
+      "suggestedHumanReadableName": "screen-0-1512x2316-Injury Risk A08 dark maximum AX last recommendation_0_95776B1C-658F-4B1A-9E4D-2246BB9C912A.png",
+      "testIdentifier": "ActivityExerciseRegressionTests/testInjuryRiskAtMaximumAccessibilityTextSize()",
+      "timestamp": 1793430727.804
+    }
+  },
+  "scope": "Archived A20 normal and dark MAX rendered synthetic fixture and AX. No current iPad execution.",
+  "test_methods_sha256_original_current": {
+    "ensureActivityRoot": [
+      "97df1190ea758e44cf1756ff236c613fcc8de37bcb848963684210b70c67c056",
+      "97df1190ea758e44cf1756ff236c613fcc8de37bcb848963684210b70c67c056"
+    ],
+    "setUpWithError": [
+      "2c7dae2e3fb1558f1a048c4d792f6e172fff9f838b11b460422b5b3cb6002643",
+      "2c7dae2e3fb1558f1a048c4d792f6e172fff9f838b11b460422b5b3cb6002643"
+    ],
+    "tapBackButton": [
+      "224111b13c883cc5d98b9bc202ede637972d52c3a8f3ee9be5138e0bf3d34709",
+      "224111b13c883cc5d98b9bc202ede637972d52c3a8f3ee9be5138e0bf3d34709"
+    ],
+    "testActivityRiskAndReportRoutesOpen": [
+      "e8b1e32cd8853654b0196bbd7b2872ec6bf97c66a7c93cbf8e81fc64a3f995be",
+      "e8b1e32cd8853654b0196bbd7b2872ec6bf97c66a7c93cbf8e81fc64a3f995be"
+    ],
+    "testInjuryRiskAtMaximumAccessibilityTextSize": [
+      "6da79807816e5d07bf1f70e56774909474edcd05922a2dd50d760d8c5474bdd0",
+      "6da79807816e5d07bf1f70e56774909474edcd05922a2dd50d760d8c5474bdd0"
+    ]
+  }
+}
