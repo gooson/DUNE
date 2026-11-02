@@ -298,6 +298,41 @@ final class CumulativeStressDetailRedesignTests: SeededUITestBaseCase {
         VisualAudit.capture("Stress dark hero, factors and trend")
     }
 
+    func testAllLevelGuideIntervalsRemainVisibleInLightAndDarkAppearance() {
+        let levels = [
+            (title: "Low", range: "0–29", isCurrent: false),
+            (title: "Moderate", range: "30–54", isCurrent: true),
+            (title: "Elevated", range: "55–74", isCurrent: false),
+            (title: "High", range: "75–100", isCurrent: false)
+        ]
+
+        for appearance in ["light", "dark"] {
+            var configuration = launchConfiguration
+            configuration.additionalArguments += [
+                "--ui-test-style", appearance,
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL"
+            ]
+            launchApp(with: configuration)
+            openStressDetail(relaunch: false)
+
+            for level in levels {
+                // Query the combined guide row, not its child range or the hero status.
+                let rows = detailScreen.staticTexts.matching(NSPredicate(
+                    format: "label BEGINSWITH %@ AND label CONTAINS %@",
+                    "\(level.title),", level.range
+                ))
+                let row = rows.firstMatch
+                XCTAssertTrue(row.waitForExistence(timeout: 10))
+                XCTAssertEqual(rows.count, 1, "Each original stress interval must have one guide row")
+                XCTAssertTrue(revealWhole(row, avoidingNavigationChrome: true),
+                              "\(appearance) \(level.range) must be fully exposed for visual review")
+                XCTAssertEqual(row.label.contains(", Current,"), level.isCurrent,
+                               "Only the fixture's Moderate interval should retain the Current badge")
+                VisualAudit.capture("Stress \(appearance) unobscured \(level.title) \(level.range) guide")
+            }
+        }
+    }
+
     private var factors: [(id: String, rawScore: String, weight: String)] {
         [
             ("hrvVariability", "40", "40%"),
@@ -318,12 +353,16 @@ final class CumulativeStressDetailRedesignTests: SeededUITestBaseCase {
     }
 
     /// Reveal against the actual scroll/window intersection, never AX existence alone.
-    private func revealWhole(_ target: XCUIElement, requireHittable: Bool = false) -> Bool {
+    private func revealWhole(
+        _ target: XCUIElement,
+        requireHittable: Bool = false,
+        avoidingNavigationChrome: Bool = false
+    ) -> Bool {
         guard detailScreen.waitForExistence(timeout: 10),
               target.waitForExistence(timeout: 10) else { return false }
         let scroll = detailScreen
         for _ in 0..<32 {
-            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+            let viewport = visibleViewport(avoidingNavigationChrome: avoidingNavigationChrome)
             if viewport.contains(target.frame) && (!requireHittable || target.isHittable) { return true }
             let moveUp = target.frame.midY > viewport.midY
             let start: CGFloat = moveUp ? 0.75 : 0.25
@@ -333,8 +372,23 @@ final class CumulativeStressDetailRedesignTests: SeededUITestBaseCase {
                     withNormalizedOffset: CGVector(dx: 0.05, dy: end)
                 ), withVelocity: .slow, thenHoldForDuration: 0.2)
         }
-        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+        let viewport = visibleViewport(avoidingNavigationChrome: avoidingNavigationChrome)
         return viewport.contains(target.frame) && (!requireHittable || target.isHittable)
+    }
+
+    private func visibleViewport(avoidingNavigationChrome: Bool) -> CGRect {
+        var viewport = detailScreen.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+        guard avoidingNavigationChrome else { return viewport }
+
+        for bar in app.navigationBars.allElementsBoundByIndex where bar.frame.intersects(viewport) {
+            let top = max(viewport.minY, bar.frame.maxY + 4)
+            viewport = CGRect(x: viewport.minX, y: top, width: viewport.width,
+                              height: max(0, viewport.maxY - top))
+        }
+        for bar in app.tabBars.allElementsBoundByIndex where bar.frame.intersects(viewport) {
+            viewport.size.height = max(0, bar.frame.minY - 4 - viewport.minY)
+        }
+        return viewport
     }
 
     private func waitForPeriod(_ option: XCUIElement, range: XCUIElement, replacing prior: String) -> Bool {
