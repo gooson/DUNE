@@ -326,6 +326,25 @@ final class WorkoutManager: NSObject {
 
     // MARK: - HealthKit Authorization
 
+    static let authorizationShareTypes: Set<HKSampleType> = [
+        HKQuantityType.workoutType(),
+        HKSeriesType.workoutRoute()
+    ]
+
+    static let authorizationReadTypes: Set<HKObjectType> = [
+        // Route authorization requires its parent workout type in the same read set.
+        HKObjectType.workoutType(),
+        HKQuantityType(.heartRate),
+        HKQuantityType(.activeEnergyBurned),
+        HKQuantityType(.stepCount),
+        HKQuantityType(.distanceWalkingRunning),
+        HKQuantityType(.distanceCycling),
+        HKQuantityType(.distanceSwimming),
+        HKCharacteristicType(.dateOfBirth),
+        HKQuantityType(.flightsClimbed),
+        HKSeriesType.workoutRoute()
+    ]
+
     func requestAuthorization(timeout seconds: TimeInterval = 10) async throws {
         if Self.isSimulatorRuntime {
             // HealthKit authorization/workout sessions are unreliable on watch simulator.
@@ -334,28 +353,15 @@ final class WorkoutManager: NSObject {
             return
         }
 
-        let shareTypes: Set<HKSampleType> = [
-            HKQuantityType.workoutType(),
-            HKSeriesType.workoutRoute()
-        ]
-        let readTypes: Set<HKObjectType> = [
-            HKQuantityType(.heartRate),
-            HKQuantityType(.activeEnergyBurned),
-            HKQuantityType(.stepCount),
-            HKQuantityType(.distanceWalkingRunning),
-            HKQuantityType(.distanceCycling),
-            HKQuantityType(.distanceSwimming),
-            HKCharacteristicType(.dateOfBirth),
-            HKQuantityType(.flightsClimbed),
-            HKSeriesType.workoutRoute()
-        ]
-
         Self.logger.info("Requesting HealthKit authorization for workout session")
         try await runWithTimeout(
             seconds: seconds,
             timeoutError: WorkoutStartupError.authorizationTimedOut
         ) {
-            try await self.healthStore.requestAuthorization(toShare: shareTypes, read: readTypes)
+            try await self.healthStore.requestAuthorization(
+                toShare: Self.authorizationShareTypes,
+                read: Self.authorizationReadTypes
+            )
         }
 
         let workoutType = HKQuantityType.workoutType()

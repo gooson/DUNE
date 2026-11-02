@@ -49,6 +49,7 @@ struct InsightCardView: View {
                 }
             }
         }
+        .accessibilityIdentifier("dashboard-insight-\(data.id)")
     }
 
     private var iconColor: Color {
