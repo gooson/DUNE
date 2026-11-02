@@ -212,3 +212,12 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-10-31 T08 날씨 상세: [네 기기 실제 앱 전후 비교](../full-redesign-map/review/weather-detail-2026-10-31/index.html). iPhone·iPad·Duo 접힘0°/펼침180°의 새 실제 앱 캡처입니다. 어두운 비와 최대 글씨의 눈 화면은 별도 상태로 보존했습니다. 정적 UI 감사에서는 움직임을 멈추며, 모의 날씨 자료를 사용합니다. 각 이미지의 실제 소스가 표기되어 있고 전체 회귀나 실제 기상 관측을 검증한 것은 아닙니다.
+
+
+2026-11-02 T05 누적 스트레스: [네 기기 실제 앱 전후 비교](../full-redesign-map/review/t05-cumulative-stress-native-2026-11-02/index.html). 왼쪽은 10월 13일 과거 실제 캡처이며 당시 개별 소스·기기·자세 기록은 남아 있지 않습니다. 과거 iPad·Duo 접힘은 9/Low, iPhone·Duo 펼침은 42/Moderate이고 일부 표시 비중도 다릅니다. 같은 입력의 점수 변화 비교가 아닙니다. 오른쪽은 11월 2일 실제 앱 검사이며 Duo는 0°/180° 자세와 PNG·AX 쌍을 확인했습니다. 기존 공통 차트의 날짜 눈금 누락은 TODO 158에 미해결로 남아 있습니다.
+
+
+2026-11-02 T06 건강 지표: [HRV 네 기기와 18개 지표 iPad 실제 비교](../full-redesign-map/review/t06-metric-matrix-native-2026-11-02/index.html). 네 기기의 T06 HRV 캡처를 올바른 75 ms 화면으로 갱신했다. iPhone 5개 검사와 Duo 접힘·펼침 각 1개는 11월 2일 c0b51078, iPad는 10월 31일 f9f1d852 실제 기록이다. 기존 기준 화면은 원래 iPad HRV만 남아 있어 다른 기기·뷰포트 참고임을 명시했다. 18개 지표 행렬은 과거 iPad에서 한 메서드로 순회한 기록이며 18개 독립 검사나 네 기기 전체 지표 통과가 아니다. 수영의 원래 min 오류와 수정 후 거리 하이라이트·이전 실패 기록을 구분했고 다른 capture-index 행과 T05는 보존했다.
+
+
+2026-11-02 T07 전체 데이터: [네 기기 실제 앱 전후 비교와 iPhone 16개 분류](../full-redesign-map/review/t07-all-data-native-2026-11-02/index.html). 정식 맵의 T07만 갱신했다. iPhone·iPad는 10월 31일 ed844d14, Duo 접힘·펼침은 11월 2일 e2759822의 실제 이미지다. 기존 10월 13일 원본의 정확한 이미지별 소스·Duo 각도는 미확인으로 보존했다. 새 Duo의 활성 LCD·각도·ACK 원문, host 파일 mtime과 XCTest 첨부 시각 구분은 갤러리 출처에서 확인한다. 전체 회귀·원격 CI 통과를 뜻하지 않는다.

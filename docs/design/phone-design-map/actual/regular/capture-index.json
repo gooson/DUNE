@@ -249,23 +249,37 @@
     },
     "T06": {
       "row_id": "T06",
-      "evidence": "metric-detail-screen-sleep",
-      "test": "TodaySettingsRegressionTests/testSleepMetricOpensMetricDetailAndAllData()",
-      "action": "tap dashboard-metric-sleep",
-      "timestamp": 1791817748.762,
-      "image": "34973E09-4205-464D-9C2E-4B26FC4FFE17.png",
-      "screen": "screen-0-1320x2868-tap dashboard-metric-sleep_0_6D2DA302-E5FF-4FD2-AAC4-D5AF9F96C59E.png",
-      "file": "T06.png"
+      "evidence": "metric-detail-screen-hrv",
+      "test": "DUNEUITests/MetricDetailRedesignTests/testSelectedMetricIdentityAndCapture",
+      "action": "T06-hrv-initial",
+      "timestamp": 1793600657.503,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "CB183561-BF9D-4DD8-8C68-F3E625C2A5CF.png",
+      "screen": "T06-hrv-initial_0_D58B6683-13DF-47C9-BB1C-36EDD0FC9C2F.png",
+      "file": "T06.png",
+      "source_revision": "c0b51078",
+      "source_worktree_dirty": false,
+      "device_udid": "D7BDC13D-6BF8-4C69-B6B3-409D03298E12",
+      "sha256": "fcb145b45f193203aa904f7d9a0f5382d1bd8fdc9f8dd6bd54b033658ab5bb68",
+      "source_json": "../../../full-redesign-map/review/t06-metric-matrix-native-2026-11-02/evidence.json",
+      "scope": "HRV after capture; 18identity historical matrix remains iPad-only",
+      "capture_historical": false
     },
     "T05": {
       "row_id": "T05",
       "evidence": "cumulative-stress-detail-screen",
-      "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
-      "action": "tap dashboard-stress-score",
-      "timestamp": 1791837198.964,
-      "image": "95B63D6B-4D69-48B4-AC5E-154A78D9C3E9.png",
-      "screen": "screen-0-1320x2868-tap dashboard-stress-score_0_3633C696-58F7-4105-8DB0-539AE8196CDF.png",
-      "file": "T05.png"
+      "test": "DUNEUITests/CumulativeStressDetailRedesignTests/testHeroFactorsAndUnifiedTrendAreVisible",
+      "action": "Stress detail hero and status",
+      "timestamp": 1793590988.848,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "regular.png",
+      "screen": "regular.png",
+      "file": "T05.png",
+      "source_revision": "edad6355",
+      "source_worktree_dirty": false,
+      "device_udid": "85E142A1-69FE-4CE7-BC50-760989AB8A7A",
+      "sha256": "bfe2b7f50c8d92ccba58db1244f578453ffb71a5be0ef418915a5b94e3b1d037",
+      "source_json": "../../../full-redesign-map/review/t05-cumulative-stress-native-2026-11-02/evidence.json"
     },
     "T08": {
       "row_id": "T08",
@@ -447,12 +461,21 @@
     "T07": {
       "row_id": "T07",
       "evidence": "all-data-screen-hrv",
-      "test": "WellnessRegressionTests/testHRVCardOpensMetricDetailAndAllData()",
-      "action": "tap metric-detail-show-all-data",
-      "timestamp": 1791819668.871,
-      "image": "AEE6F8DD-8602-476A-A141-EEB109236A60.png",
-      "screen": "screen-0-1320x2868-tap metric-detail-show-all-data_0_F0364998-CDF4-4293-8702-6A8A7D804E9B.png",
-      "file": "T07.png"
+      "test": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+      "action": "T07-hrv-native_0_CF1869E8-1F74-45E8-AD07-75E4F5202999.png",
+      "timestamp": 1793405865.668,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "8111ECA7-BBC9-470A-AFBE-17A1F06FC6B7.png",
+      "screen": "8111ECA7-BBC9-470A-AFBE-17A1F06FC6B7.png",
+      "file": "T07.png",
+      "source_revision": "ed844d14",
+      "source_worktree_dirty": false,
+      "device_udid": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+      "sha256": "af4be8d12bd0b5443a78a62f72deae9a2d5fc3d8517ed973faded1723e5c1e24",
+      "source_json": "../../../full-redesign-map/review/t07-all-data-native-2026-11-02/evidence.json",
+      "source_record": "four_tier_after.regular",
+      "capture_scope": "Historical Oct31 matrix, one method/16 categories",
+      "pose_readback_verified": false
     },
     "H09": {
       "row_id": "H09",
@@ -1170,9 +1193,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "ae9ef78e",
+  "last_refresh_revision": "c0b51078",
   "last_refresh_screens": [
-    "T08"
+    "T06"
   ],
-  "last_refresh_note": "T08 native redesign only; all unrelated records and original global provenance preserved."
+  "last_refresh_note": "T06 HRV only; all unrelated records including T05 and original global provenance preserved. iPad capture is historical Oct31."
 }

@@ -105,4 +105,31 @@ struct BreathingDisturbanceTests {
         #expect(!normal.isElevated)
         #expect(elevated.isElevated)
     }
+
+    #if DEBUG && targetEnvironment(simulator)
+    @Test("T07 opt-in sample uses the normal half-open history range")
+    func t07BaselineRange() throws {
+        let referenceDate = Date(timeIntervalSince1970: 1_800_000_000)
+        let day = Calendar.current.startOfDay(for: referenceDate)
+        let sampleDate = try #require(Calendar.current.date(byAdding: .hour, value: 1, to: day))
+        let start = sampleDate.addingTimeInterval(-1)
+        let end = sampleDate.addingTimeInterval(1)
+
+        let included = BreathingDisturbanceQueryService.t07BaselineSamples(
+            referenceDate: referenceDate, start: start, end: end, isEmpty: false
+        )
+        #expect(included.count == 1)
+        #expect(included.first?.date == sampleDate)
+        #expect(included.first?.value == 1.2)
+        #expect(BreathingDisturbanceQueryService.t07BaselineSamples(
+            referenceDate: referenceDate, start: sampleDate, end: end, isEmpty: false
+        ).count == 1)
+        #expect(BreathingDisturbanceQueryService.t07BaselineSamples(
+            referenceDate: referenceDate, start: start, end: sampleDate, isEmpty: false
+        ).isEmpty)
+        #expect(BreathingDisturbanceQueryService.t07BaselineSamples(
+            referenceDate: referenceDate, start: start, end: end, isEmpty: true
+        ).isEmpty)
+    }
+    #endif
 }
