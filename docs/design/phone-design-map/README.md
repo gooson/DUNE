@@ -242,3 +242,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-11-02 H03/T15: [기기별 실제 전후·MAX·출처](../full-redesign-map/review/h03-t15-sleep-prediction-native-2026-11-02/index.html). H03 엄격 fixture78/두 요인과 T15 기본 계산 예측을 구분하고 여덟 행만 갱신했다. 역사적 Phone/iPad와 새 Duo의 기기·날짜·소스·실제값·Back 범위를 각 원문으로 보존한다. 전체 회귀나 현재 HEAD CI 통과 주장이 아니다.
+
+
+2026-11-03 A02: [기기별 실제 전후·MAX·출처](../full-redesign-map/review/a02-training-readiness-native-2026-11-03/index.html). Training Readiness 네 행만 갱신했다. 실제 계산 점수·평가 시간·가중치와 과거 iPad/새 Phone·Duo의 소스 및 Back 검증 범위를 보존한다. 전체 회귀나 현재 HEAD 전체 CI 통과 주장이 아니다.
