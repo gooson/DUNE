@@ -37,6 +37,8 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 ## 화면별 맵 목록
 
+2026-10-31 [T13 알림 대상 없음 배치](notification-destination-unavailable-t13.html)는 기존 설명·뒤로 가기·실제 알림 ID를 유지하는 상세 화면의 한 열 계약이다. 정적 시안이며 실제 캡처가 아니다.
+
 2026-10-31 [T09 아침 브리핑 배치 계약](morning-briefing-proposal.md)은 일출 히어로 뒤에 회복·가이드·주간·조건부 날씨를 배치한다. [보존 시안](../theme-map/themes/dune-morning-briefing.html)은 예시로, 실제 앱 캡처와 구분한다.
 
 2026-10-31 [T02 iCloud 동기화 동의 배치](cloud-sync-consent-t02.html)는 앱 시작 시트의 히어로→세 설명→두 선택, 폭·큰 글씨·동작 계약을 정한다. HTML은 구현 기준 시안이며 실제 앱 캡처가 아니다.

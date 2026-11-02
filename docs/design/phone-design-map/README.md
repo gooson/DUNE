@@ -233,3 +233,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-11-02 T12 알림 메시지: [네 기기 실제 전후와 정확한 원문·큰 글씨](../full-redesign-map/review/t12-notification-message-native-2026-11-02/index.html). T12 네 행만 갱신했다. 역사적 Phone583 normal·MAX2PASS와 새 iPad/Duo normal 실행을 구분했다. iPad mini/Pro13 차이, 옛 Duo 각도 미확인, 새 Duo 각도·활성LCD·원문ACK와 펼침 PNG2853×2007 EXIF1을 보존했다. T11 허브가 아닌 메시지 상세 원본이다. 전체 회귀 통과를 뜻하지 않는다.
+
+
+2026-11-02 T13 알림 목적지 없음: [네 기기 실제 전후와 Go Back·실제 UUID](../full-redesign-map/review/t13-notification-unavailable-native-2026-11-02/index.html). T13 네 행만 갱신했다. 역사적 Phone734 normal·MAX2PASS와 새 iPad/Duo normal 실행을 구분했다. iPad baseline 전체FAILED6/5/1 중 해당 unavailable case만PASS라는 범위를 보존했다. iPad mini/Pro13 차이와 옛 Duo 각도 미확인, 새 Duo 각도·활성LCD·rawACK·펼침 PNG2853×2007 EXIF1을 명시했다. 전체 회귀나 새 현재HEAD CI 통과를 뜻하지 않는다.
