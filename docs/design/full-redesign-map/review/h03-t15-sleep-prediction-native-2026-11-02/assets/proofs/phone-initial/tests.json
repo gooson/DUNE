@@ -1,0 +1,105 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+      "deviceName" : "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+      "modelName" : "iPhone 18 Pro Max",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "1분 15초",
+                  "durationInSeconds" : 75.36483597755432,
+                  "name" : "testSleepPredictionConfidenceUsesActualLowMediumHighFixture()",
+                  "nodeIdentifier" : "DesignMapAdditionalRoutesTests/testSleepPredictionConfidenceUsesActualLowMediumHighFixture()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapAdditionalRoutesTests/testSleepPredictionConfidenceUsesActualLowMediumHighFixture",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "42초",
+                  "durationInSeconds" : 42.803529024124146,
+                  "name" : "testSleepPredictionDarkMaximumAccessibilityKeepsContentReachable()",
+                  "nodeIdentifier" : "DesignMapAdditionalRoutesTests/testSleepPredictionDarkMaximumAccessibilityKeepsContentReachable()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapAdditionalRoutesTests/testSleepPredictionDarkMaximumAccessibilityKeepsContentReachable",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "26초",
+                  "durationInSeconds" : 26.086090922355652,
+                  "name" : "testSleepPredictionOpensFromWellness()",
+                  "nodeIdentifier" : "DesignMapAdditionalRoutesTests/testSleepPredictionOpensFromWellness()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapAdditionalRoutesTests/testSleepPredictionOpensFromWellness",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "DesignMapAdditionalRoutesTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapAdditionalRoutesTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "34초",
+                  "durationInSeconds" : 34.51100790500641,
+                  "name" : "testNotificationSleepDetailLoadsSharedPrediction()",
+                  "nodeIdentifier" : "DesignMapNotificationDetailTests/testNotificationSleepDetailLoadsSharedPrediction()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapNotificationDetailTests/testNotificationSleepDetailLoadsSharedPrediction",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "DesignMapNotificationDetailTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/DesignMapNotificationDetailTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "20초",
+                  "durationInSeconds" : 20.724456071853638,
+                  "name" : "testBedtimeReminderPushesFromNotificationHub()",
+                  "nodeIdentifier" : "NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "NotificationRoutingRegressionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/NotificationRoutingRegressionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "DUNEUITests-DesignCapture",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Design Capture"
+    }
+  ]
+}

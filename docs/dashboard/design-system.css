@@ -1,0 +1,97 @@
+/* Generated from design-system.json. Shared by the portal and every document. */
+
+:root, :root[data-theme="light"] {
+  color-scheme: light;
+  --dune-ink: #3c3028;
+  --dune-text: #705c48;
+  --dune-muted: #806b55;
+  --dune-subtle: #987e60;
+  --dune-paper: #fffdf9;
+  --dune-canvas: #e9ddca;
+  --dune-inset: #eee0c9;
+  --dune-accent: #91612c;
+  --dune-gold: #c9a263;
+  --dune-sand: #d3b68d;
+  --dune-bronze: #b68a68;
+  --dune-sage: #82916a;
+  --dune-white: #ffffff;
+  --dune-black: #281d15;
+  --dune-line: #8a673c32;
+  --dune-highlight: #ffffffc9;
+  --dune-glass-start: #fffdf9d9;
+  --dune-glass-end: #fff9ec94;
+  --dune-chrome-start: #fffaf0d9;
+  --dune-chrome-end: #f2e2c8a8;
+  --dune-hover: #ffffff75;
+  --dune-active: #dfc28c73;
+  --dune-input: #fffdf9a8;
+  --dune-code: #ede0c780;
+  --dune-shadow-color: #58371b15;
+  --dune-backdrop-sky: #e0cfb7;
+  --dune-backdrop-far: #cbb18a;
+  --dune-backdrop-middle: #b18e64;
+  --dune-backdrop-near: #98764d;
+  --dune-backdrop-glow: #fff0c0;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --dune-ink: #f1e8dc;
+  --dune-text: #d6c9b8;
+  --dune-muted: #bfae98;
+  --dune-subtle: #b39c7f;
+  --dune-paper: #2b241e;
+  --dune-canvas: #1d1916;
+  --dune-inset: #3c3026;
+  --dune-accent: #edbf7a;
+  --dune-gold: #d6a75c;
+  --dune-sand: #a28764;
+  --dune-bronze: #b48b6b;
+  --dune-sage: #a9bb8a;
+  --dune-white: #ffffff;
+  --dune-black: #120e0b;
+  --dune-line: #f0d3a51f;
+  --dune-highlight: #fff4de2b;
+  --dune-glass-start: #382e26bf;
+  --dune-glass-end: #211d19a6;
+  --dune-chrome-start: #3b3027ba;
+  --dune-chrome-end: #231d17b8;
+  --dune-hover: #f6d8a511;
+  --dune-active: #d5a25d2b;
+  --dune-input: #211c1780;
+  --dune-code: #19151094;
+  --dune-shadow-color: #08050350;
+  --dune-backdrop-sky: #201b18;
+  --dune-backdrop-far: #4d382b;
+  --dune-backdrop-middle: #65432b;
+  --dune-backdrop-near: #2c221b;
+  --dune-backdrop-glow: #d09148;
+}
+
+:root {
+  --dune-font: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', sans-serif;
+  --dune-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --dune-type-xs: 11px;
+  --dune-type-sm: 12px;
+  --dune-type-body: 14px;
+  --dune-type-h3: 17px;
+  --dune-type-h2: 22px;
+  --dune-type-h1: 32px;
+  --dune-line-height: 1.8;
+  --dune-radius-sm: 10px;
+  --dune-radius-md: 16px;
+  --dune-radius-lg: 22px;
+  --dune-radius-pill: 999px;
+  --dune-space-1: 4px;
+  --dune-space-2: 8px;
+  --dune-space-3: 12px;
+  --dune-space-4: 16px;
+  --dune-space-5: 24px;
+  --dune-space-6: 32px;
+  --dune-blur: 24px;
+  --dune-duration: 180ms;
+  --dune-ease: cubic-bezier(.2,.8,.2,1);
+  --dune-surface: linear-gradient(145deg, var(--dune-glass-start), var(--dune-glass-end));
+  --dune-chrome: linear-gradient(145deg, var(--dune-chrome-start), var(--dune-chrome-end));
+  --dune-shadow: 0 12px 36px var(--dune-shadow-color), inset 0 1px 0 var(--dune-highlight);
+}

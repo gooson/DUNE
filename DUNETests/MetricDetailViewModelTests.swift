@@ -191,6 +191,28 @@ struct MetricDetailViewModelTests {
         )
     }
 
+    @Test("Visible period paging stops at the frozen latest and earliest starts")
+    func visiblePeriodPagingBounds() {
+        let vm = makeVM()
+        vm.configure(category: .hrv, currentValue: 75, lastUpdated: Date(), metricUnit: "ms")
+        let latest = vm.scrollPosition
+        #expect(!vm.canStepForward)
+        #expect(vm.canStepBackward)
+        vm.stepVisiblePeriod(by: 1)
+        #expect(vm.scrollPosition == latest)
+        vm.stepVisiblePeriod(by: -1)
+        #expect(vm.scrollPosition == latest.addingTimeInterval(-vm.selectedPeriod.visibleDomainSeconds))
+        #expect(vm.canStepForward)
+        vm.stepVisiblePeriod(by: 1)
+        #expect(vm.scrollPosition == latest)
+        vm.scrollPosition = vm.scrollDomain.lowerBound
+        #expect(!vm.canStepBackward)
+        vm.stepVisiblePeriod(by: -1)
+        #expect(vm.scrollPosition == vm.scrollDomain.lowerBound)
+        vm.stepVisiblePeriod(by: 0)
+        #expect(vm.scrollPosition == vm.scrollDomain.lowerBound)
+    }
+
     @Test("Metric history keeps the authorization boundary separate from the first sample")
     func limitedHistoryBoundary() async {
         let boundary = Date().addingTimeInterval(-2 * 86_400)

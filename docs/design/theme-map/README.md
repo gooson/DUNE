@@ -7,9 +7,13 @@ status: in-progress
 
 # DUNE 테마 맵
 
-## A05 주간 운동 통계 상세 방향 · 2026-10-31
+T14 운동 기록 없음 화면은 [방향 시안](themes/dune-notification-target-not-found-t14.html)과 [배치 계약](../layout-map/notification-target-not-found-t14.html)을 따른다. 기존 DUNE 팔레트의 불투명 히어로와 원래 문구·아이콘·실제 ID를 보존한다. 이 브라우저 시안은 네이티브 캡처가 아니다.
 
-[밝음·어두움 브라우저 시안](themes/dune-weekly-stats-detail-a05.html)은 한 화면의 불투명 현재 기간 히어로, 원래 다섯 `ActivityStat.icon`, 이전 기간 네 비교 행과 단일 날짜 캡션을 제안한다. [화면별 배치·데이터 계약](../layout-map/activity-weekly-stats-detail-a05.html)을 함께 따른다. 숫자 자리와 차트 막대는 설명용이며 실제 운동 기록이나 앱 캡처가 아니다. 원본 `672d5fdb` 기기별 before와 구현 후 after는 아직 수집하지 않았다.
+H03 오늘 밤 수면 예측 상세와 T15 로드 완료 소비자는 [수면 상세 방향 시안](themes/dune-sleep-prediction-detail-h03.html)과 [배치 계약](../layout-map/sleep-prediction-detail-h03.html)을 따른다. 기존 DUNE sleep 팔레트·공유 링·원래 요인/팁 아이콘을 유지한다. HTML은 실제 앱 캡처가 아니다.
+
+## T12 알림 메시지 상세 · 2026-10-31
+
+[밝음·어두움 브라우저 제안](themes/dune-notification-message-detail.html)은 실제 알림의 저장된 제목·본문만 쓰는 불투명한 어두운 제목 히어로와 밝은 본문 카드를 결합한 한 열 문서형 상세를 보여 준다. [배치·데이터 계약](../layout-map/notification-message-detail-proposal.md)에 680pt 읽기 폭과 큰 글씨·원문 보존을 기록했다. 문구는 테스트 fixture 예시이며 실제 앱 캡처가 아니다. 네이티브 소스 변경 후 iPhone·iPad·Duo 실제 T12 캡처와 런타임 검증은 별도로 갱신한다.
 
 ## 주간 운동 업적 시안 · 2026-10-29
 
@@ -65,6 +69,8 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 ## Today 하단 읽기 위계 (2026-10-25)
 
 [원본 대비 V1·V2 시안](themes/dune-today-reading.html)을 보존했다. V2의 큰 수면 시간·분리된 수면 부족·접히는 스트레스 근거·지표형 요약을 실제 앱에 적용했으며 [실제 화면 갤러리](../full-redesign-map/review/today-reading-v2-2026-10-25/index.html)와 [구현 계획](../../plans/2026-10-25-today-reading-v2.md)에서 검증 범위를 추적한다. 이 HTML과 시안 PNG는 실제 앱 캡처가 아니다.
+
+2026-10-31 [T13 알림 대상 없음 테마 표현 연구](themes/dune-notification-unavailable-t13.html)는 기존 DUNE 팔레트와 `ScoreHeroPalette`의 밝음·어두움 정적 해석이다. [T13 배치 계약](../layout-map/notification-destination-unavailable-t13.html)의 기존 문구·동작·ID를 따른다. 실제 앱 캡처가 아니다.
 
 ## 갱신 방법
 
@@ -180,16 +186,51 @@ L03 네이티브 구현은 기존20개 템플릿의 선택·자동 입력을 유
 
 [골드 임팩트 / 내 선택 / 심박 우선](themes/dune-live-activity-size-state.html)을 보존한다. [배치·상태 계약](../layout-map/live-activity-size-state-proposal.md)에 따라 SwiftUI 구현을 반영했다. 기존 브라우저 PNG는 시안 초기 버전이며 현재 앱의 실제 캡처가 아니다. 네이티브 검증과 기기별 갱신 상태는 실제 화면맵에서 별도로 기록한다.
 
+## T11 알림함 상태·행 보존 시안 · 2026-10-31
+
+[T11 밝음·어두움 브라우저 시안](themes/dune-notification-hub-redesign.html)은 실제 앱 캡처가 아니다. 읽지 않은 합산 상태, 원래 의미 아이콘을 앞에 둔 건강/출시 행, All/Health/News 분류와 보조 행동의 배치만 보존한다. 예시 알림·수치는 구현에 입력하지 않는다. [레이아웃 계약](../layout-map/notification-inbox-proposal.md)과 [구현 계획](../../plans/2026-10-31-t11-notification-hub-redesign.md)을 따른다. 실제 기기 이미지는 네이티브 검증 뒤 actual 디자인맵에서 별도로 갱신한다.
+
 ## T04 컨디션 상세 검토본
 
 `themes/dune-condition-detail-redesign.html`에 검토한 밝음·어두움 브라우저 PNG와 원본 화면 JSON을 보존한다. 이 시안의 고정 점수 비율은 실제 모델과 달라 앱에서는 실제 Z-score·심박/시간 조정으로 표시한다. 새 실제 앱 검증은 별도 T04 비교 갤러리와 리뷰 증거로 구분한다.
 
 T04 native 구현은 단위32개·기기별 선택 UI15개와 새4기기 실제 원본으로 검증했다. 검토용 PNG/JSON은 브라우저 시안이며 새 native 캡처와 구분한다. 실제 입력이 없는70/30 예시 구성은 사용하지 않는다.
 
+- T05 누적 스트레스 상세: `themes/dune-cumulative-stress-redesign.html`과 원본 검토 JSON을 보존했다. 현재는 native 구현 전 배치이며 새 실제 캡처 완료를 뜻하지 않는다.
+
 Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 검증은 통과했다. [새 실제 설정 2장](../phone-design-map/actual/live-activity/gold-impact-2026-10-30/index.html)과 [남은 시스템 UI 게이트](../../reviews/2026-10-30-live-activity-gold-preferences.md)를 구분한다. WLA01 최종 캡처는 환경 조회 무응답으로 미완료이며 보존 시안·이전 PNG를 새 검증 증거로 사용하지 않는다.
+
+## T09 아침 브리핑 · 2026-10-31
+
+[보존 시안](themes/dune-morning-briefing.html)은 일출 히어로와 회복·가이드·주간·조건부 날씨 카드를 밝음·어두움·큰 글씨로 비교한다. 수치는 예시이며 실제 앱 캡처가 아니다. [배치 계약](../layout-map/morning-briefing-proposal.md)을 따른다.
+
+T09 네이티브 최대 접근성 글씨는 원래 아이콘을 위로 옮겨 본문 전체 폭을 확보한다. 기본 글씨의 그림·아이콘·원문은 유지한다.
 
 ## T08 날씨 상세 검토본 · 2026-10-31
 
 [보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.
+
+## T10 오늘의 건강 리포트 (2026-10-31)
+
+[밝음·어두움 보존 시안](themes/dune-daily-report.html)과 [배치 계약](../layout-map/daily-report-proposal.md)을 추가했다. 예시 값의 브라우저 시안이며 실제 앱 캡처가 아니다. 새로운 T10 네이티브 캡처는 별도 갱신 전까지 기존 상태로 둔다.
+## T06 건강 지표 상세 · 2026-10-30
+
+[16개 지표의 보존 시안과 표현 방향](themes/dune-health-metric-detail-redesign.html) · [배치/기능/출처 계약](../layout-map/health-metric-detail-redesign-proposal.md). 원래 수치·단위·아이콘·수면/운동 분석을 보존하는 제안이다. 큰 수치와 통합 추세를 강조하며 실제 native 전후 캡처는 별도 검증한다. 원본 시안의 MCST 참조를 제품 허가된 데이터로 간주하지 않으며, 선택형 미국 체중/BMI 평균과 미지원 신체 비교를 구분한다.
+
+## T07 전체 데이터 상세 방향 · 2026-10-31
+
+[밝음·어두움 히어로와 날짜별 행 시안](themes/dune-all-data-detail-t07.html) · [16개 범주와 상태·배치 계약](../layout-map/all-data-detail-t07.html). T06의 불투명 `ScoreHeroPalette`를 범주 식별에만 사용하며 원래 SF Symbol·번역된 이름과 기존 “History”를 표시한다. 기존 정적 배경, `insetGrouped List`, 날짜 섹션·실제 시각/값, 제한 이력·빈 상태·페이징·시스템 back을 유지한다. 예시 값과 브라우저 기호는 앱 데이터나 SF Symbol 캡처가 아니며, 구현 전후 실제 화면은 별도 검증한다.
+
+## H02 웰니스 점수 상세 · 2026-10-31
+
+[밝음·어두움 표현 방향](themes/dune-h02-wellness-score-detail.html)과 [상태·배치 계약](../layout-map/h02-wellness-score-detail-proposal.md)은 T04/H01의 불투명 히어로 언어를 H02에 잇는다. 상태별 아이콘과 실제 점수·평가 시각·네 선택적 구성, 시간대 조정, 기간·추세·요약, 계산 설명을 보존한다. 시안의 93점·구성·차트·날짜는 모두 예시이며 네이티브 구현이나 실제 캡처 완료를 뜻하지 않는다.
+
+## A02 훈련 준비도 상세 방향 시안 · 2026-10-31
+
+[밝음·어두움 보존 시안](themes/dune-training-readiness-detail-a02.html)과 [화면별 배치·데이터 계약](../layout-map/training-readiness-detail-a02.html)을 연결한다. 불투명 히어로·원본 상태 SF Symbol·실제 모델에서 읽을 다섯 계산 구성 점수와 별도 30/25/20/15/10 가중치, 기존 시간 조정·5기간/차트/요약·비-일간 세 원천 추세·계산 설명의 배치 방향이다. 히어로 제목은 기존 번역 키 “Score Composition”을 쓰며 중립 대체 점수를 센서 관측의 증거로 표현하지 않는다. 본문은 중앙 정렬 최대 680pt이며 큰 글씨에서는 요약도 세로로 배치한다. HTML의 75점·요인 수치·차트는 명시적인 설명용 예시다. 원본 iPhone 영어/max-AX와 iPad 영어/max-AX 및 일반 글씨 selector가 통과했다. 일반 글씨 iPhone과 Duo는 미검증이다. 새 네이티브 실제 화면 캡처는 실제 화면맵에 별도로 기록한다.
+
+## A05 주간 운동 통계 상세 방향 · 2026-10-31
+
+[밝음·어두움 브라우저 시안](themes/dune-weekly-stats-detail-a05.html)은 한 화면의 불투명 현재 기간 히어로, 원래 다섯 `ActivityStat.icon`, 이전 기간 네 비교 행과 단일 날짜 캡션을 제안한다. [화면별 배치·데이터 계약](../layout-map/activity-weekly-stats-detail-a05.html)을 함께 따른다. 숫자 자리와 차트 막대는 설명용이며 실제 운동 기록이나 앱 캡처가 아니다. 원본 `672d5fdb` 기기별 before와 구현 후 after는 아직 수집하지 않았다.
 
 A05 네이티브 소스는 원래 `ActivityStat.iconColor`를 불투명 히어로 위에 유지하고, 이전 기간의 실제 4개 값·하나의 기간 표기를 사용한다. 기본 fixture의 이전 세션 2회·빈 볼륨 증감률·이전 날짜 및 기간 전환 검증을 준비했으며 실제 캡처 통과로 표시하지 않는다.

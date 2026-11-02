@@ -1,0 +1,1348 @@
+{
+  "schema_version": 1,
+  "screen": "T11",
+  "kind": "installed actual native comparison; four canonical T11 rows only",
+  "stage_status": "installed T11-only; final CI/PR tracked separately",
+  "installed": true,
+  "target_install_directory": "docs/design/full-redesign-map/review/t11-notification-hub-native-2026-11-02",
+  "source_checkout_parent_declared": "/Users/shanks/.codex/worktrees/detail-redesign-t11/Health",
+  "pairs": {
+    "regular": {
+      "before": {
+        "kind": "historical-native-before",
+        "capture_timestamp": 1793395990.875,
+        "timestamp_kind": "native-XCTest-attachment",
+        "revision": "583dcaf1",
+        "source_worktree_dirty": false,
+        "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+        "action": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_00200184-93C6-48EA-B630-32B3E8F1232A.png",
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "8F6F0057-4C87-45AE-8FF1-E73E8EC87ADF.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_00200184-93C6-48EA-B630-32B3E8F1232A.png",
+          "timestamp": 1793395990.875
+        },
+        "device_udid": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "caveat": "Historical matched normal fixture; preserve actual timestamp/source.",
+        "image": "assets/phone-matched-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-matched-seeded-English/attachments/8F6F0057-4C87-45AE-8FF1-E73E8EC87ADF.png",
+        "sha256": "a950a8c3b0af8dc90607a5d2da30e3f3841e6577e0048010865d79da108f0c66",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "label": "일반 iPhone · 기존 · 10월 31일 동일 기기/All/3unread",
+        "capture_time_kst": "2026-10-31T06:33:10.875000+09:00"
+      },
+      "after": {
+        "kind": "historical-source-faithful-after",
+        "capture_timestamp": 1793400655.253,
+        "timestamp_kind": "native-XCTest-attachment",
+        "revision": "7be65148",
+        "source_worktree_dirty": false,
+        "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+        "action": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_A52F39B5-3520-437A-87A0-A68C29FDF139.png",
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "EC6ED6DC-554B-4C50-BE91-B8E57C002783.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-tap dashboard-toolbar-notifications_0_A52F39B5-3520-437A-87A0-A68C29FDF139.png",
+          "timestamp": 1793400655.253
+        },
+        "device_udid": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+        "caveat": "Historical October31 native capture; not new November2 or whole currentHEAD evidence. Normal only; no PhoneMAX pass claim.",
+        "image": "assets/phone-normal-7be-after.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-unread-caption-current/attachments/EC6ED6DC-554B-4C50-BE91-B8E57C002783.png",
+        "sha256": "a066b5d44059014ea0a5192207f366f6b684cf21e13014e44d72934f90813d63",
+        "pixels": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "label": "일반 iPhone · 개편 기본 · 10월 31일7be 기존 통과 자료 재사용",
+        "capture_time_kst": "2026-10-31T07:50:55.253000+09:00"
+      },
+      "status": "historical source-faithful normal available; freshMAX pending"
+    },
+    "ipad": {
+      "before": {
+        "kind": "historical-native-before",
+        "capture_timestamp": 1793419986.574,
+        "timestamp_kind": "native-XCTest-attachment",
+        "revision": "1f7f9900",
+        "source_worktree_dirty": null,
+        "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+        "action": "screen-0-1512x2316-tap dashboard-toolbar-notifications_0_9807034C-4071-4381-9799-A08EA8C87595.png",
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "F4262777-B1BF-4E6A-BAA5-A1AE43A42775.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1512x2316-tap dashboard-toolbar-notifications_0_9807034C-4071-4381-9799-A08EA8C87595.png",
+          "timestamp": 1793419986.574
+        },
+        "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+        "caveat": "Historical Oct31 iPad mini C8B44B9E; future/currentPro13 may differ in model,UDID,viewport. Not same-device claim. Original dirty unspecified.",
+        "image": "assets/ipad-original-hub-entry-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/original-ipad/evidence/ui-briefing-digest-hub-message-current/attachments/F4262777-B1BF-4E6A-BAA5-A1AE43A42775.png",
+        "sha256": "8c9497fbc64bff7e5892837e714391a6df2bf23964a87cfe9d0276bbcff09bdc",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "exif_orientation": 1,
+        "label": "iPad · 기존 · 10월 31일 T11 알림함 진입",
+        "capture_time_kst": "2026-10-31T13:13:06.574000+09:00"
+      },
+      "after": {
+        "capture_timestamp": 1793613880.792,
+        "timestamp_kind": "native-XCTest-attachment",
+        "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+        "action": "screen-0-2064x2752-tap dashboard-toolbar-notifications_0_D372B6EB-AF8C-4988-9A3E-596D48345429.png",
+        "native_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+          "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+          "exportedFileName": "0F200A67-F35A-4DC8-AB49-ECEE8DCC06FF.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-2064x2752-tap dashboard-toolbar-notifications_0_D372B6EB-AF8C-4988-9A3E-596D48345429.png",
+          "timestamp": 1793613880.792
+        },
+        "device_udid": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+        "image": "assets/ipad-normal-ae2598a6-0F200A67-F35A-4DC8-AB49-ECEE8DCC06FF.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-ipad-hub-controls-final-2026-11-02/attachments/0F200A67-F35A-4DC8-AB49-ECEE8DCC06FF.png",
+        "sha256": "332802b3eb15440a8c300d74afdb9e81eb02ca065a1265a7d0f91627b2914ad5",
+        "pixels": [
+          2064,
+          2752
+        ],
+        "exif_orientation": 1,
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "label": "iPad · 개편 기본 · All / 읽지 않은 알림 3개",
+        "kind": "actual-native-supplement",
+        "caveat": "Actual clean ae2598a6 native capture. Health-empty is filter-specific; release/news may remain. Historical before mini differs current Pro13.",
+        "capture_time_kst": "2026-11-02T19:04:40.792000+09:00"
+      },
+      "status": "actual native after available in stated scope",
+      "comparison_note": "Before Oct31 iPadmini C8B44B9E1512×2316; after Nov2 iPadPro13 8FF0195E2064×2752. Different model,UDID,viewport/date; originalT11prefix source closure only."
+    },
+    "duo": {
+      "before": {
+        "kind": "historical-canonical-before",
+        "capture_timestamp": 1791824586.825,
+        "timestamp_kind": "original canonical capture-index timestamp",
+        "revision": null,
+        "source_worktree_dirty": null,
+        "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_source_dirty": true,
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+        "action": "tap dashboard-toolbar-notifications",
+        "device_udid": null,
+        "original_capture_row": {
+          "row_id": "T11",
+          "evidence": "notification-hub-screen",
+          "test": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+          "action": "tap dashboard-toolbar-notifications",
+          "timestamp": 1791824586.825,
+          "image": "6E798CE3-3008-4DFB-BA3D-602569BFB868.png",
+          "screen": "screen-0-1398x2034-tap dashboard-toolbar-notifications_0_BFCD1DF2-72FA-4ED9-A002-03920D8C3FC1.png",
+          "file": "T11.png"
+        },
+        "pose_readback_verified": false,
+        "caveat": "Historical canonical original. Old2-health-item fixture,no segmented filter/release row; device/date/version differ from modern fixture. Individual image revision unknown; old global collection provenance separate. Old status/window orientation and numeric hinge angle unverified; not new pose proof.",
+        "image": "assets/canonical-duo-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t11/Health/docs/design/phone-design-map/actual/duo/images/T11.png",
+        "sha256": "633e8a7ce01bfbf92496c968a66ab6d29859cb98dcd16675cb2f30f376287431",
+        "pixels": [
+          1398,
+          2034
+        ],
+        "exif_orientation": 1,
+        "label": "Duo 접힘 · 정식 맵 역사 원본",
+        "capture_time_kst": "2026-10-13T02:03:06.825000+09:00"
+      },
+      "after": {
+        "capture_timestamp": 1793614167.25406,
+        "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+        "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+        "action": "DUNE_VISUAL_AUDIT_READY tap dashboard-toolbar-notifications [DUNEUITests/TodaySettingsRegressionTests.swift:867] DEADLINE=1793614194.222703",
+        "sequence": 2,
+        "angle_before": 0,
+        "angle_after": 0,
+        "active_display": "LCD",
+        "pose_readback_verified": true,
+        "strict_ack_count": 7,
+        "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+        "image": "assets/duo-closed-ae2598a6-002-1398x2034.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-closed-hub-final-2026-11-02/paired-host/002-1398x2034.png",
+        "sha256": "2d29b9698eae5708f3ec6005bc9e9527cad7dec4c1b21307d858f5bd537a162a",
+        "pixels": [
+          1398,
+          2034
+        ],
+        "exif_orientation": 1,
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "label": "Duo 접힘 · 진입 후 All · 읽지 않음 3개",
+        "kind": "actual-native-supplement",
+        "caveat": "Unedited native Duo camera/status/rail chrome preserved. Initial lower card continues below viewport through scrolling. Health-empty is filter-specific. Host timestamp is actual file mtime.",
+        "capture_time_kst": "2026-11-02T19:09:27.254060+09:00"
+      },
+      "status": "actual native after available in stated scope"
+    },
+    "duo-open": {
+      "before": {
+        "kind": "historical-canonical-before",
+        "capture_timestamp": 1791827662.623,
+        "timestamp_kind": "original canonical capture-index timestamp",
+        "revision": null,
+        "source_worktree_dirty": null,
+        "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_source_dirty": true,
+        "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+        "action": "tap dashboard-toolbar-notifications",
+        "device_udid": null,
+        "original_capture_row": {
+          "row_id": "T11",
+          "evidence": "notification-hub-screen",
+          "test": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+          "action": "tap dashboard-toolbar-notifications",
+          "timestamp": 1791827662.623,
+          "image": "44EF8DE8-7363-4BF9-A7A1-B3AC2B1D49A9.png",
+          "screen": "screen-1-2006x2852-tap dashboard-toolbar-notifications_1_76C5FDB6-F6B8-45E1-8CC1-4DA3A1D9D49C.png",
+          "file": "T11.png"
+        },
+        "pose_readback_verified": false,
+        "caveat": "Historical canonical original. Old2-health-item fixture,no segmented filter/release row; device/date/version differ from modern fixture. Individual image revision unknown; old global collection provenance separate. Old status/window orientation and numeric hinge angle unverified; not new pose proof.",
+        "image": "assets/canonical-duo-open-before.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t11/Health/docs/design/phone-design-map/actual/duo-open/images/T11.png",
+        "sha256": "4a0254df49157fde861ae91e3cb43109a809e3dc8aed7c31c1a476bbc699c506",
+        "pixels": [
+          2006,
+          2852
+        ],
+        "exif_orientation": 6,
+        "label": "Duo 펼침 · 정식 맵 역사 원본",
+        "capture_time_kst": "2026-10-13T02:54:22.623000+09:00"
+      },
+      "after": {
+        "capture_timestamp": 1793614280.3790636,
+        "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+        "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+        "action": "DUNE_VISUAL_AUDIT_READY tap dashboard-toolbar-notifications [DUNEUITests/TodaySettingsRegressionTests.swift:867] DEADLINE=1793614309.5712109",
+        "sequence": 2,
+        "angle_before": 180,
+        "angle_after": 180,
+        "active_display": "LCD-1",
+        "pose_readback_verified": true,
+        "strict_ack_count": 7,
+        "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+        "image": "assets/duo-open-ae2598a6-002-2007x2853.png",
+        "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-open-hub-final-2026-11-02/paired-host/002-2007x2853.png",
+        "sha256": "1eb4bf9425e577f3568cbff3f34683f158d03d6bf1c0c8fa4792470eff321874",
+        "pixels": [
+          2853,
+          2007
+        ],
+        "exif_orientation": 1,
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "label": "Duo 펼침 · 진입 후 All · 읽지 않음 3개",
+        "kind": "actual-native-supplement",
+        "caveat": "Original native orientation/camera/status/rail untouched. Initial lower card is scroll continuation; Health-empty is filter-specific. Timestamp is file mtime.",
+        "capture_time_kst": "2026-11-02T19:11:20.379064+09:00"
+      },
+      "status": "actual native after available in stated scope"
+    }
+  },
+  "historical_canonical_before": {
+    "regular": {
+      "kind": "historical-canonical-before",
+      "capture_timestamp": 1792783809.952,
+      "timestamp_kind": "original canonical capture-index timestamp",
+      "revision": "1c4cdd88",
+      "source_worktree_dirty": false,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "selector": "DashboardSmokeTests/testNavigateToWhatsNew()",
+      "action": "T11-news",
+      "device_udid": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+      "original_capture_row": {
+        "row_id": "T11",
+        "file": "T11.png",
+        "evidence": "actual app section",
+        "test": "DashboardSmokeTests/testNavigateToWhatsNew()",
+        "action": "T11-news",
+        "timestamp": 1792783809.952,
+        "image": "6926F12A-2995-4798-8F0F-2FCF1DF0C37C.png",
+        "source_revision": "1c4cdd88",
+        "source_worktree_dirty": false,
+        "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
+        "device_name": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
+        "xcresult": "Test-DUNEUITests-2026.10.24_04-28-35-+0900.xcresult",
+        "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html"
+      },
+      "pose_readback_verified": false,
+      "caveat": "Historical canonical original. Korean News-only filter,1unread release0.8.0; not the matched EnglishAll/3unread fixture.",
+      "image": "assets/canonical-regular-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t11/Health/docs/design/phone-design-map/actual/regular/images/T11.png",
+      "sha256": "3136a017024e4ba034f4320eedbdb0839e6026c71b69b7769dbcf248422ada61",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "exif_orientation": 1,
+      "label": "일반 iPhone · 정식 맵 역사 원본",
+      "capture_time_kst": "2026-10-24T04:30:09.952000+09:00"
+    },
+    "ipad": {
+      "kind": "historical-canonical-before",
+      "capture_timestamp": 1791820758.738,
+      "timestamp_kind": "original canonical capture-index timestamp",
+      "revision": null,
+      "source_worktree_dirty": null,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+      "action": "tap dashboard-toolbar-notifications",
+      "device_udid": null,
+      "original_capture_row": {
+        "row_id": "T11",
+        "evidence": "notification-hub-screen",
+        "test": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+        "action": "tap dashboard-toolbar-notifications",
+        "timestamp": 1791820758.738,
+        "image": "F3FBB84B-3794-4D48-B302-6EBC3F1022FA.png",
+        "screen": "screen-0-2064x2752-tap dashboard-toolbar-notifications_0_D3D78A80-5D5B-4D11-BC7B-2A65267749C8.png",
+        "file": "T11.png"
+      },
+      "pose_readback_verified": false,
+      "caveat": "Historical canonical original. Old2-health-item fixture,no segmented filter/release row; device/date/version differ from modern fixture. Individual image revision unknown; old global collection provenance separate.",
+      "image": "assets/canonical-ipad-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t11/Health/docs/design/phone-design-map/actual/ipad/images/T11.png",
+      "sha256": "1da61a17746c7dce59be6262a5a8a28f3a2b74bff861777d63fbc37256dd3ca3",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "label": "iPad · 정식 맵 역사 원본",
+      "capture_time_kst": "2026-10-13T00:59:18.738000+09:00"
+    },
+    "duo": {
+      "kind": "historical-canonical-before",
+      "capture_timestamp": 1791824586.825,
+      "timestamp_kind": "original canonical capture-index timestamp",
+      "revision": null,
+      "source_worktree_dirty": null,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+      "action": "tap dashboard-toolbar-notifications",
+      "device_udid": null,
+      "original_capture_row": {
+        "row_id": "T11",
+        "evidence": "notification-hub-screen",
+        "test": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+        "action": "tap dashboard-toolbar-notifications",
+        "timestamp": 1791824586.825,
+        "image": "6E798CE3-3008-4DFB-BA3D-602569BFB868.png",
+        "screen": "screen-0-1398x2034-tap dashboard-toolbar-notifications_0_BFCD1DF2-72FA-4ED9-A002-03920D8C3FC1.png",
+        "file": "T11.png"
+      },
+      "pose_readback_verified": false,
+      "caveat": "Historical canonical original. Old2-health-item fixture,no segmented filter/release row; device/date/version differ from modern fixture. Individual image revision unknown; old global collection provenance separate. Old status/window orientation and numeric hinge angle unverified; not new pose proof.",
+      "image": "assets/canonical-duo-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t11/Health/docs/design/phone-design-map/actual/duo/images/T11.png",
+      "sha256": "633e8a7ce01bfbf92496c968a66ab6d29859cb98dcd16675cb2f30f376287431",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "label": "Duo 접힘 · 정식 맵 역사 원본",
+      "capture_time_kst": "2026-10-13T02:03:06.825000+09:00"
+    },
+    "duo-open": {
+      "kind": "historical-canonical-before",
+      "capture_timestamp": 1791827662.623,
+      "timestamp_kind": "original canonical capture-index timestamp",
+      "revision": null,
+      "source_worktree_dirty": null,
+      "historical_global_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "global_source_dirty": true,
+      "selector": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+      "action": "tap dashboard-toolbar-notifications",
+      "device_udid": null,
+      "original_capture_row": {
+        "row_id": "T11",
+        "evidence": "notification-hub-screen",
+        "test": "TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState()",
+        "action": "tap dashboard-toolbar-notifications",
+        "timestamp": 1791827662.623,
+        "image": "44EF8DE8-7363-4BF9-A7A1-B3AC2B1D49A9.png",
+        "screen": "screen-1-2006x2852-tap dashboard-toolbar-notifications_1_76C5FDB6-F6B8-45E1-8CC1-4DA3A1D9D49C.png",
+        "file": "T11.png"
+      },
+      "pose_readback_verified": false,
+      "caveat": "Historical canonical original. Old2-health-item fixture,no segmented filter/release row; device/date/version differ from modern fixture. Individual image revision unknown; old global collection provenance separate. Old status/window orientation and numeric hinge angle unverified; not new pose proof.",
+      "image": "assets/canonical-duo-open-before.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-t11/Health/docs/design/phone-design-map/actual/duo-open/images/T11.png",
+      "sha256": "4a0254df49157fde861ae91e3cb43109a809e3dc8aed7c31c1a476bbc699c506",
+      "pixels": [
+        2006,
+        2852
+      ],
+      "exif_orientation": 6,
+      "label": "Duo 펼침 · 정식 맵 역사 원본",
+      "capture_time_kst": "2026-10-13T02:54:22.623000+09:00"
+    }
+  },
+  "extra_states": [
+    {
+      "capture_timestamp": 1793613137.192,
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize",
+      "action": "Notifications release row maximum accessibility dark_0_86C5CB45-3FD4-4CAD-9809-FA42C93785B2.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "8668D05D-BB36-48D6-B31C-1664DE8F76B8",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "5E9E5542-E0CA-4E49-892F-96F5C214D609.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "Notifications release row maximum accessibility dark_0_86C5CB45-3FD4-4CAD-9809-FA42C93785B2.png",
+        "timestamp": 1793613137.192
+      },
+      "device_udid": "8668D05D-BB36-48D6-B31C-1664DE8F76B8",
+      "image": "assets/phone-max-ae2598a6-5E9E5542-E0CA-4E49-892F-96F5C214D609.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-phone-max-approved-extra-final-2026-11-02/attachments/5E9E5542-E0CA-4E49-892F-96F5C214D609.png",
+      "sha256": "dc88826812b2eca24a9123b7af8e0b4e871c7f9ef4f11b539c0d22da41a5a203",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "phone-max-ae2598a6 · Notifications release row maximum accessibility dark",
+      "kind": "actual-native-supplement",
+      "caveat": "Exact executed revision preserved. Review action/viewport state; no wholeHEAD or fullsuite claim.",
+      "capture_time_kst": "2026-11-02T18:52:17.192000+09:00"
+    },
+    {
+      "capture_timestamp": 1793613136.365,
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize",
+      "action": "Notifications release title maximum accessibility dark_0_E64766A9-5D4D-455B-97ED-E9FFFBE06144.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "8668D05D-BB36-48D6-B31C-1664DE8F76B8",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "B2829268-4897-4E50-9A86-B34F5E088F31.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "Notifications release title maximum accessibility dark_0_E64766A9-5D4D-455B-97ED-E9FFFBE06144.png",
+        "timestamp": 1793613136.365
+      },
+      "device_udid": "8668D05D-BB36-48D6-B31C-1664DE8F76B8",
+      "image": "assets/phone-max-ae2598a6-B2829268-4897-4E50-9A86-B34F5E088F31.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-phone-max-approved-extra-final-2026-11-02/attachments/B2829268-4897-4E50-9A86-B34F5E088F31.png",
+      "sha256": "c88528a172c176419bddab9e1f436db2447bdb43d07464c08d8d59c180f476b4",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "phone-max-ae2598a6 · Notifications release title maximum accessibility dark",
+      "kind": "actual-native-supplement",
+      "caveat": "Exact executed revision preserved. Review action/viewport state; no wholeHEAD or fullsuite claim.",
+      "capture_time_kst": "2026-11-02T18:52:16.365000+09:00"
+    },
+    {
+      "capture_timestamp": 1793613125.344,
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize",
+      "action": "Notifications health row maximum accessibility dark_0_D02C35DC-A902-49BD-858B-B8DDACD113EE.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "8668D05D-BB36-48D6-B31C-1664DE8F76B8",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "6AD257BC-EF5B-4467-98F8-78B72091002F.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "Notifications health row maximum accessibility dark_0_D02C35DC-A902-49BD-858B-B8DDACD113EE.png",
+        "timestamp": 1793613125.344
+      },
+      "device_udid": "8668D05D-BB36-48D6-B31C-1664DE8F76B8",
+      "image": "assets/phone-max-ae2598a6-6AD257BC-EF5B-4467-98F8-78B72091002F.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-phone-max-approved-extra-final-2026-11-02/attachments/6AD257BC-EF5B-4467-98F8-78B72091002F.png",
+      "sha256": "0d4364e0a5e9bd4beda899a06f5ed445ebac62d5b25f9be7a0df816d3c20ab48",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "phone-max-ae2598a6 · Notifications health row maximum accessibility dark",
+      "kind": "actual-native-supplement",
+      "caveat": "Exact executed revision preserved. Review action/viewport state; no wholeHEAD or fullsuite claim.",
+      "capture_time_kst": "2026-11-02T18:52:05.344000+09:00"
+    },
+    {
+      "capture_timestamp": 1793613121.379,
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize",
+      "action": "Notifications health title maximum accessibility dark_0_5E15A8CF-71F1-4157-985F-A6233385F289.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "8668D05D-BB36-48D6-B31C-1664DE8F76B8",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "DEE81A54-2BD6-4AE5-839F-552261877A72.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "Notifications health title maximum accessibility dark_0_5E15A8CF-71F1-4157-985F-A6233385F289.png",
+        "timestamp": 1793613121.379
+      },
+      "device_udid": "8668D05D-BB36-48D6-B31C-1664DE8F76B8",
+      "image": "assets/phone-max-ae2598a6-DEE81A54-2BD6-4AE5-839F-552261877A72.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-phone-max-approved-extra-final-2026-11-02/attachments/DEE81A54-2BD6-4AE5-839F-552261877A72.png",
+      "sha256": "47d033382f1738288cf8a5c8db0ae42d4bbd9a59cfd8158882a613b46409de21",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "phone-max-ae2598a6 · Notifications health title maximum accessibility dark",
+      "kind": "actual-native-supplement",
+      "caveat": "Exact executed revision preserved. Review action/viewport state; no wholeHEAD or fullsuite claim.",
+      "capture_time_kst": "2026-11-02T18:52:01.379000+09:00"
+    },
+    {
+      "capture_timestamp": 1793613116.347,
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize",
+      "action": "Notifications summary and filters maximum accessibility_0_77518549-C161-4285-9EDD-E4F28F7D7D77.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "8668D05D-BB36-48D6-B31C-1664DE8F76B8",
+        "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "5B16C33F-F6EA-4CFD-85AB-DF611A563CA8.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "Notifications summary and filters maximum accessibility_0_77518549-C161-4285-9EDD-E4F28F7D7D77.png",
+        "timestamp": 1793613116.347
+      },
+      "device_udid": "8668D05D-BB36-48D6-B31C-1664DE8F76B8",
+      "image": "assets/phone-max-ae2598a6-5B16C33F-F6EA-4CFD-85AB-DF611A563CA8.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-phone-max-approved-extra-final-2026-11-02/attachments/5B16C33F-F6EA-4CFD-85AB-DF611A563CA8.png",
+      "sha256": "f6aae6d241a37fc849a7c3d5ea159a981bb027bbf63fee023e3146b74278ee34",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "phone-max-ae2598a6 · Notifications summary and filters maximum accessibility",
+      "kind": "actual-native-supplement",
+      "caveat": "Exact executed revision preserved. Review action/viewport state; no wholeHEAD or fullsuite claim.",
+      "capture_time_kst": "2026-11-02T18:51:56.347000+09:00"
+    },
+    {
+      "capture_timestamp": 1793613905.872,
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "screen-0-2064x2752-before teardown -[TodaySettingsRegressionTests testNotificationHubControlsTransitionToEmptyState]_0_DD2BD62E-432A-4494-B9F3-1F3D45E78649.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+        "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "8E1EFBF6-F034-4015-94D0-93499339E7C3.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-2064x2752-before teardown -[TodaySettingsRegressionTests testNotificationHubControlsTransitionToEmptyState]_0_DD2BD62E-432A-4494-B9F3-1F3D45E78649.png",
+        "timestamp": 1793613905.872
+      },
+      "device_udid": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+      "image": "assets/ipad-normal-ae2598a6-8E1EFBF6-F034-4015-94D0-93499339E7C3.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-ipad-hub-controls-final-2026-11-02/attachments/8E1EFBF6-F034-4015-94D0-93499339E7C3.png",
+      "sha256": "554278f269fffc93a4b4952a6899747c97aa9723715237c68eadfa8e117d0f97",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "iPad · Health 필터의 빈 상태 (전체 알림함 비움 아님)",
+      "kind": "actual-native-supplement",
+      "caveat": "Actual clean ae2598a6 native capture. Health-empty is filter-specific; release/news may remain. Historical before mini differs current Pro13.",
+      "capture_time_kst": "2026-11-02T19:05:05.872000+09:00"
+    },
+    {
+      "capture_timestamp": 1793613900.318,
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "screen-0-2064x2752-tap Delete All_0_5092AEB0-1F76-4802-A04A-2C48A26A482A.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+        "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "B05F4AE7-35BB-498E-BC97-967A9168FF46.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-2064x2752-tap Delete All_0_5092AEB0-1F76-4802-A04A-2C48A26A482A.png",
+        "timestamp": 1793613900.318
+      },
+      "device_udid": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+      "image": "assets/ipad-normal-ae2598a6-B05F4AE7-35BB-498E-BC97-967A9168FF46.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-ipad-hub-controls-final-2026-11-02/attachments/B05F4AE7-35BB-498E-BC97-967A9168FF46.png",
+      "sha256": "ce1a6242f445a8e9d9b7fdda3d1572fcb34447ac2e0ef1f252394b5240283da9",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "iPad · 삭제 확인을 누른 후 · All에 읽은 새 소식 유지",
+      "kind": "actual-native-supplement",
+      "caveat": "Actual clean ae2598a6 native capture. Health-empty is filter-specific; release/news may remain. Historical before mini differs current Pro13.",
+      "capture_time_kst": "2026-11-02T19:05:00.318000+09:00"
+    },
+    {
+      "capture_timestamp": 1793613897.192,
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "screen-0-2064x2752-tap notifications-delete-all-button_0_C693B82D-8C1B-46B7-898B-6FFE4EF0EA96.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+        "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "23EB49AC-1908-4DCE-AEB3-BB03FDDD048D.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-2064x2752-tap notifications-delete-all-button_0_C693B82D-8C1B-46B7-898B-6FFE4EF0EA96.png",
+        "timestamp": 1793613897.192
+      },
+      "device_udid": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+      "image": "assets/ipad-normal-ae2598a6-23EB49AC-1908-4DCE-AEB3-BB03FDDD048D.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-ipad-hub-controls-final-2026-11-02/attachments/23EB49AC-1908-4DCE-AEB3-BB03FDDD048D.png",
+      "sha256": "a1d3a93ca8eb05c8b335679efabedbfeb1801e78ce43cd7ef5e713cb88b2371b",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "iPad · 메뉴의 전체 삭제를 누른 후 · 확인 대화상자",
+      "kind": "actual-native-supplement",
+      "caveat": "Actual clean ae2598a6 native capture. Health-empty is filter-specific; release/news may remain. Historical before mini differs current Pro13.",
+      "capture_time_kst": "2026-11-02T19:04:57.192000+09:00"
+    },
+    {
+      "capture_timestamp": 1793613892.77,
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "screen-0-2064x2752-tap notifications-more-options-button_0_A7993D77-DBA5-4D24-AB52-860A97BAEEBE.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+        "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "0C46EF0A-33B6-4A0B-874B-C9208EAA6690.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-2064x2752-tap notifications-more-options-button_0_A7993D77-DBA5-4D24-AB52-860A97BAEEBE.png",
+        "timestamp": 1793613892.77
+      },
+      "device_udid": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+      "image": "assets/ipad-normal-ae2598a6-0C46EF0A-33B6-4A0B-874B-C9208EAA6690.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-ipad-hub-controls-final-2026-11-02/attachments/0C46EF0A-33B6-4A0B-874B-C9208EAA6690.png",
+      "sha256": "b49a671fc6723b78cf3f3d8c8ff35e9d8a52189c35ae9f3e83db4aaf529e20aa",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "iPad · 더 보기를 누른 후 · 메뉴 표시",
+      "kind": "actual-native-supplement",
+      "caveat": "Actual clean ae2598a6 native capture. Health-empty is filter-specific; release/news may remain. Historical before mini differs current Pro13.",
+      "capture_time_kst": "2026-11-02T19:04:52.770000+09:00"
+    },
+    {
+      "capture_timestamp": 1793613887.125,
+      "timestamp_kind": "native-XCTest-attachment",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "screen-0-2064x2752-tap notifications-read-all-button_0_730DBC46-6F04-40FA-B50A-0B4DDD895E8D.png",
+      "native_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+        "deviceName": "iPad Pro 13-inch (M5)-wt-Health-detail-redesign-validation-644069bf7efc",
+        "exportedFileName": "8FEC4C34-8FEC-4BED-940C-E2C6C299B251.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-2064x2752-tap notifications-read-all-button_0_730DBC46-6F04-40FA-B50A-0B4DDD895E8D.png",
+        "timestamp": 1793613887.125
+      },
+      "device_udid": "8FF0195E-1053-483E-9B03-C82FC55C0092",
+      "image": "assets/ipad-normal-ae2598a6-8FEC4C34-8FEC-4BED-940C-E2C6C299B251.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-ipad-hub-controls-final-2026-11-02/attachments/8FEC4C34-8FEC-4BED-940C-E2C6C299B251.png",
+      "sha256": "82aac9cb6c3d001bb41ae3e858655b29f5346679302ed59fc39135bcf899ee28",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "iPad · Read All 후 · 읽음 상태",
+      "kind": "actual-native-supplement",
+      "caveat": "Actual clean ae2598a6 native capture. Health-empty is filter-specific; release/news may remain. Historical before mini differs current Pro13.",
+      "capture_time_kst": "2026-11-02T19:04:47.125000+09:00"
+    },
+    {
+      "capture_timestamp": 1793614175.776799,
+      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "DUNE_VISUAL_AUDIT_READY tap notifications-read-all-button [DUNEUITests/TodaySettingsRegressionTests.swift:509] DEADLINE=1793614203.423123",
+      "sequence": 3,
+      "angle_before": 0,
+      "angle_after": 0,
+      "active_display": "LCD",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+      "image": "assets/duo-closed-ae2598a6-003-1398x2034.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-closed-hub-final-2026-11-02/paired-host/003-1398x2034.png",
+      "sha256": "95d0a3cc260034d1a669572d46c89cfd4efab068493c9cbf73c52877e4441f30",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "Duo 접힘 · Read All 후 · 모두 읽음",
+      "kind": "actual-native-supplement",
+      "caveat": "Unedited native Duo camera/status/rail chrome preserved. Initial lower card continues below viewport through scrolling. Health-empty is filter-specific. Host timestamp is actual file mtime.",
+      "capture_time_kst": "2026-11-02T19:09:35.776799+09:00"
+    },
+    {
+      "capture_timestamp": 1793614182.235957,
+      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "DUNE_VISUAL_AUDIT_READY tap notifications-more-options-button [DUNEUITests/TodaySettingsRegressionTests.swift:517] DEADLINE=1793614210.059844",
+      "sequence": 4,
+      "angle_before": 0,
+      "angle_after": 0,
+      "active_display": "LCD",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+      "image": "assets/duo-closed-ae2598a6-004-1398x2034.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-closed-hub-final-2026-11-02/paired-host/004-1398x2034.png",
+      "sha256": "3b832aa03ea9fc66384a5743af683b54dc5d342e431f604674983701485fd3c6",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "Duo 접힘 · 더 보기 후 · 메뉴 표시",
+      "kind": "actual-native-supplement",
+      "caveat": "Unedited native Duo camera/status/rail chrome preserved. Initial lower card continues below viewport through scrolling. Health-empty is filter-specific. Host timestamp is actual file mtime.",
+      "capture_time_kst": "2026-11-02T19:09:42.235957+09:00"
+    },
+    {
+      "capture_timestamp": 1793614188.5558226,
+      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "DUNE_VISUAL_AUDIT_READY tap notifications-delete-all-button [DUNEUITests/TodaySettingsRegressionTests.swift:521] DEADLINE=1793614216.474568",
+      "sequence": 5,
+      "angle_before": 0,
+      "angle_after": 0,
+      "active_display": "LCD",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+      "image": "assets/duo-closed-ae2598a6-005-1398x2034.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-closed-hub-final-2026-11-02/paired-host/005-1398x2034.png",
+      "sha256": "c8b738f03f60be701d33ebaf845e45d74ccd56cbe5fadb0a184fd1846cbb5cd1",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "Duo 접힘 · 메뉴 전체 삭제 후 · 확인 대화상자",
+      "kind": "actual-native-supplement",
+      "caveat": "Unedited native Duo camera/status/rail chrome preserved. Initial lower card continues below viewport through scrolling. Health-empty is filter-specific. Host timestamp is actual file mtime.",
+      "capture_time_kst": "2026-11-02T19:09:48.555823+09:00"
+    },
+    {
+      "capture_timestamp": 1793614194.05292,
+      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "DUNE_VISUAL_AUDIT_READY tap Delete All [DUNEUITests/TodaySettingsRegressionTests.swift:525] DEADLINE=1793614221.756082",
+      "sequence": 6,
+      "angle_before": 0,
+      "angle_after": 0,
+      "active_display": "LCD",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+      "image": "assets/duo-closed-ae2598a6-006-1398x2034.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-closed-hub-final-2026-11-02/paired-host/006-1398x2034.png",
+      "sha256": "e83136b4ba4dccfa010f8f19041f191d70f1d91ab24c1fb111d4aef0232ee9bd",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "Duo 접힘 · 삭제 확인 후 · All에 읽은 새 소식 유지",
+      "kind": "actual-native-supplement",
+      "caveat": "Unedited native Duo camera/status/rail chrome preserved. Initial lower card continues below viewport through scrolling. Health-empty is filter-specific. Host timestamp is actual file mtime.",
+      "capture_time_kst": "2026-11-02T19:09:54.052920+09:00"
+    },
+    {
+      "capture_timestamp": 1793614201.7555976,
+      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "DUNE_VISUAL_AUDIT_READY before teardown -[TodaySettingsRegressionTests testNotificationHubControlsTransitionToEmptyState] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793614229.5497441",
+      "sequence": 7,
+      "angle_before": 0,
+      "angle_after": 0,
+      "active_display": "LCD",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+      "image": "assets/duo-closed-ae2598a6-007-1398x2034.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-closed-hub-final-2026-11-02/paired-host/007-1398x2034.png",
+      "sha256": "66ff1ed1fd71b26ad2177043694fb8ee279c1c3d950718df995376dfc46addc0",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "Duo 접힘 · Health 필터만 빈 상태 · 전체 알림함 비움 아님",
+      "kind": "actual-native-supplement",
+      "caveat": "Unedited native Duo camera/status/rail chrome preserved. Initial lower card continues below viewport through scrolling. Health-empty is filter-specific. Host timestamp is actual file mtime.",
+      "capture_time_kst": "2026-11-02T19:10:01.755598+09:00"
+    },
+    {
+      "capture_timestamp": 1793614288.278133,
+      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "DUNE_VISUAL_AUDIT_READY tap notifications-read-all-button [DUNEUITests/TodaySettingsRegressionTests.swift:509] DEADLINE=1793614317.496653",
+      "sequence": 3,
+      "angle_before": 180,
+      "angle_after": 180,
+      "active_display": "LCD-1",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+      "image": "assets/duo-open-ae2598a6-003-2007x2853.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-open-hub-final-2026-11-02/paired-host/003-2007x2853.png",
+      "sha256": "648a6c22cab997d53d06b54dbbccf6974444083d944464a4aed1dc57ea613d54",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "Duo 펼침 · Read All 후 · 모두 읽음",
+      "kind": "actual-native-supplement",
+      "caveat": "Original native orientation/camera/status/rail untouched. Initial lower card is scroll continuation; Health-empty is filter-specific. Timestamp is file mtime.",
+      "capture_time_kst": "2026-11-02T19:11:28.278133+09:00"
+    },
+    {
+      "capture_timestamp": 1793614295.9408734,
+      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "DUNE_VISUAL_AUDIT_READY tap notifications-more-options-button [DUNEUITests/TodaySettingsRegressionTests.swift:517] DEADLINE=1793614325.201736",
+      "sequence": 4,
+      "angle_before": 180,
+      "angle_after": 180,
+      "active_display": "LCD-1",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+      "image": "assets/duo-open-ae2598a6-004-2007x2853.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-open-hub-final-2026-11-02/paired-host/004-2007x2853.png",
+      "sha256": "2eb1a5cde6874d5b470a931a93b657c6e8fbc4122a3a16e144f30dd5fe233294",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "Duo 펼침 · 더 보기 후 · 메뉴 표시",
+      "kind": "actual-native-supplement",
+      "caveat": "Original native orientation/camera/status/rail untouched. Initial lower card is scroll continuation; Health-empty is filter-specific. Timestamp is file mtime.",
+      "capture_time_kst": "2026-11-02T19:11:35.940873+09:00"
+    },
+    {
+      "capture_timestamp": 1793614302.5298522,
+      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "DUNE_VISUAL_AUDIT_READY tap notifications-delete-all-button [DUNEUITests/TodaySettingsRegressionTests.swift:521] DEADLINE=1793614331.833242",
+      "sequence": 5,
+      "angle_before": 180,
+      "angle_after": 180,
+      "active_display": "LCD-1",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+      "image": "assets/duo-open-ae2598a6-005-2007x2853.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-open-hub-final-2026-11-02/paired-host/005-2007x2853.png",
+      "sha256": "3df9924a8e5155b7d0d11504aea5bac21f8c8646a637fc8de6d63f60b21e2999",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "Duo 펼침 · 메뉴 전체 삭제 후 · 확인 대화상자",
+      "kind": "actual-native-supplement",
+      "caveat": "Original native orientation/camera/status/rail untouched. Initial lower card is scroll continuation; Health-empty is filter-specific. Timestamp is file mtime.",
+      "capture_time_kst": "2026-11-02T19:11:42.529852+09:00"
+    },
+    {
+      "capture_timestamp": 1793614307.7596426,
+      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "DUNE_VISUAL_AUDIT_READY tap Delete All [DUNEUITests/TodaySettingsRegressionTests.swift:525] DEADLINE=1793614337.08951",
+      "sequence": 6,
+      "angle_before": 180,
+      "angle_after": 180,
+      "active_display": "LCD-1",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+      "image": "assets/duo-open-ae2598a6-006-2007x2853.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-open-hub-final-2026-11-02/paired-host/006-2007x2853.png",
+      "sha256": "7968cdd51e9ad2d7c1fe3fa7de2f30b501bcd45212418e4086bb366f06f103f3",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "Duo 펼침 · 삭제 확인 후 · All에 읽은 새 소식 유지",
+      "kind": "actual-native-supplement",
+      "caveat": "Original native orientation/camera/status/rail untouched. Initial lower card is scroll continuation; Health-empty is filter-specific. Timestamp is file mtime.",
+      "capture_time_kst": "2026-11-02T19:11:47.759643+09:00"
+    },
+    {
+      "capture_timestamp": 1793614315.5209014,
+      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
+      "selector": "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState",
+      "action": "DUNE_VISUAL_AUDIT_READY before teardown -[TodaySettingsRegressionTests testNotificationHubControlsTransitionToEmptyState] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793614344.771634",
+      "sequence": 7,
+      "angle_before": 180,
+      "angle_after": 180,
+      "active_display": "LCD-1",
+      "pose_readback_verified": true,
+      "strict_ack_count": 7,
+      "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+      "image": "assets/duo-open-ae2598a6-007-2007x2853.png",
+      "source_file": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-open-hub-final-2026-11-02/paired-host/007-2007x2853.png",
+      "sha256": "2c76cbab465456c9d278309a920bfe2b43bf52a0f290135b3b21b26bff6def8c",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "exif_orientation": 1,
+      "revision": "ae2598a6",
+      "source_worktree_dirty": false,
+      "label": "Duo 펼침 · Health 필터만 빈 상태 · 전체 알림함 비움 아님",
+      "kind": "actual-native-supplement",
+      "caveat": "Original native orientation/camera/status/rail untouched. Initial lower card is scroll continuation; Health-empty is filter-specific. Timestamp is file mtime.",
+      "capture_time_kst": "2026-11-02T19:11:55.520901+09:00"
+    }
+  ],
+  "bundles": {
+    "phone_before": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/before-phone-matched-seeded-English",
+      "provenance": {
+        "revision": "583dcaf1",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_06-32-49-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-before-phone-seeded-583dcaf1.log"
+      }
+    },
+    "phone_normal_historical": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/ui-phone-unread-caption-current",
+      "provenance": {
+        "revision": "7be65148",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.31_07-49-53-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-unread-caption-contrast-7be65148.log"
+      }
+    },
+    "phone-max-ae2598a6": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-phone-max-approved-extra-final-2026-11-02",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/DashboardSmokeTests/testNotificationHubSummaryAtMaximumAccessibilitySize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-phone-max-approved-extra-ae2598a6.log"
+      },
+      "provenance": {
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_18-50-28-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "included_files": [
+        "5E9E5542-E0CA-4E49-892F-96F5C214D609.png",
+        "B2829268-4897-4E50-9A86-B34F5E088F31.png",
+        "6AD257BC-EF5B-4467-98F8-78B72091002F.png",
+        "DEE81A54-2BD6-4AE5-839F-552261877A72.png",
+        "5B16C33F-F6EA-4CFD-85AB-DF611A563CA8.png"
+      ],
+      "source_closure_note": "T11prefix matches7be/bfed; executed ae2598a6 future T12/T13tail differs. Do not assert whole NotificationHubView or wholeHEAD equality.",
+      "visual_review": "Parent reports actual five PNGs viewed clear. Stage worker verified receipt and attachment metadata, not a new independent visual review."
+    },
+    "ipad-normal-ae2598a6": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-ipad-hub-controls-final-2026-11-02",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-ipad-controls-ae2598a6.log"
+      },
+      "provenance": {
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_19-03-21-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DesignCapture"
+      },
+      "included_files": [
+        "8E1EFBF6-F034-4015-94D0-93499339E7C3.png",
+        "B05F4AE7-35BB-498E-BC97-967A9168FF46.png",
+        "23EB49AC-1908-4DCE-AEB3-BB03FDDD048D.png",
+        "0C46EF0A-33B6-4A0B-874B-C9208EAA6690.png",
+        "8FEC4C34-8FEC-4BED-940C-E2C6C299B251.png",
+        "0F200A67-F35A-4DC8-AB49-ECEE8DCC06FF.png"
+      ],
+      "excluded_setup_today": "B9214C4F-5799-4A9D-8D8D-6254F9967B77.png",
+      "state_note": "0F200 initial All3unread; teardown8E1E is Health-filter empty only, not whole-inbox empty."
+    },
+    "duo-closed-ae2598a6": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-closed-hub-final-2026-11-02",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-duo-closed-ae2598a6.log"
+      },
+      "provenance": {
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_19-07-47-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DuoAudit",
+        "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+        "pose": "closed",
+        "raw_pose_proof": "paired-host/pose-proof.json"
+      },
+      "included_files": [
+        "002-1398x2034.png",
+        "003-1398x2034.png",
+        "004-1398x2034.png",
+        "005-1398x2034.png",
+        "006-1398x2034.png",
+        "007-1398x2034.png"
+      ]
+    },
+    "duo-open-ae2598a6": {
+      "source_directory": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t11/evidence/pr883-duo-open-hub-final-2026-11-02",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/TodaySettingsRegressionTests/testNotificationHubControlsTransitionToEmptyState"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/t11-duo-open-ae2598a6.log"
+      },
+      "provenance": {
+        "revision": "ae2598a6",
+        "source_worktree_dirty": false,
+        "original_xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.02_19-10-53-+0900.xcresult",
+        "xcode": "Xcode 27.2\nBuild version 27B52",
+        "test_plan": "DUNEUITests-DuoAudit",
+        "device_udid": "BAA807BB-A8A7-4AD5-9097-808844D25562",
+        "pose": "open",
+        "raw_pose_proof": "paired-host/pose-proof.json"
+      },
+      "included_files": [
+        "002-2007x2853.png",
+        "003-2007x2853.png",
+        "004-2007x2853.png",
+        "005-2007x2853.png",
+        "006-2007x2853.png",
+        "007-2007x2853.png"
+      ]
+    }
+  },
+  "proof_sha256": {
+    "assets/proofs/minimal-quality-prep.json": "9ea4982d6d498d97f8c483071733daab49b79642aadd7c3d82590fc27d5bae00",
+    "assets/proofs/phone-before/result.json": "1150cef4a3d1ed1c6ea5c3312892954676fe8aa203e658f70bbd74cccf2cc4c3",
+    "assets/proofs/phone-before/provenance.json": "7ff422775a14b9dc493d3e6c2c354b939bc9dd3bf2c46c5560e70c552b29c7ae",
+    "assets/proofs/phone-before/summary.json": "a9550b9fcc4f985e2fde09a7376ed545d3474afda55e80ddfb1f41d4ebfd41cb",
+    "assets/proofs/phone-before/tests.json": "e6fbbda3eb568d77a96d133669d8edecae61458cf44c79ac4c944bf662ca5200",
+    "assets/proofs/phone-before/manifest.json": "3e7fe958009fe71d1ee77a272e5015948d98cbe04e8ccd8dd62f1f174416ded6",
+    "assets/proofs/phone-normal-7be/result.json": "1a164edc2aee442804e2f5a73507ce298f64904d88cc39a5ebbf25dd8d9078c8",
+    "assets/proofs/phone-normal-7be/provenance.json": "7e8fd3d3bd804d569f30968f82a60e5a6f6aa6e13c4bb78c750ff53aabe08e19",
+    "assets/proofs/phone-normal-7be/summary.json": "a67311cbbfa3591c1c8c95559faae118e5c0fc3ccd70508e3d9df91ce74921bb",
+    "assets/proofs/phone-normal-7be/tests.json": "2bac25fac595cb3dd4151ed1de5d42e176d365b139d72dfe843e3e28f63e9ffc",
+    "assets/proofs/phone-normal-7be/manifest.json": "bfcac5857f29fc6cb244ed9ef28f9253d8d2b6cbc8e3fa7290dcc9ad5e83fa38",
+    "assets/proofs/ipad-original/result.json": "18caa95af13997684aaf9e9f8f01bc0e370cc016f7450a69a01df18ca4d31447",
+    "assets/proofs/ipad-original/provenance.json": "5079b1d2d598657514ae2ac54b8d1c382648724774eec6822e2b4c84b38b0e73",
+    "assets/proofs/ipad-original/manifest.json": "a499623077c1db9a822a19ee8154ad01b3c6feff0d5d75b9d8ca83926b50b41f",
+    "assets/proofs/phone-max-ae2598a6/result.json": "19e5029635fdc7ce42aee138065dfa1ea38d4c68642a0b94f43d05e7cd3ebef0",
+    "assets/proofs/phone-max-ae2598a6/provenance.json": "cc5bcd502768f7a79b5caba08a5b66559ac6afa9a38550080392cf34387408da",
+    "assets/proofs/phone-max-ae2598a6/summary.json": "c13cb61fcd8069b9dd2d99475dbe53cd389083341118e152549018d4a6570b54",
+    "assets/proofs/phone-max-ae2598a6/tests.json": "44906feffbe4952a3d46f7ae1cb12118179336240f0eb052574cfbf14b15dcd0",
+    "assets/proofs/phone-max-ae2598a6/manifest.json": "eb2d44699acf3ebe1c4ac3e39c78e79cd56aaf4298059d44eed9e92cccac7e59",
+    "assets/proofs/phone-max-approval-history/check-9c602a5f40860c2606f9cf4c.json": "94e3f018c843f6b6c74eca4bbc494998652f89511dcf0c4fc26ff5d57845c273",
+    "assets/proofs/phone-max-approval-history/approved-extra-consumed-once.json": "b11b74b4478f9c0de8200742d760b3567094eb1af1d2f6543c30f0cb5b05e18c",
+    "assets/proofs/phone-max-approval-history/pr883-approved-once-budget-review.md": "7bad5db44837ed51b2c6f9ed113c3949fc3705f3a91ddb25a60cb6301fe2baa5",
+    "assets/proofs/ipad-normal-ae2598a6/result.json": "c69c78049ef12b10695dec038612fd65083ed6d97e9aadebcb9342443c1b24fd",
+    "assets/proofs/ipad-normal-ae2598a6/provenance.json": "674645782ea3a779581dc5b22e1d64185deeee5c586a1f739621ac8270455746",
+    "assets/proofs/ipad-normal-ae2598a6/summary.json": "42cd9c44f457be3604c78ff322e2b66131f84a4e92b63dbc771a75646feaece4",
+    "assets/proofs/ipad-normal-ae2598a6/tests.json": "d843ffc435d1342bb74413519f7b1a402a836cd1feabdba07a82de320930a4aa",
+    "assets/proofs/ipad-normal-ae2598a6/manifest.json": "255bb95f777076ca72c68aa8df92a727bb2dbde184dcdaf20f1363d01d404ea9",
+    "assets/proofs/duo-closed-ae2598a6/result.json": "79af73d88d07b533e3b5c6af61fff7d222530bb1d2e69714ed4a42c95a02e193",
+    "assets/proofs/duo-closed-ae2598a6/provenance.json": "deb0ecb85dcd011bb1e9c5b1c7fc5f531d540460b637f5c010575c716c420054",
+    "assets/proofs/duo-closed-ae2598a6/summary.json": "9942701a05da05db6d32f99a62b493d399b28ef2c4592c90667810ab1bfec775",
+    "assets/proofs/duo-closed-ae2598a6/tests.json": "dbe7151f91b6e828bf921aee33eff1ba9b0c49e2f61f3e054643d8e3e3e50f06",
+    "assets/proofs/duo-closed-ae2598a6/pose-proof.json": "71dcd619ff7bad7c959e6021c20f3c4c5c61c876a250c2387bf2f90a75a4d8e9",
+    "assets/proofs/duo-closed-ae2598a6/runner-result.json": "12434abf6e032467b7f9d96df1ba707db82127b67243b8fe2dd9088b40b71c40",
+    "assets/proofs/duo-closed-ae2598a6/checkpoints.jsonl": "a554933b54e8ab4fd3465342628df247ee2fa2f391e8a833d16c28c954dcacb8",
+    "assets/proofs/duo-closed-ae2598a6/captures.tsv": "bedf56f359320bca4d504419dac6857ba7872710605b6c81ebd6e5a40e96aaa3",
+    "assets/proofs/duo-closed-ae2598a6/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/duo-closed-ae2598a6/angle-after.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "assets/proofs/duo-closed-ae2598a6/displays-before.json": "f6326a12b37d41ee390f6ec4399d41df78309ebff49831d4c243125f2d8e64e7",
+    "assets/proofs/duo-closed-ae2598a6/displays-after.json": "f6326a12b37d41ee390f6ec4399d41df78309ebff49831d4c243125f2d8e64e7",
+    "assets/proofs/duo-closed-ae2598a6/002-hierarchy.txt": "6791fbb6aac50e5c13579b1ea4972c6f16c41d05f8302882ffe91fe48462f25f",
+    "assets/proofs/duo-closed-ae2598a6/003-hierarchy.txt": "aabc0783895aa82ee082f1245759d05ba9bc42f6dc061073a3594569093d540d",
+    "assets/proofs/duo-closed-ae2598a6/004-hierarchy.txt": "eb7f9c6157d17b94c531c598f737cdfbcc4bcbeb07805068d50092e529560178",
+    "assets/proofs/duo-closed-ae2598a6/005-hierarchy.txt": "93083e538b4e915620aa64522f414e68c80d23369a37e0b7559f9586b98b7c2f",
+    "assets/proofs/duo-closed-ae2598a6/006-hierarchy.txt": "379e1cbdba3fe6a34ca1682f6bc33a0f5e7bc80797d051ee05ee5318613ef8c0",
+    "assets/proofs/duo-closed-ae2598a6/007-hierarchy.txt": "a83674e9227028409fdcac0db3f804227e3e592de8ad4330f78b44e236992e0a",
+    "assets/proofs/duo-closed-ae2598a6/parent-observation.json": "560be4c598c81ff85d5ef5a9847501d2c4f5bfcbe19093a54acbb4543501796c",
+    "assets/proofs/duo-open-ae2598a6/result.json": "3c98b25a2a307ea8f59106d4df015bb67de8313f206f6734b3bf2a03d65ffcf7",
+    "assets/proofs/duo-open-ae2598a6/provenance.json": "bb7108aba42de7ed8ba75513114801d93c299d7289453bef8916b64ddd70dac6",
+    "assets/proofs/duo-open-ae2598a6/summary.json": "bdd4ef5a00369bfb11d5c641549720cee64c3db725e90d0cd532ba26a3e89d71",
+    "assets/proofs/duo-open-ae2598a6/tests.json": "b5e5a704c1228058c4ec73e6641359f8ddcd50ea4cdf0879262ca59a74c00735",
+    "assets/proofs/duo-open-ae2598a6/pose-proof.json": "260e5110139f4d52ee60f78c583fbf6882cec4e055d3b5b6a7defe028dfa5110",
+    "assets/proofs/duo-open-ae2598a6/runner-result.json": "e7895f5fa90b75f5848332eca81aacccda34fbd1a362b6c71083ef15843abdaa",
+    "assets/proofs/duo-open-ae2598a6/checkpoints.jsonl": "4e89a7474a131141048d3f019ffc5d63b84a0dea0eeb16542e1a6c9ca5d70ab5",
+    "assets/proofs/duo-open-ae2598a6/captures.tsv": "faa472380d540022e12fe91d5b74252013c6710ba9613b1b3ed4a4d5d908d43d",
+    "assets/proofs/duo-open-ae2598a6/angle-before.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "assets/proofs/duo-open-ae2598a6/angle-after.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "assets/proofs/duo-open-ae2598a6/displays-before.json": "c4405730f5b862fe5612af6e3f9c8245f48b609364b598fceb48bda054988638",
+    "assets/proofs/duo-open-ae2598a6/displays-after.json": "c4405730f5b862fe5612af6e3f9c8245f48b609364b598fceb48bda054988638",
+    "assets/proofs/duo-open-ae2598a6/002-hierarchy.txt": "492a2fa493228af984029152384fd062707a775685d168e0e81addb783f2ede3",
+    "assets/proofs/duo-open-ae2598a6/003-hierarchy.txt": "aff241fcf3d41d42bcad4a455451995d72270b554cea2f11ca1270b6e524ce27",
+    "assets/proofs/duo-open-ae2598a6/004-hierarchy.txt": "46ef04d3b0103d86797529c0e01b0036047c0ed40a397ab092efc2f8b3610f73",
+    "assets/proofs/duo-open-ae2598a6/005-hierarchy.txt": "11b7a25ca4f823d1735a8b7347726aaab67289234810bc9dd6ff34d2b9dff9c4",
+    "assets/proofs/duo-open-ae2598a6/006-hierarchy.txt": "e93d014a56700e0efe12916c7e7f09748cc5c22710fa3c163f9c48ca5afb1c97",
+    "assets/proofs/duo-open-ae2598a6/007-hierarchy.txt": "0e2061cefd3f8ae99b7af86c954d7815af0426fc4133236c3083b2ff574e8597",
+    "assets/proofs/duo-open-ae2598a6/parent-observation.json": "ae80ee48f28f4acc7ca4e9a50e890bbd4f3a5e7b4209ae5166c7d42b9bfeff59",
+    "assets/proofs/quality/pr883-phone-max-native-quality.md": "38128d8599bbf2605d8c0dda33267a80945d9f1dbca1db69537752dadc1eba0d",
+    "assets/proofs/quality/pr883-ipad-native-quality.md": "a8d7e4bd9c397715303155630b9990c90c678ac8a63d9350e4c655525f65d3b3",
+    "assets/proofs/quality/pr883-duo-native-quality.md": "d07098b5cc5638716ff3c7da461294ce6a6d32f2722b425d839cab7d68709bdd"
+  },
+  "source_closure": {
+    "T11prefix_sha256": "43addd7e052fef21fa6f129e26067a3a7a2470729a9001e0925868a9ba38e625",
+    "scope": "T11 resolver/hub prefix only; currentmainT12/T13tail preserved; validation futuretail differs",
+    "review": "/private/tmp/pr883-review-architecture.md"
+  },
+  "approval_snapshot": {
+    "approved_extra": 1,
+    "consumed": 1,
+    "remaining": 0,
+    "meaning": "Actual once-only Phone MAX execution passed ae2598a6; historical two failures and raw history preserved. No further budget."
+  },
+  "limits": [
+    "Installed: only four canonical T11 rows/images and related rendered pages/boards updated; other screens and Watch preserved.",
+    "Phone normal after is historicalOctober31 clean7be65148,1PASS exact Controls selector; T11prefix equalcurrentbfed only, not whole validation/current file or wholeHEAD equality. No newNovember2Phone normal execution claimed.",
+    "MatchedPhonebefore8F6 source583dcaf1 andafterEC6 source7be use sameUID340663C8,EnglishAll/3unread/release0.8.0 fixture; timestamps differ within October31.",
+    "CanonicalPhone before is clean1c4cdd88 October24 KoreanNews-only1unread. CanonicaliPad/Duo October13 are old2item/noFilter fixture; exact per-image revision unknown,global443dirty is separate. OldDuo angles/status/window unknown; no new pose proof.",
+    "Original t11-ui-hub failures retained. Approved extra1 actually consumed1/remaining0 by PhoneMAX1PASS ae2598a6; preparation does not reset execution budget.",
+    "No native/build/test/device/Git/source action or PNG editing; static links/hashes are not browser-render QA.",
+    "Closed actual Controls1/1PASS,7 strict ACK,0° before/after LCD,1398×2034. Original raw pose pending-parent retained; separate parent observation records actual002/007 review. Native Duo camera/status/rail preserved; lower initial card is scroll continuation,007 Health-empty only.",
+    "iPad before mini1512×2316 and after Pro13 2064×2752 differ in model/UID/date/viewport.",
+    "Open Controls1/1PASS,7ACK,180°→180° LCD-1,2853×2007 stored pixels (filename retains2007x2853) with original orientation. Native camera/status/rail untouched. Raw pending-parent retained; actual parent observation separate.",
+    "Installed publication verified; final PR review and merge tracked separately. Raw historical and capture-time pending-parent records remain unchanged."
+  ],
+  "model_note": "Explicitavailablegpt-6.1-solmediumfallback;notunavailableoldmodel",
+  "publication": {
+    "canonical_screen": "T11",
+    "png_count": 30,
+    "app_test_tool_changes_by_publisher": false,
+    "all_other_rows_images_preserved": true,
+    "watch_preserved": true,
+    "pose_summary": {
+      "duo": {
+        "ack_count": 7,
+        "angle_before": 0,
+        "angle_after": 0,
+        "active_display": "LCD",
+        "raw_pose_sha256": "71dcd619ff7bad7c959e6021c20f3c4c5c61c876a250c2387bf2f90a75a4d8e9",
+        "raw_checkpoints_sha256": "a554933b54e8ab4fd3465342628df247ee2fa2f391e8a833d16c28c954dcacb8"
+      },
+      "duo-open": {
+        "ack_count": 7,
+        "angle_before": 180,
+        "angle_after": 180,
+        "active_display": "LCD-1",
+        "raw_pose_sha256": "260e5110139f4d52ee60f78c583fbf6882cec4e055d3b5b6a7defe028dfa5110",
+        "raw_checkpoints_sha256": "4e89a7474a131141048d3f019ffc5d63b84a0dea0eeb16542e1a6c9ca5d70ab5"
+      }
+    },
+    "ci_note": "Documentation-only publication changes no app/test/tool source. Actual bfed CI build/iOS/Watch successful per parent-retained records; exact counts and links remain in parent final quality report, not invented here."
+  }
+}

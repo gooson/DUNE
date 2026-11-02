@@ -1,0 +1,5 @@
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  ↪︎Find: Descendants matching type Other
+    ↪︎Find: Elements matching predicate '"chart-selection-probe" IN identifiers'
+      ↪︎Find: First Match
