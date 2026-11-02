@@ -144,5 +144,5 @@ Refactor only `WorkoutReportDetailView`: a private opaque hero presents the actu
 
 1. 완료된 Duo Open 1/1, 9/9 ACK, 180°/LCD-1과 13쌍 품질 판정의 원본을 보존한다.
 2. 실제 설치 exit 0, 고정 19개 출력과 기존 행·갤러리·Watch 보존을 확인했다.
-3. CI Build 성공. iOS unit job `125608087094`의 테스트 단계는 취소로 표시되며 결과 업로드 중이다. 전체 unit 통과를 주장하지 않는다. Watch job `125608087511`, run `41541957500`은 테스트 전 destination ID 누락으로 exit 64이며 실행 수는 미확인이다. 이 변경에는 Watch 코드와 runner 수정이 없다. 별도 전체 재실행을 하지 않았다.
+3. CI Build 성공. iOS unit job `125608087094`는 cancelled로 끝났다. FormVoiceCoach 검사 시작 뒤 `The operation was canceled`로 종료했으며 원인은 미확정이다. 전체 unit 통과를 주장하지 않는다. Watch job `125608087511`, run `41541957500`은 테스트 전 destination ID 누락으로 exit 64이며 실행 수는 미확인이다. 이 변경에는 Watch 코드와 runner 수정이 없다. 별도 전체 재실행을 하지 않았다.
 4. 최종 PR 리뷰와 GitHub 머지는 별도 Ship 단계에 기록한다.

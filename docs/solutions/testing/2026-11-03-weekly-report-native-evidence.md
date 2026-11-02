@@ -46,7 +46,7 @@ related_solutions:
 | Duo Closed, `0d789a1e` | 일반 경로 1/1 통과, 9/9 ACK, 전후 0°/LCD. 실제 host PNG와 manifest AX를 대조했다. |
 | Duo Open, `0d789a1e` | 일반 경로 1/1 통과, 9/9 ACK, 전후 180°/LCD-1. 활성 host 이미지와 manifest AX를 대조했다. |
 | 이전 화면 | clean `936b87b4` 원본 A20 report-link PNG와 AX는 동일 checkpoint 및 통과 selector에 묶인 별도 before다. 다른 세 맵의 개별 과거 기기·버전·AX·Duo 자세는 미확인이다. `58ac` iPad 2/2는 아이콘 변경 전 역사적 결과다. |
-| CI | CI Build 성공. iOS unit job `125608087094`의 테스트 단계는 취소로 표시되며 결과 업로드 중이다. 전체 unit 통과를 주장하지 않는다. Watch job `125608087511`, run `41541957500`은 테스트 전 destination ID 누락으로 exit 64이며 실행 수는 미확인이다. 이 변경에는 Watch 코드와 runner 수정이 없다. 별도 전체 재실행을 하지 않았다. |
+| CI | CI Build 성공. iOS unit job `125608087094`는 cancelled로 끝났다. FormVoiceCoach 검사 시작 뒤 `The operation was canceled`로 종료했으며 원인은 미확정이다. 전체 unit 통과를 주장하지 않는다. Watch job `125608087511`, run `41541957500`은 테스트 전 destination ID 누락으로 exit 64이며 실행 수는 미확인이다. 이 변경에는 Watch 코드와 runner 수정이 없다. 별도 전체 재실행을 하지 않았다. |
 
 현재 소스의 다섯 케이스 5/5와 일반 hero 4쌍, 하단 4쌍, iPad MAX 5쌍 총 13개 PNG/AX에 대한 독립 네이티브 품질 검토는 PASS WITH NOTES, P1/P2/P3 0이다. 소유 기기 세 대는 모두 삭제되어 registry는 비어 있다. 갤러리는 298파일·126 PNG로 stage되었고 inventory SHA-256은 `49a20c82faeb0182f190374772c282920efaa0dc1ec7086a123bc8c05f06e04d`다. 갤러리 설치는 실제 exit 0으로 완료했다. 18개 소스와 19개 출력의 고정 값 및 네 A09 행·활동 보드만 반영하고 다른 행·Watch·기존 갤러리 보존을 설치기에서 확인했다.
 
