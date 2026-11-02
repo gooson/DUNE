@@ -1,0 +1,87 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "deviceName" : "iPad mini (A20 Pro)-wt-Health-detail-redesign-validation-644069bf7efc",
+      "modelName" : "iPad mini (A20 Pro)",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "1분 11초",
+                  "durationInSeconds" : 71.07774198055267,
+                  "name" : "testTrainingReadinessDetailShowsTrendAndSubscoreSections()",
+                  "nodeIdentifier" : "ActivityExerciseRegressionTests/testTrainingReadinessDetailShowsTrendAndSubscoreSections()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testTrainingReadinessDetailShowsTrendAndSubscoreSections",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ActivityExerciseRegressionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "3분 24초",
+                  "durationInSeconds" : 204.31303095817566,
+                  "name" : "testAllCategoryReadyRowsAndCaptures()",
+                  "nodeIdentifier" : "AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AllDataDetailRedesignTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/AllDataDetailRedesignTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "23초",
+                  "durationInSeconds" : 23.840920090675354,
+                  "name" : "testWellnessRootRendersAndHeroOpensScoreDetail()",
+                  "nodeIdentifier" : "WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/WellnessRegressionTests/testWellnessRootRendersAndHeroOpensScoreDetail",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "WellnessRegressionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests/WellnessRegressionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "DUNEUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNEUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "DUNEUITests-DesignCapture",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Design Capture"
+    }
+  ]
+}

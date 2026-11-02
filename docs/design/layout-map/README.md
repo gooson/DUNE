@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+H03 수면 예측 상세와 이를 공유하는 T15 알림 수면 상세의 로드 완료 상태는 [전용 배치 계약](sleep-prediction-detail-h03.html)을 따른다. 기존 링·신뢰도·요인·팁을 한 열에서 읽고 큰 글씨에서는 세로로 쌓는다. 이 HTML은 시안이며 실제 앱 캡처가 아니다.
+
 2026-10-28 Today 지표의 Wellness 표현과 동일 행 높이는 [상태/배치 계약](today-case-matrix.md), [새 실제 화면](../full-redesign-map/review/today-wellness-metrics-2026-10-28/index.html)을 따른다. 큰 글씨 한 열과 홀수 전체 폭은 유지한다.
 
 2026-10-28 H01 오늘 밤 수면은 큰 예측 점수·달 상징·0–100 가로 게이지와 실제3단계 신뢰도 배지·팁 영역을 사용한다. [배치 계약](wellness-redesign-proposal.md)과 [실제 화면](../full-redesign-map/review/wellness-prediction-visual-2026-10-28/index.html)을 함께 따른다. 큰 글씨는 세로 전환한다.
@@ -38,6 +40,10 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 ## 화면별 맵 목록
 
 2026-10-31 [A03 근육 지도 상세 · A04 3D 진입 비활성화](activity-muscle-map-detail-a04.md)는 2D 선택, compact/regular 배치와 기존 테마 유지 계약이다. 실제 화면 캡처와 구분한다.
+
+2026-10-31 [T13 알림 대상 없음 배치](notification-destination-unavailable-t13.html)는 기존 설명·뒤로 가기·실제 알림 ID를 유지하는 상세 화면의 한 열 계약이다. 정적 시안이며 실제 캡처가 아니다.
+
+2026-10-31 [T09 아침 브리핑 배치 계약](morning-briefing-proposal.md)은 일출 히어로 뒤에 회복·가이드·주간·조건부 날씨를 배치한다. [보존 시안](../theme-map/themes/dune-morning-briefing.html)은 예시로, 실제 앱 캡처와 구분한다.
 
 2026-10-31 [T02 iCloud 동기화 동의 배치](cloud-sync-consent-t02.html)는 앱 시작 시트의 히어로→세 설명→두 선택, 폭·큰 글씨·동작 계약을 정한다. HTML은 구현 기준 시안이며 실제 앱 캡처가 아니다.
 
@@ -142,3 +148,6 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 [WLA01 골드 임팩트 · 종목별 지표 선택](live-activity-size-state-proposal.md) · [보존 시안](../theme-map/themes/dune-live-activity-size-state.html) · 네이티브 구현·검증 진행 중.
 
 - [T04 컨디션 상세 개편](condition-detail-redesign-proposal.md): 링·실측 기여·기간/차트/통계·단일 설명 펼침의 화면별 native 계약.
+
+- [T05 누적 스트레스 상세 개편](cumulative-stress-redesign-proposal.md): 동일 히어로·통합 기간/통계·요인 막대·하나의 계산 펼침.
+- [T06 건강 지표 상세 개편](health-metric-detail-redesign-proposal.md):16개 지표의 실제 단위/기능 보존, 통합 추세, 검증된 선택형 비교와 정확한 전후 화면 식별.

@@ -68,6 +68,8 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-10-31 로컬 시간 인사·야간 인사이트를 수정하고 [새 T03·T04·T09 실제 화면 17장](actual/local-time-2026-10-31/index.html)을 통합 포털에 연결했다. 단위 40개와 iPhone 2·iPad 1·Duo 접힘 1·펼침 1의 관련 UI가 통과했다. 펼침의 검은 XCTest PNG는 완료 증거에서 제외하고 활성 내부 LCD-1 native 캡처용 같은 경로를 추가 1건 실행해 통과했다. 기기·시간 fixture·앱 소스 해시·실행별 receipt와 native 원본은 새 갤러리에 보존한다. 기존 다른 worktree의 갤러리 이미지는 이번 수정의 증거로 덮어쓰지 않았다.
+
 같은 날 C19 본문의 중복 질문을 제거해 ‘이동이 감지됐어요.’로 줄였다. 전용 40mm Watch에서 관련 UI 1개가 통과했고 `Test-DUNEWatchUITests-2026.10.28_10-22-32-+0900.xcresult`의 새 C19 원본으로 갱신했다. C10과 다른 화면의 기존 검증 출처는 유지한다.
 
 2026-10-28 Watch 계단 운동의 C10 진행과 새 C19 기구 이탈 안내를 전용 Apple Watch SE 3 (40mm), watchOS 27.0에서 새로 캡처했다. [실제 Watch 맵](actual/watch/index.html)의 두 원본과 출처를 갱신하고 직접 확인했다. GPS/걸음 fixture를 통한 안내 유지·계속 운동·명시적 종료와 기존 무알림 진행의 관련 UI 3개가 모두 통과했다. 현재 총 69개 중 66개 상태가 캡처돼 있으며 S08·S11·C12의 기존 미완료 상태는 유지한다. 한국어·기본 글씨·40mm 세로만 이번 증거이며, 실제 GPS 수집·손목을 내린 진동·배터리 사용은 [실기기 확인 항목](../../solutions/general/2026-10-28-watch-stair-gps-exit-reminder.md)으로 남긴다. iPhone·iPad·Duo 화면은 이번 변경의 소비자가 아니다.
@@ -210,3 +212,33 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-10-31 T08 날씨 상세: [네 기기 실제 앱 전후 비교](../full-redesign-map/review/weather-detail-2026-10-31/index.html). iPhone·iPad·Duo 접힘0°/펼침180°의 새 실제 앱 캡처입니다. 어두운 비와 최대 글씨의 눈 화면은 별도 상태로 보존했습니다. 정적 UI 감사에서는 움직임을 멈추며, 모의 날씨 자료를 사용합니다. 각 이미지의 실제 소스가 표기되어 있고 전체 회귀나 실제 기상 관측을 검증한 것은 아닙니다.
+
+
+2026-11-02 T05 누적 스트레스: [네 기기 실제 앱 전후 비교](../full-redesign-map/review/t05-cumulative-stress-native-2026-11-02/index.html). 왼쪽은 10월 13일 과거 실제 캡처이며 당시 개별 소스·기기·자세 기록은 남아 있지 않습니다. 과거 iPad·Duo 접힘은 9/Low, iPhone·Duo 펼침은 42/Moderate이고 일부 표시 비중도 다릅니다. 같은 입력의 점수 변화 비교가 아닙니다. 오른쪽은 11월 2일 실제 앱 검사이며 Duo는 0°/180° 자세와 PNG·AX 쌍을 확인했습니다. 기존 공통 차트의 날짜 눈금 누락은 TODO 158에 미해결로 남아 있습니다.
+
+
+2026-11-02 T06 건강 지표: [HRV 네 기기와 18개 지표 iPad 실제 비교](../full-redesign-map/review/t06-metric-matrix-native-2026-11-02/index.html). 네 기기의 T06 HRV 캡처를 올바른 75 ms 화면으로 갱신했다. iPhone 5개 검사와 Duo 접힘·펼침 각 1개는 11월 2일 c0b51078, iPad는 10월 31일 f9f1d852 실제 기록이다. 기존 기준 화면은 원래 iPad HRV만 남아 있어 다른 기기·뷰포트 참고임을 명시했다. 18개 지표 행렬은 과거 iPad에서 한 메서드로 순회한 기록이며 18개 독립 검사나 네 기기 전체 지표 통과가 아니다. 수영의 원래 min 오류와 수정 후 거리 하이라이트·이전 실패 기록을 구분했고 다른 capture-index 행과 T05는 보존했다.
+
+
+2026-11-02 T07 전체 데이터: [네 기기 실제 앱 전후 비교와 iPhone 16개 분류](../full-redesign-map/review/t07-all-data-native-2026-11-02/index.html). 정식 맵의 T07만 갱신했다. iPhone·iPad는 10월 31일 ed844d14, Duo 접힘·펼침은 11월 2일 e2759822의 실제 이미지다. 기존 10월 13일 원본의 정확한 이미지별 소스·Duo 각도는 미확인으로 보존했다. 새 Duo의 활성 LCD·각도·ACK 원문, host 파일 mtime과 XCTest 첨부 시각 구분은 갤러리 출처에서 확인한다. 전체 회귀·원격 CI 통과를 뜻하지 않는다.
+
+
+2026-11-02 T09 아침 브리핑: [네 기기 실제 전후 비교와 최대 접근성 글씨](../full-redesign-map/review/t09-morning-briefing-native-2026-11-02/index.html). 정식 맵의 T09만 갱신했다. 새 iPhone·Duo 접힘은 94d7a48b, Duo 펼침은 31718cae, iPad는 fd227b54의 실제 캡처다. 네 캡처의 제품 뷰는 동일하며 테스트 도우미 버전과 원본 촬영 날짜·기기 차이는 갤러리에 구분했다. 기존 원본의 정확한 소스와 과거 Duo 각도는 미확인으로 유지한다. 새 Duo의 각도·활성 화면·ACK 원문을 보존했다. 전체 회귀 통과를 뜻하지 않는다.
+
+
+2026-11-02 T10 오늘의 리포트: [네 기기 실제 전후 비교와 원문·최대 접근성 글씨](../full-redesign-map/review/t10-daily-report-native-2026-11-02/index.html). 정식 맵의 T10만 갱신했다. iPhone·iPad는 f9c956e1, Duo 접힘·펼침은 ae2598a6의 실제 캡처다. Phone·펼침 기본 이미지는 스크롤 후 본문이며 최대 글씨 표지를 보충 자료로 구분했다. iPad 전후 모델·viewport 차이와 역사적 원본 출처를 명시했다. 새 Duo 각도·활성 화면·ACK 원문을 보존했다. 전체 회귀 통과를 뜻하지 않는다.
+
+
+2026-11-02 T11 알림함: [네 기기 실제 전후와 Phone MAX](../full-redesign-map/review/t11-notification-hub-native-2026-11-02/index.html). T11 네 행만 갱신했다. 역사적 Phone 기본 7be와 fresh MAX ae를 구분하고, iPad mini/Pro13 차이 및 Duo 각도·활성 LCD·원문 ACK를 보존했다. Health empty는 전체 inbox empty가 아니다. 승인된 MAX 추가1회는 consumed1/remaining0이며 원래 실패를 유지한다. 전체 회귀 통과를 뜻하지 않는다.
+
+
+2026-11-02 T12 알림 메시지: [네 기기 실제 전후와 정확한 원문·큰 글씨](../full-redesign-map/review/t12-notification-message-native-2026-11-02/index.html). T12 네 행만 갱신했다. 역사적 Phone583 normal·MAX2PASS와 새 iPad/Duo normal 실행을 구분했다. iPad mini/Pro13 차이, 옛 Duo 각도 미확인, 새 Duo 각도·활성LCD·원문ACK와 펼침 PNG2853×2007 EXIF1을 보존했다. T11 허브가 아닌 메시지 상세 원본이다. 전체 회귀 통과를 뜻하지 않는다.
+
+
+2026-11-02 T13 알림 목적지 없음: [네 기기 실제 전후와 Go Back·실제 UUID](../full-redesign-map/review/t13-notification-unavailable-native-2026-11-02/index.html). T13 네 행만 갱신했다. 역사적 Phone734 normal·MAX2PASS와 새 iPad/Duo normal 실행을 구분했다. iPad baseline 전체FAILED6/5/1 중 해당 unavailable case만PASS라는 범위를 보존했다. iPad mini/Pro13 차이와 옛 Duo 각도 미확인, 새 Duo 각도·활성LCD·rawACK·펼침 PNG2853×2007 EXIF1을 명시했다. 전체 회귀나 새 현재HEAD CI 통과를 뜻하지 않는다.
+
+
+2026-11-02 H02 Wellness Score: [네 기기 실제 전후·MAX·출처](../full-redesign-map/review/h02-wellness-score-detail-native-2026-11-02/index.html). H02 네 행만 갱신했다. 역사적 Phone normal 개별 Passed/FAILED5·2·3 그룹과 같은ID 조건부3PASS, finalglyph iPad normal+MAX2PASS 및 새Duo normal·PhoneMAX는 각 원문 결과로 구분했다. normal은 실제Back 복귀, MAX는Back 미탭이다. 기기·날짜·실제값·옛Duo pose불확실성을 보존하며 전체회귀나 현재HEAD CI 통과를 뜻하지 않는다.
+
+
+2026-11-02 H03/T15: [기기별 실제 전후·MAX·출처](../full-redesign-map/review/h03-t15-sleep-prediction-native-2026-11-02/index.html). H03 엄격 fixture78/두 요인과 T15 기본 계산 예측을 구분하고 여덟 행만 갱신했다. 역사적 Phone/iPad와 새 Duo의 기기·날짜·소스·실제값·Back 범위를 각 원문으로 보존한다. 전체 회귀나 현재 HEAD CI 통과 주장이 아니다.
