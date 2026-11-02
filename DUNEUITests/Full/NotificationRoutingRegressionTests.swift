@@ -26,7 +26,9 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
             XCTFail("Bedtime reminder should load the computed sleep prediction")
             return
         }
-        XCTAssertTrue(app.descendants(matching: .any)["wellness-sleep-prediction-detail-screen"].firstMatch.exists)
+        // The notification wrapper names the shared root; verify the loaded leaves directly.
+        XCTAssertTrue(app.staticTexts["sleep-prediction-hero-guide"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["sleep-prediction-confidence-label"].firstMatch.exists)
         XCTAssertTrue(score.isHittable, "The computed score should be visible before capture")
 
         // iPad's floating navigation exposes the selected item outside a TabBar.
