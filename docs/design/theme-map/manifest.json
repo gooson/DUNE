@@ -360,6 +360,17 @@
         "layout": "../layout-map/cloud-sync-consent-t02.html",
         "status": "native-source-ready-captures-pending"
       }
+    },
+    {
+      "id": "daily-report-redesign",
+      "name": "오늘의 건강 리포트",
+      "title": "T10 · Today’s Report",
+      "file": "dune-daily-report.html",
+      "detail": "2026-10-31 T10 알림 목적지 보고서 방향 보존. 불투명 골드 표지와 컨디션·활동·수면·하루 돌아보기 분리. 수치는 예시이며 실제 앱 캡처나 건강 데이터가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/daily-report-proposal.md",
+        "status": "native-source-in-progress-capture-pending"
+      }
     }
   ]
 }
