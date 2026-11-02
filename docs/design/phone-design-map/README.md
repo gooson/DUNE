@@ -230,3 +230,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-11-02 T11 알림함: [네 기기 실제 전후와 Phone MAX](../full-redesign-map/review/t11-notification-hub-native-2026-11-02/index.html). T11 네 행만 갱신했다. 역사적 Phone 기본 7be와 fresh MAX ae를 구분하고, iPad mini/Pro13 차이 및 Duo 각도·활성 LCD·원문 ACK를 보존했다. Health empty는 전체 inbox empty가 아니다. 승인된 MAX 추가1회는 consumed1/remaining0이며 원래 실패를 유지한다. 전체 회귀 통과를 뜻하지 않는다.
+
+
+2026-11-02 T12 알림 메시지: [네 기기 실제 전후와 정확한 원문·큰 글씨](../full-redesign-map/review/t12-notification-message-native-2026-11-02/index.html). T12 네 행만 갱신했다. 역사적 Phone583 normal·MAX2PASS와 새 iPad/Duo normal 실행을 구분했다. iPad mini/Pro13 차이, 옛 Duo 각도 미확인, 새 Duo 각도·활성LCD·원문ACK와 펼침 PNG2853×2007 EXIF1을 보존했다. T11 허브가 아닌 메시지 상세 원본이다. 전체 회귀 통과를 뜻하지 않는다.

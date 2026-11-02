@@ -1,7 +1,7 @@
 ---
 topic: T12 notification message detail redesign
 date: 2026-10-31
-status: approved
+status: verified
 confidence: high
 related_solutions:
   - docs/solutions/general/2026-10-05-notification-landing-route-audit.md
@@ -105,3 +105,13 @@ Change only the private T12 view within `NotificationHubView.swift`. An opaque S
 Reuse the original clean583 normal+dark/MAX Phone 2/2 PASS under exact T12 app/payload/helper closure. The normal method now adds one paused capture at the already asserted detail and uses the known native Duo rail BackButton when present/hittable, retaining the original Phone/iPad navbar fallback, 5s existence wait, hittability, actual back tap and hub-return assertion. This test-only query delta is explicit; it does not relabel historical evidence as a new full method execution. The dark/MAX method and helpers are unchanged.
 
 Current main's completed T11 prefix and unchanged T13 tail are preserved. Three additional existing normal cases are sufficient: iPad one, Duo closed one and open one, with exact payload/back assertions and strict SDK/active-display/checkpoint proof for Duo. No new model/unit, full UI or local Watch regression is needed. All three new cases and final maps/Compound/ship remain pending at this checkpoint. Five distinct source reviews and the UI test-design review found zero actionable findings; source/theme-union/Swift parse checks passed. Actual runner compilation will cover the small test query delta.
+
+
+## Final native verification — 2026-11-02
+
+- Public0862f70f preserves latest T11/T13 and old583 T12 implementation. Frozen validation3fac15d4 has the same T12 and relevant normal method; future T13 code differs, so whole-file/tree equality is not claimed.
+- Reused historical clean583 Phone normal+dark/MAX2/2 PASS with the documented normal-query delta. Fresh iPad normal1, Duo closed1 and open1 PASS; strict DuoACK7each, before/after0°LCD and180°LCD-1. Actual title/body equality, native back tap and hub-return assertions passed. Each three-lens actual image review found zero actionable issues. No extra Phone/unit/full UI/Watch local run.
+- [Installed original native comparison](../design/full-redesign-map/review/t12-notification-message-native-2026-11-02/index.html):12 PNGs; only four T12 canonical rows/images and related rendered pages/Today boards changed. All other rows/images and Watch preserved. Correct message-detail originals are compared; Today/hub/post-back images are excluded as afters. iPad mini/Pro13 and historical dates/unknown oldDuo poses remain explicit. Open stored2853×2007EXIF1 differs from capture filename2007×2853.
+- Five source reviewers, UI test-design/source quality and actual native reviews are zero. Final integration review and remote CI decisions are tracked separately. [Compound solution](../solutions/architecture/2026-11-02-stored-notification-message-reading-layout.md) records payload-only design, reading width, shared-file boundaries and native back verification.
+- Public0862 app build passed. Watch CI failed before any test because the runtime became watchOS Simulator(null), incompatible with27.0; Watch/shared/project/workflow/runner inputs are unchanged, and the previous same-input T11 run passed213/29. This failure remains recorded, not relabeled as a PASS. iOS CI result and final ship are recorded after completion.
+- All owned verification devices were deleted one at a time; registry empty. `.claude` originals, test runners and common settings were not changed.
