@@ -123,8 +123,11 @@ final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
         let briefingClosed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: briefingDismiss)
         XCTAssertEqual(XCTWaiter.wait(for: [briefingClosed], timeout: 5), .completed)
 
-        let backButton = app.navigationBars.buttons.element(boundBy: 0)
-        XCTAssertTrue(backButton.waitForExistence(timeout: 5), "Summary should have a back button")
+        let navigationBack = app.navigationBars.buttons.element(boundBy: 0)
+        let railBack = app.buttons["BackButton"].firstMatch
+        let backButton = railBack.exists && railBack.isHittable ? railBack : navigationBack
+        XCTAssertTrue(backButton.waitForExistence(timeout: 5) && backButton.isHittable,
+                      "Summary should have a reachable native back button")
         backButton.tap()
 
         XCTAssertTrue(app.descendants(matching: .any)[AXID.dashboardToolbarNotifications].firstMatch.waitForExistence(timeout: 8))
