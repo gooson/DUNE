@@ -68,6 +68,8 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-10-31 로컬 시간 인사·야간 인사이트를 수정하고 [새 T03·T04·T09 실제 화면 17장](actual/local-time-2026-10-31/index.html)을 통합 포털에 연결했다. 단위 40개와 iPhone 2·iPad 1·Duo 접힘 1·펼침 1의 관련 UI가 통과했다. 펼침의 검은 XCTest PNG는 완료 증거에서 제외하고 활성 내부 LCD-1 native 캡처용 같은 경로를 추가 1건 실행해 통과했다. 기기·시간 fixture·앱 소스 해시·실행별 receipt와 native 원본은 새 갤러리에 보존한다. 기존 다른 worktree의 갤러리 이미지는 이번 수정의 증거로 덮어쓰지 않았다.
+
 같은 날 C19 본문의 중복 질문을 제거해 ‘이동이 감지됐어요.’로 줄였다. 전용 40mm Watch에서 관련 UI 1개가 통과했고 `Test-DUNEWatchUITests-2026.10.28_10-22-32-+0900.xcresult`의 새 C19 원본으로 갱신했다. C10과 다른 화면의 기존 검증 출처는 유지한다.
 
 2026-10-28 Watch 계단 운동의 C10 진행과 새 C19 기구 이탈 안내를 전용 Apple Watch SE 3 (40mm), watchOS 27.0에서 새로 캡처했다. [실제 Watch 맵](actual/watch/index.html)의 두 원본과 출처를 갱신하고 직접 확인했다. GPS/걸음 fixture를 통한 안내 유지·계속 운동·명시적 종료와 기존 무알림 진행의 관련 UI 3개가 모두 통과했다. 현재 총 69개 중 66개 상태가 캡처돼 있으며 S08·S11·C12의 기존 미완료 상태는 유지한다. 한국어·기본 글씨·40mm 세로만 이번 증거이며, 실제 GPS 수집·손목을 내린 진동·배터리 사용은 [실기기 확인 항목](../../solutions/general/2026-10-28-watch-stair-gps-exit-reminder.md)으로 남긴다. iPhone·iPad·Duo 화면은 이번 변경의 소비자가 아니다.
