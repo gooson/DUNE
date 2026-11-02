@@ -800,12 +800,21 @@
     "A03": {
       "row_id": "A03",
       "evidence": "activity-musclemap-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
-      "action": "tap activity-musclemap-detail-link",
-      "timestamp": 1791832056.945,
-      "image": "DB839447-CA63-4268-A093-3A978E99D535.png",
-      "screen": "screen-1-2006x2852-tap activity-musclemap-detail-link_1_D141F58B-28AD-435E-8CC7-CE426D5A352C.png",
-      "file": "A03.png"
+      "test": "DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled",
+      "action": "DUNE_VISUAL_AUDIT_READY A03 default map with disabled 3D entry [DUNEUITests/ActivityMuscleMapRegressionTests.swift:43] DEADLINE=1793636272.973819",
+      "timestamp": 1793636243.9685216,
+      "timestamp_kind": "host_file_mtime",
+      "capture_kind": "paired_host_active_LCD-1",
+      "image": "002-2007x2853.png",
+      "screen": "DUNE_VISUAL_AUDIT_READY A03 default map with disabled 3D entry [DUNEUITests/ActivityMuscleMapRegressionTests.swift:43] DEADLINE=1793636272.973819",
+      "file": "A03.png",
+      "source_revision": "8274d1cb4883515019d01045807b3ca1c0082922",
+      "source_worktree_dirty": false,
+      "device_udid": "D9AD7AD9-B767-4A6F-AD34-FF76A27A19C8",
+      "sha256": "0a723067e757a8813d944d91df02bb8942b961947f2e134ce656987ad38c5b86",
+      "source_json": "../../../full-redesign-map/review/a04-muscle-map-disabled-entry-native-2026-11-03/evidence.json",
+      "source_record": "records.duo-open.after",
+      "capture_scope": "A04 2D default; 3D entry disabled; selected state supplemental"
     },
     "A02": {
       "row_id": "A02",

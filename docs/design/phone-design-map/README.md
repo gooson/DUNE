@@ -245,3 +245,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-11-03 A02: [기기별 실제 전후·MAX·출처](../full-redesign-map/review/a02-training-readiness-native-2026-11-03/index.html). Training Readiness 네 행만 갱신했다. 실제 계산 점수·평가 시간·가중치와 과거 iPad/새 Phone·Duo의 소스 및 Back 검증 범위를 보존한다. 전체 회귀나 현재 HEAD 전체 CI 통과 주장이 아니다.
+
+
+2026-11-03 A04: [기기별 실제 2D 근육맵과 출처](../full-redesign-map/review/a04-muscle-map-disabled-entry-native-2026-11-03/index.html). 3D 진입은 비활성 상태이며 기존 3D 화면은 과거 기록이다.
