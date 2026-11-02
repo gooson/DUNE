@@ -1,0 +1,418 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "00D70DEA-41CA-46FB-85F6-23F022AD98C9",
+      "deviceName" : "iPad mini (A20 Pro)-wt-Health-detail-redesign-a06-93fc5bbf51df",
+      "modelName" : "iPad mini (A20 Pro)",
+      "osBuildNumber" : "24B8117",
+      "osVersion" : "27.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "0.00096s",
+                  "durationInSeconds" : 0.0009639263153076172,
+                  "name" : "Type summary and trend use calendar dates while recent sessions retain the rolling lookback",
+                  "nodeIdentifier" : "ExerciseTypeDetailViewModelTests/calendarSummaryAndRecentLookback()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/ExerciseTypeDetailViewModelTests/calendarSummaryAndRecentLookback()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00018s",
+                  "durationInSeconds" : 0.00018072128295898438,
+                  "name" : "loadData filters workouts by typeKey and builds trend/recent lists",
+                  "nodeIdentifier" : "ExerciseTypeDetailViewModelTests/loadDataFiltersByType()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/ExerciseTypeDetailViewModelTests/loadDataFiltersByType()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000087s",
+                  "durationInSeconds" : 8.702278137207031e-05,
+                  "name" : "selectedPeriod change clears cached detail data",
+                  "nodeIdentifier" : "ExerciseTypeDetailViewModelTests/selectedPeriodResetsState()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/ExerciseTypeDetailViewModelTests/selectedPeriodResetsState()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0001s",
+                  "durationInSeconds" : 0.00010013580322265625,
+                  "name" : "durationChange and calorieChange return nil when previous baseline is zero",
+                  "nodeIdentifier" : "ExerciseTypeDetailViewModelTests/changeRequiresNonZeroPrevious()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/ExerciseTypeDetailViewModelTests/changeRequiresNonZeroPrevious()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000077s",
+                  "durationInSeconds" : 7.700920104980469e-05,
+                  "name" : "durationChange and calorieChange compute finite percentages",
+                  "nodeIdentifier" : "ExerciseTypeDetailViewModelTests/changeComputed()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/ExerciseTypeDetailViewModelTests/changeComputed()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ExerciseTypeDetailViewModel",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/ExerciseTypeDetailViewModelTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "duration" : "0.00014s",
+                      "durationInSeconds" : 0.00013709068298339844,
+                      "name" : "1",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/linkedWorkout(daysAgo:)?args=6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0.000092s",
+                      "durationInSeconds" : 9.202957153320312e-05,
+                      "name" : "9",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/linkedWorkout(daysAgo:)?args=19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0.00011s",
+                  "durationInSeconds" : 0.00011456012725830078,
+                  "name" : "Linked HealthKit workouts count once while local set volume survives",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/linkedWorkout(daysAgo:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/linkedWorkout(daysAgo:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000064s",
+                  "durationInSeconds" : 6.413459777832031e-05,
+                  "name" : "An invalid local record does not hide its linked HealthKit workout",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/invalidLinkedRecord()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/invalidLinkedRecord()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "duration" : "0.00014s",
+                      "durationInSeconds" : 0.00014400482177734375,
+                      "name" : ".month",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/calendarBounds(period:)?args=181d90829828f91d8d92fb4b3fbd0dcdfeb130d6a1982eb05253810d07d802c9",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0.00048s",
+                      "durationInSeconds" : 0.0004780292510986328,
+                      "name" : ".sixMonths",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/calendarBounds(period:)?args=86e6b1810c6d11148f89034d3657799ca8fe607c4593868d6599d1f56e3d5e9b",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0.0012s",
+                      "durationInSeconds" : 0.0012400150299072266,
+                      "name" : ".threeMonths",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/calendarBounds(period:)?args=e89b5bfac65c52e381e85fabcf92388eb68c072cfa95d978159c048405674518",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    },
+                    {
+                      "duration" : "0.00017s",
+                      "durationInSeconds" : 0.0001709461212158203,
+                      "name" : ".week",
+                      "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/calendarBounds(period:)?args=ff6bd46ed72a91d3edc87b0068d3eed936385539fbdbf328f48dd29127c3274e",
+                      "nodeType" : "Arguments",
+                      "result" : "Passed"
+                    }
+                  ],
+                  "duration" : "0.00051s",
+                  "durationInSeconds" : 0.0005082488059997559,
+                  "name" : "Calendar comparisons contain exactly N dates and respect both boundaries",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/calendarBounds(period:)",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/calendarBounds(period:)",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00017s",
+                  "durationInSeconds" : 0.0001671314239501953,
+                  "name" : "Weekly goal excludes the preceding date",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/weeklyGoalUsesSevenDates()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/weeklyGoalUsesSevenDates()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00032s",
+                  "durationInSeconds" : 0.0003230571746826172,
+                  "name" : "Calendar windows and buckets follow Santiago midnight DST transitions",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/midnightDSTTransition()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/midnightDSTTransition()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000058s",
+                  "durationInSeconds" : 5.793571472167969e-05,
+                  "name" : "Empty data returns zero summary",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/emptyData()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/emptyData()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000057s",
+                  "durationInSeconds" : 5.7220458984375e-05,
+                  "name" : "Single HK workout aggregates correctly",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/singleWorkout()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/singleWorkout()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000058s",
+                  "durationInSeconds" : 5.793571472167969e-05,
+                  "name" : "Manual records aggregate with manual- prefix",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/manualRecordPrefix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/manualRecordPrefix()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000084s",
+                  "durationInSeconds" : 8.368492126464844e-05,
+                  "name" : "Multiple workout types sorted by duration descending",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/multipleTypesSorted()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/multipleTypesSorted()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00006s",
+                  "durationInSeconds" : 6.008148193359375e-05,
+                  "name" : "Duration fractions sum to 1.0",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/durationFractionsSum()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/durationFractionsSum()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000058s",
+                  "durationInSeconds" : 5.793571472167969e-05,
+                  "name" : "Active days counts unique days",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/activeDaysUnique()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/activeDaysUnique()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000055s",
+                  "durationInSeconds" : 5.4836273193359375e-05,
+                  "name" : "Previous period populated for comparison",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/previousPeriodExists()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/previousPeriodExists()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000051s",
+                  "durationInSeconds" : 5.125999450683594e-05,
+                  "name" : "Duration change percentage calculated correctly",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/durationChangePercentage()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/durationChangePercentage()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000045s",
+                  "durationInSeconds" : 4.506111145019531e-05,
+                  "name" : "Daily breakdown fills all days in period",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/dailyBreakdownFillsGaps()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/dailyBreakdownFillsGaps()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000056s",
+                  "durationInSeconds" : 5.602836608886719e-05,
+                  "name" : "Daily breakdown segments grouped by type",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/dailyBreakdownSegments()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/dailyBreakdownSegments()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000046s",
+                  "durationInSeconds" : 4.57763671875e-05,
+                  "name" : "Zero duration workouts are skipped",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/zeroDurationSkipped()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/zeroDurationSkipped()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000046s",
+                  "durationInSeconds" : 4.601478576660156e-05,
+                  "name" : "Non-finite duration workouts are skipped",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/nonFiniteDurationSkipped()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/nonFiniteDurationSkipped()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000049s",
+                  "durationInSeconds" : 4.9114227294921875e-05,
+                  "name" : "Distance tracked for distance-based types",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/distanceTracked()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/distanceTracked()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00006s",
+                  "durationInSeconds" : 5.984306335449219e-05,
+                  "name" : "Volume tracked for manual strength records",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/volumeTracked()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/volumeTracked()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000049s",
+                  "durationInSeconds" : 4.887580871582031e-05,
+                  "name" : "referenceDate shifts analysis window to historical period",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/referenceDateShiftsWindow()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/referenceDateShiftsWindow()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000078s",
+                  "durationInSeconds" : 7.796287536621094e-05,
+                  "name" : "Default referenceDate matches explicit now-based analysis",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/defaultReferenceDateMatchesToday()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/defaultReferenceDateMatchesToday()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000076s",
+                  "durationInSeconds" : 7.605552673339844e-05,
+                  "name" : "Mixed HK and manual records aggregate independently",
+                  "nodeIdentifier" : "TrainingVolumeAnalysisServiceTests/mixedSources()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests/mixedSources()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "TrainingVolumeAnalysisService",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeAnalysisServiceTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.01s",
+                  "durationInSeconds" : 0.010424375534057617,
+                  "name" : "loadData computes comparison from workouts and manual records",
+                  "nodeIdentifier" : "TrainingVolumeViewModelTests/loadDataBuildsComparison()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeViewModelTests/loadDataBuildsComparison()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.01s",
+                  "durationInSeconds" : 0.009999752044677734,
+                  "name" : "loadData falls back to manual records for training load history when workout fetch fails",
+                  "nodeIdentifier" : "TrainingVolumeViewModelTests/loadDataFallsBackToManualTrainingLoadHistory()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeViewModelTests/loadDataFallsBackToManualTrainingLoadHistory()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00055s",
+                  "durationInSeconds" : 0.0005450248718261719,
+                  "name" : "Overview fetches the first previous morning for both sources",
+                  "nodeIdentifier" : "TrainingVolumeViewModelTests/previousMorningFetch()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeViewModelTests/previousMorningFetch()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000097s",
+                  "durationInSeconds" : 9.703636169433594e-05,
+                  "name" : "Changing selectedPeriod clears cached comparison",
+                  "nodeIdentifier" : "TrainingVolumeViewModelTests/selectedPeriodClearsComparison()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeViewModelTests/selectedPeriodClearsComparison()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.000044s",
+                  "durationInSeconds" : 4.410743713378906e-05,
+                  "name" : "loadData returns immediately when already loading",
+                  "nodeIdentifier" : "TrainingVolumeViewModelTests/isLoadingGuard()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeViewModelTests/isLoadingGuard()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00043s",
+                  "durationInSeconds" : 0.0004298686981201172,
+                  "name" : "loadData expands training load history to current and previous period",
+                  "nodeIdentifier" : "TrainingVolumeViewModelTests/loadDataBuildsScrollableTrainingLoadHistory()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeViewModelTests/loadDataBuildsScrollableTrainingLoadHistory()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00049s",
+                  "durationInSeconds" : 0.0004909038543701172,
+                  "name" : "loadData expands daily volume history to current and previous period",
+                  "nodeIdentifier" : "TrainingVolumeViewModelTests/loadDataBuildsScrollableDailyVolumeHistory()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeViewModelTests/loadDataBuildsScrollableDailyVolumeHistory()",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "TrainingVolumeViewModel",
+              "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests/TrainingVolumeViewModelTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "DUNETests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/DUNE/DUNETests",
+          "nodeType" : "Unit test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "DUNETests",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

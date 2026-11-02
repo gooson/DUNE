@@ -1,0 +1,236 @@
+{
+  "source": "GitHub plugin fetch_workflow_run_jobs actual structured responses",
+  "commit": "844dacaae8d1bed1c467b92bb3f21d7b07e449a4",
+  "runs": [
+    {
+      "run_id": 41516869602,
+      "response": {
+        "jobs": [
+          {
+            "id": 125522549998,
+            "name": "build",
+            "status": "completed",
+            "conclusion": "success",
+            "run_id": 41516869602,
+            "logs_url": null,
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Select Xcode",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Install xcodegen",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Validate string catalog extraction",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Build iOS",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 6
+              },
+              {
+                "name": "Upload build log",
+                "status": "completed",
+                "conclusion": "skipped",
+                "number": 7
+              },
+              {
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 14
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 15
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "run_id": 41516869679,
+      "response": {
+        "jobs": [
+          {
+            "id": 125522548056,
+            "name": "unit-tests (watch)",
+            "status": "completed",
+            "conclusion": "success",
+            "run_id": 41516869679,
+            "logs_url": null,
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Select Xcode",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Simulator diagnostics",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Install xcodegen",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Create isolated test worktree",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 6
+              },
+              {
+                "name": "Run Unit Tests",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 7
+              },
+              {
+                "name": "Collect simulator state",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 8
+              },
+              {
+                "name": "Upload test results",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 9
+              },
+              {
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 18
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 19
+              }
+            ]
+          },
+          {
+            "id": 125522548388,
+            "name": "unit-tests (ios)",
+            "status": "completed",
+            "conclusion": "success",
+            "run_id": 41516869679,
+            "logs_url": null,
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Select Xcode",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Simulator diagnostics",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Install xcodegen",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Create isolated test worktree",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 6
+              },
+              {
+                "name": "Run Unit Tests",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 7
+              },
+              {
+                "name": "Collect simulator state",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 8
+              },
+              {
+                "name": "Upload test results",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 9
+              },
+              {
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 18
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 19
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

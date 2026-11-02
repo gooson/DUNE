@@ -1,7 +1,7 @@
 ---
 topic: A07 exercise type detail redesign
 date: 2026-10-31
-status: draft
+status: implemented
 confidence: medium
 related_solutions:
   - docs/solutions/testing/2026-03-16-e2e-settings-activity-surface-contracts.md
@@ -112,3 +112,16 @@ The second maximum-AX iPad attempt stopped at the intermediate Training Volume c
 
 - **Overall**: Medium.
 - **Reasoning**: Source identity, query, aggregation, optional units, chart and existing selector are authenticated. A fresh before capture and a second seeded HealthKit type route have not yet been verified. The prior date caption needs source-anchor/native date-boundary validation.
+
+
+## 최종 구현·검증 부록 · 2026-11-03
+
+앞의 baseline 미확보와 MAX 대기 문구는 계획 당시 기록이다. 구현은 AEDF에서 완료했다. A06의 명시적인 로컬 달력 집계 계약을 상속하고 A07 ViewModel·분석·unit 코드는 현재 main40과 동일하게 유지한다. 원래 4개 기간과 차트, 유형/장비 아이콘, HealthKit 전용 최근 운동과 Back을 보존했다. 새 Duration/Sessions 아이콘 6곳은 A06의 timer/figure.strengthtraining.traditional과 통일하되 최근 세션 clock은 유지한다.
+
+iPad 일반 2 + dark MAX 1 + Phone 일반 2 + Duo 접힘 2 + 펼침 2가 실제 통과해 9개다. Duo는 각 14 ACK와 실제 0°/LCD, 180°/LCD-1을 확인했다. 세 기기는 순서대로 사용하고 모두 삭제했다. 원래 MAX 두 실패와 승인된 추가 1회 통과(소모1/잔여0)는 유지한다. 큰 중간 카드의 hittable·viewport 교차를 확인하는 테스트 수정을 적용했고 상세 값·기간·도달성 assertion은 유지했다.
+
+동일 A20 모델 원본 manual은 6/5/1 묶음의 개별 PASS selector와 연결하고 원본 HK 4종은 2/2 묶음과 연결한다. 원래 map-before를 보존하며 Phone/iPad Week, Duo Month를 비교한다. 다른 과거 맵의 기기·실행 버전·AX와 Duo 자세는 미확인으로 표시한다. 4개 A07 행과 Activity 보드 및 새 검토 갤러리만 공개하고 다른 화면·기존 갤러리·Watch를 보존했다.
+
+현재 iOS 빌드/단위 CI는 성공했다. Watch CI는 대상 기기 ID 누락으로 테스트 전 실패했으며 통과로 표시하지 않는다. 공통 business 코드의 기존 A06 focused 34와 CI는 blob 동일성 범위에서 재사용한다. 소스 리뷰 P1/P2는 0, 날짜 formatter 캐시 P3 1건은 측정된 지연 없이 상태 무효화 복잡도가 생기는 tradeoff로 보류했다. 원래 좁은 주간 차트 날짜 눈금 밀집, 미실행 Phone MAX/live VoiceOver/접힘 연속성/새 native3M6M은 범위 밖으로 명시한다.
+
+해결책과 검증 출처: [실제 지표 히어로와 네이티브 출처](../solutions/testing/2026-11-03-exercise-type-metric-hero-native-evidence.md).

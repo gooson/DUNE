@@ -353,12 +353,21 @@
     "A07": {
       "row_id": "A07",
       "evidence": "activity-exercise-type-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface()",
-      "action": "tap activity-training-volume-row-manual-strength",
-      "timestamp": 1791818168.971,
-      "image": "F4B1D095-ACCA-427F-BD03-CE0A3CE40DB1.png",
-      "screen": "screen-0-1320x2868-tap activity-training-volume-row-manual-strength_0_FCD61171-D1AF-47EB-9EC4-892A9A4FD742.png",
-      "file": "A07.png"
+      "test": "DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface",
+      "action": "Exercise type manual strength Week loaded",
+      "timestamp": 1793654819.769,
+      "timestamp_kind": "native-XCTest-attachment",
+      "capture_kind": "native-XCTest-attachment",
+      "image": "EAFCDA44-DCA4-4BF9-974B-8364B05EBA2B.png",
+      "screen": "Exercise type manual strength Week loaded",
+      "file": "A07.png",
+      "source_revision": "aedf464d9972acba89c77b2ddbe4b662231d1588",
+      "source_worktree_dirty": false,
+      "device_udid": "A1E816CA-F736-432D-8E5F-7B4460B443BD",
+      "sha256": "1bb51dbbd0c512968380fd8fe123960f60efa0ec13e3ab6dff246f7f271ab067",
+      "source_json": "../../../full-redesign-map/review/a07-exercise-type-native-2026-11-03/evidence.json",
+      "source_record": "records.regular.after",
+      "capture_scope": "A07 manual Week; HK variants and iPad MAX supplemental"
     },
     "W10": {
       "row_id": "W10",

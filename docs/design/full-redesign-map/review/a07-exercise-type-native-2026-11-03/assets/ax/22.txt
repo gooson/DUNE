@@ -1,0 +1,150 @@
+Attributes: Application, 0x1033adf40, pid: 41618, label: 'DUNE'
+Element subtree:
+ →Application, 0x1033adf40, pid: 41618, label: 'DUNE'
+    Window, 0x1033aef80, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x1033aee40, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x1033af480, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x1033af980, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x1033ae6c0, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x1033ad900, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x1033aea80, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x1033afac0, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x1033ad040, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x1033af340, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x1033af0c0, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x1033af5c0, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x1033ae940, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x1033af200, {{0.0, -0.0}, {951.0, 669.0}}
+                            NavigationBar, 0x1033ac280, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Stair Stepper'
+                              StaticText, 0x1033afc00, {{20.0, 37.7}, {105.0, 20.7}}, label: 'Stair Stepper'
+                            Toolbar, 0x1033ae1c0, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: '도구 막대'
+                              Other, 0x1033ad680, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x1033afe80, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x1033ada40, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x1033af840, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x1033adb80, {{0.0, -0.0}, {951.0, 669.0}}
+                                    ScrollView, 0x1033acf00, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'activity-exercise-type-detail-screen'
+                                      Other, 0x1033adcc0, {{0.0, -0.0}, {951.0, 669.0}}
+                                        Other, 0x1033ad7c0, {{0.0, -0.0}, {951.0, 122.0}}
+                                      Other, 0x1033aebc0, {{0.0, -0.0}, {951.0, 669.0}}
+                                      Other, 0x110664000, {{0.0, 82.0}, {867.0, 1037.7}}
+                                        SegmentedControl, 0x110664140, {{109.7, 98.0}, {648.0, 31.0}}, identifier: 'activity-exercise-type-period-picker'
+                                          Button, 0x110664280, {{109.7, 98.0}, {162.0, 32.0}}, label: '1주', Selected
+                                          Button, 0x1106643c0, {{271.7, 98.0}, {162.0, 32.0}}, label: '1개월'
+                                          Button, 0x110664500, {{433.7, 98.0}, {162.0, 32.0}}, label: '3개월'
+                                          Button, 0x110664640, {{595.7, 98.0}, {162.0, 32.0}}, label: '6개월'
+                                        Other, 0x110664780, {{109.7, 149.0}, {648.0, 235.3}}, identifier: 'activity-exercise-type-hero'
+                                          Image, 0x1106648c0, {{129.7, 169.0}, {60.0, 60.0}}, identifier: 'figure.stair.stepper', label: '스텝퍼를 하는 사람'
+                                          StaticText, 0x110664a00, {{201.5, 186.9}, {121.0, 24.0}}, label: 'Stair Stepper'
+                                          StaticText, 0x110664b40, {{131.0, 244.9}, {80.2, 18.0}}, label: '소요 시간'
+                                          Image, 0x110664c80, {{131.0, 246.3}, {15.3, 15.3}}, identifier: 'timer', label: '타이머'
+                                          StaticText, 0x110664dc0, {{129.5, 267.0}, {74.7, 40.7}}, identifier: 'activity-exercise-type-primary-value', label: '36m'
+                                          Image, 0x110664f00, {{133.3, 325.0}, {12.7, 16.3}}, identifier: 'flame.fill', label: '불꽃'
+                                          StaticText, 0x110665040, {{157.5, 328.0}, {31.3, 14.3}}, label: '칼로리'
+                                          Image, 0x110665180, {{440.7, 325.0}, {18.0, 18.3}}, identifier: 'figure.strengthtraining.traditional', label: '전통 근력 운동을 하는 사람'
+                                          StaticText, 0x1106652c0, {{467.5, 328.0}, {21.0, 14.3}}, label: '세션'
+                                          StaticText, 0x110665400, {{157.5, 346.3}, {61.7, 18.0}}, label: '421 kcal'
+                                          StaticText, 0x110665540, {{467.5, 346.3}, {9.7, 18.0}}, label: '1'
+                                        StaticText, 0x110665680, {{121.5, 416.3}, {26.0, 18.0}}, identifier: 'activity-exercise-type-trend-chart', label: '추세'
+                                        Other, 0x1106657c0, {{121.7, 442.3}, {624.0, 180.0}}, identifier: 'activity-exercise-type-trend-chart'
+                                        Other, 0x110665900, {{121.7, 442.3}, {624.0, 180.0}}, identifier: 'activity-exercise-type-trend-chart'
+                                          Other, 0x110665a40, {{140.7, 442.3}, {86.4, 162.0}}, label: '2026년 10월 28일 0시에서 2026년 10월 29일 0시 사이', value: 36
+                                          Other, 0x110665b80, {{227.1, 442.3}, {86.4, 162.0}}, label: '2026년 10월 29일 0시에서 2026년 10월 30일 0시 사이', value: 0
+                                          Other, 0x110665cc0, {{313.5, 442.3}, {86.4, 162.0}}, label: '2026년 10월 30일 0시에서 2026년 10월 31일 0시 사이', value: 0
+                                          Other, 0x110665e00, {{400.0, 442.3}, {86.4, 162.0}}, label: '2026년 10월 31일 0시에서 2026년 11월 1일 0시 사이', value: 0
+                                          Other, 0x110665f40, {{486.4, 442.3}, {86.4, 162.0}}, label: '2026년 11월 1일 0시에서 2026년 11월 2일 0시 사이', value: 0
+                                          Other, 0x110666080, {{572.8, 442.3}, {86.4, 162.0}}, label: '2026년 11월 2일 0시에서 2026년 11월 3일 0시 사이', value: 0
+                                          Other, 0x1106661c0, {{659.2, 442.3}, {86.4, 162.0}}, label: '2026년 11월 3일 0시에서 2026년 11월 4일 0시 사이', value: 0
+                                        Other, 0x110666300, {{109.7, 654.3}, {648.0, 344.0}}, identifier: 'activity-exercise-type-comparison'
+                                          StaticText, 0x110666440, {{125.5, 670.3}, {63.0, 20.3}}, label: '기간 비교'
+                                          StaticText, 0x110666580, {{125.5, 702.7}, {115.3, 32.7}}, identifier: 'activity-exercise-type-previous-period', label: '이전 기간, 10월 21일 – 10월 27일'
+                                            StaticText, 0x1106666c0, {{125.5, 702.7}, {45.0, 14.3}}, label: '이전 기간'
+                                            StaticText, 0x110666800, {{125.5, 721.0}, {115.3, 14.3}}, label: '10월 21일 – 10월 27일'
+                                          Other, 0x110666940, {{128.0, 751.3}, {99.2, 62.3}}, identifier: 'activity-exercise-type-comparison-row-duration'
+                                            Image, 0x110666a80, {{128.0, 752.7}, {15.3, 15.3}}, identifier: 'timer', label: '타이머'
+                                            StaticText, 0x110666bc0, {{157.5, 751.3}, {55.7, 18.0}}, label: '소요 시간'
+                                            StaticText, 0x110666d00, {{157.5, 777.3}, {21.0, 14.3}}, label: '현재'
+                                            StaticText, 0x110666e40, {{206.2, 777.3}, {21.0, 14.3}}, label: '이전'
+                                            StaticText, 0x110666f80, {{157.5, 795.7}, {32.7, 18.0}}, identifier: 'activity-exercise-type-comparison-current-duration', label: '36m'
+                                            StaticText, 0x1106670c0, {{206.2, 795.7}, {13.3, 18.0}}, identifier: 'activity-exercise-type-comparison-previous-duration', label: '—'
+                                          Other, 0x110667200, {{129.3, 833.7}, {126.8, 62.3}}, identifier: 'activity-exercise-type-comparison-row-calories'
+                                            Image, 0x110667340, {{129.3, 835.0}, {12.7, 16.3}}, identifier: 'flame.fill', label: '불꽃'
+                                            StaticText, 0x110667480, {{157.5, 833.7}, {39.0, 18.0}}, label: '칼로리'
+                                            StaticText, 0x1106675c0, {{157.5, 859.7}, {21.0, 14.3}}, label: '현재'
+                                            StaticText, 0x110667700, {{235.2, 859.7}, {21.0, 14.3}}, label: '이전'
+                                            StaticText, 0x110667840, {{157.5, 878.0}, {61.7, 18.0}}, identifier: 'activity-exercise-type-comparison-current-calories', label: '421 kcal'
+                                            StaticText, 0x110667980, {{235.2, 878.0}, {13.3, 18.0}}, identifier: 'activity-exercise-type-comparison-previous-calories', label: '—'
+                                          Other, 0x110667ac0, {{126.7, 916.0}, {88.8, 62.3}}, identifier: 'activity-exercise-type-comparison-row-sessions'
+                                            Image, 0x110667c00, {{126.7, 917.3}, {18.0, 18.3}}, identifier: 'figure.strengthtraining.traditional', label: '전통 근력 운동을 하는 사람'
+                                            StaticText, 0x110667d40, {{157.5, 916.0}, {26.0, 18.0}}, label: '세션'
+                                            StaticText, 0x110667e80, {{157.5, 942.0}, {21.0, 14.3}}, label: '현재'
+                                            StaticText, 0x110654000, {{194.5, 942.0}, {21.0, 14.3}}, label: '이전'
+                                            StaticText, 0x110654140, {{157.5, 960.3}, {9.7, 18.0}}, identifier: 'activity-exercise-type-comparison-current-sessions', label: '1'
+                                            StaticText, 0x110654280, {{194.5, 960.3}, {13.3, 18.0}}, identifier: 'activity-exercise-type-comparison-previous-sessions', label: '—'
+                                        StaticText, 0x1106543c0, {{121.5, 1030.3}, {55.7, 18.0}}, identifier: 'activity-exercise-type-recent-sessions', label: '최근 세션'
+                                        Button, 0x110654500, {{121.5, 1056.3}, {623.5, 35.4}}, identifier: 'activity-exercise-type-recent-sessions', label: '10월 28일 수요일, 36m, 421 kcal'
+                                          StaticText, 0x110654640, {{121.5, 1056.3}, {107.0, 18.0}}, label: '10월 28일 수요일'
+                                          StaticText, 0x110654780, {{122.7, 1076.9}, {46.5, 14.3}}, label: '36m'
+                                          Image, 0x1106548c0, {{739.0, 1069.0}, {6.0, 10.3}}, identifier: 'chevron.right', label: '앞으로'
+                                          Image, 0x110654a00, {{122.7, 1077.7}, {12.0, 12.0}}, identifier: 'clock', label: '시계'
+                                          StaticText, 0x110654b40, {{182.3, 1077.3}, {65.5, 14.4}}, label: '421 kcal'
+                                          Image, 0x110654c80, {{182.3, 1077.3}, {10.0, 13.0}}, identifier: 'flame.fill', label: '불꽃'
+                                      Other, 0x110654dc0, {{918.0, 82.0}, {30.0, 532.0}}, label: '수직 스크롤 막대, 2페이지', value: 0%
+                                        Other, 0x110654f00, {{945.0, 355.0}, {3.0, 260.3}}
+                                      Other, 0x110655040, {{918.0, 82.0}, {30.0, 532.0}}, label: '수직 스크롤 막대, 2페이지', value: 0%
+                                        Other, 0x110655180, {{945.0, 355.0}, {3.0, 260.3}}
+                Other, 0x1106552c0, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x110655400, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: '도구 막대'
+                    Other, 0x110655540, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x110655680, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x1106557c0, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x110655900, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x110655a40, {{879.0, 124.0}, {48.0, 48.0}}
+                              Other, 0x110655b80, {{879.0, 124.0}, {48.0, 48.0}}
+                                Other, 0x110655cc0, {{884.0, 129.0}, {38.0, 38.0}}
+                                  Other, 0x110655e00, {{884.0, 129.0}, {38.0, 38.0}}
+                                    Button, 0x110655f40, {{884.0, 129.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x110656080, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x1106561c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x110656300, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x110656440, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x110656580, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x1106566c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x110656800, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x110656940, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x110656a80, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x110656bc0, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x110656d00, {{881.0, 435.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x110656e40, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: '채워진 텍스트 클립보드에 있는 하트'
+                                          Button, 0x110656f80, {{881.0, 485.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                                            Image, 0x1106570c0, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: '불꽃'
+                                          Button, 0x110657200, {{881.0, 535.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x110657340, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: '나뭇잎'
+                                          Button, 0x110657480, {{881.0, 585.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x1106575c0, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: '체크 표시가 있는 체크리스트'
+                                        Other, 0x110657700, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x110657840, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x110657980, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x110657ac0, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x110657c00, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x110657d40, {{879.0, 433.0}, {48.0, 212.0}}
+                                                  Other, 0x110657e80, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x10657c000, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x10657c140, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x10657c280, {{881.0, 485.0}, {44.0, 58.0}}
+                                          Other, 0x10657c3c0, {{881.0, 485.0}, {44.0, 58.0}}
+                                            Other, 0x10657c500, {{881.0, 485.0}, {44.0, 58.0}}
+                                            Other, 0x10657c640, {{881.0, 485.0}, {44.0, 58.0}}
+                                              Other, 0x10657c780, {{881.0, 485.0}, {44.0, 58.0}}
+                                                Other, 0x10657c8c0, {{881.0, 485.0}, {44.0, 58.0}}
+                                                  Other, 0x10657ca00, {{881.0, 485.0}, {44.0, 58.0}}
+                                                Other, 0x10657cb40, {{881.0, 485.0}, {44.0, 58.0}}
+                                              Other, 0x10657cc80, {{881.0, 485.0}, {44.0, 58.0}}
+              Other, 0x10657cdc0, {{433.5, 317.5}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x1033adf40, pid: 41618, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10657cf00, pid: 41618, label: 'DUNE'
+  }

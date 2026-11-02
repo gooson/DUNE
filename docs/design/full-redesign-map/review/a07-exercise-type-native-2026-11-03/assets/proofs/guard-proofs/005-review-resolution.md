@@ -1,0 +1,5 @@
+# A07 source review resolution
+
+Current source3f2ff74b after integrating main40c035. Five reviewers actually reviewed current bounded snapshot. Security, data, architecture and simplicity found no P1/P2/P3. Performance found one P3: repeated two date formats/calendar operations during chart selection; no measured user-facing delay. Deferred as an explicit tradeoff: adding cached view state requires correct locale/calendar invalidation and expands complexity without measured benefit. No P1/P2 remains; P3 is not silently marked fixed.
+
+Production delta is ExerciseTypeDetailView presentation only. ViewModel, analysis service and unit sources match merged A06/main exactly; A06 focused34 and complete iOS/Watch unit CI passed. No redundant local unit run planned for unchanged business code. Current A07 native value/period/type/navigation/MAX coverage remains required and is not inferred from main CI. Original two MAX failures are retained; the one general approved additional MAX case remains unconsumed before dispatch.
