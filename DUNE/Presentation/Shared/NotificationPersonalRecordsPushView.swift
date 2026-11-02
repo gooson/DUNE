@@ -20,6 +20,7 @@ struct NotificationPersonalRecordsPushView: View {
                     notice: viewModel.personalRecordNotice,
                     rewardSummary: viewModel.workoutRewardSummary,
                     rewardHistory: viewModel.workoutRewardHistory,
+                    unlockedBadgeKeys: viewModel.unlockedBadgeKeys,
                     recentWorkouts: viewModel.recentWorkouts
                 )
             }

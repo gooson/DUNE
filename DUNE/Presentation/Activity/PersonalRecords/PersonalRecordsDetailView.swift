@@ -15,10 +15,16 @@ struct PersonalRecordsDetailView: View {
     @State private var shareImage: ShareableImage?
     @Environment(\.appTheme) private var theme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
+    @ScaledMetric(relativeTo: .largeTitle) private var bestValueSize: CGFloat = 52
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     private var columns: [GridItem] {
-        [GridItem(.flexible(), spacing: DS.Spacing.sm),
-         GridItem(.flexible(), spacing: DS.Spacing.sm)]
+        dynamicTypeSize.isAccessibilitySize
+            ? [GridItem(.flexible())]
+            : [GridItem(.flexible(), spacing: DS.Spacing.sm),
+               GridItem(.flexible(), spacing: DS.Spacing.sm)]
     }
 
     private let cardMinHeight: CGFloat = 120
@@ -35,6 +41,14 @@ struct PersonalRecordsDetailView: View {
             hasher.combine(workout.averagePace)
             hasher.combine(workout.date.timeIntervalSince1970)
         }
+        return hasher.finalize()
+    }
+
+    private var rewardUpdateKey: Int {
+        var hasher = Hasher()
+        hasher.combine(rewardSummary)
+        hasher.combine(rewardHistory)
+        hasher.combine(unlockedBadgeKeys)
         return hasher.finalize()
     }
 
@@ -64,9 +78,7 @@ struct PersonalRecordsDetailView: View {
                         currentBestCard(best)
                     }
 
-                    // Period picker
-                    periodPicker
-
+                    // The chart owns its period controls and one shared date range.
                     // Enhanced timeline chart
                     timelineChart
 
@@ -91,6 +103,8 @@ struct PersonalRecordsDetailView: View {
                     )
                 }
             }
+            .frame(maxWidth: 680)
+            .frame(maxWidth: .infinity)
             .padding()
         }
         .accessibilityIdentifier("activity-personal-records-detail-screen")
@@ -102,9 +116,6 @@ struct PersonalRecordsDetailView: View {
         .task(id: recordsUpdateKey) {
             viewModel.load(records: records)
             viewModel.addPaceWorkouts(recentWorkouts)
-            viewModel.rewardSummary = rewardSummary
-            viewModel.rewardHistory = rewardHistory
-            viewModel.unlockedBadgeKeys = unlockedBadgeKeys
             viewModel.refreshRewardDerived()
             if viewModel.selectedKind == nil {
                 viewModel.selectedKind = preselectedKind ?? viewModel.availableKinds.first
@@ -112,6 +123,12 @@ struct PersonalRecordsDetailView: View {
             if viewModel.resolvedKind == .fastestPace {
                 await viewModel.loadPaceHistoryIfNeeded()
             }
+        }
+        .task(id: rewardUpdateKey) {
+            viewModel.rewardSummary = rewardSummary
+            viewModel.rewardHistory = rewardHistory
+            viewModel.unlockedBadgeKeys = unlockedBadgeKeys
+            viewModel.refreshRewardDerived()
         }
         .task(id: viewModel.resolvedKind) {
             guard viewModel.resolvedKind == .fastestPace else { return }
@@ -135,21 +152,23 @@ struct PersonalRecordsDetailView: View {
     }
 
     private func currentBestCard(_ best: ActivityPersonalRecord) -> some View {
-        VStack(spacing: DS.Spacing.sm) {
-            HStack(spacing: DS.Spacing.xs) {
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            HStack(alignment: .center, spacing: DS.Spacing.sm) {
                 Image(systemName: best.kind.iconName)
-                    .foregroundStyle(best.kind.tintColor)
-                Text(String(localized: "Current Best"))
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(DS.Color.textSecondary)
+                    .font(.title2.weight(.semibold))
+                    .frame(width: 44, height: 44)
+                    .background(palette.gold.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                    .accessibilityHidden(true)
+                Text("Current Best")
+                    .font(.headline)
+                    .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 0)
                 if best.isRecent {
                     Text("NEW")
-                        .font(.system(size: 9, weight: .bold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 2)
-                        .background(DS.Color.activity, in: Capsule())
+                        .font(.caption2.bold())
+                        .padding(.horizontal, DS.Spacing.sm)
+                        .padding(.vertical, DS.Spacing.xs)
+                        .background(palette.gold.opacity(0.18), in: Capsule())
                 }
                 Button {
                     let data = PRShareService.buildShareData(from: best)
@@ -158,63 +177,109 @@ struct PersonalRecordsDetailView: View {
                     }
                 } label: {
                     Image(systemName: "square.and.arrow.up")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
+                        .font(.body.weight(.medium))
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(String(localized: "Share PR"))
                 .accessibilityIdentifier("activity-personal-records-share-button")
             }
 
-            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
-                Text(best.formattedValue)
-                    .font(.system(size: 36, weight: .bold, design: .rounded))
-                    .foregroundStyle(theme.heroTextGradient)
-                    .minimumScaleFactor(0.6)
-                    .lineLimit(1)
-
-                if let unit = best.kind.unitLabel {
-                    Text(unit)
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    bestValue(best)
+                    bestUnit(best)
                 }
-
-                if let delta = best.formattedDelta {
-                    Text(delta)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle((best.deltaValue ?? 0) > 0 ? DS.Color.positive : DS.Color.negative)
+            } else {
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                        bestValue(best)
+                        bestUnit(best)
+                    }
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        bestValue(best)
+                        bestUnit(best)
+                    }
                 }
-
-                Spacer(minLength: 0)
             }
 
-            HStack(spacing: DS.Spacing.xs) {
+            if let delta = best.formattedDelta {
+                Text(delta)
+                    .font(.subheadline.weight(.semibold).monospacedDigit())
+                    .foregroundStyle((best.deltaValue ?? 0) > 0 ? palette.heroPositive : DS.Color.negative)
+                    .accessibilityIdentifier("activity-personal-records-best-delta")
+            }
+
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 Text(best.localizedTitle)
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
+                    .font(.subheadline.weight(.semibold))
+                    .fixedSize(horizontal: false, vertical: true)
                 if let subtitle = best.subtitle {
-                    Text("\u{00B7}")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
                     Text(subtitle)
                         .font(.caption)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(palette.muted)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                Spacer(minLength: 0)
                 Text(best.date, style: .date)
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .font(.caption)
+                    .foregroundStyle(palette.muted)
+                    .accessibilityIdentifier("activity-personal-records-best-date")
             }
         }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .foregroundStyle(palette.ink)
+        .padding(DS.Spacing.xl)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: DS.Radius.xl)
+                .fill(palette.surface)
+                .overlay(alignment: .bottom) {
+                    PersonalRecordHeroDune()
+                        .fill(palette.gold.opacity(0.10))
+                        .frame(height: 90)
+                        .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl))
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: DS.Radius.xl)
+                        .strokeBorder(palette.border, lineWidth: 1)
+                }
+        }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-personal-records-current-best")
+    }
+
+    private func bestValue(_ best: ActivityPersonalRecord) -> some View {
+        Text(best.formattedValue)
+            .font(dynamicTypeSize.isAccessibilitySize
+                  ? .largeTitle.bold()
+                  : .system(size: bestValueSize, weight: .bold, design: .rounded))
+            .monospacedDigit()
+            .foregroundStyle(LinearGradient(
+                colors: [palette.heroHighlight, palette.heroAccent],
+                startPoint: .topLeading, endPoint: .bottomTrailing
+            ))
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityIdentifier("activity-personal-records-best-value")
+    }
+
+    @ViewBuilder
+    private func bestUnit(_ best: ActivityPersonalRecord) -> some View {
+        if let unit = best.kind.unitLabel {
+            Text(unit)
+                .font(.title3.weight(.medium))
+                .foregroundStyle(palette.muted)
+                .accessibilityIdentifier("activity-personal-records-best-unit")
+        }
     }
 
     private var periodPicker: some View {
         Picker("Period", selection: $viewModel.selectedPeriod) {
             ForEach(PersonalRecordsDetailViewModel.availablePeriods, id: \.self) { period in
-                Text(period.displayName).tag(period)
+                Text(period.displayName)
+                    .tag(period)
+                    .accessibilityIdentifier("activity-personal-records-period-\(period.rawValue)")
             }
         }
         .pickerStyle(.segmented)
@@ -234,6 +299,21 @@ struct PersonalRecordsDetailView: View {
             }
             .font(.subheadline.weight(.semibold))
             .foregroundStyle(DS.Color.textSecondary)
+
+            periodPicker
+
+            Text(chartRangeLabel)
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("activity-personal-records-chart-range")
+
+            if let unit = viewModel.resolvedKind?.unitLabel {
+                Text(unit)
+                    .font(.caption2)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .accessibilityIdentifier("activity-personal-records-chart-unit")
+            }
 
             if viewModel.chartData.isEmpty {
                 Group {
@@ -263,6 +343,11 @@ struct PersonalRecordsDetailView: View {
                 .frame(maxWidth: .infinity, minHeight: 220)
             } else {
                 let chartColor = viewModel.resolvedKind?.tintColor ?? DS.Color.activity
+                let chartLineColor = chartColor.opacity(0.7)
+                let chartFill = LinearGradient(
+                    colors: [chartColor.opacity(0.25), chartColor.opacity(0.02)],
+                    startPoint: .top, endPoint: .bottom
+                )
 
                 Chart(viewModel.chartData) { record in
                     // Gradient area fill under the curve
@@ -270,13 +355,7 @@ struct PersonalRecordsDetailView: View {
                         x: .value("Date", record.date),
                         y: .value("Value", record.value)
                     )
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [chartColor.opacity(0.25), chartColor.opacity(0.02)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
+                    .foregroundStyle(chartFill)
                     .interpolationMethod(viewModel.resolvedKind == .fastestPace ? .linear : .catmullRom)
 
                     // Smooth curved line
@@ -284,7 +363,7 @@ struct PersonalRecordsDetailView: View {
                         x: .value("Date", record.date),
                         y: .value("Value", record.value)
                     )
-                    .foregroundStyle(chartColor.opacity(0.7))
+                    .foregroundStyle(chartLineColor)
                     // A smoothed pace curve can imply a faster value than any workout measured.
                     .interpolationMethod(viewModel.resolvedKind == .fastestPace ? .linear : .catmullRom)
                     .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
@@ -317,7 +396,8 @@ struct PersonalRecordsDetailView: View {
                     }
                 }
                 .chartXAxis {
-                    AxisMarks(values: .stride(by: chartXStride)) { _ in
+                    AxisMarks(values: .stride(by: viewModel.selectedPeriod.strideComponent,
+                                             count: viewModel.selectedPeriod.strideCount)) { _ in
                         AxisGridLine()
                             .foregroundStyle(theme.accentColor.opacity(0.15))
                         AxisValueLabel(format: chartXFormat)
@@ -336,6 +416,7 @@ struct PersonalRecordsDetailView: View {
                         }
                     }
                 }
+                .chartXScale(domain: chartXDomain)
                 .chartYScale(domain: chartYDomain)
                 .padding(.top, 16)
                 .frame(height: 252)
@@ -364,20 +445,40 @@ struct PersonalRecordsDetailView: View {
         return max(0, minVal - padding)...(maxVal + padding)
     }
 
-    private var chartXStride: Calendar.Component {
-        switch viewModel.selectedPeriod {
-        case .day, .week: .day
-        case .month: .weekOfYear
-        case .sixMonths, .year: .month
-        }
+    private var chartXDomain: ClosedRange<Date> {
+        let range = viewModel.chartDateRange
+        // A midnight empty interval needs a nonzero display domain, never synthetic records.
+        return range.start...max(range.end, range.start.addingTimeInterval(1))
     }
 
     private var chartXFormat: Date.FormatStyle {
         switch viewModel.selectedPeriod {
-        case .day, .week: .dateTime.day().month(.abbreviated)
+        case .day: .dateTime.hour()
+        case .week: .dateTime.weekday(.abbreviated)
         case .month: .dateTime.day().month(.abbreviated)
         case .sixMonths, .year: .dateTime.month(.abbreviated)
         }
+    }
+
+    private enum DateFormatters {
+        static let day: DateIntervalFormatter = {
+            let formatter = DateIntervalFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+            return formatter
+        }()
+        static let range: DateIntervalFormatter = {
+            let formatter = DateIntervalFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .none
+            return formatter
+        }()
+    }
+
+    private var chartRangeLabel: String {
+        let range = viewModel.chartDateRange
+        let formatter = viewModel.selectedPeriod == .day ? DateFormatters.day : DateFormatters.range
+        return formatter.string(from: range.start, to: range.end)
     }
 
     // MARK: - All-Time Records Grid
@@ -419,7 +520,7 @@ struct PersonalRecordsDetailView: View {
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(DS.Color.textSecondary)
-                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 0)
                 if record.isRecent {
                     Text("NEW")
@@ -435,15 +536,14 @@ struct PersonalRecordsDetailView: View {
                 Text(subtitle)
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
-                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
                 Text(record.formattedValue)
                     .font(DS.Typography.cardScore)
                     .foregroundStyle(theme.heroTextGradient)
-                    .minimumScaleFactor(0.7)
-                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 if let unit = record.kind.unitLabel {
                     Text(unit)
@@ -460,7 +560,11 @@ struct PersonalRecordsDetailView: View {
         }
         .frame(maxWidth: .infinity, minHeight: cardMinHeight, alignment: .topLeading)
         .padding(DS.Spacing.sm)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+        .background(record.kind.tintColor.opacity(0.06), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.md)
+                .strokeBorder(record.kind.tintColor.opacity(0.16), lineWidth: 1)
+        }
     }
 
     private var emptyState: some View {
@@ -497,5 +601,22 @@ struct PersonalRecordsDetailView: View {
              .highestCalories, .highestElevation:
             return value.formattedWithSeparator()
         }
+    }
+}
+
+/// Static decoration conveys celebration without progress or continuous motion.
+private struct PersonalRecordHeroDune: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 0, y: rect.height * 0.75))
+        path.addCurve(
+            to: CGPoint(x: rect.maxX, y: rect.height * 0.42),
+            control1: CGPoint(x: rect.width * 0.30, y: rect.height * 0.95),
+            control2: CGPoint(x: rect.width * 0.70, y: rect.height * 0.15)
+        )
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.closeSubpath()
+        return path
     }
 }

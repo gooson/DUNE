@@ -4,7 +4,6 @@ import SwiftUI
 struct AchievementHistorySection: View {
     let groupedHistory: [(month: String, events: [WorkoutRewardEvent])]
 
-    @Environment(\.appTheme) private var theme
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -54,26 +53,22 @@ struct AchievementHistorySection: View {
 
     private func eventRow(_ event: WorkoutRewardEvent) -> some View {
         HStack(alignment: .top, spacing: DS.Spacing.sm) {
-            // Event icon with kind-specific treatment
             eventIcon(event.kind)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 Text(event.title)
-                    .font(event.kind == .levelUp ? .subheadline.weight(.bold) : .caption.weight(.semibold))
+                    .font(.subheadline.weight(.semibold))
                     .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 Text(eventDetailText(event))
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-                    .lineLimit(2)
-            }
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
 
-            Spacer(minLength: 0)
-
-            VStack(alignment: .trailing, spacing: 2) {
                 Text(event.date, style: .date)
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
 
                 if event.pointsAwarded > 0 {
                     Text(
@@ -82,45 +77,33 @@ struct AchievementHistorySection: View {
                             Int64(event.pointsAwarded)
                         )
                     )
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(eventColor(event.kind), in: Capsule())
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .padding(.horizontal, DS.Spacing.sm)
+                    .padding(.vertical, DS.Spacing.xxs)
+                    .background(eventColor(event.kind).opacity(0.15), in: Capsule())
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(DS.Spacing.sm)
-        .background {
-            if event.kind == .levelUp {
-                RoundedRectangle(cornerRadius: DS.Radius.sm)
-                    .fill(
-                        LinearGradient(
-                            colors: [Color.mint.opacity(0.08), Color.yellow.opacity(0.05)],
-                            startPoint: .leading, endPoint: .trailing
-                        )
-                    )
-            } else if event.kind == .badgeUnlocked {
-                RoundedRectangle(cornerRadius: DS.Radius.sm)
-                    .fill(Color.yellow.opacity(0.04))
-            }
-        }
+        .padding(DS.Spacing.md)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(eventColor(event.kind).opacity(0.08), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .overlay(RoundedRectangle(cornerRadius: DS.Radius.md).stroke(eventColor(event.kind).opacity(0.22), lineWidth: 1))
+        .accessibilityIdentifier("activity-personal-records-achievement-\(event.id)")
     }
 
     private func eventIcon(_ kind: WorkoutRewardEventKind) -> some View {
-        let iconSize: CGFloat = kind == .levelUp ? 22 : 16
-
-        return Image(systemName: iconName(for: kind))
-            .font(.system(size: kind == .levelUp ? 14 : 11))
+        Image(systemName: iconName(for: kind))
+            .font(.title3)
             .foregroundStyle(eventColor(kind))
-            .frame(width: iconSize, height: iconSize)
+            .frame(width: 44, height: 44)
             .background {
-                if kind == .levelUp || kind == .badgeUnlocked {
-                    Circle()
-                        .fill(eventColor(kind).opacity(0.12))
-                        .frame(width: iconSize + 6, height: iconSize + 6)
-                }
+                Circle()
+                    .fill(eventColor(kind).opacity(0.15))
+                    .overlay(Circle().stroke(eventColor(kind).opacity(0.35), lineWidth: 1))
             }
+            .accessibilityHidden(true)
     }
 
     private func iconName(for kind: WorkoutRewardEventKind) -> String {
