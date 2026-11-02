@@ -5,6 +5,7 @@ struct MorningBriefingView: View {
     let data: MorningBriefingData
     @State private var viewModel = MorningBriefingViewModel()
     @State private var visibleSections: Set<Int> = []
+    @State private var currentPeriod = LocalDayPeriod(date: DashboardClock.now())
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
@@ -13,7 +14,7 @@ struct MorningBriefingView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: DS.Spacing.xl) {
-                    MorningBriefingHero()
+                    MorningBriefingHero(title: briefingTitle)
                         .accessibilityIdentifier("dashboard-morning-briefing-hero")
                     if let sections = viewModel.sections {
                         // Section 1: Recovery Summary
@@ -70,6 +71,8 @@ struct MorningBriefingView: View {
                 .frame(maxWidth: .infinity)
             }
             .background { SheetWaveBackground() }
+            .navigationTitle(briefingTitle)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(String(localized: "Done")) { dismiss() }
@@ -78,6 +81,12 @@ struct MorningBriefingView: View {
             }
         }
         .accessibilityIdentifier("dashboard-morning-briefing-screen")
+        .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { _ in
+            currentPeriod = LocalDayPeriod(date: DashboardClock.now())
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { currentPeriod = LocalDayPeriod(date: DashboardClock.now()) }
+        }
         .onDisappear {
             MorningBriefingViewModel.markBriefingShown()
         }
@@ -105,6 +114,12 @@ struct MorningBriefingView: View {
         data.conditionStatus.color
     }
 
+    private var briefingTitle: String {
+        currentPeriod == .morning
+            ? String(localized: "Good Morning")
+            : String(localized: "Morning Briefing")
+    }
+
     @ViewBuilder
     private func briefingSection<Content: View>(index: Int, @ViewBuilder content: () -> Content) -> some View {
         content()
@@ -116,6 +131,7 @@ struct MorningBriefingView: View {
 // MARK: - Morning scene
 
 private struct MorningBriefingHero: View {
+    let title: String
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
@@ -145,7 +161,7 @@ private struct MorningBriefingHero: View {
             }
             .accessibilityHidden(true)
 
-            Text("Good Morning")
+            Text(title)
                 .font(.largeTitle.bold())
                 .foregroundStyle(.primary)
                 .fixedSize(horizontal: false, vertical: true)

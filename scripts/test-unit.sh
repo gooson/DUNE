@@ -245,22 +245,6 @@ sys.exit(1)
     echo "$requested"
 }
 
-if [[ "$DRY_RUN" -eq 0 && "$RUN_IOS" -eq 1 && -z "${DAILVE_IOS_DESTINATION:-}" ]]; then
-    IOS_DESTINATION="$(resolve_sim_destination "iOS" "iOS-${IOS_SIM_OS//./-}" "$IOS_SIM_NAME" "$IOS_SIM_OS" "27")"
-fi
-
-if [[ "$DRY_RUN" -eq 0 && "$RUN_WATCH" -eq 1 && -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
-    WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "27")"
-fi
-
-if [[ "$DRY_RUN" -eq 0 && "$RUN_IOS" -eq 1 ]]; then
-    IOS_DESTINATION=$(apply_worktree_destination "$IOS_DESTINATION" "$IOS_SIM_NAME" "iOS")
-fi
-
-if [[ "$DRY_RUN" -eq 0 && "$RUN_WATCH" -eq 1 ]]; then
-    WATCH_DESTINATION=$(apply_worktree_destination "$WATCH_DESTINATION" "$WATCH_SIM_NAME" "watchOS")
-fi
-
 preboot_from_destination() {
     local destination="$1"
     local label="$2"
@@ -272,14 +256,6 @@ preboot_from_destination() {
     fi
     wait_for_simulator_boot "$udid" "$label"
 }
-
-if [[ "$DRY_RUN" -eq 0 && "$RUN_IOS" -eq 1 ]]; then
-    preboot_from_destination "$IOS_DESTINATION" "iOS"
-fi
-
-if [[ "$DRY_RUN" -eq 0 && "$RUN_WATCH" -eq 1 ]]; then
-    preboot_from_destination "$WATCH_DESTINATION" "watchOS"
-fi
 
 IOS_LOG_FILE="$LOG_FILE"
 WATCH_LOG_FILE="$LOG_FILE"
@@ -349,6 +325,13 @@ run_suite() {
 }
 
 if [[ "$RUN_IOS" -eq 1 ]]; then
+    if [[ "$DRY_RUN" -eq 0 ]]; then
+        if [[ -z "${DAILVE_IOS_DESTINATION:-}" ]]; then
+            IOS_DESTINATION="$(resolve_sim_destination "iOS" "iOS-${IOS_SIM_OS//./-}" "$IOS_SIM_NAME" "$IOS_SIM_OS" "27")"
+        fi
+        IOS_DESTINATION=$(apply_worktree_destination "$IOS_DESTINATION" "$IOS_SIM_NAME" "iOS")
+        preboot_from_destination "$IOS_DESTINATION" "iOS"
+    fi
     if [[ ${#ONLY_TESTING[@]} -eq 0 ]]; then
         IOS_ONLY_TESTING=(DUNETests)
     fi
@@ -356,6 +339,13 @@ if [[ "$RUN_IOS" -eq 1 ]]; then
 fi
 
 if [[ "$RUN_WATCH" -eq 1 ]]; then
+    if [[ "$DRY_RUN" -eq 0 ]]; then
+        if [[ -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
+            WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "27")"
+        fi
+        WATCH_DESTINATION=$(apply_worktree_destination "$WATCH_DESTINATION" "$WATCH_SIM_NAME" "watchOS")
+        preboot_from_destination "$WATCH_DESTINATION" "watchOS"
+    fi
     if [[ ${#ONLY_TESTING[@]} -eq 0 ]]; then
         WATCH_ONLY_TESTING=(DUNEWatchTests)
     fi

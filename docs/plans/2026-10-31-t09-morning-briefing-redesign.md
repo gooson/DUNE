@@ -94,3 +94,11 @@ UI 캡처에 필요하면 기존 opt-in `TodaySettingsRegressionTests/testVisual
 ## Fresh maximum-text visual finding
 
 The normal and dark maximum-text methods passed at306f352c. Native PNG3E96011B-78D7-4941-996A-DD14F87E9EFF then showed the scaled leading icon narrowing long briefing prose. Resolve this distinct visual finding with an accessibility-only vertical original-symbol/text layout and32pt decorative symbol. Keep normal HStack/artwork, full original text, header traits and callbacks. Recheck only the existing dark maximum-text method and inspect a fresh image; retain both original successful receipts with their actual source.
+
+## Main integration · local-time greeting
+
+Main added `LocalDayPeriod`/`DashboardClock` and a 06:00–09:59 `Good Morning` versus later manual `Morning Briefing` title, plus the guarded once-per-local-morning lifecycle. The merged T09 view uses that same localized title in its retained sunrise hero and compact navigation title; the original rich cards, source-backed text, optional weather, Done action and AX IDs remain. The layout map records the two actual title states. This merge also carries main's local-time tests and the approved Duo capture-budget script unchanged. Source parse/map checks precede the parent's targeted build/native gates; no new native capture is claimed here.
+
+## 복구 병합 검증 체크포인트 (2026-11-02)
+
+추가 편집 전 인덱스 트리가 저장된 `c97f1adf`와 완전히 일치하는지 확인했고, 실제 `MERGE_HEAD=10fa29fb`를 유지했다. 기존 자동 브리핑 검사 두 개에 opt-in 아침 캡처와 같은 `--ui-dashboard-hour 6` 인자만 추가해 실제 낮 시각 때문에 진입이 막히지 않도록 했다. 전역 시계·아침 외 수동 진입·제품 표시 조건·fixture 값·assertion은 유지한다. 구문·프로젝트·카탈로그·맵 검사는 병합 트리의 빌드나 native 통과를 의미하지 않으며 해당 검증은 부모 작업에 남아 있다. 승인된 Duo 펼침 추가 실행 1회는 아직 사용하지 않았다.

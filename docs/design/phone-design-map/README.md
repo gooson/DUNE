@@ -68,6 +68,8 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-10-31 로컬 시간 인사·야간 인사이트를 수정하고 [새 T03·T04·T09 실제 화면 17장](actual/local-time-2026-10-31/index.html)을 통합 포털에 연결했다. 단위 40개와 iPhone 2·iPad 1·Duo 접힘 1·펼침 1의 관련 UI가 통과했다. 펼침의 검은 XCTest PNG는 완료 증거에서 제외하고 활성 내부 LCD-1 native 캡처용 같은 경로를 추가 1건 실행해 통과했다. 기기·시간 fixture·앱 소스 해시·실행별 receipt와 native 원본은 새 갤러리에 보존한다. 기존 다른 worktree의 갤러리 이미지는 이번 수정의 증거로 덮어쓰지 않았다.
+
 같은 날 C19 본문의 중복 질문을 제거해 ‘이동이 감지됐어요.’로 줄였다. 전용 40mm Watch에서 관련 UI 1개가 통과했고 `Test-DUNEWatchUITests-2026.10.28_10-22-32-+0900.xcresult`의 새 C19 원본으로 갱신했다. C10과 다른 화면의 기존 검증 출처는 유지한다.
 
 2026-10-28 Watch 계단 운동의 C10 진행과 새 C19 기구 이탈 안내를 전용 Apple Watch SE 3 (40mm), watchOS 27.0에서 새로 캡처했다. [실제 Watch 맵](actual/watch/index.html)의 두 원본과 출처를 갱신하고 직접 확인했다. GPS/걸음 fixture를 통한 안내 유지·계속 운동·명시적 종료와 기존 무알림 진행의 관련 UI 3개가 모두 통과했다. 현재 총 69개 중 66개 상태가 캡처돼 있으며 S08·S11·C12의 기존 미완료 상태는 유지한다. 한국어·기본 글씨·40mm 세로만 이번 증거이며, 실제 GPS 수집·손목을 내린 진동·배터리 사용은 [실기기 확인 항목](../../solutions/general/2026-10-28-watch-stair-gps-exit-reminder.md)으로 남긴다. iPhone·iPad·Duo 화면은 이번 변경의 소비자가 아니다.
@@ -204,3 +206,9 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-10-30 L01 제목·내비게이션 배경의 테마별 강제 설정을 제거하고 습관 기록 inspector를 Today와 같은 탭 NavigationStack 바깥으로 이동했다. 사용자 요청으로 테스트·캡처는 실행하지 않았다. iPhone·iPad·Duo 접힘/펼침의 L01 및 기록 패널은 새 실제 캡처 미갱신이며 이전 PNG를 이번 변경의 증거로 사용하지 않는다. Watch·visionOS는 이 LifeView를 사용하지 않는다. 스크롤 복귀 해결 여부와 기록 열기·닫기·과거 기록 추가의 실행 검증은 남아 있다.
+
+
+2026-10-31 T02 iCloud 동의 개편은 [네 기기 실제 앱 전후 비교](../full-redesign-map/review/cloud-sync-consent-2026-10-31/index.html)에 보존했다. 기존 화면과 원본 아이콘을 대조하고 iPhone·iPad·Duo 접힘0°·펼침180°의 새 PNG와 출처를 갱신했다. 두 선택의 기본 글씨 터치 높이는44pt 이상이며 어두움·최대 접근성 글씨의 별도 소스와 한계는 갤러리에 명시했다. 다른 화면·Watch·실제 iCloud 동기화나 사용자 건강 기록의 검증을 뜻하지 않는다.
+
+
+2026-10-31 T08 날씨 상세: [네 기기 실제 앱 전후 비교](../full-redesign-map/review/weather-detail-2026-10-31/index.html). iPhone·iPad·Duo 접힘0°/펼침180°의 새 실제 앱 캡처입니다. 어두운 비와 최대 글씨의 눈 화면은 별도 상태로 보존했습니다. 정적 UI 감사에서는 움직임을 멈추며, 모의 날씨 자료를 사용합니다. 각 이미지의 실제 소스가 표기되어 있고 전체 회귀나 실제 기상 관측을 검증한 것은 아닙니다.

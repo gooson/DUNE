@@ -1,0 +1,307 @@
+{
+  "prototype_snapshot": "786c2c3cb8dab80ccb0f5db0414c23f0ae5e4894",
+  "source_manifest_sha256": "ca3557caea37893829f622ae8c89a42aa43cf65ee84fe7b90ae0abbc9fbb8429",
+  "screen": {
+    "id": "T02",
+    "group": "시작 · 오늘 · 알림",
+    "title": "iCloud 동기화 동의",
+    "parent": "앱 시작",
+    "kind": "sheet",
+    "anatomy": "설명/동의/건너뛰기",
+    "type": "CloudSyncConsentView",
+    "source": "DUNE/Presentation/Shared/CloudSyncConsentView.swift",
+    "line": 3,
+    "key": "T02",
+    "entry": "앱 시작",
+    "presentation": "sheet",
+    "sections": [
+      "iCloud Sync introduction",
+      "Private & Encrypted",
+      "Seamless Sync",
+      "Local Option",
+      "Decision actions"
+    ],
+    "controls": [
+      "Enable iCloud Sync",
+      "Keep Local Only"
+    ],
+    "catalog_ids": [
+      "T02"
+    ],
+    "notes": "",
+    "proposal": {
+      "eyebrow": "데이터와 개인정보",
+      "summary": "건강 기록을 기기 간 동기화할지 선택합니다.",
+      "changes": [
+        "저장 위치 선택을 먼저 설명하고 두 선택지를 하단에 배치합니다."
+      ],
+      "blocks": [
+        {
+          "label": "iCloud 동기화",
+          "value": "기기 간 기록 연결",
+          "unit": "",
+          "note": "개인 iCloud 컨테이너에 저장됩니다.",
+          "kind": "hero",
+          "symbol": "icloud.and.arrow.up",
+          "symbol_prominent": true
+        },
+        {
+          "title": "선택 전 알아보기",
+          "items": [
+            {
+              "title": "비공개 저장",
+              "value": "개인 iCloud",
+              "note": "개인 컨테이너에 기록 저장",
+              "symbol": "lock.shield"
+            },
+            {
+              "title": "기기 간 동기화",
+              "value": "여러 Apple 기기",
+              "note": "신체 및 운동 기록 연결",
+              "symbol": "arrow.triangle.2.circlepath"
+            },
+            {
+              "title": "로컬 사용",
+              "value": "이 기기",
+              "note": "iCloud 없이 계속 사용",
+              "symbol": "externaldrive"
+            }
+          ],
+          "kind": "rows",
+          "rowVisual": "summary"
+        },
+        {
+          "label": "iCloud 동기화 켜기",
+          "kind": "action",
+          "intent": "save",
+          "primary": true,
+          "message": "예시에서 iCloud 동기화를 선택했어요. 실제 설정은 변경되지 않아요.",
+          "set": {
+            "cloudEnabled": true
+          }
+        },
+        {
+          "label": "이 기기에만 보관",
+          "kind": "action",
+          "intent": "save",
+          "primary": false,
+          "message": "예시에서 이 기기에만 보관을 선택했어요.",
+          "set": {
+            "cloudEnabled": false
+          }
+        }
+      ],
+      "fixture": true,
+      "symbol": "icloud.and.arrow.up",
+      "navigation_hidden": true,
+      "dismiss_disabled": true,
+      "symbol_tone": "system-blue"
+    },
+    "dormant": false,
+    "captures": [
+      {
+        "path": "../phone-design-map/actual/regular/images/T02.png",
+        "exists": true,
+        "device": "regular",
+        "state": null,
+        "theme": null,
+        "date": "2026-10-12T20:23:47.119000+00:00",
+        "provenance": "docs/design/phone-design-map/actual",
+        "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+        "evidence": "cloud-sync-consent-view",
+        "capture_index": "../phone-design-map/actual/regular/capture-index.json",
+        "identity_label": "iCloud 동기화 동의",
+        "identity_note": "캡처 출처의 목적지·조작과 이미지의 제목·본문을 대조했습니다.",
+        "identity_keys": [
+          "T02"
+        ],
+        "identity_sha256": "ba783053e15b44492b40fcb3a730f03c504b9f4bffadb57c7dc8abe549a8264c",
+        "pixels": [
+          1320,
+          2868
+        ]
+      },
+      {
+        "path": "../phone-design-map/actual/ipad/images/T02.png",
+        "exists": true,
+        "device": "ipad",
+        "state": null,
+        "theme": null,
+        "date": "2026-10-12T20:56:59.882000+00:00",
+        "provenance": "docs/design/phone-design-map/actual",
+        "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+        "evidence": "cloud-sync-consent-view",
+        "capture_index": "../phone-design-map/actual/ipad/capture-index.json",
+        "identity_label": "iCloud 동기화 동의",
+        "identity_note": "캡처 출처의 목적지·조작과 이미지의 제목·본문을 대조했습니다.",
+        "identity_keys": [
+          "T02"
+        ],
+        "identity_sha256": "79ed7294214b483135eecb057830883e931b6aa9fc81d1769bf67ef950c7ea34",
+        "pixels": [
+          2064,
+          2752
+        ]
+      },
+      {
+        "path": "../phone-design-map/actual/duo/images/T02.png",
+        "exists": true,
+        "device": "duo",
+        "state": null,
+        "theme": null,
+        "date": "2026-10-12T16:56:47.864000+00:00",
+        "provenance": "docs/design/phone-design-map/actual",
+        "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+        "evidence": "cloud-sync-consent-view",
+        "capture_index": "../phone-design-map/actual/duo/capture-index.json",
+        "identity_label": "iCloud 동기화 동의",
+        "identity_note": "캡처 출처의 목적지·조작과 이미지의 제목·본문을 대조했습니다.",
+        "identity_keys": [
+          "T02"
+        ],
+        "identity_sha256": "4af916fa8efa0efd68ca1d74627d0f9e023e1f95fc0eb883c48155afc038ac78",
+        "pixels": [
+          1398,
+          2034
+        ]
+      },
+      {
+        "path": "../phone-design-map/actual/duo-open/images/T02.png",
+        "exists": true,
+        "device": "duo-open",
+        "state": null,
+        "theme": null,
+        "date": "2026-10-12T17:48:10.258000+00:00",
+        "provenance": "docs/design/phone-design-map/actual",
+        "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+        "evidence": "cloud-sync-consent-view",
+        "capture_index": "../phone-design-map/actual/duo-open/capture-index.json",
+        "identity_label": "iCloud 동기화 동의",
+        "identity_note": "캡처 출처의 목적지·조작과 이미지의 제목·본문을 대조했습니다.",
+        "identity_keys": [
+          "T02"
+        ],
+        "identity_sha256": "a4438a2a789fa9367abc2bbc005509e667176fd3180e2152c58905d4af4a7015",
+        "pixels": [
+          2006,
+          2852
+        ]
+      }
+    ],
+    "representative": false,
+    "feature_contract": [
+      {
+        "id": "T02-intro",
+        "label": "동기화·개인 컨테이너 설명",
+        "sources": [
+          {
+            "path": "DUNE/Presentation/Shared/CloudSyncConsentView.swift",
+            "line": 15
+          }
+        ],
+        "representation": "iCloud 히어로"
+      },
+      {
+        "id": "T02-privacy",
+        "label": "비공개·암호화",
+        "sources": [
+          {
+            "path": "DUNE/Presentation/Shared/CloudSyncConsentView.swift",
+            "line": 32
+          }
+        ],
+        "representation": "lock.shield 설명 행"
+      },
+      {
+        "id": "T02-sync",
+        "label": "신체·운동 기록 동기화",
+        "sources": [
+          {
+            "path": "DUNE/Presentation/Shared/CloudSyncConsentView.swift",
+            "line": 37
+          }
+        ],
+        "representation": "동기화 행"
+      },
+      {
+        "id": "T02-local",
+        "label": "로컬 보관 선택",
+        "sources": [
+          {
+            "path": "DUNE/Presentation/Shared/CloudSyncConsentView.swift",
+            "line": 42
+          }
+        ],
+        "representation": "로컬 설명 행"
+      },
+      {
+        "id": "T02-decision",
+        "label": "동기화 기본 버튼·로컬 보조 버튼",
+        "sources": [
+          {
+            "path": "DUNE/Presentation/Shared/CloudSyncConsentView.swift",
+            "line": 55
+          }
+        ],
+        "representation": "상하 선택 버튼"
+      },
+      {
+        "id": "T02-dismiss",
+        "label": "결정 전 임의 닫기 방지",
+        "sources": [
+          {
+            "path": "DUNE/Presentation/Shared/CloudSyncConsentView.swift",
+            "line": 92
+          }
+        ],
+        "representation": "닫기·뒤로 버튼 없음"
+      }
+    ],
+    "capture_pairing": {
+      "regular": {
+        "screen": "T02",
+        "device": "regular",
+        "status": "matched",
+        "reason": "",
+        "paths": [
+          "../phone-design-map/actual/regular/images/T02.png"
+        ],
+        "removed_paths": []
+      },
+      "ipad": {
+        "screen": "T02",
+        "device": "ipad",
+        "status": "matched",
+        "reason": "",
+        "paths": [
+          "../phone-design-map/actual/ipad/images/T02.png"
+        ],
+        "removed_paths": []
+      },
+      "duo": {
+        "screen": "T02",
+        "device": "duo",
+        "status": "matched",
+        "reason": "",
+        "paths": [
+          "../phone-design-map/actual/duo/images/T02.png"
+        ],
+        "removed_paths": []
+      },
+      "duo-open": {
+        "screen": "T02",
+        "device": "duo-open",
+        "status": "matched",
+        "reason": "",
+        "paths": [
+          "../phone-design-map/actual/duo-open/images/T02.png"
+        ],
+        "removed_paths": []
+      }
+    }
+  }
+}

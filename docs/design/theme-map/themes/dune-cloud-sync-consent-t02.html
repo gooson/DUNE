@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>T02 · 동의 시트 테마 표현 연구</title>
+  <style>
+    body { margin: 0; padding: 24px; font: 16px/1.5 system-ui, sans-serif; background: #eeebe7; color: #29231f; }
+    main { max-width: 1000px; margin: auto; } h1 { margin-bottom: 0; } .note { color: #655c53; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 24px; margin: 24px 0; }
+    .sample { border-radius: 26px; padding: 22px; background: #fdfbf7; color: #29231f; }
+    .sample.dark { background: #242124; color: #f8f2ec; }
+    .hero { padding: 24px; border-radius: 24px; background: #352e29; color: #fff3e8; }
+    .hero .cloud { font-size: 42px; color: #e2b780; line-height: 1; }
+    .hero small { display: block; color: #e2b780; margin-top: 18px; font-weight: bold; letter-spacing: 1px; }
+    .hero h2 { margin: 5px 0; } .hero p { color: #e1d3c7; margin-bottom: 0; }
+    .row { display: flex; gap: 14px; align-items: flex-start; border-radius: 16px; background: #fffdfa; padding: 16px; margin-top: 12px; }
+    .dark .row { background: #332e2e; } .badge { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #eee0d0; color: #745d43; font-size: 22px; }
+    .dark .badge { background: #47372e; color: #d6a680; } .row strong, .row span { display: block; } .row span { color: #655c53; font-size: 14px; }
+    .dark .row span { color: #c8bdb5; } .button { margin-top: 20px; padding: 14px; border-radius: 14px; background: #c9966d; text-align: center; color: #1a1716; font-weight: bold; }
+    .secondary { text-align: center; padding: 14px 0 0; }
+  </style>
+</head>
+<body><main>
+  <p><a href="../index.html">테마 맵</a> · <a href="../../layout-map/cloud-sync-consent-t02.html">T02 배치 계약</a></p>
+  <h1>T02 · 동의 시트 테마 표현</h1>
+  <p class="note">승인된 T02 방향을 기존 DUNE 팔레트에서 밝음·어두움으로 해석한 정적 연구 시안. 실제 앱 캡처가 아니다. 구름 그림은 웹 표기이며 앱은 원래 SF Symbol `icloud.and.arrow.up`을 사용한다. 다른 테마는 기존 `ScoreHeroPalette` 표면·강조색과 각 테마의 시트 배경을 따른다.</p>
+  <div class="grid">
+    <section class="sample"><h2>밝음</h2><div class="hero"><div class="cloud">☁︎↑</div><small>데이터와 개인정보</small><h2>iCloud 동기화</h2><p>건강 기록을 기기 간 동기화할지 선택합니다.</p></div><div class="row"><div class="badge">♙</div><div><strong>비공개 저장</strong><span>개인 iCloud 컨테이너에 기록 보관</span></div></div><div class="row"><div class="badge">↻</div><div><strong>기기 간 동기화</strong><span>신체·운동 기록을 Apple 기기에서 연결</span></div></div><div class="row"><div class="badge">▣</div><div><strong>로컬 사용</strong><span>이 기기에만 기록 보관</span></div></div><div class="button">iCloud 동기화 켜기</div><div class="secondary">이 기기에만 보관</div></section>
+    <section class="sample dark"><h2>어두움</h2><div class="hero"><div class="cloud">☁︎↑</div><small>데이터와 개인정보</small><h2>iCloud 동기화</h2><p>건강 기록을 기기 간 동기화할지 선택합니다.</p></div><div class="row"><div class="badge">♙</div><div><strong>비공개 저장</strong><span>개인 iCloud 컨테이너에 기록 보관</span></div></div><div class="row"><div class="badge">↻</div><div><strong>기기 간 동기화</strong><span>신체·운동 기록을 Apple 기기에서 연결</span></div></div><div class="row"><div class="badge">▣</div><div><strong>로컬 사용</strong><span>이 기기에만 기록 보관</span></div></div><div class="button">iCloud 동기화 켜기</div><div class="secondary">이 기기에만 보관</div></section>
+  </div>
+  <p class="note">네이티브 구현은 주제별 텍스트·아이콘이 줄바꿈할 수 있는 세로 카드이고, 최대 글씨에서 스크롤과 하단 선택 영역을 유지한다. 새 실제 화면 증거는 <a href="../../phone-design-map/actual/index.html">실제 화면 맵</a>에서 별도 관리한다.</p>
+</main></body></html>
