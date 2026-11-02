@@ -682,11 +682,13 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.descendants(matching: .any)["dashboard-morning-briefing-hero"].firstMatch.exists)
         let scroll = briefing.descendants(matching: .scrollView).firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Briefing needs its own scroll view")
+        VisualAudit.capture("T09 briefing hero")
         for section in ["recovery", "guide", "weekly", "weather"] {
             let title = app.descendants(matching: .any)["dashboard-morning-briefing-\(section)-title"].firstMatch
             XCTAssertTrue(title.waitForExistence(timeout: 5), "\(section) card title should exist")
             XCTAssertTrue(revealBriefingText(title, in: briefing, scroll: scroll, whole: true),
                           "\(section) title must fit above the sheet toolbar")
+            VisualAudit.capture("T09 briefing \(section) title")
             addScreenshotAttachment(named: "T09 briefing \(section) title")
         }
         assertBriefingDoneReachable()
@@ -714,6 +716,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         let heading = app.descendants(matching: .any)["dashboard-morning-briefing-heading"].firstMatch
         XCTAssertTrue(heading.waitForExistence(timeout: 5) && !heading.label.isEmpty)
         XCTAssertTrue(revealBriefingText(heading, in: briefing, scroll: scroll, whole: true))
+        VisualAudit.capture("T09 dark maximum text hero")
         addScreenshotAttachment(named: "T09 dark maximum text hero")
 
         for section in ["recovery", "guide", "weekly", "weather"] {
@@ -724,6 +727,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             XCTAssertTrue(title.waitForExistence(timeout: 5) && !title.label.isEmpty)
             XCTAssertTrue(revealBriefingText(title, in: briefing, scroll: scroll, whole: true),
                           "\(section) title must fit inside the visible sheet content")
+            VisualAudit.capture("T09 dark maximum text \(section) title")
             addScreenshotAttachment(named: "T09 dark maximum text \(section) title")
 
             let message = card.descendants(matching: .staticText)
@@ -732,6 +736,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
                           "\(section) message should remain accessible")
             XCTAssertTrue(revealBriefingText(message, in: briefing, scroll: scroll, whole: false),
                           "\(section) message needs a readable visible portion")
+            VisualAudit.capture("T09 dark maximum text \(section) message")
             addScreenshotAttachment(named: "T09 dark maximum text \(section) message")
         }
         assertBriefingDoneReachable()
