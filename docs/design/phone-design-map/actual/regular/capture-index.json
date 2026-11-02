@@ -461,12 +461,21 @@
     "T07": {
       "row_id": "T07",
       "evidence": "all-data-screen-hrv",
-      "test": "WellnessRegressionTests/testHRVCardOpensMetricDetailAndAllData()",
-      "action": "tap metric-detail-show-all-data",
-      "timestamp": 1791819668.871,
-      "image": "AEE6F8DD-8602-476A-A141-EEB109236A60.png",
-      "screen": "screen-0-1320x2868-tap metric-detail-show-all-data_0_F0364998-CDF4-4293-8702-6A8A7D804E9B.png",
-      "file": "T07.png"
+      "test": "DUNEUITests/AllDataDetailRedesignTests/testAllCategoryReadyRowsAndCaptures",
+      "action": "T07-hrv-native_0_CF1869E8-1F74-45E8-AD07-75E4F5202999.png",
+      "timestamp": 1793405865.668,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "8111ECA7-BBC9-470A-AFBE-17A1F06FC6B7.png",
+      "screen": "8111ECA7-BBC9-470A-AFBE-17A1F06FC6B7.png",
+      "file": "T07.png",
+      "source_revision": "ed844d14",
+      "source_worktree_dirty": false,
+      "device_udid": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
+      "sha256": "af4be8d12bd0b5443a78a62f72deae9a2d5fc3d8517ed973faded1723e5c1e24",
+      "source_json": "../../../full-redesign-map/review/t07-all-data-native-2026-11-02/evidence.json",
+      "source_record": "four_tier_after.regular",
+      "capture_scope": "Historical Oct31 matrix, one method/16 categories",
+      "pose_readback_verified": false
     },
     "H09": {
       "row_id": "H09",
