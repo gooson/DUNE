@@ -260,12 +260,18 @@
     "T05": {
       "row_id": "T05",
       "evidence": "cumulative-stress-detail-screen",
-      "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
-      "action": "tap dashboard-stress-score",
-      "timestamp": 1791837198.964,
-      "image": "95B63D6B-4D69-48B4-AC5E-154A78D9C3E9.png",
-      "screen": "screen-0-1320x2868-tap dashboard-stress-score_0_3633C696-58F7-4105-8DB0-539AE8196CDF.png",
-      "file": "T05.png"
+      "test": "DUNEUITests/CumulativeStressDetailRedesignTests/testHeroFactorsAndUnifiedTrendAreVisible",
+      "action": "Stress detail hero and status",
+      "timestamp": 1793590988.848,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "regular.png",
+      "screen": "regular.png",
+      "file": "T05.png",
+      "source_revision": "edad6355",
+      "source_worktree_dirty": false,
+      "device_udid": "85E142A1-69FE-4CE7-BC50-760989AB8A7A",
+      "sha256": "bfe2b7f50c8d92ccba58db1244f578453ffb71a5be0ef418915a5b94e3b1d037",
+      "source_json": "../../../full-redesign-map/review/t05-cumulative-stress-native-2026-11-02/evidence.json"
     },
     "T08": {
       "row_id": "T08",
@@ -1170,9 +1176,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "ae9ef78e",
+  "last_refresh_revision": "edad6355",
   "last_refresh_screens": [
-    "T08"
+    "T05"
   ],
-  "last_refresh_note": "T08 native redesign only; all unrelated records and original global provenance preserved."
+  "last_refresh_note": "T05 native redesign only; all unrelated records and original global provenance preserved."
 }

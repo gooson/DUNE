@@ -212,3 +212,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-10-31 T08 날씨 상세: [네 기기 실제 앱 전후 비교](../full-redesign-map/review/weather-detail-2026-10-31/index.html). iPhone·iPad·Duo 접힘0°/펼침180°의 새 실제 앱 캡처입니다. 어두운 비와 최대 글씨의 눈 화면은 별도 상태로 보존했습니다. 정적 UI 감사에서는 움직임을 멈추며, 모의 날씨 자료를 사용합니다. 각 이미지의 실제 소스가 표기되어 있고 전체 회귀나 실제 기상 관측을 검증한 것은 아닙니다.
+
+
+2026-11-02 T05 누적 스트레스: [네 기기 실제 앱 전후 비교](../full-redesign-map/review/t05-cumulative-stress-native-2026-11-02/index.html). 왼쪽은 10월 13일 과거 실제 캡처이며 당시 개별 소스·기기·자세 기록은 남아 있지 않습니다. 과거 iPad·Duo 접힘은 9/Low, iPhone·Duo 펼침은 42/Moderate이고 일부 표시 비중도 다릅니다. 같은 입력의 점수 변화 비교가 아닙니다. 오른쪽은 11월 2일 실제 앱 검사이며 Duo는 0°/180° 자세와 PNG·AX 쌍을 확인했습니다. 기존 공통 차트의 날짜 눈금 누락은 TODO 158에 미해결로 남아 있습니다.

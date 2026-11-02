@@ -148,6 +148,25 @@
       ],
       "motif": "기존 DUNE 팔레트·원래 심볼",
       "motion": "정적 브라우저 검토 캡처 보존본"
+    },
+    {
+      "id": "cumulative-stress-detail-redesign",
+      "name": "누적 스트레스 상세 개편",
+      "title": "T05 · Cumulative Stress",
+      "file": "dune-cumulative-stress-redesign.html",
+      "detail": "사용자 검토 원본 JSON과 구현 전 밝음·어두움·큰 글씨 배치. 동일 링/팔레트·요인별 막대·통합 기간/통계·구성과 계산의 단일 펼침. 예시 자료이며 실제 캡처가 아님.",
+      "implementation": {
+        "layout": "../layout-map/cumulative-stress-redesign-proposal.md",
+        "status": "native-implementation-in-progress"
+      },
+      "colors": [
+        "#302b2a",
+        "#b2854c",
+        "#e1b453",
+        "#f5d778"
+      ],
+      "motif": "기존 DUNE 링·능선·원래 요인 심볼",
+      "motion": "정적 장식·시스템 펼침/기간 선택; Reduce Motion 존중"
     }
   ],
   "studies": [
