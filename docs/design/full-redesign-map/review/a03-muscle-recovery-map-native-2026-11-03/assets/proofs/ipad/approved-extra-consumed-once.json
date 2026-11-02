@@ -1,0 +1,58 @@
+{
+  "authorization": "모두 1회 추가 허용 알아서 처리하고 머지까지 완료",
+  "approvalGroup": "2026-11-02-pending-extra-once",
+  "originalPipelineID": "a03-ui-ipad-2d-detail-and-calculation",
+  "proxyRecordID": "pr890-ipad-calculation-approved-extra-once-a2268fe0",
+  "selector": "DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled",
+  "revision": "a2268fe08bbe181777ee3454bc3befc8659eda97",
+  "device": "0479255E-D576-45F2-BAB8-C5EC72A8C173",
+  "approvedExtra": 1,
+  "consumed": 1,
+  "remaining": 0,
+  "status": "passed",
+  "started": 1793638888.0654469,
+  "historyPins": {
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-55022da0cc71d14c40be714e-4c9385c7f5bc41bc8f20a098b23d3cf1.log": "5edc7507afd80cfed0356dddcc436f4726a20e285f0edc97e0c2db4c4e1e4a67",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-55022da0cc71d14c40be714e-71f770e584474288b85a6a895425a8ff.log": "28318b095d10f16d31555ccc26757a4025454ef1f93a6565fb06c00f7a2242e7",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-55022da0cc71d14c40be714e.json": "1e969833583234dcc7c130c6c2fac974247bd3a0cdb6566f90fb40a4f95501b7"
+  },
+  "infraProof": "/Users/shanks/.codex/worktrees/detail-redesign-a03/Health/.codex-checks/a03/ipad-calc-infra-a2268fe0/proof.json",
+  "compilePins": {
+    "/Users/shanks/.codex/worktrees/detail-redesign-a03/Health/.codex-checks/pipeline/check-57c78bc98298efab1256b643.json": "1930e8d42e0ba1fafd3335d83ed362be7c7d58a1bc4c4a9c767a9714d3bee836",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a03/Health/.codex-checks/pipeline/check-57c78bc98298efab1256b643-7cb537df0bea4b039cab76efa41feaa4.log": "c2339ba1436d0a5cfe1395106a0e6b7957b71ca945177fa0a15e14394b48ab2f",
+    "/private/tmp/pr890-a03-compile-a2268fe0.log": "cccf4e9b375a1c486886d5d229d4c025769c3da72a9275cdc715d5e919c573d6",
+    "/private/tmp/pr890-review-data.md": "465aee21d6987e0638ae19807694a09b80d08d92536fd0a7db030623ca47e3fa",
+    "/private/tmp/pr890-review-architecture.md": "9d39cf91fa4a6e3f954322c7b36fd4ed68782e2e5c1c4f3ab72d76df4da7562f",
+    "/private/tmp/pr890-review-performance.md": "eba29c019b15761550aff7a584bf6570cebf339f578948ee7cf0ee89b5ecfd16",
+    "/private/tmp/pr890-review-security.md": "16db8a3e623a1d38b83b4d0efed4b36e6512d674c3ec9c71aef1e11e90d17490",
+    "/private/tmp/pr890-review-simplicity.md": "04b09b4f8c99086455a735d4438310b44dfae4d557b6c6fd54af535ca3a2f4d4"
+  },
+  "exitCode": 0,
+  "nativeResult": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/ActivityMuscleMapRegressionTests/testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 1,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a03/Health/.xcodebuild/a03-ipad-calc-approved-extra-a2268fe0.log"
+  },
+  "sourceUnchanged": true,
+  "originalHistoryUnchanged": true,
+  "completed": 1793639169.260671
+}

@@ -229,6 +229,10 @@ T09 네이티브 최대 접근성 글씨는 원래 아이콘을 위로 옮겨 �
 
 [밝음·어두움 보존 시안](themes/dune-training-readiness-detail-a02.html)과 [화면별 배치·데이터 계약](../layout-map/training-readiness-detail-a02.html)을 연결한다. 불투명 히어로·원본 상태 SF Symbol·실제 모델에서 읽을 다섯 계산 구성 점수와 별도 30/25/20/15/10 가중치, 기존 시간 조정·5기간/차트/요약·비-일간 세 원천 추세·계산 설명의 배치 방향이다. 히어로 제목은 기존 번역 키 “Score Composition”을 쓰며 중립 대체 점수를 센서 관측의 증거로 표현하지 않는다. 본문은 중앙 정렬 최대 680pt이며 큰 글씨에서는 요약도 세로로 배치한다. HTML의 75점·요인 수치·차트는 명시적인 설명용 예시다. 원본 iPhone 영어/max-AX와 iPad 영어/max-AX 및 일반 글씨 selector가 통과했다. 일반 글씨 iPhone과 Duo는 미검증이다. 새 네이티브 실제 화면 캡처는 실제 화면맵에 별도로 기록한다.
 
+## A03 근육 지도 상세 2D 방향 · 2026-10-31
+
+[밝음·어두움 보존 시안](themes/dune-muscle-map-detail-a03.html)과 [화면별 배치·데이터 계약](../layout-map/activity-muscle-map-detail-a03.html)은 A04의 3D 버튼 비활성화와 compact 자동 이동 방지를 유지한다. 실제 recoveredCount/관측 상태 수와 로딩·빈 상태를 구분하는 불투명 회복 헤더(regular에서는 secondary 첫 항목, compact에서는 primary 지도 위), 실제 앞/뒤 2D 지도, Recovery/Sets별 원래 색과 범례, 선택 근육·기존 가로 볼륨 막대·회복 정보를 정돈하는 제안이다. 도식 몸체와 막대는 실제 SVG·건강 기록·앱 캡처가 아니다. A04 phone 및 iPad 기본/선택 before는 동일 원본 소스와 실제 PNG로 확인했다. Duo before 및 수정된 A03 after는 별도 검증이 필요하다.
+
 ## A05 주간 운동 통계 상세 방향 · 2026-10-31
 
 [밝음·어두움 브라우저 시안](themes/dune-weekly-stats-detail-a05.html)은 한 화면의 불투명 현재 기간 히어로, 원래 다섯 `ActivityStat.icon`, 이전 기간 네 비교 행과 단일 날짜 캡션을 제안한다. [화면별 배치·데이터 계약](../layout-map/activity-weekly-stats-detail-a05.html)을 함께 따른다. 숫자 자리와 차트 막대는 설명용이며 실제 운동 기록이나 앱 캡처가 아니다. 원본 `672d5fdb` 기기별 before와 구현 후 after는 아직 수집하지 않았다.

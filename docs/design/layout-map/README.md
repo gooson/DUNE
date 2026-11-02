@@ -156,4 +156,6 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 
 2026-10-31 [A02 훈련 준비도 상세 배치·데이터 계약](training-readiness-detail-a02.html)은 원본 다섯 구성 점수/가중치, 모델 상태 심볼, 시간 조정, 5기간 실제 차트와 비-일간 세 원천 근사 이력을 분리한다. 브라우저의 값은 설명용이며 앱 캡처가 아니다. 원본 iPhone 영어/max-AX selector 1개와 iPad 첫 max-AX 사례만 통과했다. iPad 배치는 진행 중이며 일반 글씨 원본과 Duo는 미검증이다.
 
+2026-10-31 [A03 2D 근육 지도 상세 배치 시안](activity-muscle-map-detail-a03.html)은 A04의 비활성 3D 진입을 보존하면서 실제 앞/뒤 SVG 지도·Recovery/Sets 범례·선택 근육·볼륨·회복 정보의 새 위계를 정한다. 실제 iPad 기본 캡처의 종아리 가림을 반영해 regular에서는 회복 히어로를 secondary 첫 항목으로, compact에서는 primary 지도 위로 둔다. 도식의 몸체와 막대는 설명용이며 네이티브 캡처·측정값이 아니다.
+
 2026-10-31 [A05 주간 운동 통계 상세 배치](activity-weekly-stats-detail-a05.html)는 기존 세 기간·현재 다섯 지표·이전 기간 실제 네 비교 행·한 날짜 캡션·세 차트 지표와 운동 종류 분해의 화면별 계약이다. [DUNE 테마 방향](../theme-map/themes/dune-weekly-stats-detail-a05.html)의 수치 자리와 막대는 설명용이며 네이티브 캡처가 아니다.
