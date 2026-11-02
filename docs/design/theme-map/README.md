@@ -180,14 +180,37 @@ L03 네이티브 구현은 기존20개 템플릿의 선택·자동 입력을 유
 
 [골드 임팩트 / 내 선택 / 심박 우선](themes/dune-live-activity-size-state.html)을 보존한다. [배치·상태 계약](../layout-map/live-activity-size-state-proposal.md)에 따라 SwiftUI 구현을 반영했다. 기존 브라우저 PNG는 시안 초기 버전이며 현재 앱의 실제 캡처가 아니다. 네이티브 검증과 기기별 갱신 상태는 실제 화면맵에서 별도로 기록한다.
 
+## T11 알림함 상태·행 보존 시안 · 2026-10-31
+
+[T11 밝음·어두움 브라우저 시안](themes/dune-notification-hub-redesign.html)은 실제 앱 캡처가 아니다. 읽지 않은 합산 상태, 원래 의미 아이콘을 앞에 둔 건강/출시 행, All/Health/News 분류와 보조 행동의 배치만 보존한다. 예시 알림·수치는 구현에 입력하지 않는다. [레이아웃 계약](../layout-map/notification-inbox-proposal.md)과 [구현 계획](../../plans/2026-10-31-t11-notification-hub-redesign.md)을 따른다. 실제 기기 이미지는 네이티브 검증 뒤 actual 디자인맵에서 별도로 갱신한다.
+
 ## T04 컨디션 상세 검토본
 
 `themes/dune-condition-detail-redesign.html`에 검토한 밝음·어두움 브라우저 PNG와 원본 화면 JSON을 보존한다. 이 시안의 고정 점수 비율은 실제 모델과 달라 앱에서는 실제 Z-score·심박/시간 조정으로 표시한다. 새 실제 앱 검증은 별도 T04 비교 갤러리와 리뷰 증거로 구분한다.
 
 T04 native 구현은 단위32개·기기별 선택 UI15개와 새4기기 실제 원본으로 검증했다. 검토용 PNG/JSON은 브라우저 시안이며 새 native 캡처와 구분한다. 실제 입력이 없는70/30 예시 구성은 사용하지 않는다.
 
+- T05 누적 스트레스 상세: `themes/dune-cumulative-stress-redesign.html`과 원본 검토 JSON을 보존했다. 현재는 native 구현 전 배치이며 새 실제 캡처 완료를 뜻하지 않는다.
+
 Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 검증은 통과했다. [새 실제 설정 2장](../phone-design-map/actual/live-activity/gold-impact-2026-10-30/index.html)과 [남은 시스템 UI 게이트](../../reviews/2026-10-30-live-activity-gold-preferences.md)를 구분한다. WLA01 최종 캡처는 환경 조회 무응답으로 미완료이며 보존 시안·이전 PNG를 새 검증 증거로 사용하지 않는다.
+
+## T09 아침 브리핑 · 2026-10-31
+
+[보존 시안](themes/dune-morning-briefing.html)은 일출 히어로와 회복·가이드·주간·조건부 날씨 카드를 밝음·어두움·큰 글씨로 비교한다. 수치는 예시이며 실제 앱 캡처가 아니다. [배치 계약](../layout-map/morning-briefing-proposal.md)을 따른다.
+
+T09 네이티브 최대 접근성 글씨는 원래 아이콘을 위로 옮겨 본문 전체 폭을 확보한다. 기본 글씨의 그림·아이콘·원문은 유지한다.
 
 ## T08 날씨 상세 검토본 · 2026-10-31
 
 [보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.
+
+## T10 오늘의 건강 리포트 (2026-10-31)
+
+[밝음·어두움 보존 시안](themes/dune-daily-report.html)과 [배치 계약](../layout-map/daily-report-proposal.md)을 추가했다. 예시 값의 브라우저 시안이며 실제 앱 캡처가 아니다. 새로운 T10 네이티브 캡처는 별도 갱신 전까지 기존 상태로 둔다.
+## T06 건강 지표 상세 · 2026-10-30
+
+[16개 지표의 보존 시안과 표현 방향](themes/dune-health-metric-detail-redesign.html) · [배치/기능/출처 계약](../layout-map/health-metric-detail-redesign-proposal.md). 원래 수치·단위·아이콘·수면/운동 분석을 보존하는 제안이다. 큰 수치와 통합 추세를 강조하며 실제 native 전후 캡처는 별도 검증한다. 원본 시안의 MCST 참조를 제품 허가된 데이터로 간주하지 않으며, 선택형 미국 체중/BMI 평균과 미지원 신체 비교를 구분한다.
+
+## T07 전체 데이터 상세 방향 · 2026-10-31
+
+[밝음·어두움 히어로와 날짜별 행 시안](themes/dune-all-data-detail-t07.html) · [16개 범주와 상태·배치 계약](../layout-map/all-data-detail-t07.html). T06의 불투명 `ScoreHeroPalette`를 범주 식별에만 사용하며 원래 SF Symbol·번역된 이름과 기존 “History”를 표시한다. 기존 정적 배경, `insetGrouped List`, 날짜 섹션·실제 시각/값, 제한 이력·빈 상태·페이징·시스템 back을 유지한다. 예시 값과 브라우저 기호는 앱 데이터나 SF Symbol 캡처가 아니며, 구현 전후 실제 화면은 별도 검증한다.

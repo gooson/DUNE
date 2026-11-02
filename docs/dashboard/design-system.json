@@ -1,0 +1,145 @@
+{
+  "name": "DUNE Glass",
+  "version": 1,
+  "themes": {
+    "light": {
+      "ink": "#3c3028",
+      "text": "#705c48",
+      "muted": "#806b55",
+      "subtle": "#987e60",
+      "paper": "#fffdf9",
+      "canvas": "#e9ddca",
+      "inset": "#eee0c9",
+      "accent": "#91612c",
+      "gold": "#c9a263",
+      "sand": "#d3b68d",
+      "bronze": "#b68a68",
+      "sage": "#82916a",
+      "white": "#ffffff",
+      "black": "#281d15",
+      "line": "#8a673c32",
+      "highlight": "#ffffffc9",
+      "glass-start": "#fffdf9d9",
+      "glass-end": "#fff9ec94",
+      "chrome-start": "#fffaf0d9",
+      "chrome-end": "#f2e2c8a8",
+      "hover": "#ffffff75",
+      "active": "#dfc28c73",
+      "input": "#fffdf9a8",
+      "code": "#ede0c780",
+      "shadow-color": "#58371b15",
+      "backdrop-sky": "#e0cfb7",
+      "backdrop-far": "#cbb18a",
+      "backdrop-middle": "#b18e64",
+      "backdrop-near": "#98764d",
+      "backdrop-glow": "#fff0c0"
+    },
+    "dark": {
+      "ink": "#f1e8dc",
+      "text": "#d6c9b8",
+      "muted": "#bfae98",
+      "subtle": "#b39c7f",
+      "paper": "#2b241e",
+      "canvas": "#1d1916",
+      "inset": "#3c3026",
+      "accent": "#edbf7a",
+      "gold": "#d6a75c",
+      "sand": "#a28764",
+      "bronze": "#b48b6b",
+      "sage": "#a9bb8a",
+      "white": "#ffffff",
+      "black": "#120e0b",
+      "line": "#f0d3a51f",
+      "highlight": "#fff4de2b",
+      "glass-start": "#382e26bf",
+      "glass-end": "#211d19a6",
+      "chrome-start": "#3b3027ba",
+      "chrome-end": "#231d17b8",
+      "hover": "#f6d8a511",
+      "active": "#d5a25d2b",
+      "input": "#211c1780",
+      "code": "#19151094",
+      "shadow-color": "#08050350",
+      "backdrop-sky": "#201b18",
+      "backdrop-far": "#4d382b",
+      "backdrop-middle": "#65432b",
+      "backdrop-near": "#2c221b",
+      "backdrop-glow": "#d09148"
+    }
+  },
+  "tokens": {
+    "font": "-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', sans-serif",
+    "mono": "ui-monospace, SFMono-Regular, Menlo, monospace",
+    "type-xs": "11px",
+    "type-sm": "12px",
+    "type-body": "14px",
+    "type-h3": "17px",
+    "type-h2": "22px",
+    "type-h1": "32px",
+    "line-height": "1.8",
+    "radius-sm": "10px",
+    "radius-md": "16px",
+    "radius-lg": "22px",
+    "radius-pill": "999px",
+    "space-1": "4px",
+    "space-2": "8px",
+    "space-3": "12px",
+    "space-4": "16px",
+    "space-5": "24px",
+    "space-6": "32px",
+    "blur": "24px",
+    "duration": "180ms",
+    "ease": "cubic-bezier(.2,.8,.2,1)"
+  },
+  "protection": {
+    "selectors": [
+      "img",
+      "svg",
+      "canvas",
+      "video",
+      ".phone",
+      ".dd-phone",
+      ".watch",
+      ".da-phone",
+      ".atlas-app",
+      ".run-preview",
+      ".ls-stage",
+      ".crest-scene",
+      ".widget-frame",
+      ".lock-frame",
+      ".island-grid",
+      ".watch-shell",
+      ".digest-card",
+      ".summary-card",
+      ".stress-card",
+      ".camera-preview",
+      ".chart",
+      ".graph",
+      ".plot",
+      ".swatches",
+      ".swatch",
+      ".palette",
+      "[role=\"img\"]"
+    ],
+    "documents": {
+      "docs/design/layout-map/index.html": [
+        ".preview"
+      ],
+      "docs/design/theme-map/themes/dune-today-reading.html": [
+        ".target"
+      ],
+      "docs/design/theme-map/themes/dune-widget-live-activity.html": [
+        ".preview-card"
+      ],
+      "docs/design/theme-map/themes/theme-crest-language.html": [
+        ".crest-scene"
+      ],
+      "docs/design/theme-map/themes/dune-cloud-sync-consent-t02.html": [
+        ".sample"
+      ],
+      "docs/design/layout-map/cloud-sync-consent-t02.html": [
+        ".sheet"
+      ]
+    }
+  }
+}

@@ -58,9 +58,13 @@ final class DesignMapNotificationDetailTests: SeededUITestBaseCase {
         XCTAssertEqual(title.label, "Message Route Fixture")
         XCTAssertEqual(body.label, "A notification message that opens its in-app detail.")
         addScreenshotAttachment(named: "T12 notification message detail verified")
+        VisualAudit.capture("T12 notification message detail verified")
 
-        let backButton = app.navigationBars.buttons.firstMatch
-        XCTAssertTrue(backButton.exists)
+        let railBack = app.buttons["BackButton"].firstMatch
+        let backButton = railBack.exists && railBack.isHittable
+            ? railBack : app.navigationBars.buttons.firstMatch
+        XCTAssertTrue(backButton.waitForExistence(timeout: 5), "The native Back control should exist")
+        XCTAssertTrue(backButton.isHittable, "The native Back control should be tappable")
         backButton.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
             .waitForExistence(timeout: 8))

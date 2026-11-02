@@ -98,3 +98,10 @@ Change only the private T12 view within `NotificationHubView.swift`. An opaque S
 
 - **Overall**: High for source semantics; runtime layout remains pending parent device verification.
 - **Reasoning**: The actual route passes only two strings, and the change adds no conditional logic or new data source.
+
+
+## Resumed minimum verification — 2026-11-02
+
+Reuse the original clean583 normal+dark/MAX Phone 2/2 PASS under exact T12 app/payload/helper closure. The normal method now adds one paused capture at the already asserted detail and uses the known native Duo rail BackButton when present/hittable, retaining the original Phone/iPad navbar fallback, 5s existence wait, hittability, actual back tap and hub-return assertion. This test-only query delta is explicit; it does not relabel historical evidence as a new full method execution. The dark/MAX method and helpers are unchanged.
+
+Current main's completed T11 prefix and unchanged T13 tail are preserved. Three additional existing normal cases are sufficient: iPad one, Duo closed one and open one, with exact payload/back assertions and strict SDK/active-display/checkpoint proof for Duo. No new model/unit, full UI or local Watch regression is needed. All three new cases and final maps/Compound/ship remain pending at this checkpoint. Five distinct source reviews and the UI test-design review found zero actionable findings; source/theme-union/Swift parse checks passed. Actual runner compilation will cover the small test query delta.

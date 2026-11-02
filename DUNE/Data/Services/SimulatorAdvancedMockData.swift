@@ -429,7 +429,27 @@ enum SimulatorAdvancedMockDataProvider {
             )
         }
         let snapshot = buildSharedHealthSnapshot(referenceDate: referenceDate)
-        let workouts = buildWorkouts(referenceDate: referenceDate)
+        var workouts = buildWorkouts(referenceDate: referenceDate)
+        #if DEBUG && targetEnvironment(simulator)
+        if ProcessInfo.processInfo.arguments.contains("--uitesting"),
+           let index = ProcessInfo.processInfo.arguments.firstIndex(of: "--ui-t06-metric"),
+           ProcessInfo.processInfo.arguments.indices.contains(index + 1),
+           ["exercise-km", "exercise-m"].contains(ProcessInfo.processInfo.arguments[index + 1]) {
+            let isSwimming = ProcessInfo.processInfo.arguments[index + 1] == "exercise-m"
+            let workout = WorkoutSummary(
+                id: isSwimming ? "t06-capture-swimming" : "t06-capture-running",
+                type: isSwimming ? "Swimming" : "Running",
+                activityType: isSwimming ? .swimming : .running,
+                duration: isSwimming ? 38 * 60 : 48 * 60,
+                calories: isSwimming ? 310 : 612,
+                distance: isSwimming ? 1_314 : 10_200,
+                date: Calendar.current.date(byAdding: .day, value: -1, to: referenceDate) ?? referenceDate
+            )
+            workouts.append(SimulatorAdvancedMockWorkout(
+                summary: workout, heartRateSamples: [], heartRateRecovery: nil
+            ))
+        }
+        #endif
         // UI-only state: preserve each actual latest sample, but offer no prior
         // observation from which Wellness could manufacture a comparison.
         let latestBodyOnly = ProcessInfo.processInfo.arguments.contains("--uitesting") &&
