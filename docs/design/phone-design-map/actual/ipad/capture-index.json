@@ -38,12 +38,21 @@
     "T09": {
       "row_id": "T09",
       "evidence": "dashboard-morning-briefing-screen",
-      "test": "TodaySettingsRegressionTests/testVisualAuditMorningBriefing()",
-      "action": "Today morning briefing initial viewport",
-      "timestamp": 1791821081.044,
-      "image": "D6577080-0A4F-45E0-B878-0FB6DCED1A61.png",
-      "screen": "screen-0-2064x2752-Today morning briefing initial viewport_0_DF42791C-9914-482F-B5D0-1CC0F5C8EAD5.png",
-      "file": "T09.png"
+      "test": "DUNEUITests/TodaySettingsRegressionTests/testMorningBriefingSectionsAndDismissal",
+      "action": "T09 briefing recovery title_0_DFEC59FA-569B-4555-ABB8-0118F73BBE62.png",
+      "timestamp": 1793585866.574,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "B9561B4D-7C83-41FF-85DD-C2BEE944C991.png",
+      "screen": "T09 briefing recovery title_0_DFEC59FA-569B-4555-ABB8-0118F73BBE62.png",
+      "file": "T09.png",
+      "source_revision": "fd227b54",
+      "source_worktree_dirty": false,
+      "device_udid": "C8B44B9E-4C42-4CB0-845E-0F5E7C74F162",
+      "sha256": "634fcb85ee11250c3cb94ab40a964c907c414e1fd5417fba4e9956a7140669b1",
+      "source_json": "../../../full-redesign-map/review/t09-morning-briefing-native-2026-11-02/evidence.json",
+      "source_record": "pairs.ipad.after",
+      "capture_scope": "Focused T09 native layout; see actual source and test-version limits",
+      "pose_readback_verified": false
     },
     "P05": {
       "row_id": "P05",

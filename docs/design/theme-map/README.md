@@ -186,6 +186,12 @@ T04 native 구현은 단위32개·기기별 선택 UI15개와 새4기기 실제 
 
 Gold Impact 네이티브 일반 빌드·관련 단위51개와 S01 설정 저장 검증은 통과했다. [새 실제 설정 2장](../phone-design-map/actual/live-activity/gold-impact-2026-10-30/index.html)과 [남은 시스템 UI 게이트](../../reviews/2026-10-30-live-activity-gold-preferences.md)를 구분한다. WLA01 최종 캡처는 환경 조회 무응답으로 미완료이며 보존 시안·이전 PNG를 새 검증 증거로 사용하지 않는다.
 
+## T09 아침 브리핑 · 2026-10-31
+
+[보존 시안](themes/dune-morning-briefing.html)은 일출 히어로와 회복·가이드·주간·조건부 날씨 카드를 밝음·어두움·큰 글씨로 비교한다. 수치는 예시이며 실제 앱 캡처가 아니다. [배치 계약](../layout-map/morning-briefing-proposal.md)을 따른다.
+
+T09 네이티브 최대 접근성 글씨는 원래 아이콘을 위로 옮겨 본문 전체 폭을 확보한다. 기본 글씨의 그림·아이콘·원문은 유지한다.
+
 ## T08 날씨 상세 검토본 · 2026-10-31
 
 [보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.

@@ -192,12 +192,21 @@
     "T09": {
       "row_id": "T09",
       "evidence": "dashboard-morning-briefing-screen",
-      "test": "TodaySettingsRegressionTests/testConditionHeroOpensConditionScoreDetail()",
-      "action": "tap Today",
-      "timestamp": 1792597705.786,
-      "image": "63D48482-900A-4662-AA9E-070E87B5533B.png",
-      "screen": "screen-0-1320x2868-tap Today_0_D3AA4D49-A821-429F-B920-862DFE808762.png",
-      "file": "T09.png"
+      "test": "DUNEUITests/TodaySettingsRegressionTests/testMorningBriefingSectionsAndDismissal",
+      "action": "T09 briefing recovery title_0_BBC76897-628A-4851-8765-497F9992E7CE.png",
+      "timestamp": 1793608052.118,
+      "timestamp_kind": "native-XCTest-attachment",
+      "image": "F07709E0-6276-46D2-89E4-0A7C4E4C4C9C.png",
+      "screen": "T09 briefing recovery title_0_BBC76897-628A-4851-8765-497F9992E7CE.png",
+      "file": "T09.png",
+      "source_revision": "94d7a48b",
+      "source_worktree_dirty": false,
+      "device_udid": "178C413B-EB1F-4E2F-B5A7-F76534234CE9",
+      "sha256": "f6a4b4b728a2464b6a6b13ccbf16f0854063a4bbc862d850e7039c4ecf6f3626",
+      "source_json": "../../../full-redesign-map/review/t09-morning-briefing-native-2026-11-02/evidence.json",
+      "source_record": "pairs.regular.after",
+      "capture_scope": "Focused T09 native layout; see actual source and test-version limits",
+      "pose_readback_verified": false
     },
     "T11": {
       "row_id": "T11",
