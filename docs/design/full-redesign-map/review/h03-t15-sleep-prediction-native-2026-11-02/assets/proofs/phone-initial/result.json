@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "target": "DUNEUITests",
+  "run_exit_status": 0,
+  "requested_selectors": [
+    "DUNEUITests/DesignMapAdditionalRoutesTests/testSleepPredictionOpensFromWellness",
+    "DUNEUITests/DesignMapAdditionalRoutesTests/testSleepPredictionDarkMaximumAccessibilityKeepsContentReachable",
+    "DUNEUITests/DesignMapAdditionalRoutesTests/testSleepPredictionConfidenceUsesActualLowMediumHighFixture",
+    "DUNEUITests/DesignMapNotificationDetailTests/testNotificationSleepDetailLoadsSharedPrediction",
+    "DUNEUITests/NotificationRoutingRegressionTests/testBedtimeReminderPushesFromNotificationHub"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 5,
+    "passed": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "passed_cases": 5,
+  "failures": [],
+  "required_selectors_missing": [],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/h03-iphone-3820a8e6.log"
+}

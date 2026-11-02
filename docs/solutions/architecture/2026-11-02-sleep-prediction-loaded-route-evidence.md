@@ -4,7 +4,7 @@ date: 2026-11-02
 category: architecture
 tags: [swiftui, sleep-prediction, dynamic-type, notification-routing, visual-evidence]
 severity: moderate
-status: validation-in-progress
+status: implemented
 ---
 
 # Sleep prediction detail and its loaded notification consumer
@@ -25,7 +25,7 @@ The H03 Back helper uses an existing hittable native rail button when available 
 
 The initial final-glyph UI target compiled at validation `59fdf60f`; relevant source and selected methods match public product commit `67e5ea09`. The final-glyph Phone maximum-text case passed once, including actual Back and disappearance of the detail. Prior Phone normal/confidence and iPad normal/maximum evidence is retained under explicit relevant-source closure; whole validation and PR trees are not equal. The ordinary default T15 historical image proves a loaded prediction, not the newly added Back assertions.
 
-Duo closed/open route results, publication and final quality review are still pending at this document's initial checkpoint. The final evidence gallery will record actual pose readbacks, image hashes, loaded default scores, exact selected tests and original histories. No full local regression, repeated iPad matrix or Watch runtime is required for this private iOS layout change; existing CI remains enabled.
+Duo closed/open route results and final quality review are complete. The [installed eight-pair gallery](../../design/full-redesign-map/review/h03-t15-sleep-prediction-native-2026-11-02/index.html) records actual pose readbacks, image hashes, loaded default scores, exact selected tests and original histories. No full local regression, repeated iPad matrix or Watch runtime is required for this private iOS layout change; existing CI remains enabled.
 
 ## Prevention
 
@@ -37,4 +37,6 @@ A passing navigation test and a useful visual comparison need different evidence
 
 Rule promotion: no `.claude/**` change. The existing evidence, ownership and retry rules already describe the reusable practice.
 
-Closed Duo H03 passed inside a mixed 2/1/1 run. The default T15 first failed before tapping a virtualized row; a scoped bounded reveal corrected that failure. Its conditional retry then loaded score72/Good/Medium but exposed an incorrect test assumption about a second root ID. That assertion is corrected to mandatory actual guide and confidence leaves, preserving wrapper/score/Today/capture/Back/hub checks; target compile passed at02cc8c81. Both original failures remain, and no Back success is inferred from the loaded failure screenshot. The explicitly approved additional T15 execution is still pending.
+Closed Duo H03 passed inside a mixed 2/1/1 run. The default T15 first failed before tapping a virtualized row; a scoped bounded reveal corrected that failure. Its conditional retry then loaded score72/Good/Medium but exposed an incorrect test assumption about a second root ID. That assertion is corrected to mandatory actual guide and confidence leaves, preserving wrapper/score/Today/capture/Back/hub checks; target compile passed at02cc8c81. Both original failures remain, and no Back success is inferred from the loaded failure screenshot. The explicitly approved additional T15 execution passed once, including actual Back, hub return and Today selection; its remaining allowance is zero.
+
+Final outcome: five necessary new positive UI cases (Phone MAX1, closedH03normal1, openH03/T15normal2, closedT15normal1), with both earlier T15 failures retained. Closed uses actual0°/LCD and open180°/LCD-1. All eight canonical H03/T15 rows and their two board groups are installed; other rows/images, H02 and Watch remain unchanged. Final scoped quality has P1=0/P2=0/P3=0. Product67e5 iOS CI build and2734 Swift tests/302 suites plus12 XCTest cases passed. Its Watch job failed before test execution because cloning failed and destination ID was empty; this is preserved as PRETEST failure, not Watch PASS. No new prediction logic or local full/Watch execution was required.
