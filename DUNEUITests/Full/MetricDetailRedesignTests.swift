@@ -17,12 +17,73 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         ]
     }
 
+    override func waitForInitialScreenReady() throws {
+        let key = selectedKey
+        let category = ["exercise-min", "exercise-km", "exercise-m"].contains(key) ? "exercise" : key
+        let identifier = "metric-detail-screen-\(category)"
+        guard app.descendants(matching: .any)[identifier].firstMatch.waitForExistence(timeout: 15) else {
+            throw VisualAudit.unavailable("Initial T06 metric route \(key) not found: \(identifier)")
+        }
+    }
+
     func testSelectedMetricIdentityAndCapture() throws {
         guard let expected = Self.matrix[selectedKey] else {
             XCTFail("Unknown T06 matrix key: \(selectedKey)")
             return
         }
         assertIdentityAndCapture(key: selectedKey, expected: expected)
+    }
+
+    func testSwimmingMeterValueUnitAndCapture() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", "exercise-m", "--ui-disable-animations",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        guard let expected = Self.matrix["exercise-m"] else {
+            XCTFail("Missing Swimming meter contract")
+            return
+        }
+        assertIdentityAndCapture(key: "exercise-m", expected: expected)
+        let screen = app.scrollViews["metric-detail-screen-exercise"].firstMatch
+        XCTAssertTrue(revealWholeDetailRow("metric-highlight-row-high", in: screen),
+                      "Swimming highest-distance row must be fully visible")
+        let highlights = app.descendants(matching: .any)["metric-highlights"].firstMatch
+        let highest = highlights.descendants(matching: .any)["metric-highlight-row-high"].firstMatch
+        XCTAssertTrue(highest.staticTexts["Highest"].exists)
+        let value = highest.staticTexts["metric-highlight-value-high"].firstMatch
+        XCTAssertEqual(value.label, "1.3 km", "The 1,314 m swim history must use its resolved km chart unit")
+        attach("T06-exercise-m-corrected-highest-distance")
+    }
+
+    func testRunningKilometerHighlightUsesDistanceUnit() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", "exercise-km", "--ui-disable-animations",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        guard let expected = Self.matrix["exercise-km"] else {
+            XCTFail("Missing Running kilometer contract")
+            return
+        }
+        assertIdentityAndCapture(key: "exercise-km", expected: expected)
+        let summary = app.descendants(matching: .any)["metric-summary-header"].firstMatch
+        XCTAssertEqual(summary.label, "Exercise, 10.2 km")
+        XCTAssertTrue(app.navigationBars["Running"].firstMatch.exists)
+        let screen = app.scrollViews["metric-detail-screen-exercise"].firstMatch
+        XCTAssertTrue(revealWholeDetailRow("metric-highlight-row-high", in: screen),
+                      "Running highest-distance row must be fully visible")
+        let highest = app.descendants(matching: .any)["metric-highlights"].firstMatch
+            .descendants(matching: .any)["metric-highlight-row-high"].firstMatch
+        XCTAssertTrue(highest.staticTexts["Highest"].exists)
+        let value = highest.staticTexts["metric-highlight-value-high"].firstMatch
+        XCTAssertEqual(value.label, "10.2 km",
+                       "The filtered Running workout must retain its actual grouped distance")
+        attach("T06-exercise-km-corrected-highest-distance")
     }
 
     func testAllMetricIdentitiesAndCaptures() throws {
@@ -66,6 +127,12 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(label.contains(expected.value), "Expected \(key) value \(expected.value), got \(label)")
         if !expected.unit.isEmpty {
             XCTAssertTrue(label.contains(expected.unit), "Expected \(key) unit \(expected.unit), got \(label)")
+        }
+        if key == "exercise-m" {
+            XCTAssertEqual(label, "Exercise, 1,314 m",
+                           "Meter input must not be accepted as min or km")
+            XCTAssertTrue(app.navigationBars["Swimming"].firstMatch.exists,
+                          "The meter fixture must keep the actual Swimming destination")
         }
         let updatedValue = summary.value as? String ?? ""
         XCTAssertTrue(updatedValue.hasPrefix("Updated ") && updatedValue.count > "Updated ".count,
@@ -209,7 +276,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
     func testWeightPeerCriteriaCancelApplyAndSource() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments = [
-            "--ui-t06-metric", "weight", "--ui-disable-animations",
+            "--ui-t06-metric", "weight", "--ui-t06-reset-peer-criteria", "--ui-disable-animations",
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
             "-morningBriefingDisabled", "YES"
         ]
@@ -218,7 +285,11 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         let criteria = app.buttons["body-peer-criteria-cta"]
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-criteria-cta", maxSwipes: 8))
         criteria.tap()
-        XCTAssertFalse(app.buttons["body-peer-apply"].isEnabled)
+        let apply = app.buttons["body-peer-apply"]
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        XCTAssertFalse(apply.isEnabled)
+        addScreenshotAttachment(named: "T06-weight-peer-criteria-unselected")
+        VisualAudit.capture("T06-weight-peer-criteria-unselected")
         app.buttons["Cancel"].tap()
         XCTAssertFalse(app.descendants(matching: .any)["body-peer-reference"].firstMatch.exists)
         criteria.tap()
@@ -228,8 +299,9 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         app.buttons["30–39 years"].firstMatch.tap()
         sex.tap()
         app.buttons["Male (survey)"].firstMatch.tap()
-        let apply = app.buttons["body-peer-apply"]
         XCTAssertTrue(apply.isEnabled)
+        addScreenshotAttachment(named: "T06-weight-peer-criteria-selected-before-apply")
+        VisualAudit.capture("T06-weight-peer-criteria-selected-before-apply")
         apply.tap()
         XCTAssertTrue(app.descendants(matching: .any)["body-peer-current"].firstMatch.waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["body-peer-reference"].firstMatch.exists)
@@ -287,7 +359,9 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         let navigationBar = app.navigationBars.firstMatch
         let tabBar = app.tabBars.firstMatch
         let top = max(scrollFrame.minY, navigationBar.exists ? navigationBar.frame.maxY : scrollFrame.minY)
-        let bottom = min(scrollFrame.maxY, tabBar.exists ? tabBar.frame.minY : scrollFrame.maxY)
+        let hasBottomTabBar = tabBar.exists && tabBar.isHittable &&
+            tabBar.frame.minY > app.windows.firstMatch.frame.midY
+        let bottom = hasBottomTabBar ? min(scrollFrame.maxY, tabBar.frame.minY) : scrollFrame.maxY
         guard bottom > top + 8 else { return .null }
         return CGRect(x: scrollFrame.minX, y: top,
                       width: scrollFrame.width, height: bottom - top).insetBy(dx: 4, dy: 4)

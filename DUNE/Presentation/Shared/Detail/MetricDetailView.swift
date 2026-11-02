@@ -176,7 +176,8 @@ struct MetricDetailView: View {
                         if !viewModel.highlights.isEmpty {
                             MetricHighlightsView(
                                 highlights: viewModel.highlights,
-                                category: metric.category
+                                category: metric.category,
+                                resolvedChartUnit: viewModel.metricUnit
                             )
                             .frame(maxWidth: .infinity)
                         }
@@ -189,7 +190,8 @@ struct MetricDetailView: View {
                     }
                     MetricHighlightsView(
                         highlights: viewModel.highlights,
-                        category: metric.category
+                        category: metric.category,
+                        resolvedChartUnit: viewModel.metricUnit
                     )
                     .staggeredAppear(index: 5)
                 }
