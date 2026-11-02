@@ -199,13 +199,13 @@ struct ExerciseTypeDetailView: View {
     @ViewBuilder
     private func supportingMetrics(_ summary: ExerciseTypeVolume, excluding kind: PrimaryMetricKind) -> some View {
         if kind != .duration {
-            heroMetric("Duration", value: summary.totalDuration.formattedDuration(), icon: "clock")
+            heroMetric("Duration", value: summary.totalDuration.formattedDuration(), icon: "timer")
         }
         if kind != .calories {
             heroMetric("Calories", value: "\(summary.totalCalories.formattedWithSeparator()) kcal", icon: "flame.fill")
         }
         if kind != .sessions {
-            heroMetric("Sessions", value: summary.sessionCount.formattedWithSeparator, icon: "calendar")
+            heroMetric("Sessions", value: summary.sessionCount.formattedWithSeparator, icon: "figure.strengthtraining.traditional")
         }
     }
 
@@ -219,12 +219,12 @@ struct ExerciseTypeDetailView: View {
             return (.volume, "Volume", formatVolume(volume), "scalemass")
         }
         if summary.totalDuration > 0 {
-            return (.duration, "Duration", summary.totalDuration.formattedDuration(), "clock")
+            return (.duration, "Duration", summary.totalDuration.formattedDuration(), "timer")
         }
         if summary.totalCalories > 0 {
             return (.calories, "Calories", "\(summary.totalCalories.formattedWithSeparator()) kcal", "flame.fill")
         }
-        return (.sessions, "Sessions", summary.sessionCount.formattedWithSeparator, "calendar")
+        return (.sessions, "Sessions", summary.sessionCount.formattedWithSeparator, "figure.strengthtraining.traditional")
     }
 
     private var iconBadge: some View {
@@ -332,7 +332,7 @@ struct ExerciseTypeDetailView: View {
             .accessibilityIdentifier("activity-exercise-type-previous-period")
 
             comparisonRow(
-                label: "Duration", icon: "clock", metricID: "duration",
+                label: "Duration", icon: "timer", metricID: "duration",
                 current: current.totalDuration.formattedDuration(),
                 previous: viewModel.previousSummary?.totalDuration.formattedDuration(),
                 change: viewModel.durationChange
@@ -346,7 +346,7 @@ struct ExerciseTypeDetailView: View {
                 change: viewModel.calorieChange
             )
             comparisonRow(
-                label: "Sessions", icon: "calendar", metricID: "sessions",
+                label: "Sessions", icon: "figure.strengthtraining.traditional", metricID: "sessions",
                 current: current.sessionCount.formattedWithSeparator,
                 previous: viewModel.previousSummary?.sessionCount.formattedWithSeparator,
                 change: nil
