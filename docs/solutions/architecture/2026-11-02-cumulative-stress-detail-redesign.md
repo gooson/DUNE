@@ -47,13 +47,14 @@ related_solutions:
 | Duo 펼침 핵심 검사 | `edad6355`에서 native 1개 검사 통과와 유효한 PNG/AX 8쌍을 확보했다. pipeline은 별도로 cache 파일 변화에 따른 fingerprint 실패를 보존한다. 재현한 cache-only 소스 동등성 검토를 함께 기록하며 원래 실패 영수증을 성공으로 바꾸지 않는다. |
 | Duo 펼침 범례 전용 검사 | `af8ab656`에서 `testAllLevelGuideIntervalsRemainVisibleInLightAndDarkAppearance` 1개 통과. 12개 strict paired checkpoint가 모두 유효하고 ACK를 받았다. 네 구간이 밝음·어두움에서 가리지 않고 노출됐다. 실제 최소 대비는 밝음 **6.097:1**, 어두움 **11.184:1**로, 구간 숫자의 P2를 닫았다. |
 | 관련 unit 검사 | `af8ab656`에서 `ScoreRefreshServiceTests`, `CumulativeStressDetailViewModelTests`, `CumulativeStressDisplayTests`의 3개 suite·27개 검사 통과. 전체 unit suite 결과가 아니다. |
+| Duo 접힘 핵심 검사 | `af8ab656`에서 동일 핵심 selector 1개 통과. 0° 자세 전후 확인, 활성 LCD 및 strict PNG/AX 8쌍의 ACK를 확보했다. 승인된 표준 진입점 예외 1회를 사용했고 이전 실행 전 오류 2회는 보존했다. |
 | 최종 iPad 핵심 검사 | `af8ab656`에서 밝은 기본 글씨의 `testHeroFactorsAndUnifiedTrendAreVisible` 1개 통과. iPad 전체 상태·어두움·최대 글씨 검증으로 확대 해석하지 않는다. |
 
 실제 main 병합 커밋 `468df320`의 T05 관련 코드·테스트 11개 경로는 `af8ab656`과 byte-identical임을 확인했다. 이는 해당 소스의 증거 재사용 근거이며, 캡처의 실제 커밋을 개별 PR 커밋으로 바꾸거나 새 main의 모든 소비자·테마·언어를 실행했다는 뜻이 아니다.
 
 기존 화면 비교에는 실제 과거 캡처임을 명시한다. 과거 iPad·Duo 접힘은 9/Low, iPhone·Duo 펼침은 42/Moderate이며 일부 과거 표시 비중도 다르다. 이를 같은 입력의 전후 비교나 제품 계산식이 바뀐 증거로 해석하지 않는다.
 
-Duo 접힘의 추가 실행 예외와 캡처, 네 기기 실제 디자인맵 갱신은 아직 남아 있다. 이 문서는 전체 PR 완료나 Ship 승인이 아니다. 기존 공통 DotLine 날짜 축 glyph 문제는 TODO 158에 미해결로 유지한다. 승인된 animation-mask 진단 1회는 음성 결과였고 원본을 복원했으며 잔여 실행은 0회다. 기간 기능 검사의 성공으로 이 시각 결함을 해결한 것으로 표시하지 않는다.
+Duo 접힘 캡처와 네 기기 실제 디자인맵 갱신을 완료했다. [실제 전후 비교](../../design/full-redesign-map/review/t05-cumulative-stress-native-2026-11-02/index.html)에 캡처별 소스·해시·과거 입력 차이를 기록한다. 현재 앱 소스 `0e0d8f6f`의 CI는 빌드 및 iOS 2,700개 검사·296개 suite를 통과했다. 현재 Watch 검사는 런타임 번들 누락으로 실행 전에 두 번 실패해 실패 상태로 보존했다. Watch의 455개 소스·리소스 입력과 설정이 동일하므로 PR 902의 213개 검사·29개 suite 통과 결과를 변경 없는 기능의 참고 증거로 재사용하고, 현재 iOS CI의 Watch 컴파일 성공을 함께 확인했다. 현재 Watch 검사 통과로 표시하지 않는다. 기존 공통 DotLine 날짜 축 glyph 문제는 TODO 158에 미해결로 유지한다. 승인된 animation-mask 진단 1회는 음성 결과였고 원본을 복원했으며 잔여 실행은 0회다. 기간 기능 검사의 성공으로 이 시각 결함을 해결한 것으로 표시하지 않는다.
 
 ## Prevention
 

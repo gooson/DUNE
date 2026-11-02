@@ -1,0 +1,336 @@
+{
+  "screen": "T05",
+  "base": "0e0d8f6f",
+  "gallery": "t05-cumulative-stress-native-2026-11-02",
+  "title": "누적 스트레스",
+  "date": "2026-11-02",
+  "summary": "강조된 점수 링과 원래 아이콘, 기여 요인의 가로 막대, 기간별 추세와 통합 통계, 하나로 모은 계산 설명을 실제 앱에서 확인했습니다.",
+  "scope_note": "왼쪽은 10월 13일 과거 실제 캡처이며 당시 개별 소스·기기·자세 기록은 남아 있지 않습니다. 과거 iPad·Duo 접힘은 9/Low, iPhone·Duo 펼침은 42/Moderate이고 일부 표시 비중도 다릅니다. 같은 입력의 점수 변화 비교가 아닙니다. 오른쪽은 11월 2일 실제 앱 검사이며 Duo는 0°/180° 자세와 PNG·AX 쌍을 확인했습니다. 기존 공통 차트의 날짜 눈금 누락은 TODO 158에 미해결로 남아 있습니다.",
+  "before_directory": ".codex-checks/detail-rollout/quality-queue/pr878/original-before",
+  "extra_states": [
+    {
+      "key": "guide-light",
+      "label": "스트레스 구간 안내 · 밝음",
+      "image": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/guide-light.png",
+      "revision": "af8ab656",
+      "sha256": "4d8520ae0669a10e980d0048548693229ea6d28f3bf8e59ad6d10a0bc7ccdd55"
+    },
+    {
+      "key": "guide-dark",
+      "label": "스트레스 구간 안내 · 어두움",
+      "image": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/guide-dark.png",
+      "revision": "af8ab656",
+      "sha256": "a69c7f586d00d645406f3a2c97f99b61e5315d8a39fcf5ed2c10c75d56f49fa6"
+    }
+  ],
+  "kind": "actual native captures, not browser proposals",
+  "devices": {
+    "regular": {
+      "image": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/regular.png",
+      "result": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/regular-result.json",
+      "selector": "DUNEUITests/CumulativeStressDetailRedesignTests/testHeroFactorsAndUnifiedTrendAreVisible",
+      "action": "Stress detail hero and status",
+      "timestamp": 1793590988.848,
+      "timestamp_kind": "native-XCTest-attachment",
+      "revision": "edad6355",
+      "udid": "85E142A1-69FE-4CE7-BC50-760989AB8A7A",
+      "sha256": "bfe2b7f50c8d92ccba58db1244f578453ffb71a5be0ef418915a5b94e3b1d037",
+      "actual_review": "parent-and-independent-viewed",
+      "source_origin": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t05/evidence/pr878-legend-contrast-phone-light-dark-2026-11-02",
+      "pixels": [
+        1320,
+        2868
+      ],
+      "before": {
+        "tier": "regular",
+        "sha256": "2b76261d6db3cf3bf294550df6dd3c777abbef113496f360013bc8fa7c5e7fcb",
+        "capture_index_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/docs/design/phone-design-map/actual/regular/capture-index.json",
+        "capture_index_sha256": "573052bb6656bc4815870d6d1004aa69388b7e8da94a72a5d9ca626ccde20a4c",
+        "original_capture_record": {
+          "row_id": "T05",
+          "evidence": "cumulative-stress-detail-screen",
+          "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
+          "action": "tap dashboard-stress-score",
+          "timestamp": 1791837198.964,
+          "image": "95B63D6B-4D69-48B4-AC5E-154A78D9C3E9.png",
+          "screen": "screen-0-1320x2868-tap dashboard-stress-score_0_3633C696-58F7-4105-8DB0-539AE8196CDF.png",
+          "file": "T05.png"
+        },
+        "capture_time_utc": "2026-10-12T20:33:18.964000+00:00",
+        "capture_time_kst": "2026-10-13T05:33:18.964000+09:00",
+        "encoded_dimensions_px": [
+          1320,
+          2868
+        ],
+        "exif_orientation": 1,
+        "display_dimensions_px": [
+          1320,
+          2868
+        ],
+        "global_collection_revision_only": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_collection_dirty_only": true,
+        "per_image_source_revision": null,
+        "per_image_device_id": null,
+        "direct_xcresult": null,
+        "observed_pixels": {
+          "score": 42,
+          "level": "Moderate",
+          "factor_scores_visible": [
+            40,
+            46,
+            38
+          ],
+          "weights_percent_visible": [
+            50,
+            30,
+            20
+          ],
+          "factor_icons_visible": [
+            "waveform.path.ecg (HRV)",
+            "moon.fill (sleep)",
+            "figure.run (activity)"
+          ],
+          "layout": "portrait phone, one column"
+        },
+        "allowed_caption": "기존 실제 앱 화면 · 과거 캡처 · 현재 소스/입력과 다를 수 있음"
+      },
+      "visual_review": "parent-viewed-fresh-native-image"
+    },
+    "ipad": {
+      "image": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/ipad.png",
+      "result": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/ipad-result.json",
+      "selector": "DUNEUITests/CumulativeStressDetailRedesignTests/testHeroFactorsAndUnifiedTrendAreVisible",
+      "action": "Stress detail hero and status",
+      "timestamp": 1793594236.916,
+      "timestamp_kind": "native-XCTest-attachment",
+      "revision": "af8ab656",
+      "udid": "64E75E66-3AB8-4708-9008-74D1C02021FB",
+      "sha256": "9efdb1ba224fe3eebd8904568434d452cfd45fa7d1aa2d81b4fcb39aa39479dc",
+      "actual_review": "parent-and-independent-viewed",
+      "source_origin": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/t05/evidence/pr878-ipad-final-native-2026-11-02",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "before": {
+        "tier": "ipad",
+        "sha256": "c3342d6b524565bc0d0a3bd31edf580aa3082da64e49f21df6cd56800234f548",
+        "capture_index_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/docs/design/phone-design-map/actual/ipad/capture-index.json",
+        "capture_index_sha256": "fa5d4fd07d6c1d47fc25a2761c3406ba80182772903f8e6d14f23f260214a271",
+        "original_capture_record": {
+          "row_id": "T05",
+          "evidence": "cumulative-stress-detail-screen",
+          "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
+          "action": "tap dashboard-stress-score",
+          "timestamp": 1791821037.043,
+          "image": "457E8489-06B1-483E-86B3-B1E2AD81BA84.png",
+          "screen": "screen-0-2064x2752-tap dashboard-stress-score_0_AC73FED1-467B-4842-956F-67C1AE672AED.png",
+          "file": "T05.png"
+        },
+        "capture_time_utc": "2026-10-12T16:03:57.043000+00:00",
+        "capture_time_kst": "2026-10-13T01:03:57.043000+09:00",
+        "encoded_dimensions_px": [
+          2064,
+          2752
+        ],
+        "exif_orientation": 1,
+        "display_dimensions_px": [
+          2064,
+          2752
+        ],
+        "global_collection_revision_only": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_collection_dirty_only": true,
+        "per_image_source_revision": null,
+        "per_image_device_id": null,
+        "direct_xcresult": null,
+        "observed_pixels": {
+          "score": 9,
+          "level": "Low",
+          "factor_scores_visible": [
+            10,
+            1,
+            20
+          ],
+          "weights_percent_visible": [
+            40,
+            35,
+            25
+          ],
+          "factor_icons_visible": [
+            "waveform.path.ecg (HRV)",
+            "moon.fill (sleep)",
+            "figure.run (activity)"
+          ],
+          "layout": "portrait iPad, adaptive two columns, top tab bar",
+          "visible_period": "Sep 13, 2026 – Oct 13, 2026"
+        },
+        "allowed_caption": "기존 실제 앱 화면 · 과거 캡처 · 현재 소스/입력과 다를 수 있음"
+      },
+      "visual_review": "parent-viewed-fresh-native-image"
+    },
+    "duo-open": {
+      "image": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/duo-open.png",
+      "result": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/duo-open-result.json",
+      "selector": "DUNEUITests/CumulativeStressDetailRedesignTests/testHeroFactorsAndUnifiedTrendAreVisible",
+      "action": "Stress detail hero and status",
+      "revision": "edad6355",
+      "udid": "649B217D-46B1-4C86-9775-590E69EE3970",
+      "pose_directory": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/duo-open-paired-proof",
+      "pipeline_warning": "originalfailedcacheonly;exactindependent4hashreconstructionprovesappandtestsourceunchanged",
+      "actual_review": "parent-and-independent-viewed",
+      "timestamp": 1793592642.82555,
+      "timestamp_kind": "host-PNG-file-mtime",
+      "sha256": "d90067ab8cc44e4b6f172689105da36663bb145b0003211f64bacbefecada3f0",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "before": {
+        "tier": "duo-open",
+        "sha256": "17419cecfc6c2a9c2843d1aa4648c8dcdf451952db16e4f22c88174f603658b4",
+        "capture_index_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/docs/design/phone-design-map/actual/duo-open/capture-index.json",
+        "capture_index_sha256": "ad6156995cd1c2201790ab932007e81a23ca523b4ec6fd78ea346c0b07ec1b47",
+        "original_capture_record": {
+          "row_id": "T05",
+          "evidence": "cumulative-stress-detail-screen",
+          "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
+          "action": "tap dashboard-stress-score",
+          "timestamp": 1791835479.898,
+          "image": "FE569477-D551-4ED4-8484-3588565F4300.png",
+          "screen": "screen-1-2006x2852-tap dashboard-stress-score_1_F1AEB3CA-CA04-4D4C-A2F7-90BA940DB3C6.png",
+          "file": "T05.png"
+        },
+        "capture_time_utc": "2026-10-12T20:04:39.898000+00:00",
+        "capture_time_kst": "2026-10-13T05:04:39.898000+09:00",
+        "encoded_dimensions_px": [
+          2006,
+          2852
+        ],
+        "exif_orientation": 6,
+        "display_dimensions_px": [
+          2852,
+          2006
+        ],
+        "global_collection_revision_only": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_collection_dirty_only": true,
+        "per_image_source_revision": null,
+        "per_image_device_id": null,
+        "direct_xcresult": null,
+        "observed_pixels": {
+          "score": 42,
+          "level": "Moderate",
+          "factor_scores_visible": [
+            40,
+            46,
+            38
+          ],
+          "weights_percent_visible": [
+            50,
+            30,
+            20
+          ],
+          "factor_icons_visible": [
+            "waveform.path.ecg (HRV)",
+            "moon.fill (sleep)",
+            "figure.run (activity)"
+          ],
+          "layout": "displayed landscape/wide Duo, adaptive two columns, right-side status strip"
+        },
+        "allowed_caption": "기존 실제 앱 화면 · 과거 캡처 · 현재 소스/입력과 다를 수 있음"
+      },
+      "visual_review": "parent-viewed-fresh-native-image",
+      "pose": {
+        "revision": "edad6355",
+        "target": 180.0,
+        "angle_before": 180.0,
+        "angle_after": 180.0,
+        "active_display": "LCD-1",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793592718.3017442,
+        "native_visual_review": "pending-parent"
+      },
+      "raw_pose_sha256": "3a83b90d7cb9cd152491a5c4ad376774cc9a1bdd86156fe883a1805780ee88a0"
+    },
+    "duo": {
+      "image": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/duo.png",
+      "result": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/duo-result.json",
+      "selector": "DUNEUITests/CumulativeStressDetailRedesignTests/testHeroFactorsAndUnifiedTrendAreVisible",
+      "action": "Stress detail hero and status",
+      "timestamp": 1793598593.2630014,
+      "timestamp_kind": "host-PNG-file-mtime",
+      "revision": "af8ab656",
+      "udid": "FB085D5F-FE6C-4DD2-9616-908C204FB50F",
+      "pose_directory": ".codex-checks/detail-rollout/quality-queue/pr878/selected-after/duo-paired-proof",
+      "entry_exception": "one authorized standard-runner entry; original two pre-test entry failures retained; remaining zero",
+      "sha256": "d39bce82a2a2ad8408993ec94d38763bde109fc6aac854a090d1ea9716b1d4b0",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "before": {
+        "tier": "duo",
+        "sha256": "25879e30608e0fd65c4686edaccff38346d7fd977ef21bd998716af06a029719",
+        "capture_index_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/docs/design/phone-design-map/actual/duo/capture-index.json",
+        "capture_index_sha256": "0f53e356a91e1b312030cf8083ff5ef1d0a32b7050cc308cc9095ef579d1fb7c",
+        "original_capture_record": {
+          "row_id": "T05",
+          "evidence": "cumulative-stress-detail-screen",
+          "test": "TodaySettingsRegressionTests/testVisualAuditCumulativeStress()",
+          "action": "tap dashboard-stress-score",
+          "timestamp": 1791824885.921,
+          "image": "733A88DC-DDC5-4DD1-B9D1-2EA79B67F2D8.png",
+          "screen": "screen-0-1398x2034-tap dashboard-stress-score_0_93EBA847-CE38-4CF4-BE04-E9E8AADD5DD9.png",
+          "file": "T05.png"
+        },
+        "capture_time_utc": "2026-10-12T17:08:05.921000+00:00",
+        "capture_time_kst": "2026-10-13T02:08:05.921000+09:00",
+        "encoded_dimensions_px": [
+          1398,
+          2034
+        ],
+        "exif_orientation": 1,
+        "display_dimensions_px": [
+          1398,
+          2034
+        ],
+        "global_collection_revision_only": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+        "global_collection_dirty_only": true,
+        "per_image_source_revision": null,
+        "per_image_device_id": null,
+        "direct_xcresult": null,
+        "observed_pixels": {
+          "score": 9,
+          "level": "Low",
+          "factor_scores_visible": [
+            10,
+            1,
+            null
+          ],
+          "weights_percent_visible": [
+            null,
+            35,
+            null
+          ],
+          "factor_icons_visible": [
+            "moon.fill (sleep); HRV row obscured by bottom tab bar; activity row outside viewport"
+          ],
+          "layout": "folded/compact Duo viewport with right-side black status strip",
+          "visibility_limit": "Factor card partially covered/cut off; do not claim all three factors visible."
+        },
+        "allowed_caption": "기존 실제 앱 화면 · 과거 캡처 · 현재 소스/입력과 다를 수 있음"
+      },
+      "visual_review": "parent-viewed-fresh-native-image",
+      "pose": {
+        "revision": "af8ab656",
+        "target": 0.0,
+        "angle_before": 0.0,
+        "angle_after": 0.0,
+        "active_display": "LCD",
+        "script_sha256": "0e178ea0645a579cc83ace50631edf0bfef6846830abf478a3a9863d3144b559",
+        "captured_at": 1793598668.711787,
+        "native_visual_review": "pending-parent"
+      },
+      "raw_pose_sha256": "05c6a7e95c7b05aba959d6334e7f4968529648ef639fd35b3ac1d31593c70eb1"
+    }
+  }
+}
