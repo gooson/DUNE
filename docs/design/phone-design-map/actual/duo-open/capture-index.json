@@ -748,12 +748,25 @@
     "A10": {
       "row_id": "A10",
       "evidence": "activity-personal-records-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditPersonalRecordShareSheet()",
-      "action": "tap activity-section-pr",
-      "timestamp": 1791830982.122,
-      "image": "912B9A1C-A5B1-4264-B3C8-E140045D10D6.png",
-      "screen": "screen-1-2006x2852-tap activity-section-pr_1_6AD53F67-D206-4668-B87E-4EA8B526D450.png",
-      "file": "A10.png"
+      "test": "ActivityExerciseRegressionTests/testPersonalRecordsPaceHistoryShowsWorkoutsInMonth()",
+      "action": "Personal Records A10 fastest pace six-month hero",
+      "timestamp": 1793680952.173,
+      "image": "003-2007x2853.png",
+      "screen": "003-2007x2853.png",
+      "manifest_ax": "E81EC682-3C91-4451-A855-113D62947032.txt",
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "file": "A10.png",
+      "source_revision": "b0dafb053044289192eb9652862f01fced206b3d",
+      "normal_source_review_current_revision": "7ce674d4b3da73a7a24ccda6fbe39429f098d806",
+      "normal_renderer_closure_sha256": "4c19c8569a1e6fd44d29c44e902b1063bb0cedac4e23cdcea0fbb81663fa0822",
+      "device_uid": "0B8DD8DB-9BF7-4202-9DA5-52EC5DAE08DD",
+      "model_name": "iPhone",
+      "capture_kind": "host",
+      "bootstatus_migration_failure_reported": true,
+      "bootstatus_stdout_sha256": "9ea454a2c2ec6bf9d8a6eae6151af0b69625683f93a71f6702fbb8e6c319b05b",
+      "ownership_evidence": "raw registry snapshot copied before native dispatch; exact copy time not retained",
+      "image_sha256": "44ea233a8e21ac12c9baac9e4873d8bdeb87cbaba74077bd006f84ac599b79c7",
+      "ax_sha256": "fcfe5c34fb8497374196d1f5b5b3dd8e57b69ba6cd77be6dbb6d49186b73d652"
     },
     "T17": {
       "row_id": "T17",
@@ -1042,13 +1055,26 @@
     },
     "T16": {
       "row_id": "T16",
-      "evidence": "test-and-action:Personal Records notification push",
+      "evidence": "activity-personal-records-detail-screen",
       "test": "DesignMapNotificationDetailTests/testNotificationPersonalRecordsPush()",
-      "action": "Personal Records Route Fixture",
-      "timestamp": 1791834063.292,
-      "image": "34EFF361-A38F-4EC9-99CD-64BCFC85948D.png",
-      "screen": "screen-1-2006x2852-Personal Records Route Fixture_1_B2007374-8CF3-4A6F-924A-0AB9AEEE5A01.png",
-      "file": "T16.png"
+      "action": "Personal Records T16 fastest pace six-month hero",
+      "timestamp": 1793681059.777,
+      "image": "013-2007x2853.png",
+      "screen": "013-2007x2853.png",
+      "manifest_ax": "D0D9F3DF-7488-4B20-8BFB-08F457AC5E8E.txt",
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "file": "T16.png",
+      "source_revision": "b0dafb053044289192eb9652862f01fced206b3d",
+      "normal_source_review_current_revision": "7ce674d4b3da73a7a24ccda6fbe39429f098d806",
+      "normal_renderer_closure_sha256": "4c19c8569a1e6fd44d29c44e902b1063bb0cedac4e23cdcea0fbb81663fa0822",
+      "device_uid": "0B8DD8DB-9BF7-4202-9DA5-52EC5DAE08DD",
+      "model_name": "iPhone",
+      "capture_kind": "host",
+      "bootstatus_migration_failure_reported": true,
+      "bootstatus_stdout_sha256": "9ea454a2c2ec6bf9d8a6eae6151af0b69625683f93a71f6702fbb8e6c319b05b",
+      "ownership_evidence": "raw registry snapshot copied before native dispatch; exact copy time not retained",
+      "image_sha256": "b031d05ff305c5e70410f465828811710f16f37d440fdd838b730f3e11d7f94d",
+      "ax_sha256": "4857c2dbd05be11ef896b233232f1425570b0fcdd960bea133f4d30230871654"
     },
     "A16": {
       "row_id": "A16",
@@ -1373,9 +1399,10 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+  "last_refresh_revision": "b0dafb053044289192eb9652862f01fced206b3d",
   "last_refresh_screens": [
-    "A05"
+    "A10",
+    "T16"
   ],
-  "last_refresh_note": "Per-row source revisions retained; d79 content/layout closure excludes ambient wave phase."
+  "last_refresh_note": "A10 and T16 fresh normal native captures; see per-row source and linked gallery."
 }

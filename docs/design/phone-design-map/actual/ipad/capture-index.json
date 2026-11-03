@@ -795,12 +795,25 @@
     "A10": {
       "row_id": "A10",
       "evidence": "activity-personal-records-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivitySecondaryDetailRoutesOpenExpectedScreens()",
-      "action": "tap activity-section-pr",
-      "timestamp": 1791837954.171,
-      "image": "694106A0-FF16-4E9F-B198-FBBF3096A073.png",
-      "screen": "screen-0-2064x2752-tap activity-section-pr_0_B2637735-7D0A-4D09-A3BB-1126D8E4FBFE.png",
-      "file": "A10.png"
+      "test": "ActivityExerciseRegressionTests/testPersonalRecordsPaceHistoryShowsWorkoutsInMonth()",
+      "action": "Personal Records A10 fastest pace six-month hero",
+      "timestamp": 1793678878.034,
+      "image": "8A48E4EA-205D-4D8D-884D-EF91D30223FC.png",
+      "screen": "screen-0-1512x2316-Personal Records A10 fastest pace six-month hero_0_1BF77FA0-1A4D-4193-A8C6-3DC4BA946C27.png",
+      "manifest_ax": "3780020E-70D3-468A-B698-CF70467F49E8.txt",
+      "timestamp_kind": "native attachment timestamp",
+      "file": "A10.png",
+      "source_revision": "b0dafb053044289192eb9652862f01fced206b3d",
+      "normal_source_review_current_revision": "7ce674d4b3da73a7a24ccda6fbe39429f098d806",
+      "normal_renderer_closure_sha256": "4c19c8569a1e6fd44d29c44e902b1063bb0cedac4e23cdcea0fbb81663fa0822",
+      "device_uid": "5A14D7C1-098C-4B9B-A793-50B10CAACED0",
+      "model_name": "iPad mini (A20 Pro)",
+      "capture_kind": "xctest",
+      "bootstatus_migration_failure_reported": false,
+      "bootstatus_stdout_sha256": "8b6e8ca65287bdbdfbed047c7dddca133af60c75431ac7b17e11ff069b95b35d",
+      "ownership_evidence": "raw registry snapshot copied before native dispatch; exact copy time not retained",
+      "image_sha256": "f6236a7ffdc4270e965eff01c26dd318625a9eabd1f81b4813cfaac2055bf212",
+      "ax_sha256": "97a84f76810767724b5e87afe47de0a114e8db4dbb0e0f138532fda913a075ec"
     },
     "W25": {
       "row_id": "W25",
@@ -1137,13 +1150,26 @@
     },
     "T16": {
       "row_id": "T16",
-      "evidence": "test-and-action:Personal Records notification push",
+      "evidence": "activity-personal-records-detail-screen",
       "test": "DesignMapNotificationDetailTests/testNotificationPersonalRecordsPush()",
-      "action": "Personal Records Route Fixture",
-      "timestamp": 1791839178.383,
-      "image": "24E075CF-F528-4EF9-8A2A-541005DE7EEE.png",
-      "screen": "screen-0-2064x2752-Personal Records Route Fixture_0_989CA821-6844-4981-B5DB-AFF625E1B0A7.png",
-      "file": "T16.png"
+      "action": "Personal Records T16 fastest pace six-month hero",
+      "timestamp": 1793678956.425,
+      "image": "72A28652-1F12-4CB9-9133-06499356D1B5.png",
+      "screen": "screen-0-1512x2316-Personal Records T16 fastest pace six-month hero_0_4768A0FC-B0EE-4853-A115-AFF1D5DB8FA8.png",
+      "manifest_ax": "C3E223F8-1D5C-4939-8647-DDA586E48860.txt",
+      "timestamp_kind": "native attachment timestamp",
+      "file": "T16.png",
+      "source_revision": "b0dafb053044289192eb9652862f01fced206b3d",
+      "normal_source_review_current_revision": "7ce674d4b3da73a7a24ccda6fbe39429f098d806",
+      "normal_renderer_closure_sha256": "4c19c8569a1e6fd44d29c44e902b1063bb0cedac4e23cdcea0fbb81663fa0822",
+      "device_uid": "5A14D7C1-098C-4B9B-A793-50B10CAACED0",
+      "model_name": "iPad mini (A20 Pro)",
+      "capture_kind": "xctest",
+      "bootstatus_migration_failure_reported": false,
+      "bootstatus_stdout_sha256": "8b6e8ca65287bdbdfbed047c7dddca133af60c75431ac7b17e11ff069b95b35d",
+      "ownership_evidence": "raw registry snapshot copied before native dispatch; exact copy time not retained",
+      "image_sha256": "99acbcaea7878266e81f1cf617fbc4838c92bda9dae7ae9f645105210b3a2897",
+      "ax_sha256": "23c3ebbbc39638c05ee11a341c0f3dc263b93a13b5f9212c08e6b96dd2cf2748"
     },
     "H12": {
       "row_id": "H12",
@@ -1328,9 +1354,10 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+  "last_refresh_revision": "b0dafb053044289192eb9652862f01fced206b3d",
   "last_refresh_screens": [
-    "A05"
+    "A10",
+    "T16"
   ],
-  "last_refresh_note": "Per-row source revisions retained; d79 content/layout closure excludes ambient wave phase."
+  "last_refresh_note": "A10 and T16 fresh normal native captures; see per-row source and linked gallery."
 }
