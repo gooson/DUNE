@@ -13,7 +13,7 @@ struct MorningBriefingView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: DS.Spacing.xl) {
+                VStack(spacing: DS.Spacing.lg) {
                     MorningBriefingHero(title: briefingTitle)
                         .accessibilityIdentifier("dashboard-morning-briefing-hero")
                     if let sections = viewModel.sections {
@@ -22,9 +22,10 @@ struct MorningBriefingView: View {
                             BriefingSectionCard(
                                 iconName: "heart.text.clipboard",
                                 title: sections.recoveryTitle,
-                                message: sections.recoveryMessage,
+                                message: sections.recoverySupportingMessage,
                                 accentColor: conditionColor,
-                                kind: .recovery
+                                kind: .recovery,
+                                highlights: sections.recoveryHighlights
                             )
                         }
 
@@ -44,9 +45,11 @@ struct MorningBriefingView: View {
                             BriefingSectionCard(
                                 iconName: "chart.bar.fill",
                                 title: sections.weeklyTitle,
-                                message: sections.weeklyMessage,
+                                message: sections.weeklySupportingMessage,
                                 accentColor: DS.Color.desertBronze,
-                                kind: .weekly
+                                kind: .weekly,
+                                highlights: sections.weeklyHighlights,
+                                progress: sections.weeklyGoalProgress
                             )
                         }
 
@@ -67,7 +70,7 @@ struct MorningBriefingView: View {
                 }
                 .frame(maxWidth: DS.Layout.rootContentMaxWidth)
                 .padding(.horizontal, DS.Spacing.lg)
-                .padding(.vertical, DS.Spacing.xl)
+                .padding(.vertical, DS.Spacing.lg)
                 .frame(maxWidth: .infinity)
             }
             .background { SheetWaveBackground() }
@@ -147,12 +150,12 @@ private struct MorningBriefingHero: View {
                 let size = geometry.size
                 Circle()
                     .fill(DS.Color.warmGlow.opacity(DS.Opacity.overlay))
-                    .frame(width: 154, height: 154)
+                    .frame(width: 128, height: 128)
                     .position(x: size.width * 0.76, y: size.height * 0.43)
                     .blur(radius: 18)
                 Circle()
                     .fill(DS.Color.warmGlow.opacity(0.74))
-                    .frame(width: 78, height: 78)
+                    .frame(width: 64, height: 64)
                     .position(x: size.width * 0.76, y: size.height * 0.43)
                 MorningRidge(crest: 0.64)
                     .fill(DS.Color.desertBronze.opacity(DS.Opacity.overlay))
@@ -165,11 +168,11 @@ private struct MorningBriefingHero: View {
                 .font(.largeTitle.bold())
                 .foregroundStyle(.primary)
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(DS.Spacing.xxl)
+                .padding(DS.Spacing.lg)
                 .accessibilityAddTraits(.isHeader)
                 .accessibilityIdentifier("dashboard-morning-briefing-heading")
         }
-        .frame(minHeight: dynamicTypeSize.isAccessibilitySize ? 220 : 205)
+        .frame(minHeight: dynamicTypeSize.isAccessibilitySize ? 220 : 126)
         .clipShape(RoundedRectangle(cornerRadius: DS.Radius.lg))
         .accessibilityElement(children: .contain)
     }
@@ -195,51 +198,79 @@ private struct MorningRidge: Shape {
 
 // MARK: - Section Card
 
-private enum BriefingArtworkKind {
+private enum BriefingSectionKind {
     case recovery, guide, weekly, weather
 }
 
 private struct BriefingSectionCard: View {
     let iconName: String
     let title: String
-    let message: String
+    let message: String?
     let accentColor: Color
-    let kind: BriefingArtworkKind
+    let kind: BriefingSectionKind
+    var highlights: [BriefingTemplateEngine.Highlight] = []
+    var progress: Double?
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         InlineCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                if !dynamicTypeSize.isAccessibilitySize {
-                    BriefingArtwork(iconName: iconName, accentColor: accentColor, kind: kind)
-                        .frame(height: 80)
-                        .accessibilityHidden(true)
-                }
-
-                let layout = dynamicTypeSize.isAccessibilitySize
-                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
-                    : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.sm))
-                layout {
+                HStack(spacing: DS.Spacing.xs) {
                     Image(systemName: iconName)
-                        .font(dynamicTypeSize.isAccessibilitySize ? .system(size: 32) : .title2)
+                        .font(.subheadline)
                         .foregroundStyle(accentColor)
                         .accessibilityHidden(true)
+                    Text(categoryTitle)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
 
-                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                        Text(title)
-                            .font(.headline)
-                            .accessibilityAddTraits(.isHeader)
-                            .accessibilityIdentifier("\(accessibilityID)-title")
-                        Text(message)
-                            .font(.subheadline)
-                            .foregroundStyle(DS.Color.textSecondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    if !dynamicTypeSize.isAccessibilitySize {
-                        Spacer(minLength: 0)
+                Text(title)
+                    .font(.title3.bold())
+                    .foregroundStyle(.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityIdentifier("\(accessibilityID)-title")
+
+                if !highlights.isEmpty {
+                    let layout = dynamicTypeSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.lg))
+                        : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.lg))
+                    layout {
+                        ForEach(highlights) { highlight in
+                            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                                Text(highlight.title)
+                                    .font(.subheadline)
+                                    .foregroundStyle(DS.Color.textSecondary)
+                                Text(highlight.value)
+                                    .font(.title.bold())
+                                    .foregroundStyle(.primary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityIdentifier("\(accessibilityID)-\(highlight.id.rawValue)-value")
+                        }
                     }
                 }
+
+                if let progress {
+                    ProgressView(value: progress)
+                        .tint(accentColor)
+                        .accessibilityLabel(Text("Weekly Exercise Goal"))
+                }
+
+                if let message, !message.isEmpty {
+                    Text(message)
+                        .font(.body)
+                        .foregroundStyle(.primary)
+                        .lineSpacing(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("\(accessibilityID)-message")
+                }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(DS.Spacing.sm)
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier(accessibilityID)
@@ -253,57 +284,13 @@ private struct BriefingSectionCard: View {
         case .weather: "dashboard-morning-briefing-weather"
         }
     }
-}
 
-private struct BriefingArtwork: View {
-    let iconName: String
-    let accentColor: Color
-    let kind: BriefingArtworkKind
-
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                RoundedRectangle(cornerRadius: DS.Radius.sm)
-                    .fill(LinearGradient(
-                        colors: [accentColor.opacity(DS.Opacity.overlay), DS.Color.surfacePrimary.opacity(DS.Opacity.medium)],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    ))
-
-                artworkDetail(in: geometry.size)
-
-                Image(systemName: iconName)
-                    .font(.system(size: 42, weight: .light))
-                    .foregroundStyle(accentColor)
-                    .position(x: geometry.size.width * 0.76, y: geometry.size.height * 0.5)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: DS.Radius.sm))
-        }
-    }
-
-    @ViewBuilder
-    private func artworkDetail(in size: CGSize) -> some View {
+    private var categoryTitle: LocalizedStringKey {
         switch kind {
-        case .recovery:
-            Image(systemName: "waveform.path.ecg")
-                .font(.system(size: 38, weight: .ultraLight))
-                .foregroundStyle(accentColor.opacity(0.72))
-                .position(x: size.width * 0.23, y: size.height * 0.53)
-        case .guide:
-            Image(systemName: "point.topleft.down.to.point.bottomright.curvepath")
-                .font(.system(size: 38, weight: .ultraLight))
-                .foregroundStyle(accentColor.opacity(0.72))
-                .position(x: size.width * 0.23, y: size.height * 0.5)
-        case .weekly:
-            MorningRidge(crest: 0.61)
-                .fill(accentColor.opacity(DS.Opacity.overlay))
-                .frame(width: size.width * 0.44, height: size.height)
-                .position(x: size.width * 0.22, y: size.height * 0.5)
-        case .weather:
-            Image(systemName: "cloud")
-                .font(.system(size: 46, weight: .ultraLight))
-                .foregroundStyle(accentColor.opacity(0.76))
-                .position(x: size.width * 0.23, y: size.height * 0.5)
+        case .recovery: "Today's Condition"
+        case .guide: "Today's Workout"
+        case .weekly: "This Week"
+        case .weather: "Weather"
         }
     }
 }
