@@ -549,6 +549,17 @@
         "layout": "../layout-map/activity-weekly-stats-detail-a05.html",
         "status": "native-source-prepared-runtime-validation-pending"
       }
+    },
+    {
+      "id": "muscle-detail-popover-a13",
+      "name": "A13 · 근육 상세 팝오버",
+      "title": "DUNE 근육 상세 · 밝음/어두움",
+      "file": "dune-muscle-detail-popover-a13.html",
+      "detail": "실제 선택 근육 아이콘·상태·피로·주간 세트·최근 훈련·조건부 보정과 기존 운동 추천을 위한 정적 제안. 수치는 예시이며 네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/activity-muscle-detail-popover-a13.html",
+        "status": "proposal-only-native-validation-pending"
+      }
     }
   ]
 }
