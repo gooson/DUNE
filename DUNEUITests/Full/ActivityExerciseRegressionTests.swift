@@ -1628,26 +1628,24 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
 
         reveal("Workout Consistency")
+        XCTAssertEqual(sheet.staticTexts.matching(NSPredicate(
+            format: "label == %@", "Workout Consistency"
+        )).count, 1, "The duplicated title must be removed")
         let sections: [(String, [String])] = [
             ("Overview", [
                 "Tracks how consistently you work out. Check your consistency through workout streaks and monthly progress."
             ]),
             ("Current Streak", [
-                "Consecutive workout days including today or yesterday",
                 "A day counts when at least one workout lasts 20 minutes or more.",
-                "Missing a single day resets the streak"
             ]),
             ("Best Streak", [
-                "Your longest consecutive workout record ever",
                 "Automatically updated when the current streak exceeds the record"
             ]),
             ("Monthly Progress", [
                 "Compare this month's qualifying workout days against your goal",
                 "Default goal: 16 workout days per month (about 4 per week)",
-                "Progress bar visualizes your completion rate"
             ]),
             ("Tips", [
-                "Consistency matters more than intensity for long-term results",
                 "Rest days are essential for recovery — you don't need to train every day"
             ])
         ]
