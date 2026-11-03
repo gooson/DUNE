@@ -1,4 +1,5 @@
 @preconcurrency import XCTest
+import UIKit
 
 @MainActor
 final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCase {
@@ -1282,6 +1283,22 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 addScreenshotAttachment(named: "Personal Records maximum AX \(name)")
             }
 
+            let heading = app.staticTexts["activity-personal-records-best-heading"].firstMatch
+            reveal(heading, named: "current best heading")
+            XCTAssertEqual(heading.label, "Current Best")
+            let maximumTraits = UITraitCollection(preferredContentSizeCategory: .accessibilityExtraExtraExtraLarge)
+            let headingLine = UIFont.preferredFont(forTextStyle: .headline, compatibleWith: maximumTraits).lineHeight
+            XCTAssertLessThanOrEqual(heading.frame.height, headingLine * 2 + 1,
+                                     "Current Best should use at most two headline lines")
+            let newBadge = app.staticTexts["activity-personal-records-best-new"].firstMatch
+            reveal(newBadge, named: "new record badge")
+            XCTAssertEqual(newBadge.label, "NEW")
+            let badgeLine = UIFont.preferredFont(forTextStyle: .caption2, compatibleWith: maximumTraits).lineHeight
+            XCTAssertLessThanOrEqual(newBadge.frame.height, badgeLine + 2 * 4 + 1,
+                                     "NEW should remain on one readable line")
+            VisualAudit.capture("Personal Records maximum AX best heading and new badge")
+            addScreenshotAttachment(named: "Personal Records maximum AX best heading and new badge")
+
             let best = app.staticTexts["activity-personal-records-best-value"].firstMatch
             XCTAssertTrue(best.waitForExistence(timeout: 10))
             XCTAssertFalse(best.label.isEmpty)
@@ -1358,8 +1375,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             let badgeViewport = badgesScroll.frame.intersection(viewport())
             XCTAssertEqual(badgeName.label, "PR Collector")
             XCTAssertFalse(badgeName.frame.isEmpty)
-            XCTAssertTrue(!badgeViewport.isEmpty && badgeViewport.contains(badgeName.frame),
-                          "The complete actual badge name must fit the visible trophy viewport")
+            // Retain complete containment with a bounded subpoint tolerance.
+            // The prior rounded AX dump does not establish the exact edge mismatch.
+            XCTAssertTrue(!badgeViewport.isEmpty && badgeViewport.insetBy(dx: -0.5, dy: -0.5).contains(badgeName.frame),
+                          "The complete actual badge name must fit the visible trophy viewport (0.5pt edge tolerance)")
             VisualAudit.capture("Personal Records maximum AX badge PR Collector")
             addScreenshotAttachment(named: "Personal Records maximum AX badge PR Collector")
 

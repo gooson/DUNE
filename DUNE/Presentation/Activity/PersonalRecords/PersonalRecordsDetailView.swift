@@ -153,37 +153,78 @@ struct PersonalRecordsDetailView: View {
 
     private func currentBestCard(_ best: ActivityPersonalRecord) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-            HStack(alignment: .center, spacing: DS.Spacing.sm) {
-                Image(systemName: best.kind.iconName)
-                    .font(.system(size: 22, weight: .semibold))
-                    .frame(width: 44, height: 44)
-                    .background(palette.gold.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
-                    .accessibilityHidden(true)
-                Text("Current Best")
-                    .font(.headline)
-                    .fixedSize(horizontal: false, vertical: true)
-                Spacer(minLength: 0)
-                if best.isRecent {
-                    Text("NEW")
-                        .font(.caption2.bold())
-                        .padding(.horizontal, DS.Spacing.sm)
-                        .padding(.vertical, DS.Spacing.xs)
-                        .background(palette.gold.opacity(0.18), in: Capsule())
-                }
-                Button {
-                    let data = PRShareService.buildShareData(from: best)
-                    if let image = PRShareService.renderShareImage(data: data, accentColor: best.kind.tintColor) {
-                        shareImage = ShareableImage(image: image)
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    HStack(alignment: .center, spacing: DS.Spacing.sm) {
+                        Image(systemName: best.kind.iconName)
+                            .font(.system(size: 22, weight: .semibold))
+                            .frame(width: 44, height: 44)
+                            .background(palette.gold.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                            .accessibilityHidden(true)
+                        Text("Current Best")
+                            .font(.headline)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("activity-personal-records-best-heading")
                     }
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
-                        .font(.system(size: 17, weight: .medium))
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
+                    HStack(spacing: DS.Spacing.sm) {
+                        if best.isRecent {
+                            Text("NEW")
+                                .font(.caption2.bold())
+                                .padding(.horizontal, DS.Spacing.sm)
+                                .padding(.vertical, DS.Spacing.xs)
+                                .background(palette.gold.opacity(0.18), in: Capsule())
+                                .accessibilityIdentifier("activity-personal-records-best-new")
+                        }
+                        Spacer(minLength: 0)
+                        Button {
+                            let data = PRShareService.buildShareData(from: best)
+                            if let image = PRShareService.renderShareImage(data: data, accentColor: best.kind.tintColor) {
+                                shareImage = ShareableImage(image: image)
+                            }
+                        } label: {
+                            Image(systemName: "square.and.arrow.up")
+                                .font(.system(size: 17, weight: .medium))
+                                .frame(width: 44, height: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(String(localized: "Share PR"))
+                        .accessibilityIdentifier("activity-personal-records-share-button")
+                    }
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel(String(localized: "Share PR"))
-                .accessibilityIdentifier("activity-personal-records-share-button")
+            } else {
+                HStack(alignment: .center, spacing: DS.Spacing.sm) {
+                    Image(systemName: best.kind.iconName)
+                        .font(.system(size: 22, weight: .semibold))
+                        .frame(width: 44, height: 44)
+                        .background(palette.gold.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                        .accessibilityHidden(true)
+                    Text("Current Best")
+                        .font(.headline)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer(minLength: 0)
+                    if best.isRecent {
+                        Text("NEW")
+                            .font(.caption2.bold())
+                            .padding(.horizontal, DS.Spacing.sm)
+                            .padding(.vertical, DS.Spacing.xs)
+                            .background(palette.gold.opacity(0.18), in: Capsule())
+                    }
+                    Button {
+                        let data = PRShareService.buildShareData(from: best)
+                        if let image = PRShareService.renderShareImage(data: data, accentColor: best.kind.tintColor) {
+                            shareImage = ShareableImage(image: image)
+                        }
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.system(size: 17, weight: .medium))
+                            .frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(String(localized: "Share PR"))
+                    .accessibilityIdentifier("activity-personal-records-share-button")
+                }
             }
 
             if dynamicTypeSize.isAccessibilitySize {
