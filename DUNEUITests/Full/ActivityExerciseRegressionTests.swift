@@ -954,18 +954,44 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
 
         func visible(_ id: String) -> XCUIElement {
-            let element = app.descendants(matching: .any)[id].firstMatch
-            XCTAssertTrue(element.waitForExistence(timeout: 10), "Missing \(id)")
+            let matches = app.descendants(matching: .any).matching(identifier: id)
+            XCTAssertTrue(matches.firstMatch.waitForExistence(timeout: 10), "Missing \(id)")
+            let isDonut = id == "activity-exercise-mix-donut-chart"
+
+            func target() -> XCUIElement {
+                guard isDonut else { return matches.firstMatch }
+                // Chart may expose both a larger semantic container and the 200pt plot.
+                // Choose by intrinsic frame area, never by whether it already fits the viewport.
+                return matches.allElementsBoundByIndex.filter { !$0.frame.isEmpty }.min {
+                    $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height
+                } ?? matches.firstMatch
+            }
+
             for _ in 0..<24 {
+                let element = target()
                 let bounds = viewport()
-                if !element.frame.isEmpty && bounds.contains(element.frame) { break }
-                if element.exists && element.frame.midY < bounds.midY {
+                let frame = element.frame
+                if !frame.isEmpty && bounds.contains(frame) { break }
+                if isDonut && !frame.isEmpty && frame.maxY >= bounds.minY - bounds.height
+                    && frame.minY <= bounds.maxY + bounds.height {
+                    // Short bounded drags avoid oscillating past a plot near the viewport.
+                    let delta = min(bounds.height * 0.3, max(-bounds.height * 0.3, bounds.midY - frame.midY))
+                    if abs(delta) < 1 { break }
+                    let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+                        .withOffset(CGVector(dx: bounds.midX - scroll.frame.minX,
+                                             dy: bounds.midY - scroll.frame.minY))
+                    start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: delta)))
+                } else if element.exists && frame.midY < bounds.midY {
                     scroll.swipeDown(velocity: .slow)
                 } else {
                     scroll.swipeUp(velocity: .slow)
                 }
             }
+            let element = target()
             XCTAssertFalse(element.frame.isEmpty, "Empty frame: \(id)")
+            if isDonut {
+                XCTAssertEqual(element.frame.height, 200, accuracy: 1, "Expected the actual 200pt chart plot")
+            }
             XCTAssertTrue(viewport().contains(element.frame), "Not fully visible: \(id)")
             return element
         }

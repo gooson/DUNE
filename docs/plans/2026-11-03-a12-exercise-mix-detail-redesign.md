@@ -21,3 +21,7 @@ The focused route cross-checks the displayed category counts against the display
 A11 normal native AX showed a parent identifier propagating onto its child leaves in the same SDK. A12 weekly, muscle and cardio cards now explicitly contain accessibility children to reduce that source-level risk; A12 hierarchy and VoiceOver behavior remain unverified. The repeated weekly total, muscle set and cardio count identifiers intentionally select a representative first actual leaf; only the separately keyed frequency rows are used for an exact selected-item comparison.
 
 A11 실제 MAX 실행에서 Activity의 하단 링크까지 10회 스와이프로 도달하지 못했다. A12는 그 아래에 위치하므로 최초 실행 전 MAX 경로 탐색만 최대 32회로 한정하고 일반 크기는 12회를 유지한다. 링크가 보이면 즉시 중단하며 모든 화면 값·날짜·전체 프레임·선택·Back 검사는 그대로 유지한다. 이는 A12의 실제 통과를 의미하지 않는다.
+
+## 실제 첫 검사의 차트 프레임 수정
+
+5e047c04 접힘 Duo 일반·MAX 실행은 실제 0/2 실패다. 두 검사 모두 같은 차트 식별자의 664×538pt 접근성 컨테이너를 선택했다. 실제 플롯은 같은 식별자의 326×200pt 요소이며 소스가 지정한 200pt 높이와 일치한다. 테스트는 표시 영역에 맞는지와 무관하게 양의 면적이 가장 작은 차트 프레임을 선택한 뒤 높이 200pt와 전체 표시 영역 포함을 계속 검사한다. 가까운 플롯은 짧은 수직 드래그로 찾으며 날짜·합계·선택 값·전체 목록·뒤로 가기 검사는 보존한다. 앱 소스는 변경하지 않는다. 실제 실패 원본·접힘 전후 상태·복사 중 공간 부족과 복구 기록은 모두 보존했고, 수정본은 별도 네이티브 실행으로 확인한다.
