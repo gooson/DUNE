@@ -972,13 +972,19 @@
     },
     "A18": {
       "row_id": "A18",
-      "evidence": "activity-consistency-info-sheet",
+      "file": "A18.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditConsistencyExplanation()",
-      "action": "tap activity-consistency-info",
-      "timestamp": 1791833000.369,
-      "image": "186AEFAF-D19E-4B19-8052-A59662A7EFEE.png",
-      "screen": "screen-1-2006x2852-tap activity-consistency-info_1_2C6820EA-1614-48C7-97E1-D332F5D42C83.png",
-      "file": "A18.png"
+      "action": "activity-consistency-info-sheet",
+      "source_revision": "d91f6248fc8a75e26a19822a28543368c1268832",
+      "capture_kind": "host",
+      "image": "003-2007x2853.png",
+      "screen": "003-2007x2853.png",
+      "timestamp": 1793739073.765,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "device_uid": "90219857-F460-42D0-A184-3AE2785490BA",
+      "image_sha256": "310a0cb5f88bc4b499800f85954c5b6c5e6e06a6ac7e8d472d4d9edfe791826e",
+      "ax_sha256": "0a36571f43ee1a3b880db20218a8ebd5748b36f53ff3262364aecc250ec06f09",
+      "evidence": "activity-consistency-info-sheet"
     },
     "A19": {
       "row_id": "A19",
@@ -1441,9 +1447,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "6b857ae8cfc29fe7ec9f3a77a9c6d6af8992d509",
+  "last_refresh_revision": "d91f6248fc8a75e26a19822a28543368c1268832",
   "last_refresh_screens": [
-    "A17"
+    "A18"
   ],
-  "last_refresh_note": "Fresh corrected-source A17 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Fresh corrected-source A18 captures; per-row source and device provenance retained."
 }
