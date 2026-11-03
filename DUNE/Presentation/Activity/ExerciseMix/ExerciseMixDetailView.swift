@@ -81,6 +81,7 @@ struct ExerciseMixDetailView: View {
                 .font(.headline)
                 .foregroundStyle(palette.ink)
             Text("\(summary.start, format: .dateTime.month(.abbreviated).day()) – \(summary.end, format: .dateTime.month(.abbreviated).day())")
+                .accessibilityIdentifier("activity-exercise-mix-date-range")
                 .font(.caption)
                 .foregroundStyle(palette.muted)
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
@@ -98,10 +99,10 @@ struct ExerciseMixDetailView: View {
             Text("Share of all workout records")
                 .font(.caption)
                 .foregroundStyle(palette.muted)
-            compositionRow("Strength", count: summary.strength, color: strengthColor)
-            compositionRow("Cardio", count: summary.cardio, color: cardioColor)
+            compositionRow("Strength", count: summary.strength, color: strengthColor, id: "strength")
+            compositionRow("Cardio", count: summary.cardio, color: cardioColor, id: "cardio")
             if summary.other > 0 {
-                compositionRow("Other", count: summary.other, color: otherColor)
+                compositionRow("Other", count: summary.other, color: otherColor, id: "other")
             }
         }
         .padding(DS.Spacing.lg)
@@ -138,7 +139,7 @@ struct ExerciseMixDetailView: View {
         .accessibilityHidden(true)
     }
 
-    private func compositionRow(_ title: LocalizedStringKey, count: Int, color: Color) -> some View {
+    private func compositionRow(_ title: LocalizedStringKey, count: Int, color: Color, id: String) -> some View {
         let layout = dynamicTypeSize.isAccessibilitySize
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xxs))
             : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: DS.Spacing.sm))
@@ -150,6 +151,7 @@ struct ExerciseMixDetailView: View {
             if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: DS.Spacing.xs) }
             HStack(spacing: DS.Spacing.xs) {
                 Text(count.formattedWithSeparator)
+                    .accessibilityIdentifier("activity-exercise-mix-category-count-\(id)")
                 Text(Double(count) / Double(max(summary.total, 1)), format: .percent.precision(.fractionLength(0)))
                     .foregroundStyle(palette.muted)
             }
@@ -426,13 +428,13 @@ struct ExerciseMixDetailView: View {
             if let name = selectedExercise,
                let freq = viewModel.frequencyByName[name] {
                 Text(localizedExerciseName(name))
-                    .accessibilityIdentifier("activity-exercise-mix-selected-name")
+                    .accessibilityIdentifier("activity-exercise-mix-selected-name-\(name)")
                     .font(.caption.weight(.semibold))
                     .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                 Text("\(freq.count.formattedWithSeparator)x")
-                    .accessibilityIdentifier("activity-exercise-mix-selected-count")
+                    .accessibilityIdentifier("activity-exercise-mix-selected-count-\(name)")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
             } else {
@@ -477,12 +479,13 @@ struct ExerciseMixDetailView: View {
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     HStack {
                         Text(localizedExerciseName(freq.exerciseName))
-                            .accessibilityIdentifier("activity-exercise-mix-frequency-name")
+                            .accessibilityIdentifier("activity-exercise-mix-frequency-name-\(freq.id)")
                             .font(.caption)
                             .fontWeight(.medium)
                             .fixedSize(horizontal: false, vertical: true)
                         Spacer(minLength: 0)
                         Text("\(freq.count.formattedWithSeparator)x")
+                            .accessibilityIdentifier("activity-exercise-mix-frequency-count-\(freq.id)")
                             .font(.caption)
                             .foregroundStyle(DS.Color.textSecondary)
                             .monospacedDigit()

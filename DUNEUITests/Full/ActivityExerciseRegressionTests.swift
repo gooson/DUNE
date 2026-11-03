@@ -973,6 +973,28 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let parsedTotal = Int(total.label.replacingOccurrences(of: ",", with: ""))
         XCTAssertNotNil(parsedTotal, "The total must be an actual formatted integer: \(total.label)")
         XCTAssertGreaterThan(parsedTotal ?? 0, 0, "The seeded route must contain workout records")
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let firstDay = try XCTUnwrap(calendar.date(byAdding: .day, value: -27, to: today))
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US")
+        dateFormatter.calendar = calendar
+        dateFormatter.timeZone = calendar.timeZone
+        dateFormatter.setLocalizedDateFormatFromTemplate("MMMd")
+        let dateRange = visible("activity-exercise-mix-date-range").label
+        XCTAssertTrue(dateRange.contains(dateFormatter.string(from: firstDay)), dateRange)
+        XCTAssertTrue(dateRange.contains(dateFormatter.string(from: today)), dateRange)
+        var categoryTotal = 0
+        for category in ["strength", "cardio", "other"] {
+            let id = "activity-exercise-mix-category-count-\(category)"
+            let candidate = app.descendants(matching: .any)[id].firstMatch
+            if category == "other" && !candidate.exists { continue }
+            let value = visible(id).label.replacingOccurrences(of: ",", with: "")
+            let count = try XCTUnwrap(Int(value), "Invalid category value: \(value)")
+            XCTAssertGreaterThanOrEqual(count, 0)
+            categoryTotal += count
+        }
+        XCTAssertEqual(categoryTotal, parsedTotal, "Category counts must sum to the displayed total")
         VisualAudit.capture("A12 exercise mix summary \(maxText ? "MAX" : "normal")")
         _ = visible("activity-exercise-mix-weekly-heading")
         let week = visible("activity-exercise-mix-weekly-total")
@@ -992,19 +1014,29 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let chart = visible("activity-exercise-mix-donut-chart")
         let center = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         center.withOffset(CGVector(dx: 65, dy: 0)).tap()
-        let selectedName = visible("activity-exercise-mix-selected-name")
-        XCTAssertFalse(selectedName.label.isEmpty, "A real donut sector should select its exercise")
-        let selectedCount = visible("activity-exercise-mix-selected-count")
+        let prefix = "activity-exercise-mix-selected-name-"
+        let selection = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", prefix)).firstMatch
+        XCTAssertTrue(selection.waitForExistence(timeout: 10), "A donut sector should select an exercise")
+        let selectedName = visible(selection.identifier)
+        XCTAssertFalse(selectedName.label.isEmpty)
+        let selectedKey = String(selectedName.identifier.dropFirst(prefix.count))
+        XCTAssertFalse(selectedKey.isEmpty)
+        let selectedCount = visible("activity-exercise-mix-selected-count-\(selectedKey)")
         XCTAssertTrue(selectedCount.label.hasSuffix("x"), selectedCount.label)
         let count = Int(String(selectedCount.label.dropLast()).replacingOccurrences(of: ",", with: ""))
         XCTAssertGreaterThan(count ?? 0, 0, "The selected exercise must have a real positive frequency")
+        let nameValue = selectedName.label
+        let countValue = selectedCount.label
         VisualAudit.capture("A12 exercise mix selected donut \(maxText ? "MAX" : "normal")")
-        let exercise = visible("activity-exercise-mix-frequency-name")
-        XCTAssertFalse(exercise.label.isEmpty)
+        let exercise = visible("activity-exercise-mix-frequency-name-\(selectedKey)")
+        XCTAssertEqual(exercise.label, nameValue)
+        let frequency = visible("activity-exercise-mix-frequency-count-\(selectedKey)")
+        XCTAssertEqual(frequency.label, countValue)
         VisualAudit.capture("A12 exercise mix frequency \(maxText ? "MAX" : "normal")")
         tapBackButton()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 10),
                       "Back should return to Activity")
+        XCTAssertTrue(calendar.isDateInToday(today), "The date range assertions require one local day")
     }
 
     func testActivityRiskAndReportRoutesOpen() throws {
