@@ -514,6 +514,30 @@
         "layout": "../layout-map/activity-weekly-stats-detail-a05.html",
         "status": "native-source-prepared-runtime-validation-pending"
       }
+    },
+    {
+      "id": "morning-briefing-readability",
+      "name": "아침 브리핑 · 읽기 비중 개선",
+      "title": "T09 · 정보 강조 / 풍경 유지",
+      "file": "dune-morning-briefing-readability.html",
+      "detail": "2026-11-03 사용자 선택: 1번 정보 강조. 실제 수면·어제 대비 HRV·주간 운동 일수·평균을 큰 label/value로 표시한다. 풍경 유지 대안도 보존한다. 시안의 값은 첨부 화면의 예시이며 네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/morning-briefing-proposal.md",
+        "status": "implemented-iphone-ipad-verified-duo-captures-pending",
+        "actual_captures": "../full-redesign-map/review/briefing-condition-readability-2026-11-03/index.html"
+      }
+    },
+    {
+      "id": "condition-contribution-alignment",
+      "name": "컨디션 기여 카드 높이 정렬",
+      "title": "T04 · HRV / RHR 정렬",
+      "file": "condition-contribution-alignment.html",
+      "detail": "2026-11-03 사용자 첨부의 Ocean 어두운 화면에서 이전 RHR 날짜로 달라진 카드 높이를 정렬한다. 아이콘·제목·수치·상태의 시작선과 외곽 높이를 통일한다. 예시 시안이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/condition-detail-redesign-proposal.md",
+        "status": "implemented-iphone-ipad-verified-duo-captures-pending",
+        "actual_captures": "../full-redesign-map/review/briefing-condition-readability-2026-11-03/index.html"
+      }
     }
   ]
 }

@@ -20,6 +20,7 @@ struct BriefingTemplateEngineTests {
         previousWeekAverage: Int? = nil,
         activeDays: Int = 3,
         goalDays: Int = 5,
+        hasScoreHistory: Bool = true,
         weatherCondition: String? = nil,
         temperature: Double? = nil,
         outdoorFitnessLevel: String? = nil,
@@ -38,7 +39,7 @@ struct BriefingTemplateEngineTests {
             recoveryInsight: recoveryInsight,
             trainingInsight: trainingInsight,
             sleepDebtHours: sleepDebtHours,
-            recentScores: [],
+            recentScores: hasScoreHistory ? [.init(date: Date(timeIntervalSince1970: 0), score: weeklyAverage)] : [],
             weeklyAverage: weeklyAverage,
             previousWeekAverage: previousWeekAverage,
             activeDays: activeDays,
@@ -118,6 +119,90 @@ struct BriefingTemplateEngineTests {
 
     // MARK: - Guide
 
+    @Test("Recovery highlights separate real sleep and signed HRV without repeating the narrative")
+    func recoveryHighlights() {
+        let sections = BriefingTemplateEngine.generate(from: makeData(hrvDelta: 24, sleepDurationMinutes: 290))
+        #expect(sections.recoveryHighlights.map(\.id) == [.sleep, .hrv])
+        #expect(sections.recoveryHighlights[0].value == String(localized: "\(4)h \(50)min"))
+        #expect(sections.recoveryHighlights[1].value == "+24 ms")
+        #expect(sections.recoverySupportingMessage == nil)
+    }
+
+    @Test("Recovery highlights preserve negative and zero HRV changes", arguments: [-3.0, 0.0])
+    func signedRecoveryHighlight(delta: Double) {
+        let sections = BriefingTemplateEngine.generate(from: makeData(hrvDelta: delta))
+        #expect(sections.recoveryHighlights.count == 1)
+        #expect(sections.recoveryHighlights[0].value == (delta == 0 ? "0 ms" : "-3 ms"))
+    }
+
+    @Test("Fractional HRV changes retain their measured direction", arguments: [
+        (-0.5, "-0.5 ms"), (0.5, "+0.5 ms"), (-0.0001, "-0.0001 ms"), (0.0001, "+0.0001 ms")
+    ])
+    func fractionalRecoveryHighlight(delta: Double, expected: String) {
+        let sections = BriefingTemplateEngine.generate(from: makeData(hrvDelta: delta))
+        let value = sections.recoveryHighlights[0].value
+        #expect(value == expected)
+        #expect(value != "0 ms" && value != "+0 ms" && value != "-0 ms")
+        #expect(value.hasPrefix(delta < 0 ? "-" : "+"))
+    }
+
+    @Test("Whole-hour and zero-minute sleep remain measured values", arguments: [0.0, 480.0])
+    func wholeHourHighlight(minutes: Double) {
+        let sections = BriefingTemplateEngine.generate(from: makeData(sleepDurationMinutes: minutes))
+        #expect(sections.recoveryHighlights.first?.value == String(localized: "\(Int(minutes) / 60)h"))
+    }
+
+    @Test("Missing recovery measurements keep the original score fallback")
+    func missingRecoveryHighlights() {
+        let sections = BriefingTemplateEngine.generate(from: makeData(conditionScore: 82))
+        #expect(sections.recoveryHighlights.isEmpty)
+        #expect(sections.recoverySupportingMessage == sections.recoveryMessage)
+    }
+
+    @Test("Invalid recovery measurements are omitted without numeric conversion traps", arguments: [Double.nan, .infinity, -.infinity, Double(Int.max)])
+    func invalidRecoveryHighlights(value: Double) {
+        let sections = BriefingTemplateEngine.generate(from: makeData(hrvDelta: value, rhrDelta: value, sleepDurationMinutes: value))
+        #expect(sections.recoveryHighlights.isEmpty)
+        #expect(sections.recoverySupportingMessage == sections.recoveryMessage)
+    }
+
+    @Test("RHR information remains below the recovery highlights")
+    func recoverySupportingRHR() {
+        let sections = BriefingTemplateEngine.generate(from: makeData(hrvDelta: 2, rhrDelta: -3, sleepDurationMinutes: 420))
+        #expect(sections.recoverySupportingMessage == String(localized: "RHR dropped \(3)bpm — a positive sign."))
+    }
+
+    @Test("Weekly highlights show actual exercise days and average with a separate remaining count")
+    func weeklyHighlights() {
+        let sections = BriefingTemplateEngine.generate(from: makeData(weeklyAverage: 56, activeDays: 1, goalDays: 5))
+        #expect(sections.weeklyHighlights.map(\.id) == [.exercise, .average])
+        #expect(sections.weeklyHighlights[0].value == String(localized: "\(1)/\(5) days"))
+        #expect(sections.weeklyHighlights[1].value == String(localized: "\(56) points"))
+        #expect(sections.weeklySupportingMessage == String(localized: "\(4) days to go"))
+        #expect(sections.weeklyGoalProgress == 0.2)
+    }
+
+    @Test("A current-score fallback is not labeled as a weekly average")
+    func weeklyHighlightsWithoutHistory() {
+        let sections = BriefingTemplateEngine.generate(from: makeData(weeklyAverage: 82, hasScoreHistory: false))
+        #expect(sections.weeklyHighlights.map(\.id) == [.exercise])
+    }
+
+    @Test("Weekly remaining count never becomes negative after completing the goal", arguments: [5, 7])
+    func weeklyHighlightsCompleted(activeDays: Int) {
+        let sections = BriefingTemplateEngine.generate(from: makeData(activeDays: activeDays, goalDays: 5))
+        #expect(sections.weeklySupportingMessage == String(localized: "Weekly exercise goal completed!"))
+        #expect(sections.weeklyGoalProgress == 1)
+    }
+
+    @Test("A missing weekly goal does not claim goal completion")
+    func weeklyHighlightsWithoutGoal() {
+        let sections = BriefingTemplateEngine.generate(from: makeData(activeDays: 0, goalDays: 0))
+        #expect(sections.weeklyHighlights[0].value == String(localized: "\(0) days"))
+        #expect(sections.weeklySupportingMessage == nil)
+        #expect(sections.weeklyGoalProgress == nil)
+    }
+
     @Test("Guide title uses recommended intensity")
     func guideTitle() {
         let data = makeData(conditionStatus: .excellent)
@@ -176,25 +261,27 @@ struct BriefingTemplateEngineTests {
         #expect(sections.weeklyTitle == String(localized: "Your week so far"))
     }
 
-    @Test("Weekly message shows goal completed")
+    @Test("Weekly supporting message shows goal completed")
     func weeklyGoalCompleted() {
         let data = makeData(activeDays: 5, goalDays: 5)
         let sections = BriefingTemplateEngine.generate(from: data)
-        #expect(sections.weeklyMessage.contains(String(localized: "Weekly exercise goal completed!")))
+        #expect(sections.weeklySupportingMessage == String(localized: "Weekly exercise goal completed!"))
     }
 
-    @Test("Weekly message shows progress")
+    @Test("Weekly highlights show progress")
     func weeklyProgress() {
         let data = makeData(activeDays: 3, goalDays: 5)
         let sections = BriefingTemplateEngine.generate(from: data)
-        #expect(sections.weeklyMessage.contains("3/5"))
+        #expect(sections.weeklyHighlights[0].value == String(localized: "\(3)/\(5) days"))
     }
 
-    @Test("Weekly message shows no workouts yet")
+    @Test("Weekly highlights preserve zero recorded exercise days")
     func weeklyNoWorkouts() {
         let data = makeData(activeDays: 0, goalDays: 4)
         let sections = BriefingTemplateEngine.generate(from: data)
-        #expect(sections.weeklyMessage.contains(String(localized: "No workouts yet this week — start today!")))
+        #expect(sections.weeklyHighlights[0].value == String(localized: "\(0)/\(4) days"))
+        #expect(sections.weeklySupportingMessage == String(localized: "\(4) days to go"))
+        #expect(sections.weeklyGoalProgress == 0)
     }
 
     // MARK: - Weather
