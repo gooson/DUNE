@@ -463,7 +463,7 @@ struct PersonalRecordsDetailView: View {
                 }
                 .chartXAxis {
                     AxisMarks(values: .stride(by: viewModel.selectedPeriod.strideComponent,
-                                             count: viewModel.selectedPeriod.strideCount)) { _ in
+                                             count: chartXStrideCount)) { _ in
                         AxisGridLine()
                             .foregroundStyle(theme.accentColor.opacity(0.15))
                         AxisValueLabel(format: chartXFormat)
@@ -487,6 +487,7 @@ struct PersonalRecordsDetailView: View {
                 .padding(.top, 16)
                 .frame(height: 252)
                 .clipped()
+                .accessibilityIdentifier("activity-personal-records-timeline-plot")
             }
         }
         .padding(DS.Spacing.md)
@@ -544,6 +545,17 @@ struct PersonalRecordsDetailView: View {
         let range = viewModel.chartDateRange
         // A midnight empty interval needs a nonzero display domain, never synthetic records.
         return range.start...max(range.end, range.start.addingTimeInterval(1))
+    }
+
+    private var chartXStrideCount: Int {
+        guard dynamicTypeSize.isAccessibilitySize else { return viewModel.selectedPeriod.strideCount }
+        switch viewModel.selectedPeriod {
+        case .day: return 12
+        case .week: return 3
+        case .month: return 15
+        case .sixMonths: return 3
+        case .year: return 6
+        }
     }
 
     private var chartXFormat: Date.FormatStyle {

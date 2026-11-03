@@ -1342,6 +1342,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             XCTAssertEqual(range.label, defaultRange, "Returning to 6M restores its original date range")
             captureLeaf(app.descendants(matching: .any)["personal-records-timeline-latest-value"].firstMatch,
                         named: "timeline latest value")
+            captureLeaf(app.descendants(matching: .any)["activity-personal-records-timeline-plot"].firstMatch,
+                        named: "timeline plot and axes")
             captureLeaf(app.staticTexts["activity-personal-records-reward-level"].firstMatch,
                         named: "reward level")
             captureLeaf(app.staticTexts["activity-personal-records-reward-points"].firstMatch,
