@@ -1,0 +1,298 @@
+Attributes: Application, 0x110a93840, pid: 71349, label: 'DUNE'
+Element subtree:
+ →Application, 0x110a93840, pid: 71349, label: 'DUNE'
+    Window (Main), 0x110a93980, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x110a93ac0, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x110a93c00, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x110a93d40, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x110a93e80, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x110a93700, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x110a8a940, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x110a897c0, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x110a8be80, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x112e2b340, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x112e2b480, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x112e2b5c0, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x112e2b700, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x112e2b840, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x112e2b980, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x112e2bac0, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x112e2bc00, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Exercise Mix'
+                            Other, 0x112e2bd40, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x112e2be80, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x112e2af80, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x112e2b0c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                    ScrollView, 0x112e2a940, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'activity-exercise-mix-detail-screen'
+                                      Other, 0x112e2aa80, {{0.0, -5303.0}, {382.0, 7713.0}}
+                                        Other, 0x112e2abc0, {{16.0, -5287.0}, {350.0, 823.7}}, identifier: 'activity-exercise-mix-composition'
+                                          Image, 0x112e2ad00, {{38.7, -5264.0}, {68.7, 49.0}}, identifier: 'chart.bar.fill', label: 'Chart Column'
+                                          StaticText, 0x112c82f80, {{38.7, -5271.0}, {241.0, 125.3}}, label: 'Last 4 weeks'
+                                          StaticText, 0x112c80b40, {{32.0, -5133.7}, {250.3, 51.3}}, identifier: 'activity-exercise-mix-date-range', label: 'Oct 7 – Nov 3'
+                                          StaticText, 0x112c83c00, {{32.0, -5070.3}, {75.7, 69.3}}, identifier: 'activity-exercise-mix-total', label: '13'
+                                          StaticText, 0x112c83d40, {{32.0, -4999.0}, {185.7, 116.7}}, label: 'Workout records'
+                                          Other, 0x112c83e80, {{32.0, -4870.3}, {318.0, 14.0}}
+                                          StaticText, 0x112c82bc0, {{32.0, -4844.3}, {294.0, 102.3}}, label: 'Share of all workout records'
+                                          StaticText, 0x112c82d00, {{44.0, -4730.0}, {179.7, 58.7}}, label: 'Strength'
+                                          Other, 0x112c82e40, {{32.0, -4704.7}, {8.0, 8.0}}
+                                          StaticText, 0x112c80000, {{32.0, -4669.3}, {30.0, 58.7}}, identifier: 'activity-exercise-mix-category-count-strength', label: '5'
+                                          StaticText, 0x112c80140, {{66.0, -4669.3}, {11.0, 58.7}}, label: '·'
+                                          StaticText, 0x112c80280, {{81.0, -4669.3}, {100.0, 58.7}}, label: '38%'
+                                          StaticText, 0x112c803c0, {{44.0, -4598.7}, {137.7, 58.7}}, label: 'Cardio'
+                                          Other, 0x112c80500, {{32.0, -4573.3}, {8.0, 8.0}}
+                                          StaticText, 0x112c80640, {{32.0, -4538.0}, {30.0, 58.7}}, identifier: 'activity-exercise-mix-category-count-cardio', label: '8'
+                                          StaticText, 0x112c80780, {{66.0, -4538.0}, {11.0, 58.7}}, label: '·'
+                                          StaticText, 0x112c808c0, {{81.0, -4538.0}, {100.0, 58.7}}, label: '62%'
+                                        Other, 0x112c80a00, {{16.0, -4447.3}, {350.0, 1052.0}}, identifier: 'activity-exercise-mix-weekly-chart'
+                                          Image, 0x112c83200, {{38.7, -4424.3}, {60.3, 49.0}}, identifier: 'activity-exercise-mix-weekly-heading', label: 'Bar Chart With An X Axis'
+                                          StaticText, 0x112c80c80, {{38.7, -4431.3}, {259.7, 125.3}}, identifier: 'activity-exercise-mix-weekly-heading', label: 'Weekly mix'
+                                          StaticText, 0x1069afe80, {{32.0, -4294.0}, {303.7, 153.3}}, label: 'Each bar uses that week's workout records.'
+                                          StaticText, 0x1069afd40, {{32.0, -4126.7}, {102.3, 51.3}}, label: 'Oct 7'
+                                          StaticText, 0x1069acc80, {{322.7, -4126.7}, {27.3, 51.3}}, identifier: 'activity-exercise-mix-weekly-total', label: '2'
+                                          Other, 0x1069acdc0, {{32.0, -4071.3}, {318.0, 9.0}}
+                                          StaticText, 0x110a792c0, {{40.0, -4058.3}, {147.3, 48.0}}, label: 'Strength'
+                                          StaticText, 0x110a79400, {{189.3, -4058.3}, {9.0, 48.0}}, label: '·'
+                                          StaticText, 0x110a79cc0, {{200.3, -4058.3}, {24.7, 48.0}}, label: '0'
+                                          StaticText, 0x110a7af80, {{40.0, -4008.3}, {113.0, 48.0}}, label: 'Cardio'
+                                          StaticText, 0x110a78c80, {{155.0, -4008.3}, {9.0, 48.0}}, label: '·'
+                                          StaticText, 0x110a7bc00, {{166.0, -4008.3}, {24.7, 48.0}}, label: '2'
+                                          StaticText, 0x110a7bd40, {{32.0, -3944.3}, {125.0, 51.3}}, label: 'Oct 14'
+                                          StaticText, 0x110a7aa80, {{322.7, -3944.3}, {27.3, 51.3}}, identifier: 'activity-exercise-mix-weekly-total', label: '2'
+                                          Other, 0x110a79900, {{32.0, -3889.0}, {318.0, 9.0}}
+                                          StaticText, 0x110a78dc0, {{40.0, -3876.0}, {147.3, 48.0}}, label: 'Strength'
+                                          StaticText, 0x110a78f00, {{189.3, -3876.0}, {9.0, 48.0}}, label: '·'
+                                          StaticText, 0x110a79e00, {{200.3, -3876.0}, {24.7, 48.0}}, label: '1'
+                                          StaticText, 0x110a79f40, {{40.0, -3826.0}, {113.0, 48.0}}, label: 'Cardio'
+                                          StaticText, 0x110a79b80, {{155.0, -3826.0}, {9.0, 48.0}}, label: '·'
+                                          StaticText, 0x110a78b40, {{166.0, -3826.0}, {24.7, 48.0}}, label: '1'
+                                          StaticText, 0x110a7ad00, {{32.0, -3762.0}, {123.3, 51.3}}, label: 'Oct 21'
+                                          StaticText, 0x110a7abc0, {{322.7, -3762.0}, {27.3, 51.3}}, identifier: 'activity-exercise-mix-weekly-total', label: '2'
+                                          Other, 0x110a79540, {{32.0, -3706.7}, {318.0, 9.0}}
+                                          StaticText, 0x110a79680, {{40.0, -3693.7}, {147.3, 48.0}}, label: 'Strength'
+                                          StaticText, 0x110a797c0, {{189.3, -3693.7}, {9.0, 48.0}}, label: '·'
+                                          StaticText, 0x110a7a080, {{200.3, -3693.7}, {24.7, 48.0}}, label: '0'
+                                          StaticText, 0x110a7ae40, {{40.0, -3643.7}, {113.0, 48.0}}, label: 'Cardio'
+                                          StaticText, 0x112fd4000, {{155.0, -3643.7}, {9.0, 48.0}}, label: '·'
+                                          StaticText, 0x112fd4140, {{166.0, -3643.7}, {24.7, 48.0}}, label: '2'
+                                          StaticText, 0x112fd4280, {{32.0, -3579.7}, {130.3, 51.3}}, label: 'Oct 28'
+                                          StaticText, 0x112fd43c0, {{322.7, -3579.7}, {27.3, 51.3}}, identifier: 'activity-exercise-mix-weekly-total', label: '7'
+                                          Other, 0x112fd4500, {{32.0, -3524.3}, {318.0, 9.0}}
+                                          StaticText, 0x112fd4640, {{40.0, -3511.3}, {147.3, 48.0}}, label: 'Strength'
+                                          StaticText, 0x112fd4780, {{189.3, -3511.3}, {9.0, 48.0}}, label: '·'
+                                          StaticText, 0x112fd48c0, {{200.3, -3511.3}, {24.7, 48.0}}, label: '4'
+                                          StaticText, 0x112fd4a00, {{40.0, -3461.3}, {113.0, 48.0}}, label: 'Cardio'
+                                          StaticText, 0x112fd4b40, {{155.0, -3461.3}, {9.0, 48.0}}, label: '·'
+                                          StaticText, 0x112fd4c80, {{166.0, -3461.3}, {24.7, 48.0}}, label: '3'
+                                        Other, 0x112fd4dc0, {{16.0, -3379.3}, {350.0, 1151.3}}, identifier: 'activity-exercise-mix-muscle-shares'
+                                          Image, 0x112fd4f00, {{38.7, -3358.7}, {63.7, 65.0}}, identifier: 'activity-exercise-mix-muscle-heading', label: 'Figure Doing Traditional Strength Training'
+                                          StaticText, 0x112fd5040, {{38.7, -3358.7}, {276.0, 126.3}}, identifier: 'activity-exercise-mix-muscle-heading', label: 'Primary muscles'
+                                          StaticText, 0x112fd5180, {{32.0, -3220.3}, {297.7, 204.3}}, label: 'Completed sets are split evenly across primary muscles.'
+                                          StaticText, 0x112fd52c0, {{32.0, -3004.0}, {94.3, 51.3}}, label: 'Back'
+                                          StaticText, 0x112fd5400, {{32.0, -2948.7}, {62.3, 51.3}}, identifier: 'activity-exercise-mix-muscle-sets', label: '1.5'
+                                          StaticText, 0x112fd5540, {{98.3, -2948.7}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fd5680, {{112.0, -2948.7}, {88.0, 51.3}}, label: '17%'
+                                          Other, 0x112fd57c0, {{32.0, -2893.3}, {318.0, 6.0}}
+                                          StaticText, 0x112fd5900, {{32.0, -2875.3}, {113.0, 51.3}}, label: 'Chest'
+                                          StaticText, 0x112fd5a40, {{32.0, -2820.0}, {62.3, 51.3}}, identifier: 'activity-exercise-mix-muscle-sets', label: '1.5'
+                                          StaticText, 0x112fd5b80, {{98.3, -2820.0}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fd5cc0, {{112.0, -2820.0}, {88.0, 51.3}}, label: '17%'
+                                          Other, 0x112fd5e00, {{32.0, -2764.7}, {318.0, 6.0}}
+                                          StaticText, 0x112fd5f40, {{32.0, -2746.7}, {122.7, 51.3}}, label: 'Glutes'
+                                          StaticText, 0x112fd6080, {{32.0, -2691.3}, {62.3, 51.3}}, identifier: 'activity-exercise-mix-muscle-sets', label: '1.5'
+                                          StaticText, 0x112fd61c0, {{98.3, -2691.3}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fd6300, {{112.0, -2691.3}, {88.0, 51.3}}, label: '17%'
+                                          Other, 0x112fd6440, {{32.0, -2636.0}, {318.0, 6.0}}
+                                          StaticText, 0x112fd6580, {{32.0, -2618.0}, {218.0, 51.3}}, label: 'Hamstrings'
+                                          StaticText, 0x112fd66c0, {{32.0, -2562.7}, {62.3, 51.3}}, identifier: 'activity-exercise-mix-muscle-sets', label: '1.5'
+                                          StaticText, 0x112fd6800, {{98.3, -2562.7}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fd6940, {{112.0, -2562.7}, {88.0, 51.3}}, label: '17%'
+                                          Other, 0x112fd6a80, {{32.0, -2507.3}, {318.0, 6.0}}
+                                          StaticText, 0x112fd6bc0, {{32.0, -2489.3}, {124.7, 51.3}}, label: 'Quads'
+                                          StaticText, 0x112fd6d00, {{32.0, -2434.0}, {62.3, 51.3}}, identifier: 'activity-exercise-mix-muscle-sets', label: '1.5'
+                                          StaticText, 0x112fd6e40, {{98.3, -2434.0}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fd6f80, {{112.0, -2434.0}, {88.0, 51.3}}, label: '17%'
+                                          Other, 0x112fd70c0, {{32.0, -2378.7}, {318.0, 6.0}}
+                                          StaticText, 0x112fd7200, {{32.0, -2360.7}, {137.3, 51.3}}, label: 'Triceps'
+                                          StaticText, 0x112fd7340, {{32.0, -2305.3}, {62.3, 51.3}}, identifier: 'activity-exercise-mix-muscle-sets', label: '1.5'
+                                          StaticText, 0x112fd7480, {{98.3, -2305.3}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fd75c0, {{112.0, -2305.3}, {88.0, 51.3}}, label: '17%'
+                                          Other, 0x112fd7700, {{32.0, -2250.0}, {318.0, 6.0}}
+                                        Other, 0x112fd7840, {{16.0, -2212.0}, {350.0, 1865.7}}, identifier: 'activity-exercise-mix-cardio-types'
+                                          Image, 0x112fd7980, {{38.7, -2188.3}, {53.0, 49.3}}, identifier: 'activity-exercise-mix-cardio-heading', label: 'Love'
+                                          StaticText, 0x112fd7ac0, {{38.7, -2196.0}, {235.3, 125.3}}, identifier: 'activity-exercise-mix-cardio-heading', label: 'Cardio types'
+                                          StaticText, 0x112fd7c00, {{32.0, -2058.7}, {259.3, 102.3}}, label: 'Share of cardio records'
+                                          StaticText, 0x112fd7d40, {{32.0, -1942.3}, {214.3, 58.7}}, label: 'Long Ride'
+                                          StaticText, 0x112fd7e80, {{32.0, -1879.7}, {19.7, 51.3}}, identifier: 'activity-exercise-mix-cardio-count', label: '1'
+                                          StaticText, 0x112fe0000, {{55.7, -1879.7}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fe0140, {{69.3, -1879.7}, {79.3, 51.3}}, label: '12%'
+                                          Other, 0x112fe0280, {{32.0, -1824.3}, {318.0, 6.0}}
+                                          StaticText, 0x112fe03c0, {{32.0, -1814.3}, {48.0, 48.0}}, label: '92'
+                                          StaticText, 0x112fe0500, {{82.0, -1814.3}, {62.7, 48.0}}, label: 'min'
+                                          StaticText, 0x112fe0640, {{152.7, -1814.3}, {82.7, 48.0}}, label: '34.6'
+                                          StaticText, 0x112fe0780, {{237.3, -1814.3}, {52.3, 48.0}}, label: 'km'
+                                          StaticText, 0x112fe08c0, {{32.0, -1750.3}, {287.0, 58.7}}, label: 'Pool Intervals'
+                                          StaticText, 0x112fe0a00, {{32.0, -1687.7}, {19.7, 51.3}}, identifier: 'activity-exercise-mix-cardio-count', label: '1'
+                                          StaticText, 0x112fe0b40, {{55.7, -1687.7}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fe0c80, {{69.3, -1687.7}, {79.3, 51.3}}, label: '12%'
+                                          Other, 0x112fe0dc0, {{32.0, -1632.3}, {318.0, 6.0}}
+                                          StaticText, 0x112fe0f00, {{32.0, -1622.3}, {49.3, 48.0}}, label: '44'
+                                          StaticText, 0x112fe1040, {{83.3, -1622.3}, {62.7, 48.0}}, label: 'min'
+                                          StaticText, 0x112fe1180, {{154.0, -1622.3}, {56.7, 48.0}}, label: '2.4'
+                                          StaticText, 0x112fe12c0, {{212.7, -1622.3}, {52.3, 48.0}}, label: 'km'
+                                          StaticText, 0x112fe1400, {{32.0, -1558.3}, {316.0, 58.7}}, label: 'Recovery Walk'
+                                          StaticText, 0x112fe1540, {{32.0, -1495.7}, {19.7, 51.3}}, identifier: 'activity-exercise-mix-cardio-count', label: '1'
+                                          StaticText, 0x112fe1680, {{55.7, -1495.7}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fe17c0, {{69.3, -1495.7}, {79.3, 51.3}}, label: '12%'
+                                          Other, 0x112fe1900, {{32.0, -1440.3}, {318.0, 6.0}}
+                                          StaticText, 0x112fe1a40, {{32.0, -1430.3}, {49.0, 48.0}}, label: '56'
+                                          StaticText, 0x112fe1b80, {{83.0, -1430.3}, {62.7, 48.0}}, label: 'min'
+                                          StaticText, 0x112fe1cc0, {{153.7, -1430.3}, {49.3, 48.0}}, label: '5.1'
+                                          StaticText, 0x112fe1e00, {{205.0, -1430.3}, {52.3, 48.0}}, label: 'km'
+                                          StaticText, 0x112fe1f40, {{32.0, -1366.3}, {230.7, 58.7}}, label: 'Ridge Hike'
+                                          StaticText, 0x112fe2080, {{32.0, -1303.7}, {19.7, 51.3}}, identifier: 'activity-exercise-mix-cardio-count', label: '1'
+                                          StaticText, 0x112fe21c0, {{55.7, -1303.7}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fe2300, {{69.3, -1303.7}, {79.3, 51.3}}, label: '12%'
+                                          Other, 0x112fe2440, {{32.0, -1248.3}, {318.0, 6.0}}
+                                          StaticText, 0x112fe2580, {{32.0, -1238.3}, {65.7, 48.0}}, label: '128'
+                                          StaticText, 0x112fe26c0, {{99.7, -1238.3}, {62.7, 48.0}}, label: 'min'
+                                          StaticText, 0x112fe2800, {{170.3, -1238.3}, {74.7, 48.0}}, label: '12.8'
+                                          StaticText, 0x112fe2940, {{247.0, -1238.3}, {52.3, 48.0}}, label: 'km'
+                                          StaticText, 0x112fe2a80, {{32.0, -1174.3}, {317.7, 58.7}}, label: 'Rowing Engine'
+                                          StaticText, 0x112fe2bc0, {{32.0, -1111.7}, {19.7, 51.3}}, identifier: 'activity-exercise-mix-cardio-count', label: '1'
+                                          StaticText, 0x112fe2d00, {{55.7, -1111.7}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fe2e40, {{69.3, -1111.7}, {79.3, 51.3}}, label: '12%'
+                                          Other, 0x112fe2f80, {{32.0, -1056.3}, {318.0, 6.0}}
+                                          StaticText, 0x112fe30c0, {{32.0, -1046.3}, {49.3, 48.0}}, label: '40'
+                                          StaticText, 0x112fe3200, {{83.3, -1046.3}, {62.7, 48.0}}, label: 'min'
+                                          StaticText, 0x112fe3340, {{154.0, -1046.3}, {57.3, 48.0}}, label: '9.3'
+                                          StaticText, 0x112fe3480, {{213.3, -1046.3}, {52.3, 48.0}}, label: 'km'
+                                          StaticText, 0x112fe35c0, {{32.0, -982.3}, {216.3, 116.7}}, label: 'Stair Threshold'
+                                          StaticText, 0x112fe3700, {{32.0, -861.7}, {19.7, 51.3}}, identifier: 'activity-exercise-mix-cardio-count', label: '1'
+                                          StaticText, 0x112fe3840, {{55.7, -861.7}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fe3980, {{69.3, -861.7}, {79.3, 51.3}}, label: '12%'
+                                          Other, 0x112fe3ac0, {{32.0, -806.3}, {318.0, 6.0}}
+                                          StaticText, 0x112fe3c00, {{32.0, -796.3}, {49.3, 48.0}}, label: '36'
+                                          StaticText, 0x112fe3d40, {{83.3, -796.3}, {62.7, 48.0}}, label: 'min'
+                                          StaticText, 0x112fe3e80, {{32.0, -732.3}, {240.0, 58.7}}, label: 'Tempo Run'
+                                          StaticText, 0x112fec000, {{32.0, -669.7}, {19.7, 51.3}}, identifier: 'activity-exercise-mix-cardio-count', label: '1'
+                                          StaticText, 0x112fec140, {{55.7, -669.7}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fec280, {{69.3, -669.7}, {79.3, 51.3}}, label: '12%'
+                                          Other, 0x112fec3c0, {{32.0, -614.3}, {318.0, 6.0}}
+                                          StaticText, 0x112fec500, {{32.0, -604.3}, {49.0, 48.0}}, label: '48'
+                                          StaticText, 0x112fec640, {{83.0, -604.3}, {62.7, 48.0}}, label: 'min'
+                                          StaticText, 0x112fec780, {{153.7, -604.3}, {74.0, 48.0}}, label: '10.2'
+                                          StaticText, 0x112fec8c0, {{229.7, -604.3}, {52.3, 48.0}}, label: 'km'
+                                          StaticText, 0x112feca00, {{32.0, -540.3}, {296.7, 58.7}}, label: 'Track Session'
+                                          StaticText, 0x112fecb40, {{32.0, -477.7}, {19.7, 51.3}}, identifier: 'activity-exercise-mix-cardio-count', label: '1'
+                                          StaticText, 0x112fecc80, {{55.7, -477.7}, {9.7, 51.3}}, label: '·'
+                                          StaticText, 0x112fecdc0, {{69.3, -477.7}, {79.3, 51.3}}, label: '12%'
+                                          Other, 0x112fecf00, {{32.0, -422.3}, {318.0, 6.0}}
+                                          StaticText, 0x112fed040, {{32.0, -412.3}, {48.7, 48.0}}, label: '34'
+                                          StaticText, 0x112fed180, {{82.7, -412.3}, {62.7, 48.0}}, label: 'min'
+                                          StaticText, 0x112fed2c0, {{153.3, -412.3}, {24.7, 48.0}}, label: '8'
+                                          StaticText, 0x112fed400, {{180.0, -412.3}, {52.3, 48.0}}, label: 'km'
+                                        StaticText, 0x112fed540, {{32.7, -318.3}, {276.3, 125.3}}, label: 'Distribution'
+                                        StaticText, 0x112fed680, {{28.0, -185.0}, {319.3, 153.3}}, label: 'Touch and hold a segment to see details.'
+                                        StaticText, 0x112fed7c0, {{28.0, -23.7}, {292.0, 204.3}}, label: 'Top 8 exercises shown. Total includes all exercises.'
+                                        Other, 0x112fed900, {{28.0, 188.7}, {326.0, 200.0}}, identifier: 'activity-exercise-mix-donut-chart'
+                                        StaticText, 0x112feda40, {{155.8, 396.7}, {70.3, 65.7}}, identifier: 'activity-exercise-mix-donut-total', label: '13'
+                                        StaticText, 0x112fedb80, {{153.7, 464.3}, {74.7, 48.0}}, label: 'total'
+                                        Other, 0x112fedcc0, {{-141.0, 19.7}, {664.0, 538.0}}, identifier: 'activity-exercise-mix-donut-chart'
+                                          Other, 0x112fede00, {{121.0, 188.7}, {69.0, 56.9}}, value: 1
+                                          Other, 0x112fedf40, {{192.0, 188.7}, {69.0, 56.9}}, value: 1
+                                          Other, 0x112fee080, {{91.0, 218.7}, {56.9, 69.0}}, value: 1
+                                          Other, 0x112fee1c0, {{234.1, 218.7}, {56.9, 69.0}}, value: 1
+                                          Other, 0x112fee300, {{91.0, 289.7}, {56.9, 69.0}}, value: 1
+                                          Other, 0x112fee440, {{234.1, 289.7}, {56.9, 69.0}}, value: 1
+                                          Other, 0x112fee580, {{121.0, 331.8}, {69.0, 56.9}}, value: 1
+                                          Other, 0x112fee6c0, {{192.0, 331.8}, {69.0, 56.9}}, value: 1
+                                        Other, 0x112fee800, {{40.0, 520.3}, {314.0, 157.7}}
+                                          StaticText, 0x112fee940, {{40.0, 520.3}, {183.7, 51.3}}, label: 'Long Ride'
+                                          StaticText, 0x112feea80, {{307.0, 520.3}, {47.0, 51.3}}, label: '1x'
+                                          StaticText, 0x112feebc0, {{40.0, 575.7}, {186.0, 102.3}}, label: '바벨 벤치프레스'
+                                          StaticText, 0x112feed00, {{307.0, 601.2}, {47.0, 51.3}}, label: '1x'
+                                        StaticText, 0x112feee40, {{34.7, 1152.3}, {295.0, 125.3}}, label: 'All Exercises'
+                                        StaticText, 0x112feef80, {{28.0, 1285.7}, {188.7, 51.3}}, identifier: 'activity-exercise-mix-frequency-name-Long Ride', label: 'Long Ride'
+                                        StaticText, 0x112fef0c0, {{307.0, 1285.7}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-Long Ride', label: '1x'
+                                        StaticText, 0x112fef200, {{28.0, 1351.0}, {269.7, 51.3}}, identifier: 'activity-exercise-mix-frequency-name-바벨 벤치프레스', label: '바벨 벤치프레스'
+                                        StaticText, 0x112fef340, {{307.0, 1351.0}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-바벨 벤치프레스', label: '1x'
+                                        StaticText, 0x112fef480, {{28.0, 1416.3}, {195.3, 51.3}}, identifier: 'activity-exercise-mix-frequency-name-바벨 스쿼트', label: '바벨 스쿼트'
+                                        StaticText, 0x112fef5c0, {{307.0, 1416.3}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-바벨 스쿼트', label: '1x'
+                                        StaticText, 0x112fef700, {{28.0, 1481.7}, {252.7, 51.3}}, identifier: 'activity-exercise-mix-frequency-name-Pool Intervals', label: 'Pool Intervals'
+                                        StaticText, 0x112fef840, {{307.0, 1481.7}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-Pool Intervals', label: '1x'
+                                        StaticText, 0x112fef980, {{28.0, 1547.0}, {164.3, 102.3}}, identifier: 'activity-exercise-mix-frequency-name-Lower Strength', label: 'Lower Strength'
+                                        StaticText, 0x112fefac0, {{307.0, 1572.5}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-Lower Strength', label: '1x'
+                                        StaticText, 0x112fefc00, {{28.0, 1663.3}, {278.3, 51.3}}, identifier: 'activity-exercise-mix-frequency-name-Recovery Walk', label: 'Recovery Walk'
+                                        StaticText, 0x112fefd40, {{307.0, 1663.3}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-Recovery Walk', label: '1x'
+                                        StaticText, 0x112fefe80, {{28.0, 1728.7}, {261.3, 51.3}}, identifier: 'activity-exercise-mix-frequency-name-Track Session', label: 'Track Session'
+                                        StaticText, 0x113000000, {{307.0, 1728.7}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-Track Session', label: '1x'
+                                        StaticText, 0x113000140, {{28.0, 1794.0}, {186.0, 102.3}}, identifier: 'activity-exercise-mix-frequency-name-컨벤셔널 데드리프트', label: '컨벤셔널 데드리프트'
+                                        StaticText, 0x113000280, {{307.0, 1819.5}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-컨벤셔널 데드리프트', label: '1x'
+                                        StaticText, 0x1130003c0, {{28.0, 1910.3}, {150.3, 102.3}}, identifier: 'activity-exercise-mix-frequency-name-Rowing Engine', label: 'Rowing Engine'
+                                        StaticText, 0x113000500, {{307.0, 1935.8}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-Rowing Engine', label: '1x'
+                                        StaticText, 0x113000640, {{28.0, 2026.7}, {190.3, 102.3}}, identifier: 'activity-exercise-mix-frequency-name-Stair Threshold', label: 'Stair Threshold'
+                                        StaticText, 0x113000780, {{307.0, 2052.2}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-Stair Threshold', label: '1x'
+                                        StaticText, 0x1130008c0, {{28.0, 2143.0}, {164.3, 102.3}}, identifier: 'activity-exercise-mix-frequency-name-Upper Strength', label: 'Upper Strength'
+                                        StaticText, 0x113000a00, {{307.0, 2168.5}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-Upper Strength', label: '1x'
+                                        StaticText, 0x113000b40, {{28.0, 2259.3}, {211.3, 51.3}}, identifier: 'activity-exercise-mix-frequency-name-Tempo Run', label: 'Tempo Run'
+                                        StaticText, 0x113000c80, {{307.0, 2259.3}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-Tempo Run', label: '1x'
+                                        StaticText, 0x113000dc0, {{28.0, 2324.7}, {203.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-name-Ridge Hike', label: 'Ridge Hike'
+                                        StaticText, 0x113000f00, {{307.0, 2324.7}, {47.0, 51.3}}, identifier: 'activity-exercise-mix-frequency-count-Ridge Hike', label: '1x'
+                                      Other, 0x113001040, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 13 pages', value: 75%
+                                        Other, 0x113001180, {{460.0, 449.0}, {3.0, 46.3}}
+                                      Other, 0x1130012c0, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 13 pages', value: 75%
+                                        Other, 0x113001400, {{460.0, 449.0}, {3.0, 46.3}}
+                Other, 0x113001540, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x113001680, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x1130017c0, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x113001900, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x113001a40, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x113001b80, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x113001cc0, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x113001e00, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x113001f40, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x113002080, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x1130021c0, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x113002300, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x113002440, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x113002580, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x1130026c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x113002800, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x113002940, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x113002a80, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x113002bc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x113002d00, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x113002e40, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x113002f80, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x1130030c0, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x113003200, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                                            Image, 0x113003340, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x113003480, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x1130035c0, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x113003700, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x113003840, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x113003980, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x113003ac0, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x113003c00, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x113003d40, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x113003e80, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x113010000, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x113010140, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x113010280, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x1130103c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x113010500, {{396.0, 494.0}, {44.0, 58.0}}
+                                          Other, 0x113010640, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x113010780, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x1130108c0, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x113010a00, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x113010b40, {{396.0, 494.0}, {44.0, 58.0}}
+                                                  Other, 0x113010c80, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x113010dc0, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x113010f00, {{396.0, 494.0}, {44.0, 58.0}}
+              Other, 0x113011040, {{191.0, 322.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x110a93840, pid: 71349, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x113011180, pid: 71349, label: 'DUNE'
+  }

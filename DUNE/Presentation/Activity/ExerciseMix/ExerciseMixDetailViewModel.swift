@@ -40,6 +40,17 @@ final class ExerciseMixDetailViewModel {
         isLoading = false
     }
 
+    /// Maps the chart's selected plottable value to cumulative sector counts.
+    static func selectedExercise(for value: Double?, frequencies: [ExerciseFrequency]) -> String? {
+        guard let value, value.isFinite, value >= 0 else { return nil }
+        var upperBound = 0.0
+        for frequency in frequencies where frequency.count > 0 {
+            upperBound += Double(frequency.count)
+            if value < upperBound { return frequency.exerciseName }
+        }
+        return nil
+    }
+
     private func resolveDisplayName(record: ExerciseRecord, definition: ExerciseDefinition?) -> String {
         if let localizedName = definition?.localizedName, !localizedName.isEmpty {
             return localizedName
