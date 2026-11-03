@@ -1,0 +1,878 @@
+{
+  "source_head": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+  "quality_status": "source/native/stage reviewed within recorded source and state scopes; PR outcome separate",
+  "canonical": {
+    "regular": {
+      "map_entry": {
+        "row_id": "A11",
+        "file": "A11.png",
+        "test": "ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections()",
+        "action": "A11 consistency current and best normal",
+        "source_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+        "capture_kind": "xctest",
+        "image": "91D62FC3-C514-4494-91EC-2091C9B48777.png",
+        "screen": "screen-0-1320x2868-A11 consistency current and best normal_0_54CF0E94-100D-49EC-A073-E5FCB70721C0.png",
+        "timestamp": 1793695594.786,
+        "timestamp_kind": "native XCTest image attachment timestamp",
+        "device_uid": "BB138F5C-4449-4A7D-B70C-A5F01D27EB99",
+        "image_sha256": "c5a7cf9fc652ac98d5e04450d174fa47ace8d509cdd6a68707874a856226f1e5",
+        "ax_sha256": "affbd974b922ce69778342ac431e5bfb38eb23c28b003dfdbbe8601def233d4d",
+        "evidence": "activity-consistency-detail-screen"
+      },
+      "capture": {
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/attachments/91D62FC3-C514-4494-91EC-2091C9B48777.png",
+        "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/attachments/B68F4918-E072-4713-9B1E-9CCF47B39A38.txt",
+        "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/attachments/B68F4918-E072-4713-9B1E-9CCF47B39A38.txt",
+        "manifest_ax_sha256": "affbd974b922ce69778342ac431e5bfb38eb23c28b003dfdbbe8601def233d4d",
+        "manifest_ax_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "BB138F5C-4449-4A7D-B70C-A5F01D27EB99",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+          "exportedFileName": "B68F4918-E072-4713-9B1E-9CCF47B39A38.txt",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "hierarchy-A11 consistency current and best normal-DUNEUITestsActivityExerciseRegressionTests_1_54CF0E94-100D-49EC-A073-E5FCB70721C0.swift-1799",
+          "timestamp": 1793695594.786
+        },
+        "image_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "BB138F5C-4449-4A7D-B70C-A5F01D27EB99",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+          "exportedFileName": "91D62FC3-C514-4494-91EC-2091C9B48777.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-A11 consistency current and best normal_0_54CF0E94-100D-49EC-A073-E5FCB70721C0.png",
+          "timestamp": 1793695594.786
+        },
+        "host_checkpoint": null,
+        "kind": "xctest",
+        "uid": "BB138F5C-4449-4A7D-B70C-A5F01D27EB99",
+        "device": "iPhone 18 Pro Max-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+        "model": "iPhone 18 Pro Max",
+        "action": "A11 consistency current and best normal",
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections",
+        "timestamp": 1793695594.786,
+        "timestamp_kind": "native XCTest image attachment timestamp",
+        "screen": "screen-0-1320x2868-A11 consistency current and best normal_0_54CF0E94-100D-49EC-A073-E5FCB70721C0.png",
+        "image_sha256": "c5a7cf9fc652ac98d5e04450d174fa47ace8d509cdd6a68707874a856226f1e5",
+        "ax_sha256": "affbd974b922ce69778342ac431e5bfb38eb23c28b003dfdbbe8601def233d4d",
+        "pose_evidence": "not applicable",
+        "legacy_model_evidence": "not applicable"
+      },
+      "ownership": {
+        "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "creation_source": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+        "readiness_source": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+        "readiness_kind": "historical pose-only, not a full boot/readiness receipt",
+        "scope": "Actual creation/readiness at 30b; 31D; later registry copy after be23 is not a capture-time snapshot",
+        "reviewer": "source binding pending independent gallery review",
+        "records": {
+          "creation_baseline": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-creation-baseline.json",
+            "sha256": "ba2eade17391f9e5b188e93d7af4af4cd3a4acb46b226ad2c6fdbe5655771faa"
+          },
+          "creation_device": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-device.json",
+            "sha256": "6dcc68a1b6462fe88ac61d6b0ab192af48fb99789dabfc64530a40440f4b21e9"
+          },
+          "creation_current": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-current.json",
+            "sha256": "abbe0b0d52e16d999982c44c36e26ae5703b5b81df85fbd3dfd1c5aa972fd1cc"
+          },
+          "readiness": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/prior-actual-readiness-30b/proof.json",
+            "sha256": "021edc4866d0a75813463507175c103cebbbe9b9eff497c863c2bdc20fc63244"
+          }
+        }
+      }
+    },
+    "ipad": {
+      "map_entry": {
+        "row_id": "A11",
+        "file": "A11.png",
+        "test": "ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections()",
+        "action": "A11 consistency current and best normal",
+        "source_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+        "capture_kind": "xctest",
+        "image": "721170FE-41A4-454F-AA5A-6A7F86F78469.png",
+        "screen": "screen-0-1512x2316-A11 consistency current and best normal_0_3124A50A-105C-4E7B-A5A9-730045680AEC.png",
+        "timestamp": 1793696319.697,
+        "timestamp_kind": "native XCTest image attachment timestamp",
+        "device_uid": "2E6BD714-6859-4C4C-8F28-739157173E3B",
+        "image_sha256": "c2399e98e703594272079c76883bc2ddcfec09de1ce55c73ec7fb154127c2282",
+        "ax_sha256": "1943be83bd4dd293f81b27fe9721159143b19620f6e368cdf32527472eb1f8b4",
+        "evidence": "activity-consistency-detail-screen"
+      },
+      "capture": {
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/attachments/721170FE-41A4-454F-AA5A-6A7F86F78469.png",
+        "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/attachments/2C6A7CBE-DA2E-4412-A221-717A500CFAF9.txt",
+        "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/attachments/2C6A7CBE-DA2E-4412-A221-717A500CFAF9.txt",
+        "manifest_ax_sha256": "1943be83bd4dd293f81b27fe9721159143b19620f6e368cdf32527472eb1f8b4",
+        "manifest_ax_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "2E6BD714-6859-4C4C-8F28-739157173E3B",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+          "exportedFileName": "2C6A7CBE-DA2E-4412-A221-717A500CFAF9.txt",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "hierarchy-A11 consistency current and best normal-DUNEUITestsActivityExerciseRegressionTests_1_3124A50A-105C-4E7B-A5A9-730045680AEC.swift-1799",
+          "timestamp": 1793696319.697
+        },
+        "image_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "2E6BD714-6859-4C4C-8F28-739157173E3B",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+          "exportedFileName": "721170FE-41A4-454F-AA5A-6A7F86F78469.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1512x2316-A11 consistency current and best normal_0_3124A50A-105C-4E7B-A5A9-730045680AEC.png",
+          "timestamp": 1793696319.697
+        },
+        "host_checkpoint": null,
+        "kind": "xctest",
+        "uid": "2E6BD714-6859-4C4C-8F28-739157173E3B",
+        "device": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+        "model": "iPad mini (A20 Pro)",
+        "action": "A11 consistency current and best normal",
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections",
+        "timestamp": 1793696319.697,
+        "timestamp_kind": "native XCTest image attachment timestamp",
+        "screen": "screen-0-1512x2316-A11 consistency current and best normal_0_3124A50A-105C-4E7B-A5A9-730045680AEC.png",
+        "image_sha256": "c2399e98e703594272079c76883bc2ddcfec09de1ce55c73ec7fb154127c2282",
+        "ax_sha256": "1943be83bd4dd293f81b27fe9721159143b19620f6e368cdf32527472eb1f8b4",
+        "pose_evidence": "not applicable",
+        "legacy_model_evidence": "not applicable"
+      },
+      "ownership": {
+        "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "creation_source": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+        "readiness_source": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+        "readiness_kind": "historical pose-only, not a full boot/readiness receipt",
+        "scope": "Actual creation/readiness at 30b; 31D; later registry copy after be23 is not a capture-time snapshot",
+        "reviewer": "source binding pending independent gallery review",
+        "records": {
+          "creation_baseline": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-creation-baseline.json",
+            "sha256": "ba2eade17391f9e5b188e93d7af4af4cd3a4acb46b226ad2c6fdbe5655771faa"
+          },
+          "creation_device": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-device.json",
+            "sha256": "6dcc68a1b6462fe88ac61d6b0ab192af48fb99789dabfc64530a40440f4b21e9"
+          },
+          "creation_current": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-current.json",
+            "sha256": "abbe0b0d52e16d999982c44c36e26ae5703b5b81df85fbd3dfd1c5aa972fd1cc"
+          },
+          "readiness": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/prior-actual-readiness-30b/proof.json",
+            "sha256": "021edc4866d0a75813463507175c103cebbbe9b9eff497c863c2bdc20fc63244"
+          }
+        }
+      }
+    },
+    "duo": {
+      "map_entry": {
+        "row_id": "A11",
+        "file": "A11.png",
+        "test": "ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections()",
+        "action": "A11 consistency current and best normal",
+        "source_revision": "be23b071d82b0a821c4e0d7fd04613e0ccdd2f03",
+        "capture_kind": "host",
+        "image": "007-1398x2034.png",
+        "screen": "007-1398x2034.png",
+        "timestamp": 1793690492.229,
+        "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+        "device_uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "image_sha256": "b75f3b5e5c771a1ef9026b1d87692b1597d6b8a7e51602399574709eba045c42",
+        "ax_sha256": "c06cf022ec94d2eda0b7e965e9e5db276f34d30ee9070e8dbd570652669dd147",
+        "evidence": "activity-consistency-detail-screen"
+      },
+      "capture": {
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/host-captures/007-1398x2034.png",
+        "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/host-captures/007-hierarchy.txt",
+        "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/attachments/25248F1E-BB74-4A87-8434-4156CC8D0F92.txt",
+        "manifest_ax_sha256": "c06cf022ec94d2eda0b7e965e9e5db276f34d30ee9070e8dbd570652669dd147",
+        "manifest_ax_attachment": {
+          "configurationName": "Duo Visual Audit",
+          "deviceId": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+          "exportedFileName": "25248F1E-BB74-4A87-8434-4156CC8D0F92.txt",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "hierarchy-A11 consistency current and best normal-DUNEUITestsActivityExerciseRegressionTests_0_67C0E7CD-688D-478B-A155-947D74A1D02E.swift-1761",
+          "timestamp": 1793690492.229
+        },
+        "image_attachment": null,
+        "host_checkpoint": {
+          "sequence": 7,
+          "action": "DUNE_VISUAL_AUDIT_READY A11 consistency current and best normal [DUNEUITests/ActivityExerciseRegressionTests.swift:1761] DEADLINE=1793690519.960829",
+          "elapsed_seconds": 2.238,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        "kind": "host",
+        "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "device": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+        "model": "iPhone",
+        "action": "A11 consistency current and best normal",
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections",
+        "timestamp": 1793690492.229,
+        "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+        "screen": "007-1398x2034.png",
+        "image_sha256": "b75f3b5e5c771a1ef9026b1d87692b1597d6b8a7e51602399574709eba045c42",
+        "ax_sha256": "c06cf022ec94d2eda0b7e965e9e5db276f34d30ee9070e8dbd570652669dd147",
+        "pose_evidence": "raw before plus delayed operator post-run readback; no hinge operation attested; not automatic immediate after",
+        "legacy_model_evidence": "legacy raw device record verified"
+      },
+      "ownership": {
+        "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "creation_source": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+        "readiness_source": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+        "readiness_kind": "historical pose-only, not a full boot/readiness receipt",
+        "scope": "Actual creation/readiness at 30b; 31D; later registry copy after be23 is not a capture-time snapshot",
+        "reviewer": "source binding pending independent gallery review",
+        "records": {
+          "creation_baseline": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-creation-baseline.json",
+            "sha256": "ba2eade17391f9e5b188e93d7af4af4cd3a4acb46b226ad2c6fdbe5655771faa"
+          },
+          "creation_device": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-device.json",
+            "sha256": "6dcc68a1b6462fe88ac61d6b0ab192af48fb99789dabfc64530a40440f4b21e9"
+          },
+          "creation_current": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-current.json",
+            "sha256": "abbe0b0d52e16d999982c44c36e26ae5703b5b81df85fbd3dfd1c5aa972fd1cc"
+          },
+          "readiness": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/prior-actual-readiness-30b/proof.json",
+            "sha256": "021edc4866d0a75813463507175c103cebbbe9b9eff497c863c2bdc20fc63244"
+          }
+        }
+      }
+    },
+    "duo-open": {
+      "map_entry": {
+        "row_id": "A11",
+        "file": "A11.png",
+        "test": "ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections()",
+        "action": "A11 consistency current and best normal",
+        "source_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+        "capture_kind": "host",
+        "image": "003-2007x2853.png",
+        "screen": "003-2007x2853.png",
+        "timestamp": 1793694885.738,
+        "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+        "device_uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "image_sha256": "efe8b21f69096de1809aabb514e00ae1a697a70ea8e4e26be1f8a8cfbfa53d14",
+        "ax_sha256": "a2efba8c7a69ded3bc993786147ac97d6f03bfaf39fb7645b66c0d1a2968537f",
+        "evidence": "activity-consistency-detail-screen"
+      },
+      "capture": {
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/003-2007x2853.png",
+        "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/003-hierarchy.txt",
+        "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/attachments/813BA5BC-0A6A-4363-BD33-44E54E19B4E2.txt",
+        "manifest_ax_sha256": "a2efba8c7a69ded3bc993786147ac97d6f03bfaf39fb7645b66c0d1a2968537f",
+        "manifest_ax_attachment": {
+          "configurationName": "Duo Visual Audit",
+          "deviceId": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+          "exportedFileName": "813BA5BC-0A6A-4363-BD33-44E54E19B4E2.txt",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "hierarchy-A11 consistency current and best normal-DUNEUITestsActivityExerciseRegressionTests_0_1A260ADA-BF76-4E6C-A419-DF4DAFC98B29.swift-1799",
+          "timestamp": 1793694885.738
+        },
+        "image_attachment": null,
+        "host_checkpoint": {
+          "sequence": 3,
+          "action": "DUNE_VISUAL_AUDIT_READY A11 consistency current and best normal [DUNEUITests/ActivityExerciseRegressionTests.swift:1799] DEADLINE=1793694913.405932",
+          "elapsed_seconds": 2.294,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        "kind": "host",
+        "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "device": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+        "model": "iPhone",
+        "action": "A11 consistency current and best normal",
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections",
+        "timestamp": 1793694885.738,
+        "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+        "screen": "003-2007x2853.png",
+        "image_sha256": "efe8b21f69096de1809aabb514e00ae1a697a70ea8e4e26be1f8a8cfbfa53d14",
+        "ax_sha256": "a2efba8c7a69ded3bc993786147ac97d6f03bfaf39fb7645b66c0d1a2968537f",
+        "pose_evidence": "automatic before/after readbacks",
+        "legacy_model_evidence": "legacy raw device record verified"
+      },
+      "ownership": {
+        "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "creation_source": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+        "readiness_source": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+        "readiness_kind": "historical pose-only, not a full boot/readiness receipt",
+        "scope": "Actual creation/readiness at 30b; 31D; later registry copy after be23 is not a capture-time snapshot",
+        "reviewer": "source binding pending independent gallery review",
+        "records": {
+          "creation_baseline": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-creation-baseline.json",
+            "sha256": "ba2eade17391f9e5b188e93d7af4af4cd3a4acb46b226ad2c6fdbe5655771faa"
+          },
+          "creation_device": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-device.json",
+            "sha256": "6dcc68a1b6462fe88ac61d6b0ab192af48fb99789dabfc64530a40440f4b21e9"
+          },
+          "creation_current": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-current.json",
+            "sha256": "abbe0b0d52e16d999982c44c36e26ae5703b5b81df85fbd3dfd1c5aa972fd1cc"
+          },
+          "readiness": {
+            "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/prior-actual-readiness-30b/proof.json",
+            "sha256": "021edc4866d0a75813463507175c103cebbbe9b9eff497c863c2bdc20fc63244"
+          }
+        }
+      }
+    }
+  },
+  "max_revision": "3c5b652e660284e9bbc3c747b9f3e50a0f59bfe7",
+  "max_selector": "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailAtMaximumAccessibilityTextSize",
+  "validated_input_sha256": {
+    "/private/tmp/a10-gallery/build-7ce.py": "f052a0c67b19576d73c972f38f9ab5c14f45ca7801a721d7a778b0d8b518cc22",
+    "/private/tmp/a11-normal-renderer-closure-3c5b652e.json": "f134e6b19446e6d5e9408b506b5108c141c31c64ac290198f8838acd47853a3b",
+    "/private/tmp/a11-singular-independent-review.md": "baf20bd95d65dc24beec00d7519d2210cb7642e659daa66ca0ea4dd8ff79b9c9",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-first-ui-30b8647e-failed/result.json": "a50a0e000ca95ad691ef7886bf0e75b6411e03c931e9b5c721ac2d02ac88a6ce",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-first-ui-30b8647e-failed/provenance.json": "5f880e27b3d07f414c12172dd7747553abe319f7b6757fc8b3d90926120e18a2",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-9e77710a-glyph-failed/result.json": "b93ab158ed3a7a390867b9e8442be012301d6fab11c46ba6d59a489d6859b607",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-9e77710a-glyph-failed/provenance.json": "8a943364ef4487db9544bb887fa642f72391de8261aee67ddb9bc421d2ef8bbf",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/docs/design/phone-design-map/collect-real-captures.py": "6245de4341dd88fe15c12ffa0ca38a58ce8344f074efc1c2cfcfef2d8e79eff2",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/docs/design/phone-design-map/build-phone-design-maps.py": "f83119e204966acc0c83e835a4939bd866b52d1f94cc590d3807f31eed5f1431",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/docs/design/phone-design-map/screen-catalog.py": "9f1b3c2b2814ee98962e15e176736c8ad1af003a9e7f044d816f4e37e3c4d107",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/result.json": "a2e635eafd63326d40e27f2a57f28558b914cf9887210b86d6bd2c41884e2c8d",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/tests.json": "8def0dd5c869f547cd32c5547609bc069f215b920bf66cd7e5c50701f6436b6e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/summary.json": "5125856ce8b0262e068704877aebedb6d2b5a66f59587535d644db5dd55ff943",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/provenance.json": "773e64c54e1eff5078c22ac74afe56e6dc7f67c439c6f138ea90a5cf4f484209",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/run.log.gz": "850059b72c137d363e99f911fa6f145475498677d4988e5d97787aeb96043d2e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/attachments/manifest.json": "6752c42a7d1a854687cebd20247814df899b2d5f8559fe35052a567b3f0c9a3e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/attachments/91D62FC3-C514-4494-91EC-2091C9B48777.png": "c5a7cf9fc652ac98d5e04450d174fa47ace8d509cdd6a68707874a856226f1e5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/attachments/B68F4918-E072-4713-9B1E-9CCF47B39A38.txt": "affbd974b922ce69778342ac431e5bfb38eb23c28b003dfdbbe8601def233d4d",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/dispatch-support/a11-phone-normal-fa4ba738-creation-baseline.json": "a79170e1fd1fb7058aba40036f0fb59bd5ef0feb294faa7a07786c2ee654a5eb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/dispatch-support/a11-phone-normal-fa4ba738-device.json": "a465c855a09c635b83c916a02fbb9ded6479f23dbce812825a4b4f19ca7f3ba5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/dispatch-support/a11-phone-normal-fa4ba738-current.json": "45f84ecface09a6f7124e7abc01d84abd2442f84bb8751492f64cf3dcc3f51b5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/dispatch-support/readiness/proof.json": "2428759ca9d8644944176a16c457341582c4a5e95fe40ee9241417018bf9dc9f",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/dispatch-support/readiness/registry-before-dispatch.json": "423d23bbe0b73d81c1a1044ae7623c01e7ffabe6c962992d6cca243d0c6407fa",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738/dispatch-support/readiness/registry-before-dispatch-binding.json": "85c229c1596f0b1d3e2344c581d7229187512cdf20f316f2c791ec3f396a7c3e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/result.json": "cf0178e3219fc46276324ad51c2f581734ee843c73ae01b82e91363d2f63dd4f",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/tests.json": "414ca063c699f1a1b7a9e6d2da216939bcd8f4ef42cddc89fe073ac635386e73",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/summary.json": "120927a643cb00c0fc52e825e05c3fcc0e6eb59a6bc9a46b621fab4735669757",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/provenance.json": "a2de93bb7aaa34121ced9a1148b8fcd280bdc5739c46f8596c9ce807c1f69aee",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/run.log.gz": "699f49f2ec7b9cc2fdbc6431c110713a2c9d3c54dfec7b0109accf6ce4af03a4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/attachments/manifest.json": "7995446c9fc23383f7af47033c488bed433848d507bf35aff96bdd5385d2fd2d",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/attachments/721170FE-41A4-454F-AA5A-6A7F86F78469.png": "c2399e98e703594272079c76883bc2ddcfec09de1ce55c73ec7fb154127c2282",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/attachments/2C6A7CBE-DA2E-4412-A221-717A500CFAF9.txt": "1943be83bd4dd293f81b27fe9721159143b19620f6e368cdf32527472eb1f8b4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/dispatch-support/a11-ipad-normal-fa4ba738-creation-baseline.json": "1b8614bff2d2f9062372d4add4b516cc5e845283e835b53840a20852c9c14896",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/dispatch-support/a11-ipad-normal-fa4ba738-device.json": "1f32b3971ca85b357db8811e37e81cd4b563d47cd944ec7e9b69241d94cd48a4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/dispatch-support/a11-ipad-normal-fa4ba738-current.json": "41a84597138721cf6a7ef02652982e4e7137f7e633e35726fdac967c15052bd6",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/dispatch-support/readiness/proof.json": "da990d1db95160a78f6b901015e58fd0ec57cfc267e5244e733008f6bc6802fe",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/dispatch-support/readiness/registry-before-dispatch.json": "c08ac50282ea5e2254ac979f6d4284fcd03484a7662c259a2704f9570679ab96",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738/dispatch-support/readiness/registry-before-dispatch-binding.json": "9cc2f63049968eb423c48d11f478059f23a6d26997a2a6ced1a4bdcd0912d01c",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/result.json": "7bfa10394c0888157e90f8571e64cf983d9be0bdeda7a797eadc7c54b61e2eeb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/tests.json": "a2c10699a26c35093e56bbef9ae71868afec8fb4dc822aedf87fa67f666cea48",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/summary.json": "20e5c0f2e2eda382b5302a07956136606f63dc5025465b1bca1c13e59783160e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/provenance.json": "72d7ce48e642ac6b3e16cd309695c1c14b21f46eac2a8ceef976b658ca64ead6",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/run.log.gz": "2e94ce2fd6383dc2a844da3ad67652fa834bb97a6574f5e508d035f410ad035e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/attachments/manifest.json": "dbb1e5ed456c9c741fb459303ce75b389430c57c4bf84085a529866bffd81642",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/attachments/25248F1E-BB74-4A87-8434-4156CC8D0F92.txt": "c06cf022ec94d2eda0b7e965e9e5db276f34d30ee9070e8dbd570652669dd147",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/host-captures/007-1398x2034.png": "b75f3b5e5c771a1ef9026b1d87692b1597d6b8a7e51602399574709eba045c42",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/host-captures/007-hierarchy.txt": "c06cf022ec94d2eda0b7e965e9e5db276f34d30ee9070e8dbd570652669dd147",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/host-captures/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/host-captures/displays-before.json": "811d52bca1040cea395cf3c54364b17e7d75dde75f759358c48f842ad3acad97",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/host-captures/checkpoints.jsonl": "2bad0fae567b4b812fb0f39f465289c7f6f4582fa88286e0174f5d8a9427fca3",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/host-captures/captures.tsv": "17adfe4520862558932f25793580586023efadadbdbc5eadde7a09ce19b1b8e3",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/pipeline-receipt.json": "a8c331d70dc117a7aa454c78bf53a11115d5dead82f1e252197b6c132f5c5383",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/operator-post-run-pose/proof.json": "226e4027222dc7f3dfd156679a2e8f09379f4cfa26348f0da638ca5e43bcf7aa",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/operator-post-run-pose/angle-after.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/operator-post-run-pose/displays-after.json": "5a3e3fa4d21c8b4d585261e8b2275f444d4dc65b96bdb1d62519b69151659706",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/xcresult-legacy-root.json": "792986efa8c0aeee4d9af39bed2ed378761b6bc2a617f7378ed91dec23b01ebb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/producer-source/first-native-contract-witness.json": "d521f05eced03c635e6fc4eb7f55dfbf1fa9923883725b7b86a3e1363794d692",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/producer-source/provenance.json": "2c19cb16545ac3a53aaf5ecec44202ed5b4297a4ca767ac41c8137f91f6057d5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/producer-source/a11-capture-duo-cases.sh": "5f3e8c98da87199823565e93b2dd0256c5e04fd63c8d9e747045a5d5717751e9",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-creation-baseline.json": "ba2eade17391f9e5b188e93d7af4af4cd3a4acb46b226ad2c6fdbe5655771faa",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-device.json": "6dcc68a1b6462fe88ac61d6b0ab192af48fb99789dabfc64530a40440f4b21e9",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-current.json": "abbe0b0d52e16d999982c44c36e26ae5703b5b81df85fbd3dfd1c5aa972fd1cc",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/prior-actual-readiness-30b/proof.json": "021edc4866d0a75813463507175c103cebbbe9b9eff497c863c2bdc20fc63244",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/registry-snapshot-after-run.json": "40b4b287fa3db787b7a03c2a3091a98e447ff12647018920ebbdc297169f025c",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/copy-scope.json": "782ef7f506771329762a943ca609d7d0c2377595ae5b66e525fc805ddc024bb3",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/result.json": "183e127c62a1e3a7918b78a9cdc06a5df44a2788d3daeaa374aad756ba3cfc96",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/tests.json": "0b5fc6600d01f88e27e9d73025aa0381f8ecc9b08bc68abc12ec1faa2236b02f",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/summary.json": "52b942f6ae8a2963b1928023e7e44caa73a7f9500ac815636838133afc9322ae",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/provenance.json": "4147d7ba28fa70b5b8f716e69539c67211dae175a62d8be0698b0351e82d36b4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/run.log.gz": "f040f11211d2d61a102378718162ebc5832e73608b16d5bb1ff87c32f30750f5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/attachments/manifest.json": "8575091bc5033d361b9169cba9c0fe227ac0f282b369b30d44fb55681849bf0a",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/attachments/813BA5BC-0A6A-4363-BD33-44E54E19B4E2.txt": "a2efba8c7a69ded3bc993786147ac97d6f03bfaf39fb7645b66c0d1a2968537f",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/pose-proof.json": "5000436df8210fbc3306d508a0f95d23ae98344f5d4728d28657224f9bc0398b",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/angle-before.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/angle-after.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/displays-before.json": "9fe818d3190a86c37adcadceda50660f15a182c44eeb25dbc3a81988c283fd5e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/displays-after.json": "9fe818d3190a86c37adcadceda50660f15a182c44eeb25dbc3a81988c283fd5e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/checkpoints.jsonl": "281ba3262865184c9df9d5bfeb8a99bd09598af8d4ed49c996ece6da62c24b21",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/captures.tsv": "03a4c52a675037d59d6311495703ad59b46f261c6fafefad287dd86cad486ed3",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/003-2007x2853.png": "efe8b21f69096de1809aabb514e00ae1a697a70ea8e4e26be1f8a8cfbfa53d14",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/host-captures/003-hierarchy.txt": "a2efba8c7a69ded3bc993786147ac97d6f03bfaf39fb7645b66c0d1a2968537f",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/xcresult-legacy-root.json": "cb43a64421474fd8c31e8dc16007ae0a710c9d8d9af47e37c5e53c24d67dc464",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/dispatch-support/a11-capture-duo-cases.sh": "1e5ab04fb5465a1e1c5e0fce6ca0b0d279f42008136666c0cd308ed7c652a19d",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/dispatch-support/a11-duo-first-native-creation-baseline.json": "ba2eade17391f9e5b188e93d7af4af4cd3a4acb46b226ad2c6fdbe5655771faa",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/dispatch-support/a11-duo-first-native-device.json": "6dcc68a1b6462fe88ac61d6b0ab192af48fb99789dabfc64530a40440f4b21e9",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/dispatch-support/a11-duo-first-native-current.json": "abbe0b0d52e16d999982c44c36e26ae5703b5b81df85fbd3dfd1c5aa972fd1cc",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/dispatch-support/readiness/proof.json": "9a70cb22c9ef843d939f6c91ddf88508f38fcb284256c7ec68fb07f18230721b",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/dispatch-support/readiness/registry-before-dispatch.json": "40b4b287fa3db787b7a03c2a3091a98e447ff12647018920ebbdc297169f025c",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738/dispatch-support/readiness/registry-before-dispatch-binding.json": "1537898a33fe3b140a44cfaa4b98a0c4e8ceb58827e94fc584d1c6cefc364184",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/result.json": "11f7104132044eb28fd855f71a2d509f1211fc8a3fa19e1d03b195a43a1acc81",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/tests.json": "cb850675baf68d27f110da528334ca8452ffc3d5c1985909f54edbf15d023377",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/summary.json": "53ff223e6105c5950786bd8e1c084cc129625e58916cad33d9c029a2194137b5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/provenance.json": "e36c9a853d85fdba983b2de332276d198a3cd703910630c92d1a5957cc1665d5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/run.log.gz": "d3c2e3c0660257d3e45075cafc3c20158f62a523139b545b5aaebee9fc83024c",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/manifest.json": "bcd95b05744ddc559f9f15ba70e371bdd26f1688e72863d173f3c69db4249bbe",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/xcresult-legacy-root.json": "edafc975cbc73f1cd8de7fef86e028a2dc143370cdc5b8681718d044ffc25b82",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/pose-proof.json": "28448df6ce543c9e14ed82469f8f9f7576490163c74dd58df1a3582998e948b7",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/angle-after.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/displays-before.json": "811d52bca1040cea395cf3c54364b17e7d75dde75f759358c48f842ad3acad97",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/displays-after.json": "811d52bca1040cea395cf3c54364b17e7d75dde75f759358c48f842ad3acad97",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/checkpoints.jsonl": "1fcca43b80fe372065e27f24973dc46839a2d55b58348a3158f3153dc3849ec8",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/captures.tsv": "42e9ccf5138dfb5e46c54ef7d22f63d8bfc30b83b4479ee572b29d1aab88209a",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/003-1398x2034.png": "8be397555c88dcb4de385a5a294ffcba3c9a67bc40e9694d68b0954a7d0831e7",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/003-hierarchy.txt": "223b9e8f6611f75daf5ac7839981492049d2f7f2be72f0e48b42054c40890052",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/004-1398x2034.png": "1636f6ebfa4b2d5a6774f5c1b691fd65c4d598b083d7421225ea165f1acc1496",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/004-hierarchy.txt": "c5580848aed70fa1fc965ee3ed8d7085b1014961681b052ada9a83ef26c178ee",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/005-1398x2034.png": "606367cebe3919f2666ad78cfb800f303b29a354b0bfca1240802e202141ec49",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/005-hierarchy.txt": "339300ccfb48cff199208e9752056f39563ed7ecc2805d6a549e71534ab1121e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/006-1398x2034.png": "606367cebe3919f2666ad78cfb800f303b29a354b0bfca1240802e202141ec49",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/006-hierarchy.txt": "ba4f1836e82a7fa6586b118941382ca7f86b3e4884f983ba2f479b5463e5c72d",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/007-1398x2034.png": "d3f5e3480f364c053fa7a1142430b3be4cad200e7381f0804d1ccc44a3ac984b",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/007-hierarchy.txt": "d01372577629732f3d77bf1526544faa9b827c6f829ef3b37a40eb9385a945a2",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/1D23DDE5-2B95-4C12-87A1-0E10BCF07CBA.txt": "223b9e8f6611f75daf5ac7839981492049d2f7f2be72f0e48b42054c40890052",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/FB3F70F0-7A54-4BE6-A7DD-E6372F424F62.txt": "c5580848aed70fa1fc965ee3ed8d7085b1014961681b052ada9a83ef26c178ee",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/69988986-BD2E-4B79-953E-D9F22DF45E59.txt": "339300ccfb48cff199208e9752056f39563ed7ecc2805d6a549e71534ab1121e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/BA1BB060-31DE-4A4D-810B-514AE93DC2E5.txt": "ba4f1836e82a7fa6586b118941382ca7f86b3e4884f983ba2f479b5463e5c72d",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/96800C6B-2E6E-4709-BAB9-46D4DEA8D910.txt": "d01372577629732f3d77bf1526544faa9b827c6f829ef3b37a40eb9385a945a2",
+    "/private/tmp/a11-capture-duo-closed-max.sh": "069cc27b5ca5672e2bbc18424afc1e565a463223a9213b91490c8ff82461c635"
+  },
+  "normal_source_closure_sha256": "f134e6b19446e6d5e9408b506b5108c141c31c64ac290198f8838acd47853a3b",
+  "archives": {
+    "regular": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/phone-normal-fa4ba738",
+      "source_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.xcodebuild/a11-phone-normal-fa4ba738.log"
+      },
+      "core_sha256": {
+        "result.json": "a2e635eafd63326d40e27f2a57f28558b914cf9887210b86d6bd2c41884e2c8d",
+        "tests.json": "8def0dd5c869f547cd32c5547609bc069f215b920bf66cd7e5c50701f6436b6e",
+        "summary.json": "5125856ce8b0262e068704877aebedb6d2b5a66f59587535d644db5dd55ff943",
+        "provenance.json": "773e64c54e1eff5078c22ac74afe56e6dc7f67c439c6f138ea90a5cf4f484209",
+        "run.log.gz": "850059b72c137d363e99f911fa6f145475498677d4988e5d97787aeb96043d2e",
+        "attachments/manifest.json": "6752c42a7d1a854687cebd20247814df899b2d5f8559fe35052a567b3f0c9a3e"
+      }
+    },
+    "ipad": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/ipad-normal-fa4ba738",
+      "source_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.xcodebuild/a11-ipad-normal-fa4ba738.log"
+      },
+      "core_sha256": {
+        "result.json": "cf0178e3219fc46276324ad51c2f581734ee843c73ae01b82e91363d2f63dd4f",
+        "tests.json": "414ca063c699f1a1b7a9e6d2da216939bcd8f4ef42cddc89fe073ac635386e73",
+        "summary.json": "120927a643cb00c0fc52e825e05c3fcc0e6eb59a6bc9a46b621fab4735669757",
+        "provenance.json": "a2de93bb7aaa34121ced9a1148b8fcd280bdc5739c46f8596c9ce807c1f69aee",
+        "run.log.gz": "699f49f2ec7b9cc2fdbc6431c110713a2c9d3c54dfec7b0109accf6ce4af03a4",
+        "attachments/manifest.json": "7995446c9fc23383f7af47033c488bed433848d507bf35aff96bdd5385d2fd2d"
+      }
+    },
+    "duo": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed",
+      "source_revision": "be23b071d82b0a821c4e0d7fd04613e0ccdd2f03",
+      "result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections",
+          "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailAtMaximumAccessibilityTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 1,
+        "failures": [
+          "687: /Users/shanks/.codex/worktrees/detail-redesign-a11/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:1743: error: -[DUNEUITests.ActivityExerciseRegressionTests testConsistencyDetailAtMaximumAccessibilityTextSize] : XCTAssertTrue failed - Missing activity-consistency-day-3-workout-today",
+          "700: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testConsistencyDetailAtMaximumAccessibilityTextSize]' failed (149.458 seconds).",
+          "1062: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-11-03 16:22:01.343.",
+          "1064: Test Suite 'DUNEUITests.xctest' failed at 2026-11-03 16:22:01.349.",
+          "1066: Test Suite 'Selected tests' failed at 2026-11-03 16:22:01.350.",
+          "1081: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 1 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailAtMaximumAccessibilityTextSize"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.xcodebuild/a11-duo-closed-be23b071.log"
+      },
+      "core_sha256": {
+        "result.json": "7bfa10394c0888157e90f8571e64cf983d9be0bdeda7a797eadc7c54b61e2eeb",
+        "tests.json": "a2c10699a26c35093e56bbef9ae71868afec8fb4dc822aedf87fa67f666cea48",
+        "summary.json": "20e5c0f2e2eda382b5302a07956136606f63dc5025465b1bca1c13e59783160e",
+        "provenance.json": "72d7ce48e642ac6b3e16cd309695c1c14b21f46eac2a8ceef976b658ca64ead6",
+        "run.log.gz": "2e94ce2fd6383dc2a844da3ad67652fa834bb97a6574f5e508d035f410ad035e",
+        "attachments/manifest.json": "dbb1e5ed456c9c741fb459303ce75b389430c57c4bf84085a529866bffd81642"
+      }
+    },
+    "duo-open": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-open-normal-fa4ba738",
+      "source_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.xcodebuild/a11-duo-open-fa4ba738.log"
+      },
+      "core_sha256": {
+        "result.json": "183e127c62a1e3a7918b78a9cdc06a5df44a2788d3daeaa374aad756ba3cfc96",
+        "tests.json": "0b5fc6600d01f88e27e9d73025aa0381f8ecc9b08bc68abc12ec1faa2236b02f",
+        "summary.json": "52b942f6ae8a2963b1928023e7e44caa73a7f9500ac815636838133afc9322ae",
+        "provenance.json": "4147d7ba28fa70b5b8f716e69539c67211dae175a62d8be0698b0351e82d36b4",
+        "run.log.gz": "f040f11211d2d61a102378718162ebc5832e73608b16d5bb1ff87c32f30750f5",
+        "attachments/manifest.json": "8575091bc5033d361b9169cba9c0fe227ac0f282b369b30d44fb55681849bf0a"
+      }
+    },
+    "maximum": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed",
+      "source_revision": "3c5b652e660284e9bbc3c747b9f3e50a0f59bfe7",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailAtMaximumAccessibilityTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.xcodebuild/a11-duo-closed-3c5b652e-max.log"
+      },
+      "core_sha256": {
+        "result.json": "11f7104132044eb28fd855f71a2d509f1211fc8a3fa19e1d03b195a43a1acc81",
+        "tests.json": "cb850675baf68d27f110da528334ca8452ffc3d5c1985909f54edbf15d023377",
+        "summary.json": "53ff223e6105c5950786bd8e1c084cc129625e58916cad33d9c029a2194137b5",
+        "provenance.json": "e36c9a853d85fdba983b2de332276d198a3cd703910630c92d1a5957cc1665d5",
+        "run.log.gz": "d3c2e3c0660257d3e45075cafc3c20158f62a523139b545b5aaebee9fc83024c",
+        "attachments/manifest.json": "bcd95b05744ddc559f9f15ba70e371bdd26f1688e72863d173f3c69db4249bbe"
+      }
+    }
+  },
+  "max_checkpoints": [
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/003-1398x2034.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/003-hierarchy.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/1D23DDE5-2B95-4C12-87A1-0E10BCF07CBA.txt",
+      "manifest_ax_sha256": "223b9e8f6611f75daf5ac7839981492049d2f7f2be72f0e48b42054c40890052",
+      "manifest_ax_attachment": {
+        "configurationName": "Duo Visual Audit",
+        "deviceId": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+        "exportedFileName": "1D23DDE5-2B95-4C12-87A1-0E10BCF07CBA.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-A11 consistency current and best MAX-DUNEUITestsActivityExerciseRegressionTests_0_0D8D8EED-BEB7-46A6-8E53-EE2447BDA61A.swift-1799",
+        "timestamp": 1793691852.698
+      },
+      "image_attachment": null,
+      "host_checkpoint": {
+        "sequence": 3,
+        "action": "DUNE_VISUAL_AUDIT_READY A11 consistency current and best MAX [DUNEUITests/ActivityExerciseRegressionTests.swift:1799] DEADLINE=1793691880.464174",
+        "elapsed_seconds": 2.186,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "kind": "host",
+      "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+      "device": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+      "model": "iPhone",
+      "action": "A11 consistency current and best MAX",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailAtMaximumAccessibilityTextSize",
+      "timestamp": 1793691852.698,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "screen": "003-1398x2034.png",
+      "image_sha256": "8be397555c88dcb4de385a5a294ffcba3c9a67bc40e9694d68b0954a7d0831e7",
+      "ax_sha256": "223b9e8f6611f75daf5ac7839981492049d2f7f2be72f0e48b42054c40890052",
+      "pose_evidence": "automatic before/after readbacks",
+      "legacy_model_evidence": "legacy raw device record verified"
+    },
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/004-1398x2034.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/004-hierarchy.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/FB3F70F0-7A54-4BE6-A7DD-E6372F424F62.txt",
+      "manifest_ax_sha256": "c5580848aed70fa1fc965ee3ed8d7085b1014961681b052ada9a83ef26c178ee",
+      "manifest_ax_attachment": {
+        "configurationName": "Duo Visual Audit",
+        "deviceId": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+        "exportedFileName": "FB3F70F0-7A54-4BE6-A7DD-E6372F424F62.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-A11 consistency today calendar MAX-DUNEUITestsActivityExerciseRegressionTests_0_D47E92DE-F7CD-4476-BA0E-5868613863D3.swift-1804",
+        "timestamp": 1793691863.255
+      },
+      "image_attachment": null,
+      "host_checkpoint": {
+        "sequence": 4,
+        "action": "DUNE_VISUAL_AUDIT_READY A11 consistency today calendar MAX [DUNEUITests/ActivityExerciseRegressionTests.swift:1804] DEADLINE=1793691890.401854",
+        "elapsed_seconds": 2.814,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "kind": "host",
+      "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+      "device": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+      "model": "iPhone",
+      "action": "A11 consistency today calendar MAX",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailAtMaximumAccessibilityTextSize",
+      "timestamp": 1793691863.255,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "screen": "004-1398x2034.png",
+      "image_sha256": "1636f6ebfa4b2d5a6774f5c1b691fd65c4d598b083d7421225ea165f1acc1496",
+      "ax_sha256": "c5580848aed70fa1fc965ee3ed8d7085b1014961681b052ada9a83ef26c178ee",
+      "pose_evidence": "automatic before/after readbacks",
+      "legacy_model_evidence": "legacy raw device record verified"
+    },
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/005-1398x2034.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/005-hierarchy.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/69988986-BD2E-4B79-953E-D9F22DF45E59.txt",
+      "manifest_ax_sha256": "339300ccfb48cff199208e9752056f39563ed7ecc2805d6a549e71534ab1121e",
+      "manifest_ax_attachment": {
+        "configurationName": "Duo Visual Audit",
+        "deviceId": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+        "exportedFileName": "69988986-BD2E-4B79-953E-D9F22DF45E59.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-A11 consistency two-digit day MAX-DUNEUITestsActivityExerciseRegressionTests_0_47DC3D55-B421-4DEA-B11A-C6DF73FF2F18.swift-1826",
+        "timestamp": 1793691874.38
+      },
+      "image_attachment": null,
+      "host_checkpoint": {
+        "sequence": 5,
+        "action": "DUNE_VISUAL_AUDIT_READY A11 consistency two-digit day MAX [DUNEUITests/ActivityExerciseRegressionTests.swift:1826] DEADLINE=1793691902.22791",
+        "elapsed_seconds": 2.135,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "kind": "host",
+      "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+      "device": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+      "model": "iPhone",
+      "action": "A11 consistency two-digit day MAX",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailAtMaximumAccessibilityTextSize",
+      "timestamp": 1793691874.38,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "screen": "005-1398x2034.png",
+      "image_sha256": "606367cebe3919f2666ad78cfb800f303b29a354b0bfca1240802e202141ec49",
+      "ax_sha256": "339300ccfb48cff199208e9752056f39563ed7ecc2805d6a549e71534ab1121e",
+      "pose_evidence": "automatic before/after readbacks",
+      "legacy_model_evidence": "legacy raw device record verified"
+    },
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/006-1398x2034.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/006-hierarchy.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/BA1BB060-31DE-4A4D-810B-514AE93DC2E5.txt",
+      "manifest_ax_sha256": "ba4f1836e82a7fa6586b118941382ca7f86b3e4884f983ba2f479b5463e5c72d",
+      "manifest_ax_attachment": {
+        "configurationName": "Duo Visual Audit",
+        "deviceId": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+        "exportedFileName": "BA1BB060-31DE-4A4D-810B-514AE93DC2E5.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-A11 consistency calendar and progress MAX-DUNEUITestsActivityExerciseRegressionTests_0_EFFF0875-4F6A-4770-9196-AEBE3EBD4280.swift-1841",
+        "timestamp": 1793691882.29
+      },
+      "image_attachment": null,
+      "host_checkpoint": {
+        "sequence": 6,
+        "action": "DUNE_VISUAL_AUDIT_READY A11 consistency calendar and progress MAX [DUNEUITests/ActivityExerciseRegressionTests.swift:1841] DEADLINE=1793691910.117167",
+        "elapsed_seconds": 2.134,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "kind": "host",
+      "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+      "device": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+      "model": "iPhone",
+      "action": "A11 consistency calendar and progress MAX",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailAtMaximumAccessibilityTextSize",
+      "timestamp": 1793691882.29,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "screen": "006-1398x2034.png",
+      "image_sha256": "606367cebe3919f2666ad78cfb800f303b29a354b0bfca1240802e202141ec49",
+      "ax_sha256": "ba4f1836e82a7fa6586b118941382ca7f86b3e4884f983ba2f479b5463e5c72d",
+      "pose_evidence": "automatic before/after readbacks",
+      "legacy_model_evidence": "legacy raw device record verified"
+    },
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/007-1398x2034.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/host-captures/007-hierarchy.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-max-3c5b652e-full-width-passed/attachments/96800C6B-2E6E-4709-BAB9-46D4DEA8D910.txt",
+      "manifest_ax_sha256": "d01372577629732f3d77bf1526544faa9b827c6f829ef3b37a40eb9385a945a2",
+      "manifest_ax_attachment": {
+        "configurationName": "Duo Visual Audit",
+        "deviceId": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+        "deviceName": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+        "exportedFileName": "96800C6B-2E6E-4709-BAB9-46D4DEA8D910.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-A11 consistency latest history MAX-DUNEUITestsActivityExerciseRegressionTests_0_99A8CB26-C8CC-4FA0-8A37-B13C530A3F1B.swift-1847",
+        "timestamp": 1793691893.078
+      },
+      "image_attachment": null,
+      "host_checkpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY A11 consistency latest history MAX [DUNEUITests/ActivityExerciseRegressionTests.swift:1847] DEADLINE=1793691920.9490619",
+        "elapsed_seconds": 2.126,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "kind": "host",
+      "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+      "device": "iPhone Duo-wt-Health-detail-redesign-a11-3abc35ca2fe0",
+      "model": "iPhone",
+      "action": "A11 consistency latest history MAX",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testConsistencyDetailAtMaximumAccessibilityTextSize",
+      "timestamp": 1793691893.078,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "screen": "007-1398x2034.png",
+      "image_sha256": "d3f5e3480f364c053fa7a1142430b3be4cad200e7381f0804d1ccc44a3ac984b",
+      "ax_sha256": "d01372577629732f3d77bf1526544faa9b827c6f829ef3b37a40eb9385a945a2",
+      "pose_evidence": "automatic before/after readbacks",
+      "legacy_model_evidence": "legacy raw device record verified"
+    }
+  ],
+  "historical_failure": {
+    "revision": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+    "status": "failed",
+    "result_sha256": "a50a0e000ca95ad691ef7886bf0e75b6411e03c931e9b5c721ac2d02ac88a6ce",
+    "provenance_sha256": "5f880e27b3d07f414c12172dd7747553abe319f7b6757fc8b3d90926120e18a2"
+  },
+  "historical_glyph_failure": {
+    "revision": "9e77710ab8bf2a14940217979e496b478e414ccc",
+    "status": "failed",
+    "result_sha256": "b93ab158ed3a7a390867b9e8442be012301d6fab11c46ba6d59a489d6859b607",
+    "provenance_sha256": "8a943364ef4487db9544bb887fa642f72391de8261aee67ddb9bc421d2ef8bbf"
+  },
+  "maximum_ownership": {
+    "uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+    "creation_source": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+    "readiness_source": "30b8647ee1afeb431bf25c7dc1331cf6b156bc9f",
+    "readiness_kind": "historical pose-only, not a full boot/readiness receipt",
+    "scope": "Actual creation/readiness at 30b; 31D; later registry copy after be23 is not a capture-time snapshot",
+    "reviewer": "source binding pending independent gallery review",
+    "records": {
+      "creation_baseline": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-creation-baseline.json",
+        "sha256": "ba2eade17391f9e5b188e93d7af4af4cd3a4acb46b226ad2c6fdbe5655771faa"
+      },
+      "creation_device": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-device.json",
+        "sha256": "6dcc68a1b6462fe88ac61d6b0ab192af48fb99789dabfc64530a40440f4b21e9"
+      },
+      "creation_current": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/a11-duo-first-native-current.json",
+        "sha256": "abbe0b0d52e16d999982c44c36e26ae5703b5b81df85fbd3dfd1c5aa972fd1cc"
+      },
+      "readiness": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-a11/Health/.codex-checks/a11/evidence/duo-closed-containment-be23b071-mixed/ownership-support/prior-actual-readiness-30b/proof.json",
+        "sha256": "021edc4866d0a75813463507175c103cebbbe9b9eff497c863c2bdc20fc63244"
+      }
+    }
+  },
+  "final_review": "../../../../reviews/2026-11-03-a11-consistency-detail-redesign.md",
+  "max_visual_note": "Event006 PNG equals005; original files retained, duplicate photo omitted in HTML. Progress and history are visibly recorded at007."
+}

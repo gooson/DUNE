@@ -776,13 +776,19 @@
     },
     "A11": {
       "row_id": "A11",
-      "evidence": "activity-consistency-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivitySecondaryDetailRoutesOpenExpectedScreens()",
-      "action": "tap activity-section-consistency",
-      "timestamp": 1791839969.128,
-      "image": "B6EBB33E-2FE2-457E-870B-5D80D9729482.png",
-      "screen": "screen-0-1398x2034-tap activity-section-consistency_0_C92B30F2-A8B7-4FD4-B893-A07787CB9D09.png",
-      "file": "A11.png"
+      "file": "A11.png",
+      "test": "ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections()",
+      "action": "A11 consistency current and best normal",
+      "source_revision": "be23b071d82b0a821c4e0d7fd04613e0ccdd2f03",
+      "capture_kind": "host",
+      "image": "007-1398x2034.png",
+      "screen": "007-1398x2034.png",
+      "timestamp": 1793690492.229,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "device_uid": "31D08536-7B26-4FF7-BABD-4FAD49578596",
+      "image_sha256": "b75f3b5e5c771a1ef9026b1d87692b1597d6b8a7e51602399574709eba045c42",
+      "ax_sha256": "c06cf022ec94d2eda0b7e965e9e5db276f34d30ee9070e8dbd570652669dd147",
+      "evidence": "activity-consistency-detail-screen"
     },
     "A10": {
       "row_id": "A10",
@@ -1398,10 +1404,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "b0dafb053044289192eb9652862f01fced206b3d",
+  "last_refresh_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
   "last_refresh_screens": [
-    "A10",
-    "T16"
+    "A11"
   ],
-  "last_refresh_note": "A10 and T16 fresh normal native captures; see per-row source and linked gallery."
+  "last_refresh_note": "Duo closed normal is be23 passed case in failed mixed run; other normals are current source."
 }
