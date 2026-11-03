@@ -114,3 +114,7 @@ Protected read-only sources: `WeeklyStatsDetailViewModel.swift`, `TrainingVolume
 
 - **Overall**: Medium.
 - **Reasoning**: Source data/period/chart contracts and protected hashes are known. The exact native geometry and available seeded prior-period data still need a source-matched baseline and device readback before implementation is called complete.
+
+## 최종 실행 기록 · 2026-11-03
+
+ed21363c에서 iPad 일반 화면과 원래 MAX Workout Insights 검사가 실제 2/2 통과했다. 큰 글씨의 세 기간 선택·비교 범위 복귀, 차트 볼륨 선택, 기존 10초 닫기·운동 화면 복귀 조건을 보존했다. 관련 VM 9개는 변경 없는 원본 소스 범위로 재사용했다. 실제 화면 비교는 iPad ed213과 Phone·Duo의 d79 원본 촬영 리비전을 구분하며, 파동 위상이나 픽셀 일치는 주장하지 않는다. 새 캡처·접근성·입력 출처는 A05 실제 검토 갤러리에서 확인한다.
