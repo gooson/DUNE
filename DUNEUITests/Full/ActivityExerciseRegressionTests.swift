@@ -656,6 +656,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     override func setUpWithError() throws {
+        if name == "-[ActivityExerciseRegressionTests testActivityExerciseMixAtMaximumAccessibilityTextSize]" {
+            // This exact MAX case includes host capture handshakes and real chart interactions.
+            executionTimeAllowance = 360
+        }
         try super.setUpWithError()
     }
 
