@@ -1219,7 +1219,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             configuration.additionalArguments += [
                 "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
                 "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
-                "--ui-test-style", "dark"
+                "--ui-test-style", "dark",
+                "--ui-visual-personal-records-recent-fixture"
             ]
             launchApp(with: configuration)
             XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
