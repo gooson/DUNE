@@ -1,0 +1,232 @@
+Attributes: Application, 0x10fe52800, pid: 56092, label: 'DUNE'
+Element subtree:
+ →Application, 0x10fe52800, pid: 56092, label: 'DUNE'
+    Window (Main), 0x10fe5ef80, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x10fe5f200, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x10fe5d7c0, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x10fe5f5c0, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x10fe5df40, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x10fe5f840, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x10fe5e300, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x10fe5e440, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x10fe5e580, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x10fe5e6c0, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x10fe5e800, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x10fe5e940, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x10fe5ea80, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10fe5ebc0, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x10fe5ed00, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: '도구 막대'
+                              Other, 0x10fe5ee40, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x10279d540, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Personal Records'
+                              StaticText, 0x10279dcc0, {{20.0, 31.0}, {228.3, 34.0}}, label: 'Personal Records'
+                            Other, 0x10279e440, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x10279f700, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x10fe56a80, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x10fe56bc0, {{0.0, 0.0}, {466.0, 678.0}}
+                                    ScrollView, 0x10fe56d00, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'activity-personal-records-detail-screen'
+                                      Other, 0x10fe57480, {{0.0, 0.0}, {466.0, 678.0}}
+                                        Other, 0x10fe575c0, {{0.0, 0.0}, {466.0, 122.0}}
+                                      Other, 0x10fe57700, {{0.0, 0.0}, {466.0, 678.0}}
+                                      Other, 0x10fe57840, {{0.0, 82.0}, {382.0, 2095.3}}
+                                        ScrollView, 0x10fe57980, {{16.0, 98.0}, {350.0, 34.0}}, identifier: 'activity-personal-records-chip-bar'
+                                          Other, 0x10fe55900, {{16.0, 98.0}, {454.7, 34.0}}
+                                            Button, 0x10fe55a40, {{24.0, 98.0}, {110.7, 34.0}}, identifier: 'activity-personal-records-kind-fastestPace', label: '최고 페이스', Selected
+                                              Image, 0x10fe55b80, {{37.0, 109.0}, {12.0, 12.0}}, identifier: 'speedometer', label: '속도'
+                                              StaticText, 0x10fe55cc0, {{54.0, 106.0}, {68.7, 18.0}}, label: '최고 페이스'
+                                            Button, 0x10fe55e00, {{142.7, 98.0}, {97.0, 34.0}}, identifier: 'activity-personal-records-kind-longestDistance', label: '최장 거리'
+                                              Image, 0x10fe55f40, {{156.0, 108.7}, {10.3, 13.0}}, identifier: 'point.topleft.down.to.point.bottomright.curvepath.fill', label: '곡선 경로의 오른쪽 하단 모서리를 향하는 왼쪽 상단 모서리에 배치된 뒤를 향하는 화살표, 채워짐'
+                                              StaticText, 0x10fe56080, {{171.7, 106.0}, {56.0, 18.0}}, label: '최장 거리'
+                                            Button, 0x10fe561c0, {{247.7, 98.0}, {98.0, 34.0}}, identifier: 'activity-personal-records-kind-longestDuration', label: '최장 시간'
+                                              Image, 0x10fe56300, {{260.7, 109.0}, {12.0, 12.0}}, identifier: 'timer', label: '타이머'
+                                              StaticText, 0x10fe56440, {{277.7, 106.0}, {56.0, 18.0}}, label: '최장 시간'
+                                            Button, 0x10fe56580, {{353.7, 98.0}, {109.0, 34.0}}, identifier: 'activity-personal-records-kind-highestCalories', label: '최고 칼로리'
+                                              Image, 0x10fe566c0, {{366.7, 108.7}, {10.0, 13.0}}, identifier: 'flame.fill', label: '불꽃'
+                                              StaticText, 0x10fe56800, {{381.7, 106.0}, {69.0, 18.0}}, label: '최고 칼로리'
+                                        Other, 0x10fe56940, {{16.0, 148.0}, {350.0, 233.0}}, identifier: 'activity-personal-records-current-best'
+                                          Image, 0x10fe54280, {{36.0, 168.0}, {44.0, 44.0}}, identifier: 'speedometer', label: '속도'
+                                          Button, 0x10fe543c0, {{302.0, 168.0}, {44.0, 44.0}}, identifier: 'activity-personal-records-share-button', label: 'PR 공유'
+                                          StaticText, 0x10fe54500, {{88.0, 179.8}, {63.0, 20.3}}, label: '현재 최고'
+                                          StaticText, 0x10fe54640, {{36.0, 228.0}, {172.0, 62.3}}, identifier: 'activity-personal-records-best-value', label: '13'00"'
+                                          StaticText, 0x10fe54780, {{216.0, 258.7}, {33.7, 24.0}}, identifier: 'activity-personal-records-best-unit', label: '/km'
+                                          StaticText, 0x10fe548c0, {{36.0, 306.3}, {26.0, 18.0}}, label: '걷기'
+                                          Other, 0x10fe54a00, {{16.0, 323.7}, {350.0, 57.3}}
+                                          StaticText, 0x10fe54b40, {{36.0, 328.3}, {55.3, 14.3}}, label: '최고 페이스'
+                                          StaticText, 0x10fe54c80, {{36.0, 346.7}, {94.0, 14.3}}, identifier: 'activity-personal-records-best-date', label: '2026년 10월 14일'
+                                        Other, 0x10fe54dc0, {{16.0, 397.0}, {350.0, 471.3}}, identifier: 'activity-personal-records-timeline-chart'
+                                          StaticText, 0x10fe54f00, {{28.0, 409.0}, {68.7, 18.0}}, label: '페이스 기록'
+                                          SegmentedControl, 0x10fe55040, {{28.0, 435.0}, {326.0, 31.0}}, identifier: 'activity-personal-records-period-picker'
+                                            Button, 0x10fe55180, {{28.0, 435.0}, {65.2, 32.0}}, identifier: 'activity-personal-records-period-D', label: '일'
+                                            Button, 0x10fe552c0, {{93.2, 435.0}, {65.2, 32.0}}, identifier: 'activity-personal-records-period-W', label: '주'
+                                            Button, 0x10fe55400, {{158.4, 435.0}, {65.2, 32.0}}, identifier: 'activity-personal-records-period-M', label: '월'
+                                            Button, 0x10fe55540, {{223.6, 435.0}, {65.2, 32.0}}, identifier: 'activity-personal-records-period-6M', label: '6개월', Selected
+                                            Button, 0x10fe55680, {{288.8, 435.0}, {65.2, 32.0}}, identifier: 'activity-personal-records-period-Y', label: '년'
+                                          StaticText, 0x10fe557c0, {{28.0, 474.0}, {140.0, 14.3}}, identifier: 'activity-personal-records-chart-range', label: '2026. 5. 3. ~ 2026. 11. 3.'
+                                          StaticText, 0x105d54000, {{28.0, 496.3}, {19.3, 13.3}}, identifier: 'activity-personal-records-chart-unit', label: '/km'
+                                          Image, 0x105d54140, {{43.7, 531.3}, {18.3, 18.3}}, identifier: 'speedometer', label: '속도'
+                                          StaticText, 0x105d54280, {{74.0, 529.7}, {45.0, 14.3}}, label: '최근 기록'
+                                          StaticText, 0x105d543c0, {{74.0, 548.0}, {71.7, 18.0}}, identifier: 'personal-records-timeline-latest-value', label: '4'42" /km'
+                                          StaticText, 0x105d54500, {{74.0, 570.0}, {86.0, 14.3}}, identifier: 'personal-records-timeline-latest-date', label: '2026년 11월 2일'
+                                          Other, 0x105d54640, {{28.0, 620.3}, {326.0, 236.0}}
+                                            Other, 0x105d54780, {{262.8, 620.3}, {48.2, 218.0}}, label: '2026년 10월 1일에서 2026년 11월 1일 사이', value: 시작 값 658, 변동 범위 11...
+                                            Other, 0x105d548c0, {{311.0, 620.3}, {46.7, 218.0}}, label: '2026년 11월 1일에서 2026년 12월 1일 사이', value: 시작부터 끝까지 내내 282, 3...
+                                        Other, 0x105d54a00, {{16.0, 884.3}, {350.0, 338.7}}, identifier: 'activity-personal-records-reward-progress'
+                                          Button, 0x105d54b40, {{310.0, 896.3}, {44.0, 44.0}}, identifier: 'activity-personal-records-reward-info', label: '보상 시스템 안내'
+                                          StaticText, 0x105d54c80, {{28.0, 909.3}, {68.7, 18.0}}, label: '보상 진행도'
+                                          Image, 0x105d54dc0, {{39.5, 963.8}, {53.0, 53.0}}, identifier: 'star.circle.fill', label: '즐겨찾기'
+                                          StaticText, 0x105d54f00, {{100.0, 964.3}, {138.3, 20.3}}, identifier: 'activity-personal-records-reward-level', label: '레벨 2 — Beginner'
+                                          StaticText, 0x105d55040, {{100.0, 986.7}, {72.0, 18.0}}, identifier: 'activity-personal-records-reward-points', label: '340 포인트'
+                                          StaticText, 0x105d55180, {{40.0, 1028.3}, {217.3, 14.3}}, label: '다음: 레벨 5 — Dedicated (60포인트 남음)'
+                                          ProgressIndicator, 0x105d552c0, {{40.0, 1054.7}, {302.0, 4.0}}, identifier: 'activity-personal-records-level-progress', label: 'Level progress', value: 140 of 200 points
+                                            ProgressIndicator, 0x105d55400, {{40.0, 1044.7}, {302.0, 24.0}}, value: 70%
+                                          ScrollView, 0x105d55540, {{40.0, 1070.7}, {302.0, 27.7}}
+                                            Other, 0x105d55680, {{40.0, 1070.7}, {543.3, 27.7}}
+                                              Image, 0x105d557c0, {{49.3, 1076.0}, {17.0, 17.0}}, identifier: 'checkmark.circle.fill', label: '선택됨', Selected
+                                              StaticText, 0x105d55900, {{69.7, 1077.3}, {53.0, 14.3}}, label: 'Beginner'
+                                              Image, 0x105d55a40, {{148.0, 1076.0}, {17.0, 17.0}}, identifier: 'circle', label: '원'
+                                              StaticText, 0x105d55b80, {{168.3, 1077.3}, {58.0, 14.3}}, label: 'Dedicated'
+                                              Image, 0x105d55cc0, {{251.7, 1076.0}, {17.0, 17.0}}, identifier: 'circle', label: '원'
+                                              StaticText, 0x105d55e00, {{272.0, 1077.3}, {45.7, 14.3}}, label: 'Ironclad'
+                                              Image, 0x105d55f40, {{343.0, 1076.0}, {17.0, 17.0}}, identifier: 'circle', label: '원'
+                                              StaticText, 0x105d56080, {{363.3, 1077.3}, {28.7, 14.3}}, label: 'Titan'
+                                              Image, 0x105d561c0, {{417.3, 1076.0}, {17.0, 17.0}}, identifier: 'circle', label: '원'
+                                              StaticText, 0x105d56300, {{437.7, 1077.3}, {42.0, 14.3}}, label: 'Legend'
+                                              Image, 0x105d56440, {{505.0, 1076.0}, {17.0, 17.0}}, identifier: 'circle', label: '원'
+                                              StaticText, 0x105d56580, {{525.3, 1077.3}, {50.0, 14.3}}, label: 'Immortal'
+                                          StaticText, 0x105d566c0, {{28.0, 1122.3}, {59.7, 14.3}}, label: '배지 (3/16)'
+                                          ScrollView, 0x105d56800, {{28.0, 1144.7}, {326.0, 66.3}}, identifier: 'activity-personal-records-badges-scroll'
+                                            Other, 0x105d56940, {{28.0, 1144.7}, {1656.0, 66.3}}
+                                              Image, 0x105d56a80, {{66.0, 1157.7}, {20.0, 22.0}}, identifier: 'trophy.fill', label: '채워진 트로피 컵'
+                                              Image, 0x105d56bc0, {{173.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d56d00, {{277.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d56e40, {{381.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d56f80, {{481.7, 1157.7}, {21.0, 21.7}}, identifier: 'scalemass.fill', label: '질량을 재는 저울, 채워짐'
+                                              Image, 0x105d570c0, {{589.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d57200, {{693.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d57340, {{797.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d57480, {{901.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d575c0, {{1005.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d57700, {{1108.3, 1156.7}, {15.0, 23.7}}, identifier: 'figure.walk', label: '걷기'
+                                              Image, 0x105d57840, {{1213.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d57980, {{1317.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d57ac0, {{1421.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d57c00, {{1525.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              Image, 0x105d57d40, {{1629.0, 1158.7}, {14.0, 19.7}}, identifier: 'lock.fill', label: '잠금'
+                                              StaticText, 0x105d57e80, {{61.2, 1196.7}, {29.7, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-first-pr', label: '첫 PR'
+                                              StaticText, 0x105d98000, {{154.8, 1196.7}, {50.3, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-10-prs', label: 'PR 수집가'
+                                              StaticText, 0x105d98140, {{258.8, 1196.7}, {50.3, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-50-prs', label: 'PR 마스터'
+                                              StaticText, 0x105d98280, {{367.2, 1196.7}, {41.7, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-all-kinds', label: '올라운더'
+                                              StaticText, 0x105d983c0, {{473.0, 1196.7}, {38.0, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-1k-volume', label: '1K 클럽'
+                                              StaticText, 0x105d98500, {{573.0, 1196.7}, {46.0, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-10k-volume', label: '10K 클럽'
+                                              StaticText, 0x105d98640, {{667.2, 1196.7}, {65.7, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-100k-volume', label: '아이언 센추리'
+                                              StaticText, 0x105d98780, {{776.3, 1196.7}, {55.3, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-7-streak', label: '위크 워리어'
+                                              StaticText, 0x105d988c0, {{875.2, 1196.7}, {65.7, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-30-streak', label: '먼슬리 마스터'
+                                              StaticText, 0x105d98a00, {{979.2, 1196.7}, {65.7, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-100-streak', label: '센추리 스트릭'
+                                              StaticText, 0x105d98b40, {{1098.7, 1196.7}, {34.7, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-first-workout', label: '첫 걸음'
+                                              StaticText, 0x105d98c80, {{1199.2, 1196.7}, {41.7, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-100-workouts', label: '센추리온'
+                                              StaticText, 0x105d98dc0, {{1303.8, 1196.7}, {40.3, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-365-days', label: '1년의 힘'
+                                              StaticText, 0x105d98f00, {{1417.5, 1196.7}, {21.0, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-10pct-improve', label: '진행'
+                                              StaticText, 0x105d99040, {{1514.7, 1196.7}, {34.7, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-double-lift', label: '더블 업'
+                                              StaticText, 0x105d99180, {{1608.3, 1196.7}, {55.3, 14.3}}, identifier: 'activity-personal-records-badge-name-badge-sub5-pace', label: '스피드 데몬'
+                                        StaticText, 0x105d992c0, {{16.0, 1239.0}, {128.3, 18.0}}, label: '전체 최고 페이스 기록'
+                                        Other, 0x105d99400, {{16.0, 1417.0}, {350.0, 744.3}}, identifier: 'activity-personal-records-achievement-history'
+                                          StaticText, 0x105d99540, {{28.0, 1429.0}, {81.7, 18.0}}, label: '달성 히스토리'
+                                          StaticText, 0x105d99680, {{28.0, 1459.0}, {56.7, 14.3}}, label: '11월 2026'
+                                          Other, 0x105d997c0, {{27.5, 1478.8}, {327.0, 102.0}}, identifier: 'activity-personal-records-achievement-milestone-ui-test-activity-workout-running-distanceMeters-tier-1'
+                                            Image, 0x105d99900, {{39.5, 1490.8}, {45.0, 45.0}}, identifier: 'flag.checkered.circle.fill', label: '채워진 원 안에 있는 체크 무늬 깃발'
+                                            StaticText, 0x105d99a40, {{92.0, 1491.3}, {81.7, 18.0}}, identifier: 'activity-personal-records-achievement-title-milestone-ui-test-activity-workout-running-distanceMeters-tier-1', label: '마일스톤 달성'
+                                            StaticText, 0x105d99b80, {{92.0, 1513.3}, {53.7, 14.3}}, identifier: 'activity-personal-records-achievement-detail-milestone-ui-test-activity-workout-running-distanceMeters-tier-1', label: '달리기: 5K'
+                                            StaticText, 0x105d99cc0, {{92.0, 1531.7}, {86.0, 14.3}}, identifier: 'activity-personal-records-achievement-date-milestone-ui-test-activity-workout-running-distanceMeters-tier-1', label: '2026년 11월 2일'
+                                            StaticText, 0x105d99e00, {{100.0, 1552.0}, {58.3, 14.3}}, label: '+40 포인트'
+                                          Other, 0x105d99f40, {{27.5, 1583.8}, {327.0, 79.7}}, identifier: 'activity-personal-records-achievement-badge-ui-test-activity-workout-running-milestone-running-distanceMeters-tier-1'
+                                            Image, 0x105d9a080, {{39.5, 1595.8}, {45.0, 45.0}}, identifier: 'medal.fill', label: '메달, 채워짐'
+                                            StaticText, 0x105d9a1c0, {{92.0, 1596.3}, {72.7, 18.0}}, identifier: 'activity-personal-records-achievement-title-badge-ui-test-activity-workout-running-milestone-running-distanceMeters-tier-1', label: '새 배지 획득'
+                                            StaticText, 0x105d9a300, {{92.0, 1618.3}, {53.7, 14.3}}, identifier: 'activity-personal-records-achievement-detail-badge-ui-test-activity-workout-running-milestone-running-distanceMeters-tier-1', label: '달리기: 5K'
+                                            StaticText, 0x105d9a440, {{92.0, 1636.7}, {86.0, 14.3}}, identifier: 'activity-personal-records-achievement-date-badge-ui-test-activity-workout-running-milestone-running-distanceMeters-tier-1', label: '2026년 11월 2일'
+                                          Other, 0x105d9a580, {{27.5, 1666.5}, {327.0, 102.0}}, identifier: 'activity-personal-records-achievement-pr-ui-test-activity-workout-running-fastestPace'
+                                            Image, 0x105d9a6c0, {{39.5, 1678.5}, {45.0, 45.0}}, identifier: 'trophy.fill', label: '채워진 트로피 컵'
+                                            StaticText, 0x105d9a800, {{92.0, 1679.0}, {85.7, 18.0}}, identifier: 'activity-personal-records-achievement-title-pr-ui-test-activity-workout-running-fastestPace', label: '개인 기록 갱신'
+                                            StaticText, 0x105d9a940, {{92.0, 1701.0}, {93.7, 14.3}}, identifier: 'activity-personal-records-achievement-detail-pr-ui-test-activity-workout-running-fastestPace', label: '달리기: 최고 페이스'
+                                            StaticText, 0x105d9aa80, {{92.0, 1719.3}, {86.0, 14.3}}, identifier: 'activity-personal-records-achievement-date-pr-ui-test-activity-workout-running-fastestPace', label: '2026년 11월 2일'
+                                            StaticText, 0x105d9abc0, {{100.0, 1739.7}, {58.3, 14.3}}, label: '+60 포인트'
+                                          Other, 0x105d9ad00, {{27.5, 1771.5}, {327.0, 79.7}}, identifier: 'activity-personal-records-achievement-badge-pr-ui-test-activity-workout-running-fastestPace'
+                                            Image, 0x105d9ae40, {{39.5, 1783.5}, {45.0, 45.0}}, identifier: 'medal.fill', label: '메달, 채워짐'
+                                            StaticText, 0x105d9af80, {{92.0, 1784.0}, {72.7, 18.0}}, identifier: 'activity-personal-records-achievement-title-badge-pr-ui-test-activity-workout-running-fastestPace', label: '새 배지 획득'
+                                            StaticText, 0x105d9b0c0, {{92.0, 1806.0}, {135.0, 14.3}}, identifier: 'activity-personal-records-achievement-detail-badge-pr-ui-test-activity-workout-running-fastestPace', label: '달리기: 새 PR 배지 1개 획득'
+                                            StaticText, 0x105d9b200, {{92.0, 1824.3}, {86.0, 14.3}}, identifier: 'activity-personal-records-achievement-date-badge-pr-ui-test-activity-workout-running-fastestPace', label: '2026년 11월 2일'
+                                          StaticText, 0x105d9b340, {{28.0, 1862.7}, {58.7, 14.3}}, label: '10월 2026'
+                                          Other, 0x105d9b480, {{27.5, 1882.5}, {327.0, 102.0}}, identifier: 'activity-personal-records-achievement-pr-ui-test-recommendation-walking-20-fastestPace-highestCalories-longestDistance-longestDuration'
+                                            Image, 0x105d9b5c0, {{39.5, 1894.5}, {45.0, 45.0}}, identifier: 'trophy.fill', label: '채워진 트로피 컵'
+                                            StaticText, 0x105d9b700, {{92.0, 1895.0}, {85.7, 18.0}}, identifier: 'activity-personal-records-achievement-title-pr-ui-test-recommendation-walking-20-fastestPace-highestCalories-longestDistance-longestDuration', label: '개인 기록 갱신'
+                                            StaticText, 0x105d9b840, {{92.0, 1917.0}, {249.0, 14.3}}, identifier: 'activity-personal-records-achievement-detail-pr-ui-test-recommendation-walking-20-fastestPace-highestCalories-longestDistance-longestDuration', label: '걷기: 최고 페이스, 최고 칼로리, 최장 거리, 최장 시간'
+                                            StaticText, 0x105d9b980, {{92.0, 1935.3}, {94.0, 14.3}}, identifier: 'activity-personal-records-achievement-date-pr-ui-test-recommendation-walking-20-fastestPace-highestCalories-longestDistance-longestDuration', label: '2026년 10월 14일'
+                                            StaticText, 0x105d9bac0, {{100.0, 1955.7}, {65.7, 14.3}}, label: '+240 포인트'
+                                          Other, 0x105d9bc00, {{27.5, 1987.5}, {327.0, 79.7}}, identifier: 'activity-personal-records-achievement-badge-pr-ui-test-recommendation-walking-20-fastestPace-highestCalories-longestDistance-longestDuration'
+                                            Image, 0x105d9bd40, {{39.5, 1999.5}, {45.0, 45.0}}, identifier: 'medal.fill', label: '메달, 채워짐'
+                                            StaticText, 0x105d9be80, {{92.0, 2000.0}, {72.7, 18.0}}, identifier: 'activity-personal-records-achievement-title-badge-pr-ui-test-recommendation-walking-20-fastestPace-highestCalories-longestDistance-longestDuration', label: '새 배지 획득'
+                                            StaticText, 0x10fe44000, {{92.0, 2022.0}, {126.7, 14.3}}, identifier: 'activity-personal-records-achievement-detail-badge-pr-ui-test-recommendation-walking-20-fastestPace-highestCalories-longestDistance-longestDuration', label: '걷기: 새 PR 배지 4개 획득'
+                                            StaticText, 0x10fe44140, {{92.0, 2040.3}, {94.0, 14.3}}, identifier: 'activity-personal-records-achievement-date-badge-pr-ui-test-recommendation-walking-20-fastestPace-highestCalories-longestDistance-longestDuration', label: '2026년 10월 14일'
+                                          Other, 0x10fe44280, {{27.5, 2070.2}, {327.0, 79.7}}, identifier: 'activity-personal-records-achievement-level-ui-test-recommendation-walking-20-2'
+                                            Image, 0x10fe443c0, {{39.5, 2082.2}, {45.0, 45.0}}, identifier: 'star.circle.fill', label: '즐겨찾기'
+                                            StaticText, 0x10fe44500, {{92.0, 2082.7}, {47.7, 18.0}}, identifier: 'activity-personal-records-achievement-title-level-ui-test-recommendation-walking-20-2', label: '레벨 업!'
+                                            StaticText, 0x10fe44640, {{92.0, 2104.7}, {55.7, 14.3}}, identifier: 'activity-personal-records-achievement-detail-level-ui-test-recommendation-walking-20-2', label: '레벨 2 달성'
+                                            StaticText, 0x10fe44780, {{92.0, 2123.0}, {94.0, 14.3}}, identifier: 'activity-personal-records-achievement-date-level-ui-test-recommendation-walking-20-2', label: '2026년 10월 14일'
+                                        Other, 0x10fe448c0, {{0.0, 0.0}, {0.0, 0.0}}
+                                      Other, 0x10fe44a00, {{433.0, 82.0}, {30.0, 537.0}}, label: '수직 스크롤 막대, 4페이지', value: 0%
+                                        Other, 0x10fe44b40, {{460.0, 85.0}, {3.0, 162.7}}
+                                      Other, 0x10fe44c80, {{433.0, 82.0}, {30.0, 537.0}}, label: '수직 스크롤 막대, 4페이지', value: 0%
+                                        Other, 0x10fe44dc0, {{460.0, 85.0}, {3.0, 162.7}}
+                Other, 0x10fe44f00, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x10fe45040, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: '도구 막대'
+                    Other, 0x10fe45180, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x10fe452c0, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x10fe45400, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10fe45540, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10fe45680, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x10fe457c0, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x10fe45900, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x10fe45a40, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x10fe45b80, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x10fe45cc0, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10fe45e00, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10fe45f40, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x10fe46080, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x10fe461c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x10fe46300, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x10fe46440, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x10fe46580, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10fe466c0, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x10fe46800, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x10fe46940, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x10fe46a80, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: '채워진 텍스트 클립보드에 있는 하트'
+                                          Button, 0x10fe46bc0, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                                            Image, 0x10fe46d00, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: '불꽃'
+                                          Button, 0x10fe46e40, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x10fe46f80, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: '나뭇잎'
+                                          Button, 0x10fe470c0, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x10fe47200, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: '체크 표시가 있는 체크리스트'
+                                        Other, 0x10fe47340, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10fe47480, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x10fe475c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x10fe47700, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x10fe47840, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x10fe47980, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x10fe47ac0, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x10fe47c00, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x10fe47d40, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10fe47e80, {{396.0, 494.0}, {44.0, 58.0}}
+                                          Other, 0x10fe48000, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x10fe48140, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x10fe48280, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x10fe483c0, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x10fe48500, {{396.0, 494.0}, {44.0, 58.0}}
+                                                  Other, 0x10fe48640, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x10fe48780, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x10fe488c0, {{396.0, 494.0}, {44.0, 58.0}}
+              Other, 0x10fe48a00, {{191.0, 322.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x10fe52800, pid: 56092, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10fe48b40, pid: 56092, label: 'DUNE'
+  }

@@ -138,12 +138,25 @@
     "A10": {
       "row_id": "A10",
       "evidence": "activity-personal-records-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivitySecondaryDetailRoutesOpenExpectedScreens()",
-      "action": "tap activity-section-pr",
-      "timestamp": 1791816479.385,
-      "image": "E893B287-4B16-42CF-9E58-5DFCCBC86A38.png",
-      "screen": "screen-0-1320x2868-tap activity-section-pr_0_AAFB15FC-4BF9-4E84-8A1C-6021E8ED8699.png",
-      "file": "A10.png"
+      "test": "ActivityExerciseRegressionTests/testPersonalRecordsPaceHistoryShowsWorkoutsInMonth()",
+      "action": "Personal Records A10 fastest pace six-month hero",
+      "timestamp": 1793678010.579,
+      "image": "7824C715-443B-45C4-B2AC-AA2452DD25DC.png",
+      "screen": "screen-0-1320x2868-Personal Records A10 fastest pace six-month hero_0_EC08F825-4E0B-40F0-914E-A0EBFB0756A2.png",
+      "manifest_ax": "5D8EEC4C-2122-4F56-AC15-F0B9FCC4B293.txt",
+      "timestamp_kind": "native attachment timestamp",
+      "file": "A10.png",
+      "source_revision": "b0dafb053044289192eb9652862f01fced206b3d",
+      "normal_source_review_current_revision": "7ce674d4b3da73a7a24ccda6fbe39429f098d806",
+      "normal_renderer_closure_sha256": "4c19c8569a1e6fd44d29c44e902b1063bb0cedac4e23cdcea0fbb81663fa0822",
+      "device_uid": "F82FD28D-A0FD-4096-B97B-03B690668E7C",
+      "model_name": "iPhone 18 Pro Max",
+      "capture_kind": "xctest",
+      "bootstatus_migration_failure_reported": false,
+      "bootstatus_stdout_sha256": "ac5f6db66dfa2a803eed422b715f780188137895c4d7c589154b71a2eb161320",
+      "ownership_evidence": "operator-attested standard creation/registration; capture-time registry snapshot not retained",
+      "image_sha256": "4c38fcc9439583a7db35f3b4b74a6f65c59b109d2a0d60a55fb62e0bf4fd6288",
+      "ax_sha256": "81cbc0ec2bff68cbf3b1a564dd375a9aa6cb0387ebef39a64d6a48a6f2ec7897"
     },
     "W21": {
       "row_id": "W21",
@@ -1011,13 +1024,26 @@
     },
     "T16": {
       "row_id": "T16",
-      "evidence": "test-and-action:Personal Records notification push",
+      "evidence": "activity-personal-records-detail-screen",
       "test": "DesignMapNotificationDetailTests/testNotificationPersonalRecordsPush()",
-      "action": "Personal Records Route Fixture",
-      "timestamp": 1791837145.131,
-      "image": "FAE91668-88CB-46BD-B53D-FB3F07ACE571.png",
-      "screen": "screen-0-1320x2868-Personal Records Route Fixture_0_B5CB7551-128D-4C70-BD81-AD22FAE87DF8.png",
-      "file": "T16.png"
+      "action": "Personal Records T16 fastest pace six-month hero",
+      "timestamp": 1793678092.056,
+      "image": "C4C3315F-291E-4FFB-89FE-B2620E20067D.png",
+      "screen": "screen-0-1320x2868-Personal Records T16 fastest pace six-month hero_0_C052FD29-E7CB-4813-A4FD-B355FF258148.png",
+      "manifest_ax": "CD48367D-784D-40C8-9A5F-24F8204F00A7.txt",
+      "timestamp_kind": "native attachment timestamp",
+      "file": "T16.png",
+      "source_revision": "b0dafb053044289192eb9652862f01fced206b3d",
+      "normal_source_review_current_revision": "7ce674d4b3da73a7a24ccda6fbe39429f098d806",
+      "normal_renderer_closure_sha256": "4c19c8569a1e6fd44d29c44e902b1063bb0cedac4e23cdcea0fbb81663fa0822",
+      "device_uid": "F82FD28D-A0FD-4096-B97B-03B690668E7C",
+      "model_name": "iPhone 18 Pro Max",
+      "capture_kind": "xctest",
+      "bootstatus_migration_failure_reported": false,
+      "bootstatus_stdout_sha256": "ac5f6db66dfa2a803eed422b715f780188137895c4d7c589154b71a2eb161320",
+      "ownership_evidence": "operator-attested standard creation/registration; capture-time registry snapshot not retained",
+      "image_sha256": "b0818b72fd3a7f15a780f471cb2385134733618f28b9269cf64f36f8dda928c1",
+      "ax_sha256": "9788b4604fdd1eee33d28900eac40f0031d1ffa3dcf3b43d904760d0d102bf62"
     },
     "W25": {
       "row_id": "W25",
@@ -1331,9 +1357,10 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+  "last_refresh_revision": "b0dafb053044289192eb9652862f01fced206b3d",
   "last_refresh_screens": [
-    "A05"
+    "A10",
+    "T16"
   ],
-  "last_refresh_note": "Per-row source revisions retained; d79 content/layout closure excludes ambient wave phase."
+  "last_refresh_note": "A10 and T16 fresh normal native captures; see per-row source and linked gallery."
 }
