@@ -68,7 +68,7 @@ struct ConsistencyInfoSheet: View {
         }
     }
 
-    private func sectionCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+    private func sectionCard<Content: View>(@ViewBuilder content: @escaping () -> Content) -> some View {
         StandardCard {
             content().frame(maxWidth: .infinity, alignment: .leading)
         }
