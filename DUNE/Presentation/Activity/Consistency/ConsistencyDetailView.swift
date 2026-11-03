@@ -19,6 +19,7 @@ struct ConsistencyDetailView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption2) private var calendarColumnWidth: CGFloat = 24
 
     private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
@@ -117,46 +118,14 @@ struct ConsistencyDetailView: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(DS.Color.textSecondary)
 
-            // Weekday headers
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 7), spacing: 4) {
-                ForEach(weekdayHeaders) { header in
-                    Text(header.label)
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                        .frame(maxWidth: .infinity)
+            if dynamicTypeSize.isAccessibilitySize {
+                ScrollView(.horizontal, showsIndicators: true) {
+                    calendarGrid(columns: Array(repeating: GridItem(.fixed(calendarColumnWidth), spacing: 4), count: 7))
                 }
-
-                // Leading spacers for alignment
-                ForEach(0..<viewModel.cachedFirstWeekdayOffset, id: \.self) { _ in
-                    Color.clear.frame(minHeight: 28)
-                }
-
-                // Day cells
-                ForEach(viewModel.cachedCalendarDays, id: \.self) { date in
-                    let hasWorkout = viewModel.hasWorkout(on: date)
-                    let isToday = Calendar.current.isDateInToday(date)
-                    let isFuture = date > Calendar.current.startOfDay(for: Date())
-                    Text("\(Calendar.current.component(.day, from: date))")
-                        .font(.caption2)
-                        .monospacedDigit()
-                        .accessibilityLabel(Text(date, style: .date))
-                        .accessibilityValue(isFuture ? Text("") : (hasWorkout ? Text("Workout") : Text("No workout of 20 minutes or more")))
-                        .accessibilityHint(isToday ? Text("Today") : Text(""))
-                        .accessibilityIdentifier("activity-consistency-day-\(Calendar.current.component(.day, from: date))-\(hasWorkout ? "workout" : "nonqualifying")\(isToday ? "-today" : "")")
-                        .foregroundStyle(hasWorkout ? .white : .secondary)
-                        .padding(.vertical, DS.Spacing.xs)
-                        .frame(maxWidth: .infinity, minHeight: 28)
-                        .background(
-                            hasWorkout ? DS.Color.activity : DS.Color.activity.opacity(0.08),
-                            in: RoundedRectangle(cornerRadius: 4)
-                        )
-                        .overlay {
-                            if isToday {
-                                RoundedRectangle(cornerRadius: 4)
-                                    .strokeBorder(DS.Color.activity, lineWidth: 1.5)
-                            }
-                        }
-                }
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("activity-consistency-calendar-horizontal")
+            } else {
+                calendarGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 7))
             }
 
             // Monthly progress
@@ -208,6 +177,49 @@ struct ConsistencyDetailView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-consistency-calendar")
+    }
+
+    private func calendarGrid(columns: [GridItem]) -> some View {
+        LazyVGrid(columns: columns, spacing: 4) {
+            ForEach(weekdayHeaders) { header in
+                Text(header.label)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .frame(maxWidth: .infinity)
+            }
+
+            // Leading spacers for alignment
+            ForEach(0..<viewModel.cachedFirstWeekdayOffset, id: \.self) { _ in
+                Color.clear.frame(minHeight: 28)
+            }
+
+            // Day cells
+            ForEach(viewModel.cachedCalendarDays, id: \.self) { date in
+                let hasWorkout = viewModel.hasWorkout(on: date)
+                let isToday = Calendar.current.isDateInToday(date)
+                let isFuture = date > Calendar.current.startOfDay(for: Date())
+                Text("\(Calendar.current.component(.day, from: date))")
+                    .font(.caption2)
+                    .monospacedDigit()
+                    .accessibilityLabel(Text(date, style: .date))
+                    .accessibilityValue(isFuture ? Text("") : (hasWorkout ? Text("Workout") : Text("No workout of 20 minutes or more")))
+                    .accessibilityHint(isToday ? Text("Today") : Text(""))
+                    .accessibilityIdentifier("activity-consistency-day-\(Calendar.current.component(.day, from: date))-\(hasWorkout ? "workout" : "nonqualifying")\(isToday ? "-today" : "")")
+                    .foregroundStyle(hasWorkout ? .white : .secondary)
+                    .padding(.vertical, DS.Spacing.xs)
+                    .frame(maxWidth: .infinity, minHeight: 28)
+                    .background(
+                        hasWorkout ? DS.Color.activity : DS.Color.activity.opacity(0.08),
+                        in: RoundedRectangle(cornerRadius: 4)
+                    )
+                    .overlay {
+                        if isToday {
+                            RoundedRectangle(cornerRadius: 4)
+                                .strokeBorder(DS.Color.activity, lineWidth: 1.5)
+                        }
+                    }
+            }
+        }
     }
 
     // MARK: - Streak History

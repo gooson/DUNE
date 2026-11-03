@@ -1745,9 +1745,25 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 ? Int(identifier.dropFirst(dayPrefix.count).prefix { $0.isNumber }) : nil
             for _ in 0..<24 {
                 let viewport = visibleContent()
-                if element.exists && !element.frame.isEmpty && viewport.contains(element.frame) { break }
-                if element.exists && element.frame.midY < viewport.midY {
+                let horizontal = app.scrollViews["activity-consistency-calendar-horizontal"].firstMatch
+                let dayViewport = maxText && requestedDay != nil && horizontal.exists
+                    ? viewport.intersection(horizontal.frame) : viewport
+                if element.exists && !element.frame.isEmpty && dayViewport.contains(element.frame) { break }
+                if element.exists && element.frame.maxY > viewport.maxY {
+                    scroll.swipeUp(velocity: .slow)
+                } else if element.exists && element.frame.minY < viewport.minY {
                     scroll.swipeDown(velocity: .slow)
+                } else if maxText, requestedDay != nil, horizontal.exists,
+                          !element.frame.isEmpty, !dayViewport.isEmpty {
+                    let target = element.frame
+                    let overflow = target.minX < dayViewport.minX
+                        ? dayViewport.minX - target.minX + 12 : target.maxX - dayViewport.maxX + 12
+                    let distance = min(max(overflow, 1), dayViewport.width * 0.35)
+                    let start = horizontal.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+                        .withOffset(CGVector(dx: dayViewport.midX - horizontal.frame.minX,
+                                             dy: target.midY - horizontal.frame.minY))
+                    let delta = target.minX < dayViewport.minX ? distance : -distance
+                    start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: delta, dy: 0)))
                 } else if !element.exists, let requestedDay {
                     // LazyVGrid may not expose offscreen cells until their row is revealed.
                     let cells = app.descendants(matching: .any).matching(
@@ -1767,8 +1783,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             }
             XCTAssertTrue(element.waitForExistence(timeout: 15), "Missing \(identifier)")
             let viewport = visibleContent()
+            let horizontal = app.scrollViews["activity-consistency-calendar-horizontal"].firstMatch
+            if maxText && requestedDay != nil {
+                XCTAssertTrue(horizontal.exists, "Calendar horizontal scroll should exist at maximum text")
+            }
+            let visibleFrame = maxText && requestedDay != nil && horizontal.exists
+                ? viewport.intersection(horizontal.frame) : viewport
             XCTAssertFalse(element.frame.isEmpty, "Empty frame: \(identifier)")
-            XCTAssertTrue(viewport.contains(element.frame), "Not fully visible: \(identifier)")
+            XCTAssertTrue(visibleFrame.contains(element.frame), "Not fully visible: \(identifier)")
             return element
         }
 
@@ -1779,6 +1801,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let todayCell = visible("activity-consistency-day-\(day)-workout-today")
         XCTAssertTrue(dateFormats(today).contains(todayCell.label), todayCell.label)
         XCTAssertEqual(todayCell.value as? String, "Workout")
+        if maxText { VisualAudit.capture("A11 consistency today calendar MAX") }
         let monthDays = try XCTUnwrap(calendar.range(of: .day, in: .month, for: today))
         let usedDays = Set(dates.filter { calendar.isDate($0, equalTo: today, toGranularity: .month) }
             .map { calendar.component(.day, from: $0) })
