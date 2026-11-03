@@ -926,6 +926,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         configuration.additionalArguments.append(contentsOf: ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
         if maxText {
             configuration.additionalArguments.append(contentsOf: [
+                "--ui-test-style", "dark",
                 "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
             ])
         }
