@@ -1539,7 +1539,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             ]
         }
         launchApp(with: configuration)
-        openActivityInfo(button: "activity-consistency-info", sheet: "activity-consistency-info-sheet")
+        // At MAX text the root content exceeds 20,000 points; the original
+        // 30 swipes leave this real entry below the viewport.
+        openActivityInfo(button: "activity-consistency-info", sheet: "activity-consistency-info-sheet",
+                         maxSwipes: maxText ? 40 : 30)
         // openActivityInfo preserves the original, pre-scroll canonical capture.
         let sheet = app.scrollViews["activity-consistency-info-sheet"].firstMatch
         XCTAssertTrue(sheet.waitForExistence(timeout: 10))
@@ -2071,11 +2074,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Recommendation equipment sheet")
     }
 
-    private func openActivityInfo(button: String, sheet: String) {
+    private func openActivityInfo(button: String, sheet: String, maxSwipes: Int = 30) {
         let target = app.buttons[button].firstMatch
         let rootScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
         XCTAssertTrue(rootScroll.waitForExistence(timeout: 8))
-        for _ in 0..<30 where !target.isHittable {
+        for _ in 0..<maxSwipes where !target.isHittable {
             rootScroll.swipeUp(velocity: .slow)
         }
         XCTAssertTrue(target.isHittable, "\(button) should be reachable")
