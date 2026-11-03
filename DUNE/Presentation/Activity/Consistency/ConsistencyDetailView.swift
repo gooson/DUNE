@@ -242,7 +242,9 @@ struct ConsistencyDetailView: View {
                     HStack(alignment: .center, spacing: DS.Spacing.md) {
                         leadingTile("flame.fill")
                         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                            Text(String(localized: "\(period.days.formattedWithSeparator) days"))
+                            Text(period.days == 1
+                                 ? String(localized: "1 day")
+                                 : String(localized: "\(period.days.formattedWithSeparator) days"))
                                 .accessibilityIdentifier("activity-consistency-history-days-\(historyID)")
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(theme.heroTextGradient)
