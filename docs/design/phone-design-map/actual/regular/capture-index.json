@@ -113,17 +113,18 @@
     "A12": {
       "row_id": "A12",
       "file": "A12.png",
-      "evidence": "actual app section",
       "test": "ActivityExerciseRegressionTests/testActivityExerciseMixRouteOpensExpectedScreen()",
-      "action": "A12-composition",
-      "timestamp": 1792783785.319,
-      "image": "5729391B-963B-4B26-9CA8-B9347989C664.png",
-      "source_revision": "1c4cdd88",
-      "source_worktree_dirty": false,
-      "device_id": "4990D55E-752C-4E35-8FB4-953F995AB2C2",
-      "device_name": "iPhone 18 Pro-wt-Health-desert-horizon-final-validation-f5271f075392",
-      "xcresult": "Test-DUNEUITests-2026.10.24_04-28-35-+0900.xcresult",
-      "gallery": "../../../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html"
+      "action": "A12 exercise mix summary normal",
+      "source_revision": "bb79f250497786526d37d420fd839de5c2df5dee",
+      "capture_kind": "xctest",
+      "image": "25D34D94-DFA5-4071-A509-6F82962C9933.png",
+      "screen": "screen-0-1320x2868-A12 exercise mix summary normal_0_1D005230-3231-44A9-85ED-CEFF1BC5165C.png",
+      "timestamp": 1793709528.664,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "50C94B43-0B52-4BDA-AC43-C6EECDDE7709",
+      "image_sha256": "6ff667cf8261b748fed873af1da78907edfb719b9191184ecada8b7d2d63d727",
+      "ax_sha256": "e09f3479c7a09efb982e3e32178cf3485dd48390a286624c3f4eaf0532c0a5d5",
+      "evidence": "activity-exercise-mix-detail-screen"
     },
     "A11": {
       "row_id": "A11",
@@ -1182,13 +1183,19 @@
     },
     "A13": {
       "row_id": "A13",
-      "evidence": "test-and-action:Muscle detail popover",
+      "file": "A13.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditMuscleDetailPopover()",
-      "action": "Muscle detail popover",
-      "timestamp": 1792375002.054,
-      "image": "04171F06-FF59-4730-8D2F-670BA80CCBF9.png",
-      "screen": "screen-0-1206x2622-Muscle detail popover_0_A12EC78B-4DDC-42DB-B543-A59887299884.png",
-      "file": "A13.png"
+      "action": "A13 muscle detail hero normal",
+      "source_revision": "72c462e3eabd7d6da4f578dba11e5583c8e973b0",
+      "capture_kind": "xctest",
+      "image": "F8889FF6-608B-40D3-98E7-E45CE5189549.png",
+      "screen": "screen-0-1320x2868-A13 muscle detail hero normal_0_DC72F900-F5D4-4D0F-AF78-6B2AECF0A33C.png",
+      "timestamp": 1793715417.16,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "1ABD0C49-BEA4-47FB-BAFE-A4ABFD275017",
+      "image_sha256": "5844a768958824b7dc53527eb3ef4aab007ac1e7bcc4a76350b490f7117437ed",
+      "ax_sha256": "b153d1afcc367f69f8e34c67e0c03d9a93d6de44184570abfd4762977ef6e024",
+      "evidence": "activity-muscle-detail-popover-sheet"
     },
     "A14": {
       "row_id": "A14",
@@ -1363,9 +1370,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+  "last_refresh_revision": "72c462e3eabd7d6da4f578dba11e5583c8e973b0",
   "last_refresh_screens": [
-    "A11"
+    "A13"
   ],
-  "last_refresh_note": "Duo closed normal is be23 passed case in failed mixed run; other normals are current source."
+  "last_refresh_note": "Fresh corrected-source A13 captures; per-row source and device provenance retained."
 }
