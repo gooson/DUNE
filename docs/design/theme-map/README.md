@@ -260,3 +260,7 @@ A05 네이티브 소스는 원래 `ActivityStat.iconColor`를 불투명 히어�
 ## A12 운동 구성 상세 · 2026-11-03
 
 [테마 시안](themes/dune-exercise-mix-detail-a12.html)과 [배치 계약](../layout-map/activity-exercise-mix-detail-a12.html)은 실제 값·선택 도넛과 기존 상태를 보존한다. 수치는 예시이며 네이티브 캡처가 아니다.
+
+## A13 근육 상세 팝오버 · 2026-11-03
+
+[테마 시안](themes/dune-muscle-detail-popover-a13.html)과 [배치 계약](../layout-map/activity-muscle-detail-popover-a13.html)은 실제 근육 상태와 기존 추천·계산 연결을 보존한다. 예시 값은 네이티브 캡처가 아니다.

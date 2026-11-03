@@ -95,7 +95,35 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         addScreenshotAttachment(named: "A03 2D muscle selection and disabled 3D entry")
         VisualAudit.capture("A03 2D muscle selection and disabled 3D entry")
 
-        let detailScroll = app.scrollViews.element(boundBy: app.scrollViews.count > 1 ? 1 : 0)
+        let summaryScroll = app.scrollViews["musclemap-detail-summary-scroll"].firstMatch
+        let compactScroll = app.scrollViews["musclemap-detail-map-scroll"].firstMatch
+        let detailScroll = summaryScroll.exists ? summaryScroll : compactScroll
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5), "The selected muscle's actual pane should exist")
+        XCTAssertTrue(detailScroll.descendants(matching: .any)["musclemap-detail-selected-muscle"].firstMatch.exists,
+                      "The selected detail should belong to the chosen pane")
+        for identifier in ["activity-muscle-detail-inline-title", "activity-muscle-detail-status",
+                           "activity-muscle-detail-value-fatigue", "activity-muscle-detail-value-weekly-volume",
+                           "activity-muscle-detail-value-last-trained", "activity-muscle-detail-value-sleep-modifier"] {
+            let element = inlineDetail.descendants(matching: .any)[identifier].firstMatch
+            for _ in 0..<16 {
+                let viewport = detailScroll.frame.intersection(app.windows.firstMatch.frame)
+                if element.exists && !element.frame.isEmpty && viewport.contains(element.frame) { break }
+                if element.exists && element.frame.midY < viewport.midY {
+                    detailScroll.swipeDown(velocity: .slow)
+                } else {
+                    detailScroll.swipeUp(velocity: .slow)
+                }
+            }
+            XCTAssertTrue(element.waitForExistence(timeout: 5), "Missing selected inline \(identifier)")
+            XCTAssertFalse(element.label.isEmpty)
+            XCTAssertFalse(element.frame.isEmpty)
+            XCTAssertTrue(detailScroll.frame.intersection(app.windows.firstMatch.frame).contains(element.frame),
+                          "Selected inline \(identifier) should fit in its viewport")
+            if identifier == "activity-muscle-detail-inline-title" {
+                XCTAssertTrue(["Chest", "가슴", "胸"].contains(element.label), element.label)
+            }
+            VisualAudit.capture("A13 inline selected \(identifier)")
+        }
         for _ in 0..<8 where !calculation.isHittable { detailScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(calculation.isHittable, "The selected muscle's calculation action should be reachable")
         addScreenshotAttachment(named: "A03 selected muscle detail before calculation")
@@ -113,7 +141,7 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
 
         // This iPad presentation exposes the native sheet as a scroll view with a drag indicator,
         // not as an XCUIElementTypeSheet. Use the single observed system grabber.
-        let grabbers = app.buttons.matching(NSPredicate(format: "label == %@", "시트 손잡이"))
+        let grabbers = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
         XCTAssertEqual(grabbers.count, 1, "The native sheet should expose one visible drag indicator")
         let grabber = grabbers.element(boundBy: 0)
         XCTAssertTrue(grabber.exists && grabber.isHittable, "The native sheet drag indicator should be reachable")
