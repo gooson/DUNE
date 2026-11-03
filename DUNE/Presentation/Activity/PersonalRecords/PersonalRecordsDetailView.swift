@@ -315,6 +315,10 @@ struct PersonalRecordsDetailView: View {
                     .accessibilityIdentifier("activity-personal-records-chart-unit")
             }
 
+            if let latest = viewModel.chartData.last {
+                latestRecordSummary(latest)
+            }
+
             if viewModel.chartData.isEmpty {
                 Group {
                     if viewModel.isLoadingPaceHistory && viewModel.resolvedKind == .fastestPace {
@@ -381,17 +385,13 @@ struct PersonalRecordsDetailView: View {
                                     : .automatic) {
                         if isLatestPoint(record) {
                             Text(record.formattedValue)
-                                .font(dynamicTypeSize.isAccessibilitySize
-                                      ? .caption.weight(.semibold)
-                                      : .system(size: 10, weight: .semibold))
-                                .foregroundStyle(dynamicTypeSize.isAccessibilitySize ? Color.primary : chartColor)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(Color.primary)
                                 .fixedSize()
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 2)
-                                .background(dynamicTypeSize.isAccessibilitySize
-                                            ? AnyShapeStyle(DS.Color.surfacePrimary)
-                                            : AnyShapeStyle(.ultraThinMaterial), in: Capsule())
-                                .accessibilityIdentifier("personal-records-timeline-latest-value")
+                                .padding(.horizontal, DS.Spacing.sm)
+                                .padding(.vertical, DS.Spacing.xs)
+                                .background(DS.Color.surfacePrimary, in: Capsule())
+                                .accessibilityHidden(true)
                         }
                     }
                 }
@@ -429,6 +429,34 @@ struct PersonalRecordsDetailView: View {
         .transition(.opacity)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-personal-records-timeline-chart")
+    }
+
+    /// The latest sample belongs to the selected chart period, independently of the all-time best.
+    private func latestRecordSummary(_ record: ActivityPersonalRecord) -> some View {
+        HStack(alignment: .top, spacing: DS.Spacing.sm) {
+            Image(systemName: record.kind.iconName)
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(record.kind.tintColor)
+                .frame(width: 26)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                Text("Latest Record")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+                Text(record.formattedValue + (record.kind.unitLabel.map { " " + $0 } ?? ""))
+                    .font(.subheadline.weight(.semibold).monospacedDigit())
+                    .foregroundStyle(.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("personal-records-timeline-latest-value")
+                Text(record.date, style: .date)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .accessibilityIdentifier("personal-records-timeline-latest-date")
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Spacing.md)
+        .background(DS.Color.activity.opacity(0.06), in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     private func isLatestPoint(_ record: ActivityPersonalRecord) -> Bool {
