@@ -57,6 +57,9 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     }
 
     func testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR"]
+        launchApp(with: configuration)
         navigateToMuscleMapDetail()
 
         let entryLabels = ["3D Muscle Map", "3D 근육맵", "3Dマッスルマップ"]
@@ -136,6 +139,14 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         )).firstMatch
         XCTAssertTrue(calculationTitle.waitForExistence(timeout: 5),
                       "The calculation sheet should expose its existing localized title")
+        for title in ["운동 부하 (14일)", "생체 보정"] {
+            let heading = explanation.staticTexts[title].firstMatch
+            XCTAssertTrue(heading.waitForExistence(timeout: 5), "The Korean calculation heading must be translated")
+            XCTAssertFalse(heading.frame.isEmpty)
+            XCTAssertTrue(explanation.frame.intersection(app.windows.firstMatch.frame).contains(heading.frame),
+                          "The complete Korean heading must fit in the sheet")
+        }
+        VisualAudit.capture("A14 Korean calculation headings")
         // A14 child values: actual localized values, never fixed fixture numbers.
         func visibleFatigueValue(_ suffix: String) -> XCUIElement {
             let value = explanation.staticTexts["activity-fatigue-info-" + suffix].firstMatch
