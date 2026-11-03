@@ -154,6 +154,7 @@ struct ExerciseMixDetailView: View {
             HStack(spacing: DS.Spacing.xs) {
                 Text(count.formattedWithSeparator)
                     .accessibilityIdentifier("activity-exercise-mix-category-count-\(id)")
+                Text(verbatim: "·").accessibilityHidden(true)
                 Text(Double(count) / Double(max(summary.total, 1)), format: .percent.precision(.fractionLength(0)))
                     .foregroundStyle(palette.muted)
             }
@@ -220,6 +221,7 @@ struct ExerciseMixDetailView: View {
         HStack(spacing: DS.Spacing.xxs) {
             Circle().fill(color).frame(width: 6, height: 6)
             Text(title)
+            Text(verbatim: "·").accessibilityHidden(true)
             Text(count.formattedWithSeparator)
                 .monospacedDigit()
         }
@@ -248,6 +250,7 @@ struct ExerciseMixDetailView: View {
                                 Text(share.sets, format: .number.precision(.fractionLength(0...1)))
                                     .accessibilityIdentifier("activity-exercise-mix-muscle-sets")
                                     .monospacedDigit()
+                                Text(verbatim: "·").accessibilityHidden(true)
                                 Text(share.fraction, format: .percent.precision(.fractionLength(0)))
                                     .foregroundStyle(DS.Color.textSecondary)
                                     .monospacedDigit()
@@ -298,6 +301,7 @@ struct ExerciseMixDetailView: View {
                             HStack(spacing: DS.Spacing.xs) {
                                 Text(kind.count.formattedWithSeparator)
                                     .accessibilityIdentifier("activity-exercise-mix-cardio-count")
+                                Text(verbatim: "·").accessibilityHidden(true)
                                 Text(Double(kind.count) / Double(max(summary.cardio, 1)),
                                      format: .percent.precision(.fractionLength(0)))
                                 Spacer(minLength: DS.Spacing.xs)

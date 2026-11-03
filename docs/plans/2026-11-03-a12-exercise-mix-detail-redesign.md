@@ -45,3 +45,7 @@ c6의 실제 일반·MAX 검사는 200pt 차트 전체 표시를 통과한 뒤 �
 ### MAX execution budget correction
 
 The 5f mixed run remains failed: the normal case individually passed (202.657 seconds), while MAX reached clear selection but exceeded its default 300-second allowance before completed Back. Only the exact MAX case receives 360 seconds before superclass setup; normal setup, test assertions, app, data model, catalog and standard executors are unchanged. Retain all original failures and parser limitations, independently bind the historical normal source closure, then run the original MAX selector alone. No repeated user approval is required under the latest autonomous-validation instruction.
+
+### Native readability correction
+
+6706 closed MAX and open normal passed their original functional contracts. Independent review of the real MAX PNG/AX found adjacent count/percentage and weekly label/count text visually ambiguous. Four decorative, accessibility-hidden centered dots distinguish these values without changing data, IDs, fonts, icons or catalogs. Preserve the pre-correction results as history; final captures must use the corrected app source, with closed normal/MAX and open/phone/iPad normal verification.
