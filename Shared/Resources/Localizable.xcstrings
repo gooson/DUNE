@@ -3169,6 +3169,29 @@
     "1" : {
       "extractionState" : "manual"
     },
+    "1 day" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 day"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1일"
+          }
+        }
+      }
+    },
     "1 Hour" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -32075,6 +32098,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 운동 데이터가 없어요."
+          }
+        }
+      }
+    },
+    "No workout of 20 minutes or more" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "20分以上のワークアウトなし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "20분 이상 운동 없음"
           }
         }
       }
