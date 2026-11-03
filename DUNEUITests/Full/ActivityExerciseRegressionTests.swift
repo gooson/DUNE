@@ -1201,38 +1201,76 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testVisualAuditMuscleDetailPopover() throws {
+        try assertMuscleDetailPopover(maxText: false)
+    }
+
+    func testVisualAuditMuscleDetailPopoverAtMaximumAccessibilityTextSize() throws {
+        try assertMuscleDetailPopover(maxText: true)
+    }
+
+    private func assertMuscleDetailPopover(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += ["--ui-test-style", "dark",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        }
+        launchApp(with: configuration)
         let muscle = app.buttons["musclemap-body-front-chest"].firstMatch
         let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
         XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
-        for _ in 0..<24 where !muscle.isHittable { activityScroll.swipeUp(velocity: .slow) }
+        for _ in 0..<(maxText ? 32 : 24) where !muscle.isHittable { activityScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(muscle.isHittable)
         muscle.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)["activity-muscle-detail-popover-sheet"].firstMatch
-            .waitForExistence(timeout: 10))
+        let title = app.staticTexts["activity-muscle-detail-popover-sheet"].firstMatch
+        XCTAssertTrue(title.waitForExistence(timeout: 10))
         let detailScroll = app.scrollViews["activity-muscle-detail-scroll"].firstMatch
         XCTAssertTrue(detailScroll.waitForExistence(timeout: 5))
-        let status = app.descendants(matching: .any)["activity-muscle-detail-status"].firstMatch
-        XCTAssertTrue(status.waitForExistence(timeout: 5))
-        XCTAssertFalse(status.label.isEmpty, "The selected muscle should expose its actual fatigue status")
-        VisualAudit.capture("Muscle detail popover")
-        for metric in ["fatigue", "weekly-volume", "last-trained", "sleep-modifier"] {
-            let value = app.staticTexts["activity-muscle-detail-value-\(metric)"].firstMatch
-            XCTAssertTrue(value.waitForExistence(timeout: 5), "Missing seeded \(metric)")
-            for _ in 0..<8 {
+        func visible(_ identifier: String) -> XCUIElement {
+            let element = app.descendants(matching: .any)[identifier].firstMatch
+            for _ in 0..<16 {
                 let viewport = detailScroll.frame.intersection(app.windows.firstMatch.frame)
-                if !value.frame.isEmpty && viewport.contains(value.frame) { break }
-                if value.frame.midY < viewport.midY {
+                if element.exists && !element.frame.isEmpty && viewport.contains(element.frame) { break }
+                if element.exists && element.frame.midY < viewport.midY {
                     detailScroll.swipeDown(velocity: .slow)
                 } else {
                     detailScroll.swipeUp(velocity: .slow)
                 }
             }
-            XCTAssertFalse(value.label.isEmpty, "The seeded \(metric) value should be readable")
-            XCTAssertFalse(value.frame.isEmpty)
-            XCTAssertTrue(detailScroll.frame.intersection(app.windows.firstMatch.frame).contains(value.frame),
-                          "The full \(metric) value should fit in the sheet viewport")
+            XCTAssertTrue(element.waitForExistence(timeout: 5), "Missing \(identifier)")
+            XCTAssertFalse(element.frame.isEmpty, "Empty frame: \(identifier)")
+            XCTAssertTrue(detailScroll.frame.intersection(app.windows.firstMatch.frame).contains(element.frame),
+                          "The full \(identifier) should fit in the sheet viewport")
+            return element
         }
-        VisualAudit.capture("Muscle detail popover values")
+        XCTAssertEqual(visible("activity-muscle-detail-popover-sheet").label, "Chest")
+        let status = visible("activity-muscle-detail-status")
+        XCTAssertFalse(status.label.isEmpty, "The selected muscle should expose its actual fatigue status")
+        if !maxText { VisualAudit.capture("Muscle detail popover") }
+        VisualAudit.capture("A13 muscle detail hero \(maxText ? "MAX" : "normal")")
+        for metric in ["fatigue", "weekly-volume", "last-trained", "sleep-modifier"] {
+            let value = visible("activity-muscle-detail-value-\(metric)")
+            XCTAssertFalse(value.label.isEmpty, "The seeded \(metric) value should be readable")
+            VisualAudit.capture("A13 muscle detail \(metric) \(maxText ? "MAX" : "normal")")
+        }
+        if !maxText { VisualAudit.capture("Muscle detail popover values") }
+        let calculation = visible("activity-muscle-detail-calculation")
+        XCTAssertTrue(calculation.isHittable, "The seeded compound score should retain its calculation action")
+        VisualAudit.capture("A13 muscle detail calculation \(maxText ? "MAX" : "normal")")
+        let grabber = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet grabber", "시트 손잡이"])).firstMatch
+        XCTAssertTrue(grabber.waitForExistence(timeout: 5) && grabber.isHittable,
+                      "The native sheet drag indicator should be reachable")
+        let window = app.windows.firstMatch
+        let endY = min(window.frame.maxY - 30, grabber.frame.midY + window.frame.height * 0.55)
+        XCTAssertGreaterThan(endY, grabber.frame.midY)
+        let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero)
+            .withOffset(CGVector(dx: grabber.frame.midX - window.frame.minX, dy: endY - window.frame.minY))
+        start.press(forDuration: 0.1, thenDragTo: end)
+        XCTAssertTrue(detailScroll.waitForNonExistence(timeout: 5), "Native dismissal should close the sheet")
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5) && activityScroll.isHittable,
+                      "Activity should remain usable after dismissal")
+        VisualAudit.capture("A13 muscle detail dismissed \(maxText ? "MAX" : "normal")")
     }
 
     func testVisualAuditMuscleFatigueExplanation() throws {

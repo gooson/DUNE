@@ -127,7 +127,7 @@ struct MuscleDetailPopover: View {
             .font(.headline)
             .fixedSize(horizontal: false, vertical: true)
         if isInline {
-            title
+            title.accessibilityIdentifier("activity-muscle-detail-inline-title")
         } else {
             title.accessibilityIdentifier("activity-muscle-detail-popover-sheet")
         }

@@ -96,6 +96,29 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         VisualAudit.capture("A03 2D muscle selection and disabled 3D entry")
 
         let detailScroll = app.scrollViews.element(boundBy: app.scrollViews.count > 1 ? 1 : 0)
+        for identifier in ["activity-muscle-detail-inline-title", "activity-muscle-detail-status",
+                           "activity-muscle-detail-value-fatigue", "activity-muscle-detail-value-weekly-volume",
+                           "activity-muscle-detail-value-last-trained", "activity-muscle-detail-value-sleep-modifier"] {
+            let element = inlineDetail.descendants(matching: .any)[identifier].firstMatch
+            for _ in 0..<16 {
+                let viewport = detailScroll.frame.intersection(app.windows.firstMatch.frame)
+                if element.exists && !element.frame.isEmpty && viewport.contains(element.frame) { break }
+                if element.exists && element.frame.midY < viewport.midY {
+                    detailScroll.swipeDown(velocity: .slow)
+                } else {
+                    detailScroll.swipeUp(velocity: .slow)
+                }
+            }
+            XCTAssertTrue(element.waitForExistence(timeout: 5), "Missing selected inline \(identifier)")
+            XCTAssertFalse(element.label.isEmpty)
+            XCTAssertFalse(element.frame.isEmpty)
+            XCTAssertTrue(detailScroll.frame.intersection(app.windows.firstMatch.frame).contains(element.frame),
+                          "Selected inline \(identifier) should fit in its viewport")
+            if identifier == "activity-muscle-detail-inline-title" {
+                XCTAssertTrue(["Chest", "가슴", "胸"].contains(element.label), element.label)
+            }
+            VisualAudit.capture("A13 inline selected \(identifier)")
+        }
         for _ in 0..<8 where !calculation.isHittable { detailScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(calculation.isHittable, "The selected muscle's calculation action should be reachable")
         addScreenshotAttachment(named: "A03 selected muscle detail before calculation")
