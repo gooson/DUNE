@@ -27,7 +27,7 @@ struct RewardProgressSection: View {
                     showingInfoSheet = true
                 } label: {
                     Image(systemName: "info.circle")
-                        .font(.body)
+                        .font(.system(size: 17, weight: .medium))
                         .foregroundStyle(DS.Color.textSecondary)
                         .frame(minWidth: 44, minHeight: 44)
                         .contentShape(Rectangle())
@@ -62,7 +62,7 @@ struct RewardProgressSection: View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             HStack(alignment: .top, spacing: DS.Spacing.sm) {
                 Image(systemName: "star.circle.fill")
-                    .font(.title2)
+                    .font(.system(size: 24, weight: .semibold))
                     .foregroundStyle(palette.heroHighlight)
                     .frame(width: 52, height: 52)
                     .background {
@@ -81,6 +81,7 @@ struct RewardProgressSection: View {
                         )
                     )
                     .font(.headline)
+                    .accessibilityIdentifier("activity-personal-records-reward-level")
                     .foregroundStyle(palette.ink)
                     .fixedSize(horizontal: false, vertical: true)
 
@@ -91,6 +92,7 @@ struct RewardProgressSection: View {
                         )
                     )
                     .font(.subheadline.weight(.semibold))
+                    .accessibilityIdentifier("activity-personal-records-reward-points")
                     .foregroundStyle(palette.heroHighlight)
                 }
                 Spacer(minLength: 0)
@@ -111,6 +113,7 @@ struct RewardProgressSection: View {
             }
 
             ProgressView(value: levelProgress.fraction)
+                .accessibilityIdentifier("activity-personal-records-level-progress")
                 .tint(palette.heroAccent)
                 .accessibilityLabel(String(localized: "Level progress"))
                 .accessibilityValue(
@@ -176,7 +179,7 @@ struct RewardProgressSection: View {
     private func badgeCard(_ badge: WorkoutBadgeDefinition) -> some View {
         VStack(spacing: DS.Spacing.xs) {
             Image(systemName: badge.isUnlocked ? badge.iconName : "lock.fill")
-                .font(.title3)
+                .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(badge.isUnlocked ? AnyShapeStyle(badge.category.tintColor) : AnyShapeStyle(DS.Color.textSecondary))
                 .frame(width: 48, height: 48)
                 .background {
@@ -205,7 +208,7 @@ struct RewardProgressSection: View {
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     HStack(alignment: .top, spacing: DS.Spacing.sm) {
                         Image(systemName: comparison.iconName)
-                            .font(.title3)
+                            .font(.system(size: 20, weight: .semibold))
                             .foregroundStyle(DS.Color.activity)
                             .frame(width: 28)
 

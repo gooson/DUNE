@@ -4,7 +4,6 @@ import SwiftUI
 struct AchievementHistorySection: View {
     let groupedHistory: [(month: String, events: [WorkoutRewardEvent])]
 
-
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             Text(String(localized: "Achievement History"))
@@ -33,6 +32,7 @@ struct AchievementHistorySection: View {
                 .font(.caption)
                 .foregroundStyle(.tertiary)
                 .multilineTextAlignment(.center)
+                .accessibilityIdentifier("activity-personal-records-history-empty")
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, DS.Spacing.sm)
@@ -57,16 +57,19 @@ struct AchievementHistorySection: View {
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 Text(event.title)
+                    .accessibilityIdentifier("activity-personal-records-achievement-title-\(event.id)")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(DS.Color.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
 
                 Text(eventDetailText(event))
+                    .accessibilityIdentifier("activity-personal-records-achievement-detail-\(event.id)")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
 
                 Text(event.date, style: .date)
+                    .accessibilityIdentifier("activity-personal-records-achievement-date-\(event.id)")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
 
@@ -95,7 +98,7 @@ struct AchievementHistorySection: View {
 
     private func eventIcon(_ kind: WorkoutRewardEventKind) -> some View {
         Image(systemName: iconName(for: kind))
-            .font(.title3)
+            .font(.system(size: 20, weight: .semibold))
             .foregroundStyle(eventColor(kind))
             .frame(width: 44, height: 44)
             .background {

@@ -155,7 +155,7 @@ struct PersonalRecordsDetailView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             HStack(alignment: .center, spacing: DS.Spacing.sm) {
                 Image(systemName: best.kind.iconName)
-                    .font(.title2.weight(.semibold))
+                    .font(.system(size: 22, weight: .semibold))
                     .frame(width: 44, height: 44)
                     .background(palette.gold.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
                     .accessibilityHidden(true)
@@ -177,7 +177,7 @@ struct PersonalRecordsDetailView: View {
                     }
                 } label: {
                     Image(systemName: "square.and.arrow.up")
-                        .font(.body.weight(.medium))
+                        .font(.system(size: 17, weight: .medium))
                         .frame(width: 44, height: 44)
                         .contentShape(Rectangle())
                 }

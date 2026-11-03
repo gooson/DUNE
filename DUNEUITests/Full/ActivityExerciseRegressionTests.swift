@@ -1217,7 +1217,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             var configuration = launchConfiguration
             configuration.additionalArguments += [
                 "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
-                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
+                "--ui-test-style", "dark"
             ]
             launchApp(with: configuration)
             XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
@@ -1247,32 +1248,81 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         if VisualAudit.isEnabled {
             let scroll = app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch
             XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Personal Records should own its scroll viewport")
+
+            func viewport() -> CGRect {
+                let window = app.windows.firstMatch.frame
+                var visible = scroll.frame.intersection(window).insetBy(dx: 8, dy: 8)
+                let nav = app.navigationBars.firstMatch
+                if nav.exists && nav.frame.intersects(visible) && nav.frame.midY < visible.midY {
+                    let top = min(visible.maxY, nav.frame.maxY)
+                    visible = CGRect(x: visible.minX, y: top, width: visible.width, height: visible.maxY - top)
+                }
+                let tab = app.tabBars.firstMatch
+                if tab.exists && tab.isHittable && tab.frame.intersects(visible) && tab.frame.midY > visible.midY {
+                    visible.size.height = max(0, tab.frame.minY - visible.minY)
+                }
+                return visible
+            }
+
+            func reveal(_ element: XCUIElement, named name: String) {
+                XCTAssertTrue(element.waitForExistence(timeout: 10), "\(name) should exist")
+                for _ in 0..<20 {
+                    let visible = viewport()
+                    if visible.contains(element.frame) && element.isHittable { return }
+                    if element.frame.midY < visible.midY { scroll.swipeDown(velocity: .slow) }
+                    else { scroll.swipeUp(velocity: .slow) }
+                }
+                XCTAssertTrue(viewport().contains(element.frame) && element.isHittable,
+                              "The complete \(name) should be reachable in the detail viewport")
+            }
+
+            func captureLeaf(_ element: XCUIElement, named name: String) {
+                reveal(element, named: name)
+                VisualAudit.capture("Personal Records maximum AX \(name)")
+                addScreenshotAttachment(named: "Personal Records maximum AX \(name)")
+            }
+
             let best = app.staticTexts["activity-personal-records-best-value"].firstMatch
             XCTAssertTrue(best.waitForExistence(timeout: 10))
             XCTAssertFalse(best.label.isEmpty)
-            for _ in 0..<12 where !scroll.frame.intersection(app.windows.firstMatch.frame).contains(best.frame) {
-                if best.frame.midY < scroll.frame.midY { scroll.swipeDown(velocity: .slow) }
-                else { scroll.swipeUp(velocity: .slow) }
-            }
-            XCTAssertTrue(scroll.frame.intersection(app.windows.firstMatch.frame).contains(best.frame),
-                          "The complete best value should fit in the maximum-size viewport")
-            VisualAudit.capture("Personal Records maximum AX best value viewport")
-            for (identifier, checkpoint) in [
-                ("personal-records-timeline-latest-value", "timeline latest value"),
-                (AXID.activityPersonalRecordsRewardProgress, "reward progress"),
-                (AXID.activityPersonalRecordsAchievementHistory, "achievement history")
-            ] {
-                let section = app.descendants(matching: .any)[identifier].firstMatch
-                for _ in 0..<16 {
-                    let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
-                    if section.exists && viewport.contains(CGPoint(x: section.frame.midX, y: section.frame.midY)) { break }
-                    if section.exists && section.frame.midY < viewport.midY { scroll.swipeDown(velocity: .slow) }
-                    else { scroll.swipeUp(velocity: .slow) }
-                }
-                let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
-                XCTAssertTrue(section.exists && viewport.contains(CGPoint(x: section.frame.midX, y: section.frame.midY)),
-                              "Personal Records \(checkpoint) should reach the visible viewport")
-                VisualAudit.capture("Personal Records maximum AX \(checkpoint) viewport")
+            captureLeaf(best, named: "best value")
+            let share = app.buttons["activity-personal-records-share-button"].firstMatch
+            reveal(share, named: "Share")
+            XCTAssertGreaterThanOrEqual(share.frame.width, 44, "Share must have a 44-point target")
+            XCTAssertGreaterThanOrEqual(share.frame.height, 44, "Share must have a 44-point target")
+            VisualAudit.capture("Personal Records maximum AX Share")
+            addScreenshotAttachment(named: "Personal Records maximum AX Share")
+
+            captureLeaf(app.descendants(matching: .any)["personal-records-timeline-latest-value"].firstMatch,
+                        named: "timeline latest value")
+            captureLeaf(app.staticTexts["activity-personal-records-reward-level"].firstMatch,
+                        named: "reward level")
+            captureLeaf(app.staticTexts["activity-personal-records-reward-points"].firstMatch,
+                        named: "reward points")
+            reveal(app.descendants(matching: .any)["activity-personal-records-level-progress"].firstMatch,
+                   named: "level progress")
+
+            let titlePrefix = "activity-personal-records-achievement-title-"
+            let firstTitle = app.staticTexts.matching(
+                NSPredicate(format: "identifier BEGINSWITH %@", titlePrefix)
+            ).firstMatch
+            let empty = app.staticTexts["activity-personal-records-history-empty"].firstMatch
+            // Revealing the section lets lazy accessibility children be materialized before choosing a branch.
+            let history = app.descendants(matching: .any)[AXID.activityPersonalRecordsAchievementHistory].firstMatch
+            for _ in 0..<20 where !firstTitle.exists && !empty.exists { scroll.swipeUp(velocity: .slow) }
+            XCTAssertTrue(history.exists)
+            if firstTitle.exists {
+                let eventID = String(firstTitle.identifier.dropFirst(titlePrefix.count))
+                XCTAssertFalse(eventID.isEmpty)
+                captureLeaf(firstTitle, named: "history event title")
+                captureLeaf(app.staticTexts["activity-personal-records-achievement-detail-\(eventID)"].firstMatch,
+                            named: "history event detail")
+                captureLeaf(app.staticTexts["activity-personal-records-achievement-date-\(eventID)"].firstMatch,
+                            named: "history event date")
+            } else {
+                XCTAssertTrue(empty.waitForExistence(timeout: 5), "History should show an event or its real empty state")
+                XCTAssertFalse(empty.label.isEmpty)
+                captureLeaf(empty, named: "history empty state")
             }
         }
     }
