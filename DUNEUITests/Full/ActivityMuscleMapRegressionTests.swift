@@ -184,12 +184,13 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         XCTAssertTrue(sheet.frame.intersects(grabber.frame), "The grabber must overlap the explanation sheet")
         XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height,
                                  "The grabber must be at the explanation sheet top edge")
-        let endY = min(window.frame.maxY - 60, grabber.frame.midY + window.frame.height * 0.6)
+        let endY = window.frame.maxY - 40
         XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3)
         let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         let end = window.coordinate(withNormalizedOffset: .zero)
             .withOffset(CGVector(dx: grabber.frame.midX - window.frame.minX, dy: endY - window.frame.minY))
-        start.press(forDuration: 0.1, thenDragTo: end)
+        start.press(forDuration: 0.1, thenDragTo: end,
+                    withVelocity: XCUIGestureVelocity(rawValue: 1_000), thenHoldForDuration: 0)
         XCTAssertTrue(sheet.waitForNonExistence(timeout: 5), "The native sheet must dismiss")
         let detail = app.descendants(matching: .any)[AXID.activityMuscleMapDetailScreen].firstMatch
         XCTAssertTrue(detail.waitForExistence(timeout: 5), "A03 must remain after dismissal")

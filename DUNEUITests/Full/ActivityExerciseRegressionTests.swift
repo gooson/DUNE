@@ -1513,11 +1513,12 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let window = app.windows.firstMatch
         XCTAssertTrue(window.frame.contains(sheet.frame) && window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame))
         XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height)
-        let endY = min(window.frame.maxY - 60, grabber.frame.midY + window.frame.height * 0.6)
+        let endY = window.frame.maxY - 40
         XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3)
         let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         let end = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: grabber.frame.midX - window.frame.minX, dy: endY - window.frame.minY))
-        start.press(forDuration: 0.1, thenDragTo: end)
+        start.press(forDuration: 0.1, thenDragTo: end,
+                    withVelocity: XCUIGestureVelocity(rawValue: 1_000), thenHoldForDuration: 0)
         XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
         XCTAssertTrue(rootScroll.waitForExistence(timeout: 10))
         VisualAudit.capture("A16 volume dismissed \(maxText ? "MAX" : "normal")")
