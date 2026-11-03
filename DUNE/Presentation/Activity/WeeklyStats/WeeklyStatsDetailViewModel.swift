@@ -15,8 +15,11 @@ final class WeeklyStatsDetailViewModel {
         case thisMonth = "This Month"
 
         var dateRange: (start: Date, end: Date) {
+            dateRange(referenceDate: Date())
+        }
+
+        func dateRange(referenceDate now: Date) -> (start: Date, end: Date) {
             let calendar = Calendar.current
-            let now = Date()
             switch self {
             case .thisWeek:
                 // Rolling 7 days — matches Activity tab card
@@ -78,7 +81,7 @@ final class WeeklyStatsDetailViewModel {
 
     // MARK: - Loading
 
-    func loadData(manualSnapshots: [ManualExerciseSnapshot]) async {
+    func loadData(manualSnapshots: [ManualExerciseSnapshot], referenceDate: Date = Date()) async {
         let requestID = beginLoadRequest()
         isLoading = true
         errorMessage = nil
@@ -86,13 +89,15 @@ final class WeeklyStatsDetailViewModel {
 
         let period = selectedPeriod
         let calendar = Calendar.current
-        let range = period.dateRange
+        let range = period.dateRange(referenceDate: referenceDate)
         let historyEnd = range.end
         let historyEndDay = calendar.startOfDay(for: historyEnd)
-        let historyStart = calendar.date(byAdding: .day, value: -(period.fetchDays - 1), to: historyEndDay) ?? historyEndDay
-        let historySnapshots = manualSnapshots.filter { $0.date >= historyStart && $0.date <= historyEnd }
+        let chartStart = calendar.date(byAdding: .day, value: -(period.fetchDays - 1), to: historyEndDay) ?? historyEndDay
+        let comparisonStart = calendar.date(byAdding: .day, value: -(period.volumePeriod.days * 2), to: historyEndDay) ?? historyEndDay
+        let analysisStart = min(chartStart, comparisonStart)
+        let historySnapshots = manualSnapshots.filter { $0.date >= analysisStart && $0.date <= historyEnd }
 
-        let workoutResult = await fetchWorkouts(start: historyStart, end: historyEnd)
+        let workoutResult = await fetchWorkouts(start: analysisStart, end: historyEnd)
         let workouts = workoutResult.workouts
 
         guard isCurrentLoadRequest(requestID) else { return }
@@ -106,7 +111,7 @@ final class WeeklyStatsDetailViewModel {
         chartDailyBreakdown = TrainingVolumeAnalysisService.buildHistoryDailyBreakdown(
             workouts: workouts,
             manualRecords: historySnapshots,
-            start: historyStart,
+            start: chartStart,
             end: historyEnd
         )
 

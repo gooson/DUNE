@@ -55,13 +55,20 @@
     },
     "A05": {
       "row_id": "A05",
-      "evidence": "activity-weeklystats-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
-      "action": "tap activity-section-weeklystats",
-      "timestamp": 1791816404.638,
-      "image": "BF02B9CF-82FE-4876-9A08-B2617E570600.png",
-      "screen": "screen-0-1320x2868-tap activity-section-weeklystats_0_DA7559B4-7CFC-44F9-99F6-C821CA292511.png",
-      "file": "A05.png"
+      "file": "A05.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect()",
+      "action": "Weekly stats detail",
+      "source_revision": "d79a4666c3d2b16044b577937f64450e9dc7e2fe",
+      "normal_source_review_head": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+      "capture_kind": "xctest",
+      "image": "935B859E-A816-4D2B-B4BD-590DE66AA382.png",
+      "screen": "screen-0-1320x2868-Weekly stats detail_0_1F4B92B2-889D-4F4E-8528-6CA25E403603.png",
+      "timestamp": 1793670560.818,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "87B2D0F2-137D-4072-9F48-EFB68D9B2049",
+      "image_sha256": "48a0851fe80f0cfea891be6b54e42e428d0d2449bf3814e6414c0125573fd570",
+      "ax_sha256": "53689646f8d18e685a0423174534002831da76b1dbd0612ce58f339abb35efe4",
+      "evidence": "activity-weeklystats-detail-screen"
     },
     "A03": {
       "row_id": "A03",
@@ -1324,9 +1331,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "c0b51078",
+  "last_refresh_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
   "last_refresh_screens": [
-    "T06"
+    "A05"
   ],
-  "last_refresh_note": "T06 HRV only; all unrelated records including T05 and original global provenance preserved. iPad capture is historical Oct31."
+  "last_refresh_note": "Per-row source revisions retained; d79 content/layout closure excludes ambient wave phase."
 }

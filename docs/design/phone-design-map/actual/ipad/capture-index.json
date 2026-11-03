@@ -679,13 +679,20 @@
     },
     "A05": {
       "row_id": "A05",
-      "evidence": "activity-weeklystats-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
-      "action": "tap activity-section-weeklystats",
-      "timestamp": 1791837846.613,
-      "image": "1866ED99-9EC3-4DEF-BE5E-C097B88DB2AF.png",
-      "screen": "screen-0-2064x2752-tap activity-section-weeklystats_0_976AE295-8195-4FC2-AF6C-5C9D80C85759.png",
-      "file": "A05.png"
+      "file": "A05.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect()",
+      "action": "Weekly stats detail",
+      "source_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+      "normal_source_review_head": null,
+      "capture_kind": "xctest",
+      "image": "928AC706-4043-4A5E-A938-4E15E21D0701.png",
+      "screen": "screen-0-1512x2316-Weekly stats detail_0_6772609C-C99A-4415-A6E7-C87057C7B6BB.png",
+      "timestamp": 1793684192.244,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "18A86577-C9F9-469D-BFA9-448512138E1D",
+      "image_sha256": "3c7e1ab5adde5eff6b8e44f05a4ed31555dfbefeea5027250c8cfb1f5a57f913",
+      "ax_sha256": "bdc262499623d507965d0f71efbd51c193b8e211f41f16c9801884839ff5593b",
+      "evidence": "activity-weeklystats-detail-screen"
     },
     "A03": {
       "row_id": "A03",
@@ -1321,9 +1328,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "f9f1d852",
+  "last_refresh_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
   "last_refresh_screens": [
-    "T06"
+    "A05"
   ],
-  "last_refresh_note": "T06 HRV only; all unrelated records including T05 and original global provenance preserved. iPad capture is historical Oct31."
+  "last_refresh_note": "Per-row source revisions retained; d79 content/layout closure excludes ambient wave phase."
 }

@@ -1,0 +1,740 @@
+{
+  "source_head": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+  "quality_status": "source, scoped native and stage reviewed; final documentation recorded separately",
+  "normal_source_closure_sha256": "4364df9083aba4f5e3444f429bee25a7676d8488eea8cf65bd354df3882402b3",
+  "canonical": {
+    "regular": {
+      "map_entry": {
+        "row_id": "A05",
+        "file": "A05.png",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect()",
+        "action": "Weekly stats detail",
+        "source_revision": "d79a4666c3d2b16044b577937f64450e9dc7e2fe",
+        "normal_source_review_head": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+        "capture_kind": "xctest",
+        "image": "935B859E-A816-4D2B-B4BD-590DE66AA382.png",
+        "screen": "screen-0-1320x2868-Weekly stats detail_0_1F4B92B2-889D-4F4E-8528-6CA25E403603.png",
+        "timestamp": 1793670560.818,
+        "timestamp_kind": "native XCTest image attachment timestamp",
+        "device_uid": "87B2D0F2-137D-4072-9F48-EFB68D9B2049",
+        "image_sha256": "48a0851fe80f0cfea891be6b54e42e428d0d2449bf3814e6414c0125573fd570",
+        "ax_sha256": "53689646f8d18e685a0423174534002831da76b1dbd0612ce58f339abb35efe4",
+        "evidence": "activity-weeklystats-detail-screen"
+      },
+      "capture": {
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/attachments/935B859E-A816-4D2B-B4BD-590DE66AA382.png",
+        "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/attachments/D2408451-C328-4E5C-839D-0FED5FD50FFD.txt",
+        "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/attachments/D2408451-C328-4E5C-839D-0FED5FD50FFD.txt",
+        "manifest_ax_sha256": "53689646f8d18e685a0423174534002831da76b1dbd0612ce58f339abb35efe4",
+        "manifest_ax_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "87B2D0F2-137D-4072-9F48-EFB68D9B2049",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a05-9cf56da58ff1",
+          "exportedFileName": "D2408451-C328-4E5C-839D-0FED5FD50FFD.txt",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "hierarchy-Weekly stats detail-DUNEUITestsActivityExerciseRegressionTests_1_1F4B92B2-889D-4F4E-8528-6CA25E403603.swift-759",
+          "timestamp": 1793670560.818
+        },
+        "image_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "87B2D0F2-137D-4072-9F48-EFB68D9B2049",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-a05-9cf56da58ff1",
+          "exportedFileName": "935B859E-A816-4D2B-B4BD-590DE66AA382.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1320x2868-Weekly stats detail_0_1F4B92B2-889D-4F4E-8528-6CA25E403603.png",
+          "timestamp": 1793670560.818
+        },
+        "host_checkpoint": null,
+        "kind": "xctest",
+        "uid": "87B2D0F2-137D-4072-9F48-EFB68D9B2049",
+        "device": "iPhone 18 Pro Max-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "model": "iPhone 18 Pro Max",
+        "action": "Weekly stats detail",
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect",
+        "timestamp": 1793670560.818,
+        "timestamp_kind": "native XCTest image attachment timestamp",
+        "screen": "screen-0-1320x2868-Weekly stats detail_0_1F4B92B2-889D-4F4E-8528-6CA25E403603.png",
+        "image_sha256": "48a0851fe80f0cfea891be6b54e42e428d0d2449bf3814e6414c0125573fd570",
+        "ax_sha256": "53689646f8d18e685a0423174534002831da76b1dbd0612ce58f339abb35efe4"
+      }
+    },
+    "ipad": {
+      "map_entry": {
+        "row_id": "A05",
+        "file": "A05.png",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect()",
+        "action": "Weekly stats detail",
+        "source_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+        "normal_source_review_head": null,
+        "capture_kind": "xctest",
+        "image": "928AC706-4043-4A5E-A938-4E15E21D0701.png",
+        "screen": "screen-0-1512x2316-Weekly stats detail_0_6772609C-C99A-4415-A6E7-C87057C7B6BB.png",
+        "timestamp": 1793684192.244,
+        "timestamp_kind": "native XCTest image attachment timestamp",
+        "device_uid": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "image_sha256": "3c7e1ab5adde5eff6b8e44f05a4ed31555dfbefeea5027250c8cfb1f5a57f913",
+        "ax_sha256": "bdc262499623d507965d0f71efbd51c193b8e211f41f16c9801884839ff5593b",
+        "evidence": "activity-weeklystats-detail-screen"
+      },
+      "capture": {
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/928AC706-4043-4A5E-A938-4E15E21D0701.png",
+        "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/EBD673AC-F66A-4F82-903C-6BA67184025B.txt",
+        "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/EBD673AC-F66A-4F82-903C-6BA67184025B.txt",
+        "manifest_ax_sha256": "bdc262499623d507965d0f71efbd51c193b8e211f41f16c9801884839ff5593b",
+        "manifest_ax_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+          "exportedFileName": "EBD673AC-F66A-4F82-903C-6BA67184025B.txt",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "hierarchy-Weekly stats detail-DUNEUITestsActivityExerciseRegressionTests_1_6772609C-C99A-4415-A6E7-C87057C7B6BB.swift-806",
+          "timestamp": 1793684192.245
+        },
+        "image_attachment": {
+          "configurationName": "Design Capture",
+          "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+          "exportedFileName": "928AC706-4043-4A5E-A938-4E15E21D0701.png",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "screen-0-1512x2316-Weekly stats detail_0_6772609C-C99A-4415-A6E7-C87057C7B6BB.png",
+          "timestamp": 1793684192.244
+        },
+        "host_checkpoint": null,
+        "kind": "xctest",
+        "uid": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "device": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "model": "iPad mini (A20 Pro)",
+        "action": "Weekly stats detail",
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect",
+        "timestamp": 1793684192.244,
+        "timestamp_kind": "native XCTest image attachment timestamp",
+        "screen": "screen-0-1512x2316-Weekly stats detail_0_6772609C-C99A-4415-A6E7-C87057C7B6BB.png",
+        "image_sha256": "3c7e1ab5adde5eff6b8e44f05a4ed31555dfbefeea5027250c8cfb1f5a57f913",
+        "ax_sha256": "bdc262499623d507965d0f71efbd51c193b8e211f41f16c9801884839ff5593b"
+      }
+    },
+    "duo": {
+      "map_entry": {
+        "row_id": "A05",
+        "file": "A05.png",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect()",
+        "action": "Weekly stats detail",
+        "source_revision": "d79a4666c3d2b16044b577937f64450e9dc7e2fe",
+        "normal_source_review_head": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+        "capture_kind": "host",
+        "image": "003-1398x2034.png",
+        "screen": "003-1398x2034.png",
+        "timestamp": 1793672104.104,
+        "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+        "device_uid": "6BCF83DA-1054-46AA-AACA-FF57872E464A",
+        "image_sha256": "302f2d393cd8f7975100e1756b8143d515b5a2256abe74f549f36b6c1b364632",
+        "ax_sha256": "268c7f40a9a8bef3e2f026db261a2c0021ac28b3f47e5cd167e6c12023a3a4c5",
+        "evidence": "activity-weeklystats-detail-screen"
+      },
+      "capture": {
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/003-1398x2034.png",
+        "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/003-hierarchy.txt",
+        "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/attachments/E681537B-1683-4C58-9180-E2305CC09F1D.txt",
+        "manifest_ax_sha256": "268c7f40a9a8bef3e2f026db261a2c0021ac28b3f47e5cd167e6c12023a3a4c5",
+        "manifest_ax_attachment": {
+          "configurationName": "Duo Visual Audit",
+          "deviceId": "6BCF83DA-1054-46AA-AACA-FF57872E464A",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-a05-9cf56da58ff1",
+          "exportedFileName": "E681537B-1683-4C58-9180-E2305CC09F1D.txt",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "hierarchy-Weekly stats detail-DUNEUITestsActivityExerciseRegressionTests_0_0BF111B0-C37B-4713-825E-0ED82DCD8F67.swift-759",
+          "timestamp": 1793672104.104
+        },
+        "image_attachment": null,
+        "host_checkpoint": {
+          "sequence": 3,
+          "action": "DUNE_VISUAL_AUDIT_READY Weekly stats detail [DUNEUITests/ActivityExerciseRegressionTests.swift:759] DEADLINE=1793672129.298689",
+          "elapsed_seconds": 4.755,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        "kind": "host",
+        "uid": "6BCF83DA-1054-46AA-AACA-FF57872E464A",
+        "device": "iPhone Duo-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "model": "iPhone",
+        "action": "Weekly stats detail",
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect",
+        "timestamp": 1793672104.104,
+        "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+        "screen": "003-1398x2034.png",
+        "image_sha256": "302f2d393cd8f7975100e1756b8143d515b5a2256abe74f549f36b6c1b364632",
+        "ax_sha256": "268c7f40a9a8bef3e2f026db261a2c0021ac28b3f47e5cd167e6c12023a3a4c5"
+      }
+    },
+    "duo-open": {
+      "map_entry": {
+        "row_id": "A05",
+        "file": "A05.png",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect()",
+        "action": "Weekly stats detail",
+        "source_revision": "d79a4666c3d2b16044b577937f64450e9dc7e2fe",
+        "normal_source_review_head": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+        "capture_kind": "host",
+        "image": "003-2007x2853.png",
+        "screen": "003-2007x2853.png",
+        "timestamp": 1793672944.736,
+        "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+        "device_uid": "6BCF83DA-1054-46AA-AACA-FF57872E464A",
+        "image_sha256": "84eef8de3780930d363df48bdf6ef0c79de128deabc8c78af3af11737198e984",
+        "ax_sha256": "eb89ff1d9ba874888a2b2b33b308dbffa7f6369a9e46d4de247fbbf0cc03f190",
+        "evidence": "activity-weeklystats-detail-screen"
+      },
+      "capture": {
+        "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/003-2007x2853.png",
+        "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/003-hierarchy.txt",
+        "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/attachments/CFBBE06A-3C1A-48A1-8BDC-9E9185504D4F.txt",
+        "manifest_ax_sha256": "eb89ff1d9ba874888a2b2b33b308dbffa7f6369a9e46d4de247fbbf0cc03f190",
+        "manifest_ax_attachment": {
+          "configurationName": "Duo Visual Audit",
+          "deviceId": "6BCF83DA-1054-46AA-AACA-FF57872E464A",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-a05-9cf56da58ff1",
+          "exportedFileName": "CFBBE06A-3C1A-48A1-8BDC-9E9185504D4F.txt",
+          "isAssociatedWithFailure": false,
+          "suggestedHumanReadableName": "hierarchy-Weekly stats detail-DUNEUITestsActivityExerciseRegressionTests_0_C8D1B176-5936-4521-AAD2-55B41C6BC89A.swift-759",
+          "timestamp": 1793672944.736
+        },
+        "image_attachment": null,
+        "host_checkpoint": {
+          "sequence": 3,
+          "action": "DUNE_VISUAL_AUDIT_READY Weekly stats detail [DUNEUITests/ActivityExerciseRegressionTests.swift:759] DEADLINE=1793672971.569078",
+          "elapsed_seconds": 3.141,
+          "acknowledged": true,
+          "valid_evidence": true,
+          "error": null
+        },
+        "kind": "host",
+        "uid": "6BCF83DA-1054-46AA-AACA-FF57872E464A",
+        "device": "iPhone Duo-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "model": "iPhone",
+        "action": "Weekly stats detail",
+        "selector": "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect",
+        "timestamp": 1793672944.736,
+        "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+        "screen": "003-2007x2853.png",
+        "image_sha256": "84eef8de3780930d363df48bdf6ef0c79de128deabc8c78af3af11737198e984",
+        "ax_sha256": "eb89ff1d9ba874888a2b2b33b308dbffa7f6369a9e46d4de247fbbf0cc03f190"
+      }
+    }
+  },
+  "max_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+  "max_selector": "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+  "validated_input_sha256": {
+    "/private/tmp/a05-normal-renderer-closure.json": "4364df9083aba4f5e3444f429bee25a7676d8488eea8cf65bd354df3882402b3",
+    "/private/tmp/a10-gallery/build.py": "26773bcd71f374658bf639bc7bde34d4a729ed8da2225cf853450552245e611d",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/docs/design/phone-design-map/collect-real-captures.py": "6245de4341dd88fe15c12ffa0ca38a58ce8344f074efc1c2cfcfef2d8e79eff2",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/docs/design/phone-design-map/build-phone-design-maps.py": "f83119e204966acc0c83e835a4939bd866b52d1f94cc590d3807f31eed5f1431",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/docs/design/phone-design-map/screen-catalog.py": "9f1b3c2b2814ee98962e15e176736c8ad1af003a9e7f044d816f4e37e3c4d107",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/result.json": "e4debbb6739f31472d821662aa736487de86cd04233d4c405ca4f957420cb32c",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/tests.json": "1220b324a21f67855a4edb2fcb43ebf4b7a622eadfb5e09c567af6e8fddb15d9",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/summary.json": "02f3e89e4cb47b7844b7f50491c1daa19cee2f5deafeec31c05cb3eea3875e85",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/provenance.json": "84c2f306d636e86c2b22cc08411985b3508bd48b1b0fb4d57b47b36ccd2d69ee",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/run.log.gz": "526073dff72dc9cc8e35d0e868528a7d13d7bac3fa8378d2c22a1d1bbaa426a0",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/attachments/manifest.json": "e3c10c854c3e6b399dd6d9f5f16113b7a2f2da97582872cc30e7eea5ff8ddbc2",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/attachments/935B859E-A816-4D2B-B4BD-590DE66AA382.png": "48a0851fe80f0cfea891be6b54e42e428d0d2449bf3814e6414c0125573fd570",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666/attachments/D2408451-C328-4E5C-839D-0FED5FD50FFD.txt": "53689646f8d18e685a0423174534002831da76b1dbd0612ce58f339abb35efe4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/result.json": "79130c703a0d5a15d0c84bbc2102b10e817dfa140de0624b6d59278ec2cafea7",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/tests.json": "64591683255ba1e4ac509fe46a1cdb13eb369242687c295b9523ea138f4cd4af",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/summary.json": "2e82245402377b61f79bf63c25607acc1cee957f1b606b5a52de55cf107ffeea",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/provenance.json": "6644b0bb19af3a42f688adf68d9c417185d5695d80e47bddc96ebd9a166bfed0",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/run.log.gz": "0e0e5d24ab99e4f0e6dcb5bacfa77027af7f43aee7a9533b2965398d3350df1f",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/manifest.json": "c9ccd19452cea85855c380143a7d4d3ae200cf8d0dd65c4076b0de8974330393",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/928AC706-4043-4A5E-A938-4E15E21D0701.png": "3c7e1ab5adde5eff6b8e44f05a4ed31555dfbefeea5027250c8cfb1f5a57f913",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/EBD673AC-F66A-4F82-903C-6BA67184025B.txt": "bdc262499623d507965d0f71efbd51c193b8e211f41f16c9801884839ff5593b",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/7E63B191-8841-4E9C-B1F7-0965E34C0A08.png": "ec10451fb82f04f94b5b2ba0559929e475d293796b670a5df19485e5bcdcf02c",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/9E3B65E0-421F-474E-93B7-50A460A1F3A2.txt": "03f325cc766bb239b37a586a265cd797d06e14b8276d515fc0e974630d9ada6f",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/A0CCC59F-06EF-4C87-B3C9-695EF16F723E.png": "d16d7d4248cb457be3a72b85565844443957133559a74629388028215a7a6538",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/695D0860-3872-4F1C-AE64-8E6E49E4568D.txt": "74e75c42f2551065a5d8c8caea3358ab5c117f9d947bcd23db6e6e0549bc0be3",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/5F3F2811-FBAB-4C68-8A44-8981B8CF98C7.png": "0c5011f49850facd1e7e52301e16b460131afd1d207fdca99e5966128e2d5077",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/18CEB122-2C18-416C-971D-4D1684A03D3C.txt": "5753502a83a97fb00f7ff1e2a26b2154bca3b819005a53033d34f3992e4fceeb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/2A3BC8BC-56ED-4FB1-96BC-94441578835C.png": "e706b4c35dc5319b52a2ee033eddb574dfdecaba73aff6890c32099c1b1a41e8",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/6E72DCAF-BA9A-4326-8453-F4EEBF71A927.txt": "4455ecb8962b7751f5ad319f63dd910909bd03e9f0db90b634dd0bf0d2601ee5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/430AFCA0-9A92-4589-8AC3-D1F89F9573C4.png": "c6198d5450c7895030bc857677e53ada96baa1891b74ae9891a2da78c97d547c",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/55D4B8EF-1914-44CC-B79B-15E927CF5032.txt": "08aa1bf7665448f24eb89de20bf2929c3e406f906d78bbdb9068d88d49cd9c17",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/0F6C3F8A-EFF6-49BE-B3E6-73286FBB69BB.png": "4519f42ef9781294abda832b27bfac39636d4e748fbe2919d3a6e5d17f082dcb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/EDB9C8B1-D0AC-4D2C-968A-B5FAF7B55336.txt": "97e0831eb1135cadac1fd08152f284bd6ec72b2293f297e0db553df600693ec5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/5A88D21F-B410-4839-8E1D-EAC3FDC51468.png": "4519f42ef9781294abda832b27bfac39636d4e748fbe2919d3a6e5d17f082dcb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/98275365-1BB9-47A1-8759-B875BA484EC5.txt": "e8485002eca245b9b390707e037833202c7c3ac46fbf6e8f5764f55960f6c51b",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/result.json": "727f1fd9908adf7abde2a9e5deca1aa15f0375af324618a7c7f7e1324bf44c13",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/tests.json": "576ccc72b8531bc07145497d91e1e1c561795386d235bb200967d3d538c2a3eb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/summary.json": "ef966d9060c07bf48b257492399d3328d7565a4ccac94be6d3f5f952934e49b4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/provenance.json": "2e7d5ba967365cbe4818664f5cd955342d028f8b3f9b3e54d7f3f27db324dbf8",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/run.log.gz": "40ea4891a61b70e4ecfd6356f15b2bcf82e0a64dbb1b5c5f2a07a56c3327aff2",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/attachments/manifest.json": "653e55688b050d2eedb2d611ee739ed4dd4cafd3ee3df16e553a1ccab45fd2e8",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/attachments/E681537B-1683-4C58-9180-E2305CC09F1D.txt": "268c7f40a9a8bef3e2f026db261a2c0021ac28b3f47e5cd167e6c12023a3a4c5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/003-1398x2034.png": "302f2d393cd8f7975100e1756b8143d515b5a2256abe74f549f36b6c1b364632",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/003-hierarchy.txt": "268c7f40a9a8bef3e2f026db261a2c0021ac28b3f47e5cd167e6c12023a3a4c5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/pose-proof.json": "7f354c6e1c214fd61e7301b5719f89592782c2f830c0d1144f172a41cfbad562",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/angle-before.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/angle-after.txt": "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/displays-before.json": "1f1e3ce24e970ad99e8b80687da4571eaf13045817228f3ebbe4a7754375b9d5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/displays-after.json": "1f1e3ce24e970ad99e8b80687da4571eaf13045817228f3ebbe4a7754375b9d5",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/checkpoints.jsonl": "d33faa2d36cfa07c170af529e0f7edbbb68dc86e0ce11a1e8dfc7a2330a3fb88",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/host-captures/captures.tsv": "ce15c6a736c5b9b83989e09295247a92710bc4fe4d02da419cfcf95f8f0fa483",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666/xcresult-legacy-root.json": "ae304573a65cb5cf8135804f5625ee9396d4ce3f80a90416d2e0baa02431cc16",
+    "/private/tmp/pr892-capture-duo-readiness-retry.sh": "b49265eb7327041241dd5eac9e87dc6f9f88ef45cdacb35a8ab2d411d3703afd",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/result.json": "b20715b38202e10052c2f687e0023408a3817b8009f75ac03311a1225d1cf515",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/tests.json": "08ef557e22cfe89bb1317ac2d5ab26a6b76304225897ad4137e1c9b4ce228b55",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/summary.json": "0121b425036e96943748aea3136aaeeab6fbde2a04132e825fa09380f60e1495",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/provenance.json": "fe1b049d71acdeb3e07326da131d9a19ee4ecafbb3c10e9c72e8c20091ac59b3",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/run.log.gz": "bee761368bb2048fe745de926c0aa580dab60b6cb2aec4b564d4dc19a960cc10",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/attachments/manifest.json": "b4555e546d5af18fa2661f2f7883328fe2f9d0b8f7993c2df32254899817bffd",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/attachments/CFBBE06A-3C1A-48A1-8BDC-9E9185504D4F.txt": "eb89ff1d9ba874888a2b2b33b308dbffa7f6369a9e46d4de247fbbf0cc03f190",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/003-2007x2853.png": "84eef8de3780930d363df48bdf6ef0c79de128deabc8c78af3af11737198e984",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/003-hierarchy.txt": "eb89ff1d9ba874888a2b2b33b308dbffa7f6369a9e46d4de247fbbf0cc03f190",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/pose-proof.json": "f3f61a260f4ac4f0dad439d251f2b986d907498a4f06b3c4cf4205e4293dd6f4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/angle-before.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/angle-after.txt": "1e8ac0d84b7644b31324a78dee04aa7600daefcab3d96a422731f5b29245878e",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/displays-before.json": "a0d1cc969d9043b8f1743df486c1ac25407980ebe912a2686c726a7371a637bb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/displays-after.json": "a0d1cc969d9043b8f1743df486c1ac25407980ebe912a2686c726a7371a637bb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/checkpoints.jsonl": "752969df8ec1c46099f4e9f14b484d55f2ea797320b821462ac2149787534fb2",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/host-captures/captures.tsv": "13642fdb73becc35024edce5e133bd1afb07e18dc6b1210164bf4eb8489d18b2",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666/xcresult-legacy-root.json": "05d5f5c3e984e08a20b585cbc85ed7d1cc289472fb59b1ce7049e3c8539ba44a",
+    "/private/tmp/pr892-capture-duo-open-readiness-retry.sh": "74dd930a1e0a05f60188e3becd8b0dbe61ab1f2ce9bb189f51dde43209d2e8be"
+  },
+  "archives": {
+    "regular": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/phone-normal-loaded-prior-d79a4666",
+      "source_revision": "d79a4666c3d2b16044b577937f64450e9dc7e2fe",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.xcodebuild/a05-phone-normal-d79a4666.log"
+      },
+      "core_sha256": {
+        "result.json": "e4debbb6739f31472d821662aa736487de86cd04233d4c405ca4f957420cb32c",
+        "tests.json": "1220b324a21f67855a4edb2fcb43ebf4b7a622eadfb5e09c567af6e8fddb15d9",
+        "summary.json": "02f3e89e4cb47b7844b7f50491c1daa19cee2f5deafeec31c05cb3eea3875e85",
+        "provenance.json": "84c2f306d636e86c2b22cc08411985b3508bd48b1b0fb4d57b47b36ccd2d69ee",
+        "run.log.gz": "526073dff72dc9cc8e35d0e868528a7d13d7bac3fa8378d2c22a1d1bbaa426a0",
+        "attachments/manifest.json": "e3c10c854c3e6b399dd6d9f5f16113b7a2f2da97582872cc30e7eea5ff8ddbc2"
+      }
+    },
+    "ipad": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c",
+      "source_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect",
+          "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 2,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.xcodebuild/a05-responsive-period-final-ed21363c.log"
+      },
+      "core_sha256": {
+        "result.json": "79130c703a0d5a15d0c84bbc2102b10e817dfa140de0624b6d59278ec2cafea7",
+        "tests.json": "64591683255ba1e4ac509fe46a1cdb13eb369242687c295b9523ea138f4cd4af",
+        "summary.json": "2e82245402377b61f79bf63c25607acc1cee957f1b606b5a52de55cf107ffeea",
+        "provenance.json": "6644b0bb19af3a42f688adf68d9c417185d5695d80e47bddc96ebd9a166bfed0",
+        "run.log.gz": "0e0e5d24ab99e4f0e6dcb5bacfa77027af7f43aee7a9533b2965398d3350df1f",
+        "attachments/manifest.json": "c9ccd19452cea85855c380143a7d4d3ae200cf8d0dd65c4076b0de8974330393"
+      }
+    },
+    "duo": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-closed-loaded-prior-d79a4666",
+      "source_revision": "d79a4666c3d2b16044b577937f64450e9dc7e2fe",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.xcodebuild/a05-duo-closed-d79a4666-readiness-retry.log"
+      },
+      "core_sha256": {
+        "result.json": "727f1fd9908adf7abde2a9e5deca1aa15f0375af324618a7c7f7e1324bf44c13",
+        "tests.json": "576ccc72b8531bc07145497d91e1e1c561795386d235bb200967d3d538c2a3eb",
+        "summary.json": "ef966d9060c07bf48b257492399d3328d7565a4ccac94be6d3f5f952934e49b4",
+        "provenance.json": "2e7d5ba967365cbe4818664f5cd955342d028f8b3f9b3e54d7f3f27db324dbf8",
+        "run.log.gz": "40ea4891a61b70e4ecfd6356f15b2bcf82e0a64dbb1b5c5f2a07a56c3327aff2",
+        "attachments/manifest.json": "653e55688b050d2eedb2d611ee739ed4dd4cafd3ee3df16e553a1ccab45fd2e8"
+      }
+    },
+    "duo-open": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/duo-open-loaded-prior-d79a4666",
+      "source_revision": "d79a4666c3d2b16044b577937f64450e9dc7e2fe",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.xcodebuild/a05-duo-open-d79a4666-display-readiness-retry.log"
+      },
+      "core_sha256": {
+        "result.json": "b20715b38202e10052c2f687e0023408a3817b8009f75ac03311a1225d1cf515",
+        "tests.json": "08ef557e22cfe89bb1317ac2d5ab26a6b76304225897ad4137e1c9b4ce228b55",
+        "summary.json": "0121b425036e96943748aea3136aaeeab6fbde2a04132e825fa09380f60e1495",
+        "provenance.json": "fe1b049d71acdeb3e07326da131d9a19ee4ecafbb3c10e9c72e8c20091ac59b3",
+        "run.log.gz": "bee761368bb2048fe745de926c0aa580dab60b6cb2aec4b564d4dc19a960cc10",
+        "attachments/manifest.json": "b4555e546d5af18fa2661f2f7883328fe2f9d0b8f7993c2df32254899817bffd"
+      }
+    },
+    "ipad-max": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c",
+      "source_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+      "result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect",
+          "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 2,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.xcodebuild/a05-responsive-period-final-ed21363c.log"
+      },
+      "core_sha256": {
+        "result.json": "79130c703a0d5a15d0c84bbc2102b10e817dfa140de0624b6d59278ec2cafea7",
+        "tests.json": "64591683255ba1e4ac509fe46a1cdb13eb369242687c295b9523ea138f4cd4af",
+        "summary.json": "2e82245402377b61f79bf63c25607acc1cee957f1b606b5a52de55cf107ffeea",
+        "provenance.json": "6644b0bb19af3a42f688adf68d9c417185d5695d80e47bddc96ebd9a166bfed0",
+        "run.log.gz": "0e0e5d24ab99e4f0e6dcb5bacfa77027af7f43aee7a9533b2965398d3350df1f",
+        "attachments/manifest.json": "c9ccd19452cea85855c380143a7d4d3ae200cf8d0dd65c4076b0de8974330393"
+      }
+    }
+  },
+  "max_checkpoints": [
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/5A88D21F-B410-4839-8E1D-EAC3FDC51468.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/98275365-1BB9-47A1-8759-B875BA484EC5.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/98275365-1BB9-47A1-8759-B875BA484EC5.txt",
+      "manifest_ax_sha256": "e8485002eca245b9b390707e037833202c7c3ac46fbf6e8f5764f55960f6c51b",
+      "manifest_ax_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "98275365-1BB9-47A1-8759-B875BA484EC5.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-Workout Insights presentation-DUNEUITestsActivityExerciseRegressionTests_1_A1DC610E-AE22-4639-8079-77ED665A8D17.swift-135",
+        "timestamp": 1793684305.46
+      },
+      "image_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "5A88D21F-B410-4839-8E1D-EAC3FDC51468.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Workout Insights presentation_0_A1DC610E-AE22-4639-8079-77ED665A8D17.png",
+        "timestamp": 1793684305.46
+      },
+      "host_checkpoint": null,
+      "kind": "xctest",
+      "uid": "18A86577-C9F9-469D-BFA9-448512138E1D",
+      "device": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+      "model": "iPad mini (A20 Pro)",
+      "action": "Workout Insights presentation",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+      "timestamp": 1793684305.46,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "screen": "screen-0-1512x2316-Workout Insights presentation_0_A1DC610E-AE22-4639-8079-77ED665A8D17.png",
+      "image_sha256": "4519f42ef9781294abda832b27bfac39636d4e748fbe2919d3a6e5d17f082dcb",
+      "ax_sha256": "e8485002eca245b9b390707e037833202c7c3ac46fbf6e8f5764f55960f6c51b"
+    },
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/0F6C3F8A-EFF6-49BE-B3E6-73286FBB69BB.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/EDB9C8B1-D0AC-4D2C-968A-B5FAF7B55336.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/EDB9C8B1-D0AC-4D2C-968A-B5FAF7B55336.txt",
+      "manifest_ax_sha256": "97e0831eb1135cadac1fd08152f284bd6ec72b2293f297e0db553df600693ec5",
+      "manifest_ax_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "EDB9C8B1-D0AC-4D2C-968A-B5FAF7B55336.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-Weekly stats maximum AX period menu-DUNEUITestsActivityExerciseRegressionTests_1_DBDFC03A-028D-4C8B-A4C4-CC7C89A0FF6F.swift-182",
+        "timestamp": 1793684316.233
+      },
+      "image_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "0F6C3F8A-EFF6-49BE-B3E6-73286FBB69BB.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Weekly stats maximum AX period menu_0_DBDFC03A-028D-4C8B-A4C4-CC7C89A0FF6F.png",
+        "timestamp": 1793684316.233
+      },
+      "host_checkpoint": null,
+      "kind": "xctest",
+      "uid": "18A86577-C9F9-469D-BFA9-448512138E1D",
+      "device": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+      "model": "iPad mini (A20 Pro)",
+      "action": "Weekly stats maximum AX period menu",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+      "timestamp": 1793684316.233,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "screen": "screen-0-1512x2316-Weekly stats maximum AX period menu_0_DBDFC03A-028D-4C8B-A4C4-CC7C89A0FF6F.png",
+      "image_sha256": "4519f42ef9781294abda832b27bfac39636d4e748fbe2919d3a6e5d17f082dcb",
+      "ax_sha256": "97e0831eb1135cadac1fd08152f284bd6ec72b2293f297e0db553df600693ec5"
+    },
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/430AFCA0-9A92-4589-8AC3-D1F89F9573C4.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/55D4B8EF-1914-44CC-B79B-15E927CF5032.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/55D4B8EF-1914-44CC-B79B-15E927CF5032.txt",
+      "manifest_ax_sha256": "08aa1bf7665448f24eb89de20bf2929c3e406f906d78bbdb9068d88d49cd9c17",
+      "manifest_ax_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "55D4B8EF-1914-44CC-B79B-15E927CF5032.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-Weekly stats maximum AX period Last Week-DUNEUITestsActivityExerciseRegressionTests_1_58B1FBD2-96B1-4353-8A4A-1692160B1268.swift-203",
+        "timestamp": 1793684339.799
+      },
+      "image_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "430AFCA0-9A92-4589-8AC3-D1F89F9573C4.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Weekly stats maximum AX period Last Week_0_58B1FBD2-96B1-4353-8A4A-1692160B1268.png",
+        "timestamp": 1793684339.799
+      },
+      "host_checkpoint": null,
+      "kind": "xctest",
+      "uid": "18A86577-C9F9-469D-BFA9-448512138E1D",
+      "device": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+      "model": "iPad mini (A20 Pro)",
+      "action": "Weekly stats maximum AX period Last Week",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+      "timestamp": 1793684339.799,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "screen": "screen-0-1512x2316-Weekly stats maximum AX period Last Week_0_58B1FBD2-96B1-4353-8A4A-1692160B1268.png",
+      "image_sha256": "c6198d5450c7895030bc857677e53ada96baa1891b74ae9891a2da78c97d547c",
+      "ax_sha256": "08aa1bf7665448f24eb89de20bf2929c3e406f906d78bbdb9068d88d49cd9c17"
+    },
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/2A3BC8BC-56ED-4FB1-96BC-94441578835C.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/6E72DCAF-BA9A-4326-8453-F4EEBF71A927.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/6E72DCAF-BA9A-4326-8453-F4EEBF71A927.txt",
+      "manifest_ax_sha256": "4455ecb8962b7751f5ad319f63dd910909bd03e9f0db90b634dd0bf0d2601ee5",
+      "manifest_ax_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "6E72DCAF-BA9A-4326-8453-F4EEBF71A927.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-Weekly stats maximum AX period This Month-DUNEUITestsActivityExerciseRegressionTests_1_D9569F39-B48A-4387-BCB2-CA5F5FCF0CF8.swift-203",
+        "timestamp": 1793684364.154
+      },
+      "image_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "2A3BC8BC-56ED-4FB1-96BC-94441578835C.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Weekly stats maximum AX period This Month_0_D9569F39-B48A-4387-BCB2-CA5F5FCF0CF8.png",
+        "timestamp": 1793684364.154
+      },
+      "host_checkpoint": null,
+      "kind": "xctest",
+      "uid": "18A86577-C9F9-469D-BFA9-448512138E1D",
+      "device": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+      "model": "iPad mini (A20 Pro)",
+      "action": "Weekly stats maximum AX period This Month",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+      "timestamp": 1793684364.154,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "screen": "screen-0-1512x2316-Weekly stats maximum AX period This Month_0_D9569F39-B48A-4387-BCB2-CA5F5FCF0CF8.png",
+      "image_sha256": "e706b4c35dc5319b52a2ee033eddb574dfdecaba73aff6890c32099c1b1a41e8",
+      "ax_sha256": "4455ecb8962b7751f5ad319f63dd910909bd03e9f0db90b634dd0bf0d2601ee5"
+    },
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/5F3F2811-FBAB-4C68-8A44-8981B8CF98C7.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/18CEB122-2C18-416C-971D-4D1684A03D3C.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/18CEB122-2C18-416C-971D-4D1684A03D3C.txt",
+      "manifest_ax_sha256": "5753502a83a97fb00f7ff1e2a26b2154bca3b819005a53033d34f3992e4fceeb",
+      "manifest_ax_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "18CEB122-2C18-416C-971D-4D1684A03D3C.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-Weekly stats maximum AX period This Week-DUNEUITestsActivityExerciseRegressionTests_1_13D75E71-7B39-4A12-85A3-A53F067D442F.swift-203",
+        "timestamp": 1793684387.977
+      },
+      "image_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "5F3F2811-FBAB-4C68-8A44-8981B8CF98C7.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Weekly stats maximum AX period This Week_0_13D75E71-7B39-4A12-85A3-A53F067D442F.png",
+        "timestamp": 1793684387.977
+      },
+      "host_checkpoint": null,
+      "kind": "xctest",
+      "uid": "18A86577-C9F9-469D-BFA9-448512138E1D",
+      "device": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+      "model": "iPad mini (A20 Pro)",
+      "action": "Weekly stats maximum AX period This Week",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+      "timestamp": 1793684387.977,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "screen": "screen-0-1512x2316-Weekly stats maximum AX period This Week_0_13D75E71-7B39-4A12-85A3-A53F067D442F.png",
+      "image_sha256": "0c5011f49850facd1e7e52301e16b460131afd1d207fdca99e5966128e2d5077",
+      "ax_sha256": "5753502a83a97fb00f7ff1e2a26b2154bca3b819005a53033d34f3992e4fceeb"
+    },
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/A0CCC59F-06EF-4C87-B3C9-695EF16F723E.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/695D0860-3872-4F1C-AE64-8E6E49E4568D.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/695D0860-3872-4F1C-AE64-8E6E49E4568D.txt",
+      "manifest_ax_sha256": "74e75c42f2551065a5d8c8caea3358ab5c117f9d947bcd23db6e6e0549bc0be3",
+      "manifest_ax_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "695D0860-3872-4F1C-AE64-8E6E49E4568D.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-Daily chart heading and accessible metric menu-DUNEUITestsActivityExerciseRegressionTests_1_9826308F-C15B-4DE8-B0EA-474A7F2B057B.swift-240",
+        "timestamp": 1793684409.63
+      },
+      "image_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "A0CCC59F-06EF-4C87-B3C9-695EF16F723E.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Daily chart heading and accessible metric menu_0_9826308F-C15B-4DE8-B0EA-474A7F2B057B.png",
+        "timestamp": 1793684409.63
+      },
+      "host_checkpoint": null,
+      "kind": "xctest",
+      "uid": "18A86577-C9F9-469D-BFA9-448512138E1D",
+      "device": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+      "model": "iPad mini (A20 Pro)",
+      "action": "Daily chart heading and accessible metric menu",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+      "timestamp": 1793684409.63,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "screen": "screen-0-1512x2316-Daily chart heading and accessible metric menu_0_9826308F-C15B-4DE8-B0EA-474A7F2B057B.png",
+      "image_sha256": "d16d7d4248cb457be3a72b85565844443957133559a74629388028215a7a6538",
+      "ax_sha256": "74e75c42f2551065a5d8c8caea3358ab5c117f9d947bcd23db6e6e0549bc0be3"
+    },
+    {
+      "image": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/7E63B191-8841-4E9C-B1F7-0965E34C0A08.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/9E3B65E0-421F-474E-93B7-50A460A1F3A2.txt",
+      "manifest_ax": "/Users/shanks/.codex/worktrees/detail-redesign-a05/Health/.codex-checks/a05/evidence/ipad-normal-and-responsive-period-max-ed21363c/attachments/9E3B65E0-421F-474E-93B7-50A460A1F3A2.txt",
+      "manifest_ax_sha256": "03f325cc766bb239b37a586a265cd797d06e14b8276d515fc0e974630d9ada6f",
+      "manifest_ax_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "9E3B65E0-421F-474E-93B7-50A460A1F3A2.txt",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "hierarchy-Daily volume chart after selecting volume-DUNEUITestsActivityExerciseRegressionTests_1_B6A61DE0-6611-4074-BBD2-17A231BB1160.swift-251",
+        "timestamp": 1793684436.849
+      },
+      "image_attachment": {
+        "configurationName": "Design Capture",
+        "deviceId": "18A86577-C9F9-469D-BFA9-448512138E1D",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+        "exportedFileName": "7E63B191-8841-4E9C-B1F7-0965E34C0A08.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Daily volume chart after selecting volume_0_B6A61DE0-6611-4074-BBD2-17A231BB1160.png",
+        "timestamp": 1793684436.849
+      },
+      "host_checkpoint": null,
+      "kind": "xctest",
+      "uid": "18A86577-C9F9-469D-BFA9-448512138E1D",
+      "device": "iPad mini (A20 Pro)-wt-Health-detail-redesign-a05-9cf56da58ff1",
+      "model": "iPad mini (A20 Pro)",
+      "action": "Daily volume chart after selecting volume",
+      "selector": "DUNEUITests/ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize",
+      "timestamp": 1793684436.849,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "screen": "screen-0-1512x2316-Daily volume chart after selecting volume_0_B6A61DE0-6611-4074-BBD2-17A231BB1160.png",
+      "image_sha256": "ec10451fb82f04f94b5b2ba0559929e475d293796b670a5df19485e5bcdcf02c",
+      "ax_sha256": "03f325cc766bb239b37a586a265cd797d06e14b8276d515fc0e974630d9ada6f"
+    }
+  ],
+  "final_review": "../../../../reviews/2026-11-03-a05-weekly-stats-detail-redesign.md",
+  "accepted_P3": 1
+}
