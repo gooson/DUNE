@@ -201,6 +201,7 @@ struct ExerciseMixDetailView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-exercise-mix-weekly-chart")
     }
 
@@ -269,6 +270,7 @@ struct ExerciseMixDetailView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-exercise-mix-muscle-shares")
     }
 
@@ -320,6 +322,7 @@ struct ExerciseMixDetailView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-exercise-mix-cardio-types")
     }
 
