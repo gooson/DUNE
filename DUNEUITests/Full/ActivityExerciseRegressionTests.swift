@@ -1404,7 +1404,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
         var oversizedTextIndex = 0
         func reveal(_ expected: String) {
-            let item = sheet.staticTexts[expected].firstMatch
+            let item = sheet.staticTexts.matching(NSPredicate(format: "label == %@", expected)).firstMatch
             XCTAssertTrue(item.waitForExistence(timeout: 10), "Missing exact text: \(expected)")
             XCTAssertEqual(item.label, expected, "Text must be complete: \(expected)")
             XCTAssertFalse(item.frame.isEmpty)
