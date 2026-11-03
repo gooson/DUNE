@@ -965,13 +965,19 @@
     },
     "A17": {
       "row_id": "A17",
-      "evidence": "activity-personal-records-info-sheet",
+      "file": "A17.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditPersonalRecordsExplanation()",
-      "action": "tap activity-pr-info",
-      "timestamp": 1791838559.452,
-      "image": "9476B96C-CBB3-43C4-B724-B9F30747B0BE.png",
-      "screen": "screen-0-2064x2752-tap activity-pr-info_0_D66A61BD-B363-4A30-BECE-FEFFEC7600F5.png",
-      "file": "A17.png"
+      "action": "activity-personal-records-info-sheet",
+      "source_revision": "6b857ae8cfc29fe7ec9f3a77a9c6d6af8992d509",
+      "capture_kind": "xctest",
+      "image": "D8F2A254-F7A0-4046-BF64-9F8F27CCC27D.png",
+      "screen": "screen-0-1512x2316-activity-personal-records-info-sheet_0_E5292213-1104-4C89-97B6-5934B3CD6B35.png",
+      "timestamp": 1793735944.588,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "87EF8417-CC50-4601-969D-B960EFADA2C0",
+      "image_sha256": "9ad3ca8220fcfc2d4986a165d6b13fe367d105cc9e0344212c6f47edcc67adda",
+      "ax_sha256": "7a5cb7685c0d625c58af9ac5cbc11f2ca955aa120eb7492575c172aa48f62357",
+      "evidence": "activity-personal-records-info-sheet"
     },
     "W11": {
       "row_id": "W11",
@@ -1390,9 +1396,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "6d186b3ac51f4fa94c91c06455ea6e267a0a037d",
+  "last_refresh_revision": "6b857ae8cfc29fe7ec9f3a77a9c6d6af8992d509",
   "last_refresh_screens": [
-    "A16"
+    "A17"
   ],
-  "last_refresh_note": "Fresh corrected-source A16 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Fresh corrected-source A17 captures; per-row source and device provenance retained."
 }
