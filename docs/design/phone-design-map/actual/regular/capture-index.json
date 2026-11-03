@@ -1251,13 +1251,19 @@
     },
     "A16": {
       "row_id": "A16",
-      "evidence": "test-and-action:Volume algorithm explanation",
+      "file": "A16.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditVolumeAlgorithmExplanation()",
       "action": "Volume algorithm explanation",
-      "timestamp": 1792375193.278,
-      "image": "DD07085C-C171-41E0-8FF9-3752DCD0A3C8.png",
-      "screen": "screen-0-1206x2622-Volume algorithm explanation_0_97BFD1CE-4264-4A25-8652-00EE8A4ED35C.png",
-      "file": "A16.png"
+      "source_revision": "6d186b3ac51f4fa94c91c06455ea6e267a0a037d",
+      "capture_kind": "xctest",
+      "image": "4FC9578F-256F-4540-9ECE-560A91CC1564.png",
+      "screen": "screen-0-1320x2868-Volume algorithm explanation_0_22AD057C-7722-4108-A6DB-A4A4C25BA74E.png",
+      "timestamp": 1793730291.618,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "8D1CA19F-61C8-4A7E-9AAE-4B949D1DA4B1",
+      "image_sha256": "35afffd04d073b590891f2625a34a74b8556c9359de37a73528d8098985862cb",
+      "ax_sha256": "5317ba30a17e5ea4ce3a44f7c6347f4606b5f8cc3aa0f6e0f9020c22089c1e51",
+      "evidence": "activity-volume-algorithm-sheet"
     },
     "W15": {
       "row_id": "W15",
@@ -1382,9 +1388,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "95ecbe1846133c1e5d1073e24686ee5fff72e549",
+  "last_refresh_revision": "6d186b3ac51f4fa94c91c06455ea6e267a0a037d",
   "last_refresh_screens": [
-    "A15"
+    "A16"
   ],
-  "last_refresh_note": "Fresh corrected-source A15 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Fresh corrected-source A16 captures; per-row source and device provenance retained."
 }

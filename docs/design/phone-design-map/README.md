@@ -283,3 +283,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 [A14 native review](../full-redesign-map/review/a14-fatigue-explanation-native-2026-11-04/index.html)
 
 [A15 native review](../full-redesign-map/review/a15-fatigue-algorithm-native-2026-11-04/index.html)
+
+[A16 native review](../full-redesign-map/review/a16-volume-algorithm-native-2026-11-04/index.html)

@@ -1141,13 +1141,19 @@
     },
     "A16": {
       "row_id": "A16",
-      "evidence": "activity-volume-algorithm-sheet",
+      "file": "A16.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditVolumeAlgorithmExplanation()",
-      "action": "tap activity-muscle-map-algorithm-info",
-      "timestamp": 1791839010.345,
-      "image": "F9671387-57EB-46D3-8095-0EA51207F46A.png",
-      "screen": "screen-0-2064x2752-tap activity-muscle-map-algorithm-info_0_7B425C6A-0CE8-4747-B9B8-C42015C07A03.png",
-      "file": "A16.png"
+      "action": "Volume algorithm explanation",
+      "source_revision": "6d186b3ac51f4fa94c91c06455ea6e267a0a037d",
+      "capture_kind": "xctest",
+      "image": "FDBD89E0-5D50-41C6-9C60-B6769E92484A.png",
+      "screen": "screen-0-1512x2316-Volume algorithm explanation_0_40094782-42E7-45FF-BEE3-9C13C04E1A9E.png",
+      "timestamp": 1793730496.466,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "1E6BBBBD-C6EA-4CAE-8245-294215790B25",
+      "image_sha256": "f08ad5fc42e4599ad62cb698f2f8ff2643ba419b8f3efed000c65343e19f0148",
+      "ax_sha256": "3958b40827efcb16332377f9ca847528a43365327560493c82c3877c456feb8c",
+      "evidence": "activity-volume-algorithm-sheet"
     },
     "S07": {
       "row_id": "S07",
@@ -1384,9 +1390,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "95ecbe1846133c1e5d1073e24686ee5fff72e549",
+  "last_refresh_revision": "6d186b3ac51f4fa94c91c06455ea6e267a0a037d",
   "last_refresh_screens": [
-    "A15"
+    "A16"
   ],
-  "last_refresh_note": "Fresh corrected-source A15 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Fresh corrected-source A16 captures; per-row source and device provenance retained."
 }
