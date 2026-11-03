@@ -911,13 +911,18 @@ enum TestDataSeeder {
             .contains("--ui-visual-stress-fixture")
             ? [.init(factor: .hrv, impact: .neutral, detail: "Synthetic visual audit HRV contribution")]
             : []
+        let usesPriorRHRFixture = ProcessInfo.processInfo.arguments
+            .contains("--ui-visual-condition-prior-rhr-fixture")
         let conditionComponentDetail: ConditionScoreDetail? = ProcessInfo.processInfo.arguments
             .contains("--ui-visual-condition-components-fixture")
             ? ConditionScoreDetail(
                 todayHRV: 60, baselineHRV: 40, zScore: 2,
                 stdDev: 10, effectiveStdDev: 10, daysInBaseline: 14,
-                todayDate: today, rawScore: 100, todayRHR: 54,
-                baselineRHR: 54, rhrDeltaFromBaseline: 0, rhrBaselineDays: 14
+                todayDate: today, rawScore: 100, todayRHR: usesPriorRHRFixture ? nil : 54,
+                baselineRHR: 54, rhrDeltaFromBaseline: 0, rhrBaselineDays: 14,
+                displayRHR: usesPriorRHRFixture ? 54 : nil,
+                displayRHRDate: usesPriorRHRFixture
+                    ? calendar.date(byAdding: .day, value: -1, to: today) : nil
             )
             : nil
         // Opt-in visual boundary fixture; never changes the standard seeded snapshot.

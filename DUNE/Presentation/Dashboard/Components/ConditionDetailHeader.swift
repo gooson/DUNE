@@ -14,20 +14,27 @@ struct ConditionDetailHeader: View {
         VStack(spacing: DS.Spacing.lg) {
             hero
             if score.detail != nil || !score.contributions.isEmpty {
-                LazyVGrid(
-                    columns: Array(repeating: GridItem(.flexible(), alignment: .top),
-                                   count: dynamicTypeSize.isAccessibilitySize ? 1 : 2),
-                    spacing: DS.Spacing.md
-                ) {
-                    ForEach(ScoreContribution.Factor.allCases, id: \.rawValue) { factor in
-                        ConditionContributionTile(
-                            factor: factor,
-                            contribution: score.contributions.first { $0.factor == factor },
-                            detail: score.detail
-                        )
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(spacing: DS.Spacing.md) {
+                        contributionTiles
+                    }
+                } else {
+                    EqualHeightContributionRow(spacing: DS.Spacing.md) {
+                        contributionTiles
                     }
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var contributionTiles: some View {
+        ForEach(ScoreContribution.Factor.allCases, id: \.rawValue) { factor in
+            ConditionContributionTile(
+                factor: factor,
+                contribution: score.contributions.first { $0.factor == factor },
+                detail: score.detail
+            )
         }
     }
 
@@ -101,6 +108,32 @@ struct ConditionDetailHeader: View {
     }
 }
 
+/// Proposes the tallest tile's natural height to both cards in the compact row.
+private struct EqualHeightContributionRow: Layout {
+    let spacing: CGFloat
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let width = proposal.width ?? subviews.reduce(CGFloat.zero) {
+            $0 + $1.sizeThatFits(.unspecified).width
+        } + spacing * CGFloat(max(0, subviews.count - 1))
+        let gaps = spacing * CGFloat(max(0, subviews.count - 1))
+        let columnWidth = max(0, (width - gaps) / CGFloat(max(1, subviews.count)))
+        let height = subviews.map { $0.sizeThatFits(.init(width: columnWidth, height: nil)).height }.max() ?? 0
+        return CGSize(width: width, height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let gaps = spacing * CGFloat(max(0, subviews.count - 1))
+        let columnWidth = max(0, (bounds.width - gaps) / CGFloat(max(1, subviews.count)))
+        for (index, subview) in subviews.enumerated() {
+            subview.place(
+                at: CGPoint(x: bounds.minX + CGFloat(index) * (columnWidth + spacing), y: bounds.minY),
+                proposal: .init(width: columnWidth, height: bounds.height)
+            )
+        }
+    }
+}
+
 private struct ConditionHeroBands: Shape {
     func path(in rect: CGRect) -> Path {
         Path { path in
@@ -122,6 +155,9 @@ private struct ConditionContributionTile: View {
     let factor: ScoreContribution.Factor
     let contribution: ScoreContribution?
     let detail: ConditionScoreDetail?
+
+    @ScaledMetric(relativeTo: .subheadline) private var titleMinHeight: CGFloat = 38
+    @ScaledMetric(relativeTo: .title2) private var iconMinSize: CGFloat = 28
 
     private var value: Double? {
         switch factor {
@@ -151,12 +187,15 @@ private struct ConditionContributionTile: View {
                 Image(systemName: factor.iconName)
                     .font(.title2)
                     .foregroundStyle(factor.themeColor)
+                    .frame(minWidth: iconMinSize, minHeight: iconMinSize)
                     .padding(DS.Spacing.sm)
                     .background(factor.themeColor.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
                     .accessibilityHidden(true)
                 Text(factor.displayName)
                     .font(.subheadline.weight(.semibold))
                     .fixedSize(horizontal: false, vertical: true)
+                    .frame(minHeight: titleMinHeight, alignment: .topLeading)
+                    .accessibilityIdentifier("condition-contribution-title-\(factor.rawValue)")
                 Text(formattedValue)
                     .font(.title3.bold().monospacedDigit())
                     .accessibilityIdentifier("condition-contribution-value-\(factor.rawValue)")
@@ -170,14 +209,16 @@ private struct ConditionContributionTile: View {
                         .foregroundStyle(DS.Color.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
+                Spacer(minLength: 0)
                 if factor == .rhr, detail?.todayRHR == nil,
                    detail?.displayRHR != nil, let date = detail?.displayRHRDate {
                     Text(date, format: .dateTime.year().month(.abbreviated).day())
                         .font(.caption2)
                         .foregroundStyle(DS.Color.textSecondary)
+                        .accessibilityIdentifier("condition-contribution-date-rhr")
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("condition-contribution-\(factor.rawValue)")
