@@ -50,6 +50,7 @@ struct RewardProgressSection: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-personal-records-reward-progress")
         .sheet(isPresented: $showingInfoSheet) {
             rewardInfoSheet

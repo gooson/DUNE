@@ -427,6 +427,7 @@ struct PersonalRecordsDetailView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         .id(viewModel.selectedPeriod)
         .transition(.opacity)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-personal-records-timeline-chart")
     }
 

@@ -20,6 +20,7 @@ struct AchievementHistorySection: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-personal-records-achievement-history")
     }
 
@@ -93,6 +94,7 @@ struct AchievementHistorySection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(eventColor(event.kind).opacity(0.08), in: RoundedRectangle(cornerRadius: DS.Radius.md))
         .overlay(RoundedRectangle(cornerRadius: DS.Radius.md).stroke(eventColor(event.kind).opacity(0.22), lineWidth: 1))
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-personal-records-achievement-\(event.id)")
     }
 
