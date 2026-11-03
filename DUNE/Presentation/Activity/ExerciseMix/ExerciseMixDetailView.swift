@@ -1,5 +1,8 @@
 import SwiftUI
 import Charts
+#if DEBUG
+import OSLog
+#endif
 
 /// Detail view for Exercise Mix with donut chart and full frequency list.
 struct ExerciseMixDetailView: View {
@@ -12,6 +15,12 @@ struct ExerciseMixDetailView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var selectedAngle: Double?
     @State private var selectedExercise: String?
+    #if DEBUG
+    private static let selectionProbeLog = Logger(subsystem: "com.raftel.dailve.a12probe", category: "selection")
+    private var selectionProbeEnabled: Bool {
+        ProcessInfo.processInfo.arguments.contains("--ui-a12-selection-probe")
+    }
+    #endif
 
     // Correction #83: static color cache — palette derived from ActivityCategory.allCases (excludes multiSport).
     // NOTE: Chart access is index-based (cycling palette), not category-keyed.
@@ -396,7 +405,24 @@ struct ExerciseMixDetailView: View {
                 if !dynamicTypeSize.isAccessibilitySize { donutCenterLabel }
             }
             .sensoryFeedback(.selection, trigger: selectedExercise)
-            .onChange(of: selectedAngle) { _, _ in updateDonutSelection() }
+            .onAppear {
+                #if DEBUG
+                if selectionProbeEnabled {
+                    Self.selectionProbeLog.notice("ready pid=\(ProcessInfo.processInfo.processIdentifier, privacy: .public)")
+                }
+                #endif
+            }
+            .onChange(of: selectedAngle) { oldValue, newValue in
+                updateDonutSelection()
+                #if DEBUG
+                if selectionProbeEnabled {
+                    let old = oldValue.map { String($0) } ?? "nil"
+                    let new = newValue.map { String($0) } ?? "nil"
+                    let mapped = selectedExercise ?? "nil"
+                    Self.selectionProbeLog.notice("change pid=\(ProcessInfo.processInfo.processIdentifier, privacy: .public) old=\(old, privacy: .public) new=\(new, privacy: .public) mapped=\(mapped, privacy: .public)")
+                }
+                #endif
+            }
 
             if dynamicTypeSize.isAccessibilitySize {
                 donutCenterLabel

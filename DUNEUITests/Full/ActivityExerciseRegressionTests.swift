@@ -921,7 +921,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         try assertExerciseMixDetail(maxText: true)
     }
 
-    private func assertExerciseMixDetail(maxText: Bool) throws {
+    func testActivityExerciseMixSelectionDiagnostic() throws {
+        try assertExerciseMixDetail(maxText: false, diagnostic: true)
+    }
+
+    private func assertExerciseMixDetail(maxText: Bool, diagnostic: Bool = false) throws {
         var configuration = launchConfiguration
         configuration.additionalArguments.append(contentsOf: ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
         if maxText {
@@ -929,6 +933,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
             ])
         }
+        if diagnostic { configuration.additionalArguments.append("--ui-a12-selection-probe") }
         launchApp(with: configuration)
         openActivityDetail(sectionIdentifier: AXID.activitySectionExerciseMix,
                            destinationIdentifier: AXID.activityExerciseMixDetailScreen, maxSwipes: maxText ? 32 : 12)
@@ -994,6 +999,61 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             }
             XCTAssertTrue(viewport().contains(element.frame), "Not fully visible: \(id)")
             return element
+        }
+
+        if diagnostic {
+            let chart = visible("activity-exercise-mix-donut-chart")
+            let frame = chart.frame
+            let window = app.windows.firstMatch
+            let windowFrame = window.frame
+            let namePrefix = "activity-exercise-mix-frequency-name-"
+            let countPrefix = "activity-exercise-mix-frequency-count-"
+            let names = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", namePrefix))
+                .allElementsBoundByIndex.sorted { $0.frame.minY < $1.frame.minY }
+            var rows: [(key: String, count: Int)] = []
+            for name in names.prefix(8) {
+                let key = String(name.identifier.dropFirst(namePrefix.count))
+                let count = app.staticTexts[countPrefix + key].firstMatch
+                XCTAssertTrue(count.waitForExistence(timeout: 10), "Missing frequency for \(key)")
+                let label = count.label
+                XCTAssertTrue(label.hasSuffix("x"))
+                let value = try XCTUnwrap(Int(String(label.dropLast()).replacingOccurrences(of: ",", with: "")))
+                XCTAssertGreaterThan(value, 0)
+                rows.append((key, value))
+            }
+            let first = try XCTUnwrap(rows.first)
+            let second = try XCTUnwrap(rows.dropFirst().first)
+            XCTAssertNotEqual(first.key, second.key)
+            let total = rows.reduce(0) { $0 + $1.count }
+            XCTAssertGreaterThan(total, 0)
+            func point(before: Int, count: Int) -> XCUICoordinate {
+                let angle = 2 * Double.pi * (Double(before) + Double(count) / 2) / Double(total)
+                let radius = 0.8 * min(frame.width, frame.height) / 2
+                return window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                    dx: frame.midX + radius * CGFloat(sin(angle)) - windowFrame.minX,
+                    dy: frame.midY - radius * CGFloat(cos(angle)) - windowFrame.minY
+                ))
+            }
+            func checkpoint(_ label: String) {
+                let selected = app.staticTexts.matching(NSPredicate(
+                    format: "identifier BEGINSWITH %@", "activity-exercise-mix-selected-name-"
+                )).allElementsBoundByIndex.map { "\($0.identifier)=\($0.label)" }
+                let attachment = XCTAttachment(string: "epoch=\(Date().timeIntervalSince1970);frame=\(frame);window=\(windowFrame);rows=\(rows.map { "\($0.key):\($0.count)" }.joined(separator: "|"));selected=\(selected)")
+                attachment.name = "A12 probe \(label) state"
+                attachment.lifetime = .keepAlways
+                add(attachment)
+                VisualAudit.capture("A12 probe \(label)")
+            }
+            let firstPoint = point(before: 0, count: first.count)
+            let secondPoint = point(before: first.count, count: second.count)
+            checkpoint("before")
+            firstPoint.tap()
+            checkpoint("short tap first")
+            firstPoint.press(forDuration: 1)
+            checkpoint("one second first")
+            secondPoint.press(forDuration: 1)
+            checkpoint("one second second")
+            return
         }
 
         let total = visible("activity-exercise-mix-total")
