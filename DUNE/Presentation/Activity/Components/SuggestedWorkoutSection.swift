@@ -604,6 +604,10 @@ private struct RecommendationEquipmentSheet: View {
     let onSetEquipmentAvailability: (Equipment, Bool) -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     private var title: String {
         switch context {
@@ -614,6 +618,13 @@ private struct RecommendationEquipmentSheet: View {
         }
     }
 
+    private var localizedContextTitle: LocalizedStringKey {
+        switch context {
+        case .gym: "Gym Equipment"
+        case .home: "Home Equipment"
+        }
+    }
+
     private var selectableEquipment: [Equipment] {
         Equipment.allCases.filter { $0 != .other }
     }
@@ -621,6 +632,13 @@ private struct RecommendationEquipmentSheet: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    equipmentOverview
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                }
+
                 Section {
                     ForEach(selectableEquipment, id: \.self) { equipment in
                         Toggle(
@@ -639,9 +657,9 @@ private struct RecommendationEquipmentSheet: View {
                                     .font(.subheadline)
                             }
                         }
+                        .tint(DS.Color.activity)
+                        .accessibilityIdentifier("activity-recommendation-equipment-\(equipment.rawValue)")
                     }
-                } footer: {
-                    Text("At least one equipment is always kept to avoid an empty recommendation.")
                 }
             }
             .accessibilityIdentifier("activity-recommendation-equipment-sheet")
@@ -653,6 +671,37 @@ private struct RecommendationEquipmentSheet: View {
                     }
                 }
             }
+        }
+    }
+
+    private var equipmentOverview: some View {
+        HStack(alignment: .top, spacing: DS.Spacing.md) {
+            Image(systemName: "dumbbell.fill")
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(DS.Color.activity)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                Text(localizedContextTitle)
+                    .accessibilityIdentifier("activity-recommendation-equipment-hero-title")
+                    .font(.headline)
+                    .foregroundStyle(palette.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("At least one equipment is always kept to avoid an empty recommendation.")
+                    .font(.subheadline)
+                    .foregroundStyle(palette.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(DS.Spacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                .fill(palette.surface)
+                .overlay {
+                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                        .strokeBorder(palette.border, lineWidth: 1)
+                }
+                .allowsHitTesting(false)
         }
     }
 }
