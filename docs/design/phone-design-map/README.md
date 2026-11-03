@@ -271,3 +271,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-03 T09 정보 강조와 T04 기여 카드 높이를 개선했다. [새 실제 화면·출처·실패와 재검증](../full-redesign-map/review/briefing-condition-readability-2026-11-03/index.html)에 iPhone 기본/최대 글씨 및 iPad 기본 글씨를 보존했다. 단위33개와 핵심 UI가 통과했고 iPhone·iPad의 T04/T09 네 행과 Today 보드를 갱신했다. Duo 접힘·펼침 T04/T09는 검토된 자세 제어 파일 부재·공식 CLI 경로 변경·Device Hub AX 시간 초과로 새 캡처 미완료이며 이전 PNG를 이번 구현 증거로 재사용하지 않았다.
 
 [A05 native review](../full-redesign-map/review/a05-weekly-stats-native-2026-11-03/index.html)
+
+[A10/T16 native review](../full-redesign-map/review/a10-personal-records-native-2026-11-03/index.html)

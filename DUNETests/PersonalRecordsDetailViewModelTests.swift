@@ -80,6 +80,76 @@ struct PersonalRecordsDetailViewModelTests {
         )
     }
 
+    @Test("Day includes midnight through now and preserves distinct same-day points")
+    func dayBoundaries() {
+        let reference = Date(timeIntervalSince1970: 1_730_650_000)
+        let midnight = calendar.startOfDay(for: reference)
+        let vm = PersonalRecordsDetailViewModel(now: { reference })
+        vm.selectedPeriod = .day
+        let dates = [midnight.addingTimeInterval(-1), midnight, midnight.addingTimeInterval(1), reference, reference.addingTimeInterval(1)]
+        vm.load(records: dates.enumerated().map { index, date in
+            ActivityPersonalRecord(id: "\(index)", kind: .strengthWeight, title: "PR", value: Double(index), date: date, isRecent: false, source: .manual)
+        })
+
+        #expect(vm.chartDateRange.start == midnight)
+        #expect(vm.chartDateRange.end == reference)
+        #expect(vm.chartData.map(\.id) == ["1", "2", "3"])
+        #expect(Set(vm.filteredRecords.map(\.id)) == Set(["1", "2", "3"]))
+    }
+
+    @Test("Week includes seven local dates through now and excludes outside points")
+    func weekBoundaries() throws {
+        let reference = Date(timeIntervalSince1970: 1_730_650_000)
+        let midnight = calendar.startOfDay(for: reference)
+        let start = try #require(calendar.date(byAdding: .day, value: -6, to: midnight))
+        let vm = PersonalRecordsDetailViewModel(now: { reference })
+        vm.selectedPeriod = .week
+        let dates = [start.addingTimeInterval(-1), start, midnight, reference, reference.addingTimeInterval(1)]
+        vm.load(records: dates.enumerated().map { index, date in
+            ActivityPersonalRecord(id: "\(index)", kind: .strengthWeight, title: "PR", value: Double(index), date: date, isRecent: false, source: .manual)
+        })
+
+        #expect(vm.chartDateRange.start == start)
+        #expect(vm.chartDateRange.end == reference)
+        #expect(vm.chartData.map(\.id) == ["1", "2", "3"])
+    }
+
+    @Test("An empty period retains the older all-time best")
+    func emptyPeriodRetainsBest() throws {
+        let reference = Date(timeIntervalSince1970: 1_730_650_000)
+        let oldDate = try #require(calendar.date(byAdding: .day, value: -10, to: reference))
+        let vm = PersonalRecordsDetailViewModel(now: { reference })
+        vm.selectedPeriod = .day
+        vm.load(records: [ActivityPersonalRecord(id: "best", kind: .strengthWeight, title: "PR", value: 150, date: oldDate, isRecent: false, source: .manual)])
+
+        #expect(vm.chartData.isEmpty)
+        #expect(vm.filteredRecords.isEmpty)
+        #expect(vm.currentBest?.id == "best")
+    }
+
+    @Test("Pace period uses actual workouts while the lowest all-time record remains best")
+    func pacePeriodUsesWorkouts() throws {
+        let reference = Date(timeIntervalSince1970: 1_730_650_000)
+        let midnight = calendar.startOfDay(for: reference)
+        let oldDate = try #require(calendar.date(byAdding: .day, value: -10, to: reference))
+        let vm = PersonalRecordsDetailViewModel(now: { reference })
+        vm.selectedPeriod = .day
+        vm.load(records: [ActivityPersonalRecord(id: "best", kind: .fastestPace, title: "PR", value: 280, date: oldDate, isRecent: false, source: .manual)])
+        let workouts = [("before", midnight.addingTimeInterval(-1), 300.0), ("today", midnight, 320.0), ("future", reference.addingTimeInterval(1), 310.0)].map { id, date, pace in
+            WorkoutSummary(id: id, type: WorkoutActivityType.running.rawValue, activityType: .running, duration: 1_800, calories: 250, distance: 5_000, date: date, averagePace: pace)
+        }
+        vm.addPaceWorkouts(workouts)
+
+        #expect(vm.chartData.map(\.id) == ["pace-workout-today"])
+        #expect(vm.currentBest?.value == 280)
+    }
+
+    @Test("The detail exposes five periods and defaults to six months")
+    func availablePeriods() {
+        #expect(PersonalRecordsDetailViewModel.availablePeriods == [.day, .week, .month, .sixMonths, .year])
+        #expect(PersonalRecordsDetailViewModel().selectedPeriod == .sixMonths)
+    }
+
     @Test("load sorts by date desc, kind sortOrder asc, value desc")
     func sortingOrder() {
         let vm = PersonalRecordsDetailViewModel()

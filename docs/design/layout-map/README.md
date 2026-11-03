@@ -47,6 +47,8 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 2026-10-31 [A09 주간 운동 보고서 배치](activity-weekly-report-detail-a09.html)는 실제 기간·총 kg/분/세션/활동일/정규화 강도와 조건부 요약·하이라이트·근육별 바를 제안한다. [DUNE 테마 표현](../theme-map/themes/dune-weekly-report-detail-a09.html)은 정적 시안이다. 원본 iPad의 DEBUG 보고서 화면은 별도 실제 이미지로 확인됐으며 시안의 값은 그 이미지가 아니다.
 
+2026-11-03 [A10/T16 개인 기록 상세 배치](activity-personal-records-detail-a10-t16.html)와 [DUNE 밝음·어두움 표현](../theme-map/themes/dune-personal-records-detail-a10-t16.html)은 공통 화면의 정적 시안이다. 일·주를 포함한 다섯 기간과 실제 값·원래 아이콘·보상·두 경로를 보존한다. 앱 캡처가 아니다.
+
 ## 화면별 맵 목록
 
 2026-10-31 [A06 Training Volume 상세 배치](activity-training-volume-detail-a06.html)는 실제 네 기간·네 현재/이전 지표·1W 주간 목표 링과 긴 기간의 실제 활동일 건수/별도 주간 참고·한 날짜 범위·도넛 세 모드·분 단위 일별 차트와 조건부 하위 그래프를 보존하는 제안이다. HTML 숫자는 예시이며 실제 앱 캡처가 아니다. [구현 계획](../../plans/2026-10-31-a06-training-volume-detail-redesign.md)과 [테마 표현](../theme-map/themes/dune-training-volume-detail-a06.html)을 함께 본다.
