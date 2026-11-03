@@ -4,6 +4,10 @@ import SwiftUI
 struct FatigueInfoSheet: View {
     let score: CompoundFatigueScore
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     var body: some View {
         ScrollView {
@@ -12,7 +16,6 @@ struct FatigueInfoSheet: View {
                 workoutContributionsSection
                 sleepModifierSection
                 readinessModifierSection
-                Divider()
                 resultSection
                 FatigueLegendView()
                     .padding(.top, DS.Spacing.sm)
@@ -31,7 +34,8 @@ struct FatigueInfoSheet: View {
         HStack(spacing: DS.Spacing.sm) {
             Image(systemName: "info.circle.fill")
                 .font(.title3)
-                .foregroundStyle(DS.Color.activity)
+                .foregroundStyle(palette.heroAccent)
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 Text("Fatigue Calculation")
@@ -39,16 +43,34 @@ struct FatigueInfoSheet: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Text(score.muscle.displayName)
                         .font(.subheadline)
-                    Text(score.level.shortLabel)
-                        .font(.caption.weight(.bold).monospacedDigit())
-                        .padding(.horizontal, DS.Spacing.xs)
-                        .padding(.vertical, 2)
-                        .background(score.level.color(for: colorScheme).opacity(0.15), in: Capsule())
-                        .foregroundStyle(score.level.color(for: colorScheme))
+                    HStack(spacing: DS.Spacing.xxs) {
+                        Circle()
+                            .fill(score.level.color(for: .dark))
+                            .frame(width: 8, height: 8)
+                            .accessibilityHidden(true)
+                        Text(score.level.shortLabel)
+                            .font(.caption.weight(.bold).monospacedDigit())
+                            .accessibilityIdentifier("activity-fatigue-info-level")
+                    }
+                    .padding(.horizontal, DS.Spacing.xs)
+                    .padding(.vertical, 2)
+                    .background(palette.ink.opacity(0.12), in: Capsule())
+                    .foregroundStyle(palette.ink)
                 }
             }
-            Spacer()
+            Spacer(minLength: 0)
         }
+        .foregroundStyle(palette.ink)
+        .padding(DS.Spacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.lg)
+                .strokeBorder(palette.border, lineWidth: 1)
+                .allowsHitTesting(false)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("activity-fatigue-info-header")
     }
 
     // MARK: - Workout Contributions
@@ -71,37 +93,50 @@ struct FatigueInfoSheet: View {
                         .font(.caption.weight(.semibold))
                     Spacer()
                     Text(score.breakdown.baseFatigue.formattedWithSeparator(fractionDigits: 2))
+                        .accessibilityIdentifier("activity-fatigue-info-subtotal")
                         .font(.caption.weight(.semibold).monospacedDigit())
                 }
                 .padding(.top, DS.Spacing.xxs)
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("activity-fatigue-info-contributions")
     }
 
     private func contributionRow(_ contribution: WorkoutContribution) -> some View {
-        HStack(spacing: DS.Spacing.sm) {
-            Text(Self.dateFormatter.string(from: contribution.date))
-                .font(.caption2.monospacedDigit())
-                .foregroundStyle(DS.Color.textSecondary)
-                .frame(width: 45, alignment: .leading)
-
-            Text(contribution.exerciseName ?? "Unknown")
-                .font(.caption)
-                .lineLimit(1)
-
-            Spacer()
-
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xxs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return layout {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: "chart.bar.fill")
+                    .foregroundStyle(DS.Color.activity)
+                    .accessibilityHidden(true)
+                Text(Self.dateFormatter.string(from: contribution.date))
+                    .font(.caption2.monospacedDigit())
+                    .foregroundStyle(DS.Color.textSecondary)
+                Text(contribution.exerciseName ?? "Unknown")
+                    .font(.caption)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: DS.Spacing.xs) }
             HStack(spacing: DS.Spacing.xxs) {
                 Text(contribution.rawLoad.formattedWithSeparator(fractionDigits: 1))
+                    .accessibilityIdentifier("activity-fatigue-info-contribution-raw")
                     .font(.caption2.monospacedDigit())
                     .foregroundStyle(DS.Color.textSecondary)
                 Image(systemName: "arrow.right")
                     .font(.system(size: 8))
                     .foregroundStyle(.tertiary)
+                    .accessibilityHidden(true)
                 Text(contribution.decayedLoad.formattedWithSeparator(fractionDigits: 2))
+                    .accessibilityIdentifier("activity-fatigue-info-contribution-decayed")
                     .font(.caption2.weight(.medium).monospacedDigit())
             }
         }
+        .padding(DS.Spacing.sm)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
     // MARK: - Sleep Modifier
@@ -116,16 +151,19 @@ struct FatigueInfoSheet: View {
                     .foregroundStyle(DS.Color.textSecondary)
                 Spacer()
                 Text("×\(score.breakdown.sleepModifier.formattedWithSeparator(fractionDigits: 2))")
+                    .accessibilityIdentifier("activity-fatigue-info-sleep-value")
                     .font(.caption.weight(.medium).monospacedDigit())
                     .foregroundStyle(modifierColor(score.breakdown.sleepModifier))
             }
 
             if score.breakdown.sleepModifier == 1.0 {
-                Text("No sleep data collected — default applied")
+                Text("This factor does not change the recovery rate.")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("activity-fatigue-info-sleep")
     }
 
     // MARK: - Readiness Modifier
@@ -140,48 +178,69 @@ struct FatigueInfoSheet: View {
                     .foregroundStyle(DS.Color.textSecondary)
                 Spacer()
                 Text("×\(score.breakdown.readinessModifier.formattedWithSeparator(fractionDigits: 2))")
+                    .accessibilityIdentifier("activity-fatigue-info-readiness-value")
                     .font(.caption.weight(.medium).monospacedDigit())
                     .foregroundStyle(modifierColor(score.breakdown.readinessModifier))
             }
 
             if score.breakdown.readinessModifier == 1.0 {
-                Text("No HRV/RHR data collected — default applied")
+                Text("This factor does not change the recovery rate.")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("activity-fatigue-info-readiness")
     }
 
     // MARK: - Result
 
     private var resultSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack {
+        let rowLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout())
+        let valueLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+
+        return VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            rowLayout {
                 Text("Final Fatigue")
                     .font(.subheadline.weight(.semibold))
-                Spacer()
-                HStack(spacing: DS.Spacing.xs) {
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
+                valueLayout {
                     Text(score.normalizedScore.formattedWithSeparator(fractionDigits: 2))
+                        .accessibilityIdentifier("activity-fatigue-info-result-value")
                         .font(.subheadline.weight(.bold).monospacedDigit())
-                    Image(systemName: "arrow.right")
-                        .font(.caption2)
-                        .foregroundStyle(DS.Color.textSecondary)
-                    Text(score.level.displayName)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(score.level.color(for: colorScheme))
+                        .fixedSize(horizontal: true, vertical: true)
+                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                        Image(systemName: "arrow.right")
+                            .font(.caption2)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .accessibilityHidden(true)
+                        Text(score.level.displayName)
+                            .accessibilityIdentifier("activity-fatigue-info-result-level")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(score.level.color(for: colorScheme))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
             }
 
-            HStack {
+            rowLayout {
                 Text("Decay Time Constant (τ)")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
-                Spacer()
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                 Text("\(score.breakdown.effectiveTau.formattedWithSeparator())h")
+                    .accessibilityIdentifier("activity-fatigue-info-tau-value")
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: true, vertical: true)
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("activity-fatigue-info-result")
     }
 
     // MARK: - Helpers

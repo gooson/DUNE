@@ -57,6 +57,9 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
     }
 
     func testMuscleMapDetailKeeps2DSelectionWith3DEntryDisabled() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR"]
+        launchApp(with: configuration)
         navigateToMuscleMapDetail()
 
         let entryLabels = ["3D Muscle Map", "3D 근육맵", "3Dマッスルマップ"]
@@ -95,7 +98,35 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         addScreenshotAttachment(named: "A03 2D muscle selection and disabled 3D entry")
         VisualAudit.capture("A03 2D muscle selection and disabled 3D entry")
 
-        let detailScroll = app.scrollViews.element(boundBy: app.scrollViews.count > 1 ? 1 : 0)
+        let summaryScroll = app.scrollViews["musclemap-detail-summary-scroll"].firstMatch
+        let compactScroll = app.scrollViews["musclemap-detail-map-scroll"].firstMatch
+        let detailScroll = summaryScroll.exists ? summaryScroll : compactScroll
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5), "The selected muscle's actual pane should exist")
+        XCTAssertTrue(detailScroll.descendants(matching: .any)["musclemap-detail-selected-muscle"].firstMatch.exists,
+                      "The selected detail should belong to the chosen pane")
+        for identifier in ["activity-muscle-detail-inline-title", "activity-muscle-detail-status",
+                           "activity-muscle-detail-value-fatigue", "activity-muscle-detail-value-weekly-volume",
+                           "activity-muscle-detail-value-last-trained", "activity-muscle-detail-value-sleep-modifier"] {
+            let element = inlineDetail.descendants(matching: .any)[identifier].firstMatch
+            for _ in 0..<16 {
+                let viewport = detailScroll.frame.intersection(app.windows.firstMatch.frame)
+                if element.exists && !element.frame.isEmpty && viewport.contains(element.frame) { break }
+                if element.exists && element.frame.midY < viewport.midY {
+                    detailScroll.swipeDown(velocity: .slow)
+                } else {
+                    detailScroll.swipeUp(velocity: .slow)
+                }
+            }
+            XCTAssertTrue(element.waitForExistence(timeout: 5), "Missing selected inline \(identifier)")
+            XCTAssertFalse(element.label.isEmpty)
+            XCTAssertFalse(element.frame.isEmpty)
+            XCTAssertTrue(detailScroll.frame.intersection(app.windows.firstMatch.frame).contains(element.frame),
+                          "Selected inline \(identifier) should fit in its viewport")
+            if identifier == "activity-muscle-detail-inline-title" {
+                XCTAssertTrue(["Chest", "가슴", "胸"].contains(element.label), element.label)
+            }
+            VisualAudit.capture("A13 inline selected \(identifier)")
+        }
         for _ in 0..<8 where !calculation.isHittable { detailScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(calculation.isHittable, "The selected muscle's calculation action should be reachable")
         addScreenshotAttachment(named: "A03 selected muscle detail before calculation")
@@ -108,12 +139,51 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         )).firstMatch
         XCTAssertTrue(calculationTitle.waitForExistence(timeout: 5),
                       "The calculation sheet should expose its existing localized title")
+        for title in ["운동 부하 (14일)", "생체 보정"] {
+            let heading = explanation.staticTexts[title].firstMatch
+            XCTAssertTrue(heading.waitForExistence(timeout: 5), "The Korean calculation heading must be translated")
+            XCTAssertFalse(heading.frame.isEmpty)
+            XCTAssertTrue(explanation.frame.intersection(app.windows.firstMatch.frame).contains(heading.frame),
+                          "The complete Korean heading must fit in the sheet")
+        }
+        VisualAudit.capture("A14 Korean calculation headings")
+        // A14 child values: actual localized values, never fixed fixture numbers.
+        func visibleFatigueValue(_ suffix: String) -> XCUIElement {
+            let value = explanation.staticTexts["activity-fatigue-info-" + suffix].firstMatch
+            for _ in 0..<16 {
+                let window = app.windows.firstMatch
+                let viewport = explanation.frame.intersection(window.frame)
+                if value.exists && !value.frame.isEmpty && viewport.contains(value.frame) { break }
+                let direction: CGFloat = value.exists && value.frame.midY < viewport.midY ? 1 : -1
+                let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX, dy: viewport.midY - window.frame.minY))
+                start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: direction * viewport.height * 0.18)))
+            }
+            XCTAssertTrue(value.waitForExistence(timeout: 5), "Missing inline fatigue \(suffix)")
+            XCTAssertFalse(value.label.isEmpty)
+            XCTAssertFalse(value.frame.isEmpty)
+            XCTAssertTrue(explanation.frame.intersection(app.windows.firstMatch.frame).contains(value.frame),
+                          "The complete inline fatigue \(suffix) must fit")
+            VisualAudit.capture("A14 inline fatigue \(suffix)")
+            return value
+        }
+        _ = visibleFatigueValue("level")
+        if explanation.staticTexts["activity-fatigue-info-contribution-raw"].firstMatch.exists {
+            _ = visibleFatigueValue("contribution-raw")
+            _ = visibleFatigueValue("contribution-decayed")
+            _ = visibleFatigueValue("subtotal")
+        } else {
+            XCTAssertTrue(explanation.staticTexts.matching(NSPredicate(format: "label IN %@", ["No workout records", "운동 기록 없음", "ワークアウト記録なし"])).firstMatch.exists)
+        }
+        for suffix in ["sleep-value", "readiness-value", "result-value", "result-level", "tau-value"] {
+            _ = visibleFatigueValue(suffix)
+        }
         addScreenshotAttachment(named: "A03 selected muscle fatigue calculation")
         VisualAudit.capture("A03 selected muscle fatigue calculation")
 
         // This iPad presentation exposes the native sheet as a scroll view with a drag indicator,
         // not as an XCUIElementTypeSheet. Use the single observed system grabber.
-        let grabbers = app.buttons.matching(NSPredicate(format: "label == %@", "시트 손잡이"))
+        let grabbers = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
         XCTAssertEqual(grabbers.count, 1, "The native sheet should expose one visible drag indicator")
         let grabber = grabbers.element(boundBy: 0)
         XCTAssertTrue(grabber.exists && grabber.isHittable, "The native sheet drag indicator should be reachable")

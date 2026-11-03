@@ -766,13 +766,19 @@
     },
     "A12": {
       "row_id": "A12",
-      "evidence": "activity-exercise-mix-detail-screen",
+      "file": "A12.png",
       "test": "ActivityExerciseRegressionTests/testActivityExerciseMixRouteOpensExpectedScreen()",
-      "action": "tap activity-section-exercisemix",
-      "timestamp": 1791839876.478,
-      "image": "918EC62C-5D82-421E-BAB0-5DBC7C33B3D0.png",
-      "screen": "screen-0-1398x2034-tap activity-section-exercisemix_0_9FBE0140-288C-412E-8A98-4F75DA7100AE.png",
-      "file": "A12.png"
+      "action": "A12 exercise mix summary normal",
+      "source_revision": "bb79f250497786526d37d420fd839de5c2df5dee",
+      "capture_kind": "host",
+      "image": "016-1398x2034.png",
+      "screen": "016-1398x2034.png",
+      "timestamp": 1793708565.977,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "device_uid": "12B1DD58-7ED7-488C-929E-F77EC480D4E3",
+      "image_sha256": "4b2db347c2f4d51d58d539704fe07019533ef955096daa7052a9dcc719218d50",
+      "ax_sha256": "67352ab51979caf172d21f17fe5b1b8695045fef7e8c3088c5cfb79c4bcf5a72",
+      "evidence": "activity-exercise-mix-detail-screen"
     },
     "A11": {
       "row_id": "A11",
@@ -1207,23 +1213,35 @@
     },
     "A13": {
       "row_id": "A13",
-      "evidence": "activity-muscle-detail-popover-sheet",
+      "file": "A13.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditMuscleDetailPopover()",
-      "action": "tap musclemap-body-front-chest",
-      "timestamp": 1791855300.985,
-      "image": "D9EF3F14-F803-4D0F-BB09-BB0E9716FAAE.png",
-      "screen": "screen-0-1398x2034-tap musclemap-body-front-chest_0_B5FD771A-2F00-4722-A32E-6CAB98DD7EBF.png",
-      "file": "A13.png"
+      "action": "A13 muscle detail hero normal",
+      "source_revision": "72c462e3eabd7d6da4f578dba11e5583c8e973b0",
+      "capture_kind": "host",
+      "image": "004-1398x2034.png",
+      "screen": "004-1398x2034.png",
+      "timestamp": 1793713131.246,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "device_uid": "B3CFC5B7-144A-4711-9E11-9396316B963F",
+      "image_sha256": "de8bd288ee861044f2fc4c4aead0bee196fd09ace33cad3c93e55c202f596844",
+      "ax_sha256": "80364269114e719699a4842b23efbcdf988229b10f47b6cad06d45a5a1c38d22",
+      "evidence": "activity-muscle-detail-popover-sheet"
     },
     "A14": {
       "row_id": "A14",
-      "evidence": "activity-fatigue-info-sheet",
+      "file": "A14.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditMuscleFatigueExplanation()",
-      "action": "tap activity-muscle-detail-calculation",
-      "timestamp": 1791855340.368,
-      "image": "0BBC0C18-B61C-44C5-B303-0842C3B37CAD.png",
-      "screen": "screen-0-1398x2034-tap activity-muscle-detail-calculation_0_B111833F-9D97-45C8-B66D-A765F969BF0A.png",
-      "file": "A14.png"
+      "action": "A14 fatigue level normal",
+      "source_revision": "ec97aabe0b43cf225099c0c9dd2354a069548685",
+      "capture_kind": "host",
+      "image": "004-1398x2034.png",
+      "screen": "004-1398x2034.png",
+      "timestamp": 1793719532.919,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "device_uid": "947C00F6-6374-4C79-B7BC-6D26A42B3208",
+      "image_sha256": "d036b3a1f8e03fc9fef7f9659bcfd44ab0f75277fd975a800ac5fab163609b4e",
+      "ax_sha256": "838a9b3f505d98940b5f0d7d0ecc0d40f9e99431c83f4d0c86a279cc619be79a",
+      "evidence": "activity-fatigue-info-sheet"
     },
     "A20": {
       "row_id": "A20",
@@ -1404,9 +1422,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+  "last_refresh_revision": "bedf85663cf4997063e58a4b3d9e92224059f367",
   "last_refresh_screens": [
-    "A11"
+    "A14"
   ],
-  "last_refresh_note": "Duo closed normal is be23 passed case in failed mixed run; other normals are current source."
+  "last_refresh_note": "English captures are ec97; reviewed English source/text equivalence to bedf is scoped, not a new-head test or capture."
 }

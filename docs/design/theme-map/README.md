@@ -257,4 +257,14 @@ A05 네이티브 소스는 원래 `ActivityStat.iconColor`를 불투명 히어�
 
 2026-11-03 [A11 운동 일관성 상세 테마 시안](themes/dune-consistency-detail-a11.html)은 기존 팔레트와 실제 값 표시의 제안이다. 숫자와 웹 기호는 예시이며 네이티브 캡처가 아니다. [배치 계약](../layout-map/activity-consistency-detail-a11.html)을 함께 본다.
 
+## A12 운동 구성 상세 · 2026-11-03
+
+[테마 시안](themes/dune-exercise-mix-detail-a12.html)과 [배치 계약](../layout-map/activity-exercise-mix-detail-a12.html)은 실제 값·선택 도넛과 기존 상태를 보존한다. 수치는 예시이며 네이티브 캡처가 아니다.
+
+## A13 근육 상세 팝오버 · 2026-11-03
+
+[테마 시안](themes/dune-muscle-detail-popover-a13.html)과 [배치 계약](../layout-map/activity-muscle-detail-popover-a13.html)은 실제 근육 상태와 기존 추천·계산 연결을 보존한다. 예시 값은 네이티브 캡처가 아니다.
+
+2026-11-03 [A14 근육별 피로 설명](themes/dune-fatigue-explanation-a14.html)은 실제 값과 14일 기여 행을 위한 시안이며 네이티브 캡처가 아니다. [배치 계약](../layout-map/activity-fatigue-explanation-a14.html)을 따른다.
+
 A15 피로도 계산 설명 [시안](themes/dune-fatigue-algorithm-a15.html)은 실제 앱 캡처가 아니다.

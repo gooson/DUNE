@@ -93,4 +93,28 @@ struct ExerciseMixDetailViewModelTests {
         #expect(vm.exerciseFrequencies == summary.frequencies)
         #expect(vm.frequencyByName["Bench Press"]?.count == 1)
     }
+    @Test("Donut selection uses cumulative raw counts and clears out-of-range values")
+    func donutSelectionUsesRawCounts() {
+        let values = [("First", 3), ("Second", 1), ("Third", 2)].map {
+            ExerciseFrequency(exerciseName: $0.0, count: $0.1, lastDate: nil, percentage: 0)
+        }
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: nil, frequencies: values) == nil)
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: .nan, frequencies: values) == nil)
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: -0.1, frequencies: values) == nil)
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 0, frequencies: values) == "First")
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 2.9, frequencies: values) == "First")
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 3, frequencies: values) == "Second")
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 3.5, frequencies: values) == "Second")
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 4, frequencies: values) == "Third")
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 6, frequencies: values) == nil)
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 0, frequencies: []) == nil)
+        let zero = ExerciseFrequency(exerciseName: "Zero", count: 0, lastDate: nil, percentage: 0)
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 0, frequencies: [zero] + values) == "First")
+        let nine = (0..<9).map { ExerciseFrequency(exerciseName: "\($0)", count: 1, lastDate: nil, percentage: 0) }
+        let displayed = Array(nine.prefix(8))
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 7.5, frequencies: displayed) == "7")
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 8, frequencies: displayed) == nil)
+        #expect(ExerciseMixDetailViewModel.selectedExercise(for: 8.5, frequencies: nine) == "8")
+    }
+
 }
