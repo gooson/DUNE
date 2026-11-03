@@ -1213,26 +1213,93 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testVisualAuditMuscleFatigueExplanation() throws {
+        try assertMuscleFatigueExplanation(maxText: false)
+    }
+
+    func testVisualAuditMuscleFatigueExplanationAtMaximumAccessibilityTextSize() throws {
+        try assertMuscleFatigueExplanation(maxText: true)
+    }
+
+    private func assertMuscleFatigueExplanation(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        }
+        launchApp(with: configuration)
         let muscle = app.buttons["musclemap-body-front-chest"].firstMatch
         let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
         XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
         for _ in 0..<24 where !muscle.isHittable { activityScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(muscle.isHittable)
         muscle.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)["activity-muscle-detail-popover-sheet"].firstMatch
-            .waitForExistence(timeout: 10))
+        let muscleTitle = app.descendants(matching: .any)["activity-muscle-detail-popover-sheet"].firstMatch
+        XCTAssertTrue(muscleTitle.waitForExistence(timeout: 10))
         let calculation = app.buttons["activity-muscle-detail-calculation"].firstMatch
         XCTAssertTrue(calculation.waitForExistence(timeout: 8))
         calculation.auditTap()
         let sheet = app.scrollViews["activity-fatigue-info-sheet"].firstMatch
         XCTAssertTrue(sheet.waitForExistence(timeout: 10))
-        XCTAssertTrue(sheet.descendants(matching: .any)["activity-fatigue-info-header"].firstMatch.exists)
-        XCTAssertTrue(sheet.descendants(matching: .any)["activity-fatigue-info-contributions"].firstMatch.exists)
+
+        func visibleValue(_ suffix: String) -> XCUIElement {
+            let value = sheet.staticTexts["activity-fatigue-info-" + suffix].firstMatch
+            XCTAssertTrue(value.waitForExistence(timeout: 10), "Missing \(suffix)")
+            for _ in 0..<16 {
+                let viewport = sheet.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 2, dy: 2)
+                if !value.frame.isEmpty && viewport.contains(value.frame) { break }
+                if value.frame.midY < viewport.midY { sheet.swipeDown(velocity: .slow) }
+                else { sheet.swipeUp(velocity: .slow) }
+            }
+            XCTAssertFalse(value.label.isEmpty, "Empty \(suffix)")
+            XCTAssertFalse(value.frame.isEmpty, "Empty frame for \(suffix)")
+            XCTAssertTrue(sheet.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 2, dy: 2).contains(value.frame),
+                          "The entire \(suffix) must be inside the visible sheet")
+            return value
+        }
+        func number(_ text: String) throws -> Double {
+            let cleaned = text.replacingOccurrences(of: "×", with: "")
+                .replacingOccurrences(of: "h", with: "")
+                .replacingOccurrences(of: ",", with: "")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            let value = try XCTUnwrap(Double(cleaned), "Not a number: \(text)")
+            XCTAssertTrue(value.isFinite)
+            return value
+        }
+
+        let level = visibleValue("level")
+        XCTAssertFalse(level.label.isEmpty)
         VisualAudit.capture("Muscle fatigue explanation")
-        let result = sheet.descendants(matching: .any)["activity-fatigue-info-result"].firstMatch
-        for _ in 0..<12 where !result.isHittable { sheet.swipeUp(velocity: .slow) }
-        XCTAssertTrue(result.exists && result.isHittable, "The actual fatigue result should be reachable")
+        let raw = sheet.staticTexts["activity-fatigue-info-contribution-raw"].firstMatch
+        var subtotal: Double?
+        if raw.exists {
+            let rawValue = try number(visibleValue("contribution-raw").label)
+            let decayed = try number(visibleValue("contribution-decayed").label)
+            XCTAssertGreaterThanOrEqual(rawValue + 0.06, decayed, "Decay cannot increase a contribution")
+            XCTAssertGreaterThanOrEqual(decayed, 0)
+            subtotal = try number(visibleValue("subtotal").label)
+        } else {
+            XCTAssertTrue(sheet.staticTexts["No workout records"].exists,
+                          "Missing contributions must expose the real empty state")
+        }
+        let sleep = try number(visibleValue("sleep-value").label)
+        XCTAssertTrue((0.5...1.25).contains(sleep))
+        let readiness = try number(visibleValue("readiness-value").label)
+        XCTAssertTrue((0.6...1.2).contains(readiness))
+        let result = try number(visibleValue("result-value").label)
+        XCTAssertTrue((0.0...1.0).contains(result))
+        if let subtotal {
+            // Chest saturation is 12; allow for the two displayed decimal roundings.
+            XCTAssertEqual(result, min(subtotal / 12, 1), accuracy: 0.01)
+        }
+        let tau = try number(visibleValue("tau-value").label)
+        // Chest base τ is 48h × 2. Allow for displayed two-decimal modifiers and rounded hours.
+        let lowerTau = max(1, 96 / ((sleep + 0.005) * (readiness + 0.005))) - 0.51
+        let upperTau = max(1, 96 / ((sleep - 0.005) * (readiness - 0.005))) + 0.51
+        XCTAssertTrue((lowerTau...upperTau).contains(tau), "The displayed τ must match the actual modifiers")
         VisualAudit.capture("Muscle fatigue explanation result")
+        for _ in 0..<12 where sheet.exists { sheet.swipeDown(velocity: .slow) }
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10), "Dismissing the calculation should return to muscle detail")
+        XCTAssertTrue(muscleTitle.waitForExistence(timeout: 5))
     }
 
     func testVisualAuditRecommendationEquipmentInfo() throws {

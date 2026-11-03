@@ -43,12 +43,19 @@ struct FatigueInfoSheet: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Text(score.muscle.displayName)
                         .font(.subheadline)
-                    Text(score.level.shortLabel)
-                        .font(.caption.weight(.bold).monospacedDigit())
-                        .padding(.horizontal, DS.Spacing.xs)
-                        .padding(.vertical, 2)
-                        .background(score.level.color(for: colorScheme).opacity(0.15), in: Capsule())
-                        .foregroundStyle(score.level.color(for: colorScheme))
+                    HStack(spacing: DS.Spacing.xxs) {
+                        Circle()
+                            .fill(score.level.color(for: .dark))
+                            .frame(width: 8, height: 8)
+                            .accessibilityHidden(true)
+                        Text(score.level.shortLabel)
+                            .font(.caption.weight(.bold).monospacedDigit())
+                            .accessibilityIdentifier("activity-fatigue-info-level")
+                    }
+                    .padding(.horizontal, DS.Spacing.xs)
+                    .padding(.vertical, 2)
+                    .background(palette.ink.opacity(0.12), in: Capsule())
+                    .foregroundStyle(palette.ink)
                 }
             }
             Spacer(minLength: 0)
@@ -86,6 +93,7 @@ struct FatigueInfoSheet: View {
                         .font(.caption.weight(.semibold))
                     Spacer()
                     Text(score.breakdown.baseFatigue.formattedWithSeparator(fractionDigits: 2))
+                        .accessibilityIdentifier("activity-fatigue-info-subtotal")
                         .font(.caption.weight(.semibold).monospacedDigit())
                 }
                 .padding(.top, DS.Spacing.xxs)
@@ -114,6 +122,7 @@ struct FatigueInfoSheet: View {
             if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: DS.Spacing.xs) }
             HStack(spacing: DS.Spacing.xxs) {
                 Text(contribution.rawLoad.formattedWithSeparator(fractionDigits: 1))
+                    .accessibilityIdentifier("activity-fatigue-info-contribution-raw")
                     .font(.caption2.monospacedDigit())
                     .foregroundStyle(DS.Color.textSecondary)
                 Image(systemName: "arrow.right")
@@ -121,6 +130,7 @@ struct FatigueInfoSheet: View {
                     .foregroundStyle(.tertiary)
                     .accessibilityHidden(true)
                 Text(contribution.decayedLoad.formattedWithSeparator(fractionDigits: 2))
+                    .accessibilityIdentifier("activity-fatigue-info-contribution-decayed")
                     .font(.caption2.weight(.medium).monospacedDigit())
             }
         }
@@ -141,12 +151,13 @@ struct FatigueInfoSheet: View {
                     .foregroundStyle(DS.Color.textSecondary)
                 Spacer()
                 Text("×\(score.breakdown.sleepModifier.formattedWithSeparator(fractionDigits: 2))")
+                    .accessibilityIdentifier("activity-fatigue-info-sleep-value")
                     .font(.caption.weight(.medium).monospacedDigit())
                     .foregroundStyle(modifierColor(score.breakdown.sleepModifier))
             }
 
             if score.breakdown.sleepModifier == 1.0 {
-                Text("No sleep data collected — default applied")
+                Text("This factor does not change the recovery rate.")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
             }
@@ -167,12 +178,13 @@ struct FatigueInfoSheet: View {
                     .foregroundStyle(DS.Color.textSecondary)
                 Spacer()
                 Text("×\(score.breakdown.readinessModifier.formattedWithSeparator(fractionDigits: 2))")
+                    .accessibilityIdentifier("activity-fatigue-info-readiness-value")
                     .font(.caption.weight(.medium).monospacedDigit())
                     .foregroundStyle(modifierColor(score.breakdown.readinessModifier))
             }
 
             if score.breakdown.readinessModifier == 1.0 {
-                Text("No HRV/RHR data collected — default applied")
+                Text("This factor does not change the recovery rate.")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
             }
@@ -191,6 +203,7 @@ struct FatigueInfoSheet: View {
                 Spacer()
                 HStack(spacing: DS.Spacing.xs) {
                     Text(score.normalizedScore.formattedWithSeparator(fractionDigits: 2))
+                        .accessibilityIdentifier("activity-fatigue-info-result-value")
                         .font(.subheadline.weight(.bold).monospacedDigit())
                     Image(systemName: "arrow.right")
                         .font(.caption2)
@@ -207,6 +220,7 @@ struct FatigueInfoSheet: View {
                     .foregroundStyle(DS.Color.textSecondary)
                 Spacer()
                 Text("\(score.breakdown.effectiveTau.formattedWithSeparator())h")
+                    .accessibilityIdentifier("activity-fatigue-info-tau-value")
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(DS.Color.textSecondary)
             }
