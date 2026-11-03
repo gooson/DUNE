@@ -597,6 +597,25 @@
         "status": "native-implemented-scoped-captures-reviewed",
         "actual_captures": "../full-redesign-map/review/a14-fatigue-explanation-native-2026-11-04/index.html"
       }
+    },
+    {
+      "id": "fatigue-algorithm-a15",
+      "name": "피로도 계산 설명",
+      "title": "A15 · Fatigue Calculation",
+      "file": "dune-fatigue-algorithm-a15.html",
+      "detail": "기존 계산 설명과 예시 계수를 보존하는 적응형 시트 시안. 실제 캡처가 아님.",
+      "colors": [
+        "#352e29",
+        "#b2854c",
+        "#fff4dd"
+      ],
+      "motif": "기존 function·계산 섹션 심볼",
+      "motion": "기존 시스템 시트 스크롤",
+      "implementation": {
+        "layout": "../layout-map/activity-fatigue-algorithm-a15.html",
+        "status": "native-implemented-scoped-captures-reviewed",
+        "actual_captures": "../full-redesign-map/review/a15-fatigue-algorithm-native-2026-11-04/index.html"
+      }
     }
   ]
 }

@@ -4,17 +4,21 @@ import SwiftUI
 /// Accessible from the body map header info button and the legend bar tap.
 struct FatigueAlgorithmSheet: View {
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.appTheme) private var theme
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 headerSection
-                overviewSection
-                decayModelSection
-                sleepSection
-                readinessSection
-                levelExplanationSection
+                explanationCard { overviewSection }
+                explanationCard { decayModelSection }
+                explanationCard { sleepSection }
+                explanationCard { readinessSection }
+                explanationCard { levelExplanationSection }
                 FatigueLegendView()
+                    .accessibilityIdentifier("activity-fatigue-algorithm-legend")
                     .padding(.top, DS.Spacing.sm)
             }
             .padding(DS.Spacing.xl)
@@ -31,16 +35,21 @@ struct FatigueAlgorithmSheet: View {
         HStack(spacing: DS.Spacing.sm) {
             Image(systemName: "function")
                 .font(.title3)
-                .foregroundStyle(DS.Color.activity)
+                .foregroundStyle(palette.heroAccent)
+                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 Text("Fatigue Calculation")
                     .font(.headline)
+                    .foregroundStyle(palette.ink)
                 Text("Compound Fatigue Score")
                     .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
+                    .foregroundStyle(palette.muted)
             }
-            Spacer()
+            Spacer(minLength: 0)
         }
+        .padding(DS.Spacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
     }
 
     // MARK: - Overview
@@ -62,9 +71,11 @@ struct FatigueAlgorithmSheet: View {
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 formulaRow("Fatigue = Σ (Load × e^(-elapsed/τ))")
+                    .accessibilityIdentifier("activity-fatigue-algorithm-formula")
                 bulletPoint("More recent workouts contribute more to fatigue")
                 bulletPoint("Naturally decreases over time (exponential decay)")
-                bulletPoint("τ (tau): Recovery rate by muscle size (large 72h, small 36h)")
+                bulletPoint("τ = max(2 × recovery hours ÷ max(sleep × readiness, 0.1), 1 hour)",
+                            identifier: "activity-fatigue-algorithm-tau")
             }
         }
     }
@@ -124,6 +135,13 @@ struct FatigueAlgorithmSheet: View {
 
     // MARK: - Helpers
 
+    private func explanationCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        content()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+    }
+
     private func sectionHeader(icon: String, title: LocalizedStringKey) -> some View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
@@ -142,14 +160,20 @@ struct FatigueAlgorithmSheet: View {
             .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
-    private func bulletPoint(_ text: LocalizedStringKey) -> some View {
-        HStack(alignment: .top, spacing: DS.Spacing.xs) {
+    private func bulletPoint(_ text: LocalizedStringKey, identifier: String? = nil) -> some View {
+        let label = Text(text)
+            .font(.caption)
+            .foregroundStyle(DS.Color.textSecondary)
+        return HStack(alignment: .top, spacing: DS.Spacing.xs) {
             Text("·")
                 .font(.caption.weight(.bold))
                 .foregroundStyle(DS.Color.textSecondary)
-            Text(text)
-                .font(.caption)
-                .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityHidden(true)
+            if let identifier {
+                label.accessibilityIdentifier(identifier)
+            } else {
+                label
+            }
         }
     }
 
@@ -173,9 +197,11 @@ struct FatigueAlgorithmSheet: View {
                 .frame(width: 12, height: 12)
             Text(level.shortLabel)
                 .font(.caption2.weight(.bold).monospacedDigit())
-                .frame(width: 24, alignment: .leading)
+                .fixedSize(horizontal: true, vertical: false)
             Text(description)
+                .accessibilityIdentifier("activity-fatigue-algorithm-level-\(level.rawValue)")
                 .font(.caption2)
+                .fixedSize(horizontal: false, vertical: true)
                 .foregroundStyle(DS.Color.textSecondary)
             Spacer()
         }

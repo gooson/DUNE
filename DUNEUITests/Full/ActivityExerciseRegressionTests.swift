@@ -1366,7 +1366,73 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testVisualAuditRecoveryAlgorithmExplanation() throws {
+        try verifyRecoveryAlgorithmExplanation(maxText: false)
+    }
+
+    func testRecoveryAlgorithmExplanationAtMaximumAccessibilityTextSize() throws {
+        try verifyRecoveryAlgorithmExplanation(maxText: true)
+    }
+
+    private func verifyRecoveryAlgorithmExplanation(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += ["--ui-test-style", "dark",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        }
+        launchApp(with: configuration)
         openActivityInfo(button: "activity-muscle-map-algorithm-info", sheet: "activity-fatigue-algorithm-sheet")
+        let sheet = app.scrollViews["activity-fatigue-algorithm-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        func reveal(_ id: String) -> XCUIElement {
+            let item = app.descendants(matching: .any)[id].firstMatch
+            XCTAssertTrue(item.waitForExistence(timeout: 10), "Missing \(id)")
+            for _ in 0..<24 {
+                let viewport = sheet.frame.intersection(app.windows.firstMatch.frame)
+                if !item.frame.isEmpty && viewport.contains(item.frame) { break }
+                let window = app.windows.firstMatch
+                let direction: CGFloat = item.frame.midY < viewport.midY ? 1 : -1
+                let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX, dy: viewport.midY - window.frame.minY))
+                start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: direction * viewport.height * 0.18)))
+            }
+            XCTAssertFalse(item.frame.isEmpty)
+            XCTAssertTrue(sheet.frame.intersection(app.windows.firstMatch.frame).contains(item.frame), "Not fully visible: \(id)")
+            return item
+        }
+        XCTAssertEqual(reveal("activity-fatigue-algorithm-formula").label, "Fatigue = Σ (Load × e^(-elapsed/τ))")
+        VisualAudit.capture("A15 fatigue formula")
+        XCTAssertEqual(reveal("activity-fatigue-algorithm-tau").label,
+                       "τ = max(2 × recovery hours ÷ max(sleep × readiness, 0.1), 1 hour)")
+        VisualAudit.capture("A15 effective tau")
+        for level in 1...10 {
+            let item = reveal("activity-fatigue-algorithm-level-\(level)")
+            XCTAssertFalse(item.label.isEmpty, "Missing level \(level) description")
+            if [1, 5, 10].contains(level) { VisualAudit.capture("A15 fatigue level \(level) \(maxText ? "MAX" : "normal")") }
+        }
+        VisualAudit.capture("A15 fatigue scale last level")
+        let legend = app.descendants(matching: .any)["activity-fatigue-algorithm-legend"].firstMatch
+        XCTAssertTrue(legend.waitForExistence(timeout: 10), "The original legend should remain")
+        let grabbers = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
+        XCTAssertEqual(grabbers.count, 1, "The native algorithm sheet should expose one grabber")
+        let grabber = grabbers.element(boundBy: 0)
+        XCTAssertTrue(grabber.exists && grabber.isHittable, "The native algorithm sheet grabber should be reachable")
+        let window = app.windows.firstMatch
+        XCTAssertTrue(window.exists && window.frame.contains(sheet.frame),
+                      "Algorithm content should be inside the active window")
+        XCTAssertTrue(window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame),
+                      "The native drag indicator should overlap the algorithm sheet's top edge")
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height,
+                                 "The native drag indicator should be at the algorithm sheet's top edge")
+        let endY = min(window.frame.maxY - 60, grabber.frame.midY + window.frame.height * 0.6)
+        XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3,
+                             "The dismiss drag should travel down inside the window")
+        let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero)
+            .withOffset(CGVector(dx: grabber.frame.midX - window.frame.minX, dy: endY - window.frame.minY))
+        start.press(forDuration: 0.1, thenDragTo: end)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10), "The native sheet should dismiss")
+        XCTAssertTrue(app.scrollViews[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 10))
     }
 
     func testVisualAuditVolumeAlgorithmExplanation() throws {
