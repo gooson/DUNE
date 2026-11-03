@@ -2335,7 +2335,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("A20 equipment hero \(maxText ? "dark MAX" : "normal")")
         let first = list.switches["activity-recommendation-equipment-barbell"].firstMatch
         let last = list.switches["activity-recommendation-equipment-stabilityBall"].firstMatch
-        reveal(first, upward: false)
+        reveal(first, upward: true)
         VisualAudit.capture("A20 first equipment \(maxText ? "MAX" : "normal")")
         guard let firstValue = first.value as? String, ["0", "1"].contains(firstValue) else {
             XCTFail("Barbell switch must expose its boolean value"); return
@@ -2375,7 +2375,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(target.waitForExistence(timeout: 5))
         XCTAssertTrue(target.isHittable); target.auditTap()
         XCTAssertTrue(sheet.waitForExistence(timeout: 10))
-        reveal(selected, upward: !changeFirst)
+        reveal(selected, upward: true)
         XCTAssertEqual(selected.value as? String, changed, "The real context retains the selection after reopening")
         setNativeSwitch(original)
         XCTAssertEqual(selected.value as? String, original, "Restore the original equipment selection")
