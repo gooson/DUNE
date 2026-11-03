@@ -12,6 +12,8 @@ struct MuscleDetailPopover: View {
     @State private var showingInfoSheet = false
     @State private var topExercises: [ExerciseDefinition] = []
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @ScaledMetric(relativeTo: .title3) private var headerIconSize: CGFloat = 32
 
     var body: some View {
@@ -32,34 +34,20 @@ struct MuscleDetailPopover: View {
                 .padding(DS.Spacing.lg)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         } else {
-            inlineBody
-                .padding(DS.Spacing.xl)
-                .background { SheetWaveBackground().opacity(0.55) }
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
+            ScrollView {
+                inlineBody
+                    .padding(DS.Spacing.xl)
+            }
+            .accessibilityIdentifier("activity-muscle-detail-scroll")
+            .background { SheetWaveBackground().opacity(0.55) }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
         }
     }
 
     private var inlineBody: some View {
         VStack(alignment: .leading, spacing: isInline ? DS.Spacing.md : DS.Spacing.lg) {
-            // Header
-            let headerLayout = dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
-                : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
-            headerLayout {
-                Image(systemName: muscle.iconName)
-                    .font(.title3)
-                    .foregroundStyle(DS.Color.activity)
-                    .frame(width: headerIconSize, height: headerIconSize)
-
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    muscleTitle
-                }
-
-                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
-
-                recoveryBadge
-            }
+            header
 
             // Stats grid
             if let state = fatigueState {
@@ -101,6 +89,38 @@ struct MuscleDetailPopover: View {
         }
     }
 
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+
+    private var header: some View {
+        let headerLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return headerLayout {
+            HStack(spacing: DS.Spacing.sm) {
+                Image(systemName: muscle.iconName)
+                    .font(.title3)
+                    .foregroundStyle(palette.heroAccent)
+                    .frame(minWidth: headerIconSize, minHeight: headerIconSize)
+                    .accessibilityHidden(true)
+                muscleTitle
+                    .foregroundStyle(palette.ink)
+            }
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: DS.Spacing.xs) }
+            recoveryBadge
+        }
+        .padding(DS.Spacing.md)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: DS.Radius.lg, style: .continuous)
+                .fill(palette.surface)
+                .overlay {
+                    RoundedRectangle(cornerRadius: DS.Radius.lg, style: .continuous)
+                        .strokeBorder(palette.border, lineWidth: 1)
+                }
+                .allowsHitTesting(false)
+        }
+    }
+
     @ViewBuilder
     private var muscleTitle: some View {
         let title = Text(muscle.displayName)
@@ -116,24 +136,24 @@ struct MuscleDetailPopover: View {
     private func exerciseRow(_ exercise: ExerciseDefinition) -> some View {
         HStack(spacing: DS.Spacing.sm) {
             exercise.equipment.svgIcon(size: 16)
-                .foregroundStyle(DS.Color.textSecondary)
-                .frame(width: 20)
+                .foregroundStyle(DS.Color.activity)
+                .frame(minWidth: 32, minHeight: 32)
+                .background(DS.Color.activity.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                .accessibilityHidden(true)
             Text(exercise.localizedName)
                 .font(.subheadline)
+                .fixedSize(horizontal: false, vertical: true)
             Spacer()
         }
     }
 
     // MARK: - Recovery Badge
 
-    @Environment(\.colorScheme) private var colorScheme
-
     private var recoveryBadge: some View {
         let level = fatigueState?.fatigueLevel ?? .noData
         let color = level.color(for: colorScheme)
-        let badgeBackground = color.opacity(0.15)
-
         return HStack(spacing: DS.Spacing.xxs) {
+            Circle().fill(color).frame(width: 8, height: 8).accessibilityHidden(true)
             Text(level.shortLabel)
                 .font(.caption2.weight(.bold).monospacedDigit())
             Text(level.displayName)
@@ -141,8 +161,10 @@ struct MuscleDetailPopover: View {
         }
         .padding(.horizontal, DS.Spacing.sm)
         .padding(.vertical, DS.Spacing.xxs)
-        .background(badgeBackground, in: Capsule())
-        .foregroundStyle(color)
+        .background(palette.ink.opacity(0.12), in: Capsule())
+        .foregroundStyle(palette.ink)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("activity-muscle-detail-status")
     }
 
     // MARK: - Stats Grid
@@ -155,48 +177,52 @@ struct MuscleDetailPopover: View {
             statItem(
                 title: "Fatigue Level",
                 value: "\(state.fatigueLevel.shortLabel) / L10",
-                icon: "flame.fill"
+                icon: "flame.fill", id: "fatigue"
             )
             statItem(
                 title: "Weekly Volume",
                 value: "\(state.weeklyVolume.formattedWithSeparator) sets",
-                icon: "chart.bar.fill"
+                icon: "chart.bar.fill", id: "weekly-volume"
             )
             statItem(
                 title: "Last Trained",
                 value: lastTrainedText(state: state),
-                icon: "clock.fill"
+                icon: "clock.fill", id: "last-trained"
             )
             if let score = state.compoundScore {
                 statItem(
                     title: "Sleep Modifier",
                     value: "\(score.breakdown.sleepModifier.formattedWithSeparator(fractionDigits: 2))×",
-                    icon: "moon.fill"
+                    icon: "moon.fill", id: "sleep-modifier"
                 )
             } else {
                 statItem(
                     title: "Base Recovery",
                     value: "\(Int(muscle.recoveryHours).formattedWithSeparator)h",
-                    icon: "timer"
+                    icon: "timer", id: "base-recovery"
                 )
             }
         }
     }
 
-    private func statItem(title: LocalizedStringKey, value: String, icon: String) -> some View {
+    private func statItem(title: LocalizedStringKey, value: String, icon: String, id: String) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
             HStack(spacing: DS.Spacing.xxs) {
                 Image(systemName: icon)
                     .font(.caption2)
-                    .foregroundStyle(DS.Color.textSecondary)
+                    .foregroundStyle(DS.Color.activity)
+                    .frame(minWidth: 24, minHeight: 24)
+                    .background(DS.Color.activity.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                    .accessibilityHidden(true)
                 Text(title)
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
             Text(value)
-                .font(.subheadline.weight(.medium))
+                .font(.subheadline.weight(.semibold))
                 .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("activity-muscle-detail-value-\(id)")
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DS.Spacing.sm)

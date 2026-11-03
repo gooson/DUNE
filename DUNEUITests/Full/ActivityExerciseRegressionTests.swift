@@ -1209,7 +1209,30 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         muscle.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)["activity-muscle-detail-popover-sheet"].firstMatch
             .waitForExistence(timeout: 10))
+        let detailScroll = app.scrollViews["activity-muscle-detail-scroll"].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5))
+        let status = app.descendants(matching: .any)["activity-muscle-detail-status"].firstMatch
+        XCTAssertTrue(status.waitForExistence(timeout: 5))
+        XCTAssertFalse(status.label.isEmpty, "The selected muscle should expose its actual fatigue status")
         VisualAudit.capture("Muscle detail popover")
+        for metric in ["fatigue", "weekly-volume", "last-trained", "sleep-modifier"] {
+            let value = app.staticTexts["activity-muscle-detail-value-\(metric)"].firstMatch
+            XCTAssertTrue(value.waitForExistence(timeout: 5), "Missing seeded \(metric)")
+            for _ in 0..<8 {
+                let viewport = detailScroll.frame.intersection(app.windows.firstMatch.frame)
+                if !value.frame.isEmpty && viewport.contains(value.frame) { break }
+                if value.frame.midY < viewport.midY {
+                    detailScroll.swipeDown(velocity: .slow)
+                } else {
+                    detailScroll.swipeUp(velocity: .slow)
+                }
+            }
+            XCTAssertFalse(value.label.isEmpty, "The seeded \(metric) value should be readable")
+            XCTAssertFalse(value.frame.isEmpty)
+            XCTAssertTrue(detailScroll.frame.intersection(app.windows.firstMatch.frame).contains(value.frame),
+                          "The full \(metric) value should fit in the sheet viewport")
+        }
+        VisualAudit.capture("Muscle detail popover values")
     }
 
     func testVisualAuditMuscleFatigueExplanation() throws {
