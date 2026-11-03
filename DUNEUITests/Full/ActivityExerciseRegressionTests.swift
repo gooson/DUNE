@@ -1740,16 +1740,32 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
         func visible(_ identifier: String) -> XCUIElement {
             let element = app.descendants(matching: .any)[identifier].firstMatch
-            XCTAssertTrue(element.waitForExistence(timeout: 15), "Missing \(identifier)")
-            for _ in 0..<12 {
+            let dayPrefix = "activity-consistency-day-"
+            let requestedDay = identifier.hasPrefix(dayPrefix)
+                ? Int(identifier.dropFirst(dayPrefix.count).prefix { $0.isNumber }) : nil
+            for _ in 0..<24 {
                 let viewport = visibleContent()
                 if element.exists && !element.frame.isEmpty && viewport.contains(element.frame) { break }
                 if element.exists && element.frame.midY < viewport.midY {
                     scroll.swipeDown(velocity: .slow)
+                } else if !element.exists, let requestedDay {
+                    // LazyVGrid may not expose offscreen cells until their row is revealed.
+                    let cells = app.descendants(matching: .any).matching(
+                        NSPredicate(format: "identifier BEGINSWITH %@", dayPrefix)
+                    ).allElementsBoundByIndex
+                    let days = cells.compactMap { cell in
+                        Int(cell.identifier.dropFirst(dayPrefix.count).prefix { $0.isNumber })
+                    }
+                    if let first = days.min(), requestedDay < first {
+                        scroll.swipeDown(velocity: .slow)
+                    } else {
+                        scroll.swipeUp(velocity: .slow)
+                    }
                 } else {
                     scroll.swipeUp(velocity: .slow)
                 }
             }
+            XCTAssertTrue(element.waitForExistence(timeout: 15), "Missing \(identifier)")
             let viewport = visibleContent()
             XCTAssertFalse(element.frame.isEmpty, "Empty frame: \(identifier)")
             XCTAssertTrue(viewport.contains(element.frame), "Not fully visible: \(identifier)")

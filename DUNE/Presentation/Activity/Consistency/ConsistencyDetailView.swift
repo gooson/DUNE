@@ -161,17 +161,33 @@ struct ConsistencyDetailView: View {
 
             // Monthly progress
             if let streak = viewModel.workoutStreak {
-                HStack {
-                    leadingTile("calendar")
-                    Text("Monthly Progress")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
-                    Spacer()
-                    Text("\(streak.monthlyCount)/\(streak.monthlyGoal)")
-                        .accessibilityIdentifier("activity-consistency-month-progress")
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .monospacedDigit()
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        leadingTile("calendar")
+                        Text("Monthly Progress")
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Text("\(streak.monthlyCount)/\(streak.monthlyGoal)")
+                            .accessibilityIdentifier("activity-consistency-month-progress")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .monospacedDigit()
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    HStack {
+                        leadingTile("calendar")
+                        Text("Monthly Progress")
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.textSecondary)
+                        Spacer()
+                        Text("\(streak.monthlyCount)/\(streak.monthlyGoal)")
+                            .accessibilityIdentifier("activity-consistency-month-progress")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .monospacedDigit()
+                    }
                 }
 
                 GeometryReader { geo in
