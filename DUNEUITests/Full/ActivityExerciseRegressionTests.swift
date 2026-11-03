@@ -1,4 +1,5 @@
 @preconcurrency import XCTest
+import UIKit
 
 @MainActor
 final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCase {
@@ -1568,6 +1569,26 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let monthDays = try XCTUnwrap(calendar.range(of: .day, in: .month, for: today))
         let usedDays = Set(dates.filter { calendar.isDate($0, equalTo: today, toGranularity: .month) }
             .map { calendar.component(.day, from: $0) })
+        if maxText {
+            let targetDay = 28 // Present in every calendar month and always two digits.
+            var components = calendar.dateComponents([.year, .month], from: today)
+            components.day = targetDay
+            let targetDate = try XCTUnwrap(calendar.date(from: components))
+            let suffix = usedDays.contains(targetDay) ? "workout" : "nonqualifying"
+            let todaySuffix = targetDay == day ? "-today" : ""
+            let cell = visible("activity-consistency-day-\(targetDay)-\(suffix)\(todaySuffix)")
+            XCTAssertTrue(dateFormats(targetDate).contains(cell.label), cell.label)
+            let traits = UITraitCollection(preferredContentSizeCategory: .accessibilityExtraExtraExtraLarge)
+            let caption = UIFont.preferredFont(forTextStyle: .caption2, compatibleWith: traits)
+            let digits = UIFont.monospacedDigitSystemFont(ofSize: caption.pointSize, weight: .regular)
+            let requiredWidth = ("28" as NSString).size(withAttributes: [.font: digits]).width
+            XCTAssertGreaterThanOrEqual(cell.frame.width + 0.5, requiredWidth,
+                                        "Both day digits should fit in the seven-column cell")
+            // The day Text has four points of vertical padding on each side.
+            XCTAssertLessThanOrEqual(cell.frame.height, max(28, ceil(caption.lineHeight + 8)) + 1,
+                                     "The two-digit day should occupy one caption line")
+            VisualAudit.capture("A11 consistency two-digit day MAX")
+        }
         if let missedDay = monthDays.first(where: { $0 < day && !usedDays.contains($0) }) {
             var components = calendar.dateComponents([.year, .month], from: today)
             components.day = missedDay
