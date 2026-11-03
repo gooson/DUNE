@@ -179,23 +179,18 @@ struct ExerciseMixDetailView: View {
                         .font(.caption.weight(.medium))
                         stackedBar(strength: week.strength, cardio: week.cardio,
                                    other: week.other, total: week.total)
-                        ViewThatFits(in: .horizontal) {
-                            HStack(spacing: DS.Spacing.md) {
-                                weekLegend("Strength", count: week.strength, color: strengthColor)
-                                weekLegend("Cardio", count: week.cardio, color: cardioColor)
-                                if week.other > 0 {
-                                    weekLegend("Other", count: week.other, color: otherColor)
-                                }
-                            }
+                        if dynamicTypeSize.isAccessibilitySize {
                             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                                weekLegend("Strength", count: week.strength, color: strengthColor)
-                                weekLegend("Cardio", count: week.cardio, color: cardioColor)
-                                if week.other > 0 {
-                                    weekLegend("Other", count: week.other, color: otherColor)
-                                }
+                                weeklyLegendItems(week)
                             }
+                            .font(.caption2)
+                        } else {
+                            ViewThatFits(in: .horizontal) {
+                                HStack(spacing: DS.Spacing.md) { weeklyLegendItems(week) }
+                                VStack(alignment: .leading, spacing: DS.Spacing.xxs) { weeklyLegendItems(week) }
+                            }
+                            .font(.caption2)
                         }
-                        .font(.caption2)
                     }
                     .padding(.vertical, DS.Spacing.xxs)
                 }
@@ -203,6 +198,15 @@ struct ExerciseMixDetailView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibilityIdentifier("activity-exercise-mix-weekly-chart")
+    }
+
+    @ViewBuilder
+    private func weeklyLegendItems(_ week: ExerciseMixSummary.Week) -> some View {
+        weekLegend("Strength", count: week.strength, color: strengthColor)
+        weekLegend("Cardio", count: week.cardio, color: cardioColor)
+        if week.other > 0 {
+            weekLegend("Other", count: week.other, color: otherColor)
+        }
     }
 
     private func weekLegend(_ title: LocalizedStringKey, count: Int, color: Color) -> some View {
@@ -375,10 +379,15 @@ struct ExerciseMixDetailView: View {
             .frame(height: 200)
             .clipped()
             .overlay {
-                donutCenterLabel
+                if !dynamicTypeSize.isAccessibilitySize { donutCenterLabel }
             }
             .sensoryFeedback(.selection, trigger: selectedExercise)
             .onChange(of: selectedAngle) { _, _ in updateDonutSelection() }
+
+            if dynamicTypeSize.isAccessibilitySize {
+                donutCenterLabel
+                    .frame(maxWidth: .infinity)
+            }
 
             // Legend
             LazyVGrid(columns: dynamicTypeSize.isAccessibilitySize
@@ -409,7 +418,9 @@ struct ExerciseMixDetailView: View {
                let freq = viewModel.frequencyByName[name] {
                 Text(localizedExerciseName(name))
                     .font(.caption.weight(.semibold))
-                    .lineLimit(1)
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text("\(freq.count.formattedWithSeparator)x")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
