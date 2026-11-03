@@ -1,0 +1,166 @@
+Attributes: Application, 0x1102dd2c0, pid: 89877, label: 'DUNE'
+Element subtree:
+ →Application, 0x1102dd2c0, pid: 89877, label: 'DUNE'
+    Window (Main), 0x1102df840, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1102dc640, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1102dc780, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1102de580, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x1102de440, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x1102debc0, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x1102ded00, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x1102dee40, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1102def80, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x1102de6c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x1102de800, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x1102de940, {{0.0, 0.0}, {756.0, 1158.0}}
+                          Other, 0x1102dea80, {{0.0, 0.0}, {756.0, 1158.0}}
+                            NavigationBar, 0x1102df0c0, {{0.0, 96.0}, {756.0, 108.0}}, identifier: 'Muscle Map'
+                              Button, 0x1102df200, {{10.0, 96.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Activity'
+                              StaticText, 0x1102df340, {{330.0, 161.5}, {96.0, 21.0}}, label: 'Muscle Map'
+                            Other, 0x1102df480, {{0.0, 0.0}, {756.0, 1158.0}}
+                              Other, 0x1102df5c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                                Other, 0x1102df700, {{0.0, 0.0}, {756.0, 1158.0}}
+                                  Other, 0x1102dfe80, {{0.0, 0.0}, {756.0, 1158.0}}
+                                    Other, 0x1102ddf40, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'activity-musclemap-detail-screen'
+                                      ScrollView, 0x102be43c0, {{0.0, 0.0}, {756.0, 671.0}}, identifier: 'musclemap-detail-map-scroll'
+                                        Other, 0x102be7200, {{0.0, 0.0}, {756.0, 671.0}}
+                                          Other, 0x102be7ac0, {{0.0, 0.0}, {756.0, 244.0}}
+                                        Other, 0x102be7e80, {{0.0, 0.0}, {756.0, 671.0}}
+                                          Other, 0x102a33700, {{0.0, 0.0}, {756.0, 244.0}}
+                                        Other, 0x102a33840, {{0.0, 77.5}, {756.0, 593.5}}
+                                          StaticText, 0x102a33980, {{66.0, 120.2}, {157.0, 14.5}}, label: '7 muscles trained this week'
+                                          Button, 0x102a33480, {{231.0, 105.5}, {44.0, 44.0}}, identifier: 'activity-muscle-map-algorithm-info', label: 'About Muscle Map'
+                                          SegmentedControl, 0x102a30780, {{530.0, 112.0}, {160.0, 31.0}}, identifier: 'activity-muscle-map-mode'
+                                            Button, 0x102a335c0, {{530.0, 112.0}, {80.0, 32.0}}, label: 'Recovery'
+                                            Button, 0x102a330c0, {{610.0, 112.0}, {80.0, 32.0}}, label: 'Sets', Selected
+                                          Button, 0x102a33340, {{241.8, 238.5}, {44.6, 9.2}}, identifier: 'musclemap-body-front-traps'
+                                          Button, 0x1061af980, {{217.0, 245.0}, {94.1, 26.4}}, identifier: 'musclemap-body-front-shoulders'
+                                          Button, 0x1061afac0, {{233.7, 248.9}, {60.7, 33.1}}, identifier: 'musclemap-body-front-chest'
+                                          Button, 0x1061afc00, {{444.8, 247.1}, {94.1, 24.6}}, identifier: 'musclemap-body-back-shoulders'
+                                          Button, 0x1061afd40, {{456.3, 250.4}, {70.9, 25.0}}, identifier: 'musclemap-body-back-lats'
+                                          Button, 0x1061afe80, {{218.7, 267.6}, {90.9, 36.3}}, identifier: 'musclemap-body-front-triceps'
+                                          Button, 0x1061af840, {{213.5, 273.5}, {101.2, 24.5}}, identifier: 'musclemap-body-front-biceps'
+                                          Button, 0x1061af700, {{445.4, 266.7}, {92.8, 19.8}}, identifier: 'musclemap-body-back-triceps'
+                                          Button, 0x1061af5c0, {{469.2, 243.4}, {45.1, 49.0}}, identifier: 'musclemap-body-back-traps'
+                                          Button, 0x1061af340, {{248.7, 294.6}, {30.8, 27.0}}, identifier: 'musclemap-body-front-core'
+                                          Button, 0x1061af480, {{198.0, 299.0}, {132.2, 51.5}}, identifier: 'musclemap-body-front-forearms'
+                                          Button, 0x1061ac000, {{463.9, 295.8}, {55.6, 42.5}}, identifier: 'musclemap-body-back-back'
+                                          Button, 0x1061ac140, {{428.0, 308.8}, {127.6, 43.0}}, identifier: 'musclemap-body-back-forearms'
+                                          Button, 0x1061ac280, {{230.7, 345.5}, {66.8, 75.0}}, identifier: 'musclemap-body-front-quadriceps'
+                                          Button, 0x1061ac3c0, {{461.9, 336.8}, {59.7, 39.8}}, identifier: 'musclemap-body-back-glutes'
+                                          Button, 0x1061ac500, {{462.2, 371.4}, {59.1, 65.2}}, identifier: 'musclemap-body-back-hamstrings'
+                                          Button, 0x1061ac640, {{232.5, 439.7}, {63.1, 62.3}}, identifier: 'musclemap-body-front-calves'
+                                          Button, 0x1061ac780, {{460.3, 429.6}, {63.1, 50.1}}, identifier: 'musclemap-body-back-calves'
+                                          StaticText, 0x1061ac8c0, {{112.2, 577.5}, {32.5, 13.5}}, identifier: 'activity-muscle-map-legend-sets', label: '0 sets'
+                                          StaticText, 0x1061aca00, {{244.5, 577.5}, {17.5, 13.5}}, identifier: 'activity-muscle-map-legend-sets', label: '1-5'
+                                          StaticText, 0x1061acb40, {{365.8, 577.5}, {24.5, 13.5}}, identifier: 'activity-muscle-map-legend-sets', label: '6-10'
+                                          StaticText, 0x1061acc80, {{488.8, 577.5}, {28.0, 13.5}}, identifier: 'activity-muscle-map-legend-sets', label: '11-15'
+                                          StaticText, 0x1061acdc0, {{617.9, 577.5}, {19.5, 13.5}}, identifier: 'activity-muscle-map-legend-sets', label: '16+'
+                                          Button, 0x1061acf00, {{54.0, 619.0}, {172.0, 36.0}}, label: '3D Muscle Map', Disabled
+                                            StaticText, 0x1061ad040, {{54.0, 619.0}, {172.0, 36.0}}, label: '3D Muscle Map', Disabled
+                                            Image, 0x1061ad180, {{68.0, 627.5}, {17.0, 19.0}}, identifier: 'cube', label: 'Depth Effect', Disabled
+                                        Other, 0x1061ad2c0, {{723.0, 204.0}, {30.0, 467.0}}, label: 'Vertical scroll bar, 2 pages', value: 100%
+                                          Other, 0x1061ad540, {{750.0, 280.0}, {3.0, 388.0}}
+                                        Other, 0x1061adb80, {{723.0, 204.0}, {30.0, 467.0}}, label: 'Vertical scroll bar, 2 pages', value: 100%
+                                          Other, 0x1061adcc0, {{750.0, 280.0}, {3.0, 388.0}}
+                                      ScrollView, 0x1102e0000, {{0.0, 671.0}, {756.0, 487.0}}, identifier: 'musclemap-detail-summary-scroll'
+                                        Other, 0x1102e0140, {{0.0, 671.0}, {756.0, 1354.5}}
+                                          Other, 0x1102e0280, {{54.0, 687.0}, {648.0, 93.5}}, identifier: 'musclemap-detail-header'
+                                            Other, 0x1102e03c0, {{54.0, 687.0}, {648.0, 93.5}}
+                                            Image, 0x1102e0500, {{74.0, 712.0}, {44.0, 44.0}}, identifier: 'heart.text.clipboard', label: 'Heart On A Text Clipboard'
+                                            StaticText, 0x1102e0640, {{130.0, 707.0}, {117.0, 18.0}}, label: 'Recovery Status'
+                                            StaticText, 0x1102e0780, {{130.0, 727.0}, {241.5, 33.5}}, label: '8/8 muscles ready'
+                                          Image, 0x1102e08c0, {{86.0, 822.5}, {18.5, 14.0}}, identifier: 'musclemap-detail-volume-section', label: 'Chart Column'
+                                          StaticText, 0x1102e0a00, {{110.5, 820.5}, {117.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Volume Analysis'
+                                          Other, 0x1102e0b40, {{86.0, 863.5}, {395.5, 46.0}}, identifier: 'musclemap-detail-volume-section'
+                                            Image, 0x1102e0c80, {{87.5, 865.0}, {11.0, 11.5}}, identifier: 'number', label: 'Number Sign'
+                                            StaticText, 0x1102e0dc0, {{104.0, 863.5}, {56.0, 14.5}}, label: 'Total Sets'
+                                            Image, 0x1102e0f00, {{395.5, 863.5}, {14.0, 14.5}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x1102e1040, {{415.0, 863.5}, {66.5, 14.5}}, label: 'Muscles Hit'
+                                            StaticText, 0x1102e1180, {{86.0, 882.0}, {25.5, 26.5}}, label: '19'
+                                            StaticText, 0x1102e12c0, {{394.0, 883.0}, {44.0, 26.5}}, label: '7/13'
+                                          StaticText, 0x1102e1400, {{86.0, 956.5}, {168.5, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Weekly Goal per Muscle'
+                                          Stepper, 0x1102e1540, {{262.5, 949.5}, {407.5, 32.0}}, identifier: 'musclemap-detail-volume-section', label: '15 sets', value: 15
+                                            Button, 0x1102e1680, {{576.0, 949.5}, {47.0, 32.0}}, identifier: 'musclemap-detail-volume-section-Decrement', label: '15 sets, Decrement', value: 15
+                                            Button, 0x1102e17c0, {{623.0, 949.5}, {47.0, 32.0}}, identifier: 'musclemap-detail-volume-section-Increment', label: '15 sets, Increment', value: 15
+                                          StaticText, 0x1102e1900, {{74.0, 1009.5}, {119.5, 20.5}}, identifier: 'musclemap-detail-volume-section', label: 'Muscle Groups'
+                                          Image, 0x1102e1a40, {{87.5, 1048.0}, {9.0, 14.0}}, identifier: 'musclemap-detail-volume-section', label: 'Walk'
+                                          StaticText, 0x1102e1b80, {{110.0, 1046.0}, {44.5, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Quads'
+                                          StaticText, 0x1102e1cc0, {{646.5, 1047.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1102e1e00, {{87.5, 1098.0}, {9.0, 14.0}}, identifier: 'musclemap-detail-volume-section', label: 'Walk'
+                                          StaticText, 0x1102e1f40, {{110.0, 1096.0}, {44.5, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Glutes'
+                                          StaticText, 0x1102e2080, {{646.5, 1097.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1102e21c0, {{86.5, 1150.0}, {11.0, 10.5}}, identifier: 'musclemap-detail-volume-section', label: 'Figure Rowing'
+                                          StaticText, 0x1102e2300, {{110.0, 1146.0}, {34.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Back'
+                                          StaticText, 0x1102e2440, {{646.5, 1147.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1102e2580, {{84.5, 1200.5}, {15.0, 9.0}}, identifier: 'musclemap-detail-volume-section', label: 'Dumbbell Weight, Filled'
+                                          StaticText, 0x1102e26c0, {{110.0, 1196.0}, {50.5, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Triceps'
+                                          StaticText, 0x1102e2800, {{646.5, 1197.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1102e2940, {{85.0, 1248.0}, {14.0, 14.5}}, identifier: 'musclemap-detail-volume-section', label: 'Figure Doing Traditional Strength Training'
+                                          StaticText, 0x1102e2a80, {{110.0, 1246.0}, {40.5, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Chest'
+                                          StaticText, 0x1102e2bc0, {{646.5, 1247.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1102e2d00, {{87.5, 1298.0}, {9.0, 14.0}}, identifier: 'musclemap-detail-volume-section', label: 'Walk'
+                                          StaticText, 0x1102e2e40, {{110.0, 1296.0}, {79.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Hamstrings'
+                                          StaticText, 0x1102e2f80, {{646.5, 1297.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '3/15'
+                                          Image, 0x1102e30c0, {{83.0, 1352.0}, {18.0, 6.5}}, identifier: 'musclemap-detail-volume-section', label: 'Figure Doing Core Training'
+                                          StaticText, 0x1102e3200, {{110.0, 1346.0}, {33.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Core'
+                                          StaticText, 0x1102e3340, {{646.5, 1347.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '1/15'
+                                          Image, 0x1102e3480, {{87.5, 1398.0}, {9.0, 14.0}}, identifier: 'musclemap-detail-volume-section', label: 'Walk'
+                                          StaticText, 0x1102e35c0, {{110.0, 1396.0}, {46.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Calves'
+                                          StaticText, 0x1102e3700, {{646.5, 1397.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1102e3840, {{84.5, 1450.5}, {15.0, 9.0}}, identifier: 'musclemap-detail-volume-section', label: 'Dumbbell Weight, Filled'
+                                          StaticText, 0x1102e3980, {{110.0, 1446.0}, {65.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Forearms'
+                                          StaticText, 0x1102e3ac0, {{646.5, 1447.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1102e3c00, {{86.5, 1500.0}, {11.0, 10.5}}, identifier: 'musclemap-detail-volume-section', label: 'Figure Rowing'
+                                          StaticText, 0x1102e3d40, {{110.0, 1496.0}, {29.5, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Lats'
+                                          StaticText, 0x1102e3e80, {{646.5, 1497.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1102e4000, {{88.0, 1548.5}, {8.5, 13.5}}, identifier: 'musclemap-detail-volume-section', label: 'Figure With Arms Open'
+                                          StaticText, 0x1102e4140, {{110.0, 1546.0}, {69.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Shoulders'
+                                          StaticText, 0x1102e4280, {{646.5, 1547.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1102e43c0, {{88.0, 1598.5}, {8.5, 13.5}}, identifier: 'musclemap-detail-volume-section', label: 'Figure With Arms Open'
+                                          StaticText, 0x1102e4500, {{110.0, 1596.0}, {38.5, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Traps'
+                                          StaticText, 0x1102e4640, {{646.5, 1597.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1102e4780, {{84.5, 1650.5}, {15.0, 9.0}}, identifier: 'musclemap-detail-volume-section', label: 'Dumbbell Weight, Filled'
+                                          StaticText, 0x1102e48c0, {{110.0, 1646.0}, {46.5, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Biceps'
+                                          StaticText, 0x1102e4a00, {{646.5, 1647.8}, {27.5, 14.5}}, identifier: 'musclemap-detail-volume-section', label: '0/15'
+                                          Image, 0x1102e4b40, {{87.5, 1709.5}, {17.0, 17.0}}, identifier: 'musclemap-detail-volume-section', label: 'Selected', Selected
+                                          StaticText, 0x1102e4c80, {{114.0, 1709.0}, {116.0, 18.0}}, identifier: 'musclemap-detail-volume-section', label: 'Training Balance'
+                                          StaticText, 0x1102e4dc0, {{86.0, 1736.0}, {298.0, 14.5}}, identifier: 'musclemap-detail-volume-section', label: 'Your training is well-balanced across muscle groups.'
+                                          Image, 0x1102e4f00, {{86.0, 1824.0}, {12.5, 18.0}}, identifier: 'musclemap-detail-recovery-section', label: 'Heart On A Text Clipboard'
+                                          StaticText, 0x1102e5040, {{104.5, 1824.0}, {117.0, 18.0}}, identifier: 'musclemap-detail-recovery-section', label: 'Recovery Status'
+                                          StaticText, 0x1102e5180, {{107.5, 1883.5}, {13.0, 24.0}}, identifier: 'musclemap-detail-recovery-section', label: '8'
+                                          StaticText, 0x1102e52c0, {{154.0, 1878.2}, {129.5, 18.0}}, identifier: 'musclemap-detail-recovery-section', label: '8/8 muscles ready'
+                                          StaticText, 0x1102e5400, {{154.0, 1898.2}, {182.0, 14.5}}, identifier: 'musclemap-detail-recovery-section', label: 'All muscle groups are recovered'
+                                          Image, 0x1102e5540, {{85.5, 1961.0}, {16.5, 15.0}}, identifier: 'musclemap-detail-recovery-section', label: 'Clock With A Circular Arrow'
+                                          StaticText, 0x1102e5680, {{111.5, 1961.2}, {65.0, 14.5}}, identifier: 'musclemap-detail-recovery-section', label: 'Next ready:'
+                                          StaticText, 0x1102e57c0, {{184.5, 1961.2}, {28.5, 14.5}}, identifier: 'musclemap-detail-recovery-section', label: 'Back'
+                                          StaticText, 0x1102e5900, {{647.0, 1961.2}, {23.0, 14.5}}, identifier: 'musclemap-detail-recovery-section', label: '20h'
+                                        Other, 0x1102e5a40, {{723.0, 671.0}, {30.0, 440.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                          Other, 0x1102e5b80, {{750.0, 674.0}, {3.0, 196.0}}
+                                        Other, 0x1102e5cc0, {{723.0, 671.0}, {30.0, 440.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                          Other, 0x1102e5e00, {{750.0, 674.0}, {3.0, 196.0}}
+                            Toolbar, 0x1102e5f40, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x1102e6080, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x1102e61c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1102e6300, {{0.0, 32.0}, {756.0, 44.0}}
+                    Button, 0x1102e6440, {{183.5, 36.0}, {56.0, 36.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x1102e6580, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x1102e66c0, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x1102e6800, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                      Button, 0x1102e6940, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                    Button, 0x1102e6a80, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                      Button, 0x1102e6bc0, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                    Button, 0x1102e6d00, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x1102e6e40, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x1102e6f80, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x1102e70c0, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x1102e7200, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1102e7340, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1102e7480, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x1102dd2c0, pid: 89877, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1102e75c0, pid: 89877, label: 'DUNE'
+  }

@@ -1,0 +1,12 @@
+# A16 final bounded source review
+
+- Base: `3a32dd67465c48b79cae537530e948c363f107e2`.
+- Final clean HEAD: `6d186b3ac51f4fa94c91c06455ea6e267a0a037d`.
+- Final `git diff --binary base HEAD` SHA-256: `b0da334ea841bc5c7a4343275ae79b539469fbef47f366bfc58b76084d129744`.
+- Findings: **P1 0 / P2 0 / P3 0** in A16 source scope. Data integrity, security, architecture, performance, simplicity, and SwiftUI/native UI contract have no source-confirmed actionable finding. Agent-native is not applicable.
+
+The app sheet and `Localizable.xcstrings` at final HEAD are byte-identical to commit `35718dd4` (SHA-256 `d5056ae763484325aaf98751bd63a0f0d9383a8cc93b3642d70cc1f964ec52d3` and `926bb65df7a57dc44adc5f7eadade52e1826902c71caa27cbab52cf03ed633d1`). Their detailed independent review is `/private/tmp/a16-initial-source-review.md`, at reviewed working diff SHA-256 `a2e8e0b3f99ac614fb71f85aa25b23fac5f0b95027e8b67dffc648bb41fae28a`. The implemented explanation follows the unchanged `weeklyMuscleVolume` per-record secondary contribution `max(setCount / 2, 1)`, five existing `VolumeIntensity` ranges, and the original legend, symbols, content and dismiss path. Eight new catalog entries have manual en/ko/ja; existing referenced strings also have those translations. Formula, bullets and helper text use localized keys/text leaves.
+
+Only the two UI test files changed after the initial app/catalog commit. The independent query-fix review (`/private/tmp/a16-legend-query-fix-review.md`) bound the AX tree observation and the scoped `horizontal.staticTexts[label]` correction. The independent gesture-fix review (`/private/tmp/a16-native-dismiss-gesture-fix-review.md`) bound the single grabber fling correction at final HEAD, with original unique/hittable/window/top-edge/distance/disappearance/return assertions intact. These corrections add no app or producer change. A03 inline test continues to assert its real Sets legend entry and navigation return.
+
+Runtime status at this review: six targeted A16 UI cases at final 6d are sealed and passed across closed Duo normal/MAX, open Duo normal, iPhone normal, iPad normal and iPad inline A03. See `/private/tmp/a16-final-native-quality-review.md` for exact selectors, durations, image/AX hashes and bounded pixel observations. This is not a full locale, VoiceOver or suite claim. The CI Watch clone had HTTP 401 / exit 64 before tests and contains no A16 Watch code change; it provides no Watch pass. The separate iOS build/unit result was last reported **in progress**, so this review makes no build or unit pass claim.

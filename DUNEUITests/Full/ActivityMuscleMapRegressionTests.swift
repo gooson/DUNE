@@ -118,6 +118,96 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         VisualAudit.capture("A15 A03 returned to Activity")
     }
 
+    func testRegularMuscleMapSetsLegendOpensVolumeAlgorithm() throws {
+        guard UIDevice.current.userInterfaceIdiom == .pad else {
+            throw XCTSkip("The expanded sets legend contract applies to regular iPad")
+        }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        launchApp(with: configuration)
+        navigateToMuscleMapDetail()
+
+        let map = app.scrollViews["musclemap-detail-map-scroll"].firstMatch
+        XCTAssertTrue(map.waitForExistence(timeout: 10), "The regular map pane must exist")
+        let mode = map.segmentedControls["activity-muscle-map-mode"].firstMatch
+        XCTAssertTrue(mode.waitForExistence(timeout: 5))
+        let sets = mode.buttons["Sets"].firstMatch
+        XCTAssertTrue(sets.waitForExistence(timeout: 5) && sets.isHittable)
+        sets.auditTap()
+        let legend = map.descendants(matching: .any)["activity-muscle-map-legend-sets"].firstMatch
+        XCTAssertTrue(legend.waitForExistence(timeout: 10), "The sets legend must exist")
+        for _ in 0..<16 {
+            let window = app.windows.firstMatch
+            let viewport = map.frame.intersection(window.frame)
+            if !legend.frame.isEmpty && viewport.contains(legend.frame) && legend.isHittable { break }
+            let direction: CGFloat = legend.frame.midY < viewport.midY ? 1 : -1
+            let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                dx: viewport.midX - window.frame.minX, dy: viewport.midY - window.frame.minY))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: direction * viewport.height * 0.18)))
+        }
+        XCTAssertFalse(legend.frame.isEmpty)
+        XCTAssertTrue(map.frame.intersection(app.windows.firstMatch.frame).contains(legend.frame),
+                      "The full sets legend must fit in the map viewport")
+        XCTAssertTrue(legend.isHittable, "The sets legend must be actionable")
+        VisualAudit.capture("A16 A03 sets legend")
+        legend.auditTap()
+
+        let sheet = app.scrollViews["activity-volume-algorithm-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10), "The legend must open the weekly volume explanation")
+        func reveal(_ id: String) -> XCUIElement {
+            let item = sheet.descendants(matching: .any)[id].firstMatch
+            XCTAssertTrue(item.waitForExistence(timeout: 10), "Missing \(id)")
+            for _ in 0..<16 {
+                let window = app.windows.firstMatch
+                let viewport = sheet.frame.intersection(window.frame)
+                if !item.frame.isEmpty && viewport.contains(item.frame) { break }
+                let direction: CGFloat = item.frame.midY < viewport.midY ? 1 : -1
+                let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX, dy: viewport.midY - window.frame.minY))
+                start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: direction * viewport.height * 0.18)))
+            }
+            XCTAssertFalse(item.frame.isEmpty)
+            XCTAssertTrue(sheet.frame.intersection(app.windows.firstMatch.frame).contains(item.frame),
+                          "The full \(id) must fit in the sheet viewport")
+            return item
+        }
+        XCTAssertEqual(reveal("activity-volume-algorithm-formula").label, "Volume = Σ primary sets + Σ max(⌊secondary sets ÷ 2⌋, 1)")
+        VisualAudit.capture("A16 A03 volume formula")
+        XCTAssertTrue(reveal("activity-volume-algorithm-secondary").label.contains("For each record, halve the completed sets, round down, and credit at least 1 set"))
+        VisualAudit.capture("A16 A03 secondary contribution")
+        let grabbers = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
+        XCTAssertEqual(grabbers.count, 1, "The native sheet should expose one visible drag indicator")
+        let grabber = grabbers.element(boundBy: 0)
+        XCTAssertTrue(grabber.exists && grabber.isHittable, "The native sheet grabber must be reachable")
+        let window = app.windows.firstMatch
+        XCTAssertTrue(window.frame.contains(grabber.frame), "The grabber must be within the window")
+        XCTAssertTrue(sheet.frame.intersects(grabber.frame), "The grabber must overlap the explanation sheet")
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height,
+                                 "The grabber must be at the explanation sheet top edge")
+        let endY = window.frame.maxY - 40
+        XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3)
+        let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero)
+            .withOffset(CGVector(dx: grabber.frame.midX - window.frame.minX, dy: endY - window.frame.minY))
+        start.press(forDuration: 0.1, thenDragTo: end,
+                    withVelocity: XCUIGestureVelocity(rawValue: 1_000), thenHoldForDuration: 0)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 5), "The native sheet must dismiss")
+        let detail = app.descendants(matching: .any)[AXID.activityMuscleMapDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 5), "A03 must remain after dismissal")
+        VisualAudit.capture("A16 A03 volume dismissed")
+        let railBack = app.buttons["BackButton"].firstMatch
+        if railBack.exists && railBack.isHittable {
+            railBack.auditTap()
+        } else {
+            let back = app.navigationBars.buttons.element(boundBy: 0)
+            XCTAssertTrue(back.waitForExistence(timeout: 5), "Native Back must remain available")
+            back.auditTap()
+        }
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch.waitForExistence(timeout: 10),
+                      "Back must return to Activity")
+        VisualAudit.capture("A16 A03 returned to Activity")
+    }
+
     func testRegularMuscleMapShowsFrontCalvesWithoutScrolling() throws {
         guard UIDevice.current.userInterfaceIdiom == .pad else {
             throw XCTSkip("The two-pane first-viewport contract applies to regular iPad layout")

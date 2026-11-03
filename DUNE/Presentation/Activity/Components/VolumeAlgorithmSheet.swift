@@ -3,18 +3,35 @@ import SwiftUI
 /// Explanation of how weekly training volume is calculated and displayed.
 /// Accessible from the volume mode info button and the volume legend tap.
 struct VolumeAlgorithmSheet: View {
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption2) private var legendWidth: CGFloat = 320
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 headerSection
-                overviewSection
-                calculationSection
-                levelSection
-                tipsSection
-                VolumeLegendView()
+                explanationCard { overviewSection }
+                explanationCard { calculationSection }
+                explanationCard { levelSection }
+                explanationCard { tipsSection }
+                if dynamicTypeSize.isAccessibilitySize {
+                    ScrollView(.horizontal) {
+                        VolumeLegendView().accessibilityIdentifier("activity-volume-algorithm-legend").frame(minWidth: legendWidth)
+                    }
+                    .accessibilityIdentifier("activity-volume-algorithm-legend-scroll")
                     .padding(.top, DS.Spacing.sm)
+                } else {
+                    VolumeLegendView().accessibilityIdentifier("activity-volume-algorithm-legend")
+                        .padding(.top, DS.Spacing.sm)
+                }
             }
             .padding(DS.Spacing.xl)
+            .frame(maxWidth: 680)
+            .frame(maxWidth: .infinity)
         }
         .background { SheetWaveBackground().opacity(0.55) }
         .accessibilityIdentifier("activity-volume-algorithm-sheet")
@@ -25,19 +42,23 @@ struct VolumeAlgorithmSheet: View {
     // MARK: - Header
 
     private var headerSection: some View {
-        HStack(spacing: DS.Spacing.sm) {
+        HStack(alignment: .top, spacing: DS.Spacing.md) {
             Image(systemName: "chart.bar.fill")
                 .font(.title3)
-                .foregroundStyle(DS.Color.activity)
-            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                Text("Weekly Training Volume")
-                    .font(.headline)
-                Text("Weekly Training Volume")
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
-            }
-            Spacer()
+                .foregroundStyle(palette.heroAccent)
+                .padding(DS.Spacing.sm)
+                .background(palette.heroAccent.opacity(0.16), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                .accessibilityHidden(true)
+            Text("Weekly Training Volume")
+                .font(.title3.bold())
+                .foregroundStyle(palette.ink)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Spacing.lg)
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+        .overlay { RoundedRectangle(cornerRadius: DS.Radius.lg).strokeBorder(palette.border, lineWidth: 1) }
     }
 
     // MARK: - Overview
@@ -59,10 +80,12 @@ struct VolumeAlgorithmSheet: View {
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 bulletPoint("Primary: Full set count is credited to the muscle")
-                bulletPoint("Secondary: Half the set count is credited (minimum 1 set)")
+                bulletPoint("Secondary: For each record, halve the completed sets, round down, and credit at least 1 set",
+                            identifier: "activity-volume-algorithm-secondary")
                 bulletPoint("Compound exercises (e.g., Squat) credit multiple muscles simultaneously")
 
-                formulaRow("Volume = Σ (Primary sets) + Σ (Secondary sets ÷ 2)")
+                formulaRow("Volume = Σ primary sets + Σ max(⌊secondary sets ÷ 2⌋, 1)")
+                    .accessibilityIdentifier("activity-volume-algorithm-formula")
             }
         }
     }
@@ -97,17 +120,28 @@ struct VolumeAlgorithmSheet: View {
 
     // MARK: - Helpers
 
+    private func explanationCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        content()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+    }
+
     private func sectionHeader(icon: String, title: LocalizedStringKey) -> some View {
         HStack(spacing: DS.Spacing.xs) {
             Image(systemName: icon)
-                .font(.caption)
-                .foregroundStyle(DS.Color.textSecondary)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(DS.Color.activity)
+                .padding(DS.Spacing.sm)
+                .background(DS.Color.activity.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                .accessibilityHidden(true)
             Text(title)
                 .font(.subheadline.weight(.semibold))
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
-    private func formulaRow(_ text: String) -> some View {
+    private func formulaRow(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.caption.monospaced())
             .padding(DS.Spacing.sm)
@@ -115,19 +149,28 @@ struct VolumeAlgorithmSheet: View {
             .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
-    private func bulletPoint(_ text: String) -> some View {
-        HStack(alignment: .top, spacing: DS.Spacing.xs) {
+    private func bulletPoint(_ text: LocalizedStringKey, identifier: String? = nil) -> some View {
+        let label = Text(text)
+            .font(.caption)
+            .foregroundStyle(DS.Color.textSecondary)
+        return HStack(alignment: .top, spacing: DS.Spacing.xs) {
             Text("·")
                 .font(.caption.weight(.bold))
                 .foregroundStyle(DS.Color.textSecondary)
-            Text(text)
-                .font(.caption)
-                .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityHidden(true)
+            if let identifier {
+                label.accessibilityIdentifier(identifier)
+            } else {
+                label
+            }
         }
     }
 
     private func levelRow(_ level: VolumeIntensity) -> some View {
-        HStack(spacing: DS.Spacing.sm) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.sm))
+        return layout {
             RoundedRectangle(cornerRadius: 2)
                 .fill(level.color)
                 .overlay {
@@ -139,11 +182,13 @@ struct VolumeAlgorithmSheet: View {
                 .frame(width: 12, height: 12)
             Text(level.label)
                 .font(.caption2.weight(.bold).monospacedDigit())
-                .frame(width: 32, alignment: .leading)
+                .fixedSize(horizontal: true, vertical: false)
             Text(level.description)
+                .accessibilityIdentifier("activity-volume-algorithm-level-\(level.rawValue)")
                 .font(.caption2)
                 .foregroundStyle(DS.Color.textSecondary)
-            Spacer()
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
         }
     }
 }
