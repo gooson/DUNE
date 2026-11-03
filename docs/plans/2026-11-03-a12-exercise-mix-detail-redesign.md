@@ -6,9 +6,9 @@ Base: `4fb32ead94df9c0bc595cf744271d1003832030d`. Approved browser direction: `r
 
 Preserve 4-week date range, workout-record total, category counts and percentages, weekly stacked segments and dates, muscle sets/shares and unattributed disclaimer, cardio counts/duration/distance, selectable top-eight donut and complete frequency list, HealthKit partial-data notice, loading/empty states, and native Back. Preserve existing data, calculations, service, navigation and source icons/colors. The current view has no period selector. Use an opaque theme-aware summary hero and clearer rows; keep charts using real source data. Accommodate accessibility sizes through explicit single-column layouts.
 
-Files: `DUNE/Presentation/Activity/ExerciseMix/ExerciseMixDetailView.swift`, its focused UI selector if meaningful geometry/value checks are needed, layout/theme proposals and generated theme index. No VM/domain changes.
+Files: `DUNE/Presentation/Activity/ExerciseMix/ExerciseMixDetailView.swift`, its focused UI selector if meaningful geometry/value checks are needed, layout/theme proposals and generated theme index. The presentation ViewModel sector lookup now follows raw cumulative counts; domain, source queries and exercise calculations remain unchanged.
 
-## Validation still required
+## Initial validation plan — historical; completed matrix below
 
 Source checks and `git diff --check` only during preparation. Product compile and focused `ActivityExerciseRegressionTests/testActivityExerciseMixRouteOpensExpectedScreen` must be run later using the owned standard runner. Verify actual normal iPhone, iPad and Duo closed/open plus relevant MAX/Dark geometry, selectable donut, actual counts, dates, units and Back. New A12 actual-map captures for each affected tier are required; historical images cannot stand in for after captures. Review accessible text and layout with real data before claiming native quality.
 
@@ -49,3 +49,11 @@ The 5f mixed run remains failed: the normal case individually passed (202.657 se
 ### Native readability correction
 
 6706 closed MAX and open normal passed their original functional contracts. Independent review of the real MAX PNG/AX found adjacent count/percentage and weekly label/count text visually ambiguous. Four decorative, accessibility-hidden centered dots distinguish these values without changing data, IDs, fonts, icons or catalogs. Preserve the pre-correction results as history; final captures must use the corrected app source, with closed normal/MAX and open/phone/iPad normal verification.
+
+## Completed native validation and publication
+
+Application source `bb79f250497786526d37d420fd839de5c2df5dee` was built and verified with the original selectors. Closed Duo normal and Dark/AX-XXXL passed 2/2; unfolded Duo, iPhone 18 Pro Max and iPad mini (A20 Pro) normal each passed 1/1. Actual dates, totals, category counts, two held selections, clear restoring the all-exercise total, full plot containment and Back passed. Independent source, four-profile native and staged-publication reviews have no open P1/P2/P3 in their documented scopes. All owned simulators were deleted after archival.
+
+[Published native before/after and nine MAX checkpoints](../design/full-redesign-map/review/a12-exercise-mix-native-2026-11-03/index.html) retain exact source, device, PNG/AX and failure provenance. Prior 5f mixed failure and pre-separator 6706 passes remain historical. The final unfolded pretest display mismatch was recovered with an owned 0→180 cycle and actual LCD-1 readback before the successful original case; no app test ran in that failed preparation.
+
+The unchanged ViewModel/unit sources retain their actual 547 four-test pass; source bb79 CI iOS build and unit job also succeeded. Its Watch job failed before tests because the CI runtime was missing; this is not a Watch pass and the changed view is excluded from that target. No local full regression or Watch/visionOS verification was requested. Captures do not establish all locales, themes, VoiceOver speech or every data state.
