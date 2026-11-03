@@ -1,8 +1,5 @@
 import SwiftUI
 import Charts
-#if DEBUG
-import OSLog
-#endif
 
 /// Detail view for Exercise Mix with donut chart and full frequency list.
 struct ExerciseMixDetailView: View {
@@ -15,12 +12,6 @@ struct ExerciseMixDetailView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var selectedAngle: Double?
     @State private var selectedExercise: String?
-    #if DEBUG
-    private static let selectionProbeLog = Logger(subsystem: "com.raftel.dailve.a12probe", category: "selection")
-    private var selectionProbeEnabled: Bool {
-        ProcessInfo.processInfo.arguments.contains("--ui-a12-selection-probe")
-    }
-    #endif
 
     // Correction #83: static color cache — palette derived from ActivityCategory.allCases (excludes multiSport).
     // NOTE: Chart access is index-based (cycling palette), not category-keyed.
@@ -78,6 +69,8 @@ struct ExerciseMixDetailView: View {
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Exercise Mix")
         .task(id: summary.end) {
+            selectedAngle = nil
+            selectedExercise = nil
             viewModel.load(summary: summary)
         }
     }
@@ -388,6 +381,17 @@ struct ExerciseMixDetailView: View {
                 .font(.headline)
                 .foregroundStyle(DS.Color.textSecondary)
 
+            Text("Touch and hold a segment to see details.")
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+            if viewModel.exerciseFrequencies.count > 8 {
+                Text("Top 8 exercises shown. Total includes all exercises.")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
             Chart(Array(displayFrequencies.enumerated()), id: \.element.id) { index, freq in
                 SectorMark(
                     angle: .value("Count", freq.count),
@@ -405,28 +409,20 @@ struct ExerciseMixDetailView: View {
                 if !dynamicTypeSize.isAccessibilitySize { donutCenterLabel }
             }
             .sensoryFeedback(.selection, trigger: selectedExercise)
-            .onAppear {
-                #if DEBUG
-                if selectionProbeEnabled {
-                    Self.selectionProbeLog.notice("ready pid=\(ProcessInfo.processInfo.processIdentifier, privacy: .public)")
-                }
-                #endif
-            }
-            .onChange(of: selectedAngle) { oldValue, newValue in
-                updateDonutSelection()
-                #if DEBUG
-                if selectionProbeEnabled {
-                    let old = oldValue.map { String($0) } ?? "nil"
-                    let new = newValue.map { String($0) } ?? "nil"
-                    let mapped = selectedExercise ?? "nil"
-                    Self.selectionProbeLog.notice("change pid=\(ProcessInfo.processInfo.processIdentifier, privacy: .public) old=\(old, privacy: .public) new=\(new, privacy: .public) mapped=\(mapped, privacy: .public)")
-                }
-                #endif
-            }
+            .onChange(of: selectedAngle) { _, _ in updateDonutSelection() }
 
             if dynamicTypeSize.isAccessibilitySize {
                 donutCenterLabel
                     .frame(maxWidth: .infinity)
+            }
+
+            if selectedExercise != nil {
+                Button("Clear Selection") {
+                    selectedAngle = nil
+                    selectedExercise = nil
+                }
+                .accessibilityIdentifier("activity-exercise-mix-clear-selection")
+                .frame(minHeight: 44, alignment: .leading)
             }
 
             // Legend
@@ -469,6 +465,7 @@ struct ExerciseMixDetailView: View {
             } else {
                 let total = viewModel.exerciseFrequencies.reduce(0) { $0 + $1.count }
                 Text(total.formattedWithSeparator)
+                    .accessibilityIdentifier("activity-exercise-mix-donut-total")
                     .font(.title3.weight(.semibold))
                     .monospacedDigit()
                 Text("total")
@@ -480,6 +477,8 @@ struct ExerciseMixDetailView: View {
     }
 
     private func updateDonutSelection() {
+        // The system clears the transient angle when the touch ends; keep the last selection readable.
+        guard selectedAngle != nil else { return }
         selectedExercise = ExerciseMixDetailViewModel.selectedExercise(
             for: selectedAngle, frequencies: displayFrequencies
         )

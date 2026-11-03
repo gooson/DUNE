@@ -921,11 +921,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         try assertExerciseMixDetail(maxText: true)
     }
 
-    func testActivityExerciseMixSelectionDiagnostic() throws {
-        try assertExerciseMixDetail(maxText: false, diagnostic: true)
-    }
-
-    private func assertExerciseMixDetail(maxText: Bool, diagnostic: Bool = false) throws {
+    private func assertExerciseMixDetail(maxText: Bool) throws {
         var configuration = launchConfiguration
         configuration.additionalArguments.append(contentsOf: ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
         if maxText {
@@ -933,7 +929,6 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
             ])
         }
-        if diagnostic { configuration.additionalArguments.append("--ui-a12-selection-probe") }
         launchApp(with: configuration)
         openActivityDetail(sectionIdentifier: AXID.activitySectionExerciseMix,
                            destinationIdentifier: AXID.activityExerciseMixDetailScreen, maxSwipes: maxText ? 32 : 12)
@@ -1001,61 +996,6 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             return element
         }
 
-        if diagnostic {
-            let chart = visible("activity-exercise-mix-donut-chart")
-            let frame = chart.frame
-            let window = app.windows.firstMatch
-            let windowFrame = window.frame
-            let namePrefix = "activity-exercise-mix-frequency-name-"
-            let countPrefix = "activity-exercise-mix-frequency-count-"
-            let names = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", namePrefix))
-                .allElementsBoundByIndex.sorted { $0.frame.minY < $1.frame.minY }
-            var rows: [(key: String, count: Int)] = []
-            for name in names.prefix(8) {
-                let key = String(name.identifier.dropFirst(namePrefix.count))
-                let count = app.staticTexts[countPrefix + key].firstMatch
-                XCTAssertTrue(count.waitForExistence(timeout: 10), "Missing frequency for \(key)")
-                let label = count.label
-                XCTAssertTrue(label.hasSuffix("x"))
-                let value = try XCTUnwrap(Int(String(label.dropLast()).replacingOccurrences(of: ",", with: "")))
-                XCTAssertGreaterThan(value, 0)
-                rows.append((key, value))
-            }
-            let first = try XCTUnwrap(rows.first)
-            let second = try XCTUnwrap(rows.dropFirst().first)
-            XCTAssertNotEqual(first.key, second.key)
-            let total = rows.reduce(0) { $0 + $1.count }
-            XCTAssertGreaterThan(total, 0)
-            func point(before: Int, count: Int) -> XCUICoordinate {
-                let angle = 2 * Double.pi * (Double(before) + Double(count) / 2) / Double(total)
-                let radius = 0.8 * min(frame.width, frame.height) / 2
-                return window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
-                    dx: frame.midX + radius * CGFloat(sin(angle)) - windowFrame.minX,
-                    dy: frame.midY - radius * CGFloat(cos(angle)) - windowFrame.minY
-                ))
-            }
-            func checkpoint(_ label: String) {
-                let selected = app.staticTexts.matching(NSPredicate(
-                    format: "identifier BEGINSWITH %@", "activity-exercise-mix-selected-name-"
-                )).allElementsBoundByIndex.map { "\($0.identifier)=\($0.label)" }
-                let attachment = XCTAttachment(string: "epoch=\(Date().timeIntervalSince1970);frame=\(frame);window=\(windowFrame);rows=\(rows.map { "\($0.key):\($0.count)" }.joined(separator: "|"));selected=\(selected)")
-                attachment.name = "A12 probe \(label) state"
-                attachment.lifetime = .keepAlways
-                add(attachment)
-                VisualAudit.capture("A12 probe \(label)")
-            }
-            let firstPoint = point(before: 0, count: first.count)
-            let secondPoint = point(before: first.count, count: second.count)
-            checkpoint("before")
-            firstPoint.tap()
-            checkpoint("short tap first")
-            firstPoint.press(forDuration: 1)
-            checkpoint("one second first")
-            secondPoint.press(forDuration: 1)
-            checkpoint("one second second")
-            return
-        }
-
         let total = visible("activity-exercise-mix-total")
         let parsedTotal = Int(total.label.replacingOccurrences(of: ",", with: ""))
         XCTAssertNotNil(parsedTotal, "The total must be an actual formatted integer: \(total.label)")
@@ -1120,6 +1060,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let first = try XCTUnwrap(plotted.first, "Missing first plotted frequency")
         let second = try XCTUnwrap(plotted.dropFirst().first, "Missing second plotted frequency")
         let plottedTotal = plotted.reduce(0) { $0 + $1.count }
+        var allFrequencyTotal = 0
+        for name in names {
+            let key = String(name.identifier.dropFirst(namePrefix.count))
+            let count = app.staticTexts[countPrefix + key].firstMatch
+            XCTAssertTrue(count.waitForExistence(timeout: 10))
+            let text = count.label
+            XCTAssertTrue(text.hasSuffix("x"), text)
+            allFrequencyTotal += try XCTUnwrap(Int(String(text.dropLast()).replacingOccurrences(of: ",", with: "")))
+        }
         XCTAssertGreaterThan(plottedTotal, 0)
         XCTAssertNotEqual(first.key, second.key)
 
@@ -1129,8 +1078,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             if index == 0 { VisualAudit.capture("A12 exercise mix full donut \(maxText ? "MAX" : "normal")") }
             let angle = 2 * Double.pi * (Double(preceding) + Double(row.count) / 2) / Double(plottedTotal)
             let radius = 0.8 * min(chart.frame.width, chart.frame.height) / 2
-            let center = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-            center.withOffset(CGVector(dx: radius * CGFloat(sin(angle)), dy: -radius * CGFloat(cos(angle)))).tap()
+            let plotFrame = chart.frame
+            let window = app.windows.firstMatch
+            let windowFrame = window.frame
+            let point = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                dx: plotFrame.midX + radius * CGFloat(sin(angle)) - windowFrame.minX,
+                dy: plotFrame.midY - radius * CGFloat(cos(angle)) - windowFrame.minY
+            ))
+            point.press(forDuration: 1)
             let selectedName = app.staticTexts["activity-exercise-mix-selected-name-\(row.key)"].firstMatch
             XCTAssertTrue(selectedName.waitForExistence(timeout: 10), "Expected selected sector \(row.key)")
             XCTAssertEqual(visible(selectedName.identifier).label, row.name)
@@ -1144,6 +1099,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             XCTAssertEqual(visible(countPrefix + row.key).label, row.countLabel)
         }
         VisualAudit.capture("A12 exercise mix frequency \(maxText ? "MAX" : "normal")")
+        _ = visible("activity-exercise-mix-clear-selection")
+        let clear = app.buttons["activity-exercise-mix-clear-selection"].firstMatch
+        XCTAssertTrue(clear.isHittable, "Clear selection must be usable")
+        clear.tap()
+        XCTAssertTrue(clear.waitForNonExistence(timeout: 10), "Clear should disappear after use")
+        let selected = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", "activity-exercise-mix-selected-name-"
+        )).firstMatch
+        XCTAssertTrue(selected.waitForNonExistence(timeout: 10), "Clearing must remove the selected exercise")
+        let donutTotal = visible("activity-exercise-mix-donut-total")
+        XCTAssertEqual(Int(donutTotal.label.replacingOccurrences(of: ",", with: "")), allFrequencyTotal,
+                       "Clearing must restore the actual total for all exercises")
+        VisualAudit.capture("A12 exercise mix cleared selection \(maxText ? "MAX" : "normal")")
         tapBackButton()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 10),
                       "Back should return to Activity")
