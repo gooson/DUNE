@@ -1225,13 +1225,19 @@
     },
     "A15": {
       "row_id": "A15",
-      "evidence": "test-and-action:activity-fatigue-algorithm-sheet",
+      "file": "A15.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditRecoveryAlgorithmExplanation()",
       "action": "activity-fatigue-algorithm-sheet",
-      "timestamp": 1792375086.728,
-      "image": "4B1EF0E3-445E-45C4-8F4E-45DE4360F02C.png",
-      "screen": "screen-0-1206x2622-activity-fatigue-algorithm-sheet_0_2D500A6A-D926-4AA3-A61E-0747F85629A2.png",
-      "file": "A15.png"
+      "source_revision": "95ecbe1846133c1e5d1073e24686ee5fff72e549",
+      "capture_kind": "xctest",
+      "image": "D01842EA-8D80-4545-BC33-F796CF75A7E6.png",
+      "screen": "screen-0-1320x2868-activity-fatigue-algorithm-sheet_0_5D1C60A4-3411-4E25-91F4-4920128AD3EA.png",
+      "timestamp": 1793725948.939,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "B2185D9A-3152-43B5-AB8A-913865AD1B69",
+      "image_sha256": "f660b04b5c01b21c4c840a0fa263ad9850f4f303f44fca07440fee923f9e3299",
+      "ax_sha256": "1bdadd821a1ac9944a649110988a19c3df886cdd015ed8d9ed97e5dec520d999",
+      "evidence": "activity-fatigue-algorithm-sheet"
     },
     "W09": {
       "row_id": "W09",
@@ -1376,9 +1382,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "bedf85663cf4997063e58a4b3d9e92224059f367",
+  "last_refresh_revision": "95ecbe1846133c1e5d1073e24686ee5fff72e549",
   "last_refresh_screens": [
-    "A14"
+    "A15"
   ],
-  "last_refresh_note": "English captures are ec97; reviewed English source/text equivalence to bedf is scoped, not a new-head test or capture."
+  "last_refresh_note": "Fresh corrected-source A15 captures; per-row source and device provenance retained."
 }

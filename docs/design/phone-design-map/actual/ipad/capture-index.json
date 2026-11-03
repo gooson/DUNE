@@ -985,13 +985,19 @@
     },
     "A15": {
       "row_id": "A15",
-      "evidence": "activity-fatigue-algorithm-sheet",
+      "file": "A15.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditRecoveryAlgorithmExplanation()",
-      "action": "tap activity-muscle-map-algorithm-info",
-      "timestamp": 1791838606.493,
-      "image": "ADDFD16E-E19F-4D99-8929-3B842A708882.png",
-      "screen": "screen-0-2064x2752-tap activity-muscle-map-algorithm-info_0_C90487C1-75C7-4433-8CFA-59314681D57E.png",
-      "file": "A15.png"
+      "action": "activity-fatigue-algorithm-sheet",
+      "source_revision": "95ecbe1846133c1e5d1073e24686ee5fff72e549",
+      "capture_kind": "xctest",
+      "image": "CCD6306D-1858-41B5-9B3E-70B8712093DF.png",
+      "screen": "screen-0-1512x2316-activity-fatigue-algorithm-sheet_0_7C22FAC3-D6B6-4A43-B57D-EC1F65E65F82.png",
+      "timestamp": 1793726167.523,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "3E063B55-3D07-4D97-888E-AD84712B08AC",
+      "image_sha256": "64bafc2db931225a8b02b7ee1aefb4677f03bfb666ba908d105b3d993c096fad",
+      "ax_sha256": "6cf354c13963a1fb8145ed21c9d6541bbf4e75a38b018af6b7059c98984b93db",
+      "evidence": "activity-fatigue-algorithm-sheet"
     },
     "T02": {
       "row_id": "T02",
@@ -1378,9 +1384,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "bedf85663cf4997063e58a4b3d9e92224059f367",
+  "last_refresh_revision": "95ecbe1846133c1e5d1073e24686ee5fff72e549",
   "last_refresh_screens": [
-    "A14"
+    "A15"
   ],
-  "last_refresh_note": "English captures are ec97; reviewed English source/text equivalence to bedf is scoped, not a new-head test or capture."
+  "last_refresh_note": "Fresh corrected-source A15 captures; per-row source and device provenance retained."
 }

@@ -1,0 +1,17 @@
+# A15 final source review — consolidated independent evidence
+
+P1 = 0, P2 = 0, P3 = 0 confirmed in the bounded final source and test-review scope. Final clean source `95ecbe1846133c1e5d1073e24686ee5fff72e549`, compared with actual A14 main `cfe6970c72bcc14a20123c8b565dce09d1c4e589`; `git diff --check` passes. This consolidates prior independent reviews; it is not a new full test run.
+
+- **Data/security:** No data model, calculation, storage, permission, network or source-query change. Corrected effective τ explanation `max(2 × recovery hours ÷ max(sleep × readiness, 0.1), 1 hour)` matches the existing calculation. The earlier misleading 72h/36h wording was removed, with one corrected manual en/ko/ja catalog key; other existing entries are unchanged. All 33 extracted sheet literals are present in the catalog. Earlier data finding was corrected and independently re-reviewed.
+- **Architecture/performance:** The generic native sheet and existing Activity info/recovery legend consumers remain; its component remains byte-identical to previously reviewed A15 `947fb7eab26aa9dafd90ca06efba2944f3bee291`. The UI-only card/hero arrangement introduces no new query or unbounded work; runtime performance was not profiled. A12/A13/A14 product views and actual map files are preserved in this source diff.
+- **Simplicity/Apple UI:** Existing 14-day overview, decay expression, sleep/biometric examples, ten levels, native sheet, legend, icons and dismissal remain. Exact corrected equation, all ten full-frame nonempty level assertions, dark MAX, named representative captures and actual system grabber dismissal were independently source-reviewed. The separate iPad A03 recovery-legend case verifies the actual generic consumer; it is distinct from A14's per-muscle sheet.
+- **Runtime limits:** Actual `95ec` closed Duo normal+dark MAX 2/2, open Duo normal 1/1, phone normal 1/1, iPad normal 1/1 and iPad A03 recovery-legend 1/1 passed and were independently reviewed. Actual native inspection sampled formula/τ and representative level glyphs; assertion of all ten levels does not mean all ten were visually inspected. Other locales, themes, states and VoiceOver speech/traversal are not established. Agent-native is not applicable to this screen.
+
+## Final hashes
+
+- `DUNE/Presentation/Activity/Components/FatigueAlgorithmSheet.swift`: `f3f84559ad797746749e2abf16d33dfb0fb170f6f19c305153c1ee9becfa64c4`
+- `Shared/Resources/Localizable.xcstrings`: `dc7eb994b43e906515e9f0255f3ed9e88862055c8d4a4e0882b5f9521a7d2ae0`
+- `DUNEUITests/Full/ActivityExerciseRegressionTests.swift`: `4e60d83d578b40cf1beea61ebbe6f44ee515d759b6587d4fcdf638e0d69dc403`
+- `DUNEUITests/Full/ActivityMuscleMapRegressionTests.swift`: `befcc5a03f5f821e81c7f9d0972ed6b5fb60f13ca3b80e06a3d897281393c912`
+
+Reused source evidence: `/private/tmp/a15-source-data-security-review.md`, `/private/tmp/a15-source-architecture-performance-simplicity-ui-review.md`, `/private/tmp/a15-correction-data-and-contract-review.md`, `/private/tmp/a15-tau-leaf-contract-review.md`, `/private/tmp/a15-a11-integration-independent-review.md`, `/private/tmp/a15-a14-integration-source-and-producer-review.md`. Final independent UI/catalog review `/private/tmp/a15-final-test-ui-and-catalog-review.md` SHA `cbbd762b28c985957c8a2de1a0978ee0732c16837826cc6fc9a5bdaca7fa10c0`; native review `/private/tmp/a15-native-95ec-quality-review.md` SHA `78069545bad666d9415c0a098d89a27d7fdd2512203381f65d12765fbc9fb437` as read. No build, test, simulator, device or repository mutation was performed for this consolidation.
