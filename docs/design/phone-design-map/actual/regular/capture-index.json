@@ -1163,13 +1163,19 @@
     },
     "A18": {
       "row_id": "A18",
-      "evidence": "test-and-action:activity-consistency-info-sheet",
+      "file": "A18.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditConsistencyExplanation()",
       "action": "activity-consistency-info-sheet",
-      "timestamp": 1792374935.952,
-      "image": "EDA84A48-DB10-434B-B547-C58DFC9781A1.png",
-      "screen": "screen-0-1206x2622-activity-consistency-info-sheet_0_983D30D8-8EA5-4024-861F-757D8FA4B6FA.png",
-      "file": "A18.png"
+      "source_revision": "d91f6248fc8a75e26a19822a28543368c1268832",
+      "capture_kind": "xctest",
+      "image": "7C81DA67-B396-44FB-851C-F1446D53F63A.png",
+      "screen": "screen-0-1320x2868-activity-consistency-info-sheet_0_28BFA3B5-3CAF-4450-9AE8-786798AF25CE.png",
+      "timestamp": 1793739334.149,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "92507125-C6D8-4D05-BE2E-467CE98DCF23",
+      "image_sha256": "e971b500ece0825334e0b467604791815c2bbb6af001b92728faf4bca02a185c",
+      "ax_sha256": "dab28a876d11093f2592030fbb9a292665108b4fcd9e4809502e66d7cd48c208",
+      "evidence": "activity-consistency-info-sheet"
     },
     "A19": {
       "row_id": "A19",
@@ -1394,9 +1400,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "6b857ae8cfc29fe7ec9f3a77a9c6d6af8992d509",
+  "last_refresh_revision": "d91f6248fc8a75e26a19822a28543368c1268832",
   "last_refresh_screens": [
-    "A17"
+    "A18"
   ],
-  "last_refresh_note": "Fresh corrected-source A17 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Fresh corrected-source A18 captures; per-row source and device provenance retained."
 }
