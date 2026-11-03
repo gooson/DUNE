@@ -141,7 +141,7 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
 
         // This iPad presentation exposes the native sheet as a scroll view with a drag indicator,
         // not as an XCUIElementTypeSheet. Use the single observed system grabber.
-        let grabbers = app.buttons.matching(NSPredicate(format: "label == %@", "시트 손잡이"))
+        let grabbers = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
         XCTAssertEqual(grabbers.count, 1, "The native sheet should expose one visible drag indicator")
         let grabber = grabbers.element(boundBy: 0)
         XCTAssertTrue(grabber.exists && grabber.isHittable, "The native sheet drag indicator should be reachable")

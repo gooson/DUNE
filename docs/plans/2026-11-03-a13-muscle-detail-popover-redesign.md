@@ -17,3 +17,7 @@ Source test scope: the existing Activity sheet selector and a new MAX/Dark selec
 ## A12 integration before native validation
 
 Merged actual A12 main `e1f4efa42c3253923c2405bc0a6bb612db7f9023`, preserving all published A12 comparisons, selected-sector behavior and original tests. The five documentation conflicts retain main plus the A13 proposal. A13 sheet and inline consumers remain separate native contracts. Use one closed-Duo Dark/MAX case as the constrained profile, normal captures on all four profiles, and the existing iPad inline/calculation flow; no full regression or duplicated MAX cases are requested.
+
+## Native test-driver correction after actual b26 failure
+
+The first closed Duo run built the app and executed both original cases, then failed 0/2. Normal reached all metric/calculation captures but its system label query omitted the observed English `Sheet Grabber` capitalization. MAX full slow swipes overshot a 58.7pt weekly-volume text within the feasible 390pt sheet viewport. The correction adds that exact known label variant to both existing native-sheet consumers and uses short centered window-relative drags, retaining the 16-step limit, whole-frame containment, data and dismissal assertions. Product sources and native interactions remain unchanged. All original raw failures are archived, and the existing check receives one evidence-based conditional retry under the user’s autonomous-validation authorization.

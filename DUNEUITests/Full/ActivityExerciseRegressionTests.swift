@@ -1417,11 +1417,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             for _ in 0..<16 {
                 let viewport = detailScroll.frame.intersection(app.windows.firstMatch.frame)
                 if element.exists && !element.frame.isEmpty && viewport.contains(element.frame) { break }
-                if element.exists && element.frame.midY < viewport.midY {
-                    detailScroll.swipeDown(velocity: .slow)
-                } else {
-                    detailScroll.swipeUp(velocity: .slow)
-                }
+                let window = app.windows.firstMatch
+                let direction: CGFloat = element.exists && element.frame.midY < viewport.midY ? 1 : -1
+                let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX,
+                    dy: viewport.midY - window.frame.minY
+                ))
+                let end = start.withOffset(CGVector(dx: 0, dy: direction * viewport.height * 0.18))
+                start.press(forDuration: 0.05, thenDragTo: end)
             }
             XCTAssertTrue(element.waitForExistence(timeout: 5), "Missing \(identifier)")
             XCTAssertFalse(element.frame.isEmpty, "Empty frame: \(identifier)")
@@ -1443,7 +1446,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let calculation = visible("activity-muscle-detail-calculation")
         XCTAssertTrue(calculation.isHittable, "The seeded compound score should retain its calculation action")
         VisualAudit.capture("A13 muscle detail calculation \(maxText ? "MAX" : "normal")")
-        let grabber = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet grabber", "시트 손잡이"])).firstMatch
+        let grabber = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"])).firstMatch
         XCTAssertTrue(grabber.waitForExistence(timeout: 5) && grabber.isHittable,
                       "The native sheet drag indicator should be reachable")
         let window = app.windows.firstMatch
