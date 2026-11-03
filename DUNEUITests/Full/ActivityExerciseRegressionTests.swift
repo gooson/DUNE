@@ -1293,6 +1293,35 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             VisualAudit.capture("Personal Records maximum AX Share")
             addScreenshotAttachment(named: "Personal Records maximum AX Share")
 
+            let periodMenu = app.buttons[AXID.activityPersonalRecordsPeriodPicker].firstMatch
+            reveal(periodMenu, named: "period menu")
+            XCTAssertGreaterThanOrEqual(periodMenu.frame.height, 44)
+            XCTAssertGreaterThanOrEqual(periodMenu.frame.width, 44)
+            let range = app.staticTexts["activity-personal-records-chart-range"].firstMatch
+            XCTAssertTrue(range.waitForExistence(timeout: 10))
+            let defaultRange = range.label
+            let originalBest = best.label
+            XCTAssertFalse(defaultRange.isEmpty)
+            XCTAssertEqual(periodMenu.value as? String, "6M")
+            VisualAudit.capture("Personal Records maximum AX period menu")
+            addScreenshotAttachment(named: "Personal Records maximum AX period menu")
+            var previousRange = defaultRange
+            for period in ["D", "W", "M", "Y", "6M"] {
+                reveal(periodMenu, named: "period menu")
+                periodMenu.tap()
+                let option = app.buttons["activity-personal-records-period-\(period)"].firstMatch
+                XCTAssertTrue(option.waitForExistence(timeout: 5), "\(period) menu choice should exist")
+                option.tap()
+                let changed = XCTNSPredicateExpectation(
+                    predicate: NSPredicate(format: "label != %@", previousRange), object: range
+                )
+                XCTAssertEqual(XCTWaiter.wait(for: [changed], timeout: 10), .completed,
+                               "The selected period should update its actual date range")
+                XCTAssertEqual(periodMenu.value as? String, period)
+                XCTAssertEqual(best.label, originalBest, "Period selection must preserve the all-time best")
+                previousRange = range.label
+            }
+            XCTAssertEqual(range.label, defaultRange, "Returning to 6M restores its original date range")
             captureLeaf(app.descendants(matching: .any)["personal-records-timeline-latest-value"].firstMatch,
                         named: "timeline latest value")
             captureLeaf(app.staticTexts["activity-personal-records-reward-level"].firstMatch,
@@ -1301,6 +1330,38 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                         named: "reward points")
             reveal(app.descendants(matching: .any)["activity-personal-records-level-progress"].firstMatch,
                    named: "level progress")
+            let badgesScroll = app.scrollViews["activity-personal-records-badges-scroll"].firstMatch
+            reveal(badgesScroll, named: "badge trophy viewport")
+            let badgeName = app.staticTexts["activity-personal-records-badge-name-badge-10-prs"].firstMatch
+            XCTAssertTrue(badgeName.waitForExistence(timeout: 10), "PR Collector badge should exist")
+            for _ in 0..<8 {
+                let visible = badgesScroll.frame.intersection(viewport())
+                let target = badgeName.frame
+                if !visible.isEmpty && !target.isEmpty && visible.contains(target) { break }
+                guard visible.width > 44, !target.isEmpty else { break }
+                let displacement: CGFloat
+                if target.minX < visible.minX {
+                    displacement = min(max(visible.minX - target.minX + 12, 1), visible.width * 0.35)
+                } else if target.maxX > visible.maxX {
+                    displacement = -min(max(target.maxX - visible.maxX + 12, 1), visible.width * 0.35)
+                } else {
+                    break
+                }
+                let origin = badgesScroll.frame.origin
+                let start = badgesScroll.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: visible.midX - origin.x, dy: visible.midY - origin.y))
+                let end = badgesScroll.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: visible.midX + displacement - origin.x,
+                                         dy: visible.midY - origin.y))
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+            let badgeViewport = badgesScroll.frame.intersection(viewport())
+            XCTAssertEqual(badgeName.label, "PR Collector")
+            XCTAssertFalse(badgeName.frame.isEmpty)
+            XCTAssertTrue(!badgeViewport.isEmpty && badgeViewport.contains(badgeName.frame),
+                          "The complete actual badge name must fit the visible trophy viewport")
+            VisualAudit.capture("Personal Records maximum AX badge PR Collector")
+            addScreenshotAttachment(named: "Personal Records maximum AX badge PR Collector")
 
             let titlePrefix = "activity-personal-records-achievement-title-"
             let firstTitle = app.staticTexts.matching(

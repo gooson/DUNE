@@ -274,16 +274,41 @@ struct PersonalRecordsDetailView: View {
         }
     }
 
+    @ViewBuilder
     private var periodPicker: some View {
-        Picker("Period", selection: $viewModel.selectedPeriod) {
-            ForEach(PersonalRecordsDetailViewModel.availablePeriods, id: \.self) { period in
-                Text(period.displayName)
-                    .tag(period)
-                    .accessibilityIdentifier("activity-personal-records-period-\(period.rawValue)")
+        if dynamicTypeSize.isAccessibilitySize {
+            Picker(selection: $viewModel.selectedPeriod) {
+                periodOptions
+            } label: {
+                HStack {
+                    Text("Period")
+                    Spacer(minLength: DS.Spacing.sm)
+                    Text(viewModel.selectedPeriod.displayName)
+                }
+                .font(.headline)
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
             }
+            .pickerStyle(.menu)
+            .font(.headline)
+            .frame(minHeight: 44)
+            .accessibilityIdentifier("activity-personal-records-period-picker")
+            .accessibilityValue(viewModel.selectedPeriod.displayName)
+        } else {
+            Picker("Period", selection: $viewModel.selectedPeriod) {
+                periodOptions
+            }
+            .pickerStyle(.segmented)
+            .accessibilityIdentifier("activity-personal-records-period-picker")
         }
-        .pickerStyle(.segmented)
-        .accessibilityIdentifier("activity-personal-records-period-picker")
+    }
+
+    private var periodOptions: some View {
+        ForEach(PersonalRecordsDetailViewModel.availablePeriods, id: \.self) { period in
+            Text(period.displayName)
+                .tag(period)
+                .accessibilityIdentifier("activity-personal-records-period-\(period.rawValue)")
+        }
     }
 
     // MARK: - Enhanced Timeline Chart

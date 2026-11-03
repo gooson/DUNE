@@ -43,7 +43,7 @@ struct AchievementHistorySection: View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text(group.month)
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .padding(.bottom, 2)
 
             ForEach(group.events) { event in

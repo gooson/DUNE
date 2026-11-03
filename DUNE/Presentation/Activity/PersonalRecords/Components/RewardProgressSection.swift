@@ -9,6 +9,7 @@ struct RewardProgressSection: View {
     let nextTier: RewardLevelTier?
     let levelProgress: (current: Int, needed: Int, fraction: Double)
 
+    @ScaledMetric(relativeTo: .caption) private var badgeWidth: CGFloat = 96
     @State private var showingInfoSheet = false
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
@@ -174,6 +175,7 @@ struct RewardProgressSection: View {
                     }
                 }
             }
+            .accessibilityIdentifier("activity-personal-records-badges-scroll")
         }
     }
 
@@ -189,12 +191,13 @@ struct RewardProgressSection: View {
                 }
 
             Text(badge.name)
+                .accessibilityIdentifier("activity-personal-records-badge-name-\(badge.id)")
                 .font(.caption.weight(.medium))
                 .foregroundStyle(DS.Color.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .frame(width: 96, alignment: .top)
+        .frame(width: badgeWidth, alignment: .top)
     }
 
     // MARK: - Fun Comparisons
