@@ -169,3 +169,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 2026-10-31 [A03 2D 근육 지도 상세 배치 시안](activity-muscle-map-detail-a03.html)은 A04의 비활성 3D 진입을 보존하면서 실제 앞/뒤 SVG 지도·Recovery/Sets 범례·선택 근육·볼륨·회복 정보의 새 위계를 정한다. 실제 iPad 기본 캡처의 종아리 가림을 반영해 regular에서는 회복 히어로를 secondary 첫 항목으로, compact에서는 primary 지도 위로 둔다. 도식의 몸체와 막대는 설명용이며 네이티브 캡처·측정값이 아니다.
 
 2026-10-31 [A05 주간 운동 통계 상세 배치](activity-weekly-stats-detail-a05.html)는 기존 세 기간·현재 다섯 지표·이전 기간 실제 네 비교 행·한 날짜 캡션·세 차트 지표와 운동 종류 분해의 화면별 계약이다. [DUNE 테마 방향](../theme-map/themes/dune-weekly-stats-detail-a05.html)의 수치 자리와 막대는 설명용이며 네이티브 캡처가 아니다.
+
+- [A14 근육별 피로 설명](activity-fatigue-explanation-a14.html): 실제 계산 값을 보존하는 시트 배치 계약.

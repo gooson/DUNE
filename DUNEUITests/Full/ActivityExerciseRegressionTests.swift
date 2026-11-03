@@ -1224,9 +1224,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let calculation = app.buttons["activity-muscle-detail-calculation"].firstMatch
         XCTAssertTrue(calculation.waitForExistence(timeout: 8))
         calculation.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)["activity-fatigue-info-sheet"].firstMatch
-            .waitForExistence(timeout: 10))
+        let sheet = app.scrollViews["activity-fatigue-info-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        XCTAssertTrue(sheet.descendants(matching: .any)["activity-fatigue-info-header"].firstMatch.exists)
+        XCTAssertTrue(sheet.descendants(matching: .any)["activity-fatigue-info-contributions"].firstMatch.exists)
         VisualAudit.capture("Muscle fatigue explanation")
+        let result = sheet.descendants(matching: .any)["activity-fatigue-info-result"].firstMatch
+        for _ in 0..<12 where !result.isHittable { sheet.swipeUp(velocity: .slow) }
+        XCTAssertTrue(result.exists && result.isHittable, "The actual fatigue result should be reachable")
+        VisualAudit.capture("Muscle fatigue explanation result")
     }
 
     func testVisualAuditRecommendationEquipmentInfo() throws {

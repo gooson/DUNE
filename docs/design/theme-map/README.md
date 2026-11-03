@@ -254,3 +254,5 @@ A05 네이티브 소스는 원래 `ActivityStat.iconColor`를 불투명 히어�
 2026-11-03 T09 [가독성 개선 두 시안](themes/dune-morning-briefing-readability.html)을 추가했다. **정보 강조**는 수면·HRV·주간 횟수를 분리해 크게 표시하고, **풍경 유지**는 낮은 장식 띠 아래 큰 제목·본문으로 기존 분위기를 유지한다. 수치는 사용자 첨부 화면의 예시다. 원래 시안은 별도 보존하고 앱 소스는 원복했다. 새 네이티브 적용·실제 캡처가 아니며 선택 전에는 UI 검증을 진행하지 않는다.
 
 2026-11-03 후속 선택: 아침 브리핑은 **1번 정보 강조**로 구현한다. T04 [기여 카드 높이 시안](themes/condition-contribution-alignment.html)도 보존했다. 같은 행의 HRV·RHR는 날짜 유무와 관계없이 같은 높이와 내부 시작선을 사용한다. 두 시안은 네이티브 캡처가 아니며 실제 검증은 별도 출처로 관리한다.
+
+2026-11-03 [A14 근육별 피로 설명](themes/dune-fatigue-explanation-a14.html)은 실제 값과 14일 기여 행을 위한 시안이며 네이티브 캡처가 아니다. [배치 계약](../layout-map/activity-fatigue-explanation-a14.html)을 따른다.
