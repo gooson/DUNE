@@ -564,7 +564,7 @@ struct PersonalRecordsDetailView: View {
             if let subtitle = record.subtitle {
                 Text(subtitle)
                     .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
@@ -585,7 +585,7 @@ struct PersonalRecordsDetailView: View {
 
             Text(record.date, style: .date)
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity, minHeight: cardMinHeight, alignment: .topLeading)
         .padding(DS.Spacing.sm)
