@@ -1354,7 +1354,157 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testVisualAuditPersonalRecordsExplanation() throws {
+        try verifyPersonalRecordsExplanation(maxText: false)
+    }
+
+    func testPersonalRecordsExplanationAtMaximumAccessibilityTextSize() throws {
+        try verifyPersonalRecordsExplanation(maxText: true)
+    }
+
+    private func verifyPersonalRecordsExplanation(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += [
+                "--ui-test-style", "dark",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+        }
+        launchApp(with: configuration)
         openActivityInfo(button: "activity-pr-info", sheet: "activity-personal-records-info-sheet")
+        // openActivityInfo keeps the original, pre-scroll canonical capture.
+        let sheet = app.scrollViews["activity-personal-records-info-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        let window = app.windows.firstMatch
+        let grabbers = app.buttons.matching(NSPredicate(
+            format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]
+        ))
+        XCTAssertEqual(grabbers.count, 1)
+        let grabber = grabbers.element(boundBy: 0)
+        XCTAssertTrue(grabber.exists && grabber.isHittable)
+        XCTAssertTrue(window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame))
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height)
+        if maxText {
+            // The native grabber exposes Expanded on the observed English simulator.
+            // A large detent may already be selected when the sheet appears.
+            let initialValue = grabber.value as? String
+            VisualAudit.capture("A17 Personal Records dark MAX initial detent")
+            if initialValue != "Expanded" {
+                let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                start.press(forDuration: 0.1, thenDragTo: start.withOffset(
+                    CGVector(dx: 0, dy: -window.frame.height * 0.35)
+                ))
+                XCTAssertEqual(grabber.value as? String, "Expanded",
+                               "The native grabber must report the large detent after the upward drag")
+            }
+            XCTAssertEqual(grabber.value as? String, "Expanded",
+                           "MAX text requires the native large detent")
+            VisualAudit.capture("A17 Personal Records dark MAX expanded sheet")
+        }
+
+        var oversizedTextIndex = 0
+        func reveal(_ expected: String) {
+            let item = sheet.staticTexts[expected].firstMatch
+            XCTAssertTrue(item.waitForExistence(timeout: 10), "Missing exact text: \(expected)")
+            XCTAssertEqual(item.label, expected, "Text must be complete: \(expected)")
+            XCTAssertFalse(item.frame.isEmpty)
+            func viewport() -> CGRect { sheet.frame.intersection(window.frame) }
+            func horizontallyContained() -> Bool {
+                let visible = viewport()
+                return item.frame.minX >= visible.minX && item.frame.maxX <= visible.maxX
+            }
+            func drag(_ direction: CGFloat) {
+                let visible = viewport()
+                let origin = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                    dx: visible.midX - window.frame.minX, dy: visible.midY - window.frame.minY
+                ))
+                origin.press(forDuration: 0.05, thenDragTo: origin.withOffset(CGVector(
+                    dx: 0, dy: direction * visible.height * 0.18
+                )))
+            }
+            XCTAssertTrue(horizontallyContained(), "Text overflows sheet width: \(expected)")
+            if item.frame.height <= viewport().height {
+                for _ in 0..<30 where !viewport().contains(item.frame) {
+                    drag(item.frame.midY < viewport().midY ? 1 : -1)
+                }
+                XCTAssertTrue(viewport().contains(item.frame), "Short text must fit fully: \(expected)")
+                return
+            }
+            // An oversized AX Text cannot fit vertically in a single viewport. Observe
+            // its top and bottom, with overlapping content intervals between captures.
+            for _ in 0..<30 where !(item.frame.minY >= viewport().minY && item.frame.minY < viewport().maxY) {
+                drag(item.frame.minY < viewport().minY ? 1 : -1)
+            }
+            XCTAssertTrue(item.frame.minY >= viewport().minY && item.frame.minY < viewport().maxY,
+                          "Tall text top must be visible: \(expected)")
+            XCTAssertTrue(horizontallyContained())
+            oversizedTextIndex += 1
+            VisualAudit.capture("A17 Personal Records tall text \(oversizedTextIndex) top \(maxText ? "MAX" : "normal")")
+            var reachedBottom = item.frame.maxY <= viewport().maxY
+            for _ in 0..<30 where !reachedBottom {
+                let before = item.frame.intersection(viewport())
+                let beforeEnd = before.maxY - item.frame.minY
+                drag(-1)
+                let after = item.frame.intersection(viewport())
+                let afterStart = after.minY - item.frame.minY
+                let afterEnd = after.maxY - item.frame.minY
+                XCTAssertFalse(after.isEmpty, "Tall text interval disappeared")
+                XCTAssertTrue(horizontallyContained(), "Tall text overflows sheet width")
+                XCTAssertLessThanOrEqual(afterStart, beforeEnd + 1,
+                                         "Tall text intervals must overlap")
+                XCTAssertGreaterThan(afterEnd, beforeEnd + 1,
+                                     "Tall text scroll must make visible progress")
+                reachedBottom = item.frame.maxY <= viewport().maxY && !after.isEmpty
+            }
+            XCTAssertTrue(reachedBottom, "Tall text bottom must be visible: \(expected)")
+            VisualAudit.capture("A17 Personal Records tall text \(oversizedTextIndex) bottom \(maxText ? "MAX" : "normal")")
+        }
+
+        reveal("Personal Records (PR)")
+        XCTAssertFalse(sheet.staticTexts["Personal Records"].exists, "Repeated subtitle should be gone")
+        let sections: [(String, [String])] = [
+            ("Overview", [
+                "Tracks your personal bests by analyzing both strength and cardio records. View your progress on one screen and use it to adjust your training direction."
+            ]),
+            ("How It's Measured", [
+                "Strength records include weight records, estimated 1RM, rep-max records, and session volume.",
+                "Abnormal values are automatically excluded (e.g., 0 or out-of-range values)"
+            ]),
+            ("HealthKit Integration", [
+                "Displays heart rate, steps, weather, and indoor/outdoor info when available",
+                "Cards are hidden with a notice when permissions are missing or data is unavailable"
+            ]),
+            ("NEW Badge", [
+                "Shown on records updated within the last 7 days",
+                "Visually track your consistent progress"
+            ]),
+            ("Tips", [
+                "Review weight trends for strength and pace/distance trends for cardio",
+                "Consistent repetition beats aggressive intensity for long-term gains"
+            ])
+        ]
+        for (heading, texts) in sections {
+            reveal(heading)
+            for text in texts { reveal(text) }
+            VisualAudit.capture("A17 Personal Records \(heading) \(maxText ? "MAX" : "normal")")
+        }
+
+        XCTAssertTrue(grabber.exists && grabber.isHittable)
+        XCTAssertTrue(window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame))
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height)
+        let endY = window.frame.maxY - 40
+        XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3)
+        let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+            dx: grabber.frame.midX - window.frame.minX, dy: endY - window.frame.minY
+        ))
+        start.press(forDuration: 0.1, thenDragTo: end,
+                    withVelocity: XCUIGestureVelocity(rawValue: 1_000), thenHoldForDuration: 0)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10), "Native sheet should dismiss")
+        XCTAssertTrue(app.scrollViews[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["activity-pr-info"].firstMatch.waitForExistence(timeout: 5),
+                      "Dismissal should return to Activity personal records")
+        VisualAudit.capture("A17 Personal Records dismissed \(maxText ? "MAX" : "normal")")
     }
 
     func testVisualAuditConsistencyExplanation() throws {
