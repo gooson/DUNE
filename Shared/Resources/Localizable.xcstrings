@@ -1867,6 +1867,29 @@
         }
       }
     },
+    "%lld days to go" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld days to go"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残り%lld日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld일 남았어요"
+          }
+        }
+      }
+    },
     "%lld elevated nights in 30 days" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2294,6 +2317,29 @@
         }
       }
     },
+    "%lld points" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld points"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldポイント"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld점"
+          }
+        }
+      }
+    },
     "%lld posture warnings detected" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2596,6 +2642,29 @@
         }
       }
     },
+    "%lld/%lld days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld days"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld일"
+          }
+        }
+      }
+    },
     "%lld/%lld done" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2609,23 +2678,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld/%lld 완료"
-          }
-        }
-      }
-    },
-    "%lld/%lld exercise days done, %lld to go." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "運動%lld/%lld日完了、残り%lld日。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "운동 %lld/%lld일 완료, %lld일 남았어요."
           }
         }
       }
@@ -6833,19 +6885,25 @@
         }
       }
     },
-    "Average condition: %lld points." : {
+    "Average Condition" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Average Condition"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "平均コンディション: %lld点。"
+            "value" : "平均コンディション"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "평균 컨디션: %lld점."
+            "value" : "평균 컨디션"
           }
         }
       }
@@ -17116,6 +17174,29 @@
         }
       }
     },
+    "Exercise Days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exercise Days"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "運動日数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 일수"
+          }
+        }
+      }
+    },
     "Exercise Defaults" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -23282,6 +23363,29 @@
         }
       }
     },
+    "HRV vs. Yesterday" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HRV vs. Yesterday"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "昨日比のHRV"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "어제보다 HRV"
+          }
+        }
+      }
+    },
     "HRV z-score evaluates autonomic nervous system state" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -25207,6 +25311,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "지난밤: %lld시간 %lld분 수면"
+          }
+        }
+      }
+    },
+    "Last Night's Sleep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Night's Sleep"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "昨夜の睡眠"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "어젯밤 수면"
           }
         }
       }
@@ -31982,23 +32109,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@에 기록된 운동이 없어요."
-          }
-        }
-      }
-    },
-    "No workouts yet this week — start today!" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今週はまだ運動していません — 今日始めましょう！"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이번 주 아직 운동 기록이 없어요 — 오늘 시작해보세요!"
           }
         }
       }
@@ -48138,6 +48248,29 @@
         }
       }
     },
+    "Today's Condition" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today's Condition"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日のコンディション"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘의 컨디션"
+          }
+        }
+      }
+    },
     "Today's condition score was %lld (%@%lld from yesterday)." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -48454,6 +48587,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오늘의 요약"
+          }
+        }
+      }
+    },
+    "Today's Workout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today's Workout"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日の運動"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘의 운동"
           }
         }
       }
@@ -52491,6 +52647,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "주별 평균"
+          }
+        }
+      }
+    },
+    "Weekly Exercise Goal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekly Exercise Goal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週間運動目標"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주간 운동 목표"
           }
         }
       }

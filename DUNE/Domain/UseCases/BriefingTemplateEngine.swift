@@ -3,28 +3,98 @@ import Foundation
 /// Template-based text generation for morning briefing sections.
 /// Produces localized text from MorningBriefingData without external dependencies.
 enum BriefingTemplateEngine {
+    struct Highlight: Sendable, Identifiable {
+        enum Kind: String, Sendable {
+            case sleep, hrv, exercise, average
+        }
+
+        let id: Kind
+        let title: String
+        let value: String
+    }
+
     struct Sections: Sendable {
         let recoveryTitle: String
         let recoveryMessage: String
         let guideTitle: String
         let guideMessage: String
         let weeklyTitle: String
-        let weeklyMessage: String
         let weatherTitle: String?
         let weatherMessage: String?
+        let recoveryHighlights: [Highlight]
+        let recoverySupportingMessage: String?
+        let weeklyHighlights: [Highlight]
+        let weeklySupportingMessage: String?
+        let weeklyGoalProgress: Double?
     }
 
     static func generate(from data: MorningBriefingData) -> Sections {
-        Sections(
+        let highlights = recoveryHighlights(for: data)
+        return Sections(
             recoveryTitle: recoveryTitle(for: data),
             recoveryMessage: recoveryMessage(for: data),
             guideTitle: guideTitle(for: data),
             guideMessage: guideMessage(for: data),
             weeklyTitle: weeklyTitle(for: data),
-            weeklyMessage: weeklyMessage(for: data),
             weatherTitle: data.hasWeatherData ? weatherTitle(for: data) : nil,
-            weatherMessage: data.hasWeatherData ? weatherMessage(for: data) : nil
+            weatherMessage: data.hasWeatherData ? weatherMessage(for: data) : nil,
+            recoveryHighlights: highlights,
+            recoverySupportingMessage: recoverySupportingMessage(for: data, hasHighlights: !highlights.isEmpty),
+            weeklyHighlights: weeklyHighlights(for: data),
+            weeklySupportingMessage: weeklySupportingMessage(for: data),
+            weeklyGoalProgress: data.goalDays > 0
+                ? Double(max(0, min(data.activeDays, data.goalDays))) / Double(data.goalDays)
+                : nil
         )
+    }
+
+    private static func recoveryHighlights(for data: MorningBriefingData) -> [Highlight] {
+        var highlights: [Highlight] = []
+        if let minutes = data.sleepDurationMinutes,
+           minutes.isFinite, minutes >= 0, minutes < Double(Int.max) {
+            let hours = Int(minutes) / 60
+            let remainder = Int(minutes) % 60
+            let value = remainder == 0
+                ? String(localized: "\(hours)h")
+                : String(localized: "\(hours)h \(remainder)min")
+            highlights.append(Highlight(id: .sleep, title: String(localized: "Last Night's Sleep"), value: value))
+        }
+        if let delta = data.hrvDelta, delta.isFinite, abs(delta) < Double(Int.max) {
+            let value = delta == 0
+                ? 0.formatted()
+                : delta.formatted(.number.precision(.significantDigits(1...3)).sign(strategy: .always()))
+            highlights.append(Highlight(id: .hrv, title: String(localized: "HRV vs. Yesterday"), value: "\(value) ms"))
+        }
+        return highlights
+    }
+
+    private static func recoverySupportingMessage(for data: MorningBriefingData, hasHighlights: Bool) -> String? {
+        if !hasHighlights { return recoveryMessage(for: data) }
+        guard let delta = data.rhrDelta, delta.isFinite, abs(delta) < Double(Int.max), delta != 0 else { return nil }
+        let value = Int(abs(delta))
+        return delta < 0
+            ? String(localized: "RHR dropped \(value)bpm — a positive sign.")
+            : String(localized: "RHR is up \(value)bpm from yesterday.")
+    }
+
+    private static func weeklyHighlights(for data: MorningBriefingData) -> [Highlight] {
+        let activeDays = max(0, data.activeDays)
+        let exerciseValue = data.goalDays > 0
+            ? String(localized: "\(activeDays)/\(data.goalDays) days")
+            : String(localized: "\(activeDays) days")
+        var highlights = [Highlight(id: .exercise, title: String(localized: "Exercise Days"), value: exerciseValue)]
+        if !data.recentScores.isEmpty {
+            highlights.append(Highlight(id: .average, title: String(localized: "Average Condition"), value: String(localized: "\(data.weeklyAverage) points")))
+        }
+        return highlights
+    }
+
+    private static func weeklySupportingMessage(for data: MorningBriefingData) -> String? {
+        guard data.goalDays > 0 else { return nil }
+        let remaining = data.goalDays - max(0, min(data.activeDays, data.goalDays))
+        return remaining == 0
+            ? String(localized: "Weekly exercise goal completed!")
+            : String(localized: "\(remaining) days to go")
     }
 
     // MARK: - Recovery Summary
@@ -47,7 +117,8 @@ enum BriefingTemplateEngine {
     private static func recoveryMessage(for data: MorningBriefingData) -> String {
         var parts: [String] = []
 
-        if let sleepMinutes = data.sleepDurationMinutes, sleepMinutes >= 0 {
+        if let sleepMinutes = data.sleepDurationMinutes,
+           sleepMinutes.isFinite, sleepMinutes >= 0, sleepMinutes < Double(Int.max) {
             let hours = Int(sleepMinutes) / 60
             let mins = Int(sleepMinutes) % 60
             if mins > 0 {
@@ -57,7 +128,7 @@ enum BriefingTemplateEngine {
             }
         }
 
-        if let hrvDelta = data.hrvDelta {
+        if let hrvDelta = data.hrvDelta, hrvDelta.isFinite, abs(hrvDelta) < Double(Int.max) {
             let absValue = Int(abs(hrvDelta))
             if hrvDelta > 0 {
                 parts.append(String(localized: "HRV is up \(absValue)ms from yesterday."))
@@ -66,7 +137,7 @@ enum BriefingTemplateEngine {
             }
         }
 
-        if let rhrDelta = data.rhrDelta {
+        if let rhrDelta = data.rhrDelta, rhrDelta.isFinite, abs(rhrDelta) < Double(Int.max) {
             let absValue = Int(abs(rhrDelta))
             if rhrDelta < 0 {
                 parts.append(String(localized: "RHR dropped \(absValue)bpm — a positive sign."))
@@ -133,23 +204,6 @@ enum BriefingTemplateEngine {
             }
         }
         return String(localized: "Your week so far")
-    }
-
-    private static func weeklyMessage(for data: MorningBriefingData) -> String {
-        var parts: [String] = []
-
-        parts.append(String(localized: "Average condition: \(data.weeklyAverage) points."))
-
-        let remaining = max(0, data.goalDays - data.activeDays)
-        if remaining == 0 {
-            parts.append(String(localized: "Weekly exercise goal completed!"))
-        } else if data.activeDays > 0 {
-            parts.append(String(localized: "\(data.activeDays)/\(data.goalDays) exercise days done, \(remaining) to go."))
-        } else {
-            parts.append(String(localized: "No workouts yet this week — start today!"))
-        }
-
-        return parts.joined(separator: " ")
     }
 
     // MARK: - Weather
