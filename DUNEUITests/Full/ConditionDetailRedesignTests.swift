@@ -49,6 +49,57 @@ final class ConditionDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(screen.exists)
     }
 
+    func testPriorRHRDateKeepsContributionCardsAndRowsAligned() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-visual-condition-prior-rhr-fixture"]
+        launchApp(with: configuration)
+        openConditionDetail(relaunch: false)
+
+        let hrvCard = app.descendants(matching: .any)["condition-contribution-hrv"].firstMatch
+        let rhrCard = app.descendants(matching: .any)["condition-contribution-rhr"].firstMatch
+        let priorDate = app.staticTexts["condition-contribution-date-rhr"].firstMatch
+        XCTAssertTrue(revealWhole(rhrCard), "The dated RHR card should fit in the viewport")
+        XCTAssertTrue(hrvCard.exists)
+        XCTAssertTrue(priorDate.exists, "The previous RHR sample date must remain visible")
+        XCTAssertTrue(priorDate.label.rangeOfCharacter(from: .decimalDigits) != nil)
+        XCTAssertLessThanOrEqual(priorDate.frame.maxY, rhrCard.frame.maxY)
+        XCTAssertEqual(hrvCard.frame.minY, rhrCard.frame.minY, accuracy: 1)
+        XCTAssertEqual(hrvCard.frame.height, rhrCard.frame.height, accuracy: 1,
+                       "The undated HRV card should stretch to match the dated RHR card")
+
+        for row in ["title", "value", "impact"] {
+            let hrv = app.staticTexts["condition-contribution-\(row)-hrv"].firstMatch
+            let rhr = app.staticTexts["condition-contribution-\(row)-rhr"].firstMatch
+            XCTAssertTrue(hrv.exists && rhr.exists)
+            XCTAssertEqual(hrv.frame.minY, rhr.frame.minY, accuracy: 1,
+                           "Both contribution \(row) rows should start at the same height")
+        }
+        VisualAudit.capture("Condition aligned contribution cards with prior RHR date")
+    }
+
+    func testPriorRHRDateStacksContributionCardsAtMaximumText() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-visual-condition-prior-rhr-fixture",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openConditionDetail(relaunch: false)
+        let hrvCard = app.descendants(matching: .any)["condition-contribution-hrv"].firstMatch
+        let rhrCard = app.descendants(matching: .any)["condition-contribution-rhr"].firstMatch
+        XCTAssertTrue(hrvCard.exists && rhrCard.exists)
+        XCTAssertEqual(hrvCard.frame.minX, rhrCard.frame.minX, accuracy: 1)
+        XCTAssertEqual(hrvCard.frame.width, rhrCard.frame.width, accuracy: 1)
+        XCTAssertGreaterThanOrEqual(rhrCard.frame.minY, hrvCard.frame.maxY)
+        for metric in ["hrv", "rhr"] {
+            let value = app.staticTexts["condition-contribution-value-\(metric)"].firstMatch
+            XCTAssertTrue(revealWhole(value), "Large metric values should remain readable")
+            VisualAudit.capture("Condition maximum text \(metric) aligned card")
+        }
+        XCTAssertTrue(revealWhole(app.staticTexts["condition-contribution-date-rhr"].firstMatch))
+        VisualAudit.capture("Condition maximum text prior RHR date")
+    }
+
     func testPeriodWindowAndTrendControlsUpdateVisibleReadback() {
         openConditionDetail()
         let picker = app.segmentedControls["condition-period-picker"].firstMatch

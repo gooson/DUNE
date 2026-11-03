@@ -55,13 +55,20 @@
     },
     "A05": {
       "row_id": "A05",
-      "evidence": "activity-weeklystats-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
-      "action": "tap activity-section-weeklystats",
-      "timestamp": 1791816404.638,
-      "image": "BF02B9CF-82FE-4876-9A08-B2617E570600.png",
-      "screen": "screen-0-1320x2868-tap activity-section-weeklystats_0_DA7559B4-7CFC-44F9-99F6-C821CA292511.png",
-      "file": "A05.png"
+      "file": "A05.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect()",
+      "action": "Weekly stats detail",
+      "source_revision": "d79a4666c3d2b16044b577937f64450e9dc7e2fe",
+      "normal_source_review_head": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+      "capture_kind": "xctest",
+      "image": "935B859E-A816-4D2B-B4BD-590DE66AA382.png",
+      "screen": "screen-0-1320x2868-Weekly stats detail_0_1F4B92B2-889D-4F4E-8528-6CA25E403603.png",
+      "timestamp": 1793670560.818,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "87B2D0F2-137D-4072-9F48-EFB68D9B2049",
+      "image_sha256": "48a0851fe80f0cfea891be6b54e42e428d0d2449bf3814e6414c0125573fd570",
+      "ax_sha256": "53689646f8d18e685a0423174534002831da76b1dbd0612ce58f339abb35efe4",
+      "evidence": "activity-weeklystats-detail-screen"
     },
     "A03": {
       "row_id": "A03",
@@ -232,21 +239,21 @@
     "T09": {
       "row_id": "T09",
       "evidence": "dashboard-morning-briefing-screen",
-      "test": "DUNEUITests/TodaySettingsRegressionTests/testMorningBriefingSectionsAndDismissal",
-      "action": "T09 briefing recovery title_0_BBC76897-628A-4851-8765-497F9992E7CE.png",
-      "timestamp": 1793608052.118,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingInformationHighlightsInKorean()",
+      "action": "T09 information first Korean top_0_46EC2316-CF28-4209-8D78-4D0FC395DF8F.png",
+      "timestamp": 1793680578.666,
       "timestamp_kind": "native-XCTest-attachment",
-      "image": "F07709E0-6276-46D2-89E4-0A7C4E4C4C9C.png",
-      "screen": "T09 briefing recovery title_0_BBC76897-628A-4851-8765-497F9992E7CE.png",
+      "capture_kind": "native-XCTest-attachment",
+      "image": "0EB76537-38A3-46E4-BF5E-54D95D515A7D.png",
+      "screen": "T09 information first Korean top_0_D4DEFF25-7265-47B4-ABF3-4ECC83CFA4D4.png",
       "file": "T09.png",
-      "source_revision": "94d7a48b",
-      "source_worktree_dirty": false,
-      "device_udid": "178C413B-EB1F-4E2F-B5A7-F76534234CE9",
-      "sha256": "f6a4b4b728a2464b6a6b13ccbf16f0854063a4bbc862d850e7039c4ecf6f3626",
-      "source_json": "../../../full-redesign-map/review/t09-morning-briefing-native-2026-11-02/evidence.json",
-      "source_record": "pairs.regular.after",
-      "capture_scope": "Focused T09 native layout; see actual source and test-version limits",
-      "pose_readback_verified": false
+      "source_revision": "df53412c41340861722d422c8da6f4fa0d8e77fd",
+      "source_worktree_dirty": true,
+      "device_udid": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "sha256": "0386d54ab225116240049e27a6e3b411c005f8ad5d6793cbd594b47cef973327",
+      "source_json": "../../../full-redesign-map/review/briefing-condition-readability-2026-11-03/evidence.json",
+      "source_record": "selected.regular.T09",
+      "capture_scope": "Post-review final Korean briefing UI1 PASS; history present; Phone AX supplemental predates formatter/provenance resolve"
     },
     "T11": {
       "row_id": "T11",
@@ -1305,27 +1312,28 @@
     "T04": {
       "row_id": "T04",
       "evidence": "condition-score-detail-screen",
-      "test": "ConditionDetailRedesignTests/testHeroContributionsAndUnifiedTrendAreReachable()",
-      "action": "Condition detail top hero",
-      "timestamp": 1793309033.533,
-      "image": "E038C322-87E7-467E-BC48-CB14DAF5C930.png",
-      "screen": "screen-0-1320x2868-Condition detail top hero_0_231CB4AE-1427-4929-AA82-DF9E5B885275.png",
+      "test": "ConditionDetailRedesignTests/testPriorRHRDateKeepsContributionCardsAndRowsAligned()",
+      "action": "screen-0-1206x2622-Condition aligned contribution cards with prior RHR date_0_4F55CA4D-AB3C-4C33-85B3-C284D6FFCBBF.png",
+      "timestamp": 1793669339.838,
+      "timestamp_kind": "native-XCTest-attachment",
+      "capture_kind": "native-XCTest-attachment",
+      "image": "FB23A237-FB5F-434D-BFF0-4192C56686C0.png",
+      "screen": "screen-0-1206x2622-Condition aligned contribution cards with prior RHR date_0_4F55CA4D-AB3C-4C33-85B3-C284D6FFCBBF.png",
       "file": "T04.png",
-      "source_revision": "abe732c1",
+      "source_revision": "df53412c41340861722d422c8da6f4fa0d8e77fd",
       "source_worktree_dirty": true,
-      "device_id": "15B032B0-FEA4-465A-B5C1-A10F7CADA216",
-      "fixture": "fixture100",
-      "selected_test_result": "Passed",
-      "original_run_failed_tests": 0,
-      "fixture_data_note": "DEBUG test fixture data; not real user health records.",
-      "xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_06-19-55-+0900.xcresult"
+      "device_udid": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "sha256": "b0ba51944ac6610fbe231d74a33d974098f5c7fd44d00f680afd8c7e2165d5a8",
+      "source_json": "../../../full-redesign-map/review/briefing-condition-readability-2026-11-03/evidence.json",
+      "source_record": "selected.regular.T04",
+      "capture_scope": "2026-11-03 targeted readability and equal-height fix; default text only; Phone max text supplemental"
     }
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "c0b51078",
+  "last_refresh_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
   "last_refresh_screens": [
-    "T06"
+    "A05"
   ],
-  "last_refresh_note": "T06 HRV only; all unrelated records including T05 and original global provenance preserved. iPad capture is historical Oct31."
+  "last_refresh_note": "Per-row source revisions retained; d79 content/layout closure excludes ambient wave phase."
 }

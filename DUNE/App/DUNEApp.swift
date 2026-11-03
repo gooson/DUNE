@@ -72,6 +72,12 @@ struct DUNEApp: App {
         return arguments.contains("--uitesting") || arguments.contains("--healthkit-permission-uitest")
     }
 
+#if DEBUG
+    private static var uiAnimationsDisabled: Bool {
+        isRunningUITests && ProcessInfo.processInfo.arguments.contains("--ui-disable-animations")
+    }
+#endif
+
     private static var isRunningLaunchPermissionUITest: Bool {
         ProcessInfo.processInfo.arguments.contains("--healthkit-permission-uitest")
     }
@@ -408,6 +414,9 @@ struct DUNEApp: App {
                     && (!Self.shouldSeedMockData || hasSeededMockData)
             )
             .environment(\.appTheme, selectedTheme)
+#if DEBUG
+            .environment(\.waveAnimationEnabled, !Self.uiAnimationsDisabled)
+#endif
             .tint(selectedTheme.accentColor)
             .preferredColorScheme(Self.forcedUITestColorScheme)
             .task {
@@ -446,9 +455,12 @@ struct DUNEApp: App {
                 }
             }
         }
+#if DEBUG
+        .environment(\.waveAnimationEnabled, !Self.uiAnimationsDisabled)
+#endif
         .transaction { transaction in
 #if DEBUG
-            if Self.isRunningUITests && ProcessInfo.processInfo.arguments.contains("--ui-disable-animations") {
+            if Self.uiAnimationsDisabled {
                 transaction.animation = nil
                 transaction.disablesAnimations = true
             }

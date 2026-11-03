@@ -208,6 +208,84 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         )
     }
 
+    func testWeeklyStatsPreviousMatchesSeededLastWeekAndDateWindow() throws {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        openWeeklyStatsDetail()
+
+        let periodPicker = waitForElement(AXID.weeklyStatsPeriodPicker, timeout: 15)
+        XCTAssertEqual(periodPicker.value as? String, "This Week")
+        let caption = waitForElement("activity-weeklystats-previous-period", timeout: 15)
+        // The analysis service labels the previous summary from today−14d through today−8d.
+        let previousStart = try XCTUnwrap(calendar.date(byAdding: .day, value: -14, to: today))
+        let previousEnd = try XCTUnwrap(calendar.date(byAdding: .day, value: -8, to: today))
+        // This class inherits the device locale; the test runner and app can still
+        // report different current locales. Accept only the app's supported date
+        // renderings for the exact source boundaries, without changing its launch.
+        let supportedLocales = [Locale.current, Locale(identifier: "en_US"),
+                                Locale(identifier: "ko_KR"), Locale(identifier: "ja_JP")]
+        let expectedCaptions = supportedLocales.map { locale in
+            let format = Date.FormatStyle(date: .abbreviated, time: .omitted).locale(locale)
+            return "\(previousStart.formatted(format)) – \(previousEnd.formatted(format))"
+        }
+        XCTAssertTrue(expectedCaptions.contains(caption.label),
+                      "The prior caption should show the actual previous start and end dates")
+
+        let metricIDs = ["volume", "duration", "calories", "sessions"]
+        var previousValues: [String: String] = [:]
+        var previousUnits: [String: String] = [:]
+        for id in metricIDs {
+            XCTAssertTrue(waitForElement("activity-weeklystats-previous-\(id)", timeout: 10).exists)
+            let value = waitForElement("activity-weeklystats-previous-value-\(id)", timeout: 10)
+            previousValues[id] = value.label
+            if id != "sessions" {
+                previousUnits[id] = waitForElement("activity-weeklystats-previous-unit-\(id)", timeout: 10).label
+            }
+        }
+
+        // This seeded scenario has manual strength sets only on days 0–2 and mock
+        // workouts on days 8 and 11. Its prior strength denominator is absent,
+        // while prior duration/sessions are real nonzero workout aggregates.
+        XCTAssertEqual(previousValues["volume"], "—")
+        XCTAssertFalse(app.staticTexts["activity-weekly-stat-change-volume"].exists,
+                       "No prior manual volume must not become a fabricated 0% change")
+        XCTAssertNotEqual(previousValues["duration"], "—")
+        XCTAssertEqual(previousValues["sessions"], "2", "Only the seeded day-8 and day-11 workouts belong to the prior window")
+
+        let detailScroll = app.scrollViews.firstMatch
+        let lastPreviousRow = waitForElement("activity-weeklystats-previous-sessions", timeout: 10)
+        for _ in 0..<6 where !lastPreviousRow.isHittable { detailScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(lastPreviousRow.isHittable, "The last previous-period row should be reachable")
+        addScreenshotAttachment(named: "A05 This Week actual previous-period lower rows")
+        VisualAudit.capture("A05 This Week actual previous-period lower rows")
+        for _ in 0..<6 where !caption.isHittable { detailScroll.swipeDown(velocity: .slow) }
+        XCTAssertTrue(caption.isHittable, "The single actual date caption should be reachable")
+        addScreenshotAttachment(named: "A05 This Week previous-period date and upper rows")
+        VisualAudit.capture("A05 This Week previous-period date and upper rows")
+
+        let currentDuration = app.staticTexts["activity-weekly-stat-value-duration"].firstMatch
+        XCTAssertNotEqual(currentDuration.label, previousValues["duration"])
+        // The fixture has no workout on day 7, the one boundary day where these
+        // two service windows differ. Only under that condition do their values match.
+        for _ in 0..<6 where !periodPicker.isHittable { detailScroll.swipeDown(velocity: .slow) }
+        XCTAssertTrue(periodPicker.isHittable)
+        tapSegment(in: AXID.weeklyStatsPeriodPicker, index: 1, timeout: 10)
+        XCTAssertEqual(periodPicker.value as? String, "Last Week")
+        let matchingDuration = NSPredicate(format: "label == %@", try XCTUnwrap(previousValues["duration"]))
+        expectation(for: matchingDuration, evaluatedWith: currentDuration)
+        waitForExpectations(timeout: 15)
+        for id in metricIDs {
+            XCTAssertEqual(waitForElement("activity-weekly-stat-value-\(id)", timeout: 10).label,
+                           previousValues[id], "The same seeded workout window should show the same \(id) value")
+            if id != "sessions" {
+                XCTAssertEqual(waitForElement("activity-weekly-stat-unit-\(id)", timeout: 10).label,
+                               previousUnits[id], "The prior and current \(id) units should match")
+            }
+        }
+        addScreenshotAttachment(named: "A05 Last Week current metrics from the same seeded window")
+        VisualAudit.capture("A05 Last Week current metrics from the same seeded window")
+    }
+
     func testTrainingVolumeTrainingLoadChartScrollsToPastData() throws {
         openTrainingVolumeDetail()
 

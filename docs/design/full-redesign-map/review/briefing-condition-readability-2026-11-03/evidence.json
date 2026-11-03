@@ -1,0 +1,407 @@
+{
+  "revision": "df53412c41340861722d422c8da6f4fa0d8e77fd",
+  "dirty": true,
+  "files": {
+    "DUNE/Domain/UseCases/BriefingTemplateEngine.swift": "05b211463c2860889fdbd280a178a01eb9a4f63d2c9c7794e41f355bfa582eb4",
+    "DUNE/Presentation/Dashboard/MorningBriefingView.swift": "22df173391b70b3d7c08b53ac01c56210b7ae6bc563d524a7eb5ba2c43c91f9d",
+    "DUNE/Presentation/Dashboard/Components/ConditionDetailHeader.swift": "0ccb3b26a0c1c450e635dea03cfb9891403059dbbbced931fe20e839805c2eeb",
+    "DUNE/App/TestDataSeeder.swift": "78211505d6604e501b7ab0ba1f9a5c2038c6cbf456d1e3bfa45f71f3c28a74a7",
+    "DUNETests/BriefingTemplateEngineTests.swift": "ae8376b12ac27de47a01a04c7e5059c2cc84242b8b6f3c2fa08870089d1ab666",
+    "DUNEUITests/Full/ConditionDetailRedesignTests.swift": "339d8e34264c86580a9fd0dfb48998b8a92c4951a1c78ea328ca28030528f543",
+    "DUNEUITests/Full/TodaySettingsRegressionTests.swift": "e8b9ccd4130d51149d7685ef88dbbc26a5f95e15caa53c2eb82f3ab7c71dc5a3",
+    "Shared/Resources/Localizable.xcstrings": "76859d1598da7231a9e6134a0db0326eee5902d5d9298d9db005116afd02c46b"
+  },
+  "unit": {
+    "selector": "DUNETests/BriefingTemplateEngineTests",
+    "passed": 35,
+    "log": ".xcodebuild/briefing-review-resolve-unit.log",
+    "sha256": "efdb82e631098de13720aa2a8f0f2ec96b8bcd412bb000273952ac37fa0af395"
+  },
+  "ui_status": "Phone four unique core selectors passed; iPad two selectors passed; Duo T04/T09 both poses not recaptured",
+  "records": [
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "0FA12FD1-30D0-4782-89FC-743B5B5113C6.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text dashboard-morning-briefing-weather-message_0_254EF8AA-A617-4C3E-9619-2AEFB63AD20E.png",
+      "timestamp": 1793668997.384,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-dashboard-morning-briefing-weather-message.png",
+      "sha256": "a4d967e7158b3756e833f049eb9e7577001678e49f11136288e3c82e753c69ec",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "7219B4E2-8046-428F-AA74-F91B229C6CD3.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text weather title_0_DB94E6DE-8CFA-41A0-9756-4E5B5AE02747.png",
+      "timestamp": 1793668995.652,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-weather-title.png",
+      "sha256": "eefc36c037f1a35672c31c5a67c0bb09cf7ff3ed152d00ec6a64b45b77ccf4f5",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "78CDC66C-7441-4026-BA1F-DC841765BB22.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text dashboard-morning-briefing-weekly-average-value_0_357A7645-FEDC-4435-8EFF-C51089E11858.png",
+      "timestamp": 1793668989.638,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-dashboard-morning-briefing-weekly-average-value.png",
+      "sha256": "da1e628b7ea2754ee7636201f45cffc42c1dc9121c014fb779fbb4507290db0b",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "F7F6423E-B585-4876-A809-776D01151906.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text dashboard-morning-briefing-weekly-exercise-value_0_41CC818B-B2D7-49C2-9283-0869851B8944.png",
+      "timestamp": 1793668987.913,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-dashboard-morning-briefing-weekly-exercise-value.png",
+      "sha256": "27d697e70d1abc64427d0b3b609edde5f4b02927fafa505bd067d7dff18a7c0a",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "04021F4F-945A-45A0-9188-ECF255595F95.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text weekly title_0_44990458-9DB0-4012-BD57-553510E08ED1.png",
+      "timestamp": 1793668986.137,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-weekly-title.png",
+      "sha256": "819c48b62245bcbefb1d4f44cc52289960a0af148121322d26275541aef2d580",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "AEB6D173-0B2E-4C7D-8D36-2FF270D6E372.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text dashboard-morning-briefing-guide-message_0_4E30BC04-8F91-46E2-A2A4-3AD49669C68D.png",
+      "timestamp": 1793668980.443,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-dashboard-morning-briefing-guide-message.png",
+      "sha256": "1b4d352dc379d233fd1c8844657d97f2f2251b704bf3ac4241e81b762fd1cf25",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "D78EDD01-AD97-4C51-B079-D28AEE391103.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text guide title_0_F4329EE4-FF21-4EC2-B129-1542013BC1BC.png",
+      "timestamp": 1793668978.629,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-guide-title.png",
+      "sha256": "daceaab73038a201169c829ade8a8a7264a408ef90ee58c33dbc7881a0fc01a6",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "6582412B-CBFE-4E9F-B22C-113782A49DA9.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text dashboard-morning-briefing-recovery-hrv-value_0_43763160-67EA-4599-ADAF-055177325E48.png",
+      "timestamp": 1793668973.162,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-dashboard-morning-briefing-recovery-hrv-value.png",
+      "sha256": "3a014ce9708218f393d1e19718b8b02495fa9a274b5e2b86c39efd706e335754",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "954709E5-4A5B-4FB3-851C-84E4370ECF78.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text dashboard-morning-briefing-recovery-sleep-value_0_6F1CCD9A-D5DF-4A4A-9C88-E80594B92205.png",
+      "timestamp": 1793668968.771,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-dashboard-morning-briefing-recovery-sleep-value.png",
+      "sha256": "346e2fb407c87393c0387009d61569584c6806ec3ad90c7a2e303965ae9d9c82",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "B96967EA-DF47-4862-848D-40D04419E5AB.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text recovery title_0_71B2AF1C-33D4-4E87-BFEA-5A653F896414.png",
+      "timestamp": 1793668966.952,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-recovery-title.png",
+      "sha256": "7755e5a0badcd78503fa7a541ef05d2ed02d4abd259038dc45cce777b9a86c5e",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Full Configuration",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "78665C1E-5A8F-438C-B287-270225B4A089.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 dark maximum text hero_0_8AF74A59-862F-47C8-8D27-E32C77F575B5.png",
+      "timestamp": 1793668963.63,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingAtDarkMaximumAccessibilitySize()",
+      "file": "images/t09-dark-maximum-text-hero.png",
+      "sha256": "cbf20520487fb0f4aa4d00b2ca075431eb97147771e6baac722491d9c239e844",
+      "scope": "Pre-review capture: unchanged AX layout; does not validate fractional-HRV or no-history states"
+    },
+    {
+      "configurationName": "Design Capture",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "34D2CB08-EE07-49D4-A441-FA765802EA5A.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 information first Korean weekly_0_C18AA65A-788C-4AE4-9679-1F2D2E49E547.png",
+      "timestamp": 1793680589.806,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingInformationHighlightsInKorean()",
+      "file": "images/t09-information-first-korean-weekly.png",
+      "sha256": "df5efe7dd57b7dcec94341fd610d94a38afd119338dd06211026296522f76769",
+      "scope": "Post-review resolved source; final Korean UI PASS",
+      "source_files": {
+        "DUNE/Domain/UseCases/BriefingTemplateEngine.swift": "6a8d5a7854813c819c40a8e39fd885f72a112ab77308421d8a80a63db8b3a968",
+        "DUNE/Presentation/Dashboard/MorningBriefingView.swift": "24c2f3ee416821ec975675bdb9aafd35e2836a64dccb5c95237f256186242b12",
+        "DUNE/Presentation/Dashboard/Components/ConditionDetailHeader.swift": "0ccb3b26a0c1c450e635dea03cfb9891403059dbbbced931fe20e839805c2eeb",
+        "DUNE/App/TestDataSeeder.swift": "78211505d6604e501b7ab0ba1f9a5c2038c6cbf456d1e3bfa45f71f3c28a74a7",
+        "DUNETests/BriefingTemplateEngineTests.swift": "3ea1c029a54bcc0b3ad63375c2b4e8bc7da53e1113aa28164431830af6e91857",
+        "DUNEUITests/Full/ConditionDetailRedesignTests.swift": "339d8e34264c86580a9fd0dfb48998b8a92c4951a1c78ea328ca28030528f543",
+        "DUNEUITests/Full/TodaySettingsRegressionTests.swift": "e8b9ccd4130d51149d7685ef88dbbc26a5f95e15caa53c2eb82f3ab7c71dc5a3",
+        "Shared/Resources/Localizable.xcstrings": "cf49303ab9ed699281b3ce1c70e5a1ce3edf2b45a0ca9d45d068641f94c353a7"
+      }
+    },
+    {
+      "configurationName": "Design Capture",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "F921B9E3-AA3F-4BAB-A06B-9C76677E8714.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 information first Korean recovery_0_0F235D5E-D4FB-45FD-93EE-723ECED446DA.png",
+      "timestamp": 1793680584.23,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingInformationHighlightsInKorean()",
+      "file": "images/t09-information-first-korean-recovery.png",
+      "sha256": "70f7ef43dacea5b27330c19ca62b6c3560163c54692e9648d181365b9e835f17",
+      "scope": "Post-review resolved source; final Korean UI PASS",
+      "source_files": {
+        "DUNE/Domain/UseCases/BriefingTemplateEngine.swift": "6a8d5a7854813c819c40a8e39fd885f72a112ab77308421d8a80a63db8b3a968",
+        "DUNE/Presentation/Dashboard/MorningBriefingView.swift": "24c2f3ee416821ec975675bdb9aafd35e2836a64dccb5c95237f256186242b12",
+        "DUNE/Presentation/Dashboard/Components/ConditionDetailHeader.swift": "0ccb3b26a0c1c450e635dea03cfb9891403059dbbbced931fe20e839805c2eeb",
+        "DUNE/App/TestDataSeeder.swift": "78211505d6604e501b7ab0ba1f9a5c2038c6cbf456d1e3bfa45f71f3c28a74a7",
+        "DUNETests/BriefingTemplateEngineTests.swift": "3ea1c029a54bcc0b3ad63375c2b4e8bc7da53e1113aa28164431830af6e91857",
+        "DUNEUITests/Full/ConditionDetailRedesignTests.swift": "339d8e34264c86580a9fd0dfb48998b8a92c4951a1c78ea328ca28030528f543",
+        "DUNEUITests/Full/TodaySettingsRegressionTests.swift": "e8b9ccd4130d51149d7685ef88dbbc26a5f95e15caa53c2eb82f3ab7c71dc5a3",
+        "Shared/Resources/Localizable.xcstrings": "cf49303ab9ed699281b3ce1c70e5a1ce3edf2b45a0ca9d45d068641f94c353a7"
+      }
+    },
+    {
+      "configurationName": "Design Capture",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "0EB76537-38A3-46E4-BF5E-54D95D515A7D.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 information first Korean top_0_46EC2316-CF28-4209-8D78-4D0FC395DF8F.png",
+      "timestamp": 1793680578.666,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingInformationHighlightsInKorean()",
+      "file": "images/t09-information-first-korean-top.png",
+      "sha256": "0386d54ab225116240049e27a6e3b411c005f8ad5d6793cbd594b47cef973327",
+      "scope": "Post-review resolved source; final Korean UI PASS",
+      "source_files": {
+        "DUNE/Domain/UseCases/BriefingTemplateEngine.swift": "6a8d5a7854813c819c40a8e39fd885f72a112ab77308421d8a80a63db8b3a968",
+        "DUNE/Presentation/Dashboard/MorningBriefingView.swift": "24c2f3ee416821ec975675bdb9aafd35e2836a64dccb5c95237f256186242b12",
+        "DUNE/Presentation/Dashboard/Components/ConditionDetailHeader.swift": "0ccb3b26a0c1c450e635dea03cfb9891403059dbbbced931fe20e839805c2eeb",
+        "DUNE/App/TestDataSeeder.swift": "78211505d6604e501b7ab0ba1f9a5c2038c6cbf456d1e3bfa45f71f3c28a74a7",
+        "DUNETests/BriefingTemplateEngineTests.swift": "3ea1c029a54bcc0b3ad63375c2b4e8bc7da53e1113aa28164431830af6e91857",
+        "DUNEUITests/Full/ConditionDetailRedesignTests.swift": "339d8e34264c86580a9fd0dfb48998b8a92c4951a1c78ea328ca28030528f543",
+        "DUNEUITests/Full/TodaySettingsRegressionTests.swift": "e8b9ccd4130d51149d7685ef88dbbc26a5f95e15caa53c2eb82f3ab7c71dc5a3",
+        "Shared/Resources/Localizable.xcstrings": "cf49303ab9ed699281b3ce1c70e5a1ce3edf2b45a0ca9d45d068641f94c353a7"
+      }
+    },
+    {
+      "configurationName": "Design Capture",
+      "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+      "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "FB23A237-FB5F-434D-BFF0-4192C56686C0.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "screen-0-1206x2622-Condition aligned contribution cards with prior RHR date_0_4F55CA4D-AB3C-4C33-85B3-C284D6FFCBBF.png",
+      "timestamp": 1793669339.838,
+      "test": "ConditionDetailRedesignTests/testPriorRHRDateKeepsContributionCardsAndRowsAligned()",
+      "file": "images/iphone-t04-aligned-cards.png",
+      "sha256": "b0ba51944ac6610fbe231d74a33d974098f5c7fd44d00f680afd8c7e2165d5a8"
+    },
+    {
+      "configurationName": "Design Capture",
+      "deviceId": "AB35434E-7026-4601-A301-F2F284B063FE",
+      "deviceName": "iPad mini-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "5E00ACDF-A47E-448E-80F4-F7FC3E86B5FD.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "screen-0-1512x2316-Condition aligned contribution cards with prior RHR date_0_10703943-E142-4E3E-A8C4-69F921EBCEFB.png",
+      "timestamp": 1793669620.058,
+      "test": "ConditionDetailRedesignTests/testPriorRHRDateKeepsContributionCardsAndRowsAligned()",
+      "file": "images/ipad-t04-aligned-cards.png",
+      "sha256": "acec09c2bc3dc781751bbeb919e6dd1ea9e085d5dc8bb6e98f0f6a6abd9b65e3"
+    },
+    {
+      "configurationName": "Design Capture",
+      "deviceId": "AB35434E-7026-4601-A301-F2F284B063FE",
+      "deviceName": "iPad mini-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "8655E10B-0EE9-47C6-B15B-942AE90E9260.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 information first Korean weekly_0_8FE2B268-9686-42F4-8919-D203A6BAB3F7.png",
+      "timestamp": 1793669675.876,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingInformationHighlightsInKorean()",
+      "file": "images/ipad-t09-information-first-korean-weekly.png",
+      "sha256": "a53c7150ef9070609264b43ba72f429d89f823e5b81579ae0fe773e845dbec19"
+    },
+    {
+      "configurationName": "Design Capture",
+      "deviceId": "AB35434E-7026-4601-A301-F2F284B063FE",
+      "deviceName": "iPad mini-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "FE7A7EE6-822B-49DC-963E-D5FF9F4FB3E4.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 information first Korean recovery_0_1F0D1D2B-3570-46A9-81D3-A8BC0803AFC2.png",
+      "timestamp": 1793669663.991,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingInformationHighlightsInKorean()",
+      "file": "images/ipad-t09-information-first-korean-recovery.png",
+      "sha256": "3687f4b41ae944c09f64ce95ed2506c2f405352739b2a959c332c86b7eae86f5"
+    },
+    {
+      "configurationName": "Design Capture",
+      "deviceId": "AB35434E-7026-4601-A301-F2F284B063FE",
+      "deviceName": "iPad mini-wt-Health-work-1bb990dd45f0",
+      "exportedFileName": "7C2B6086-FEC6-4E08-B0D9-74A15AC68D47.png",
+      "isAssociatedWithFailure": false,
+      "suggestedHumanReadableName": "T09 information first Korean top_0_A082E723-EAED-4099-88E4-1B9F82A13050.png",
+      "timestamp": 1793669653.833,
+      "test": "TodaySettingsRegressionTests/testMorningBriefingInformationHighlightsInKorean()",
+      "file": "images/ipad-t09-information-first-korean-top.png",
+      "sha256": "635e2fbbbeef56f08d1d5700572d9528196fb664a8339259532c7151ff7998a2"
+    }
+  ],
+  "selected": {
+    "regular": {
+      "T09": {
+        "configurationName": "Design Capture",
+        "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+        "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+        "exportedFileName": "0EB76537-38A3-46E4-BF5E-54D95D515A7D.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T09 information first Korean top_0_46EC2316-CF28-4209-8D78-4D0FC395DF8F.png",
+        "timestamp": 1793680578.666,
+        "test": "TodaySettingsRegressionTests/testMorningBriefingInformationHighlightsInKorean()",
+        "file": "images/t09-information-first-korean-top.png",
+        "sha256": "0386d54ab225116240049e27a6e3b411c005f8ad5d6793cbd594b47cef973327",
+        "scope": "Post-review resolved source; final Korean UI PASS",
+        "source_files": {
+          "DUNE/Domain/UseCases/BriefingTemplateEngine.swift": "6a8d5a7854813c819c40a8e39fd885f72a112ab77308421d8a80a63db8b3a968",
+          "DUNE/Presentation/Dashboard/MorningBriefingView.swift": "24c2f3ee416821ec975675bdb9aafd35e2836a64dccb5c95237f256186242b12",
+          "DUNE/Presentation/Dashboard/Components/ConditionDetailHeader.swift": "0ccb3b26a0c1c450e635dea03cfb9891403059dbbbced931fe20e839805c2eeb",
+          "DUNE/App/TestDataSeeder.swift": "78211505d6604e501b7ab0ba1f9a5c2038c6cbf456d1e3bfa45f71f3c28a74a7",
+          "DUNETests/BriefingTemplateEngineTests.swift": "3ea1c029a54bcc0b3ad63375c2b4e8bc7da53e1113aa28164431830af6e91857",
+          "DUNEUITests/Full/ConditionDetailRedesignTests.swift": "339d8e34264c86580a9fd0dfb48998b8a92c4951a1c78ea328ca28030528f543",
+          "DUNEUITests/Full/TodaySettingsRegressionTests.swift": "e8b9ccd4130d51149d7685ef88dbbc26a5f95e15caa53c2eb82f3ab7c71dc5a3",
+          "Shared/Resources/Localizable.xcstrings": "cf49303ab9ed699281b3ce1c70e5a1ce3edf2b45a0ca9d45d068641f94c353a7"
+        }
+      },
+      "T04": {
+        "configurationName": "Design Capture",
+        "deviceId": "5E9B3E4F-136B-4D22-8113-CCB18744729B",
+        "deviceName": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+        "exportedFileName": "FB23A237-FB5F-434D-BFF0-4192C56686C0.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1206x2622-Condition aligned contribution cards with prior RHR date_0_4F55CA4D-AB3C-4C33-85B3-C284D6FFCBBF.png",
+        "timestamp": 1793669339.838,
+        "test": "ConditionDetailRedesignTests/testPriorRHRDateKeepsContributionCardsAndRowsAligned()",
+        "file": "images/iphone-t04-aligned-cards.png",
+        "sha256": "b0ba51944ac6610fbe231d74a33d974098f5c7fd44d00f680afd8c7e2165d5a8"
+      }
+    },
+    "ipad": {
+      "T09": {
+        "configurationName": "Design Capture",
+        "deviceId": "AB35434E-7026-4601-A301-F2F284B063FE",
+        "deviceName": "iPad mini-wt-Health-work-1bb990dd45f0",
+        "exportedFileName": "7C2B6086-FEC6-4E08-B0D9-74A15AC68D47.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "T09 information first Korean top_0_A082E723-EAED-4099-88E4-1B9F82A13050.png",
+        "timestamp": 1793669653.833,
+        "test": "TodaySettingsRegressionTests/testMorningBriefingInformationHighlightsInKorean()",
+        "file": "images/ipad-t09-information-first-korean-top.png",
+        "sha256": "635e2fbbbeef56f08d1d5700572d9528196fb664a8339259532c7151ff7998a2"
+      },
+      "T04": {
+        "configurationName": "Design Capture",
+        "deviceId": "AB35434E-7026-4601-A301-F2F284B063FE",
+        "deviceName": "iPad mini-wt-Health-work-1bb990dd45f0",
+        "exportedFileName": "5E00ACDF-A47E-448E-80F4-F7FC3E86B5FD.png",
+        "isAssociatedWithFailure": false,
+        "suggestedHumanReadableName": "screen-0-1512x2316-Condition aligned contribution cards with prior RHR date_0_10703943-E142-4E3E-A8C4-69F921EBCEFB.png",
+        "timestamp": 1793669620.058,
+        "test": "ConditionDetailRedesignTests/testPriorRHRDateKeepsContributionCardsAndRowsAligned()",
+        "file": "images/ipad-t04-aligned-cards.png",
+        "sha256": "acec09c2bc3dc781751bbeb919e6dd1ea9e085d5dc8bb6e98f0f6a6abd9b65e3"
+      }
+    }
+  },
+  "duo_limit": {
+    "screen_ids": [
+      "T04",
+      "T09"
+    ],
+    "poses": [
+      "closed",
+      "open"
+    ],
+    "reviewed_hinge_cli": "/tmp/life-hinge-20261029/skills/hinge/scripts/hinge absent",
+    "official_cli": "Xcode 27.2 devicectl device has no motion subcommand; simulate exposes biometrics/location/statusBar",
+    "gui_attempt": "cua.getApp(com.apple.dt.Devices) -> server -10005 timeoutReached",
+    "old_png_reused": false,
+    "resume": "restore a reviewed posture driver with readback or Device Hub AX connection for owned Duo"
+  },
+  "initial_unit": {
+    "selector": "DUNETests/BriefingTemplateEngineTests",
+    "passed": 33,
+    "log": ".xcodebuild/briefing-info-unit.log"
+  },
+  "capture_source_files": {
+    "DUNE/Domain/UseCases/BriefingTemplateEngine.swift": "05b211463c2860889fdbd280a178a01eb9a4f63d2c9c7794e41f355bfa582eb4",
+    "DUNE/Presentation/Dashboard/MorningBriefingView.swift": "22df173391b70b3d7c08b53ac01c56210b7ae6bc563d524a7eb5ba2c43c91f9d",
+    "DUNE/Presentation/Dashboard/Components/ConditionDetailHeader.swift": "0ccb3b26a0c1c450e635dea03cfb9891403059dbbbced931fe20e839805c2eeb",
+    "DUNE/App/TestDataSeeder.swift": "78211505d6604e501b7ab0ba1f9a5c2038c6cbf456d1e3bfa45f71f3c28a74a7",
+    "DUNETests/BriefingTemplateEngineTests.swift": "ae8376b12ac27de47a01a04c7e5059c2cc84242b8b6f3c2fa08870089d1ab666",
+    "DUNEUITests/Full/ConditionDetailRedesignTests.swift": "339d8e34264c86580a9fd0dfb48998b8a92c4951a1c78ea328ca28030528f543",
+    "DUNEUITests/Full/TodaySettingsRegressionTests.swift": "e8b9ccd4130d51149d7685ef88dbbc26a5f95e15caa53c2eb82f3ab7c71dc5a3",
+    "Shared/Resources/Localizable.xcstrings": "76859d1598da7231a9e6134a0db0326eee5902d5d9298d9db005116afd02c46b"
+  },
+  "review_resolve_source_files": {
+    "DUNE/Domain/UseCases/BriefingTemplateEngine.swift": "6a8d5a7854813c819c40a8e39fd885f72a112ab77308421d8a80a63db8b3a968",
+    "DUNE/Presentation/Dashboard/MorningBriefingView.swift": "24c2f3ee416821ec975675bdb9aafd35e2836a64dccb5c95237f256186242b12",
+    "DUNE/Presentation/Dashboard/Components/ConditionDetailHeader.swift": "0ccb3b26a0c1c450e635dea03cfb9891403059dbbbced931fe20e839805c2eeb",
+    "DUNE/App/TestDataSeeder.swift": "78211505d6604e501b7ab0ba1f9a5c2038c6cbf456d1e3bfa45f71f3c28a74a7",
+    "DUNETests/BriefingTemplateEngineTests.swift": "3ea1c029a54bcc0b3ad63375c2b4e8bc7da53e1113aa28164431830af6e91857",
+    "DUNEUITests/Full/ConditionDetailRedesignTests.swift": "339d8e34264c86580a9fd0dfb48998b8a92c4951a1c78ea328ca28030528f543",
+    "DUNEUITests/Full/TodaySettingsRegressionTests.swift": "e8b9ccd4130d51149d7685ef88dbbc26a5f95e15caa53c2eb82f3ab7c71dc5a3",
+    "Shared/Resources/Localizable.xcstrings": "cf49303ab9ed699281b3ce1c70e5a1ce3edf2b45a0ca9d45d068641f94c353a7"
+  },
+  "review_resolve_notes": "35 engine tests and final Korean briefing UI1 PASS. Original capture_source_files remain historical; final source is review_resolve_source_files.",
+  "review_final_ui": {
+    "passed": 1,
+    "selector": "DUNEUITests/TodaySettingsRegressionTests/testMorningBriefingInformationHighlightsInKorean",
+    "log": ".xcodebuild/briefing-review-final-ui.log",
+    "sha256": "8dca1f98c2359bd5c2db3e8b8d23627fcb041a064ad3d141d4e3b696da0aca5b"
+  }
+}

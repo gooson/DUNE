@@ -697,6 +697,35 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         waitForExpectations(timeout: 3)
     }
 
+    func testMorningBriefingInformationHighlightsInKorean() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR",
+            "--ui-dashboard-hour", "6",
+            "--ui-test-theme", "desertWarm", "--ui-test-style", "dark",
+            "-lastBriefingDate", "1900-01-01", "-morningBriefingDisabled", "NO"
+        ]
+        launchApp(with: configuration)
+        let briefing = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        XCTAssertTrue(briefing.waitForExistence(timeout: 8))
+        let scroll = briefing.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        VisualAudit.capture("T09 information first Korean top")
+        addScreenshotAttachment(named: "T09 information first Korean top")
+        for (section, metrics) in [("recovery", ["sleep", "hrv"]), ("weekly", ["exercise", "average"])] {
+            for metric in metrics {
+                let value = app.descendants(matching: .any)["dashboard-morning-briefing-\(section)-\(metric)-value"].firstMatch
+                XCTAssertTrue(value.waitForExistence(timeout: 5) && !value.label.isEmpty)
+                XCTAssertTrue(revealBriefingText(value, in: briefing, scroll: scroll, whole: true))
+                XCTAssertNotNil(value.label.rangeOfCharacter(from: .decimalDigits))
+            }
+            VisualAudit.capture("T09 information first Korean \(section)")
+            addScreenshotAttachment(named: "T09 information first Korean \(section)")
+        }
+        assertBriefingDoneReachable()
+        XCTAssertTrue(app.waitAndTap(AXID.dashboardMorningBriefingDismiss))
+    }
+
     func testMorningBriefingAtDarkMaximumAccessibilitySize() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments += [
@@ -730,14 +759,21 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             VisualAudit.capture("T09 dark maximum text \(section) title")
             addScreenshotAttachment(named: "T09 dark maximum text \(section) title")
 
-            let message = card.descendants(matching: .staticText)
-                .matching(NSPredicate(format: "identifier != %@", "\(cardID)-title")).firstMatch
-            XCTAssertTrue(message.waitForExistence(timeout: 5) && !message.label.isEmpty,
-                          "\(section) message should remain accessible")
-            XCTAssertTrue(revealBriefingText(message, in: briefing, scroll: scroll, whole: false),
-                          "\(section) message needs a readable visible portion")
-            VisualAudit.capture("T09 dark maximum text \(section) message")
-            addScreenshotAttachment(named: "T09 dark maximum text \(section) message")
+            let contentIDs: [String]
+            switch section {
+            case "recovery": contentIDs = ["\(cardID)-sleep-value", "\(cardID)-hrv-value"]
+            case "weekly": contentIDs = ["\(cardID)-exercise-value", "\(cardID)-average-value"]
+            default: contentIDs = ["\(cardID)-message"]
+            }
+            for contentID in contentIDs {
+                let content = app.descendants(matching: .any)[contentID].firstMatch
+                XCTAssertTrue(content.waitForExistence(timeout: 5) && !content.label.isEmpty,
+                              "\(contentID) should remain accessible")
+                XCTAssertTrue(revealBriefingText(content, in: briefing, scroll: scroll, whole: false),
+                              "\(contentID) needs a readable visible portion")
+                VisualAudit.capture("T09 dark maximum text \(contentID)")
+                addScreenshotAttachment(named: "T09 dark maximum text \(contentID)")
+            }
         }
         assertBriefingDoneReachable()
         XCTAssertTrue(app.waitAndTap(AXID.dashboardMorningBriefingDismiss))
