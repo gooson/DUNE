@@ -95,7 +95,12 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         addScreenshotAttachment(named: "A03 2D muscle selection and disabled 3D entry")
         VisualAudit.capture("A03 2D muscle selection and disabled 3D entry")
 
-        let detailScroll = app.scrollViews.element(boundBy: app.scrollViews.count > 1 ? 1 : 0)
+        let summaryScroll = app.scrollViews["musclemap-detail-summary-scroll"].firstMatch
+        let compactScroll = app.scrollViews["musclemap-detail-map-scroll"].firstMatch
+        let detailScroll = summaryScroll.exists ? summaryScroll : compactScroll
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5), "The selected muscle's actual pane should exist")
+        XCTAssertTrue(detailScroll.descendants(matching: .any)["musclemap-detail-selected-muscle"].firstMatch.exists,
+                      "The selected detail should belong to the chosen pane")
         for identifier in ["activity-muscle-detail-inline-title", "activity-muscle-detail-status",
                            "activity-muscle-detail-value-fatigue", "activity-muscle-detail-value-weekly-volume",
                            "activity-muscle-detail-value-last-trained", "activity-muscle-detail-value-sleep-modifier"] {
