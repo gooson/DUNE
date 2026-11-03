@@ -1492,7 +1492,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         if maxText {
             let horizontal = reveal("activity-volume-algorithm-legend-scroll")
             for label in ["0 sets", "16+"] {
-                let item = legend.staticTexts[label].firstMatch
+                let item = horizontal.staticTexts[label].firstMatch
                 XCTAssertTrue(item.waitForExistence(timeout: 5))
                 for _ in 0..<8 where !horizontal.frame.intersection(sheet.frame).contains(item.frame) {
                     if item.frame.midX < horizontal.frame.midX { horizontal.swipeRight(velocity: .slow) }
