@@ -277,3 +277,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 [A11 native review](../full-redesign-map/review/a11-consistency-native-2026-11-03/index.html)
 
 [A12 native review](../full-redesign-map/review/a12-exercise-mix-native-2026-11-03/index.html)
+
+[A13 native review](../full-redesign-map/review/a13-muscle-detail-native-2026-11-03/index.html)

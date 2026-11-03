@@ -1183,13 +1183,19 @@
     },
     "A13": {
       "row_id": "A13",
-      "evidence": "test-and-action:Muscle detail popover",
+      "file": "A13.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditMuscleDetailPopover()",
-      "action": "Muscle detail popover",
-      "timestamp": 1792375002.054,
-      "image": "04171F06-FF59-4730-8D2F-670BA80CCBF9.png",
-      "screen": "screen-0-1206x2622-Muscle detail popover_0_A12EC78B-4DDC-42DB-B543-A59887299884.png",
-      "file": "A13.png"
+      "action": "A13 muscle detail hero normal",
+      "source_revision": "72c462e3eabd7d6da4f578dba11e5583c8e973b0",
+      "capture_kind": "xctest",
+      "image": "F8889FF6-608B-40D3-98E7-E45CE5189549.png",
+      "screen": "screen-0-1320x2868-A13 muscle detail hero normal_0_DC72F900-F5D4-4D0F-AF78-6B2AECF0A33C.png",
+      "timestamp": 1793715417.16,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "1ABD0C49-BEA4-47FB-BAFE-A4ABFD275017",
+      "image_sha256": "5844a768958824b7dc53527eb3ef4aab007ac1e7bcc4a76350b490f7117437ed",
+      "ax_sha256": "b153d1afcc367f69f8e34c67e0c03d9a93d6de44184570abfd4762977ef6e024",
+      "evidence": "activity-muscle-detail-popover-sheet"
     },
     "A14": {
       "row_id": "A14",
@@ -1364,9 +1370,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "bb79f250497786526d37d420fd839de5c2df5dee",
+  "last_refresh_revision": "72c462e3eabd7d6da4f578dba11e5583c8e973b0",
   "last_refresh_screens": [
-    "A12"
+    "A13"
   ],
-  "last_refresh_note": "Fresh corrected-source A12 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Fresh corrected-source A13 captures; per-row source and device provenance retained."
 }

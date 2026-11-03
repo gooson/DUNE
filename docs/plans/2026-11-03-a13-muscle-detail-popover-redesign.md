@@ -21,3 +21,10 @@ Merged actual A12 main `e1f4efa42c3253923c2405bc0a6bb612db7f9023`, preserving al
 ## Native test-driver correction after actual b26 failure
 
 The first closed Duo run built the app and executed both original cases, then failed 0/2. Normal reached all metric/calculation captures but its system label query omitted the observed English `Sheet Grabber` capitalization. MAX full slow swipes overshot a 58.7pt weekly-volume text within the feasible 390pt sheet viewport. The correction adds that exact known label variant to both existing native-sheet consumers and uses short centered window-relative drags, retaining the 16-step limit, whole-frame containment, data and dismissal assertions. Product sources and native interactions remain unchanged. All original raw failures are archived, and the existing check receives one evidence-based conditional retry under the user’s autonomous-validation authorization.
+
+
+## Actual scoped validation (72c462e3)
+
+The final source `72c462e3eabd7d6da4f578dba11e5583c8e973b0` passed six actual cases: normal sheet on phone, iPad, closed and open Duo; closed Duo dark Accessibility XXXL; and the separate iPad A03 inline consumer. Closed normal/MAX came from one real 2/2 run; each other case was its own real 1/1. Native selected Chest and value frames, calculation action, native sheet dismissal and return were checked; the iPad inline route also opens the existing baseline calculation sheet and returns. The inline calculation is not the future A14 redesign. Actual values are seeded observations, not recomputed numerical invariants. No claim is made for untested VoiceOver traversal, all locales or conditional states.
+
+The earlier `b26ff4c0` closed 0/2 failure and both pre-dispatch open sensor/display mismatch histories remain separately recorded. The original source's conditional model, icons, 3D-disabled entry and domain calculations were preserved. Historical before-image source and device/pose identity are unknown. [Reviewed native gallery](../design/full-redesign-map/review/a13-muscle-detail-native-2026-11-03/index.html) includes actual capture and review provenance.
