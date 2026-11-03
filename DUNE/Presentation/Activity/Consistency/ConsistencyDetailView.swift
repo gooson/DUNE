@@ -190,6 +190,7 @@ struct ConsistencyDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-consistency-calendar")
     }
 
@@ -231,6 +232,7 @@ struct ConsistencyDetailView: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-consistency-history")
     }
 

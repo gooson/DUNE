@@ -1715,7 +1715,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         openActivityDetail(
             sectionIdentifier: AXID.activitySectionConsistency,
             destinationIdentifier: AXID.activityConsistencyDetailScreen,
-            maxSwipes: 10
+            maxSwipes: maxText ? 28 : 10
         )
         let scroll = app.scrollViews[AXID.activityConsistencyDetailScreen].firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 15))
