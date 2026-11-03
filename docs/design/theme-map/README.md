@@ -255,6 +255,8 @@ A05 네이티브 소스는 원래 `ActivityStat.iconColor`를 불투명 히어�
 
 2026-11-03 후속 선택: 아침 브리핑은 **1번 정보 강조**로 구현한다. T04 [기여 카드 높이 시안](themes/condition-contribution-alignment.html)도 보존했다. 같은 행의 HRV·RHR는 날짜 유무와 관계없이 같은 높이와 내부 시작선을 사용한다. 두 시안은 네이티브 캡처가 아니며 실제 검증은 별도 출처로 관리한다.
 
+2026-11-03 [A11 운동 일관성 상세 테마 시안](themes/dune-consistency-detail-a11.html)은 기존 팔레트와 실제 값 표시의 제안이다. 숫자와 웹 기호는 예시이며 네이티브 캡처가 아니다. [배치 계약](../layout-map/activity-consistency-detail-a11.html)을 함께 본다.
+
 ## A12 운동 구성 상세 · 2026-11-03
 
 [테마 시안](themes/dune-exercise-mix-detail-a12.html)과 [배치 계약](../layout-map/activity-exercise-mix-detail-a12.html)은 실제 값·선택 도넛과 기존 상태를 보존한다. 수치는 예시이며 네이티브 캡처가 아니다.

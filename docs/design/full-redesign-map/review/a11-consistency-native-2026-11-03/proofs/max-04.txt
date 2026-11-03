@@ -1,0 +1,171 @@
+Attributes: Application, 0x10539f840, pid: 73973, label: 'DUNE'
+Element subtree:
+ →Application, 0x10539f840, pid: 73973, label: 'DUNE'
+    Window (Main), 0x10539df40, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x10539f200, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x10539ea80, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x10539f340, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x10539f0c0, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x10539f700, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x10539e300, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x10539fac0, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x10539de00, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x10539fd40, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x112a5db80, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x112a5d900, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x112a5d400, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x112a5d2c0, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x112a5d180, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x112a5d680, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x112a5f840, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Consistency'
+                            Other, 0x112a5cb40, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x112a5f200, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x112a5c3c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x112a5de00, {{0.0, 0.0}, {466.0, 678.0}}
+                                    ScrollView, 0x112a5d7c0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'activity-consistency-detail-screen'
+                                      Other, 0x112a5ebc0, {{0.0, -973.3}, {382.0, 3788.0}}
+                                        Image, 0x112a5d040, {{44.7, -911.7}, {44.7, 57.3}}, identifier: 'flame.fill', label: 'Flame'
+                                        StaticText, 0x112a5f480, {{110.0, -941.3}, {177.3, 116.7}}, label: 'Current Streak'
+                                        StaticText, 0x112a5fe80, {{32.0, -812.7}, {38.0, 69.3}}, identifier: 'activity-consistency-current-value', label: '3'
+                                        StaticText, 0x112a5ca00, {{74.0, -798.3}, {88.0, 51.3}}, label: 'days'
+                                        Image, 0x112a5f340, {{45.0, -669.3}, {59.7, 56.7}}, identifier: 'star.fill', label: 'Favorite'
+                                        StaticText, 0x112a5e1c0, {{125.7, -699.3}, {142.7, 116.7}}, label: 'Best Streak'
+                                        StaticText, 0x112a5e6c0, {{32.0, -570.7}, {38.0, 69.3}}, identifier: 'activity-consistency-best-value', label: '3'
+                                        StaticText, 0x112a5ef80, {{74.0, -556.3}, {88.0, 51.3}}, label: 'days'
+                                        Other, 0x112a5c8c0, {{16.0, -469.3}, {350.0, 640.3}}, identifier: 'activity-consistency-calendar'
+                                          StaticText, 0x112a5c500, {{28.0, -457.3}, {246.3, 58.7}}, label: 'This Month'
+                                          ScrollView, 0x112a5c140, {{28.0, -390.7}, {326.0, 347.0}}, identifier: 'activity-consistency-calendar-horizontal'
+                                            Other, 0x112a5f980, {{-280.3, -390.7}, {644.7, 347.0}}
+                                              Other, 0x112a5f0c0, {{-260.7, -390.7}, {605.3, 344.0}}
+                                                StaticText, 0x1101da6c0, {{-248.2, -390.7}, {24.3, 48.0}}, label: 'S'
+                                                StaticText, 0x1101daf80, {{-160.2, -390.7}, {33.7, 48.0}}, label: 'M'
+                                                StaticText, 0x1101d8640, {{-62.5, -390.7}, {23.7, 48.0}}, label: 'T'
+                                                StaticText, 0x1101d8b40, {{23.3, -390.7}, {37.3, 48.0}}, label: 'W'
+                                                StaticText, 0x1101d88c0, {{122.8, -390.7}, {23.7, 48.0}}, label: 'T'
+                                                StaticText, 0x1101d83c0, {{216.5, -390.7}, {21.7, 48.0}}, label: 'F'
+                                                StaticText, 0x1101d8780, {{307.8, -390.7}, {24.3, 48.0}}, label: 'S'
+                                                StaticText, 0x1101da440, {{-248.3, -334.7}, {24.7, 48.0}}, identifier: 'activity-consistency-day-1-workout', label: 'November 1, 2026', value: Workout
+                                                StaticText, 0x1101db0c0, {{-155.7, -334.7}, {24.7, 48.0}}, identifier: 'activity-consistency-day-2-workout', label: 'November 2, 2026', value: Workout
+                                                StaticText, 0x112a60000, {{-63.0, -334.7}, {24.7, 48.0}}, identifier: 'activity-consistency-day-3-workout-today', label: 'November 3, 2026', value: Workout
+                                                StaticText, 0x112a60140, {{29.7, -334.7}, {24.7, 48.0}}, identifier: 'activity-consistency-day-4-nonqualifying', label: 'November 4, 2026'
+                                                StaticText, 0x112a60280, {{122.3, -334.7}, {24.7, 48.0}}, identifier: 'activity-consistency-day-5-nonqualifying', label: 'November 5, 2026'
+                                                StaticText, 0x112a603c0, {{215.0, -334.7}, {24.7, 48.0}}, identifier: 'activity-consistency-day-6-nonqualifying', label: 'November 6, 2026'
+                                                StaticText, 0x112a60500, {{307.7, -334.7}, {24.7, 48.0}}, identifier: 'activity-consistency-day-7-nonqualifying', label: 'November 7, 2026'
+                                                StaticText, 0x112a60640, {{-248.3, -274.7}, {24.7, 48.0}}, identifier: 'activity-consistency-day-8-nonqualifying', label: 'November 8, 2026'
+                                                StaticText, 0x112a60780, {{-155.7, -274.7}, {24.7, 48.0}}, identifier: 'activity-consistency-day-9-nonqualifying', label: 'November 9, 2026'
+                                                StaticText, 0x112a608c0, {{-75.3, -274.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-10-nonqualifying', label: 'November 10, 2026'
+                                                StaticText, 0x112a60a00, {{17.3, -274.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-11-nonqualifying', label: 'November 11, 2026'
+                                                StaticText, 0x112a60b40, {{110.0, -274.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-12-nonqualifying', label: 'November 12, 2026'
+                                                StaticText, 0x112a60c80, {{202.7, -274.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-13-nonqualifying', label: 'November 13, 2026'
+                                                StaticText, 0x112a60dc0, {{295.3, -274.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-14-nonqualifying', label: 'November 14, 2026'
+                                                StaticText, 0x112a60f00, {{-260.7, -214.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-15-nonqualifying', label: 'November 15, 2026'
+                                                StaticText, 0x112a61040, {{-168.0, -214.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-16-nonqualifying', label: 'November 16, 2026'
+                                                StaticText, 0x112a61180, {{-75.3, -214.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-17-nonqualifying', label: 'November 17, 2026'
+                                                StaticText, 0x112a612c0, {{17.3, -214.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-18-nonqualifying', label: 'November 18, 2026'
+                                                StaticText, 0x112a61400, {{110.0, -214.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-19-nonqualifying', label: 'November 19, 2026'
+                                                StaticText, 0x112a61540, {{202.7, -214.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-20-nonqualifying', label: 'November 20, 2026'
+                                                StaticText, 0x112a61680, {{295.3, -214.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-21-nonqualifying', label: 'November 21, 2026'
+                                                StaticText, 0x112a617c0, {{-260.7, -154.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-22-nonqualifying', label: 'November 22, 2026'
+                                                StaticText, 0x112a61900, {{-168.0, -154.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-23-nonqualifying', label: 'November 23, 2026'
+                                                StaticText, 0x112a61a40, {{-75.3, -154.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-24-nonqualifying', label: 'November 24, 2026'
+                                                StaticText, 0x112a61b80, {{17.3, -154.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-25-nonqualifying', label: 'November 25, 2026'
+                                                StaticText, 0x112a61cc0, {{110.0, -154.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-26-nonqualifying', label: 'November 26, 2026'
+                                                StaticText, 0x112a61e00, {{202.7, -154.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-27-nonqualifying', label: 'November 27, 2026'
+                                                StaticText, 0x112a61f40, {{295.3, -154.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-28-nonqualifying', label: 'November 28, 2026'
+                                                StaticText, 0x112a62080, {{-260.7, -94.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-29-nonqualifying', label: 'November 29, 2026'
+                                                StaticText, 0x112a621c0, {{-168.0, -94.7}, {49.3, 48.0}}, identifier: 'activity-consistency-day-30-nonqualifying', label: 'November 30, 2026'
+                                            Other, 0x112a62300, {{28.0, -76.7}, {326.0, 30.0}}, label: 'Horizontal scroll bar, 2 pages', value: 97%
+                                              Other, 0x112a62440, {{184.3, -49.7}, {161.7, 3.0}}
+                                            Other, 0x112a62580, {{28.0, -76.7}, {326.0, 30.0}}, label: 'Horizontal scroll bar, 2 pages', value: 97%
+                                              Other, 0x112a626c0, {{184.3, -49.7}, {161.7, 3.0}}
+                                          Image, 0x112a62800, {{28.0, -35.7}, {77.3, 70.0}}, identifier: 'calendar', label: 'Calendar'
+                                          StaticText, 0x112a62940, {{28.0, 38.3}, {319.3, 51.3}}, label: 'Monthly Progress'
+                                          StaticText, 0x112a62a80, {{28.0, 93.7}, {94.0, 51.3}}, identifier: 'activity-consistency-month-progress', label: '3/16'
+                                        Other, 0x112a62bc0, {{16.0, 187.0}, {350.0, 2611.7}}, identifier: 'activity-consistency-history'
+                                          StaticText, 0x112a62d00, {{28.0, 199.0}, {312.0, 58.7}}, label: 'Streak History'
+                                          StaticText, 0x112a62e40, {{106.0, 269.7}, {146.3, 58.7}}, identifier: 'activity-consistency-history-days-0', label: '3 days'
+                                          StaticText, 0x112a62f80, {{106.0, 330.3}, {236.0, 204.3}}, identifier: 'activity-consistency-history-dates-0', label: 'November 1, 2026 — November 3, 2026'
+                                          Image, 0x112a630c0, {{28.0, 363.3}, {66.0, 77.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x112a63200, {{106.0, 550.7}, {139.0, 58.7}}, identifier: 'activity-consistency-history-days-1793286000.0', label: '1 days'
+                                          StaticText, 0x112a63340, {{106.0, 611.3}, {227.0, 204.3}}, identifier: 'activity-consistency-history-dates-1793286000.0', label: 'October 30, 2026 — October 30, 2026'
+                                          Image, 0x112a63480, {{28.0, 644.3}, {66.0, 77.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x112a635c0, {{106.0, 831.7}, {139.0, 58.7}}, identifier: 'activity-consistency-history-days-1793113200.0', label: '1 days'
+                                          StaticText, 0x112a63700, {{106.0, 892.3}, {226.0, 204.3}}, identifier: 'activity-consistency-history-dates-1793113200.0', label: 'October 28, 2026 — October 28, 2026'
+                                          Image, 0x112a63840, {{28.0, 925.3}, {66.0, 77.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x112a63980, {{106.0, 1112.7}, {139.0, 58.7}}, identifier: 'activity-consistency-history-days-1792940400.0', label: '1 days'
+                                          StaticText, 0x112a63ac0, {{106.0, 1173.3}, {227.3, 204.3}}, identifier: 'activity-consistency-history-dates-1792940400.0', label: 'October 26, 2026 — October 26, 2026'
+                                          Image, 0x112a63c00, {{28.0, 1206.3}, {66.0, 77.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x112a63d40, {{106.0, 1393.7}, {139.0, 58.7}}, identifier: 'activity-consistency-history-days-1792681200.0', label: '1 days'
+                                          StaticText, 0x112a63e80, {{106.0, 1454.3}, {225.7, 204.3}}, identifier: 'activity-consistency-history-dates-1792681200.0', label: 'October 23, 2026 — October 23, 2026'
+                                          Image, 0x112a58000, {{28.0, 1487.3}, {66.0, 77.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x112a58140, {{106.0, 1674.7}, {139.0, 58.7}}, identifier: 'activity-consistency-history-days-1792335600.0', label: '1 days'
+                                          StaticText, 0x112a58280, {{106.0, 1735.3}, {221.3, 204.3}}, identifier: 'activity-consistency-history-dates-1792335600.0', label: 'October 19, 2026 — October 19, 2026'
+                                          Image, 0x112a583c0, {{28.0, 1768.3}, {66.0, 77.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x112a58500, {{106.0, 1955.7}, {139.0, 58.7}}, identifier: 'activity-consistency-history-days-1792076400.0', label: '1 days'
+                                          StaticText, 0x112a58640, {{106.0, 2016.3}, {222.0, 204.3}}, identifier: 'activity-consistency-history-dates-1792076400.0', label: 'October 16, 2026 — October 16, 2026'
+                                          Image, 0x112a58780, {{28.0, 2049.3}, {66.0, 77.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x112a588c0, {{106.0, 2236.7}, {139.0, 58.7}}, identifier: 'activity-consistency-history-days-1791817200.0', label: '1 days'
+                                          StaticText, 0x112a58a00, {{106.0, 2297.3}, {220.3, 204.3}}, identifier: 'activity-consistency-history-dates-1791817200.0', label: 'October 13, 2026 — October 13, 2026'
+                                          Image, 0x112a58b40, {{28.0, 2330.3}, {66.0, 77.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x112a58c80, {{106.0, 2517.7}, {139.0, 58.7}}, identifier: 'activity-consistency-history-days-1791471600.0', label: '1 days'
+                                          StaticText, 0x112a58dc0, {{106.0, 2578.3}, {201.7, 204.3}}, identifier: 'activity-consistency-history-dates-1791471600.0', label: 'October 9, 2026 — October 9, 2026'
+                                          Image, 0x112a58f00, {{28.0, 2611.3}, {66.0, 77.7}}, identifier: 'flame.fill', label: 'Flame'
+                                      Other, 0x112a59040, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 7 pages', value: 31%
+                                        Other, 0x112a59180, {{460.0, 222.7}, {3.0, 93.7}}
+                                      Other, 0x112a592c0, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 7 pages', value: 31%
+                                        Other, 0x112a59400, {{460.0, 222.7}, {3.0, 93.7}}
+                Other, 0x112a59540, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x112a59680, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x112a597c0, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x112a59900, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x112a59a40, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x112a59b80, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x112a59cc0, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x112a59e00, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x112a59f40, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x112a5a080, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x112a5a1c0, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x112a5a300, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x112a5a440, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x112a5a580, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x112a5a6c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x112a5a800, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x112a5a940, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x112a5aa80, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x112a5abc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x112a5ad00, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x112a5ae40, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x112a5af80, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x112a5b0c0, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x112a5b200, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                                            Image, 0x112a5b340, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x112a5b480, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x112a5b5c0, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x112a5b700, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x112a5b840, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x112a5b980, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x112a5bac0, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x112a5bc00, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x112a5bd40, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x112a5be80, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x112a6c000, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x112a6c140, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x112a6c280, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x112a6c3c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x112a6c500, {{396.0, 494.0}, {44.0, 58.0}}
+                                          Other, 0x112a6c640, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x112a6c780, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x112a6c8c0, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x112a6ca00, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x112a6cb40, {{396.0, 494.0}, {44.0, 58.0}}
+                                                  Other, 0x112a6cc80, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x112a6cdc0, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x112a6cf00, {{396.0, 494.0}, {44.0, 58.0}}
+              Other, 0x112a6d040, {{191.0, 322.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x10539f840, pid: 73973, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x112a6d180, pid: 73973, label: 'DUNE'
+  }

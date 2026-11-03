@@ -127,13 +127,19 @@
     },
     "A11": {
       "row_id": "A11",
-      "evidence": "activity-consistency-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivitySecondaryDetailRoutesOpenExpectedScreens()",
-      "action": "tap activity-section-consistency",
-      "timestamp": 1791816491.6,
-      "image": "73FE305A-ED40-44B2-A192-AA2D1CECF77D.png",
-      "screen": "screen-0-1320x2868-tap activity-section-consistency_0_1E18A5D2-2401-48B0-BE8A-75E06404091C.png",
-      "file": "A11.png"
+      "file": "A11.png",
+      "test": "ActivityExerciseRegressionTests/testConsistencyDetailShowsCalendarAndHistorySections()",
+      "action": "A11 consistency current and best normal",
+      "source_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+      "capture_kind": "xctest",
+      "image": "91D62FC3-C514-4494-91EC-2091C9B48777.png",
+      "screen": "screen-0-1320x2868-A11 consistency current and best normal_0_54CF0E94-100D-49EC-A073-E5FCB70721C0.png",
+      "timestamp": 1793695594.786,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "BB138F5C-4449-4A7D-B70C-A5F01D27EB99",
+      "image_sha256": "c5a7cf9fc652ac98d5e04450d174fa47ace8d509cdd6a68707874a856226f1e5",
+      "ax_sha256": "affbd974b922ce69778342ac431e5bfb38eb23c28b003dfdbbe8601def233d4d",
+      "evidence": "activity-consistency-detail-screen"
     },
     "A10": {
       "row_id": "A10",
@@ -1357,10 +1363,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "b0dafb053044289192eb9652862f01fced206b3d",
+  "last_refresh_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
   "last_refresh_screens": [
-    "A10",
-    "T16"
+    "A11"
   ],
-  "last_refresh_note": "A10 and T16 fresh normal native captures; see per-row source and linked gallery."
+  "last_refresh_note": "Duo closed normal is be23 passed case in failed mixed run; other normals are current source."
 }
