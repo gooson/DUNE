@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+A15 피로도 계산 설명은 [전용 배치 계약](activity-fatigue-algorithm-a15.html)을 따른다. 시안은 실제 캡처가 아니다.
+
 H03 수면 예측 상세와 이를 공유하는 T15 알림 수면 상세의 로드 완료 상태는 [전용 배치 계약](sleep-prediction-detail-h03.html)을 따른다. 기존 링·신뢰도·요인·팁을 한 열에서 읽고 큰 글씨에서는 세로로 쌓는다. 이 HTML은 시안이며 실제 앱 캡처가 아니다.
 
 T14 운동 알림의 누락된 대상 화면은 [전용 배치 계약](notification-target-not-found-t14.html)을 따른다. 원래 문구·아이콘·선택 가능한 실제 ID와 시스템 뒤로가기를 보존하며, iPhone·iPad·Duo의 큰 글씨에서도 한 열 스크롤로 읽는다. 이 HTML은 시안이며 새 실제 앱 캡처가 아니다.
