@@ -606,6 +606,7 @@ private struct RecommendationEquipmentSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
@@ -675,7 +676,11 @@ private struct RecommendationEquipmentSheet: View {
     }
 
     private var equipmentOverview: some View {
-        HStack(alignment: .top, spacing: DS.Spacing.md) {
+        let contentLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
+
+        return contentLayout {
             Image(systemName: "dumbbell.fill")
                 .font(.title3.weight(.semibold))
                 .foregroundStyle(DS.Color.activity)

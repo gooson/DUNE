@@ -2251,16 +2251,77 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let hero = app.descendants(matching: .any)["activity-recommendation-equipment-hero-title"].firstMatch
         XCTAssertTrue(hero.waitForExistence(timeout: 5))
         let window = app.windows.firstMatch
-        func visible(_ element: XCUIElement) -> Bool {
-            let viewport = list.frame.intersection(window.frame)
-            return element.exists && !element.frame.isEmpty && viewport.contains(element.frame)
+        let sheetBars = app.navigationBars.matching(NSPredicate(
+            format: "identifier IN %@", ["Gym Equipment", "Home Equipment"]
+        ))
+        XCTAssertEqual(sheetBars.count, 1, "One equipment sheet navigation bar is required")
+        let sheetBar = sheetBars.element(boundBy: 0)
+        func viewport() -> CGRect {
+            let intersection = list.frame.intersection(window.frame)
+            guard !intersection.isNull, !intersection.isEmpty else { return .null }
+            let bar = sheetBar.frame.intersection(intersection)
+            guard !bar.isNull, !bar.isEmpty else { return intersection }
+            return CGRect(x: intersection.minX, y: max(intersection.minY, bar.maxY),
+                          width: intersection.width, height: max(0, intersection.maxY - bar.maxY))
+        }
+        func drag(_ delta: CGFloat) {
+            let area = viewport()
+            XCTAssertFalse(area.isNull || area.isEmpty, "No unobscured list viewport")
+            let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                dx: area.midX - window.frame.minX, dy: area.midY - window.frame.minY
+            ))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: delta)))
         }
         func reveal(_ element: XCUIElement, upward: Bool) {
-            for _ in 0..<24 {
-                if visible(element) { break }
-                if upward { list.swipeUp(velocity: .slow) } else { list.swipeDown(velocity: .slow) }
+            // SwiftUI List lazily materializes distant rows: use the caller's
+            // direction only until a real, nonempty frame is available.
+            for _ in 0..<30 {
+                if element.exists && !element.frame.isEmpty { break }
+                let area = viewport()
+                XCTAssertFalse(area.isNull || area.isEmpty, "No unobscured list viewport")
+                drag((upward ? -1 : 1) * area.height * 0.18)
             }
-            XCTAssertTrue(visible(element), "Equipment row must fit the visible list and window")
+            XCTAssertTrue(element.exists && !element.frame.isEmpty, "Equipment content did not materialize")
+            func widthFits() -> Bool {
+                let area = viewport(), frame = element.frame
+                return !area.isNull && !area.isEmpty && frame.minX >= area.minX && frame.maxX <= area.maxX
+            }
+            XCTAssertTrue(widthFits(), "Equipment content overflows the unobscured list width")
+            if element.frame.height <= viewport().height {
+                for _ in 0..<30 where !viewport().contains(element.frame) {
+                    let area = viewport(), frame = element.frame
+                    let needed = frame.minY < area.minY ? area.minY - frame.minY : area.maxY - frame.maxY
+                    let step = min(abs(needed) + 4, area.height * 0.18)
+                    drag(needed > 0 ? step : -step)
+                }
+                XCTAssertTrue(widthFits() && viewport().contains(element.frame),
+                              "Short content must fit fully below the navigation bar")
+                return
+            }
+            // Oversized text must be read across overlapping, progressing visible intervals.
+            for _ in 0..<30 where !(element.frame.minY >= viewport().minY && element.frame.minY < viewport().maxY) {
+                let area = viewport(), needed = area.minY + 4 - element.frame.minY
+                let step = min(abs(needed), area.height * 0.18)
+                drag(needed > 0 ? step : -step)
+            }
+            XCTAssertTrue(widthFits() && element.frame.minY >= viewport().minY && element.frame.minY < viewport().maxY,
+                          "Tall content top must be readable below the navigation bar")
+            var reachedBottom = element.frame.maxY <= viewport().maxY
+            for _ in 0..<30 where !reachedBottom {
+                let beforeFrame = element.frame, before = beforeFrame.intersection(viewport())
+                XCTAssertFalse(before.isEmpty)
+                let beforeEnd = before.maxY - beforeFrame.minY
+                drag(-viewport().height * 0.18)
+                let afterFrame = element.frame, after = afterFrame.intersection(viewport())
+                XCTAssertFalse(after.isEmpty, "Tall content interval disappeared")
+                XCTAssertTrue(widthFits(), "Tall content overflows list width")
+                XCTAssertLessThanOrEqual(after.minY - afterFrame.minY, beforeEnd + 1,
+                                         "Tall content intervals must overlap")
+                XCTAssertGreaterThan(after.maxY - afterFrame.minY, beforeEnd + 1,
+                                     "Tall content must make visible progress")
+                reachedBottom = afterFrame.maxY <= viewport().maxY && !after.isEmpty
+            }
+            XCTAssertTrue(reachedBottom, "Tall content bottom must be readable")
         }
         reveal(hero, upward: false)
         let initialContext = hero.label
@@ -2289,9 +2350,24 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let selected = changeFirst ? first : last
         let original = changeFirst ? firstValue : lastValue
         reveal(selected, upward: changeFirst ? false : true)
-        selected.tap()
+        func setNativeSwitch(_ expected: String) {
+            let children = selected.switches
+            XCTAssertEqual(children.count, 1, "Expected one native switch control")
+            let control = children.element(boundBy: 0)
+            XCTAssertTrue(control.exists && control.isHittable && !control.frame.isEmpty)
+            XCTAssertTrue(selected.frame.contains(control.frame) && viewport().contains(control.frame),
+                          "Native switch must be fully visible in its row")
+            control.tap()
+            for element in [selected, control] {
+                let expectedValue = XCTNSPredicateExpectation(
+                    predicate: NSPredicate(format: "value == %@", expected), object: element
+                )
+                XCTAssertEqual(XCTWaiter.wait(for: [expectedValue], timeout: 3), .completed,
+                               "Native and row switch values must reach the expected state")
+            }
+        }
         let changed = original == "1" ? "0" : "1"
-        XCTAssertEqual(selected.value as? String, changed)
+        setNativeSwitch(changed)
         VisualAudit.capture("A20 equipment changed \(maxText ? "MAX" : "normal")")
         let done = app.buttons["Done"].firstMatch
         XCTAssertTrue(done.waitForExistence(timeout: 5)); done.tap()
@@ -2301,7 +2377,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(sheet.waitForExistence(timeout: 10))
         reveal(selected, upward: !changeFirst)
         XCTAssertEqual(selected.value as? String, changed, "The real context retains the selection after reopening")
-        selected.tap()
+        setNativeSwitch(original)
         XCTAssertEqual(selected.value as? String, original, "Restore the original equipment selection")
         XCTAssertTrue(done.waitForExistence(timeout: 5)); done.tap()
         XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
