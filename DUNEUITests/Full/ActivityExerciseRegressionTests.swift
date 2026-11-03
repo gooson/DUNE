@@ -1381,6 +1381,21 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         ))
         XCTAssertEqual(grabbers.count, 1)
         let grabber = grabbers.element(boundBy: 0)
+        if !maxText {
+            // Read the native sheet's two detents separately rather than relying
+            // on a long fling to skip the medium stop after content scrolling.
+            XCTAssertEqual(grabber.value as? String, "Expanded")
+            let collapseStart = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            collapseStart.press(forDuration: 0.1, thenDragTo: collapseStart.withOffset(CGVector(
+                dx: 0, dy: window.frame.height * 0.4
+            )), withVelocity: XCUIGestureVelocity(rawValue: 400), thenHoldForDuration: 0)
+            let collapsed = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "value == %@", "Half screen"), object: grabber
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [collapsed], timeout: 5), .completed,
+                           "Native sheet should collapse to its medium detent")
+            VisualAudit.capture("A17 Personal Records normal collapsed sheet")
+        }
         XCTAssertTrue(grabber.exists && grabber.isHittable)
         XCTAssertTrue(window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame))
         XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height)
