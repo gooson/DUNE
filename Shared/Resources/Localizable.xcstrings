@@ -55883,26 +55883,15 @@
     "μg/m³" : {
       "extractionState" : "manual"
     },
-    "τ (tau): Recovery rate by muscle size (large 72h, small 36h)" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "τ（タウ）: 筋肉サイズ別回復速度（大筋群72時間、小筋群36時間）"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "τ (타우): 근육 크기별 회복 속도 (대근육 72시간, 소근육 36시간)"
-          }
-        }
-      }
-    },
     "τ = max(2 × recovery hours ÷ max(sleep × readiness, 0.1), 1 hour)" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "τ = max(2 × recovery hours ÷ max(sleep × readiness, 0.1), 1 hour)"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
