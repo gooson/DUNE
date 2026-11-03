@@ -641,7 +641,7 @@
       "name": "개인 기록 설명",
       "title": "A17 · Personal Records",
       "file": "dune-personal-records-explanation-a17.html",
-      "detail": "기존 트로피·다섯 섹션과 시스템 시트를 유지하는 정적 제안. 실제 캡처 아님.",
+      "detail": "기존 트로피·다섯 섹션·시스템 시트를 보존한 실제 앱 개편. 4개 기기 상태와 큰 글씨 검증 완료.",
       "colors": [
         "#352e29",
         "#b2854c",
@@ -651,7 +651,8 @@
       "motion": "기존 중간/큰 시스템 시트와 스크롤",
       "implementation": {
         "layout": "../layout-map/activity-personal-records-explanation-a17.html",
-        "status": "native-implementation-in-progress"
+        "status": "native-implemented-scoped-captures-reviewed",
+        "actual_captures": "../full-redesign-map/review/a17-personal-records-explanation-native-2026-11-04/index.html"
       }
     }
   ]
