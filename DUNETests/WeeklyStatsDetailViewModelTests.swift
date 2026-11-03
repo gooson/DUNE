@@ -21,6 +21,15 @@ private struct MockWeeklyStatsWorkoutService: WorkoutQuerying {
     }
 }
 
+private struct RangeFilteringWeeklyStatsWorkoutService: WorkoutQuerying {
+    let workouts: [WorkoutSummary]
+
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] { workouts }
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
+        workouts.filter { $0.date >= start && $0.date <= end }
+    }
+}
+
 private actor SequencedWeeklyStatsWorkoutService: WorkoutQuerying {
     private let firstWorkouts: [WorkoutSummary]
     private let secondWorkouts: [WorkoutSummary]
@@ -155,6 +164,38 @@ struct WeeklyStatsDetailViewModelTests {
         #expect(vm.chartDailyBreakdown.count == 28)
         #expect(vm.chartDailyBreakdown.first?.date == expectedStart)
         #expect(vm.chartDailyBreakdown.last?.date == expectedEnd)
+    }
+
+    @Test("monthly comparison includes the first previous day without extending chart history")
+    func monthlyComparisonIncludesOldestPreviousDay() async throws {
+        let today = try #require(calendar.date(from: DateComponents(year: 2025, month: 6, day: 15, hour: 12)))
+        let startOfToday = calendar.startOfDay(for: today)
+        let oldest = try #require(calendar.date(byAdding: .day, value: -60, to: startOfToday))
+        let beforeOldest = try #require(calendar.date(byAdding: .day, value: -61, to: startOfToday))
+        let workout = WorkoutSummary(
+            id: "boundary", type: WorkoutActivityType.running.typeName, activityType: .running,
+            duration: 1_800, calories: 210, distance: 2_700, date: oldest
+        )
+        let excluded = WorkoutSummary(
+            id: "outside", type: WorkoutActivityType.running.typeName, activityType: .running,
+            duration: 3_600, calories: 420, distance: 5_400, date: beforeOldest
+        )
+        let manual = ManualExerciseSnapshot(
+            date: oldest, exerciseType: "Manual Squat", categoryRawValue: ActivityCategory.strength.rawValue,
+            equipmentRawValue: Equipment.barbell.rawValue, duration: 1_200, calories: 100, totalVolume: 1_000
+        )
+        let vm = WeeklyStatsDetailViewModel(workoutService: RangeFilteringWeeklyStatsWorkoutService(workouts: [workout, excluded]))
+        vm.selectedPeriod = .thisMonth
+
+        await vm.loadData(manualSnapshots: [manual], referenceDate: today)
+
+        let previous = try #require(vm.comparison?.previous)
+        #expect(previous.totalSessions == 2)
+        #expect(previous.totalDuration == 3_000)
+        #expect(previous.totalCalories == 310)
+        #expect(previous.exerciseTypes.compactMap(\.totalVolume).reduce(0, +) == 1_000)
+        #expect(vm.chartDailyBreakdown.count == 60)
+        #expect(vm.chartDailyBreakdown.first?.date == calendar.date(byAdding: .day, value: -59, to: startOfToday))
     }
 
     @Test("Changing selectedPeriod clears cached state")

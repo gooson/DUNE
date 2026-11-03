@@ -70,13 +70,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize() throws {
+        if VisualAudit.isEnabled { executionTimeAllowance = 420 }
         var configuration = launchConfiguration
         configuration.additionalArguments.append(contentsOf: [
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
         ])
         launchApp(with: configuration)
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
-        try verifyWorkoutInsightsReturnsToWorkout(useQuickStart: true)
+        try verifyWorkoutInsightsReturnsToWorkout(useQuickStart: true, checkPeriodMenu: true)
     }
 
     func testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI() throws {
@@ -114,7 +115,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Recovered legacy phone content resumes persisted workout draft")
     }
 
-    private func verifyWorkoutInsightsReturnsToWorkout(useQuickStart: Bool = false) throws {
+    private func verifyWorkoutInsightsReturnsToWorkout(useQuickStart: Bool = false, checkPeriodMenu: Bool = false) throws {
         if useQuickStart {
             openQuickStartPicker()
         } else {
@@ -135,20 +136,108 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Workout Insights presentation")
         captureFunctionalCheckpoint("Insights loaded at maximum accessibility size")
         if useQuickStart {
-            let metricPicker = app.buttons["weeklystats-chart-metric-picker"].firstMatch
-            for _ in 0..<8 where !(metricPicker.exists && metricPicker.isHittable) {
-                app.scrollViews.firstMatch.swipeUp(velocity: .slow)
+            let statsScroll = app.scrollViews["activity-weeklystats-detail-screen"].firstMatch
+            let chartHeading = statsScroll.staticTexts["weeklystats-chart-heading"].firstMatch
+            let metricPicker = statsScroll.buttons["weeklystats-chart-metric-picker"].firstMatch
+            let window = app.windows.firstMatch
+            let close = app.buttons["workout-insights-close"].firstMatch
+            XCTAssertTrue(statsScroll.exists && window.exists && close.exists,
+                          "Insights should expose its own scroll, window, and native close action")
+            XCTAssertTrue(chartHeading.waitForExistence(timeout: 5) && metricPicker.waitForExistence(timeout: 5),
+                          "The daily chart should expose both heading and metric menu")
+
+            func visibleContent() -> CGRect {
+                let scrollFrame = statsScroll.frame.intersection(window.frame)
+                var top = scrollFrame.minY
+                var bottom = scrollFrame.maxY
+                let navigation = app.navigationBars.firstMatch
+                if navigation.exists && navigation.frame.minY < scrollFrame.midY && navigation.frame.maxY > top {
+                    top = min(bottom, navigation.frame.maxY)
+                }
+                if close.isHittable && close.frame.midY > scrollFrame.midY && close.frame.minY < bottom {
+                    bottom = max(top, close.frame.minY)
+                }
+                return CGRect(x: scrollFrame.minX + 4, y: top + 4,
+                              width: max(0, scrollFrame.width - 8), height: max(0, bottom - top - 8))
             }
-            XCTAssertTrue(metricPicker.exists && metricPicker.isHittable,
-                          "The chart metric menu must be reachable at maximum accessibility size")
-            let statsScroll = app.scrollViews.firstMatch
-            statsScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25))
-                .press(forDuration: 0.05, thenDragTo: statsScroll.coordinate(
-                    withNormalizedOffset: CGVector(dx: 0.5, dy: 0.4)
-                ))
-            XCTAssertTrue(metricPicker.isHittable)
-            XCTAssertTrue(app.staticTexts["weeklystats-chart-heading"].firstMatch.isHittable,
-                          "The chart title must remain visible above its metric menu")
+
+            if checkPeriodMenu {
+                let period = statsScroll.buttons["weeklystats-period-picker"].firstMatch
+                XCTAssertTrue(period.waitForExistence(timeout: 10) && period.isHittable,
+                              "The maximum-text period menu must be reachable")
+                XCTAssertGreaterThanOrEqual(period.frame.width, 44)
+                XCTAssertGreaterThanOrEqual(period.frame.height, 44)
+                XCTAssertTrue(visibleContent().contains(period.frame),
+                              "The complete period menu must fit the visible Insights viewport")
+                let range = statsScroll.descendants(matching: .any)["activity-weeklystats-previous-period"].firstMatch
+                XCTAssertTrue(range.waitForExistence(timeout: 10), "The seeded comparison must expose its date range")
+                let initialRange = range.label
+                XCTAssertFalse(initialRange.isEmpty)
+                let choices: [(id: String, names: [String])] = [
+                    ("Last Week", ["Last Week", "지난 주", "先週"]),
+                    ("This Month", ["This Month", "이번 달", "今月"]),
+                    ("This Week", ["This Week", "이번 주", "今週"])
+                ]
+                XCTAssertTrue(["This Week", "이번 주", "今週"].contains(period.value as? String ?? ""),
+                              "The selected period must expose the complete translated label")
+                VisualAudit.capture("Weekly stats maximum AX period menu")
+                addScreenshotAttachment(named: "Weekly stats maximum AX period menu")
+                var previousRange = initialRange
+                for choice in choices {
+                    period.auditTap()
+                    let option = app.buttons["weeklystats-period-option-\(choice.id)"].firstMatch
+                    XCTAssertTrue(option.waitForExistence(timeout: 5) && option.isHittable,
+                                  "The period menu must expose \(choice.id)")
+                    let selectedLabel = option.label
+                    XCTAssertTrue(choice.names.contains(selectedLabel), "The menu option must show its complete label")
+                    option.auditTap()
+                    let changed = XCTNSPredicateExpectation(
+                        predicate: NSPredicate(format: "exists == true AND label != '' AND label != %@", previousRange),
+                        object: range
+                    )
+                    XCTAssertEqual(XCTWaiter.wait(for: [changed], timeout: 10), .completed,
+                                   "Selecting a period must change the actual comparison range")
+                    XCTAssertEqual(period.value as? String, selectedLabel,
+                                   "The selected period must expose the same complete translated label")
+                    XCTAssertTrue(period.isHittable && visibleContent().contains(period.frame),
+                                  "The selected menu must remain fully visible")
+                    VisualAudit.capture("Weekly stats maximum AX period \(choice.id)")
+                    addScreenshotAttachment(named: "Weekly stats maximum AX period \(choice.id)")
+                    previousRange = range.label
+                }
+                XCTAssertEqual(range.label, initialRange, "Returning to This Week must restore its comparison range")
+            }
+
+            for _ in 0..<8 {
+                let viewport = visibleContent()
+                let chartControls = chartHeading.frame.union(metricPicker.frame)
+                if viewport.contains(chartControls) && chartHeading.isHittable && metricPicker.isHittable {
+                    break
+                }
+                let displacement: CGFloat
+                if chartControls.minY < viewport.minY {
+                    displacement = min(max(viewport.minY - chartControls.minY + 12, 44), viewport.height * 0.35)
+                } else if chartControls.maxY > viewport.maxY {
+                    displacement = -min(max(chartControls.maxY - viewport.maxY + 12, 44), viewport.height * 0.35)
+                } else {
+                    break
+                }
+                let origin = statsScroll.frame.origin
+                let start = statsScroll.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: viewport.midX - origin.x, dy: viewport.midY - origin.y))
+                let end = statsScroll.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: viewport.midX - origin.x,
+                                         dy: viewport.midY + displacement - origin.y))
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+            let chartControls = chartHeading.frame.union(metricPicker.frame)
+            XCTAssertTrue(visibleContent().contains(chartControls),
+                          "The complete chart heading and menu must share the visible scroll viewport")
+            XCTAssertTrue(chartHeading.isHittable && metricPicker.isHittable,
+                          "The chart title and metric menu must both be reachable at maximum accessibility size")
+            XCTAssertLessThanOrEqual(chartHeading.frame.maxY, metricPicker.frame.minY,
+                                     "The chart title must remain above its metric menu")
+            addScreenshotAttachment(named: "Daily chart heading and accessible metric menu")
             VisualAudit.capture("Daily chart heading and accessible metric menu")
             metricPicker.auditTap()
             let volume = app.buttons.matching(NSPredicate(
@@ -704,9 +793,105 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         for _ in 0..<14 where !weekly.isHittable { rootScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(weekly.isHittable, "Weekly stats link should be visible")
         weekly.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityWeeklyStatsDetailScreen].firstMatch
-            .waitForExistence(timeout: 10))
+        let detail = app.descendants(matching: .any)[AXID.activityWeeklyStatsDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10))
+
+        // The destination exists before its asynchronous comparison finishes loading.
+        let summary = app.descendants(matching: .any)[AXID.activityWeeklyStatsSummaryGrid].firstMatch
+        XCTAssertTrue(summary.waitForExistence(timeout: 15), "Weekly stats summary should finish loading")
+        for id in ["volume", "duration", "calories", "activeDays", "sessions"] {
+            let value = app.staticTexts["activity-weekly-stat-value-\(id)"].firstMatch
+            XCTAssertTrue(value.waitForExistence(timeout: 10), "Current \(id) should exist")
+            XCTAssertFalse(value.label.isEmpty, "Current \(id) should have a value")
+        }
         VisualAudit.capture("Weekly stats detail")
+
+        let detailScroll = app.scrollViews[AXID.activityWeeklyStatsDetailScreen].firstMatch
+        let window = app.windows.firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5) && window.exists,
+                      "Weekly stats should own its scroll viewport")
+
+        func visibleContent() -> CGRect {
+            let base = detailScroll.frame.intersection(window.frame)
+            var top = base.minY
+            var bottom = base.maxY
+            let navigation = app.navigationBars.firstMatch
+            if navigation.exists && !navigation.frame.isEmpty && navigation.frame.intersects(base)
+                && navigation.frame.midY < base.midY {
+                top = min(bottom, max(top, navigation.frame.maxY))
+            }
+            let tabBar = app.tabBars.firstMatch
+            if tabBar.exists && !tabBar.frame.isEmpty && tabBar.frame.intersects(base)
+                && tabBar.frame.midY > base.midY {
+                bottom = max(top, min(bottom, tabBar.frame.minY))
+            }
+            return CGRect(x: base.minX, y: top + 2,
+                          width: max(0, base.width), height: max(0, bottom - top - 4))
+        }
+
+        func revealWhole(_ target: XCUIElement, value: XCUIElement) {
+            for _ in 0..<12 {
+                let viewport = visibleContent()
+                let targetFrame = target.frame
+                let valueFrame = value.frame
+                if viewport.width > 0 && viewport.height > 0 && !targetFrame.isEmpty && !valueFrame.isEmpty
+                    && viewport.contains(targetFrame) && viewport.contains(valueFrame)
+                    && target.isHittable && value.isHittable { return }
+                guard viewport.height > 44, !targetFrame.isEmpty else { break }
+                let displacement: CGFloat
+                if targetFrame.minY < viewport.minY {
+                    displacement = min(max(viewport.minY - targetFrame.minY + 12, 44), viewport.height * 0.35)
+                } else if targetFrame.maxY > viewport.maxY {
+                    displacement = -min(max(targetFrame.maxY - viewport.maxY + 12, 44), viewport.height * 0.35)
+                } else {
+                    break
+                }
+                let origin = detailScroll.frame.origin
+                let start = detailScroll.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: viewport.midX - origin.x, dy: viewport.midY - origin.y))
+                let end = detailScroll.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: viewport.midX - origin.x,
+                                         dy: viewport.midY + displacement - origin.y))
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+            let viewport = visibleContent()
+            XCTAssertTrue(viewport.width > 0 && viewport.height > 0 && !target.frame.isEmpty
+                          && !value.frame.isEmpty && viewport.contains(target.frame)
+                          && viewport.contains(value.frame) && target.isHittable && value.isHittable,
+                          "The whole comparison item and its value should be visible and hittable")
+        }
+
+        let caption = app.staticTexts["activity-weeklystats-previous-period"].firstMatch
+        XCTAssertTrue(caption.waitForExistence(timeout: 15), "Previous comparison should include its date range")
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let previousStart = try XCTUnwrap(calendar.date(byAdding: .day, value: -14, to: today))
+        let previousEnd = try XCTUnwrap(calendar.date(byAdding: .day, value: -8, to: today))
+        let supportedLocales = [Locale.current, Locale(identifier: "en_US"),
+                                Locale(identifier: "ko_KR"), Locale(identifier: "ja_JP")]
+        let expectedCaptions = supportedLocales.map { locale in
+            let format = Date.FormatStyle(date: .abbreviated, time: .omitted).locale(locale)
+            return "\(previousStart.formatted(format)) – \(previousEnd.formatted(format))"
+        }
+        XCTAssertTrue(expectedCaptions.contains(caption.label),
+                      "The previous caption should show the real previous start and end dates")
+        XCTAssertEqual(app.staticTexts.matching(identifier: "activity-weeklystats-previous-period").count, 1)
+        revealWhole(caption, value: caption)
+        VisualAudit.capture("A05 previous comparison date")
+
+        for id in ["volume", "duration", "calories", "sessions"] {
+            let row = app.descendants(matching: .any)["activity-weeklystats-previous-\(id)"].firstMatch
+            let value = app.staticTexts["activity-weeklystats-previous-value-\(id)"].firstMatch
+            XCTAssertTrue(row.waitForExistence(timeout: 10), "Previous \(id) row should exist")
+            XCTAssertTrue(value.waitForExistence(timeout: 10), "Previous \(id) value should exist")
+            XCTAssertFalse(value.label.isEmpty, "Previous \(id) should have a value")
+            revealWhole(row, value: value)
+            VisualAudit.capture("A05 previous comparison \(id) row")
+        }
+
+        tapBackButton()
+        XCTAssertTrue(detail.waitForNonExistence(timeout: 8), "Weekly stats detail should dismiss")
+        ensureActivityRoot()
     }
 
     func testActivitySecondaryDetailRoutesOpenExpectedScreens() throws {

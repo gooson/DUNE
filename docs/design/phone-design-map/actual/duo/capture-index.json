@@ -704,13 +704,20 @@
     },
     "A05": {
       "row_id": "A05",
-      "evidence": "activity-weeklystats-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens()",
-      "action": "tap activity-section-weeklystats",
-      "timestamp": 1791839836.303,
-      "image": "DDFF18E1-3B33-4A80-B970-7BF25FE187F6.png",
-      "screen": "screen-0-1398x2034-tap activity-section-weeklystats_0_34418AF5-0695-481F-B861-D3CA6F73A4F8.png",
-      "file": "A05.png"
+      "file": "A05.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWeeklyStatsDetailDirect()",
+      "action": "Weekly stats detail",
+      "source_revision": "d79a4666c3d2b16044b577937f64450e9dc7e2fe",
+      "normal_source_review_head": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
+      "capture_kind": "host",
+      "image": "003-1398x2034.png",
+      "screen": "003-1398x2034.png",
+      "timestamp": 1793672104.104,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "device_uid": "6BCF83DA-1054-46AA-AACA-FF57872E464A",
+      "image_sha256": "302f2d393cd8f7975100e1756b8143d515b5a2256abe74f549f36b6c1b364632",
+      "ax_sha256": "268c7f40a9a8bef3e2f026db261a2c0021ac28b3f47e5cd167e6c12023a3a4c5",
+      "evidence": "activity-weeklystats-detail-screen"
     },
     "A03": {
       "row_id": "A03",
@@ -1365,9 +1372,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "c0b51078",
+  "last_refresh_revision": "ed21363cf3a790d29e704e5fa4883f9e5e16bd0a",
   "last_refresh_screens": [
-    "T06"
+    "A05"
   ],
-  "last_refresh_note": "T06 HRV only; all unrelated records including T05 and original global provenance preserved. iPad capture is historical Oct31."
+  "last_refresh_note": "Per-row source revisions retained; d79 content/layout closure excludes ambient wave phase."
 }

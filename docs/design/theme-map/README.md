@@ -242,6 +242,12 @@ A06 네이티브 소스는 실제 현재·이전 네 지표와 원래 네 기간
 
 [밝음·어두움 보존 시안](themes/dune-muscle-map-detail-a03.html)과 [화면별 배치·데이터 계약](../layout-map/activity-muscle-map-detail-a03.html)은 A04의 3D 버튼 비활성화와 compact 자동 이동 방지를 유지한다. 실제 recoveredCount/관측 상태 수와 로딩·빈 상태를 구분하는 불투명 회복 헤더(regular에서는 secondary 첫 항목, compact에서는 primary 지도 위), 실제 앞/뒤 2D 지도, Recovery/Sets별 원래 색과 범례, 선택 근육·기존 가로 볼륨 막대·회복 정보를 정돈하는 제안이다. 도식 몸체와 막대는 실제 SVG·건강 기록·앱 캡처가 아니다. A04 phone 및 iPad 기본/선택 before는 동일 원본 소스와 실제 PNG로 확인했다. Duo before 및 수정된 A03 after는 별도 검증이 필요하다.
 
+## A05 주간 운동 통계 상세 방향 · 2026-10-31
+
+[밝음·어두움 브라우저 시안](themes/dune-weekly-stats-detail-a05.html)은 한 화면의 불투명 현재 기간 히어로, 원래 다섯 `ActivityStat.icon`, 이전 기간 네 비교 행과 단일 날짜 캡션을 제안한다. [화면별 배치·데이터 계약](../layout-map/activity-weekly-stats-detail-a05.html)을 함께 따른다. 숫자 자리와 차트 막대는 설명용이며 실제 운동 기록이나 앱 캡처가 아니다. 원본 `672d5fdb` 기기별 before와 구현 후 after는 아직 수집하지 않았다.
+
+A05 네이티브 소스는 원래 `ActivityStat.iconColor`를 불투명 히어로 위에 유지하고, 이전 기간의 실제 4개 값·하나의 기간 표기를 사용한다. 기본 fixture의 이전 세션 2회·빈 볼륨 증감률·이전 날짜 및 기간 전환 검증을 준비했으며 실제 캡처 통과로 표시하지 않는다.
+
 
 2026-11-03 [A10/T16 개인 기록 상세](themes/dune-personal-records-detail-a10-t16.html)는 실제 기록·원래 아이콘·보상과 다섯 기간을 위한 밝음/어두움 정적 제안이다. 예시 값과 웹 기호는 앱 데이터나 네이티브 캡처가 아니다. [배치 계약](../layout-map/activity-personal-records-detail-a10-t16.html)과 구분해 보존한다.
 
