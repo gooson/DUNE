@@ -454,20 +454,9 @@ struct ExerciseMixDetailView: View {
     }
 
     private func updateDonutSelection() {
-        guard let angle = selectedAngle else {
-            selectedExercise = nil
-            return
-        }
-        let total = Double(displayFrequencies.reduce(0) { $0 + $1.count })
-        guard total > 0 else { return }
-        var cumulative = 0.0
-        for freq in displayFrequencies {
-            cumulative += Double(freq.count) / total * 360
-            if angle <= cumulative {
-                selectedExercise = freq.exerciseName
-                return
-            }
-        }
+        selectedExercise = ExerciseMixDetailViewModel.selectedExercise(
+            for: selectedAngle, frequencies: displayFrequencies
+        )
     }
 
     // MARK: - Full Frequency List

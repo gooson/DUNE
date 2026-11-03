@@ -1038,27 +1038,51 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertFalse(cardioLeaf.label.isEmpty)
         VisualAudit.capture("A12 exercise mix cardio \(maxText ? "MAX" : "normal")")
 
-        let chart = visible("activity-exercise-mix-donut-chart")
-        let center = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        center.withOffset(CGVector(dx: 65, dy: 0)).tap()
-        let prefix = "activity-exercise-mix-selected-name-"
-        let selection = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", prefix)).firstMatch
-        XCTAssertTrue(selection.waitForExistence(timeout: 10), "A donut sector should select an exercise")
-        let selectedName = visible(selection.identifier)
-        XCTAssertFalse(selectedName.label.isEmpty)
-        let selectedKey = String(selectedName.identifier.dropFirst(prefix.count))
-        XCTAssertFalse(selectedKey.isEmpty)
-        let selectedCount = visible("activity-exercise-mix-selected-count-\(selectedKey)")
-        XCTAssertTrue(selectedCount.label.hasSuffix("x"), selectedCount.label)
-        let count = Int(String(selectedCount.label.dropLast()).replacingOccurrences(of: ",", with: ""))
-        XCTAssertGreaterThan(count ?? 0, 0, "The selected exercise must have a real positive frequency")
-        let nameValue = selectedName.label
-        let countValue = selectedCount.label
-        VisualAudit.capture("A12 exercise mix selected donut \(maxText ? "MAX" : "normal")")
-        let exercise = visible("activity-exercise-mix-frequency-name-\(selectedKey)")
-        XCTAssertEqual(exercise.label, nameValue)
-        let frequency = visible("activity-exercise-mix-frequency-count-\(selectedKey)")
-        XCTAssertEqual(frequency.label, countValue)
+        // The chart draws the first eight entries of the eager full-frequency list.
+        // Derive expected names and counts from the real list, not fixture constants.
+        let namePrefix = "activity-exercise-mix-frequency-name-"
+        let countPrefix = "activity-exercise-mix-frequency-count-"
+        let names = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", namePrefix))
+            .allElementsBoundByIndex.sorted { $0.frame.minY < $1.frame.minY }
+        XCTAssertGreaterThanOrEqual(names.count, 2, "Two real chart sectors are required")
+        var plotted: [(key: String, name: String, count: Int, countLabel: String)] = []
+        for name in names.prefix(8) {
+            let key = String(name.identifier.dropFirst(namePrefix.count))
+            XCTAssertFalse(key.isEmpty)
+            let countElement = app.staticTexts[countPrefix + key].firstMatch
+            XCTAssertTrue(countElement.waitForExistence(timeout: 10), "Missing count for \(key)")
+            let text = countElement.label
+            XCTAssertTrue(text.hasSuffix("x"), text)
+            let count = try XCTUnwrap(Int(String(text.dropLast()).replacingOccurrences(of: ",", with: "")))
+            XCTAssertGreaterThan(count, 0)
+            plotted.append((key, name.label, count, text))
+        }
+        let first = try XCTUnwrap(plotted.first, "Missing first plotted frequency")
+        let second = try XCTUnwrap(plotted.dropFirst().first, "Missing second plotted frequency")
+        let plottedTotal = plotted.reduce(0) { $0 + $1.count }
+        XCTAssertGreaterThan(plottedTotal, 0)
+        XCTAssertNotEqual(first.key, second.key)
+
+        var preceding = 0
+        for (index, row) in plotted.prefix(2).enumerated() {
+            let chart = visible("activity-exercise-mix-donut-chart")
+            if index == 0 { VisualAudit.capture("A12 exercise mix full donut \(maxText ? "MAX" : "normal")") }
+            let angle = 2 * Double.pi * (Double(preceding) + Double(row.count) / 2) / Double(plottedTotal)
+            let radius = 0.8 * min(chart.frame.width, chart.frame.height) / 2
+            let center = chart.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            center.withOffset(CGVector(dx: radius * CGFloat(sin(angle)), dy: -radius * CGFloat(cos(angle)))).tap()
+            let selectedName = app.staticTexts["activity-exercise-mix-selected-name-\(row.key)"].firstMatch
+            XCTAssertTrue(selectedName.waitForExistence(timeout: 10), "Expected selected sector \(row.key)")
+            XCTAssertEqual(visible(selectedName.identifier).label, row.name)
+            let selectedCount = visible("activity-exercise-mix-selected-count-\(row.key)")
+            XCTAssertEqual(selectedCount.label, row.countLabel)
+            VisualAudit.capture(index == 1 ? "A12 exercise mix selected donut \(maxText ? "MAX" : "normal")" : "A12 exercise mix first selected donut \(maxText ? "MAX" : "normal")")
+            preceding += row.count
+        }
+        for row in plotted.prefix(2) {
+            XCTAssertEqual(visible(namePrefix + row.key).label, row.name)
+            XCTAssertEqual(visible(countPrefix + row.key).label, row.countLabel)
+        }
         VisualAudit.capture("A12 exercise mix frequency \(maxText ? "MAX" : "normal")")
         tapBackButton()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 10),
