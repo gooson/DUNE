@@ -736,13 +736,19 @@
     },
     "A12": {
       "row_id": "A12",
-      "evidence": "activity-exercise-mix-detail-screen",
+      "file": "A12.png",
       "test": "ActivityExerciseRegressionTests/testActivityExerciseMixRouteOpensExpectedScreen()",
-      "action": "tap activity-section-exercisemix",
-      "timestamp": 1791837884.246,
-      "image": "469E19A9-BCE7-4C21-99B5-36DE530ED7EF.png",
-      "screen": "screen-0-2064x2752-tap activity-section-exercisemix_0_4872B193-1DD5-45DB-AF58-918637A4997B.png",
-      "file": "A12.png"
+      "action": "A12 exercise mix summary normal",
+      "source_revision": "bb79f250497786526d37d420fd839de5c2df5dee",
+      "capture_kind": "xctest",
+      "image": "F9D0D3E9-F787-4516-B1BD-E926E8DE6364.png",
+      "screen": "screen-0-1512x2316-A12 exercise mix summary normal_0_111C5078-048F-423F-BC88-22548E912DA8.png",
+      "timestamp": 1793709876.849,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "300C4F35-3265-402F-905C-DBC29B23621D",
+      "image_sha256": "fd85c388f5af4a2eb086d6974f417fa72f04c3a1b7ee4387f73fdf1cf123b909",
+      "ax_sha256": "acbbdd0bdb2bcaa4525761f40d9ba2294865c17ed873fbbd071f53d29294793b",
+      "evidence": "activity-exercise-mix-detail-screen"
     },
     "A09": {
       "row_id": "A09",
@@ -1360,9 +1366,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "fa4ba7383f1e08c70585e84e0bddaa30d6f41bf1",
+  "last_refresh_revision": "bb79f250497786526d37d420fd839de5c2df5dee",
   "last_refresh_screens": [
-    "A11"
+    "A12"
   ],
-  "last_refresh_note": "Duo closed normal is be23 passed case in failed mixed run; other normals are current source."
+  "last_refresh_note": "Fresh corrected-source A12 captures; per-row source and device provenance retained."
 }

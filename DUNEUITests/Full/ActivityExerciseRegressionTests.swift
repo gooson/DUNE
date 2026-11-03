@@ -656,6 +656,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     override func setUpWithError() throws {
+        if name == "-[ActivityExerciseRegressionTests testActivityExerciseMixAtMaximumAccessibilityTextSize]" {
+            // This exact MAX case includes host capture handshakes and real chart interactions.
+            executionTimeAllowance = 360
+        }
         try super.setUpWithError()
     }
 
@@ -914,27 +918,209 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testActivityExerciseMixRouteOpensExpectedScreen() throws {
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.activitySectionExerciseMix, maxSwipes: 10))
-        waitForElement(AXID.activitySectionExerciseMix, timeout: 5).auditTap()
-        XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.activityExerciseMixDetailScreen].firstMatch.waitForExistence(timeout: 10),
-            "Exercise Mix detail should open"
-        )
-        let composition = app.descendants(matching: .any)["activity-exercise-mix-composition"].firstMatch
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-exercise-mix-composition", maxSwipes: 10))
-        XCTAssertTrue(composition.isHittable)
-        addScreenshotAttachment(named: "Activity Exercise Mix composition")
+        try assertExerciseMixDetail(maxText: false)
+    }
 
-        let weeklyChart = app.descendants(matching: .any)["activity-exercise-mix-weekly-chart"].firstMatch
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-exercise-mix-weekly-chart", maxSwipes: 10))
-        XCTAssertTrue(weeklyChart.isHittable)
-        addScreenshotAttachment(named: "Activity Exercise Mix weekly chart")
+    func testActivityExerciseMixAtMaximumAccessibilityTextSize() throws {
+        try assertExerciseMixDetail(maxText: true)
+    }
 
-        let muscleShares = app.descendants(matching: .any)["activity-exercise-mix-muscle-shares"].firstMatch
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-exercise-mix-muscle-shares", maxSwipes: 10))
-        XCTAssertTrue(muscleShares.isHittable)
-        XCTAssertTrue(app.descendants(matching: .any)["activity-exercise-mix-cardio-types"].firstMatch.exists)
-        addScreenshotAttachment(named: "Activity Exercise Mix muscle shares")
+    private func assertExerciseMixDetail(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        if maxText {
+            configuration.additionalArguments.append(contentsOf: [
+                "--ui-test-style", "dark",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ])
+        }
+        launchApp(with: configuration)
+        openActivityDetail(sectionIdentifier: AXID.activitySectionExerciseMix,
+                           destinationIdentifier: AXID.activityExerciseMixDetailScreen, maxSwipes: maxText ? 32 : 12)
+        let scroll = app.scrollViews[AXID.activityExerciseMixDetailScreen].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 10))
+
+        func viewport() -> CGRect {
+            let base = scroll.frame.intersection(app.windows.firstMatch.frame)
+            var top = base.minY
+            var bottom = base.maxY
+            let navigation = app.navigationBars.firstMatch
+            if navigation.exists && !navigation.frame.isEmpty && navigation.frame.intersects(base)
+                && navigation.frame.midY < base.midY {
+                top = min(bottom, max(top, navigation.frame.maxY))
+            }
+            let tabBar = app.tabBars.firstMatch
+            if tabBar.exists && !tabBar.frame.isEmpty && tabBar.frame.intersects(base)
+                && tabBar.frame.midY > base.midY {
+                bottom = max(top, min(bottom, tabBar.frame.minY))
+            }
+            return CGRect(x: base.minX, y: top + 2, width: max(0, base.width),
+                          height: max(0, bottom - top - 4))
+        }
+
+        func visible(_ id: String) -> XCUIElement {
+            let matches = app.descendants(matching: .any).matching(identifier: id)
+            XCTAssertTrue(matches.firstMatch.waitForExistence(timeout: 10), "Missing \(id)")
+            let isDonut = id == "activity-exercise-mix-donut-chart"
+
+            func target() -> XCUIElement {
+                guard isDonut else { return matches.firstMatch }
+                // Chart may expose both a larger semantic container and the 200pt plot.
+                // Choose by intrinsic frame area, never by whether it already fits the viewport.
+                return matches.allElementsBoundByIndex.filter { !$0.frame.isEmpty }.min {
+                    $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height
+                } ?? matches.firstMatch
+            }
+
+            for _ in 0..<24 {
+                let element = target()
+                let bounds = viewport()
+                let frame = element.frame
+                if !frame.isEmpty && bounds.contains(frame) { break }
+                if isDonut && !frame.isEmpty && frame.maxY >= bounds.minY - bounds.height
+                    && frame.minY <= bounds.maxY + bounds.height {
+                    // Short bounded drags avoid oscillating past a plot near the viewport.
+                    let delta = min(bounds.height * 0.3, max(-bounds.height * 0.3, bounds.midY - frame.midY))
+                    if abs(delta) < 1 { break }
+                    let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+                        .withOffset(CGVector(dx: bounds.midX - scroll.frame.minX,
+                                             dy: bounds.midY - scroll.frame.minY))
+                    start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: delta)))
+                } else if element.exists && frame.midY < bounds.midY {
+                    scroll.swipeDown(velocity: .slow)
+                } else {
+                    scroll.swipeUp(velocity: .slow)
+                }
+            }
+            let element = target()
+            XCTAssertFalse(element.frame.isEmpty, "Empty frame: \(id)")
+            if isDonut {
+                XCTAssertEqual(element.frame.height, 200, accuracy: 1, "Expected the actual 200pt chart plot")
+            }
+            XCTAssertTrue(viewport().contains(element.frame), "Not fully visible: \(id)")
+            return element
+        }
+
+        let total = visible("activity-exercise-mix-total")
+        let parsedTotal = Int(total.label.replacingOccurrences(of: ",", with: ""))
+        XCTAssertNotNil(parsedTotal, "The total must be an actual formatted integer: \(total.label)")
+        XCTAssertGreaterThan(parsedTotal ?? 0, 0, "The seeded route must contain workout records")
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let firstDay = try XCTUnwrap(calendar.date(byAdding: .day, value: -27, to: today))
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US")
+        dateFormatter.calendar = calendar
+        dateFormatter.timeZone = calendar.timeZone
+        dateFormatter.setLocalizedDateFormatFromTemplate("MMMd")
+        let dateRange = visible("activity-exercise-mix-date-range").label
+        XCTAssertTrue(dateRange.contains(dateFormatter.string(from: firstDay)), dateRange)
+        XCTAssertTrue(dateRange.contains(dateFormatter.string(from: today)), dateRange)
+        var categoryTotal = 0
+        for category in ["strength", "cardio", "other"] {
+            let id = "activity-exercise-mix-category-count-\(category)"
+            let candidate = app.descendants(matching: .any)[id].firstMatch
+            if category == "other" && !candidate.exists { continue }
+            let value = visible(id).label.replacingOccurrences(of: ",", with: "")
+            let count = try XCTUnwrap(Int(value), "Invalid category value: \(value)")
+            XCTAssertGreaterThanOrEqual(count, 0)
+            categoryTotal += count
+        }
+        XCTAssertEqual(categoryTotal, parsedTotal, "Category counts must sum to the displayed total")
+        VisualAudit.capture("A12 exercise mix summary \(maxText ? "MAX" : "normal")")
+        _ = visible("activity-exercise-mix-weekly-heading")
+        let week = visible("activity-exercise-mix-weekly-total")
+        XCTAssertNotNil(Int(week.label.replacingOccurrences(of: ",", with: "")))
+        VisualAudit.capture("A12 exercise mix weekly \(maxText ? "MAX" : "normal")")
+        _ = visible("activity-exercise-mix-muscle-heading")
+        let muscleSets = app.descendants(matching: .any)["activity-exercise-mix-muscle-sets"].firstMatch
+        let muscleLeaf = visible(muscleSets.exists ? "activity-exercise-mix-muscle-sets" : "activity-exercise-mix-muscle-empty")
+        XCTAssertFalse(muscleLeaf.label.isEmpty)
+        VisualAudit.capture("A12 exercise mix muscles \(maxText ? "MAX" : "normal")")
+        _ = visible("activity-exercise-mix-cardio-heading")
+        let cardioCount = app.descendants(matching: .any)["activity-exercise-mix-cardio-count"].firstMatch
+        let cardioLeaf = visible(cardioCount.exists ? "activity-exercise-mix-cardio-count" : "activity-exercise-mix-cardio-empty")
+        XCTAssertFalse(cardioLeaf.label.isEmpty)
+        VisualAudit.capture("A12 exercise mix cardio \(maxText ? "MAX" : "normal")")
+
+        // The chart draws the first eight entries of the eager full-frequency list.
+        // Derive expected names and counts from the real list, not fixture constants.
+        let namePrefix = "activity-exercise-mix-frequency-name-"
+        let countPrefix = "activity-exercise-mix-frequency-count-"
+        let names = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", namePrefix))
+            .allElementsBoundByIndex.sorted { $0.frame.minY < $1.frame.minY }
+        XCTAssertGreaterThanOrEqual(names.count, 2, "Two real chart sectors are required")
+        var plotted: [(key: String, name: String, count: Int, countLabel: String)] = []
+        for name in names.prefix(8) {
+            let key = String(name.identifier.dropFirst(namePrefix.count))
+            XCTAssertFalse(key.isEmpty)
+            let countElement = app.staticTexts[countPrefix + key].firstMatch
+            XCTAssertTrue(countElement.waitForExistence(timeout: 10), "Missing count for \(key)")
+            let text = countElement.label
+            XCTAssertTrue(text.hasSuffix("x"), text)
+            let count = try XCTUnwrap(Int(String(text.dropLast()).replacingOccurrences(of: ",", with: "")))
+            XCTAssertGreaterThan(count, 0)
+            plotted.append((key, name.label, count, text))
+        }
+        let first = try XCTUnwrap(plotted.first, "Missing first plotted frequency")
+        let second = try XCTUnwrap(plotted.dropFirst().first, "Missing second plotted frequency")
+        let plottedTotal = plotted.reduce(0) { $0 + $1.count }
+        var allFrequencyTotal = 0
+        for name in names {
+            let key = String(name.identifier.dropFirst(namePrefix.count))
+            let count = app.staticTexts[countPrefix + key].firstMatch
+            XCTAssertTrue(count.waitForExistence(timeout: 10))
+            let text = count.label
+            XCTAssertTrue(text.hasSuffix("x"), text)
+            allFrequencyTotal += try XCTUnwrap(Int(String(text.dropLast()).replacingOccurrences(of: ",", with: "")))
+        }
+        XCTAssertGreaterThan(plottedTotal, 0)
+        XCTAssertNotEqual(first.key, second.key)
+
+        var preceding = 0
+        for (index, row) in plotted.prefix(2).enumerated() {
+            let chart = visible("activity-exercise-mix-donut-chart")
+            if index == 0 { VisualAudit.capture("A12 exercise mix full donut \(maxText ? "MAX" : "normal")") }
+            let angle = 2 * Double.pi * (Double(preceding) + Double(row.count) / 2) / Double(plottedTotal)
+            let radius = 0.8 * min(chart.frame.width, chart.frame.height) / 2
+            let plotFrame = chart.frame
+            let window = app.windows.firstMatch
+            let windowFrame = window.frame
+            let point = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                dx: plotFrame.midX + radius * CGFloat(sin(angle)) - windowFrame.minX,
+                dy: plotFrame.midY - radius * CGFloat(cos(angle)) - windowFrame.minY
+            ))
+            point.press(forDuration: 1)
+            let selectedName = app.staticTexts["activity-exercise-mix-selected-name-\(row.key)"].firstMatch
+            XCTAssertTrue(selectedName.waitForExistence(timeout: 10), "Expected selected sector \(row.key)")
+            XCTAssertEqual(visible(selectedName.identifier).label, row.name)
+            let selectedCount = visible("activity-exercise-mix-selected-count-\(row.key)")
+            XCTAssertEqual(selectedCount.label, row.countLabel)
+            VisualAudit.capture(index == 1 ? "A12 exercise mix selected donut \(maxText ? "MAX" : "normal")" : "A12 exercise mix first selected donut \(maxText ? "MAX" : "normal")")
+            preceding += row.count
+        }
+        for row in plotted.prefix(2) {
+            XCTAssertEqual(visible(namePrefix + row.key).label, row.name)
+            XCTAssertEqual(visible(countPrefix + row.key).label, row.countLabel)
+        }
+        VisualAudit.capture("A12 exercise mix frequency \(maxText ? "MAX" : "normal")")
+        _ = visible("activity-exercise-mix-clear-selection")
+        let clear = app.buttons["activity-exercise-mix-clear-selection"].firstMatch
+        XCTAssertTrue(clear.isHittable, "Clear selection must be usable")
+        clear.tap()
+        XCTAssertTrue(clear.waitForNonExistence(timeout: 10), "Clear should disappear after use")
+        let selected = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", "activity-exercise-mix-selected-name-"
+        )).firstMatch
+        XCTAssertTrue(selected.waitForNonExistence(timeout: 10), "Clearing must remove the selected exercise")
+        let donutTotal = visible("activity-exercise-mix-donut-total")
+        XCTAssertEqual(Int(donutTotal.label.replacingOccurrences(of: ",", with: "")), allFrequencyTotal,
+                       "Clearing must restore the actual total for all exercises")
+        VisualAudit.capture("A12 exercise mix cleared selection \(maxText ? "MAX" : "normal")")
+        tapBackButton()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 10),
+                      "Back should return to Activity")
+        XCTAssertTrue(calendar.isDateInToday(today), "The date range assertions require one local day")
     }
 
     func testActivityRiskAndReportRoutesOpen() throws {
