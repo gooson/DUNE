@@ -241,3 +241,5 @@ A06 네이티브 소스는 실제 현재·이전 네 지표와 원래 네 기간
 ## A03 근육 지도 상세 2D 방향 · 2026-10-31
 
 [밝음·어두움 보존 시안](themes/dune-muscle-map-detail-a03.html)과 [화면별 배치·데이터 계약](../layout-map/activity-muscle-map-detail-a03.html)은 A04의 3D 버튼 비활성화와 compact 자동 이동 방지를 유지한다. 실제 recoveredCount/관측 상태 수와 로딩·빈 상태를 구분하는 불투명 회복 헤더(regular에서는 secondary 첫 항목, compact에서는 primary 지도 위), 실제 앞/뒤 2D 지도, Recovery/Sets별 원래 색과 범례, 선택 근육·기존 가로 볼륨 막대·회복 정보를 정돈하는 제안이다. 도식 몸체와 막대는 실제 SVG·건강 기록·앱 캡처가 아니다. A04 phone 및 iPad 기본/선택 before는 동일 원본 소스와 실제 PNG로 확인했다. Duo before 및 수정된 A03 after는 별도 검증이 필요하다.
+
+2026-11-03 [A11 운동 페이스 상세 테마 시안](themes/dune-consistency-detail-a11.html)은 기존 팔레트와 실제 값 표시의 제안이다. 숫자와 웹 기호는 예시이며 네이티브 캡처가 아니다. [배치 계약](../layout-map/activity-consistency-detail-a11.html)을 함께 본다.

@@ -1290,24 +1290,123 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testConsistencyDetailShowsCalendarAndHistorySections() throws {
+        try assertSeededConsistencyDetail(maxText: false)
+    }
+
+    func testConsistencyDetailAtMaximumAccessibilityTextSize() throws {
+        try assertSeededConsistencyDetail(maxText: true)
+    }
+
+    private func assertSeededConsistencyDetail(maxText: Bool) throws {
+        // TestDataSeeder: manual 30/40/50 minute records on today and the two
+        // preceding days. SimulatorAdvancedMockData: qualifying workouts on
+        // days 1, 2, 4, 6, 8, 11, 15, 18, 21 and 25 before the reference date.
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let qualifyingOffsets = [0, 1, 2, 4, 6, 8, 11, 15, 18, 21, 25]
+        let dates = try qualifyingOffsets.map { offset in
+            try XCTUnwrap(calendar.date(byAdding: .day, value: -offset, to: today))
+        }
+        let monthCount = dates.filter { calendar.isDate($0, equalTo: today, toGranularity: .month) }.count
+        let start = try XCTUnwrap(calendar.date(byAdding: .day, value: -2, to: today))
+        func dateFormats(_ date: Date) -> [String] {
+            [DateFormatter.Style.medium, .long, .full].map { style in
+                let formatter = DateFormatter()
+                formatter.locale = Locale(identifier: "en_US")
+                formatter.calendar = calendar
+                formatter.timeZone = calendar.timeZone
+                formatter.dateStyle = style
+                formatter.timeStyle = .none
+                return formatter.string(from: date)
+            }
+        }
+
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"])
+        if maxText {
+            configuration.additionalArguments.append(contentsOf: [
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ])
+        }
+        launchApp(with: configuration)
         openActivityDetail(
             sectionIdentifier: AXID.activitySectionConsistency,
             destinationIdentifier: AXID.activityConsistencyDetailScreen,
             maxSwipes: 10
         )
+        let scroll = app.scrollViews[AXID.activityConsistencyDetailScreen].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 15))
 
-        XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.activityConsistencyCalendar].firstMatch.waitForExistence(timeout: 15),
-            "Consistency detail should show the calendar heatmap"
-        )
-        XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.activityConsistencyHistory].firstMatch.waitForExistence(timeout: 15),
-            "Consistency detail should show the streak history"
-        )
-        XCTAssertFalse(
-            app.descendants(matching: .any)[AXID.activityConsistencyEmptyState].firstMatch.exists,
-            "Seeded consistency detail should not fall back to the empty state"
-        )
+        func visibleContent() -> CGRect {
+            let base = scroll.frame.intersection(app.windows.firstMatch.frame)
+            var top = base.minY
+            var bottom = base.maxY
+            let navigation = app.navigationBars.firstMatch
+            if navigation.exists && !navigation.frame.isEmpty && navigation.frame.intersects(base)
+                && navigation.frame.midY < base.midY {
+                top = min(bottom, max(top, navigation.frame.maxY))
+            }
+            let tabBar = app.tabBars.firstMatch
+            if tabBar.exists && !tabBar.frame.isEmpty && tabBar.frame.intersects(base)
+                && tabBar.frame.midY > base.midY {
+                bottom = max(top, min(bottom, tabBar.frame.minY))
+            }
+            return CGRect(x: base.minX, y: top + 2,
+                          width: max(0, base.width), height: max(0, bottom - top - 4))
+        }
+
+        func visible(_ identifier: String) -> XCUIElement {
+            let element = app.descendants(matching: .any)[identifier].firstMatch
+            XCTAssertTrue(element.waitForExistence(timeout: 15), "Missing \(identifier)")
+            for _ in 0..<12 {
+                let viewport = visibleContent()
+                if element.exists && !element.frame.isEmpty && viewport.contains(element.frame) { break }
+                if element.exists && element.frame.midY < viewport.midY {
+                    scroll.swipeDown(velocity: .slow)
+                } else {
+                    scroll.swipeUp(velocity: .slow)
+                }
+            }
+            let viewport = visibleContent()
+            XCTAssertFalse(element.frame.isEmpty, "Empty frame: \(identifier)")
+            XCTAssertTrue(viewport.contains(element.frame), "Not fully visible: \(identifier)")
+            return element
+        }
+
+        XCTAssertEqual(visible("activity-consistency-current-value").label, "3")
+        XCTAssertEqual(visible("activity-consistency-best-value").label, "3")
+        VisualAudit.capture("A11 consistency current and best \(maxText ? "MAX" : "normal")")
+        let day = calendar.component(.day, from: today)
+        let todayCell = visible("activity-consistency-day-\(day)-workout-today")
+        XCTAssertTrue(dateFormats(today).contains(todayCell.label), todayCell.label)
+        XCTAssertEqual(todayCell.value as? String, "Workout")
+        let monthDays = try XCTUnwrap(calendar.range(of: .day, in: .month, for: today))
+        let usedDays = Set(dates.filter { calendar.isDate($0, equalTo: today, toGranularity: .month) }
+            .map { calendar.component(.day, from: $0) })
+        if let missedDay = monthDays.first(where: { $0 < day && !usedDays.contains($0) }) {
+            var components = calendar.dateComponents([.year, .month], from: today)
+            components.day = missedDay
+            let missedDate = try XCTUnwrap(calendar.date(from: components))
+            let missedCell = visible("activity-consistency-day-\(missedDay)-nonqualifying")
+            XCTAssertTrue(dateFormats(missedDate).contains(missedCell.label), missedCell.label)
+            XCTAssertEqual(missedCell.value as? String, "No workout of 20 minutes or more")
+        }
+        if let futureDay = monthDays.first(where: { $0 > day }) {
+            let futureCell = visible("activity-consistency-day-\(futureDay)-nonqualifying")
+            XCTAssertEqual(futureCell.value as? String ?? "", "")
+        }
+        XCTAssertEqual(visible("activity-consistency-month-progress").label, "\(monthCount)/16")
+        VisualAudit.capture("A11 consistency calendar and progress \(maxText ? "MAX" : "normal")")
+        let days = visible("activity-consistency-history-days-0")
+        XCTAssertTrue(days.label.contains("3"), "Latest streak should span the three seeded days")
+        let range = visible("activity-consistency-history-dates-0")
+        XCTAssertTrue(dateFormats(start).contains { range.label.contains($0) }, range.label)
+        XCTAssertTrue(dateFormats(today).contains { range.label.contains($0) }, range.label)
+        VisualAudit.capture("A11 consistency latest history \(maxText ? "MAX" : "normal")")
+        XCTAssertFalse(app.descendants(matching: .any)[AXID.activityConsistencyEmptyState].firstMatch.exists)
+        tapBackButton()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityToolbarAdd].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(calendar.isDateInToday(today), "Seed and assertions must stay on the same local day")
     }
 
     func testRecentWorkoutsSeeAllOpensExerciseHistory() throws {
