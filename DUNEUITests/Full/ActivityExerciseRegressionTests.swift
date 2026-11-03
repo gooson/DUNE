@@ -2370,16 +2370,24 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         setNativeSwitch(changed)
         VisualAudit.capture("A20 equipment changed \(maxText ? "MAX" : "normal")")
         let done = app.buttons["Done"].firstMatch
-        XCTAssertTrue(done.waitForExistence(timeout: 5)); done.tap()
+        func closeWithDone(captureToolbar: Bool = false) {
+            if !done.isHittable { drag(viewport().height * 0.18) }
+            if captureToolbar { VisualAudit.capture("A20 native toolbar ready MAX") }
+            XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable)
+            done.tap()
+        }
+        closeWithDone()
         XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
         XCTAssertTrue(target.waitForExistence(timeout: 5))
         XCTAssertTrue(target.isHittable); target.auditTap()
         XCTAssertTrue(sheet.waitForExistence(timeout: 10))
         reveal(selected, upward: true)
+        if maxText { VisualAudit.capture("A20 reopened after reveal before restore MAX") }
         XCTAssertEqual(selected.value as? String, changed, "The real context retains the selection after reopening")
         setNativeSwitch(original)
         XCTAssertEqual(selected.value as? String, original, "Restore the original equipment selection")
-        XCTAssertTrue(done.waitForExistence(timeout: 5)); done.tap()
+        if maxText { VisualAudit.capture("A20 restored before reverse drag MAX") }
+        closeWithDone(captureToolbar: maxText)
         XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
         if !maxText {
             let other = initialContext == "Gym Equipment" ? "Home" : "Gym"
@@ -2393,7 +2401,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             XCTAssertTrue(hero.waitForExistence(timeout: 5))
             XCTAssertEqual(hero.label, other + " Equipment", "Hero reflects the real selected context")
             VisualAudit.capture("A20 alternate context normal")
-            XCTAssertTrue(done.waitForExistence(timeout: 5)); done.tap()
+            closeWithDone()
             XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
             let initialButton = app.buttons[initial].firstMatch
             XCTAssertTrue(initialButton.waitForExistence(timeout: 5)); XCTAssertTrue(initialButton.isHittable)

@@ -632,43 +632,41 @@ private struct RecommendationEquipmentSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                List {
-                    Section {
-                        equipmentOverview
-                            .listRowInsets(EdgeInsets())
-                            .listRowBackground(Color.clear)
-                            .listRowSeparator(.hidden)
-                    }
+            List {
+                Section {
+                    equipmentOverview
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                }
 
-                    Section {
-                        ForEach(selectableEquipment, id: \.self) { equipment in
-                            Toggle(
-                                isOn: Binding(
-                                    get: { isEquipmentAvailable(equipment) },
-                                    set: { isOn in
-                                        onSetEquipmentAvailability(equipment, isOn)
-                                    }
-                                )
-                            ) {
-                                HStack(spacing: DS.Spacing.xs) {
-                                    equipment.svgIcon(size: 18)
-                                        .foregroundStyle(DS.Color.activity)
-
-                                    Text(equipment.displayName)
-                                        .font(.subheadline)
+                Section {
+                    ForEach(selectableEquipment, id: \.self) { equipment in
+                        Toggle(
+                            isOn: Binding(
+                                get: { isEquipmentAvailable(equipment) },
+                                set: { isOn in
+                                    onSetEquipmentAvailability(equipment, isOn)
                                 }
+                            )
+                        ) {
+                            HStack(spacing: DS.Spacing.xs) {
+                                equipment.svgIcon(size: 18)
+                                    .foregroundStyle(DS.Color.activity)
+
+                                Text(equipment.displayName)
+                                    .font(.subheadline)
                             }
-                            .tint(DS.Color.activity)
-                            .accessibilityIdentifier("activity-recommendation-equipment-\(equipment.rawValue)")
                         }
+                        .tint(DS.Color.activity)
+                        .accessibilityIdentifier("activity-recommendation-equipment-\(equipment.rawValue)")
                     }
                 }
-                .accessibilityIdentifier("activity-recommendation-equipment-sheet")
             }
+            .accessibilityIdentifier("activity-recommendation-equipment-sheet")
             .englishNavigationTitle(title)
             .toolbar {
-                ToolbarItem(placement: .topBarPinnedTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button("Done") {
                         dismiss()
                     }
