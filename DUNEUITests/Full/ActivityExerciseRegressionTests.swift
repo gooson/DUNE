@@ -931,7 +931,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
         launchApp(with: configuration)
         openActivityDetail(sectionIdentifier: AXID.activitySectionExerciseMix,
-                           destinationIdentifier: AXID.activityExerciseMixDetailScreen, maxSwipes: 12)
+                           destinationIdentifier: AXID.activityExerciseMixDetailScreen, maxSwipes: maxText ? 32 : 12)
         let scroll = app.scrollViews[AXID.activityExerciseMixDetailScreen].firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 10))
 
