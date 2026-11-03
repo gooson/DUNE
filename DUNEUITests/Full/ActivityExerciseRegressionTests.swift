@@ -1474,19 +1474,38 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         var configuration = launchConfiguration
         configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         if maxText {
-            configuration.additionalArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+            configuration.additionalArguments += ["--ui-test-style", "dark",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
         }
         launchApp(with: configuration)
         let muscle = app.buttons["musclemap-body-front-chest"].firstMatch
         let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
         XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
-        for _ in 0..<24 where !muscle.isHittable { activityScroll.swipeUp(velocity: .slow) }
+        for _ in 0..<(maxText ? 32 : 24) where !muscle.isHittable { activityScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(muscle.isHittable)
         muscle.auditTap()
         let muscleTitle = app.descendants(matching: .any)["activity-muscle-detail-popover-sheet"].firstMatch
         XCTAssertTrue(muscleTitle.waitForExistence(timeout: 10))
         let calculation = app.buttons["activity-muscle-detail-calculation"].firstMatch
         XCTAssertTrue(calculation.waitForExistence(timeout: 8))
+        let detailScroll = app.scrollViews["activity-muscle-detail-scroll"].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5))
+        for _ in 0..<16 {
+            let window = app.windows.firstMatch
+            let viewport = detailScroll.frame.intersection(window.frame)
+            if !calculation.frame.isEmpty && viewport.contains(calculation.frame) && calculation.isHittable { break }
+            let direction: CGFloat = calculation.frame.midY < viewport.midY ? 1 : -1
+            let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                dx: viewport.midX - window.frame.minX,
+                dy: viewport.midY - window.frame.minY
+            ))
+            let end = start.withOffset(CGVector(dx: 0, dy: direction * viewport.height * 0.18))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        XCTAssertFalse(calculation.frame.isEmpty)
+        XCTAssertTrue(detailScroll.frame.intersection(app.windows.firstMatch.frame).contains(calculation.frame),
+                      "The complete calculation action must fit in the muscle detail viewport")
+        XCTAssertTrue(calculation.isHittable, "The calculation action should be reachable")
         calculation.auditTap()
         let sheet = app.scrollViews["activity-fatigue-info-sheet"].firstMatch
         XCTAssertTrue(sheet.waitForExistence(timeout: 10))
@@ -1504,6 +1523,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             XCTAssertFalse(value.frame.isEmpty, "Empty frame for \(suffix)")
             XCTAssertTrue(sheet.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 2, dy: 2).contains(value.frame),
                           "The entire \(suffix) must be inside the visible sheet")
+            VisualAudit.capture("A14 fatigue \(suffix) \(maxText ? "MAX" : "normal")")
             return value
         }
         func number(_ text: String) throws -> Double {
@@ -1550,6 +1570,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         for _ in 0..<12 where sheet.exists { sheet.swipeDown(velocity: .slow) }
         XCTAssertTrue(sheet.waitForNonExistence(timeout: 10), "Dismissing the calculation should return to muscle detail")
         XCTAssertTrue(muscleTitle.waitForExistence(timeout: 5))
+        VisualAudit.capture("A14 fatigue dismissed \(maxText ? "MAX" : "normal")")
     }
 
     func testVisualAuditRecommendationEquipmentInfo() throws {

@@ -136,6 +136,37 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         )).firstMatch
         XCTAssertTrue(calculationTitle.waitForExistence(timeout: 5),
                       "The calculation sheet should expose its existing localized title")
+        // A14 child values: actual localized values, never fixed fixture numbers.
+        func visibleFatigueValue(_ suffix: String) -> XCUIElement {
+            let value = explanation.staticTexts["activity-fatigue-info-" + suffix].firstMatch
+            for _ in 0..<16 {
+                let window = app.windows.firstMatch
+                let viewport = explanation.frame.intersection(window.frame)
+                if value.exists && !value.frame.isEmpty && viewport.contains(value.frame) { break }
+                let direction: CGFloat = value.exists && value.frame.midY < viewport.midY ? 1 : -1
+                let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX, dy: viewport.midY - window.frame.minY))
+                start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: direction * viewport.height * 0.18)))
+            }
+            XCTAssertTrue(value.waitForExistence(timeout: 5), "Missing inline fatigue \(suffix)")
+            XCTAssertFalse(value.label.isEmpty)
+            XCTAssertFalse(value.frame.isEmpty)
+            XCTAssertTrue(explanation.frame.intersection(app.windows.firstMatch.frame).contains(value.frame),
+                          "The complete inline fatigue \(suffix) must fit")
+            VisualAudit.capture("A14 inline fatigue \(suffix)")
+            return value
+        }
+        _ = visibleFatigueValue("level")
+        if explanation.staticTexts["activity-fatigue-info-contribution-raw"].firstMatch.exists {
+            _ = visibleFatigueValue("contribution-raw")
+            _ = visibleFatigueValue("contribution-decayed")
+            _ = visibleFatigueValue("subtotal")
+        } else {
+            XCTAssertTrue(explanation.staticTexts.matching(NSPredicate(format: "label IN %@", ["No workout records", "운동 기록 없음", "ワークアウト記録なし"])).firstMatch.exists)
+        }
+        for suffix in ["sleep-value", "readiness-value", "result-value", "tau-value"] {
+            _ = visibleFatigueValue(suffix)
+        }
         addScreenshotAttachment(named: "A03 selected muscle fatigue calculation")
         VisualAudit.capture("A03 selected muscle fatigue calculation")
 
