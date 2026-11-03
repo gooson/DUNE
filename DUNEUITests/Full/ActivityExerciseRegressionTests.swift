@@ -69,6 +69,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize() throws {
+        if VisualAudit.isEnabled { executionTimeAllowance = 420 }
         var configuration = launchConfiguration
         configuration.additionalArguments.append(contentsOf: [
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
@@ -744,9 +745,105 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         for _ in 0..<14 where !weekly.isHittable { rootScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(weekly.isHittable, "Weekly stats link should be visible")
         weekly.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityWeeklyStatsDetailScreen].firstMatch
-            .waitForExistence(timeout: 10))
+        let detail = app.descendants(matching: .any)[AXID.activityWeeklyStatsDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10))
+
+        // The destination exists before its asynchronous comparison finishes loading.
+        let summary = app.descendants(matching: .any)[AXID.activityWeeklyStatsSummaryGrid].firstMatch
+        XCTAssertTrue(summary.waitForExistence(timeout: 15), "Weekly stats summary should finish loading")
+        for id in ["volume", "duration", "calories", "activeDays", "sessions"] {
+            let value = app.staticTexts["activity-weekly-stat-value-\(id)"].firstMatch
+            XCTAssertTrue(value.waitForExistence(timeout: 10), "Current \(id) should exist")
+            XCTAssertFalse(value.label.isEmpty, "Current \(id) should have a value")
+        }
         VisualAudit.capture("Weekly stats detail")
+
+        let detailScroll = app.scrollViews[AXID.activityWeeklyStatsDetailScreen].firstMatch
+        let window = app.windows.firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5) && window.exists,
+                      "Weekly stats should own its scroll viewport")
+
+        func visibleContent() -> CGRect {
+            let base = detailScroll.frame.intersection(window.frame)
+            var top = base.minY
+            var bottom = base.maxY
+            let navigation = app.navigationBars.firstMatch
+            if navigation.exists && !navigation.frame.isEmpty && navigation.frame.intersects(base)
+                && navigation.frame.midY < base.midY {
+                top = min(bottom, max(top, navigation.frame.maxY))
+            }
+            let tabBar = app.tabBars.firstMatch
+            if tabBar.exists && !tabBar.frame.isEmpty && tabBar.frame.intersects(base)
+                && tabBar.frame.midY > base.midY {
+                bottom = max(top, min(bottom, tabBar.frame.minY))
+            }
+            return CGRect(x: base.minX, y: top + 2,
+                          width: max(0, base.width), height: max(0, bottom - top - 4))
+        }
+
+        func revealWhole(_ target: XCUIElement, value: XCUIElement) {
+            for _ in 0..<12 {
+                let viewport = visibleContent()
+                let targetFrame = target.frame
+                let valueFrame = value.frame
+                if viewport.width > 0 && viewport.height > 0 && !targetFrame.isEmpty && !valueFrame.isEmpty
+                    && viewport.contains(targetFrame) && viewport.contains(valueFrame)
+                    && target.isHittable && value.isHittable { return }
+                guard viewport.height > 44, !targetFrame.isEmpty else { break }
+                let displacement: CGFloat
+                if targetFrame.minY < viewport.minY {
+                    displacement = min(max(viewport.minY - targetFrame.minY + 12, 44), viewport.height * 0.35)
+                } else if targetFrame.maxY > viewport.maxY {
+                    displacement = -min(max(targetFrame.maxY - viewport.maxY + 12, 44), viewport.height * 0.35)
+                } else {
+                    break
+                }
+                let origin = detailScroll.frame.origin
+                let start = detailScroll.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: viewport.midX - origin.x, dy: viewport.midY - origin.y))
+                let end = detailScroll.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: viewport.midX - origin.x,
+                                         dy: viewport.midY + displacement - origin.y))
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+            let viewport = visibleContent()
+            XCTAssertTrue(viewport.width > 0 && viewport.height > 0 && !target.frame.isEmpty
+                          && !value.frame.isEmpty && viewport.contains(target.frame)
+                          && viewport.contains(value.frame) && target.isHittable && value.isHittable,
+                          "The whole comparison item and its value should be visible and hittable")
+        }
+
+        let caption = app.staticTexts["activity-weeklystats-previous-period"].firstMatch
+        XCTAssertTrue(caption.waitForExistence(timeout: 15), "Previous comparison should include its date range")
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let previousStart = try XCTUnwrap(calendar.date(byAdding: .day, value: -14, to: today))
+        let previousEnd = try XCTUnwrap(calendar.date(byAdding: .day, value: -8, to: today))
+        let supportedLocales = [Locale.current, Locale(identifier: "en_US"),
+                                Locale(identifier: "ko_KR"), Locale(identifier: "ja_JP")]
+        let expectedCaptions = supportedLocales.map { locale in
+            let format = Date.FormatStyle(date: .abbreviated, time: .omitted).locale(locale)
+            return "\(previousStart.formatted(format)) – \(previousEnd.formatted(format))"
+        }
+        XCTAssertTrue(expectedCaptions.contains(caption.label),
+                      "The previous caption should show the real previous start and end dates")
+        XCTAssertEqual(app.staticTexts.matching(identifier: "activity-weeklystats-previous-period").count, 1)
+        revealWhole(caption, value: caption)
+        VisualAudit.capture("A05 previous comparison date")
+
+        for id in ["volume", "duration", "calories", "sessions"] {
+            let row = app.descendants(matching: .any)["activity-weeklystats-previous-\(id)"].firstMatch
+            let value = app.staticTexts["activity-weeklystats-previous-value-\(id)"].firstMatch
+            XCTAssertTrue(row.waitForExistence(timeout: 10), "Previous \(id) row should exist")
+            XCTAssertTrue(value.waitForExistence(timeout: 10), "Previous \(id) value should exist")
+            XCTAssertFalse(value.label.isEmpty, "Previous \(id) should have a value")
+            revealWhole(row, value: value)
+            VisualAudit.capture("A05 previous comparison \(id) row")
+        }
+
+        tapBackButton()
+        XCTAssertTrue(detail.waitForNonExistence(timeout: 8), "Weekly stats detail should dismiss")
+        ensureActivityRoot()
     }
 
     func testActivitySecondaryDetailRoutesOpenExpectedScreens() throws {
