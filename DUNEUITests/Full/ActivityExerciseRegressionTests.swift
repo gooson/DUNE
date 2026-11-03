@@ -1555,7 +1555,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue((0.5...1.25).contains(sleep))
         let readiness = try number(visibleValue("readiness-value").label)
         XCTAssertTrue((0.6...1.2).contains(readiness))
-        let result = try number(visibleValue("result-value").label)
+        let resultValue = visibleValue("result-value")
+        XCTAssertLessThanOrEqual(resultValue.frame.height, resultValue.frame.width,
+                                 "The four-character fatigue value must remain on one line")
+        let result = try number(resultValue.label)
+        _ = visibleValue("result-level")
         XCTAssertTrue((0.0...1.0).contains(result))
         if let subtotal {
             // Chest saturation is 12; allow for the two displayed decimal roundings.
@@ -1567,7 +1571,24 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let upperTau = max(1, 96 / ((sleep - 0.005) * (readiness - 0.005))) + 0.51
         XCTAssertTrue((lowerTau...upperTau).contains(tau), "The displayed τ must match the actual modifiers")
         VisualAudit.capture("Muscle fatigue explanation result")
-        for _ in 0..<12 where sheet.exists { sheet.swipeDown(velocity: .slow) }
+        let grabbers = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
+        XCTAssertEqual(grabbers.count, 1, "The native calculation sheet should expose one grabber")
+        let grabber = grabbers.element(boundBy: 0)
+        XCTAssertTrue(grabber.exists && grabber.isHittable, "The native calculation sheet grabber should be reachable")
+        let window = app.windows.firstMatch
+        XCTAssertTrue(window.exists && window.frame.contains(sheet.frame),
+                      "Calculation content should be inside the active window")
+        XCTAssertTrue(window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame),
+                      "The native drag indicator should overlap the calculation sheet's top edge")
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height,
+                                 "The native drag indicator should be at the calculation sheet's top edge")
+        let endY = min(window.frame.maxY - 60, grabber.frame.midY + window.frame.height * 0.6)
+        XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3,
+                             "The dismiss drag should travel down inside the window")
+        let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero)
+            .withOffset(CGVector(dx: grabber.frame.midX - window.frame.minX, dy: endY - window.frame.minY))
+        start.press(forDuration: 0.1, thenDragTo: end)
         XCTAssertTrue(sheet.waitForNonExistence(timeout: 10), "Dismissing the calculation should return to muscle detail")
         XCTAssertTrue(muscleTitle.waitForExistence(timeout: 5))
         VisualAudit.capture("A14 fatigue dismissed \(maxText ? "MAX" : "normal")")

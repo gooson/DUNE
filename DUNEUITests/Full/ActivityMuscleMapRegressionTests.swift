@@ -164,7 +164,7 @@ final class ActivityMuscleMapRegressionTests: ActivityExerciseSeededUITestBaseCa
         } else {
             XCTAssertTrue(explanation.staticTexts.matching(NSPredicate(format: "label IN %@", ["No workout records", "운동 기록 없음", "ワークアウト記録なし"])).firstMatch.exists)
         }
-        for suffix in ["sleep-value", "readiness-value", "result-value", "tau-value"] {
+        for suffix in ["sleep-value", "readiness-value", "result-value", "result-level", "tau-value"] {
             _ = visibleFatigueValue(suffix)
         }
         addScreenshotAttachment(named: "A03 selected muscle fatigue calculation")
