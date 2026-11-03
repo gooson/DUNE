@@ -1384,23 +1384,22 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(grabber.exists && grabber.isHittable)
         XCTAssertTrue(window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame))
         XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height)
-        if maxText {
-            // The native grabber exposes Expanded on the observed English simulator.
-            // A large detent may already be selected when the sheet appears.
-            let initialValue = grabber.value as? String
-            VisualAudit.capture("A17 Personal Records dark MAX initial detent")
-            if initialValue != "Expanded" {
-                let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-                start.press(forDuration: 0.1, thenDragTo: start.withOffset(
-                    CGVector(dx: 0, dy: -window.frame.height * 0.35)
-                ))
-                XCTAssertEqual(grabber.value as? String, "Expanded",
-                               "The native grabber must report the large detent after the upward drag")
-            }
+        // Preserve the initial detent capture, then expand with the real native control.
+        // Short content drags can resize a medium sheet instead of scrolling its text.
+        let detentLabel = maxText ? "dark MAX" : "normal"
+        let initialValue = grabber.value as? String
+        VisualAudit.capture("A17 Personal Records \(detentLabel) initial detent")
+        if initialValue != "Expanded" {
+            let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: start.withOffset(
+                CGVector(dx: 0, dy: -window.frame.height * 0.35)
+            ))
             XCTAssertEqual(grabber.value as? String, "Expanded",
-                           "MAX text requires the native large detent")
-            VisualAudit.capture("A17 Personal Records dark MAX expanded sheet")
+                           "The native grabber must report the large detent after the upward drag")
         }
+        XCTAssertEqual(grabber.value as? String, "Expanded",
+                       "Read the remaining explanation from the native large detent")
+        VisualAudit.capture("A17 Personal Records \(detentLabel) expanded sheet")
 
         var oversizedTextIndex = 0
         func reveal(_ expected: String) {
