@@ -1436,6 +1436,20 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testVisualAuditVolumeAlgorithmExplanation() throws {
+        try verifyVolumeAlgorithmExplanation(maxText: false)
+    }
+
+    func testVolumeAlgorithmExplanationAtMaximumAccessibilityTextSize() throws {
+        try verifyVolumeAlgorithmExplanation(maxText: true)
+    }
+
+    private func verifyVolumeAlgorithmExplanation(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += ["--ui-test-style", "dark", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        }
+        launchApp(with: configuration)
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-muscle-map-algorithm-info", maxSwipes: 10))
         let mode = app.segmentedControls["activity-muscle-map-mode"].firstMatch
         XCTAssertTrue(mode.waitForExistence(timeout: 5))
@@ -1447,9 +1461,66 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         for _ in 0..<30 where !info.isHittable { rootScroll.swipeDown(velocity: .slow) }
         XCTAssertTrue(info.isHittable, "Volume calculation info should be visible")
         info.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)["activity-volume-algorithm-sheet"].firstMatch
-            .waitForExistence(timeout: 10))
+        let sheet = app.scrollViews["activity-volume-algorithm-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
         VisualAudit.capture("Volume algorithm explanation")
+        func reveal(_ id: String) -> XCUIElement {
+            let item = sheet.descendants(matching: .any)[id].firstMatch
+            XCTAssertTrue(item.waitForExistence(timeout: 10), "Missing \(id)")
+            for _ in 0..<24 {
+                let window = app.windows.firstMatch
+                let viewport = sheet.frame.intersection(window.frame)
+                if !item.frame.isEmpty && viewport.contains(item.frame) { break }
+                let direction: CGFloat = item.frame.midY < viewport.midY ? 1 : -1
+                let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: viewport.midX - window.frame.minX, dy: viewport.midY - window.frame.minY))
+                start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: direction * viewport.height * 0.18)))
+            }
+            XCTAssertFalse(item.frame.isEmpty)
+            XCTAssertTrue(sheet.frame.intersection(app.windows.firstMatch.frame).contains(item.frame), "Not fully visible: \(id)")
+            return item
+        }
+        XCTAssertTrue(reveal("activity-volume-algorithm-secondary").label.contains("For each record, halve the completed sets, round down, and credit at least 1 set"))
+        XCTAssertEqual(reveal("activity-volume-algorithm-formula").label, "Volume = Σ primary sets + Σ max(⌊secondary sets ÷ 2⌋, 1)")
+        VisualAudit.capture("A16 volume formula \(maxText ? "MAX" : "normal")")
+        for level in 0...4 {
+            let item = reveal("activity-volume-algorithm-level-\(level)")
+            XCTAssertFalse(item.label.isEmpty, "Missing volume level \(level)")
+            if [0, 2, 4].contains(level) { VisualAudit.capture("A16 volume level \(level) \(maxText ? "MAX" : "normal")") }
+        }
+        let legend = sheet.descendants(matching: .any)["activity-volume-algorithm-legend"].firstMatch
+        XCTAssertTrue(legend.waitForExistence(timeout: 10), "Original volume legend must remain")
+        if maxText {
+            let horizontal = reveal("activity-volume-algorithm-legend-scroll")
+            for label in ["0 sets", "16+"] {
+                let item = legend.staticTexts[label].firstMatch
+                XCTAssertTrue(item.waitForExistence(timeout: 5))
+                for _ in 0..<8 where !horizontal.frame.intersection(sheet.frame).contains(item.frame) {
+                    if item.frame.midX < horizontal.frame.midX { horizontal.swipeRight(velocity: .slow) }
+                    else { horizontal.swipeLeft(velocity: .slow) }
+                }
+                XCTAssertFalse(item.frame.isEmpty)
+                XCTAssertTrue(horizontal.frame.intersection(sheet.frame).contains(item.frame), "The full legend label must fit")
+                VisualAudit.capture("A16 volume legend \(label) MAX")
+            }
+        } else {
+            _ = reveal("activity-volume-algorithm-legend")
+            VisualAudit.capture("A16 volume legend normal")
+        }
+        let grabbers = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
+        XCTAssertEqual(grabbers.count, 1)
+        let grabber = grabbers.element(boundBy: 0)
+        XCTAssertTrue(grabber.exists && grabber.isHittable)
+        let window = app.windows.firstMatch
+        XCTAssertTrue(window.frame.contains(sheet.frame) && window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame))
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height)
+        let endY = min(window.frame.maxY - 60, grabber.frame.midY + window.frame.height * 0.6)
+        XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3)
+        let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: grabber.frame.midX - window.frame.minX, dy: endY - window.frame.minY))
+        start.press(forDuration: 0.1, thenDragTo: end)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
+        XCTAssertTrue(rootScroll.waitForExistence(timeout: 10))
+        VisualAudit.capture("A16 volume dismissed \(maxText ? "MAX" : "normal")")
     }
 
     func testVisualAuditMuscleDetailPopover() throws {

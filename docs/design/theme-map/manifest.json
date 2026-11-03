@@ -616,6 +616,24 @@
         "status": "native-implemented-scoped-captures-reviewed",
         "actual_captures": "../full-redesign-map/review/a15-fatigue-algorithm-native-2026-11-04/index.html"
       }
+    },
+    {
+      "id": "volume-algorithm-a16",
+      "name": "주간 볼륨 계산 설명",
+      "title": "A16 · Weekly Training Volume",
+      "file": "dune-volume-algorithm-a16.html",
+      "detail": "원래 아이콘과 5단계·범례를 보존하고 기록별 보조 세트 계산 설명을 바로잡는 정적 시안. 실제 캡처 아님.",
+      "colors": [
+        "#352e29",
+        "#b2854c",
+        "#fff4dd"
+      ],
+      "motif": "기존 chart.bar.fill·function·원래 섹션 심볼",
+      "motion": "기존 시스템 시트 스크롤",
+      "implementation": {
+        "layout": "../layout-map/activity-volume-algorithm-a16.html",
+        "status": "native-implementation-in-progress"
+      }
     }
   ]
 }
