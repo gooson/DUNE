@@ -673,6 +673,24 @@
         "status": "native-implemented-scoped-captures-reviewed",
         "actual_captures": "../full-redesign-map/review/a18-consistency-explanation-native-2026-11-04/index.html"
       }
+    },
+    {
+      "id": "exercise-mix-explanation-a19",
+      "name": "운동 구성 설명",
+      "title": "A19 · Exercise Mix",
+      "file": "dune-exercise-mix-explanation-a19.html",
+      "detail": "기존 차트·4개 설명 그룹·시스템 시트를 보존하는 배치 제안. 실제 캡처 대기.",
+      "colors": [
+        "#352e29",
+        "#b2854c",
+        "#fff4dd"
+      ],
+      "motif": "기존 chart.bar.xaxis·lightbulb·chart.bar.fill·균형 심볼",
+      "motion": "기존 중간/큰 시스템 시트와 스크롤",
+      "implementation": {
+        "layout": "../layout-map/activity-exercise-mix-explanation-a19.html",
+        "status": "native-implementation-in-progress"
+      }
     }
   ]
 }

@@ -1692,7 +1692,167 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testVisualAuditExerciseMixExplanation() throws {
-        openActivityInfo(button: "activity-exercise-mix-info", sheet: "activity-exercise-mix-info-sheet")
+        try verifyExerciseMixExplanation(maxText: false)
+    }
+
+    func testExerciseMixExplanationAtMaximumAccessibilityTextSize() throws {
+        try verifyExerciseMixExplanation(maxText: true)
+    }
+
+    private func verifyExerciseMixExplanation(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += [
+                "--ui-test-style", "dark",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+        }
+        launchApp(with: configuration)
+        openActivityInfo(button: "activity-exercise-mix-info", sheet: "activity-exercise-mix-info-sheet",
+                         maxSwipes: maxText ? 40 : 30)
+        // openActivityInfo preserves the original, pre-scroll canonical capture.
+        let sheet = app.scrollViews["activity-exercise-mix-info-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        let window = app.windows.firstMatch
+        let grabbers = app.buttons.matching(NSPredicate(
+            format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]
+        ))
+        XCTAssertEqual(grabbers.count, 1)
+        let grabber = grabbers.element(boundBy: 0)
+        XCTAssertTrue(grabber.exists && grabber.isHittable)
+        XCTAssertTrue(window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame))
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height)
+        // Preserve the initial detent capture, then expand with the real native control.
+        // Short content drags can resize a medium sheet instead of scrolling its text.
+        let detentLabel = maxText ? "dark MAX" : "normal"
+        let initialValue = grabber.value as? String
+        VisualAudit.capture("A19 exercise mix info \(detentLabel) initial detent")
+        if initialValue != "Expanded" {
+            let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: start.withOffset(
+                CGVector(dx: 0, dy: -window.frame.height * 0.35)
+            ))
+            XCTAssertEqual(grabber.value as? String, "Expanded",
+                           "The native grabber must report the large detent after the upward drag")
+        }
+        XCTAssertEqual(grabber.value as? String, "Expanded",
+                       "Read the remaining explanation from the native large detent")
+        VisualAudit.capture("A19 exercise mix info \(detentLabel) expanded sheet")
+
+        var oversizedTextIndex = 0
+        func reveal(_ expected: String) {
+            let item = sheet.staticTexts.matching(NSPredicate(format: "label == %@", expected)).firstMatch
+            XCTAssertTrue(item.waitForExistence(timeout: 10), "Missing exact text: \(expected)")
+            XCTAssertEqual(item.label, expected, "Text must be complete: \(expected)")
+            XCTAssertFalse(item.frame.isEmpty)
+            func viewport() -> CGRect { sheet.frame.intersection(window.frame) }
+            func horizontallyContained() -> Bool {
+                let visible = viewport()
+                return item.frame.minX >= visible.minX && item.frame.maxX <= visible.maxX
+            }
+            func drag(_ direction: CGFloat) {
+                let visible = viewport()
+                let origin = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                    dx: visible.midX - window.frame.minX, dy: visible.midY - window.frame.minY
+                ))
+                origin.press(forDuration: 0.05, thenDragTo: origin.withOffset(CGVector(
+                    dx: 0, dy: direction * visible.height * 0.18
+                )))
+            }
+            XCTAssertTrue(horizontallyContained(), "Text overflows sheet width: \(expected)")
+            if item.frame.height <= viewport().height {
+                for _ in 0..<30 where !viewport().contains(item.frame) {
+                    drag(item.frame.midY < viewport().midY ? 1 : -1)
+                }
+                XCTAssertTrue(viewport().contains(item.frame), "Short text must fit fully: \(expected)")
+                return
+            }
+            // An oversized AX Text cannot fit vertically in a single viewport. Observe
+            // its top and bottom, with overlapping content intervals between captures.
+            for _ in 0..<30 where !(item.frame.minY >= viewport().minY && item.frame.minY < viewport().maxY) {
+                drag(item.frame.minY < viewport().minY ? 1 : -1)
+            }
+            XCTAssertTrue(item.frame.minY >= viewport().minY && item.frame.minY < viewport().maxY,
+                          "Tall text top must be visible: \(expected)")
+            XCTAssertTrue(horizontallyContained())
+            oversizedTextIndex += 1
+            VisualAudit.capture("A19 exercise mix info tall text \(oversizedTextIndex) top \(maxText ? "MAX" : "normal")")
+            var reachedBottom = item.frame.maxY <= viewport().maxY
+            for _ in 0..<30 where !reachedBottom {
+                let before = item.frame.intersection(viewport())
+                let beforeEnd = before.maxY - item.frame.minY
+                drag(-1)
+                let after = item.frame.intersection(viewport())
+                let afterStart = after.minY - item.frame.minY
+                let afterEnd = after.maxY - item.frame.minY
+                XCTAssertFalse(after.isEmpty, "Tall text interval disappeared")
+                XCTAssertTrue(horizontallyContained(), "Tall text overflows sheet width")
+                XCTAssertLessThanOrEqual(afterStart, beforeEnd + 1,
+                                         "Tall text intervals must overlap")
+                XCTAssertGreaterThan(afterEnd, beforeEnd + 1,
+                                     "Tall text scroll must make visible progress")
+                reachedBottom = item.frame.maxY <= viewport().maxY && !after.isEmpty
+            }
+            XCTAssertTrue(reachedBottom, "Tall text bottom must be visible: \(expected)")
+            VisualAudit.capture("A19 exercise mix info tall text \(oversizedTextIndex) bottom \(maxText ? "MAX" : "normal")")
+        }
+
+        reveal("Exercise Mix")
+        XCTAssertEqual(sheet.staticTexts.matching(NSPredicate(
+            format: "label == %@", "Exercise Mix"
+        )).count, 1, "The sheet title must not be duplicated")
+        let sections: [(String, [String])] = [
+            ("Overview", [
+                "Analyzes which exercises you perform and how often. Check the balance of your exercise mix and discover underworked areas."
+            ]),
+            ("How It's Measured", [
+                "Counts how often each exercise appears in the last 4 weeks",
+            ]),
+            ("Balanced Composition", [
+                "Aim for balanced full-body development with varied exercise patterns"
+            ]),
+            ("Tips", [
+                "Regularly check your upper/lower body ratio"
+            ])
+        ]
+        for (heading, texts) in sections {
+            reveal(heading)
+            for text in texts { reveal(text) }
+            VisualAudit.capture("A19 exercise mix info \(heading) \(maxText ? "MAX" : "normal")")
+        }
+
+        if !maxText {
+            // Read the native sheet's two detents separately rather than relying
+            // on a long fling to skip the medium stop after content scrolling.
+            XCTAssertEqual(grabber.value as? String, "Expanded")
+            let collapseStart = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            collapseStart.press(forDuration: 0.1, thenDragTo: collapseStart.withOffset(CGVector(
+                dx: 0, dy: window.frame.height * 0.4
+            )), withVelocity: XCUIGestureVelocity(rawValue: 400), thenHoldForDuration: 0)
+            let collapsed = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "value == %@", "Half screen"), object: grabber
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [collapsed], timeout: 5), .completed,
+                           "Native sheet should collapse to its medium detent")
+            VisualAudit.capture("A19 exercise mix info normal collapsed sheet")
+        }
+        XCTAssertTrue(grabber.exists && grabber.isHittable)
+        XCTAssertTrue(window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame))
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height)
+        let endY = window.frame.maxY - 40
+        XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3)
+        let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+            dx: grabber.frame.midX - window.frame.minX, dy: endY - window.frame.minY
+        ))
+        start.press(forDuration: 0.1, thenDragTo: end,
+                    withVelocity: XCUIGestureVelocity(rawValue: 1_000), thenHoldForDuration: 0)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10), "Native sheet should dismiss")
+        XCTAssertTrue(app.scrollViews[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["activity-exercise-mix-info"].firstMatch.waitForExistence(timeout: 5),
+                      "Dismissal should return to Activity")
+        VisualAudit.capture("A19 exercise mix info dismissed \(maxText ? "MAX" : "normal")")
     }
 
     func testVisualAuditRecoveryAlgorithmExplanation() throws {
