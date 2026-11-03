@@ -7,6 +7,7 @@ struct ExerciseMixDetailView: View {
     @State private var viewModel = ExerciseMixDetailViewModel()
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var selectedAngle: Double?
@@ -38,10 +39,10 @@ struct ExerciseMixDetailView: View {
                 } else if viewModel.exerciseFrequencies.isEmpty {
                     emptyState
                 } else {
+                    compositionCard
                     if sizeClass == .regular && !dynamicTypeSize.isAccessibilitySize {
                         HStack(alignment: .top, spacing: DS.Spacing.md) {
                             VStack(spacing: DS.Spacing.md) {
-                                compositionCard
                                 weeklyCard
                             }
                             .frame(maxWidth: .infinity, alignment: .top)
@@ -52,7 +53,6 @@ struct ExerciseMixDetailView: View {
                             .frame(maxWidth: .infinity, alignment: .top)
                         }
                     } else {
-                        compositionCard
                         weeklyCard
                         muscleCard
                         cardioCard
@@ -73,35 +73,49 @@ struct ExerciseMixDetailView: View {
         }
     }
 
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+
     private var compositionCard: some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                Text("Last 4 weeks")
-                    .font(.headline)
-                Text("\(summary.start, format: .dateTime.month(.abbreviated).day()) – \(summary.end, format: .dateTime.month(.abbreviated).day())")
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    Text(summary.total.formattedWithSeparator)
-                        .font(.title2.weight(.semibold))
-                        .monospacedDigit()
-                    Text("Workout records")
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
-                stackedBar(strength: summary.strength, cardio: summary.cardio,
-                           other: summary.other, total: summary.total, height: 14)
-                Text("Share of all workout records")
-                    .font(.caption2)
-                    .foregroundStyle(DS.Color.textSecondary)
-                compositionRow("Strength", count: summary.strength, color: strengthColor)
-                compositionRow("Cardio", count: summary.cardio, color: cardioColor)
-                if summary.other > 0 {
-                    compositionRow("Other", count: summary.other, color: otherColor)
-                }
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            Label("Last 4 weeks", systemImage: "chart.bar.fill")
+                .font(.headline)
+                .foregroundStyle(palette.ink)
+            Text("\(summary.start, format: .dateTime.month(.abbreviated).day()) – \(summary.end, format: .dateTime.month(.abbreviated).day())")
+                .font(.caption)
+                .foregroundStyle(palette.muted)
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text(summary.total.formattedWithSeparator)
+                    .font(DS.Typography.cardScore)
+                    .foregroundStyle(palette.ink)
+                    .monospacedDigit()
+                    .accessibilityIdentifier("activity-exercise-mix-total")
+                Text("Workout records")
+                    .font(.subheadline)
+                    .foregroundStyle(palette.muted)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            stackedBar(strength: summary.strength, cardio: summary.cardio,
+                       other: summary.other, total: summary.total, height: 14)
+            Text("Share of all workout records")
+                .font(.caption)
+                .foregroundStyle(palette.muted)
+            compositionRow("Strength", count: summary.strength, color: strengthColor)
+            compositionRow("Cardio", count: summary.cardio, color: cardioColor)
+            if summary.other > 0 {
+                compositionRow("Other", count: summary.other, color: otherColor)
+            }
         }
+        .padding(DS.Spacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                .fill(palette.surface)
+                .overlay {
+                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                        .strokeBorder(palette.border, lineWidth: 1)
+                }
+                .allowsHitTesting(false)
+        }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-exercise-mix-composition")
     }
 
@@ -125,25 +139,31 @@ struct ExerciseMixDetailView: View {
     }
 
     private func compositionRow(_ title: LocalizedStringKey, count: Int, color: Color) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xxs))
+            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: DS.Spacing.sm))
+        return layout {
             HStack(spacing: DS.Spacing.xs) {
-                Circle().fill(color).frame(width: 8, height: 8)
-                Text(title)
+                Circle().fill(color).frame(width: 8, height: 8).accessibilityHidden(true)
+                Text(title).foregroundStyle(palette.ink)
             }
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: DS.Spacing.xs) }
             HStack(spacing: DS.Spacing.xs) {
                 Text(count.formattedWithSeparator)
                 Text(Double(count) / Double(max(summary.total, 1)), format: .percent.precision(.fractionLength(0)))
-                    .foregroundStyle(DS.Color.textSecondary)
+                    .foregroundStyle(palette.muted)
             }
             .monospacedDigit()
         }
         .font(.subheadline)
+        .foregroundStyle(palette.ink)
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private var weeklyCard: some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                Text("Weekly mix")
+                Label("Weekly mix", systemImage: "chart.bar.xaxis")
                     .font(.headline)
                 Text("Each bar uses that week's workout records.")
                     .font(.caption)
@@ -197,7 +217,7 @@ struct ExerciseMixDetailView: View {
     private var muscleCard: some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                Text("Primary muscles")
+                Label("Primary muscles", systemImage: "figure.strengthtraining.traditional")
                     .font(.headline)
                 Text("Completed sets are split evenly across primary muscles.")
                     .font(.caption)
@@ -244,7 +264,7 @@ struct ExerciseMixDetailView: View {
     private var cardioCard: some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                Text("Cardio types")
+                Label("Cardio types", systemImage: "heart.fill")
                     .font(.headline)
                 if summary.cardioTypes.isEmpty {
                     Text("No cardio records in this period.")
@@ -338,8 +358,8 @@ struct ExerciseMixDetailView: View {
 
     private var donutChart: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Distribution")
-                .font(.subheadline.weight(.semibold))
+            Label("Distribution", systemImage: "chart.pie.fill")
+                .font(.headline)
                 .foregroundStyle(DS.Color.textSecondary)
 
             Chart(Array(displayFrequencies.enumerated()), id: \.element.id) { index, freq in
@@ -361,13 +381,15 @@ struct ExerciseMixDetailView: View {
             .onChange(of: selectedAngle) { _, _ in updateDonutSelection() }
 
             // Legend
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: DS.Spacing.xs) {
+            LazyVGrid(columns: dynamicTypeSize.isAccessibilitySize
+                      ? [GridItem(.flexible())]
+                      : [GridItem(.flexible()), GridItem(.flexible())], spacing: DS.Spacing.xs) {
                 ForEach(Array(displayFrequencies.enumerated()), id: \.element.id) { index, freq in
                     HStack(spacing: DS.Spacing.xs) {
                         Circle().fill(colorFor(index: index)).frame(width: 8, height: 8)
                         Text(localizedExerciseName(freq.exerciseName))
                             .font(.caption)
-                            .lineLimit(1)
+                            .fixedSize(horizontal: false, vertical: true)
                         Spacer()
                         Text("\(freq.count.formattedWithSeparator)x")
                             .font(.caption)
@@ -425,8 +447,8 @@ struct ExerciseMixDetailView: View {
 
     private var fullFrequencyList: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("All Exercises")
-                .font(.subheadline.weight(.semibold))
+            Label("All Exercises", systemImage: "list.bullet")
+                .font(.headline)
                 .foregroundStyle(DS.Color.textSecondary)
 
             ForEach(viewModel.exerciseFrequencies) { freq in
@@ -435,7 +457,7 @@ struct ExerciseMixDetailView: View {
                         Text(localizedExerciseName(freq.exerciseName))
                             .font(.caption)
                             .fontWeight(.medium)
-                            .lineLimit(1)
+                            .fixedSize(horizontal: false, vertical: true)
                         Spacer(minLength: 0)
                         Text("\(freq.count.formattedWithSeparator)x")
                             .font(.caption)

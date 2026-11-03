@@ -922,6 +922,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let composition = app.descendants(matching: .any)["activity-exercise-mix-composition"].firstMatch
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-exercise-mix-composition", maxSwipes: 10))
         XCTAssertTrue(composition.isHittable)
+        let total = app.staticTexts["activity-exercise-mix-total"].firstMatch
+        XCTAssertTrue(total.waitForExistence(timeout: 5), "The actual workout record total should render")
+        XCTAssertFalse(total.label.isEmpty)
+        XCTAssertTrue(composition.frame.contains(total.frame), "The full total should fit inside its summary")
         addScreenshotAttachment(named: "Activity Exercise Mix composition")
 
         let weeklyChart = app.descendants(matching: .any)["activity-exercise-mix-weekly-chart"].firstMatch
@@ -934,6 +938,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(muscleShares.isHittable)
         XCTAssertTrue(app.descendants(matching: .any)["activity-exercise-mix-cardio-types"].firstMatch.exists)
         addScreenshotAttachment(named: "Activity Exercise Mix muscle shares")
+        tapBackButton()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 10),
+                      "Back should return to Activity")
     }
 
     func testActivityRiskAndReportRoutesOpen() throws {
