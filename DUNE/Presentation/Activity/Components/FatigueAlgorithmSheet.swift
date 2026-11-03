@@ -18,6 +18,7 @@ struct FatigueAlgorithmSheet: View {
                 explanationCard { readinessSection }
                 explanationCard { levelExplanationSection }
                 FatigueLegendView()
+                    .accessibilityIdentifier("activity-fatigue-algorithm-legend")
                     .padding(.top, DS.Spacing.sm)
             }
             .padding(DS.Spacing.xl)
@@ -70,9 +71,11 @@ struct FatigueAlgorithmSheet: View {
 
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 formulaRow("Fatigue = Σ (Load × e^(-elapsed/τ))")
+                    .accessibilityIdentifier("activity-fatigue-algorithm-formula")
                 bulletPoint("More recent workouts contribute more to fatigue")
                 bulletPoint("Naturally decreases over time (exponential decay)")
-                bulletPoint("τ (tau): Recovery rate by muscle size (large 72h, small 36h)")
+                bulletPoint("τ = max(2 × recovery hours ÷ max(sleep × readiness, 0.1), 1 hour)")
+                    .accessibilityIdentifier("activity-fatigue-algorithm-tau")
             }
         }
     }
@@ -190,6 +193,7 @@ struct FatigueAlgorithmSheet: View {
                 .font(.caption2.weight(.bold).monospacedDigit())
                 .fixedSize(horizontal: true, vertical: false)
             Text(description)
+                .accessibilityIdentifier("activity-fatigue-algorithm-level-\(level.rawValue)")
                 .font(.caption2)
                 .fixedSize(horizontal: false, vertical: true)
                 .foregroundStyle(DS.Color.textSecondary)

@@ -55721,6 +55721,23 @@
           }
         }
       }
+    },
+    "τ = max(2 × recovery hours ÷ max(sleep × readiness, 0.1), 1 hour)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "τ = 最大値(2 × 回復時間 ÷ 最大値(睡眠 × 準備度, 0.1), 1時間)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "τ = 최댓값(2 × 회복 시간 ÷ 최댓값(수면 × 준비도, 0.1), 1시간)"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

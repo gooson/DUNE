@@ -1180,7 +1180,55 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testVisualAuditRecoveryAlgorithmExplanation() throws {
+        try verifyRecoveryAlgorithmExplanation(maxText: false)
+    }
+
+    func testRecoveryAlgorithmExplanationAtMaximumAccessibilityTextSize() throws {
+        try verifyRecoveryAlgorithmExplanation(maxText: true)
+    }
+
+    private func verifyRecoveryAlgorithmExplanation(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        }
+        launchApp(with: configuration)
         openActivityInfo(button: "activity-muscle-map-algorithm-info", sheet: "activity-fatigue-algorithm-sheet")
+        let sheet = app.scrollViews["activity-fatigue-algorithm-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        func reveal(_ id: String) -> XCUIElement {
+            let item = app.descendants(matching: .any)[id].firstMatch
+            XCTAssertTrue(item.waitForExistence(timeout: 10), "Missing \(id)")
+            for _ in 0..<24 {
+                let viewport = sheet.frame.intersection(app.windows.firstMatch.frame)
+                if !item.frame.isEmpty && viewport.contains(item.frame) { break }
+                if item.exists && item.frame.midY < viewport.midY { sheet.swipeDown(velocity: .slow) }
+                else { sheet.swipeUp(velocity: .slow) }
+            }
+            XCTAssertFalse(item.frame.isEmpty)
+            XCTAssertTrue(sheet.frame.intersection(app.windows.firstMatch.frame).contains(item.frame), "Not fully visible: \(id)")
+            return item
+        }
+        XCTAssertEqual(reveal("activity-fatigue-algorithm-formula").label, "Fatigue = Σ (Load × e^(-elapsed/τ))")
+        VisualAudit.capture("A15 fatigue formula")
+        XCTAssertTrue(reveal("activity-fatigue-algorithm-tau").label.contains("2 × recovery hours"))
+        VisualAudit.capture("A15 effective tau")
+        for level in 1...10 {
+            let item = reveal("activity-fatigue-algorithm-level-\(level)")
+            XCTAssertFalse(item.label.isEmpty, "Missing level \(level) description")
+        }
+        VisualAudit.capture("A15 fatigue scale last level")
+        let legend = app.descendants(matching: .any)["activity-fatigue-algorithm-legend"].firstMatch
+        XCTAssertTrue(legend.waitForExistence(timeout: 10), "The original legend should remain")
+        for _ in 0..<24 where !app.descendants(matching: .any)["activity-fatigue-algorithm-formula"].firstMatch.isHittable {
+            sheet.swipeDown(velocity: .slow)
+        }
+        let top = sheet.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.02))
+        let bottom = sheet.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.90))
+        top.press(forDuration: 0.05, thenDragTo: bottom)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10), "The native sheet should dismiss")
+        XCTAssertTrue(app.scrollViews[AXID.activityRootScroll].firstMatch.waitForExistence(timeout: 10))
     }
 
     func testVisualAuditVolumeAlgorithmExplanation() throws {
