@@ -74,8 +74,8 @@ struct FatigueAlgorithmSheet: View {
                     .accessibilityIdentifier("activity-fatigue-algorithm-formula")
                 bulletPoint("More recent workouts contribute more to fatigue")
                 bulletPoint("Naturally decreases over time (exponential decay)")
-                bulletPoint("τ = max(2 × recovery hours ÷ max(sleep × readiness, 0.1), 1 hour)")
-                    .accessibilityIdentifier("activity-fatigue-algorithm-tau")
+                bulletPoint("τ = max(2 × recovery hours ÷ max(sleep × readiness, 0.1), 1 hour)",
+                            identifier: "activity-fatigue-algorithm-tau")
             }
         }
     }
@@ -160,14 +160,20 @@ struct FatigueAlgorithmSheet: View {
             .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
-    private func bulletPoint(_ text: LocalizedStringKey) -> some View {
-        HStack(alignment: .top, spacing: DS.Spacing.xs) {
+    private func bulletPoint(_ text: LocalizedStringKey, identifier: String? = nil) -> some View {
+        let label = Text(text)
+            .font(.caption)
+            .foregroundStyle(DS.Color.textSecondary)
+        return HStack(alignment: .top, spacing: DS.Spacing.xs) {
             Text("·")
                 .font(.caption.weight(.bold))
                 .foregroundStyle(DS.Color.textSecondary)
-            Text(text)
-                .font(.caption)
-                .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityHidden(true)
+            if let identifier {
+                label.accessibilityIdentifier(identifier)
+            } else {
+                label
+            }
         }
     }
 
