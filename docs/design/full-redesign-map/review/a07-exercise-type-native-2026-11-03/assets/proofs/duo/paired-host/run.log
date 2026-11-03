@@ -1,0 +1,844 @@
+Host state context: .xcodebuild/a07-duo-closed-aedf464d.log.host.json
+Ensuring requested iOS simulator '9CE87DD6-57CF-42A1-81D4-1B915C3A82C4' is booted...
+Waiting for iOS simulator [9CE87DD6-57CF-42A1-81D4-1B915C3A82C4] to boot (timeout=120s, retries=1)...
+iOS simulator already booted.
+Running UI tests with scheme 'DUNEUITests' for destination 'id=9CE87DD6-57CF-42A1-81D4-1B915C3A82C4'...
+Using test plan: DUNEUITests-DuoAudit
+Only testing: DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface
+Only testing: DUNEUITests/ExerciseTypeHealthKitVariantUITests/testExistingHealthKitTypesOpenWeekDetailAndCapture
+Streaming logs to console and .xcodebuild/a07-duo-closed-aedf464d.log
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project DUNE/DUNE.xcodeproj -scheme DUNEUITests -destination id=9CE87DD6-57CF-42A1-81D4-1B915C3A82C4 -derivedDataPath .deriveddata/ui-tests -jobs 2 COMPILER_INDEX_STORE_ENABLE=NO -parallel-testing-enabled NO -test-timeouts-enabled YES -default-test-execution-time-allowance 300 -maximum-test-execution-time-allowance 600 CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO -testPlan DUNEUITests-DuoAudit -only-testing DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface -only-testing DUNEUITests/ExerciseTypeHealthKitVariantUITests/testExistingHealthKitTypesOpenWeekDetailAndCapture
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+    CODE_SIGNING_REQUIRED = NO
+    COMPILER_INDEX_STORE_ENABLE = NO
+
+Build Preparation
+Build task concurrency set to 2 via user default IDEBuildOperationMaxNumberOfConcurrentCompileTasks
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (4 targets)
+    Target 'DUNEUITests' in project 'DUNE'
+        ➜ Explicit dependency on target 'DUNE' in project 'DUNE'
+    Target 'DUNE' in project 'DUNE'
+        ➜ Explicit dependency on target 'DUNEWatch' in project 'DUNE'
+        ➜ Explicit dependency on target 'DUNEWidget' in project 'DUNE'
+    Target 'DUNEWidget' in project 'DUNE' (no dependencies)
+    Target 'DUNEWatch' in project 'DUNE' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/xcstringstool compile --dry-run --output-directory /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNEWatch/Resources/InfoPlist.xcstrings
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/xcstringstool compile --dry-run --output-directory /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Localizable.xcstrings
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNEWatch/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/xcstringstool compile --dry-run --output-directory /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE/Resources/AppShortcuts.xcstrings
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/xcstringstool compile --dry-run --output-directory /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Localizable.xcstrings
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/xcstringstool compile --dry-run --output-directory /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNEWatch/Resources/Localizable.xcstrings
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 3a94e02e1d6578e710db7474f132e051
+Build description path: /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/XCBuildData/3a94e02e1d6578e710db7474f132e051.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/SDKStatCaches.noindex/watchsimulator27.2-24S118-b9fa32cfc2bdb801fba35bd912eef9f2.sdkstatcache
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE/DUNE.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk -o /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/SDKStatCaches.noindex/watchsimulator27.2-24S118-b9fa32cfc2bdb801fba35bd912eef9f2.sdkstatcache
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-cc78df9d8a9de6526dea716b1c70fd8e.sdkstatcache
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE/DUNE.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk -o /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/SDKStatCaches.noindex/iphonesimulator27.2-24B8118-cc78df9d8a9de6526dea716b1c70fd8e.sdkstatcache
+
+CompileAssetCatalogVariant thinned /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNEWatch/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets (in target 'DUNEWatch' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNEWatch/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets --compile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --filter-for-thinning-device-configuration iPhone19,4 --filter-for-device-os-version 27.2 --development-region en --target-device watch --minimum-deployment-target 27.0 --platform watchsimulator
+/* com.apple.actool.compilation-results */
+/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist_thinned
+/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_output/thinned/Assets.car
+
+
+LinkAssetCatalog /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNEWatch/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets (in target 'DUNEWatch' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-linkAssetCatalog --thinned /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_output/thinned --thinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist_unthinned --output /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app --plist-output /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Assets.car (in target 'DUNEWatch' from project 'DUNE')
+
+ProcessInfoPlistFile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Info.plist /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNEWatch/Resources/Info.plist (in target 'DUNEWatch' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-infoPlistUtility /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNEWatch/Resources/Info.plist -producttype com.apple.product-type.application -genpkginfo /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/PkgInfo -expandbuildsettings -format binary -platform watchsimulator -additionalcontentfile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/assetcatalog_generated_info.plist -o /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Info.plist
+
+CopySwiftLibs /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app (in target 'DUNEWatch' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/DUNEWatch.debug.dylib --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Frameworks --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/PlugIns --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/SystemExtensions --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Extensions --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk/System/Library/Frameworks/HealthKit.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk/System/Library/Frameworks/WatchConnectivity.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework --platform watchsimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-watchsimulator/DUNEWatch.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+Ignoring --strip-bitcode because --sign was not passed
+
+CompileAssetCatalogVariant thinned /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets (in target 'DUNEWidget' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets --compile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist_thinned --compress-pngs --enable-on-demand-resources NO --standalone-icon-behavior all --filter-for-thinning-device-configuration iPhone19,4 --filter-for-device-os-version 27.2 --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 27.0 --platform iphonesimulator
+/* com.apple.actool.compilation-results */
+/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist_thinned
+/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_output/thinned/Assets.car
+
+
+LinkAssetCatalog /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets (in target 'DUNEWidget' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-linkAssetCatalog --thinned /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_output/thinned --thinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist_unthinned --output /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex --plist-output /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex/Assets.car (in target 'DUNEWidget' from project 'DUNE')
+
+ProcessInfoPlistFile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex/Info.plist /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNEWidget/Resources/Info.plist (in target 'DUNEWidget' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-infoPlistUtility /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNEWidget/Resources/Info.plist -producttype com.apple.product-type.app-extension -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEWidget.build/assetcatalog_generated_info.plist -o /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex/Info.plist
+
+CompileAssetCatalogVariant thinned /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    /Applications/Xcode.app/Contents/Developer/usr/bin/actool /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets --compile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --filter-for-thinning-device-configuration iPhone19,4 --filter-for-device-os-version 27.2 --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 27.0 --platform iphonesimulator
+/* com.apple.actool.compilation-results */
+/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist_thinned
+/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/thinned/AppIcon60x60@2x.png
+/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/thinned/AppIcon76x76@2x~ipad.png
+/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/thinned/Assets.car
+
+
+LinkAssetCatalog /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE/Resources/Assets.xcassets /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/Shared/Resources/Colors.xcassets (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-linkAssetCatalog --thinned /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/thinned --thinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist_unthinned --output /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app --plist-output /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/AppIcon60x60@2x.png (in target 'DUNE' from project 'DUNE')
+note: Emplaced /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/AppIcon76x76@2x~ipad.png (in target 'DUNE' from project 'DUNE')
+note: Emplaced /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Assets.car (in target 'DUNE' from project 'DUNE')
+
+Copy /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns/DUNEWidget.appex /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks -remove-static-executable /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEWidget.appex /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns
+
+Copy /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Watch/DUNEWatch.app /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks -remove-static-executable /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-watchsimulator/DUNEWatch.app /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Watch
+
+ProcessInfoPlistFile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Info.plist /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE/Resources/Info.plist (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-infoPlistUtility /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE/Resources/Info.plist -producttype com.apple.product-type.application -genpkginfo /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/assetcatalog_generated_info.plist -scanforprivacyfile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns/DUNEWidget.appex -scanforprivacyfile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Watch/DUNEWatch.app -o /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Info.plist
+
+CopySwiftLibs /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/DUNE.debug.dylib --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Frameworks --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/SystemExtensions --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Extensions --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/HealthKit.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/GroupActivities.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreLocation.framework --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.2.sdk/System/Library/Frameworks/CoreMotion.framework --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNE.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+Ignoring --strip-bitcode because --sign was not passed
+
+ValidateEmbeddedBinary /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Watch/DUNEWatch.app (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    /Applications/Xcode.app/Contents/Developer/usr/bin/embeddedBinaryValidationUtility /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Watch/DUNEWatch.app -info-plist-path /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Info.plist
+
+ValidateEmbeddedBinary /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns/DUNEWidget.appex (in target 'DUNE' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    /Applications/Xcode.app/Contents/Developer/usr/bin/embeddedBinaryValidationUtility /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/PlugIns/DUNEWidget.appex -info-plist-path /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNE.app/Info.plist
+
+ProcessInfoPlistFile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/Info.plist /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEUITests.build/empty-DUNEUITests.plist (in target 'DUNEUITests' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-infoPlistUtility /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEUITests.build/empty-DUNEUITests.plist -producttype com.apple.product-type.bundle.ui-testing -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEUITests.build/ProductTypeInfoPlistAdditions.plist -o /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/Info.plist
+
+CopySwiftLibs /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest (in target 'DUNEUITests' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/DUNE
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/DUNEUITests --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/Frameworks --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/PlugIns --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/SystemExtensions --scan-folder /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Products/Debug-iphonesimulator/DUNEUITests-Runner.app/PlugIns/DUNEUITests.xctest/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/DUNE.build/Debug-iphonesimulator/DUNEUITests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+Ignoring --strip-bitcode because --sign was not passed
+
+PruneExplicitPrecompiledModules /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/SDKExplicitPrecompiledModules
+
+2026-11-03 06:38:42.568 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 06:38:55.011166+0900 DUNEUITests-Runner[32580:23152497] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-11-03 06:39:04.005.
+Test Suite 'DUNEUITests.xctest' started at 2026-11-03 06:39:04.007.
+Test Suite 'ActivityExerciseRegressionTests' started at 2026-11-03 06:39:04.007.
+Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]' started.
+    t =     0.01s Start Test at 2026-11-03 06:39:04.019
+    t =     0.48s Set Up
+    t =     0.50s     Open com.raftel.dailve
+    t =     0.50s         Launch com.raftel.dailve
+2026-11-03 06:39:05.874 xcodebuild[31569:23147235] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-03 06:39:05.874 xcodebuild[31569:23147235] [MT] IDELaunchParametersSnapshot: no debugger version
+objc[32580]: Class UIAccessibilityLoaderWebShared is implemented in both /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.2.91016.19.Arupr1/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x10a89c310) and /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.2.91016.19.Arupr1/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x10a94c398). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+2026-11-03 06:39:06.274 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+    t =     7.73s             Setting up automation session
+    t =    10.88s             Wait for com.raftel.dailve to idle
+    t =    16.39s     Checking existence of `"workout-insights-close" Button`
+    t =    20.33s     Checking `Expect predicate `BLOCKPREDICATE(0x10a6c15f0)` for object Target Application 'com.raftel.dailve'`
+    t =    20.33s         Checking existence of `TabBar (First Match)`
+    t =    20.79s         Checking existence of `Any (First Match)`
+    t =    21.99s     Requesting snapshot of accessibility hierarchy for app with pid 33156
+    t =    24.76s     Requesting snapshot of accessibility hierarchy for app with pid 33156
+DUNE_VISUAL_AUDIT_READY root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793655598.960098 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-42D96505-CD44-4C96-B669-FF784143D3C0.ack
+    t =    30.87s     Visual audit: root after setup -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface] [DUNEUITests/UITestBaseCase.swift:145]
+    t =    30.89s Waiting 3.0s for "activity-toolbar-add" Any to exist
+    t =    31.96s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-toolbar-add" Any`
+    t =    31.96s         Checking existence of `"activity-toolbar-add" Any`
+    t =    32.24s Waiting 15.0s for "activity-hero-readiness" Any to exist
+    t =    33.34s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-hero-readiness" Any`
+    t =    33.34s         Checking existence of `"activity-hero-readiness" Any`
+    t =    34.91s Waiting 5.0s for "activity-toolbar-add" Any to exist
+    t =    35.92s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-toolbar-add" Any`
+    t =    35.92s         Checking existence of `"activity-toolbar-add" Any`
+    t =    37.25s Waiting 1.0s for "activity-section-volume" Any to exist
+    t =    38.25s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-section-volume" Any`
+    t =    38.25s         Checking existence of `"activity-section-volume" Any`
+    t =    38.56s         Capturing element debug description
+    t =    38.56s     Checking existence of `"activity-section-volume" Any`
+    t =    39.03s Checking existence of `"activity-section-volume" Any`
+    t =    39.35s Find the "activity-section-volume" Any
+    t =    40.40s Checking existence of `"picker-root-list" Table`
+    t =    40.76s Checking existence of `"activity-root-scroll" Any`
+    t =    40.81s Find the "activity-root-scroll" Any
+    t =    40.90s Swipe up "activity-root-scroll" ScrollView
+    t =    40.90s     Wait for com.raftel.dailve to idle
+    t =    40.91s     Find the "activity-root-scroll" ScrollView
+    t =    40.99s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    41.21s         Wait for com.apple.springboard to idle
+    t =    41.52s     Synthesize event
+    t =    42.15s     Wait for com.raftel.dailve to idle
+    t =    44.35s Checking existence of `"activity-section-volume" Button`
+    t =    44.48s Find the "activity-section-volume" Button
+    t =    44.67s Checking existence of `"picker-root-list" Table`
+    t =    44.95s Checking existence of `"activity-root-scroll" Any`
+    t =    45.00s Find the "activity-root-scroll" Any
+    t =    45.07s Swipe up "activity-root-scroll" ScrollView
+    t =    45.07s     Wait for com.raftel.dailve to idle
+    t =    45.07s     Find the "activity-root-scroll" ScrollView
+    t =    45.13s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    45.23s         Wait for com.apple.springboard to idle
+    t =    45.33s     Synthesize event
+    t =    45.84s     Wait for com.raftel.dailve to idle
+    t =    48.07s Checking existence of `"activity-section-volume" Button`
+    t =    48.33s Find the "activity-section-volume" Button
+    t =    48.49s Checking existence of `"picker-root-list" Table`
+    t =    48.86s Checking existence of `"activity-root-scroll" Any`
+    t =    48.98s Find the "activity-root-scroll" Any
+    t =    49.24s Swipe up "activity-root-scroll" ScrollView
+    t =    49.25s     Wait for com.raftel.dailve to idle
+    t =    49.43s     Find the "activity-root-scroll" ScrollView
+    t =    49.52s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    49.64s         Wait for com.apple.springboard to idle
+    t =    49.85s     Synthesize event
+    t =    50.51s     Wait for com.raftel.dailve to idle
+    t =    52.64s Checking existence of `"activity-section-volume" Button`
+    t =    52.76s Find the "activity-section-volume" Button
+    t =    52.95s Checking existence of `"picker-root-list" Table`
+    t =    53.29s Checking existence of `"activity-root-scroll" Any`
+    t =    53.35s Find the "activity-root-scroll" Any
+    t =    53.46s Swipe up "activity-root-scroll" ScrollView
+    t =    53.46s     Wait for com.raftel.dailve to idle
+    t =    53.47s     Find the "activity-root-scroll" ScrollView
+    t =    53.56s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    53.69s         Wait for com.apple.springboard to idle
+    t =    53.79s     Synthesize event
+    t =    54.53s     Wait for com.raftel.dailve to idle
+    t =    56.62s Checking existence of `"activity-section-volume" Button`
+    t =    56.82s Find the "activity-section-volume" Button
+    t =    57.00s Checking existence of `"picker-root-list" Table`
+    t =    57.36s Checking existence of `"activity-root-scroll" Any`
+    t =    57.43s Find the "activity-root-scroll" Any
+    t =    57.53s Swipe up "activity-root-scroll" ScrollView
+    t =    57.53s     Wait for com.raftel.dailve to idle
+    t =    57.53s     Find the "activity-root-scroll" ScrollView
+    t =    57.59s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    57.72s         Wait for com.apple.springboard to idle
+    t =    57.78s     Synthesize event
+    t =    58.26s     Wait for com.raftel.dailve to idle
+    t =    60.35s Checking existence of `"activity-section-volume" Button`
+    t =    60.48s Find the "activity-section-volume" Button
+    t =    60.75s Checking existence of `"picker-root-list" Table`
+    t =    61.05s Checking existence of `"activity-root-scroll" Any`
+    t =    61.12s Find the "activity-root-scroll" Any
+    t =    61.19s Swipe up "activity-root-scroll" ScrollView
+    t =    61.19s     Wait for com.raftel.dailve to idle
+    t =    61.19s     Find the "activity-root-scroll" ScrollView
+    t =    61.25s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    61.37s         Wait for com.apple.springboard to idle
+    t =    61.43s     Synthesize event
+    t =    61.89s     Wait for com.raftel.dailve to idle
+    t =    64.02s Checking existence of `"activity-section-volume" Button`
+    t =    64.12s Find the "activity-section-volume" Button
+    t =    64.23s Waiting 8.0s for "activity-section-volume" Any to exist
+    t =    65.27s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-section-volume" Any`
+    t =    65.27s         Checking existence of `"activity-section-volume" Any`
+    t =    65.39s Find the "activity-section-volume" Any
+    t =    65.49s Find the "activity-section-volume" Button
+    t =    65.61s Tap "activity-section-volume" Button
+    t =    65.61s     Wait for com.raftel.dailve to idle
+    t =    65.61s     Find the "activity-section-volume" Button
+    t =    65.71s     Check for interrupting elements affecting "activity-section-volume" Button
+    t =    65.82s         Wait for com.apple.springboard to idle
+    t =    65.88s     Synthesize event
+    t =    66.18s     Wait for com.raftel.dailve to idle
+    t =    67.42s Requesting snapshot of accessibility hierarchy for app with pid 33156
+    t =    67.88s Requesting snapshot of accessibility hierarchy for app with pid 33156
+DUNE_VISUAL_AUDIT_READY tap activity-section-volume [DUNEUITests/ActivityExerciseRegressionTests.swift:2520] DEADLINE=1793655641.9992971 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-3BF0A160-EF83-459E-A03C-C634C96E6D4F.ack
+    t =    70.66s Visual audit: tap activity-section-volume [DUNEUITests/ActivityExerciseRegressionTests.swift:2520]
+    t =    70.66s Waiting 10.0s for "activity-training-volume-detail-screen" Any to exist
+    t =    71.70s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-detail-screen" Any`
+    t =    71.70s         Checking existence of `"activity-training-volume-detail-screen" Any`
+    t =    71.75s Waiting 1.0s for "activity-training-volume-type-list" Any to exist
+    t =    72.76s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-type-list" Any`
+    t =    72.76s         Checking existence of `"activity-training-volume-type-list" Any`
+    t =    72.86s     Checking existence of `"activity-training-volume-type-list" Any`
+    t =    72.96s Waiting 1.0s for "activity-training-volume-row-manual-strength" Any to exist
+    t =    73.97s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-row-manual-strength" Any`
+    t =    73.97s         Checking existence of `"activity-training-volume-row-manual-strength" Any`
+    t =    74.15s     Checking existence of `"activity-training-volume-row-manual-strength" Any`
+    t =    74.33s Checking existence of `"activity-training-volume-row-manual-strength" Any`
+    t =    74.51s Find the "activity-training-volume-row-manual-strength" Any
+    t =    74.71s Checking existence of `"picker-root-list" Table`
+    t =    74.83s Checking existence of `"activity-root-scroll" Any`
+    t =    75.12s Checking existence of `"picker-root-list" Table`
+    t =    75.24s Checking existence of `"activity-root-scroll" Any`
+    t =    75.54s Get all elements bound by index for: Descendants matching type Table
+    t =    75.59s Get all elements bound by index for: Descendants matching type ScrollView
+    t =    75.64s Checking existence of `ScrollView (Element at index 0)`
+    t =    75.70s Find the ScrollView (Element at index 0)
+    t =    75.77s Swipe up "activity-training-volume-detail-screen" ScrollView
+    t =    75.77s     Wait for com.raftel.dailve to idle
+    t =    75.77s     Find the "activity-training-volume-detail-screen" ScrollView
+    t =    75.83s     Check for interrupting elements affecting "activity-training-volume-detail-screen" ScrollView
+    t =    75.89s         Wait for com.apple.springboard to idle
+    t =    75.93s     Synthesize event
+    t =    76.39s     Wait for com.raftel.dailve to idle
+    t =    78.52s Checking existence of `"activity-training-volume-row-manual-strength" StaticText`
+    t =    78.68s Find the "activity-training-volume-row-manual-strength" StaticText
+    t =    78.86s Checking existence of `"picker-root-list" Table`
+    t =    78.96s Checking existence of `"activity-root-scroll" Any`
+    t =    79.26s Checking existence of `"picker-root-list" Table`
+    t =    79.37s Checking existence of `"activity-root-scroll" Any`
+    t =    79.66s Get all elements bound by index for: Descendants matching type Table
+    t =    79.71s Get all elements bound by index for: Descendants matching type ScrollView
+    t =    79.76s Checking existence of `ScrollView (Element at index 0)`
+    t =    79.81s Find the ScrollView (Element at index 0)
+    t =    79.87s Swipe up "activity-training-volume-detail-screen" ScrollView
+    t =    79.87s     Wait for com.raftel.dailve to idle
+    t =    79.91s     Find the "activity-training-volume-detail-screen" ScrollView
+    t =    79.97s     Check for interrupting elements affecting "activity-training-volume-detail-screen" ScrollView
+    t =    80.03s         Wait for com.apple.springboard to idle
+    t =    80.06s     Synthesize event
+    t =    80.53s     Wait for com.raftel.dailve to idle
+    t =    81.40s Checking existence of `"activity-training-volume-row-manual-strength" StaticText`
+    t =    82.12s Find the "activity-training-volume-row-manual-strength" StaticText
+    t =    82.86s Waiting 8.0s for "activity-training-volume-row-manual-strength" Any to exist
+    t =    83.88s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-row-manual-strength" Any`
+    t =    83.88s         Checking existence of `"activity-training-volume-row-manual-strength" Any`
+    t =    84.12s Find the "activity-training-volume-row-manual-strength" Any
+    t =    84.29s Find the "activity-training-volume-row-manual-strength" StaticText
+    t =    84.46s Tap "activity-training-volume-row-manual-strength" StaticText
+    t =    84.46s     Wait for com.raftel.dailve to idle
+    t =    84.46s     Find the "activity-training-volume-row-manual-strength" StaticText
+    t =    84.63s     Check for interrupting elements affecting "activity-training-volume-row-manual-strength" StaticText
+    t =    84.69s         Wait for com.apple.springboard to idle
+    t =    84.75s     Synthesize event
+    t =    85.05s     Wait for com.raftel.dailve to idle
+    t =    86.24s Requesting snapshot of accessibility hierarchy for app with pid 33156
+    t =    86.47s Requesting snapshot of accessibility hierarchy for app with pid 33156
+DUNE_VISUAL_AUDIT_READY tap activity-training-volume-row-manual-strength [DUNEUITests/ActivityExerciseRegressionTests.swift:951] DEADLINE=1793655660.546098 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-C9069646-A4D8-46E9-A8DB-1B6FA44F56D1.ack
+    t =    89.00s Visual audit: tap activity-training-volume-row-manual-strength [DUNEUITests/ActivityExerciseRegressionTests.swift:951]
+    t =    89.00s Waiting 10.0s for "activity-exercise-type-detail-screen" Any to exist
+    t =    90.00s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-detail-screen" Any`
+    t =    90.00s         Checking existence of `"activity-exercise-type-detail-screen" Any`
+    t =    90.05s Waiting 15.0s for "activity-exercise-type-period-picker" Any to exist
+    t =    91.08s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-period-picker" Any`
+    t =    91.08s         Checking existence of `"activity-exercise-type-period-picker" Any`
+    t =    91.14s Waiting 15.0s for "activity-exercise-type-trend-chart" Any to exist
+    t =    92.16s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-trend-chart" Any`
+    t =    92.16s         Checking existence of `"activity-exercise-type-trend-chart" Any`
+    t =    92.21s Waiting 15.0s for "activity-exercise-type-primary-value" StaticText to exist
+    t =    93.27s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-primary-value" StaticText`
+    t =    93.27s         Checking existence of `"activity-exercise-type-primary-value" StaticText`
+    t =    93.31s Find the "activity-exercise-type-primary-value" StaticText
+    t =    93.34s Waiting 5.0s for "activity-exercise-type-comparison-current-volume" StaticText to exist
+    t =    94.38s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-comparison-current-volume" StaticText`
+    t =    94.38s         Checking existence of `"activity-exercise-type-comparison-current-volume" StaticText`
+    t =    94.48s Find the "activity-exercise-type-comparison-current-volume" StaticText
+    t =    94.56s Find the "activity-exercise-type-primary-value" StaticText
+    t =    94.59s Checking existence of `"activity-exercise-type-recent-sessions" Any`
+    t =    95.56s Requesting snapshot of accessibility hierarchy for app with pid 33156
+    t =    95.80s Requesting snapshot of accessibility hierarchy for app with pid 33156
+DUNE_VISUAL_AUDIT_READY Exercise type manual strength Week loaded [DUNEUITests/ActivityExerciseRegressionTests.swift:975] DEADLINE=1793655669.869783 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-36E23C03-BE19-4D70-99E1-AF2E6BE8097C.ack
+    t =    98.07s Visual audit: Exercise type manual strength Week loaded [DUNEUITests/ActivityExerciseRegressionTests.swift:975]
+    t =    98.07s Waiting 1.0s for "activity-exercise-type-comparison-row-volume" Any to exist
+    t =    99.08s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-comparison-row-volume" Any`
+    t =    99.08s         Checking existence of `"activity-exercise-type-comparison-row-volume" Any`
+    t =    99.18s     Checking existence of `"activity-exercise-type-comparison-row-volume" Any`
+    t =    99.30s Checking existence of `"activity-exercise-type-comparison-row-volume" Any`
+    t =    99.41s Find the "activity-exercise-type-comparison-row-volume" Any
+    t =    99.53s Checking existence of `"picker-root-list" Table`
+    t =    99.60s Checking existence of `"activity-root-scroll" Any`
+    t =    99.78s Checking existence of `"picker-root-list" Table`
+    t =    99.87s Checking existence of `"activity-root-scroll" Any`
+    t =   100.07s Get all elements bound by index for: Descendants matching type Table
+    t =   100.10s Get all elements bound by index for: Descendants matching type ScrollView
+    t =   100.14s Checking existence of `ScrollView (Element at index 0)`
+    t =   100.17s Find the ScrollView (Element at index 0)
+    t =   100.22s Swipe up "activity-exercise-type-detail-screen" ScrollView
+    t =   100.22s     Wait for com.raftel.dailve to idle
+    t =   100.22s     Find the "activity-exercise-type-detail-screen" ScrollView
+    t =   100.25s     Check for interrupting elements affecting "activity-exercise-type-detail-screen" ScrollView
+    t =   100.29s         Wait for com.apple.springboard to idle
+    t =   100.32s     Synthesize event
+    t =   100.79s     Wait for com.raftel.dailve to idle
+    t =   101.59s Checking existence of `"activity-exercise-type-comparison-row-volume" Other`
+    t =   101.69s Find the "activity-exercise-type-comparison-row-volume" Other
+    t =   102.62s Requesting snapshot of accessibility hierarchy for app with pid 33156
+    t =   102.81s Requesting snapshot of accessibility hierarchy for app with pid 33156
+DUNE_VISUAL_AUDIT_READY Exercise type manual strength Week comparison [DUNEUITests/ActivityExerciseRegressionTests.swift:985] DEADLINE=1793655676.8833609 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-FEE185AE-6899-48E4-B8B9-ECD56C54ADB7.ack
+    t =   105.17s Visual audit: Exercise type manual strength Week comparison [DUNEUITests/ActivityExerciseRegressionTests.swift:985]
+    t =   105.17s Waiting 1.0s for "activity-exercise-type-period-picker" Any to exist
+    t =   106.17s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-period-picker" Any`
+    t =   106.17s         Checking existence of `"activity-exercise-type-period-picker" Any`
+    t =   106.22s     Checking existence of `"activity-exercise-type-period-picker" Any`
+    t =   106.27s Checking existence of `"activity-exercise-type-period-picker" Any`
+    t =   106.32s Find the "activity-exercise-type-period-picker" Any
+    t =   106.38s Checking existence of `"picker-root-list" Table`
+    t =   106.45s Checking existence of `"activity-root-scroll" Any`
+    t =   106.62s Checking existence of `"picker-root-list" Table`
+    t =   106.71s Checking existence of `"activity-root-scroll" Any`
+    t =   106.90s Get all elements bound by index for: Descendants matching type Table
+    t =   106.93s Get all elements bound by index for: Descendants matching type ScrollView
+    t =   106.96s Checking existence of `ScrollView (Element at index 0)`
+    t =   106.99s Find the ScrollView (Element at index 0)
+    t =   107.03s Swipe down "activity-exercise-type-detail-screen" ScrollView
+    t =   107.03s     Wait for com.raftel.dailve to idle
+    t =   107.03s     Find the "activity-exercise-type-detail-screen" ScrollView
+    t =   107.07s     Check for interrupting elements affecting "activity-exercise-type-detail-screen" ScrollView
+    t =   107.10s         Wait for com.apple.springboard to idle
+    t =   107.14s     Synthesize event
+    t =   107.59s     Wait for com.raftel.dailve to idle
+    t =   108.39s Checking existence of `"activity-exercise-type-period-picker" SegmentedControl`
+    t =   108.45s Find the "activity-exercise-type-period-picker" SegmentedControl
+    t =   108.52s Checking existence of `"activity-exercise-type-period-picker" SegmentedControl`
+    t =   108.55s Waiting 10.0s for "activity-exercise-type-period-picker" SegmentedControl to exist
+    t =   109.58s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-period-picker" SegmentedControl`
+    t =   109.58s         Checking existence of `"activity-exercise-type-period-picker" SegmentedControl`
+    t =   109.63s Waiting 10.0s for Button (Element at index 1) to exist
+    t =   110.68s     Checking `Expect predicate `existsNoRetry == 1` for object Button (Element at index 1)`
+    t =   110.68s         Checking existence of `Button (Element at index 1)`
+    t =   110.72s Find the Button (Element at index 1)
+    t =   110.79s Find the "1개월" Button
+    t =   110.83s Tap "1개월" Button
+    t =   110.83s     Wait for com.raftel.dailve to idle
+    t =   110.83s     Find the "1개월" Button
+    t =   110.87s     Check for interrupting elements affecting "1개월" Button
+    t =   110.92s         Wait for com.apple.springboard to idle
+    t =   110.96s     Synthesize event
+    t =   111.26s     Wait for com.raftel.dailve to idle
+    t =   113.49s Requesting snapshot of accessibility hierarchy for app with pid 33156
+    t =   114.36s Requesting snapshot of accessibility hierarchy for app with pid 33156
+DUNE_VISUAL_AUDIT_READY tap 1개월 [DUNEUITests/UITestBaseCase.swift:232] DEADLINE=1793655688.521202 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-B1FE09EE-3C75-4F8A-934C-9DF57EBF72AD.ack
+    t =   117.99s Visual audit: tap 1개월 [DUNEUITests/UITestBaseCase.swift:232]
+    t =   117.99s Waiting 15.0s for "activity-exercise-type-trend-chart" Any to exist
+    t =   119.03s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-trend-chart" Any`
+    t =   119.03s         Checking existence of `"activity-exercise-type-trend-chart" Any`
+    t =   119.09s Find the "activity-exercise-type-primary-value" StaticText
+    t =   119.95s Requesting snapshot of accessibility hierarchy for app with pid 33156
+    t =   120.21s Requesting snapshot of accessibility hierarchy for app with pid 33156
+DUNE_VISUAL_AUDIT_READY Exercise type manual strength Month loaded [DUNEUITests/ActivityExerciseRegressionTests.swift:1006] DEADLINE=1793655694.281357 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-20A2435C-722C-4EBA-9665-D128CA2D96D0.ack
+    t =   122.51s Visual audit: Exercise type manual strength Month loaded [DUNEUITests/ActivityExerciseRegressionTests.swift:1006]
+    t =   122.51s Tear Down
+    t =   123.32s     Requesting snapshot of accessibility hierarchy for app with pid 33156
+    t =   123.56s     Requesting snapshot of accessibility hierarchy for app with pid 33156
+DUNE_VISUAL_AUDIT_READY before teardown -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793655697.634128 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-5EA4CE85-3E27-43B7-B82A-DEF7794CBB2B.ack
+    t =   125.82s     Visual audit: before teardown -[ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface] [DUNEUITests/UITestBaseCase.swift:120]
+    t =   125.82s     Terminate com.raftel.dailve:33156
+2026-11-03 06:41:09.885 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 06:41:09.889 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 06:41:09.899 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+    t =   126.89s     Wait for com.raftel.dailve to become Not Running
+Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailShowsTrendSurface]' passed (127.260 seconds).
+Test Suite 'ActivityExerciseRegressionTests' passed at 2026-11-03 06:41:11.279.
+	 Executed 1 test, with 0 failures (0 unexpected) in 127.260 (127.272) seconds
+Test Suite 'ExerciseTypeHealthKitVariantUITests' started at 2026-11-03 06:41:11.280.
+Test Case '-[DUNEUITests.ExerciseTypeHealthKitVariantUITests testExistingHealthKitTypesOpenWeekDetailAndCapture]' started.
+    t =     0.00s Start Test at 2026-11-03 06:41:11.281
+    t =     0.04s Set Up
+    t =     0.04s     Open com.raftel.dailve
+    t =     0.04s         Launch com.raftel.dailve
+2026-11-03 06:41:11.330 xcodebuild[31569:23147235] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-11-03 06:41:11.330 xcodebuild[31569:23147235] [MT] IDELaunchParametersSnapshot: no debugger version
+2026-11-03 06:41:11.391 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+    t =     0.26s             Setting up automation session
+    t =     4.36s             Wait for com.raftel.dailve to idle
+    t =     8.44s     Checking existence of `"workout-insights-close" Button`
+    t =     9.94s     Checking `Expect predicate `BLOCKPREDICATE(0x10a5f39c0)` for object Target Application 'com.raftel.dailve'`
+    t =     9.94s         Checking existence of `TabBar (First Match)`
+    t =    10.14s         Checking existence of `Any (First Match)`
+    t =    11.06s     Requesting snapshot of accessibility hierarchy for app with pid 36247
+    t =    11.71s     Requesting snapshot of accessibility hierarchy for app with pid 36247
+DUNE_VISUAL_AUDIT_READY root after setup -[ExerciseTypeHealthKitVariantUITests testExistingHealthKitTypesOpenWeekDetailAndCapture] [DUNEUITests/UITestBaseCase.swift:145] DEADLINE=1793655713.171811 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-A08631BC-9487-4543-B451-87DEEB365BD1.ack
+    t =    14.22s     Visual audit: root after setup -[ExerciseTypeHealthKitVariantUITests testExistingHealthKitTypesOpenWeekDetailAndCapture] [DUNEUITests/UITestBaseCase.swift:145]
+    t =    14.22s Waiting 15.0s for "activity-hero-readiness" Any to exist
+    t =    15.26s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-hero-readiness" Any`
+    t =    15.27s         Checking existence of `"activity-hero-readiness" Any`
+    t =    15.34s Waiting 1.0s for "activity-section-volume" Any to exist
+    t =    16.35s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-section-volume" Any`
+    t =    16.35s         Checking existence of `"activity-section-volume" Any`
+    t =    16.45s     Checking existence of `"activity-section-volume" Any`
+    t =    16.55s Checking existence of `"activity-section-volume" Any`
+    t =    16.67s Find the "activity-section-volume" Any
+    t =    16.77s Checking existence of `"picker-root-list" Table`
+    t =    16.97s Checking existence of `"activity-root-scroll" Any`
+    t =    17.01s Find the "activity-root-scroll" Any
+    t =    17.06s Swipe up "activity-root-scroll" ScrollView
+    t =    17.06s     Wait for com.raftel.dailve to idle
+    t =    17.07s     Find the "activity-root-scroll" ScrollView
+    t =    17.11s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    17.21s         Wait for com.apple.springboard to idle
+    t =    17.27s     Synthesize event
+    t =    17.71s     Wait for com.raftel.dailve to idle
+    t =    19.83s Checking existence of `"activity-section-volume" Button`
+    t =    19.94s Find the "activity-section-volume" Button
+    t =    20.07s Checking existence of `"picker-root-list" Table`
+    t =    20.26s Checking existence of `"activity-root-scroll" Any`
+    t =    20.30s Find the "activity-root-scroll" Any
+    t =    20.36s Swipe up "activity-root-scroll" ScrollView
+    t =    20.36s     Wait for com.raftel.dailve to idle
+    t =    20.36s     Find the "activity-root-scroll" ScrollView
+    t =    20.40s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    20.49s         Wait for com.apple.springboard to idle
+    t =    20.54s     Synthesize event
+    t =    20.99s     Wait for com.raftel.dailve to idle
+    t =    23.11s Checking existence of `"activity-section-volume" Button`
+    t =    23.22s Find the "activity-section-volume" Button
+    t =    23.32s Checking existence of `"picker-root-list" Table`
+    t =    23.52s Checking existence of `"activity-root-scroll" Any`
+    t =    23.56s Find the "activity-root-scroll" Any
+    t =    23.61s Swipe up "activity-root-scroll" ScrollView
+    t =    23.61s     Wait for com.raftel.dailve to idle
+    t =    23.61s     Find the "activity-root-scroll" ScrollView
+    t =    23.65s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    23.75s         Wait for com.apple.springboard to idle
+    t =    23.80s     Synthesize event
+    t =    24.26s     Wait for com.raftel.dailve to idle
+    t =    26.37s Checking existence of `"activity-section-volume" Button`
+    t =    26.46s Find the "activity-section-volume" Button
+    t =    26.56s Checking existence of `"picker-root-list" Table`
+    t =    26.77s Checking existence of `"activity-root-scroll" Any`
+    t =    26.82s Find the "activity-root-scroll" Any
+    t =    26.87s Swipe up "activity-root-scroll" ScrollView
+    t =    26.87s     Wait for com.raftel.dailve to idle
+    t =    26.87s     Find the "activity-root-scroll" ScrollView
+    t =    26.92s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    27.01s         Wait for com.apple.springboard to idle
+    t =    27.07s     Synthesize event
+    t =    27.52s     Wait for com.raftel.dailve to idle
+    t =    29.65s Checking existence of `"activity-section-volume" Button`
+    t =    29.75s Find the "activity-section-volume" Button
+    t =    29.87s Checking existence of `"picker-root-list" Table`
+    t =    30.08s Checking existence of `"activity-root-scroll" Any`
+    t =    30.12s Find the "activity-root-scroll" Any
+    t =    30.18s Swipe up "activity-root-scroll" ScrollView
+    t =    30.18s     Wait for com.raftel.dailve to idle
+    t =    30.18s     Find the "activity-root-scroll" ScrollView
+    t =    30.23s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    30.33s         Wait for com.apple.springboard to idle
+    t =    30.38s     Synthesize event
+    t =    30.83s     Wait for com.raftel.dailve to idle
+    t =    32.93s Checking existence of `"activity-section-volume" Button`
+    t =    33.03s Find the "activity-section-volume" Button
+    t =    33.14s Checking existence of `"picker-root-list" Table`
+    t =    33.36s Checking existence of `"activity-root-scroll" Any`
+    t =    33.40s Find the "activity-root-scroll" Any
+    t =    33.45s Swipe up "activity-root-scroll" ScrollView
+    t =    33.45s     Wait for com.raftel.dailve to idle
+    t =    33.46s     Find the "activity-root-scroll" ScrollView
+    t =    33.50s     Check for interrupting elements affecting "activity-root-scroll" ScrollView
+    t =    33.60s         Wait for com.apple.springboard to idle
+    t =    33.65s     Synthesize event
+    t =    34.11s     Wait for com.raftel.dailve to idle
+    t =    36.21s Checking existence of `"activity-section-volume" Button`
+    t =    36.31s Find the "activity-section-volume" Button
+    t =    36.42s Tap "activity-section-volume" Any
+    t =    36.42s     Wait for com.raftel.dailve to idle
+    t =    36.42s     Find the "activity-section-volume" Any
+    t =    36.51s     Check for interrupting elements affecting "activity-section-volume" Button
+    t =    36.61s         Wait for com.apple.springboard to idle
+    t =    36.67s     Synthesize event
+    t =    36.96s     Wait for com.raftel.dailve to idle
+    t =    37.45s Waiting 10.0s for "activity-training-volume-detail-screen" Any to exist
+    t =    38.50s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-detail-screen" Any`
+    t =    38.50s         Checking existence of `"activity-training-volume-detail-screen" Any`
+    t =    38.56s Waiting 1.0s for "activity-training-volume-type-list" Any to exist
+    t =    39.57s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-type-list" Any`
+    t =    39.57s         Checking existence of `"activity-training-volume-type-list" Any`
+    t =    39.66s     Checking existence of `"activity-training-volume-type-list" Any`
+    t =    39.75s Waiting 1.0s for "activity-training-volume-row-running" Any to exist
+    t =    40.75s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-row-running" Any`
+    t =    40.75s         Checking existence of `"activity-training-volume-row-running" Any`
+    t =    41.00s     Checking existence of `"activity-training-volume-row-running" Any`
+    t =    41.18s Checking existence of `"activity-training-volume-row-running" Any`
+    t =    41.37s Find the "activity-training-volume-row-running" Any
+    t =    41.58s Checking existence of `"picker-root-list" Table`
+    t =    41.70s Checking existence of `"activity-root-scroll" Any`
+    t =    41.95s Checking existence of `"picker-root-list" Table`
+    t =    42.06s Checking existence of `"activity-root-scroll" Any`
+    t =    42.32s Get all elements bound by index for: Descendants matching type Table
+    t =    42.36s Get all elements bound by index for: Descendants matching type ScrollView
+    t =    42.41s Checking existence of `ScrollView (Element at index 0)`
+    t =    42.46s Find the ScrollView (Element at index 0)
+    t =    42.53s Swipe up "activity-training-volume-detail-screen" ScrollView
+    t =    42.53s     Wait for com.raftel.dailve to idle
+    t =    42.53s     Find the "activity-training-volume-detail-screen" ScrollView
+    t =    42.59s     Check for interrupting elements affecting "activity-training-volume-detail-screen" ScrollView
+    t =    42.65s         Wait for com.apple.springboard to idle
+    t =    42.69s     Synthesize event
+    t =    43.14s     Wait for com.raftel.dailve to idle
+    t =    45.26s Checking existence of `"activity-training-volume-row-running" StaticText`
+    t =    45.46s Find the "activity-training-volume-row-running" StaticText
+    t =    45.66s Checking existence of `"picker-root-list" Table`
+    t =    45.77s Checking existence of `"activity-root-scroll" Any`
+    t =    46.03s Checking existence of `"picker-root-list" Table`
+    t =    46.14s Checking existence of `"activity-root-scroll" Any`
+    t =    46.40s Get all elements bound by index for: Descendants matching type Table
+    t =    46.45s Get all elements bound by index for: Descendants matching type ScrollView
+    t =    46.50s Checking existence of `ScrollView (Element at index 0)`
+    t =    46.55s Find the ScrollView (Element at index 0)
+    t =    46.61s Swipe up "activity-training-volume-detail-screen" ScrollView
+    t =    46.61s     Wait for com.raftel.dailve to idle
+    t =    46.69s     Find the "activity-training-volume-detail-screen" ScrollView
+    t =    46.76s     Check for interrupting elements affecting "activity-training-volume-detail-screen" ScrollView
+    t =    46.81s         Wait for com.apple.springboard to idle
+    t =    46.85s     Synthesize event
+    t =    47.30s     Wait for com.raftel.dailve to idle
+    t =    48.18s Checking existence of `"activity-training-volume-row-running" StaticText`
+    t =    48.39s Find the "activity-training-volume-row-running" StaticText
+    t =    48.60s Checking existence of `"activity-training-volume-row-running" Any`
+    t =    48.83s Find the "activity-training-volume-row-running" Any
+    t =    49.03s Tap "activity-training-volume-row-running" StaticText
+    t =    49.03s     Wait for com.raftel.dailve to idle
+    t =    49.03s     Find the "activity-training-volume-row-running" StaticText
+    t =    49.21s     Check for interrupting elements affecting "activity-training-volume-row-running" StaticText
+    t =    49.27s         Wait for com.apple.springboard to idle
+    t =    49.32s     Synthesize event
+    t =    49.62s     Wait for com.raftel.dailve to idle
+    t =    50.00s Waiting 10.0s for "activity-exercise-type-detail-screen" Any to exist
+    t =    51.01s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-detail-screen" Any`
+    t =    51.01s         Checking existence of `"activity-exercise-type-detail-screen" Any`
+    t =    51.06s Waiting 10.0s for "activity-exercise-type-period-picker" Any to exist
+    t =    52.08s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-period-picker" Any`
+    t =    52.08s         Checking existence of `"activity-exercise-type-period-picker" Any`
+    t =    52.14s Waiting 15.0s for "activity-exercise-type-trend-chart" Any to exist
+    t =    53.18s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-trend-chart" Any`
+    t =    53.18s         Checking existence of `"activity-exercise-type-trend-chart" Any`
+    t =    53.24s Waiting 10.0s for "activity-exercise-type-recent-sessions" Any to exist
+    t =    54.24s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-recent-sessions" Any`
+    t =    54.24s         Checking existence of `"activity-exercise-type-recent-sessions" Any`
+    t =    54.31s Find the Target Application 'com.raftel.dailve'
+    t =    54.52s Added attachment named 'Exercise type running Week loaded'
+    t =    55.33s Requesting snapshot of accessibility hierarchy for app with pid 36247
+    t =    55.57s Requesting snapshot of accessibility hierarchy for app with pid 36247
+DUNE_VISUAL_AUDIT_READY Exercise type running Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793655756.916374 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-8DA53843-4EBA-473C-ADE2-564A5F70EF39.ack
+    t =    58.00s Visual audit: Exercise type running Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42]
+    t =    58.00s Checking existence of `"BackButton" Button`
+    t =    58.03s Find the "BackButton" Button
+    t =    58.06s Tap "BackButton" Button
+    t =    58.06s     Wait for com.raftel.dailve to idle
+    t =    58.07s     Find the "BackButton" Button
+    t =    58.09s     Check for interrupting elements affecting "BackButton" Button
+    t =    58.13s         Wait for com.apple.springboard to idle
+    t =    58.16s     Synthesize event
+    t =    58.46s     Wait for com.raftel.dailve to idle
+    t =    58.82s Waiting 10.0s for "activity-training-volume-detail-screen" Any to exist
+    t =    59.88s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-detail-screen" Any`
+    t =    59.88s         Checking existence of `"activity-training-volume-detail-screen" Any`
+    t =    59.93s Waiting 1.0s for "activity-training-volume-row-cycling" Any to exist
+    t =    60.93s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-row-cycling" Any`
+    t =    60.93s         Checking existence of `"activity-training-volume-row-cycling" Any`
+    t =    61.10s     Checking existence of `"activity-training-volume-row-cycling" Any`
+    t =    61.27s Checking existence of `"activity-training-volume-row-cycling" Any`
+    t =    61.43s Find the "activity-training-volume-row-cycling" Any
+    t =    61.62s Checking existence of `"activity-training-volume-row-cycling" Any`
+    t =    61.82s Find the "activity-training-volume-row-cycling" Any
+    t =    62.00s Tap "activity-training-volume-row-cycling" StaticText
+    t =    62.00s     Wait for com.raftel.dailve to idle
+    t =    62.01s     Find the "activity-training-volume-row-cycling" StaticText
+    t =    62.19s     Check for interrupting elements affecting "activity-training-volume-row-cycling" StaticText
+    t =    62.25s         Wait for com.apple.springboard to idle
+    t =    62.30s     Synthesize event
+    t =    62.60s     Wait for com.raftel.dailve to idle
+    t =    62.95s Waiting 10.0s for "activity-exercise-type-detail-screen" Any to exist
+    t =    63.98s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-detail-screen" Any`
+    t =    63.98s         Checking existence of `"activity-exercise-type-detail-screen" Any`
+    t =    64.06s Waiting 10.0s for "activity-exercise-type-period-picker" Any to exist
+    t =    65.09s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-period-picker" Any`
+    t =    65.09s         Checking existence of `"activity-exercise-type-period-picker" Any`
+    t =    65.18s Waiting 15.0s for "activity-exercise-type-trend-chart" Any to exist
+    t =    66.23s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-trend-chart" Any`
+    t =    66.23s         Checking existence of `"activity-exercise-type-trend-chart" Any`
+    t =    66.30s Waiting 10.0s for "activity-exercise-type-recent-sessions" Any to exist
+    t =    67.32s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-recent-sessions" Any`
+    t =    67.32s         Checking existence of `"activity-exercise-type-recent-sessions" Any`
+    t =    67.40s Find the Target Application 'com.raftel.dailve'
+    t =    67.53s Added attachment named 'Exercise type cycling Week loaded'
+    t =    68.33s Requesting snapshot of accessibility hierarchy for app with pid 36247
+    t =    68.58s Requesting snapshot of accessibility hierarchy for app with pid 36247
+DUNE_VISUAL_AUDIT_READY Exercise type cycling Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793655769.921068 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-03288D65-B1A2-4652-BD6C-8F406988B13F.ack
+    t =    70.88s Visual audit: Exercise type cycling Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42]
+    t =    70.88s Checking existence of `"BackButton" Button`
+    t =    70.90s Find the "BackButton" Button
+    t =    70.94s Tap "BackButton" Button
+    t =    70.94s     Wait for com.raftel.dailve to idle
+    t =    70.94s     Find the "BackButton" Button
+    t =    70.96s     Check for interrupting elements affecting "BackButton" Button
+    t =    71.00s         Wait for com.apple.springboard to idle
+    t =    71.03s     Synthesize event
+    t =    71.33s     Wait for com.raftel.dailve to idle
+    t =    71.68s Waiting 10.0s for "activity-training-volume-detail-screen" Any to exist
+    t =    72.71s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-detail-screen" Any`
+    t =    72.71s         Checking existence of `"activity-training-volume-detail-screen" Any`
+    t =    72.75s Waiting 1.0s for "activity-training-volume-row-stairStepper" Any to exist
+    t =    73.76s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-row-stairStepper" Any`
+    t =    73.76s         Checking existence of `"activity-training-volume-row-stairStepper" Any`
+    t =    73.96s     Checking existence of `"activity-training-volume-row-stairStepper" Any`
+    t =    74.16s Checking existence of `"activity-training-volume-row-stairStepper" Any`
+    t =    74.34s Find the "activity-training-volume-row-stairStepper" Any
+    t =    74.54s Checking existence of `"activity-training-volume-row-stairStepper" Any`
+    t =    74.72s Find the "activity-training-volume-row-stairStepper" Any
+    t =    74.92s Tap "activity-training-volume-row-stairStepper" Image
+    t =    74.92s     Wait for com.raftel.dailve to idle
+    t =    74.92s     Find the "activity-training-volume-row-stairStepper" Image
+    t =    75.10s     Check for interrupting elements affecting "activity-training-volume-row-stairStepper" Image
+    t =    75.15s         Wait for com.apple.springboard to idle
+    t =    75.21s     Synthesize event
+    t =    75.50s     Wait for com.raftel.dailve to idle
+    t =    75.85s Waiting 10.0s for "activity-exercise-type-detail-screen" Any to exist
+    t =    76.86s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-detail-screen" Any`
+    t =    76.86s         Checking existence of `"activity-exercise-type-detail-screen" Any`
+    t =    76.93s Waiting 10.0s for "activity-exercise-type-period-picker" Any to exist
+    t =    77.94s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-period-picker" Any`
+    t =    77.94s         Checking existence of `"activity-exercise-type-period-picker" Any`
+    t =    78.00s Waiting 15.0s for "activity-exercise-type-trend-chart" Any to exist
+    t =    79.03s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-trend-chart" Any`
+    t =    79.03s         Checking existence of `"activity-exercise-type-trend-chart" Any`
+    t =    79.09s Waiting 10.0s for "activity-exercise-type-recent-sessions" Any to exist
+    t =    80.11s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-recent-sessions" Any`
+    t =    80.11s         Checking existence of `"activity-exercise-type-recent-sessions" Any`
+    t =    80.18s Find the Target Application 'com.raftel.dailve'
+    t =    80.32s Added attachment named 'Exercise type stairStepper Week loaded'
+    t =    81.13s Requesting snapshot of accessibility hierarchy for app with pid 36247
+    t =    81.38s Requesting snapshot of accessibility hierarchy for app with pid 36247
+DUNE_VISUAL_AUDIT_READY Exercise type stairStepper Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793655782.7108212 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-27A53CFD-A460-44EA-924C-102A180C2209.ack
+    t =    83.71s Visual audit: Exercise type stairStepper Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42]
+    t =    83.72s Checking existence of `"BackButton" Button`
+    t =    83.75s Find the "BackButton" Button
+    t =    83.79s Tap "BackButton" Button
+    t =    83.79s     Wait for com.raftel.dailve to idle
+    t =    83.79s     Find the "BackButton" Button
+    t =    83.81s     Check for interrupting elements affecting "BackButton" Button
+    t =    83.85s         Wait for com.apple.springboard to idle
+    t =    83.88s     Synthesize event
+    t =    84.17s     Wait for com.raftel.dailve to idle
+    t =    84.53s Waiting 10.0s for "activity-training-volume-detail-screen" Any to exist
+    t =    85.58s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-detail-screen" Any`
+    t =    85.58s         Checking existence of `"activity-training-volume-detail-screen" Any`
+    t =    85.65s Waiting 1.0s for "activity-training-volume-row-traditionalStrengthTraining" Any to exist
+    t =    86.65s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-row-traditionalStrengthTraining" Any`
+    t =    86.65s         Checking existence of `"activity-training-volume-row-traditionalStrengthTraining" Any`
+    t =    86.84s     Checking existence of `"activity-training-volume-row-traditionalStrengthTraining" Any`
+    t =    87.01s Checking existence of `"activity-training-volume-row-traditionalStrengthTraining" Any`
+    t =    87.18s Find the "activity-training-volume-row-traditionalStrengthTraining" Any
+    t =    87.36s Checking existence of `"activity-training-volume-row-traditionalStrengthTraining" Any`
+    t =    87.53s Find the "activity-training-volume-row-traditionalStrengthTraining" Any
+    t =    87.71s Tap "activity-training-volume-row-traditionalStrengthTraining" StaticText
+    t =    87.71s     Wait for com.raftel.dailve to idle
+    t =    87.72s     Find the "activity-training-volume-row-traditionalStrengthTraining" StaticText
+    t =    87.88s     Check for interrupting elements affecting "activity-training-volume-row-traditionalStrengthTraining" StaticText
+    t =    87.94s         Wait for com.apple.springboard to idle
+    t =    87.99s     Synthesize event
+    t =    88.29s     Wait for com.raftel.dailve to idle
+    t =    88.62s Waiting 10.0s for "activity-exercise-type-detail-screen" Any to exist
+    t =    89.66s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-detail-screen" Any`
+    t =    89.66s         Checking existence of `"activity-exercise-type-detail-screen" Any`
+    t =    89.71s Waiting 10.0s for "activity-exercise-type-period-picker" Any to exist
+    t =    90.76s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-period-picker" Any`
+    t =    90.76s         Checking existence of `"activity-exercise-type-period-picker" Any`
+    t =    90.83s Waiting 15.0s for "activity-exercise-type-trend-chart" Any to exist
+    t =    91.88s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-trend-chart" Any`
+    t =    91.88s         Checking existence of `"activity-exercise-type-trend-chart" Any`
+    t =    91.96s Waiting 10.0s for "activity-exercise-type-recent-sessions" Any to exist
+    t =    92.98s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-exercise-type-recent-sessions" Any`
+    t =    92.98s         Checking existence of `"activity-exercise-type-recent-sessions" Any`
+    t =    93.06s Find the Target Application 'com.raftel.dailve'
+    t =    93.21s Added attachment named 'Exercise type traditionalStrengthTraining Week loaded'
+    t =    94.03s Requesting snapshot of accessibility hierarchy for app with pid 36247
+    t =    94.27s Requesting snapshot of accessibility hierarchy for app with pid 36247
+DUNE_VISUAL_AUDIT_READY Exercise type traditionalStrengthTraining Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42] DEADLINE=1793655795.606488 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-070B6A9C-53EF-4C35-A04D-38124008F027.ack
+    t =    96.69s Visual audit: Exercise type traditionalStrengthTraining Week loaded [DUNEUITests/ExerciseTypeHealthKitVariantUITests.swift:42]
+    t =    96.70s Checking existence of `"BackButton" Button`
+    t =    96.74s Find the "BackButton" Button
+    t =    96.77s Tap "BackButton" Button
+    t =    96.77s     Wait for com.raftel.dailve to idle
+    t =    96.77s     Find the "BackButton" Button
+    t =    96.79s     Check for interrupting elements affecting "BackButton" Button
+    t =    96.83s         Wait for com.apple.springboard to idle
+    t =    96.86s     Synthesize event
+    t =    97.16s     Wait for com.raftel.dailve to idle
+    t =    97.52s Waiting 10.0s for "activity-training-volume-detail-screen" Any to exist
+    t =    98.56s     Checking `Expect predicate `existsNoRetry == 1` for object "activity-training-volume-detail-screen" Any`
+    t =    98.56s         Checking existence of `"activity-training-volume-detail-screen" Any`
+    t =    98.61s Tear Down
+    t =    99.42s     Requesting snapshot of accessibility hierarchy for app with pid 36247
+    t =    99.68s     Requesting snapshot of accessibility hierarchy for app with pid 36247
+DUNE_VISUAL_AUDIT_READY before teardown -[ExerciseTypeHealthKitVariantUITests testExistingHealthKitTypesOpenWeekDetailAndCapture] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793655801.054095 ACK=/Users/shanks/Library/Developer/CoreSimulator/Devices/9CE87DD6-57CF-42A1-81D4-1B915C3A82C4/data/Containers/Data/Application/635F2B1D-C726-468B-9B56-4EBD583C4C2F/tmp/dune-visual-audit-48F8D461-C76B-4037-B093-1AD522C8FDF1.ack
+    t =   102.00s     Visual audit: before teardown -[ExerciseTypeHealthKitVariantUITests testExistingHealthKitTypesOpenWeekDetailAndCapture] [DUNEUITests/UITestBaseCase.swift:120]
+    t =   102.00s     Terminate com.raftel.dailve:36247
+2026-11-03 06:42:53.322 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 06:42:53.324 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 06:42:53.326 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+    t =   103.09s     Wait for com.raftel.dailve to become Not Running
+Test Case '-[DUNEUITests.ExerciseTypeHealthKitVariantUITests testExistingHealthKitTypesOpenWeekDetailAndCapture]' passed (109.091 seconds).
+Test Suite 'ExerciseTypeHealthKitVariantUITests' passed at 2026-11-03 06:43:00.372.
+	 Executed 1 test, with 0 failures (0 unexpected) in 109.091 (109.092) seconds
+Test Suite 'DUNEUITests.xctest' passed at 2026-11-03 06:43:00.372.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 236.351 (236.366) seconds
+Test Suite 'Selected tests' passed at 2026-11-03 06:43:00.373.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 236.351 (236.368) seconds
+2026-11-03 06:43:00.427 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 06:43:00.427 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 06:43:00.429 xcodebuild[31569:23147235] [MT] IDESchemeActionDeviceRecord: versionAndBuild = 27.2 (24B91016s), error = invalidDigitCount(91016).
+2026-11-03 06:43:00.701 xcodebuild[31569:23147235] [MT] IDETestOperationsObserverDebug: 258.959 elapsed -- Testing started completed.
+2026-11-03 06:43:00.701 xcodebuild[31569:23147235] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-11-03 06:43:00.701 xcodebuild[31569:23147235] [MT] IDETestOperationsObserverDebug: 258.959 sec, +258.959 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.11.03_06-38-03-+0900.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started
+UI tests: passed
+Last reported test count: 2
+Last reported failures: 0
+Full log: /Users/shanks/.codex/worktrees/detail-redesign-a07/Health/.xcodebuild/a07-duo-closed-aedf464d.log
+Verified UI test execution: 2 reported, 2 passed cases

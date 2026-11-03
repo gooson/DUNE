@@ -254,3 +254,15 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-11-03 A03: [기기별 실제 2D 근육맵과 출처](../full-redesign-map/review/a03-muscle-recovery-map-native-2026-11-03/index.html). 3D 진입은 비활성 상태이며 기존 3D 화면은 과거 기록이다.
+
+
+2026-11-03 A06: [기기별 훈련량 실제 화면과 출처](../full-redesign-map/review/a06-training-volume-native-2026-11-03/index.html). 과거 캡처의 기기와 실행 버전은 미확인이다.
+
+
+2026-11-03 A07: [기기별 운동 종류 실제 화면과 출처](../full-redesign-map/review/a07-exercise-type-native-2026-11-03/index.html). 기존 맵 이미지의 정확한 기기·실행 버전은 미확인이며, 갤러리의 A20 원본 비교는 실행 기록으로 확인했다.
+
+
+2026-11-03 A08: [기기별 부상 위험 실제 화면과 출처](../full-redesign-map/review/a08-injury-risk-native-2026-11-03/index.html). 기존 맵 이미지의 정확한 기기·실행 버전은 미확인이며, 갤러리의 A20 원본 비교는 실행 기록으로 확인했다.
+
+
+2026-11-03 A09: [기기별 주간 리포트 실제 화면과 출처](../full-redesign-map/review/a09-weekly-report-native-2026-11-03/index.html). 기존 맵 이미지의 정확한 기기·실행 버전은 미확인이며, 갤러리의 A20 원본 비교는 실행 기록으로 확인했다.

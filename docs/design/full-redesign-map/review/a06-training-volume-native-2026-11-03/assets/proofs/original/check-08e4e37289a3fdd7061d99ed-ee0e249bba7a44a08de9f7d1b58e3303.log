@@ -1,0 +1,25 @@
+Host state context: .xcodebuild/a06-ipad-core-goals-duration-fc28b6b9.log.host.json
+Ensuring requested iOS simulator 'C8B44B9E-4C42-4CB0-845E-0F5E7C74F162' is booted...
+Waiting for iOS simulator [C8B44B9E-4C42-4CB0-845E-0F5E7C74F162] to boot (timeout=120s, retries=1)...
+iOS simulator already booted.
+Running UI tests with scheme 'DUNEUITests' for destination 'id=C8B44B9E-4C42-4CB0-845E-0F5E7C74F162'...
+Using test plan: DUNEUITests-DesignCapture
+Only testing: DUNEUITests/ActivityExerciseRegressionTests/testActivityDetailRoutesOpenExpectedScreens
+Only testing: DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList
+Only testing: DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods
+Only testing: DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeTrainingLoadChartScrollsToPastData
+Only testing: DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeDailyVolumeChartScrollsToPastData
+Only testing: DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeTrainingLoadLongPressKeepsVisibleRangeAndActivatesSelection
+UI tests: failed (exit 65)
+Last reported test count: 6
+Last reported failures: 1
+Failure details:
+  744: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Regression/ChartInteractionRegressionUITests.swift:306: error: -[DUNEUITests.ChartInteractionRegressionUITests testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods] : XCTAssertTrue failed - The current count should id…
+  755: Test Case '-[DUNEUITests.ChartInteractionRegressionUITests testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods]' failed (38.344 seconds).
+  1251: Test Suite 'ChartInteractionRegressionUITests' failed at 2026-10-31 14:11:17.842.
+  1253: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 14:11:17.846.
+  1255: Test Suite 'Selected tests' failed at 2026-10-31 14:11:17.846.
+  1267: ** TEST FAILED **
+Full log: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/a06-ipad-core-goals-duration-fc28b6b9.log
+UI test verification failed: 744: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Regression/ChartInteractionRegressionUITests.swift:306: error: -[DUNEUITests.ChartInteractionRegressionUITests testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods] : XCTAssertTrue failed - The current count should id…; 755: Test Case '-[DUNEUITests.ChartInteractionRegressionUITests testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods]' failed (38.344 seconds).; 1251: Test Suite 'ChartInteractionRegressionUITests' failed at 2026-10-31 14:11:17.842.; 1253: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 14:11:17.846.; 1255: Test Suite 'Selected tests' failed at 2026-10-31 14:11:17.846.; 1267: ** TEST FAILED **; xcodebuild exited 65; UI test log reports 1 failures; requested UI test selector has no execution evidence
+Missing: DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods

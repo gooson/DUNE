@@ -348,6 +348,8 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             "Exercise type list should exist in the training volume detail surface"
         )
 
+        VisualAudit.capture("Training volume detail default week")
+
         let periodPicker = waitForElement(AXID.activityTrainingVolumePeriodPicker, timeout: 15)
         let initialPeriod = periodPicker.value as? String
         tapSegment(in: AXID.activityTrainingVolumePeriodPicker, index: 1, timeout: 10)
@@ -361,6 +363,70 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             app.descendants(matching: .any)[AXID.activityTrainingVolumeTypeList].firstMatch.waitForExistence(timeout: 15),
             "Exercise type list should remain visible after switching the training volume period"
         )
+    }
+
+    func testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods() throws {
+        openTrainingVolumeDetail()
+
+        let activeDays = app.descendants(matching: .any)["activity-training-volume-current-active-days"].firstMatch
+        let weeklyGoal = app.staticTexts["activity-training-volume-weekly-goal-reference"].firstMatch
+        let previousDates = app.staticTexts["activity-training-volume-previous-period"].firstMatch
+        let dailyChart = app.descendants(matching: .any)[AXID.trainingVolumeChartDailyVolume].firstMatch
+        XCTAssertTrue(activeDays.waitForExistence(timeout: 15))
+        XCTAssertTrue(weeklyGoal.waitForExistence(timeout: 5))
+        XCTAssertTrue(previousDates.waitForExistence(timeout: 5),
+                      "The seeded previous window should expose its real date range once")
+        XCTAssertEqual(app.staticTexts.matching(identifier: "activity-training-volume-previous-period").count, 1)
+        XCTAssertTrue(dailyChart.waitForExistence(timeout: 5))
+        XCTAssertTrue(["Daily Duration", "일별 운동 시간", "日別の運動時間"].contains {
+            dailyChart.label.contains($0)
+        }, "The existing daily chart must identify duration instead of weight or sets")
+
+        let weekDays = try XCTUnwrap(Int(activeDays.value as? String ?? ""))
+        XCTAssertTrue(["1W", "1주", "1週"].contains { activeDays.label.contains($0) },
+                      "The current count should identify the selected week in the app language")
+        let weekGoalLabel = weeklyGoal.label
+        XCTAssertTrue(weekGoalLabel.contains("5"), "The seeded view model has a five-day weekly goal")
+        let weekPreviousDates = previousDates.label
+        // TrainingVolumeAnalysisService uses [today−13d, today−7d] for 1W's previous summary.
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let previousStart = try XCTUnwrap(calendar.date(byAdding: .day, value: -13, to: today))
+        let previousEnd = try XCTUnwrap(calendar.date(byAdding: .day, value: -7, to: today))
+        let supportedLocales = [Locale.current, Locale(identifier: "en_US"),
+                                Locale(identifier: "ko_KR"), Locale(identifier: "ja_JP")]
+        let expectedCaptions = supportedLocales.map { locale in
+            let format = Date.FormatStyle(date: .abbreviated, time: .omitted).locale(locale)
+            return "\(previousStart.formatted(format)) – \(previousEnd.formatted(format))"
+        }
+        XCTAssertTrue(expectedCaptions.contains(weekPreviousDates),
+                      "The previous caption must use the analysis service's real week boundaries")
+
+        tapSegment(in: AXID.activityTrainingVolumePeriodPicker, index: 1, timeout: 10)
+        let monthReady = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                guard activeDays.exists else { return false }
+                let label = activeDays.label
+                return ["1M", "1개월", "1ヶ月"].contains { label.contains($0) }
+            }, object: activeDays
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [monthReady], timeout: 15), .completed,
+                       "The active-day count should reload for the selected month")
+        let monthDays = try XCTUnwrap(Int(activeDays.value as? String ?? ""))
+        XCTAssertGreaterThanOrEqual(monthDays, weekDays,
+                                    "The rolling month includes the seeded week's active days")
+        XCTAssertFalse(activeDays.label.contains("of 5"),
+                       "A month-long count must not be presented as progress toward five days")
+        XCTAssertEqual(weeklyGoal.label, weekGoalLabel,
+                       "The five-day weekly reference should remain separate from the month count")
+        let monthPreviousDates = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == true AND label != %@", weekPreviousDates),
+            object: previousDates
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [monthPreviousDates], timeout: 15), .completed,
+                       "The previous-period caption should follow the selected rolling window")
+        XCTAssertEqual(app.staticTexts.matching(identifier: "activity-training-volume-previous-period").count, 1)
+        XCTAssertTrue(dailyChart.exists, "The duration chart should survive the period change")
     }
 
     func testHRVDetailChartScrollsToPastData() throws {
@@ -635,8 +701,9 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
 
         XCTAssertTrue(readinessHero.exists, "Activity tab should be visible before opening training volume")
         let volumeSection = waitForElement(AXID.activitySectionVolume, timeout: 15)
+        let activityScroll = waitForElement(AXID.activityRootScroll, timeout: 15)
         XCTAssertTrue(
-            scrollUntilHittable(volumeSection, maxSwipes: 8),
+            scrollUntilHittable(volumeSection, maxSwipes: 8, scrollContainer: activityScroll),
             "Training volume section should be reachable before opening detail"
         )
         let detailScreen = app.descendants(matching: .any)[AXID.activityTrainingVolumeDetailScreen].firstMatch
@@ -649,7 +716,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             }
 
             XCTAssertTrue(
-                scrollUntilHittable(volumeSection, maxSwipes: 3),
+                scrollUntilHittable(volumeSection, maxSwipes: 3, scrollContainer: activityScroll),
                 "Training volume section should remain tappable while retrying detail navigation"
             )
         }

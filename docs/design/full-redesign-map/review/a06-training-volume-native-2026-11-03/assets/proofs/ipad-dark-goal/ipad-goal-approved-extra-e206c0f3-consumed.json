@@ -1,0 +1,92 @@
+{
+  "authorization": "모두 1회 추가 허용 알아서 처리하고 머지까지 완료",
+  "approvalGroup": "2026-11-02-pending-extra-once",
+  "originalPipelineID": "a06-ui-ipad-core-goals-duration",
+  "proxyRecordID": "pr893-ipad-goal-approved-extra-once-e206c0f3",
+  "selector": "DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods",
+  "revision": "e206c0f30b18532c509bc7aa554c3825a6711ba2",
+  "device": "00D70DEA-41CA-46FB-85F6-23F022AD98C9",
+  "approvedExtra": 1,
+  "consumed": 1,
+  "remaining": 0,
+  "status": "passed",
+  "started": 1793649104.0117629,
+  "historyPins": {
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-08e4e37289a3fdd7061d99ed.json": "1a218a885203a94e88ad171393e70a9a91e4124c7c174db6b6012985e5a9a08b",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-08e4e37289a3fdd7061d99ed-b1db08eb0ec04aebaab086621f4dd4e0.log": "bda0dae7c48b7dbe00875847ddf83c3e57c3b3b9d7c72d7d1642563aa989aab4",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/pipeline/check-08e4e37289a3fdd7061d99ed-ee0e249bba7a44a08de9f7d1b58e3303.log": "0bcb022ceeef3c1935c41edc1433ad37e2bd5a55ee88f551b27015b29c30ba4a",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a06/evidence/ui-ipad-core-conditional-localized-period-failure/result.json": "e2cd9f77529469df5f76e9d463355e02772a39b7ac8965a7ab598e0e667531f1",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a06/evidence/ui-ipad-core-conditional-localized-period-failure/summary.json": "47646054e737c70174dd2f27f72c81f852b02f6542a052a7f058d4cea28aa2ea",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a06/evidence/ui-ipad-core-conditional-localized-period-failure/tests.json": "04795f5770d1605a7a89715e59356c9373cd0ae8ad9dfabc54922c3e1b01ffcb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a06/evidence/ui-ipad-core-conditional-localized-period-failure/provenance.json": "0e5b066653800473e9880e4fc9cf0d48ed681f61efa3b8841a857536ce999547",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a06/evidence/ui-ipad-core-conditional-localized-period-failure/run.log.gz": "d8b62e5e9de18d7eb32b64de7504e11b68b234954d31fd5c63240df92320a996",
+    "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.codex-checks/a06/retry-proof/cause-remediation.json": "4d16517bc7d705d682d3e0356e3a29a497ec0d46105feadb86803eae2d2bf7da"
+  },
+  "infraProof": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/ipad-goal-a20-infra-e206c0f3/proof.json",
+  "infraSHA256": "ea994d654c7e96a628b8b91d6c04e604a9657dc4ce8e899c8b6f93915d5b0089",
+  "appearanceReadback": "dark",
+  "compilePins": {
+    "revision": "e206c0f30b18532c509bc7aa554c3825a6711ba2",
+    "normal_selector": "DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList",
+    "result_status": "passed",
+    "receipt": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/pipeline/check-bbd74254f3d724970798d467.json",
+    "result": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.xcodebuild/a06-ipad-normal-e206c0f3.log.result.json",
+    "pipeline_log": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/pipeline/check-bbd74254f3d724970798d467-9ad3d9672e284752a4dab8c012746adb.log",
+    "raw_log": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.xcodebuild/a06-ipad-normal-e206c0f3.log",
+    "tests": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/ipad-normal-volume-overview-e206c0f3/tests.json",
+    "provenance": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/ipad-normal-volume-overview-e206c0f3/provenance.json",
+    "summary": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/ipad-normal-volume-overview-e206c0f3/summary.json",
+    "archived_log": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/ipad-normal-volume-overview-e206c0f3/run.log.gz",
+    "hashes": {
+      "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/pipeline/check-bbd74254f3d724970798d467.json": "548c73ac440e622f58e8a500128d768f55a20e1f9b38fddca4322773901431cb",
+      "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.xcodebuild/a06-ipad-normal-e206c0f3.log.result.json": "5734f6a520ae852fae671fc1a2c40bd0287efacb658dbd533d3dd61557bd182c",
+      "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/pipeline/check-bbd74254f3d724970798d467-9ad3d9672e284752a4dab8c012746adb.log": "a36b16e47f394af902dcbae2dd648ba1c61834491fc1b27524a3d9dfaec4fcf8",
+      "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.xcodebuild/a06-ipad-normal-e206c0f3.log": "01ae749cdb701da73b6aa619e953913701d71ade234859e239418a22f8455e18",
+      "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/ipad-normal-volume-overview-e206c0f3/tests.json": "3e010ab7f4c820342a873edd8e6f50bbd4872ae457f951dda020a905675b8db3",
+      "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/ipad-normal-volume-overview-e206c0f3/provenance.json": "00739a53c8cf8e6038e69b80f84ae0d814a3fa8db1021ae73224e5d089fc85f5",
+      "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/ipad-normal-volume-overview-e206c0f3/summary.json": "db6a83b5974f75d0f7aef5ce8b0483ef1e4200033dd7fa5dd47b518f0019cd45",
+      "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/ipad-normal-volume-overview-e206c0f3/run.log.gz": "2f10ab33b1297bf0172c183de49849563c3abc1f7246f29412582c370ed92730"
+    }
+  },
+  "reviewPins": {
+    "/private/tmp/pr893-review-architecture.md": "400c7b5967e3f32b1e2a026df815dc88bf4f967855c4015f75a0a22bb3627288",
+    "/private/tmp/pr893-review-data.md": "8b1582249d16f43be73ec2f097fd3462e5ac1fa1fa6a6186c10a2e747d0f0fcb",
+    "/private/tmp/pr893-review-performance.md": "b7a64862cd3414c1efc64f4f19025987a0c5bc6ae288dca3ced63252b7f69c6e",
+    "/private/tmp/pr893-review-security.md": "bc207ca3f2667460b82eb52b81d105e8b3b24eaae1c450418e7f19ab07d12d04",
+    "/private/tmp/pr893-review-simplicity.md": "0da21a7557941d845c2d86bddb2023fe7e99cdc3356edb5a46686a6429f16ea7",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/pipeline-receipt.json": "ab9f1b05567c763cbba5316f59c2576eeaeb500bdf91266f80e453503bfd8feb",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/pipeline-output.log": "39edb3b0c128a6cc35cb2cc0537c36f0eb2e240651f25da7a090e35132aa7a2d",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/summary.json": "dce6f16dc7c914b50ef93d1dfe7436d31f7e963ff8d824c6822f428a62f52c31",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/tests.json": "bd4b0b778d04a39a6b200c53adbc8ed8eb975bc7b79e3920780d71def28c2b84",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/provenance.json": "a37013d4af178a1c1df5dd65192c815cb034ab59a7273bf3a3f42a8d137c950c",
+    "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.codex-checks/a06/evidence/calendar-volume-unit-aeabdd7d/run.log.gz": "28b49e8ebf029715fe99db7333821e10deb11ea164669a879a73dbc81bce017a"
+  },
+  "exitCode": 0,
+  "nativeResult": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/ChartInteractionRegressionUITests/testTrainingVolumeGoalContextAndPreviousRangeAcrossPeriods"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 1,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-a06/Health/.xcodebuild/a06-ipad-goal-approved-extra-e206c0f3.log"
+  },
+  "sourceUnchanged": true,
+  "originalHistoryUnchanged": true,
+  "completed": 1793649183.415721
+}

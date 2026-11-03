@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "717: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:2322: error: -[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailAtMaximumAccessibilityTextSize] : XCTAssertTrue failed",
+    "728: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailAtMaximumAccessibilityTextSize]' failed (89.557 seconds).",
+    "729: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-31 15:59:06.155.",
+    "731: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 15:59:06.155.",
+    "733: Test Suite 'Selected tests' failed at 2026-10-31 15:59:06.156.",
+    "745: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailAtMaximumAccessibilityTextSize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/a07-ipad-conditional-dark-AX-25ad7839.log"
+}

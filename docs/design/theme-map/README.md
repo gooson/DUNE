@@ -72,7 +72,15 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 
 2026-10-31 [T13 알림 대상 없음 테마 표현 연구](themes/dune-notification-unavailable-t13.html)는 기존 DUNE 팔레트와 `ScoreHeroPalette`의 밝음·어두움 정적 해석이다. [T13 배치 계약](../layout-map/notification-destination-unavailable-t13.html)의 기존 문구·동작·ID를 따른다. 실제 앱 캡처가 아니다.
 
+2026-10-31 [A07 운동 종류 상세 DUNE 표현 제안](themes/dune-exercise-type-detail-a07.html)은 원래 유형·장비 아이콘, 선택한 종류의 실제 시간·칼로리·세션 및 조건부 거리/무게 볼륨을 불투명한 히어로에 배치한 밝음·어두움 정적 시안이다. 수치와 웹 기호는 설명용이며 실제 앱 캡처가 아니다. [A07 배치 계약](../layout-map/activity-exercise-type-detail-a07.html)과 구분한다.
+
+2026-10-31 [A08 부상 위험 상세 DUNE 표현 제안](themes/dune-injury-risk-detail-a08.html)은 기존 단계 아이콘·색, 불투명 점수 히어로와 요인/권장 행동 위계를 밝음·어두움으로 해석한 정적 시안이다. 수치는 실제 평가가 아니며 [A08 배치 계약](../layout-map/activity-injury-risk-detail-a08.html) 및 네이티브 캡처와 구분한다.
+
+2026-10-31 [A09 주간 운동 보고서 DUNE 표현 제안](themes/dune-weekly-report-detail-a09.html)은 원본 보고서 아이콘, 기간·실제 값·조건부 문장과 하이라이트를 불투명 히어로에 배치한 밝음·어두움 정적 시안이다. 수치/웹 기호는 실제 앱 캡처가 아니며 [A09 배치 계약](../layout-map/activity-weekly-report-detail-a09.html)과 구분한다.
+
 ## 갱신 방법
+
+2026-10-31 [A06 Training Volume 상세 표현 시안](themes/dune-training-volume-detail-a06.html)은 기존 DUNE 불투명 히어로·1W 주간 목표 링과 긴 기간의 실제 활동일 건수·밝음/어두움·원래 지표 의미색의 정적 제안이다. 값과 막대는 설명용이며 실제 네이티브 캡처가 아니다. [배치·데이터 계약](../layout-map/activity-training-volume-detail-a06.html)을 따른다.
 
 2026-10-31 [T02 동의 시트 테마 표현 연구](themes/dune-cloud-sync-consent-t02.html)는 기존 DUNE 팔레트와 `ScoreHeroPalette`를 사용한 밝음·어두움의 정적 해석이다. 새로운 테마·동작 규칙을 추가하지 않는다. 화면 정보 순서와 선택 동작은 [T02 레이아웃 맵](../layout-map/cloud-sync-consent-t02.html)을 따르며, 이 HTML은 실제 앱 캡처가 아니다.
 
@@ -210,6 +218,7 @@ T09 네이티브 최대 접근성 글씨는 원래 아이콘을 위로 옮겨 �
 
 [보존 시안](themes/dune-weather-detail-redesign.html)의 밝음·어두움 PNG와 원본 T08 JSON을 `themes/assets/condition-detail-redesign/`에 둔다. [네이티브 배치 계약](../layout-map/weather-detail-redesign-proposal.md)은 실제 날씨 상태와 수신 조건을 사용한다. 브라우저 시안은 앱 캡처가 아니며 T08 새 실제 화면은 런타임 검증 뒤 별도로 갱신한다.
 
+A06 네이티브 소스는 실제 현재·이전 네 지표와 원래 네 기간·세 도넛 모드를 유지한다. 히어로의 증감 텍스트는 대비를 확보하고 큰 글씨는 고정 링 밖의 주간 수치로 전환한다. 일별 차트는 실제 운동 시간과 맞는 제목·빈 상태를 세 언어로 준비했으며 실제 캡처 검증은 대기 중이다.
 ## T10 오늘의 건강 리포트 (2026-10-31)
 
 [밝음·어두움 보존 시안](themes/dune-daily-report.html)과 [배치 계약](../layout-map/daily-report-proposal.md)을 추가했다. 예시 값의 브라우저 시안이며 실제 앱 캡처가 아니다. 새로운 T10 네이티브 캡처는 별도 갱신 전까지 기존 상태로 둔다.

@@ -171,13 +171,13 @@
   ],
   "studies": [
     {
-      "id": "weekly-stats-detail-a05",
-      "name": "A05 · 주간 운동 통계 상세",
-      "title": "현재 지표와 실제 이전 기간 비교",
-      "file": "dune-weekly-stats-detail-a05.html",
-      "detail": "원본 672d5fdb의 WeeklyStatsDetailView에 대한 DUNE 밝음·어두움 브라우저 방향. 현재 다섯 ActivityStat 아이콘·실제 값, 이전 기간 네 비교 행과 하나의 실제 날짜 캡션, 기존 세 기간·세 차트 지표·기록 없음/로딩/오류를 보존한다. 값 자리와 막대는 설명용이며 원본 또는 구현 후 네이티브 캡처가 아니다.",
+      "id": "training-volume-detail-a06",
+      "name": "A06 · Training Volume 상세",
+      "title": "현재 지표·이전 기간·분 단위 차트",
+      "file": "dune-training-volume-detail-a06.html",
+      "detail": "2026-10-31 DUNE 밝음/어두움 정적 제안. 실제 네 지표·1W 주간 목표와 긴 기간 실제 활동일 건수의 구별·이전 기간 날짜 한 번·운동 시간(분) 차트를 시각화한다. 값·막대·웹 아이콘은 설명용이며 네이티브 캡처 또는 실제 HealthKit 데이터가 아니다. A03 근육 세트 목표는 A06에 포함하지 않는다.",
       "implementation": {
-        "layout": "../layout-map/activity-weekly-stats-detail-a05.html",
+        "layout": "../layout-map/activity-training-volume-detail-a06.html",
         "status": "native-source-prepared-runtime-validation-pending"
       }
     },
@@ -469,6 +469,50 @@
       "implementation": {
         "layout": "../layout-map/sleep-prediction-detail-h03.html",
         "status": "source-contract-pending-native-validation"
+      }
+    },
+    {
+      "id": "exercise-type-detail-a07",
+      "name": "A07 · 운동 종류 상세",
+      "title": "DUNE 운동 종류 상세 · 밝음/어두움",
+      "file": "dune-exercise-type-detail-a07.html",
+      "detail": "원본 유형·장비 식별 아이콘, 실제 유형별 값과 조건부 거리/무게 볼륨을 위한 화면별 정적 제안. 예시 값과 웹 기호는 실제 앱 데이터·SF Symbol·네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/activity-exercise-type-detail-a07.html",
+        "status": "proposal-only-original-native-capture-pending"
+      }
+    },
+    {
+      "id": "injury-risk-detail-a08",
+      "name": "A08 · 부상 위험 상세",
+      "title": "DUNE 부상 위험 상세 · 밝음/어두움",
+      "file": "dune-injury-risk-detail-a08.html",
+      "detail": "원본 평가 점수·위험 단계 아이콘, 실제 공급된 요인의 상대 기여, 원래 권장 문구를 위한 화면별 정적 제안. 수치/웹 기호는 실제 평가나 네이티브 캡처가 아니다. DEBUG 점수42/두 요인은 제품 공식이 아니다.",
+      "implementation": {
+        "layout": "../layout-map/activity-injury-risk-detail-a08.html",
+        "status": "proposal-only-original-native-capture-pending"
+      }
+    },
+    {
+      "id": "weekly-report-detail-a09",
+      "name": "A09 · 주간 운동 보고서",
+      "title": "DUNE 보고서 상세 · 밝음/어두움",
+      "file": "dune-weekly-report-detail-a09.html",
+      "detail": "실제 보고서 기간·값·요약·타입별 하이라이트와 상대 근육 볼륨을 위한 화면별 정적 제안. 값/웹 아이콘은 실제 사용자 기록이나 네이티브 앱 캡처가 아니다. DEBUG 보고서 fixture는 제품 기본값이 아니다.",
+      "implementation": {
+        "layout": "../layout-map/activity-weekly-report-detail-a09.html",
+        "status": "proposal-only-original-ipad-before-reviewed-after-pending"
+      }
+    },
+    {
+      "id": "weekly-stats-detail-a05",
+      "name": "A05 · 주간 운동 통계 상세",
+      "title": "현재 지표와 실제 이전 기간 비교",
+      "file": "dune-weekly-stats-detail-a05.html",
+      "detail": "원본 672d5fdb의 WeeklyStatsDetailView에 대한 DUNE 밝음·어두움 브라우저 방향. 현재 다섯 ActivityStat 아이콘·실제 값, 이전 기간 네 비교 행과 하나의 실제 날짜 캡션, 기존 세 기간·세 차트 지표·기록 없음/로딩/오류를 보존한다. 값 자리와 막대는 설명용이며 원본 또는 구현 후 네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/activity-weekly-stats-detail-a05.html",
+        "status": "native-source-prepared-runtime-validation-pending"
       }
     }
   ]

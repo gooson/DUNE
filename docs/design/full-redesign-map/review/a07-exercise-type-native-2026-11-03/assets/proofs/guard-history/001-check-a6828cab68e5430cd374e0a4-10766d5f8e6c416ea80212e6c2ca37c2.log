@@ -1,0 +1,22 @@
+Host state context: .xcodebuild/a07-ipad-types-and-dark-AX-b2b5ae66.log.host.json
+Ensuring requested iOS simulator 'C8B44B9E-4C42-4CB0-845E-0F5E7C74F162' is booted...
+Waiting for iOS simulator [C8B44B9E-4C42-4CB0-845E-0F5E7C74F162] to boot (timeout=120s, retries=1)...
+iOS simulator already booted.
+Running UI tests with scheme 'DUNEUITests' for destination 'id=C8B44B9E-4C42-4CB0-845E-0F5E7C74F162'...
+Using test plan: DUNEUITests-DesignCapture
+Only testing: DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailShowsTrendSurface
+Only testing: DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailAtMaximumAccessibilityTextSize
+Only testing: DUNEUITests/ExerciseTypeHealthKitVariantUITests/testExistingHealthKitTypesOpenWeekDetailAndCapture
+UI tests: failed (exit 65)
+Last reported test count: 3
+Last reported failures: 1
+Failure details:
+  530: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:2276: error: -[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailAtMaximumAccessibilityTextSize] : XCTAssertTrue failed - activity-section-volume should be reachabl…
+  541: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailAtMaximumAccessibilityTextSize]' failed (52.195 seconds).
+  799: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-31 15:11:23.895.
+  1159: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 15:12:48.082.
+  1161: Test Suite 'Selected tests' failed at 2026-10-31 15:12:48.083.
+  1173: ** TEST FAILED **
+Full log: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/.xcodebuild/a07-ipad-types-and-dark-AX-b2b5ae66.log
+UI test verification failed: 530: /Users/shanks/.codex/worktrees/detail-redesign-validation/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:2276: error: -[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailAtMaximumAccessibilityTextSize] : XCTAssertTrue failed - activity-section-volume should be reachabl…; 541: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testExerciseTypeDetailAtMaximumAccessibilityTextSize]' failed (52.195 seconds).; 799: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-10-31 15:11:23.895.; 1159: Test Suite 'DUNEUITests.xctest' failed at 2026-10-31 15:12:48.082.; 1161: Test Suite 'Selected tests' failed at 2026-10-31 15:12:48.083.; 1173: ** TEST FAILED **; xcodebuild exited 65; UI test log reports 1 failures; requested UI test selector has no execution evidence
+Missing: DUNEUITests/ActivityExerciseRegressionTests/testExerciseTypeDetailAtMaximumAccessibilityTextSize

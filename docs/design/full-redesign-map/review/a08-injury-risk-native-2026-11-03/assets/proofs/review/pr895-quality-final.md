@@ -1,0 +1,15 @@
+# A08 Native Quality — PASS WITH NOTES
+**P1=0 · P2=0 · P3=0**
+
+SwiftUI, Apple UX, UI-test and holistic review found no actionable issue in the observed fixture states. Five source review perspectives reported no P1/P2/P3 findings. This verdict covers native quality, not publication: the independent publication code review is clear, but installation and its separate gate remain pending.
+
+| Evidence | Result and scope |
+| --- | --- |
+| Phone, current ca88892a | 1/1 passed. Named F152EAC5 image and paired 4071F3A5 AX show 42 Moderate, +24/+18, and all three recommendations legibly; the route selector also covers Back and Weekly Report. |
+| Duo Closed, current ca88892a | 1/1 passed, 0°/LCD before and after, six checkpoints. Active host 003 image and manifest-matched AX show the hero and factors; two recommendations appear in the viewport and the third continues below it, with its AX node present. |
+| Duo Open, current ca88892a | 1/1 passed, 180°/LCD-1 before and after, six checkpoints. Active host `003-2007x2853.png` shows the 42 Moderate hero, guidance, +24/+18 factors and two visible recommendations without overlap; the third is below the viewport. The matching `003-hierarchy.txt` is byte-identical to manifest attachment `B523B0C0-6545-485B-825C-1177EC0CB826.txt` and includes all three recommendation nodes. Checkpoint 4 is Back and 5 is Weekly Report; the passing selector supplies route evidence, separate from the screenshot. |
+| iPad A20, historical 74a | 2/2 passed historically: normal and dark maximum text. Inspected paired render/AX evidence supports the retained fixture's presentation, including vertically reflowed MAX content and the last recommendation in a separate scrolled capture. Zero current ca888 iPad executions are claimed; this is not current entry or Back evidence. |
+
+The independent iPad closure covers 36 Git object pairs, five method digests, 20 selected catalog lookups and eight paired attachment hashes. Its machine-proof SHA-256 is `a84618db7d3888bafc03e1d3f795ed205ea408945d0a69a7b30b2ec3c119b1fd`; independent audit SHA-256 is `8e63bfe219bbaf124d2eee1b966278d93b2cf5c68509a4a3989effda481a3c84`. Changed entry/fixture files are not asserted wholly unchanged. Original 936 A20 before image `6A2FFFA4` and AX `12FDEE69` show the same risk screen and fixture; the old iPad map-before is preserved. Other historical before images have unproven device, source and pose metadata and must retain those limitations.
+
+The fixture is 42 Moderate with two factors; all risk levels, nil/zero/empty states, live VoiceOver, Phone MAX, full regression, and interactive fold continuity were not established by these captures. AX presence alone does not prove a row is visible or that live VoiceOver was exercised. The RISK caption and English fixture detail text predate this change. Publication code review `/private/tmp/pr895-publication-code-independent-review.md` SHA-256 `00d4a9d5b960d9c17a66aff2e4f2f8922df20720ada2cfe1fc7f51ebaa8f263f` is a separate code review, not an installed-gallery approval.

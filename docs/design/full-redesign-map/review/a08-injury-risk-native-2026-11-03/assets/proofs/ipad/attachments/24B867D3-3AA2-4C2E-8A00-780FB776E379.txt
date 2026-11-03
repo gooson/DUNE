@@ -1,0 +1,83 @@
+Attributes: Application, 0x104fda440, pid: 9413, label: 'DUNE'
+Element subtree:
+ →Application, 0x104fda440, pid: 9413, label: 'DUNE'
+    Window (Main), 0x104fdbe80, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x104fdb980, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x104fdb200, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x104fdad00, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x104fda580, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x104fd9e00, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x104fda800, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x104fdb0c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x104fdaa80, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x104fdae40, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x104fd9f40, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x104fda300, {{0.0, 0.0}, {756.0, 1158.0}}
+                          Other, 0x104fda6c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                            NavigationBar, 0x104fd92c0, {{0.0, 96.0}, {756.0, 108.0}}, identifier: 'Weekly Report'
+                              Button, 0x104fdb840, {{10.0, 96.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Activity'
+                              StaticText, 0x104fdb700, {{320.0, 161.5}, {116.0, 21.0}}, label: 'Weekly Report'
+                            Other, 0x104fdbac0, {{0.0, 0.0}, {756.0, 1158.0}}
+                              Other, 0x104fd83c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                                Other, 0x104fd8500, {{0.0, 0.0}, {756.0, 1158.0}}
+                                  Other, 0x104fdabc0, {{0.0, 0.0}, {756.0, 1158.0}}
+                                    ScrollView, 0x104fdaf80, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'activity-weekly-report-detail-screen'
+                                      Other, 0x104fd9900, {{0.0, 0.0}, {756.0, 1158.0}}
+                                        Other, 0x104fdb480, {{0.0, 0.0}, {756.0, 244.0}}
+                                      Other, 0x104fdbc00, {{0.0, 0.0}, {756.0, 1158.0}}
+                                      Other, 0x104fdbd40, {{0.0, 204.0}, {756.0, 536.5}}
+                                        StaticText, 0x104fda940, {{328.0, 228.0}, {100.0, 26.5}}, label: '주간 리포트'
+                                        StaticText, 0x104fd8c80, {{281.2, 258.5}, {193.5, 18.0}}, label: '2026. 10. 24. ~ 2026. 10. 31.'
+                                        StaticText, 0x104fd8a00, {{16.0, 300.5}, {29.5, 20.5}}, label: '통계'
+                                        Other, 0x104fda080, {{89.5, 341.0}, {560.8, 109.0}}
+                                          StaticText, 0x104fd97c0, {{127.5, 341.0}, {13.0, 24.0}}, label: '3'
+                                          StaticText, 0x104fd9180, {{371.5, 341.0}, {13.0, 24.0}}, label: '3'
+                                          StaticText, 0x104fd9400, {{601.0, 341.0}, {42.0, 24.0}}, label: '2.4k'
+                                          StaticText, 0x104fd9a40, {{123.5, 367.0}, {21.0, 14.5}}, label: '세션'
+                                          StaticText, 0x104fd9cc0, {{355.5, 367.0}, {45.0, 14.5}}, label: '활동 일수'
+                                          StaticText, 0x104fd9040, {{604.5, 367.0}, {35.0, 14.5}}, label: '총 볼륨'
+                                          StaticText, 0x104fd8f00, {{89.5, 409.5}, {89.0, 24.0}}, label: '5400 min'
+                                          StaticText, 0x104fd9680, {{356.0, 409.5}, {44.0, 24.0}}, label: '72%'
+                                          StaticText, 0x10819d7c0, {{593.8, 409.5}, {56.5, 24.0}}, label: '+12%'
+                                          StaticText, 0x10819d900, {{116.5, 435.5}, {35.0, 14.5}}, label: '총 시간'
+                                          StaticText, 0x10819da40, {{355.5, 435.5}, {45.0, 14.5}}, label: '평균 강도'
+                                          StaticText, 0x10819db80, {{599.5, 435.5}, {45.0, 14.5}}, label: '볼륨 변화'
+                                        StaticText, 0x10819dcc0, {{16.0, 474.0}, {29.5, 20.5}}, label: '요약'
+                                        StaticText, 0x10819de00, {{24.0, 514.5}, {342.5, 18.0}}, label: 'Three sessions across strength training this week.'
+                                        StaticText, 0x10819df40, {{16.0, 556.5}, {74.0, 20.5}}, label: '하이라이트'
+                                        Image, 0x10819e080, {{29.0, 598.5}, {19.0, 16.0}}, identifier: 'calendar.badge.checkmark', label: '체크 표시 배지가 있는 캘린더'
+                                        StaticText, 0x10819e1c0, {{56.0, 597.5}, {189.5, 18.0}}, label: 'Three active days this week'
+                                        StaticText, 0x10819e300, {{16.0, 640.0}, {111.5, 20.5}}, label: '근육 그룹별 볼륨'
+                                        StaticText, 0x10819e440, {{83.0, 681.2}, {21.0, 14.5}}, label: '가슴'
+                                        StaticText, 0x10819cc80, {{706.5, 681.2}, {25.5, 14.5}}, label: '1.1k'
+                                        StaticText, 0x10819cdc0, {{62.0, 701.2}, {42.0, 14.5}}, label: '대퇴사두'
+                                        StaticText, 0x10819cf00, {{706.5, 701.2}, {25.5, 14.5}}, label: '1.3k'
+                                      Other, 0x10819d040, {{723.0, 204.0}, {30.0, 907.0}}, label: '수직 스크롤 막대, 1페이지', value: 0%
+                                        Other, 0x10819d180, {{750.0, 550.5}, {3.0, 557.5}}
+                                      Other, 0x10819d2c0, {{723.0, 204.0}, {30.0, 907.0}}, label: '수직 스크롤 막대, 1페이지', value: 0%
+                                        Other, 0x10819d400, {{750.0, 550.5}, {3.0, 557.5}}
+                            Toolbar, 0x10819d540, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'Toolbar', label: '도구 막대'
+                              Other, 0x10819d680, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x10819f200, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x10819f340, {{0.0, 32.0}, {756.0, 44.0}}
+                    Button, 0x10819f480, {{183.5, 36.0}, {56.0, 36.0}}, identifier: 'ToggleSideBar', label: '사이드바 토글'
+                    Button, 0x10819f5c0, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x10819f700, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x10819f840, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                      Button, 0x10819f980, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                    Button, 0x10819fac0, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                      Button, 0x10819fc00, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                    Button, 0x10819fd40, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x10819fe80, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x10819ca00, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x10819e580, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x10819e800, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x10819c140, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x10819c280, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x104fda440, pid: 9413, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10819c3c0, pid: 9413, label: 'DUNE'
+  }
