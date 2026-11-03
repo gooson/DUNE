@@ -186,4 +186,4 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 
 - [A18 운동 일관성 설명](activity-consistency-explanation-a18.html): 기존 시트·아이콘을 보존한 구현 기준과 검토 완료된 실제 캡처 비교.
 
-- [A19 운동 구성 설명](activity-exercise-mix-explanation-a19.html): 기존 시트·아이콘과 4개 그룹을 보존하는 구현 기준. 실제 캡처 검증 대기.
+- [A19 운동 구성 설명](activity-exercise-mix-explanation-a19.html): 기존 시트·아이콘을 보존한 구현 기준과 검토 완료된 실제 캡처 비교.
