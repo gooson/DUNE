@@ -264,3 +264,5 @@ A05 네이티브 소스는 원래 `ActivityStat.iconColor`를 불투명 히어�
 ## A13 근육 상세 팝오버 · 2026-11-03
 
 [테마 시안](themes/dune-muscle-detail-popover-a13.html)과 [배치 계약](../layout-map/activity-muscle-detail-popover-a13.html)은 실제 근육 상태와 기존 추천·계산 연결을 보존한다. 예시 값은 네이티브 캡처가 아니다.
+
+2026-11-03 [A14 근육별 피로 설명](themes/dune-fatigue-explanation-a14.html)은 실제 값과 14일 기여 행을 위한 시안이며 네이티브 캡처가 아니다. [배치 계약](../layout-map/activity-fatigue-explanation-a14.html)을 따른다.

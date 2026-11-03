@@ -1463,20 +1463,135 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testVisualAuditMuscleFatigueExplanation() throws {
+        try assertMuscleFatigueExplanation(maxText: false)
+    }
+
+    func testVisualAuditMuscleFatigueExplanationAtMaximumAccessibilityTextSize() throws {
+        try assertMuscleFatigueExplanation(maxText: true)
+    }
+
+    private func assertMuscleFatigueExplanation(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += ["--ui-test-style", "dark",
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        }
+        launchApp(with: configuration)
         let muscle = app.buttons["musclemap-body-front-chest"].firstMatch
         let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
         XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
-        for _ in 0..<24 where !muscle.isHittable { activityScroll.swipeUp(velocity: .slow) }
+        for _ in 0..<(maxText ? 32 : 24) where !muscle.isHittable { activityScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(muscle.isHittable)
         muscle.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)["activity-muscle-detail-popover-sheet"].firstMatch
-            .waitForExistence(timeout: 10))
+        let muscleTitle = app.descendants(matching: .any)["activity-muscle-detail-popover-sheet"].firstMatch
+        XCTAssertTrue(muscleTitle.waitForExistence(timeout: 10))
         let calculation = app.buttons["activity-muscle-detail-calculation"].firstMatch
         XCTAssertTrue(calculation.waitForExistence(timeout: 8))
+        let detailScroll = app.scrollViews["activity-muscle-detail-scroll"].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5))
+        for _ in 0..<16 {
+            let window = app.windows.firstMatch
+            let viewport = detailScroll.frame.intersection(window.frame)
+            if !calculation.frame.isEmpty && viewport.contains(calculation.frame) && calculation.isHittable { break }
+            let direction: CGFloat = calculation.frame.midY < viewport.midY ? 1 : -1
+            let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                dx: viewport.midX - window.frame.minX,
+                dy: viewport.midY - window.frame.minY
+            ))
+            let end = start.withOffset(CGVector(dx: 0, dy: direction * viewport.height * 0.18))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        XCTAssertFalse(calculation.frame.isEmpty)
+        XCTAssertTrue(detailScroll.frame.intersection(app.windows.firstMatch.frame).contains(calculation.frame),
+                      "The complete calculation action must fit in the muscle detail viewport")
+        XCTAssertTrue(calculation.isHittable, "The calculation action should be reachable")
         calculation.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)["activity-fatigue-info-sheet"].firstMatch
-            .waitForExistence(timeout: 10))
+        let sheet = app.scrollViews["activity-fatigue-info-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+
+        func visibleValue(_ suffix: String) -> XCUIElement {
+            let value = sheet.staticTexts["activity-fatigue-info-" + suffix].firstMatch
+            XCTAssertTrue(value.waitForExistence(timeout: 10), "Missing \(suffix)")
+            for _ in 0..<16 {
+                let viewport = sheet.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 2, dy: 2)
+                if !value.frame.isEmpty && viewport.contains(value.frame) { break }
+                if value.frame.midY < viewport.midY { sheet.swipeDown(velocity: .slow) }
+                else { sheet.swipeUp(velocity: .slow) }
+            }
+            XCTAssertFalse(value.label.isEmpty, "Empty \(suffix)")
+            XCTAssertFalse(value.frame.isEmpty, "Empty frame for \(suffix)")
+            XCTAssertTrue(sheet.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 2, dy: 2).contains(value.frame),
+                          "The entire \(suffix) must be inside the visible sheet")
+            VisualAudit.capture("A14 fatigue \(suffix) \(maxText ? "MAX" : "normal")")
+            return value
+        }
+        func number(_ text: String) throws -> Double {
+            let cleaned = text.replacingOccurrences(of: "×", with: "")
+                .replacingOccurrences(of: "h", with: "")
+                .replacingOccurrences(of: ",", with: "")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            let value = try XCTUnwrap(Double(cleaned), "Not a number: \(text)")
+            XCTAssertTrue(value.isFinite)
+            return value
+        }
+
+        let level = visibleValue("level")
+        XCTAssertFalse(level.label.isEmpty)
         VisualAudit.capture("Muscle fatigue explanation")
+        let raw = sheet.staticTexts["activity-fatigue-info-contribution-raw"].firstMatch
+        var subtotal: Double?
+        if raw.exists {
+            let rawValue = try number(visibleValue("contribution-raw").label)
+            let decayed = try number(visibleValue("contribution-decayed").label)
+            XCTAssertGreaterThanOrEqual(rawValue + 0.06, decayed, "Decay cannot increase a contribution")
+            XCTAssertGreaterThanOrEqual(decayed, 0)
+            subtotal = try number(visibleValue("subtotal").label)
+        } else {
+            XCTAssertTrue(sheet.staticTexts["No workout records"].exists,
+                          "Missing contributions must expose the real empty state")
+        }
+        let sleep = try number(visibleValue("sleep-value").label)
+        XCTAssertTrue((0.5...1.25).contains(sleep))
+        let readiness = try number(visibleValue("readiness-value").label)
+        XCTAssertTrue((0.6...1.2).contains(readiness))
+        let resultValue = visibleValue("result-value")
+        XCTAssertLessThanOrEqual(resultValue.frame.height, resultValue.frame.width,
+                                 "The four-character fatigue value must remain on one line")
+        let result = try number(resultValue.label)
+        _ = visibleValue("result-level")
+        XCTAssertTrue((0.0...1.0).contains(result))
+        if let subtotal {
+            // Chest saturation is 12; allow for the two displayed decimal roundings.
+            XCTAssertEqual(result, min(subtotal / 12, 1), accuracy: 0.01)
+        }
+        let tau = try number(visibleValue("tau-value").label)
+        // Chest base τ is 48h × 2. Allow for displayed two-decimal modifiers and rounded hours.
+        let lowerTau = max(1, 96 / ((sleep + 0.005) * (readiness + 0.005))) - 0.51
+        let upperTau = max(1, 96 / ((sleep - 0.005) * (readiness - 0.005))) + 0.51
+        XCTAssertTrue((lowerTau...upperTau).contains(tau), "The displayed τ must match the actual modifiers")
+        VisualAudit.capture("Muscle fatigue explanation result")
+        let grabbers = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
+        XCTAssertEqual(grabbers.count, 1, "The native calculation sheet should expose one grabber")
+        let grabber = grabbers.element(boundBy: 0)
+        XCTAssertTrue(grabber.exists && grabber.isHittable, "The native calculation sheet grabber should be reachable")
+        let window = app.windows.firstMatch
+        XCTAssertTrue(window.exists && window.frame.contains(sheet.frame),
+                      "Calculation content should be inside the active window")
+        XCTAssertTrue(window.frame.contains(grabber.frame) && sheet.frame.intersects(grabber.frame),
+                      "The native drag indicator should overlap the calculation sheet's top edge")
+        XCTAssertLessThanOrEqual(abs(grabber.frame.midY - sheet.frame.minY), grabber.frame.height,
+                                 "The native drag indicator should be at the calculation sheet's top edge")
+        let endY = min(window.frame.maxY - 60, grabber.frame.midY + window.frame.height * 0.6)
+        XCTAssertGreaterThan(endY - grabber.frame.midY, window.frame.height * 0.3,
+                             "The dismiss drag should travel down inside the window")
+        let start = grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero)
+            .withOffset(CGVector(dx: grabber.frame.midX - window.frame.minX, dy: endY - window.frame.minY))
+        start.press(forDuration: 0.1, thenDragTo: end)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10), "Dismissing the calculation should return to muscle detail")
+        XCTAssertTrue(muscleTitle.waitForExistence(timeout: 5))
+        VisualAudit.capture("A14 fatigue dismissed \(maxText ? "MAX" : "normal")")
     }
 
     func testVisualAuditRecommendationEquipmentInfo() throws {

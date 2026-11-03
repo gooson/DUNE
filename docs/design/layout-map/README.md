@@ -175,3 +175,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 2026-11-03 [A12 운동 구성 상세](activity-exercise-mix-detail-a12.html)는 실제 4주 유형별·주간·근육·유산소·선택 도넛·전체 빈도와 기존 상태를 보존하는 시안이다. 실제 네이티브 검증은 별도다.
 
 2026-11-03 [A13 근육 상세 팝오버](activity-muscle-detail-popover-a13.html)는 실제 근육 상태·주간 세트·기존 계산 및 운동 추천을 유지하는 배치 제안이다. 시트와 인라인 양쪽 네이티브 검증은 별도다.
+
+- [A14 근육별 피로 설명](activity-fatigue-explanation-a14.html): 실제 계산 값을 보존하는 시트 배치 계약.

@@ -1229,13 +1229,19 @@
     },
     "A14": {
       "row_id": "A14",
-      "evidence": "activity-fatigue-info-sheet",
+      "file": "A14.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditMuscleFatigueExplanation()",
-      "action": "tap activity-muscle-detail-calculation",
-      "timestamp": 1791855340.368,
-      "image": "0BBC0C18-B61C-44C5-B303-0842C3B37CAD.png",
-      "screen": "screen-0-1398x2034-tap activity-muscle-detail-calculation_0_B111833F-9D97-45C8-B66D-A765F969BF0A.png",
-      "file": "A14.png"
+      "action": "A14 fatigue level normal",
+      "source_revision": "ec97aabe0b43cf225099c0c9dd2354a069548685",
+      "capture_kind": "host",
+      "image": "004-1398x2034.png",
+      "screen": "004-1398x2034.png",
+      "timestamp": 1793719532.919,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "device_uid": "947C00F6-6374-4C79-B7BC-6D26A42B3208",
+      "image_sha256": "d036b3a1f8e03fc9fef7f9659bcfd44ab0f75277fd975a800ac5fab163609b4e",
+      "ax_sha256": "838a9b3f505d98940b5f0d7d0ecc0d40f9e99431c83f4d0c86a279cc619be79a",
+      "evidence": "activity-fatigue-info-sheet"
     },
     "A20": {
       "row_id": "A20",
@@ -1416,9 +1422,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "72c462e3eabd7d6da4f578dba11e5583c8e973b0",
+  "last_refresh_revision": "bedf85663cf4997063e58a4b3d9e92224059f367",
   "last_refresh_screens": [
-    "A13"
+    "A14"
   ],
-  "last_refresh_note": "Fresh corrected-source A13 captures; per-row source and device provenance retained."
+  "last_refresh_note": "English captures are ec97; reviewed English source/text equivalence to bedf is scoped, not a new-head test or capture."
 }
