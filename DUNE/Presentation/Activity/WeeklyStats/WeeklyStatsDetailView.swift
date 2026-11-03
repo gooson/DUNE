@@ -75,15 +75,41 @@ struct WeeklyStatsDetailView: View {
 
     // MARK: - Period Picker
 
+    @ViewBuilder
     private var periodPicker: some View {
-        Picker("Period", selection: $viewModel.selectedPeriod) {
-            ForEach(WeeklyStatsDetailViewModel.StatsPeriod.allCases, id: \.self) { period in
-                Text(period.displayName).tag(period)
+        if dynamicTypeSize.isAccessibilitySize {
+            Picker(selection: $viewModel.selectedPeriod) {
+                ForEach(WeeklyStatsDetailViewModel.StatsPeriod.allCases, id: \.self) { period in
+                    Text(period.displayName)
+                        .tag(period)
+                        .accessibilityIdentifier("weeklystats-period-option-\(period.rawValue)")
+                }
+            } label: {
+                HStack(spacing: DS.Spacing.sm) {
+                    Text("Period")
+                    Spacer(minLength: DS.Spacing.sm)
+                    Text(viewModel.selectedPeriod.displayName)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .font(.headline)
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
             }
+            .pickerStyle(.menu)
+            .font(.headline)
+            .frame(minHeight: 44)
+            .accessibilityIdentifier("weeklystats-period-picker")
+            .accessibilityValue(viewModel.selectedPeriod.displayName)
+        } else {
+            Picker("Period", selection: $viewModel.selectedPeriod) {
+                ForEach(WeeklyStatsDetailViewModel.StatsPeriod.allCases, id: \.self) { period in
+                    Text(period.displayName).tag(period)
+                }
+            }
+            .pickerStyle(.segmented)
+            .accessibilityIdentifier("weeklystats-period-picker")
+            .accessibilityValue(viewModel.selectedPeriod.rawValue)
         }
-        .pickerStyle(.segmented)
-        .accessibilityIdentifier("weeklystats-period-picker")
-        .accessibilityValue(viewModel.selectedPeriod.rawValue)
     }
 
     // MARK: - Content

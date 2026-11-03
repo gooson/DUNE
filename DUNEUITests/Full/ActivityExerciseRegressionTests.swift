@@ -76,7 +76,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         ])
         launchApp(with: configuration)
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 8))
-        try verifyWorkoutInsightsReturnsToWorkout(useQuickStart: true)
+        try verifyWorkoutInsightsReturnsToWorkout(useQuickStart: true, checkPeriodMenu: true)
     }
 
     func testLegacyPhoneInsightsContentRecoversPrimaryWorkoutUI() throws {
@@ -114,7 +114,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Recovered legacy phone content resumes persisted workout draft")
     }
 
-    private func verifyWorkoutInsightsReturnsToWorkout(useQuickStart: Bool = false) throws {
+    private func verifyWorkoutInsightsReturnsToWorkout(useQuickStart: Bool = false, checkPeriodMenu: Bool = false) throws {
         if useQuickStart {
             openQuickStartPicker()
         } else {
@@ -158,6 +158,53 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 }
                 return CGRect(x: scrollFrame.minX + 4, y: top + 4,
                               width: max(0, scrollFrame.width - 8), height: max(0, bottom - top - 8))
+            }
+
+            if checkPeriodMenu {
+                let period = statsScroll.buttons["weeklystats-period-picker"].firstMatch
+                XCTAssertTrue(period.waitForExistence(timeout: 10) && period.isHittable,
+                              "The maximum-text period menu must be reachable")
+                XCTAssertGreaterThanOrEqual(period.frame.width, 44)
+                XCTAssertGreaterThanOrEqual(period.frame.height, 44)
+                XCTAssertTrue(visibleContent().contains(period.frame),
+                              "The complete period menu must fit the visible Insights viewport")
+                let range = statsScroll.descendants(matching: .any)["activity-weeklystats-previous-period"].firstMatch
+                XCTAssertTrue(range.waitForExistence(timeout: 10), "The seeded comparison must expose its date range")
+                let initialRange = range.label
+                XCTAssertFalse(initialRange.isEmpty)
+                let choices: [(id: String, names: [String])] = [
+                    ("Last Week", ["Last Week", "지난 주", "先週"]),
+                    ("This Month", ["This Month", "이번 달", "今月"]),
+                    ("This Week", ["This Week", "이번 주", "今週"])
+                ]
+                XCTAssertTrue(["This Week", "이번 주", "今週"].contains(period.value as? String ?? ""),
+                              "The selected period must expose the complete translated label")
+                VisualAudit.capture("Weekly stats maximum AX period menu")
+                addScreenshotAttachment(named: "Weekly stats maximum AX period menu")
+                var previousRange = initialRange
+                for choice in choices {
+                    period.auditTap()
+                    let option = app.buttons["weeklystats-period-option-\(choice.id)"].firstMatch
+                    XCTAssertTrue(option.waitForExistence(timeout: 5) && option.isHittable,
+                                  "The period menu must expose \(choice.id)")
+                    let selectedLabel = option.label
+                    XCTAssertTrue(choice.names.contains(selectedLabel), "The menu option must show its complete label")
+                    option.auditTap()
+                    let changed = XCTNSPredicateExpectation(
+                        predicate: NSPredicate(format: "exists == true AND label != '' AND label != %@", previousRange),
+                        object: range
+                    )
+                    XCTAssertEqual(XCTWaiter.wait(for: [changed], timeout: 10), .completed,
+                                   "Selecting a period must change the actual comparison range")
+                    XCTAssertEqual(period.value as? String, selectedLabel,
+                                   "The selected period must expose the same complete translated label")
+                    XCTAssertTrue(period.isHittable && visibleContent().contains(period.frame),
+                                  "The selected menu must remain fully visible")
+                    VisualAudit.capture("Weekly stats maximum AX period \(choice.id)")
+                    addScreenshotAttachment(named: "Weekly stats maximum AX period \(choice.id)")
+                    previousRange = range.label
+                }
+                XCTAssertEqual(range.label, initialRange, "Returning to This Week must restore its comparison range")
             }
 
             for _ in 0..<8 {
