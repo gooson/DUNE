@@ -164,6 +164,7 @@ struct ExerciseMixDetailView: View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 Label("Weekly mix", systemImage: "chart.bar.xaxis")
+                    .accessibilityIdentifier("activity-exercise-mix-weekly-heading")
                     .font(.headline)
                 Text("Each bar uses that week's workout records.")
                     .font(.caption)
@@ -174,6 +175,7 @@ struct ExerciseMixDetailView: View {
                             Text(week.start, format: .dateTime.month(.abbreviated).day())
                             Spacer(minLength: DS.Spacing.xs)
                             Text(week.total.formattedWithSeparator)
+                                .accessibilityIdentifier("activity-exercise-mix-weekly-total")
                                 .monospacedDigit()
                         }
                         .font(.caption.weight(.medium))
@@ -222,12 +224,14 @@ struct ExerciseMixDetailView: View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 Label("Primary muscles", systemImage: "figure.strengthtraining.traditional")
+                    .accessibilityIdentifier("activity-exercise-mix-muscle-heading")
                     .font(.headline)
                 Text("Completed sets are split evenly across primary muscles.")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
                 if summary.muscles.isEmpty {
                     Text("No attributed strength sets yet.")
+                        .accessibilityIdentifier("activity-exercise-mix-muscle-empty")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
                 } else {
@@ -237,6 +241,7 @@ struct ExerciseMixDetailView: View {
                                 .font(.caption.weight(.medium))
                             HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
                                 Text(share.sets, format: .number.precision(.fractionLength(0...1)))
+                                    .accessibilityIdentifier("activity-exercise-mix-muscle-sets")
                                     .monospacedDigit()
                                 Text(share.fraction, format: .percent.precision(.fractionLength(0)))
                                     .foregroundStyle(DS.Color.textSecondary)
@@ -269,9 +274,11 @@ struct ExerciseMixDetailView: View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 Label("Cardio types", systemImage: "heart.fill")
+                    .accessibilityIdentifier("activity-exercise-mix-cardio-heading")
                     .font(.headline)
                 if summary.cardioTypes.isEmpty {
                     Text("No cardio records in this period.")
+                        .accessibilityIdentifier("activity-exercise-mix-cardio-empty")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
                 } else {
@@ -284,6 +291,7 @@ struct ExerciseMixDetailView: View {
                                 .font(.subheadline.weight(.medium))
                             HStack(spacing: DS.Spacing.xs) {
                                 Text(kind.count.formattedWithSeparator)
+                                    .accessibilityIdentifier("activity-exercise-mix-cardio-count")
                                 Text(Double(kind.count) / Double(max(summary.cardio, 1)),
                                      format: .percent.precision(.fractionLength(0)))
                                 Spacer(minLength: DS.Spacing.xs)
@@ -376,6 +384,7 @@ struct ExerciseMixDetailView: View {
                 .opacity(selectedExercise == nil || selectedExercise == freq.exerciseName ? 1 : 0.4)
             }
             .chartAngleSelection(value: $selectedAngle)
+            .accessibilityIdentifier("activity-exercise-mix-donut-chart")
             .frame(height: 200)
             .clipped()
             .overlay {
@@ -417,11 +426,13 @@ struct ExerciseMixDetailView: View {
             if let name = selectedExercise,
                let freq = viewModel.frequencyByName[name] {
                 Text(localizedExerciseName(name))
+                    .accessibilityIdentifier("activity-exercise-mix-selected-name")
                     .font(.caption.weight(.semibold))
                     .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                 Text("\(freq.count.formattedWithSeparator)x")
+                    .accessibilityIdentifier("activity-exercise-mix-selected-count")
                     .font(.caption2)
                     .foregroundStyle(DS.Color.textSecondary)
             } else {
@@ -466,6 +477,7 @@ struct ExerciseMixDetailView: View {
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     HStack {
                         Text(localizedExerciseName(freq.exerciseName))
+                            .accessibilityIdentifier("activity-exercise-mix-frequency-name")
                             .font(.caption)
                             .fontWeight(.medium)
                             .fixedSize(horizontal: false, vertical: true)
