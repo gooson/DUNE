@@ -1199,13 +1199,19 @@
     },
     "A14": {
       "row_id": "A14",
-      "evidence": "test-and-action:Muscle fatigue explanation",
+      "file": "A14.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditMuscleFatigueExplanation()",
-      "action": "Muscle fatigue explanation",
-      "timestamp": 1792375027.618,
-      "image": "420C1131-390B-4F73-A9EF-DD209FB4CCFD.png",
-      "screen": "screen-0-1206x2622-Muscle fatigue explanation_0_2DF63458-AA45-4A6E-9142-FD06470F09CE.png",
-      "file": "A14.png"
+      "action": "A14 fatigue level normal",
+      "source_revision": "ec97aabe0b43cf225099c0c9dd2354a069548685",
+      "capture_kind": "xctest",
+      "image": "B11B19C6-EC85-4E9F-B857-343E009B425C.png",
+      "screen": "screen-0-1320x2868-A14 fatigue level normal_0_E80C314A-5B2B-48FD-AF79-571B72AD2E6C.png",
+      "timestamp": 1793720447.614,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "75399EA7-EB70-4C32-912F-4F4F0E6C5E78",
+      "image_sha256": "9c9cdb852001f860abebaf00612e5b6d6696ae73c99f18d1163bb3e16f6ec520",
+      "ax_sha256": "8a80b248ea4d66780f202458b7bb6773c9df3a00ccb6d54c1fc0c926fcea2d29",
+      "evidence": "activity-fatigue-info-sheet"
     },
     "A17": {
       "row_id": "A17",
@@ -1370,9 +1376,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "72c462e3eabd7d6da4f578dba11e5583c8e973b0",
+  "last_refresh_revision": "bedf85663cf4997063e58a4b3d9e92224059f367",
   "last_refresh_screens": [
-    "A13"
+    "A14"
   ],
-  "last_refresh_note": "Fresh corrected-source A13 captures; per-row source and device provenance retained."
+  "last_refresh_note": "English captures are ec97; reviewed English source/text equivalence to bedf is scoped, not a new-head test or capture."
 }
