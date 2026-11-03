@@ -9,6 +9,7 @@ final class PersonalRecordsDetailViewModel {
     var selectedKind: ActivityPersonalRecord.Kind? { didSet { invalidateDerived() } }
 
     private let workoutService: any WorkoutQuerying
+    private let now: () -> Date
     private var recentPaceWorkouts: [ActivityPersonalRecord] = []
     private var fetchedPaceWorkouts: [ActivityPersonalRecord] = []
     private var paceLoadTask: Task<Void, Never>?
@@ -17,12 +18,16 @@ final class PersonalRecordsDetailViewModel {
     private(set) var isLoadingPaceHistory = false
     private(set) var paceHistoryError: String?
 
-    init(workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared)) {
+    init(
+        workoutService: any WorkoutQuerying = WorkoutQueryService(manager: .shared),
+        now: @escaping () -> Date = Date.init
+    ) {
         self.workoutService = workoutService
+        self.now = now
+        self.chartDateRange = TimePeriod.sixMonths.dateRange(referenceDate: now())
     }
 
-    /// PR periods relevant for this view (day/week excluded — PRs are sparse).
-    static let availablePeriods: [TimePeriod] = [.month, .sixMonths, .year]
+    static let availablePeriods: [TimePeriod] = [.day, .week, .month, .sixMonths, .year]
 
     // MARK: - Cached Derived Data
 
@@ -30,6 +35,7 @@ final class PersonalRecordsDetailViewModel {
     private(set) var filteredByKind: [ActivityPersonalRecord] = []
     private(set) var filteredRecords: [ActivityPersonalRecord] = []
     private(set) var chartData: [ActivityPersonalRecord] = []
+    private(set) var chartDateRange: (start: Date, end: Date)
     private(set) var currentBest: ActivityPersonalRecord?
     private(set) var allTimeRecords: [ActivityPersonalRecord] = []
 
@@ -226,7 +232,8 @@ final class PersonalRecordsDetailViewModel {
         }
         filteredByKind = byKind
 
-        let range = selectedPeriod.dateRange()
+        let range = selectedPeriod.dateRange(referenceDate: now())
+        chartDateRange = range
         let periodFiltered = byKind
             .filter { $0.date >= range.start && $0.date <= range.end }
             .sorted { $0.date > $1.date }

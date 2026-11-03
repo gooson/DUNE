@@ -516,6 +516,9 @@ enum TestDataSeeder {
             for: .activityExerciseSeeded,
             workoutID: activityExerciseMockWorkoutID
         ) {
+            if ProcessInfo.processInfo.arguments.contains("--ui-visual-personal-records-recent-fixture") {
+                PersonalRecordStore.shared.updateIfNewRecords(workout)
+            }
             _ = PersonalRecordStore.shared.evaluateReward(for: workout, newPRTypes: [.fastestPace])
         }
         try? context.save()

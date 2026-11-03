@@ -9,8 +9,12 @@ struct RewardProgressSection: View {
     let nextTier: RewardLevelTier?
     let levelProgress: (current: Int, needed: Int, fraction: Double)
 
+    @ScaledMetric(relativeTo: .caption) private var badgeWidth: CGFloat = 96
     @State private var showingInfoSheet = false
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -24,10 +28,14 @@ struct RewardProgressSection: View {
                     showingInfoSheet = true
                 } label: {
                     Image(systemName: "info.circle")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .frame(minWidth: 44, minHeight: 44)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(String(localized: "How Rewards Work"))
+                .accessibilityIdentifier("activity-personal-records-reward-info")
             }
 
             // Level progress
@@ -43,6 +51,7 @@ struct RewardProgressSection: View {
         }
         .padding(DS.Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("activity-personal-records-reward-progress")
         .sheet(isPresented: $showingInfoSheet) {
             rewardInfoSheet
@@ -52,13 +61,20 @@ struct RewardProgressSection: View {
     // MARK: - Level Progress
 
     private var levelProgressCard: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack(spacing: DS.Spacing.xs) {
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            HStack(alignment: .top, spacing: DS.Spacing.sm) {
                 Image(systemName: "star.circle.fill")
-                    .font(.title3)
-                    .foregroundStyle(.yellow)
+                    .font(.system(size: 24, weight: .semibold))
+                    .foregroundStyle(palette.heroHighlight)
+                    .frame(width: 52, height: 52)
+                    .background {
+                        Circle()
+                            .fill(palette.heroAccent.opacity(0.18))
+                            .overlay(Circle().stroke(palette.heroAccent.opacity(0.7), lineWidth: 1))
+                    }
+                    .accessibilityHidden(true)
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     Text(
                         String.localizedStringWithFormat(
                             String(localized: "Level %lld — %@"),
@@ -66,37 +82,41 @@ struct RewardProgressSection: View {
                             levelTier.name
                         )
                     )
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(DS.Color.textSecondary)
+                    .font(.headline)
+                    .accessibilityIdentifier("activity-personal-records-reward-level")
+                    .foregroundStyle(palette.ink)
+                    .fixedSize(horizontal: false, vertical: true)
 
-                    if let next = nextTier {
-                        Text(
-                            String.localizedStringWithFormat(
-                                String(localized: "Next: Level %lld — %@ (%lld pts to go)"),
-                                Int64(next.level),
-                                next.name,
-                                Int64(max(0, levelProgress.needed - levelProgress.current))
-                            )
+                    Text(
+                        String.localizedStringWithFormat(
+                            String(localized: "%lld pts"),
+                            Int64(summary.totalPoints)
                         )
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
-                    }
+                    )
+                    .font(.subheadline.weight(.semibold))
+                    .accessibilityIdentifier("activity-personal-records-reward-points")
+                    .foregroundStyle(palette.heroHighlight)
                 }
-
                 Spacer(minLength: 0)
+            }
 
+            if let next = nextTier {
                 Text(
                     String.localizedStringWithFormat(
-                        String(localized: "%lld pts"),
-                        Int64(summary.totalPoints)
+                        String(localized: "Next: Level %lld — %@ (%lld pts to go)"),
+                        Int64(next.level),
+                        next.name,
+                        Int64(max(0, levelProgress.needed - levelProgress.current))
                     )
                 )
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(DS.Color.activity)
+                .font(.caption)
+                .foregroundStyle(palette.muted)
+                .fixedSize(horizontal: false, vertical: true)
             }
 
             ProgressView(value: levelProgress.fraction)
-                .tint(DS.Color.activity)
+                .accessibilityIdentifier("activity-personal-records-level-progress")
+                .tint(palette.heroAccent)
                 .accessibilityLabel(String(localized: "Level progress"))
                 .accessibilityValue(
                     String.localizedStringWithFormat(
@@ -106,26 +126,29 @@ struct RewardProgressSection: View {
                     )
                 )
 
-            // Milestone tier indicators
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: DS.Spacing.sm) {
                     ForEach(RewardLevelTier.allTierMilestones, id: \.level) { milestone in
                         let isPast = summary.level >= milestone.level
                         let isCurrent = RewardLevelTier.tier(for: summary.level).name == milestone.name
-                        HStack(spacing: 4) {
+                        HStack(spacing: DS.Spacing.xxs) {
                             Image(systemName: isPast ? "checkmark.circle.fill" : (isCurrent ? "circle.dotted" : "circle"))
-                                .font(.system(size: 10))
-                                .foregroundStyle(isPast ? AnyShapeStyle(DS.Color.positive) : (isCurrent ? AnyShapeStyle(DS.Color.activity) : AnyShapeStyle(.tertiary)))
+                                .foregroundStyle(isPast || isCurrent ? palette.heroAccent : palette.muted)
                             Text(milestone.name)
-                                .font(.system(size: 10, weight: isCurrent ? .semibold : .regular))
-                                .foregroundStyle(isPast ? AnyShapeStyle(DS.Color.textSecondary) : AnyShapeStyle(.tertiary))
+                                .font(.caption.weight(isCurrent ? .semibold : .regular))
+                                .foregroundStyle(palette.ink)
                         }
+                        .padding(.vertical, DS.Spacing.xs)
+                        .padding(.horizontal, DS.Spacing.sm)
+                        .background(palette.ink.opacity(0.08), in: Capsule())
                     }
                 }
             }
         }
-        .padding(DS.Spacing.sm)
-        .background(DS.Color.activity.opacity(0.05), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+        .padding(DS.Spacing.md)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .overlay(RoundedRectangle(cornerRadius: DS.Radius.md).stroke(palette.border, lineWidth: 1))
     }
 
     // MARK: - Badge Trophy Case
@@ -152,27 +175,29 @@ struct RewardProgressSection: View {
                     }
                 }
             }
+            .accessibilityIdentifier("activity-personal-records-badges-scroll")
         }
     }
 
     private func badgeCard(_ badge: WorkoutBadgeDefinition) -> some View {
-        VStack(spacing: 4) {
-            ZStack {
-                Circle()
-                    .fill(badge.isUnlocked ? badge.category.tintColor.opacity(0.15) : Color.gray.opacity(0.1))
-                    .frame(width: 44, height: 44)
-
-                Image(systemName: badge.isUnlocked ? badge.iconName : "lock.fill")
-                    .font(.system(size: 18))
-                    .foregroundStyle(badge.isUnlocked ? AnyShapeStyle(badge.category.tintColor) : AnyShapeStyle(.quaternary))
-            }
+        VStack(spacing: DS.Spacing.xs) {
+            Image(systemName: badge.isUnlocked ? badge.iconName : "lock.fill")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(badge.isUnlocked ? AnyShapeStyle(badge.category.tintColor) : AnyShapeStyle(DS.Color.textSecondary))
+                .frame(width: 48, height: 48)
+                .background {
+                    Circle()
+                        .fill(badge.isUnlocked ? badge.category.tintColor.opacity(0.15) : DS.Color.textSecondary.opacity(0.1))
+                }
 
             Text(badge.name)
-                .font(.system(size: 9, weight: .medium))
-                .foregroundStyle(badge.isUnlocked ? AnyShapeStyle(DS.Color.textSecondary) : AnyShapeStyle(.quaternary))
-                .lineLimit(1)
+                .accessibilityIdentifier("activity-personal-records-badge-name-\(badge.id)")
+                .font(.caption.weight(.medium))
+                .foregroundStyle(DS.Color.textSecondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .frame(width: 56)
+        .frame(width: badgeWidth, alignment: .top)
     }
 
     // MARK: - Fun Comparisons
@@ -184,27 +209,28 @@ struct RewardProgressSection: View {
                 .foregroundStyle(DS.Color.textSecondary)
 
             ForEach(funComparisons) { comparison in
-                HStack(spacing: DS.Spacing.sm) {
-                    Image(systemName: comparison.iconName)
-                        .font(.title3)
-                        .foregroundStyle(DS.Color.activity)
-                        .frame(width: 28)
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                        Image(systemName: comparison.iconName)
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundStyle(DS.Color.activity)
+                            .frame(width: 28)
 
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(comparison.metric)
-                            .font(.caption2)
-                            .foregroundStyle(.tertiary)
-                        Text(comparison.value.formattedWithSeparator())
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(DS.Color.textSecondary)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(comparison.metric)
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
+                            Text(comparison.value.formattedWithSeparator())
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(DS.Color.textSecondary)
+                        }
                     }
-
-                    Spacer(minLength: 0)
-
                     Text(comparison.comparison)
                         .font(.caption.weight(.medium))
-                        .foregroundStyle(DS.Color.activity)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(DS.Spacing.sm)
                 .background(theme.accentColor.opacity(0.05), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
             }
