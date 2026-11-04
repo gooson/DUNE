@@ -341,20 +341,41 @@ struct BodyPeerComparisonCard: View {
                     }
                 }
                 Section("Survey group") {
-                    Picker("Age at measurement", selection: $draftAgeGroup) {
-                        Text("Select age group").tag(nil as BodyPeerReference.AgeGroup?)
-                        ForEach(BodyPeerReference.AgeGroup.allCases, id: \.self) { age in
-                            Text(age.displayName).tag(Optional(age))
+                    if metric.category == .bodyFat && dynamicTypeSize.isAccessibilitySize {
+                        Menu {
+                            Button("Select age group") { draftAgeGroup = nil }
+                            ForEach(BodyPeerReference.AgeGroup.allCases, id: \.self) { age in
+                                Button(age.displayName) { draftAgeGroup = age }
+                            }
+                        } label: {
+                            criteriaMenuLabel("Age at measurement", value: draftAgeGroup?.displayName ?? String(localized: "Select age group"))
                         }
-                    }
-                    .accessibilityIdentifier("body-peer-age-selection")
-                    Picker("Sex in survey table", selection: $draftSurveySex) {
-                        Text("Select survey sex").tag(nil as BodyPeerReference.SurveySex?)
-                        ForEach(BodyPeerReference.SurveySex.allCases, id: \.self) { sex in
-                            Text(sex.displayName).tag(Optional(sex))
+                        .accessibilityIdentifier("body-peer-age-selection")
+                        Menu {
+                            Button("Select survey sex") { draftSurveySex = nil }
+                            ForEach(BodyPeerReference.SurveySex.allCases, id: \.self) { sex in
+                                Button(sex.displayName) { draftSurveySex = sex }
+                            }
+                        } label: {
+                            criteriaMenuLabel("Sex in survey table", value: draftSurveySex?.displayName ?? String(localized: "Select survey sex"))
                         }
+                        .accessibilityIdentifier("body-peer-sex-selection")
+                    } else {
+                        Picker("Age at measurement", selection: $draftAgeGroup) {
+                            Text("Select age group").tag(nil as BodyPeerReference.AgeGroup?)
+                            ForEach(BodyPeerReference.AgeGroup.allCases, id: \.self) { age in
+                                Text(age.displayName).tag(Optional(age))
+                            }
+                        }
+                        .accessibilityIdentifier("body-peer-age-selection")
+                        Picker("Sex in survey table", selection: $draftSurveySex) {
+                            Text("Select survey sex").tag(nil as BodyPeerReference.SurveySex?)
+                            ForEach(BodyPeerReference.SurveySex.allCases, id: \.self) { sex in
+                                Text(sex.displayName).tag(Optional(sex))
+                            }
+                        }
+                        .accessibilityIdentifier("body-peer-sex-selection")
                     }
-                    .accessibilityIdentifier("body-peer-sex-selection")
                 }
                 Section {
                     Text("The survey excludes pregnant women. Choose a group only when that reference applies to the measurement date.")
@@ -380,6 +401,24 @@ struct BodyPeerComparisonCard: View {
             }
         }
         .presentationBackground(DS.Color.surfacePrimary)
+    }
+
+    private func criteriaMenuLabel(_ title: LocalizedStringKey, value: String) -> some View {
+        HStack(alignment: .center, spacing: DS.Spacing.sm) {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                Text(title)
+                    .foregroundStyle(.primary)
+                Text(value)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: DS.Spacing.sm)
+            Image(systemName: "chevron.up.chevron.down")
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
     }
 
     private var sourceSheet: some View {

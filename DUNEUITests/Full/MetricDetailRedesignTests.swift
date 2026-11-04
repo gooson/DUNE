@@ -241,7 +241,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         VisualAudit.capture("T06-bodyFat-DXA-unselected")
 
         criteria.tap()
-        let apply = app.buttons["body-peer-apply"].firstMatch
+        let apply = app.descendants(matching: .any)["body-peer-apply"].firstMatch
         XCTAssertTrue(apply.waitForExistence(timeout: 5))
         XCTAssertFalse(apply.isEnabled)
         VisualAudit.capture("T06-bodyFat-DXA-criteria-empty")
@@ -253,7 +253,8 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         app.buttons["30–39 years"].firstMatch.tap()
         app.buttons["body-peer-sex-selection"].firstMatch.tap()
         app.buttons["Male (survey)"].firstMatch.tap()
-        XCTAssertTrue(apply.isEnabled)
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        XCTAssertTrue(apply.isEnabled && apply.isHittable && app.windows.firstMatch.frame.contains(apply.frame))
         apply.tap()
         let selected = app.descendants(matching: .any)["body-peer-selected-criteria"].firstMatch
         XCTAssertTrue(selected.waitForExistence(timeout: 5))
@@ -280,7 +281,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         app.buttons["Done"].firstMatch.tap()
         XCTAssertTrue(survey.waitForExistence(timeout: 5))
 
-        let back = app.navigationBars["Body Fat"].buttons.firstMatch
+        let back = app.descendants(matching: .any)["BackButton"].firstMatch
         XCTAssertTrue(back.exists && back.isHittable && app.windows.firstMatch.frame.contains(back.frame))
         back.tap()
         XCTAssertTrue(detail.waitForNonExistence(timeout: 5))
@@ -311,17 +312,35 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         XCTAssertTrue(detail.waitForExistence(timeout: 15))
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-criteria-cta", maxSwipes: 12))
         app.buttons["body-peer-criteria-cta"].firstMatch.tap()
-        let apply = app.buttons["body-peer-apply"].firstMatch
+        let apply = app.descendants(matching: .any)["body-peer-apply"].firstMatch
         XCTAssertTrue(apply.waitForExistence(timeout: 5))
         XCTAssertFalse(apply.isEnabled)
         VisualAudit.capture("T06-bodyFat-DXA-MAX-unselected")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-age-selection", maxSwipes: 6))
         app.buttons["body-peer-age-selection"].firstMatch.tap()
         app.buttons["30–39 years"].firstMatch.tap()
+        let ageRow = app.descendants(matching: .any)["body-peer-age-selection"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-age-selection", maxSwipes: 6))
+        XCTAssertTrue(ageRow.label.contains("30–39 years") && ageRow.isHittable && app.windows.firstMatch.frame.contains(ageRow.frame))
+        VisualAudit.capture("T06-bodyFat-DXA-MAX-age-selected-full-row")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-sex-selection", maxSwipes: 6))
         app.buttons["body-peer-sex-selection"].firstMatch.tap()
         app.buttons["Male (survey)"].firstMatch.tap()
-        XCTAssertTrue(apply.isEnabled)
+        let sexRow = app.descendants(matching: .any)["body-peer-sex-selection"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-sex-selection", maxSwipes: 6))
+        XCTAssertTrue(sexRow.label.contains("Male (survey)") && sexRow.isHittable && app.windows.firstMatch.frame.contains(sexRow.frame))
+        VisualAudit.capture("T06-bodyFat-DXA-MAX-sex-selected-full-row")
+        let criteriaList = app.collectionViews.firstMatch
+        XCTAssertTrue(criteriaList.exists && criteriaList.isHittable &&
+                      app.windows.firstMatch.frame.contains(criteriaList.frame))
+        for _ in 0..<8 {
+            if apply.exists && apply.isHittable && app.windows.firstMatch.frame.contains(apply.frame) {
+                break
+            }
+            criteriaList.swipeDown()
+        }
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        XCTAssertTrue(apply.isEnabled && apply.isHittable && app.windows.firstMatch.frame.contains(apply.frame))
         apply.tap()
 
         let warning = app.descendants(matching: .any)["body-fat-method-warning"].firstMatch
@@ -344,7 +363,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         VisualAudit.capture("T06-bodyFat-DXA-MAX-source")
         app.buttons["Done"].firstMatch.tap()
         XCTAssertTrue(app.descendants(matching: .any)["body-fat-survey-mean"].firstMatch.waitForExistence(timeout: 5))
-        let back = app.navigationBars["Body Fat"].buttons.firstMatch
+        let back = app.descendants(matching: .any)["BackButton"].firstMatch
         XCTAssertTrue(back.exists && back.isHittable && app.windows.firstMatch.frame.contains(back.frame))
         back.tap()
         XCTAssertTrue(detail.waitForNonExistence(timeout: 5))
