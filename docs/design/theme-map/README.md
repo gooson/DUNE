@@ -222,6 +222,10 @@ A06 네이티브 소스는 실제 현재·이전 네 지표와 원래 네 기간
 ## T10 오늘의 건강 리포트 (2026-10-31)
 
 [밝음·어두움 보존 시안](themes/dune-daily-report.html)과 [배치 계약](../layout-map/daily-report-proposal.md)을 추가했다. 예시 값의 브라우저 시안이며 실제 앱 캡처가 아니다. 새로운 T10 네이티브 캡처는 별도 갱신 전까지 기존 상태로 둔다.
+## H06 신체 기록 이력 · 2026-11-05
+
+[정적 DUNE 표현 시안](themes/dune-body-history-h06.html)과 [배치 계약](../layout-map/body-history-h06.html)은 날짜를 먼저 읽고 Weight·Body Fat·세 번째 신체값의 기존 아이콘과 신체 색 캡슐로 값을 구분한다. 접근성 이름은 수동 muscle에 Muscle Mass (kg), Apple Health의 HealthKit lean 값에 Lean Body Mass를 사용한다. 밝은 화면의 아이콘만 기존 신체 색을 더 진하게 쓰고, 값 글자와 어두운 화면 색은 유지한다. 수동 행의 원래 더 보기와 Apple Health 행의 원래 심장 아이콘을 그대로 두며, 큰 글씨와 좁은 폭은 값을 세로로 쌓는다. 시안의 날짜·숫자·기호는 예시이고 실제 SF Symbol·건강 기록·앱 캡처가 아니다. 과거 H06 PNG 네 장은 역사적 참고로 보존하며, 현행 소스의 네 기기·자세에서 기존 여섯 사례와 실제 PNG/AX 12쌍을 검토한 [네이티브 갤러리](../full-redesign-map/review/h06-body-history-native-2026-11-05/index.html)를 별도로 제공한다.
+
 ## H05 신체 기록 입력·수정 · 2026-11-05
 
 [정적 DUNE 표현 시안](themes/dune-body-record-form-h05.html)과 [배치 계약](../layout-map/body-record-form-h05.html)은 기존 네이티브 Form의 날짜·세 측정 헤더와 원래 단위, 메모, 키보드 툴바, 고정 Cancel/Save, 큰 글씨 스크롤을 정한다. 값·날짜·기호는 예시이며 실제 앱 캡처가 아니다. 기존 H05 PNG 네 장은 역사적 화면 정체성 참고다. H05 수정은 같은 공유 Form이고 H06 이력 화면은 별개다.

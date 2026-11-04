@@ -303,3 +303,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 [H04 native review](../full-redesign-map/review/h04-metric-comparison-native-2026-11-05/index.html)
 
 [H05 native review](../full-redesign-map/review/h05-body-record-native-2026-11-05/index.html)
+
+[H06 native review](../full-redesign-map/review/h06-body-history-native-2026-11-05/index.html)

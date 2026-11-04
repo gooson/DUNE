@@ -1,0 +1,217 @@
+{
+  "source_head": "438d9e8376fc4929cbf977893055eb4124d4d318",
+  "case_count": 6,
+  "selected_pair_count": 12,
+  "cases": {
+    "duo_closed_add": {
+      "source_head": "438d9e8376fc4929cbf977893055eb4124d4d318",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyAddFlowSavesRecord",
+      "device_uid": "52221D05-7E4C-4845-95BA-942043D15CA2",
+      "pose": "closed 0° active LCD",
+      "archive": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed",
+      "inventory_sha256": "f55d68c1b621b010f28044315e4e4466555e93e52356d4bb5992c5d163c1a33e",
+      "selected_pairs": [
+        {
+          "test_identifier": "WellnessRegressionTests/testBodyAddFlowSavesRecord()",
+          "role": "weight_only_saved_row",
+          "capture_label": "H05 add saved history",
+          "png": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/011-1398x2034.png",
+          "png_sha256": "daeeae1a8bae107d9ffba22628b3de31e62b215255710ceaddba6dd1d1fdab9a",
+          "ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/011-hierarchy.txt",
+          "ax_sha256": "daa6f9abeaec497190cc5214fb88f238913998bfbd7c4cc3eb867540e5d8c5fb",
+          "sdk_ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/attachments/116C88EE-4421-4B91-A9BB-27871193778E.txt",
+          "sdk_ax_sha256": "daa6f9abeaec497190cc5214fb88f238913998bfbd7c4cc3eb867540e5d8c5fb"
+        }
+      ]
+    },
+    "duo_closed_max_edit": {
+      "source_head": "438d9e8376fc4929cbf977893055eb4124d4d318",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyHistoryEditAndSaveAtMaximumAccessibilityTextSize",
+      "device_uid": "52221D05-7E4C-4845-95BA-942043D15CA2",
+      "pose": "closed 0° active LCD",
+      "archive": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed",
+      "inventory_sha256": "f55d68c1b621b010f28044315e4e4466555e93e52356d4bb5992c5d163c1a33e",
+      "selected_pairs": [
+        {
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryEditAndSaveAtMaximumAccessibilityTextSize()",
+          "role": "rows_before_context",
+          "capture_label": "H06 body history rows",
+          "png": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/015-1398x2034.png",
+          "png_sha256": "c84a8f44f37d559bafebd400b608663754e57106d85fb6b358e867159949ae00",
+          "ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/015-hierarchy.txt",
+          "ax_sha256": "275f7228e3fac68bc1a5927bee0f286b0b49b45331ba9a8768df8b8e882259f3",
+          "sdk_ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/attachments/1EDF2AE0-D447-4233-B033-3DDA588FDE1D.txt",
+          "sdk_ax_sha256": "275f7228e3fac68bc1a5927bee0f286b0b49b45331ba9a8768df8b8e882259f3"
+        },
+        {
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryEditAndSaveAtMaximumAccessibilityTextSize()",
+          "role": "lower_fields_save_visible",
+          "capture_label": "Body edit lower fields with usable Save",
+          "png": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/024-1398x2034.png",
+          "png_sha256": "847317e5fee1734c6897b25e4184f65782ae080803b55fe3518e9e4a41d51a54",
+          "ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/024-hierarchy.txt",
+          "ax_sha256": "c131ea50b8c3f6dc90356b34ce4562638214aea62f935913d3d6f87da08e6b26",
+          "sdk_ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/attachments/A6F7A91D-E7C6-4A31-B252-D741C4BBC0BB.txt",
+          "sdk_ax_sha256": "c131ea50b8c3f6dc90356b34ce4562638214aea62f935913d3d6f87da08e6b26"
+        },
+        {
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryEditAndSaveAtMaximumAccessibilityTextSize()",
+          "role": "saved_return",
+          "capture_label": "Body history remains usable after saving",
+          "png": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/026-1398x2034.png",
+          "png_sha256": "2bee3a7308e6b93dd3569831e32af22dce1966ce955690ca7336778b33dee639",
+          "ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/026-hierarchy.txt",
+          "ax_sha256": "b9691a54793ed29e002d610bb48c8628b4378374398757c1b62540af31f0056d",
+          "sdk_ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/attachments/E53E8835-5343-4FBB-9257-62216ED17EDB.txt",
+          "sdk_ax_sha256": "b9691a54793ed29e002d610bb48c8628b4378374398757c1b62540af31f0056d"
+        }
+      ]
+    },
+    "duo_closed_edit": {
+      "source_head": "438d9e8376fc4929cbf977893055eb4124d4d318",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves",
+      "device_uid": "52221D05-7E4C-4845-95BA-942043D15CA2",
+      "pose": "closed 0° active LCD",
+      "archive": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed",
+      "inventory_sha256": "f55d68c1b621b010f28044315e4e4466555e93e52356d4bb5992c5d163c1a33e",
+      "selected_pairs": [
+        {
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves()",
+          "role": "rows_before_context",
+          "capture_label": "H06 body history rows",
+          "png": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/030-1398x2034.png",
+          "png_sha256": "3b65464250fac0940d3f8736ed449a40a9db3fccfd91d2362c071d6689cf9abf",
+          "ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/030-hierarchy.txt",
+          "ax_sha256": "37270f31739b89798ea827caf0c64450c3b60f5422fcfd3bbeb4c3509c1fd6d9",
+          "sdk_ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/attachments/85476182-87B7-488E-9E8B-E12A87D03C7B.txt",
+          "sdk_ax_sha256": "37270f31739b89798ea827caf0c64450c3b60f5422fcfd3bbeb4c3509c1fd6d9"
+        },
+        {
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves()",
+          "role": "saved_return",
+          "capture_label": "Body history remains usable after saving",
+          "png": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/041-1398x2034.png",
+          "png_sha256": "07ed9b7b9e7baf936757e1dd3981d48d7afca21ddd21dd2d9c8edb2cc4515b06",
+          "ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/041-hierarchy.txt",
+          "ax_sha256": "c91e6b3b0515b16c63b803dbd57cdaf66093bdd9c83b83d45cc82479c3db50c7",
+          "sdk_ax": ".codex-checks/h06/evidence/duo-closed-438d9e83-passed/attachments/C3FEE702-C0A2-426D-B1E8-9A8F947DDA69.txt",
+          "sdk_ax_sha256": "c91e6b3b0515b16c63b803dbd57cdaf66093bdd9c83b83d45cc82479c3db50c7"
+        }
+      ]
+    },
+    "duo_open_edit": {
+      "source_head": "438d9e8376fc4929cbf977893055eb4124d4d318",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves",
+      "device_uid": "52221D05-7E4C-4845-95BA-942043D15CA2",
+      "pose": "open 180° active LCD-1",
+      "archive": ".codex-checks/h06/evidence/duo-open-438d9e83-passed",
+      "inventory_sha256": "e19b11f9b8b283549500879954a6d218ecfb3a707709f0930bf43a75457454ce",
+      "selected_pairs": [
+        {
+          "role": "rows_before_context",
+          "capture_label": "H06 body history rows",
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves()",
+          "png": ".codex-checks/h06/evidence/duo-open-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/003-2007x2853.png",
+          "png_sha256": "31c90af4756e6a0af3080b183602dfc53bafe4c69c4875b8f9d7ba08daea2034",
+          "ax": ".codex-checks/h06/evidence/duo-open-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/003-hierarchy.txt",
+          "ax_sha256": "99b1402f29b5aee737b886c6437e3cf78d234a0ab3ebf9af6caea3137c3e957b",
+          "sdk_ax": ".codex-checks/h06/evidence/duo-open-438d9e83-passed/attachments/76BAC40E-3766-438C-917A-0B04BBE317A3.txt",
+          "sdk_ax_sha256": "99b1402f29b5aee737b886c6437e3cf78d234a0ab3ebf9af6caea3137c3e957b"
+        },
+        {
+          "role": "saved_return",
+          "capture_label": "Body history remains usable after saving",
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves()",
+          "png": ".codex-checks/h06/evidence/duo-open-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/014-2007x2853.png",
+          "png_sha256": "485a954e359d2e1516e37e2ca8f3e1d4d772292764161c2acd92e54c5aadc7c3",
+          "ax": ".codex-checks/h06/evidence/duo-open-438d9e83-passed/execution-proof/duo-pose-and-checkpoints/014-hierarchy.txt",
+          "ax_sha256": "7cce61c093c2b1464f8c2ace2e525e84a85a136c7dc0e32a01d0b595fbd46ada",
+          "sdk_ax": ".codex-checks/h06/evidence/duo-open-438d9e83-passed/attachments/F2E9A09E-9AEB-46FE-A7B8-291BA88E086E.txt",
+          "sdk_ax_sha256": "7cce61c093c2b1464f8c2ace2e525e84a85a136c7dc0e32a01d0b595fbd46ada"
+        }
+      ]
+    },
+    "phone_edit": {
+      "source_head": "438d9e8376fc4929cbf977893055eb4124d4d318",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves",
+      "device_uid": "331D52E8-7C75-4CA5-B194-13F1B6A1759D",
+      "pose": "normal",
+      "archive": ".codex-checks/h06/evidence/phone-normal-438d9e83-passed",
+      "inventory_sha256": "570a6c3a5000c28d4660d8c8f6dc771527c3ce332c519397566d45d0f3f97690",
+      "selected_pairs": [
+        {
+          "role": "rows_before_context",
+          "capture_label": "H06 body history rows",
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves()",
+          "png": ".codex-checks/h06/evidence/phone-normal-438d9e83-passed/attachments/16614249-E876-428C-9492-B815565E09A4.png",
+          "png_sha256": "b66fdcb728dcb389d5ce4f622f837e1c4dd2ed802244133eb531f6326d75d96e",
+          "ax": ".codex-checks/h06/evidence/phone-normal-438d9e83-passed/attachments/4EFC37E3-106E-4347-BD27-016C1444B42F.txt",
+          "ax_sha256": "dd28ff49573e7e8baac933d7716355856e26490b260f46c019a3b643e81fa536"
+        },
+        {
+          "role": "saved_return",
+          "capture_label": "Body history remains usable after saving",
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves()",
+          "png": ".codex-checks/h06/evidence/phone-normal-438d9e83-passed/attachments/A883A88E-2F80-4B64-B2DB-F5D0E9BEECBE.png",
+          "png_sha256": "01e4870a0617244584ff4cd2baf7efa502b1f0441bb2d292c6aa5b39a0584cc9",
+          "ax": ".codex-checks/h06/evidence/phone-normal-438d9e83-passed/attachments/119C559D-C26C-4D92-B481-C3C08D33EB40.txt",
+          "ax_sha256": "7b6040f14b03b9fe02c68204aec99f1c2f2e7ad6db220202160c8129b79f64c4"
+        }
+      ]
+    },
+    "ipad_edit": {
+      "source_head": "438d9e8376fc4929cbf977893055eb4124d4d318",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves",
+      "device_uid": "1FDA3D18-F62C-4211-888F-542E4495B2AB",
+      "pose": "normal",
+      "archive": ".codex-checks/h06/evidence/ipad-normal-438d9e83-passed",
+      "inventory_sha256": "efb160255a3f4e96ccf2acaab99f44303b36cb21cfa9959797d2aab6a0d1bd8e",
+      "selected_pairs": [
+        {
+          "role": "rows_before_context",
+          "capture_label": "H06 body history rows",
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves()",
+          "png": ".codex-checks/h06/evidence/ipad-normal-438d9e83-passed/attachments/ECA4F5A8-085D-4D55-980B-D89588DF0A96.png",
+          "png_sha256": "317c6a0f56898f27d09272431a9ad117645d4f80232990a24217392a60d41fd8",
+          "ax": ".codex-checks/h06/evidence/ipad-normal-438d9e83-passed/attachments/40D3A41A-C565-429C-B6BE-BABA573C49FD.txt",
+          "ax_sha256": "267ac4547091d86a145eb416d1686a76979715f96437427287b9a3493f23be1d"
+        },
+        {
+          "role": "saved_return",
+          "capture_label": "Body history remains usable after saving",
+          "test_identifier": "WellnessRegressionTests/testBodyHistoryRowOpensEditFormAndSaves()",
+          "png": ".codex-checks/h06/evidence/ipad-normal-438d9e83-passed/attachments/A965800F-65DA-4652-8127-EA13E9034BBE.png",
+          "png_sha256": "8adb62e5b3667e15394ee92f32381dad2bfc7d046fcfe04bbdf06a9275e9ac3a",
+          "ax": ".codex-checks/h06/evidence/ipad-normal-438d9e83-passed/attachments/EEBCE81D-24A7-43E3-91BA-FC72A37DBA54.txt",
+          "ax_sha256": "d8149ac9a1b4dd5bbc9a5966de57fde97694a07068c010a73fa6061a52c64802"
+        }
+      ]
+    }
+  },
+  "canonical": {
+    "phone_edit": "rows_before_context",
+    "ipad_edit": "rows_before_context",
+    "duo_closed_edit": "rows_before_context",
+    "duo_open_edit": "rows_before_context"
+  },
+  "final_native_review": {
+    "path": "/private/tmp/h06-native-gallery/final-native-review-438d-v1.json",
+    "sha256": "1e389ca18e5edf26e0368a70b4aab439cb369843abfdc137d5355237c3841e13"
+  },
+  "source_review_closure": {
+    "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/h06/current-source-review-closure.json",
+    "sha256": "3862a29c61354e625a29ffe61585275046fd318e36025fca41e3d123277feca8"
+  },
+  "historical_scope": "identity only; source/UID/pose/paired AX unavailable",
+  "prior_positive_before_label_correction": {
+    "source_head": "12eccd771ab433acc5996936ebd516e76affa00c",
+    "status": "historical-prior-to-mass-label-correction",
+    "sealed_inventory_sha256": "0dc051bacb0a4723d18ce3a8dea3f2011ff82af6c69c26611a00e3681ed27536"
+  }
+}
