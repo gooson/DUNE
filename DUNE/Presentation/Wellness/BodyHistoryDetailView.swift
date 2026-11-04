@@ -130,9 +130,11 @@ struct BodyHistoryDetailView: View {
             metricValue(
                 Text("\(muscle.formattedWithSeparator(fractionDigits: 1)) kg"),
                 category: .leanBodyMass,
-                accessibilityLabel: Text("Muscle Mass (kg)")
-                    + Text(verbatim: ": ")
-                    + Text(verbatim: muscle.formattedWithSeparator(fractionDigits: 1))
+                accessibilityLabel: item.source == .manual
+                    ? Text("Muscle Mass (kg)")
+                        + Text(verbatim: ": ")
+                        + Text(verbatim: muscle.formattedWithSeparator(fractionDigits: 1))
+                    : nil
             )
         }
     }
