@@ -409,12 +409,12 @@ struct BodyPeerComparisonCard: View {
                 Text(title)
                     .foregroundStyle(.primary)
                 Text(value)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(DS.Color.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
             Spacer(minLength: DS.Spacing.sm)
             Image(systemName: "chevron.up.chevron.down")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary)
                 .accessibilityHidden(true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
