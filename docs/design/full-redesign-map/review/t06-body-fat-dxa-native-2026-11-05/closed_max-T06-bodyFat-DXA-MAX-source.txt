@@ -1,0 +1,213 @@
+Attributes: Application, 0x10f8f8280, pid: 12355, label: 'DUNE'
+Element subtree:
+ →Application, 0x10f8f8280, pid: 12355, label: 'DUNE'
+    Window (Main), 0x10f8f83c0, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x10fb8b840, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x10fb8ae40, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x10fb8b480, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x10fb8b700, {{-466.0, -678.0}, {1398.0, 2034.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+          Other, 0x10fb88780, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x10fb89540, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x105d7fc00, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x105d7df40, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x105d7ebc0, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x105d7f480, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x105d7d7c0, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x105d7ea80, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x105d7de00, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10ff157c0, {{0.0, 0.0}, {466.0, 678.0}}
+                            Other, 0x10ff14000, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x10ff14140, {{0.0, 0.0}, {466.0, 678.0}}
+                                Toolbar, 0x10ff14280, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x10ff143c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x10ff14500, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x10ff14640, {{0.0, 0.0}, {466.0, 678.0}}
+                                    Other, 0x10ff14780, {{0.0, 0.0}, {466.0, 678.0}}
+                                      Other, 0x10ff148c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                        Toolbar, 0x10ff14a00, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x10ff14b40, {{0.0, 0.0}, {466.0, 678.0}}
+                                        NavigationBar, 0x10ff14c80, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Body Fat'
+                                        Other, 0x10ff14dc0, {{0.0, 0.0}, {466.0, 678.0}}
+                                          Other, 0x10ff14f00, {{0.0, 0.0}, {466.0, 678.0}}
+                                            Other, 0x10ff15040, {{0.0, 0.0}, {466.0, 678.0}}
+                                              Other, 0x10ff15180, {{0.0, 0.0}, {466.0, 678.0}}
+                                                ScrollView, 0x10ff152c0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'metric-detail-screen-bodyFat'
+                                                  Other, 0x10ff15400, {{0.0, -4326.3}, {382.0, 5067.0}}
+                                                    StaticText, 0x10ff15540, {{16.0, -4310.3}, {350.0, 365.0}}, identifier: 'metric-summary-header', label: 'Body Fat, 17.8 %', value: Updated 2 minutes ...
+                                                      Image, 0x10ff15680, {{36.0, -4290.3}, {103.7, 103.7}}, identifier: 'percent', label: 'Percent Sign'
+                                                      StaticText, 0x10ff17700, {{151.7, -4267.8}, {192.3, 58.7}}, label: 'Body Fat'
+                                                      StaticText, 0x10ff17840, {{36.0, -4170.7}, {128.7, 71.7}}, label: '17.8'
+                                                      StaticText, 0x10ff17980, {{36.0, -4095.0}, {46.7, 65.7}}, label: '%'
+                                                      StaticText, 0x10ff17ac0, {{36.0, -4013.3}, {229.7, 48.0}}, label: 'Updated 2 minutes ago'
+                                                      Other, 0x10ff17c00, {{16.0, -3984.8}, {350.0, 39.5}}
+                                                    StaticText, 0x10ff17d40, {{32.0, -3909.3}, {154.0, 130.7}}, label: 'History'
+                                                    Button, 0x10ff17e80, {{195.3, -3899.0}, {154.7, 110.3}}, label: 'Trend'
+                                                      StaticText, 0x10ff1bd40, {{263.3, -3895.2}, {78.7, 102.3}}, label: 'Trend'
+                                                      Image, 0x10ff1b980, {{208.7, -3863.3}, {45.3, 39.0}}, identifier: 'chart.line.uptrend.xyaxis', label: 'Chart Line'
+                                                    SegmentedControl, 0x10ff1bac0, {{32.0, -3762.7}, {318.0, 31.0}}
+                                                      Button, 0x10ff1bc00, {{32.0, -3762.7}, {63.6, 32.0}}, label: 'D'
+                                                      Button, 0x10279af80, {{95.6, -3762.7}, {63.6, 32.0}}, label: 'W', Selected
+                                                      Button, 0x10279bc00, {{159.2, -3762.7}, {63.6, 32.0}}, label: 'M'
+                                                      Button, 0x102799e00, {{222.8, -3762.7}, {63.6, 32.0}}, label: '6M'
+                                                      Button, 0x10279b0c0, {{286.4, -3762.7}, {63.6, 32.0}}, label: 'Y'
+                                                    Button, 0x10279b980, {{38.0, -3679.7}, {25.3, 45.0}}, identifier: 'detail-chart-previous-period', label: 'Previous period'
+                                                    StaticText, 0x10279a6c0, {{102.7, -3715.7}, {176.7, 116.7}}, identifier: 'detail-chart-visible-range', label: '10/30 – 11/5'
+                                                    Button, 0x10279a800, {{318.7, -3679.7}, {25.3, 45.0}}, identifier: 'detail-chart-next-period', label: 'Next period', Disabled
+                                                    Other, 0x10279ae40, {{32.0, -3583.0}, {318.0, 620.0}}, identifier: 'detail-chart-surface', label: 'Body Fat Detail Chart', value: 10/30 – 11/5
+                                                    Other, 0x10279abc0, {{32.0, -3583.0}, {318.0, 620.0}}
+                                                    ScrollView, 0x10279a580, {{80.0, -3583.0}, {270.0, 568.0}}
+                                                      Other, 0x10279a080, {{-1000.0, -3583.0}, {1350.0, 568.0}}
+                                                        Other, 0x102799f40, {{-1243.0, -3633.0}, {1836.0, 1658.0}}
+                                                          Other, 0x102799a40, {{-922.9, -3583.0}, {270.0, 568.0}}, label: 'Oct 4, 2026 at 00 to Oct 11, 2026 at 00', value: 16.56 to 16.76, in...
+                                                          Other, 0x102799540, {{-652.9, -3583.0}, {270.0, 568.0}}, label: 'Oct 11, 2026 at 00 to Oct 18, 2026 at 00', value: 16.8 to 17, increa...
+                                                          Other, 0x102799900, {{-382.9, -3583.0}, {270.0, 568.0}}, label: 'Oct 18, 2026 at 00 to Oct 25, 2026 at 00', value: 17.04 to 17.28, in...
+                                                          Other, 0x1027997c0, {{-112.9, -3583.0}, {270.0, 568.0}}, label: 'Oct 25, 2026 at 00 to Nov 1, 2026 at 00', value: 17.44 to 17.52, in...
+                                                          Other, 0x102799400, {{157.1, -3583.0}, {270.0, 568.0}}, label: 'Nov 1, 2026 at 00 to Nov 8, 2026 at 00', value: 17.68 to 17.76, in...
+                                                    Other, 0x10279a440, {{32.0, -2947.0}, {315.7, 822.3}}, identifier: 'detail-chart-visible-summary'
+                                                      StaticText, 0x102798000, {{32.0, -2947.0}, {273.0, 51.3}}, identifier: 'detail-chart-summary-basis', label: 'Measurements'
+                                                      StaticText, 0x10279bac0, {{34.7, -2879.0}, {170.7, 163.7}}, identifier: 'detail-chart-summary-average', label: 'Avg, 17.7, %'
+                                                        Image, 0x10279b840, {{34.7, -2879.0}, {58.0, 48.0}}, identifier: 'chart.bar.xaxis', label: 'Bar Chart With An X Axis'
+                                                        StaticText, 0x10279b200, {{99.7, -2877.3}, {70.3, 51.3}}, label: 'Avg'
+                                                        StaticText, 0x10279bd40, {{99.7, -2824.0}, {105.7, 58.7}}, label: '17.7'
+                                                        StaticText, 0x10279a940, {{99.7, -2763.3}, {33.0, 48.0}}, label: '%'
+                                                      StaticText, 0x10faac000, {{44.3, -2698.7}, {161.0, 164.3}}, identifier: 'detail-chart-summary-minimum', label: 'Min, 17.5, %'
+                                                        Image, 0x10faac140, {{44.3, -2698.7}, {39.3, 49.0}}, identifier: 'arrow.down', label: 'Down'
+                                                        StaticText, 0x10faac280, {{99.7, -2696.3}, {68.3, 51.3}}, label: 'Min'
+                                                        StaticText, 0x10faac3c0, {{99.7, -2643.0}, {105.7, 58.7}}, label: '17.5'
+                                                        StaticText, 0x10faac500, {{99.7, -2582.3}, {33.0, 48.0}}, label: '%'
+                                                      StaticText, 0x10faac640, {{44.3, -2517.7}, {161.0, 164.3}}, identifier: 'detail-chart-summary-maximum', label: 'Max, 17.8, %'
+                                                        Image, 0x10faac780, {{44.3, -2517.7}, {39.3, 49.0}}, identifier: 'arrow.up', label: 'Up'
+                                                        StaticText, 0x10faac8c0, {{99.7, -2515.3}, {78.0, 51.3}}, label: 'Max'
+                                                        StaticText, 0x10faaca00, {{99.7, -2462.0}, {105.7, 58.7}}, label: '17.8'
+                                                        StaticText, 0x10faacb40, {{99.7, -2401.3}, {33.0, 48.0}}, label: '%'
+                                                      StaticText, 0x10faacc80, {{32.0, -2341.3}, {315.7, 216.7}}, label: '1.6%, Your average is 1.6% higher than last period'
+                                                        StaticText, 0x10faacdc0, {{87.0, -2337.3}, {102.7, 51.3}}, label: '1.6%'
+                                                        Image, 0x10faacf00, {{45.0, -2328.0}, {32.7, 32.7}}, identifier: 'arrow.up.right', label: 'Up-Right Diagonal Arrow'
+                                                        StaticText, 0x10faad040, {{32.0, -2278.0}, {315.7, 153.3}}, label: 'Your average is 1.6% higher than last period'
+                                                    Other, 0x10faad180, {{16.0, -2088.7}, {350.0, 2218.3}}, identifier: 'body-peer-card'
+                                                      StaticText, 0x10faad2c0, {{100.7, -2072.7}, {205.7, 195.7}}, label: 'US DXA survey mean'
+                                                      Image, 0x10faad400, {{38.7, -2064.0}, {47.3, 50.0}}, identifier: 'percent', label: 'Percent Sign'
+                                                      StaticText, 0x10faad540, {{32.0, -1861.0}, {261.0, 208.7}}, label: 'US adults · 1999–2004 · whole-body DXA'
+                                                      StaticText, 0x10faad680, {{32.0, -1640.3}, {209.3, 116.7}}, identifier: 'body-peer-selected-criteria', label: 'Survey age group'
+                                                      StaticText, 0x10faad7c0, {{32.0, -1521.7}, {267.0, 58.7}}, identifier: 'body-peer-selected-criteria', label: '20–39 years'
+                                                      StaticText, 0x10faad900, {{32.0, -1461.0}, {281.0, 58.7}}, identifier: 'body-peer-selected-criteria', label: 'Male (survey)'
+                                                      StaticText, 0x10faada40, {{32.0, -1390.3}, {300.7, 728.7}}, identifier: 'body-fat-method-warning', label: 'Your measurement method may be unknown or different. DXA and bioimpedance estimates can differ; these values are not directly equivalent or a health assessment.'
+                                                      StaticText, 0x10faadb80, {{32.0, -645.0}, {300.0, 240.0}}, identifier: 'body-fat-recorded-value', label: 'Your recorded body fat, 17.8%'
+                                                        Image, 0x10faadcc0, {{38.7, -645.0}, {47.3, 50.0}}, identifier: 'percent', label: 'Percent Sign'
+                                                        StaticText, 0x10faade00, {{32.0, -582.3}, {300.0, 116.7}}, label: 'Your recorded body fat'
+                                                        StaticText, 0x10faadf40, {{32.0, -463.7}, {148.0, 58.7}}, label: '17.8%'
+                                                      StaticText, 0x10faae080, {{32.0, -388.3}, {264.0, 240.0}}, identifier: 'body-fat-survey-mean', label: 'US DXA survey mean, 26.1%'
+                                                        Image, 0x10faae1c0, {{38.7, -388.3}, {47.3, 50.0}}, identifier: 'percent', label: 'Percent Sign'
+                                                        StaticText, 0x10faae300, {{32.0, -325.7}, {264.0, 116.7}}, label: 'US DXA survey mean'
+                                                        StaticText, 0x10faae440, {{32.0, -207.0}, {148.0, 58.7}}, label: '26.1%'
+                                                      Button, 0x10faae580, {{32.0, -132.3}, {290.3, 125.3}}, identifier: 'body-peer-criteria-cta', label: 'Change survey group'
+                                                      Button, 0x10faae6c0, {{32.0, 9.0}, {234.0, 104.7}}, identifier: 'body-peer-source', label: 'View survey source'
+                                                    Other, 0x10faae800, {{15.3, 149.7}, {350.7, 397.7}}, identifier: 'metric-highlights'
+                                                      StaticText, 0x10faae940, {{16.0, 149.7}, {225.3, 58.7}}, label: 'Highlights'
+                                                      Other, 0x10faaea80, {{15.3, 216.3}, {350.7, 136.0}}, identifier: 'metric-highlight-row-high'
+                                                        StaticText, 0x10faaebc0, {{64.0, 228.3}, {143.3, 51.3}}, label: 'Highest'
+                                                        Image, 0x10faaed00, {{15.3, 260.0}, {49.0, 49.0}}, identifier: 'arrow.up.circle.fill', label: 'Arrow Up Circle'
+                                                        StaticText, 0x10faaee40, {{245.3, 258.7}, {108.7, 51.3}}, label: 'Nov 5'
+                                                        StaticText, 0x10faaef80, {{64.0, 281.7}, {129.3, 58.7}}, identifier: 'metric-highlight-value-high', label: '17.8%'
+                                                      Other, 0x10faaf0c0, {{15.3, 360.3}, {350.7, 187.0}}, identifier: 'metric-highlight-row-low'
+                                                        StaticText, 0x10faaf200, {{64.0, 372.3}, {95.7, 102.3}}, label: 'Lowest'
+                                                        Image, 0x10faaf340, {{15.3, 429.3}, {49.0, 49.0}}, identifier: 'arrow.down.circle.fill', label: 'Arrow Down Circle'
+                                                        StaticText, 0x10faaf480, {{225.3, 428.2}, {128.7, 51.3}}, label: 'Oct 30'
+                                                        StaticText, 0x10faaf5c0, {{64.0, 476.7}, {128.7, 58.7}}, identifier: 'metric-highlight-value-low', label: '17.5%'
+                                                    Button, 0x10faaf700, {{16.0, 567.3}, {350.0, 157.3}}, identifier: 'metric-detail-show-all-data', label: 'Show All Data'
+                                                      StaticText, 0x10faaf840, {{32.0, 583.3}, {173.3, 125.3}}, label: 'Show All Data'
+                                                      Image, 0x10faaf980, {{326.7, 627.7}, {20.7, 36.7}}, identifier: 'chevron.right', label: 'Forward'
+                                                  Other, 0x10faafac0, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 9 pages', value: 98%
+                                                    Other, 0x10faafc00, {{460.0, 535.7}, {3.0, 70.3}}
+                                                  Other, 0x10faafd40, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 9 pages', value: 98%
+                                                    Other, 0x10faafe80, {{460.0, 535.7}, {3.0, 70.3}}
+                            Other, 0x10fb84000, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x10fb84140, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x10fb84280, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x10fb843c0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x10fb84500, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x10fb84640, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x10fb84780, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10fb848c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10fb84a00, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x10fb84b40, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x10fb84c80, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x10fb84dc0, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x10fb84f00, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x10fb85040, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10fb85180, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10fb852c0, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x10fb85400, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x10fb85540, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x10fb85680, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x10fb857c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x10fb85900, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10fb85a40, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x10fb85b80, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x10fb85cc0, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today', Selected
+                                            Image, 0x10fb85e00, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x10fb85f40, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x10fb86080, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x10fb861c0, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x10fb86300, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x10fb86440, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x10fb86580, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x10fb866c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10fb86800, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x10fb86940, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x10fb86a80, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x10fb86bc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x10fb86d00, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10fb86e40, {{396.0, 444.0}, {44.0, 58.0}}
+                                          Other, 0x10fb86f80, {{396.0, 444.0}, {44.0, 58.0}}
+                                            Other, 0x10fb870c0, {{396.0, 444.0}, {44.0, 58.0}}
+                                            Other, 0x10fb87200, {{396.0, 444.0}, {44.0, 58.0}}
+                                              Other, 0x10fb87340, {{396.0, 444.0}, {44.0, 58.0}}
+                                                Other, 0x10fb87480, {{396.0, 444.0}, {44.0, 58.0}}
+                                                  Other, 0x10fb875c0, {{396.0, 444.0}, {44.0, 58.0}}
+                                                Other, 0x10fb87700, {{396.0, 444.0}, {44.0, 58.0}}
+                                              Other, 0x10fb87840, {{396.0, 444.0}, {44.0, 58.0}}
+              Other, 0x10fb87980, {{191.0, 322.0}, {0.0, 0.0}}
+      Other, 0x10fb87ac0, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x10fb87c00, {{-466.0, -678.0}, {1398.0, 2034.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Other, 0x10fb87d40, {{8.0, 8.0}, {450.0, 670.0}}
+          Other, 0x10fb87e80, {{8.0, 8.0}, {450.0, 670.0}}
+          Other, 0x10fb8c000, {{8.0, 8.0}, {450.0, 670.0}}
+            Other, 0x10fb8c140, {{8.0, 8.0}, {450.0, 670.0}}
+              Other, 0x10fb8c280, {{8.0, 8.0}, {450.0, 670.0}}
+                Other, 0x10fb8c3c0, {{8.0, 8.0}, {450.0, 670.0}}
+                  Toolbar, 0x10fb8c500, {{8.0, 8.0}, {450.0, 670.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x10fb8c640, {{8.0, 8.0}, {450.0, 670.0}}
+                  NavigationBar, 0x10fb8c780, {{8.0, 24.0}, {450.0, 58.0}}, identifier: 'Survey source'
+                    StaticText, 0x10fb8c8c0, {{24.0, 35.3}, {136.7, 25.3}}, label: 'Survey source'
+                    Other, 0x10fb8ca00, {{303.3, 30.0}, {74.7, 36.0}}
+                      Other, 0x10fb8cb40, {{303.3, 30.0}, {74.7, 36.0}}
+                        Button, 0x10fb8cc80, {{303.3, 30.0}, {74.7, 36.0}}, label: 'Done'
+                  Other, 0x10fb8cdc0, {{8.0, 8.0}, {450.0, 670.0}}
+                    Other, 0x10fb8cf00, {{8.0, 8.0}, {450.0, 670.0}}
+                      Other, 0x10fb8d040, {{8.0, 8.0}, {450.0, 670.0}}
+                        Other, 0x10fb8d180, {{8.0, 8.0}, {450.0, 670.0}}
+                          ScrollView, 0x10fb8d2c0, {{8.0, 8.0}, {450.0, 670.0}}
+                            Other, 0x10fb8d400, {{8.0, 8.0}, {450.0, 670.0}}
+                              Other, 0x10fb8d540, {{8.0, 8.0}, {450.0, 114.0}}
+                            Other, 0x10fb8d680, {{8.0, 8.0}, {450.0, 670.0}}
+                            Other, 0x10fb8d7c0, {{8.0, 82.0}, {374.0, 3396.7}}
+                              StaticText, 0x10fb8d900, {{28.0, 102.0}, {317.3, 249.3}}, label: 'CDC/NCHS · NCHS Series 11 No. 250, Table 3'
+                              StaticText, 0x10fb8da40, {{28.0, 367.3}, {319.0, 993.3}}, label: 'NHANES 1999–2004, US adults, whole-body DXA. Table 3 reports weighted mean percent body fat by broad age group and survey sex. These are not medians, percentiles or health targets.'
+                              StaticText, 0x10fb8db80, {{28.0, 1376.7}, {334.0, 1365.3}}, label: 'DXA and other body-fat methods can give different results. The survey excluded pregnant people and people with certain equipment or recent contrast exposure; missing DXA data were statistically imputed. The mean is not an individual assessment.'
+                              StaticText, 0x10fb8dcc0, {{28.0, 2758.0}, {315.0, 559.3}}, label: 'The CDC/NCHS report is public domain and available free. CDC and NCHS do not endorse this app.'
+                              Link, 0x10fb8de00, {{28.0, 3333.3}, {309.3, 125.3}}, label: 'Open free original report'
+                            Other, 0x10fb8df40, {{425.0, 82.0}, {30.0, 570.0}}, label: 'Vertical scroll bar, 7 pages', value: 0%
+                              Other, 0x10fb8e080, {{452.0, 85.0}, {3.0, 103.0}}
+                            Other, 0x10fb8e1c0, {{425.0, 82.0}, {30.0, 570.0}}, label: 'Vertical scroll bar, 7 pages', value: 0%
+                              Other, 0x10fb8e300, {{452.0, 85.0}, {3.0, 103.0}}
+    Window, 0x10fb8e440, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x10fb8e580, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x10fb8e6c0, {{0.0, 0.0}, {466.0, 678.0}}
+Path to element:
+ →Application, 0x10f8f8280, pid: 12355, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10fb8e800, pid: 12355, label: 'DUNE'
+  }

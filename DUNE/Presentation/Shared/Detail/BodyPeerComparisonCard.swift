@@ -40,6 +40,12 @@ struct BodyPeerComparisonCard: View {
         }
     }
 
+    private var bodyFatDisplay: BodyFatSurveyReference.Display? {
+        guard metric.category == .bodyFat, metric.unit == "%", let criteria else { return nil }
+        // Invalid readings use bodyFatContent's explicit unavailable state.
+        return try? BodyFatSurveyReference.display(recordedPercent: metric.value, criteria: criteria)
+    }
+
     private var comparison: BodyPeerReference.Comparison? {
         guard let referenceMetric, let criteria, let canonicalValue else { return nil }
         // Invalid or out-of-range measurements have an expected unavailable state.
@@ -62,15 +68,22 @@ struct BodyPeerComparisonCard: View {
                     Image(systemName: metric.resolvedIconName)
                         .foregroundStyle(metric.category.themeColor)
                         .accessibilityHidden(true)
-                    Text("US survey mean")
-                        .font(DS.Typography.sectionTitle)
+                    if metric.category == .bodyFat {
+                        Text("US DXA survey mean")
+                            .font(DS.Typography.sectionTitle)
+                    } else {
+                        Text("US survey mean")
+                            .font(DS.Typography.sectionTitle)
+                    }
                     Spacer(minLength: DS.Spacing.sm)
                 }
 
                 switch metric.category {
                 case .weight, .bmi:
                     supportedContent
-                case .bodyFat, .leanBodyMass:
+                case .bodyFat:
+                    bodyFatContent
+                case .leanBodyMass:
                     Text("A comparable survey mean is not available for this measure.")
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -80,7 +93,7 @@ struct BodyPeerComparisonCard: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
-                if referenceMetric != nil {
+                if referenceMetric != nil || metric.category == .bodyFat {
                     Button("View survey source") { isShowingSource = true }
                         .font(.footnote)
                         .frame(minHeight: 44, alignment: .leading)
@@ -126,6 +139,84 @@ struct BodyPeerComparisonCard: View {
         }
         .frame(minHeight: 44, alignment: .leading)
         .accessibilityIdentifier("body-peer-criteria-cta")
+    }
+
+    @ViewBuilder
+    private var bodyFatContent: some View {
+        if let criteria, let bodyFatDisplay {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Text("US adults · 1999–2004 · whole-body DXA")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text("Survey age group")
+                        .foregroundStyle(.secondary)
+                    if dynamicTypeSize.isAccessibilitySize {
+                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                            Text(BodyFatSurveyReference.broadAgeGroup(for: criteria.ageGroup).displayName)
+                            Text(criteria.sex.displayName)
+                        }
+                    } else {
+                        HStack(spacing: DS.Spacing.xs) {
+                            Text(BodyFatSurveyReference.broadAgeGroup(for: criteria.ageGroup).displayName)
+                            Text(verbatim: "·")
+                            Text(criteria.sex.displayName)
+                        }
+                    }
+                }
+                .font(.subheadline)
+                .accessibilityIdentifier("body-peer-selected-criteria")
+                Text("Your measurement method may be unknown or different. DXA and bioimpedance estimates can differ; these values are not directly equivalent or a health assessment.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("body-fat-method-warning")
+                surveyValue(label: "Your recorded body fat", value: bodyFatDisplay.recordedPercent,
+                            identifier: "body-fat-recorded-value")
+                surveyValue(label: "US DXA survey mean", value: bodyFatDisplay.reference.meanPercent,
+                            identifier: "body-fat-survey-mean")
+            }
+        } else if criteria == nil {
+            Text("Choose a survey age group and sex to view the US DXA mean.")
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        } else {
+            Text("This recorded body-fat value is unavailable for the survey display.")
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+
+        Button {
+            draftAgeGroup = criteria?.ageGroup
+            draftSurveySex = criteria?.sex
+            isChoosingCriteria = true
+        } label: {
+            if criteria == nil {
+                Text("Choose survey group")
+            } else {
+                Text("Change survey group")
+            }
+        }
+        .frame(minHeight: 44, alignment: .leading)
+        .accessibilityIdentifier("body-peer-criteria-cta")
+    }
+
+    private func surveyValue(label: LocalizedStringKey, value: Double, identifier: String) -> some View {
+        iconRow {
+            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                Text(label)
+                    .foregroundStyle(.secondary)
+                Text(verbatim: "\(value.formattedWithSeparator(fractionDigits: 1))%")
+                    .fontWeight(.semibold)
+                    .monospacedDigit()
+            }
+            .font(.subheadline)
+            .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier(identifier)
     }
 
     private func comparisonContent(_ comparison: BodyPeerReference.Comparison) -> some View {
@@ -241,24 +332,50 @@ struct BodyPeerComparisonCard: View {
         NavigationStack {
             Form {
                 Section {
-                    Text("This comparison uses US adult survey means from 2021–2023. It does not describe a Korean population or a health target.")
-                        .fixedSize(horizontal: false, vertical: true)
+                    if metric.category == .bodyFat {
+                        Text("This group shows US adult whole-body DXA survey means from 1999–2004. Your selected age maps to the survey's broader age group. It is not a Korean reference or a health target.")
+                            .fixedSize(horizontal: false, vertical: true)
+                    } else {
+                        Text("This comparison uses US adult survey means from 2021–2023. It does not describe a Korean population or a health target.")
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
                 Section("Survey group") {
-                    Picker("Age at measurement", selection: $draftAgeGroup) {
-                        Text("Select age group").tag(nil as BodyPeerReference.AgeGroup?)
-                        ForEach(BodyPeerReference.AgeGroup.allCases, id: \.self) { age in
-                            Text(age.displayName).tag(Optional(age))
+                    if metric.category == .bodyFat && dynamicTypeSize.isAccessibilitySize {
+                        Menu {
+                            Button("Select age group") { draftAgeGroup = nil }
+                            ForEach(BodyPeerReference.AgeGroup.allCases, id: \.self) { age in
+                                Button(age.displayName) { draftAgeGroup = age }
+                            }
+                        } label: {
+                            criteriaMenuLabel("Age at measurement", value: draftAgeGroup?.displayName ?? String(localized: "Select age group"))
                         }
-                    }
-                    .accessibilityIdentifier("body-peer-age-selection")
-                    Picker("Sex in survey table", selection: $draftSurveySex) {
-                        Text("Select survey sex").tag(nil as BodyPeerReference.SurveySex?)
-                        ForEach(BodyPeerReference.SurveySex.allCases, id: \.self) { sex in
-                            Text(sex.displayName).tag(Optional(sex))
+                        .accessibilityIdentifier("body-peer-age-selection")
+                        Menu {
+                            Button("Select survey sex") { draftSurveySex = nil }
+                            ForEach(BodyPeerReference.SurveySex.allCases, id: \.self) { sex in
+                                Button(sex.displayName) { draftSurveySex = sex }
+                            }
+                        } label: {
+                            criteriaMenuLabel("Sex in survey table", value: draftSurveySex?.displayName ?? String(localized: "Select survey sex"))
                         }
+                        .accessibilityIdentifier("body-peer-sex-selection")
+                    } else {
+                        Picker("Age at measurement", selection: $draftAgeGroup) {
+                            Text("Select age group").tag(nil as BodyPeerReference.AgeGroup?)
+                            ForEach(BodyPeerReference.AgeGroup.allCases, id: \.self) { age in
+                                Text(age.displayName).tag(Optional(age))
+                            }
+                        }
+                        .accessibilityIdentifier("body-peer-age-selection")
+                        Picker("Sex in survey table", selection: $draftSurveySex) {
+                            Text("Select survey sex").tag(nil as BodyPeerReference.SurveySex?)
+                            ForEach(BodyPeerReference.SurveySex.allCases, id: \.self) { sex in
+                                Text(sex.displayName).tag(Optional(sex))
+                            }
+                        }
+                        .accessibilityIdentifier("body-peer-sex-selection")
                     }
-                    .accessibilityIdentifier("body-peer-sex-selection")
                 }
                 Section {
                     Text("The survey excludes pregnant women. Choose a group only when that reference applies to the measurement date.")
@@ -286,16 +403,44 @@ struct BodyPeerComparisonCard: View {
         .presentationBackground(DS.Color.surfacePrimary)
     }
 
+    private func criteriaMenuLabel(_ title: LocalizedStringKey, value: String) -> some View {
+        HStack(alignment: .center, spacing: DS.Spacing.sm) {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                Text(title)
+                    .foregroundStyle(.primary)
+                Text(value)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: DS.Spacing.sm)
+            Image(systemName: "chevron.up.chevron.down")
+                .foregroundStyle(DS.Color.textSecondary)
+                .accessibilityHidden(true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
+    }
+
     private var sourceSheet: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                    Text(verbatim: "CDC/NCHS · \(BodyPeerReference.reportIdentifier)")
-                        .font(.headline)
-                    Text("NHANES, August 2021–August 2023. US civilian noninstitutionalized adults; pregnant women excluded. Table 3: measured weight. Table 10: BMI. Values shown are means, not medians or health targets.")
-                    Text("The report is public domain and the original is available free from CDC. CDC and NCHS do not endorse this app.")
-                    Link("Open free original report", destination: BodyPeerReference.sourcePDFURL)
-                        .frame(minHeight: 44, alignment: .leading)
+                    if metric.category == .bodyFat {
+                        Text(verbatim: "CDC/NCHS · \(BodyFatSurveyReference.reportIdentifier)")
+                            .font(.headline)
+                        Text("NHANES 1999–2004, US adults, whole-body DXA. Table 3 reports weighted mean percent body fat by broad age group and survey sex. These are not medians, percentiles or health targets.")
+                        Text("DXA and other body-fat methods can give different results. The survey excluded pregnant people and people with certain equipment or recent contrast exposure; missing DXA data were statistically imputed. The mean is not an individual assessment.")
+                        Text("The CDC/NCHS report is public domain and available free. CDC and NCHS do not endorse this app.")
+                        Link("Open free original report", destination: BodyFatSurveyReference.sourcePDFURL)
+                            .frame(minHeight: 44, alignment: .leading)
+                    } else {
+                        Text(verbatim: "CDC/NCHS · \(BodyPeerReference.reportIdentifier)")
+                            .font(.headline)
+                        Text("NHANES, August 2021–August 2023. US civilian noninstitutionalized adults; pregnant women excluded. Table 3: measured weight. Table 10: BMI. Values shown are means, not medians or health targets.")
+                        Text("The report is public domain and the original is available free from CDC. CDC and NCHS do not endorse this app.")
+                        Link("Open free original report", destination: BodyPeerReference.sourcePDFURL)
+                            .frame(minHeight: 44, alignment: .leading)
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(DS.Spacing.xl)
@@ -331,6 +476,17 @@ private extension BodyPeerReference.SurveySex {
         switch self {
         case .male: String(localized: "Male (survey)")
         case .female: String(localized: "Female (survey)")
+        }
+    }
+}
+
+private extension BodyFatSurveyReference.AgeGroup {
+    var displayName: String {
+        switch self {
+        case .twentyToThirtyNine: String(localized: "20–39 years")
+        case .fortyToFiftyNine: String(localized: "40–59 years")
+        case .sixtyToSeventyNine: String(localized: "60–79 years")
+        case .eightyAndOlder: String(localized: "80 years and older")
         }
     }
 }

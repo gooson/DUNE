@@ -204,25 +204,173 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         }
     }
 
-    func testBodyUnsupportedPeerStates() throws {
-        for key in ["bodyFat", "leanBodyMass"] {
-            var configuration = launchConfiguration
-            configuration.additionalArguments = [
-                "--ui-t06-metric", key, "--ui-disable-animations",
-                "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
-                "-morningBriefingDisabled", "YES"
-            ]
-            launchApp(with: configuration)
-            XCTAssertTrue(app.descendants(matching: .any)["metric-detail-screen-\(key)"].firstMatch.waitForExistence(timeout: 15))
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-card", maxSwipes: 8))
-            XCTAssertTrue(app.staticTexts["A comparable survey mean is not available for this measure."].firstMatch.exists)
-            XCTAssertFalse(app.buttons["body-peer-criteria-cta"].exists,
-                           "\(key) must not offer an unsupported comparison cohort")
-            XCTAssertFalse(app.buttons["body-peer-source"].exists)
-            XCTAssertFalse(app.descendants(matching: .any)["body-peer-reference"].firstMatch.exists)
-            XCTAssertFalse(app.descendants(matching: .any)["body-peer-difference"].firstMatch.exists)
-            attach("T06-\(key)-unsupported-peer")
+    func testLeanBodyMassUnsupportedPeerState() throws {
+        let key = "leanBodyMass"
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", key, "--ui-disable-animations",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        XCTAssertTrue(app.descendants(matching: .any)["metric-detail-screen-\(key)"].firstMatch.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-card", maxSwipes: 8))
+        XCTAssertTrue(app.staticTexts["A comparable survey mean is not available for this measure."].firstMatch.exists)
+        XCTAssertFalse(app.buttons["body-peer-criteria-cta"].exists,
+                       "\(key) must not offer an unsupported comparison cohort")
+        XCTAssertFalse(app.buttons["body-peer-source"].exists)
+        XCTAssertFalse(app.descendants(matching: .any)["body-peer-reference"].firstMatch.exists)
+        XCTAssertFalse(app.descendants(matching: .any)["body-peer-difference"].firstMatch.exists)
+        attach("T06-\(key)-unsupported-peer")
+    }
+
+    func testBodyFatDXASurveyFlow() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", "bodyFat", "--ui-t06-reset-peer-criteria", "--ui-disable-animations",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US", "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        let detail = app.descendants(matching: .any)["metric-detail-screen-bodyFat"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-criteria-cta", maxSwipes: 8))
+        let criteria = app.buttons["body-peer-criteria-cta"].firstMatch
+        XCTAssertTrue(criteria.label.contains("Choose survey group"))
+        XCTAssertFalse(app.descendants(matching: .any)["body-fat-survey-mean"].firstMatch.exists)
+        XCTAssertFalse(app.descendants(matching: .any)["body-peer-difference"].firstMatch.exists)
+        VisualAudit.capture("T06-bodyFat-DXA-unselected")
+
+        criteria.tap()
+        let apply = app.descendants(matching: .any)["body-peer-apply"].firstMatch
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        XCTAssertFalse(apply.isEnabled)
+        VisualAudit.capture("T06-bodyFat-DXA-criteria-empty")
+        app.buttons["Cancel"].firstMatch.tap()
+        XCTAssertFalse(app.descendants(matching: .any)["body-fat-survey-mean"].firstMatch.exists)
+
+        criteria.tap()
+        app.buttons["body-peer-age-selection"].firstMatch.tap()
+        app.buttons["30–39 years"].firstMatch.tap()
+        app.buttons["body-peer-sex-selection"].firstMatch.tap()
+        app.buttons["Male (survey)"].firstMatch.tap()
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        XCTAssertTrue(apply.isEnabled && apply.isHittable && app.windows.firstMatch.frame.contains(apply.frame))
+        apply.tap()
+        let selected = app.descendants(matching: .any)["body-peer-selected-criteria"].firstMatch
+        XCTAssertTrue(selected.waitForExistence(timeout: 5))
+        XCTAssertTrue(selected.label.contains("20–39 years") ||
+                      app.staticTexts["20–39 years"].firstMatch.exists,
+                      "The 30–39 choice must display the survey's actual 20–39 bin")
+        let recorded = app.descendants(matching: .any)["body-fat-recorded-value"].firstMatch
+        let survey = app.descendants(matching: .any)["body-fat-survey-mean"].firstMatch
+        XCTAssertTrue(recorded.label.contains("17.8%"))
+        XCTAssertTrue(survey.label.contains("26.1%"))
+        let warning = app.descendants(matching: .any)["body-fat-method-warning"].firstMatch
+        XCTAssertTrue(warning.label.contains("DXA") && warning.label.contains("bioimpedance"))
+        XCTAssertFalse(app.descendants(matching: .any)["body-peer-difference"].firstMatch.exists)
+        VisualAudit.capture("T06-bodyFat-DXA-selected")
+
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-source", maxSwipes: 8))
+        app.buttons["body-peer-source"].firstMatch.tap()
+        let report = app.staticTexts["CDC/NCHS · NCHS Series 11 No. 250, Table 3"].firstMatch
+        XCTAssertTrue(report.waitForExistence(timeout: 5))
+        let period = app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "NHANES 1999–2004"))
+        XCTAssertTrue(period.firstMatch.exists)
+        XCTAssertTrue(app.links["Open free original report"].firstMatch.exists)
+        VisualAudit.capture("T06-bodyFat-DXA-source")
+        app.buttons["Done"].firstMatch.tap()
+        XCTAssertTrue(survey.waitForExistence(timeout: 5))
+
+        let back = app.descendants(matching: .any)["BackButton"].firstMatch
+        XCTAssertTrue(back.exists && back.isHittable && app.windows.firstMatch.frame.contains(back.frame))
+        back.tap()
+        XCTAssertTrue(detail.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("T06-bodyFat-DXA-real-back")
+
+        configuration.additionalArguments.removeAll { $0 == "--ui-t06-reset-peer-criteria" }
+        launchApp(with: configuration)
+        XCTAssertTrue(app.descendants(matching: .any)["metric-detail-screen-bodyFat"].firstMatch.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.descendants(matching: .any)["body-fat-survey-mean"].firstMatch.waitForExistence(timeout: 5))
+        let reopenedGroup = app.descendants(matching: .any)["body-peer-selected-criteria"].firstMatch
+        XCTAssertTrue(reopenedGroup.label.contains("20–39 years") ||
+                      app.staticTexts["20–39 years"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["body-fat-survey-mean"].firstMatch.label.contains("26.1%"))
+        VisualAudit.capture("T06-bodyFat-DXA-persisted-reopen")
+    }
+
+    func testBodyFatDXAMaximumAccessibility() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments = [
+            "--ui-t06-metric", "bodyFat", "--ui-t06-reset-peer-criteria", "--ui-disable-animations",
+            "--ui-test-style", "dark", "-UIPreferredContentSizeCategoryName",
+            "UICTContentSizeCategoryAccessibilityXXXL", "-AppleLanguages", "(en)",
+            "-AppleLocale", "en_US", "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        let detail = app.scrollViews["metric-detail-screen-bodyFat"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-criteria-cta", maxSwipes: 12))
+        app.buttons["body-peer-criteria-cta"].firstMatch.tap()
+        let apply = app.descendants(matching: .any)["body-peer-apply"].firstMatch
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        XCTAssertFalse(apply.isEnabled)
+        VisualAudit.capture("T06-bodyFat-DXA-MAX-unselected")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-age-selection", maxSwipes: 6))
+        app.buttons["body-peer-age-selection"].firstMatch.tap()
+        app.buttons["30–39 years"].firstMatch.tap()
+        let ageRow = app.descendants(matching: .any)["body-peer-age-selection"].firstMatch
+        XCTAssertTrue(revealWholeDetailRow("body-peer-age-selection",
+                                          in: app.collectionViews.firstMatch, maxSwipes: 8, stepFraction: 0.2))
+        XCTAssertTrue(ageRow.label.contains("30–39 years") && ageRow.isHittable && app.windows.firstMatch.frame.contains(ageRow.frame))
+        VisualAudit.capture("T06-bodyFat-DXA-MAX-age-selected-full-row")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-sex-selection", maxSwipes: 6))
+        app.buttons["body-peer-sex-selection"].firstMatch.tap()
+        app.buttons["Male (survey)"].firstMatch.tap()
+        let sexRow = app.descendants(matching: .any)["body-peer-sex-selection"].firstMatch
+        XCTAssertTrue(revealWholeDetailRow("body-peer-sex-selection",
+                                          in: app.collectionViews.firstMatch, maxSwipes: 8, stepFraction: 0.2))
+        XCTAssertTrue(sexRow.label.contains("Male (survey)") && sexRow.isHittable && app.windows.firstMatch.frame.contains(sexRow.frame))
+        VisualAudit.capture("T06-bodyFat-DXA-MAX-sex-selected-full-row")
+        let criteriaList = app.collectionViews.firstMatch
+        XCTAssertTrue(criteriaList.exists && criteriaList.isHittable &&
+                      app.windows.firstMatch.frame.contains(criteriaList.frame))
+        for _ in 0..<8 {
+            if apply.exists && apply.isHittable && app.windows.firstMatch.frame.contains(apply.frame) {
+                break
+            }
+            criteriaList.swipeDown()
         }
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        XCTAssertTrue(apply.isEnabled && apply.isHittable && app.windows.firstMatch.frame.contains(apply.frame))
+        apply.tap()
+
+        let warning = app.descendants(matching: .any)["body-fat-method-warning"].firstMatch
+        XCTAssertTrue(warning.waitForExistence(timeout: 5))
+        XCTAssertTrue(warning.label.contains("DXA") && warning.label.contains("bioimpedance"))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-fat-method-warning", maxSwipes: 12))
+        VisualAudit.capture("T06-bodyFat-DXA-MAX-method-warning")
+        for (id, value) in [("body-fat-recorded-value", "17.8%"), ("body-fat-survey-mean", "26.1%")] {
+            XCTAssertTrue(revealWholeDetailRow(id, in: detail, maxSwipes: 12), "\(id) must fit the actual viewport")
+            XCTAssertTrue(app.descendants(matching: .any)[id].firstMatch.label.contains(value))
+            VisualAudit.capture("T06-bodyFat-DXA-MAX-\(id)")
+        }
+        XCTAssertTrue(app.staticTexts["20–39 years"].firstMatch.exists)
+        XCTAssertFalse(app.descendants(matching: .any)["body-peer-difference"].firstMatch.exists)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-source", maxSwipes: 10))
+        app.buttons["body-peer-source"].firstMatch.tap()
+        let report = app.staticTexts["CDC/NCHS · NCHS Series 11 No. 250, Table 3"].firstMatch
+        XCTAssertTrue(report.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.links["Open free original report"].firstMatch.exists)
+        VisualAudit.capture("T06-bodyFat-DXA-MAX-source")
+        app.buttons["Done"].firstMatch.tap()
+        XCTAssertTrue(app.descendants(matching: .any)["body-fat-survey-mean"].firstMatch.waitForExistence(timeout: 5))
+        let back = app.descendants(matching: .any)["BackButton"].firstMatch
+        XCTAssertTrue(back.exists && back.isHittable && app.windows.firstMatch.frame.contains(back.frame))
+        back.tap()
+        XCTAssertTrue(detail.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("T06-bodyFat-DXA-MAX-real-back")
     }
 
     func testHRVDarkDetailReadability() throws {
@@ -335,7 +483,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
     /// Scrolls along the gutter so the chart cannot intercept the gesture.
     /// Checks a single row against the real viewport, not the oversized hero/card frame.
     private func revealWholeDetailRow(
-        _ identifier: String, in scroll: XCUIElement, maxSwipes: Int = 10
+        _ identifier: String, in scroll: XCUIElement, maxSwipes: Int = 10, stepFraction: CGFloat = 0.5
     ) -> Bool {
         let row = app.descendants(matching: .any)[identifier].firstMatch
         guard scroll.waitForExistence(timeout: 5), row.waitForExistence(timeout: 5) else { return false }
@@ -344,8 +492,9 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
             guard !viewport.isNull else { return false }
             if viewport.contains(row.frame) { return true }
             let moveUp = row.frame.midY > viewport.midY
-            let startY: CGFloat = moveUp ? 0.75 : 0.25
-            let endY: CGFloat = moveUp ? 0.25 : 0.75
+            let halfStep = stepFraction / 2
+            let startY: CGFloat = moveUp ? 0.5 + halfStep : 0.5 - halfStep
+            let endY: CGFloat = moveUp ? 0.5 - halfStep : 0.5 + halfStep
             scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: startY))
                 .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
                     withNormalizedOffset: CGVector(dx: 0.05, dy: endY)
