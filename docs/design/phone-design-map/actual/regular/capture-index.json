@@ -1408,13 +1408,29 @@
       "source_json": "../../../full-redesign-map/review/briefing-condition-readability-2026-11-03/evidence.json",
       "source_record": "selected.regular.T04",
       "capture_scope": "2026-11-03 targeted readability and equal-height fix; default text only; Phone max text supplemental"
+    },
+    "A21": {
+      "row_id": "A21",
+      "file": "A21.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditRewardExplanation()",
+      "action": "Reward info sheet",
+      "source_revision": "9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef",
+      "capture_kind": "xctest",
+      "image": "30DFF5F0-4838-41AB-9BCA-99C861F2D7A0.png",
+      "screen": "screen-0-1320x2868-Reward info sheet_0_4EAC0A8C-8E3C-42BC-BE01-C6B726F66763.png",
+      "timestamp": 1793791212.197,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "EA8C68CF-3513-4354-B3CD-F4E0EB244A7C",
+      "image_sha256": "a12ae584312146a310cdd8074e534a3ab79e3156586ae534c707f979406e7187",
+      "ax_sha256": "3c4b9f9229942fdd3cee3dccd033ace173099201dabd53a563705e285eac0d5a",
+      "evidence": "activity-personal-records-reward-info-sheet"
     }
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "52dfe9b909c48c183d6412efdce8a16d2e54df0e",
+  "last_refresh_revision": "9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef",
   "last_refresh_screens": [
-    "A20"
+    "A21"
   ],
-  "last_refresh_note": "Fresh corrected-source A20 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Fresh corrected-source A21 captures; per-row source and device provenance retained."
 }

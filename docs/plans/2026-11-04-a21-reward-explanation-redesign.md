@@ -1,62 +1,53 @@
-# A21 Reward Progress explanation: private integration plan
+---
+tags: [a21, rewards, swiftui, native-sheet, dynamic-type]
+date: 2026-11-04
+category: plan
+status: implemented
+---
 
-Status: active A21 plan on actual merged A20 main `eb3bfffdce166f5e9b5c1bf36b5f0159fcf6438d`. Original RewardProgressSection still has its exact reviewed legacy hash. `source.patch` and `catalog.patch` both pass read-only `git apply --check` at this provisional source. No compile, native capture, or test pass is claimed.
+# A21 보상 설명 개편과 실제 화면 검증
 
-## Actual owner and surface
+앱 검증 소스는 `9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef`다. 원본 iPhone 1/1과 개편 선택 검사 6/6을 구분해 보존했다. [실제 전후 비교](../design/full-redesign-map/review/a21-reward-help-native-2026-11-04/index.html)에는 단일 원본 iPhone, 네 기기·자세의 개편 화면, 큰 글씨와 알림 진입 증거를 담았다.
 
-`RewardProgressSection` is instantiated only inside `PersonalRecordsDetailView` when `rewardSummary.totalPoints > 0 || badgeCount > 0`. The detail has two production entries: Activity's personal-records destination and `NotificationPersonalRecordsPushView` after its load state. The existing info button `activity-personal-records-reward-info` opens the private `rewardInfoSheet`. Keep that real path, the existing `ScrollView`, `.presentationDetents([.medium])`, visible native drag indicator, and all four sections/icons (star, medal, trophy, flag). The main reward progress, badge trophy case, history, data and navigation are outside A21.
+## 목적과 영향 파일
 
-## Source proposal
+기존 네 설명을 제목 히어로와 아이콘별 불투명 카드로 강조한다. 별·메달·트로피·깃발, 기존 정보 버튼, 중간 높이 시스템 시트와 스크롤·닫기를 보존한다. 실제 보상 경로에 맞게 설명만 고치며 점수·배지 계산과 저장은 유지한다.
 
-Use the existing `ScoreHeroPalette` to put the exact “How Rewards Work” title on an opaque dark hero card. Put the four explanations on opaque `DS.Color.cardBackground` cards with intrinsically padded tinted icon chips and full-width description paragraphs, intrinsic wrapping, a 680-point maximum content width and no fixed body height. Add one sheet identifier for scoped UI queries. Keep all four section titles, original icon names, and the supported Badges description. Correct the Levels, Personal Records, and Milestones sentences: newly crossed activity milestones and new cardio PR types award points; strength records remain visible but do not enter that PR award path; badge count thresholds use unique workout days. Add the three corrected literal keys with manual en/ko/ja values; retain the old catalog entries as historical data pending normal catalog policy. Do not add levels, points, badges, values, thresholds, or animations to this explanation.
+| 파일 | 역할 |
+|---|---|
+| `DUNE/Presentation/Activity/PersonalRecords/Components/RewardProgressSection.swift` | 기존 private 설명 시트, 공통 팔레트·카드·제목 접근성 |
+| `Shared/Resources/Localizable.xcstrings` | 수정한 설명 세 문장의 수동 en/ko/ja 번역 |
+| `DUNEUITests/Full/ActivityExerciseRegressionTests.swift` | Activity 진입, 전체 본문 읽기, 기본·최대 글씨, 실제 닫기·복귀 |
+| `DUNEUITests/Full/DesignMapAdditionalRoutesTests.swift` | 실제 알림 Personal Records 소비자의 열기·닫기·뒤로 복귀 |
+| `docs/design/phone-design-map/` | 실제 inline 시트 A21 등록, 네 기기 맵·보드 갱신 |
+| `docs/design/layout-map/`, `docs/design/theme-map/` | 배치·표현 계약과 실제 결과 연결 |
 
-## Bounded validation after integration
+## 구현 단계와 기준
 
-1. Rebase on actual merged A20 source. Review the final source/catalog delta and run `swift scripts/format-xcstrings.swift` followed by `--check --check-manual`; verify the literal and translations. Compile the changed iOS target with the standard owned process budget. Keep existing source/persistence receipts rather than rerun unrelated tests.
-2. Extend a real seeded Personal Records route: open the reward info button, retain a canonical `VisualAudit.capture("Reward info sheet")` immediately after the sheet appears, then inspect all four exact headings and selected full body text in a bounded scroll. Prove the last Milestones paragraph reaches the viewport; require one-frame containment for short leaves with two reading steps of clearance; for near-viewport or taller text, use overlapping bounded18% window drags and capture top/bottom with exact labels, horizontal containment and positive overlap progress, rather than requiring pixel-perfect alignment from ineffective fine gestures. Check original four icons visually, native medium grabber, and a real drag dismissal back to Personal Records. Do not synthesize reward events or assert an invented badge count.
-3. First run one original-source phone baseline before product changes, then remove that one-use baseline method after its archive/seal and device cleanup. After source integration run six cases in four serial runs: closed Duo Activity normal/MAX, open Duo Activity normal, phone Activity normal plus the distinct Notification Personal Records wrapper, and iPad Activity normal. The actual notification XCTest class is DesignMapNotificationDetailTests. Medium-only sheet and real native grabber/return are required; conditional reward eligibility must be observed, never synthesized. Preserve source-pinned raw PNG/AX and all historical results; publish fresh map captures only after independent visual review. The iPad and Duo sheet dimensions, dark contrast, text wrap, scroll reachability and dismissal are runtime questions.
-4. Create/update A21 layout and theme map proposals before app integration. After native validation, update the actual phone design map for affected states, compare against the preserved original screen, and document evidence limits. Then scoped source/native/stage/publication reviews and ordinary PR merge.
+1. 실제 머지된 A20 기반에서 원본 `495d93be` iPhone을 먼저 촬영하고 1/1 SDK·PNG·AX를 보존했다. 일회성 원본 테스트는 보존·기기 정리 뒤 제거했다.
+2. `ScoreHeroPalette`와 기존 네 SF Symbol을 재사용했다. 본문은 카드 전체 폭에서 자연스럽게 줄바꿈하고 최대 콘텐츠 폭680pt를 둔다. 고정 본문 높이나 글자 축소를 추가하지 않았다.
+3. 새 활동 마일스톤과 새 유산소 PR의 포인트, 레벨당200점, 근력 최고 기록의 표시, 운동일 기준 배지를 설명한다. 원래 계산 경로의 마일스톤40점·유산소 PR60점·레벨200점은 바꾸지 않았다.
+4. 실제 두 소비자(Activity와 알림) 및 iPhone·iPad·Duo 접힘·펼침을 확인했다. 큰 글씨는 정확한 전체 라벨·폭·겹치는 읽기 구간·앞/끝 도달·양의 진행을 검사한다. 진행 제스처는 실제 보이는 텍스트 구간 안에서 시작한다. 기본 시스템 손잡이로 닫고 원래 화면 복귀를 확인한다.
+5. 누락됐던 실제 inline A21을 등록해 맵은110→111행이 됐다. 기존 모든 행과 Activity20개 타일의 픽셀은 보존했다. 네 A21 이미지를 새로 만들고 기존15개 출력만 갱신했다.
 
-## Source facts and constraints
+## 핵심 검증과 제한
 
-`PersonalRecordStore` awards 40 points per newly crossed activity milestone tier and 60 per distinct new PR type, calculates level as `totalPoints / 200 + 1`, and separately unlocks badges. `ActivityViewModel` submits new PR types on this award path only for cardio candidates; strength records are merged into display records separately. `WorkoutBadgeDefinition` has count-based badge rules, and the statistic called `totalWorkoutCount` is assembled from unique local workout days rather than sessions; these badge thresholds are not point awards. `RewardLevelTier.levelProgress` also uses 200 points per level. The revised copy describes these facts without promising points for every workout or strength PR. Keep `.claude/**`, domain model, store, reward calculations, and original section icons unchanged.
+| 범위 | 실제 결과 |
+|---|---|
+| 원본 iPhone `495d93be` | 1/1, 개편 검사와 별도 |
+| 개편 Duo 접힘 | 기본·어두운 최대 글씨2/2 |
+| 개편 Duo 펼침 | 기본1/1, 180°/LCD-1 readback |
+| 개편 iPhone | Activity와 실제 알림 소비자2/2 |
+| 개편 iPad mini (A20 Pro) | 기본1/1, 실제 설치된 기기형·SDK 확인 |
+| 합계 | 개편6/6, 실패·스킵0, 사용 후 소유 기기0 |
 
-## Original baseline and source contract
+11개 앱·테스트·실행기 소스 바이트는 cc0 이후 문서 체크포인트에서도 동일하다. cc0의 iOS 빌드·iOS/Watch 단위 CI와 카탈로그 포맷·수동 번역 검증을 해당 범위에서 재사용했다. 로컬 UI는 위 선택 검사만 실행했다. 실제 캡처는 영어이며 한국어·일본어는 카탈로그·소스 검토 범위다. VoiceOver 음성, 모든 언어·밝기 조합을 관찰했다고 주장하지 않는다.
 
-No matching historical A21 help-sheet capture exists in the four earlier maps; A10 is its parent and cannot be substituted. Capture the real original help once on a normal owned iPhone with exact original title/four headings before app changes. Preserve the original source commit, manifest, SDK/PNG/AX and label it as a single-phone historical reference for later device comparisons, never as fabricated iPad/Duo-before evidence. After successful archival and owned device deletion, reverse the exact one-use baseline patch before applying the after-source tests. Failed records remain; the original capture is never rerun on redesigned source.
+## 실패 보존과 해결
 
-Affected app file: `DUNE/Presentation/Activity/PersonalRecords/Components/RewardProgressSection.swift`; catalog: `Shared/Resources/Localizable.xcstrings`; tests: `DUNEUITests/Full/ActivityExerciseRegressionTests.swift` and `DUNEUITests/Full/DesignMapAdditionalRoutesTests.swift`; read-only consumers: ActivityView, ActivityViewModel, NotificationPersonalRecordsPushView and PersonalRecordsDetailView; target A21 layout/theme/actual maps and Compound. No domain/store/reward computation changes.
+- `d87a163a`: 2개 중 기본1통과·MAX1실패. 거의 화면 높이인 Badges 본문에 작은 이동이 효과가 없었다. 원본 SDK1820개 파일을 그대로 보존했다.
+- `400c4e8f`: 2개 중 기본1통과·MAX1실패. Levels 본문이29pt만 보였는데 제스처 전후 프레임이 같았다. SDK1598개 파일을 보존하고, 양의 진행 판정을 유지한 채 드래그 시작점을 보이는 본문 안으로 옮겼다.
+- `cc0cbfb6`: 호스트·게스트의 `errno28` 캡처 오류다. SDK에 Info.plist가 없고 최종 관찰13개 파일만 남았으므로 검사 집계를 추정하지 않았다. 미사용 캐시 정리 후 같은 논리 검사 ID의 조건부 두 번째 실행으로 확인했다. 원래 실패 두 번과 추가 실행 사용 기록은 유지했다.
+- `9208e68c` iPad 준비: 존재하지 않는 A21 Pro 기기형으로 생성 전 실패했다(기기0·UI0). 설치 SDK의 A20 Pro 식별자를 확인하고 private iPad 전용 복사본·새 보존 접두사로 남은1개만 실행했다. 이미 통과한5개는 재실행하지 않았다.
 
-Reuse the reviewed native producers with fresh eleven-source and six-producer manifests. Source/capacity preflight is independently reviewed; before every fresh device creation require three consecutive free-space samples >=3GiB two seconds apart within60seconds, with exclusive fsynced receipts. Original setup/native guards, one owned simulator, worktree locks and UI1200/pipeline1250 deadlines remain. Capture readiness is not a UI pass. No broad local suite or irrelevant locale/device run; static manual en/ko/ja source checks and the six actual after cases provide scoped coverage.
-
-Research: existing reward-system brainstorm/solution and A17 actual native sheet reading; source traces retain40points per newly crossed activity milestone tier,60per new cardio PR type and200points per level, while badge workout count is unique local workout days. Existing source copy review and independent test/producer reviews are private preparation until their exact final integration is checked. The before baseline and six after cases are unrun at this plan stage.
-
-## Original capture completed and implementation integration
-
-The real original phone baseline passed1/1 at source `495d93bedc433e6184f6ff6d4e291210fc3f1379`, with the legacy RewardProgressSection exacthash `8bd04e8051acd22169f37573b3f270501139b4684d147f62cc3a20c97ace26cb`; its complete SDK/PNG/AX was archived and sealed before source edits, then the owned phone was deleted. The one-use baseline method was reversed before the six-case after tests were applied. No other-device original capture is claimed.
-
-The app hero/cards, three manually localized corrected bodies and Activity/Notification tests are now integrated; new title/section header accessibility traits supplement the reviewed proposal. Swift parse and catalog formatting/manual checks passed; the redesigned app target and six actual after cases remain unverified at this integration checkpoint.
-
-A21 was absent from all four existing actual capture indexes/images. The reviewed documentation catalog now registers the unique real `RewardProgressSection.rewardInfoSheet` property and collector ID, adding one row after A20:110→111, all existing row metadata/order exactly preserved. Actual map publication will have15 existing output paths and4 newly created A21 image paths. A new activity tile/header count may change board geometry; prove all existing tiles unchanged and honestly audit the append/header change instead of assuming an old A21 tile exists. Renderer files: `docs/design/phone-design-map/screen-catalog.py`, `build-phone-design-maps.py`, `collect-real-captures.py`. No full-map render occurred at this checkpoint.
-
-## First after-source execution and reader correction
-
-At source `d87a163af653f8632d8feb533e89fa2bc15ac586` the redesigned closed Duo pair compiled and executed2cases: normal passed124.175s, MAX failed190.977s at the Badges body containment assertion. The full failed SDK copy was byte-verified against all1820 original files with clean-source provenance, and its original receipt remains one failed attempt. No other after profile was dispatched; the owned Duo was deleted only after archival. This is separate from original495d phone baseline1/1.
-
-Actual failure AX: unobscured viewport y300–670, height370; exact body y315.3–672.6, height357.3. Twenty-nine repeated−6.7pt fine drags did not produce a fitting final frame. No alternating overshoot, app clipping defect, or exact OS drag threshold is established. An8.95pt-centering hypothesis was rejected before execution. The independently reviewed test-only correction uses already exercised18% viewport steps. Whole-frame containment stays mandatory for leaves with two full steps of clearance; near-fit/tall leaves retain exact label/width, visible start/end, nonempty overlapping intervals and strictly positive read progress. A stationary gesture still fails. Fonts, application, native medium-only detent, controls, timeouts and30-step caps stay unchanged.
-
-Use the original closed check ID with standard second-attempt cause/remediation/immutable evidence, not a new ID or a reset failure count. The shared reader affects normal and MAX, so verify the original corrected pair once, then only never-executed open/phone/iPad profiles after genuine sealed2/2. Source-bound final6 remains pending; no corrected pass is inferred from review.
-
-## Corrected reader execution and gesture-origin hypothesis
-
-At source `400c4e8fb1a51f31ddaba1464eb4f98dbc9e2b07`, the second closed Duo pair executed2: normal passed150.401s; MAX failed168.496s. All1598 raw SDK files were byte-verified with clean-source provenance before edits and device deletion. The original logical receipt retains both failed attempts. MAX failed earlier on the Levels body, not the prior Badges body: exact leaf y641–1100.3 intersects unobscured y300–670 in29pt. The −66.6pt drag started y485 outside the visible text; captured AX stayed identical, and the unchanged strict progress guard correctly failed29>30. This does not establish the prior Badges issue resolved and is not a terminal-one-point tolerance error.
-
-The reviewed test-only hypothesis anchors only the overlap-progress drag at the actual visible text interval midpoint (y655.5 in the observed case), preserving18% displacement, complete exact labels, width fit, top/bottom coverage, interval overlap and positive progress,30-step caps, native detent/dismiss and all budgets. No app or executor source changes. A stationary gesture still fails. The user’s standing autonomous corrective-validation authorization applies to one audited corrective execution; preserve both prior failures and consumed marker, use the standard native runner, and do not treat the review as runtime success. Other screens are deferred until2026-11-04 20:00 Asia/Seoul; finish onlyA21 now.
-
-## Evening resumption after capacity recovery
-
-The actual `cc0cbfb6` attempt failed in the capture infrastructure with host and guest `errno28` while creating files. The MAX log records an initial capture failure107.068s; the normal selector started but no final result or aggregate was produced. The SDK lacks Info.plist; all13 final observed raw files were preserved byte-for-byte and explicitly labeled incomplete. This run is not evidence that the corrected reading gesture passed or failed. The original two failed closed attempts and the one consumed corrective execution remain intact.
-
-The user-authorized cleanup removed19 inactive cache directories (6.65GiB logical) without deleting source, test logs or the current UI cache. Evening recovery now has three >=3GiB observations2seconds apart, an empty owned simulator registry and no active A21 runner. Reuse the unchanged eleven app/test/executor pins and six native producers; do not rebuild unchanged targets or rerun unrelated checks. iOS build and iOS/Watch unit CI atcc0 all passed. This documentation-only checkpoint preserves the previous creation/run receipts while giving a fresh source-bound namespace for the recovery device and captures; it does not reset logical check IDs or failures.
-
-Resume the same corrective logical ID `a21-duo-closed-visible-interval-origin-once` once through the standard conditional-second-attempt API with capacity cause, concrete remediation and immutable evidence. Its prior errno28 attempt remains failed; the original closed ID retains both earlier failures. Preserve bounded tests, native ownership and capture deadlines. Run closednormal+MAX first; only after sealed2/2 continue the never-completed open/phone/notification/iPad cases. Complete comparison publication, reviews and merge before moving to the next screen. After each merge, confirm worktree ownership and whether it is finished, preserve verification evidence, then archive only unused authorized worktrees/caches; app-protected other-task worktrees remain intact.
+세 실패 이력과 기기 준비 실패는 [발행 증거](../design/full-redesign-map/review/a21-reward-help-native-2026-11-04/evidence.json)에 구분했다. 독립 소스·네이티브·발행 검토의 미해결 P1/P2/P3은0이다. 머지 후에도 재사용 중인 작업트리는 유지하고, 사용이 끝난 소유 리소스만 확인·정리한다. 다른 작업 소유로 앱이 보호하는 워크트리는 보존한다.

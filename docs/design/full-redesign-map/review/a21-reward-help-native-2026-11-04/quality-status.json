@@ -1,0 +1,39 @@
+{
+  "status": "passed independent source/native/stage review",
+  "source_head": "9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef",
+  "reviewed_stage_inventory_sha256": "bd50d031bb73e3e4f6e2194de2bc2ae7fefa89256be99a41b42ecafe29476319",
+  "native_current": {
+    "executed": 6,
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0
+  },
+  "original_baseline": {
+    "source": "495d93bedc433e6184f6ff6d4e291210fc3f1379",
+    "executed": 1,
+    "passed": 1,
+    "scope": "single iPhone original reference only"
+  },
+  "open_findings": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0
+  },
+  "reviews": {
+    "source-review.md": {
+      "path": "reviews/source-review.md",
+      "sha256": "083b7cb0b5d9af879a9db52834b986685ea7d5e8fb5ca1a2249d43ef2f273730"
+    },
+    "native-quality.md": {
+      "path": "reviews/native-quality.md",
+      "sha256": "8e0331814288c2bc24b8f97bc1708c20de9e7f36dcf83502e34b70cb0212c0c0"
+    },
+    "stage-publication.md": {
+      "path": "reviews/stage-publication.md",
+      "sha256": "56db6ddedc28ca69f4f5509a0d827edb88e4892e90540ba2501e8ddcf74d0a67"
+    }
+  },
+  "scope": "A21 selected English native cases; four device/pose profiles, closed dark maximum text and actual notification entry. KO/JA catalog statically reviewed.",
+  "historical_failures": "d87 and400c each2executed1passed1failed; cc0incomplete13rawfiles/noaggregate; unsupported A21 iPad setup0UI/0device retained.",
+  "owned_simulators_after_validation": 0
+}

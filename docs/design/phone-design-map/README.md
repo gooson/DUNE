@@ -293,3 +293,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 [A19 native review](../full-redesign-map/review/a19-exercise-mix-explanation-native-2026-11-04/index.html)
 
 [A20 추천 장비 설정 실제 비교](../full-redesign-map/review/a20-recommendation-equipment-native-2026-11-04/index.html) · 최종 5/5 검증과 독립 소스·화면·보존 검토 완료. 이전 SDK 실패와 UI 실행 전 중단은 별도 기록.
+
+[A21 native review](../full-redesign-map/review/a21-reward-help-native-2026-11-04/index.html)

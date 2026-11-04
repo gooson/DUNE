@@ -268,3 +268,5 @@ A05 네이티브 소스는 원래 `ActivityStat.iconColor`를 불투명 히어�
 2026-11-03 [A14 근육별 피로 설명](themes/dune-fatigue-explanation-a14.html)은 실제 값과 14일 기여 행을 위한 시안이며 네이티브 캡처가 아니다. [배치 계약](../layout-map/activity-fatigue-explanation-a14.html)을 따른다.
 
 A15 피로도 계산 설명 [시안](themes/dune-fatigue-algorithm-a15.html)은 실제 앱 캡처가 아니다.
+
+A21 보상 설명은 [배치 계약](../layout-map/activity-reward-explanation-a21.html)과 [실제 전후 비교](../full-redesign-map/review/a21-reward-help-native-2026-11-04/index.html)에 연결했다. 기존 네 아이콘·계산·중간 높이 시스템 시트를 유지하고 개편 선택 검사6/6, 원본 iPhone1/1을 각각 검증했다. 방향 HTML과 실제 캡처를 구분한다.

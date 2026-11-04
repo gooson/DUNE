@@ -1455,13 +1455,29 @@
       "original_run_failed_tests": 1,
       "fixture_data_note": "DEBUG test fixture data; not real user health records.",
       "xcresult": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.deriveddata/ui-tests/Logs/Test/Test-DUNEUITests-2026.10.30_06-30-40-+0900.xcresult"
+    },
+    "A21": {
+      "row_id": "A21",
+      "file": "A21.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditRewardExplanation()",
+      "action": "Reward info sheet",
+      "source_revision": "9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef",
+      "capture_kind": "host",
+      "image": "003-2007x2853.png",
+      "screen": "003-2007x2853.png",
+      "timestamp": 1793790971.619,
+      "timestamp_kind": "paired manifest AX timestamp; host PNG capture time not independently timestamped",
+      "device_uid": "87604E03-DD7A-4B04-8816-AE5CB950A322",
+      "image_sha256": "56d463e8dd4cd34849092911da784f7b6e3e0d4fb1d766ace1dabfcd3fbb1af9",
+      "ax_sha256": "e7444eee34822a8c432fa00414200d1a0c64b0773e83dd60d7eb97173a6b0d0a",
+      "evidence": "activity-personal-records-reward-info-sheet"
     }
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "52dfe9b909c48c183d6412efdce8a16d2e54df0e",
+  "last_refresh_revision": "9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef",
   "last_refresh_screens": [
-    "A20"
+    "A21"
   ],
-  "last_refresh_note": "Fresh corrected-source A20 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Fresh corrected-source A21 captures; per-row source and device provenance retained."
 }
