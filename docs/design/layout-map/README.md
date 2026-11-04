@@ -188,4 +188,4 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 
 - [A19 운동 구성 설명](activity-exercise-mix-explanation-a19.html): 기존 시트·아이콘을 보존한 구현 기준과 검토 완료된 실제 캡처 비교.
 
-- [A20 추천 장비 설정](activity-recommendation-equipment-a20.html): 기존 장비 아이콘·토글·상황별 저장을 보존하는 구현 기준. 실제 캡처 검증 대기.
+- [A20 추천 장비 설정](activity-recommendation-equipment-a20.html): 기존 SVG·토글·저장을 보존한 네이티브 개편. 4개 기기 상태와 큰 글씨 5/5 검증 및 실제 비교 캡처 검토 완료.

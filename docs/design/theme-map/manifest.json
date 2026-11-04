@@ -698,7 +698,7 @@
       "name": "추천 장비 설정",
       "title": "A20 · Recommendation Equipment",
       "file": "dune-recommendation-equipment-a20.html",
-      "detail": "상황별 장비 히어로와 기존 SVG·토글·저장을 보존하는 구현 제안. 실제 캡처 대기.",
+      "detail": "기존 SVG·네이티브 토글·상황별 저장을 보존한 실제 개편. 4개 기기 상태와 큰 글씨 5/5 검증 완료.",
       "colors": [
         "#352e29",
         "#b2854c",
@@ -708,7 +708,8 @@
       "motion": "기존 네이티브 List와 Toggle",
       "implementation": {
         "layout": "../layout-map/activity-recommendation-equipment-a20.html",
-        "status": "native-implementation-in-progress"
+        "status": "native-implemented-scoped-captures-reviewed",
+        "actual_captures": "../full-redesign-map/review/a20-recommendation-equipment-native-2026-11-04/index.html"
       }
     }
   ]
