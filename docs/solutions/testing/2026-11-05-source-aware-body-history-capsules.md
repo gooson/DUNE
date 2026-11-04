@@ -27,7 +27,7 @@ status: implemented
 
 - 완료: Duo 접힘 3건, 펼침 1건, 일반 iPhone 1건, iPad 1건의 현행 소스 통과 및 선택 캡처 검토.
 - 게시: 네 기기·자세의 일반 Edit 목록을 각 H06 카드에 연결하고 Add·MAX Edit 보조 증거는 갤러리에서 구분한다.
-- 미검증: 다른 언어, 어두운 외관, VoiceOver 음성, 실사용 HealthKit 쓰기, Duo 펼침의 MAX/Add.
+- 미검증: 다른 언어, 어두운 외관, VoiceOver 음성, 실사용 HealthKit 쓰기, Duo 펼침과 일반 iPhone·iPad의 MAX/Add.
 
 ## Lessons Learned
 
