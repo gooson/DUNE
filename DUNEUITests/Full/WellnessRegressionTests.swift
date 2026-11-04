@@ -199,7 +199,8 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("H04 MAX second Weight plot lower")
 
         let month = app.descendants(matching: .any)["metric-comparison-period-M"].firstMatch
-        XCTAssertTrue(revealComparisonControl("metric-comparison-period-M", in: comparisonScroll))
+        XCTAssertTrue(revealComparisonMonthAfterPlots(in: comparisonScroll),
+                      "The unique Month action must return fully into the viewport after both MAX plots")
         let monthViewport = comparisonScroll.frame.intersection(app.windows.firstMatch.frame)
         XCTAssertTrue(monthViewport.contains(month.frame), "The entire month action should fit the scroll viewport")
         XCTAssertTrue(month.isEnabled && month.isHittable)
@@ -210,6 +211,11 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertEqual(XCTWaiter.wait(for: [monthRange], timeout: 5), .completed)
         XCTAssertEqual(app.staticTexts.matching(identifier: "comparison-date-range").count, 1)
         XCTAssertTrue(month.isSelected, "The shared month period must show its selected state at MAX")
+        XCTAssertTrue(revealComparisonControl(sharedDate, in: comparisonScroll),
+                      "The updated shared month range must be fully visible")
+        let sharedDateViewport = comparisonScroll.frame.intersection(app.windows.firstMatch.frame)
+        XCTAssertTrue(sharedDateViewport.contains(sharedDate.frame),
+                      "The entire shared month range should fit the scroll viewport")
         VisualAudit.capture("H04 MAX shared month")
         let done = app.descendants(matching: .any)["metric-comparison-done"].firstMatch
         XCTAssertTrue(done.waitForExistence(timeout: 5))
@@ -218,6 +224,34 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(firstPane.waitForNonExistence(timeout: 5))
         XCTAssertTrue(app.buttons[AXID.wellnessToolbarAdd].waitForExistence(timeout: 5))
         VisualAudit.capture("H04 MAX Done returns Wellness")
+    }
+
+    private func revealComparisonMonthAfterPlots(in scroll: XCUIElement) -> Bool {
+        let matches = app.descendants(matching: .any).matching(identifier: "metric-comparison-period-M")
+        let month = matches.firstMatch
+        guard month.waitForExistence(timeout: 5), matches.count == 1 else { return false }
+        for attempt in 0...12 {
+            guard matches.count == 1 else { return false }
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+            guard !viewport.isNull && !viewport.isEmpty else { return false }
+            let frame = month.frame
+            guard frame.width > 0 && frame.height > 0 else { return false }
+            if viewport.contains(frame) && month.isEnabled && month.isHittable { return true }
+            guard attempt < 12 else { break }
+            let delta = frame.midY - viewport.midY
+            guard abs(delta) >= 1 else { return false }
+            let travel = min(max(abs(delta), viewport.height * 0.20), viewport.height * 0.70)
+            let direction: CGFloat = delta < 0 ? 1 : -1
+            let origin = scroll.coordinate(withNormalizedOffset: .zero)
+            let x = viewport.midX - scroll.frame.minX
+            let startY = viewport.midY - direction * travel / 2 - scroll.frame.minY
+            let endY = viewport.midY + direction * travel / 2 - scroll.frame.minY
+            origin.withOffset(CGVector(dx: x, dy: startY)).press(
+                forDuration: 0.05,
+                thenDragTo: origin.withOffset(CGVector(dx: x, dy: endY))
+            )
+        }
+        return false
     }
 
     private func tapComparisonMenuOption(_ identifier: String) -> Bool {
