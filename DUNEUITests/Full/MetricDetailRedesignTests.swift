@@ -320,14 +320,16 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
         app.buttons["body-peer-age-selection"].firstMatch.tap()
         app.buttons["30–39 years"].firstMatch.tap()
         let ageRow = app.descendants(matching: .any)["body-peer-age-selection"].firstMatch
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-age-selection", maxSwipes: 6))
+        XCTAssertTrue(revealWholeDetailRow("body-peer-age-selection",
+                                          in: app.collectionViews.firstMatch, maxSwipes: 8, stepFraction: 0.2))
         XCTAssertTrue(ageRow.label.contains("30–39 years") && ageRow.isHittable && app.windows.firstMatch.frame.contains(ageRow.frame))
         VisualAudit.capture("T06-bodyFat-DXA-MAX-age-selected-full-row")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-sex-selection", maxSwipes: 6))
         app.buttons["body-peer-sex-selection"].firstMatch.tap()
         app.buttons["Male (survey)"].firstMatch.tap()
         let sexRow = app.descendants(matching: .any)["body-peer-sex-selection"].firstMatch
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("body-peer-sex-selection", maxSwipes: 6))
+        XCTAssertTrue(revealWholeDetailRow("body-peer-sex-selection",
+                                          in: app.collectionViews.firstMatch, maxSwipes: 8, stepFraction: 0.2))
         XCTAssertTrue(sexRow.label.contains("Male (survey)") && sexRow.isHittable && app.windows.firstMatch.frame.contains(sexRow.frame))
         VisualAudit.capture("T06-bodyFat-DXA-MAX-sex-selected-full-row")
         let criteriaList = app.collectionViews.firstMatch
@@ -481,7 +483,7 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
     /// Scrolls along the gutter so the chart cannot intercept the gesture.
     /// Checks a single row against the real viewport, not the oversized hero/card frame.
     private func revealWholeDetailRow(
-        _ identifier: String, in scroll: XCUIElement, maxSwipes: Int = 10
+        _ identifier: String, in scroll: XCUIElement, maxSwipes: Int = 10, stepFraction: CGFloat = 0.5
     ) -> Bool {
         let row = app.descendants(matching: .any)[identifier].firstMatch
         guard scroll.waitForExistence(timeout: 5), row.waitForExistence(timeout: 5) else { return false }
@@ -490,8 +492,9 @@ final class MetricDetailRedesignTests: SeededUITestBaseCase {
             guard !viewport.isNull else { return false }
             if viewport.contains(row.frame) { return true }
             let moveUp = row.frame.midY > viewport.midY
-            let startY: CGFloat = moveUp ? 0.75 : 0.25
-            let endY: CGFloat = moveUp ? 0.25 : 0.75
+            let halfStep = stepFraction / 2
+            let startY: CGFloat = moveUp ? 0.5 + halfStep : 0.5 - halfStep
+            let endY: CGFloat = moveUp ? 0.5 - halfStep : 0.5 + halfStep
             scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: startY))
                 .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
                     withNormalizedOffset: CGVector(dx: 0.05, dy: endY)
