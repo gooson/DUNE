@@ -1,7 +1,7 @@
 ---
 topic: H05 body record form
 date: 2026-11-05
-status: in-progress
+status: completed
 ---
 
 # H05 · Body record Form
@@ -37,3 +37,11 @@ The app/test files above, this plan, and these seven design outputs are the impl
 - `docs/design/theme-map/index.html`
 
 Actual H05 native images, capture metadata, four H05 map cards/boards, and a separate evidence gallery follow only after observed device results. Historical images are not matched-source before proof. Header wrapping/contrast and icon visibility need actual MAX/lower-field captures. The decorative image must not replace the localized label or alter input/Save ownership. Verify software keyboard from focused PNG and AX before classifying input failures. The related existing TODO `todos/done/070-done-p2-e2e-dune-body-composition-form-sheet.md` already records the unchanged entry/AX contract; it is not a new incomplete task.
+
+## Native result and publication
+
+The shared Form headers were implemented at `42a1b774`; a reviewed one-line normal Add keyboard Done interaction followed at `d8fca250`. The app SHA remained `735641ce268afe852e8564a7e2ddf1b16ef3d4e872c13941544cbd14e2c51c5d`; final UI test SHA is `4d4f499d6ec070e4ed8187d594d6f72112272c5725fa75c1c5cf0b8828d9e7ed`. Five effective existing cases passed: phone Add, iPad Add, Duo closed Add/MAX Edit and Duo open Add. The first iPad attempt remains failed, so historical execution is six cases: five passed and one failed. Eighteen selected original PNG/AX pairs were independently reviewed; the 62-output H05-only native map/gallery stage was independently approved. All 111 card IDs per tier and other screens' board pixels are preserved.
+
+The iPad original Save tap computed {-1,-1}. Its later Done tap did not prove dismissal, although Save and history then passed. Phone and open Duo post-Done captures show dismissal. Actual archive provenance is Xcode 27.2 (27B52); original pipeline labels using 27.1 remain untouched with an additive metadata correction. English/default Add on all four profiles and closed MAX Edit were observed; dark, all locales, VoiceOver, live HealthKit, MAX Add and open MAX were not run. Model/query/validation paths are unchanged, so no extra unit/full/Watch/Vision suite is required.
+
+See [native review gallery](../design/full-redesign-map/review/h05-body-record-native-2026-11-05/index.html) and [solution](../solutions/testing/2026-11-05-native-form-metric-headers-and-keyboard-evidence.md). The actual map now uses new source-pinned Add images for all four tiers. Old images remain historical identity only. All three owned devices were deleted after evidence preservation; reusable build cache is retained for the next authorized screen.

@@ -301,3 +301,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 [T06 body fat DXA native review](../full-redesign-map/review/t06-body-fat-dxa-native-2026-11-05/index.html)
 
 [H04 native review](../full-redesign-map/review/h04-metric-comparison-native-2026-11-05/index.html)
+
+[H05 native review](../full-redesign-map/review/h05-body-record-native-2026-11-05/index.html)
