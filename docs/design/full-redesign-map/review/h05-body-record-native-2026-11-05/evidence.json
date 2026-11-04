@@ -1,0 +1,211 @@
+{
+  "source_head": "d8fca250c1eeca3e59ee5d7a1029431846fb0ec3",
+  "xcode": "Xcode 27.2; Build version 27B52",
+  "case_count": 5,
+  "selected_pair_count": 18,
+  "cases": {
+    "phone_add": {
+      "source_head": "d8fca250c1eeca3e59ee5d7a1029431846fb0ec3",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyAddFlowSavesRecord",
+      "device_uid": "CFEBFCE8-8424-4F70-A61D-A41ABF5B5958",
+      "pose": "portrait",
+      "archive": ".codex-checks/h05/evidence/phone-normal-d8fca250-passed",
+      "inventory_sha256": "fd6c02102d680c16dbd28ba869b0d3e9e7dbdd9afce9a43c4253ff69fea6032e",
+      "selected_pairs": [
+        {
+          "role": "empty-add-form",
+          "png": ".codex-checks/h05/evidence/phone-normal-d8fca250-passed/attachments/0F122B7F-E470-49B2-BBAF-A879B8A3EEBC.png",
+          "png_sha256": "350f80b8b7c1267e0f7c24f0f5ec1bb526762a0d03a8a75a29d21a3ec1ddc8d4",
+          "ax": ".codex-checks/h05/evidence/phone-normal-d8fca250-passed/attachments/BC28D0CB-2AAE-468B-9942-1C0A4BEE34A8.txt",
+          "ax_sha256": "dd53eb6fddbe4b93ee78f193829c459cdfcc8485d23baf474e948663176e35a2"
+        },
+        {
+          "role": "focused-weight",
+          "png": ".codex-checks/h05/evidence/phone-normal-d8fca250-passed/attachments/7B008571-E962-4454-AA77-B6C67E519EBB.png",
+          "png_sha256": "e8635d3aeae13a00c0730491e32feceef229aff216c31796be46003e24357419",
+          "ax": ".codex-checks/h05/evidence/phone-normal-d8fca250-passed/attachments/00E0E317-5E05-478B-9496-F3F9523033FA.txt",
+          "ax_sha256": "5b44f29a8ba608fa5bf84dec04334ea7a898af3ab39d8136e04447ed85826ce8"
+        },
+        {
+          "role": "saved-history",
+          "png": ".codex-checks/h05/evidence/phone-normal-d8fca250-passed/attachments/AE81374C-B475-4B10-A4DC-AB76DF615BF3.png",
+          "png_sha256": "89c96401247c99ac18ef3304e84f911872a616269f945b8e39e578789ce86390",
+          "ax": ".codex-checks/h05/evidence/phone-normal-d8fca250-passed/attachments/A339E0E0-117B-483E-9ABA-766688AF6FD5.txt",
+          "ax_sha256": "0d5eada49084dee9d4a05114a85b002cbd1376fb3e822b3935d3bc2e7aa52b22"
+        }
+      ]
+    },
+    "ipad_add": {
+      "source_head": "d8fca250c1eeca3e59ee5d7a1029431846fb0ec3",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyAddFlowSavesRecord",
+      "device_uid": "A01AD944-3478-4300-8CCA-661BFEF93788",
+      "pose": "portrait",
+      "archive": ".codex-checks/h05/evidence/ipad-normal-d8fca250-passed",
+      "inventory_sha256": "2df84aa793f39705244d887ac23ac7d97a08b12df8750ee896e4e335a90dcc95",
+      "selected_pairs": [
+        {
+          "role": "empty-add-form",
+          "png": ".codex-checks/h05/evidence/ipad-normal-d8fca250-passed/attachments/D9E14B2B-69BE-4032-847B-412322EACB02.png",
+          "png_sha256": "57669686bbb50df377ca2f32580009f2acf5998ff300fcaea9d3554126dffdb5",
+          "ax": ".codex-checks/h05/evidence/ipad-normal-d8fca250-passed/attachments/FE7A1AED-9EA7-4691-B9E5-D396AB45B4F1.txt",
+          "ax_sha256": "a6da8b8062698a30127c5d0e2e0c69390f1537efcc377a3cd6e2e96418451c7d"
+        },
+        {
+          "role": "focused-weight",
+          "png": ".codex-checks/h05/evidence/ipad-normal-d8fca250-passed/attachments/8C764A1D-8AFF-4975-A2B6-D18BEDE8A9B9.png",
+          "png_sha256": "517083b050cc09c686374ce756c7754be427903ecf1179d8a60591fa236d312b",
+          "ax": ".codex-checks/h05/evidence/ipad-normal-d8fca250-passed/attachments/844CCB07-0EA2-436B-B6A8-94AC1AE4CD25.txt",
+          "ax_sha256": "ec4cc0262a262e4f1112f53bc7224eee9cd6c71f660d8481ef0fb092080dda91"
+        },
+        {
+          "role": "saved-history",
+          "png": ".codex-checks/h05/evidence/ipad-normal-d8fca250-passed/attachments/634EC930-8CD7-48B3-B05F-1A044098ADFE.png",
+          "png_sha256": "d9f77adaf04a1c61af1f1ffaf779ee914012bec2265d4bc9f431d9f9febf0a52",
+          "ax": ".codex-checks/h05/evidence/ipad-normal-d8fca250-passed/attachments/841D108A-A6CC-4A4A-A67E-C56181317E72.txt",
+          "ax_sha256": "684178ce64c480f2caa058f5710b26bdfea51ad63efeb556702fed574ca680df"
+        }
+      ]
+    },
+    "duo_closed_add": {
+      "source_head": "d8fca250c1eeca3e59ee5d7a1029431846fb0ec3",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyAddFlowSavesRecord",
+      "device_uid": "B382D060-EEA9-4562-9CCA-0B56EA1BDAF8",
+      "pose": "closed 0° LCD",
+      "archive": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed",
+      "inventory_sha256": "0802d1c89c81da7b5191579754d4d169a6180bb0bf604334f0ee1204bb7b258a",
+      "selected_pairs": [
+        {
+          "role": "add-empty",
+          "png": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/005-1398x2034.png",
+          "png_sha256": "bcf6a97958c8ccf2ff3712fee05cd229c7615293382f6fbc5ca9c51ba9cbbb98",
+          "ax": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/attachments/29334961-2E62-4EF7-A1AE-A7464DCAE73F.txt",
+          "ax_sha256": "2d17f3a62b18bcc59e87faf5b8ef5b32c61a8de4f02fc7f465a2eab5c87fbbec"
+        },
+        {
+          "role": "add-focused",
+          "png": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/007-1398x2034.png",
+          "png_sha256": "6a5af66823fe864d75a692cb0ec6ed6fb4c49e6f4b85d6385acde3e5ffa5eebe",
+          "ax": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/attachments/00613ED4-A2A2-4335-848A-123F9CF732D0.txt",
+          "ax_sha256": "159a84f7a8a5645ba4cf7d0bdbf3de0ca2d501742f4e11ade5bb0c7b94024e7b"
+        },
+        {
+          "role": "add-saved",
+          "png": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/011-1398x2034.png",
+          "png_sha256": "d96b2d65d7899a4de91d23d0f5bb9889e2f2e0f9f46833ecd507b7a74ae0814c",
+          "ax": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/attachments/60757A6A-2460-40D1-BDDC-789A2BAFF281.txt",
+          "ax_sha256": "237a95873b5cba3957ffcf51327fedb22763e8d649fec027da7f86c6c81b7cca"
+        }
+      ]
+    },
+    "duo_open_add": {
+      "source_head": "d8fca250c1eeca3e59ee5d7a1029431846fb0ec3",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyAddFlowSavesRecord",
+      "device_uid": "B382D060-EEA9-4562-9CCA-0B56EA1BDAF8",
+      "pose": "open 180° LCD-1",
+      "archive": ".codex-checks/h05/evidence/duo-open-d8fca250-passed",
+      "inventory_sha256": "476641464e460ff2c4c12869f321017e2b1d6590440fa034ba5e40d4fa013875",
+      "selected_pairs": [
+        {
+          "role": "empty-add-form",
+          "png": ".codex-checks/h05/evidence/duo-open-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/005-2007x2853.png",
+          "png_sha256": "dce989ad5ae7259889c9940b767761e3a9d0797fe5e97c9bcb68326b205e04d6",
+          "ax": ".codex-checks/h05/evidence/duo-open-d8fca250-passed/attachments/463F25AF-61A1-40E0-B00A-D96BB9004A9C.txt",
+          "ax_sha256": "501ca013f5b241ef9810d03b8207cf02c2e3135f25000d6731696d67d48faef7"
+        },
+        {
+          "role": "focused-weight",
+          "png": ".codex-checks/h05/evidence/duo-open-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/007-2007x2853.png",
+          "png_sha256": "25f4af0829aa302e197776f9ba5bd93d71a5cb941753f7d70b32c7467c171b82",
+          "ax": ".codex-checks/h05/evidence/duo-open-d8fca250-passed/attachments/3820730D-D81D-4BA7-8988-E04A4F15CC31.txt",
+          "ax_sha256": "22b4c84d5b8101487747749dffb5087dbbe697c12c2588edb9b8a50a7ca75fc8"
+        },
+        {
+          "role": "saved-history",
+          "png": ".codex-checks/h05/evidence/duo-open-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/011-2007x2853.png",
+          "png_sha256": "a8888596dceadc2e3d1e33f22088f36c59a2292542f9baa99b2c5e5f9c3f8732",
+          "ax": ".codex-checks/h05/evidence/duo-open-d8fca250-passed/attachments/76CE6C53-6735-44B2-8B16-D57AC4383B13.txt",
+          "ax_sha256": "68fd147802fff7bbd6514bb6b283bed801f3bb8275261d9685c7d1d34ae3b9b5"
+        }
+      ]
+    },
+    "edit": {
+      "source_head": "d8fca250c1eeca3e59ee5d7a1029431846fb0ec3",
+      "status": "Passed",
+      "selector": "DUNEUITests/WellnessRegressionTests/testBodyHistoryEditAndSaveAtMaximumAccessibilityTextSize",
+      "device_uid": "B382D060-EEA9-4562-9CCA-0B56EA1BDAF8",
+      "pose": "closed 0° LCD at MAX",
+      "archive": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed",
+      "inventory_sha256": "0802d1c89c81da7b5191579754d4d169a6180bb0bf604334f0ee1204bb7b258a",
+      "selected_pairs": [
+        {
+          "role": "max-edit-initial",
+          "png": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/016-1398x2034.png",
+          "png_sha256": "48127f74a21fa9a458d9ee1e4538ba197ce80ad283ae70c9dc05f31366d8b60c",
+          "ax": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/attachments/962D63C0-0EAD-4063-AB78-05DA75C54C72.txt",
+          "ax_sha256": "1d6c210e1f45b4f3228958b210d9d6bea62c9cada1d96ae124f0985e776558d9"
+        },
+        {
+          "role": "max-weight-keyboard",
+          "png": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/019-1398x2034.png",
+          "png_sha256": "ba9ed1be130d62559104cb653799c8d6131bf4f5f4344ebeaa8acc4bfa999085",
+          "ax": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/attachments/9967D7BD-DE43-40E5-A768-DFF11146FEE1.txt",
+          "ax_sha256": "23061d9f29b43323cad83f5d7c4739c561529e5118cc5a98c7c1be389eec59c3"
+        },
+        {
+          "role": "max-body-fat",
+          "png": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/020-1398x2034.png",
+          "png_sha256": "4f8346555a0fae702a82a2bdd763804abe3ff8a232553ecb2ca0ca8768f6a21d",
+          "ax": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/attachments/643926A4-0F4D-4EB1-946D-EA1F8E616B56.txt",
+          "ax_sha256": "f27c5a357e68cbba95e76fb3c78b2aa520dc22a93fe59e6c389657efab627cac"
+        },
+        {
+          "role": "max-muscle",
+          "png": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/022-1398x2034.png",
+          "png_sha256": "d25c68f0ece1f7afb63178d0b5f044a6b9a13d5ddbdf7b582e2a5579414360e0",
+          "ax": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/attachments/5ED7D2FB-BB93-481F-A1FA-7FA042B56811.txt",
+          "ax_sha256": "c9f19c7569135ac9cdc3147703e0d5d00eef7c19ac437c397a46f8f051705f02"
+        },
+        {
+          "role": "max-lower-save",
+          "png": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/023-1398x2034.png",
+          "png_sha256": "d25c68f0ece1f7afb63178d0b5f044a6b9a13d5ddbdf7b582e2a5579414360e0",
+          "ax": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/attachments/189BE4E0-AC7F-4D37-B45B-441947F0B1E0.txt",
+          "ax_sha256": "66821b3c731cd57e96fed9b62cf2dad1eb049d4ec6659e1120132bb52b85c352"
+        },
+        {
+          "role": "max-saved-return",
+          "png": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/execution-proof/duo-pose-and-checkpoints/025-1398x2034.png",
+          "png_sha256": "266a47344e527a8fe6a19cfba244477fd7de74d6c8c5b27ddc040a9681a6f305",
+          "ax": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed/attachments/21B2C06A-A4A0-4CF6-A447-C26D18630F34.txt",
+          "ax_sha256": "d05418b719852f2547381241f1a45a0939af7c3647edc9adad5394ccea68c0d3"
+        }
+      ]
+    }
+  },
+  "canonical": {
+    "phone_add": "empty-add-form",
+    "ipad_add": "empty-add-form",
+    "duo_closed_add": "add-empty",
+    "duo_open_add": "empty-add-form"
+  },
+  "final_native_review": {
+    "path": "/private/tmp/h05-native-preparation/h05-final-native-d8-review.json",
+    "sha256": "f73b4d89aae6082c0636aedb5c5467aceb462c8d4d1f4664827a50ee425f8ce9"
+  },
+  "failed_history": {
+    "archive": ".codex-checks/h05/evidence/ipad-normal-42a1b774-failed",
+    "source_head": "42a1b774cc6534afcd632f50a68c178c118f1c5c",
+    "sealed_inventory_sha256": "c1342bf3acfc91a83bd343b8aad164a02ea428453e62f32133001cebaaa10f40",
+    "status": "failed",
+    "counts": {
+      "executed": 1,
+      "passed": 0,
+      "failed": 1
+    }
+  },
+  "historical_scope": "identity only; source/UID/pose/paired AX unavailable"
+}

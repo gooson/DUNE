@@ -577,13 +577,17 @@
     },
     "H05": {
       "row_id": "H05",
-      "evidence": "body-form-screen",
+      "file": "H05.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "WellnessRegressionTests/testBodyAddFlowSavesRecord()",
-      "action": "tap wellness-menu-body-record",
-      "timestamp": 1791826918.08,
-      "image": "641B982B-5567-43B9-AA58-F9517B348E88.png",
-      "screen": "screen-0-1398x2034-tap wellness-menu-body-record_0_7B8F2182-ED03-43BD-8224-BCC44FAB15EB.png",
-      "file": "H05.png"
+      "action": "add-empty",
+      "source_revision": "d8fca250c1eeca3e59ee5d7a1029431846fb0ec3",
+      "device_uid": "B382D060-EEA9-4562-9CCA-0B56EA1BDAF8",
+      "pose": "closed 0° LCD",
+      "archive": ".codex-checks/h05/evidence/duo-closed-d8fca250-passed",
+      "archive_inventory_sha256": "0802d1c89c81da7b5191579754d4d169a6180bb0bf604334f0ee1204bb7b258a",
+      "image_sha256": "bcf6a97958c8ccf2ff3712fee05cd229c7615293382f6fbc5ca9c51ba9cbbb98",
+      "ax_sha256": "2d17f3a62b18bcc59e87faf5b8ef5b32c61a8de4f02fc7f465a2eab5c87fbbec"
     },
     "H04": {
       "row_id": "H04",
@@ -1484,9 +1488,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "89031bea42b3c5e5256bcceaa4916240e24354cb",
+  "last_refresh_revision": "d8fca250c1eeca3e59ee5d7a1029431846fb0ec3",
   "last_refresh_screens": [
-    "H04"
+    "H05"
   ],
-  "last_refresh_note": "Reviewed native H04 capture; per-row source and device retained."
+  "last_refresh_note": "Reviewed native H05 pair; historical image retained in review gallery."
 }

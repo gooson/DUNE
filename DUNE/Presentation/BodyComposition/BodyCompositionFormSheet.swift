@@ -46,23 +46,29 @@ struct BodyCompositionFormSheet: View {
                     )
                     .accessibilityIdentifier("body-form-date")
 
-                    Section("Weight (kg)") {
+                    Section {
                         TextField("Weight (kg)", text: $viewModel.newWeight)
                             .keyboardType(.decimalPad)
                             .focused($focusedField, equals: .weight)
                             .accessibilityIdentifier("body-form-weight")
+                    } header: {
+                        measurementHeader("Weight (kg)", category: .weight)
                     }
-                    Section("Body Fat (%)") {
+                    Section {
                         TextField("Body Fat (%)", text: $viewModel.newBodyFat)
                             .keyboardType(.decimalPad)
                             .focused($focusedField, equals: .bodyFat)
                             .accessibilityIdentifier("body-form-fat")
+                    } header: {
+                        measurementHeader("Body Fat (%)", category: .bodyFat)
                     }
-                    Section("Muscle Mass (kg)") {
+                    Section {
                         TextField("Muscle Mass (kg)", text: $viewModel.newMuscleMass)
                             .keyboardType(.decimalPad)
                             .focused($focusedField, equals: .muscleMass)
                             .accessibilityIdentifier("body-form-muscle")
+                    } header: {
+                        measurementHeader("Muscle Mass (kg)", category: .leanBodyMass)
                     }
                     TextField("Memo", text: $viewModel.newMemo)
                         .focused($focusedField, equals: .memo)
@@ -116,5 +122,17 @@ struct BodyCompositionFormSheet: View {
         }
         .sensoryFeedback(.success, trigger: saveCount)
         .background { SheetWaveBackground() }
+    }
+
+    private func measurementHeader(_ title: LocalizedStringKey, category: HealthMetric.Category) -> some View {
+        Label {
+            Text(title)
+                .foregroundStyle(DS.Color.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        } icon: {
+            Image(systemName: category.iconName)
+                .foregroundStyle(category.themeColor)
+                .accessibilityHidden(true)
+        }
     }
 }

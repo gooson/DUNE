@@ -222,6 +222,10 @@ A06 네이티브 소스는 실제 현재·이전 네 지표와 원래 네 기간
 ## T10 오늘의 건강 리포트 (2026-10-31)
 
 [밝음·어두움 보존 시안](themes/dune-daily-report.html)과 [배치 계약](../layout-map/daily-report-proposal.md)을 추가했다. 예시 값의 브라우저 시안이며 실제 앱 캡처가 아니다. 새로운 T10 네이티브 캡처는 별도 갱신 전까지 기존 상태로 둔다.
+## H05 신체 기록 입력·수정 · 2026-11-05
+
+[정적 DUNE 표현 시안](themes/dune-body-record-form-h05.html)과 [배치 계약](../layout-map/body-record-form-h05.html)은 기존 네이티브 Form의 날짜·세 측정 헤더와 원래 단위, 메모, 키보드 툴바, 고정 Cancel/Save, 큰 글씨 스크롤을 정한다. 값·날짜·기호는 예시이며 실제 앱 캡처가 아니다. 기존 H05 PNG 네 장은 역사적 화면 정체성 참고다. H05 수정은 같은 공유 Form이고 H06 이력 화면은 별개다.
+
 ## H04 두 지표 기간 비교 · 2026-11-05
 
 [정적 DUNE 표현 시안](themes/dune-metric-comparison-h04.html)과 [배치 계약](../layout-map/wellness-metric-comparison-h04.html)은 공통 날짜 범위 하나와 두 지표의 독립 단위·값 축을 표시한다. 두 메뉴 피커, 다섯 기간, 넓은 두 열과 큰 글씨의 세로 카드를 설명한다. 밝은 화면의 진한 차트 선·점과 선택 글자 색은 낮은 대비가 관찰된 8f 일반 화면을 바탕으로 한 설명용 색이다. 어두운 선·점과 원래 지표 아이콘 색은 유지한다. 표시한 수치·날짜·SVG 기호는 예시이며 새 네이티브 대비 검증이나 현재 화면 캡처가 아니다. 기존 H04 PNG 네 장은 역사적 화면 정체성 참고로 보존한다. 8f 접힘 일반 사례는 실패한 집계 안에서 Passed였으며 그 캡처의 대비 P2는 아직 해소되지 않았다.
@@ -276,3 +280,5 @@ A15 피로도 계산 설명 [시안](themes/dune-fatigue-algorithm-a15.html)은 
 A21 보상 설명은 [배치 계약](../layout-map/activity-reward-explanation-a21.html)과 [실제 전후 비교](../full-redesign-map/review/a21-reward-help-native-2026-11-04/index.html)에 연결했다. 기존 네 아이콘·계산·중간 높이 시스템 시트를 유지하고 개편 선택 검사6/6, 원본 iPhone1/1을 각각 검증했다. 방향 HTML과 실제 캡처를 구분한다.
 
 2026-11-04 T06 체지방률 후속: [구현 계획](../../plans/2026-11-04-t06-body-fat-survey-reference.md)에 따라 미국 성인 1999–2004 DXA 조사 평균을 개인 값과 별도로 표시하도록 계약을 갱신했다. 원문 실제 연령 구간·측정 방식 차이를 밝히고 체중/BMI와 제지방의 기존 경로를 보존한다. 2026-11-05 [체지방 DXA 실제 화면 갤러리](../full-redesign-map/review/t06-body-fat-dxa-native-2026-11-05/index.html)에 선택 검사 5건의 32개 PNG/AX 쌍을 연결한다. Duo 접힘 일반 case는 실패한 2건 집계 안에서 Passed였고 최대 글씨 case는 별도 Passed였다. 과거 iPad 이미지는 새 조사 카드의 이전 화면이나 AX 증거가 아니다. 이 페이지의 원래 브라우저 시안은 실제 앱 캡처가 아니다.
+
+H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실제 PNG/AX 18쌍을 확인했다. [실제 화면과 검증 한계](../full-redesign-map/review/h05-body-record-native-2026-11-05/index.html)는 시안과 별도이며 첫 iPad 실패 1건도 보존한다.

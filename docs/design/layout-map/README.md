@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+2026-11-05 [H05 신체 기록 입력·수정 배치 계약](body-record-form-h05.html)은 한 네이티브 Form의 날짜·세 측정 필드·메모·키보드·고정 저장 행동과 큰 글씨 스크롤을 정한다. [DUNE 표현 시안](../theme-map/themes/dune-body-record-form-h05.html)의 값은 설명용이며 새 앱 캡처가 아니다. H05 편집은 같은 ID이고 H06 이력 화면은 별개다.
+
 2026-11-05 [H04 두 지표 기간 비교 배치 계약](wellness-metric-comparison-h04.html)은 하나의 날짜 범위와 두 독립 값 축, 두 네이티브 지표 피커, 다섯 기간·큰 글씨 세로 배치를 정한다. [DUNE 표현 시안](../theme-map/themes/dune-metric-comparison-h04.html)의 값은 설명용이며 현재 소스의 네이티브 캡처가 아니다.
 
 A15 피로도 계산 설명은 [전용 배치 계약](activity-fatigue-algorithm-a15.html)을 따른다. 시안은 실제 캡처가 아니다.
@@ -193,3 +195,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 - [A20 추천 장비 설정](activity-recommendation-equipment-a20.html): 기존 SVG·토글·저장을 보존한 네이티브 개편. 4개 기기 상태와 큰 글씨 5/5 검증 및 실제 비교 캡처 검토 완료.
 
 - [A21 보상 설명](activity-reward-explanation-a21.html): 기존 아이콘·시스템 시트와 계산을 보존한 개편. 개편 선택 검사6/6과 원본 iPhone1/1을 각각 검증하고 실제 전후 비교에 연결했다.
+
+H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실제 PNG/AX 18쌍을 확인했다. [실제 화면과 검증 한계](../full-redesign-map/review/h05-body-record-native-2026-11-05/index.html)는 시안과 별도이며 첫 iPad 실패 1건도 보존한다.

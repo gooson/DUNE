@@ -452,8 +452,11 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         let bodyForm = app.descendants(matching: .any)[AXID.bodyFormScreen].firstMatch
         saveButton.auditTap()
         XCTAssertTrue(bodyForm.waitForExistence(timeout: 2), "Body form should remain visible before body input")
+        VisualAudit.capture("H05 add empty form after Save attempt")
 
         XCTAssertTrue(app.fillTextInput(AXID.bodyFormWeight, with: "91.2"), "Weight field should accept a seeded regression value")
+        VisualAudit.capture("H05 add weight entered")
+        app.buttons["body-form-keyboard-done"].firstMatch.auditTap()
         saveButton.auditTap()
 
         let dismissed = NSPredicate(format: "exists == false")
@@ -462,6 +465,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         openBodyHistory()
         XCTAssertTrue(app.staticTexts["91.2 kg"].firstMatch.waitForExistence(timeout: 8), "Newly saved weight should appear in body history")
+        VisualAudit.capture("H05 add saved history")
     }
 
     func testBodyHistoryRowOpensEditFormAndSaves() throws {
@@ -491,6 +495,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         let form = app.descendants(matching: .any)[AXID.bodyFormScreen].firstMatch
         XCTAssertTrue(form.waitForExistence(timeout: 8), "Edit body form should appear")
+        if checkLowerFields { VisualAudit.capture("H05 edit form initial") }
         XCTAssertTrue(app.fillTextInput(AXID.bodyFormWeight, with: "88.8"), "Edit form should allow weight changes")
         XCTAssertEqual(app.textFields[AXID.bodyFormWeight].firstMatch.value as? String, "88.8",
                        "Replacement must not append to the seeded weight")
