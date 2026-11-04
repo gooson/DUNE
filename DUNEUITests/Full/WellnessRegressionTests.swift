@@ -464,7 +464,9 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         waitForExpectations(timeout: 10)
 
         openBodyHistory()
-        XCTAssertTrue(app.staticTexts["91.2 kg"].firstMatch.waitForExistence(timeout: 8), "Newly saved weight should appear in body history")
+        XCTAssertTrue(app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label == %@", "Weight: 91.2 kg"))
+            .firstMatch.waitForExistence(timeout: 8), "Newly saved weight should appear in body history")
         VisualAudit.capture("H05 add saved history")
     }
 
@@ -487,6 +489,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         let manualRow = firstElement(withIdentifierPrefix: "body-history-row-manual-")
         XCTAssertTrue(manualRow.waitForExistence(timeout: 8), "At least one manual body history row should exist")
+        VisualAudit.capture("H06 body history rows")
         manualRow.press(forDuration: 1.2)
 
         let editAction = app.descendants(matching: .any)[AXID.bodyHistoryEditAction].firstMatch
@@ -536,7 +539,9 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             app.descendants(matching: .any)[AXID.bodyHistoryDetailScreen].firstMatch.waitForExistence(timeout: 8),
             "Body history screen should remain visible after saving edit"
         )
-        let editedWeight = app.staticTexts["88.8 kg"].firstMatch
+        let editedWeight = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label == %@", "Weight: 88.8 kg"))
+            .firstMatch
         XCTAssertTrue(editedWeight.waitForExistence(timeout: 8), "Edited weight should appear in body history")
         XCTAssertTrue(editedWeight.isHittable, "History must be usable, without an empty modal covering it")
         XCTAssertEqual(app.sheets.count, 0, "Saving must dismiss every edit sheet")

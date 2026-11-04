@@ -3,6 +3,8 @@ import SwiftData
 
 struct BodyHistoryDetailView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
+    private static let lightBodyIconColor = DS.Color.body.mix(with: .black, by: 0.35)
     @Bindable var viewModel: BodyCompositionViewModel
     let onRecordsChanged: @MainActor () -> Void
     @Environment(\.modelContext) private var modelContext
@@ -116,10 +118,44 @@ struct BodyHistoryDetailView: View {
         }
     }
 
-    private var metricLayout: AnyLayout {
-        dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
-            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+    @ViewBuilder
+    private func metricValues(for item: BodyCompositionListItem) -> some View {
+        if let weight = item.weight {
+            metricValue(Text("\(weight.formattedWithSeparator(fractionDigits: 1)) kg"), category: .weight)
+        }
+        if let fat = item.bodyFatPercentage {
+            metricValue(Text("\(fat.formattedWithSeparator(fractionDigits: 1))%"), category: .bodyFat)
+        }
+        if let muscle = item.muscleMass {
+            metricValue(
+                Text("\(muscle.formattedWithSeparator(fractionDigits: 1)) kg"),
+                category: .leanBodyMass,
+                accessibilityLabel: Text("Muscle Mass (kg)")
+                    + Text(verbatim: ": ")
+                    + Text(verbatim: muscle.formattedWithSeparator(fractionDigits: 1))
+            )
+        }
+    }
+
+    private func metricValue(
+        _ value: Text,
+        category: HealthMetric.Category,
+        accessibilityLabel: Text? = nil
+    ) -> some View {
+        HStack(spacing: DS.Spacing.xs) {
+            Image(systemName: category.iconName)
+                .foregroundStyle(colorScheme == .light ? Self.lightBodyIconColor : category.themeColor)
+                .accessibilityHidden(true)
+            value
+                .foregroundStyle(.primary)
+        }
+        .font(.caption)
+        .padding(.horizontal, DS.Spacing.sm)
+        .padding(.vertical, DS.Spacing.xs)
+        .background(category.themeColor.opacity(0.12), in: Capsule())
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel ?? (Text(category.displayName) + Text(verbatim: ": ") + value))
+        .fixedSize(horizontal: true, vertical: false)
     }
 
     private func historyRow(_ item: BodyCompositionListItem, rowIndex: Int) -> some View {
@@ -131,22 +167,19 @@ struct BodyHistoryDetailView: View {
             }
             VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                 Text(item.date, style: .date)
-                    .font(.subheadline)
-                metricLayout {
-                    if let w = item.weight {
-                        Text("\(w.formattedWithSeparator(fractionDigits: 1)) kg")
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
+                    .font(.subheadline.weight(.semibold))
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        metricValues(for: item)
                     }
-                    if let f = item.bodyFatPercentage {
-                        Text("\(f.formattedWithSeparator(fractionDigits: 1))%")
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
-                    }
-                    if let m = item.muscleMass {
-                        Text("\(m.formattedWithSeparator(fractionDigits: 1)) kg")
-                            .font(.caption)
-                            .foregroundStyle(DS.Color.textSecondary)
+                } else {
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: DS.Spacing.xs) {
+                            metricValues(for: item)
+                        }
+                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                            metricValues(for: item)
+                        }
                     }
                 }
             }
