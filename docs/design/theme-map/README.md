@@ -270,3 +270,5 @@ A05 네이티브 소스는 원래 `ActivityStat.iconColor`를 불투명 히어�
 A15 피로도 계산 설명 [시안](themes/dune-fatigue-algorithm-a15.html)은 실제 앱 캡처가 아니다.
 
 A21 보상 설명은 [배치 계약](../layout-map/activity-reward-explanation-a21.html)과 [실제 전후 비교](../full-redesign-map/review/a21-reward-help-native-2026-11-04/index.html)에 연결했다. 기존 네 아이콘·계산·중간 높이 시스템 시트를 유지하고 개편 선택 검사6/6, 원본 iPhone1/1을 각각 검증했다. 방향 HTML과 실제 캡처를 구분한다.
+
+2026-11-04 T06 체지방률 후속: [구현 계획](../../plans/2026-11-04-t06-body-fat-survey-reference.md)에 따라 미국 성인 1999–2004 DXA 조사 평균을 개인 값과 별도로 표시하도록 계약을 갱신했다. 원문 실제 연령 구간·측정 방식 차이를 밝히고 체중/BMI와 제지방의 기존 경로를 보존한다. 이 기록 시점의 단위·네이티브 검사는 수행 전이며, 과거 iPad 이미지는 새 조사 카드의 완료 증거가 아니다.
