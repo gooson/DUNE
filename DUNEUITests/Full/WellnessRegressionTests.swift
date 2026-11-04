@@ -101,7 +101,8 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             XCTAssertTrue(month.isEnabled && month.isHittable)
             month.tap()
         } else {
-            XCTAssertTrue(revealComparisonControl("metric-comparison-period", in: comparisonScroll))
+            XCTAssertTrue(revealComparisonNormalPeriodMenu(in: comparisonScroll),
+                          "The unique normal Period menu must be fully visible and enabled below navigation")
             app.descendants(matching: .any)["metric-comparison-period"].firstMatch.tap()
             XCTAssertTrue(month.waitForExistence(timeout: 5))
             XCTAssertTrue(month.isEnabled && month.isHittable)
@@ -224,6 +225,34 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(firstPane.waitForNonExistence(timeout: 5))
         XCTAssertTrue(app.buttons[AXID.wellnessToolbarAdd].waitForExistence(timeout: 5))
         VisualAudit.capture("H04 MAX Done returns Wellness")
+    }
+
+    private func revealComparisonNormalPeriodMenu(in scroll: XCUIElement) -> Bool {
+        let matches = app.descendants(matching: .any).matching(identifier: "metric-comparison-period")
+        let period = matches.firstMatch
+        guard period.waitForExistence(timeout: 5), matches.count == 1 else { return false }
+        for attempt in 0...12 {
+            guard matches.count == 1 else { return false }
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+            guard !viewport.isNull && !viewport.isEmpty else { return false }
+            let frame = period.frame
+            guard frame.width > 0 && frame.height > 0 else { return false }
+            if viewport.contains(frame) && period.isEnabled && period.isHittable { return true }
+            guard attempt < 12 else { break }
+            let delta = frame.midY - viewport.midY
+            guard abs(delta) >= 1 else { return false }
+            let travel = min(max(abs(delta), viewport.height * 0.20), viewport.height * 0.70)
+            let direction: CGFloat = delta < 0 ? 1 : -1
+            let origin = scroll.coordinate(withNormalizedOffset: .zero)
+            let x = viewport.midX - scroll.frame.minX
+            let startY = viewport.midY - direction * travel / 2 - scroll.frame.minY
+            let endY = viewport.midY + direction * travel / 2 - scroll.frame.minY
+            origin.withOffset(CGVector(dx: x, dy: startY)).press(
+                forDuration: 0.05,
+                thenDragTo: origin.withOffset(CGVector(dx: x, dy: endY))
+            )
+        }
+        return false
     }
 
     private func revealComparisonMonthAfterPlots(in scroll: XCUIElement) -> Bool {
