@@ -227,7 +227,8 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         guard collections.count == 1 else { return false }
         let popup = collections.firstMatch
         let content = popup.frame
-        let clips = app.otherElements.allElementsBoundByIndex.map(\.frame).filter { frame in
+        let clips = app.otherElements.containing(.collectionView, identifier: nil)
+            .allElementsBoundByAccessibilityElement.map(\.frame).filter { frame in
             abs(frame.minX - content.minX) <= 1 && abs(frame.minY - content.minY) <= 1
                 && abs(frame.width - content.width) <= 1
                 && frame.height >= 100 && frame.height < content.height - 1
