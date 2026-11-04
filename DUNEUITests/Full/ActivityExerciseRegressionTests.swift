@@ -2801,11 +2801,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             let top = max(visible.minY, handleOverlap.maxY)
             return CGRect(x: visible.minX, y: top, width: visible.width, height: max(0, visible.maxY - top))
         }
-        func drag(_ dy: CGFloat) {
+        func drag(_ dy: CGFloat, startY: CGFloat? = nil) {
             let rect = viewport()
             XCTAssertFalse(rect.isNull || rect.isEmpty)
             let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
-                dx: rect.midX - window.frame.minX, dy: rect.midY - window.frame.minY))
+                dx: rect.midX - window.frame.minX, dy: (startY ?? rect.midY) - window.frame.minY))
             start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: dy)))
         }
         func read(_ text: String, index: Int) {
@@ -2843,7 +2843,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                     let beforeFrame = item.frame, before = beforeFrame.intersection(viewport())
                     XCTAssertFalse(before.isEmpty)
                     let beforeEnd = before.maxY - beforeFrame.minY
-                    drag(-viewport().height * 0.18)
+                    // Start on the visible text interval, then verify actual progress.
+                    drag(-viewport().height * 0.18, startY: before.midY)
                     let afterFrame = item.frame, after = afterFrame.intersection(viewport())
                     XCTAssertFalse(after.isEmpty); XCTAssertTrue(widthFits())
                     XCTAssertLessThanOrEqual(after.minY - afterFrame.minY, beforeEnd + 1)
