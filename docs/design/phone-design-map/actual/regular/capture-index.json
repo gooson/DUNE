@@ -1321,13 +1321,27 @@
     },
     "H04": {
       "row_id": "H04",
-      "evidence": "test-and-action:Metric comparison",
+      "file": "H04.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "WellnessRegressionTests/testCompareMetricsSharesPeriodAndDismisses()",
-      "action": "tap wellness-compare-metrics",
-      "timestamp": 1792375433.562,
-      "image": "ECAC4823-8D68-4567-8596-692D69BC39A2.png",
-      "screen": "screen-0-1206x2622-tap wellness-compare-metrics_0_1C9BD5C9-668D-4EDE-85A4-ACD153BF9A17.png",
-      "file": "H04.png"
+      "action": "H04 shared week and initial charts",
+      "source_revision": "89031bea42b3c5e5256bcceaa4916240e24354cb",
+      "capture_kind": "xctest",
+      "timestamp_kind": "reviewed archive checkpoint",
+      "device_uid": "599AF112-4D5B-41BD-8704-D7769C428E71",
+      "pose": {
+        "orientation": "portrait",
+        "active_display": "screen-0",
+        "pixel_dimensions": [
+          1320,
+          2868
+        ]
+      },
+      "image": "A31851E0-97C0-44A4-9EA6-EE73E4E22E95.png",
+      "image_sha256": "4bcddddf62aa31e115eb7d3899304bbafca6bf4de86ef1f803056ca6a1a7243e",
+      "ax_sha256": "e75b85ecc7c04e40548c650a8af0090faef5c882caf8b0e3155694a025be6979",
+      "archive": ".codex-checks/h04/evidence/phone-normal-89031bea-passed",
+      "archive_inventory_sha256": "b6cffd192fd5bb28276865c84ad0bf377939e9f623924676542d0bee994b8f7e"
     },
     "H12": {
       "row_id": "H12",
@@ -1428,9 +1442,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef",
+  "last_refresh_revision": "89031bea42b3c5e5256bcceaa4916240e24354cb",
   "last_refresh_screens": [
-    "A21"
+    "H04"
   ],
-  "last_refresh_note": "Fresh corrected-source A21 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Reviewed native H04 capture; per-row source and device retained."
 }
