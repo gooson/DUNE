@@ -222,6 +222,10 @@ A06 네이티브 소스는 실제 현재·이전 네 지표와 원래 네 기간
 ## T10 오늘의 건강 리포트 (2026-10-31)
 
 [밝음·어두움 보존 시안](themes/dune-daily-report.html)과 [배치 계약](../layout-map/daily-report-proposal.md)을 추가했다. 예시 값의 브라우저 시안이며 실제 앱 캡처가 아니다. 새로운 T10 네이티브 캡처는 별도 갱신 전까지 기존 상태로 둔다.
+## H04 두 지표 기간 비교 · 2026-11-05
+
+[정적 DUNE 표현 시안](themes/dune-metric-comparison-h04.html)과 [배치 계약](../layout-map/wellness-metric-comparison-h04.html)은 공통 날짜 범위 하나와 두 지표의 독립 단위·값 축을 표시한다. 두 메뉴 피커, 다섯 기간, 넓은 두 열과 큰 글씨의 세로 카드가 구현 전 제안이다. 표시한 수치·날짜·SVG 기호는 예시이며 새 네이티브 검증이나 현재 화면 캡처가 아니다. 기존 H04 PNG 네 장은 역사적 화면 정체성 참고로 보존한다.
+
 ## T06 건강 지표 상세 · 2026-10-30
 
 [16개 지표의 보존 시안과 표현 방향](themes/dune-health-metric-detail-redesign.html) · [배치/기능/출처 계약](../layout-map/health-metric-detail-redesign-proposal.md). 원래 수치·단위·아이콘·수면/운동 분석을 보존하는 제안이다. 큰 수치와 통합 추세를 강조하며 실제 native 전후 캡처는 별도 검증한다. 원본 시안의 MCST 참조를 제품 허가된 데이터로 간주하지 않으며, 선택형 미국 체중/BMI 평균과 미지원 신체 비교를 구분한다.

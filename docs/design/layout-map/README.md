@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+2026-11-05 [H04 두 지표 기간 비교 배치 계약](wellness-metric-comparison-h04.html)은 하나의 날짜 범위와 두 독립 값 축, 두 네이티브 지표 피커, 다섯 기간·큰 글씨 세로 배치를 정한다. [DUNE 표현 시안](../theme-map/themes/dune-metric-comparison-h04.html)의 값은 설명용이며 현재 소스의 네이티브 캡처가 아니다.
+
 A15 피로도 계산 설명은 [전용 배치 계약](activity-fatigue-algorithm-a15.html)을 따른다. 시안은 실제 캡처가 아니다.
 
 A11 운동 일관성 상세는 [배치 계약](activity-consistency-detail-a11.html)과 [테마 시안](../theme-map/themes/dune-consistency-detail-a11.html)을 따른다. 예시이며 네이티브 캡처가 아니다.
