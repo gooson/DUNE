@@ -2,7 +2,7 @@
 tags: [swiftui, body-composition, accessibility, design-map, native-evidence]
 date: 2026-11-05
 category: plan
-status: reviewed
+status: implemented
 ---
 
 # H06 신체 기록 이력 행 표현
@@ -36,4 +36,8 @@ status: reviewed
 
 ## 검증 기준과 위험
 
-12ecc 통합 뒤 출처별 접근성 이름 수정은 `BodyHistoryDetailView`의 수동 muscle label 조건만 바꾼다. 기존 H05 테스트·키보드와 H06 여섯 사례 계약을 유지하며, 수정 전 접힘 세 사례는 현행 소스의 통과 증거로 재사용하지 않는다. 실제 통합 전 정확한 소스 HEAD·문서 baseline을 다시 고정한다. `ViewThatFits`가 가로 캡슐을 압축하거나 가릴 수 있으므로 일반 iPhone과 MAX 이미지를 확인해야 한다. 신체 category 색은 세 값에 공통이므로 다른 색을 만들어 데이터 유형을 암시하지 않는다. 밝은 화면 아이콘은 기존 색을 더 진하게 한 예측 개선일 뿐, 실제 명암비는 새 PNG에서 확인해야 한다. [Apple ViewThatFits](https://developer.apple.com/documentation/swiftui/viewthatfits)는 제한된 축에서 첫 배치의 이상적 크기를 검사하므로 가로안 다음 세로안을 둔다. [Apple Accessibility](https://developer.apple.com/design/human-interface-guidelines/accessibility)는 기호 식별과 큰 글씨의 읽기 쉬운 배치를 요구하므로 아이콘 대비·MAX 캡슐의 전체 표시를 실제 화면에서 확인한다. 기존 v3 소스 검토는 당시 범위에서 P1/P2/P3 모두 0이었고, 현재 출처별 수정은 별도 독립 검토와 실제 AX·네이티브 품질 확인이 필요하다. H05의 이미 통과한 앱/입력 검사를 이 문서만을 이유로 반복하지 않는다.
+출처별 접근성 이름 수정은 수동 muscle label 조건만 바꾸며 기존 H05 검사·키보드 경로를 보존했다. 가로 캡슐의 압축·가림과 큰 글씨의 세로 배치는 구현 전 주요 위험이었다. [Apple ViewThatFits](https://developer.apple.com/documentation/swiftui/viewthatfits)의 제한 축 배치 기준에 맞춰 가로안 다음 세로안을 두고, [Apple Accessibility](https://developer.apple.com/design/human-interface-guidelines/accessibility)의 기호 식별·큰 글씨 가독성을 새 네이티브 PNG/AX에서 확인했다. 12ecc 접힘 세 사례의 성공은 수정 전 역사로 보존했으며, 현행 438d 소스는 네 프로필 여섯 사례와 선택 캡처 12쌍을 검증했다. 밝은 접힘 표본 아이콘 대비는 6.03:1이고, 출처별 접근성 이름 P2는 수정·독립 검토와 실제 AX 확인으로 해소했다. 다른 언어·어두운 외관·VoiceOver 음성은 검증하지 않았다. H05의 이미 통과한 앱/입력 검사는 이 문서만을 이유로 반복하지 않았다.
+
+## 완료 결과
+
+현행 앱 소스 `438d9e8376fc4929cbf977893055eb4124d4d318`에서 계획한 기존 UI 여섯 사례가 네 순차 실행에서 모두 통과했다. 일반 iPhone·iPad·Duo 접힘·펼침의 실제 PNG/AX 12쌍을 독립 검토하고 [H06 네이티브 갤러리](../design/full-redesign-map/review/h06-body-history-native-2026-11-05/index.html)에 게시한다. 수정 전 12ecc의 세 사례 통과는 역사적 성공으로 따로 보존한다. 밝은 접힘 표본 아이콘 대비는 6.03:1이고, 수동 Muscle Mass와 Apple Health Lean Body Mass 명칭을 실제 행 AX에서 구분했다. 다른 언어·어두운 외관·VoiceOver 음성·실사용 HealthKit 쓰기와 전체 회귀는 이번 검증 범위가 아니다.

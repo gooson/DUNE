@@ -1,0 +1,245 @@
+Attributes: Application, 0x10a5e9400, pid: 65882, label: 'DUNE'
+Element subtree:
+ →Application, 0x10a5e9400, pid: 65882, label: 'DUNE'
+    Window (Main), 0x10a5e8640, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x10a5eb480, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x10a5e9e00, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x10a5e8140, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x10a5ebac0, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x10a5ea1c0, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x10a5eb980, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x10a5ebc00, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x10a5e97c0, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x10a5eb340, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x10a5ebd40, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x10a5eaf80, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x10a5e8a00, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10a5ea940, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x10a5ea300, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x10a608280, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x10a60ae40, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Body Records'
+                              StaticText, 0x10a60b980, {{20.0, 37.7}, {110.7, 20.7}}, label: 'Body Records'
+                            Other, 0x10a609e00, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x10a609540, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x10a608c80, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x10a60a6c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                    Other, 0x10a60a800, {{0.0, 82.0}, {382.0, 1.0}}, identifier: 'body-history-detail-screen'
+                                    ScrollView, 0x10a60bc00, {{0.0, 83.0}, {466.0, 595.0}}
+                                      Other, 0x106f97980, {{0.0, 83.0}, {382.0, 1513.0}}
+                                        Other, 0x106f95f40, {{28.0, 111.0}, {325.0, 1064.7}}
+                                          StaticText, 0x106f97480, {{28.0, 111.0}, {133.0, 18.0}}, identifier: 'body-history-row-manual-0', label: 'November 5, 2026'
+                                          Other, 0x106f96d00, {{28.0, 134.0}, {77.7, 22.7}}, identifier: 'body-history-row-manual-0', label: 'Weight: 88.8 kg'
+                                            Image, 0x106f96940, {{37.3, 139.0}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x106f95a40, {{55.0, 138.0}, {42.7, 14.3}}, label: '88.8 kg'
+                                          Other, 0x106f95e00, {{109.7, 134.0}, {68.3, 22.3}}, identifier: 'body-history-row-manual-0', label: 'Body Fat: 18.0%'
+                                            Image, 0x106f96bc0, {{119.0, 139.7}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x106f95540, {{135.3, 138.0}, {34.7, 14.3}}, label: '18.0%'
+                                          Other, 0x106f97700, {{182.0, 133.0}, {79.0, 24.3}}, identifier: 'body-history-row-manual-0', label: 'Muscle Mass (kg): 32.0'
+                                            Image, 0x106f96300, {{191.3, 138.0}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x106f96a80, {{210.7, 138.0}, {42.3, 14.3}}, label: '32.0 kg'
+                                          Image, 0x1156b4000, {{342.0, 133.0}, {11.0, 2.3}}, identifier: 'body-history-row-manual-0', label: 'More'
+                                          StaticText, 0x1156b4140, {{50.3, 189.3}, {133.0, 18.0}}, identifier: 'body-history-row-healthkit-1', label: 'November 5, 2026'
+                                          Image, 0x1156b4280, {{29.3, 207.0}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-1', label: 'Love'
+                                          Other, 0x1156b43c0, {{50.3, 212.3}, {76.7, 22.7}}, identifier: 'body-history-row-healthkit-1', label: 'Weight: 78.3 kg'
+                                            Image, 0x1156b4500, {{59.7, 217.3}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x1156b4640, {{77.3, 216.3}, {41.7, 14.3}}, label: '78.3 kg'
+                                          Other, 0x1156b4780, {{131.0, 212.3}, {67.0, 22.3}}, identifier: 'body-history-row-healthkit-1', label: 'Body Fat: 17.8%'
+                                            Image, 0x1156b48c0, {{140.3, 218.0}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x1156b4a00, {{156.7, 216.3}, {33.3, 14.3}}, label: '17.8%'
+                                          Other, 0x1156b4b40, {{202.0, 211.3}, {77.3, 24.3}}, identifier: 'body-history-row-healthkit-1', label: 'Lean Body Mass: 63.1 kg'
+                                            Image, 0x1156b4c80, {{211.3, 216.3}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x1156b4dc0, {{230.7, 216.3}, {40.7, 14.3}}, label: '63.1 kg'
+                                          StaticText, 0x1156b4f00, {{50.3, 267.7}, {133.0, 18.0}}, identifier: 'body-history-row-healthkit-2', label: 'November 3, 2026'
+                                          Image, 0x1156b5040, {{29.3, 285.3}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-2', label: 'Love'
+                                          Other, 0x1156b5180, {{50.3, 290.7}, {76.7, 22.7}}, identifier: 'body-history-row-healthkit-2', label: 'Weight: 78.3 kg'
+                                            Image, 0x1156b52c0, {{59.7, 295.7}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x1156b5400, {{77.3, 294.7}, {41.7, 14.3}}, label: '78.3 kg'
+                                          Other, 0x1156b5540, {{131.0, 290.7}, {66.0, 22.3}}, identifier: 'body-history-row-healthkit-2', label: 'Body Fat: 17.7%'
+                                            Image, 0x1156b5680, {{140.3, 296.3}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x1156b57c0, {{156.7, 294.7}, {32.3, 14.3}}, label: '17.7%'
+                                          Other, 0x1156b5900, {{201.0, 289.7}, {79.0, 24.3}}, identifier: 'body-history-row-healthkit-2', label: 'Lean Body Mass: 63.2 kg'
+                                            Image, 0x1156b5a40, {{210.3, 294.7}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x1156b5b80, {{229.7, 294.7}, {42.3, 14.3}}, label: '63.2 kg'
+                                          StaticText, 0x1156b5cc0, {{50.3, 346.0}, {130.7, 18.0}}, identifier: 'body-history-row-healthkit-3', label: 'November 1, 2026'
+                                          Image, 0x1156b5e00, {{29.3, 363.7}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-3', label: 'Love'
+                                          Other, 0x1156b5f40, {{50.3, 369.0}, {76.7, 22.7}}, identifier: 'body-history-row-healthkit-3', label: 'Weight: 78.2 kg'
+                                            Image, 0x1156b6080, {{59.7, 374.0}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x1156b61c0, {{77.3, 373.0}, {41.7, 14.3}}, label: '78.2 kg'
+                                          Other, 0x1156b6300, {{131.0, 369.0}, {66.0, 22.3}}, identifier: 'body-history-row-healthkit-3', label: 'Body Fat: 17.7%'
+                                            Image, 0x1156b6440, {{140.3, 374.7}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x1156b6580, {{156.7, 373.0}, {32.3, 14.3}}, label: '17.7%'
+                                          Other, 0x1156b66c0, {{201.0, 368.0}, {79.3, 24.3}}, identifier: 'body-history-row-healthkit-3', label: 'Lean Body Mass: 63.3 kg'
+                                            Image, 0x1156b6800, {{210.3, 373.0}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x1156b6940, {{229.7, 373.0}, {42.7, 14.3}}, label: '63.3 kg'
+                                          StaticText, 0x1156b6a80, {{50.3, 424.3}, {127.3, 18.0}}, identifier: 'body-history-row-healthkit-4', label: 'October 30, 2026'
+                                          Image, 0x1156b6bc0, {{29.3, 442.0}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-4', label: 'Love'
+                                          Other, 0x1156b6d00, {{50.3, 447.3}, {76.7, 22.7}}, identifier: 'body-history-row-healthkit-4', label: 'Weight: 78.0 kg'
+                                            Image, 0x1156b6e40, {{59.7, 452.3}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x1156b6f80, {{77.3, 451.3}, {41.7, 14.3}}, label: '78.0 kg'
+                                          Other, 0x1156b70c0, {{131.0, 447.3}, {66.7, 22.3}}, identifier: 'body-history-row-healthkit-4', label: 'Body Fat: 17.5%'
+                                            Image, 0x1156b7200, {{140.3, 453.0}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x1156b7340, {{156.7, 451.3}, {33.0, 14.3}}, label: '17.5%'
+                                          Other, 0x1156b7480, {{201.7, 446.3}, {79.3, 24.3}}, identifier: 'body-history-row-healthkit-4', label: 'Lean Body Mass: 63.3 kg'
+                                            Image, 0x1156b75c0, {{211.0, 451.3}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x1156b7700, {{230.3, 451.3}, {42.7, 14.3}}, label: '63.3 kg'
+                                          StaticText, 0x1156b7840, {{28.0, 502.7}, {127.0, 18.0}}, identifier: 'body-history-row-manual-1', label: 'October 29, 2026'
+                                          Other, 0x1156b7980, {{28.0, 525.7}, {75.7, 22.7}}, identifier: 'body-history-row-manual-1', label: 'Weight: 74.7 kg'
+                                            Image, 0x1156b7ac0, {{37.3, 530.7}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x1156b7c00, {{55.0, 529.7}, {40.7, 14.3}}, label: '74.7 kg'
+                                          Other, 0x1156b7d40, {{107.7, 525.7}, {68.3, 22.3}}, identifier: 'body-history-row-manual-1', label: 'Body Fat: 18.2%'
+                                            Image, 0x1156b7e80, {{117.0, 531.3}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x10a5f8000, {{133.3, 529.7}, {34.7, 14.3}}, label: '18.2%'
+                                          Other, 0x10a5f8140, {{180.0, 524.7}, {77.0, 24.3}}, identifier: 'body-history-row-manual-1', label: 'Muscle Mass (kg): 32.1'
+                                            Image, 0x10a5f8280, {{189.3, 529.7}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x10a5f83c0, {{208.7, 529.7}, {40.3, 14.3}}, label: '32.1 kg'
+                                          Image, 0x10a5f8500, {{342.0, 524.7}, {11.0, 2.3}}, identifier: 'body-history-row-manual-1', label: 'More'
+                                          StaticText, 0x10a5f8640, {{50.3, 581.0}, {127.3, 18.0}}, identifier: 'body-history-row-healthkit-6', label: 'October 28, 2026'
+                                          Image, 0x10a5f8780, {{29.3, 598.7}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-6', label: 'Love'
+                                          Other, 0x10a5f88c0, {{50.3, 604.0}, {75.3, 22.7}}, identifier: 'body-history-row-healthkit-6', label: 'Weight: 77.9 kg'
+                                            Image, 0x10a5f8a00, {{59.7, 609.0}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x10a5f8b40, {{77.3, 608.0}, {40.3, 14.3}}, label: '77.9 kg'
+                                          Other, 0x10a5f8c80, {{129.7, 604.0}, {66.7, 22.3}}, identifier: 'body-history-row-healthkit-6', label: 'Body Fat: 17.5%'
+                                            Image, 0x10a5f8dc0, {{139.0, 609.7}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x10a5f8f00, {{155.3, 608.0}, {33.0, 14.3}}, label: '17.5%'
+                                          Other, 0x10a5f9040, {{200.3, 603.0}, {79.0, 24.3}}, identifier: 'body-history-row-healthkit-6', label: 'Lean Body Mass: 63.5 kg'
+                                            Image, 0x10a5f9180, {{209.7, 608.0}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x10a5f92c0, {{229.0, 608.0}, {42.3, 14.3}}, label: '63.5 kg'
+                                          StaticText, 0x10a5f9400, {{50.3, 659.3}, {127.0, 18.0}}, identifier: 'body-history-row-healthkit-7', label: 'October 26, 2026'
+                                          Image, 0x10a5f9540, {{29.3, 677.0}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-7', label: 'Love'
+                                          Other, 0x10a5f9680, {{50.3, 682.3}, {75.3, 22.7}}, identifier: 'body-history-row-healthkit-7', label: 'Weight: 77.9 kg'
+                                            Image, 0x10a5f97c0, {{59.7, 687.3}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x10a5f9900, {{77.3, 686.3}, {40.3, 14.3}}, label: '77.9 kg'
+                                          Other, 0x10a5f9a40, {{129.7, 682.3}, {67.0, 22.3}}, identifier: 'body-history-row-healthkit-7', label: 'Body Fat: 17.4%'
+                                            Image, 0x10a5f9b80, {{139.0, 688.0}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x10a5f9cc0, {{155.3, 686.3}, {33.3, 14.3}}, label: '17.4%'
+                                          Other, 0x10a5f9e00, {{200.7, 681.3}, {79.3, 24.3}}, identifier: 'body-history-row-healthkit-7', label: 'Lean Body Mass: 63.6 kg'
+                                            Image, 0x10a5f9f40, {{210.0, 686.3}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x10a5fa080, {{229.3, 686.3}, {42.7, 14.3}}, label: '63.6 kg'
+                                          StaticText, 0x10a5fa1c0, {{50.3, 737.7}, {127.3, 18.0}}, identifier: 'body-history-row-healthkit-8', label: 'October 24, 2026'
+                                          Image, 0x10a5fa300, {{29.3, 755.3}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-8', label: 'Love'
+                                          Other, 0x10a5fa440, {{50.3, 760.7}, {75.3, 22.7}}, identifier: 'body-history-row-healthkit-8', label: 'Weight: 77.6 kg'
+                                            Image, 0x10a5fa580, {{59.7, 765.7}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x10a5fa6c0, {{77.3, 764.7}, {40.3, 14.3}}, label: '77.6 kg'
+                                          Other, 0x10a5fa800, {{129.7, 760.7}, {66.7, 22.3}}, identifier: 'body-history-row-healthkit-8', label: 'Body Fat: 17.3%'
+                                            Image, 0x10a5fa940, {{139.0, 766.3}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x10a5faa80, {{155.3, 764.7}, {33.0, 14.3}}, label: '17.3%'
+                                          Other, 0x10a5fabc0, {{200.3, 759.7}, {79.3, 24.3}}, identifier: 'body-history-row-healthkit-8', label: 'Lean Body Mass: 63.6 kg'
+                                            Image, 0x10a5fad00, {{209.7, 764.7}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x10a5fae40, {{229.0, 764.7}, {42.7, 14.3}}, label: '63.6 kg'
+                                          StaticText, 0x10a5faf80, {{28.0, 816.0}, {127.0, 18.0}}, identifier: 'body-history-row-manual-2', label: 'October 22, 2026'
+                                          Other, 0x10a5fb0c0, {{28.0, 839.0}, {76.3, 22.7}}, identifier: 'body-history-row-manual-2', label: 'Weight: 74.4 kg'
+                                            Image, 0x10a5fb200, {{37.3, 844.0}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x10a5fb340, {{55.0, 843.0}, {41.3, 14.3}}, label: '74.4 kg'
+                                          Other, 0x10a5fb480, {{108.3, 839.0}, {68.7, 22.3}}, identifier: 'body-history-row-manual-2', label: 'Body Fat: 18.4%'
+                                            Image, 0x10a5fb5c0, {{117.7, 844.7}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x10a5fb700, {{134.0, 843.0}, {35.0, 14.3}}, label: '18.4%'
+                                          Other, 0x10a5fb840, {{181.0, 838.0}, {79.0, 24.3}}, identifier: 'body-history-row-manual-2', label: 'Muscle Mass (kg): 32.2'
+                                            Image, 0x10a5fb980, {{190.3, 843.0}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x10a5fbac0, {{209.7, 843.0}, {42.3, 14.3}}, label: '32.2 kg'
+                                          Image, 0x10a5fbc00, {{342.0, 838.0}, {11.0, 2.3}}, identifier: 'body-history-row-manual-2', label: 'More'
+                                          StaticText, 0x10a5fbd40, {{50.3, 894.3}, {127.0, 18.0}}, identifier: 'body-history-row-healthkit-10', label: 'October 22, 2026'
+                                          Image, 0x10a5fbe80, {{29.3, 912.0}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-10', label: 'Love'
+                                          Other, 0x1156ac000, {{50.3, 917.3}, {75.3, 22.7}}, identifier: 'body-history-row-healthkit-10', label: 'Weight: 77.6 kg'
+                                            Image, 0x1156ac140, {{59.7, 922.3}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x1156ac280, {{77.3, 921.3}, {40.3, 14.3}}, label: '77.6 kg'
+                                          Other, 0x1156ac3c0, {{129.7, 917.3}, {66.7, 22.3}}, identifier: 'body-history-row-healthkit-10', label: 'Body Fat: 17.2%'
+                                            Image, 0x1156ac500, {{139.0, 923.0}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x1156ac640, {{155.3, 921.3}, {33.0, 14.3}}, label: '17.2%'
+                                          Other, 0x1156ac780, {{200.3, 916.3}, {78.3, 24.3}}, identifier: 'body-history-row-healthkit-10', label: 'Lean Body Mass: 63.7 kg'
+                                            Image, 0x1156ac8c0, {{209.7, 921.3}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x1156aca00, {{229.0, 921.3}, {41.7, 14.3}}, label: '63.7 kg'
+                                          StaticText, 0x1156acb40, {{50.3, 972.7}, {127.0, 18.0}}, identifier: 'body-history-row-healthkit-11', label: 'October 20, 2026'
+                                          Image, 0x1156acc80, {{29.3, 990.3}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-11', label: 'Love'
+                                          Other, 0x1156acdc0, {{50.3, 995.7}, {75.3, 22.7}}, identifier: 'body-history-row-healthkit-11', label: 'Weight: 77.5 kg'
+                                            Image, 0x1156acf00, {{59.7, 1000.7}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x1156ad040, {{77.3, 999.7}, {40.3, 14.3}}, label: '77.5 kg'
+                                          Other, 0x1156ad180, {{129.7, 995.7}, {66.7, 22.3}}, identifier: 'body-history-row-healthkit-11', label: 'Body Fat: 17.2%'
+                                            Image, 0x1156ad2c0, {{139.0, 1001.3}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x1156ad400, {{155.3, 999.7}, {33.0, 14.3}}, label: '17.2%'
+                                          Other, 0x1156ad540, {{200.3, 994.7}, {79.3, 24.3}}, identifier: 'body-history-row-healthkit-11', label: 'Lean Body Mass: 63.9 kg'
+                                            Image, 0x1156ad680, {{209.7, 999.7}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x1156ad7c0, {{229.0, 999.7}, {42.7, 14.3}}, label: '63.9 kg'
+                                          StaticText, 0x1156ad900, {{50.3, 1051.0}, {125.3, 18.0}}, identifier: 'body-history-row-healthkit-12', label: 'October 18, 2026'
+                                          Image, 0x1156ada40, {{29.3, 1068.7}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-12', label: 'Love'
+                                          Other, 0x1156adb80, {{50.3, 1074.0}, {75.3, 22.7}}, identifier: 'body-history-row-healthkit-12', label: 'Weight: 77.3 kg'
+                                            Image, 0x1156adcc0, {{59.7, 1079.0}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x1156ade00, {{77.3, 1078.0}, {40.3, 14.3}}, label: '77.3 kg'
+                                          Other, 0x1156adf40, {{129.7, 1074.0}, {66.7, 22.3}}, identifier: 'body-history-row-healthkit-12', label: 'Body Fat: 17.0%'
+                                            Image, 0x1156ae080, {{139.0, 1079.7}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x1156ae1c0, {{155.3, 1078.0}, {33.0, 14.3}}, label: '17.0%'
+                                          Other, 0x1156ae300, {{200.3, 1073.0}, {79.3, 24.3}}, identifier: 'body-history-row-healthkit-12', label: 'Lean Body Mass: 63.9 kg'
+                                            Image, 0x1156ae440, {{209.7, 1078.0}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x1156ae580, {{229.0, 1078.0}, {42.7, 14.3}}, label: '63.9 kg'
+                                          StaticText, 0x1156ae6c0, {{50.3, 1129.3}, {125.0, 18.0}}, identifier: 'body-history-row-healthkit-13', label: 'October 16, 2026'
+                                          Image, 0x1156ae800, {{29.3, 1147.0}, {11.7, 11.0}}, identifier: 'body-history-row-healthkit-13', label: 'Love'
+                                          Other, 0x1156ae940, {{50.3, 1152.3}, {75.3, 22.7}}, identifier: 'body-history-row-healthkit-13', label: 'Weight: 77.2 kg'
+                                            Image, 0x1156aea80, {{59.7, 1157.3}, {12.3, 12.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            StaticText, 0x1156aebc0, {{77.3, 1156.3}, {40.3, 14.3}}, label: '77.2 kg'
+                                          Other, 0x1156aed00, {{129.7, 1152.3}, {66.7, 22.3}}, identifier: 'body-history-row-healthkit-13', label: 'Body Fat: 17.0%'
+                                            Image, 0x1156aee40, {{139.0, 1158.0}, {11.0, 11.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            StaticText, 0x1156aef80, {{155.3, 1156.3}, {33.0, 14.3}}, label: '17.0%'
+                                          Other, 0x1156af0c0, {{200.3, 1151.3}, {79.3, 24.3}}, identifier: 'body-history-row-healthkit-13', label: 'Lean Body Mass: 64.0 kg'
+                                            Image, 0x1156af200, {{209.7, 1156.3}, {14.0, 14.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            StaticText, 0x1156af340, {{229.0, 1156.3}, {42.7, 14.3}}, label: '64.0 kg'
+                                      Other, 0x1156af480, {{433.0, 83.0}, {30.0, 536.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                        Other, 0x1156af5c0, {{460.0, 86.0}, {3.0, 204.0}}
+                                      Other, 0x1156af700, {{433.0, 83.0}, {30.0, 536.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                        Other, 0x1156af840, {{460.0, 86.0}, {3.0, 204.0}}
+                Other, 0x1156af980, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x1156afac0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x1156afc00, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x1156afd40, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x1156afe80, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x114f40000, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x114f40140, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x114f40280, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x114f403c0, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x114f40500, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x114f40640, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x114f40780, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x114f408c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x114f40a00, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x114f40b40, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x114f40c80, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x114f40dc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x114f40f00, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x114f41040, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x114f41180, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x114f412c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x114f41400, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x114f41540, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x114f41680, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x114f417c0, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x114f41900, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                                            Image, 0x114f41a40, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x114f41b80, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x114f41cc0, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x114f41e00, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x114f41f40, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x114f42080, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x114f421c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x114f42300, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x114f42440, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x114f42580, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x114f426c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x114f42800, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x114f42940, {{396.0, 544.0}, {44.0, 58.0}}
+                                          Other, 0x114f42a80, {{396.0, 544.0}, {44.0, 58.0}}
+                                            Other, 0x114f42bc0, {{396.0, 544.0}, {44.0, 58.0}}
+                                            Other, 0x114f42d00, {{396.0, 544.0}, {44.0, 58.0}}
+                                              Other, 0x114f42e40, {{396.0, 544.0}, {44.0, 58.0}}
+                                                Other, 0x114f42f80, {{396.0, 544.0}, {44.0, 58.0}}
+                                                  Other, 0x114f430c0, {{396.0, 544.0}, {44.0, 58.0}}
+                                                Other, 0x114f43200, {{396.0, 544.0}, {44.0, 58.0}}
+                                              Other, 0x114f43340, {{396.0, 544.0}, {44.0, 58.0}}
+              Other, 0x114f43480, {{191.0, 322.0}, {0.0, 0.0}}
+    Window, 0x114f435c0, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x114f43700, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x114f43840, {{0.0, 0.0}, {466.0, 678.0}}
+Path to element:
+ →Application, 0x10a5e9400, pid: 65882, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x114f43980, pid: 65882, label: 'DUNE'
+  }
