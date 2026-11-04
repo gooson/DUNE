@@ -581,7 +581,7 @@ struct ContentView: View {
               let index = arguments.firstIndex(of: "--ui-t06-metric"),
               arguments.indices.contains(index + 1),
               let fixture = T06MetricCaptureFixture.make(arguments[index + 1]) else { return }
-        if fixture.category == .weight && arguments.contains("--ui-t06-reset-peer-criteria") {
+        if [.weight, .bodyFat].contains(fixture.category) && arguments.contains("--ui-t06-reset-peer-criteria") {
             // Keep this opt-in capture independent from previously saved comparison criteria.
             UserDefaults.standard.removeObject(forKey: "bodyPeerReference.ageGroup")
             UserDefaults.standard.removeObject(forKey: "bodyPeerReference.surveySex")
