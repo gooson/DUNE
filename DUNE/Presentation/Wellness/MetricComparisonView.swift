@@ -133,12 +133,18 @@ struct MetricComparisonView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 if dynamicTypeSize.isAccessibilitySize {
                     Menu {
-                        Picker(title, selection: selection) {
-                            ForEach(metrics) { metric in
-                                Text(metric.name)
-                                    .tag(metric.id)
-                                    .accessibilityIdentifier("\(identifier)-option-\(metric.category.rawValue)")
+                        ForEach(metrics) { metric in
+                            Button {
+                                selection.wrappedValue = metric.id
+                            } label: {
+                                if selection.wrappedValue == metric.id {
+                                    Label(metric.name, systemImage: "checkmark")
+                                } else {
+                                    Text(metric.name)
+                                }
                             }
+                            .accessibilityAddTraits(selection.wrappedValue == metric.id ? .isSelected : [])
+                            .accessibilityIdentifier("\(identifier)-option-\(metric.category.rawValue)")
                         }
                     } label: {
                         HStack(alignment: .top, spacing: DS.Spacing.sm) {

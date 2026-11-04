@@ -44,6 +44,10 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
     }
 
     func testCompareMetricsSharesPeriodAndDismisses() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--uitest-long-metric-history"]
+        launchApp(with: configuration)
+        navigateToWellness()
         XCTAssertTrue(app.waitAndTapToolbarAction("wellness-compare-metrics"),
                       "Wellness should expose metric comparison directly or in toolbar overflow")
         let firstPane = app.descendants(matching: .any)["metric-comparison-first"].firstMatch
@@ -84,7 +88,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(secondPane.staticTexts["kg"].firstMatch.waitForExistence(timeout: 10))
         let firstPlot = app.descendants(matching: .any)["metric-comparison-first-plot"].firstMatch
         let secondPlot = app.descendants(matching: .any)["metric-comparison-second-plot"].firstMatch
-        XCTAssertTrue(firstPlot.waitForExistence(timeout: 10), "Seeded HRV must render an actual plot")
+        XCTAssertTrue(firstPlot.waitForExistence(timeout: 10), "Fixture HRV must render an actual plot")
         XCTAssertTrue(secondPlot.waitForExistence(timeout: 10), "Seeded Weight must render an actual plot")
         captureComparisonPlot(firstPlot, named: "H04 normal HRV plot and ms", in: comparisonScroll)
         captureComparisonPlot(secondPlot, named: "H04 normal Weight plot and kg", in: comparisonScroll)
@@ -129,6 +133,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
     func testCompareMetricsDarkMaximumAccessibility() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments += [
+            "--uitest-long-metric-history",
             "--ui-test-style", "dark", "-UIPreferredContentSizeCategoryName",
             "UICTContentSizeCategoryAccessibilityXXXL", "--ui-disable-animations"
         ]
@@ -155,10 +160,8 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         let firstPicker = app.descendants(matching: .any)["metric-comparison-first-picker"].firstMatch
         XCTAssertTrue(firstPicker.isEnabled)
         firstPicker.tap()
-        let rhr = app.descendants(matching: .any)["metric-comparison-first-option-rhr"].firstMatch
-        XCTAssertTrue(rhr.waitForExistence(timeout: 5))
-        XCTAssertTrue(rhr.isEnabled && rhr.isHittable)
-        rhr.tap()
+        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-first-option-rhr", towardLowerContent: true),
+                      "The uniquely identified RHR option must be fully visible and enabled in the native menu")
         let restingHR = firstPane.staticTexts["Resting HR"].firstMatch
         XCTAssertTrue(restingHR.waitForExistence(timeout: 5))
         XCTAssertTrue(firstPane.staticTexts["bpm"].firstMatch.waitForExistence(timeout: 10))
@@ -168,10 +171,8 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("H04 MAX selected Resting HR full row")
         XCTAssertTrue(revealComparisonControl(firstPicker, in: comparisonScroll))
         firstPicker.tap()
-        let hrv = app.descendants(matching: .any)["metric-comparison-first-option-hrv"].firstMatch
-        XCTAssertTrue(hrv.waitForExistence(timeout: 5))
-        XCTAssertTrue(hrv.isEnabled && hrv.isHittable)
-        hrv.tap()
+        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-first-option-hrv", towardLowerContent: false),
+                      "The uniquely identified HRV option must be fully visible and enabled in the native menu")
         XCTAssertTrue(firstPane.staticTexts["ms"].firstMatch.waitForExistence(timeout: 10))
         let firstPlot = app.descendants(matching: .any)["metric-comparison-first-plot"].firstMatch
         XCTAssertTrue(firstPlot.waitForExistence(timeout: 10))
@@ -182,10 +183,8 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         let secondPicker = app.descendants(matching: .any)["metric-comparison-second-picker"].firstMatch
         XCTAssertTrue(secondPicker.isEnabled)
         secondPicker.tap()
-        let weight = app.descendants(matching: .any)["metric-comparison-second-option-weight"].firstMatch
-        XCTAssertTrue(weight.waitForExistence(timeout: 5))
-        XCTAssertTrue(weight.isEnabled && weight.isHittable)
-        weight.tap()
+        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-second-option-weight", towardLowerContent: false),
+                      "The uniquely identified Weight option must be fully visible and enabled in the native menu")
         let weightUnit = secondPane.staticTexts["kg"].firstMatch
         XCTAssertTrue(weightUnit.waitForExistence(timeout: 10))
         let weightPlot = app.descendants(matching: .any)["metric-comparison-second-plot"].firstMatch
@@ -219,6 +218,49 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(firstPane.waitForNonExistence(timeout: 5))
         XCTAssertTrue(app.buttons[AXID.wellnessToolbarAdd].waitForExistence(timeout: 5))
         VisualAudit.capture("H04 MAX Done returns Wellness")
+    }
+
+    private func tapComparisonMenuOption(_ identifier: String, towardLowerContent: Bool) -> Bool {
+        // The accessibility-size Menu opens a separate native, virtualized CollectionView.
+        // Its content frame is taller than the visible popover; use the popover clip frame.
+        let collections = app.collectionViews
+        guard collections.count == 1 else { return false }
+        let popup = collections.firstMatch
+        let content = popup.frame
+        let clips = app.otherElements.allElementsBoundByIndex.map(\.frame).filter { frame in
+            abs(frame.minX - content.minX) <= 1 && abs(frame.minY - content.minY) <= 1
+                && abs(frame.width - content.width) <= 1
+                && frame.height >= 100 && frame.height < content.height - 1
+        }
+        guard let clip = clips.min(by: { $0.height < $1.height }) else { return false }
+        let viewport = clip.intersection(app.windows.firstMatch.frame)
+        guard !viewport.isNull && !viewport.isEmpty else { return false }
+        let matches = popup.descendants(matching: .any).matching(identifier: identifier)
+        for attempt in 0...8 {
+            let count = matches.count
+            guard count <= 1 else { return false }
+            if count == 1 {
+                let option = matches.firstMatch
+                if option.isEnabled && option.isHittable && viewport.contains(option.frame) {
+                    option.tap()
+                    return true
+                }
+            }
+            guard attempt < 8 else { break }
+            let optionFrame = count == 1 ? matches.firstMatch.frame : CGRect.null
+            let lower = !optionFrame.isNull
+                ? optionFrame.maxY > viewport.maxY
+                : towardLowerContent
+            let origin = popup.coordinate(withNormalizedOffset: .zero)
+            let x = viewport.midX - content.minX
+            let startY = viewport.minY + viewport.height * (lower ? 0.6 : 0.4) - content.minY
+            let endY = viewport.minY + viewport.height * (lower ? 0.4 : 0.6) - content.minY
+            origin.withOffset(CGVector(dx: x, dy: startY)).press(
+                forDuration: 0.05,
+                thenDragTo: origin.withOffset(CGVector(dx: x, dy: endY))
+            )
+        }
+        return false
     }
 
     private func revealComparisonControl(
