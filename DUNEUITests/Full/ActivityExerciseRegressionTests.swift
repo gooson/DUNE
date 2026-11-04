@@ -2766,6 +2766,116 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
     }
 
+    func testVisualAuditRewardExplanation() throws {
+        try verifyRewardExplanation(maxText: false)
+    }
+
+    func testRewardExplanationAtMaximumAccessibilityTextSize() throws {
+        try verifyRewardExplanation(maxText: true)
+    }
+
+    private func verifyRewardExplanation(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += ["--ui-test-style", "dark", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        }
+        launchApp(with: configuration)
+        openActivityDetail(sectionIdentifier: AXID.activitySectionPR,
+                           destinationIdentifier: AXID.activityPersonalRecordsDetailScreen, maxSwipes: 24)
+        let info = app.buttons["activity-personal-records-reward-info"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-personal-records-reward-info", maxSwipes: 30))
+        XCTAssertTrue(info.isHittable); info.tap()
+        let sheet = app.scrollViews["activity-personal-records-reward-info-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        VisualAudit.capture("Reward info sheet")
+        let window = app.windows.firstMatch
+        let handles = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
+        XCTAssertEqual(handles.count, 1)
+        let handle = handles.element(boundBy: 0)
+        XCTAssertTrue(handle.exists && handle.isHittable && window.frame.contains(handle.frame))
+        func viewport() -> CGRect {
+            let visible = sheet.frame.intersection(window.frame)
+            let handleOverlap = visible.intersection(handle.frame)
+            guard !handleOverlap.isNull && !handleOverlap.isEmpty else { return visible }
+            let top = max(visible.minY, handleOverlap.maxY)
+            return CGRect(x: visible.minX, y: top, width: visible.width, height: max(0, visible.maxY - top))
+        }
+        func drag(_ dy: CGFloat, startY: CGFloat? = nil) {
+            let rect = viewport()
+            XCTAssertFalse(rect.isNull || rect.isEmpty)
+            let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                dx: rect.midX - window.frame.minX, dy: (startY ?? rect.midY) - window.frame.minY))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: dy)))
+        }
+        func read(_ text: String, index: Int) {
+            let item = sheet.staticTexts.matching(NSPredicate(format: "label == %@", text)).firstMatch
+            for _ in 0..<30 {
+                if item.exists && !item.frame.isEmpty { break }
+                drag(-viewport().height * 0.18)
+            }
+            XCTAssertTrue(item.exists && item.label == text && !item.frame.isEmpty, "Missing full exact text")
+            func widthFits() -> Bool {
+                let v = viewport(), f = item.frame
+                return !v.isNull && !v.isEmpty && f.minX >= v.minX && f.maxX <= v.maxX
+            }
+            XCTAssertTrue(widthFits(), "Text must fit sheet width")
+            // Small remaining clearance cannot absorb a full proven reading step.
+            // Read those leaves through overlapping intervals, as for tall text.
+            if item.frame.height + 2 * viewport().height * 0.18 <= viewport().height {
+                for _ in 0..<30 where !viewport().contains(item.frame) {
+                    let v = viewport(), f = item.frame
+                    let error = f.minY < v.minY ? v.minY - f.minY : v.maxY - f.maxY
+                    let readStep = v.height * 0.18
+                    drag(error > 0 ? readStep : -readStep)
+                }
+                XCTAssertTrue(widthFits() && viewport().contains(item.frame), "Short text must fit viewport")
+            } else {
+                for _ in 0..<30 where !(item.frame.minY >= viewport().minY && item.frame.minY < viewport().maxY) {
+                    let v = viewport(), error = v.minY + 4 - item.frame.minY
+                    let readStep = v.height * 0.18
+                    drag(error > 0 ? readStep : -readStep)
+                }
+                XCTAssertTrue(widthFits() && item.frame.minY >= viewport().minY && item.frame.minY < viewport().maxY)
+                VisualAudit.capture("A21 tall text \(index) top \(maxText ? "MAX" : "normal")")
+                var reached = item.frame.maxY <= viewport().maxY
+                for _ in 0..<30 where !reached {
+                    let beforeFrame = item.frame, before = beforeFrame.intersection(viewport())
+                    XCTAssertFalse(before.isEmpty)
+                    let beforeEnd = before.maxY - beforeFrame.minY
+                    // Start on the visible text interval, then verify actual progress.
+                    drag(-viewport().height * 0.18, startY: before.midY)
+                    let afterFrame = item.frame, after = afterFrame.intersection(viewport())
+                    XCTAssertFalse(after.isEmpty); XCTAssertTrue(widthFits())
+                    XCTAssertLessThanOrEqual(after.minY - afterFrame.minY, beforeEnd + 1)
+                    XCTAssertGreaterThan(after.maxY - afterFrame.minY, beforeEnd + 1)
+                    reached = afterFrame.maxY <= viewport().maxY && !after.isEmpty
+                }
+                XCTAssertTrue(reached, "Tall text bottom must be readable")
+                VisualAudit.capture("A21 tall text \(index) bottom \(maxText ? "MAX" : "normal")")
+            }
+        }
+        let texts = [
+            "How Rewards Work", "Levels",
+            "Earn points for new distance, step, or duration milestones and new cardio personal records. Every 200 points raises your level.",
+            "Badges", "Unlock badges by hitting milestones: PR counts, volume targets, workout streaks, and more.",
+            "Personal Records", "View strength bests (1RM, rep max, volume) and cardio bests (pace, distance, duration). New cardio personal records earn points.",
+            "Milestones", "Reach a new distance, step, or duration milestone to earn bonus points. Workout days can unlock badges."
+        ]
+        for (i, text) in texts.enumerated() { read(text, index: i) }
+        VisualAudit.capture("A21 reward final text \(maxText ? "MAX" : "normal")")
+        // The product has only the medium detent; do not attempt expansion.
+        XCTAssertTrue(handle.exists && handle.isHittable && window.frame.contains(handle.frame))
+        let start = handle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+            dx: handle.frame.midX - window.frame.minX, dy: window.frame.height - 4))
+        start.press(forDuration: 0.1, thenDragTo: end, withVelocity: XCUIGestureVelocity(rawValue: 1000), thenHoldForDuration: 0)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
+        XCTAssertTrue(app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(info.waitForExistence(timeout: 5))
+        VisualAudit.capture("A21 reward dismissed \(maxText ? "MAX" : "normal")")
+    }
+
     func testPersonalRecordsPaceHistoryShowsWorkoutsInMonth() throws {
         openActivityDetail(
             sectionIdentifier: AXID.activitySectionPR,

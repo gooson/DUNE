@@ -448,6 +448,39 @@ final class DesignMapNotificationDetailTests: SeededUITestBaseCase {
         }
     }
 
+    func testNotificationRewardHelp() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        launchApp(with: configuration)
+        openNotificationDetail(title: "Personal Records Route Fixture",
+                               screen: "activity-personal-records-detail-screen")
+        let info = app.buttons["activity-personal-records-reward-info"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-personal-records-reward-info", maxSwipes: 30),
+                      "Notification wrapper must load an actually eligible reward section")
+        XCTAssertTrue(info.isHittable); info.tap()
+        let sheet = app.scrollViews["activity-personal-records-reward-info-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        XCTAssertTrue(sheet.staticTexts.matching(NSPredicate(format: "label == %@", "How Rewards Work")).firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("A21 notification reward help")
+        let handles = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
+        XCTAssertEqual(handles.count, 1)
+        let handle = handles.element(boundBy: 0), window = app.windows.firstMatch
+        XCTAssertTrue(handle.exists && handle.isHittable && window.frame.contains(handle.frame))
+        let start = handle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: handle.frame.midX - window.frame.minX, dy: window.frame.height - 4))
+        start.press(forDuration: 0.1, thenDragTo: end, withVelocity: XCUIGestureVelocity(rawValue: 1000), thenHoldForDuration: 0)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
+        XCTAssertTrue(info.waitForExistence(timeout: 5))
+        let railBack = app.buttons["BackButton"].firstMatch
+        let back = railBack.exists && railBack.isHittable ? railBack : app.navigationBars.buttons.firstMatch
+        XCTAssertTrue(back.waitForExistence(timeout: 5) && back.isHittable)
+        XCTAssertFalse(back.frame.isEmpty)
+        XCTAssertTrue(window.frame.contains(back.frame), "Native Back must fit the active window")
+        back.tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("A21 notification reward return")
+    }
+
     func testNotificationPersonalRecordsPush() throws {
         openNotificationDetail(title: "Personal Records Route Fixture",
                                screen: "activity-personal-records-detail-screen")

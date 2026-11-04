@@ -1410,13 +1410,29 @@
       "source_json": "../../../full-redesign-map/review/briefing-condition-readability-2026-11-03/evidence.json",
       "source_record": "selected.ipad.T04",
       "capture_scope": "2026-11-03 targeted readability and equal-height fix; default text only; Phone max text supplemental"
+    },
+    "A21": {
+      "row_id": "A21",
+      "file": "A21.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditRewardExplanation()",
+      "action": "Reward info sheet",
+      "source_revision": "9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef",
+      "capture_kind": "xctest",
+      "image": "83FB9DBA-5B7A-4ACF-BA98-5EF50B569B6D.png",
+      "screen": "screen-0-1512x2316-Reward info sheet_0_34729160-BEF4-48DC-B1B7-FFD43F6C61D3.png",
+      "timestamp": 1793791979.715,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "CF0B1619-E221-49BE-910A-07B3460170FC",
+      "image_sha256": "b8aa51f240b18fefe1818b0dfdb963277791b7cafe8f85dbb87f46552078bcaf",
+      "ax_sha256": "c676bd331f55299907a031ec0a352525672de343ba4c135c8b960b5bb7a23f13",
+      "evidence": "activity-personal-records-reward-info-sheet"
     }
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "52dfe9b909c48c183d6412efdce8a16d2e54df0e",
+  "last_refresh_revision": "9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef",
   "last_refresh_screens": [
-    "A20"
+    "A21"
   ],
-  "last_refresh_note": "Fresh corrected-source A20 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Fresh corrected-source A21 captures; per-row source and device provenance retained."
 }

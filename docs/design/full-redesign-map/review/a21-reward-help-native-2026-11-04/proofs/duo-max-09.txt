@@ -1,0 +1,236 @@
+Attributes: Application, 0x11272b480, pid: 79360, label: 'DUNE'
+Element subtree:
+ →Application, 0x11272b480, pid: 79360, label: 'DUNE'
+    Window (Main), 0x112729540, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x112729cc0, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x11272be80, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x11272a800, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x112728780, {{-466.0, -678.0}, {1398.0, 2034.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+          Other, 0x112729900, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x11272b700, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x112729400, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x112728500, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x1127297c0, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x1127288c0, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x11272b200, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x11272b980, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x112728640, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x112728000, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x11272bd40, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x11272a940, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x11272b5c0, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Personal Records'
+                            Other, 0x11272a6c0, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x112729040, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x11272b340, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x112729b80, {{0.0, 0.0}, {466.0, 678.0}}
+                                    ScrollView, 0x112729680, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'activity-personal-records-detail-screen'
+                                      Other, 0x112733ac0, {{0.0, -1264.0}, {382.0, 4747.0}}
+                                        ScrollView, 0x112733d40, {{16.0, -1248.0}, {350.0, 74.7}}, identifier: 'activity-personal-records-chip-bar'
+                                          Other, 0x1127335c0, {{16.0, -1248.0}, {1546.3, 74.7}}
+                                            Button, 0x112733840, {{24.0, -1248.0}, {320.7, 74.7}}, identifier: 'activity-personal-records-kind-fastestPace', label: 'Fastest Pace', Selected
+                                              StaticText, 0x112733980, {{54.0, -1240.0}, {278.7, 58.7}}, label: 'Fastest Pace'
+                                              Image, 0x112733c00, {{37.0, -1216.7}, {12.0, 12.0}}, identifier: 'speedometer', label: 'Speed'
+                                            Button, 0x112733700, {{352.7, -1248.0}, {403.3, 74.7}}, identifier: 'activity-personal-records-kind-longestDistance', label: 'Longest Distance'
+                                              StaticText, 0x104f830c0, {{381.7, -1240.0}, {362.3, 58.7}}, label: 'Longest Distance'
+                                              Image, 0x104f82800, {{366.0, -1217.0}, {10.3, 13.0}}, identifier: 'point.topleft.down.to.point.bottomright.curvepath.fill', label: 'Downward Point At The Top-Left Corner Of To Point At The Bottom-Right Corner Of Curvepath, Filled'
+                                            Button, 0x104f81900, {{764.0, -1248.0}, {399.0, 74.7}}, identifier: 'activity-personal-records-kind-longestDuration', label: 'Longest Duration'
+                                              StaticText, 0x104f83c00, {{794.0, -1240.0}, {357.0, 58.7}}, label: 'Longest Duration'
+                                              Image, 0x104f81b80, {{777.0, -1216.7}, {12.0, 12.0}}, identifier: 'timer', label: 'Timer'
+                                            Button, 0x104f82080, {{1171.0, -1248.0}, {383.3, 74.7}}, identifier: 'activity-personal-records-kind-highestCalories', label: 'Highest Calories'
+                                              StaticText, 0x104f81a40, {{1199.0, -1240.0}, {343.3, 58.7}}, label: 'Highest Calories'
+                                              Image, 0x104f83340, {{1184.0, -1217.0}, {10.0, 13.0}}, identifier: 'flame.fill', label: 'Flame'
+                                        Other, 0x11272c140, {{16.0, -1157.3}, {350.0, 611.0}}, identifier: 'activity-personal-records-current-best'
+                                          StaticText, 0x11272c640, {{88.0, -1137.3}, {191.3, 125.3}}, identifier: 'activity-personal-records-best-heading', label: 'Current Best'
+                                          Image, 0x11272c780, {{36.0, -1096.7}, {44.0, 44.0}}, identifier: 'speedometer', label: 'Speed'
+                                          Button, 0x11272c500, {{302.0, -1004.0}, {44.0, 44.0}}, identifier: 'activity-personal-records-share-button', label: 'Share PR'
+                                          StaticText, 0x11272c8c0, {{36.0, -944.0}, {200.7, 71.7}}, identifier: 'activity-personal-records-best-value', label: '13'00"'
+                                          StaticText, 0x11272c000, {{36.0, -868.3}, {90.0, 65.7}}, identifier: 'activity-personal-records-best-unit', label: '/km'
+                                          StaticText, 0x11272ca00, {{36.0, -786.7}, {175.0, 58.7}}, label: 'Walking'
+                                          StaticText, 0x11272c3c0, {{36.0, -724.0}, {231.7, 51.3}}, label: 'Fastest Pace'
+                                          StaticText, 0x11272c280, {{36.0, -668.7}, {164.0, 102.3}}, identifier: 'activity-personal-records-best-date', label: 'October 15, 2026'
+                                          Other, 0x112740000, {{16.0, -603.6}, {350.0, 57.3}}
+                                        Other, 0x112740140, {{16.0, -530.3}, {350.0, 846.7}}, identifier: 'activity-personal-records-timeline-chart'
+                                          StaticText, 0x112740280, {{28.0, -518.3}, {277.0, 58.7}}, label: 'Pace History'
+                                          Button, 0x1127403c0, {{28.0, -451.7}, {163.7, 77.3}}, identifier: 'activity-personal-records-period-picker', label: 'Period, 6M, 6M', value: 6M
+                                            StaticText, 0x112740500, {{50.0, -444.7}, {77.7, 63.3}}, label: '6M'
+                                          StaticText, 0x112740640, {{28.0, -366.3}, {230.0, 102.3}}, identifier: 'activity-personal-records-chart-range', label: 'May 4 – Nov 4, 2026'
+                                          StaticText, 0x112740780, {{28.0, -256.0}, {64.0, 48.0}}, identifier: 'activity-personal-records-chart-unit', label: '/km'
+                                          Image, 0x1127408c0, {{43.7, -186.3}, {18.3, 18.3}}, identifier: 'speedometer', label: 'Speed'
+                                          StaticText, 0x112740a00, {{74.0, -188.0}, {267.7, 51.3}}, label: 'Latest Record'
+                                          StaticText, 0x112740b40, {{74.0, -132.7}, {221.3, 58.7}}, identifier: 'personal-records-timeline-latest-value', label: '4'42" /km'
+                                          StaticText, 0x112740c80, {{74.0, -70.0}, {199.7, 102.3}}, identifier: 'personal-records-timeline-latest-date', label: 'November 3, 2026'
+                                          Other, 0x112740dc0, {{28.0, 68.3}, {326.0, 236.0}}, identifier: 'activity-personal-records-timeline-plot'
+                                            Other, 0x112740f00, {{191.9, 68.3}, {33.9, 184.0}}, label: 'Oct 1, 2026 to Nov 1, 2026', value: starts at 658, var...
+                                            Other, 0x112741040, {{225.8, 68.3}, {32.8, 184.0}}, label: 'Nov 1, 2026 to Dec 1, 2026', value: 780 to 282, decrea...
+                                        Other, 0x112741180, {{16.0, 332.3}, {350.0, 801.0}}, identifier: 'activity-personal-records-reward-progress'
+                                          StaticText, 0x1127412c0, {{28.0, 344.3}, {194.7, 116.7}}, label: 'Reward Progress'
+                                          Button, 0x112741400, {{310.0, 380.7}, {44.0, 44.0}}, identifier: 'activity-personal-records-reward-info', label: 'How Rewards Work'
+                                          Image, 0x112741540, {{39.5, 484.5}, {53.0, 53.0}}, identifier: 'star.circle.fill', label: 'Favorite'
+                                          StaticText, 0x112741680, {{100.0, 485.0}, {227.0, 125.3}}, identifier: 'activity-personal-records-reward-level', label: 'Level 1 — Beginner'
+                                          StaticText, 0x1127417c0, {{100.0, 612.3}, {166.7, 58.7}}, identifier: 'activity-personal-records-reward-points', label: '100 pts'
+                                          StaticText, 0x112741900, {{40.0, 683.0}, {293.3, 153.3}}, label: 'Next: Level 5 — Dedicated (100 pts to go)'
+                                          ProgressIndicator, 0x112741a40, {{40.0, 848.3}, {302.0, 4.0}}, identifier: 'activity-personal-records-level-progress', label: 'Level progress', value: 100 of 200 points
+                                            ProgressIndicator, 0x112741b80, {{40.0, 838.3}, {302.0, 24.0}}, value: 50%
+                                          ScrollView, 0x112741cc0, {{40.0, 864.3}, {302.0, 70.3}}
+                                            Other, 0x112741e00, {{40.0, 864.3}, {1422.0, 70.3}}
+                                              Image, 0x112741f40, {{52.7, 873.0}, {53.0, 53.0}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                                              StaticText, 0x112742080, {{112.3, 873.8}, {173.7, 51.3}}, label: 'Beginner'
+                                              Image, 0x1127421c0, {{314.7, 873.0}, {53.0, 53.0}}, identifier: 'circle', label: 'Circle'
+                                              StaticText, 0x112742300, {{374.3, 873.8}, {188.7, 51.3}}, label: 'Dedicated'
+                                              Image, 0x112742440, {{591.7, 873.0}, {53.0, 53.0}}, identifier: 'circle', label: 'Circle'
+                                              StaticText, 0x112742580, {{651.3, 873.8}, {146.0, 51.3}}, label: 'Ironclad'
+                                              Image, 0x1127426c0, {{826.0, 873.0}, {53.0, 53.0}}, identifier: 'circle', label: 'Circle'
+                                              StaticText, 0x112742800, {{885.7, 873.8}, {91.7, 51.3}}, label: 'Titan'
+                                              Image, 0x112742940, {{1006.0, 873.0}, {53.0, 53.0}}, identifier: 'circle', label: 'Circle'
+                                              StaticText, 0x112742a80, {{1065.7, 873.8}, {138.3, 51.3}}, label: 'Legend'
+                                              Image, 0x112742bc0, {{1232.7, 873.0}, {53.0, 53.0}}, identifier: 'circle', label: 'Circle'
+                                              StaticText, 0x112742d00, {{1292.3, 873.8}, {161.7, 51.3}}, label: 'Immortal'
+                                          StaticText, 0x112742e40, {{28.0, 958.7}, {275.0, 51.3}}, label: 'Badges (3/16)'
+                                          ScrollView, 0x112742f80, {{28.0, 1018.0}, {326.0, 103.3}}, identifier: 'activity-personal-records-badges-scroll'
+                                            Other, 0x1127430c0, {{28.0, 1018.0}, {5016.0, 103.3}}
+                                              Image, 0x112743200, {{171.0, 1031.0}, {20.0, 22.0}}, identifier: 'trophy.fill', label: 'Trophy Cup, Filled'
+                                              Image, 0x112743340, {{488.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x112743480, {{802.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x1127435c0, {{1116.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x112743700, {{1426.7, 1031.0}, {21.0, 21.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                              Image, 0x112743840, {{1744.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x112743980, {{2058.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x112743ac0, {{2372.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x112743c00, {{2686.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x112743d40, {{3000.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x112743e80, {{3313.3, 1030.0}, {15.0, 23.7}}, identifier: 'figure.walk', label: 'Walk'
+                                              Image, 0x108538000, {{3628.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x108538140, {{3942.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x108538280, {{4256.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x1085383c0, {{4570.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              Image, 0x108538500, {{4884.0, 1032.0}, {14.0, 19.7}}, identifier: 'lock.fill', label: 'Lock'
+                                              StaticText, 0x108538640, {{108.7, 1070.0}, {144.7, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-first-pr', label: 'First PR'
+                                              StaticText, 0x108538780, {{378.5, 1070.0}, {233.0, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-10-prs', label: 'PR Collector'
+                                              StaticText, 0x1085388c0, {{712.7, 1070.0}, {192.7, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-50-prs', label: 'PR Master'
+                                              StaticText, 0x108538a00, {{1009.2, 1070.0}, {227.7, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-all-kinds', label: 'All-Rounder'
+                                              StaticText, 0x108538b40, {{1364.7, 1070.0}, {144.7, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-1k-volume', label: '1K Club'
+                                              StaticText, 0x108538c80, {{1665.0, 1070.0}, {172.0, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-10k-volume', label: '10K Club'
+                                              StaticText, 0x108538dc0, {{1948.3, 1070.0}, {233.3, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-100k-volume', label: 'Iron Century'
+                                              StaticText, 0x108538f00, {{2252.3, 1070.0}, {253.3, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-7-streak', label: 'Week Warrior'
+                                              StaticText, 0x108539040, {{2545.7, 1070.0}, {294.7, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-30-streak', label: 'Monthly Master'
+                                              StaticText, 0x108539180, {{2865.3, 1070.0}, {283.3, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-100-streak', label: 'Century Streak'
+                                              StaticText, 0x1085392c0, {{3231.0, 1070.0}, {180.0, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-first-workout', label: 'First Step'
+                                              StaticText, 0x108539400, {{3541.5, 1070.0}, {187.0, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-100-workouts', label: 'Centurion'
+                                              StaticText, 0x108539540, {{3839.3, 1070.0}, {219.3, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-365-days', label: 'Year Strong'
+                                              StaticText, 0x108539680, {{4179.5, 1070.0}, {167.0, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-10pct-improve', label: 'Progress'
+                                              StaticText, 0x1085397c0, {{4477.2, 1070.0}, {199.7, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-double-lift', label: 'Double Up'
+                                              StaticText, 0x108539900, {{4757.2, 1070.0}, {267.7, 51.3}}, identifier: 'activity-personal-records-badge-name-badge-sub5-pace', label: 'Speed Demon'
+                                        StaticText, 0x108539a40, {{16.0, 1149.3}, {298.7, 116.7}}, label: 'All Fastest Pace Records'
+                                        Other, 0x108539b80, {{16.0, 1539.0}, {350.0, 1928.0}}, identifier: 'activity-personal-records-achievement-history'
+                                          StaticText, 0x108539cc0, {{28.0, 1551.0}, {298.3, 116.7}}, label: 'Achievement History'
+                                          StaticText, 0x108539e00, {{28.0, 1679.7}, {315.7, 51.3}}, label: 'November 2026'
+                                          Other, 0x108539f40, {{27.5, 1736.5}, {327.0, 362.7}}, identifier: 'activity-personal-records-achievement-milestone-ui-test-activity-workout-running-distanceMeters-tier-1'
+                                            Image, 0x10853a080, {{39.5, 1748.5}, {45.0, 45.0}}, identifier: 'flag.checkered.circle.fill', label: 'Checkered Flag In A Filled Circle'
+                                            StaticText, 0x10853a1c0, {{92.0, 1749.0}, {225.0, 116.7}}, identifier: 'activity-personal-records-achievement-title-milestone-ui-test-activity-workout-running-distanceMeters-tier-1', label: 'Milestone Reached'
+                                            StaticText, 0x10853a300, {{92.0, 1869.7}, {222.0, 51.3}}, identifier: 'activity-personal-records-achievement-detail-milestone-ui-test-activity-workout-running-distanceMeters-tier-1', label: 'Running: 5K'
+                                            StaticText, 0x10853a440, {{92.0, 1925.0}, {199.7, 102.3}}, identifier: 'activity-personal-records-achievement-date-milestone-ui-test-activity-workout-running-distanceMeters-tier-1', label: 'November 3, 2026'
+                                            StaticText, 0x10853a580, {{100.0, 2033.3}, {153.7, 51.3}}, label: '+40 pts'
+                                          Other, 0x10853a6c0, {{27.5, 2102.2}, {327.0, 361.3}}, identifier: 'activity-personal-records-achievement-badge-ui-test-activity-workout-running-milestone-running-distanceMeters-tier-1'
+                                            Image, 0x10853a800, {{39.5, 2114.2}, {45.0, 45.0}}, identifier: 'medal.fill', label: 'Medal, Filled'
+                                            StaticText, 0x10853a940, {{92.0, 2114.7}, {208.0, 174.7}}, identifier: 'activity-personal-records-achievement-title-badge-ui-test-activity-workout-running-milestone-running-distanceMeters-tier-1', label: 'New Badge Unlocked'
+                                            StaticText, 0x10853aa80, {{92.0, 2293.3}, {222.0, 51.3}}, identifier: 'activity-personal-records-achievement-detail-badge-ui-test-activity-workout-running-milestone-running-distanceMeters-tier-1', label: 'Running: 5K'
+                                            StaticText, 0x10853abc0, {{92.0, 2348.7}, {199.7, 102.3}}, identifier: 'activity-personal-records-achievement-date-badge-ui-test-activity-workout-running-milestone-running-distanceMeters-tier-1', label: 'November 3, 2026'
+                                          Other, 0x10853ad00, {{27.5, 2466.5}, {327.0, 471.7}}, identifier: 'activity-personal-records-achievement-pr-ui-test-activity-workout-running-fastestPace'
+                                            Image, 0x10853ae40, {{39.5, 2478.5}, {45.0, 45.0}}, identifier: 'trophy.fill', label: 'Trophy Cup, Filled'
+                                            StaticText, 0x10853af80, {{92.0, 2479.0}, {201.0, 174.7}}, identifier: 'activity-personal-records-achievement-title-pr-ui-test-activity-workout-running-fastestPace', label: 'Personal Record Updated'
+                                            StaticText, 0x10853b0c0, {{92.0, 2657.7}, {231.7, 102.3}}, identifier: 'activity-personal-records-achievement-detail-pr-ui-test-activity-workout-running-fastestPace', label: 'Running: Fastest Pace'
+                                            StaticText, 0x10853b200, {{92.0, 2764.0}, {199.7, 102.3}}, identifier: 'activity-personal-records-achievement-date-pr-ui-test-activity-workout-running-fastestPace', label: 'November 3, 2026'
+                                            StaticText, 0x10853b340, {{100.0, 2872.3}, {154.0, 51.3}}, label: '+60 pts'
+                                          Other, 0x10853b480, {{27.5, 2941.2}, {327.0, 514.3}}, identifier: 'activity-personal-records-achievement-badge-pr-ui-test-activity-workout-running-fastestPace'
+                                            Image, 0x10853b5c0, {{39.5, 2953.2}, {45.0, 45.0}}, identifier: 'medal.fill', label: 'Medal, Filled'
+                                            StaticText, 0x10853b700, {{92.0, 2953.7}, {208.0, 174.7}}, identifier: 'activity-personal-records-achievement-title-badge-pr-ui-test-activity-workout-running-fastestPace', label: 'New Badge Unlocked'
+                                            StaticText, 0x10853b840, {{92.0, 3132.3}, {199.0, 204.3}}, identifier: 'activity-personal-records-achievement-detail-badge-pr-ui-test-activity-workout-running-fastestPace', label: 'Running: 1 new PR badge unlocked'
+                                            StaticText, 0x10853b980, {{92.0, 3340.7}, {199.7, 102.3}}, identifier: 'activity-personal-records-achievement-date-badge-pr-ui-test-activity-workout-running-fastestPace', label: 'November 3, 2026'
+                                        Other, 0x10853bac0, {{0.0, 0.0}, {0.0, 0.0}}
+                                      Other, 0x10853bc00, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 8 pages', value: 31%
+                                        Other, 0x10853bd40, {{460.0, 227.3}, {3.0, 75.0}}
+                                      Other, 0x10853be80, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 8 pages', value: 31%
+                                        Other, 0x108540000, {{460.0, 227.3}, {3.0, 75.0}}
+                Other, 0x108540140, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x108540280, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x1085403c0, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x108540500, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x108540640, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x108540780, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1085408c0, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x108540a00, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x108540b40, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x108540c80, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x108540dc0, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x108540f00, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x108541040, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x108541180, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x1085412c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x108541400, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x108541540, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x108541680, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x1085417c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x108541900, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x108541a40, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x108541b80, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x108541cc0, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x108541e00, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                                            Image, 0x108541f40, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x108542080, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x1085421c0, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x108542300, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x108542440, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x108542580, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1085426c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x108542800, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x108542940, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x108542a80, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x108542bc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x108542d00, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x108542e40, {{396.0, 494.0}, {44.0, 58.0}}
+                                          Other, 0x108542f80, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x1085430c0, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x108543200, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x108543340, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x108543480, {{396.0, 494.0}, {44.0, 58.0}}
+                                                  Other, 0x1085435c0, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x108543700, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x108543840, {{396.0, 494.0}, {44.0, 58.0}}
+              Other, 0x108543980, {{191.0, 322.0}, {0.0, 0.0}}
+      Other, 0x108543ac0, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x108543c00, {{-466.0, -678.0}, {1398.0, 2034.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Other, 0x108543d40, {{8.0, 280.0}, {450.0, 390.0}}
+          Button, 0x108543e80, {{183.0, 276.0}, {100.0, 24.0}}, label: 'Sheet Grabber', value: Half screen
+          Other, 0x112738000, {{8.0, 280.0}, {450.0, 390.0}}
+            Other, 0x112738140, {{8.0, 280.0}, {450.0, 390.0}}
+              Other, 0x112738280, {{8.0, 280.0}, {450.0, 390.0}}
+                ScrollView, 0x1127383c0, {{8.0, 280.0}, {450.0, 390.0}}, identifier: 'activity-personal-records-reward-info-sheet'
+                  Other, 0x112738500, {{8.0, -1863.7}, {374.0, 2530.3}}
+                    StaticText, 0x112738640, {{44.0, -1827.7}, {231.3, 195.7}}, label: 'How Rewards Work'
+                    StaticText, 0x112738780, {{129.7, -1592.0}, {139.7, 58.7}}, label: 'Levels'
+                    StaticText, 0x1127388c0, {{40.0, -1502.7}, {301.0, 459.3}}, label: 'Earn points for new distance, step, or duration milestones and new cardio personal records. Every 200 points raises your level.'
+                    StaticText, 0x112738a00, {{130.7, -1007.3}, {166.3, 58.7}}, label: 'Badges'
+                    StaticText, 0x112738b40, {{40.0, -911.7}, {301.0, 357.3}}, label: 'Unlock badges by hitting milestones: PR counts, volume targets, workout streaks, and more.'
+                    StaticText, 0x112738c80, {{133.0, -518.3}, {201.0, 116.7}}, label: 'Personal Records'
+                    StaticText, 0x112738dc0, {{40.0, -393.7}, {310.0, 459.3}}, label: 'View strength bests (1RM, rep max, volume) and cardio bests (pace, distance, duration). New cardio personal records earn points.'
+                    StaticText, 0x112738f00, {{129.7, 101.7}, {148.0, 116.7}}, label: 'Milestones'
+                    StaticText, 0x112739040, {{40.0, 226.3}, {310.0, 408.3}}, label: 'Reach a new distance, step, or duration milestone to earn bonus points. Workout days can unlock badges.'
+                  Other, 0x112739180, {{425.0, 320.0}, {30.0, 299.0}}, label: 'Vertical scroll bar, 8 pages', value: 99%
+                    Other, 0x1127392c0, {{452.0, 567.7}, {3.0, 44.7}}
+                  Other, 0x112739400, {{425.0, 320.0}, {30.0, 299.0}}, label: 'Vertical scroll bar, 8 pages', value: 99%
+                    Other, 0x112739540, {{452.0, 567.7}, {3.0, 44.7}}
+          Other, 0x112739680, {{8.0, 280.0}, {450.0, 390.0}}
+            Other, 0x1127397c0, {{8.0, 280.0}, {450.0, 390.0}}
+              Other, 0x112739900, {{8.0, 280.0}, {450.0, 390.0}}
+                Other, 0x112739a40, {{8.0, 280.0}, {450.0, 390.0}}
+                  Other, 0x112739b80, {{8.0, 280.0}, {450.0, 390.0}}
+                    Other, 0x112739cc0, {{8.0, 280.0}, {450.0, 390.0}}
+                Other, 0x112739e00, {{8.0, 280.0}, {450.0, 390.0}}
+                  Other, 0x112739f40, {{8.0, 280.0}, {450.0, 390.0}}
+Path to element:
+ →Application, 0x11272b480, pid: 79360, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x11273a080, pid: 79360, label: 'DUNE'
+  }

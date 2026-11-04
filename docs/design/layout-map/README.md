@@ -189,3 +189,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 - [A19 운동 구성 설명](activity-exercise-mix-explanation-a19.html): 기존 시트·아이콘을 보존한 구현 기준과 검토 완료된 실제 캡처 비교.
 
 - [A20 추천 장비 설정](activity-recommendation-equipment-a20.html): 기존 SVG·토글·저장을 보존한 네이티브 개편. 4개 기기 상태와 큰 글씨 5/5 검증 및 실제 비교 캡처 검토 완료.
+
+- [A21 보상 설명](activity-reward-explanation-a21.html): 기존 아이콘·시스템 시트와 계산을 보존한 개편. 개편 선택 검사6/6과 원본 iPhone1/1을 각각 검증하고 실제 전후 비교에 연결했다.

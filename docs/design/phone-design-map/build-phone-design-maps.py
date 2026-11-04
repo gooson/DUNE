@@ -14,6 +14,7 @@ REPO = next(p for p in HERE.parents if (p / "DUNE").is_dir())
 DATA = runpy.run_path(str(HERE / "screen-catalog.py"))
 GROUPS = DATA["GROUPS"]
 INLINE = DATA["INLINE"]
+ACTIVITY_INLINE = DATA["ACTIVITY_INLINE"]
 PREFIXES = ["T", "A", "W", "H", "P", "L", "S"]
 
 
@@ -41,6 +42,22 @@ def catalog(index):
             rows.append(dict(id=f"{prefix}{number:02d}", group=group, title=title,
                              parent=parent, kind=kind, anatomy=anatomy,
                              type=view_type, source=str(path), line=line))
+    # A21 is a real inline sheet property, not a fabricated standalone View.
+    # Insert after existing Activity rows without renumbering any prior screen.
+    for identifier, title, relative, property_name, parent, kind, anatomy in ACTIVITY_INLINE:
+        path = REPO / "DUNE/Presentation" / relative
+        if not path.is_file():
+            raise ValueError(f"inline presentation source missing: {relative}")
+        body = path.read_text(encoding="utf-8", errors="ignore")
+        pattern = rf"(?m)^[ \t]*private[ \t]+var[ \t]+{re.escape(property_name)}[ \t]*:[ \t]*some[ \t]+View[ \t]*\{{"
+        matches = list(re.finditer(pattern, body))
+        if len(matches) != 1 or "struct RewardProgressSection: View" not in body:
+            raise ValueError(f"inline presentation owner/property not unique: {relative}:{property_name}")
+        row = dict(id=identifier, group="활동 · 분석", title=title, parent=parent,
+                   kind=kind, anatomy=anatomy, type=f"RewardProgressSection.{property_name}",
+                   source=str(path.relative_to(REPO)), line=body.count("\n", 0, matches[0].start()) + 1)
+        insertion = max(i for i, item in enumerate(rows) if item["group"] == row["group"]) + 1
+        rows.insert(insertion, row)
     for number, (group, title, filename, parent, kind, anatomy) in enumerate(INLINE, 1):
         matches = list((REPO / "DUNE/Presentation").rglob(filename))
         if len(matches) != 1:

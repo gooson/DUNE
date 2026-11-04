@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-31",
+  "updated": "2026-11-04",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -710,6 +710,25 @@
         "layout": "../layout-map/activity-recommendation-equipment-a20.html",
         "status": "native-implemented-scoped-captures-reviewed",
         "actual_captures": "../full-redesign-map/review/a20-recommendation-equipment-native-2026-11-04/index.html"
+      }
+    },
+    {
+      "id": "reward-explanation-a21",
+      "name": "보상 설명",
+      "title": "A21 · Reward Explanation",
+      "file": "dune-reward-explanation-a21.html",
+      "detail": "기존 네 보상 아이콘·시스템 시트·계산을 보존한 히어로·설명 카드. 원본 iPhone1/1 별도 보존, 개편 선택 검사6/6과 독립 소스·네이티브·발행 검토 완료.",
+      "colors": [
+        "#352e29",
+        "#b2854c",
+        "#fff4dd"
+      ],
+      "motif": "기존 별·메달·트로피·깃발",
+      "motion": "기존 중간 높이 시스템 시트와 스크롤",
+      "implementation": {
+        "layout": "../layout-map/activity-reward-explanation-a21.html",
+        "status": "native-verified",
+        "review": "../full-redesign-map/review/a21-reward-help-native-2026-11-04/index.html"
       }
     }
   ]
