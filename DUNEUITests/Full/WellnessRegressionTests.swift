@@ -456,6 +456,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         XCTAssertTrue(app.fillTextInput(AXID.bodyFormWeight, with: "91.2"), "Weight field should accept a seeded regression value")
         VisualAudit.capture("H05 add weight entered")
+        app.buttons["body-form-keyboard-done"].firstMatch.auditTap()
         saveButton.auditTap()
 
         let dismissed = NSPredicate(format: "exists == false")
