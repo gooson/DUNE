@@ -2766,6 +2766,32 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
     }
 
+    // One historical baseline before A21 product implementation. The original
+    // sheet has no screen identifier; identify its actual visible title and sections.
+    func testA21OriginalRewardHelpBaseline() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        launchApp(with: configuration)
+        openActivityDetail(sectionIdentifier: AXID.activitySectionPR,
+                           destinationIdentifier: AXID.activityPersonalRecordsDetailScreen,
+                           maxSwipes: 24)
+        let info = app.buttons["activity-personal-records-reward-info"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-personal-records-reward-info", maxSwipes: 24))
+        XCTAssertTrue(info.isHittable)
+        info.tap()
+        let title = app.staticTexts.matching(NSPredicate(format: "label == %@", "How Rewards Work")).firstMatch
+        XCTAssertTrue(title.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Levels"].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("A21 original reward help baseline")
+        let helpScroll = app.scrollViews.containing(.staticText, identifier: "How Rewards Work").firstMatch
+        XCTAssertTrue(helpScroll.waitForExistence(timeout: 5))
+        for heading in ["Levels", "Badges", "Personal Records", "Milestones"] {
+            let label = helpScroll.staticTexts.matching(NSPredicate(format: "label == %@", heading)).firstMatch
+            for _ in 0..<20 where !label.isHittable { helpScroll.swipeUp(velocity: .slow) }
+            XCTAssertTrue(label.isHittable, "Original reward section should be reachable: \(heading)")
+        }
+    }
+
     func testPersonalRecordsPaceHistoryShowsWorkoutsInMonth() throws {
         openActivityDetail(
             sectionIdentifier: AXID.activitySectionPR,
