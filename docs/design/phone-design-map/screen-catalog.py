@@ -129,6 +129,12 @@ GROUPS = {
 }
 
 
+# Explicit Activity inline property: preserve A01–A20 numbering and source identity.
+ACTIVITY_INLINE = [
+    ("A21", "보상 진행 설명", "Activity/PersonalRecords/Components/RewardProgressSection.swift",
+     "rewardInfoSheet", "개인 기록 · 보상 진행", "sheet", "레벨/배지/개인 기록/목표"),
+]
+
 # Inline presentation bodies with no standalone View type still occupy a screen.
 INLINE = [
     ("운동 · 계획 · 기록", "마지막 세트 선택", "WorkoutSessionView.swift", "운동 중", "sheet", "추가 세트/완료/취소"),

@@ -69,6 +69,7 @@ OVERLAY_HINTS = {
     "activity-consistency-info-sheet": "A18",
     "activity-exercise-mix-info-sheet": "A19",
     "activity-recommendation-equipment-sheet": "A20",
+    "activity-personal-records-reward-info-sheet": "A21",
     "rest-timer-skip": "W07",
     "workout-session-last-set-sheet": "W31",
     "healthkit-workout-title-editor-screen": "W33",

@@ -241,40 +241,64 @@ struct RewardProgressSection: View {
 
     private var rewardInfoSheet: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                Text(String(localized: "How Rewards Work"))
-                    .font(.title3.weight(.bold))
-                    .foregroundStyle(DS.Color.textSecondary)
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                rewardInfoHero
 
-                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                    infoRow(icon: "star.circle.fill", color: .yellow, title: String(localized: "Levels"), description: String(localized: "Earn points from workouts and PRs. Every 200 points advances you one level."))
-                    infoRow(icon: "medal.fill", color: .orange, title: String(localized: "Badges"), description: String(localized: "Unlock badges by hitting milestones: PR counts, volume targets, workout streaks, and more."))
-                    infoRow(icon: "trophy.fill", color: DS.Color.activity, title: String(localized: "Personal Records"), description: String(localized: "Set new PRs in strength (1RM, rep max, volume) and cardio (pace, distance, duration) to earn points."))
-                    infoRow(icon: "flag.checkered.circle.fill", color: .mint, title: String(localized: "Milestones"), description: String(localized: "Hit workout count milestones to earn bonus points and unlock special badges."))
-                }
+                infoRow(icon: "star.circle.fill", color: .yellow, title: String(localized: "Levels"), description: String(localized: "Earn points for new distance, step, or duration milestones and new cardio personal records. Every 200 points raises your level."))
+                infoRow(icon: "medal.fill", color: .orange, title: String(localized: "Badges"), description: String(localized: "Unlock badges by hitting milestones: PR counts, volume targets, workout streaks, and more."))
+                infoRow(icon: "trophy.fill", color: DS.Color.activity, title: String(localized: "Personal Records"), description: String(localized: "View strength bests (1RM, rep max, volume) and cardio bests (pace, distance, duration). New cardio personal records earn points."))
+                infoRow(icon: "flag.checkered.circle.fill", color: .mint, title: String(localized: "Milestones"), description: String(localized: "Reach a new distance, step, or duration milestone to earn bonus points. Workout days can unlock badges."))
             }
             .padding(DS.Spacing.xl)
+            .frame(maxWidth: 680)
+            .frame(maxWidth: .infinity)
         }
+        .background { SheetWaveBackground().opacity(0.55) }
+        .accessibilityIdentifier("activity-personal-records-reward-info-sheet")
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
     }
 
+    private var rewardInfoHero: some View {
+        Text(String(localized: "How Rewards Work"))
+            .accessibilityAddTraits(.isHeader)
+            .font(.title3.weight(.bold))
+            .foregroundStyle(palette.ink)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(DS.Spacing.lg)
+            .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+            .overlay {
+                RoundedRectangle(cornerRadius: DS.Radius.lg)
+                    .strokeBorder(palette.border, lineWidth: 1)
+            }
+    }
+
     private func infoRow(icon: String, color: Color, title: String, description: String) -> some View {
-        HStack(alignment: .top, spacing: DS.Spacing.sm) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundStyle(color)
-                .frame(width: 24)
-            VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                Image(systemName: icon)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(color)
+                    .padding(DS.Spacing.sm)
+                    .background(color.opacity(0.14), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                    .accessibilityHidden(true)
                 Text(title)
+                    .accessibilityAddTraits(.isHeader)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(DS.Color.textSecondary)
-                Text(description)
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
+            Text(description)
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Spacing.md)
+        .background(DS.Color.cardBackground, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
     }
+
 }
 
 // MARK: - Badge Category Tint

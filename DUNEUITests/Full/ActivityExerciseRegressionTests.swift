@@ -2766,30 +2766,111 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
     }
 
-    // One historical baseline before A21 product implementation. The original
-    // sheet has no screen identifier; identify its actual visible title and sections.
-    func testA21OriginalRewardHelpBaseline() throws {
+    func testVisualAuditRewardExplanation() throws {
+        try verifyRewardExplanation(maxText: false)
+    }
+
+    func testRewardExplanationAtMaximumAccessibilityTextSize() throws {
+        try verifyRewardExplanation(maxText: true)
+    }
+
+    private func verifyRewardExplanation(maxText: Bool) throws {
         var configuration = launchConfiguration
         configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += ["--ui-test-style", "dark", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        }
         launchApp(with: configuration)
         openActivityDetail(sectionIdentifier: AXID.activitySectionPR,
-                           destinationIdentifier: AXID.activityPersonalRecordsDetailScreen,
-                           maxSwipes: 24)
+                           destinationIdentifier: AXID.activityPersonalRecordsDetailScreen, maxSwipes: 24)
         let info = app.buttons["activity-personal-records-reward-info"].firstMatch
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-personal-records-reward-info", maxSwipes: 24))
-        XCTAssertTrue(info.isHittable)
-        info.tap()
-        let title = app.staticTexts.matching(NSPredicate(format: "label == %@", "How Rewards Work")).firstMatch
-        XCTAssertTrue(title.waitForExistence(timeout: 10))
-        XCTAssertTrue(app.staticTexts["Levels"].firstMatch.waitForExistence(timeout: 5))
-        VisualAudit.capture("A21 original reward help baseline")
-        let helpScroll = app.scrollViews.containing(.staticText, identifier: "How Rewards Work").firstMatch
-        XCTAssertTrue(helpScroll.waitForExistence(timeout: 5))
-        for heading in ["Levels", "Badges", "Personal Records", "Milestones"] {
-            let label = helpScroll.staticTexts.matching(NSPredicate(format: "label == %@", heading)).firstMatch
-            for _ in 0..<20 where !label.isHittable { helpScroll.swipeUp(velocity: .slow) }
-            XCTAssertTrue(label.isHittable, "Original reward section should be reachable: \(heading)")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-personal-records-reward-info", maxSwipes: 30))
+        XCTAssertTrue(info.isHittable); info.tap()
+        let sheet = app.scrollViews["activity-personal-records-reward-info-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        VisualAudit.capture("Reward info sheet")
+        let window = app.windows.firstMatch
+        let handles = app.buttons.matching(NSPredicate(format: "label IN %@", ["Sheet Grabber", "Sheet grabber", "시트 손잡이"]))
+        XCTAssertEqual(handles.count, 1)
+        let handle = handles.element(boundBy: 0)
+        XCTAssertTrue(handle.exists && handle.isHittable && window.frame.contains(handle.frame))
+        func viewport() -> CGRect {
+            let visible = sheet.frame.intersection(window.frame)
+            let handleOverlap = visible.intersection(handle.frame)
+            guard !handleOverlap.isNull && !handleOverlap.isEmpty else { return visible }
+            let top = max(visible.minY, handleOverlap.maxY)
+            return CGRect(x: visible.minX, y: top, width: visible.width, height: max(0, visible.maxY - top))
         }
+        func drag(_ dy: CGFloat) {
+            let rect = viewport()
+            XCTAssertFalse(rect.isNull || rect.isEmpty)
+            let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                dx: rect.midX - window.frame.minX, dy: rect.midY - window.frame.minY))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: dy)))
+        }
+        func read(_ text: String, index: Int) {
+            let item = sheet.staticTexts.matching(NSPredicate(format: "label == %@", text)).firstMatch
+            for _ in 0..<30 {
+                if item.exists && !item.frame.isEmpty { break }
+                drag(-viewport().height * 0.18)
+            }
+            XCTAssertTrue(item.exists && item.label == text && !item.frame.isEmpty, "Missing full exact text")
+            func widthFits() -> Bool {
+                let v = viewport(), f = item.frame
+                return !v.isNull && !v.isEmpty && f.minX >= v.minX && f.maxX <= v.maxX
+            }
+            XCTAssertTrue(widthFits(), "Text must fit sheet width")
+            if item.frame.height <= viewport().height {
+                for _ in 0..<30 where !viewport().contains(item.frame) {
+                    let v = viewport(), f = item.frame
+                    let error = f.minY < v.minY ? v.minY - f.minY : v.maxY - f.maxY
+                    let step = min(abs(error) + 4, v.height * 0.18)
+                    drag(error > 0 ? step : -step)
+                }
+                XCTAssertTrue(widthFits() && viewport().contains(item.frame), "Short text must fit viewport")
+            } else {
+                for _ in 0..<30 where !(item.frame.minY >= viewport().minY && item.frame.minY < viewport().maxY) {
+                    let v = viewport(), error = v.minY + 4 - item.frame.minY
+                    let step = min(abs(error), v.height * 0.18)
+                    drag(error > 0 ? step : -step)
+                }
+                XCTAssertTrue(widthFits() && item.frame.minY >= viewport().minY && item.frame.minY < viewport().maxY)
+                VisualAudit.capture("A21 tall text \(index) top \(maxText ? "MAX" : "normal")")
+                var reached = item.frame.maxY <= viewport().maxY
+                for _ in 0..<30 where !reached {
+                    let beforeFrame = item.frame, before = beforeFrame.intersection(viewport())
+                    XCTAssertFalse(before.isEmpty)
+                    let beforeEnd = before.maxY - beforeFrame.minY
+                    drag(-viewport().height * 0.18)
+                    let afterFrame = item.frame, after = afterFrame.intersection(viewport())
+                    XCTAssertFalse(after.isEmpty); XCTAssertTrue(widthFits())
+                    XCTAssertLessThanOrEqual(after.minY - afterFrame.minY, beforeEnd + 1)
+                    XCTAssertGreaterThan(after.maxY - afterFrame.minY, beforeEnd + 1)
+                    reached = afterFrame.maxY <= viewport().maxY && !after.isEmpty
+                }
+                XCTAssertTrue(reached, "Tall text bottom must be readable")
+                VisualAudit.capture("A21 tall text \(index) bottom \(maxText ? "MAX" : "normal")")
+            }
+        }
+        let texts = [
+            "How Rewards Work", "Levels",
+            "Earn points for new distance, step, or duration milestones and new cardio personal records. Every 200 points raises your level.",
+            "Badges", "Unlock badges by hitting milestones: PR counts, volume targets, workout streaks, and more.",
+            "Personal Records", "View strength bests (1RM, rep max, volume) and cardio bests (pace, distance, duration). New cardio personal records earn points.",
+            "Milestones", "Reach a new distance, step, or duration milestone to earn bonus points. Workout days can unlock badges."
+        ]
+        for (i, text) in texts.enumerated() { read(text, index: i) }
+        VisualAudit.capture("A21 reward final text \(maxText ? "MAX" : "normal")")
+        // The product has only the medium detent; do not attempt expansion.
+        XCTAssertTrue(handle.exists && handle.isHittable && window.frame.contains(handle.frame))
+        let start = handle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let end = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+            dx: handle.frame.midX - window.frame.minX, dy: window.frame.height - 4))
+        start.press(forDuration: 0.1, thenDragTo: end, withVelocity: XCUIGestureVelocity(rawValue: 1000), thenHoldForDuration: 0)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
+        XCTAssertTrue(app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(info.waitForExistence(timeout: 5))
+        VisualAudit.capture("A21 reward dismissed \(maxText ? "MAX" : "normal")")
     }
 
     func testPersonalRecordsPaceHistoryShowsWorkoutsInMonth() throws {
