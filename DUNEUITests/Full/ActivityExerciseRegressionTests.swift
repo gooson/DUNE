@@ -2820,19 +2820,21 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 return !v.isNull && !v.isEmpty && f.minX >= v.minX && f.maxX <= v.maxX
             }
             XCTAssertTrue(widthFits(), "Text must fit sheet width")
-            if item.frame.height <= viewport().height {
+            // Small remaining clearance cannot absorb a full proven reading step.
+            // Read those leaves through overlapping intervals, as for tall text.
+            if item.frame.height + 2 * viewport().height * 0.18 <= viewport().height {
                 for _ in 0..<30 where !viewport().contains(item.frame) {
                     let v = viewport(), f = item.frame
                     let error = f.minY < v.minY ? v.minY - f.minY : v.maxY - f.maxY
-                    let step = min(abs(error) + 4, v.height * 0.18)
-                    drag(error > 0 ? step : -step)
+                    let readStep = v.height * 0.18
+                    drag(error > 0 ? readStep : -readStep)
                 }
                 XCTAssertTrue(widthFits() && viewport().contains(item.frame), "Short text must fit viewport")
             } else {
                 for _ in 0..<30 where !(item.frame.minY >= viewport().minY && item.frame.minY < viewport().maxY) {
                     let v = viewport(), error = v.minY + 4 - item.frame.minY
-                    let step = min(abs(error), v.height * 0.18)
-                    drag(error > 0 ? step : -step)
+                    let readStep = v.height * 0.18
+                    drag(error > 0 ? readStep : -readStep)
                 }
                 XCTAssertTrue(widthFits() && item.frame.minY >= viewport().minY && item.frame.minY < viewport().maxY)
                 VisualAudit.capture("A21 tall text \(index) top \(maxText ? "MAX" : "normal")")
