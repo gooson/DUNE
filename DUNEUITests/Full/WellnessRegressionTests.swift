@@ -44,81 +44,364 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
     }
 
     func testCompareMetricsSharesPeriodAndDismisses() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--uitest-long-metric-history"]
+        launchApp(with: configuration)
+        navigateToWellness()
         XCTAssertTrue(app.waitAndTapToolbarAction("wellness-compare-metrics"),
-                      "Wellness should expose metric comparison directly or in toolbar overflow\n\(app.debugDescription)")
-
+                      "Wellness should expose metric comparison directly or in toolbar overflow")
         let firstPane = app.descendants(matching: .any)["metric-comparison-first"].firstMatch
         let secondPane = app.descendants(matching: .any)["metric-comparison-second"].firstMatch
-        XCTAssertTrue(firstPane.waitForExistence(timeout: 5), "First metric pane should appear")
-        XCTAssertTrue(secondPane.waitForExistence(timeout: 5), "Second metric pane should appear")
+        XCTAssertTrue(firstPane.waitForExistence(timeout: 5))
+        XCTAssertTrue(secondPane.waitForExistence(timeout: 5))
+        let sharedDate = app.staticTexts["comparison-date-range"].firstMatch
+        XCTAssertTrue(sharedDate.waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts.matching(identifier: "comparison-date-range").count, 1)
+        let weekLabel = sharedDate.label
+        XCTAssertFalse(weekLabel.isEmpty)
+        XCTAssertTrue(app.staticTexts["Same dates; separate scales. Trends do not establish cause."].firstMatch.exists)
+        VisualAudit.capture("H04 shared week and initial charts")
 
-        let firstRange = firstPane.staticTexts["comparison-date-range"].firstMatch
-        let secondRange = secondPane.staticTexts["comparison-date-range"].firstMatch
-        XCTAssertTrue(firstRange.waitForExistence(timeout: 5), "First metric should show its date range")
-        XCTAssertTrue(secondRange.waitForExistence(timeout: 5), "Second metric should show its date range")
-        let initialRange = firstRange.label
-        XCTAssertFalse(initialRange.isEmpty, "Comparison dates should be readable")
-        XCTAssertEqual(initialRange, secondRange.label, "Both metrics should use the same initial dates")
+        let firstPicker = firstPane.descendants(matching: .any)["metric-comparison-first-picker"].firstMatch
+        let secondPicker = secondPane.descendants(matching: .any)["metric-comparison-second-picker"].firstMatch
+        XCTAssertTrue(firstPicker.waitForExistence(timeout: 5))
+        let comparisonScroll = app.scrollViews["metric-comparison-scroll"].firstMatch
+        XCTAssertTrue(comparisonScroll.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealComparisonControl("metric-comparison-first-picker", in: comparisonScroll))
+        XCTAssertTrue(firstPicker.isEnabled)
+        firstPicker.tap()
+        let hrv = app.descendants(matching: .any)["metric-comparison-first-option-hrv"].firstMatch
+        XCTAssertTrue(hrv.waitForExistence(timeout: 5))
+        XCTAssertTrue(hrv.isEnabled && hrv.isHittable)
+        hrv.tap()
+        XCTAssertTrue(secondPicker.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealComparisonControl("metric-comparison-second-picker", in: comparisonScroll))
+        XCTAssertTrue(secondPicker.isEnabled)
+        secondPicker.tap()
+        let weight = app.descendants(matching: .any)["metric-comparison-second-option-weight"].firstMatch
+        XCTAssertTrue(weight.waitForExistence(timeout: 5))
+        XCTAssertTrue(weight.isEnabled && weight.isHittable)
+        weight.tap()
+        XCTAssertTrue(firstPane.staticTexts["HRV"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(secondPane.staticTexts["Weight"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(firstPane.staticTexts["ms"].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(secondPane.staticTexts["kg"].firstMatch.waitForExistence(timeout: 10))
+        let firstPlot = app.descendants(matching: .any)["metric-comparison-first-plot"].firstMatch
+        let secondPlot = app.descendants(matching: .any)["metric-comparison-second-plot"].firstMatch
+        XCTAssertTrue(firstPlot.waitForExistence(timeout: 10), "Fixture HRV must render an actual plot")
+        XCTAssertTrue(secondPlot.waitForExistence(timeout: 10), "Seeded Weight must render an actual plot")
+        captureComparisonPlot(firstPlot, named: "H04 normal HRV plot and ms", in: comparisonScroll)
+        captureComparisonPlot(secondPlot, named: "H04 normal Weight plot and kg", in: comparisonScroll)
 
-        if VisualAudit.isEnabled {
-            let title = app.staticTexts["metric-comparison-title"]
-            if title.exists {
-                XCTAssertTrue(app.windows.firstMatch.frame.contains(title.frame),
-                              "The full comparison title should fit at accessibility text sizes")
-            }
-            for name in ["charts"] {
-                VisualAudit.capture("Metric comparison \(name) initial viewport")
-                for index in 1...3 {
-                    app.scrollViews.firstMatch.swipeUp()
-                    VisualAudit.capture("Metric comparison \(name) lower viewport \(index)")
-                }
-            }
-        }
-
-        let comparisonScroll = app.scrollViews.firstMatch
         let inlinePeriods = app.descendants(matching: .any)["metric-comparison-period-options"].firstMatch
-        let month = app.buttons["metric-comparison-period-M"]
+        let month = app.descendants(matching: .any)["metric-comparison-period-M"].firstMatch
         if inlinePeriods.exists {
-            for _ in 0..<12 {
-                let visible = comparisonScroll.frame.intersection(app.windows.firstMatch.frame)
-                let monthFrame = month.frame
-                if month.isHittable && visible.contains(monthFrame) { break }
-                if monthFrame.maxY > visible.maxY {
-                    comparisonScroll.swipeUp(velocity: .slow)
-                } else {
-                    comparisonScroll.swipeDown(velocity: .slow)
+            XCTAssertTrue(revealComparisonControl("metric-comparison-period-M", in: comparisonScroll))
+            XCTAssertTrue(comparisonScroll.frame.intersection(app.windows.firstMatch.frame).contains(month.frame))
+            XCTAssertTrue(month.isEnabled && month.isHittable)
+            month.tap()
+        } else {
+            XCTAssertTrue(revealComparisonNormalPeriodMenu(in: comparisonScroll),
+                          "The unique normal Period menu must be fully visible and enabled below navigation")
+            app.descendants(matching: .any)["metric-comparison-period"].firstMatch.tap()
+            XCTAssertTrue(month.waitForExistence(timeout: 5))
+            XCTAssertTrue(month.isEnabled && month.isHittable)
+            month.tap()
+        }
+        let monthRange = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "label != %@", weekLabel), object: sharedDate
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [monthRange], timeout: 5), .completed)
+        XCTAssertEqual(app.staticTexts.matching(identifier: "comparison-date-range").count, 1)
+        if inlinePeriods.exists {
+            XCTAssertTrue(month.isSelected, "The shared month period must show its selected state")
+        }
+        XCTAssertTrue(firstPane.staticTexts["ms"].firstMatch.exists)
+        XCTAssertTrue(secondPane.staticTexts["kg"].firstMatch.exists)
+        VisualAudit.capture("H04 shared month with independent units")
+        XCTAssertTrue(revealComparisonControl("metric-comparison-second-picker", in: comparisonScroll))
+        VisualAudit.capture("H04 second pane reachable")
+
+        let done = app.descendants(matching: .any)["metric-comparison-done"].firstMatch
+        XCTAssertTrue(done.waitForExistence(timeout: 5))
+        XCTAssertTrue(done.isEnabled && done.isHittable && app.windows.firstMatch.frame.contains(done.frame))
+        done.tap()
+        XCTAssertTrue(firstPane.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.buttons[AXID.wellnessToolbarAdd].waitForExistence(timeout: 5))
+        VisualAudit.capture("H04 Done returns Wellness")
+    }
+
+    func testCompareMetricsDarkMaximumAccessibility() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--uitest-long-metric-history",
+            "--ui-test-style", "dark", "-UIPreferredContentSizeCategoryName",
+            "UICTContentSizeCategoryAccessibilityXXXL", "--ui-disable-animations"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+        XCTAssertTrue(app.waitAndTapToolbarAction("wellness-compare-metrics"))
+        let title = app.descendants(matching: .any)["metric-comparison-title"].firstMatch
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.windows.firstMatch.frame.contains(title.frame),
+                      "The comparison heading should fit the active window")
+        let firstPane = app.descendants(matching: .any)["metric-comparison-first"].firstMatch
+        let secondPane = app.descendants(matching: .any)["metric-comparison-second"].firstMatch
+        XCTAssertTrue(firstPane.waitForExistence(timeout: 5))
+        XCTAssertTrue(secondPane.waitForExistence(timeout: 5))
+        let sharedDate = app.staticTexts["comparison-date-range"].firstMatch
+        XCTAssertTrue(sharedDate.waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts.matching(identifier: "comparison-date-range").count, 1)
+        let weekLabel = sharedDate.label
+        VisualAudit.capture("H04 MAX title and shared week")
+
+        let comparisonScroll = app.scrollViews["metric-comparison-scroll"].firstMatch
+        XCTAssertTrue(comparisonScroll.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealComparisonControl("metric-comparison-first-picker", in: comparisonScroll))
+        let firstPicker = app.descendants(matching: .any)["metric-comparison-first-picker"].firstMatch
+        XCTAssertTrue(firstPicker.isEnabled)
+        firstPicker.tap()
+        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-first-option-rhr"),
+                      "The uniquely identified RHR option must be fully visible and enabled in the native menu")
+        let restingHR = firstPane.staticTexts["Resting HR"].firstMatch
+        XCTAssertTrue(restingHR.waitForExistence(timeout: 5))
+        XCTAssertTrue(firstPane.staticTexts["bpm"].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(revealComparisonControl(restingHR, in: comparisonScroll))
+        XCTAssertTrue(revealComparisonControl(firstPicker, in: comparisonScroll),
+                      "Selected Resting HR picker row must fit at MAX")
+        VisualAudit.capture("H04 MAX selected Resting HR full row")
+        XCTAssertTrue(revealComparisonControl(firstPicker, in: comparisonScroll))
+        firstPicker.tap()
+        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-first-option-hrv"),
+                      "The uniquely identified HRV option must be fully visible and enabled in the native menu")
+        XCTAssertTrue(firstPane.staticTexts["ms"].firstMatch.waitForExistence(timeout: 10))
+        let firstPlot = app.descendants(matching: .any)["metric-comparison-first-plot"].firstMatch
+        XCTAssertTrue(firstPlot.waitForExistence(timeout: 10))
+        XCTAssertTrue(revealComparisonPlotEdge(firstPlot, top: true, in: comparisonScroll),
+                      "The first HRV plot's upper edge must reach the visible viewport")
+        VisualAudit.capture("H04 MAX first HRV plot")
+        XCTAssertTrue(revealComparisonControl("metric-comparison-second-picker", in: comparisonScroll))
+        let secondPicker = app.descendants(matching: .any)["metric-comparison-second-picker"].firstMatch
+        XCTAssertTrue(secondPicker.isEnabled)
+        secondPicker.tap()
+        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-second-option-weight"),
+                      "The uniquely identified Weight option must be fully visible and enabled in the native menu")
+        let weightUnit = secondPane.staticTexts["kg"].firstMatch
+        XCTAssertTrue(weightUnit.waitForExistence(timeout: 10))
+        let weightPlot = app.descendants(matching: .any)["metric-comparison-second-plot"].firstMatch
+        XCTAssertTrue(weightPlot.waitForExistence(timeout: 10))
+        XCTAssertTrue(revealComparisonPlotEdge(weightPlot, top: true, in: comparisonScroll),
+                      "The second Weight plot's upper edge must reach the visible viewport")
+        XCTAssertTrue(revealComparisonControl(weightUnit, in: comparisonScroll),
+                      "The second plot's unit must be fully reachable at MAX")
+        VisualAudit.capture("H04 MAX second Weight plot")
+        XCTAssertTrue(revealComparisonPlotEdge(weightPlot, top: false, in: comparisonScroll),
+                      "The lower chart edge and X axis must reach the visible viewport")
+        VisualAudit.capture("H04 MAX second Weight plot lower")
+
+        let month = app.descendants(matching: .any)["metric-comparison-period-M"].firstMatch
+        XCTAssertTrue(revealComparisonMonthAfterPlots(in: comparisonScroll),
+                      "The unique Month action must return fully into the viewport after both MAX plots")
+        let monthViewport = comparisonScroll.frame.intersection(app.windows.firstMatch.frame)
+        XCTAssertTrue(monthViewport.contains(month.frame), "The entire month action should fit the scroll viewport")
+        XCTAssertTrue(month.isEnabled && month.isHittable)
+        month.tap()
+        let monthRange = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "label != %@", weekLabel), object: sharedDate
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [monthRange], timeout: 5), .completed)
+        XCTAssertEqual(app.staticTexts.matching(identifier: "comparison-date-range").count, 1)
+        XCTAssertTrue(month.isSelected, "The shared month period must show its selected state at MAX")
+        XCTAssertTrue(revealComparisonControl(sharedDate, in: comparisonScroll),
+                      "The updated shared month range must be fully visible")
+        let sharedDateViewport = comparisonScroll.frame.intersection(app.windows.firstMatch.frame)
+        XCTAssertTrue(sharedDateViewport.contains(sharedDate.frame),
+                      "The entire shared month range should fit the scroll viewport")
+        VisualAudit.capture("H04 MAX shared month")
+        let done = app.descendants(matching: .any)["metric-comparison-done"].firstMatch
+        XCTAssertTrue(done.waitForExistence(timeout: 5))
+        XCTAssertTrue(done.isEnabled && done.isHittable && app.windows.firstMatch.frame.contains(done.frame))
+        done.tap()
+        XCTAssertTrue(firstPane.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.buttons[AXID.wellnessToolbarAdd].waitForExistence(timeout: 5))
+        VisualAudit.capture("H04 MAX Done returns Wellness")
+    }
+
+    private func revealComparisonNormalPeriodMenu(in scroll: XCUIElement) -> Bool {
+        let matches = app.descendants(matching: .any).matching(identifier: "metric-comparison-period")
+        let period = matches.firstMatch
+        guard period.waitForExistence(timeout: 5), matches.count == 1 else { return false }
+        for attempt in 0...12 {
+            guard matches.count == 1 else { return false }
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+            guard !viewport.isNull && !viewport.isEmpty else { return false }
+            let frame = period.frame
+            guard frame.width > 0 && frame.height > 0 else { return false }
+            if viewport.contains(frame) && period.isEnabled && period.isHittable { return true }
+            guard attempt < 12 else { break }
+            let delta = frame.midY - viewport.midY
+            guard abs(delta) >= 1 else { return false }
+            let travel = min(max(abs(delta), viewport.height * 0.20), viewport.height * 0.70)
+            let direction: CGFloat = delta < 0 ? 1 : -1
+            let origin = scroll.coordinate(withNormalizedOffset: .zero)
+            let x = viewport.midX - scroll.frame.minX
+            let startY = viewport.midY - direction * travel / 2 - scroll.frame.minY
+            let endY = viewport.midY + direction * travel / 2 - scroll.frame.minY
+            origin.withOffset(CGVector(dx: x, dy: startY)).press(
+                forDuration: 0.05,
+                thenDragTo: origin.withOffset(CGVector(dx: x, dy: endY))
+            )
+        }
+        return false
+    }
+
+    private func revealComparisonMonthAfterPlots(in scroll: XCUIElement) -> Bool {
+        let matches = app.descendants(matching: .any).matching(identifier: "metric-comparison-period-M")
+        let month = matches.firstMatch
+        guard month.waitForExistence(timeout: 5), matches.count == 1 else { return false }
+        for attempt in 0...12 {
+            guard matches.count == 1 else { return false }
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+            guard !viewport.isNull && !viewport.isEmpty else { return false }
+            let frame = month.frame
+            guard frame.width > 0 && frame.height > 0 else { return false }
+            if viewport.contains(frame) && month.isEnabled && month.isHittable { return true }
+            guard attempt < 12 else { break }
+            let delta = frame.midY - viewport.midY
+            guard abs(delta) >= 1 else { return false }
+            let travel = min(max(abs(delta), viewport.height * 0.20), viewport.height * 0.70)
+            let direction: CGFloat = delta < 0 ? 1 : -1
+            let origin = scroll.coordinate(withNormalizedOffset: .zero)
+            let x = viewport.midX - scroll.frame.minX
+            let startY = viewport.midY - direction * travel / 2 - scroll.frame.minY
+            let endY = viewport.midY + direction * travel / 2 - scroll.frame.minY
+            origin.withOffset(CGVector(dx: x, dy: startY)).press(
+                forDuration: 0.05,
+                thenDragTo: origin.withOffset(CGVector(dx: x, dy: endY))
+            )
+        }
+        return false
+    }
+
+    private func tapComparisonMenuOption(_ identifier: String) -> Bool {
+        // The accessibility-size Menu opens a separate native, virtualized CollectionView.
+        // Its content frame is taller than the visible popover; use the popover clip frame.
+        let collections = app.collectionViews
+        guard collections.count == 1 else { return false }
+        let popup = collections.firstMatch
+        let content = popup.frame
+        let clips = app.otherElements.containing(.collectionView, identifier: nil)
+            .allElementsBoundByAccessibilityElement.map(\.frame).filter { frame in
+            abs(frame.minX - content.minX) <= 1 && abs(frame.minY - content.minY) <= 1
+                && abs(frame.width - content.width) <= 1
+                && frame.height >= 100 && frame.height < content.height - 1
+        }
+        guard let clip = clips.min(by: { $0.height < $1.height }) else { return false }
+        let viewport = clip.intersection(app.windows.firstMatch.frame)
+        guard !viewport.isNull && !viewport.isEmpty else { return false }
+        let matches = popup.descendants(matching: .any).matching(identifier: identifier)
+        for attempt in 0...8 {
+            let count = matches.count
+            guard count <= 1 else { return false }
+            if count == 1 {
+                let option = matches.firstMatch
+                if option.isEnabled && option.isHittable && viewport.contains(option.frame) {
+                    option.tap()
+                    return true
                 }
             }
-            XCTAssertTrue(month.isHittable, "Month should be reachable without a popup at accessibility text sizes")
-            XCTAssertTrue(comparisonScroll.frame.intersection(app.windows.firstMatch.frame).contains(month.frame),
-                          "The whole month button should remain within the scroll viewport")
-            VisualAudit.capture("Comparison inline month fully visible before selection")
-        } else {
-            for _ in 0..<12 where !app.buttons["metric-comparison-period"].isHittable {
-                comparisonScroll.swipeDown()
-            }
-            XCTAssertTrue(app.waitAndTap("metric-comparison-period"), "Period menu should open")
+            guard attempt < 8 else { break }
+            let optionFrame = count == 1 ? matches.firstMatch.frame : CGRect.null
+            let lower = !optionFrame.isNull
+                ? optionFrame.maxY > viewport.maxY
+                : true
+            let origin = popup.coordinate(withNormalizedOffset: .zero)
+            let x = viewport.midX - content.minX
+            let startY = viewport.minY + viewport.height * (lower ? 0.6 : 0.4) - content.minY
+            let endY = viewport.minY + viewport.height * (lower ? 0.4 : 0.6) - content.minY
+            origin.withOffset(CGVector(dx: x, dy: startY)).press(
+                forDuration: 0.05,
+                thenDragTo: origin.withOffset(CGVector(dx: x, dy: endY))
+            )
         }
-        XCTAssertTrue(app.waitAndTap("metric-comparison-period-M"), "Shared period picker should offer month")
-        let rangesUpdated = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
-            firstRange.exists && secondRange.exists
-                && firstRange.label != initialRange
-                && firstRange.label == secondRange.label
-        }, object: nil)
-        XCTAssertEqual(XCTWaiter.wait(for: [rangesUpdated], timeout: 5), .completed,
-                       "Changing the shared period should update both date ranges together")
-        if inlinePeriods.exists {
-            XCTAssertTrue(month.isSelected, "The shared period should indicate the current selection")
-            VisualAudit.capture("Comparison inline month selected with shared dates updated")
-        }
+        return false
+    }
 
-        XCTAssertTrue(app.waitAndTap("metric-comparison-done"), "Comparison should expose Done")
-        let comparisonDismissed = XCTNSPredicateExpectation(
-            predicate: NSPredicate(format: "exists == false"), object: firstPane
-        )
-        XCTAssertEqual(XCTWaiter.wait(for: [comparisonDismissed], timeout: 5), .completed)
-        XCTAssertTrue(app.buttons[AXID.wellnessToolbarAdd].waitForExistence(timeout: 5),
-                      "Done should return to Wellness")
+    private func revealComparisonControl(
+        _ identifier: String,
+        in scroll: XCUIElement
+    ) -> Bool {
+        let element = app.descendants(matching: .any)[identifier].firstMatch
+        return revealComparisonControl(element, in: scroll)
+    }
+
+    private func revealComparisonControl(_ element: XCUIElement, in scroll: XCUIElement) -> Bool {
+        guard element.waitForExistence(timeout: 5) else { return false }
+        for attempt in 0...12 {
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+            let frame = element.frame
+            if element.isHittable && viewport.contains(frame) { return true }
+            guard attempt < 12 else { break }
+            if frame.maxY > viewport.maxY {
+                dragComparisonScroll(scroll, towardLowerContent: true)
+            } else if frame.minY < viewport.minY {
+                dragComparisonScroll(scroll, towardLowerContent: false)
+            } else {
+                return false
+            }
+        }
+        return false
+    }
+
+    private func revealComparisonPlotEdge(
+        _ plot: XCUIElement,
+        top: Bool,
+        in scroll: XCUIElement
+    ) -> Bool {
+        guard plot.waitForExistence(timeout: 5) else { return false }
+        for attempt in 0...8 {
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+            let frame = plot.frame
+            let edge = CGPoint(x: frame.midX, y: top ? frame.minY + 1 : frame.maxY - 1)
+            if viewport.contains(edge) { return true }
+            guard attempt < 8 else { break }
+            if edge.y > viewport.maxY {
+                dragComparisonScroll(scroll, towardLowerContent: true)
+            } else if edge.y < viewport.minY {
+                dragComparisonScroll(scroll, towardLowerContent: false)
+            } else {
+                return false
+            }
+        }
+        return false
+    }
+
+    private func captureComparisonPlot(
+        _ plot: XCUIElement,
+        named name: String,
+        in scroll: XCUIElement
+    ) {
+        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+        if plot.frame.height <= viewport.height {
+            XCTAssertTrue(revealComparisonControl(plot, in: scroll),
+                          "The complete \(name) must fit the visible viewport")
+            VisualAudit.capture(name)
+        } else {
+            XCTAssertTrue(revealComparisonPlotEdge(plot, top: true, in: scroll),
+                          "The \(name) upper edge must be reachable")
+            VisualAudit.capture("\(name) upper edge")
+            XCTAssertTrue(revealComparisonPlotEdge(plot, top: false, in: scroll),
+                          "The \(name) lower edge must be reachable")
+            VisualAudit.capture("\(name) lower edge")
+        }
+    }
+
+    private func dragComparisonScroll(_ scroll: XCUIElement, towardLowerContent: Bool) {
+        let startY: CGFloat = towardLowerContent ? 0.60 : 0.40
+        let endY: CGFloat = towardLowerContent ? 0.40 : 0.60
+        let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+        let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+        start.press(forDuration: 0.05, thenDragTo: end)
     }
 
     func testWellnessRootRendersAndHeroOpensScoreDetail() throws {

@@ -1,0 +1,3 @@
+# H04 metric comparison native review
+
+Four current map images come from reviewed native profile captures. Closed normal passed inside a failed 14f aggregate; MAX passed separately at bfd. The 890 Period helper was not run on Duo. The four historical images are identity references only and have no matched original AX/source/UID/pose. Earlier failed Duo archives remain 304 (0/2), 8f (1/1), and 51f MAX (0/1). Across ten immutable UI archives, 13 tests executed: 6 passed and 7 failed; the five selected effective cases passed across mixed source revisions. See evidence.json for case, source, device, pose, archive and SHA details.

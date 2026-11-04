@@ -587,13 +587,23 @@
     },
     "H04": {
       "row_id": "H04",
-      "evidence": "test-and-action:Metric comparison",
+      "file": "H04.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "WellnessRegressionTests/testCompareMetricsSharesPeriodAndDismisses()",
-      "action": "tap wellness-compare-metrics",
-      "timestamp": 1791827016.662,
-      "image": "BD616A4C-CDB0-455E-A1F4-01427FAE0D19.png",
-      "screen": "screen-0-1398x2034-tap wellness-compare-metrics_0_06D36275-98B4-44FE-A2DA-C8C629942CDC.png",
-      "file": "H04.png"
+      "action": "H04 shared week and initial charts",
+      "source_revision": "14f9d4aa03c666a1ef3970bf65b299bd97e6367c",
+      "capture_kind": "host",
+      "timestamp_kind": "reviewed archive checkpoint",
+      "device_uid": "93A7E6BA-4B1F-4FDE-A51D-6E1BB77B19B6",
+      "pose": {
+        "angle": 0,
+        "active_display": "LCD"
+      },
+      "image": "011-1398x2034.png",
+      "image_sha256": "8546e51cf082c37d224eb069afbd09427b4a1fb6fcd4c92c6c7a62826d78980f",
+      "ax_sha256": "e4f2bb32d3f2a1339132f4803aa297782afc33f02b6e0a943a0b9af75d2b1dc9",
+      "archive": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed",
+      "archive_inventory_sha256": "544e0c584251fa8a714cbccd3385f025724a54cb6829933c477dabe3795ae2b8"
     },
     "T07": {
       "row_id": "T07",
@@ -1474,9 +1484,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef",
+  "last_refresh_revision": "89031bea42b3c5e5256bcceaa4916240e24354cb",
   "last_refresh_screens": [
-    "A21"
+    "H04"
   ],
-  "last_refresh_note": "Fresh corrected-source A21 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Reviewed native H04 capture; per-row source and device retained."
 }

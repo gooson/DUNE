@@ -1,0 +1,698 @@
+{
+  "source_head": "89031bea42b3c5e5256bcceaa4916240e24354cb",
+  "status": "native-reviewed; private stage",
+  "case_count": 5,
+  "selected_pair_count": 31,
+  "cases": {
+    "phone": {
+      "tier": "regular",
+      "selector": "DUNEUITests/WellnessRegressionTests/testCompareMetricsSharesPeriodAndDismisses",
+      "archive": ".codex-checks/h04/evidence/phone-normal-89031bea-passed",
+      "inventory_sha256": "b6cffd192fd5bb28276865c84ad0bf377939e9f623924676542d0bee994b8f7e",
+      "aggregate_status": "passed",
+      "aggregate_counts": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "selected_case_status": "Passed",
+      "source_head": "89031bea42b3c5e5256bcceaa4916240e24354cb",
+      "device_uid": "599AF112-4D5B-41BD-8704-D7769C428E71",
+      "pose": {
+        "orientation": "portrait",
+        "active_display": "screen-0",
+        "pixel_dimensions": [
+          1320,
+          2868
+        ]
+      },
+      "canonical_role": "H04 shared week and initial charts",
+      "selected_pairs": [
+        {
+          "sequence": 1,
+          "role": "H04 shared week and initial charts",
+          "png": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/A31851E0-97C0-44A4-9EA6-EE73E4E22E95.png",
+          "png_sha256": "4bcddddf62aa31e115eb7d3899304bbafca6bf4de86ef1f803056ca6a1a7243e",
+          "ax": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/E7EDF86B-AF6D-443E-AAE7-1D98E8D81A2E.txt",
+          "ax_sha256": "e75b85ecc7c04e40548c650a8af0090faef5c882caf8b0e3155694a025be6979",
+          "timestamp": 1793820569.429,
+          "pixel_dimensions": [
+            1320,
+            2868
+          ]
+        },
+        {
+          "sequence": 2,
+          "role": "H04 normal HRV plot and ms",
+          "png": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/B22077AF-ECAF-411F-9B53-4EC11DECA88E.png",
+          "png_sha256": "0ad7cffdfed447effee3161d2dbd1a06424afee20214cfa3f5cebdcd550e8c69",
+          "ax": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/28F59B53-E9F6-4FFF-8B3A-EF5954253ECE.txt",
+          "ax_sha256": "1a037969800b7badfb1725b720a73b041763f0def1fe7d7e1310a797d58babbf",
+          "timestamp": 1793820595.566,
+          "pixel_dimensions": [
+            1320,
+            2868
+          ]
+        },
+        {
+          "sequence": 3,
+          "role": "H04 normal Weight plot and kg",
+          "png": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/3E064610-4E0C-4D85-9E77-7D6A156F02D3.png",
+          "png_sha256": "305c871ccdd9a50c5111c1a1daf11d5de4f2fd29a2dbde112d09d40f63b39848",
+          "ax": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/11BE2376-0628-4B50-8B8C-8878CA6D28A7.txt",
+          "ax_sha256": "c04f15275dfc1e9f0b22a1ce7a49e7a0a064991876c18853bd5c51c5cfa99d9a",
+          "timestamp": 1793820601.476,
+          "pixel_dimensions": [
+            1320,
+            2868
+          ]
+        },
+        {
+          "sequence": 4,
+          "role": "H04 shared month with independent units",
+          "png": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/E25BDB1C-D01D-4293-B26C-8F3DE6E47563.png",
+          "png_sha256": "dab648a8d967ba21faef530637756ac55f4fd6899c70b01f7e22aee4c035c084",
+          "ax": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/9C64E0EF-6F26-4EB3-BF92-D808F61472D3.txt",
+          "ax_sha256": "466682280b719512612a500de25f926bb11dfa8610eb5e4cadff6ca1c1866f5d",
+          "timestamp": 1793820615.132,
+          "pixel_dimensions": [
+            1320,
+            2868
+          ]
+        },
+        {
+          "sequence": 5,
+          "role": "H04 second pane reachable",
+          "png": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/DDAF8B0D-E6AA-4D9A-9958-B2C78DDF617A.png",
+          "png_sha256": "dab648a8d967ba21faef530637756ac55f4fd6899c70b01f7e22aee4c035c084",
+          "ax": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/D5762573-2114-4BB1-87D7-8FC1A9D5C5F8.txt",
+          "ax_sha256": "efbff63e8bc223694cfe78975908f68ffdabf64bb84f276da3291218fa8682f9",
+          "timestamp": 1793820618.48,
+          "pixel_dimensions": [
+            1320,
+            2868
+          ]
+        },
+        {
+          "sequence": 6,
+          "role": "H04 Done returns Wellness",
+          "png": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/8A499DDD-497B-449C-A390-C301DDEB6B7B.png",
+          "png_sha256": "c4f3ec18f38289d5f5f82ea6858b36edd31dc630528dc8a40142c78c2565220d",
+          "ax": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/6B2501EA-4CC1-4F3A-9B39-69244650F894.txt",
+          "ax_sha256": "87d1c3a81447bc7313190415caf7296ef4579eca4b64c39882b078696364d036",
+          "timestamp": 1793820624.762,
+          "pixel_dimensions": [
+            1320,
+            2868
+          ]
+        }
+      ],
+      "classification": "normal-passed-separate-cause-bound-operator-after-two-failed-pipeline-attempts",
+      "operator_receipt": {
+        "path": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/support/phone-normal-period-89031bea-operator-entry.json",
+        "sha256": "94f03883911ca764be73de7b1fc49bed7d24819fdab426850c2d0ce0d9b82805"
+      },
+      "attachments_manifest_sha256": "e8eb72778dbdee51063eecb9aff640d7689358029fe0065c5bdc2ba1f3ab3cc8"
+    },
+    "ipad": {
+      "tier": "ipad",
+      "selector": "DUNEUITests/WellnessRegressionTests/testCompareMetricsSharesPeriodAndDismisses",
+      "archive": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed",
+      "inventory_sha256": "70fc5fccebbb1bb2f17c423571335bbd37a485a47338bc7f73e314cadbadd7b7",
+      "aggregate_status": "passed",
+      "aggregate_counts": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "selected_case_status": "Passed",
+      "source_head": "89031bea42b3c5e5256bcceaa4916240e24354cb",
+      "device_uid": "5E510CAA-B05C-4450-94F4-E532A7EB0526",
+      "pose": {
+        "orientation": "portrait",
+        "active_display": "screen-0",
+        "pixel_dimensions": [
+          1512,
+          2316
+        ]
+      },
+      "canonical_role": "H04 shared week and initial charts",
+      "selected_pairs": [
+        {
+          "sequence": 1,
+          "role": "H04 shared week and initial charts",
+          "png": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/2B64F5D4-FD2C-4BBB-B862-696AC1FC84AB.png",
+          "png_sha256": "8c9625635ce9f0bf2ce4672bd608a2d3f53f1515f7f0464f7279378da8b959c1",
+          "ax": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/39E6882F-2D5B-4EAE-A9A0-A6A27B7070E5.txt",
+          "ax_sha256": "60962bdc2fd0c194f183d2295d28a3dbaf74f589827584f8e846000ef6e0a63b",
+          "timestamp": 1793821040.001,
+          "pixel_dimensions": [
+            1512,
+            2316
+          ]
+        },
+        {
+          "sequence": 2,
+          "role": "H04 normal HRV plot and ms",
+          "png": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/05004E6A-6F3C-426F-99D5-34FE10C85813.png",
+          "png_sha256": "19c92e000c47254004a80ee2ba934961eaa55523fbf49958573e7e3611354f8a",
+          "ax": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/43F0047C-3500-4B74-B975-87D39DB10D2D.txt",
+          "ax_sha256": "b6790884120d7761da7ddc6e80804ed7cab5dfd25d4f03300aa2d03fe1e5f7b7",
+          "timestamp": 1793821067.293,
+          "pixel_dimensions": [
+            1512,
+            2316
+          ]
+        },
+        {
+          "sequence": 3,
+          "role": "H04 normal Weight plot and kg",
+          "png": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/10BA2780-C5B7-4350-9CA6-2EF880451037.png",
+          "png_sha256": "061955dc5d05cfbfda1ec69b1637b501e2ea8e218e8d1da4218357d5d3e58e85",
+          "ax": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/732C32C5-EF6C-4B5B-ABFD-FD482CD93085.txt",
+          "ax_sha256": "6430273467f5f51e8d0dba6c86c9854a0a675aea98e4c5fc9aec6e08ed760579",
+          "timestamp": 1793821073.338,
+          "pixel_dimensions": [
+            1512,
+            2316
+          ]
+        },
+        {
+          "sequence": 4,
+          "role": "H04 shared month with independent units",
+          "png": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/B7AEF356-8F24-421C-8883-75B18A9B15DA.png",
+          "png_sha256": "8cb5e6a7bb73912ba899370ebc47cabde4ec27d06f7c65002d6c2a8e9985fd3e",
+          "ax": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/4AE045DA-B126-482B-B93E-0BD81076321E.txt",
+          "ax_sha256": "c6b6fc1a966ee0bd288184c5efbfd457a29ec6c113a47a78b962f522351e330a",
+          "timestamp": 1793821088.059,
+          "pixel_dimensions": [
+            1512,
+            2316
+          ]
+        },
+        {
+          "sequence": 5,
+          "role": "H04 second pane reachable",
+          "png": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/A2EFF3F6-AA3B-4F75-A484-822903F2B7CF.png",
+          "png_sha256": "8cb5e6a7bb73912ba899370ebc47cabde4ec27d06f7c65002d6c2a8e9985fd3e",
+          "ax": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/2DE44D51-3C7E-4934-B934-EFB363FF0E66.txt",
+          "ax_sha256": "28c3975fb798776232209f8c3f4781994a1118d801e71b1cd4c4293887f624af",
+          "timestamp": 1793821091.239,
+          "pixel_dimensions": [
+            1512,
+            2316
+          ]
+        },
+        {
+          "sequence": 6,
+          "role": "H04 Done returns Wellness",
+          "png": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/4EA70BEA-684D-4AAC-B5EE-4C798B660EFF.png",
+          "png_sha256": "be9c3012fbe76777defc7a38f8281e2106057745310e4ee7cca6588684f2e30b",
+          "ax": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/6408D7D6-7256-45D9-A8EE-8A1998FA9059.txt",
+          "ax_sha256": "18a7ea6ffb8d6d25520eb182897c73b09a9403d3bab94e7b0186e79076c6e903",
+          "timestamp": 1793821098.121,
+          "pixel_dimensions": [
+            1512,
+            2316
+          ]
+        }
+      ],
+      "classification": "normal-passed-standard-pipeline",
+      "attachments_manifest_sha256": "01c43617b6c985af87e9cc8323ce6737f74ba49cedaee35d3bd7ed8b1574a582",
+      "pipeline_receipt": {
+        "path": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/support/check-7ce15aa56eb56188dcd03a51.json",
+        "sha256": "15e86482295bfb14bbf9f9655621bb7a05823dbf6091933aaa4a2a2c60b28eef"
+      }
+    },
+    "duo_closed": {
+      "tier": "duo",
+      "selector": "DUNEUITests/WellnessRegressionTests/testCompareMetricsSharesPeriodAndDismisses",
+      "archive": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed",
+      "inventory_sha256": "544e0c584251fa8a714cbccd3385f025724a54cb6829933c477dabe3795ae2b8",
+      "aggregate_status": "failed",
+      "aggregate_counts": {
+        "executed": 2,
+        "passed": 1,
+        "failed": 1,
+        "skipped": 0
+      },
+      "selected_case_status": "Passed",
+      "source_head": "14f9d4aa03c666a1ef3970bf65b299bd97e6367c",
+      "device_uid": "93A7E6BA-4B1F-4FDE-A51D-6E1BB77B19B6",
+      "pose": {
+        "angle": 0,
+        "active_display": "LCD"
+      },
+      "canonical_role": "H04 shared week and initial charts",
+      "selected_pairs": [
+        {
+          "role": "H04 shared week and initial charts",
+          "sequence": 11,
+          "png": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/011-1398x2034.png",
+          "png_sha256": "8546e51cf082c37d224eb069afbd09427b4a1fb6fcd4c92c6c7a62826d78980f",
+          "ax": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/011-hierarchy.txt",
+          "ax_sha256": "e4f2bb32d3f2a1339132f4803aa297782afc33f02b6e0a943a0b9af75d2b1dc9"
+        },
+        {
+          "role": "H04 normal HRV plot and ms",
+          "sequence": 12,
+          "png": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/012-1398x2034.png",
+          "png_sha256": "0b5a68e192c7f058da390abb6fed26a253c73f3c23de9bea35067bab1dde45b6",
+          "ax": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/012-hierarchy.txt",
+          "ax_sha256": "099be081833212af5ad5f9939ce7780d90dd6bd565cc363a1bca65c789cc311e"
+        },
+        {
+          "role": "H04 normal Weight plot and kg",
+          "sequence": 13,
+          "png": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/013-1398x2034.png",
+          "png_sha256": "31fcfca41fddd124fb09a06c654a2c18a9ac41e9927c5a9d46df40b63f7d5648",
+          "ax": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/013-hierarchy.txt",
+          "ax_sha256": "2f2146daf1c5e006d2a4c2d9243281bd67bf9d7f4adcab2c5edd62555d924d99"
+        },
+        {
+          "role": "H04 shared month with independent units",
+          "sequence": 14,
+          "png": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/014-1398x2034.png",
+          "png_sha256": "0b5edec4b63c2ddc12dc7e72fc9b7b5db05b64ab8ef8c0ae6365a05490dd9e40",
+          "ax": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/014-hierarchy.txt",
+          "ax_sha256": "c6305b2c1e50dfa9dca0b87d3ce263ad9d0f1faba04ae373cfca9b62eacf1d0a"
+        },
+        {
+          "role": "H04 second pane reachable",
+          "sequence": 15,
+          "png": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/015-1398x2034.png",
+          "png_sha256": "0b5edec4b63c2ddc12dc7e72fc9b7b5db05b64ab8ef8c0ae6365a05490dd9e40",
+          "ax": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/015-hierarchy.txt",
+          "ax_sha256": "e14e01cf7952d7f1785528a2899813bdc1971dbc364bbb720f9f63e6808f73d2"
+        },
+        {
+          "role": "H04 Done returns Wellness",
+          "sequence": 16,
+          "png": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/016-1398x2034.png",
+          "png_sha256": "988c997d7a697460cdcacb29bf06227fbb3d38ed33ce21f71f1eb76b87e0ebcd",
+          "ax": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/016-hierarchy.txt",
+          "ax_sha256": "ce340510f28e644ce776f3362afbbba6f9d29e75d57d539a71c9f2f3a4c2b5f2"
+        }
+      ],
+      "classification": "normal-passed-in-failed-aggregate"
+    },
+    "duo_open": {
+      "tier": "duo-open",
+      "selector": "DUNEUITests/WellnessRegressionTests/testCompareMetricsSharesPeriodAndDismisses",
+      "archive": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed",
+      "inventory_sha256": "8764df28390ecdf1cf9f5978a503a87cd9686edd8c7558a852d7913962533713",
+      "aggregate_status": "passed",
+      "aggregate_counts": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "selected_case_status": "Passed",
+      "source_head": "14f9d4aa03c666a1ef3970bf65b299bd97e6367c",
+      "device_uid": "93A7E6BA-4B1F-4FDE-A51D-6E1BB77B19B6",
+      "pose": {
+        "angle": 180,
+        "active_display": "LCD-1"
+      },
+      "canonical_role": "H04 shared week and initial charts",
+      "selected_pairs": [
+        {
+          "role": "H04 shared week and initial charts",
+          "sequence": 3,
+          "png": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/003-2007x2853.png",
+          "png_sha256": "2aae48f5075aacde9c446d8935c579028ac79b2d61dba3d17ca6171478fbf4ad",
+          "ax": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/003-hierarchy.txt",
+          "ax_sha256": "ec89933f5e9c6de5e693d9cfe81f247c71daee354bb355c8ba46f7e59e54ee78"
+        },
+        {
+          "role": "H04 normal HRV plot and ms",
+          "sequence": 4,
+          "png": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/004-2007x2853.png",
+          "png_sha256": "6dd5f0d984dfd399bee5effcc461f07739f6e502e3f19e85c8c635d8b27f2f67",
+          "ax": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/004-hierarchy.txt",
+          "ax_sha256": "6a69d03fdfc14ebacdd5c77de99113436eaa93ccff98a552aa96c6e5f52d1cd8"
+        },
+        {
+          "role": "H04 normal Weight plot and kg",
+          "sequence": 5,
+          "png": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/005-2007x2853.png",
+          "png_sha256": "b4d22eab22be3448e7339e7fdb21640bafa33bfed657a2a37d81760943e0804e",
+          "ax": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/005-hierarchy.txt",
+          "ax_sha256": "64b505bc22638e70ec15a8badb0bab5d09202e4d7cf147ed8043c1df1b3e3673"
+        },
+        {
+          "role": "H04 shared month with independent units",
+          "sequence": 6,
+          "png": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/006-2007x2853.png",
+          "png_sha256": "95b22169406f97b90da323d36dbe59fe85ccbc49901cb26ab39da78f255a9a55",
+          "ax": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/006-hierarchy.txt",
+          "ax_sha256": "d04d0b5140190fecd27bf944e73309c78b896738c765309d362f35b4a3325409"
+        },
+        {
+          "role": "H04 second pane reachable",
+          "sequence": 7,
+          "png": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/007-2007x2853.png",
+          "png_sha256": "95b22169406f97b90da323d36dbe59fe85ccbc49901cb26ab39da78f255a9a55",
+          "ax": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/007-hierarchy.txt",
+          "ax_sha256": "bb5139726502b9d50030ea3197a0a5706e0012429e0eb87aef231304a1f75927"
+        },
+        {
+          "role": "H04 Done returns Wellness",
+          "sequence": 8,
+          "png": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/008-2007x2853.png",
+          "png_sha256": "35653ef85dc8fa446c463fc069f31f05262e4484415b5ef12f893345a8f77cbb",
+          "ax": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/008-hierarchy.txt",
+          "ax_sha256": "5739bd41d95d7f50f0ede7c83e518c26d74c4bda40d7b7d0b78b9b05e266ac11"
+        }
+      ],
+      "classification": "normal-passed"
+    },
+    "duo_closed_max": {
+      "tier": "duo",
+      "selector": "DUNEUITests/WellnessRegressionTests/testCompareMetricsDarkMaximumAccessibility",
+      "archive": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed",
+      "inventory_sha256": "06f88d2f8b716abacc6d5708a0f334f2842858502d0a7ec087650c85f20261f3",
+      "aggregate_status": "passed",
+      "aggregate_counts": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "selected_case_status": "Passed",
+      "source_head": "bfd0348605b92a20688833d5eff1fe06fa6d5b87",
+      "device_uid": "93A7E6BA-4B1F-4FDE-A51D-6E1BB77B19B6",
+      "pose": {
+        "angle": 0,
+        "active_display": "LCD"
+      },
+      "canonical_role": "H04 MAX title and shared week",
+      "selected_pairs": [
+        {
+          "sequence": 3,
+          "role": "H04 MAX title and shared week",
+          "png": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/003-1398x2034.png",
+          "png_sha256": "d0f8a96d33ddd174c666900831d1937d4525abf3af35a1f85374cce092248347",
+          "ax": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/003-hierarchy.txt",
+          "ax_sha256": "e8048cf6bbea9572bf9e4b2d6862b30116bd41ab65244032754b3122705ac3a3",
+          "active_display": "LCD",
+          "pixel_dimensions": [
+            1398,
+            2034
+          ]
+        },
+        {
+          "sequence": 4,
+          "role": "H04 MAX selected Resting HR full row",
+          "png": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/004-1398x2034.png",
+          "png_sha256": "245fb40488b22b069f1fc8707254eb37091bdcf9d5bbd315112d2fe5ca33e241",
+          "ax": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/004-hierarchy.txt",
+          "ax_sha256": "d4703609ab3409f449d5f94962b505d401385dbc57c89e6f62a16e85a72a1f84",
+          "active_display": "LCD",
+          "pixel_dimensions": [
+            1398,
+            2034
+          ]
+        },
+        {
+          "sequence": 5,
+          "role": "H04 MAX first HRV plot",
+          "png": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/005-1398x2034.png",
+          "png_sha256": "ee5961271a47974240f73cd102b29d3896e33fcd4234edaf4ca2ef9eb18bf1fb",
+          "ax": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/005-hierarchy.txt",
+          "ax_sha256": "91e432ec3b4dda3bd2f93abe08b9b6b843321dd0cbca157b55bda38e02921df3",
+          "active_display": "LCD",
+          "pixel_dimensions": [
+            1398,
+            2034
+          ]
+        },
+        {
+          "sequence": 6,
+          "role": "H04 MAX second Weight plot",
+          "png": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/006-1398x2034.png",
+          "png_sha256": "bb40f440449af7a0eb9751e67e5177582ef4c04e646a5303481d547a1c199f93",
+          "ax": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/006-hierarchy.txt",
+          "ax_sha256": "e46726a29ad2278b639340e91c92d138fb20648cf6affffb8588d068b7ff9c7f",
+          "active_display": "LCD",
+          "pixel_dimensions": [
+            1398,
+            2034
+          ]
+        },
+        {
+          "sequence": 7,
+          "role": "H04 MAX second Weight plot lower",
+          "png": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/007-1398x2034.png",
+          "png_sha256": "e73b0388270119917c126c018db48abcf2498c141cc7fd87f6f0cdcdb1d8e756",
+          "ax": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/007-hierarchy.txt",
+          "ax_sha256": "9a09abf7a479cc37afba2869ad13a67d67299fd1f8670226cda373050c3943df",
+          "active_display": "LCD",
+          "pixel_dimensions": [
+            1398,
+            2034
+          ]
+        },
+        {
+          "sequence": 8,
+          "role": "H04 MAX shared month",
+          "png": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/008-1398x2034.png",
+          "png_sha256": "fd7642eceadeadfe020e158d79028ec4aa6a8e85e6b306497d2bbe507d6dc7d7",
+          "ax": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/008-hierarchy.txt",
+          "ax_sha256": "8f9e4904c8c62ebdcbb93acfa30bc38d9cb3da1392aa5d14ff5282ae877ddf35",
+          "active_display": "LCD",
+          "pixel_dimensions": [
+            1398,
+            2034
+          ]
+        },
+        {
+          "sequence": 9,
+          "role": "H04 MAX Done returns Wellness",
+          "png": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/009-1398x2034.png",
+          "png_sha256": "37d6cd83b4dd08e40ff46967f18c64320cabbf1fc1b1c33992a77c735584c446",
+          "ax": ".codex-checks/h04/evidence/duo-closed-max-month-bfd03486-passed/host-captures/009-hierarchy.txt",
+          "ax_sha256": "e9f96ae7ff2989338d8cbcb1080f76b733c10ad6f35e031a88f205983d4658f7",
+          "active_display": "LCD",
+          "pixel_dimensions": [
+            1398,
+            2034
+          ]
+        }
+      ],
+      "classification": "max-only-operator-passed",
+      "archive_postprocessing": "first sandbox export failed 64; same helper completed after escalation; no UI rerun"
+    }
+  },
+  "quality_reports": {
+    "closed_normal": {
+      "path": "/private/tmp/h04-native-preparation/h04-closed-normal-14-native-quality.json",
+      "sha256": "06b02d9e347feb82b5bc25869099914222d409243a4624fc6b33e3f06b8fb3ab"
+    },
+    "duo_open": {
+      "path": "/private/tmp/h04-native-preparation/h04-duo-open-14-native-quality.json",
+      "sha256": "ad9d5dbb64deff3acc6b460d3ef736ddb332c1504019c4ba23366cfe58a2ced2"
+    },
+    "closed_max": {
+      "path": "/private/tmp/h04-native-preparation/h04-closed-max-bfd-native-quality.json",
+      "sha256": "1bf5a8f27c9a9c96f0a47e28380ad2db0cd695d970bf16fa5441a0b3cac1712f"
+    },
+    "phone": {
+      "path": "/private/tmp/h04-native-preparation/h04-phone-890-native-quality.json",
+      "sha256": "0e4dd440a362fbc9955037e980b2f318b567cd2977dda5872085c0ee9b3bb4c1"
+    },
+    "ipad": {
+      "path": "/private/tmp/h04-native-preparation/h04-ipad-890-native-quality.json",
+      "sha256": "0387658c26d45ab54a1d2473b1599385603f9c35db002dc142ecb475e14e5fb3"
+    },
+    "final_native_review": {
+      "path": "/private/tmp/h04-native-preparation/h04-final-native-quality-890.json",
+      "sha256": "552006f4404c352a192621d8a9de3a56903355bc916bc155030014181bffd7a9"
+    }
+  },
+  "historical": {
+    "regular": {
+      "path": "docs/design/phone-design-map/actual/regular/images/H04.png",
+      "sha256": "854b7348227eec9d4b8ed9437a1c9acb030eecc51246103b50a5744cb1f79c40",
+      "identity_only": true,
+      "matched_source_uid_pose_ax": false,
+      "gallery_file": "historical-regular-H04.png"
+    },
+    "ipad": {
+      "path": "docs/design/phone-design-map/actual/ipad/images/H04.png",
+      "sha256": "546887b8289c9f76cb630ea2f0c0fbd0be08376d932cfedfc8580c355ba7be22",
+      "identity_only": true,
+      "matched_source_uid_pose_ax": false,
+      "gallery_file": "historical-ipad-H04.png"
+    },
+    "duo": {
+      "path": "docs/design/phone-design-map/actual/duo/images/H04.png",
+      "sha256": "478f049b91662f54fd00d3afcd1014d634e6bf8275d187adde7464cd47f4ea5c",
+      "identity_only": true,
+      "matched_source_uid_pose_ax": false,
+      "gallery_file": "historical-duo-H04.png"
+    },
+    "duo-open": {
+      "path": "docs/design/phone-design-map/actual/duo-open/images/H04.png",
+      "sha256": "63d067497696b60b47c2bc2e5d7f413638ee041bf8d4b7b5f0893004a7c0cbb7",
+      "identity_only": true,
+      "matched_source_uid_pose_ax": false,
+      "gallery_file": "historical-duo-open-H04.png"
+    }
+  },
+  "phone_failed_history": {
+    "pipeline_receipt": ".codex-checks/pipeline/check-6f44cf3ea2e87eacc7d31299.json",
+    "pipeline_receipt_sha256": "e141b907e10cce283bd76086e21abf5e020fdc20e9bfc22854f18b01be4a0d7c",
+    "attempt_count": 2,
+    "attempt_statuses": [
+      "failed",
+      "failed"
+    ],
+    "archives": [
+      {
+        "archive": ".codex-checks/h04/evidence/phone-normal-bfd03486-startup-failed",
+        "inventory_sha256": "781aefbcffafc29c755e2ccbb0ea9f7a07174d1565d12ab70c31e39449c28e1c",
+        "source_head": "bfd0348605b92a20688833d5eff1fe06fa6d5b87",
+        "status": "failed",
+        "counts": {
+          "executed": 1,
+          "passed": 0,
+          "skipped": 0,
+          "failed": 1
+        },
+        "reason": "startup accessibility not loaded"
+      },
+      {
+        "archive": ".codex-checks/h04/evidence/phone-normal-bfd03486-period-failed",
+        "inventory_sha256": "caf54f7d92b182515df8ef39015c75aa1ed76507ac8b06a3eb056c505d5b6d9a",
+        "source_head": "bfd0348605b92a20688833d5eff1fe06fa6d5b87",
+        "status": "failed",
+        "counts": {
+          "executed": 1,
+          "passed": 0,
+          "skipped": 0,
+          "failed": 1
+        },
+        "reason": "Period control occluded by navigation bar"
+      }
+    ]
+  },
+  "failed_duo_history": [
+    {
+      "archive": ".codex-checks/h04/evidence/duo-closed-304025c8-failed",
+      "inventory_sha256": "d3088ac3fb9e87817c9b66cbd9d1674883a03f3d0eacf34ea72d9529211776ce",
+      "source_head": "304025c87f015d7044874c05f171f1e294739c63",
+      "status": "failed",
+      "counts": {
+        "executed": 2,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 2
+      }
+    },
+    {
+      "archive": ".codex-checks/h04/evidence/duo-closed-8f3607ae-mixed-failed",
+      "inventory_sha256": "3ba129509c61409b01d1f4f30b6f0cc08c12487d7571808c2593469c1b9c0e35",
+      "source_head": "8f3607aebd4ec6ac5a502982f6df7357adf26525",
+      "status": "failed",
+      "counts": {
+        "executed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 1
+      }
+    },
+    {
+      "archive": ".codex-checks/h04/evidence/duo-closed-max-query-51f1e7fa-failed",
+      "inventory_sha256": "30fd746fd86fdcafff5aa16676914945dbca21dc0d2375b17baf61cfd97347f0",
+      "source_head": "51f1e7fae271441ded4b346c227544c4c7e46c35",
+      "status": "failed",
+      "counts": {
+        "executed": 1,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 1
+      }
+    }
+  ],
+  "historical_ui_totals": {
+    "executed": 13,
+    "passed": 6,
+    "failed": 7,
+    "skipped": 0,
+    "archive_count": 10
+  },
+  "canonical": {
+    "regular": {
+      "profile": "phone",
+      "pair": {
+        "sequence": 1,
+        "role": "H04 shared week and initial charts",
+        "png": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/A31851E0-97C0-44A4-9EA6-EE73E4E22E95.png",
+        "png_sha256": "4bcddddf62aa31e115eb7d3899304bbafca6bf4de86ef1f803056ca6a1a7243e",
+        "ax": ".codex-checks/h04/evidence/phone-normal-89031bea-passed/attachments/E7EDF86B-AF6D-443E-AAE7-1D98E8D81A2E.txt",
+        "ax_sha256": "e75b85ecc7c04e40548c650a8af0090faef5c882caf8b0e3155694a025be6979",
+        "timestamp": 1793820569.429,
+        "pixel_dimensions": [
+          1320,
+          2868
+        ]
+      },
+      "source_head": "89031bea42b3c5e5256bcceaa4916240e24354cb",
+      "device_uid": "599AF112-4D5B-41BD-8704-D7769C428E71"
+    },
+    "ipad": {
+      "profile": "ipad",
+      "pair": {
+        "sequence": 1,
+        "role": "H04 shared week and initial charts",
+        "png": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/2B64F5D4-FD2C-4BBB-B862-696AC1FC84AB.png",
+        "png_sha256": "8c9625635ce9f0bf2ce4672bd608a2d3f53f1515f7f0464f7279378da8b959c1",
+        "ax": ".codex-checks/h04/evidence/ipad-normal-89031bea-passed/attachments/39E6882F-2D5B-4EAE-A9A0-A6A27B7070E5.txt",
+        "ax_sha256": "60962bdc2fd0c194f183d2295d28a3dbaf74f589827584f8e846000ef6e0a63b",
+        "timestamp": 1793821040.001,
+        "pixel_dimensions": [
+          1512,
+          2316
+        ]
+      },
+      "source_head": "89031bea42b3c5e5256bcceaa4916240e24354cb",
+      "device_uid": "5E510CAA-B05C-4450-94F4-E532A7EB0526"
+    },
+    "duo": {
+      "profile": "duo_closed",
+      "pair": {
+        "role": "H04 shared week and initial charts",
+        "sequence": 11,
+        "png": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/011-1398x2034.png",
+        "png_sha256": "8546e51cf082c37d224eb069afbd09427b4a1fb6fcd4c92c6c7a62826d78980f",
+        "ax": ".codex-checks/h04/evidence/duo-closed-color-14f9d4aa-mixed-failed/host-captures/011-hierarchy.txt",
+        "ax_sha256": "e4f2bb32d3f2a1339132f4803aa297782afc33f02b6e0a943a0b9af75d2b1dc9"
+      },
+      "source_head": "14f9d4aa03c666a1ef3970bf65b299bd97e6367c",
+      "device_uid": "93A7E6BA-4B1F-4FDE-A51D-6E1BB77B19B6"
+    },
+    "duo-open": {
+      "profile": "duo_open",
+      "pair": {
+        "role": "H04 shared week and initial charts",
+        "sequence": 3,
+        "png": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/003-2007x2853.png",
+        "png_sha256": "2aae48f5075aacde9c446d8935c579028ac79b2d61dba3d17ca6171478fbf4ad",
+        "ax": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed/host-captures/003-hierarchy.txt",
+        "ax_sha256": "ec89933f5e9c6de5e693d9cfe81f247c71daee354bb355c8ba46f7e59e54ee78"
+      },
+      "source_head": "14f9d4aa03c666a1ef3970bf65b299bd97e6367c",
+      "device_uid": "93A7E6BA-4B1F-4FDE-A51D-6E1BB77B19B6"
+    }
+  },
+  "limitations": [
+    "Closed normal passed within failed 14f aggregate; MAX passed separately at bfd.",
+    "The 890 normal Period helper was not executed on Duo; app bytes are unchanged.",
+    "Phone original same-ID pipeline has two failed attempts; 890 operator passed separately.",
+    "Historical H04 images are identity references without matched AX/source/UID/pose."
+  ]
+}

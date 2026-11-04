@@ -640,13 +640,23 @@
     },
     "H04": {
       "row_id": "H04",
-      "evidence": "test-and-action:Metric comparison",
+      "file": "H04.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "WellnessRegressionTests/testCompareMetricsSharesPeriodAndDismisses()",
-      "action": "tap wellness-compare-metrics",
-      "timestamp": 1791830324.75,
-      "image": "049A51EC-94B7-47C1-B949-E4700754B6DB.png",
-      "screen": "screen-1-2006x2852-tap wellness-compare-metrics_1_8AD43AE6-B5D3-4570-B0AE-2D73608242DB.png",
-      "file": "H04.png"
+      "action": "H04 shared week and initial charts",
+      "source_revision": "14f9d4aa03c666a1ef3970bf65b299bd97e6367c",
+      "capture_kind": "host",
+      "timestamp_kind": "reviewed archive checkpoint",
+      "device_uid": "93A7E6BA-4B1F-4FDE-A51D-6E1BB77B19B6",
+      "pose": {
+        "angle": 180,
+        "active_display": "LCD-1"
+      },
+      "image": "003-2007x2853.png",
+      "image_sha256": "2aae48f5075aacde9c446d8935c579028ac79b2d61dba3d17ca6171478fbf4ad",
+      "ax_sha256": "ec89933f5e9c6de5e693d9cfe81f247c71daee354bb355c8ba46f7e59e54ee78",
+      "archive": ".codex-checks/h04/evidence/duo-open-14f9d4aa-passed",
+      "archive_inventory_sha256": "8764df28390ecdf1cf9f5978a503a87cd9686edd8c7558a852d7913962533713"
     },
     "H09": {
       "row_id": "H09",
@@ -1475,9 +1485,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "9208e68ca8f2cd1b9e209fd7c9fb40a8164547ef",
+  "last_refresh_revision": "89031bea42b3c5e5256bcceaa4916240e24354cb",
   "last_refresh_screens": [
-    "A21"
+    "H04"
   ],
-  "last_refresh_note": "Fresh corrected-source A21 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Reviewed native H04 capture; per-row source and device retained."
 }
