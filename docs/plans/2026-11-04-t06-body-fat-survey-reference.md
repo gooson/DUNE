@@ -85,3 +85,9 @@ related_brainstorms: []
 ## 확신도
 
 자료 원문·단위 경로·기존 소비자를 독립 검토했고 제안 소스·번역·UI 계약의 미해결 P1/P2/P3는 없다. 따라서 설계 확신은 높지만, 실제 컴파일·동작·캡처 결과는 이후 게이트에서 확인한다.
+
+## Vision 검증 범위 조정
+
+계획한 전체 DUNEVision 빌드 한 번은 **실패**했다. 기존 `DailyDigestScheduler`, `ExerciseVariantMigration`, `HealthKitObserverManager`가 Vision 타깃에서 제외·누락된 파일의 타입을 참조했다. 독립 검토에서 실패 파일·타입 정의·`project.yml`이 기반 `e99a16e9`와 동일함을 확인했다. 기반 전체 빌드를 다시 실행한 결과는 아니며, 새 모델 진단이 없다는 사실만으로 새 코드의 컴파일 성공을 추정하지 않는다. 기존 실패 로그와 실행기 기록을 보존하고 이 후속 작업에 무관한 Vision 소스 구성을 함께 수정하지 않는다.
+
+변경 범위의 컴파일은 별도 제한 검사로 확인했다. 실제 XRSimulator 27.2 SDK, `x86_64-apple-xros27.0-simulator`, Swift 6·strict concurrency에서 `BodyPeerReference.swift`와 새 `BodyFatSurveyReference.swift` 두 파일만 typecheck하여 종료 코드 0을 확인했다. 이는 **분리한 모델 typecheck 통과**이며 전체 DUNEVision 빌드·실행·UI 통과가 아니다. 전체 빌드 실패는 계속 별도로 보고한다. iOS의 선택한 단위·네이티브 검사 게이트는 그대로 유지한다.
