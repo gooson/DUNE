@@ -153,7 +153,7 @@ struct SessionSummaryView: View {
             }
             .padding(.horizontal, DS.Spacing.xs)
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
+        .safeAreaInset(edge: .bottom, spacing: DS.Spacing.lg) {
             Button {
                 if saveError != nil {
                     retrySave()

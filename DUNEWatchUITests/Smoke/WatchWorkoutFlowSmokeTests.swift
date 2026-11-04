@@ -260,7 +260,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     }
 
     func testCaptureSaveErrorDesignMap() throws {
-        relaunchApp(withAdditionalArguments: ["--ui-force-session-save-error"])
+        relaunchApp(withAdditionalArguments: ["--ui-force-session-save-error", "--ui-watch-home-empty"])
         completeFixtureStrengthWorkoutToSummary()
         captureDesignState("F06", visible: "watch-session-summary-save-retry-button")
     }
@@ -664,7 +664,8 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     }
 
     func testCaptureMachineDesignMap() throws {
-        launchApp(with: LaunchConfiguration(scenario: .responsiveLayout))
+        launchApp(with: LaunchConfiguration(scenario: .responsiveLayout,
+                                           additionalArguments: ["--ui-watch-home-empty"]))
         openAllExercises()
         guard let stair = findQuickStartExercise(identifier: "watch-quickstart-exercise-stair-climber") else {
             XCTFail("Fixture stair climber must be reachable")
@@ -713,6 +714,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     }
 
     func testCaptureStrengthDesignMap() throws {
+        relaunchApp(withAdditionalArguments: ["--ui-watch-home-empty"])
         openAllExercises()
         captureDesignState("D01", visible: WatchAXID.quickStartScreen)
         guard let squat = findQuickStartExercise(identifier: WatchAXID.quickStartExerciseSquat) else {
