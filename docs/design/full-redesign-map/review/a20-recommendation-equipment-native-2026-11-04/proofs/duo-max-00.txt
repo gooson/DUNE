@@ -1,0 +1,468 @@
+Attributes: Application, 0x114288780, pid: 45356, label: 'DUNE'
+Element subtree:
+ →Application, 0x114288780, pid: 45356, label: 'DUNE'
+    Window (Main), 0x114289180, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x11428b980, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x11428a6c0, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x11428aa80, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x114289cc0, {{-466.0, -678.0}, {1398.0, 2034.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+          Other, 0x114288140, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x114289e00, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x114288f00, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x114288280, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x114289680, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x11428ad00, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x114288500, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x11428abc0, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x1142888c0, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x11428be80, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x1142897c0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x114288c80, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x11428a580, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Activity'
+                            Other, 0x11428b700, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x11428bac0, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x114288b40, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x11428b0c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                    ScrollView, 0x11428bc00, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'activity-root-scroll'
+                                      Other, 0x11428b200, {{0.0, -3545.0}, {382.0, 20671.0}}
+                                        Button, 0x11428a300, {{36.0, -3501.0}, {310.0, 455.3}}, identifier: 'activity-hero-readiness', label: 'READINESS, 75, Moderate, Normal training — HRV needs attention'
+                                          StaticText, 0x11428b480, {{36.0, -3501.0}, {310.0, 51.3}}, identifier: 'card-navigation-header', label: 'READINESS'
+                                            StaticText, 0x114288000, {{36.0, -3501.0}, {310.0, 51.3}}, identifier: 'activity-hero-heading', label: 'READINESS'
+                                            Image, 0x11428a940, {{293.7, -3494.3}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x114288a00, {{36.0, -3431.7}, {71.0, 71.7}}, identifier: 'activity-hero-score-external', label: '75'
+                                          StaticText, 0x114289f40, {{36.0, -3348.0}, {236.7, 65.7}}, label: 'Moderate'
+                                          StaticText, 0x11428ae40, {{36.0, -3278.3}, {244.0, 232.7}}, label: 'Normal training — HRV needs attention'
+                                        Other, 0x11428a800, {{36.0, -3027.7}, {310.0, 468.0}}, identifier: 'activity-hero-components'
+                                          StaticText, 0x11428b340, {{36.0, -3014.7}, {263.3, 153.3}}, label: 'Component scores · out of 100'
+                                          StaticText, 0x11428af80, {{36.0, -2849.3}, {310.0, 69.7}}, label: 'HRV, 54, /100'
+                                            StaticText, 0x11428b840, {{36.0, -2845.7}, {84.3, 51.3}}, label: 'HRV'
+                                            StaticText, 0x11428a080, {{196.0, -2849.3}, {62.7, 58.7}}, label: '54'
+                                            StaticText, 0x106f8da40, {{260.7, -2840.7}, {85.3, 48.0}}, label: '/100'
+                                            Other, 0x106f8d900, {{36.0, -2786.7}, {310.0, 7.0}}
+                                          StaticText, 0x106f8d7c0, {{36.0, -2767.7}, {310.0, 69.7}}, label: 'Sleep, 82, /100'
+                                            StaticText, 0x114b5fe80, {{36.0, -2764.0}, {104.0, 51.3}}, label: 'Sleep'
+                                            StaticText, 0x114b5df40, {{196.0, -2767.7}, {62.7, 58.7}}, label: '82'
+                                            StaticText, 0x114b5f980, {{260.7, -2759.0}, {85.3, 48.0}}, label: '/100'
+                                            Other, 0x114b5e800, {{36.0, -2705.0}, {310.0, 7.0}}
+                                          StaticText, 0x114b5ea80, {{36.0, -2686.0}, {310.0, 113.3}}, label: 'Recovery, 91, /100'
+                                            StaticText, 0x114b5f5c0, {{36.0, -2686.0}, {132.7, 102.3}}, label: 'Recovery'
+                                            StaticText, 0x114b5f0c0, {{196.0, -2664.2}, {62.7, 58.7}}, label: '91'
+                                            StaticText, 0x114b5f840, {{260.7, -2655.5}, {85.3, 48.0}}, label: '/100'
+                                            Other, 0x114b5fac0, {{36.0, -2579.7}, {310.0, 7.0}}
+                                        Button, 0x114b5d040, {{36.0, -2541.7}, {310.0, 153.3}}, identifier: 'activity-hero-history-disclosure', label: 'Readiness History and Evidence', value: Collapsed
+                                          StaticText, 0x114b5d180, {{36.0, -2541.7}, {231.3, 153.3}}, label: 'Readiness History and Evidence'
+                                          Image, 0x114b5d900, {{302.7, -2476.0}, {38.0, 22.0}}, identifier: 'chevron.down', label: 'Go Down'
+                                        Other, 0x114b5ed00, {{16.0, -2352.3}, {350.0, 666.0}}, identifier: 'activity-section-musclemap'
+                                          Button, 0x114b5fd40, {{36.0, -2336.3}, {310.0, 116.7}}, identifier: 'activity-musclemap-detail-link', label: 'Muscle Map'
+                                            StaticText, 0x114b5cb40, {{80.7, -2336.3}, {169.3, 116.7}}, label: 'Muscle Map'
+                                            Image, 0x114b5d2c0, {{262.3, -2324.0}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                            Image, 0x114b5e300, {{48.0, -2304.7}, {22.7, 53.3}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x114b5cdc0, {{32.0, -2207.7}, {244.3, 102.3}}, label: 'All 13 muscle groups ready'
+                                          Button, 0x114b5cf00, {{284.3, -2185.3}, {57.7, 57.7}}, identifier: 'activity-muscle-map-algorithm-info', label: 'About Muscle Map'
+                                          SegmentedControl, 0x114b5ef80, {{32.0, -2097.3}, {318.0, 31.0}}, identifier: 'activity-muscle-map-mode'
+                                            Button, 0x114b5ebc0, {{32.0, -2097.3}, {159.0, 32.0}}, label: 'Recovery', Selected
+                                            Button, 0x114b5d400, {{191.0, -2097.3}, {159.0, 32.0}}, label: 'Sets'
+                                          Button, 0x114b5f200, {{98.7, -2004.3}, {56.7, 16.0}}, identifier: 'musclemap-body-front-shoulders'
+                                          Button, 0x114b5da40, {{108.7, -2002.0}, {36.6, 20.0}}, identifier: 'musclemap-body-front-chest'
+                                          Button, 0x114290000, {{113.6, -2008.2}, {26.9, 5.7}}, identifier: 'musclemap-body-front-traps'
+                                          Button, 0x114290140, {{226.6, -2003.1}, {56.6, 14.9}}, identifier: 'musclemap-body-back-shoulders'
+                                          Button, 0x114290280, {{233.5, -2001.1}, {42.8, 15.2}}, identifier: 'musclemap-body-back-lats'
+                                          Button, 0x1142903c0, {{241.3, -2005.3}, {27.3, 29.6}}, identifier: 'musclemap-body-back-traps'
+                                          Button, 0x114290500, {{96.5, -1987.3}, {60.9, 14.9}}, identifier: 'musclemap-body-front-biceps'
+                                          Button, 0x114290640, {{99.7, -1990.8}, {54.7, 22.0}}, identifier: 'musclemap-body-front-triceps'
+                                          Button, 0x114290780, {{227.0, -1991.3}, {55.9, 12.1}}, identifier: 'musclemap-body-back-triceps'
+                                          Button, 0x1142908c0, {{87.2, -1972.0}, {79.5, 31.1}}, identifier: 'musclemap-body-front-forearms'
+                                          Button, 0x114290a00, {{117.7, -1974.6}, {18.7, 16.4}}, identifier: 'musclemap-body-front-core'
+                                          Button, 0x114290b40, {{216.5, -1966.0}, {76.8, 26.0}}, identifier: 'musclemap-body-back-forearms'
+                                          Button, 0x114290c80, {{238.1, -1973.9}, {33.6, 25.7}}, identifier: 'musclemap-body-back-back'
+                                          Button, 0x114290dc0, {{106.9, -1944.0}, {40.3, 45.2}}, identifier: 'musclemap-body-front-quadriceps'
+                                          Button, 0x114290f00, {{236.9, -1949.2}, {36.0, 24.1}}, identifier: 'musclemap-body-back-glutes'
+                                          Button, 0x114291040, {{237.1, -1928.5}, {35.7, 39.3}}, identifier: 'musclemap-body-back-hamstrings'
+                                          Button, 0x114291180, {{108.0, -1887.5}, {38.0, 37.6}}, identifier: 'musclemap-body-front-calves'
+                                          Button, 0x1142912c0, {{235.9, -1893.5}, {38.1, 30.3}}, identifier: 'musclemap-body-back-calves'
+                                          StaticText, 0x114291400, {{32.0, -1798.3}, {123.7, 96.0}}, identifier: 'activity-muscle-map-legend-recovery', label: 'Recovered'
+                                          StaticText, 0x114291540, {{201.0, -1774.3}, {149.0, 48.0}}, identifier: 'activity-muscle-map-legend-recovery', label: 'Fatigued'
+                                        Button, 0x114291680, {{36.0, -1654.3}, {310.0, 174.7}}, identifier: 'activity-injuryrisk-detail-link', label: 'Training Burden Check'
+                                          StaticText, 0x1142917c0, {{98.0, -1654.3}, {185.7, 174.7}}, identifier: 'activity-section-injuryrisk', label: 'Training Burden Check'
+                                          Image, 0x114291900, {{296.0, -1642.0}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          Image, 0x114291a40, {{48.0, -1591.0}, {40.0, 48.3}}, identifier: 'shield.checkered', label: 'Shield With A Checkered Pattern'
+                                        Button, 0x114291b80, {{32.0, -1467.7}, {318.0, 1319.7}}, identifier: 'activity-injuryrisk-detail-content', label: '3, Low Risk, Training safely — keep it up, Training records · assessment context, Strength Volume, 6,360 kg, Consecutive Training, 3 days, Muscle Recovery, Recovered, These records provide context; they are not all risk factors., 1 active injury'
+                                          StaticText, 0x114291cc0, {{48.0, -1451.7}, {37.0, 69.3}}, label: '3'
+                                          StaticText, 0x114291e00, {{48.0, -1370.3}, {194.7, 58.7}}, label: 'Low Risk'
+                                          StaticText, 0x114291f40, {{48.0, -1309.7}, {269.0, 102.3}}, label: 'Training safely — keep it up'
+                                          StaticText, 0x114292080, {{48.0, -1183.3}, {228.7, 204.3}}, label: 'Training records · assessment context'
+                                          StaticText, 0x1142921c0, {{48.0, -967.0}, {286.0, 170.0}}, label: 'Strength Volume, 6,360 kg'
+                                            StaticText, 0x114292300, {{53.3, -962.0}, {233.7, 102.3}}, label: 'Strength Volume'
+                                            Image, 0x114292440, {{53.3, -956.0}, {53.0, 39.3}}, identifier: 'chart.bar.fill', label: 'Chart Column'
+                                            StaticText, 0x114292580, {{48.0, -855.7}, {200.3, 58.7}}, label: '6,360 kg'
+                                          StaticText, 0x1142926c0, {{48.0, -785.0}, {286.0, 170.0}}, label: 'Consecutive Training, 3 days'
+                                            StaticText, 0x114292800, {{53.3, -780.0}, {274.0, 102.3}}, label: 'Consecutive Training'
+                                            Image, 0x114292940, {{53.3, -773.3}, {42.0, 38.7}}, identifier: 'calendar', label: 'Calendar'
+                                            StaticText, 0x114292a80, {{48.0, -673.7}, {147.0, 58.7}}, label: '3 days'
+                                          StaticText, 0x114292bc0, {{48.0, -603.0}, {286.0, 171.6}}, label: 'Muscle Recovery, Recovered'
+                                            StaticText, 0x114292d00, {{53.3, -596.4}, {204.3, 102.3}}, label: 'Muscle Recovery'
+                                            Image, 0x114292e40, {{53.3, -594.3}, {20.0, 47.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                            StaticText, 0x114292f80, {{48.0, -490.0}, {233.7, 58.7}}, label: 'Recovered'
+                                          StaticText, 0x1142930c0, {{48.0, -419.4}, {280.0, 192.0}}, label: 'These records provide context; they are not all risk factors.'
+                                          Image, 0x114293200, {{34.7, -211.3}, {43.0, 43.0}}, identifier: 'bandage', label: 'Adhesive Bandage Strip'
+                                          StaticText, 0x114293340, {{68.0, -215.4}, {247.0, 51.3}}, label: '1 active injury'
+                                        Image, 0x114293480, {{47.0, -69.0}, {44.3, 54.7}}, identifier: 'sparkles', label: 'Sparkle'
+                                        StaticText, 0x1142935c0, {{100.3, -100.0}, {245.7, 116.7}}, identifier: 'activity-section-suggested', label: 'Suggested Workout'
+                                        Image, 0x114293700, {{49.3, 42.3}, {47.0, 47.3}}, identifier: 'magnifyingglass', label: 'Search'
+                                        TextField, 0x114293840, {{109.7, 36.7}, {228.3, 59.0}}, identifier: 'activity-exercise-search', placeholderValue: 'Search exercises'
+                                        SegmentedControl, 0x114293980, {{48.0, 127.7}, {286.0, 31.0}}
+                                          Button, 0x114293ac0, {{48.0, 127.7}, {143.0, 32.0}}, label: 'Gym', Selected
+                                          Button, 0x114293c00, {{191.0, 127.7}, {143.0, 32.0}}, label: 'Home'
+                                        Button, 0x114293d40, {{48.0, 166.7}, {286.0, 192.0}}, identifier: 'activity-recommendation-equipment-info', label: 'Equipment, 24 selected'
+                                          StaticText, 0x114293e80, {{221.0, 166.6}, {80.0, 192.0}}, label: '24 selected'
+                                          StaticText, 0x114294000, {{116.0, 186.0}, {85.3, 153.3}}, label: 'Equipment'
+                                          Image, 0x114294140, {{53.3, 247.0}, {53.3, 31.3}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                          Image, 0x114294280, {{312.3, 245.7}, {19.3, 34.0}}, identifier: 'chevron.right', label: 'Forward'
+                                        StaticText, 0x1142943c0, {{56.0, 400.6}, {78.0, 144.0}}, label: 'Shoulders'
+                                        StaticText, 0x114294500, {{154.0, 400.6}, {65.7, 144.0}}, label: 'Biceps'
+                                        StaticText, 0x114294640, {{239.7, 400.6}, {77.7, 144.0}}, label: 'Forearms'
+                                        Other, 0x114294780, {{56.0, 564.7}, {270.3, 1102.0}}
+                                          Button, 0x1142948c0, {{56.0, 564.7}, {270.0, 214.7}}, identifier: 'card-navigation-header', label: '인클라인 바벨 벤치프레스, Low weekly volume (0 sets), room for more, 5 sets'
+                                            StaticText, 0x114294a00, {{56.0, 564.7}, {132.7, 116.7}}, identifier: 'card-navigation-header', label: '인클라인 바벨 벤치프레스'
+                                              StaticText, 0x114294b40, {{56.0, 564.7}, {132.7, 116.7}}, label: '인클라인 바벨 벤치프레스'
+                                              Image, 0x114294c80, {{153.3, 577.0}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                            StaticText, 0x114294dc0, {{208.7, 570.3}, {117.3, 51.3}}, label: '5 sets'
+                                            StaticText, 0x114294f00, {{56.0, 683.3}, {123.3, 96.0}}, label: 'Low weekly volume (0 sets), room for more'
+                                          Button, 0x114295040, {{180.7, 787.3}, {132.0, 214.3}}, label: 'Alternatives'
+                                          Button, 0x114295180, {{56.0, 838.3}, {120.7, 112.3}}, label: 'Start'
+                                          Button, 0x1142952c0, {{83.3, 1005.6}, {242.7, 96.0}}, label: 'Not Interested'
+                                            StaticText, 0x114295400, {{143.0, 1005.6}, {183.0, 96.0}}, label: 'Not Interested'
+                                            Image, 0x114295540, {{83.3, 1032.7}, {53.7, 42.0}}, identifier: 'eye.slash', label: 'Hide'
+                                          Button, 0x114295680, {{56.0, 1129.7}, {270.3, 214.7}}, identifier: 'card-navigation-header', label: '바벨 로우, Low weekly volume (0 sets), room for more, 5 sets'
+                                            StaticText, 0x1142957c0, {{56.0, 1129.7}, {133.0, 116.7}}, identifier: 'card-navigation-header', label: '바벨 로우'
+                                              StaticText, 0x114295900, {{56.0, 1129.7}, {133.0, 116.7}}, label: '바벨 로우'
+                                              Image, 0x114295a40, {{160.3, 1142.0}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                            StaticText, 0x114295b80, {{208.8, 1135.3}, {117.3, 51.3}}, label: '5 sets'
+                                            StaticText, 0x114295cc0, {{55.8, 1248.3}, {123.3, 96.0}}, label: 'Low weekly volume (0 sets), room for more'
+                                          Button, 0x114295e00, {{180.7, 1352.3}, {132.0, 214.3}}, label: 'Alternatives'
+                                          Button, 0x114295f40, {{56.0, 1403.3}, {120.7, 112.3}}, label: 'Start'
+                                          Button, 0x114296080, {{83.3, 1570.6}, {242.5, 96.0}}, label: 'Not Interested'
+                                            StaticText, 0x1142961c0, {{142.8, 1570.6}, {183.0, 96.0}}, label: 'Not Interested'
+                                            Image, 0x114296300, {{83.3, 1597.7}, {53.7, 42.0}}, identifier: 'eye.slash', label: 'Hide'
+                                        StaticText, 0x114296440, {{32.0, 2830.6}, {219.0, 102.3}}, label: 'Suggested Routines'
+                                        Button, 0x114296580, {{306.0, 2952.7}, {28.3, 45.3}}, identifier: 'activity-recommended-routine-card', label: 'Save as Template'
+                                        Button, 0x1142966c0, {{32.0, 2941.0}, {318.0, 357.0}}, identifier: 'activity-recommended-routine-card', label: 'Morning Walking 4min, 4x, ~4min, Walking'
+                                          StaticText, 0x114296800, {{106.7, 2953.0}, {192.7, 174.7}}, label: 'Morning Walking 4min'
+                                          Image, 0x114296940, {{49.3, 3010.7}, {48.0, 59.3}}, identifier: 'sparkles', label: 'Sparkle'
+                                          StaticText, 0x114296a80, {{166.3, 3131.6}, {151.7, 102.3}}, label: '~4min'
+                                          Image, 0x114296bc0, {{166.3, 3136.0}, {43.0, 43.0}}, identifier: 'clock', label: 'Clock'
+                                          StaticText, 0x114296d00, {{49.3, 3157.1}, {105.3, 51.3}}, label: '4x'
+                                          Image, 0x114296e40, {{49.3, 3164.7}, {45.0, 37.3}}, identifier: 'repeat', label: 'Repeat 1'
+                                          StaticText, 0x114296f80, {{44.0, 3238.0}, {136.0, 48.0}}, label: 'Walking'
+                                        StaticText, 0x1142970c0, {{32.0, 3306.0}, {199.0, 51.3}}, label: 'Templates'
+                                        Button, 0x114297200, {{32.0, 3365.3}, {318.0, 354.0}}, label: 'Codex Circuit Builder, 2 exercises, Squat, Bench Press'
+                                          StaticText, 0x114297340, {{105.0, 3377.3}, {155.0, 174.7}}, label: 'Codex Circuit Builder'
+                                          Image, 0x114297480, {{50.7, 3431.7}, {43.7, 66.0}}, identifier: 'list.clipboard.fill', label: 'List On A Clipboard, Filled'
+                                          Image, 0x1142975c0, {{302.7, 3445.3}, {34.7, 38.7}}, identifier: 'play.fill', label: 'Play'
+                                          StaticText, 0x114297700, {{44.0, 3556.0}, {205.3, 51.3}}, label: '2 exercises'
+                                          StaticText, 0x114297840, {{44.0, 3611.3}, {234.3, 96.0}}, label: 'Squat, Bench Press'
+                                        Button, 0x114297980, {{32.0, 3727.3}, {318.0, 364.0}}, label: 'Codex Strength Starter, 1 exercises, Bench Press'
+                                          StaticText, 0x114297ac0, {{105.0, 3739.3}, {163.7, 232.7}}, label: 'Codex Strength Starter'
+                                          Image, 0x114297c00, {{50.7, 3822.7}, {43.7, 66.0}}, identifier: 'list.clipboard.fill', label: 'List On A Clipboard, Filled'
+                                          Image, 0x114297d40, {{302.7, 3836.3}, {34.7, 38.7}}, identifier: 'play.fill', label: 'Play'
+                                          StaticText, 0x114297e80, {{44.0, 3976.0}, {200.0, 51.3}}, label: '1 exercises'
+                                          StaticText, 0x114298000, {{44.0, 4031.3}, {212.0, 48.0}}, label: 'Bench Press'
+                                        Button, 0x114298140, {{32.0, 4099.3}, {318.0, 354.7}}, identifier: 'activity-ai-workout-builder', label: 'AI Workout Builder, Describe your ideal workout in natural language and get a ready-to-use template instantly.'
+                                          StaticText, 0x114298280, {{113.0, 4111.3}, {225.0, 232.7}}, identifier: 'card-navigation-header', label: 'AI Workout Builder'
+                                            StaticText, 0x1142983c0, {{113.0, 4111.3}, {225.0, 232.7}}, label: 'AI Workout Builder'
+                                            Image, 0x114298500, {{280.0, 4123.7}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          Image, 0x114298640, {{48.7, 4251.7}, {49.3, 49.7}}, identifier: 'wand.and.stars', label: 'Magic Wand With Stars'
+                                          StaticText, 0x114298780, {{113.0, 4346.0}, {188.7, 96.0}}, label: 'Describe your ideal workout in natural language and get a ready-to-use template instantly.'
+                                        Button, 0x1142988c0, {{32.0, 4462.0}, {243.0, 51.3}}, label: 'All Exercises'
+                                        Button, 0x114298a00, {{36.0, 4561.3}, {310.0, 174.7}}, identifier: 'activity-recent-seeall', label: 'Recent Workouts'
+                                          StaticText, 0x114298b40, {{103.7, 4561.3}, {165.3, 174.7}}, identifier: 'activity-section-recent', label: 'Recent Workouts'
+                                          Image, 0x114298c80, {{281.3, 4573.7}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          Image, 0x114298dc0, {{41.3, 4624.0}, {54.0, 49.0}}, identifier: 'clock.arrow.circlepath', label: 'Clock With A Circular Arrow'
+                                        Button, 0x114298f00, {{32.0, 4748.0}, {289.0, 607.3}}, identifier: 'activity-recent-workout-FF8C4018-1ACC-4198-9F2D-621D680215AF', label: '바벨 벤치프레스, Wednesday 00:00, 3 sets · 60kg · 30 reps, Chest, Triceps, 30 min, ~200 kcal'
+                                          Image, 0x114299040, {{44.0, 4760.0}, {28.0, 28.0}}, label: 'Equipment/equipment.barbell'
+                                          StaticText, 0x114299180, {{44.0, 4800.0}, {212.0, 116.7}}, label: '바벨 벤치프레스'
+                                          StaticText, 0x1142992c0, {{44.0, 4920.6}, {226.7, 102.3}}, label: 'Wednesday 00:00'
+                                          StaticText, 0x114299400, {{44.0, 5027.0}, {265.0, 102.3}}, label: '3 sets · 60kg · 30 reps'
+                                          StaticText, 0x114299540, {{48.0, 5134.3}, {88.3, 40.0}}, label: 'Chest'
+                                          StaticText, 0x114299680, {{48.0, 5178.3}, {107.3, 40.0}}, label: 'Triceps'
+                                          StaticText, 0x1142997c0, {{44.0, 5231.3}, {150.3, 58.7}}, label: '30 min'
+                                          StaticText, 0x114299900, {{44.0, 5292.0}, {186.3, 51.3}}, label: '~200 kcal'
+                                        Button, 0x114299a40, {{32.0, 5363.3}, {302.3, 498.3}}, identifier: 'activity-recent-workout-E2BD8B35-1B0D-4130-9365-401C11926F80', label: '바벨 스쿼트, Tuesday 00:00, 3 sets · 80kg · 27 reps, Quads, Glutes, 40 min, ~250 kcal'
+                                          Image, 0x114299b80, {{44.0, 5375.3}, {28.0, 28.0}}, label: 'Equipment/equipment.barbell'
+                                          StaticText, 0x114299cc0, {{44.0, 5415.3}, {222.3, 58.7}}, label: '바벨 스쿼트'
+                                          StaticText, 0x114299e00, {{44.0, 5478.0}, {278.3, 51.3}}, label: 'Tuesday 00:00'
+                                          StaticText, 0x114299f40, {{44.0, 5533.3}, {264.3, 102.3}}, label: '3 sets · 80kg · 27 reps'
+                                          StaticText, 0x11429a080, {{48.0, 5640.6}, {97.3, 40.0}}, label: 'Quads'
+                                          StaticText, 0x11429a1c0, {{48.0, 5684.6}, {95.7, 40.0}}, label: 'Glutes'
+                                          StaticText, 0x11429a300, {{44.0, 5737.6}, {151.0, 58.7}}, label: '40 min'
+                                          StaticText, 0x11429a440, {{44.0, 5798.3}, {185.3, 51.3}}, label: '~250 kcal'
+                                        Button, 0x11429a580, {{32.0, 5869.7}, {318.0, 124.7}}, identifier: 'activity-recent-earlier', label: 'Earlier Workouts'
+                                          StaticText, 0x11429a6c0, {{32.0, 5869.7}, {318.0, 124.7}}, label: 'Earlier Workouts'
+                                          Image, 0x11429a800, {{326.0, 5913.3}, {21.7, 37.3}}, identifier: 'collapsed'
+                                        Button, 0x11429a940, {{36.0, 6042.3}, {248.3, 232.7}}, identifier: 'activity-section-pr', label: 'Personal Records'
+                                          StaticText, 0x11429aa80, {{105.0, 6042.3}, {128.0, 232.7}}, label: 'Personal Records'
+                                          Image, 0x11429abc0, {{245.3, 6054.7}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          Image, 0x11429ad00, {{48.0, 6132.3}, {47.0, 52.7}}, identifier: 'trophy.fill', label: 'Trophy Cup, Filled'
+                                        Button, 0x11429ae40, {{288.3, 6129.7}, {57.7, 57.7}}, identifier: 'activity-pr-info', label: 'Info'
+                                        Button, 0x11429af80, {{32.0, 6287.0}, {318.0, 1972.0}}, identifier: 'activity-section-pr-content', label: 'Lv 1, 5 badges, 100 pts, Walking, Fastest Pace, 13'00", /km, October 15, 2026, Apple Health, Walking, Longest Distance, 0.32, km, October 15, 2026, Apple Health, Walking, Longest Duration, 4m, October 15, 2026, Apple Health, Walking, Highest Calories, 34, kcal, October 15, 2026, Apple Health'
+                                          Image, 0x11429b0c0, {{59.7, 6310.7}, {44.0, 44.0}}, identifier: 'star.circle.fill', label: 'Favorite'
+                                          StaticText, 0x11429b200, {{59.7, 6307.0}, {129.0, 51.3}}, label: 'Lv 1'
+                                          StaticText, 0x11429b340, {{53.0, 6367.9}, {210.7, 48.0}}, label: '5 badges'
+                                          Image, 0x11429b480, {{53.0, 6369.7}, {37.7, 44.3}}, identifier: 'medal.fill', label: 'Medal, Filled'
+                                          StaticText, 0x11429b5c0, {{48.0, 6421.3}, {136.7, 48.0}}, label: '100 pts'
+                                          Image, 0x11429b700, {{53.3, 6478.3}, {51.7, 60.0}}, identifier: 'medal.fill', label: 'Medal, Filled'
+                                          StaticText, 0x11429b840, {{60.0, 6535.3}, {175.0, 58.7}}, label: 'Walking'
+                                          StaticText, 0x11429b980, {{60.0, 6596.0}, {231.7, 51.3}}, label: 'Fastest Pace'
+                                          StaticText, 0x11429bac0, {{60.0, 6655.3}, {146.7, 55.7}}, label: '13'00"'
+                                          StaticText, 0x11429bc00, {{60.0, 6713.0}, {68.7, 51.3}}, label: '/km'
+                                          StaticText, 0x11429bd40, {{60.0, 6781.3}, {153.0, 96.0}}, label: 'October 15, 2026'
+                                          Image, 0x11429be80, {{287.0, 6810.0}, {33.3, 38.7}}, identifier: 'apple.logo', label: 'Apple Health'
+                                          Image, 0x11429c000, {{53.3, 6911.0}, {51.7, 60.0}}, identifier: 'medal.fill', label: 'Medal, Filled'
+                                          StaticText, 0x11429c140, {{60.0, 6968.0}, {175.0, 58.7}}, label: 'Walking'
+                                          StaticText, 0x11429c280, {{60.0, 7028.7}, {161.3, 102.3}}, label: 'Longest Distance'
+                                          StaticText, 0x11429c3c0, {{60.0, 7139.0}, {100.7, 55.7}}, label: '0.32'
+                                          StaticText, 0x11429c500, {{60.0, 7196.7}, {56.3, 51.3}}, label: 'km'
+                                          StaticText, 0x11429c640, {{60.0, 7265.0}, {214.3, 48.0}}, label: 'October 15, 2026'
+                                          Image, 0x11429c780, {{287.0, 7269.7}, {33.3, 38.7}}, identifier: 'apple.logo', label: 'Apple Health'
+                                          Image, 0x11429c8c0, {{53.3, 7334.0}, {51.7, 60.0}}, identifier: 'medal.fill', label: 'Medal, Filled'
+                                          StaticText, 0x11429ca00, {{60.0, 7391.0}, {175.0, 58.7}}, label: 'Walking'
+                                          StaticText, 0x11429cb40, {{60.0, 7451.7}, {157.7, 102.3}}, label: 'Longest Duration'
+                                          StaticText, 0x11429cc80, {{60.0, 7562.0}, {88.3, 69.3}}, label: '4m'
+                                          StaticText, 0x11429cdc0, {{60.0, 7650.3}, {153.0, 96.0}}, label: 'October 15, 2026'
+                                          Image, 0x11429cf00, {{287.0, 7679.0}, {33.3, 38.7}}, identifier: 'apple.logo', label: 'Apple Health'
+                                          Image, 0x11429d040, {{53.3, 7767.3}, {51.7, 60.0}}, identifier: 'medal.fill', label: 'Medal, Filled'
+                                          StaticText, 0x11429d180, {{60.0, 7824.3}, {175.0, 58.7}}, label: 'Walking'
+                                          StaticText, 0x11429d2c0, {{60.0, 7885.0}, {152.7, 102.3}}, label: 'Highest Calories'
+                                          StaticText, 0x11429d400, {{60.0, 7995.3}, {60.7, 56.0}}, label: '34'
+                                          StaticText, 0x11429d540, {{60.0, 8053.3}, {73.3, 51.3}}, label: 'kcal'
+                                          StaticText, 0x11429d680, {{60.0, 8121.7}, {153.0, 96.0}}, label: 'October 15, 2026'
+                                          Image, 0x11429d7c0, {{287.0, 8150.3}, {33.3, 38.7}}, identifier: 'apple.logo', label: 'Apple Health'
+                                        Button, 0x11429d900, {{36.0, 8369.7}, {310.0, 174.7}}, identifier: 'activity-section-achievement', label: 'Achievement History'
+                                          StaticText, 0x11429da40, {{104.0, 8369.7}, {197.3, 174.7}}, label: 'Achievement History'
+                                          Image, 0x11429db80, {{313.7, 8382.0}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          Image, 0x11429dcc0, {{48.0, 8430.0}, {46.0, 54.0}}, identifier: 'medal.fill', label: 'Medal, Filled'
+                                        Button, 0x11429de00, {{32.0, 8556.3}, {318.0, 1054.0}}, identifier: 'activity-section-achievement-content', label: 'Milestone Reached, Running: 5K, November 3, 2026, New Badge Unlocked, Running: 5K, November 3, 2026, Personal Record Updated, Running: Fastest Pace, November 3, 2026'
+                                          Image, 0x11429df40, {{36.0, 8575.7}, {40.0, 40.0}}, identifier: 'flag.checkered.circle.fill', label: 'Checkered Flag In A Filled Circle'
+                                          StaticText, 0x11429e080, {{68.0, 8572.3}, {122.0, 204.3}}, label: 'Milestone Reached'
+                                          StaticText, 0x11429e1c0, {{221.0, 8572.3}, {113.0, 48.0}}, label: 'November 3, 2026'
+                                          StaticText, 0x11429e300, {{68.0, 8778.7}, {141.3, 96.0}}, label: 'Running: 5K'
+                                          Image, 0x11429e440, {{37.3, 8886.0}, {37.7, 44.3}}, identifier: 'medal.fill', label: 'Medal, Filled'
+                                          StaticText, 0x11429e580, {{68.0, 8882.7}, {133.7, 204.3}}, label: 'New Badge Unlocked'
+                                          StaticText, 0x11429e6c0, {{221.0, 8882.7}, {113.0, 48.0}}, label: 'November 3, 2026'
+                                          StaticText, 0x11429e800, {{68.0, 9089.0}, {141.3, 96.0}}, label: 'Running: 5K'
+                                          Image, 0x11429e940, {{37.0, 9196.3}, {38.3, 43.0}}, identifier: 'trophy.fill', label: 'Trophy Cup, Filled'
+                                          StaticText, 0x11429ea80, {{68.0, 9193.0}, {145.0, 255.3}}, label: 'Personal Record Updated'
+                                          StaticText, 0x11429ebc0, {{221.0, 9193.0}, {113.0, 48.0}}, label: 'November 3, 2026'
+                                          StaticText, 0x11429ed00, {{68.0, 9450.3}, {145.0, 144.0}}, label: 'Running: Fastest Pace'
+                                        Button, 0x11429ee40, {{36.0, 9658.3}, {310.0, 116.7}}, identifier: 'activity-section-weeklystats', label: 'Weekly Training'
+                                          StaticText, 0x11429ef80, {{118.3, 9658.3}, {175.3, 116.7}}, label: 'Weekly Training'
+                                          Image, 0x11429f0c0, {{306.0, 9670.7}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          Image, 0x11429f200, {{48.0, 9694.3}, {60.3, 45.0}}, identifier: 'chart.bar.fill', label: 'Chart Column'
+                                        Button, 0x11429f340, {{36.0, 10829.0}, {310.0, 116.7}}, identifier: 'activity-weeklyreport-detail-link', label: 'Weekly Report'
+                                          StaticText, 0x11429f480, {{98.3, 10829.0}, {171.0, 116.7}}, identifier: 'activity-section-weeklyreport', label: 'Weekly Report'
+                                          Image, 0x11429f5c0, {{281.7, 10841.3}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          Image, 0x11429f700, {{48.0, 10861.7}, {40.3, 51.3}}, identifier: 'doc.text', label: 'Plain Text Document'
+                                        Button, 0x11429f840, {{32.0, 10957.7}, {318.0, 2376.7}}, identifier: 'activity-weeklyreport-detail-content', label: 'Weekly Report, Oct 28, –, Nov 4, Period Strength Volume, 6,360, kg, 4, Sessions, 4, Days, 124, Total Minutes, This week, you crushed it with 4 active days and 4 sessions—totaling 6360 kg over 124 minutes! Your back, hamstrings, and quads led the way, with strong gains in all key areas. Keep pushing—your 3-day workout streak and consistent effort are amazing!, Primary Muscles, Back, Hamstrings, Quads, 3-day workout streak, Trained 4 of 7 days'
+                                          StaticText, 0x11429f980, {{48.0, 10973.7}, {171.0, 116.7}}, label: 'Weekly Report'
+                                          StaticText, 0x11429fac0, {{48.0, 11102.3}, {127.3, 51.3}}, label: 'Oct 28'
+                                          StaticText, 0x11429fc00, {{175.3, 11102.3}, {23.3, 51.3}}, label: '–'
+                                          StaticText, 0x11429fd40, {{198.7, 11102.3}, {109.7, 51.3}}, label: 'Nov 4'
+                                          StaticText, 0x11429fe80, {{60.0, 11177.7}, {167.3, 153.3}}, label: 'Period Strength Volume'
+                                          StaticText, 0x1142a0000, {{60.0, 11335.0}, {167.7, 69.3}}, identifier: 'activity-report-volume-value', label: '6,360'
+                                          StaticText, 0x1142a0140, {{231.7, 11349.3}, {44.3, 51.3}}, label: 'kg'
+                                          StaticText, 0x1142a0280, {{48.0, 11428.3}, {35.3, 65.7}}, label: '4'
+                                          StaticText, 0x1142a03c0, {{48.0, 11496.0}, {165.0, 51.3}}, label: 'Sessions'
+                                          StaticText, 0x1142a0500, {{48.0, 11559.3}, {35.3, 65.7}}, label: '4'
+                                          StaticText, 0x1142a0640, {{48.0, 11627.0}, {93.3, 51.3}}, label: 'Days'
+                                          StaticText, 0x1142a0780, {{48.0, 11690.3}, {105.3, 65.7}}, label: '124'
+                                          StaticText, 0x1142a08c0, {{48.0, 11758.0}, {243.0, 51.3}}, label: 'Total Minutes'
+                                          StaticText, 0x1142a0a00, {{48.0, 11821.3}, {278.0, 969.3}}, label: 'This week, you crushed it with 4 active days and 4 sessions—totaling 6360 kg over 124 minutes! Your back, hamstrings, and quads led the way, with strong gains in all key areas. Keep pushing—your 3-day workout streak and consistent effort are amazing!'
+                                          StaticText, 0x1142a0b40, {{48.0, 12802.7}, {286.0, 51.3}}, label: 'Primary Muscles'
+                                          StaticText, 0x1142a0c80, {{56.0, 12862.0}, {94.3, 51.3}}, label: 'Back'
+                                          StaticText, 0x1142a0dc0, {{56.0, 12925.3}, {218.0, 51.3}}, label: 'Hamstrings'
+                                          StaticText, 0x1142a0f00, {{56.0, 12988.7}, {124.7, 51.3}}, label: 'Quads'
+                                          Image, 0x1142a1040, {{51.7, 13059.7}, {35.0, 45.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x1142a1180, {{51.7, 13058.6}, {203.7, 153.3}}, label: '3-day workout streak'
+                                          StaticText, 0x1142a12c0, {{53.3, 13216.0}, {280.7, 102.3}}, label: 'Trained 4 of 7 days'
+                                          Image, 0x1142a1400, {{53.3, 13222.3}, {54.0, 45.7}}, identifier: 'calendar.badge.checkmark', label: 'Calendar With A Checkmark Badge'
+                                        Button, 0x1142a1540, {{36.0, 13433.3}, {248.3, 290.7}}, identifier: 'activity-section-consistency', label: 'Workout Consistency'
+                                          StaticText, 0x1142a1680, {{94.7, 13433.3}, {135.3, 290.7}}, label: 'Workout Consistency'
+                                          Image, 0x1142a17c0, {{242.3, 13445.7}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          Image, 0x1142a1900, {{46.3, 13552.7}, {40.0, 52.0}}, identifier: 'flame.fill', label: 'Flame'
+                                        Button, 0x1142a1a40, {{288.3, 13549.7}, {57.7, 57.7}}, identifier: 'activity-consistency-info', label: 'Info'
+                                        Button, 0x1142a1b80, {{32.0, 13736.0}, {318.0, 632.0}}, identifier: 'activity-section-consistency-content', label: 'Monthly Workout Goal, 3/16, Monthly Workout Goal, Current Streak, 3, days, Best Streak, 3, days', value: 3 of 16 days
+                                          StaticText, 0x1142a1cc0, {{48.0, 13752.0}, {154.0, 290.7}}, label: 'Monthly Workout Goal'
+                                          StaticText, 0x1142a1e00, {{216.7, 13865.6}, {117.3, 63.3}}, label: '3/16'
+                                          Other, 0x1142a1f40, {{48.0, 14046.7}, {286.0, 10.0}}, label: 'Monthly Workout Goal', value: 3 of 16 days
+                                          StaticText, 0x1142a2080, {{48.0, 14081.6}, {264.3, 51.3}}, label: 'Current Streak'
+                                          StaticText, 0x1142a21c0, {{48.0, 14135.0}, {38.0, 69.3}}, label: '3'
+                                          StaticText, 0x1142a2300, {{88.0, 14149.3}, {88.0, 51.3}}, label: 'days'
+                                          StaticText, 0x1142a2440, {{48.0, 14229.3}, {209.0, 51.3}}, label: 'Best Streak'
+                                          StaticText, 0x1142a2580, {{48.0, 14282.6}, {38.0, 69.3}}, label: '3'
+                                          StaticText, 0x1142a26c0, {{88.0, 14297.0}, {88.0, 51.3}}, label: 'days'
+                                        Button, 0x1142a2800, {{36.0, 14416.0}, {310.0, 116.7}}, identifier: 'activity-section-volume', label: 'Training Load'
+                                          StaticText, 0x1142a2940, {{109.7, 14416.0}, {185.7, 116.7}}, label: 'Training Load'
+                                          Image, 0x1142a2a80, {{307.7, 14428.3}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          Image, 0x1142a2bc0, {{48.0, 14452.0}, {51.7, 44.3}}, identifier: 'chart.line.uptrend.xyaxis', label: 'Chart Line'
+                                        Button, 0x1142a2d00, {{32.0, 14544.7}, {318.0, 1013.7}}, identifier: 'activity-section-volume-content', label: 'Recent workout day · Nov 1, 2026 total, Workout Time, 4, min, Calories Burned, 34, kcal, 28-day training load'
+                                          StaticText, 0x1142a2e40, {{48.0, 14560.6}, {286.0, 153.3}}, label: 'Recent workout day · Nov 1, 2026 total'
+                                          Image, 0x1142a2f80, {{63.7, 14741.7}, {44.0, 44.0}}, identifier: 'timer', label: 'Timer'
+                                          StaticText, 0x1142a30c0, {{63.7, 14738.0}, {228.0, 102.3}}, label: 'Workout Time'
+                                          StaticText, 0x1142a3200, {{60.0, 14848.3}, {38.0, 69.3}}, identifier: 'activity-load-timer-value', label: '4'
+                                          StaticText, 0x1142a3340, {{102.0, 14862.6}, {67.3, 51.3}}, label: 'min'
+                                          Image, 0x1142a3480, {{63.7, 14953.3}, {36.3, 46.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x1142a35c0, {{63.7, 14953.0}, {216.0, 102.3}}, label: 'Calories Burned'
+                                          StaticText, 0x1142a3700, {{60.0, 15063.3}, {75.7, 69.3}}, identifier: 'activity-load-flame.fill-value', label: '34'
+                                          StaticText, 0x1142a3840, {{139.7, 15077.6}, {73.3, 51.3}}, label: 'kcal'
+                                          StaticText, 0x1142a3980, {{48.0, 15169.6}, {233.0, 102.3}}, label: '28-day training load'
+                                          Other, 0x1142a3ac0, {{48.0, 15284.0}, {286.0, 258.3}}
+                                            Other, 0x1142a3c00, {{48.0, 15284.0}, {20.4, 206.3}}, label: 'Oct 8, 2026 at 00 to Oct 10, 2026 at 00', value: 0 to 0, 2 values
+                                            Other, 0x1142a3d40, {{68.4, 15284.0}, {20.4, 206.3}}, label: 'Oct 10, 2026 at 00 to Oct 12, 2026 at 00', value: 4.9 to 0, 2 values
+                                            Other, 0x1142a3e80, {{88.9, 15284.0}, {20.4, 206.3}}, label: 'Oct 12, 2026 at 00 to Oct 14, 2026 at 00', value: 0 to 0, 2 values
+                                            Other, 0x10a198000, {{109.3, 15284.0}, {20.4, 206.3}}, label: 'Oct 14, 2026 at 00 to Oct 16, 2026 at 00', value: 3.9 to 0, 2 values
+                                            Other, 0x10a198140, {{129.7, 15284.0}, {20.4, 206.3}}, label: 'Oct 16, 2026 at 00 to Oct 18, 2026 at 00', value: 0 to 10, 2 values
+                                            Other, 0x10a198280, {{150.1, 15284.0}, {20.4, 206.3}}, label: 'Oct 18, 2026 at 00 to Oct 20, 2026 at 00', value: 0 to 0, 2 values
+                                            Other, 0x10a1983c0, {{170.6, 15284.0}, {20.4, 206.3}}, label: 'Oct 20, 2026 at 00 to Oct 22, 2026 at 00', value: 5.1 to 0, 2 values
+                                            Other, 0x10a198500, {{191.0, 15284.0}, {20.4, 206.3}}, label: 'Oct 22, 2026 at 00 to Oct 24, 2026 at 00', value: 0 to 0, 2 values
+                                            Other, 0x10a198640, {{211.4, 15284.0}, {20.4, 206.3}}, label: 'Oct 24, 2026 at 00 to Oct 26, 2026 at 00', value: 16.9 to 0, 2 values
+                                            Other, 0x10a198780, {{231.9, 15284.0}, {20.4, 206.3}}, label: 'Oct 26, 2026 at 00 to Oct 28, 2026 at 00', value: 0 to 5.1, 2 values
+                                            Other, 0x10a1988c0, {{252.3, 15284.0}, {20.4, 206.3}}, label: 'Oct 28, 2026 at 00 to Oct 30, 2026 at 00', value: 0 to 5.2, 2 values
+                                            Other, 0x10a198a00, {{272.7, 15284.0}, {20.4, 206.3}}, label: 'Oct 30, 2026 at 00 to Nov 1, 2026 at 00', value: 0 to 11.8, 2 values
+                                            Other, 0x10a198b40, {{293.1, 15284.0}, {20.4, 206.3}}, label: 'Nov 1, 2026 at 00 to Nov 3, 2026 at 00', value: 0 to 10.4, 2 values
+                                            Other, 0x10a198c80, {{313.6, 15284.0}, {20.4, 206.3}}, label: 'Nov 3, 2026 at 00 to Nov 5, 2026 at 00', value: 6.7 to 0, 2 values
+                                        Button, 0x10a198dc0, {{36.0, 15606.3}, {248.3, 174.7}}, identifier: 'activity-section-exercisemix', label: 'Exercise Mix'
+                                          StaticText, 0x10a198f00, {{111.7, 15606.3}, {117.7, 174.7}}, label: 'Exercise Mix'
+                                          Image, 0x10a199040, {{241.7, 15618.7}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                          Image, 0x10a199180, {{48.0, 15671.3}, {53.7, 44.3}}, identifier: 'chart.bar.xaxis', label: 'Bar Chart With An X Axis'
+                                        Button, 0x10a1992c0, {{288.3, 15664.7}, {57.7, 57.7}}, identifier: 'activity-exercise-mix-info', label: 'Info'
+                                        Button, 0x10a199400, {{32.0, 15793.0}, {318.0, 1301.0}}, identifier: 'activity-section-exercisemix-content', label: 'Last 28 days · by recorded exercise entries, Strength, 38%, 5 / 13, Cardio, 62%, 8 / 13, Primary muscles · completed sets, Back, 17%, Chest, 17%, Glutes, 17%, Stair Threshold, 1x, Recovery Walk, 1x, Track Session, 1x, Lower Strength, 1x, Long Ride, 1x, 바벨 벤치프레스, 1x'
+                                          StaticText, 0x10a199540, {{48.0, 15809.0}, {284.3, 153.3}}, label: 'Last 28 days · by recorded exercise entries'
+                                          StaticText, 0x10a199680, {{53.3, 15970.3}, {239.7, 51.3}}, label: 'Strength'
+                                          Image, 0x10a1997c0, {{53.3, 15979.3}, {57.7, 33.3}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                          StaticText, 0x10a199900, {{48.0, 16025.6}, {127.3, 69.3}}, identifier: 'activity-mix-dumbbell.fill-percent', label: '38%'
+                                          StaticText, 0x10a199a40, {{48.0, 16099.0}, {110.0, 51.3}}, label: '5 / 13'
+                                          StaticText, 0x10a199b80, {{53.0, 16163.9}, {178.0, 51.3}}, label: 'Cardio'
+                                          Image, 0x10a199cc0, {{53.0, 16166.0}, {37.0, 47.7}}, identifier: 'figure.run', label: 'Running'
+                                          StaticText, 0x10a199e00, {{48.0, 16221.3}, {127.3, 69.3}}, identifier: 'activity-mix-figure.run-percent', label: '62%'
+                                          StaticText, 0x10a199f40, {{48.0, 16294.6}, {110.0, 51.3}}, label: '8 / 13'
+                                          Other, 0x10a19a080, {{48.0, 16354.0}, {286.0, 16.0}}
+                                          StaticText, 0x10a19a1c0, {{48.0, 16387.0}, {286.0, 96.0}}, label: 'Primary muscles · completed sets'
+                                          StaticText, 0x10a19a300, {{56.0, 16495.0}, {94.3, 51.3}}, label: 'Back'
+                                          StaticText, 0x10a19a440, {{154.3, 16495.0}, {90.7, 51.3}}, label: '17%'
+                                          StaticText, 0x10a19a580, {{56.0, 16558.3}, {113.0, 51.3}}, label: 'Chest'
+                                          StaticText, 0x10a19a6c0, {{173.0, 16558.3}, {90.7, 51.3}}, label: '17%'
+                                          StaticText, 0x10a19a800, {{56.0, 16621.6}, {122.7, 51.3}}, label: 'Glutes'
+                                          StaticText, 0x10a19a940, {{182.7, 16621.6}, {90.7, 51.3}}, label: '17%'
+                                          StaticText, 0x10a19aa80, {{48.0, 16694.0}, {231.3, 51.3}}, label: 'Stair Threshold'
+                                          StaticText, 0x10a19abc0, {{287.0, 16694.0}, {47.0, 51.3}}, label: '1x'
+                                          StaticText, 0x10a19ad00, {{48.0, 16759.3}, {204.0, 51.3}}, label: 'Recovery Walk'
+                                          StaticText, 0x10a19ae40, {{287.0, 16759.3}, {47.0, 51.3}}, label: '1x'
+                                          StaticText, 0x10a19af80, {{48.0, 16824.6}, {231.0, 51.3}}, label: 'Track Session'
+                                          StaticText, 0x10a19b0c0, {{287.0, 16824.6}, {47.0, 51.3}}, label: '1x'
+                                          StaticText, 0x10a19b200, {{48.0, 16890.0}, {229.7, 51.3}}, label: 'Lower Strength'
+                                          StaticText, 0x10a19b340, {{287.0, 16890.0}, {47.0, 51.3}}, label: '1x'
+                                          StaticText, 0x10a19b480, {{48.0, 16955.3}, {188.7, 51.3}}, label: 'Long Ride'
+                                          StaticText, 0x10a19b5c0, {{287.0, 16955.3}, {47.0, 51.3}}, label: '1x'
+                                          StaticText, 0x10a19b700, {{48.0, 17020.6}, {232.3, 51.3}}, label: '바벨 벤치프레스'
+                                          StaticText, 0x10a19b840, {{287.0, 17020.6}, {47.0, 51.3}}, label: '1x'
+                                        Button, 0x10a19b980, {{0.0, 0.0}, {0.0, 0.0}}, identifier: 'activity-section-weeklystats-content'
+                                      Other, 0x10a19bac0, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 34 pages', value: 18%
+                                        Other, 0x10a19bc00, {{460.0, 173.0}, {3.0, 36.0}}
+                                      Other, 0x10a19bd40, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 34 pages', value: 18%
+                                        Other, 0x10a19be80, {{460.0, 173.0}, {3.0, 36.0}}
+                                    Button, 0x10a19c000, {{161.0, 140.0}, {60.0, 24.0}}, identifier: 'wave-refresh-test-trigger', label: 'Trigger Refresh', value: 0
+                                    Other, 0x10a19c140, {{191.0, 334.0}, {0.0, 0.0}}
+                Other, 0x10a19c280, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x10a19c3c0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x10a19c500, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x10a19c640, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x10a19c780, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10a19c8c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10a19ca00, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x10a19cb40, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x10a19cc80, {{399.0, 180.0}, {38.0, 36.0}}
+                                  Other, 0x10a19cdc0, {{399.0, 180.0}, {38.0, 36.0}}
+                                    Other, 0x10a19cf00, {{399.0, 180.0}, {38.0, 36.0}}
+                                      Other, 0x10a19d040, {{399.0, 180.0}, {38.0, 36.0}}
+                                        Button, 0x10a19d180, {{402.7, 180.0}, {30.7, 36.0}}, identifier: 'activity-toolbar-add', label: 'Add'
+                        Other, 0x10a19d2c0, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10a19d400, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10a19d540, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x10a19d680, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x10a19d7c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x10a19d900, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x10a19da40, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x10a19db80, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10a19dcc0, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x10a19de00, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x10a19df40, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x10a19e080, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x10a19e1c0, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                                            Image, 0x10a19e300, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x10a19e440, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x10a19e580, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x10a19e6c0, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x10a19e800, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x10a19e940, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10a19ea80, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x10a19ebc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x10a19ed00, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x10a19ee40, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x10a19ef80, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x10a19f0c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10a19f200, {{396.0, 494.0}, {44.0, 58.0}}
+                                          Other, 0x10a19f340, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x10a19f480, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x10a19f5c0, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x10a19f700, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x10a19f840, {{396.0, 494.0}, {44.0, 58.0}}
+                                                  Other, 0x10a19f980, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x10a19fac0, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x10a19fc00, {{396.0, 494.0}, {44.0, 58.0}}
+              Other, 0x10a19fd40, {{191.0, 322.0}, {0.0, 0.0}}
+      Other, 0x10a19fe80, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x10a1b0000, {{-466.0, -678.0}, {1398.0, 2034.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Other, 0x10a1b0140, {{8.0, 8.0}, {450.0, 670.0}}
+          Other, 0x10a1b0280, {{8.0, 8.0}, {450.0, 670.0}}
+            Other, 0x10a1b03c0, {{8.0, 8.0}, {450.0, 670.0}}
+              Other, 0x10a1b0500, {{8.0, 8.0}, {450.0, 670.0}}
+                Other, 0x10a1b0640, {{8.0, 8.0}, {450.0, 670.0}}
+                  Toolbar, 0x10a1b0780, {{8.0, 8.0}, {450.0, 670.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x10a1b08c0, {{8.0, 8.0}, {450.0, 670.0}}
+                  NavigationBar, 0x10a1b0a00, {{8.0, 24.0}, {450.0, 58.0}}, identifier: 'Gym Equipment'
+                    StaticText, 0x10a1b0b40, {{24.0, 28.7}, {237.3, 38.7}}, label: 'Gym Equipment'
+                    Other, 0x10a1b0c80, {{304.0, 30.0}, {74.0, 36.0}}
+                      Other, 0x10a1b0dc0, {{304.0, 30.0}, {74.0, 36.0}}
+                        Button, 0x10a1b0f00, {{304.0, 30.0}, {74.0, 36.0}}, label: 'Done'
+                  Other, 0x10a1b1040, {{8.0, 8.0}, {450.0, 670.0}}
+                    Other, 0x10a1b1180, {{8.0, 8.0}, {450.0, 670.0}}
+                      Other, 0x10a1b12c0, {{8.0, 8.0}, {450.0, 670.0}}
+                        Other, 0x10a1b1400, {{8.0, 8.0}, {450.0, 670.0}}
+                          CollectionView, 0x10a1b1540, {{8.0, 8.0}, {450.0, 670.0}}, identifier: 'activity-recommendation-equipment-sheet'
+                            Other, 0x10a1b1680, {{-8.0, -1258.0}, {542.0, 1931.7}}
+                            Other, 0x10a1b17c0, {{8.0, 8.0}, {450.0, 670.0}}
+                              Other, 0x10a1b1900, {{8.0, 8.0}, {450.0, 114.0}}
+                            Other, 0x10a1b1a40, {{8.0, 8.0}, {450.0, 670.0}}
+                            Cell, 0x10a1b1b80, {{24.0, 82.0}, {358.0, 574.0}}
+                              Other, 0x10a1b1cc0, {{24.0, 82.0}, {358.0, 574.0}}
+                                Other, 0x10a1b1e00, {{24.0, 82.0}, {358.0, 574.0}}
+                                  Other, 0x10a1b1f40, {{24.0, 82.0}, {358.0, 574.0}}
+                                    Other, 0x10a1b2080, {{24.0, 82.0}, {358.0, 574.0}}
+                              Other, 0x10a1b21c0, {{24.0, 82.0}, {358.0, 574.0}}
+                                Other, 0x10a1b2300, {{24.0, 82.0}, {358.0, 574.0}}
+                                  Other, 0x10a1b2440, {{24.0, 82.0}, {358.0, 574.0}}
+                                    Image, 0x10a1b2580, {{47.0, 102.7}, {73.7, 42.7}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                    StaticText, 0x10a1b26c0, {{40.0, 162.0}, {256.3, 125.3}}, identifier: 'activity-recommendation-equipment-hero-title', label: 'Gym Equipment'
+                                    StaticText, 0x10a1b2800, {{40.0, 291.3}, {326.0, 348.7}}, label: 'At least one equipment is always kept to avoid an empty recommendation.'
+                            Other, 0x10a1b2940, {{-8.0, 673.7}, {542.0, 2912.3}}
+                            Other, 0x10a1b2a80, {{349.0, 82.0}, {30.0, 570.0}}, label: 'Vertical scroll bar, 4 pages', value: 0%
+                              Other, 0x10a1b2bc0, {{376.0, 625.0}, {3.0, 7.0}}
+                            Other, 0x10a1b2d00, {{349.0, 82.0}, {30.0, 570.0}}, label: 'Vertical scroll bar, 4 pages', value: 0%
+                              Other, 0x10a1b2e40, {{376.0, 625.0}, {3.0, 7.0}}
+Path to element:
+ →Application, 0x114288780, pid: 45356, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10a1b2f80, pid: 45356, label: 'DUNE'
+  }

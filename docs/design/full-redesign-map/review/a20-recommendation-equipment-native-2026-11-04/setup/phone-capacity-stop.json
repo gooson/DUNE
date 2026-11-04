@@ -1,0 +1,36 @@
+{
+  "source": "52dfe9b909c48c183d6412efdce8a16d2e54df0e",
+  "cause": "less than 3 GiB before device setup; owned Duo removal had completed, free subsequently recovered",
+  "blockedBeforeDeviceSetup": true,
+  "UIExecutedAtBlock": 0,
+  "nativeNormalPipelineAttemptsAtBlock": 0,
+  "phoneDeviceTransitionReceiptsAtBlock": 0,
+  "ownedCount": 0,
+  "blockLogSHA256": "198b89ac8264bf019cfe280523a765d3477257680ac0220f5e363b47eddbf0ff",
+  "controllerStatusSHA256": "37e9c7c5c8af4015da5800fe6624c42042abe99b07dcd5f2d2ddba13212eab13",
+  "currentFreeBytes": 4915200000,
+  "passedSealed": {
+    "closed": {
+      "resultSHA256": "779842ee7a4d08bd72d5e5ea0881057a90a1c2184166bf778d7891205039fd91",
+      "sealSHA256": "9ae360990d9b001a6a318301d224b1135ed39b8e565f41a1dd19b1951591ca1d",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      }
+    },
+    "open": {
+      "resultSHA256": "f93db0524ac6a488f4075d9bb96e81eb213444850b0e1c7105a43fc2a06091ff",
+      "sealSHA256": "6f161356febc24ae06cceae899be51f129f240b9443ff55d3357769cd8779e71",
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      }
+    }
+  },
+  "next": "same source only never-executed phone/iPad profiles after independent resume review; no changed producer/deadline and no Duo rerun",
+  "createdUTC": "2026-11-03T23:51:56.682437+00:00"
+}

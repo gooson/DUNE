@@ -1139,13 +1139,19 @@
     },
     "A20": {
       "row_id": "A20",
-      "evidence": "activity-recommendation-equipment-sheet",
+      "file": "A20.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditRecommendationEquipmentInfo()",
-      "action": "tap activity-recommendation-equipment-info",
-      "timestamp": 1791838935.283,
-      "image": "AE9F7ABB-41C9-4DB3-B144-522B17EC4AF4.png",
-      "screen": "screen-0-2064x2752-tap activity-recommendation-equipment-info_0_8A9DAED7-549F-4571-82FA-D0FA0A2FC222.png",
-      "file": "A20.png"
+      "action": "Recommendation equipment sheet",
+      "source_revision": "52dfe9b909c48c183d6412efdce8a16d2e54df0e",
+      "capture_kind": "xctest",
+      "image": "A06D0BC3-31AE-4D63-AC17-1D00FD638157.png",
+      "screen": "screen-0-1512x2316-Recommendation equipment sheet_0_F8C0CB9D-B52D-45AB-B5A1-2862A70EC775.png",
+      "timestamp": 1793750818.108,
+      "timestamp_kind": "native XCTest image attachment timestamp",
+      "device_uid": "D502A39B-CD70-47AD-9980-223C9643C8E8",
+      "image_sha256": "f4107b94253e1ca0d0b2ba0f9a3938c1db54159e6964d4d05d88afcc0f6c767a",
+      "ax_sha256": "0bc013df35b5e93273fd31f8b0372919d954c6747a270886719da7d8d82fb2ff",
+      "evidence": "activity-recommendation-equipment-sheet"
     },
     "W16": {
       "row_id": "W16",
@@ -1408,9 +1414,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "9c7c2cad9a6fbfaf73dc75f76a75f737496e46ec",
+  "last_refresh_revision": "52dfe9b909c48c183d6412efdce8a16d2e54df0e",
   "last_refresh_screens": [
-    "A19"
+    "A20"
   ],
-  "last_refresh_note": "Fresh corrected-source A19 captures; per-row source and device provenance retained."
+  "last_refresh_note": "Fresh corrected-source A20 captures; per-row source and device provenance retained."
 }

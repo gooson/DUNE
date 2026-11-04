@@ -2223,15 +2223,193 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testVisualAuditRecommendationEquipmentInfo() throws {
+        try verifyRecommendationEquipment(maxText: false)
+    }
+
+    func testRecommendationEquipmentAtMaximumAccessibilityTextSize() throws {
+        try verifyRecommendationEquipment(maxText: true)
+    }
+
+    private func verifyRecommendationEquipment(maxText: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maxText {
+            configuration.additionalArguments += ["--ui-test-style", "dark", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        }
+        launchApp(with: configuration)
         let target = app.buttons["activity-recommendation-equipment-info"].firstMatch
-        let rootScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
-        XCTAssertTrue(rootScroll.waitForExistence(timeout: 8))
-        for _ in 0..<30 where !target.isHittable { rootScroll.swipeUp(velocity: .slow) }
+        let root = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(root.waitForExistence(timeout: 8))
+        for _ in 0..<(maxText ? 40 : 30) where !target.isHittable { root.swipeUp(velocity: .slow) }
         XCTAssertTrue(target.isHittable)
         target.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)["activity-recommendation-equipment-sheet"].firstMatch
-            .waitForExistence(timeout: 10))
-        VisualAudit.capture("Recommendation equipment sheet")
+        let sheet = app.descendants(matching: .any)["activity-recommendation-equipment-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        VisualAudit.capture("Recommendation equipment sheet") // Original canonical capture before changes.
+        let list = app.collectionViews["activity-recommendation-equipment-sheet"].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        let hero = app.descendants(matching: .any)["activity-recommendation-equipment-hero-title"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 5))
+        let window = app.windows.firstMatch
+        let sheetBars = app.navigationBars.matching(NSPredicate(
+            format: "identifier IN %@", ["Gym Equipment", "Home Equipment"]
+        ))
+        XCTAssertEqual(sheetBars.count, 1, "One equipment sheet navigation bar is required")
+        let sheetBar = sheetBars.element(boundBy: 0)
+        func viewport() -> CGRect {
+            let intersection = list.frame.intersection(window.frame)
+            guard !intersection.isNull, !intersection.isEmpty else { return .null }
+            let bar = sheetBar.frame.intersection(intersection)
+            guard !bar.isNull, !bar.isEmpty else { return intersection }
+            return CGRect(x: intersection.minX, y: max(intersection.minY, bar.maxY),
+                          width: intersection.width, height: max(0, intersection.maxY - bar.maxY))
+        }
+        func drag(_ delta: CGFloat) {
+            let area = viewport()
+            XCTAssertFalse(area.isNull || area.isEmpty, "No unobscured list viewport")
+            let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                dx: area.midX - window.frame.minX, dy: area.midY - window.frame.minY
+            ))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: delta)))
+        }
+        func reveal(_ element: XCUIElement, upward: Bool) {
+            // SwiftUI List lazily materializes distant rows: use the caller's
+            // direction only until a real, nonempty frame is available.
+            for _ in 0..<30 {
+                if element.exists && !element.frame.isEmpty { break }
+                let area = viewport()
+                XCTAssertFalse(area.isNull || area.isEmpty, "No unobscured list viewport")
+                drag((upward ? -1 : 1) * area.height * 0.18)
+            }
+            XCTAssertTrue(element.exists && !element.frame.isEmpty, "Equipment content did not materialize")
+            func widthFits() -> Bool {
+                let area = viewport(), frame = element.frame
+                return !area.isNull && !area.isEmpty && frame.minX >= area.minX && frame.maxX <= area.maxX
+            }
+            XCTAssertTrue(widthFits(), "Equipment content overflows the unobscured list width")
+            if element.frame.height <= viewport().height {
+                for _ in 0..<30 where !viewport().contains(element.frame) {
+                    let area = viewport(), frame = element.frame
+                    let needed = frame.minY < area.minY ? area.minY - frame.minY : area.maxY - frame.maxY
+                    let step = min(abs(needed) + 4, area.height * 0.18)
+                    drag(needed > 0 ? step : -step)
+                }
+                XCTAssertTrue(widthFits() && viewport().contains(element.frame),
+                              "Short content must fit fully below the navigation bar")
+                return
+            }
+            // Oversized text must be read across overlapping, progressing visible intervals.
+            for _ in 0..<30 where !(element.frame.minY >= viewport().minY && element.frame.minY < viewport().maxY) {
+                let area = viewport(), needed = area.minY + 4 - element.frame.minY
+                let step = min(abs(needed), area.height * 0.18)
+                drag(needed > 0 ? step : -step)
+            }
+            XCTAssertTrue(widthFits() && element.frame.minY >= viewport().minY && element.frame.minY < viewport().maxY,
+                          "Tall content top must be readable below the navigation bar")
+            var reachedBottom = element.frame.maxY <= viewport().maxY
+            for _ in 0..<30 where !reachedBottom {
+                let beforeFrame = element.frame, before = beforeFrame.intersection(viewport())
+                XCTAssertFalse(before.isEmpty)
+                let beforeEnd = before.maxY - beforeFrame.minY
+                drag(-viewport().height * 0.18)
+                let afterFrame = element.frame, after = afterFrame.intersection(viewport())
+                XCTAssertFalse(after.isEmpty, "Tall content interval disappeared")
+                XCTAssertTrue(widthFits(), "Tall content overflows list width")
+                XCTAssertLessThanOrEqual(after.minY - afterFrame.minY, beforeEnd + 1,
+                                         "Tall content intervals must overlap")
+                XCTAssertGreaterThan(after.maxY - afterFrame.minY, beforeEnd + 1,
+                                     "Tall content must make visible progress")
+                reachedBottom = afterFrame.maxY <= viewport().maxY && !after.isEmpty
+            }
+            XCTAssertTrue(reachedBottom, "Tall content bottom must be readable")
+        }
+        reveal(hero, upward: false)
+        let initialContext = hero.label
+        XCTAssertTrue(["Gym Equipment", "Home Equipment"].contains(initialContext))
+        let explanation = list.staticTexts.matching(NSPredicate(
+            format: "label == %@",
+            "At least one equipment is always kept to avoid an empty recommendation."
+        )).firstMatch
+        XCTAssertTrue(explanation.waitForExistence(timeout: 5))
+        reveal(explanation, upward: true)
+        VisualAudit.capture("A20 equipment hero \(maxText ? "dark MAX" : "normal")")
+        let first = list.switches["activity-recommendation-equipment-barbell"].firstMatch
+        let last = list.switches["activity-recommendation-equipment-stabilityBall"].firstMatch
+        reveal(first, upward: true)
+        VisualAudit.capture("A20 first equipment \(maxText ? "MAX" : "normal")")
+        guard let firstValue = first.value as? String, ["0", "1"].contains(firstValue) else {
+            XCTFail("Barbell switch must expose its boolean value"); return
+        }
+        reveal(last, upward: true)
+        VisualAudit.capture("A20 last equipment \(maxText ? "MAX" : "normal")")
+        guard let lastValue = last.value as? String, ["0", "1"].contains(lastValue) else {
+            XCTFail("Stability Ball switch must expose its boolean value"); return
+        }
+        // Choose an off row if possible; if both are on, another observed row stays enabled.
+        let changeFirst = firstValue == "0" || lastValue == "1"
+        let selected = changeFirst ? first : last
+        let original = changeFirst ? firstValue : lastValue
+        reveal(selected, upward: changeFirst ? false : true)
+        func setNativeSwitch(_ expected: String) {
+            let children = selected.switches
+            XCTAssertEqual(children.count, 1, "Expected one native switch control")
+            let control = children.element(boundBy: 0)
+            XCTAssertTrue(control.exists && control.isHittable && !control.frame.isEmpty)
+            XCTAssertTrue(selected.frame.contains(control.frame) && viewport().contains(control.frame),
+                          "Native switch must be fully visible in its row")
+            control.tap()
+            for element in [selected, control] {
+                let expectedValue = XCTNSPredicateExpectation(
+                    predicate: NSPredicate(format: "value == %@", expected), object: element
+                )
+                XCTAssertEqual(XCTWaiter.wait(for: [expectedValue], timeout: 3), .completed,
+                               "Native and row switch values must reach the expected state")
+            }
+        }
+        let changed = original == "1" ? "0" : "1"
+        setNativeSwitch(changed)
+        VisualAudit.capture("A20 equipment changed \(maxText ? "MAX" : "normal")")
+        let done = app.buttons["Done"].firstMatch
+        func closeWithDone(captureToolbar: Bool = false) {
+            if !done.isHittable { drag(viewport().height * 0.18) }
+            if captureToolbar { VisualAudit.capture("A20 native toolbar ready MAX") }
+            XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable)
+            done.tap()
+        }
+        closeWithDone()
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
+        XCTAssertTrue(target.waitForExistence(timeout: 5))
+        XCTAssertTrue(target.isHittable); target.auditTap()
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        reveal(selected, upward: true)
+        if maxText { VisualAudit.capture("A20 reopened after reveal before restore MAX") }
+        XCTAssertEqual(selected.value as? String, changed, "The real context retains the selection after reopening")
+        setNativeSwitch(original)
+        XCTAssertEqual(selected.value as? String, original, "Restore the original equipment selection")
+        if maxText { VisualAudit.capture("A20 restored before reverse drag MAX") }
+        closeWithDone(captureToolbar: maxText)
+        XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
+        if !maxText {
+            let other = initialContext == "Gym Equipment" ? "Home" : "Gym"
+            let initial = initialContext == "Gym Equipment" ? "Gym" : "Home"
+            let otherButton = app.buttons[other].firstMatch
+            XCTAssertTrue(otherButton.waitForExistence(timeout: 5)); XCTAssertTrue(otherButton.isHittable)
+            otherButton.tap()
+            XCTAssertTrue(target.waitForExistence(timeout: 5)); XCTAssertTrue(target.isHittable)
+            target.auditTap()
+            XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+            XCTAssertTrue(hero.waitForExistence(timeout: 5))
+            XCTAssertEqual(hero.label, other + " Equipment", "Hero reflects the real selected context")
+            VisualAudit.capture("A20 alternate context normal")
+            closeWithDone()
+            XCTAssertTrue(sheet.waitForNonExistence(timeout: 10))
+            let initialButton = app.buttons[initial].firstMatch
+            XCTAssertTrue(initialButton.waitForExistence(timeout: 5)); XCTAssertTrue(initialButton.isHittable)
+            initialButton.tap()
+        }
+        XCTAssertTrue(target.waitForExistence(timeout: 5))
+        XCTAssertTrue(target.isHittable, "Done returns to the real Activity equipment entry")
+        VisualAudit.capture("A20 equipment dismissed \(maxText ? "MAX" : "normal")")
     }
 
     private func openActivityInfo(button: String, sheet: String, maxSwipes: Int = 30) {

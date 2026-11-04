@@ -1,0 +1,21 @@
+{
+  "source": "52dfe9b909c48c183d6412efdce8a16d2e54df0e",
+  "parentObservedControllerSession": 16720,
+  "observedExitCode": 1,
+  "observedException": "AssertionError: less than 3 GiB before device setup",
+  "observationScope": "Parent observed actual write_stdin completion; traceback is not a native SDK or pipeline test result",
+  "blockedBeforeIPadCreation": true,
+  "IPadUIExecutedAtBlock": 0,
+  "IPadPipelineAttemptsAtBlock": 0,
+  "IPadDeviceTransitionReceiptsAtBlock": 0,
+  "ownedCountAfterActualPhoneCleanup": 0,
+  "resumeControllerSHA256": "0ce3f6983040de5e332f7fff083b97b9e57a46f58e05376a010ff114b1748e86",
+  "resumeStatusSHA256": "1d9213de2a7482a27a026905a6599f887736a102c0578e0867b3a2b45f0a0be3",
+  "phoneCleanupLogSHA256": "3a2fe3b658d71650ec6213f8a8916c07a326d1004f8d44f1dfacde94cd7ef210",
+  "phonePassedResultSHA256": "36b14ad89f6184fc0be051df6c562ae3d0d5fee2120054083d45d4eee1af0a76",
+  "phoneSealSHA256": "eaedbc21c3b2a0de587b6946292bf6056eda73877bc6e858aeea356d5e0a9055",
+  "currentFreeBytes": 4792320000,
+  "interpretation": "Immediate post-cleanup guard saw insufficient free space, subsequent readback recovered. Consistent with deferred reclaim; unrelated host writes not excluded. No producer/limit/source edit.",
+  "next": "Only still-unrun iPad under original unused pipeline ID after reviewed resume; previous4passing cases retained",
+  "createdUTC": "2026-11-04T00:01:45.942656+00:00"
+}
