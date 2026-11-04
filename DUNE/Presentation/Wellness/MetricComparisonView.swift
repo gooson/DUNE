@@ -125,6 +125,7 @@ struct MetricComparisonView: View {
                 }
             }
             .pickerStyle(.menu)
+            .tint(DS.Color.textSecondary)
             .accessibilityIdentifier("metric-comparison-period")
         }
     }
@@ -186,6 +187,7 @@ struct MetricComparisonView: View {
                             }
                         }
                         .pickerStyle(.menu)
+                        .tint(DS.Color.textSecondary)
                         .accessibilityIdentifier("\(identifier)-picker")
                     }
                 }
@@ -209,6 +211,7 @@ private struct ComparisonMetricChart: View {
     let identifier: String
     @State private var viewModel = MetricDetailViewModel()
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
     @ScaledMetric(relativeTo: .caption) private var chartHeight: CGFloat = 220
     @State private var availableWidth: CGFloat = 0
 
@@ -229,6 +232,9 @@ private struct ComparisonMetricChart: View {
     }
 
     var body: some View {
+        let plotColor = colorScheme == .light
+            ? metric.category.themeColor.mix(with: .black, by: 0.35)
+            : metric.category.themeColor
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
             Text(metric.name).font(.headline)
             if let limitedStart = viewModel.limitedHistoryStartDate,
@@ -254,13 +260,13 @@ private struct ComparisonMetricChart: View {
                     Chart(points) { point in
                         if metric.category == .sleep {
                             BarMark(x: .value("Date", point.date), y: .value(chartUnit, point.value))
-                                .foregroundStyle(metric.category.themeColor)
+                                .foregroundStyle(plotColor)
                                 .accessibilityValue("\(point.value.formatted()) \(chartUnit)")
                         } else {
                             LineMark(x: .value("Date", point.date), y: .value(chartUnit, point.value))
-                                .foregroundStyle(metric.category.themeColor)
+                                .foregroundStyle(plotColor)
                             PointMark(x: .value("Date", point.date), y: .value(chartUnit, point.value))
-                                .foregroundStyle(metric.category.themeColor)
+                                .foregroundStyle(plotColor)
                                 .accessibilityValue("\(point.value.formatted()) \(chartUnit)")
                         }
                     }

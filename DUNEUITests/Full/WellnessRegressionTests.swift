@@ -160,7 +160,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         let firstPicker = app.descendants(matching: .any)["metric-comparison-first-picker"].firstMatch
         XCTAssertTrue(firstPicker.isEnabled)
         firstPicker.tap()
-        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-first-option-rhr", towardLowerContent: true),
+        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-first-option-rhr"),
                       "The uniquely identified RHR option must be fully visible and enabled in the native menu")
         let restingHR = firstPane.staticTexts["Resting HR"].firstMatch
         XCTAssertTrue(restingHR.waitForExistence(timeout: 5))
@@ -171,7 +171,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("H04 MAX selected Resting HR full row")
         XCTAssertTrue(revealComparisonControl(firstPicker, in: comparisonScroll))
         firstPicker.tap()
-        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-first-option-hrv", towardLowerContent: false),
+        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-first-option-hrv"),
                       "The uniquely identified HRV option must be fully visible and enabled in the native menu")
         XCTAssertTrue(firstPane.staticTexts["ms"].firstMatch.waitForExistence(timeout: 10))
         let firstPlot = app.descendants(matching: .any)["metric-comparison-first-plot"].firstMatch
@@ -183,7 +183,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         let secondPicker = app.descendants(matching: .any)["metric-comparison-second-picker"].firstMatch
         XCTAssertTrue(secondPicker.isEnabled)
         secondPicker.tap()
-        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-second-option-weight", towardLowerContent: false),
+        XCTAssertTrue(tapComparisonMenuOption("metric-comparison-second-option-weight"),
                       "The uniquely identified Weight option must be fully visible and enabled in the native menu")
         let weightUnit = secondPane.staticTexts["kg"].firstMatch
         XCTAssertTrue(weightUnit.waitForExistence(timeout: 10))
@@ -220,7 +220,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("H04 MAX Done returns Wellness")
     }
 
-    private func tapComparisonMenuOption(_ identifier: String, towardLowerContent: Bool) -> Bool {
+    private func tapComparisonMenuOption(_ identifier: String) -> Bool {
         // The accessibility-size Menu opens a separate native, virtualized CollectionView.
         // Its content frame is taller than the visible popover; use the popover clip frame.
         let collections = app.collectionViews
@@ -251,7 +251,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             let optionFrame = count == 1 ? matches.firstMatch.frame : CGRect.null
             let lower = !optionFrame.isNull
                 ? optionFrame.maxY > viewport.maxY
-                : towardLowerContent
+                : true
             let origin = popup.coordinate(withNormalizedOffset: .zero)
             let x = viewport.midX - content.minX
             let startY = viewport.minY + viewport.height * (lower ? 0.6 : 0.4) - content.minY
