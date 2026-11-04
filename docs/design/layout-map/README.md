@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+2026-11-05 [H05 신체 기록 입력·수정 배치 계약](body-record-form-h05.html)은 한 네이티브 Form의 날짜·세 측정 필드·메모·키보드·고정 저장 행동과 큰 글씨 스크롤을 정한다. [DUNE 표현 시안](../theme-map/themes/dune-body-record-form-h05.html)의 값은 설명용이며 새 앱 캡처가 아니다. H05 편집은 같은 ID이고 H06 이력 화면은 별개다.
+
 2026-11-05 [H04 두 지표 기간 비교 배치 계약](wellness-metric-comparison-h04.html)은 하나의 날짜 범위와 두 독립 값 축, 두 네이티브 지표 피커, 다섯 기간·큰 글씨 세로 배치를 정한다. [DUNE 표현 시안](../theme-map/themes/dune-metric-comparison-h04.html)의 값은 설명용이며 현재 소스의 네이티브 캡처가 아니다.
 
 A15 피로도 계산 설명은 [전용 배치 계약](activity-fatigue-algorithm-a15.html)을 따른다. 시안은 실제 캡처가 아니다.

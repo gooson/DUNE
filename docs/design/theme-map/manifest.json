@@ -742,6 +742,17 @@
         "layout": "../layout-map/wellness-metric-comparison-h04.html",
         "status": "source-contrast-correction-pending-native-validation"
       }
+    },
+    {
+      "id": "body-record-form-h05",
+      "name": "H05 신체 기록 입력·수정",
+      "title": "날짜 · 세 측정값 · 원래 Form 행동",
+      "file": "dune-body-record-form-h05.html",
+      "detail": "2026-11-05 H05 구현 전 정적 DUNE 표현 시안. 네이티브 Form의 Date & Time, Weight kg·Body Fat %·Muscle Mass kg 원래 섹션 헤더·아이콘, 선택 입력·메모·키보드 Clear Input/Done·하단 Cancel/Save와 큰 글씨 스크롤을 설명한다. 모든 수치·날짜·기호는 예시이고 실제 SF Symbol·건강 기록·앱 캡처가 아니다. 편집은 H05 공유 Form이며 H06 이력과 다르다.",
+      "implementation": {
+        "layout": "../layout-map/body-record-form-h05.html",
+        "status": "proposal-only-native-pending"
+      }
     }
   ]
 }
