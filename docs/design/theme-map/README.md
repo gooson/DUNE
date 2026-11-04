@@ -271,4 +271,4 @@ A15 피로도 계산 설명 [시안](themes/dune-fatigue-algorithm-a15.html)은 
 
 A21 보상 설명은 [배치 계약](../layout-map/activity-reward-explanation-a21.html)과 [실제 전후 비교](../full-redesign-map/review/a21-reward-help-native-2026-11-04/index.html)에 연결했다. 기존 네 아이콘·계산·중간 높이 시스템 시트를 유지하고 개편 선택 검사6/6, 원본 iPhone1/1을 각각 검증했다. 방향 HTML과 실제 캡처를 구분한다.
 
-2026-11-04 T06 체지방률 후속: [구현 계획](../../plans/2026-11-04-t06-body-fat-survey-reference.md)에 따라 미국 성인 1999–2004 DXA 조사 평균을 개인 값과 별도로 표시하도록 계약을 갱신했다. 원문 실제 연령 구간·측정 방식 차이를 밝히고 체중/BMI와 제지방의 기존 경로를 보존한다. 이 기록 시점의 단위·네이티브 검사는 수행 전이며, 과거 iPad 이미지는 새 조사 카드의 완료 증거가 아니다.
+2026-11-04 T06 체지방률 후속: [구현 계획](../../plans/2026-11-04-t06-body-fat-survey-reference.md)에 따라 미국 성인 1999–2004 DXA 조사 평균을 개인 값과 별도로 표시하도록 계약을 갱신했다. 원문 실제 연령 구간·측정 방식 차이를 밝히고 체중/BMI와 제지방의 기존 경로를 보존한다. 2026-11-05 [체지방 DXA 실제 화면 갤러리](../full-redesign-map/review/t06-body-fat-dxa-native-2026-11-05/index.html)에 선택 검사 5건의 32개 PNG/AX 쌍을 연결한다. Duo 접힘 일반 case는 실패한 2건 집계 안에서 Passed였고 최대 글씨 case는 별도 Passed였다. 과거 iPad 이미지는 새 조사 카드의 이전 화면이나 AX 증거가 아니다. 이 페이지의 원래 브라우저 시안은 실제 앱 캡처가 아니다.

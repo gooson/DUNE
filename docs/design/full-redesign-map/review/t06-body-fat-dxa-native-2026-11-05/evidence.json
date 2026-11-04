@@ -1,0 +1,1444 @@
+{
+  "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+  "status": "native-reviewed; staged publication pending",
+  "selected_pair_count": 32,
+  "cases": {
+    "closed_normal": {
+      "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed",
+      "source_revision": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+      "aggregate_result": {
+        "schema_version": 1,
+        "status": "failed",
+        "target": "DUNEUITests",
+        "run_exit_status": 65,
+        "requested_selectors": [
+          "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+          "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 1
+        },
+        "passed_cases": 1,
+        "failures": [
+          "481: /Users/shanks/.codex/worktrees/detail-redesign-l03/Health/DUNEUITests/Full/MetricDetailRedesignTests.swift:324: error: -[DUNEUITests.MetricDetailRedesignTests testBodyFatDXAMaximumAccessibility] : XCTAssertTrue failed",
+          "494: Test Case '-[DUNEUITests.MetricDetailRedesignTests testBodyFatDXAMaximumAccessibility]' failed (68.508 seconds).",
+          "735: Test Suite 'MetricDetailRedesignTests' failed at 2026-11-05 00:26:36.021.",
+          "737: Test Suite 'DUNEUITests.xctest' failed at 2026-11-05 00:26:36.025.",
+          "739: Test Suite 'Selected tests' failed at 2026-11-05 00:26:36.026.",
+          "754: ** TEST FAILED **",
+          "xcodebuild exited 65",
+          "UI test log reports 1 failures",
+          "requested UI test selector has no execution evidence"
+        ],
+        "required_selectors_missing": [
+          "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility"
+        ],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/t06-bodyfat-duo-closed-113b87cd.log"
+      },
+      "selected_case": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "classification": "normal-passed-in-failed-aggregate",
+      "inventory_sha256": "a5e550d6dd36a62ac8f0579ec68dd5197abd3e737eb4ace098148b6d84616791",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+    },
+    "closed_max": {
+      "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "aggregate_result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/t06-bodyfat-duo-closed-max-contrast-2f40e909.log"
+      },
+      "selected_case": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility",
+      "classification": "max-only-passed",
+      "inventory_sha256": "f8a0554ff1e0de72ec705a992a867bc5bd7b187aa8d287ca9a9fe6c1ec7802ca",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+    },
+    "open": {
+      "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "aggregate_result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/t06-bodyfat-duo-open-2f40e909.log"
+      },
+      "selected_case": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "classification": "normal-passed",
+      "inventory_sha256": "822b1bb1d0b1215860a432979d91b2d02d306098c96d55b44eb2ab66e1951142",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+    },
+    "phone": {
+      "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "aggregate_result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/t06-bodyfat-phone-normal-2f40e909.log"
+      },
+      "selected_case": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "classification": "normal-passed",
+      "inventory_sha256": "5ed94ff9f6a68df967f999e0f10f4634372035dfc6df4853f4390d217c42f88b",
+      "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B"
+    },
+    "ipad": {
+      "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "aggregate_result": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/t06-bodyfat-ipad-normal-2f40e909.log"
+      },
+      "selected_case": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "classification": "normal-passed",
+      "inventory_sha256": "f8182570d920fae00272b10cc6e60155a649b63946ec38e9f056c288af686ba5",
+      "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545"
+    }
+  },
+  "selected": [
+    {
+      "action": "T06-bodyFat-DXA-unselected",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793805931.349,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "bc4adbf86a420fa6a1fc21a8f2f4bdc74804a9f2875fdd895c6facacee6c95b4",
+      "ax_sha256": "545b27f00b8b01ffde53b076d59097e9f1091efa512c8719ec16aa2a6b6c063a",
+      "manifest_ax_sha256": "545b27f00b8b01ffde53b076d59097e9f1091efa512c8719ec16aa2a6b6c063a",
+      "profile": "closed_normal",
+      "image": "closed_normal-T06-bodyFat-DXA-unselected.png",
+      "ax": "closed_normal-T06-bodyFat-DXA-unselected.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-criteria-empty",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793805936.465,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "12856f246261a1cc719b2b4a860393b3e4ce160dd891ddfdd885dd410e05b8d8",
+      "ax_sha256": "32ac5f6269d3471b3a6e4630684153eaf57b8d00cc9a67d9874fc232b930911f",
+      "manifest_ax_sha256": "32ac5f6269d3471b3a6e4630684153eaf57b8d00cc9a67d9874fc232b930911f",
+      "profile": "closed_normal",
+      "image": "closed_normal-T06-bodyFat-DXA-criteria-empty.png",
+      "ax": "closed_normal-T06-bodyFat-DXA-criteria-empty.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-selected",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793805953.601,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "e11abc14406109e2f03b2530c662c86960f195fbf384ddf468f18e25faf81fa6",
+      "ax_sha256": "5530cc8fb5289f72094497a28cf029eac905d832da5e413d289a109b1ca0b135",
+      "manifest_ax_sha256": "5530cc8fb5289f72094497a28cf029eac905d832da5e413d289a109b1ca0b135",
+      "profile": "closed_normal",
+      "image": "closed_normal-T06-bodyFat-DXA-selected.png",
+      "ax": "closed_normal-T06-bodyFat-DXA-selected.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-source",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793805960.745,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "30cddaf18fb35935145984b97810ac8d763c42b45f6208124a4dd5b21a5bd35f",
+      "ax_sha256": "5c1d469e3df32885c2b756a4cf5b8df123d61e584e2a41dcefb63c212ba522d3",
+      "manifest_ax_sha256": "5c1d469e3df32885c2b756a4cf5b8df123d61e584e2a41dcefb63c212ba522d3",
+      "profile": "closed_normal",
+      "image": "closed_normal-T06-bodyFat-DXA-source.png",
+      "ax": "closed_normal-T06-bodyFat-DXA-source.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-real-back",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793805971.504,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "7800913521266a350d264b1dcde866f624bb7a8acce9d7bd366423ffbaa8a652",
+      "ax_sha256": "5ba9f7ff65317c03a56d4809b96717fcda77336833b6103a815cd1ecdd4a129b",
+      "manifest_ax_sha256": "5ba9f7ff65317c03a56d4809b96717fcda77336833b6103a815cd1ecdd4a129b",
+      "profile": "closed_normal",
+      "image": "closed_normal-T06-bodyFat-DXA-real-back.png",
+      "ax": "closed_normal-T06-bodyFat-DXA-real-back.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-persisted-reopen",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793805985.925,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "31d24763ba555459de2666d7da5aeef8ad342eda287a6c1ab51133307e1f978a",
+      "ax_sha256": "674a6b2be1916c1633cb7d7736a2fce929925938215ea0944887affa38c045a3",
+      "manifest_ax_sha256": "674a6b2be1916c1633cb7d7736a2fce929925938215ea0944887affa38c045a3",
+      "profile": "closed_normal",
+      "image": "closed_normal-T06-bodyFat-DXA-persisted-reopen.png",
+      "ax": "closed_normal-T06-bodyFat-DXA-persisted-reopen.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-MAX-unselected",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793807629.423,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "095061831fa9b3018f93688943531e1f6e82ac26a9645ed4e3f72daba736c212",
+      "ax_sha256": "2d620f120313aa9bca9abc0bbfe9a8973a1c6038851232b1ec93a42ed7659508",
+      "manifest_ax_sha256": "2d620f120313aa9bca9abc0bbfe9a8973a1c6038851232b1ec93a42ed7659508",
+      "profile": "closed_max",
+      "image": "closed_max-T06-bodyFat-DXA-MAX-unselected.png",
+      "ax": "closed_max-T06-bodyFat-DXA-MAX-unselected.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-MAX-age-selected-full-row",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793807651.386,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "d2df4eb90d0c3cbf2d392144c494b9b81e02d96378c3c5d1dbd99d85c634a6b8",
+      "ax_sha256": "74f85c526f79bf9ec873698b254cfb8ced3061300992523649a0fbe75e50a98e",
+      "manifest_ax_sha256": "74f85c526f79bf9ec873698b254cfb8ced3061300992523649a0fbe75e50a98e",
+      "profile": "closed_max",
+      "image": "closed_max-T06-bodyFat-DXA-MAX-age-selected-full-row.png",
+      "ax": "closed_max-T06-bodyFat-DXA-MAX-age-selected-full-row.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-MAX-sex-selected-full-row",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793807665.913,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "52f3a293075947aca819421fd63f652c70a62a66ab6d5349f39ed8cd140280d6",
+      "ax_sha256": "83a5975d48564a1909a14d09bcd0ab4d354398db72f53b4b34f0abcdb15cbb7c",
+      "manifest_ax_sha256": "83a5975d48564a1909a14d09bcd0ab4d354398db72f53b4b34f0abcdb15cbb7c",
+      "profile": "closed_max",
+      "image": "closed_max-T06-bodyFat-DXA-MAX-sex-selected-full-row.png",
+      "ax": "closed_max-T06-bodyFat-DXA-MAX-sex-selected-full-row.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-MAX-method-warning",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793807677.669,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "5381487ad4e0ba2ba54a5689bd415219aae5af4b981de34e0427781dff20a772",
+      "ax_sha256": "ce6bc189814e3ac4d8760e5cef15e0e2accb7a9110158582b4772546ec6d2ed7",
+      "manifest_ax_sha256": "ce6bc189814e3ac4d8760e5cef15e0e2accb7a9110158582b4772546ec6d2ed7",
+      "profile": "closed_max",
+      "image": "closed_max-T06-bodyFat-DXA-MAX-method-warning.png",
+      "ax": "closed_max-T06-bodyFat-DXA-MAX-method-warning.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-MAX-body-fat-recorded-value",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793807689.532,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "48108a83210bcfb383bd2ca151d94d38dc85222d046bb08a9c0f24665987b234",
+      "ax_sha256": "ebddc71fca271e91988f90c0f48d102987ba04ed743f9c5e7036bc8bbe08ff8d",
+      "manifest_ax_sha256": "ebddc71fca271e91988f90c0f48d102987ba04ed743f9c5e7036bc8bbe08ff8d",
+      "profile": "closed_max",
+      "image": "closed_max-T06-bodyFat-DXA-MAX-body-fat-recorded-value.png",
+      "ax": "closed_max-T06-bodyFat-DXA-MAX-body-fat-recorded-value.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-MAX-body-fat-survey-mean",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793807698.587,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "4a1e02963455ef5d3df54547f73ad8bd5d8203b55595d5f22d63165b6c950bb9",
+      "ax_sha256": "7888a15ff14d97127fd6dcbe58d019fb7f81fd245f24ea0a493e4a1b4d451c7e",
+      "manifest_ax_sha256": "7888a15ff14d97127fd6dcbe58d019fb7f81fd245f24ea0a493e4a1b4d451c7e",
+      "profile": "closed_max",
+      "image": "closed_max-T06-bodyFat-DXA-MAX-body-fat-survey-mean.png",
+      "ax": "closed_max-T06-bodyFat-DXA-MAX-body-fat-survey-mean.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-MAX-source",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793807709.836,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "51536b4ff5b6e47c54f4c7536bb707dfa29494b543386182682e8135cb97a6a6",
+      "ax_sha256": "c70cf0332d0c158112b8d46a9154b15fff205f4dbc298833f5100b3c437b995e",
+      "manifest_ax_sha256": "c70cf0332d0c158112b8d46a9154b15fff205f4dbc298833f5100b3c437b995e",
+      "profile": "closed_max",
+      "image": "closed_max-T06-bodyFat-DXA-MAX-source.png",
+      "ax": "closed_max-T06-bodyFat-DXA-MAX-source.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-MAX-real-back",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXAMaximumAccessibility",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793807718.699,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "5d1141e5a9d7b3b838ef24d61df2c699d08b31dc456176a75fbbf5679a4daf8e",
+      "ax_sha256": "d439560228857e25400e0498da14eb4d559920a10d8a4bd1c510586d5fd91cd7",
+      "manifest_ax_sha256": "d439560228857e25400e0498da14eb4d559920a10d8a4bd1c510586d5fd91cd7",
+      "profile": "closed_max",
+      "image": "closed_max-T06-bodyFat-DXA-MAX-real-back.png",
+      "ax": "closed_max-T06-bodyFat-DXA-MAX-real-back.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-unselected",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793808418.853,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "dc6e95b6e44c80e6f9eaa17e17bae760fc3df06cff517f0d477c21f035b9e2bc",
+      "ax_sha256": "2b31bfc7394f4c5f802b9699c623a8c61a172e031548d52d664421e9df33bd33",
+      "manifest_ax_sha256": "2b31bfc7394f4c5f802b9699c623a8c61a172e031548d52d664421e9df33bd33",
+      "profile": "open",
+      "image": "open-T06-bodyFat-DXA-unselected.png",
+      "ax": "open-T06-bodyFat-DXA-unselected.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-criteria-empty",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793808424.677,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "1862fc4564ab562eb255304812a870090d5bc473207f251bef7c9e528b3d0bc6",
+      "ax_sha256": "9074a0f0745564a49b35082d347f5d74146fd74ba064e6fdc29c13f08bfa97e6",
+      "manifest_ax_sha256": "9074a0f0745564a49b35082d347f5d74146fd74ba064e6fdc29c13f08bfa97e6",
+      "profile": "open",
+      "image": "open-T06-bodyFat-DXA-criteria-empty.png",
+      "ax": "open-T06-bodyFat-DXA-criteria-empty.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-selected",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793808442.407,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "7e11276a171f10d72d9c4b72bfee8c693d62245859a006017e63e7bfeb998b46",
+      "ax_sha256": "f0ff42a3de1b9cf4ec893ae97120991929d262fad79a5a80a8258e7cc1513c4e",
+      "manifest_ax_sha256": "f0ff42a3de1b9cf4ec893ae97120991929d262fad79a5a80a8258e7cc1513c4e",
+      "profile": "open",
+      "image": "open-T06-bodyFat-DXA-selected.png",
+      "ax": "open-T06-bodyFat-DXA-selected.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-source",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793808449.57,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "297891f8d674b2e18b8c7a0a91f0e443d3722accf7c11138b2a09302391ed5ca",
+      "ax_sha256": "2855841996f3061132b1073e5457ede7e2d8b49910066c213478804b4e408aeb",
+      "manifest_ax_sha256": "2855841996f3061132b1073e5457ede7e2d8b49910066c213478804b4e408aeb",
+      "profile": "open",
+      "image": "open-T06-bodyFat-DXA-source.png",
+      "ax": "open-T06-bodyFat-DXA-source.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-real-back",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793808460.137,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "ed813efce78d1993c138803a0bf10cf8359c950a28db6023a086ed1cc240760c",
+      "ax_sha256": "000b58c6a5415321989ff8e0e4f61180cb4afa0f9baaa8ed7c52cc8ec6490ec2",
+      "manifest_ax_sha256": "000b58c6a5415321989ff8e0e4f61180cb4afa0f9baaa8ed7c52cc8ec6490ec2",
+      "profile": "open",
+      "image": "open-T06-bodyFat-DXA-real-back.png",
+      "ax": "open-T06-bodyFat-DXA-real-back.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-persisted-reopen",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "host",
+      "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+      "device_name": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone",
+      "timestamp": 1793808476.645,
+      "timestamp_kind": "paired manifest AX; host PNG time not independently timestamped",
+      "image_sha256": "4b3c8184888fd1b2be8cf9d4e53c3914acea7cbf858728fcc1846029c3e0747e",
+      "ax_sha256": "9aac302af108cd5c0b443e585784fe8eac872423944273feeda3c325b625b5a6",
+      "manifest_ax_sha256": "9aac302af108cd5c0b443e585784fe8eac872423944273feeda3c325b625b5a6",
+      "profile": "open",
+      "image": "open-T06-bodyFat-DXA-persisted-reopen.png",
+      "ax": "open-T06-bodyFat-DXA-persisted-reopen.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-unselected",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B",
+      "device_name": "iPhone 18 Pro Max-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone 18 Pro Max",
+      "timestamp": 1793809010.241,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "9674a2b3b549818acd879474f516a478fd878f9d1015e81fa12a3fd53696abd6",
+      "ax_sha256": "3c4dc8006ddbecc628b0155ece599b9b6d46fc1ccc9c6806f27400dc00b5e96f",
+      "manifest_ax_sha256": "3c4dc8006ddbecc628b0155ece599b9b6d46fc1ccc9c6806f27400dc00b5e96f",
+      "profile": "phone",
+      "image": "phone-T06-bodyFat-DXA-unselected.png",
+      "ax": "phone-T06-bodyFat-DXA-unselected.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-criteria-empty",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B",
+      "device_name": "iPhone 18 Pro Max-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone 18 Pro Max",
+      "timestamp": 1793809013.353,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "f7a51ca1c22241e0144360e23e9473af891d3cd3f9fd747b835ff51729f98e38",
+      "ax_sha256": "3c4816e17151effe0bb0b93f073fd9280cb32283c95f8e5213a67c61dd12d504",
+      "manifest_ax_sha256": "3c4816e17151effe0bb0b93f073fd9280cb32283c95f8e5213a67c61dd12d504",
+      "profile": "phone",
+      "image": "phone-T06-bodyFat-DXA-criteria-empty.png",
+      "ax": "phone-T06-bodyFat-DXA-criteria-empty.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-selected",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B",
+      "device_name": "iPhone 18 Pro Max-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone 18 Pro Max",
+      "timestamp": 1793809027.551,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "b642a115cf1561bd619b98c838ee2bb933fff3607a54751808f7ca220fa527b4",
+      "ax_sha256": "2e77313bddad49a4b33d69bb10007fd1f9ad7ea4788603c399ccbc951a502c7c",
+      "manifest_ax_sha256": "2e77313bddad49a4b33d69bb10007fd1f9ad7ea4788603c399ccbc951a502c7c",
+      "profile": "phone",
+      "image": "phone-T06-bodyFat-DXA-selected.png",
+      "ax": "phone-T06-bodyFat-DXA-selected.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-source",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B",
+      "device_name": "iPhone 18 Pro Max-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone 18 Pro Max",
+      "timestamp": 1793809034.865,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "62b169f27b94fea367cb2620d0d782ae50d110c043ec87b0f6f68dc16ab4702b",
+      "ax_sha256": "378cc702a517c9419c621514228ef16f3c73f3cefb3d6bc2a49ba89dd983714a",
+      "manifest_ax_sha256": "378cc702a517c9419c621514228ef16f3c73f3cefb3d6bc2a49ba89dd983714a",
+      "profile": "phone",
+      "image": "phone-T06-bodyFat-DXA-source.png",
+      "ax": "phone-T06-bodyFat-DXA-source.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-real-back",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B",
+      "device_name": "iPhone 18 Pro Max-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone 18 Pro Max",
+      "timestamp": 1793809041.876,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "dadf86c658d9a24092bbe8385b6b1e808b2ee2acd46b7c02aa579b44a272e198",
+      "ax_sha256": "69b4db0788e997ef9e4da3395788d0a4c10c1926ed06346b6d085ccad999e0e2",
+      "manifest_ax_sha256": "69b4db0788e997ef9e4da3395788d0a4c10c1926ed06346b6d085ccad999e0e2",
+      "profile": "phone",
+      "image": "phone-T06-bodyFat-DXA-real-back.png",
+      "ax": "phone-T06-bodyFat-DXA-real-back.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-persisted-reopen",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B",
+      "device_name": "iPhone 18 Pro Max-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPhone 18 Pro Max",
+      "timestamp": 1793809052.552,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "7817311e662329b009257b1aac6ac84919db2990430f0621829e0750c1e56c16",
+      "ax_sha256": "c58f00e98524d06b9f9bce33c2e9d43b6d5a4d00941937dd8c202cfd91e1d253",
+      "manifest_ax_sha256": "c58f00e98524d06b9f9bce33c2e9d43b6d5a4d00941937dd8c202cfd91e1d253",
+      "profile": "phone",
+      "image": "phone-T06-bodyFat-DXA-persisted-reopen.png",
+      "ax": "phone-T06-bodyFat-DXA-persisted-reopen.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-unselected",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545",
+      "device_name": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPad mini (A20 Pro)",
+      "timestamp": 1793809304.039,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "33c3a559e1e97b035e9522aa6e75446e53c74d4e5195d105d298fa27a9a3bb7b",
+      "ax_sha256": "e14b8052bb6686b0402160b9f94f83728a7b4222eb433c5b07136e766bb886a5",
+      "manifest_ax_sha256": "e14b8052bb6686b0402160b9f94f83728a7b4222eb433c5b07136e766bb886a5",
+      "profile": "ipad",
+      "image": "ipad-T06-bodyFat-DXA-unselected.png",
+      "ax": "ipad-T06-bodyFat-DXA-unselected.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-criteria-empty",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545",
+      "device_name": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPad mini (A20 Pro)",
+      "timestamp": 1793809307.205,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "d92d69266479258e0a5e3160599a817e7980a89115c9dcd299b6c42d93fe41b6",
+      "ax_sha256": "b627c3e70c2fcf8c7adada5438eb7565da3c9aadb5c087d9a7d276ef04346c17",
+      "manifest_ax_sha256": "b627c3e70c2fcf8c7adada5438eb7565da3c9aadb5c087d9a7d276ef04346c17",
+      "profile": "ipad",
+      "image": "ipad-T06-bodyFat-DXA-criteria-empty.png",
+      "ax": "ipad-T06-bodyFat-DXA-criteria-empty.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-selected",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545",
+      "device_name": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPad mini (A20 Pro)",
+      "timestamp": 1793809321.351,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "87b4ef72b04e0c724a8e4e974108d81eb88dae049f63f0647353fd8d8d2f6584",
+      "ax_sha256": "435af489642ace3a377a6bad8a136088019a70e01b6e06505f100f4425b4e3eb",
+      "manifest_ax_sha256": "435af489642ace3a377a6bad8a136088019a70e01b6e06505f100f4425b4e3eb",
+      "profile": "ipad",
+      "image": "ipad-T06-bodyFat-DXA-selected.png",
+      "ax": "ipad-T06-bodyFat-DXA-selected.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-source",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545",
+      "device_name": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPad mini (A20 Pro)",
+      "timestamp": 1793809326.175,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "77cde71f3b2028953df0a17002a372fab10777ea7bf12e3c62177a433768b8bf",
+      "ax_sha256": "30a6d8392b1ad475a23b2b6d5aba276fda84968eeab444378e97d59dc01aac20",
+      "manifest_ax_sha256": "30a6d8392b1ad475a23b2b6d5aba276fda84968eeab444378e97d59dc01aac20",
+      "profile": "ipad",
+      "image": "ipad-T06-bodyFat-DXA-source.png",
+      "ax": "ipad-T06-bodyFat-DXA-source.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-real-back",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545",
+      "device_name": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPad mini (A20 Pro)",
+      "timestamp": 1793809333.249,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "b198b7227de4747a93f947d06aec5d0b1d283f926cb10e6f288bd81ada14cdc9",
+      "ax_sha256": "f1bc8ddf9187ffc3f4860b42f3875612cc43a8bf61e0c41c30e169b30959c65c",
+      "manifest_ax_sha256": "f1bc8ddf9187ffc3f4860b42f3875612cc43a8bf61e0c41c30e169b30959c65c",
+      "profile": "ipad",
+      "image": "ipad-T06-bodyFat-DXA-real-back.png",
+      "ax": "ipad-T06-bodyFat-DXA-real-back.txt"
+    },
+    {
+      "action": "T06-bodyFat-DXA-persisted-reopen",
+      "selector": "DUNEUITests/MetricDetailRedesignTests/testBodyFatDXASurveyFlow",
+      "source_revision": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "capture_kind": "xctest",
+      "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545",
+      "device_name": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+      "model": "iPad mini (A20 Pro)",
+      "timestamp": 1793809343.745,
+      "timestamp_kind": "native XCTest PNG/AX attachment timestamp",
+      "image_sha256": "647062bbc2978cc98c8d7bdf5346c46513f6e1c0064f867a34fcea3edb52db4a",
+      "ax_sha256": "acee1aa3a902d3062906d5f66f43ded91d8479b6a5151ddba8b3afd0bedc6a6f",
+      "manifest_ax_sha256": "acee1aa3a902d3062906d5f66f43ded91d8479b6a5151ddba8b3afd0bedc6a6f",
+      "profile": "ipad",
+      "image": "ipad-T06-bodyFat-DXA-persisted-reopen.png",
+      "ax": "ipad-T06-bodyFat-DXA-persisted-reopen.txt"
+    }
+  ],
+  "historical_ipad_png_only": [
+    {
+      "image": "historical-bodyFat-before-initial.png",
+      "source_path": "docs/design/full-redesign-map/review/t06-metric-matrix-native-2026-11-02/assets/bodyFat-before-initial.png",
+      "sha256": "b2dbbc3a84e756d32bd3da004664f073c8b936c0b20a11d0685c71e9b0e0ddac",
+      "scope": "historical iPad detail variant PNG only; no paired AX; not DXA survey-card before"
+    },
+    {
+      "image": "historical-bodyFat-before-lower.png",
+      "source_path": "docs/design/full-redesign-map/review/t06-metric-matrix-native-2026-11-02/assets/bodyFat-before-lower.png",
+      "sha256": "1521567cc606e07824c8eae4a2a5099c675a1e5d2e294c8244fd2ac224f1c44e",
+      "scope": "historical iPad detail variant PNG only; no paired AX; not DXA survey-card before"
+    },
+    {
+      "image": "historical-bodyFat-after-initial.png",
+      "source_path": "docs/design/full-redesign-map/review/t06-metric-matrix-native-2026-11-02/assets/bodyFat-after-initial.png",
+      "sha256": "c31ed61b2890e63fea6b9b5cec0cdf83b678ebbcebd0aa5048d2dba4add470d7",
+      "scope": "historical iPad detail variant PNG only; no paired AX; not DXA survey-card before"
+    },
+    {
+      "image": "historical-bodyFat-after-lower.png",
+      "source_path": "docs/design/full-redesign-map/review/t06-metric-matrix-native-2026-11-02/assets/bodyFat-after-lower.png",
+      "sha256": "ed6129ba0df78f1f5b636b381854261543e0639816ecdf6644eb16258e9bcbc9",
+      "scope": "historical iPad detail variant PNG only; no paired AX; not DXA survey-card before"
+    }
+  ],
+  "before_missing": [
+    "phone",
+    "duo-closed",
+    "duo-open",
+    "ipad"
+  ],
+  "canonical_T06": "HRV unchanged; body-fat variant separate gallery",
+  "quality_evidence": {
+    "full_vision": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06-bodyfat/evidence/vision-full-target-726a-failed/proof.json",
+      "sha256": "ab623a02a3902785bc675d98345cdcccdfd77a470526f8bf3d6a3a29c9e9d232",
+      "status": "FAILED",
+      "scope": "full DUNEVision target at 726a"
+    },
+    "isolated_xrsimulator_models": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06-bodyfat/evidence/xrsimulator-isolated-model-typecheck/proof.json",
+      "sha256": "6622f87532854f62625b8421b8581a679c159370e2c9236737995c15f7cfbcdf",
+      "status": "PASSED",
+      "scope": "two Foundation models typecheck only at 823"
+    }
+  },
+  "source_lineage": {
+    "unit_reuse_113b": {
+      "path": "/private/tmp/t06-bodyfat-113b-unit-reuse-source-closure-review.md",
+      "sha256": "344cfc38c283fdc0cb69779233859d7f8d4121040302ba2f79d6426f38e6ef16"
+    },
+    "normal_mixed_failure": {
+      "path": "/private/tmp/t06-hinge-source-recovery/operator-attempt-native-failure-independent-review.md",
+      "sha256": "b85e929a0c8f1a8d468f4e740f78c82aacb53d204c20af8f738ae6ae4b6b2945"
+    },
+    "source_color_closure": {
+      "path": "/private/tmp/t06-bodyfat-menu-contrast-source-independent-review.md",
+      "sha256": "ea2ffe7d3a444f7fd275e9becc62447720c26cee68b25c21375d63e96d26f25b"
+    },
+    "max_producer_2f40": {
+      "path": "/private/tmp/t06-max-contrast-fresh/bound-2f40e909-v2/independent-max-contrast-review.json",
+      "sha256": "a7fe1f948879bd4490244fa6ed040a06641d9a7a372709b321ca2d198090307e"
+    },
+    "max_native_quality_2f40": {
+      "path": "/private/tmp/t06-max-2f40-final-native-quality-review.md",
+      "sha256": "731c611eb3348afffee75bcb05568591bcef60b29a224e570d5830714f33701e"
+    },
+    "remaining_producer_2f40": {
+      "path": "/private/tmp/t06-remaining-native-2f40e909-v2/independent-remaining-producers-review.json",
+      "sha256": "3be733a3ab889e428610a711b570e7d6add53f3384528ac74c73c997732bfb7e"
+    },
+    "remaining_manifest_2f40": {
+      "path": "/private/tmp/t06-remaining-native-2f40e909-v2/manifest.json",
+      "sha256": "20a48afd93a4714a52a7e574698937f520554e213042c993742d78ba8c916ad9"
+    },
+    "max_manifest_2f40": {
+      "path": "/private/tmp/t06-max-contrast-fresh/bound-2f40e909-v2/manifest.json",
+      "sha256": "b407d3c560965f72ca254cca2d272bee25339cd21425e0e8cb6f97d7c7f39e67"
+    },
+    "normal_manifest_113b": {
+      "path": "/private/tmp/t06-bodyfat-native-execution/ui-continuation-113b87cd-v2/manifest.json",
+      "sha256": "9ac41a3421edba373e3fa3e43275f77d4c7f79d03079180dba5f8aa38095a098"
+    },
+    "old_unit_manifest_1480": {
+      "path": "/private/tmp/t06-bodyfat-native-execution/bound-1480a066-v5/manifest.json",
+      "sha256": "3fd1a3fe4750b59515ccaef203a7bef123c6c4e95e9a45420124d86cc366794d"
+    },
+    "unit_recovered_proof": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06-bodyfat/evidence/unit-1480-passed-postprocess-failed/metadata-recovery/recovered-unit-proof.json",
+      "sha256": "e355aec2de61e08786be09a1f3ff44ed692f8d45389d45ecfec1cc9ec3b68f22"
+    },
+    "old_max_4a31_result": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-4a31b828-passed/result.json",
+      "sha256": "bf7f2cc93cfed99a6ed2513a5d9943e926181a75c882570ae0fdfbcf3363a39a"
+    },
+    "old_operator_failed_113b": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/duo-closed-113b87cd-operator-entry.json",
+      "sha256": "5b95afebe831ec293048d4ef900902f8c9c12ef5a2b029e88dfa415774b84c3f"
+    },
+    "old_pipeline_two_failures": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/pipeline/check-fb331b5df6deafcf65f51bd6.json",
+      "sha256": "778722abfa34e0cf4106e6443c74414c4d6b0dc2f40ba743ad51b91dd524d7d0"
+    },
+    "old_phone_pipeline_1480": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-1480a066-passed/pipeline-receipt.json",
+      "sha256": "cd68fc5b83c9162c6f97bb8600e1efd996a064a8be8375c3b8ff4d831c2827c9"
+    },
+    "old_phone_result_1480": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-1480a066-passed/result.json",
+      "sha256": "8ff093f1432b432be1d0ee1756f3858019723a31f710d5d412c6485abd38a4c8"
+    }
+  },
+  "unit_lineage": {
+    "original_producer_manifest": "/private/tmp/t06-bodyfat-native-execution/bound-1480a066-v5/manifest.json",
+    "original_producer_manifest_sha256": "3fd1a3fe4750b59515ccaef203a7bef123c6c4e95e9a45420124d86cc366794d",
+    "recovered_proof": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06-bodyfat/evidence/unit-1480-passed-postprocess-failed/metadata-recovery/recovered-unit-proof.json",
+    "recovered_proof_sha256": "e355aec2de61e08786be09a1f3ff44ed692f8d45389d45ecfec1cc9ec3b68f22",
+    "independent_recovery_review": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06-bodyfat/evidence/unit-1480-passed-postprocess-failed/metadata-recovery/independent-recovery-review.md",
+    "independent_recovery_review_sha256": "a4c3c0bed16658589a562ab793e5c83d5b77c736a6e87630c40df78fb2e8c19c",
+    "classification": "actual unit runner passed; v5 metadata postprocess and export postcheck failed; recovered read-only SDK metadata"
+  },
+  "failed_history": {
+    "logical_pipeline": "two failed attempts",
+    "first_operator": "2/1/1 failed",
+    "old_MAX_4a31": "1/1 with contrast P2; not final visual",
+    "mixed_113b": "normal Passed inside failed aggregate; MAX Failed"
+  },
+  "native_review": {
+    "reference": {
+      "path": "/private/tmp/t06-bodyfat-final-native-quality-review.json",
+      "sha256": "53c740a682a2bcedabe2e4ef40c85e880dd49926ed7a523742f9171d51f9d02c"
+    },
+    "verified": {
+      "schema": "t06-bodyfat-final-native-quality-review-v1",
+      "approved": true,
+      "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+      "finding_counts": {
+        "P1": 0,
+        "P2": 0,
+        "P3": 0
+      },
+      "case_count": 5,
+      "paired_checkpoint_count": 32,
+      "mixed_aggregate_failed_acknowledged": true,
+      "scope": "five effective selected cases in four evidence lineages; closed normal Passed within failed 113b aggregate; four 2f40 cases Passed separately",
+      "input_path": "/private/tmp/body-fat-cohort-native-preparation/gallery-inputs-pending-final-split-2f40-v3.json",
+      "input_sha256": "bd134a1482671140e6ddaf2b56cb527b21a07b1eda67ab252856083d5a7c7feb",
+      "builder_path": "/private/tmp/body-fat-cohort-native-preparation/build-gallery-final-split-2f40-v1.py",
+      "builder_sha256": "89a569af40af982f84be251bec88fdf3fbd5020a40f0e8dcad301cb361b5d69d",
+      "archives": {
+        "closed_normal": {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed",
+          "inventory_path": "/private/tmp/body-fat-cohort-native-preparation/gallery-closed-normal-113b-nonbundle-inventory.json",
+          "inventory_sha256": "a5e550d6dd36a62ac8f0579ec68dd5197abd3e737eb4ace098148b6d84616791",
+          "source_head": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+          "case_classification": "normal-passed-in-failed-aggregate",
+          "case_result": "Passed",
+          "aggregate_result": "failed",
+          "aggregate_counts": {
+            "executed": 2,
+            "passed": 1,
+            "skipped": 0,
+            "failed": 1
+          }
+        },
+        "closed_max": {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed",
+          "inventory_path": "/private/tmp/body-fat-cohort-native-preparation/gallery-closed-max-2f40-nonbundle-inventory.json",
+          "inventory_sha256": "f8a0554ff1e0de72ec705a992a867bc5bd7b187aa8d287ca9a9fe6c1ec7802ca",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+          "case_classification": "max-only-passed",
+          "case_result": "Passed",
+          "aggregate_result": "passed",
+          "aggregate_counts": {
+            "executed": 1,
+            "passed": 1,
+            "skipped": 0,
+            "failed": 0
+          }
+        },
+        "open": {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed",
+          "inventory_path": "/private/tmp/body-fat-cohort-native-preparation/gallery-open-2f40-nonbundle-inventory.json",
+          "inventory_sha256": "822b1bb1d0b1215860a432979d91b2d02d306098c96d55b44eb2ab66e1951142",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD",
+          "case_classification": "normal-passed",
+          "case_result": "Passed",
+          "aggregate_result": "passed",
+          "aggregate_counts": {
+            "executed": 1,
+            "passed": 1,
+            "skipped": 0,
+            "failed": 0
+          }
+        },
+        "phone": {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed",
+          "inventory_path": "/private/tmp/body-fat-cohort-native-preparation/gallery-phone-2f40-nonbundle-inventory.json",
+          "inventory_sha256": "5ed94ff9f6a68df967f999e0f10f4634372035dfc6df4853f4390d217c42f88b",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B",
+          "case_classification": "normal-passed",
+          "case_result": "Passed",
+          "aggregate_result": "passed",
+          "aggregate_counts": {
+            "executed": 1,
+            "passed": 1,
+            "skipped": 0,
+            "failed": 0
+          }
+        },
+        "ipad": {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed",
+          "inventory_path": "/private/tmp/body-fat-cohort-native-preparation/gallery-ipad-2f40-nonbundle-inventory.json",
+          "inventory_sha256": "f8182570d920fae00272b10cc6e60155a649b63946ec38e9f056c288af686ba5",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545",
+          "case_classification": "normal-passed",
+          "case_result": "Passed",
+          "aggregate_result": "passed",
+          "aggregate_counts": {
+            "executed": 1,
+            "passed": 1,
+            "skipped": 0,
+            "failed": 0
+          }
+        }
+      },
+      "selected_pairs": [
+        {
+          "profile": "closed_normal",
+          "checkpoint": "T06-bodyFat-DXA-unselected",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/005-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/005-1398x2034.png",
+          "png_sha256": "bc4adbf86a420fa6a1fc21a8f2f4bdc74804a9f2875fdd895c6facacee6c95b4",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/005-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/005-hierarchy.txt",
+          "ax_sha256": "545b27f00b8b01ffde53b076d59097e9f1091efa512c8719ec16aa2a6b6c063a",
+          "capture_kind": "host",
+          "source_head": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_normal",
+          "checkpoint": "T06-bodyFat-DXA-criteria-empty",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/006-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/006-1398x2034.png",
+          "png_sha256": "12856f246261a1cc719b2b4a860393b3e4ce160dd891ddfdd885dd410e05b8d8",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/006-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/006-hierarchy.txt",
+          "ax_sha256": "32ac5f6269d3471b3a6e4630684153eaf57b8d00cc9a67d9874fc232b930911f",
+          "capture_kind": "host",
+          "source_head": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_normal",
+          "checkpoint": "T06-bodyFat-DXA-selected",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/007-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/007-1398x2034.png",
+          "png_sha256": "e11abc14406109e2f03b2530c662c86960f195fbf384ddf468f18e25faf81fa6",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/007-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/007-hierarchy.txt",
+          "ax_sha256": "5530cc8fb5289f72094497a28cf029eac905d832da5e413d289a109b1ca0b135",
+          "capture_kind": "host",
+          "source_head": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_normal",
+          "checkpoint": "T06-bodyFat-DXA-source",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/008-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/008-1398x2034.png",
+          "png_sha256": "30cddaf18fb35935145984b97810ac8d763c42b45f6208124a4dd5b21a5bd35f",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/008-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/008-hierarchy.txt",
+          "ax_sha256": "5c1d469e3df32885c2b756a4cf5b8df123d61e584e2a41dcefb63c212ba522d3",
+          "capture_kind": "host",
+          "source_head": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_normal",
+          "checkpoint": "T06-bodyFat-DXA-real-back",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/009-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/009-1398x2034.png",
+          "png_sha256": "7800913521266a350d264b1dcde866f624bb7a8acce9d7bd366423ffbaa8a652",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/009-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/009-hierarchy.txt",
+          "ax_sha256": "5ba9f7ff65317c03a56d4809b96717fcda77336833b6103a815cd1ecdd4a129b",
+          "capture_kind": "host",
+          "source_head": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_normal",
+          "checkpoint": "T06-bodyFat-DXA-persisted-reopen",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/010-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/010-1398x2034.png",
+          "png_sha256": "31d24763ba555459de2666d7da5aeef8ad342eda287a6c1ab51133307e1f978a",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/010-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-113b87cd-operator-mixed-failed/mixed-run-support/host-captures/010-hierarchy.txt",
+          "ax_sha256": "674a6b2be1916c1633cb7d7736a2fce929925938215ea0944887affa38c045a3",
+          "capture_kind": "host",
+          "source_head": "113b87cde837f293aeabd6f3adaf8b0da34f98a3",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_max",
+          "checkpoint": "T06-bodyFat-DXA-MAX-unselected",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/002-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/002-1398x2034.png",
+          "png_sha256": "095061831fa9b3018f93688943531e1f6e82ac26a9645ed4e3f72daba736c212",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/002-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/002-hierarchy.txt",
+          "ax_sha256": "2d620f120313aa9bca9abc0bbfe9a8973a1c6038851232b1ec93a42ed7659508",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_max",
+          "checkpoint": "T06-bodyFat-DXA-MAX-age-selected-full-row",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/003-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/003-1398x2034.png",
+          "png_sha256": "d2df4eb90d0c3cbf2d392144c494b9b81e02d96378c3c5d1dbd99d85c634a6b8",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/003-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/003-hierarchy.txt",
+          "ax_sha256": "74f85c526f79bf9ec873698b254cfb8ced3061300992523649a0fbe75e50a98e",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_max",
+          "checkpoint": "T06-bodyFat-DXA-MAX-sex-selected-full-row",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/004-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/004-1398x2034.png",
+          "png_sha256": "52f3a293075947aca819421fd63f652c70a62a66ab6d5349f39ed8cd140280d6",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/004-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/004-hierarchy.txt",
+          "ax_sha256": "83a5975d48564a1909a14d09bcd0ab4d354398db72f53b4b34f0abcdb15cbb7c",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_max",
+          "checkpoint": "T06-bodyFat-DXA-MAX-method-warning",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/005-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/005-1398x2034.png",
+          "png_sha256": "5381487ad4e0ba2ba54a5689bd415219aae5af4b981de34e0427781dff20a772",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/005-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/005-hierarchy.txt",
+          "ax_sha256": "ce6bc189814e3ac4d8760e5cef15e0e2accb7a9110158582b4772546ec6d2ed7",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_max",
+          "checkpoint": "T06-bodyFat-DXA-MAX-body-fat-recorded-value",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/006-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/006-1398x2034.png",
+          "png_sha256": "48108a83210bcfb383bd2ca151d94d38dc85222d046bb08a9c0f24665987b234",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/006-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/006-hierarchy.txt",
+          "ax_sha256": "ebddc71fca271e91988f90c0f48d102987ba04ed743f9c5e7036bc8bbe08ff8d",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_max",
+          "checkpoint": "T06-bodyFat-DXA-MAX-body-fat-survey-mean",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/007-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/007-1398x2034.png",
+          "png_sha256": "4a1e02963455ef5d3df54547f73ad8bd5d8203b55595d5f22d63165b6c950bb9",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/007-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/007-hierarchy.txt",
+          "ax_sha256": "7888a15ff14d97127fd6dcbe58d019fb7f81fd245f24ea0a493e4a1b4d451c7e",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_max",
+          "checkpoint": "T06-bodyFat-DXA-MAX-source",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/008-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/008-1398x2034.png",
+          "png_sha256": "51536b4ff5b6e47c54f4c7536bb707dfa29494b543386182682e8135cb97a6a6",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/008-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/008-hierarchy.txt",
+          "ax_sha256": "c70cf0332d0c158112b8d46a9154b15fff205f4dbc298833f5100b3c437b995e",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "closed_max",
+          "checkpoint": "T06-bodyFat-DXA-MAX-real-back",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/009-1398x2034.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/009-1398x2034.png",
+          "png_sha256": "5d1141e5a9d7b3b838ef24d61df2c699d08b31dc456176a75fbbf5679a4daf8e",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/009-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-closed-max-contrast-2f40e909-passed/operator-run-support/host-captures/009-hierarchy.txt",
+          "ax_sha256": "d439560228857e25400e0498da14eb4d559920a10d8a4bd1c510586d5fd91cd7",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "open",
+          "checkpoint": "T06-bodyFat-DXA-unselected",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/002-2007x2853.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/002-2007x2853.png",
+          "png_sha256": "dc6e95b6e44c80e6f9eaa17e17bae760fc3df06cff517f0d477c21f035b9e2bc",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/002-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/002-hierarchy.txt",
+          "ax_sha256": "2b31bfc7394f4c5f802b9699c623a8c61a172e031548d52d664421e9df33bd33",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "open",
+          "checkpoint": "T06-bodyFat-DXA-criteria-empty",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/003-2007x2853.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/003-2007x2853.png",
+          "png_sha256": "1862fc4564ab562eb255304812a870090d5bc473207f251bef7c9e528b3d0bc6",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/003-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/003-hierarchy.txt",
+          "ax_sha256": "9074a0f0745564a49b35082d347f5d74146fd74ba064e6fdc29c13f08bfa97e6",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "open",
+          "checkpoint": "T06-bodyFat-DXA-selected",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/004-2007x2853.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/004-2007x2853.png",
+          "png_sha256": "7e11276a171f10d72d9c4b72bfee8c693d62245859a006017e63e7bfeb998b46",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/004-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/004-hierarchy.txt",
+          "ax_sha256": "f0ff42a3de1b9cf4ec893ae97120991929d262fad79a5a80a8258e7cc1513c4e",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "open",
+          "checkpoint": "T06-bodyFat-DXA-source",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/005-2007x2853.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/005-2007x2853.png",
+          "png_sha256": "297891f8d674b2e18b8c7a0a91f0e443d3722accf7c11138b2a09302391ed5ca",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/005-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/005-hierarchy.txt",
+          "ax_sha256": "2855841996f3061132b1073e5457ede7e2d8b49910066c213478804b4e408aeb",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "open",
+          "checkpoint": "T06-bodyFat-DXA-real-back",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/006-2007x2853.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/006-2007x2853.png",
+          "png_sha256": "ed813efce78d1993c138803a0bf10cf8359c950a28db6023a086ed1cc240760c",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/006-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/006-hierarchy.txt",
+          "ax_sha256": "000b58c6a5415321989ff8e0e4f61180cb4afa0f9baaa8ed7c52cc8ec6490ec2",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "open",
+          "checkpoint": "T06-bodyFat-DXA-persisted-reopen",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/007-2007x2853.png",
+          "png_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/007-2007x2853.png",
+          "png_sha256": "4b3c8184888fd1b2be8cf9d4e53c3914acea7cbf858728fcc1846029c3e0747e",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/007-hierarchy.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/duo-open-2f40e909-passed/host-captures/007-hierarchy.txt",
+          "ax_sha256": "9aac302af108cd5c0b443e585784fe8eac872423944273feeda3c325b625b5a6",
+          "capture_kind": "host",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "FCCF4AC6-E7A2-4B04-AD1F-ED9A2FD0BFAD"
+        },
+        {
+          "profile": "phone",
+          "checkpoint": "T06-bodyFat-DXA-unselected",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/72899653-5FD8-4A11-B17E-195169DF09B8.png",
+          "png_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/72899653-5FD8-4A11-B17E-195169DF09B8.png",
+          "png_sha256": "9674a2b3b549818acd879474f516a478fd878f9d1015e81fa12a3fd53696abd6",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/57DE1D6E-ACFD-4AC9-AE8D-D453E19B5471.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/57DE1D6E-ACFD-4AC9-AE8D-D453E19B5471.txt",
+          "ax_sha256": "3c4dc8006ddbecc628b0155ece599b9b6d46fc1ccc9c6806f27400dc00b5e96f",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B"
+        },
+        {
+          "profile": "phone",
+          "checkpoint": "T06-bodyFat-DXA-criteria-empty",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/B107B3A7-E810-40B8-BCE7-C77AD63C1C52.png",
+          "png_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/B107B3A7-E810-40B8-BCE7-C77AD63C1C52.png",
+          "png_sha256": "f7a51ca1c22241e0144360e23e9473af891d3cd3f9fd747b835ff51729f98e38",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/E6F1989E-6809-4491-9E35-B7DBD6D47AC4.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/E6F1989E-6809-4491-9E35-B7DBD6D47AC4.txt",
+          "ax_sha256": "3c4816e17151effe0bb0b93f073fd9280cb32283c95f8e5213a67c61dd12d504",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B"
+        },
+        {
+          "profile": "phone",
+          "checkpoint": "T06-bodyFat-DXA-selected",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/66904CA2-48D2-4728-B2CF-61DD127ACE13.png",
+          "png_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/66904CA2-48D2-4728-B2CF-61DD127ACE13.png",
+          "png_sha256": "b642a115cf1561bd619b98c838ee2bb933fff3607a54751808f7ca220fa527b4",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/D652B811-22D5-4367-BFFC-8B5806D95A6B.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/D652B811-22D5-4367-BFFC-8B5806D95A6B.txt",
+          "ax_sha256": "2e77313bddad49a4b33d69bb10007fd1f9ad7ea4788603c399ccbc951a502c7c",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B"
+        },
+        {
+          "profile": "phone",
+          "checkpoint": "T06-bodyFat-DXA-source",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/48751A45-4D69-4653-A41B-694EB82C37DB.png",
+          "png_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/48751A45-4D69-4653-A41B-694EB82C37DB.png",
+          "png_sha256": "62b169f27b94fea367cb2620d0d782ae50d110c043ec87b0f6f68dc16ab4702b",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/24335F62-DCC4-4AD8-A074-244CD887AF93.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/24335F62-DCC4-4AD8-A074-244CD887AF93.txt",
+          "ax_sha256": "378cc702a517c9419c621514228ef16f3c73f3cefb3d6bc2a49ba89dd983714a",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B"
+        },
+        {
+          "profile": "phone",
+          "checkpoint": "T06-bodyFat-DXA-real-back",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/13D978B7-8A77-49F0-89D9-14008165A9ED.png",
+          "png_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/13D978B7-8A77-49F0-89D9-14008165A9ED.png",
+          "png_sha256": "dadf86c658d9a24092bbe8385b6b1e808b2ee2acd46b7c02aa579b44a272e198",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/7A26CE63-41CD-45B7-8DD4-D14767E518CC.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/7A26CE63-41CD-45B7-8DD4-D14767E518CC.txt",
+          "ax_sha256": "69b4db0788e997ef9e4da3395788d0a4c10c1926ed06346b6d085ccad999e0e2",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B"
+        },
+        {
+          "profile": "phone",
+          "checkpoint": "T06-bodyFat-DXA-persisted-reopen",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/3BEC622D-DDEE-477D-9D73-5CE8025717F2.png",
+          "png_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/3BEC622D-DDEE-477D-9D73-5CE8025717F2.png",
+          "png_sha256": "7817311e662329b009257b1aac6ac84919db2990430f0621829e0750c1e56c16",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/8720D3C1-DCF6-44E5-A109-15789DF36DAB.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/phone-normal-2f40e909-passed/attachments/8720D3C1-DCF6-44E5-A109-15789DF36DAB.txt",
+          "ax_sha256": "c58f00e98524d06b9f9bce33c2e9d43b6d5a4d00941937dd8c202cfd91e1d253",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "9169533A-CB2B-4C5B-AB6E-61104847AD0B"
+        },
+        {
+          "profile": "ipad",
+          "checkpoint": "T06-bodyFat-DXA-unselected",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/711456AC-818D-4D14-99F2-9BD8ED30FE82.png",
+          "png_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/711456AC-818D-4D14-99F2-9BD8ED30FE82.png",
+          "png_sha256": "33c3a559e1e97b035e9522aa6e75446e53c74d4e5195d105d298fa27a9a3bb7b",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/7114110C-2FE8-41E8-9414-9ED08C72B5D6.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/7114110C-2FE8-41E8-9414-9ED08C72B5D6.txt",
+          "ax_sha256": "e14b8052bb6686b0402160b9f94f83728a7b4222eb433c5b07136e766bb886a5",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545"
+        },
+        {
+          "profile": "ipad",
+          "checkpoint": "T06-bodyFat-DXA-criteria-empty",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/3161602A-5AD7-419C-AF90-AE3C14BCC7E0.png",
+          "png_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/3161602A-5AD7-419C-AF90-AE3C14BCC7E0.png",
+          "png_sha256": "d92d69266479258e0a5e3160599a817e7980a89115c9dcd299b6c42d93fe41b6",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/765171C3-9832-4156-B004-F62EC5C0A51B.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/765171C3-9832-4156-B004-F62EC5C0A51B.txt",
+          "ax_sha256": "b627c3e70c2fcf8c7adada5438eb7565da3c9aadb5c087d9a7d276ef04346c17",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545"
+        },
+        {
+          "profile": "ipad",
+          "checkpoint": "T06-bodyFat-DXA-selected",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/2BD38F4E-8259-4C7E-89B1-4E4735ECC317.png",
+          "png_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/2BD38F4E-8259-4C7E-89B1-4E4735ECC317.png",
+          "png_sha256": "87b4ef72b04e0c724a8e4e974108d81eb88dae049f63f0647353fd8d8d2f6584",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/11FFB12D-0E3F-43EC-80E3-C840E6B9B39D.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/11FFB12D-0E3F-43EC-80E3-C840E6B9B39D.txt",
+          "ax_sha256": "435af489642ace3a377a6bad8a136088019a70e01b6e06505f100f4425b4e3eb",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545"
+        },
+        {
+          "profile": "ipad",
+          "checkpoint": "T06-bodyFat-DXA-source",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/1008C3C5-3358-49D6-9BA0-B5EEBA5D0B12.png",
+          "png_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/1008C3C5-3358-49D6-9BA0-B5EEBA5D0B12.png",
+          "png_sha256": "77cde71f3b2028953df0a17002a372fab10777ea7bf12e3c62177a433768b8bf",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/9FA833B5-363A-4A78-98F1-269C382A1BF8.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/9FA833B5-363A-4A78-98F1-269C382A1BF8.txt",
+          "ax_sha256": "30a6d8392b1ad475a23b2b6d5aba276fda84968eeab444378e97d59dc01aac20",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545"
+        },
+        {
+          "profile": "ipad",
+          "checkpoint": "T06-bodyFat-DXA-real-back",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/8D6F6083-1C0B-479C-A98E-9D6AD8D83621.png",
+          "png_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/8D6F6083-1C0B-479C-A98E-9D6AD8D83621.png",
+          "png_sha256": "b198b7227de4747a93f947d06aec5d0b1d283f926cb10e6f288bd81ada14cdc9",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/405C511E-8179-4FC7-B355-32CE7C6B6BB0.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/405C511E-8179-4FC7-B355-32CE7C6B6BB0.txt",
+          "ax_sha256": "f1bc8ddf9187ffc3f4860b42f3875612cc43a8bf61e0c41c30e169b30959c65c",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545"
+        },
+        {
+          "profile": "ipad",
+          "checkpoint": "T06-bodyFat-DXA-persisted-reopen",
+          "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed",
+          "png_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/ACF5BDBD-1673-49AC-B79B-F76108618E91.png",
+          "png_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/ACF5BDBD-1673-49AC-B79B-F76108618E91.png",
+          "png_sha256": "647062bbc2978cc98c8d7bdf5346c46513f6e1c0064f867a34fcea3edb52db4a",
+          "ax_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/28CED280-6953-478B-8D94-17631608F10B.txt",
+          "ax_relative_path": ".codex-checks/t06/evidence/ipad-normal-2f40e909-passed/attachments/28CED280-6953-478B-8D94-17631608F10B.txt",
+          "ax_sha256": "acee1aa3a902d3062906d5f66f43ded91d8479b6a5151ddba8b3afd0bedc6a6f",
+          "capture_kind": "xctest",
+          "source_head": "2f40e909f7666b36e43e6c5565451d81937761b5",
+          "device_uid": "8F09ADC2-8F33-4DF4-8F6F-F133E1525545"
+        }
+      ],
+      "prior_history": {
+        "closed_logical_pipeline": "two failed attempts retained, never marked passed",
+        "first_operator": "113b aggregate 2 executed, 1 passed normal, 1 failed MAX",
+        "max_4a31": "1/1 semantic pass but contrast 2.43:1 P2 superseded by fresh 2f40 9.46:1",
+        "unit_1480": "12 logical tests Passed in two suites; postprocessing failures and recovery proof retained; no 2f40 unit rerun",
+        "full_vision": "FAILED; isolated XR model typecheck PASSED only"
+      },
+      "native_locale": "seeded English only; Korean/Japanese source/catalog static review, no native locale assertion",
+      "related_reviews": {
+        "integrated_source": {
+          "path": "/private/tmp/t06-bodyfat-integrated-source-review.md",
+          "sha256": "a5e4ec5d2329a83b084532445a099941c728bdf42bdbe526557d1cc530b7a1fa"
+        },
+        "apple_eight_source": {
+          "path": "/private/tmp/t06-bodyfat-eight-principles-source-review.md",
+          "sha256": "542e9fd4d0c6d0c9bc1ef9870493bbf6fab3b755ddd3e8347455e76e64d81bc3"
+        },
+        "max": {
+          "path": "/private/tmp/t06-max-2f40-final-native-quality-review.md",
+          "sha256": "731c611eb3348afffee75bcb05568591bcef60b29a224e570d5830714f33701e"
+        },
+        "open": {
+          "path": "/private/tmp/t06-open-duo-2f40-native-quality-review.md",
+          "sha256": "b7956f2a6b1301b0da5eac2a9e7e4cf45e4f559e9011636c5633e2e9e6b245f9"
+        },
+        "phone": {
+          "path": "/private/tmp/t06-phone-2f40-native-quality-review.md",
+          "sha256": "1f70ddae5ad13d829c0adb86bcc7df2b11e775ce2db9915e3e332325267a1a2a"
+        },
+        "ipad": {
+          "path": "/private/tmp/t06-ipad-2f40-native-quality-review.md",
+          "sha256": "8c8e5700634c7881d6c81def672b9e34cc5d2a5d9a9209e7bea7c0e9959c4ef1"
+        }
+      }
+    }
+  }
+}

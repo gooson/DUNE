@@ -91,3 +91,9 @@ related_brainstorms: []
 계획한 전체 DUNEVision 빌드 한 번은 **실패**했다. 기존 `DailyDigestScheduler`, `ExerciseVariantMigration`, `HealthKitObserverManager`가 Vision 타깃에서 제외·누락된 파일의 타입을 참조했다. 독립 검토에서 실패 파일·타입 정의·`project.yml`이 기반 `e99a16e9`와 동일함을 확인했다. 기반 전체 빌드를 다시 실행한 결과는 아니며, 새 모델 진단이 없다는 사실만으로 새 코드의 컴파일 성공을 추정하지 않는다. 기존 실패 로그와 실행기 기록을 보존하고 이 후속 작업에 무관한 Vision 소스 구성을 함께 수정하지 않는다.
 
 변경 범위의 컴파일은 별도 제한 검사로 확인했다. 실제 XRSimulator 27.2 SDK, `x86_64-apple-xros27.0-simulator`, Swift 6·strict concurrency에서 `BodyPeerReference.swift`와 새 `BodyFatSurveyReference.swift` 두 파일만 typecheck하여 종료 코드 0을 확인했다. 이는 **분리한 모델 typecheck 통과**이며 전체 DUNEVision 빌드·실행·UI 통과가 아니다. 전체 빌드 실패는 계속 별도로 보고한다. iOS의 선택한 단위·네이티브 검사 게이트는 그대로 유지한다.
+
+## 2026-11-05 실제 선택 검사와 별도 갤러리
+
+[체지방 DXA 실제 화면 갤러리](../design/full-redesign-map/review/t06-body-fat-dxa-native-2026-11-05/index.html)는 선택한 5개 UI case의 32개 PNG/AX 쌍을 기기별로 보존한다. Duo 접힘의 일반 흐름은 `113b87cd` 실행 전체가 2건 중 1건 실패한 기록에서 해당 case만 Passed였고, 최대 글씨 흐름은 최종 소스 `2f40e909`에서 별도 1/1 Passed였다. Duo 펼침·일반 iPhone·iPad의 일반 흐름도 `2f40e909`에서 각각 1/1 Passed였다. 하나의 Duo 접힘 2/2 실행이나 원래 파이프라인의 성공을 뜻하지 않는다.
+
+12개 논리 단위 검사의 2개 suite 통과는 이전 `1480a066` 소스의 복구된 결과다. 변경되지 않은 모델·소비자 바이트 검토를 통해 재사용 범위를 정했으며 새 소스에서 단위 검사를 다시 실행했다고 표기하지 않는다. 전체 Vision 타깃은 기존 의존성 문제로 실패했고, 두 모델의 분리 XRSimulator typecheck만 통과했다. 과거 iPad PNG 4개는 당시 상세 변형의 참고 자료이며 DXA 카드의 일치하는 이전 화면이나 AX 쌍이 아니다.
