@@ -1,0 +1,107 @@
+Attributes: Application, 0x114c4b840, pid: 76610, label: 'DUNE'
+Element subtree:
+ →Application, 0x114c4b840, pid: 76610, label: 'DUNE'
+    Window (Main), 0x114c48dc0, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x114c4b980, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x114c4bc00, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x114c48c80, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x114c48000, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x114c48140, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x114c48500, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x114c48640, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x114c49180, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x114c4b200, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x114c488c0, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x114c48780, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x114c4aa80, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x114c4abc0, {{0.0, 0.0}, {466.0, 678.0}}
+                            Other, 0x114c4a800, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x114c4a940, {{0.0, 0.0}, {466.0, 678.0}}
+                                Toolbar, 0x114c483c0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x114c4a6c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x114c4a580, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x114c4a440, {{0.0, 0.0}, {466.0, 678.0}}
+                                    Other, 0x114c4a080, {{0.0, 0.0}, {466.0, 678.0}}
+                                      Other, 0x114c4a300, {{0.0, 0.0}, {466.0, 678.0}}
+                                        Toolbar, 0x114c4a1c0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x114c49f40, {{0.0, 0.0}, {466.0, 678.0}}
+                                        NavigationBar, 0x114c4ad00, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Habits'
+                                        Other, 0x114c4b0c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                          Other, 0x114c3cdc0, {{0.0, 0.0}, {466.0, 678.0}}
+                                            Other, 0x114c3cb40, {{0.0, 0.0}, {466.0, 678.0}}
+                                              Other, 0x107681680, {{0.0, 0.0}, {466.0, 678.0}}
+                                                ScrollView, 0x114d21040, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'habit-management-screen'
+                                                  Other, 0x114d208c0, {{0.0, -118.3}, {382.0, 766.7}}
+                                                    StaticText, 0x114d22e40, {{105.3, -78.3}, {143.3, 58.7}}, identifier: 'habit-management-hero-title', label: 'Habits'
+                                                    StaticText, 0x114d20a00, {{40.0, -11.7}, {39.7, 71.7}}, identifier: 'habit-management-hero-count', label: '0'
+                                                    StaticText, 0x114d22580, {{87.7, -7.0}, {218.7, 65.7}}, identifier: 'habit-management-hero-filter', label: 'Archived'
+                                                    SegmentedControl, 0x114d21680, {{16.0, 100.0}, {350.0, 31.0}}, identifier: 'habit-management-filter'
+                                                      Button, 0x114d20b40, {{16.0, 100.0}, {175.0, 32.0}}, label: 'Active (3)'
+                                                      Button, 0x114d21a40, {{191.0, 100.0}, {175.0, 32.0}}, label: 'Archived (0)', Selected
+                                                    Image, 0x114d22a80, {{167.7, 207.3}, {47.0, 43.3}}, identifier: 'archivebox', label: 'Archive'
+                                                    StaticText, 0x114d22940, {{35.2, 279.0}, {311.7, 130.7}}, label: 'No Archived Habits'
+                                                    StaticText, 0x114d21900, {{61.8, 425.7}, {258.3, 174.7}}, label: 'Archived habits will appear here.'
+                                                  Other, 0x114d21400, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 2 pages', value: 97%
+                                                    Other, 0x114d21cc0, {{460.0, 177.0}, {3.0, 439.0}}
+                                                  Other, 0x1077b3340, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 2 pages', value: 97%
+                                                    Other, 0x1077b0000, {{460.0, 177.0}, {3.0, 439.0}}
+                            Other, 0x1077b35c0, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x1077b3840, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x1077b3d40, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x1077b3e80, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x1077b3c00, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x114c40b40, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x114c40c80, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10a9ad180, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10a9ac8c0, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x10a9aca00, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x10a9ada40, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x10a9afe80, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x10a9adcc0, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x10a9af480, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10a9ae300, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x10a9ad7c0, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x10a9ad900, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x10a9adb80, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x10a9aebc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x10a9ac000, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x10a9ac140, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10a9ac280, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x10a9ac3c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x10a9ac500, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x10a9acb40, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x10a9acc80, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x10a9acdc0, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x10a9acf00, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x10a9afac0, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x10a9afc00, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life', Selected
+                                            Image, 0x10a9ad2c0, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x10a9af980, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10a9ad400, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x10a9af840, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x10a9ac640, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x10a9ac780, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x10a9afd40, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x10a9ad040, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x10a98c000, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x10a98c140, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x10a98c280, {{396.0, 594.0}, {44.0, 58.0}}
+                                          Other, 0x10a98c3c0, {{396.0, 594.0}, {44.0, 58.0}}
+                                            Other, 0x10a98c500, {{396.0, 594.0}, {44.0, 58.0}}
+                                            Other, 0x10a98c640, {{396.0, 594.0}, {44.0, 58.0}}
+                                              Other, 0x10a98c780, {{396.0, 594.0}, {44.0, 58.0}}
+                                                Other, 0x10a98c8c0, {{396.0, 594.0}, {44.0, 58.0}}
+                                                  Other, 0x10a98ca00, {{396.0, 594.0}, {44.0, 58.0}}
+                                                Other, 0x10a98cb40, {{396.0, 594.0}, {44.0, 58.0}}
+                                              Other, 0x10a98cc80, {{396.0, 594.0}, {44.0, 58.0}}
+              Other, 0x10a98cdc0, {{191.0, 322.0}, {0.0, 0.0}}
+    Window, 0x10a98cf00, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x10a98d040, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x10a98d180, {{0.0, 0.0}, {466.0, 678.0}}
+Path to element:
+ →Application, 0x114c4b840, pid: 76610, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10a98d2c0, pid: 76610, label: 'DUNE'
+  }

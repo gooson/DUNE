@@ -319,49 +319,76 @@ final class LifeRegressionTests: SeededUITestBaseCase {
     }
 
     func testVisualAuditHabitManagement() throws {
-        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in visual audit only") }
         openActionsMenu(for: "Morning Stretch")
         XCTAssertTrue(app.waitAndTap(AXID.lifeHabitActionArchive), "Seeded habit should be archivable")
-        let identifiedEntry = app.descendants(matching: .any)["life-archived-habits-link"].firstMatch
+        let entryID = "life-archived-habits-link"
+        let identifiedEntry = app.descendants(matching: .any)[entryID].firstMatch
         let labeledEntry = app.descendants(matching: .any)
             .matching(NSPredicate(format: "label == %@", "1 archived habits"))
-        var managementEntry: XCUIElement?
+        let rootScroll = app.scrollViews.firstMatch
+        var entry: XCUIElement?
         for attempt in 0...8 {
-            if identifiedEntry.exists && identifiedEntry.isHittable {
-                managementEntry = identifiedEntry
-            } else {
-                managementEntry = labeledEntry.allElementsBoundByIndex.first(where: { $0.isHittable })
+            let candidate = identifiedEntry.exists && identifiedEntry.isHittable
+                ? identifiedEntry : labeledEntry.allElementsBoundByIndex.first(where: \.isHittable)
+            if let candidate, app.windows.firstMatch.frame.contains(candidate.frame) {
+                entry = candidate
+                break
             }
-            if managementEntry != nil { break }
-            guard attempt < 8,
-                  let scroll = app.scrollViews.allElementsBoundByIndex.first(where: { $0.isHittable }) else { break }
-            // Drag through the outer margin so nested habit controls cannot consume the gesture.
-            scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.03, dy: 0.75))
-                .press(forDuration: 0.05, thenDragTo: scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.03, dy: 0.25)))
+            guard attempt < 8 else { break }
+            rootScroll.swipeUp(velocity: .slow)
         }
-        guard let managementEntry else {
-            XCTFail("UNVERIFIED: habit management entry is unavailable: \(app.debugDescription)")
-            return
-        }
+        let managementEntry = try XCTUnwrap(entry, "Archived habits entry must be reachable")
         managementEntry.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)["habit-management-screen"].firstMatch.waitForExistence(timeout: 5),
-                      "Habit management should open")
-        captureLifeAuditScroll("Habit management active")
+
+        let management = app.scrollViews[AXID.habitManagementScreen].firstMatch
+        XCTAssertTrue(management.waitForExistence(timeout: 8))
+        XCTAssertTrue(app.revealTextBody("habit-management-hero-count", in: management))
+        XCTAssertEqual(app.staticTexts["habit-management-hero-filter"].firstMatch.label, "Active")
+        XCTAssertFalse(app.staticTexts["habit-management-hero-count"].firstMatch.label.isEmpty)
+        VisualAudit.capture("L04 active management hero")
+
+        XCTAssertTrue(app.revealFullyVisible(AXID.habitManagementFilter, in: management))
         let archived = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Archived")).firstMatch
-        XCTAssertTrue(archived.waitForExistence(timeout: 5), "Archived filter should be available")
+        XCTAssertTrue(archived.waitForExistence(timeout: 5) && archived.isHittable)
         archived.auditTap()
-        captureLifeAuditScroll("Habit management archived")
-        let restoreID = "habit-management-restore-Morning Stretch"
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(restoreID, maxSwipes: 8),
-                      "Archived habit Restore action must be reachable")
-        VisualAudit.capture("Archived habit with reachable Restore")
+        XCTAssertTrue(app.revealTextBody("habit-management-hero-count", in: management))
+        XCTAssertEqual(app.staticTexts["habit-management-hero-count"].firstMatch.label, "1")
+        XCTAssertEqual(app.staticTexts["habit-management-hero-filter"].firstMatch.label, "Archived")
+        VisualAudit.capture("L04 archived management hero")
+
         let historyID = "habit-management-history-Morning Stretch"
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(historyID, maxSwipes: 8),
-                      "Archived habit History action must be reachable")
-        app.buttons[historyID].firstMatch.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)["habit-management-history-screen"].firstMatch
-            .waitForExistence(timeout: 8), "Management history sheet should open")
-        VisualAudit.capture("Archived habit management history")
+        XCTAssertTrue(app.revealFullyVisible(historyID, in: management))
+        XCTAssertTrue(management.staticTexts["Morning Stretch"].firstMatch.waitForExistence(timeout: 5))
+        let history = app.buttons[historyID].firstMatch
+        VisualAudit.capture("L04 archived row and History")
+        history.auditTap()
+        let historySheet = app.staticTexts.matching(identifier: "habit-management-history-screen")
+            .matching(NSPredicate(format: "label == %@", "Morning Stretch")).firstMatch
+        XCTAssertTrue(historySheet.waitForExistence(timeout: 8) && historySheet.isHittable)
+        XCTAssertEqual(historySheet.label, "Morning Stretch")
+        VisualAudit.capture("L04 archived history")
+        let close = app.buttons.matching(identifier: "habit-management-history-screen")
+            .matching(NSPredicate(format: "label == %@", "Close")).firstMatch
+        XCTAssertTrue(close.waitForExistence(timeout: 5) && close.isHittable)
+        close.auditTap()
+        XCTAssertTrue(historySheet.waitForNonExistence(timeout: 5))
+
+        let restoreID = AXID.habitManagementRestore("Morning Stretch")
+        XCTAssertTrue(app.revealFullyVisible(restoreID, in: management))
+        app.buttons[restoreID].firstMatch.auditTap()
+        XCTAssertTrue(app.buttons[restoreID].firstMatch.waitForNonExistence(timeout: 8))
+        XCTAssertTrue(app.staticTexts["No Archived Habits"].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("L04 archived filter after Restore")
+
+        let namedBack = app.navigationBars["Habits"].buttons["Life"].firstMatch
+        let floatingCandidates = app.buttons.matching(identifier: "BackButton").allElementsBoundByIndex
+            .filter { $0.exists && $0.isHittable }
+        let back = namedBack.exists && namedBack.isHittable
+            ? namedBack : floatingCandidates.count == 1 ? floatingCandidates[0] : nil
+        XCTAssertNotNil(back, "Management needs a unique route back to Life")
+        back?.auditTap()
+        XCTAssertTrue(management.waitForNonExistence(timeout: 8))
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch.waitForExistence(timeout: 8))
     }
 
     private func captureLifeAuditScroll(_ route: String) {

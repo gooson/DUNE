@@ -1,0 +1,76 @@
+Attributes: Application, 0x1136bb480, pid: 95669, label: 'DUNE'
+Element subtree:
+ →Application, 0x1136bb480, pid: 95669, label: 'DUNE'
+    Window (Main), 0x1136bb0c0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1136bb340, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1136b8140, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1136bb700, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x1136b9b80, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x1136ba440, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x1136bb200, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x1136b9a40, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1136b9e00, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x1136b9900, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x1136bbe80, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x1136bbac0, {{0.0, 96.0}, {756.0, 1062.0}}
+                          Other, 0x1136bb980, {{0.0, 96.0}, {756.0, 1062.0}}
+                            Other, 0x1136ba080, {{0.0, 96.0}, {756.0, 1062.0}}
+                              Other, 0x1136b9f40, {{0.0, 96.0}, {756.0, 1062.0}}
+                                Other, 0x1136baf80, {{0.0, 96.0}, {756.0, 1062.0}}
+                                  Other, 0x1136bae40, {{0.0, 96.0}, {756.0, 1062.0}}
+                                    Other, 0x1136bad00, {{0.0, 96.0}, {756.0, 1062.0}}
+                                      Other, 0x1136babc0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                        NavigationBar, 0x1136baa80, {{0.0, 150.0}, {756.0, 106.0}}, identifier: 'Habits'
+                                          Button, 0x1136ba940, {{10.0, 150.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Life'
+                                          StaticText, 0x1136ba580, {{20.0, 207.5}, {103.5, 41.0}}, label: 'Habits'
+                                        Other, 0x1136ba6c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                          Other, 0x108628000, {{0.0, 96.0}, {756.0, 1062.0}}
+                                            Other, 0x10860fc00, {{0.0, 96.0}, {756.0, 1062.0}}
+                                              Other, 0x10860f980, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                ScrollView, 0x10860f480, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'habit-management-screen'
+                                                  Other, 0x10860e6c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                    Other, 0x10860e440, {{0.0, 96.0}, {756.0, 148.0}}
+                                                  Other, 0x10860c140, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                  Other, 0x10860e580, {{0.0, 256.0}, {756.0, 447.5}}
+                                                    StaticText, 0x10860ef80, {{71.5, 304.0}, {46.5, 18.0}}, identifier: 'habit-management-hero-title', label: 'Habits'
+                                                    StaticText, 0x10860fac0, {{48.0, 330.0}, {23.0, 41.0}}, identifier: 'habit-management-hero-count', label: '0'
+                                                    StaticText, 0x10860f200, {{79.0, 343.5}, {81.5, 24.0}}, identifier: 'habit-management-hero-filter', label: 'Archived'
+                                                    SegmentedControl, 0x10860f340, {{16.0, 419.0}, {724.0, 31.0}}, identifier: 'habit-management-filter'
+                                                      Button, 0x10860ee40, {{16.0, 419.0}, {362.0, 32.0}}, label: 'Active (3)'
+                                                      Button, 0x10860f5c0, {{378.0, 419.0}, {362.0, 32.0}}, label: 'Archived (0)', Selected
+                                                    Image, 0x10860c000, {{354.5, 526.0}, {47.0, 43.5}}, identifier: 'archivebox', label: 'Archive'
+                                                    StaticText, 0x10860ebc0, {{289.8, 597.5}, {176.5, 24.0}}, label: 'No Archived Habits'
+                                                    StaticText, 0x10860ea80, {{266.8, 637.5}, {222.5, 18.0}}, label: 'Archived habits will appear here.'
+                                                  Other, 0x1136ae940, {{723.0, 204.0}, {30.0, 907.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x1136ae580, {{750.0, 750.0}, {3.0, 358.0}}
+                                                  Other, 0x1136aee40, {{723.0, 204.0}, {30.0, 907.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x1136aea80, {{750.0, 750.0}, {3.0, 358.0}}
+                                        Toolbar, 0x1136ae300, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x1136af480, {{0.0, 96.0}, {756.0, 1062.0}}
+                                Toolbar, 0x1136ae1c0, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x1136ae800, {{0.0, 96.0}, {756.0, 1062.0}}
+                            Other, 0x1136ae6c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                              Other, 0x1136adf40, {{0.0, 96.0}, {756.0, 1062.0}}
+                Other, 0x1136af5c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1136af840, {{0.0, 32.0}, {756.0, 44.0}}
+                    Button, 0x1136ae440, {{183.5, 36.0}, {56.0, 36.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x1136af0c0, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x1136af980, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x1136ade00, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                      Button, 0x1136adcc0, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                    Button, 0x1136aef80, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                      Button, 0x1136afc00, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                    Button, 0x1136ae080, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life', Selected
+                      Button, 0x1136af340, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life', Selected
+              Other, 0x1136aed00, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x1136aebc0, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x1136af700, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1136af200, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1136c0000, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x1136bb480, pid: 95669, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1136c0140, pid: 95669, label: 'DUNE'
+  }

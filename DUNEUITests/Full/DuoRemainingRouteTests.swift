@@ -154,6 +154,9 @@ final class DuoLifeArchiveRestoreTests: SeededUITestBaseCase {
 
     func testArchivedHabitRestoresToActiveLifeList() throws {
         let name = "Morning Stretch"
+        let completedToggle = app.buttons["life-completed-toggle"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-completed-toggle", maxSwipes: 8))
+        completedToggle.auditTap()
         XCTAssertTrue(app.openLifeHabitActions(named: name, maxSwipes: 8),
                       "Seeded habit actions should be reachable")
         XCTAssertTrue(app.waitAndTap(AXID.lifeHabitActionArchive), "Archive should accept the seeded habit")
@@ -179,16 +182,25 @@ final class DuoLifeArchiveRestoreTests: SeededUITestBaseCase {
 
         let management = app.descendants(matching: .any)[AXID.habitManagementScreen].firstMatch
         XCTAssertTrue(management.waitForExistence(timeout: 8), "Habit management should open")
+        let managementScroll = app.scrollViews[AXID.habitManagementScreen].firstMatch
+        XCTAssertTrue(managementScroll.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.revealTextBody("habit-management-hero-count", in: managementScroll))
+        XCTAssertEqual(app.staticTexts["habit-management-hero-filter"].firstMatch.label, "Active")
         VisualAudit.capture("Habit management active upper viewport")
+        XCTAssertTrue(app.revealFullyVisible(AXID.habitManagementFilter, in: managementScroll))
         let archivedFilter = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Archived")).firstMatch
         XCTAssertTrue(archivedFilter.waitForExistence(timeout: 5), "Archived filter should exist")
         assertWholeFrameVisible(archivedFilter, in: app.windows.firstMatch.frame, "Archived filter")
         archivedFilter.auditTap()
-
+        XCTAssertTrue(app.revealTextBody("habit-management-hero-count", in: managementScroll))
+        XCTAssertEqual(app.staticTexts["habit-management-hero-count"].firstMatch.label, "1")
+        XCTAssertEqual(app.staticTexts["habit-management-hero-filter"].firstMatch.label, "Archived")
+        VisualAudit.capture("Habit management archived MAX hero")
         let restoreID = AXID.habitManagementRestore(name)
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(restoreID, maxSwipes: 10),
-                      "Restore control should be reachable for the seeded habit")
+        XCTAssertTrue(app.revealFullyVisible(restoreID, in: managementScroll, maxMoves: 10),
+                      "Restore control should be reachable in the management scroll")
         let restore = app.buttons[restoreID].firstMatch
+        XCTAssertTrue(managementScroll.staticTexts[name].firstMatch.waitForExistence(timeout: 5))
         assertWholeFrameVisible(restore, in: app.windows.firstMatch.frame, "Restore control")
         VisualAudit.capture("Habit management archived with Restore control")
         restore.auditTap()
@@ -208,10 +220,13 @@ final class DuoLifeArchiveRestoreTests: SeededUITestBaseCase {
         VisualAudit.capture("Habit management active after Restore")
 
         // A retained root in the AX tree does not prove that management closed.
-        let floatingBack = app.buttons["BackButton"].firstMatch
-        let back = floatingBack.exists ? floatingBack : app.navigationBars["Habits"].buttons["Life"].firstMatch
-        XCTAssertTrue(back.waitForExistence(timeout: 5), "Life back navigation should be available")
-        back.auditTap()
+        let namedBack = app.navigationBars["Habits"].buttons["Life"].firstMatch
+        let floatingCandidates = app.buttons.matching(identifier: "BackButton").allElementsBoundByIndex
+            .filter { $0.exists && $0.isHittable }
+        let back = namedBack.exists && namedBack.isHittable
+            ? namedBack : floatingCandidates.count == 1 ? floatingCandidates[0] : nil
+        XCTAssertNotNil(back, "Life back navigation should be uniquely reachable")
+        back?.auditTap()
         let closed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: management)
         XCTAssertEqual(XCTWaiter.wait(for: [closed], timeout: 8), .completed,
                        "Habit management should close before verifying the restored root row")
