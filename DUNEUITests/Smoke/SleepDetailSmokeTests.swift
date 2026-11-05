@@ -69,7 +69,7 @@ final class SleepDetailSmokeTests: UITestBaseCase {
     }
 
     func testSleepExplanationSheetsAtMaximumAccessibilityTextSize() throws {
-        // Both explanation sheets include 26 host-synchronized capture checkpoints.
+        // Both explanation sheets include 20 host-synchronized capture checkpoints.
         if VisualAudit.isEnabled { executionTimeAllowance = 480 }
         var configuration = launchConfiguration
         configuration.additionalArguments += [
@@ -90,7 +90,6 @@ final class SleepDetailSmokeTests: UITestBaseCase {
             if identifier != "sleep-debt-info-title" && identifier != "sleep-debt-info-levels" {
                 XCTAssertTrue(app.revealTextBody(identifier + "-body", in: debtSheet),
                               "MAX missing or clipped \(identifier)-body")
-                VisualAudit.capture("H12 MAX \(identifier) body")
             }
         }
         XCTAssertTrue(app.revealFullyVisible("sleep-debt-info-level-severe", in: debtSheet))
@@ -114,7 +113,6 @@ final class SleepDetailSmokeTests: UITestBaseCase {
             if identifier != "sleep-waso-info-title" && identifier != "sleep-waso-info-guide" {
                 XCTAssertTrue(app.revealTextBody(identifier + "-body", in: wasoSheet),
                               "MAX missing or clipped \(identifier)-body")
-                VisualAudit.capture("H13 MAX \(identifier) body")
             }
         }
         XCTAssertTrue(app.revealFullyVisible("sleep-waso-info-guide-poor", in: wasoSheet))
