@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-05",
+  "updated": "2026-11-06",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -869,6 +869,39 @@
         "layout": "../layout-map/today-pinned-metrics-editor-t18.html",
         "status": "native-targeted-verified",
         "native": "../full-redesign-map/review/t18-pinned-metrics-editor-native-2026-11-06/index.html"
+      }
+    },
+    {
+      "id": "life-habit-l02",
+      "name": "L02 · 습관 추가·수정",
+      "title": "기존 습관 동작과 아이콘을 유지한 시각 위계",
+      "file": "dune-life-habit-l02.html",
+      "detail": "히어로·아이콘·자연 줄바꿈을 설명하는 정적 시안이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/life-habit-l02.html",
+        "status": "planned-native-verification-pending"
+      }
+    },
+    {
+      "id": "life-habit-l04",
+      "name": "L04 · 습관 관리",
+      "title": "기존 습관 동작과 아이콘을 유지한 시각 위계",
+      "file": "dune-life-habit-l04.html",
+      "detail": "히어로·아이콘·자연 줄바꿈을 설명하는 정적 시안이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/life-habit-l04.html",
+        "status": "planned-native-verification-pending"
+      }
+    },
+    {
+      "id": "life-habit-l09",
+      "name": "L09 · 지난 날짜 습관 기록",
+      "title": "기존 습관 동작과 아이콘을 유지한 시각 위계",
+      "file": "dune-life-habit-l09.html",
+      "detail": "히어로·아이콘·자연 줄바꿈을 설명하는 정적 시안이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/life-habit-l09.html",
+        "status": "planned-native-verification-pending"
       }
     }
   ]

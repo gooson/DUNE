@@ -225,3 +225,9 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-06 T17: [실제 선택 화면과 출처](../full-redesign-map/review/t17-health-data-qa-native-2026-11-06/index.html). 영어·Light 네 기본 상태와 접힌 Duo 최대 글씨의 해당 메서드 범위다.
 
 2026-11-06 T18: [실제 선택 화면과 출처](../full-redesign-map/review/t18-pinned-metrics-editor-native-2026-11-06/index.html). 영어·Light 네 기본 상태와 접힌 Duo 최대 글씨의 해당 메서드 범위다.
+
+2026-11-06 [L02 습관 추가·수정](life-habit-l02.html)은 원래 동작·아이콘을 보존하는 배치 계약이며, 현재 정적 시안이다. 실제 캡처는 검증 후 별도로 갱신한다.
+
+2026-11-06 [L04 습관 관리](life-habit-l04.html)은 원래 동작·아이콘을 보존하는 배치 계약이며, 현재 정적 시안이다. 실제 캡처는 검증 후 별도로 갱신한다.
+
+2026-11-06 [L09 지난 날짜 습관 기록](life-habit-l09.html)은 원래 동작·아이콘을 보존하는 배치 계약이며, 현재 정적 시안이다. 실제 캡처는 검증 후 별도로 갱신한다.

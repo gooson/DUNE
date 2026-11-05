@@ -316,3 +316,9 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-06 T17: [실제 선택 화면과 출처](../full-redesign-map/review/t17-health-data-qa-native-2026-11-06/index.html). 영어·Light 네 기본 상태와 접힌 Duo 최대 글씨의 해당 메서드 범위다.
 
 2026-11-06 T18: [실제 선택 화면과 출처](../full-redesign-map/review/t18-pinned-metrics-editor-native-2026-11-06/index.html). 영어·Light 네 기본 상태와 접힌 Duo 최대 글씨의 해당 메서드 범위다.
+
+2026-11-06 [L02 습관 추가·수정 정적 시안](themes/dune-life-habit-l02.html). 실제 앱·Dark 캡처로 주장하지 않는다.
+
+2026-11-06 [L04 습관 관리 정적 시안](themes/dune-life-habit-l04.html). 실제 앱·Dark 캡처로 주장하지 않는다.
+
+2026-11-06 [L09 지난 날짜 습관 기록 정적 시안](themes/dune-life-habit-l09.html). 실제 앱·Dark 캡처로 주장하지 않는다.
