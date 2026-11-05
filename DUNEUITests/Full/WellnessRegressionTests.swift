@@ -753,6 +753,8 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
                           "The complete score card should fit in the \(state) window")
             // The combined label cannot prove the ring's painted text fits.
             VisualAudit.capture("Posture \(state) complete score card at maximum AX")
+            reveal(app.staticTexts["Assessment Details"].firstMatch)
+            captureScrollContent("Posture \(state) assessment at maximum AX", count: 3)
         }
     }
 

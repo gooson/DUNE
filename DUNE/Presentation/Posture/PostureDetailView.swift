@@ -5,6 +5,14 @@ struct PostureDetailView: View {
     let record: PostureAssessmentRecord
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
+    private static let lightStatusColors: [PostureStatus: Color] = [
+        .normal: .green.mix(with: .black, by: 0.45),
+        .caution: .yellow.mix(with: .black, by: 0.45),
+        .warning: .red.mix(with: .black, by: 0.45),
+        .unmeasurable: .gray.mix(with: .black, by: 0.45)
+    ]
     @State private var showDeleteConfirmation = false
     @State private var zoomImage: ZoomableImageItem?
     @State private var pdfURL: URL?
@@ -24,8 +32,8 @@ struct PostureDetailView: View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
                 scoreSection
-                captureImagesSection
                 metricsSection
+                captureImagesSection
 
                 CorrectiveExercisesSectionView(recommendations: correctiveRecommendations)
                     .padding(DS.Spacing.md)
@@ -185,7 +193,7 @@ struct PostureDetailView: View {
             } else {
                 RoundedRectangle(cornerRadius: DS.Radius.sm)
                     .fill(.quaternary)
-                    .aspectRatio(3 / 4, contentMode: .fit)
+                    .frame(height: 120)
                     .overlay {
                         Image(systemName: "camera.fill")
                             .font(.title2)
@@ -207,8 +215,22 @@ struct PostureDetailView: View {
                 .font(.headline)
 
             let allMetrics = record.allMetrics
-            ForEach(allMetrics, id: \.type) { metric in
-                metricRow(metric)
+            if allMetrics.isEmpty {
+                Text("Unable to measure")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                LazyVGrid(
+                    columns: dynamicTypeSize.isAccessibilitySize
+                        ? [GridItem(.flexible())]
+                        : [GridItem(.flexible()), GridItem(.flexible())],
+                    alignment: .leading,
+                    spacing: DS.Spacing.sm
+                ) {
+                    ForEach(allMetrics, id: \.type) { metric in
+                        metricRow(metric)
+                    }
+                }
             }
         }
         .padding(DS.Spacing.md)
@@ -216,32 +238,36 @@ struct PostureDetailView: View {
     }
 
     private func metricRow(_ metric: PostureMetricResult) -> some View {
-        HStack(spacing: DS.Spacing.md) {
-            Image(systemName: metric.type.iconName)
-                .font(.title3)
-                .foregroundStyle(metric.status.color)
-                .frame(width: 32)
+        let foregroundColor = colorScheme == .light
+            ? (Self.lightStatusColors[metric.status] ?? metric.status.color)
+            : metric.status.color
+        return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                Image(systemName: metric.type.iconName)
+                    .font(.title3)
+                    .foregroundStyle(foregroundColor)
+                    .frame(width: 28)
 
-            VStack(alignment: .leading, spacing: 2) {
                 Text(metric.type.displayName)
                     .font(.subheadline.weight(.medium))
-
-                HStack(spacing: DS.Spacing.sm) {
-                    Text(metricValueText(metric))
-                        .font(.caption.weight(.semibold).monospacedDigit())
-                        .foregroundStyle(.primary)
-
-                    confidenceBadge(metric.confidence)
-                }
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
-            Spacer()
+            HStack(spacing: DS.Spacing.sm) {
+                Text(metricValueText(metric))
+                    .font(.caption.weight(.semibold).monospacedDigit())
+                    .foregroundStyle(.primary)
+
+                confidenceBadge(metric.confidence)
+            }
 
             Label(metric.status.displayName, systemImage: metric.status.iconName)
                 .font(.caption.weight(.medium))
-                .foregroundStyle(metric.status.color)
+                .foregroundStyle(foregroundColor)
         }
-        .padding(.vertical, DS.Spacing.xs)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Spacing.sm)
+        .background(metric.status.color.opacity(0.09), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
