@@ -8,6 +8,7 @@ struct InjuryHistoryView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.appTheme) private var theme
     @ScaledMetric(relativeTo: .title3) private var rowIconWidth: CGFloat = 28
     @State private var recordToDelete: InjuryRecord?
     @State private var cachedActiveRecords: [InjuryRecord] = []
@@ -71,6 +72,7 @@ struct InjuryHistoryView: View {
                     Image(systemName: "chart.bar.xaxis")
                 }
                 .accessibilityIdentifier("injury-history-stats")
+                .tint(statisticsTint)
                 .disabled(allRecords.isEmpty)
             }
         }
@@ -173,6 +175,10 @@ struct InjuryHistoryView: View {
                 Label("Delete", systemImage: "trash")
             }
         }
+    }
+
+    private var statisticsTint: Color {
+        colorScheme == .light ? theme.accentColor.mix(with: .black, by: 0.45) : theme.accentColor
     }
 
     private func severityForeground(_ severity: InjurySeverity) -> Color {
