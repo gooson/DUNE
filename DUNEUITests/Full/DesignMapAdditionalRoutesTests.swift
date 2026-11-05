@@ -79,6 +79,9 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
             let input = app.descendants(matching: .any)["health-qa-input"].firstMatch
             XCTAssertTrue(input.waitForExistence(timeout: 5))
             input.auditTap()
+            XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5),
+                          "The software keyboard should open for a question draft")
+            VisualAudit.capture("T17 focused composer and software keyboard")
             input.typeText("How was my recovery?")
             XCTAssertTrue(send.isEnabled)
             send.auditTap()
