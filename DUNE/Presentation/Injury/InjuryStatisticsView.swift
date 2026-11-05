@@ -6,6 +6,7 @@ struct InjuryStatisticsView: View {
     let statistics: InjuryStatistics
     let volumeComparisons: [InjuryVolumeComparison]
 
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.appTheme) private var theme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .caption) private var axisEdgePadding: CGFloat = 8
@@ -28,6 +29,7 @@ struct InjuryStatisticsView: View {
             }
             .padding()
         }
+        .accessibilityIdentifier("injury-statistics-scroll")
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.caution)
         .englishNavigationTitle("Injury Statistics")
@@ -42,36 +44,63 @@ struct InjuryStatisticsView: View {
             : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
     }
 
+    private var activeForeground: Color {
+        let color = statistics.activeCount > 0 ? DS.Color.caution : Color.green
+        return colorScheme == .light ? color.mix(with: .black, by: 0.45) : color
+    }
+
     private var overviewSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            Text("Overview")
+            Label("Overview", systemImage: "chart.bar.xaxis")
                 .font(DS.Typography.sectionTitle)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            overviewRowLayout {
-                StatCard(
-                    title: "Total",
-                    value: statistics.totalCount.formattedWithSeparator,
-                    subtitle: "injuries recorded"
-                )
-                StatCard(
-                    title: "Active",
-                    value: statistics.activeCount.formattedWithSeparator,
-                    subtitle: "current",
-                    tintColor: statistics.activeCount > 0 ? DS.Color.caution : .green
-                )
+            HeroCard(tintColor: DS.Color.caution) {
+                overviewRowLayout {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        Label("Total", systemImage: "bandage.fill")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(DS.Color.textSecondary)
+                        Text(statistics.totalCount.formattedWithSeparator)
+                            .accessibilityIdentifier("injury-statistics-overview-total-value")
+                            .font(.system(.largeTitle, design: .rounded, weight: .bold).monospacedDigit())
+                            .foregroundStyle(.primary)
+                        Text("injuries recorded")
+                            .font(.subheadline)
+                            .foregroundStyle(DS.Color.textSecondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        Label("Active", systemImage: "bandage.fill")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(DS.Color.textSecondary)
+                        Text(statistics.activeCount.formattedWithSeparator)
+                            .accessibilityIdentifier("injury-statistics-overview-active-value")
+                            .font(.system(.title, design: .rounded, weight: .bold).monospacedDigit())
+                            .foregroundStyle(activeForeground)
+                        Text("current")
+                            .font(.subheadline)
+                            .foregroundStyle(DS.Color.textSecondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
 
             overviewRowLayout {
                 StatCard(
                     title: "Avg Recovery",
+                    icon: "clock.arrow.circlepath",
                     value: statistics.averageRecoveryDays.map { "\(Int($0.rounded()).formattedWithSeparator)d" } ?? "—",
-                    subtitle: "per injury"
+                    subtitle: "per injury",
+                    valueIdentifier: "injury-statistics-overview-average-value"
                 )
                 StatCard(
                     title: "Longest",
+                    icon: "calendar",
                     value: statistics.longestRecoveryDays.map { "\($0.formattedWithSeparator)d" } ?? "—",
-                    subtitle: "recovery"
+                    subtitle: "recovery",
+                    valueIdentifier: "injury-statistics-overview-longest-value"
                 )
             }
         }
@@ -88,7 +117,7 @@ struct InjuryStatisticsView: View {
     private var frequencySection: some View {
         if !statistics.frequencyByBodyPart.isEmpty {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                Text("Frequency by Body Part")
+                Label("Frequency by Body Part", systemImage: "chart.bar.fill")
                     .font(DS.Typography.sectionTitle)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -116,12 +145,13 @@ struct InjuryStatisticsView: View {
                 .chartXAxis {
                     AxisMarks(values: .stride(by: frequencyTickStride)) { _ in
                         AxisValueLabel()
-                            .foregroundStyle(theme.sandColor)
+                            .foregroundStyle(DS.Color.textSecondary)
                         AxisGridLine()
                             .foregroundStyle(theme.accentColor.opacity(0.30))
                     }
                 }
                 .frame(height: max(120, CGFloat(statistics.frequencyByBodyPart.count) * frequencyRowHeight + frequencyAxisHeight))
+                .accessibilityIdentifier("injury-statistics-frequency-chart")
                 .padding(DS.Spacing.md)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
             }
@@ -133,7 +163,7 @@ struct InjuryStatisticsView: View {
     @ViewBuilder
     private var volumeComparisonSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            Text("Exercise Volume Impact")
+            Label("Exercise Volume Impact", systemImage: "figure.strengthtraining.traditional")
                 .font(DS.Typography.sectionTitle)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -197,21 +227,23 @@ struct InjuryStatisticsView: View {
 
 private struct StatCard: View {
     let title: LocalizedStringKey
+    let icon: String
     let value: String
     let subtitle: LocalizedStringKey
-    var tintColor: Color = .primary
+    let valueIdentifier: String
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            Text(title)
-                .font(.caption)
+            Label(title, systemImage: icon)
+                .font(.caption.weight(.semibold))
                 .foregroundStyle(DS.Color.textSecondary)
             Text(value)
+                .accessibilityIdentifier(valueIdentifier)
                 .font(.title2.weight(.bold).monospacedDigit())
-                .foregroundStyle(tintColor)
+                .foregroundStyle(.primary)
             Text(subtitle)
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DS.Spacing.md)
