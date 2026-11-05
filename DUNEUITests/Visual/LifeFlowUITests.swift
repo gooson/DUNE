@@ -105,8 +105,32 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
         XCTAssertTrue(element("habit-past-record-date").exists)
         XCTAssertTrue(element("habit-past-record-habit").exists)
+        let readDate = app.staticTexts["habit-past-record-hero-date"].firstMatch
+        XCTAssertTrue(readDate.waitForExistence(timeout: 5) && !readDate.label.isEmpty)
+        capture("L09 duration record hero and date")
         app.buttons["habit-past-record-cancel"].firstMatch.auditTap()
         XCTAssertEqual(hero.label, baseline, "Opening and canceling the sheet should preserve today")
+
+        XCTAssertTrue(app.openLifeHabitActions(named: "Water", maxSwipes: 8))
+        app.buttons["life-habit-action-past-record"].firstMatch.auditTap()
+        XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.textFields["habit-past-record-total"].firstMatch.waitForExistence(timeout: 5),
+                      "Count habits use a numeric total")
+        XCTAssertTrue(app.staticTexts["habit-past-record-hero-date"].firstMatch.exists)
+        capture("L09 count record")
+        app.buttons["habit-past-record-cancel"].firstMatch.auditTap()
+
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-completed-toggle", maxSwipes: 8))
+        app.buttons["life-completed-toggle"].firstMatch.auditTap()
+        XCTAssertTrue(app.openLifeHabitActions(named: "Morning Stretch", maxSwipes: 8))
+        app.buttons["life-habit-action-past-record"].firstMatch.auditTap()
+        XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.switches["habit-past-record-completed"].firstMatch.waitForExistence(timeout: 5),
+                      "Check habits use a completion toggle")
+        XCTAssertTrue(app.staticTexts["habit-past-record-hero-date"].firstMatch.exists)
+        capture("L09 check record")
+        app.buttons["habit-past-record-cancel"].firstMatch.auditTap()
+        XCTAssertEqual(hero.label, baseline, "Canceling every record kind must preserve today")
     }
 
     func testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged() {
@@ -120,6 +144,9 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(total.waitForExistence(timeout: 5))
         XCTAssertTrue(total.value.map { String(describing: $0).contains("30") } ?? false,
                       "The fixture should preload yesterday's 30-minute total")
+        total.auditTap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+        capture("L09 focused duration total and software keyboard")
         XCTAssertTrue(app.fillTextInput("habit-past-record-total", with: "40"))
         let save = app.buttons["habit-past-record-save"].firstMatch
         XCTAssertTrue(save.waitForExistence(timeout: 5))
@@ -141,6 +168,49 @@ final class LifeFlowUITests: SeededUITestBaseCase {
             .firstMatch
         XCTAssertTrue(late.waitForExistence(timeout: 5), "The past entry should identify late recording")
         capture("L05-Life-history-recorded-later")
+    }
+
+    func testPastRecordKindsAtMaximumAccessibilitySize() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToLife()
+        let today = waitForElement(AXID.lifeHeroProgress, timeout: 15)
+        let baseline = today.label
+
+        for (habit, controlID) in [("Read", "habit-past-record-total"),
+                                   ("Water", "habit-past-record-total"),
+                                   ("Morning Stretch", "habit-past-record-completed")] {
+            if habit == "Morning Stretch" {
+                XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-completed-toggle", maxSwipes: 8))
+                app.buttons["life-completed-toggle"].firstMatch.auditTap()
+            }
+            XCTAssertTrue(app.openLifeHabitActions(named: habit, maxSwipes: 10))
+            let action = app.buttons["life-habit-action-past-record"].firstMatch
+            XCTAssertTrue(action.waitForExistence(timeout: 5))
+            action.auditTap()
+            let sheet = app.navigationBars["Past Record"]
+            XCTAssertTrue(sheet.waitForExistence(timeout: 5))
+            let form = app.collectionViews.firstMatch
+            XCTAssertTrue(form.waitForExistence(timeout: 5))
+            XCTAssertTrue(app.revealTextBody("habit-past-record-hero-date", in: form))
+            let displayedDate = app.staticTexts["habit-past-record-hero-date"].firstMatch.label
+            XCTAssertFalse(displayedDate.isEmpty, "The actual selected past date should remain readable")
+            capture("L09 MAX \(habit) selected date")
+            XCTAssertTrue(app.revealFullyVisible("habit-past-record-date", in: form))
+            XCTAssertTrue(app.revealFullyVisible(controlID, in: form))
+            XCTAssertTrue(app.descendants(matching: .any)[controlID].firstMatch.isHittable)
+            capture("L09 MAX \(habit) record control")
+
+            XCTAssertTrue(app.revealTextBody("habit-past-record-hero-date", in: form))
+            let cancel = app.buttons["habit-past-record-cancel"].firstMatch
+            XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
+            cancel.auditTap()
+            XCTAssertTrue(sheet.waitForNonExistence(timeout: 5))
+            XCTAssertEqual(today.label, baseline, "Cancel must preserve today's progress")
+        }
     }
 
     func testWeeklyWorkoutBoardSeededContentAndCollapse() {

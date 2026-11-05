@@ -6,6 +6,7 @@ struct HabitPastRecordSheet: View {
     let onSave: (HabitDefinition, Date, Double) -> Bool
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     @State private var selectedHabitID: UUID?
     @State private var selectedDate: Date
     @State private var totalInput = ""
@@ -39,6 +40,11 @@ struct HabitPastRecordSheet: View {
                         description: Text("Add a manual habit to record a past day.")
                     )
                 } else {
+                    Section {
+                        recordHero
+                            .listRowInsets(EdgeInsets(top: DS.Spacing.sm, leading: DS.Spacing.lg, bottom: DS.Spacing.sm, trailing: DS.Spacing.lg))
+                            .listRowBackground(Color.clear)
+                    }
                     habitSection
                     dateSection
                     totalSection
@@ -73,6 +79,34 @@ struct HabitPastRecordSheet: View {
         .onAppear { updateSelection() }
         .onChange(of: selectedHabitID) { _, _ in updateSelection() }
         .onChange(of: selectedDate) { _, _ in updateInput() }
+    }
+
+    private var recordHero: some View {
+        let tint = selectedHabit?.iconCategory.themeColor ?? DS.Color.warmGlow
+        return HeroCard(tintColor: tint) {
+            HStack(alignment: .top, spacing: DS.Spacing.md) {
+                Image(systemName: selectedHabit?.iconCategory.iconName ?? "calendar.badge.clock")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(colorScheme == .light
+                        ? tint.mix(with: .black, by: 0.35)
+                        : tint)
+                    .frame(minWidth: 48, minHeight: 48)
+                    .background(tint.opacity(0.14), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                    .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text("Past Record")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(DS.Color.textSecondary)
+                    Text(selectedDate, format: .dateTime.year().month().day())
+                        .font(.title3.weight(.semibold))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("habit-past-record-hero-date")
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 
     private var eligibleHabits: [HabitDefinition] {
