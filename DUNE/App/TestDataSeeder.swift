@@ -729,6 +729,19 @@ enum TestDataSeeder {
             memo: "Mild pain during squats"
         )
         context.insert(record)
+
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("--uitesting") && arguments.contains("--ui-injury-history-fixture") {
+            let recovered = InjuryRecord(
+                bodyPart: .shoulder,
+                bodySide: .right,
+                severity: .moderate,
+                startDate: Calendar.current.date(byAdding: .day, value: -20, to: Date()) ?? Date(),
+                endDate: Calendar.current.date(byAdding: .day, value: -10, to: Date()) ?? Date(),
+                memo: "Recovered shoulder strain"
+            )
+            context.insert(recovered)
+        }
     }
 
     // MARK: - Habits

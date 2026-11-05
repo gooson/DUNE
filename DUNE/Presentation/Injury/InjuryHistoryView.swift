@@ -7,6 +7,8 @@ struct InjuryHistoryView: View {
     @Query(sort: \InjuryRecord.startDate, order: .reverse) private var allRecords: [InjuryRecord]
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
+    @ScaledMetric(relativeTo: .title3) private var rowIconWidth: CGFloat = 28
     @State private var recordToDelete: InjuryRecord?
     @State private var cachedActiveRecords: [InjuryRecord] = []
     @State private var cachedEndedRecords: [InjuryRecord] = []
@@ -22,18 +24,24 @@ struct InjuryHistoryView: View {
 
             List {
                 if !cachedActiveRecords.isEmpty {
-                    Section("Active") {
+                    Section {
                         ForEach(cachedActiveRecords) { record in
                             injuryRow(record)
                         }
+                    } header: {
+                        Label("Active", systemImage: "bandage.fill")
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
 
                 if !cachedEndedRecords.isEmpty {
-                    Section("Recovered") {
+                    Section {
                         ForEach(cachedEndedRecords) { record in
                             injuryRow(record)
                         }
+                    } header: {
+                        Label("Recovered", systemImage: "checkmark.circle")
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
 
@@ -167,6 +175,10 @@ struct InjuryHistoryView: View {
         }
     }
 
+    private func severityForeground(_ severity: InjurySeverity) -> Color {
+        colorScheme == .light ? severity.color.mix(with: .black, by: 0.45) : severity.color
+    }
+
     private func injuryRowContent(_ record: InjuryRecord) -> some View {
         let rowLayout = dynamicTypeSize.isAccessibilitySize
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
@@ -177,13 +189,14 @@ struct InjuryHistoryView: View {
 
         return rowLayout {
             Image(systemName: record.severity.iconName)
-                .foregroundStyle(record.severity.color)
-                .frame(width: 24)
+                .font(.title3)
+                .foregroundStyle(severityForeground(record.severity))
+                .frame(width: rowIconWidth)
 
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 metadataLayout {
                     Text(record.bodyPart.displayName)
-                        .font(.subheadline.weight(.medium))
+                        .font(.headline)
                     if let side = record.bodySide {
                         Text("(\(side.abbreviation))")
                             .font(.caption)
@@ -206,7 +219,7 @@ struct InjuryHistoryView: View {
 
                 Text(record.dateRangeLabel)
                     .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
 
             if !dynamicTypeSize.isAccessibilitySize {

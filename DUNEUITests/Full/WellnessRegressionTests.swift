@@ -579,11 +579,21 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
     }
 
     func testInjuryHistoryRowOpensDetailAndEditForm() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-injury-history-fixture"]
+        launchApp(with: configuration)
+        navigateToWellness()
         openInjuryHistory()
 
         let row = app.descendants(matching: .any)[AXID.injuryHistoryRow(0)].firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 8), "Seeded injury row should exist")
+        XCTAssertTrue(revealInjuryHistoryRow(0), "Active Knee row must fit")
+        XCTAssertTrue(app.staticTexts["Active"].firstMatch.exists, "Active group should be present")
         VisualAudit.capture("Injury history names and metadata")
+        XCTAssertTrue(revealInjuryHistoryRow(1), "Recovered Shoulder row must fit")
+        XCTAssertTrue(app.staticTexts["Recovered"].firstMatch.exists, "Recovered group should be present")
+        VisualAudit.capture("H09 recovered Shoulder history row")
+        XCTAssertTrue(revealInjuryHistoryRow(0, towardEarlierContent: true), "Original active row must remain reachable")
         row.auditTap()
 
         let detail = app.descendants(matching: .any)[AXID.injuryDetailScreen].firstMatch
@@ -604,6 +614,26 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         expectation(for: dismissed, evaluatedWith: form)
         waitForExpectations(timeout: 5)
         XCTAssertTrue(detail.waitForExistence(timeout: 8), "Saving edit should return to injury detail")
+    }
+
+    func testInjuryHistoryAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-injury-history-fixture",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+        openInjuryHistory()
+
+        let firstRow = app.descendants(matching: .any)[AXID.injuryHistoryRow(0)].firstMatch
+        XCTAssertTrue(firstRow.waitForExistence(timeout: 8), "Seeded active row must exist before MAX reveal")
+        XCTAssertTrue(revealInjuryHistoryRow(0), "MAX Active Knee row must fit in the List viewport")
+        XCTAssertTrue(app.staticTexts["Active"].firstMatch.exists)
+        VisualAudit.capture("H09 MAX active Knee whole row")
+        XCTAssertTrue(revealInjuryHistoryRow(1), "MAX Recovered Shoulder row must fit in the List viewport")
+        XCTAssertTrue(app.staticTexts["Recovered"].firstMatch.exists)
+        VisualAudit.capture("H09 MAX recovered Shoulder whole row")
     }
 
     func testInjuryStatisticsRouteOpensFromHistory() throws {
@@ -661,6 +691,43 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         let screen = app.descendants(matching: .any)[AXID.bodyHistoryDetailScreen].firstMatch
         XCTAssertTrue(screen.waitForExistence(timeout: 8), "Body history detail should open")
+    }
+
+    private func revealInjuryHistoryRow(
+        _ index: Int, towardEarlierContent: Bool = false, maxMoves: Int = 12
+    ) -> Bool {
+        let row = app.descendants(matching: .any)[AXID.injuryHistoryRow(index)].firstMatch
+        guard let list = app.collectionViews.allElementsBoundByIndex.first(where: { $0.exists && $0.isHittable })
+            ?? app.tables.allElementsBoundByIndex.first(where: { $0.exists && $0.isHittable }) else {
+            return false
+        }
+        func visibleList() -> CGRect {
+            let frame = list.frame.intersection(app.windows.firstMatch.frame)
+            guard frame.width > 0 && frame.height > 0 else { return .null }
+            let navigationBar = app.navigationBars.firstMatch
+            let top = navigationBar.exists && navigationBar.isHittable && navigationBar.frame.intersects(frame)
+                ? max(frame.minY, navigationBar.frame.maxY) : frame.minY
+            return CGRect(x: frame.minX, y: top, width: frame.width,
+                          height: max(0, frame.maxY - top))
+        }
+        for _ in 0..<maxMoves {
+            let viewport = visibleList()
+            guard viewport.width > 0 && viewport.height > 0 else { return false }
+            if row.exists && row.isHittable && viewport.contains(row.frame) { return true }
+            let delta = row.exists ? row.frame.midY - viewport.midY
+                : (towardEarlierContent ? -viewport.height : viewport.height)
+            if row.exists && abs(delta) < 1 { return false }
+            let distance = min(max(abs(delta), viewport.height * 0.2), viewport.height * 0.65)
+            let fraction = distance / list.frame.height
+            let startY: CGFloat = delta < 0 ? 0.3 : 0.7
+            let endY = startY + (delta < 0 ? fraction : -fraction)
+            list.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                .press(forDuration: 0.05, thenDragTo: list.coordinate(
+                    withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
+                ))
+        }
+        let viewport = visibleList()
+        return row.exists && row.isHittable && viewport.contains(row.frame)
     }
 
     private func openInjuryHistory() {
