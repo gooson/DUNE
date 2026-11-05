@@ -163,6 +163,7 @@ struct HeartRateRecoveryInfoSheet: View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 InfoSheetHelpers.SectionHeader(icon: icon, title: title)
+                    .accessibilityElement(children: .combine)
                     .accessibilityIdentifier(identifier)
                 content()
                     .font(.subheadline)
@@ -178,6 +179,7 @@ struct HeartRateRecoveryInfoSheet: View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 InfoSheetHelpers.SectionHeader(icon: "gauge.with.needle", title: "Rating Guide")
+                    .accessibilityElement(children: .combine)
                     .accessibilityIdentifier("heart-rate-recovery-info-guide")
                 VStack(spacing: 0) {
                     ratingRow(label: "Good", range: "> 20 bpm", color: HeartRateRecovery.Rating.good.color, identifier: "heart-rate-recovery-info-rating-good")
