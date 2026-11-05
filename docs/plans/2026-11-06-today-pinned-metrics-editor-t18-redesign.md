@@ -2,7 +2,7 @@
 tags: [detail-redesign, t18, health-tools]
 date: 2026-11-06
 category: plan
-status: approved
+status: done
 ---
 
 # T18 · 고정 지표 편집
@@ -14,3 +14,7 @@ status: approved
 정상 네 프로필 selector: `DUNEUITests/TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses`. 접힌 Duo MAX 추가 selector: `DUNEUITests/TodaySettingsRegressionTests/testPinnedMetricsEditorAtMaximumAccessibilitySize`. 실행·native 결과와 실패 기록은 통합 후보의 실제 source closure와 연결하고 해당 PR HEAD에서 새로 실행했다고 바꾸어 적지 않는다.
 
 위험: sheet/inspector 좁은 폭, MAX 본문·아이콘 자연 높이, List 가상화, 실제 seed, 키보드와 내비게이션. 원인별 기록과 점유 예산을 유지하고 필요한 경로만 검증한다. 아직 앱 빌드·UI 실행·새 실제 캡처·PR 완료 증거는 없다.
+
+## 실제 선택 화면 검증
+
+[T18 네이티브 PNG·AX·출처](../design/full-redesign-map/review/t18-pinned-metrics-editor-native-2026-11-06/index.html)의 범위를 확인했다. PR 및 CI 상태는 별도 기록을 따른다.

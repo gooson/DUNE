@@ -1,0 +1,310 @@
+Attributes: Application, 0x112661a40, pid: 51600, label: 'DUNE'
+Element subtree:
+ →Application, 0x112661a40, pid: 51600, label: 'DUNE'
+    Window (Main), 0x112661b80, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x112663d40, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x112663e80, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x112662a80, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x112661e00, {{-466.0, -678.0}, {1398.0, 2034.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+          Other, 0x112663c00, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x112661040, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x1126635c0, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x112662800, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x112662e40, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x112661680, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x112660500, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x1126612c0, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x112662300, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x112663480, {{0.0, 0.0}, {466.0, 678.0}}
+                            Other, 0x1126617c0, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x112661900, {{0.0, 0.0}, {466.0, 678.0}}
+                                Toolbar, 0x112661180, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x112663ac0, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x112661540, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x1126621c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                    Other, 0x112660dc0, {{0.0, 0.0}, {466.0, 678.0}}
+                                      Other, 0x112660f00, {{0.0, 0.0}, {466.0, 678.0}}
+                                        Toolbar, 0x112661cc0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x112660000, {{0.0, 0.0}, {466.0, 678.0}}
+                                        NavigationBar, 0x112660280, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Today'
+                                        Other, 0x1126603c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                          Other, 0x112661400, {{0.0, 0.0}, {466.0, 678.0}}
+                                            Other, 0x112662080, {{0.0, 0.0}, {466.0, 678.0}}
+                                              Other, 0x112660140, {{0.0, 0.0}, {466.0, 678.0}}
+                                                ScrollView, 0x112660b40, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'dashboard-root-scroll'
+                                                  Other, 0x112660640, {{0.0, -2197.0}, {382.0, 6750.7}}
+                                                    Button, 0x112660780, {{32.0, -2157.0}, {318.0, 1104.7}}, identifier: 'dashboard-hero-condition', label: 'CONDITION, Condition score 84, Excellent, You're in top shape, Time to sleep. Tomorrow starts with good rest, Condition Trend, Today, Score Trend', value: Rising. From Nov 6...
+                                                      StaticText, 0x1126608c0, {{32.0, -2157.0}, {318.0, 51.3}}, identifier: 'card-navigation-header', label: 'CONDITION'
+                                                        StaticText, 0x112660a00, {{32.0, -2157.0}, {318.0, 51.3}}, identifier: 'dashboard-hero-heading', label: 'CONDITION'
+                                                        Image, 0x112663700, {{293.3, -2150.3}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                                      Other, 0x112661f40, {{32.0, -2093.7}, {76.3, 71.7}}, identifier: 'dashboard-hero-score', label: 'Condition score 84, Excellent'
+                                                        StaticText, 0x112779680, {{32.0, -2093.7}, {76.3, 71.7}}, label: '84'
+                                                      StaticText, 0x1127792c0, {{32.0, -2016.0}, {234.7, 125.3}}, label: 'You're in top shape'
+                                                      StaticText, 0x11277af80, {{32.0, -1884.7}, {293.7, 232.7}}, label: 'Time to sleep. Tomorrow starts with good rest'
+                                                      StaticText, 0x11277ae40, {{32.0, -1640.0}, {152.3, 174.7}}, identifier: 'dashboard-hero-trend', label: 'Condition Trend'
+                                                      StaticText, 0x11277aa80, {{239.7, -1578.3}, {110.3, 51.3}}, label: 'Today'
+                                                      Other, 0x11277a940, {{32.0, -1457.3}, {318.0, 148.0}}, identifier: 'dashboard-hourly-condition-chart', label: 'Score Trend', value: Rising. From Nov 6...
+                                                        Other, 0x112779a40, {{32.0, -1457.3}, {318.0, 48.0}}
+                                                          Other, 0x112779cc0, {{15.1, -1457.3}, {42.3, 48.0}}, label: '1,793,890,000 to 1,793,892,000', value: 71
+                                                          Other, 0x112779e00, {{311.0, -1457.3}, {42.3, 48.0}}, label: '1,793,904,000 to 1,793,906,000', value: 84
+                                                          Other, 0x112779f40, {{32.0, -1447.4}, {318.0, 1.0}}, value: 84
+                                                        StaticText, 0x112779540, {{43.7, -1405.3}, {124.0, 96.0}}, label: 'Nov 6 at 00:00'
+                                                        StaticText, 0x1127797c0, {{197.3, -1405.3}, {152.7, 96.0}}, label: 'Nov 6 at 04:00'
+                                                        StaticText, 0x112779b80, {{171.7, -1381.3}, {21.7, 48.0}}, label: '–'
+                                                      Other, 0x112779900, {{32.0, -1164.3}, {318.0, 112.0}}
+                                                        StaticText, 0x11277abc0, {{32.0, -1164.3}, {318.0, 112.0}}, identifier: 'dashboard-hero-baseline-RHR vs 14d avg', label: 'RHR vs 14d avg, -4'
+                                                          StaticText, 0x112779400, {{40.0, -1156.3}, {142.0, 96.0}}, label: 'RHR vs 14d avg'
+                                                          StaticText, 0x112779180, {{298.3, -1156.3}, {43.7, 48.0}}, label: '-4'
+                                                    Other, 0x11277a080, {{16.0, -968.3}, {350.0, 794.3}}, identifier: 'dashboard-recovery-sleep-card'
+                                                      Button, 0x11277ad00, {{32.0, -952.3}, {318.0, 187.3}}, identifier: 'dashboard-recovery-sleep-details', label: 'Recovery & Sleep'
+                                                        StaticText, 0x11277b0c0, {{32.0, -952.3}, {318.0, 187.3}}, label: 'Recovery & Sleep'
+                                                        Image, 0x114ce8000, {{38.7, -943.7}, {67.7, 45.7}}, identifier: 'bed.double.fill', label: 'Bedtime'
+                                                        Image, 0x114ce8140, {{303.3, -936.3}, {22.0, 38.0}}, identifier: 'chevron.right', label: 'Forward'
+                                                      StaticText, 0x114ce8280, {{32.0, -755.0}, {217.7, 58.7}}, label: 'Last Sleep'
+                                                      StaticText, 0x114ce83c0, {{32.0, -692.3}, {257.7, 69.3}}, identifier: 'dashboard-recovery-last-sleep-value', label: '7h 10min'
+                                                      StaticText, 0x114ce8500, {{32.0, -619.0}, {110.0, 51.3}}, identifier: 'dashboard-recovery-last-sleep-date', label: 'Nov 6'
+                                                      StaticText, 0x114ce8640, {{80.0, -559.7}, {230.0, 58.7}}, identifier: 'dashboard-recovery-sleep-debt', label: 'Sleep Debt'
+                                                      Image, 0x114ce8780, {{30.0, -518.7}, {44.0, 44.0}}, identifier: 'dashboard-recovery-sleep-debt', label: 'Selected', Selected
+                                                      StaticText, 0x114ce88c0, {{80.0, -497.0}, {121.0, 63.3}}, identifier: 'dashboard-recovery-sleep-debt', label: '0min'
+                                                      StaticText, 0x114ce8a00, {{32.0, -423.7}, {253.7, 102.3}}, label: 'Sleep History (hours)'
+                                                      StaticText, 0x114ce8b40, {{32.0, -317.3}, {273.0, 51.3}}, label: 'Oct 31 – Nov 6'
+                                                      Other, 0x114ce8c80, {{32.0, -262.0}, {318.0, 72.0}}, identifier: 'dashboard-recovery-sleep-chart'
+                                                        Other, 0x114ce8dc0, {{79.0, -256.0}, {38.7, 8.0}}, label: 'Oct 31, 2026 at 00 to Nov 1, 2026 at 00', value: 6.7
+                                                        Other, 0x114ce8f00, {{117.7, -256.0}, {38.7, 8.0}}, label: 'Nov 1, 2026 at 00 to Nov 2, 2026 at 00', value: 6.8
+                                                        Other, 0x114ce9040, {{156.4, -256.0}, {38.7, 8.0}}, label: 'Nov 2, 2026 at 00 to Nov 3, 2026 at 00', value: 6.8
+                                                        Other, 0x114ce9180, {{195.1, -256.0}, {38.7, 8.0}}, label: 'Nov 3, 2026 at 00 to Nov 4, 2026 at 00', value: 6.9
+                                                        Other, 0x114ce92c0, {{233.9, -256.0}, {38.7, 8.0}}, label: 'Nov 4, 2026 at 00 to Nov 5, 2026 at 00', value: 7
+                                                        Other, 0x114ce9400, {{272.6, -256.0}, {38.7, 8.0}}, label: 'Nov 5, 2026 at 00 to Nov 6, 2026 at 00', value: 7.1
+                                                        Other, 0x114ce9540, {{311.3, -256.0}, {38.7, 8.0}}, label: 'Nov 6, 2026 at 00 to Nov 7, 2026 at 00', value: 7.2
+                                                    Other, 0x114ce9680, {{16.0, -151.2}, {350.0, 315.5}}, identifier: 'dashboard-smart-insights-section'
+                                                      Image, 0x114ce97c0, {{22.0, -149.7}, {32.3, 55.7}}, identifier: 'lightbulb.fill', label: 'Lightbulb'
+                                                      StaticText, 0x114ce9900, {{65.3, -151.2}, {174.7, 58.7}}, label: 'Insights'
+                                                      Image, 0x114ce9a40, {{24.7, -62.0}, {54.0, 56.0}}, identifier: 'dashboard-insight-night-rest', label: 'Clear Night'
+                                                      StaticText, 0x114ce9b80, {{69.0, -66.7}, {205.7, 58.7}}, identifier: 'dashboard-insight-night-rest', label: 'Recovery'
+                                                      Button, 0x114ce9cc0, {{305.0, -66.7}, {44.0, 44.0}}, identifier: 'dashboard-insight-night-rest', label: 'Dismiss'
+                                                      StaticText, 0x114ce9e00, {{69.0, -6.0}, {216.3, 153.3}}, identifier: 'dashboard-insight-night-rest', label: 'Wind down for a restful night'
+                                                    ScrollView, 0x114ce9f40, {{16.0, 184.3}, {350.0, 75.3}}, identifier: 'dashboard-quick-actions'
+                                                      Other, 0x114cea080, {{16.0, 184.3}, {570.3, 75.3}}
+                                                        Button, 0x114cea1c0, {{20.0, 184.3}, {332.0, 75.3}}, identifier: 'dashboard-quick-action-weight', label: 'Log Weight'
+                                                          Image, 0x114cea300, {{37.3, 196.7}, {49.3, 50.7}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                                          StaticText, 0x114cea440, {{96.0, 192.7}, {244.0, 58.7}}, label: 'Log Weight'
+                                                        Button, 0x114cea580, {{360.0, 184.7}, {222.3, 74.7}}, identifier: 'dashboard-quick-action-sleep', label: 'Sleep'
+                                                          StaticText, 0x114cea6c0, {{448.7, 192.7}, {121.7, 58.7}}, label: 'Sleep'
+                                                          Image, 0x114cea800, {{378.0, 201.7}, {60.7, 40.7}}, identifier: 'bed.double.fill', label: 'Bedtime'
+                                                    Image, 0x114cea940, {{29.3, 284.0}, {37.3, 56.0}}, identifier: 'pin.fill', label: 'Pin'
+                                                    StaticText, 0x114ceaa80, {{80.0, 282.7}, {152.3, 58.7}}, label: 'Pinned'
+                                                    Button, 0x114ceabc0, {{278.7, 282.7}, {83.3, 58.7}}, identifier: 'dashboard-pinned-edit', label: 'Edit'
+                                                    Other, 0x114cead00, {{16.0, 356.3}, {350.0, 876.7}}, identifier: 'dashboard-pinned-grid'
+                                                      Button, 0x114ceae40, {{16.0, 356.3}, {350.0, 434.3}}, identifier: 'dashboard-metric-hrv', label: 'HRV, 66, ms, vs yesterday, 1, Recent records · own scale, Nov 6, 2026 at 00:00'
+                                                        StaticText, 0x114ceaf80, {{37.0, 372.3}, {161.0, 58.7}}, label: 'HRV'
+                                                        Image, 0x114ceb0c0, {{37.0, 377.0}, {49.0, 51.7}}, identifier: 'waveform.path.ecg', label: 'Ecg Waveform Path'
+                                                        StaticText, 0x114ceb200, {{32.0, 441.1}, {78.3, 71.7}}, identifier: 'dashboard-workout-value-hrv', label: '66'
+                                                        StaticText, 0x114ceb340, {{114.3, 457.1}, {55.3, 51.3}}, label: 'ms'
+                                                        StaticText, 0x114ceb480, {{32.0, 522.7}, {213.7, 48.0}}, label: 'vs yesterday'
+                                                        StaticText, 0x114ceb5c0, {{266.7, 522.7}, {25.7, 48.0}}, label: '1'
+                                                        Image, 0x114ceb700, {{256.7, 543.3}, {7.0, 7.0}}, identifier: 'arrow.up.right', label: 'Up-Right Diagonal Arrow'
+                                                        Other, 0x114ceb840, {{31.2, 579.9}, {319.5, 35.5}}
+                                                        StaticText, 0x114ceb980, {{32.0, 622.7}, {283.0, 96.0}}, label: 'Recent records · own scale'
+                                                        StaticText, 0x114cebac0, {{32.0, 726.7}, {103.0, 48.0}}, label: 'Nov 6, 2026 at 00:00'
+                                                      Button, 0x114cebc00, {{16.0, 800.7}, {350.0, 432.3}}, identifier: 'dashboard-metric-rhr', label: 'RHR, 54, bpm, vs yesterday, 2, Recent records · own scale, Nov 6, 2026 at 00:00'
+                                                        StaticText, 0x114cebd40, {{38.0, 816.7}, {160.7, 58.7}}, label: 'RHR'
+                                                        Image, 0x114cebe80, {{38.0, 823.7}, {49.0, 45.7}}, identifier: 'heart.fill', label: 'Love'
+                                                        StaticText, 0x112670000, {{32.0, 883.4}, {78.3, 71.7}}, identifier: 'dashboard-workout-value-rhr', label: '54'
+                                                        StaticText, 0x112670140, {{114.3, 899.4}, {83.3, 51.3}}, label: 'bpm'
+                                                        StaticText, 0x112670280, {{32.0, 965.1}, {213.7, 48.0}}, label: 'vs yesterday'
+                                                        StaticText, 0x1126703c0, {{266.7, 965.1}, {25.7, 48.0}}, label: '2'
+                                                        Image, 0x112670500, {{256.7, 985.7}, {7.0, 7.0}}, identifier: 'arrow.down.right', label: 'Down-Right Diagonal Arrow'
+                                                        Other, 0x112670640, {{31.2, 1022.2}, {319.5, 35.5}}
+                                                        StaticText, 0x112670780, {{32.0, 1065.1}, {283.0, 96.0}}, label: 'Recent records · own scale'
+                                                        StaticText, 0x1126708c0, {{32.0, 1169.1}, {103.0, 48.0}}, label: 'Nov 6, 2026 at 00:00'
+                                                    StaticText, 0x112670a00, {{136.3, 1253.1}, {229.7, 48.0}}, label: 'Updated 46 seconds ago'
+                                                    Other, 0x112670b40, {{16.0, 1322.9}, {350.0, 1682.1}}, identifier: 'dashboard-section-activity'
+                                                      StaticText, 0x112670c80, {{21.7, 1322.9}, {222.3, 58.7}}, label: 'Activity'
+                                                      Image, 0x112670dc0, {{21.7, 1325.3}, {42.0, 54.3}}, identifier: 'figure.run', label: 'Running'
+                                                      Button, 0x112670f00, {{16.0, 1394.0}, {350.0, 294.3}}, identifier: 'dashboard-metric-steps', label: 'Steps, 8,200, steps, vs yesterday, 535, Nov 6, 2026 at 04:10'
+                                                        StaticText, 0x112671040, {{36.3, 1413.6}, {177.7, 58.7}}, label: 'Steps'
+                                                        Image, 0x112671180, {{36.3, 1414.3}, {36.7, 58.0}}, identifier: 'figure.walk', label: 'Walk'
+                                                        StaticText, 0x1126712c0, {{32.0, 1484.7}, {173.3, 71.7}}, identifier: 'dashboard-workout-value-steps', label: '8,200'
+                                                        StaticText, 0x112671400, {{209.3, 1500.7}, {100.0, 51.3}}, label: 'steps'
+                                                        StaticText, 0x112671540, {{32.0, 1566.3}, {213.7, 48.0}}, label: 'vs yesterday'
+                                                        StaticText, 0x112671680, {{266.7, 1566.3}, {77.0, 48.0}}, label: '535'
+                                                        Image, 0x1126717c0, {{256.7, 1587.0}, {7.0, 7.0}}, identifier: 'arrow.down.right', label: 'Down-Right Diagonal Arrow'
+                                                        StaticText, 0x112671900, {{32.0, 1624.3}, {103.0, 48.0}}, label: 'Nov 6, 2026 at 04:10'
+                                                      Button, 0x112671a40, {{16.0, 1698.3}, {350.0, 290.0}}, identifier: 'dashboard-metric-exercise', label: 'Exercise, 48, min, vs 14d avg, 16, Nov 5, 2026 at 04:10'
+                                                        StaticText, 0x112671b80, {{36.3, 1717.9}, {238.3, 58.7}}, label: 'Exercise'
+                                                        Image, 0x112671cc0, {{36.3, 1718.7}, {41.3, 53.0}}, identifier: 'flame.fill', label: 'Flame'
+                                                        StaticText, 0x112671e00, {{32.0, 1784.6}, {78.3, 71.7}}, identifier: 'dashboard-workout-value-exercise', label: '48'
+                                                        StaticText, 0x112671f40, {{114.3, 1800.6}, {67.3, 51.3}}, label: 'min'
+                                                        StaticText, 0x112672080, {{32.0, 1866.3}, {183.0, 48.0}}, label: 'vs 14d avg'
+                                                        StaticText, 0x1126721c0, {{236.0, 1866.3}, {51.3, 48.0}}, label: '16'
+                                                        Image, 0x112672300, {{226.0, 1886.7}, {7.0, 7.0}}, identifier: 'arrow.down.right', label: 'Down-Right Diagonal Arrow'
+                                                        StaticText, 0x112672440, {{32.0, 1924.3}, {168.3, 48.0}}, label: 'Nov 5, 2026 at 04:10'
+                                                      Button, 0x112672580, {{16.0, 1998.3}, {350.0, 338.3}}, identifier: 'dashboard-metric-exercise', label: 'Walking, 6,874, steps, No comparison record, Oct 16, 2026 at 04:10'
+                                                        StaticText, 0x1126726c0, {{36.3, 2017.9}, {225.7, 58.8}}, label: 'Walking'
+                                                        Image, 0x112672800, {{36.3, 2018.7}, {36.7, 58.0}}, identifier: 'figure.walk', label: 'Walk'
+                                                        StaticText, 0x112672940, {{32.0, 2088.9}, {173.3, 71.7}}, identifier: 'dashboard-workout-value-exercise-walking-steps', label: '6,874'
+                                                        StaticText, 0x112672a80, {{209.3, 2104.9}, {100.0, 51.3}}, label: 'steps'
+                                                        StaticText, 0x112672bc0, {{32.0, 2168.6}, {268.0, 96.0}}, label: 'No comparison record'
+                                                        StaticText, 0x112672d00, {{32.0, 2272.6}, {136.7, 48.0}}, label: 'Oct 16, 2026 at 04:10'
+                                                      StaticText, 0x112672e40, {{16.0, 2346.6}, {314.3, 51.3}}, label: 'Exercise by Type'
+                                                      Button, 0x112672f80, {{16.0, 2408.0}, {350.0, 206.3}}, identifier: 'dashboard-workout-exercise-tempo run', label: 'Tempo Run, Nov 5, 2026 at 04:10, 48, min'
+                                                        Image, 0x1126730c0, {{35.0, 2425.7}, {36.7, 47.3}}, identifier: 'figure.run', label: 'Running'
+                                                        StaticText, 0x112673200, {{81.7, 2423.6}, {211.3, 51.3}}, identifier: 'dashboard-workout-title-exercise-tempo run', label: 'Tempo Run'
+                                                        StaticText, 0x112673340, {{30.0, 2480.6}, {168.3, 48.0}}, identifier: 'dashboard-workout-date-exercise-tempo run', label: 'Nov 5, 2026 at 04:10'
+                                                        StaticText, 0x112673480, {{30.0, 2534.6}, {70.3, 65.7}}, identifier: 'dashboard-workout-value-exercise-tempo run', label: '48'
+                                                        StaticText, 0x1126735c0, {{104.3, 2545.9}, {67.3, 51.3}}, label: 'min'
+                                                      Button, 0x112673700, {{16.0, 2624.3}, {350.0, 254.0}}, identifier: 'dashboard-workout-exercise-upper strength', label: 'Upper Strength, Nov 4, 2026 at 04:10, 78, min'
+                                                        StaticText, 0x112673840, {{101.3, 2638.3}, {164.3, 102.3}}, identifier: 'dashboard-workout-title-exercise-upper strength', label: 'Upper Strength'
+                                                        Image, 0x112673980, {{35.3, 2648.0}, {55.7, 32.3}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                        StaticText, 0x112673ac0, {{30.0, 2744.6}, {118.7, 48.0}}, identifier: 'dashboard-workout-date-exercise-upper strength', label: 'Nov 4, 2026 at 04:10'
+                                                        StaticText, 0x112673c00, {{30.0, 2798.6}, {70.3, 65.7}}, identifier: 'dashboard-workout-value-exercise-upper strength', label: '78'
+                                                        StaticText, 0x112673d40, {{104.3, 2809.9}, {67.3, 51.3}}, label: 'min'
+                                                      Button, 0x112673e80, {{16.0, 2888.3}, {350.0, 116.7}}, identifier: 'dashboard-workout-more', label: 'Show more exercises', value: Collapsed
+                                                        StaticText, 0x112668000, {{35.5, 2888.3}, {251.3, 116.7}}, label: 'Show more exercises'
+                                                        Image, 0x112668140, {{298.0, 2934.3}, {42.7, 24.3}}, identifier: 'chevron.down', label: 'Go Down'
+                                                    Other, 0x112668280, {{16.0, 3025.0}, {350.0, 1196.7}}, identifier: 'dashboard-section-body'
+                                                      StaticText, 0x1126683c0, {{22.0, 3025.0}, {189.7, 58.7}}, label: 'Body'
+                                                      Image, 0x112668500, {{22.0, 3033.0}, {62.3, 42.3}}, identifier: 'bed.double.fill', label: 'Bedtime'
+                                                      Button, 0x112668640, {{16.0, 3093.7}, {350.0, 439.3}}, identifier: 'dashboard-metric-sleep', label: 'Sleep, 7h 10min, vs yesterday, 16, Recent records · own scale, Nov 6, 2026 at 00:00'
+                                                        Image, 0x112668780, {{36.7, 3114.0}, {49.3, 57.0}}, identifier: 'moon.zzz.fill', label: 'Snooze'
+                                                        StaticText, 0x1126688c0, {{36.7, 3114.0}, {184.7, 59.6}}, label: 'Sleep'
+                                                        StaticText, 0x112668a00, {{32.0, 3183.3}, {266.0, 71.7}}, identifier: 'dashboard-workout-value-sleep', label: '7h 10min'
+                                                        StaticText, 0x112668b40, {{32.0, 3265.0}, {213.7, 48.0}}, label: 'vs yesterday'
+                                                        StaticText, 0x112668c80, {{266.7, 3265.0}, {51.3, 48.0}}, label: '16'
+                                                        Image, 0x112668dc0, {{256.7, 3285.3}, {7.0, 7.0}}, identifier: 'arrow.up.right', label: 'Up-Right Diagonal Arrow'
+                                                        Other, 0x112668f00, {{31.2, 3322.2}, {319.5, 35.5}}
+                                                        StaticText, 0x112669040, {{32.0, 3365.0}, {283.0, 96.0}}, label: 'Recent records · own scale'
+                                                        StaticText, 0x112669180, {{32.0, 3469.0}, {103.0, 48.0}}, label: 'Nov 6, 2026 at 00:00'
+                                                      Button, 0x1126692c0, {{16.0, 3543.0}, {350.0, 333.3}}, identifier: 'dashboard-metric-weight', label: 'Weight, 78.3, kg, No comparison record, Nov 6, 2026 at 04:10'
+                                                        StaticText, 0x112669400, {{37.0, 3560.9}, {220.0, 58.7}}, label: 'Weight'
+                                                        Image, 0x112669540, {{37.0, 3563.3}, {51.0, 53.0}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                                        StaticText, 0x112669680, {{32.0, 3628.7}, {134.3, 71.7}}, identifier: 'dashboard-workout-value-weight', label: '78.3'
+                                                        StaticText, 0x1126697c0, {{170.3, 3644.7}, {44.3, 51.3}}, label: 'kg'
+                                                        StaticText, 0x112669900, {{32.0, 3708.3}, {268.0, 96.0}}, label: 'No comparison record'
+                                                        StaticText, 0x112669a40, {{32.0, 3812.3}, {103.0, 48.0}}, label: 'Nov 6, 2026 at 04:10'
+                                                      Button, 0x112669b80, {{16.0, 3886.3}, {350.0, 335.3}}, identifier: 'dashboard-metric-bmi', label: 'BMI, 24.7, No comparison record, Nov 6, 2026 at 04:10'
+                                                        StaticText, 0x112669cc0, {{38.0, 3904.9}, {123.7, 58.7}}, label: 'BMI'
+                                                        Image, 0x112669e00, {{38.0, 3906.7}, {24.0, 55.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                                        StaticText, 0x112669f40, {{32.0, 3974.0}, {134.3, 71.7}}, identifier: 'dashboard-workout-value-bmi', label: '24.7'
+                                                        StaticText, 0x11266a080, {{32.0, 4053.7}, {268.0, 96.0}}, label: 'No comparison record'
+                                                        StaticText, 0x11266a1c0, {{32.0, 4157.7}, {103.0, 48.0}}, label: 'Nov 6, 2026 at 04:10'
+                                                    Button, 0x11266a300, {{10.7, 4241.7}, {355.3, 296.0}}, identifier: 'dashboard-health-qa-card', label: 'Health Q&A, Ask about sleep, recovery, and recent workouts.'
+                                                      Image, 0x11266a440, {{10.7, 4258.3}, {75.7, 62.7}}, identifier: 'message.badge.waveform.fill', label: 'Message Bubble With A Waveform Badge, Filled'
+                                                      StaticText, 0x11266a580, {{64.0, 4253.7}, {155.3, 116.7}}, label: 'Health Q&A'
+                                                      Image, 0x11266a6c0, {{318.3, 4259.3}, {30.3, 43.7}}, identifier: 'chevron.up.chevron.down', label: 'Up And Down Chevrons'
+                                                      StaticText, 0x11266a800, {{64.0, 4372.3}, {218.7, 153.3}}, label: 'Ask about sleep, recovery, and recent workouts.'
+                                                  Other, 0x11266a940, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 11 pages', value: 36%
+                                                    Other, 0x11266aa80, {{460.0, 258.3}, {3.0, 53.0}}
+                                                  Other, 0x11266abc0, {{433.0, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 11 pages', value: 36%
+                                                    Other, 0x11266ad00, {{460.0, 258.3}, {3.0, 53.0}}
+                                                Button, 0x11266ae40, {{161.0, 140.0}, {60.0, 24.0}}, identifier: 'wave-refresh-test-trigger', label: 'Trigger Refresh', value: 0
+                                                Other, 0x11266af80, {{191.0, 334.0}, {0.0, 0.0}}
+                            Other, 0x11266b0c0, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x11266b200, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x11266b340, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x11266b480, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x11266b5c0, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x11266b700, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x11266b840, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x11266b980, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x11266bac0, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x11266bc00, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x11266bd40, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x11266be80, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x112678000, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x112678140, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x112678280, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x1126783c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x112678500, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today', Selected
+                                            Image, 0x112678640, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x112678780, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x1126788c0, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x112678a00, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x112678b40, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x112678c80, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x112678dc0, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x112678f00, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x112679040, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x112679180, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x1126792c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x112679400, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x112679540, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x112679680, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1126797c0, {{396.0, 444.0}, {44.0, 58.0}}
+                                          Other, 0x112679900, {{396.0, 444.0}, {44.0, 58.0}}
+                                            Other, 0x112679a40, {{396.0, 444.0}, {44.0, 58.0}}
+                                            Other, 0x112679b80, {{396.0, 444.0}, {44.0, 58.0}}
+                                              Other, 0x112679cc0, {{396.0, 444.0}, {44.0, 58.0}}
+                                                Other, 0x112679e00, {{396.0, 444.0}, {44.0, 58.0}}
+                                                  Other, 0x112679f40, {{396.0, 444.0}, {44.0, 58.0}}
+                                                Other, 0x11267a080, {{396.0, 444.0}, {44.0, 58.0}}
+                                              Other, 0x11267a1c0, {{396.0, 444.0}, {44.0, 58.0}}
+              Other, 0x11267a300, {{191.0, 322.0}, {0.0, 0.0}}
+      Other, 0x11267a440, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x11267a580, {{-466.0, -678.0}, {1398.0, 2034.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Other, 0x11267a6c0, {{8.0, 8.0}, {450.0, 670.0}}
+          Other, 0x11267a800, {{8.0, 8.0}, {450.0, 670.0}}
+            Other, 0x11267a940, {{8.0, 8.0}, {450.0, 670.0}}
+              Other, 0x11267aa80, {{8.0, 8.0}, {450.0, 670.0}}
+                Other, 0x11267abc0, {{8.0, 8.0}, {450.0, 670.0}}
+                  Toolbar, 0x11267ad00, {{8.0, 8.0}, {450.0, 670.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x11267ae40, {{8.0, 8.0}, {450.0, 670.0}}
+                  NavigationBar, 0x11267af80, {{8.0, 24.0}, {450.0, 58.0}}, identifier: 'Edit Pinned Metrics'
+                  Other, 0x11267b0c0, {{8.0, 8.0}, {450.0, 670.0}}
+                    Other, 0x11267b200, {{8.0, 8.0}, {450.0, 670.0}}
+                      Other, 0x11267b340, {{8.0, 8.0}, {450.0, 670.0}}
+                        Other, 0x11267b480, {{8.0, 8.0}, {450.0, 670.0}}
+                          CollectionView, 0x11267b5c0, {{8.0, 8.0}, {450.0, 670.0}}, identifier: 'pinned-metrics-editor-screen'
+                            Other, 0x11267b700, {{-8.0, -10.0}, {542.0, 2345.7}}
+                            Cell, 0x11267b840, {{24.0, 7.3}, {358.0, 279.3}}
+                              Other, 0x11267b980, {{24.0, 7.3}, {358.0, 279.3}}
+                                Other, 0x11267bac0, {{24.0, 7.3}, {358.0, 279.3}}
+                              Other, 0x11267bc00, {{24.0, 7.3}, {358.0, 279.3}}
+                                Other, 0x11267bd40, {{24.0, 7.3}, {358.0, 279.3}}
+                                  Other, 0x11267be80, {{24.0, 7.3}, {358.0, 279.3}}
+                                    Button, 0x107dcc000, {{24.0, 7.3}, {358.0, 279.3}}, identifier: 'pinned-metrics-editor-row-hrv', label: 'Heart Rate Variability', Selected
+                                      StaticText, 0x107dcc140, {{44.0, 22.3}, {318.0, 249.3}}, label: 'Heart Rate Variability'
+                                      Image, 0x107dcc280, {{44.0, 117.0}, {59.0, 60.0}}, identifier: 'waveform.path.ecg', label: 'Ecg Waveform Path'
+                                      Image, 0x107dcc3c0, {{304.3, 120.7}, {53.0, 53.0}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                            Cell, 0x107dcc500, {{24.0, 286.7}, {358.0, 217.3}}
+                              Other, 0x107dcc640, {{24.0, 286.7}, {358.0, 217.3}}
+                                Other, 0x107dcc780, {{24.0, 286.7}, {358.0, 217.3}}
+                              Other, 0x107dcc8c0, {{24.0, 286.7}, {358.0, 217.3}}
+                                Other, 0x107dcca00, {{24.0, 286.7}, {358.0, 217.3}}
+                                  Other, 0x107dccb40, {{24.0, 286.7}, {358.0, 217.3}}
+                                    Button, 0x107dccc80, {{24.0, 286.7}, {358.0, 217.3}}, identifier: 'pinned-metrics-editor-row-rhr', label: 'Resting Heart Rate', Selected
+                                      StaticText, 0x107dccdc0, {{44.0, 301.7}, {318.3, 187.3}}, label: 'Resting Heart Rate'
+                                      Image, 0x107dccf00, {{44.0, 368.0}, {61.0, 54.3}}, identifier: 'heart.fill', label: 'Love'
+                                      Image, 0x107dcd040, {{304.7, 369.0}, {53.0, 53.0}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                            Other, 0x107dcd180, {{115.0, 285.7}, {247.0, 1.0}}
+                            Cell, 0x107dcd2c0, {{24.0, 504.0}, {358.0, 96.0}}
+                              Other, 0x107dcd400, {{24.0, 504.0}, {358.0, 96.0}}
+                                Other, 0x107dcd540, {{24.0, 504.0}, {358.0, 96.0}}
+                              Other, 0x107dcd680, {{24.0, 504.0}, {358.0, 96.0}}
+                                Other, 0x107dcd7c0, {{24.0, 504.0}, {358.0, 96.0}}
+                                  Other, 0x107dcd900, {{24.0, 504.0}, {358.0, 96.0}}
+                                    Button, 0x107dcda40, {{24.0, 504.0}, {358.0, 96.0}}, identifier: 'pinned-metrics-editor-row-sleep', label: 'Sleep'
+                                      Image, 0x107dcdb80, {{44.0, 519.0}, {57.0, 66.0}}, identifier: 'moon.zzz.fill', label: 'Snooze'
+                                      StaticText, 0x107dcdcc0, {{44.0, 519.0}, {318.0, 66.0}}, label: 'Sleep'
+                            Other, 0x107dcde00, {{117.0, 503.0}, {245.0, 1.0}}
+                            Cell, 0x107dcdf40, {{24.0, 600.0}, {358.0, 93.3}}
+                              Other, 0x107dce080, {{24.0, 600.0}, {358.0, 93.3}}
+                                Other, 0x107dce1c0, {{24.0, 600.0}, {358.0, 93.3}}
+                              Other, 0x107dce300, {{24.0, 600.0}, {358.0, 93.3}}
+                                Other, 0x107dce440, {{24.0, 600.0}, {358.0, 93.3}}
+                                  Other, 0x107dce580, {{24.0, 600.0}, {358.0, 93.3}}
+                                    Button, 0x107dce6c0, {{24.0, 600.0}, {358.0, 93.3}}, identifier: 'pinned-metrics-editor-row-exercise', label: 'Exercise'
+                                      StaticText, 0x107dce800, {{44.0, 615.0}, {318.0, 63.3}}, label: 'Exercise'
+                                      Image, 0x107dce940, {{44.0, 615.7}, {50.0, 62.0}}, identifier: 'flame.fill', label: 'Flame'
+                            Other, 0x107dcea80, {{113.0, 599.0}, {249.0, 1.0}}
+                            Other, 0x107dcebc0, {{425.0, 82.0}, {30.0, 570.0}}, label: 'Vertical scroll bar, 3 pages', value: 48%
+                              Other, 0x107dced00, {{452.0, 219.3}, {3.0, 282.0}}
+                            Other, 0x107dcee40, {{425.0, 82.0}, {30.0, 570.0}}, label: 'Vertical scroll bar, 3 pages', value: 48%
+                              Other, 0x107dcef80, {{452.0, 219.3}, {3.0, 282.0}}
+Path to element:
+ →Application, 0x112661a40, pid: 51600, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x107dcf0c0, pid: 51600, label: 'DUNE'
+  }

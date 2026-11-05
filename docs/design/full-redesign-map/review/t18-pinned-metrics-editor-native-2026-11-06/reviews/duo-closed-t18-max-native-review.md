@@ -1,0 +1,9 @@
+# T18 Duo closed MAX native review
+
+P1: 0. P2: 0 for this passed T18 MAX method. This does not mark the enclosing six-method Duo archive passed: it remains 3 passed/3 failed, with H14 MAX, T17 MAX and T18 normal failures tracked separately.
+
+Source `fd01b1e93c9f78023a23c622e30ea9ebf4a7bdc0`; actual Duo closed 0°/LCD-0 active, 466×678 pt outer viewport, English/Light/MAX. `TodaySettingsRegressionTests/testPinnedMetricsEditorAtMaximumAccessibilitySize()` passed in 136.507 seconds. All 12 host checkpoint 046–057 active-display PNGs and paired AX files exist, with exact SHA-256 values in [`duo-closed-t18-max-native-review.json`](duo-closed-t18-max-native-review.json).
+
+Checkpoint 048 shows the full “Top 6 Metrics” hero title wrapping below the native pin, the first two selected symbols and the HRV row without symbol/text overlap. Checkpoint 054 shows the lower selected Exercise/Steps/Weight rows, disabled BMI and complete six-item footer; AX labels/selected traits and BMI disabled state agree. Checkpoint 055 captures the added six-symbol preview: all actual category symbols wrap in two rows of three, remain distinct and inside the HeroCard, while the title is fully readable. AX at 055 retains the exact title and Cancel/Done controls. Checkpoints 056–057 show Cancel tap and return to the Today screen; the test's editor-nonexistence assertion passed.
+
+The native navigation title truncates at MAX in the narrow bar, while the full hero title remains visible and reachable. No P1/P2 clipping or overlap is observed in the required content. This method proves Cancel from the MAX limit state; Done persistence belongs to the separate normal method, which failed later in this archive and is not claimed here. No Dark, other locale, VoiceOver traversal or other profile is claimed. No SDK, simulator, Git or Root tracked edit was performed by this reviewer.

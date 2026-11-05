@@ -223,3 +223,5 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-06 H14: [실제 선택 화면과 출처](../full-redesign-map/review/h14-heart-rate-recovery-explanation-native-2026-11-06/index.html). 영어·Light 네 기본 상태와 접힌 Duo 최대 글씨의 해당 메서드 범위다.
 
 2026-11-06 T17: [실제 선택 화면과 출처](../full-redesign-map/review/t17-health-data-qa-native-2026-11-06/index.html). 영어·Light 네 기본 상태와 접힌 Duo 최대 글씨의 해당 메서드 범위다.
+
+2026-11-06 T18: [실제 선택 화면과 출처](../full-redesign-map/review/t18-pinned-metrics-editor-native-2026-11-06/index.html). 영어·Light 네 기본 상태와 접힌 Duo 최대 글씨의 해당 메서드 범위다.

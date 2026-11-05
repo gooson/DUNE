@@ -1,0 +1,92 @@
+{
+  "scope": "Final sixteen-row App/UI/resource evidence reuse audit; publication/PR completion separate",
+  "finalIntegrationSource": "36bc89794a2fc557239ba3db81c2c949a7af7192",
+  "unchangedAppFilesSinceFd01": {
+    "DUNE/Presentation/Shared/Extensions/HeartRateRecovery+View.swift": "7d6cff27fa112e92da889171aebcdab00fe0010d18fb1c2c5281fb7dbb0e671d",
+    "DUNE/Presentation/Dashboard/HealthDataQASheet.swift": "4a3c39338a7bb2521210b0c9f332193f627b9299bd404fcac7d6d5ae8869589e",
+    "DUNE/Presentation/Dashboard/Components/PinnedMetricsEditorView.swift": "c12bb7eadb161f426e31f6c9908a563de69d2bbfbfc472a7d1522fc054a27956",
+    "DUNE/App/ContentView.swift": "03bcef09eb49fee7f50b8f45d493d1aaa80eb8812016bccd5bed281fb1be177e",
+    "DUNE/App/TestDataSeeder.swift": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871"
+  },
+  "fd01To36bcChangedOnly": [
+    "DUNEUITests/Full/ActivityExerciseRegressionTests.swift",
+    "DUNEUITests/Full/DesignMapAdditionalRoutesTests.swift",
+    "DUNEUITests/Full/TodaySettingsRegressionTests.swift"
+  ],
+  "retainedEvidence": [
+    {
+      "archive": "phone-fd01b1e9-native-fix-passed",
+      "screens": [
+        "H14",
+        "T17"
+      ],
+      "scope": "normal phone App bytes identical; final test delta only bounded native retrieval when missing; old visible route path assertions retained"
+    },
+    {
+      "archive": "phone-08ad7dba-passed",
+      "screens": [
+        "T18"
+      ],
+      "scope": "App bytes identical through current; final helper immediately uses same exact visible Cancel/Done; no weakening of discard/save/cap assertions"
+    },
+    {
+      "archive": "duo-closed-fd01b1e9-partial-failed",
+      "methodSubset": [
+        "H14 normal",
+        "T17 normal",
+        "T18 MAX"
+      ],
+      "scope": "Only3 individually passed methods/native reviewed; aggregate3P3F not rewritten; otherfailed3 excluded"
+    },
+    {
+      "archive": "duo-closed-36bc8979-failed3-retry-passed",
+      "methodSubset": [
+        "H14 MAX",
+        "T17 MAX",
+        "T18 normal"
+      ],
+      "scope": "3/3passed0skipped source36bc; first retry1 samecheckID; exact controls shown by newnative"
+    }
+  ],
+  "expectedUniqueMethodProfileCombinations": 16,
+  "currentlyProven": 16,
+  "pending": [
+    "screen publication/PR merge"
+  ],
+  "notClaimed": [
+    "all final PR HEADs ran SDK",
+    "full suite",
+    "Dark",
+    "real model inference",
+    "Watch",
+    "physicaldevice"
+  ],
+  "currentFinalSource": "1ae4fb4c333c0bd8890e91c3fac9d9c355511f3e",
+  "currentPositiveUniqueMethodProfiles": 16,
+  "addedRuntime": [
+    {
+      "profile": "duo-open normal3",
+      "archive": "duo-open-36bc8979-normal3-passed",
+      "source": "36bc89794a2fc557239ba3db81c2c949a7af7192",
+      "passed": 3
+    },
+    {
+      "profile": "ipad-normal3",
+      "archive": "ipad-f9739208-normal3-passed",
+      "source": "f97392084401db4c5108f241db1cb19901e072d8",
+      "passed": 3
+    },
+    {
+      "profile": "ipad-ko T18",
+      "archive": "ipad-ko-1ae4fb4c-retry1-passed",
+      "source": "1ae4fb4c333c0bd8890e91c3fac9d9c355511f3e",
+      "passed": 1
+    }
+  ],
+  "laterDeltas": {
+    "36bcToF973": "T17testonlyhealth-query-fixture existing DEBUG childservice; App/QA layout unchanged, freshiPadcoversnewchildrouting; historicalsourceflagsretained",
+    "f973To1ae4": "T18Koreandedicatedmethod +exacttwoSharedmanualIntkeys; alloldcatalogkeysunchanged; Englishvaluesmatchoriginalfallback; Appsourceunchanged. NewKoreannative provesactualresourcekeys. Watch/widget no matchingconsumers."
+  },
+  "basicExpected": 15,
+  "additionalKorean": 1
+}

@@ -1,0 +1,110 @@
+{
+  "status": "independent iPad Korean T18 native review, retry 1 passed",
+  "source_revision": "1ae4fb4c333c0bd8890e91c3fac9d9c355511f3e",
+  "archive": ".codex-checks/batch02/evidence/ipad-ko-1ae4fb4c-retry1-passed",
+  "sdk": {
+    "executed": 1,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "EDE87B03-4B23-4EFD-B3FA-438D02BFCF59",
+    "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+    "modelName": "iPad mini (A20 Pro)",
+    "osBuildNumber": "24B8117",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "pair_index_sha256": "d2d4d1c97a3c7241f4415c88fdd4214c32b5b801cec9ecd5e7f683f04ddd5c1f",
+  "app_file": "DUNE/Presentation/Dashboard/Components/PinnedMetricsEditorView.swift",
+  "app_sha256": "c12bb7eadb161f426e31f6c9908a563de69d2bbfbfc472a7d1522fc054a27956",
+  "catalog_file": "Shared/Resources/Localizable.xcstrings",
+  "catalog_sha256": "83bd89e2b1252596fac87c7e58b8a6ad173dab29cbdbf81fcb793144d0b5a462",
+  "catalog_delta": {
+    "old_keys_unchanged": true,
+    "added_keys": [
+      "Top %lld Metrics",
+      "Select up to %lld metrics shown at the top of Today."
+    ],
+    "old_at_placeholder_keys_unchanged": true,
+    "english_fallback_equivalent": true,
+    "resource_bytes_identical_to_historical_english_capture": false
+  },
+  "historical_failed_attempt": {
+    "archive": ".codex-checks/batch02/evidence/ipad-ko-d1afd659-first-failed",
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "retained": true
+  },
+  "pairs": [
+    {
+      "checkpoint": "T18 Korean iPad title and selected preview",
+      "png": ".codex-checks/batch02/evidence/ipad-ko-1ae4fb4c-retry1-passed/attachments/47A2013C-3401-4A2A-A105-EAE2E4246631.png",
+      "png_sha256": "f6415f8a5c1a53a0f28cf639fe1922205408b865941b85730e671a8f5edbb23f",
+      "ax": ".codex-checks/batch02/evidence/ipad-ko-1ae4fb4c-retry1-passed/attachments/03356FB0-A2D3-427F-8975-A0E37E2FD9E6.txt",
+      "ax_sha256": "e030b5b0d72c17886cc26ebf5f5e23754250707c28653c7c99b6b30615e37f42",
+      "pixels": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "checkpoint": "T18 Korean iPad selected rows and footer",
+      "png": ".codex-checks/batch02/evidence/ipad-ko-1ae4fb4c-retry1-passed/attachments/93B55FB5-2F0A-4BC6-AB6A-729877D55150.png",
+      "png_sha256": "fd9d2c507d4095368b65550c28a570760205b75046450f5f3c74cb5dee44177e",
+      "ax": ".codex-checks/batch02/evidence/ipad-ko-1ae4fb4c-retry1-passed/attachments/8601FC62-615A-4E82-9CB5-5B7D031FBC92.txt",
+      "ax_sha256": "c51e16cd2344b34fc2e357cf981aa4f344386ceac882c6560bee25ed96effe8e",
+      "pixels": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "checkpoint": "tap pinned-metrics-editor-cancel",
+      "png": ".codex-checks/batch02/evidence/ipad-ko-1ae4fb4c-retry1-passed/attachments/FBC7BB89-B8A7-4634-BEF5-8CDC0D9E4ADB.png",
+      "png_sha256": "96617487fc3ae29becc138f897475ebe753527bd57807f13db1dc79f9778d0e8",
+      "ax": ".codex-checks/batch02/evidence/ipad-ko-1ae4fb4c-retry1-passed/attachments/720E6A39-AB0E-41AF-8937-F6D97E6B0306.txt",
+      "ax_sha256": "f6eb14aa4203e44efffdd3bc54c1c7567a58db3ebb7a9b04c65894f7fe27cc69",
+      "pixels": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "checkpoint": "before teardown -[TodaySettingsRegressionTests testPinnedMetricsEditorKoreanTitleOnIPad]",
+      "png": ".codex-checks/batch02/evidence/ipad-ko-1ae4fb4c-retry1-passed/attachments/03C6D869-94F3-408E-A804-BFDE945883D0.png",
+      "png_sha256": "96617487fc3ae29becc138f897475ebe753527bd57807f13db1dc79f9778d0e8",
+      "ax": ".codex-checks/batch02/evidence/ipad-ko-1ae4fb4c-retry1-passed/attachments/077203E1-2881-4A46-8548-9420D9EDADF0.txt",
+      "ax_sha256": "f0a3b2f01ba20d506c7c4f8730b1929123cc5ced2b77a53d81769df745d5f6a6",
+      "pixels": [
+        1512,
+        2316
+      ]
+    }
+  ],
+  "observed": {
+    "title": "주요 지표 6개",
+    "seeded_selected_rows": [
+      "심박변이도",
+      "안정시 심박수"
+    ],
+    "preview_symbols": [
+      "waveform.path.ecg",
+      "heart.fill"
+    ],
+    "footer": "오늘 탭 상단에 표시할 지표를 최대 6개 선택하세요.",
+    "cancel_return": "editor title absent; dashboard pinned edit present"
+  },
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "limits": [
+    "This is one Korean iPad selector and does not rerun the 15 earlier English/MAX methods.",
+    "No gallery materialization, actual-map publication, PR or full CI claim."
+  ]
+}
