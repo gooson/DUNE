@@ -792,7 +792,7 @@
       "name": "H10 · 부상 상세",
       "title": "원래 부위·심각도·기간 히어로와 날짜·메모",
       "file": "dune-injury-detail-h10.html",
-      "detail": "원래 상태·아이콘·durationDays를 강조하고 날짜 중복을 줄인 정적 표현. 값은 설명용이며 실제 기록·네이티브 캡처가 아니다. 아직 구현·검증 전이다.",
+      "detail": "원래 상태·심각도 아이콘·기간·날짜·메모를 보존하는 정적 표현. H09 첫 탭은 화면 소유 기록 ID 선택으로 상세에 연결하며 회복 후에도 상세를 유지한다. iPad 경로 수정의 실제 검증은 진행 중이며 시안은 네이티브 캡처가 아니다.",
       "implementation": {
         "layout": "../layout-map/injury-detail-h10.html",
         "status": "proposal-not-native-verified"

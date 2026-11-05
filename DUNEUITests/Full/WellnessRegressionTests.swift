@@ -632,7 +632,40 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         expectation(for: dismissed, evaluatedWith: form)
         waitForExpectations(timeout: 5)
         XCTAssertTrue(detail.waitForExistence(timeout: 8), "Saving edit should return to injury detail")
+
+        let markRecovered = app.buttons[AXID.injuryDetailMarkRecovered].firstMatch
+        XCTAssertTrue(markRecovered.waitForExistence(timeout: 5), "Active injury should offer Mark Recovered")
+        XCTAssertTrue(markRecovered.isHittable, "Mark Recovered must be reachable")
+        markRecovered.auditTap()
+
+        let recoveredStatus = app.staticTexts["injury-detail-status"].firstMatch
+        let statusChanged = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "label == %@", "Recovered"), object: recoveredStatus
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [statusChanged], timeout: 5), .completed,
+                       "Recovery must update the open detail")
+        XCTAssertTrue(detail.exists, "Recovery must keep the detail route open")
+        XCTAssertTrue(app.revealFullyVisible("injury-detail-status", in: detailScroll),
+                      "Recovered status must be fully visible")
+        XCTAssertEqual(recoveredStatus.label, "Recovered")
+        let recoveredActionGone = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: markRecovered
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [recoveredActionGone], timeout: 5), .completed,
+                       "Recovered injury must not offer Mark Recovered")
+        VisualAudit.capture("H10 newly recovered Knee detail")
+
         returnToInjuryHistory(from: AXID.injuryDetailScreen, navigationTitle: "Injury Detail")
+        XCTAssertTrue(revealInjuryHistoryRow(0), "Newly recovered Knee row must remain reachable")
+        let recoveredRow = app.buttons[AXID.injuryHistoryRow(0)].firstMatch
+        XCTAssertTrue(recoveredRow.exists && recoveredRow.label.contains("Knee"),
+                      "Knee must remain in history after recovery")
+        XCTAssertFalse(recoveredRow.label.contains("Active"), "Knee must no longer be active")
+        XCTAssertTrue(app.staticTexts["Recovered"].firstMatch.exists,
+                      "Recovered section must contain the updated record")
+        XCTAssertFalse(app.staticTexts["Active"].firstMatch.exists,
+                       "No active section should remain after recovering the only active record")
+        VisualAudit.capture("H10 newly recovered Knee history")
     }
 
     func testInjuryDetailAtMaximumAccessibilityTextSize() throws {
