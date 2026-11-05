@@ -569,6 +569,10 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         let saveButton = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Injury save button should exist")
+        let cancelButton = app.descendants(matching: .any)[AXID.injuryFormCancel].firstMatch
+        let windowFrame = app.windows.firstMatch.frame
+        XCTAssertTrue(saveButton.isEnabled && saveButton.isHittable && windowFrame.contains(saveButton.frame))
+        XCTAssertTrue(cancelButton.exists && cancelButton.isHittable && windowFrame.contains(cancelButton.frame))
         saveButton.auditTap()
 
         let form = app.descendants(matching: .any)[AXID.injuryFormScreen].firstMatch
@@ -657,7 +661,29 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         memo.auditTap()
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5), "Software keyboard must appear")
         VisualAudit.capture("H08 MAX memo software keyboard")
-        XCTAssertTrue(app.dismissKeyboardIfPresent(), "Keyboard must dismiss before Save")
+        let keyboard = app.keyboards.firstMatch
+        let formScroll = app.collectionViews.firstMatch
+        XCTAssertTrue(formScroll.exists && formScroll.isHittable)
+        for _ in 0..<2 {
+            if !keyboard.exists { break }
+            let window = app.windows.firstMatch
+            let viewport = formScroll.frame.intersection(window.frame)
+            let keyboardFrame = keyboard.frame.intersection(window.frame)
+            XCTAssertGreaterThan(keyboardFrame.minY, viewport.minY, "A visible Form region must remain above the keyboard")
+            let startY = (viewport.minY + keyboardFrame.minY) / 2
+            XCTAssertGreaterThan(keyboardFrame.midY, startY, "Keyboard dismissal must drag downward inside the window")
+            let origin = window.coordinate(withNormalizedOffset: .zero)
+            let start = origin.withOffset(CGVector(
+                dx: viewport.midX - window.frame.minX,
+                dy: startY - window.frame.minY
+            ))
+            let end = origin.withOffset(CGVector(
+                dx: viewport.midX - window.frame.minX,
+                dy: keyboardFrame.midY - window.frame.minY
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+            if keyboard.waitForNonExistence(timeout: 2) { break }
+        }
         XCTAssertFalse(app.keyboards.firstMatch.exists)
         XCTAssertTrue(save.isEnabled && save.isHittable && app.windows.firstMatch.frame.contains(save.frame))
         XCTAssertTrue(cancel.isEnabled && cancel.isHittable && app.windows.firstMatch.frame.contains(cancel.frame))

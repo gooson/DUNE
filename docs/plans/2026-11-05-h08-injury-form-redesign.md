@@ -83,3 +83,9 @@ related_brainstorms:
 ## iPad 종료일 캡처 보완
 
 `df28b100`의 iPad 핵심 2건과 실제 컴파일은 통과했다. 실제 Light toolbar·선택값 대비는 9.12–9.72:1, 네 섹션 헤더는 5.73–5.95:1로 전경 보완을 확인했다. 다만 Recovered 캡처는 End Date가 Form 아래에 있어 시각 증거로 부족했다. 기존 존재 검사 뒤 이미 검토한 실제 viewport 기반 reveal을 normal Add와 MAX의 End Date를 포함하는 native Cell 전체에 적용한다. 기존 ID는 라벨에 있으므로 라벨만 보였다는 assertion으로 DatePicker 전체를 보였다고 판단하지 않는다. 앱·기존 Edit 메서드는 그대로이므로 iPad Edit 결과는 재사용하고 Add 한 건만 새로 확인한다. 이후 phone 2·Duo 접힘 3·펼침 2를 최종 테스트 소스로 실행한다. 이전 실행·캡처·finding은 그대로 보존한다.
+
+## Duo 접힘의 저장 행동·키보드 수정
+
+`d9f7e2b6`의 실제 Duo 접힘 실행은 3건 중 Edit 1건 통과, Add·MAX 2건 실패였다. End Date를 보이는 드래그 뒤 시트는 그대로지만 NavBar의 Save·Cancel이 실제 PNG·AX에서 사라졌다. MAX의 여러 줄 Memo는 기존 공통 키보드 helper의 Return 세 번으로 줄만 추가되어 키보드 닫힘 검사에 실패했다. 원본 SDK·로그·두 디스플레이 PNG·AX·실제 0°/LCD 활성 증거를 보존한다.
+
+Title·toolbar 소유를 Form에서 안정적인 상위 VStack으로 옮기며 기존 두 행동·ID·저장 검증은 그대로 둔다. Form에 시스템 interactive keyboard dismissal을 적용하고 MAX만 실제 Form/window/keyboard 프레임으로 제한한 최대 두 번 드래그 후 키보드 부재를 확인한다. 공통 helper와 실행기는 수정하지 않는다. 일반 Add에는 종료일 스크롤 후 Save·Cancel 전체 프레임·조작 가능 assertion도 유지한다. 공통 내비게이션 소유가 바뀌므로 이전 phone·iPad 및 Duo Edit 결과는 이전 소스 기록으로 남기고, 수정 소스에서 원래 4프로필·9사례를 새로 확인한다. 같은 Duo 실패 원인의 표준 실행기 재시도는 수정·독립 검토 뒤 한 번만 진행하고 기존 실패·횟수를 지우지 않는다.

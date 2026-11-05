@@ -156,26 +156,27 @@ struct InjuryFormSheet: View {
                     }
                 }
                 .scrollContentBackground(.hidden)
+                .scrollDismissesKeyboard(.interactively)
                 .background { SheetWaveBackground() }
-                .englishNavigationTitle(isEdit ? "Edit Injury" : "Add Injury")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { dismiss() }
-                            .accessibilityIdentifier("injury-form-cancel")
-                    }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Save") {
-                            let hadError = viewModel.validationError != nil
-                            onSave()
-                            // Only trigger success haptic if validation passed
-                            if !hadError, viewModel.validationError == nil {
-                                saveCount += 1
-                            }
+            }
+            .englishNavigationTitle(isEdit ? "Edit Injury" : "Add Injury")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                        .accessibilityIdentifier("injury-form-cancel")
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        let hadError = viewModel.validationError != nil
+                        onSave()
+                        // Only trigger success haptic if validation passed
+                        if !hadError, viewModel.validationError == nil {
+                            saveCount += 1
                         }
-                        .disabled(viewModel.isSaving)
-                        .accessibilityIdentifier("injury-form-save")
                     }
+                    .disabled(viewModel.isSaving)
+                    .accessibilityIdentifier("injury-form-save")
                 }
             }
         }
