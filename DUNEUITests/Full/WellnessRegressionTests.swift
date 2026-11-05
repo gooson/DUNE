@@ -632,10 +632,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         expectation(for: dismissed, evaluatedWith: form)
         waitForExpectations(timeout: 5)
         XCTAssertTrue(detail.waitForExistence(timeout: 8), "Saving edit should return to injury detail")
-        let back = app.navigationBars["Injury Detail"].buttons["Injury History"].firstMatch
-        XCTAssertTrue(back.waitForExistence(timeout: 5), "Detail must provide history return")
-        back.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryHistoryScreen].firstMatch.waitForExistence(timeout: 5))
+        returnToInjuryHistory(from: AXID.injuryDetailScreen, navigationTitle: "Injury Detail")
     }
 
     func testInjuryDetailAtMaximumAccessibilityTextSize() throws {
@@ -673,10 +670,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("H10 MAX recovered Shoulder detail timeline")
         XCTAssertTrue(app.revealFullyVisible("injury-detail-memo-value", in: detailScroll))
         VisualAudit.capture("H10 MAX recovered Shoulder detail memo")
-        let back = app.navigationBars["Injury Detail"].buttons["Injury History"].firstMatch
-        XCTAssertTrue(back.waitForExistence(timeout: 5))
-        back.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryHistoryScreen].firstMatch.waitForExistence(timeout: 5))
+        returnToInjuryHistory(from: AXID.injuryDetailScreen, navigationTitle: "Injury Detail")
     }
 
     func testInjuryHistoryAtMaximumAccessibilityTextSize() throws {
@@ -730,10 +724,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.staticTexts["Knee: 1"].firstMatch.exists)
         XCTAssertTrue(app.staticTexts["Shoulder: 1"].firstMatch.exists)
         VisualAudit.capture("H11 injury statistics frequency graph")
-        let back = app.navigationBars["Injury Statistics"].buttons["Injury History"].firstMatch
-        XCTAssertTrue(back.waitForExistence(timeout: 5), "Statistics must provide history return")
-        back.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryHistoryScreen].firstMatch.waitForExistence(timeout: 5))
+        returnToInjuryHistory(from: AXID.injuryStatisticsScreen, navigationTitle: "Injury Statistics")
     }
 
     func testInjuryStatisticsAtMaximumAccessibilityTextSize() throws {
@@ -769,10 +760,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.staticTexts["Knee: 1"].firstMatch.exists)
         XCTAssertTrue(app.staticTexts["Shoulder: 1"].firstMatch.exists)
         VisualAudit.capture("H11 MAX injury statistics frequency graph")
-        let back = app.navigationBars["Injury Statistics"].buttons["Injury History"].firstMatch
-        XCTAssertTrue(back.waitForExistence(timeout: 5))
-        back.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryHistoryScreen].firstMatch.waitForExistence(timeout: 5))
+        returnToInjuryHistory(from: AXID.injuryStatisticsScreen, navigationTitle: "Injury Statistics")
     }
 
     private func openBodyFormFromToolbar() {
@@ -849,6 +837,35 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         }
         let viewport = visibleList()
         return row.exists && row.isHittable && viewport.contains(row.frame)
+    }
+
+    private func returnToInjuryHistory(from destinationID: String, navigationTitle: String) {
+        let destination = app.descendants(matching: .any)[destinationID].firstMatch
+        XCTAssertTrue(destination.waitForExistence(timeout: 5), "Destination must be open before Back")
+
+        let namedBack = app.navigationBars[navigationTitle].buttons["Injury History"].firstMatch
+        if namedBack.exists && namedBack.isHittable {
+            namedBack.auditTap()
+        } else {
+            // Closed Duo places Back in the action rail rather than the navigation bar.
+            let railBackButtons = app.buttons.matching(identifier: "BackButton")
+            let railBack = railBackButtons.firstMatch
+            guard railBack.waitForExistence(timeout: 5),
+                  railBackButtons.count == 1,
+                  railBack.isHittable else {
+                XCTFail("Expected one reachable BackButton for \(navigationTitle)")
+                return
+            }
+            railBack.auditTap()
+        }
+
+        let departed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: destination
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [departed], timeout: 5), .completed,
+                       "Back must dismiss \(navigationTitle)")
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryHistoryScreen].firstMatch.waitForExistence(timeout: 5),
+                      "Back must return to Injury History")
     }
 
     private func openInjuryHistory() {
