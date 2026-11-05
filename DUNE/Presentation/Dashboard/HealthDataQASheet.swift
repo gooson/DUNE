@@ -11,17 +11,15 @@ struct HealthDataQASheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: DS.Spacing.lg) {
+            Group {
                 if viewModel.isAvailable {
                     availableContent
                 } else {
                     unavailableContent
                 }
             }
-            .padding(.horizontal, DS.Spacing.md)
-            .padding(.top, DS.Spacing.md)
-            .padding(.bottom, DS.Spacing.sm)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .background { SheetWaveBackground().opacity(0.55) }
             .navigationTitle("Health Q&A")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -34,6 +32,7 @@ struct HealthDataQASheet: View {
                     Button("Done") {
                         dismiss()
                     }
+                    .accessibilityIdentifier("health-qa-done")
                 }
             }
         }
@@ -44,83 +43,135 @@ struct HealthDataQASheet: View {
     }
 
     private var availableContent: some View {
-        VStack(spacing: DS.Spacing.lg) {
-            InlineCard {
-                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    Text("Answers are informational and based on your recent DUNE health data.")
-                        .font(.footnote)
-                        .foregroundStyle(DS.Color.textSecondary)
-
-                    if viewModel.messages.isEmpty {
-                        Text("Try one of these questions to get started.")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.primary)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-
+        VStack(spacing: DS.Spacing.md) {
             if viewModel.messages.isEmpty {
-                suggestedPrompts
+                ScrollView {
+                    VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                        introductionCard
+                        suggestedPrompts
+                    }
+                    .padding(.vertical, DS.Spacing.md)
+                    .frame(maxWidth: 680)
+                    .frame(maxWidth: .infinity)
+                }
+                .scrollBounceBehavior(.basedOnSize)
+                .accessibilityIdentifier("health-qa-empty-scroll")
             } else {
                 messageList
             }
 
             composer
+                .frame(maxWidth: 680)
+                .padding(.bottom, DS.Spacing.sm)
+        }
+        .padding(.horizontal, DS.Spacing.md)
+    }
+
+    private var introductionCard: some View {
+        HeroCard(tintColor: DS.Color.warmGlow) {
+            HStack(alignment: .top, spacing: DS.Spacing.md) {
+                Image(systemName: "sparkles")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(DS.Color.warmGlow)
+                    .frame(minWidth: 40, minHeight: 40)
+                    .background(DS.Color.warmGlow.opacity(0.14), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                    .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    Text("Answers are informational and based on your recent DUNE health data.")
+                        .accessibilityIdentifier("health-qa-overview-body")
+                        .font(.footnote)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    if viewModel.messages.isEmpty {
+                        Text("Try one of these questions to get started.")
+                            .accessibilityIdentifier("health-qa-overview-guide")
+                            .font(.subheadline.weight(.semibold))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
     private var unavailableContent: some View {
-        VStack(spacing: DS.Spacing.md) {
-            Spacer()
-            VStack(spacing: DS.Spacing.md) {
-                    Image(systemName: "sparkles.slash")
-                        .font(.system(size: 28, weight: .semibold))
-                        .foregroundStyle(.tertiary)
+        ScrollView {
+            VStack(spacing: DS.Spacing.lg) {
+                HeroCard(tintColor: DS.Color.warmGlow) {
+                    VStack(spacing: DS.Spacing.md) {
+                        ZStack {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 26, weight: .semibold))
+                            Image(systemName: "nosign")
+                                .font(.system(size: 46, weight: .medium))
+                        }
+                            .foregroundStyle(DS.Color.warmGlow)
+                            .frame(width: 64, height: 64)
+                            .background(DS.Color.warmGlow.opacity(0.14), in: Circle())
+                            .accessibilityHidden(true)
 
-                    Text("Health Q&A requires Apple Intelligence on a supported device.")
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
+                        Text("Health Q&A requires Apple Intelligence on a supported device.")
+                            .accessibilityIdentifier("health-qa-unavailable-title")
+                            .font(.headline)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
 
-                    Text("This feature uses on-device Foundation Models, so it only works on compatible hardware.")
-                        .font(.footnote)
-                        .foregroundStyle(DS.Color.textSecondary)
-                        .multilineTextAlignment(.center)
+                        Text("This feature uses on-device Foundation Models, so it only works on compatible hardware.")
+                            .accessibilityIdentifier("health-qa-unavailable-body")
+                            .font(.footnote)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+
+                NavigationLink {
+                    HealthQueryView(queryService: HealthQueryServiceRouting.current())
+                } label: {
+                    Label("Browse health records", systemImage: "heart.text.square")
+                        .font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                }
+                .accessibilityIdentifier("health-qa-browse-records")
             }
-            .padding(.horizontal, DS.Spacing.xl)
-            NavigationLink {
-                HealthQueryView(queryService: HealthQueryServiceRouting.current())
-            } label: {
-                Label("Browse health records", systemImage: "heart.text.square")
-            }
-            .accessibilityIdentifier("health-qa-browse-records")
-            Spacer()
+            .padding(DS.Spacing.xl)
+            .frame(maxWidth: 680)
+            .frame(maxWidth: .infinity)
         }
+        .scrollBounceBehavior(.basedOnSize)
+        .accessibilityIdentifier("health-qa-unavailable-scroll")
     }
 
     private var suggestedPrompts: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            ForEach(viewModel.suggestedPrompts, id: \.self) { prompt in
+            ForEach(viewModel.suggestedPrompts.indices, id: \.self) { index in
+                let prompt = viewModel.suggestedPrompts[index]
                 Button {
                     Task { await viewModel.send(prompt: prompt) }
                 } label: {
-                    HStack(spacing: DS.Spacing.sm) {
+                    HStack(spacing: DS.Spacing.md) {
                         Image(systemName: "sparkles")
-                            .foregroundStyle(.secondary)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(DS.Color.warmGlow)
+                            .frame(minWidth: 36, minHeight: 36)
+                            .background(DS.Color.warmGlow.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                            .accessibilityHidden(true)
                         Text(prompt)
                             .font(.subheadline)
                             .foregroundStyle(.primary)
+                            .fixedSize(horizontal: false, vertical: true)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .padding(.horizontal, DS.Spacing.md)
-                    .padding(.vertical, DS.Spacing.sm)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(
-                        RoundedRectangle(cornerRadius: DS.Radius.sm)
-                            .fill(.ultraThinMaterial)
-                    )
+                    .padding(DS.Spacing.md)
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier(index == 0 ? "health-qa-prompt-sleep" : "health-qa-prompt-\(index)")
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -130,6 +181,8 @@ struct HealthDataQASheet: View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(spacing: DS.Spacing.sm) {
+                    introductionCard
+
                     ForEach(viewModel.messages) { message in
                         HealthDataQAMessageBubble(message: message)
                             .id(message.id)
@@ -151,8 +204,11 @@ struct HealthDataQASheet: View {
                     }
                 }
                 .padding(.vertical, DS.Spacing.xxs)
+                .frame(maxWidth: 680)
+                .frame(maxWidth: .infinity)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .accessibilityIdentifier("health-qa-message-list")
             .onChange(of: viewModel.messages.count) { _, _ in
                 guard let lastMessage = viewModel.messages.last else { return }
                 withAnimation(.easeOut(duration: 0.2)) {
@@ -165,13 +221,11 @@ struct HealthDataQASheet: View {
     private var composer: some View {
         HStack(alignment: .bottom, spacing: DS.Spacing.sm) {
             TextField("Ask about sleep, recovery, or workouts", text: $viewModel.draft, axis: .vertical)
+                .accessibilityIdentifier("health-qa-input")
                 .textFieldStyle(.plain)
                 .padding(.horizontal, DS.Spacing.md)
                 .padding(.vertical, DS.Spacing.sm)
-                .background(
-                    RoundedRectangle(cornerRadius: DS.Radius.sm)
-                        .fill(.ultraThinMaterial)
-                )
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
                 .focused($isInputFocused)
                 .onSubmit {
                     Task { await viewModel.sendCurrentDraft() }
@@ -182,6 +236,7 @@ struct HealthDataQASheet: View {
             } label: {
                 Image(systemName: "arrow.up.circle.fill")
                     .font(.system(size: 28, weight: .semibold))
+                    .frame(width: 44, height: 44)
             }
             .disabled(!viewModel.canSend)
             .accessibilityLabel("Send question")
@@ -201,14 +256,16 @@ private struct HealthDataQAMessageBubble: View {
                 InlineCard {
                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                         Text(message.text)
+                            .accessibilityIdentifier("health-qa-answer-body")
                             .font(.subheadline)
                             .foregroundStyle(.primary)
                             .fixedSize(horizontal: false, vertical: true)
 
                         if message.isFallback {
                             Text("Fallback answer")
+                                .accessibilityIdentifier("health-qa-fallback-label")
                                 .font(.caption2)
-                                .foregroundStyle(.tertiary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -221,10 +278,7 @@ private struct HealthDataQAMessageBubble: View {
                     .foregroundStyle(.primary)
                     .padding(.horizontal, DS.Spacing.md)
                     .padding(.vertical, DS.Spacing.sm)
-                    .background(
-                        RoundedRectangle(cornerRadius: DS.Radius.sm)
-                            .fill(theme.accentColor.opacity(0.18))
-                    )
+                    .background(theme.accentColor.opacity(0.18), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
             }
         }
     }
