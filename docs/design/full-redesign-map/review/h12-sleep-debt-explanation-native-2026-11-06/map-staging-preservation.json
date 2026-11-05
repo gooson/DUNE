@@ -1,0 +1,99 @@
+{
+  "screen": "H12",
+  "rows": [
+    "H12"
+  ],
+  "pair_count": 4,
+  "expected_pairs": 4,
+  "missing": [],
+  "status": "ready",
+  "root_writes": 0,
+  "base_sha256": {
+    "portal_index_html": "89bcfaeb1bb6efa18f97f46e5f4546169933b96c59e70955d94c3c1d71be72c7",
+    "profiles": {
+      "regular": {
+        "capture_index_json": "09792e37331e02e4731b183e2ad1f2d185b12aca4730b536e01aa2c7d4c458ab",
+        "index_html": "ba0e9fd039afbceebdc75d53bf68b1d149a509c4965ffc5bfe35e778f9acc641",
+        "wellness_board_png": "d86735149ecf3cc02f9500aac2c54608ead40960ac34ee5fa9b3a61af5fa5447"
+      },
+      "ipad": {
+        "capture_index_json": "79280d2957cfe32f15fc844b570d70f5a841606a1986b5a8ac37cee409d4f00a",
+        "index_html": "d948677ed2272dc68bfd1e0b0bbe2963c9e3cd3fb57ec89a54d022691fb5d1dd",
+        "wellness_board_png": "2506fe64c069ea63b9e88af903a26f80b2ae1b18bcb0e0cf8284e66f6cd50944"
+      },
+      "duo": {
+        "capture_index_json": "99c914873835d986d388bee53e5be1680050239ace0421dc39f652eb5074a056",
+        "index_html": "0141deb8b994e11feed1cf197e8ab7445ae50920e1e8671699dbe2afd6c3a053",
+        "wellness_board_png": "2768ac92ab02e97e571dd5b992b1998411d223ec806b7ad91392de9bb8b8bb87"
+      },
+      "duo-open": {
+        "capture_index_json": "330e3c0681e1a4ead7a69889d76e05b4727aa10c88ecf3ec8136c70652cb6a80",
+        "index_html": "bde6b6308329de1d3048fe3598efd0c2655c9809e01d12c96bfc00f3a21c1a30",
+        "wellness_board_png": "cfb9c79a200f0d4ef47bbb5e1e63adbd3534ebc6007c2a24ec867d6201435f38"
+      }
+    }
+  },
+  "profiles": {
+    "regular": {
+      "updated_rows": {
+        "H12": {
+          "source_png": "/private/tmp/batch01-galleries/h12-sleep-debt-explanation-native-2026-11-06/assets/iphone-normal/body.png",
+          "source_ax": "/private/tmp/batch01-galleries/h12-sleep-debt-explanation-native-2026-11-06/assets/iphone-normal/body.txt",
+          "png_sha256": "ca12aa522d3818994582861988a845ac60402b7957dc2dc5d54009975fe09b72",
+          "ax_sha256": "e4d13fe4cc6a8417fef9190be1f313e0ab3408a5cb5e25f4325de17cf0d6c6ea"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "9a59a22658d8e6921b74756b78a71ba705f4f3c47954227e6e5a9d4bf04c2c00"
+    },
+    "ipad": {
+      "updated_rows": {
+        "H12": {
+          "source_png": "/private/tmp/batch01-galleries/h12-sleep-debt-explanation-native-2026-11-06/assets/ipad/normal-body.png",
+          "source_ax": "/private/tmp/batch01-galleries/h12-sleep-debt-explanation-native-2026-11-06/assets/ipad/normal-body.txt",
+          "png_sha256": "7ef045550521de979ffc0a66f809dfb4a5bd11dd29a200ab59a51e8de6de5191",
+          "ax_sha256": "8fad0abf0937afe68041ac192431a0b88bd332b6a37e86c26dfb276f5530428b"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "df129b3d1b7ab7736e801597eb51bee850b23882bf69ec38da2e423475f0780b"
+    },
+    "duo": {
+      "updated_rows": {
+        "H12": {
+          "source_png": "/private/tmp/batch01-galleries/h12-sleep-debt-explanation-native-2026-11-06/assets/duo-closed/normal-body.png",
+          "source_ax": "/private/tmp/batch01-galleries/h12-sleep-debt-explanation-native-2026-11-06/assets/duo-closed/normal-body.txt",
+          "png_sha256": "151af2bd9648768dfcaeb436d2de983352eca55475d55d8ea7919931dd50e1b4",
+          "ax_sha256": "c48e931f86d05312ee9c88ac089d17548ca83fe37abe4d7db359011cc7c1274d"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "e99218bc02ea6093128753a0d6771d02c3d2e7a80b760afe84e62a1d16c8d7b8"
+    },
+    "duo-open": {
+      "updated_rows": {
+        "H12": {
+          "source_png": "/private/tmp/batch01-galleries/h12-sleep-debt-explanation-native-2026-11-06/assets/duo-open/normal-body.png",
+          "source_ax": "/private/tmp/batch01-galleries/h12-sleep-debt-explanation-native-2026-11-06/assets/duo-open/normal-body.txt",
+          "png_sha256": "74aaf6b6d510e3b60cdc5c4dc55a243bd2341853a2e1e9b64da5c1ee58750416",
+          "ax_sha256": "9bab8f9239cc118c694ed6a90fb692153633727fe7d63b506297470c9cda5585"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "ee9c9ccecf7507ae5f4c3850b834094339862a49e45b723189843e95ead43f51"
+    }
+  },
+  "staged_path": "/private/tmp/batch01-actual-map-stage/H12"
+}

@@ -25,8 +25,10 @@ final class SleepDetailSmokeTests: UITestBaseCase {
         navigateToDashboard()
 
         let cardID = AXID.dashboardMetricCard("sleep")
-        guard app.scrollToHittableElementIfNeeded(cardID, maxSwipes: 6) else {
-            throw XCTSkip("Sleep metric card not found on Dashboard — may need HealthKit data")
+        let dashboardScroll = app.scrollViews["dashboard-root-scroll"].firstMatch
+        guard app.revealFullyVisible(cardID, in: dashboardScroll) else {
+            XCTFail("Seeded Sleep metric card must be fully reachable on Dashboard")
+            return
         }
 
         let sleepCard = app.descendants(matching: .any)[cardID].firstMatch
@@ -68,10 +70,32 @@ final class SleepDetailSmokeTests: UITestBaseCase {
 
     func testSleepDebtExplanationOpens() throws {
         try navigateToSleepDetail()
-        XCTAssertTrue(revealSleepInfoButton("sleep-debt-info-button"))
+        let detailScroll = app.scrollViews[AXID.metricDetailScreen("sleep")].firstMatch
+        XCTAssertTrue(app.revealFullyVisible("sleep-debt-info-button", in: detailScroll))
         app.buttons["sleep-debt-info-button"].firstMatch.auditTap()
-        XCTAssertTrue(app.scrollViews["sleep-debt-info-sheet"].firstMatch.waitForExistence(timeout: 5))
-        VisualAudit.capture("Sleep debt explanation")
+        let sheet = app.scrollViews["sleep-debt-info-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 5))
+        for identifier in [
+            "sleep-debt-info-title", "sleep-debt-info-baseline",
+            "sleep-debt-info-calculation", "sleep-debt-info-excess"
+        ] {
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: sheet), "Missing or clipped \(identifier)")
+            if identifier != "sleep-debt-info-title" {
+                XCTAssertTrue(app.revealTextBody(identifier + "-body", in: sheet),
+                              "Missing or clipped \(identifier)-body")
+            }
+        }
+        VisualAudit.capture("H12 sleep debt explanation body")
+        XCTAssertTrue(app.revealFullyVisible("sleep-debt-info-levels", in: sheet))
+        XCTAssertTrue(app.revealFullyVisible("sleep-debt-info-level-severe", in: sheet))
+        VisualAudit.capture("H12 sleep debt explanation levels")
+        let close = app.buttons["sleep-debt-info-close"].firstMatch
+        XCTAssertTrue(close.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.revealFullyVisible("sleep-debt-info-close", in: sheet))
+        close.auditTap()
+        let dismissed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: sheet)
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed)
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5), "Close must return to Sleep detail")
     }
 
     func testWakeAnalysisExplanationOpens() throws {

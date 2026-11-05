@@ -2,7 +2,8 @@
 tags: [sleep, explanation, accessibility, batch01]
 date: 2026-11-05
 category: plan
-status: approved
+status: done
+updated: 2026-11-06
 confidence: high
 ---
 
@@ -32,3 +33,7 @@ confidence: high
 ## Testing Strategy / Risks
 
 일반 네 프로필과 Duo 접힘 MAX에서 원래 설명·마지막 등급·Close→수면 상세 복귀를 확인한다. 7개 method/8개 화면 상태 후보 중 해당 H12 결과만 증거로 연결한다. 초기 실행 예산 1200초, 한 소유 기기·한 실행만 사용한다. UI 변경이며 도메인/계산/카탈로그 미변경이므로 새 unit/full 회귀는 추가하지 않는다. 기존 medium/large detent를 강제 변경하지 않고 실제 뷰포트에 맞춰 긴 문단의 두 끝을 확인한다. seed 진입 skip는 통과로 세지 않는다.
+
+## 검증 결과
+
+관련 기기·상태의 SDK와 독립 PNG/AX 검토를 완료했다. [실제 화면·원본 출처](../design/full-redesign-map/review/h12-sleep-debt-explanation-native-2026-11-06/index.html)의 실행 소스와 범위를 따른다. PR·머지는 GitHub 기록으로 확인한다.
