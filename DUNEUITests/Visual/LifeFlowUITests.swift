@@ -45,7 +45,7 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         return control
     }
 
-    private func tapPastRecordAction(_ identifier: String) {
+    private func tapPastRecordAction(_ identifier: String, expectedHabit: String? = nil) {
         let form = app.collectionViews.firstMatch
         let action = app.buttons[identifier].firstMatch
         // Restore the sheet toolbar after scrolling within the actual Form.
@@ -53,6 +53,9 @@ final class LifeFlowUITests: SeededUITestBaseCase {
             form.swipeDown(velocity: .slow)
         }
         XCTAssertTrue(action.waitForExistence(timeout: 5) && action.isHittable)
+        if let expectedHabit {
+            XCTAssertEqual(app.buttons["habit-past-record-habit"].firstMatch.label, "Habit, \(expectedHabit)")
+        }
         action.auditTap()
     }
 
@@ -180,8 +183,9 @@ final class LifeFlowUITests: SeededUITestBaseCase {
                       "Clear the original total before typing its replacement")
         total.typeText("40")
         XCTAssertEqual(total.value as? String, "40")
-        _ = app.dismissKeyboardIfPresent()
-        tapPastRecordAction("habit-past-record-save")
+        // Reach the actual toolbar through this Form; coordinate keyboard dismissal
+        // can hit its underlying Habit picker in the collapsed Duo navigation bar.
+        tapPastRecordAction("habit-past-record-save", expectedHabit: "Read")
         XCTAssertTrue(app.navigationBars["Past Record"].waitForNonExistence(timeout: 5))
         XCTAssertEqual(hero.label, baseline, "A past record must not change today's completion")
         XCTAssertTrue(app.openLifeHabitActions(named: "Read", maxSwipes: 8))
