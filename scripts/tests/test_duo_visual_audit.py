@@ -297,12 +297,64 @@ class CaptureContracts(unittest.TestCase):
         process.stdout = []
         process.wait.return_value = 0
         popen_mock.return_value = process
-        with (self.base / "lock").open("w") as lock:
-            with patch.dict(audit.os.environ, {"DUNE_SIM_TEST_LOCK_FD": str(lock.fileno())}), \
+        with (self.base / "repository.lock").open("w") as repository_lock, \
+                (self.base / "worktree.lock").open("w") as worktree_lock:
+            with patch.dict(audit.os.environ, {
+                "DUNE_SIM_TEST_LOCK_FD": str(repository_lock.fileno()),
+                "DUNE_SIM_TEST_WORKTREE_LOCK_FD": str(worktree_lock.fileno()),
+            }), \
                     patch.object(audit.sys, "argv", ["duo-visual-audit.py", str(self.output),
                                                    "DEVICE", "all", "fake-runner"]):
                 self.assertEqual(audit.main(), 0)
-            self.assertEqual(popen_mock.call_args.kwargs["pass_fds"], (lock.fileno(),))
+            self.assertEqual(popen_mock.call_args.kwargs["pass_fds"],
+                             (repository_lock.fileno(), worktree_lock.fileno()))
+
+    @patch.object(audit.subprocess, "Popen")
+    def test_invalid_inherited_lock_fd_blocks_runner_start(self, popen_mock):
+        with patch.dict(audit.os.environ, {"DUNE_SIM_TEST_LOCK_FD": "not-an-fd"}, clear=True), \
+                patch.object(audit.sys, "argv", ["duo-visual-audit.py", str(self.output),
+                                               "DEVICE", "all", "fake-runner"]):
+            with self.assertRaisesRegex(ValueError, "Invalid DUNE_SIM_TEST_LOCK_FD"):
+                audit.main()
+        popen_mock.assert_not_called()
+
+    def test_no_exported_lock_fds_preserves_unlocked_observer_mode(self):
+        with patch.dict(audit.os.environ, {}, clear=True):
+            self.assertEqual(audit.inherited_lock_fds(), ())
+
+    def test_duplicate_exported_lock_fds_are_inherited_once(self):
+        with (self.base / "lock").open("w") as lock:
+            with patch.dict(audit.os.environ, {
+                "DUNE_SIM_TEST_LOCK_FD": str(lock.fileno()),
+                "DUNE_SIM_TEST_WORKTREE_LOCK_FD": str(lock.fileno()),
+            }, clear=True):
+                self.assertEqual(audit.inherited_lock_fds(), (lock.fileno(),))
+
+    def test_worktree_scope_inherits_single_primary_lock_fd(self):
+        with (self.base / "worktree.lock").open("w") as lock:
+            with patch.dict(audit.os.environ, {
+                "DUNE_SIM_TEST_LOCK_FD": str(lock.fileno()),
+            }, clear=True):
+                self.assertEqual(audit.inherited_lock_fds(), (lock.fileno(),))
+
+    def test_closed_or_orphaned_worktree_lock_fd_is_rejected(self):
+        with (self.base / "closed.lock").open("w") as lock:
+            closed_fd = lock.fileno()
+        with patch.dict(audit.os.environ, {"DUNE_SIM_TEST_LOCK_FD": str(closed_fd)}, clear=True):
+            with self.assertRaises(OSError):
+                audit.inherited_lock_fds()
+        with patch.dict(audit.os.environ, {"DUNE_SIM_TEST_WORKTREE_LOCK_FD": "12"}, clear=True):
+            with self.assertRaisesRegex(ValueError, "without primary"):
+                audit.inherited_lock_fds()
+        with (self.base / "repository.lock").open("w") as repository_lock:
+            with (self.base / "closed-worktree.lock").open("w") as worktree_lock:
+                closed_worktree_fd = worktree_lock.fileno()
+            with patch.dict(audit.os.environ, {
+                "DUNE_SIM_TEST_LOCK_FD": str(repository_lock.fileno()),
+                "DUNE_SIM_TEST_WORKTREE_LOCK_FD": str(closed_worktree_fd),
+            }, clear=True):
+                with self.assertRaises(OSError):
+                    audit.inherited_lock_fds()
 
     @patch.object(audit, "stop_runner", side_effect=PermissionError("descendant cleanup denied"))
     @patch.object(audit, "runner_lines", side_effect=TimeoutError("SDK cleanup exceeded"))
@@ -392,6 +444,27 @@ class HingeCLIContracts(unittest.TestCase):
         return audit.capture_checkpoint(self.line("FOLD:partiallyOpen", seconds=120), 1,
                                         self.output, APP_ID, "all", self.container.resolve(),
                                         self.captures, self.checkpoints)
+
+    def test_hinge_child_receives_both_open_simulator_locks(self):
+        self.cli.write_text(
+            "#!/usr/bin/env python3\n"
+            "import os, sys\n"
+            "for name in ('DUNE_SIM_TEST_LOCK_FD', 'DUNE_SIM_TEST_WORKTREE_LOCK_FD'):\n"
+            "    os.fstat(int(os.environ[name]))\n"
+            "if sys.argv[-1] == 'get':\n"
+            "    print('90.0')\n"
+        )
+        with (self.base / "repository.lock").open("w") as repository_lock, \
+                (self.base / "worktree.lock").open("w") as worktree_lock:
+            with patch.dict(audit.os.environ, {
+                "DAILVE_DUO_HINGE_CLI": str(self.cli),
+                "DUNE_SIM_TEST_LOCK_FD": str(repository_lock.fileno()),
+                "DUNE_SIM_TEST_WORKTREE_LOCK_FD": str(worktree_lock.fileno()),
+            }):
+                audit.set_fold_with_cli(self.output, 1, "partiallyOpen", APP_ID, time.time() + 120)
+        receipt = json.loads((self.output / "001-fold.json").read_text())
+        self.assertTrue(receipt["verified"])
+        self.assertEqual(receipt["actual_angle"], 90.0)
 
     @patch.object(audit.time, "sleep")
     @patch.object(audit.subprocess, "run")
