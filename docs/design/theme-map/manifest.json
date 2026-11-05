@@ -737,10 +737,10 @@
       "name": "H04 두 지표 기간 비교",
       "title": "한 날짜 범위 · 두 값 축",
       "file": "dune-metric-comparison-h04.html",
-      "detail": "2026-11-05 H04 정적 표현 시안. ScoreHeroPalette 제목과 원래 지표 아이콘·두 메뉴 피커·D/W/M/6M/Y, 공통 날짜 범위 한 번, 각 지표의 독립 Y 축·단위와 넓은 두 열/큰 글씨 세로 배치를 설명한다. 밝은 화면의 진한 차트 선과 선택 글자 색, 수치·날짜·SVG 기호는 설명용이며 SF Symbol이나 실제 앱 캡처가 아니다. 새 네이티브 대비 확인은 남았다.",
+      "detail": "2026-11-05 H04 정적 표현 시안. ScoreHeroPalette 제목과 원래 지표 아이콘·두 메뉴 피커·D/W/M/6M/Y, 공통 날짜 범위 한 번, 각 지표의 독립 Y 축·단위와 넓은 두 열/큰 글씨 세로 배치를 설명한다. 밝은 화면의 진한 차트 선과 선택 글자 색, 수치·날짜·SVG 기호는 설명용이며 SF Symbol이나 실제 앱 캡처가 아니다. 수정된 밝은 화면의 대비는 새 네이티브 근거에서 확인했다. 유효 사례 5건과 PNG/AX 31쌍은 별도 실제 화면에 보존하며 모든 지표·기간·언어·실제 HealthKit 상태를 검증한 것은 아니다.",
       "implementation": {
         "layout": "../layout-map/wellness-metric-comparison-h04.html",
-        "status": "source-contrast-correction-pending-native-validation"
+        "status": "implemented-native-reviewed"
       }
     },
     {
