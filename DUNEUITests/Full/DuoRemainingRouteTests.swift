@@ -194,8 +194,8 @@ final class DuoLifeArchiveRestoreTests: SeededUITestBaseCase {
         XCTAssertEqual(app.staticTexts["habit-management-hero-filter"].firstMatch.label, "Archived")
         VisualAudit.capture("Habit management archived MAX hero")
         let restoreID = AXID.habitManagementRestore(name)
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(restoreID, maxSwipes: 10),
-                      "Restore control should be reachable for the seeded habit")
+        XCTAssertTrue(app.revealFullyVisible(restoreID, in: managementScroll, maxMoves: 10),
+                      "Restore control should be reachable in the management scroll")
         let restore = app.buttons[restoreID].firstMatch
         XCTAssertTrue(managementScroll.staticTexts[name].firstMatch.waitForExistence(timeout: 5))
         assertWholeFrameVisible(restore, in: app.windows.firstMatch.frame, "Restore control")
