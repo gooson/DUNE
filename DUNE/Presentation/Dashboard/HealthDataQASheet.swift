@@ -102,8 +102,12 @@ struct HealthDataQASheet: View {
             VStack(spacing: DS.Spacing.lg) {
                 HeroCard(tintColor: DS.Color.warmGlow) {
                     VStack(spacing: DS.Spacing.md) {
-                        Image(systemName: "sparkles.slash")
-                            .font(.system(size: 32, weight: .semibold))
+                        ZStack {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 26, weight: .semibold))
+                            Image(systemName: "nosign")
+                                .font(.system(size: 46, weight: .medium))
+                        }
                             .foregroundStyle(DS.Color.warmGlow)
                             .frame(width: 64, height: 64)
                             .background(DS.Color.warmGlow.opacity(0.14), in: Circle())
@@ -261,7 +265,7 @@ private struct HealthDataQAMessageBubble: View {
                             Text("Fallback answer")
                                 .accessibilityIdentifier("health-qa-fallback-label")
                                 .font(.caption2)
-                                .foregroundStyle(.tertiary)
+                                .foregroundStyle(DS.Color.textSecondary)
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)

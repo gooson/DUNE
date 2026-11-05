@@ -1,4 +1,5 @@
 @preconcurrency import XCTest
+import UIKit
 
 @MainActor
 final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
@@ -91,6 +92,9 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
     }
 
     private func assertUnavailableHealthQA() throws {
+        // Check the platform resources used by the composed unavailable badge.
+        XCTAssertNotNil(UIImage(systemName: "sparkles"))
+        XCTAssertNotNil(UIImage(systemName: "nosign"))
         let scroll = app.scrollViews["health-qa-unavailable-scroll"].firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Unsupported hardware needs a readable explanation")
         XCTAssertTrue(app.revealTextBody("health-qa-unavailable-title", in: scroll))

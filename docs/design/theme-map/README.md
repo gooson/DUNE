@@ -312,3 +312,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-06 H13: [실제 화면과 출처](../full-redesign-map/review/h13-wake-analysis-explanation-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.
 
 2026-11-06 Batch02: [H14 심박 회복 설명](themes/dune-heart-rate-recovery-explanation-h14.html), [T17 건강 Q&A](themes/dune-today-health-qa-t17.html), [T18 고정 지표 편집](themes/dune-today-pinned-metrics-editor-t18.html)의 정적 계약을 추가했다. 실제 앱 검증·캡처는 별도 게이트이며 아직 완료되지 않았다.
+
+2026-11-06 Batch02 native 보완 후보: H14 Close 소스 48pt로 초기 실제 최소 44pt를 확보하고, T17 지원 불가 심벌을 sparkles·nosign으로 합성하며 Fallback answer 대비를 secondary로 높인다. 원래 native P2 캡처는 보존하고 이 변경의 fresh 검증은 별도로 확인한다.
