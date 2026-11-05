@@ -19,6 +19,11 @@ struct PostureDetailView: View {
     @State private var correctiveRecommendations: [CorrectiveRecommendation] = []
     @ScaledMetric(relativeTo: .caption) private var scaledScoreRingDiameter: CGFloat = 120
     @ScaledMetric(relativeTo: .largeTitle) private var scaledScoreFontSize: CGFloat = 36
+    @ScaledMetric(relativeTo: .title3) private var scaledMetricSymbolSize: CGFloat = 20
+
+    private var metricSymbolSize: CGFloat {
+        min(scaledMetricSymbolSize, 40)
+    }
 
     private var scoreRingDiameter: CGFloat {
         min(scaledScoreRingDiameter, 220)
@@ -244,9 +249,11 @@ struct PostureDetailView: View {
         return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             HStack(alignment: .top, spacing: DS.Spacing.sm) {
                 Image(systemName: metric.type.iconName)
-                    .font(.title3)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: metricSymbolSize, height: metricSymbolSize)
                     .foregroundStyle(foregroundColor)
-                    .frame(width: 28)
+                    .frame(width: metricSymbolSize + DS.Spacing.sm)
 
                 Text(metric.type.displayName)
                     .font(.subheadline.weight(.medium))
@@ -258,7 +265,7 @@ struct PostureDetailView: View {
                     .font(.caption.weight(.semibold).monospacedDigit())
                     .foregroundStyle(.primary)
 
-                confidenceBadge(metric.confidence)
+                confidenceBadge(metric.confidence, textStyle: .primary)
             }
 
             Label(metric.status.displayName, systemImage: metric.status.iconName)

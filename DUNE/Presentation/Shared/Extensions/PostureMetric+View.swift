@@ -72,7 +72,10 @@ enum PostureViewHelpers {
 
     /// Confidence badge shown inline with metric value.
     @ViewBuilder
-    static func confidenceBadge(_ confidence: Double) -> some View {
+    static func confidenceBadge(
+        _ confidence: Double,
+        textStyle: HierarchicalShapeStyle = .secondary
+    ) -> some View {
         if confidence < 1.0 && confidence > 0 {
             HStack(spacing: 2) {
                 Circle()
@@ -81,7 +84,7 @@ enum PostureViewHelpers {
 
                 Text("\(Int(confidence * 100))%")
                     .font(.caption2.monospacedDigit())
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(textStyle)
             }
         }
     }
@@ -108,8 +111,11 @@ func formattedPostureMetricValue(_ value: Double, unit: PostureMetricUnit) -> St
 
 /// Confidence badge shown inline with metric value.
 @ViewBuilder
-func confidenceBadge(_ confidence: Double) -> some View {
-    PostureViewHelpers.confidenceBadge(confidence)
+func confidenceBadge(
+    _ confidence: Double,
+    textStyle: HierarchicalShapeStyle = .secondary
+) -> some View {
+    PostureViewHelpers.confidenceBadge(confidence, textStyle: textStyle)
 }
 
 /// Color for confidence level indicator.

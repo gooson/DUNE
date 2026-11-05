@@ -26,6 +26,7 @@ Wellness의 최근 자세 기록에서 H07은 `PostureRecordLookupView`를 거�
 | 파일 | 계획한 변경 |
 | --- | --- |
 | `DUNE/Presentation/Posture/PostureDetailView.swift` | 동일 뷰 안에서 기존 score, metrics, photos의 순서와 크기를 정리하고 저장된 metric 상태의 간결한 2D 시각 요약을 추가. 기존 액션·데이터 경로 유지. |
+| `DUNE/Presentation/Shared/Extensions/PostureMetric+View.swift` | 신뢰도 badge에 기본값이 유지되는 전경 스타일 인자를 추가해 이 상세만 대비를 강화 |
 | `DUNEUITests/Full/WellnessRegressionTests.swift` | 기존 H07 직접 진입, P06 이력·하단 스크롤, 좌우 비교 선택자는 그대로 둔다. 기존 MAX 접힘 점수 메서드의 각 자세 점수 캡처 뒤에 기존 reveal/captureScrollContent로 Assessment Details와 아래 타일 3뷰포트만 캡처한다. 새 메서드·fixture·assertion 문장은 없음. |
 | `docs/design/layout-map/` H07 전용 맵·index/README | 기존 H07과 P06이 같은 상세 뷰를 공유함을 명시하고 점수→평가→사진→추가 행동의 배치·누락 상태를 설명. |
 | `docs/design/theme-map/` H07 보존 시안·manifest/README/index | DUNE의 기존 body 테마색·SF Symbol·상태색으로 정적 표현을 보존. 시안 수치/기호와 실제 캡처를 분리. |
@@ -46,3 +47,9 @@ Wellness의 최근 자세 기록에서 H07은 `PostureRecordLookupView`를 거�
 - **시각 대안:** 새로운 3D 몸 모델이나 관절 좌표 추정 대신 2D metric 아이콘/상태 요약을 선택한다. 저장된 필드만 사용하고 기존 항목 이름·값·상태·신뢰도 표현을 재사용하기 때문이다. 새 타일의 VoiceOver 순서와 중복 여부는 실제 AX에서 확인한다.
 - **데이터·플랫폼:** 쿼리, SwiftData 모델, score 계산, Vision/ML, HealthKit, Watch UI, 카탈로그의 광범위 수정은 범위 밖이다. 새 문구가 실제로 필요해질 때만 en/ko/ja 문자열과 formatter를 좁게 갱신한다. iOS 화면 소스 변경 후 영향 타깃은 프로젝트 설정으로 다시 확인한다.
 - **검증 상태:** 비공개 소스 패치와 정적 맵 초안은 만들었고 ROOT에는 적용하지 않았다. MAX 기존 메서드의 캡처 전용 테스트 패치만 준비했고 네이티브 실행·현행 기기 캡처는 아직 없다. Apple/SwiftUI 정적 리뷰의 밝은 화면 상태 전경 대비 P2를 소스에서 두 군데만 보정했다. 0.45 혼합은 예상되는 가독성 개선이며 실제 대비 수치가 아니다. 네 상태의 아이콘·상태 글자와 평가 타일 폭·MAX 전체 텍스트는 네이티브 PNG에서 측정/확인 전까지 통과로 기록하지 않는다. MAX는 접힘 세 자세 각각 기존 점수 확인 뒤 Assessment Details를 드러내고 상단/하단 스크롤 화면을 남긴다. 이 캡처만으로 모든 8항목의 전체 가시성을 추정하지 않는다. 기존 H07/P06 이미지는 이전 소스의 역사 증거로만 사용한다. H07과 P06 각 4프로필의 새 PNG/AX가 확인되지 않으면 해당 맵 ID를 최신 캡처로 표시하지 않는다.
+
+## 실제 닫힘 캡처에서 확인한 보완
+
+최대 글씨의 실제 0° 캡처에서 고정 폭보다 커진 SF Symbol이 지표 제목으로 들어갔고, 밝은 카드의 신뢰도 숫자 대비가 약 2.76:1이었다. 기호의 실제 그림과 예약 영역을 함께 확대하되 상한을 두고, 이 상세 화면의 신뢰도에는 기본 전경을 명시한다. 공유 badge의 기본 스타일은 유지해 다른 소비자를 바꾸지 않는다. 기존 MAX 검사의 아래 캡처를 3회에서 5회로 늘려 여덟 항목을 모두 확인한다. 점수·측정값·신뢰도 계산·삭제·PDF·사진 기능은 바꾸지 않는다.
+
+추가 영향 파일은 `DUNE/Presentation/Shared/Extensions/PostureMetric+View.swift`이며 기본 인자가 유지되는 `PostureResultView` 소비자도 같은 앱 타깃 컴파일로 확인한다. 기존 실패와 두 번의 host 중단, 실행 전 준비/공간 부족은 통과로 재분류하지 않는다. 수정된 앱의 새 네이티브 캡처와 실제 대비 재검증 전에는 완료가 아니다.
