@@ -13,3 +13,5 @@
 ## Life Flow 최종 갱신 · 2026-10-29
 
 [Life Flow 실제74장](../../full-redesign-map/review/life-flow-2026-10-28/index.html)에 새 iPhone·iPad·Duo 외부/내부 원본을 갱신했다. L01/L09는 밝음·다크·최대글씨, L07/L08은 밝음이며 최대글씨 폼은 스크롤 viewport다. 68장은 통과 실행,6장은 초기 실패 부분 증거로 구분했다. 과거 기기별 인덱스의 PNG는 새 기기 출처로 덮어쓰지 않는다. [검증 범위와 receipt](../../../reviews/2026-10-28-life-flow/README.md)를 따른다. Watch UI는 변경하지 않았다.
+
+- [H09 부상 이력 현재 실제 검토](../../full-redesign-map/review/h09-injury-history-native-2026-11-05/index.html): 611d70b1 네 프로필·다섯 SDK 사례·열 PNG/AX 쌍. 이전 네 PNG는 정체성 참고입니다.

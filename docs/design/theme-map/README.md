@@ -291,6 +291,6 @@ A21 보상 설명은 [배치 계약](../layout-map/activity-reward-explanation-a
 
 H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실제 PNG/AX 18쌍을 확인했다. [실제 화면과 검증 한계](../full-redesign-map/review/h05-body-record-native-2026-11-05/index.html)는 시안과 별도이며 첫 iPad 실패 1건도 보존한다.
 
-2026-11-05 [H09 부상 이력](themes/dune-injury-history-h09.html)은 상태별 원래 심볼과 목록 위계를 보존하는 정적 시안이다. [배치 계약](../layout-map/injury-history-h09.html)을 먼저 저장했으며 640cc681의 Duo 핵심 검사 3건과 실제 캡처는 보존했다. 통계 전경 보정 후 새 소스의 네이티브 캡처·대비 검토는 대기 중이다.
+2026-11-05 [H09 부상 이력](themes/dune-injury-history-h09.html)은 상태별 원래 심볼과 목록 위계를 보존하는 정적 시안이다. [배치 계약](../layout-map/injury-history-h09.html)을 먼저 저장했으며 640cc681의 Duo 핵심 검사 3건과 실제 캡처는 보존했다. 통계 전경 보정 후 현재 611d70b1 네 프로필·다섯 사례·열 PNG/AX 쌍은 [실제 검토 갤러리](../full-redesign-map/review/h09-injury-history-native-2026-11-05/index.html)에 있다.
 
-H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 반영해 Light 전경을 진하게 조정한다. 원래 기호·동작·Dark accent를 유지하며 수정 소스의 실제 검증은 대기 중이다.
+H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 반영해 Light 전경을 진하게 조정한다. 원래 기호·동작·Dark accent를 유지하며 수정 소스의 밝은 화면 실제 대비 검토는 네 프로필에서 완료했다.

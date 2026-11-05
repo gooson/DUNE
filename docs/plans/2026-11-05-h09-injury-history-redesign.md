@@ -1,7 +1,9 @@
 ---
+tags: [swiftui, injury-history, visual-redesign, accessibility]
+category: plan
 topic: h09-injury-history-redesign
 date: 2026-11-05
-status: approved
+status: implemented
 confidence: high
 related_solutions:
   - architecture/2026-02-23-injury-ui-bilingual-radio-list-patterns
@@ -60,3 +62,11 @@ MAX에서는 두 행이 동시에 화면에 존재하지 않을 수 있다. 각 
 ## 실제 통계 아이콘 대비 보완
 
 `640cc681`의 Duo 접힘 기본·MAX 두 사례와 펼침 기본 한 사례는 SDK에서 통과했다. 실제 접힘 PNG에서는 통계 `chart.bar.xaxis` 아이콘이 RGB 201,149,107과 밝은 버튼 면 RGB 255,252,247의 2.57:1로 확인되어 시각 품질 P2를 기록했다. 기존 기호·통계 행동·비활성 조건을 유지하고 해당 버튼만 Light 테마 accent를 진하게 섞는다. Dark는 현재 테마 accent를 유지한다. fixture·UI selector는 그대로다. 이전 세 통과·실제 PNG·AX·UID·자세·리뷰를 보존하고, 새 전경이 보이는 원래 네 프로필 5사례와 새 실제 캡처를 같은 표준 ID에서 확인한다. 이는 SDK 실패 재시도가 아니며 이전 소스의 통과를 수정 후 네이티브 승인으로 계산하지 않는다.
+
+## 구현·검증 결과
+
+현재 앱 검증 소스는 `611d70b10b2c5ddcf9f2ddf64098c9bf3dcee69e`다. App·UI 실제 컴파일과 선택 검사 5/5, 4프로필의 PNG/AX 10쌍을 확인했다. iPhone 1·iPad 1·Duo 접힘 2·펼침 1이며 모든 현재 네이티브 검토의 열린 P1/P2/P3는 0이다. 통계 기호 대비는 접힘 9.50:1·펼침 9.09:1·iPhone 9.12:1·iPad 9.07:1로 확인했다. 이전 640cc681의 SDK 3건과 초기 대비 발견은 보존했으며 현재 통과에 합산하지 않는다.
+
+[현재 실제 화면·출처·확인 범위](../design/full-redesign-map/review/h09-injury-history-native-2026-11-05/index.html)와 실제 H09 네 대표를 갱신했다. 111개 렌더링 카드 중 H09만 바꾸고 다른 캡처 인덱스 항목(regular 105·iPad 106·Duo 접힘 105·펼침 105)을 보존했다. 네 보드의 H09 사진 타일 밖 RGB 픽셀 차이는 0이다. 역사적 네 이미지는 서로 다른 fixture·날짜·기기의 참고이며 현재 소스의 동일 조건 before가 아니다.
+
+소유 Duo·iPhone·iPad를 각각 사용 후 삭제했으며 활성 소유 기기는 0대다. App 소스는 검증 후 바뀌지 않았고 이후 변경은 실제 맵·문서뿐이다. 카탈로그 format/manual의 빌드 후 검사와 테마 맵·diff 검사를 수행했다. 전체 unit/full/smoke·Dark·90°·Watch·VoiceOver 실행을 추가하지 않았다. 최종 게시 통합 검토·PR·정상 머지는 Ship 단계의 실제 결과로 기록한다.

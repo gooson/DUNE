@@ -1,0 +1,104 @@
+Attributes: Application, 0x1081492c0, pid: 41779, label: 'DUNE'
+Element subtree:
+ →Application, 0x1081492c0, pid: 41779, label: 'DUNE'
+    Window (Main), 0x108148000, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x108148140, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x108148280, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1081483c0, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x108148500, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x108148640, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x108148780, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x1081488c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x108148a00, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x108148b40, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x108148c80, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x108148dc0, {{0.0, 0.0}, {756.0, 1158.0}}
+                          Other, 0x108148f00, {{0.0, 0.0}, {756.0, 1158.0}}
+                            NavigationBar, 0x10814b840, {{0.0, 96.0}, {756.0, 108.0}}, identifier: 'Injury History'
+                              Button, 0x108149040, {{10.0, 96.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Wellness'
+                              Other, 0x10814b200, {{706.0, 100.0}, {36.0, 36.0}}
+                                Other, 0x10814b340, {{706.0, 100.0}, {36.0, 36.0}}
+                                  Button, 0x10814b480, {{707.5, 100.0}, {33.5, 36.0}}, identifier: 'injury-history-stats', label: 'Bar Chart With An X Axis'
+                              StaticText, 0x10814b5c0, {{324.5, 161.5}, {107.0, 21.0}}, label: 'Injury History'
+                            Other, 0x10814b700, {{0.0, 0.0}, {756.0, 1158.0}}
+                              Other, 0x10814b980, {{0.0, 0.0}, {756.0, 1158.0}}
+                                Other, 0x10814bac0, {{0.0, 0.0}, {756.0, 1158.0}}
+                                  Other, 0x10814bc00, {{0.0, 0.0}, {756.0, 1158.0}}
+                                    Other, 0x10814bd40, {{0.0, 204.0}, {756.0, 1.0}}, identifier: 'injury-history-screen'
+                                    CollectionView, 0x10814be80, {{0.0, 205.0}, {756.0, 953.0}}
+                                      Other, 0x108149180, {{-20.0, -1701.0}, {796.0, 2053.5}}
+                                      Cell, 0x10814aa80, {{20.0, 205.0}, {716.0, 41.5}}
+                                        Other, 0x10814abc0, {{20.0, 205.0}, {716.0, 41.5}}
+                                        Other, 0x10814ad00, {{20.0, 205.0}, {716.0, 41.5}}
+                                          Other, 0x10814ae40, {{20.0, 205.0}, {716.0, 41.5}}
+                                            Other, 0x10814af80, {{20.0, 205.0}, {716.0, 41.5}}
+                                              StaticText, 0x10814b0c0, {{20.0, 205.0}, {716.0, 41.5}}, label: 'Active'
+                                              Image, 0x1123d21c0, {{41.5, 216.5}, {18.5, 18.5}}, identifier: 'bandage.fill', label: 'Adhesive Bandage Strip, Filled'
+                                      Cell, 0x1123d3840, {{20.0, 246.5}, {716.0, 88.5}}
+                                        Other, 0x1123d1400, {{20.0, 246.5}, {716.0, 88.5}}
+                                          Other, 0x1123d1a40, {{20.0, 246.5}, {716.0, 88.5}}
+                                        Other, 0x1123d1680, {{20.0, 246.5}, {716.0, 88.5}}
+                                          Other, 0x1123d17c0, {{20.0, 246.5}, {716.0, 88.5}}
+                                            Other, 0x1123d1900, {{20.0, 246.5}, {716.0, 88.5}}
+                                              Button, 0x1123d2440, {{20.0, 246.5}, {716.0, 88.5}}, identifier: 'injury-history-row-0', label: 'Knee, (L), Minor, ·, 5d, 10/31~, Active'
+                                                StaticText, 0x1123d1540, {{80.0, 261.5}, {40.5, 20.5}}, label: 'Knee'
+                                                StaticText, 0x1123d3480, {{124.5, 264.5}, {16.0, 14.5}}, label: '(L)'
+                                                Image, 0x1123d1b80, {{44.0, 281.0}, {20.0, 20.0}}, identifier: 'exclamationmark.circle', label: 'Error'
+                                                StaticText, 0x1123d1cc0, {{80.0, 287.5}, {30.0, 13.5}}, label: 'Minor'
+                                                StaticText, 0x1123d1e00, {{114.0, 284.0}, {5.0, 20.5}}, label: '·'
+                                                StaticText, 0x1123d1f40, {{123.0, 287.0}, {15.0, 14.5}}, label: '5d'
+                                                StaticText, 0x1123d2080, {{652.5, 284.0}, {33.5, 13.5}}, label: 'Active'
+                                                Image, 0x1123d2300, {{706.5, 285.0}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                StaticText, 0x1123d2d00, {{80.0, 306.5}, {35.0, 13.5}}, label: '10/31~'
+                                      Other, 0x1123d2e40, {{-20.0, 352.5}, {796.0, 2055.5}}
+                                      Cell, 0x1123d2f80, {{20.0, 352.5}, {716.0, 41.0}}
+                                        Other, 0x1123d30c0, {{20.0, 352.5}, {716.0, 41.0}}
+                                        Other, 0x1123d4000, {{20.0, 352.5}, {716.0, 41.0}}
+                                          Other, 0x1123d4140, {{20.0, 352.5}, {716.0, 41.0}}
+                                            Other, 0x1123d4280, {{20.0, 352.5}, {716.0, 41.0}}
+                                              StaticText, 0x1123d43c0, {{20.0, 352.5}, {716.0, 41.0}}, label: 'Recovered'
+                                              Image, 0x1123d4500, {{41.5, 364.0}, {17.5, 17.5}}, identifier: 'checkmark.circle', label: 'Selected', Selected
+                                      Cell, 0x1123d4640, {{20.0, 393.5}, {716.0, 88.5}}
+                                        Other, 0x1123d4780, {{20.0, 393.5}, {716.0, 88.5}}
+                                          Other, 0x1123d48c0, {{20.0, 393.5}, {716.0, 88.5}}
+                                        Other, 0x1123d4a00, {{20.0, 393.5}, {716.0, 88.5}}
+                                          Other, 0x1123d4b40, {{20.0, 393.5}, {716.0, 88.5}}
+                                            Other, 0x1123d4c80, {{20.0, 393.5}, {716.0, 88.5}}
+                                              Button, 0x1123d4dc0, {{20.0, 393.5}, {716.0, 88.5}}, identifier: 'injury-history-row-1', label: 'Shoulder, (R), Moderate, ·, 10d, 10/16 ~ 10/26'
+                                                StaticText, 0x1123d4f00, {{80.0, 408.5}, {72.0, 20.5}}, label: 'Shoulder'
+                                                StaticText, 0x1123d5040, {{156.0, 411.5}, {17.5, 14.5}}, label: '(R)'
+                                                Image, 0x1123d5180, {{44.0, 428.5}, {20.5, 19.0}}, identifier: 'exclamationmark.triangle', label: 'Warning'
+                                                StaticText, 0x1123d52c0, {{80.0, 434.5}, {50.5, 13.5}}, label: 'Moderate'
+                                                StaticText, 0x1123d5400, {{134.5, 431.0}, {5.0, 20.5}}, label: '·'
+                                                StaticText, 0x1123d5540, {{143.5, 434.0}, {20.5, 14.5}}, label: '10d'
+                                                Image, 0x1123d5680, {{706.5, 432.0}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                StaticText, 0x1123d57c0, {{80.0, 453.5}, {70.5, 13.5}}, label: '10/16 ~ 10/26'
+                                      Other, 0x1123d5900, {{723.0, 205.0}, {30.0, 906.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x1123d5a40, {{750.0, 1159.5}, {3.0, 7.0}}
+                                      Other, 0x1123d5b80, {{723.0, 205.0}, {30.0, 906.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x1123d5cc0, {{750.0, 1159.5}, {3.0, 7.0}}
+                            Toolbar, 0x1123d5e00, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x1123d5f40, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x1123d6080, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1123d61c0, {{0.0, 32.0}, {756.0, 44.0}}
+                    Button, 0x1123d6300, {{183.5, 36.0}, {56.0, 36.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x1123d6440, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x1123d6580, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x1123d66c0, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                      Button, 0x1123d6800, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                    Button, 0x1123d6940, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                      Button, 0x1123d6a80, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                    Button, 0x1123d6bc0, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x1123d6d00, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x1123d6e40, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x1123d6f80, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x1123d70c0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1123d7200, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1123d7340, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x1081492c0, pid: 41779, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1123d7480, pid: 41779, label: 'DUNE'
+  }
