@@ -547,8 +547,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     private func assertPinnedEditorInitialState() {
         let editor = app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
-        let hero = app.descendants(matching: .any)["pinned-metrics-editor-hero"].firstMatch
-        XCTAssertTrue(hero.waitForExistence(timeout: 5))
+        let title = app.staticTexts["pinned-metrics-editor-title"].firstMatch
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
         XCTAssertTrue(app.revealTextBody("pinned-metrics-editor-title", in: editor))
         XCTAssertEqual(app.descendants(matching: .any)["pinned-metrics-editor-title"].firstMatch.label, "Top 6 Metrics")
         VisualAudit.capture("T18 editor hero")

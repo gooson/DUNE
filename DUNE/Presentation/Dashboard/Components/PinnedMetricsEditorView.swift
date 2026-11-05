@@ -95,8 +95,13 @@ struct PinnedMetricsEditorView: View {
     private var selectionHero: some View {
         HeroCard(tintColor: iconTint) {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                Label("Top \(TodayPinnedMetricsStore.maxPinnedCount) Metrics", systemImage: "pin.fill")
-                    .accessibilityIdentifier("pinned-metrics-editor-title")
+                Label {
+                    Text("Top \(TodayPinnedMetricsStore.maxPinnedCount) Metrics")
+                        .accessibilityIdentifier("pinned-metrics-editor-title")
+                } icon: {
+                    Image(systemName: "pin.fill")
+                        .accessibilityHidden(true)
+                }
                     .font(.title3.weight(.semibold))
                     .fixedSize(horizontal: false, vertical: true)
 
@@ -120,7 +125,6 @@ struct PinnedMetricsEditorView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .accessibilityIdentifier("pinned-metrics-editor-hero")
     }
 
     private func toggle(_ category: HealthMetric.Category) {
