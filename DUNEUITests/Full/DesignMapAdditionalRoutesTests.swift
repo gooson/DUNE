@@ -118,8 +118,7 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
         if let preferred {
             browse = preferred
         } else {
-            let candidates = app.buttons.matching(identifier: "health-qa-browse-records").allElementsBoundByIndex
-            browse = try XCTUnwrap(candidates.first(where: { $0.exists && $0.isHittable }),
+            browse = try XCTUnwrap(revealToolbarAction("health-qa-browse-records"),
                                    "A visible Browse records route should remain available")
         }
         browse.auditTap()
@@ -130,11 +129,32 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
         XCTAssertTrue(queryDone.waitForExistence(timeout: 5))
         queryDone.auditTap()
         XCTAssertTrue(query.waitForNonExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["health-qa-done"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertNotNil(revealToolbarAction("health-qa-done"),
+                        "Done should remain reachable after returning from records")
+    }
+
+    private func revealToolbarAction(_ identifier: String) -> XCUIElement? {
+        func visibleAction() -> XCUIElement? {
+            app.buttons.matching(identifier: identifier).allElementsBoundByIndex
+                .first(where: { $0.exists && $0.isHittable })
+        }
+        if let action = visibleAction() { return action }
+        let scroll = app.scrollViews["health-qa-message-list"].firstMatch.exists
+            ? app.scrollViews["health-qa-message-list"].firstMatch
+            : app.scrollViews["health-qa-unavailable-scroll"].firstMatch
+        guard scroll.exists else { return nil }
+        for _ in 0..<8 {
+            scroll.swipeDown(velocity: .slow)
+            if let action = visibleAction() { return action }
+        }
+        return nil
     }
 
     private func dismissHealthQA(captureReturn: Bool = true) {
-        let done = app.buttons["health-qa-done"].firstMatch
+        guard let done = revealToolbarAction("health-qa-done") else {
+            XCTFail("A visible Done action should remain available")
+            return
+        }
         XCTAssertTrue(done.isHittable)
         done.auditTap()
         XCTAssertTrue(done.waitForNonExistence(timeout: 5))

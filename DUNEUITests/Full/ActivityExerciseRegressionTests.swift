@@ -4320,7 +4320,17 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         launchApp(with: configuration)
         openNotificationHub()
         let route = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationWorkoutRouteID)].firstMatch
-        XCTAssertTrue(route.waitForExistence(timeout: 8))
+        if maximumAX {
+            let hub = app.collectionViews[AXID.notificationHubScreen].firstMatch
+            XCTAssertTrue(hub.waitForExistence(timeout: 5))
+            for _ in 0..<12 where !(route.exists && route.isHittable) {
+                hub.swipeUp(velocity: .slow)
+            }
+            XCTAssertTrue(route.exists && route.isHittable,
+                          "Seeded workout route must be reachable in the notification hub")
+        } else {
+            XCTAssertTrue(route.waitForExistence(timeout: 8))
+        }
         route.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.healthkitWorkoutDetailScreen].firstMatch
             .waitForExistence(timeout: 10))

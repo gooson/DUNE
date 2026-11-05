@@ -484,7 +484,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.buttons["pinned-metrics-editor-row-hrv"].firstMatch.isEnabled,
                       "Selected categories must remain removable at the limit")
 
-        app.buttons[AXID.pinnedMetricsEditorCancel].firstMatch.auditTap()
+        try pinnedEditorToolbarAction(AXID.pinnedMetricsEditorCancel).auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
             .waitForNonExistence(timeout: 5))
         try openPinnedMetricsEditor()
@@ -495,7 +495,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         let steps = app.buttons["pinned-metrics-editor-row-steps"].firstMatch
         steps.auditTap()
         XCTAssertTrue(steps.isSelected)
-        app.buttons[AXID.pinnedMetricsEditorDone].firstMatch.auditTap()
+        try pinnedEditorToolbarAction(AXID.pinnedMetricsEditorDone).auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
             .waitForNonExistence(timeout: 5))
         try openPinnedMetricsEditor()
@@ -503,7 +503,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.buttons["pinned-metrics-editor-row-steps"].firstMatch.isSelected,
                       "Done must persist the newly pinned metric")
         VisualAudit.capture("T18 saved selection reopened")
-        app.buttons[AXID.pinnedMetricsEditorCancel].firstMatch.auditTap()
+        try pinnedEditorToolbarAction(AXID.pinnedMetricsEditorCancel).auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
             .waitForNonExistence(timeout: 5))
     }
@@ -532,6 +532,21 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         cancel.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
             .waitForNonExistence(timeout: 5))
+    }
+
+    private func pinnedEditorToolbarAction(_ identifier: String) throws -> XCUIElement {
+        func visibleAction() -> XCUIElement? {
+            app.buttons.matching(identifier: identifier).allElementsBoundByIndex
+                .first(where: { $0.exists && $0.isHittable })
+        }
+        if let action = visibleAction() { return action }
+        let editor = app.collectionViews[AXID.pinnedMetricsEditorScreen].firstMatch
+        XCTAssertTrue(editor.exists, "The editor must remain open before returning to its toolbar")
+        for _ in 0..<8 {
+            editor.swipeDown(velocity: .slow)
+            if let action = visibleAction() { return action }
+        }
+        return try XCTUnwrap(visibleAction(), "The exact editor toolbar action must remain reachable")
     }
 
     private func openPinnedMetricsEditor() throws {
