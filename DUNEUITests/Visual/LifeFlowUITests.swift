@@ -172,7 +172,14 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         total.auditTap()
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
         capture("L09 focused duration total and software keyboard")
-        XCTAssertTrue(app.fillTextInput("habit-past-record-total", with: "40"))
+        let existingTotal = total.value as? String ?? ""
+        XCTAssertEqual(existingTotal, "30")
+        total.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: existingTotal.count))
+        let clearedTotal = total.value as? String ?? ""
+        XCTAssertTrue(clearedTotal.isEmpty || clearedTotal == total.placeholderValue,
+                      "Clear the original total before typing its replacement")
+        total.typeText("40")
+        XCTAssertEqual(total.value as? String, "40")
         _ = app.dismissKeyboardIfPresent()
         tapPastRecordAction("habit-past-record-save")
         XCTAssertTrue(app.navigationBars["Past Record"].waitForNonExistence(timeout: 5))
