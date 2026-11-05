@@ -1,0 +1,239 @@
+Attributes: Application, 0x1069bebc0, pid: 16100, label: 'DUNE'
+Element subtree:
+ →Application, 0x1069bebc0, pid: 16100, label: 'DUNE'
+    Window (Main), 0x1069bd680, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1069bf340, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1069bdf40, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1069bd540, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1069bc8c0, {{-440.0, -956.0}, {1320.0, 2868.0}}
+          Other, 0x1069be300, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1069bda40, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1069bc3c0, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1069bc500, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1069bcdc0, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x1069bd900, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x1069bdb80, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x1069be440, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x1069bfe80, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x1069bd040, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x1069be940, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x1069bed00, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x1069bd2c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x1069bf700, {{0.0, 0.0}, {440.0, 956.0}}
+                                      Other, 0x1069bcf00, {{0.0, 0.0}, {440.0, 956.0}}
+                                        NavigationBar, 0x1069bfac0, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Sleep'
+                                          Button, 0x1069be580, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Today'
+                                          StaticText, 0x1069bd7c0, {{197.7, 73.7}, {44.7, 20.7}}, label: 'Sleep'
+                                        Other, 0x1069be6c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                          Other, 0x1069bdcc0, {{0.0, 0.0}, {440.0, 956.0}}
+                                            Other, 0x1069bf5c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                              Other, 0x1069bef80, {{0.0, 0.0}, {440.0, 956.0}}
+                                                ScrollView, 0x1069bcb40, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'metric-detail-screen-sleep'
+                                                  Other, 0x1069bfd40, {{0.0, -430.0}, {440.0, 2671.7}}
+                                                    StaticText, 0x1069bd400, {{16.0, -414.0}, {408.0, 191.7}}, identifier: 'metric-summary-header', label: 'Sleep, 7h 10min ', value: Updated 1 hour ago
+                                                      Image, 0x1069bc280, {{36.0, -394.0}, {44.0, 44.0}}, identifier: 'moon.zzz.fill', label: 'Snooze'
+                                                      StaticText, 0x1069bf980, {{92.0, -381.0}, {40.3, 18.0}}, label: 'Sleep'
+                                                      StaticText, 0x1069be1c0, {{36.0, -334.0}, {225.7, 62.3}}, label: '7h 10min'
+                                                      Other, 0x1069bc780, {{16.0, -261.8}, {408.0, 39.5}}
+                                                      StaticText, 0x1069bc640, {{36.0, -255.7}, {103.3, 13.3}}, label: 'Updated 1 hour ago'
+                                                    StaticText, 0x1069bcc80, {{32.0, -176.3}, {67.0, 24.0}}, label: 'History'
+                                                    Button, 0x1069bf0c0, {{340.0, -186.3}, {68.0, 44.0}}, label: 'Trend'
+                                                      Image, 0x1069bf840, {{349.3, -169.7}, {12.7, 11.0}}, identifier: 'chart.line.uptrend.xyaxis', label: 'Chart Line'
+                                                      StaticText, 0x1069bca00, {{367.3, -171.5}, {32.7, 14.3}}, label: 'Trend'
+                                                    SegmentedControl, 0x1069bc140, {{32.0, -126.3}, {376.0, 31.0}}
+                                                      Button, 0x1069be800, {{32.0, -126.3}, {75.2, 32.0}}, label: 'D'
+                                                      Button, 0x10328f5c0, {{107.2, -126.3}, {75.2, 32.0}}, label: 'W', Selected
+                                                      Button, 0x10328f200, {{182.4, -126.3}, {75.2, 32.0}}, label: 'M'
+                                                      Button, 0x10328cf00, {{257.6, -126.3}, {75.2, 32.0}}, label: '6M'
+                                                      Button, 0x10328c780, {{332.8, -126.3}, {75.2, 32.0}}, label: 'Y'
+                                                    Button, 0x10328f980, {{48.7, -64.7}, {8.3, 14.7}}, identifier: 'detail-chart-previous-period', label: 'Previous period'
+                                                    StaticText, 0x10328f700, {{179.0, -66.3}, {82.0, 18.0}}, identifier: 'detail-chart-visible-range', label: '10/31 – 11/6'
+                                                    Button, 0x10328f340, {{383.0, -64.7}, {8.3, 14.7}}, identifier: 'detail-chart-next-period', label: 'Next period', Disabled
+                                                    Other, 0x10328f840, {{32.0, -19.3}, {376.0, 220.0}}, identifier: 'detail-chart-surface', label: 'Sleep Detail Chart', value: 10/31 – 11/6
+                                                    Other, 0x1033cea80, {{32.0, -19.3}, {376.0, 220.0}}
+                                                    ScrollView, 0x1033cf700, {{58.0, -19.3}, {350.0, 202.0}}
+                                                      Other, 0x1033cee40, {{-1342.0, -19.3}, {1750.0, 202.0}}
+                                                        Other, 0x1033cd900, {{-1742.0, -69.3}, {2550.0, 302.0}}
+                                                          Other, 0x1033cf980, {{-1642.0, -19.3}, {350.0, 202.0}}, label: 'Sep 27, 2026 at 00 to Oct 4, 2026 at 00', value: 0
+                                                          Other, 0x1033ce800, {{-1292.0, -19.3}, {350.0, 202.0}}, label: 'Oct 4, 2026 at 00 to Oct 11, 2026 at 00', value: starts at 0, varie...
+                                                          Other, 0x1033ce300, {{-942.0, -19.3}, {350.0, 202.0}}, label: 'Oct 11, 2026 at 00 to Oct 18, 2026 at 00', value: starts at 438, var...
+                                                          Other, 0x1033ccb40, {{-592.0, -19.3}, {350.0, 202.0}}, label: 'Oct 18, 2026 at 00 to Oct 25, 2026 at 00', value: starts at 433, var...
+                                                          Other, 0x1033ce1c0, {{-242.0, -19.3}, {350.0, 202.0}}, label: 'Oct 25, 2026 at 00 to Nov 1, 2026 at 00', value: starts at 443, var...
+                                                          Other, 0x1033cde00, {{108.0, -19.3}, {350.0, 202.0}}, label: 'Nov 1, 2026 at 00 to Nov 8, 2026 at 00', value: starts at 429, var...
+                                                    Other, 0x1033ce6c0, {{32.0, 216.7}, {350.0, 117.3}}, identifier: 'detail-chart-visible-summary'
+                                                      StaticText, 0x1033cf200, {{32.0, 216.7}, {118.0, 14.3}}, identifier: 'detail-chart-summary-basis', label: 'Recorded sleep days'
+                                                      StaticText, 0x1033cf840, {{33.7, 244.3}, {92.3, 36.7}}, identifier: 'detail-chart-summary-average', label: 'Avg, 7h 25min'
+                                                        Image, 0x1033ce080, {{33.7, 244.3}, {18.7, 15.3}}, identifier: 'chart.bar.xaxis', label: 'Bar Chart With An X Axis'
+                                                        StaticText, 0x1033cf5c0, {{58.0, 246.7}, {21.0, 14.3}}, label: 'Avg'
+                                                        StaticText, 0x1033ce940, {{58.0, 263.0}, {68.0, 18.0}}, label: '7h 25min'
+                                                      StaticText, 0x106988000, {{164.7, 244.3}, {79.7, 37.0}}, identifier: 'detail-chart-summary-minimum', label: 'Min, 7h 6min'
+                                                        Image, 0x106988140, {{164.7, 244.3}, {12.7, 16.0}}, identifier: 'arrow.down', label: 'Down'
+                                                        StaticText, 0x106988280, {{186.0, 247.0}, {20.7, 14.3}}, label: 'Min'
+                                                        StaticText, 0x1069883c0, {{186.0, 263.3}, {58.3, 18.0}}, label: '7h 6min'
+                                                      StaticText, 0x106988500, {{292.7, 244.3}, {89.3, 37.0}}, identifier: 'detail-chart-summary-maximum', label: 'Max, 7h 54min'
+                                                        Image, 0x106988640, {{292.7, 244.3}, {12.7, 16.0}}, identifier: 'arrow.up', label: 'Up'
+                                                        StaticText, 0x106988780, {{314.0, 247.0}, {23.7, 14.3}}, label: 'Max'
+                                                        StaticText, 0x1069888c0, {{314.0, 263.3}, {68.0, 18.0}}, label: '7h 54min'
+                                                      StaticText, 0x106988a00, {{32.0, 293.3}, {249.7, 40.7}}, label: '0.5%, Your average is 0.5% higher than last period'
+                                                        Image, 0x106988b40, {{41.3, 300.0}, {9.3, 9.3}}, identifier: 'arrow.up.right', label: 'Up-Right Diagonal Arrow'
+                                                        StaticText, 0x106988c80, {{56.0, 297.3}, {31.7, 14.3}}, label: '0.5%'
+                                                        StaticText, 0x106988dc0, {{32.0, 319.7}, {249.7, 14.3}}, label: 'Your average is 0.5% higher than last period'
+                                                    Image, 0x106988f00, {{44.0, 388.7}, {18.7, 12.7}}, identifier: 'bed.double.fill', label: 'Bedtime'
+                                                    StaticText, 0x106989040, {{68.7, 386.0}, {94.7, 18.0}}, identifier: 'sleep-section-quality', label: 'Sleep Quality'
+                                                    StaticText, 0x106989180, {{36.0, 406.0}, {361.0, 14.3}}, label: 'Analyzes sleep debt, recovery forecast, and awakening patterns'
+                                                    StaticText, 0x1069892c0, {{168.5, 456.3}, {80.3, 19.3}}, label: 'Sleep Debt'
+                                                    Button, 0x106989400, {{254.3, 458.0}, {16.0, 16.0}}, identifier: 'sleep-debt-info-button', label: 'Info'
+                                                    StaticText, 0x106989540, {{187.0, 534.3}, {66.0, 26.3}}, label: '3h 0m'
+                                                    StaticText, 0x106989680, {{181.8, 562.7}, {76.3, 14.3}}, label: 'Slightly Short'
+                                                    StaticText, 0x1069897c0, {{151.2, 619.7}, {44.0, 18.0}}, label: '7h 0m'
+                                                    StaticText, 0x106989900, {{235.5, 619.7}, {53.3, 18.0}}, label: '7h 30m'
+                                                    StaticText, 0x106989a40, {{152.7, 639.7}, {41.0, 13.3}}, label: '14d avg'
+                                                    StaticText, 0x106989b80, {{240.8, 639.7}, {42.7, 13.3}}, label: '90d avg'
+                                                    StaticText, 0x106989cc0, {{50.0, 705.3}, {126.7, 19.3}}, identifier: 'sleep-wake-analysis-card', label: 'Wake Analysis'
+                                                    Button, 0x106989e00, {{186.0, 706.7}, {16.0, 16.0}}, identifier: 'sleep-waso-info-button', label: 'Info'
+                                                    StaticText, 0x106989f40, {{48.0, 732.6}, {157.0, 18.0}}, label: 'Collecting sleep data...'
+                                                    StaticText, 0x10698a080, {{49.3, 795.9}, {160.0, 19.3}}, identifier: 'sleep-debt-recovery-card', label: 'Recovery Forecast'
+                                                    StaticText, 0x10698a1c0, {{48.0, 823.3}, {36.7, 33.7}}, identifier: 'sleep-debt-recovery-card', label: '~3'
+                                                    StaticText, 0x10698a300, {{92.7, 835.6}, {105.3, 18.0}}, identifier: 'sleep-debt-recovery-card', label: 'days to recover'
+                                                    ProgressIndicator, 0x10698a440, {{48.0, 861.0}, {344.0, 4.0}}, identifier: 'sleep-debt-recovery-card', value: 88%
+                                                      ProgressIndicator, 0x10698a580, {{48.0, 851.0}, {344.0, 24.0}}, value: 88%
+                                                    StaticText, 0x10698a6c0, {{48.0, 868.9}, {115.3, 14.3}}, identifier: 'sleep-debt-recovery-card', label: 'Current debt: 3h 0m'
+                                                    StaticText, 0x10698a800, {{367.3, 868.9}, {24.7, 14.3}}, identifier: 'sleep-debt-recovery-card', label: 'Fast'
+                                                    Image, 0x10698a940, {{43.3, 952.7}, {19.0, 16.3}}, identifier: 'clock.badge.checkmark', label: 'Clock With A Checkmark Badge'
+                                                    StaticText, 0x10698aa80, {{64.0, 951.8}, {105.0, 18.0}}, identifier: 'sleep-section-patterns', label: 'Sleep Patterns'
+                                                    StaticText, 0x10698abc0, {{36.0, 972.3}, {243.3, 14.3}}, label: 'Tracks bedtime regularity and nap patterns'
+                                                    StaticText, 0x10698ad00, {{49.3, 1014.7}, {143.0, 19.3}}, identifier: 'sleep-regularity-card', label: 'Sleep Regularity'
+                                                    StaticText, 0x10698ae40, {{48.0, 1042.7}, {157.0, 18.0}}, identifier: 'sleep-regularity-card', label: 'Collecting sleep data...'
+                                                    StaticText, 0x10698af80, {{50.3, 1104.7}, {117.7, 19.3}}, identifier: 'sleep-nap-detection-card', label: 'Nap Patterns'
+                                                    StaticText, 0x10698b0c0, {{48.0, 1132.1}, {157.0, 18.0}}, identifier: 'sleep-nap-detection-card', label: 'Collecting sleep data...'
+                                                    Image, 0x10698b200, {{44.0, 1219.3}, {12.3, 18.0}}, identifier: 'heart.text.clipboard', label: 'Heart On A Text Clipboard'
+                                                    StaticText, 0x10698b340, {{62.3, 1219.3}, {121.3, 18.0}}, identifier: 'sleep-section-nocturnal', label: 'Nocturnal Health'
+                                                    StaticText, 0x10698b480, {{36.0, 1240.7}, {350.0, 14.3}}, label: 'Monitors heart rate, breathing, and oxygen levels during sleep'
+                                                    StaticText, 0x10698b5c0, {{50.0, 1283.3}, {138.7, 19.3}}, identifier: 'sleep-nocturnal-vitals-card', label: 'Overnight Vitals'
+                                                    StaticText, 0x10698b700, {{48.0, 1310.6}, {157.0, 18.0}}, identifier: 'sleep-nocturnal-vitals-card', label: 'Collecting sleep data...'
+                                                    StaticText, 0x10698b840, {{130.3, 1379.5}, {179.3, 14.3}}, identifier: 'sleep-nocturnal-vitals-card', label: 'No data available for this metric'
+                                                    StaticText, 0x10698b980, {{50.0, 1482.0}, {122.3, 19.6}}, identifier: 'sleep-vitals-timeline-card', label: '30-Day Vitals'
+                                                    StaticText, 0x10698bac0, {{48.0, 1510.3}, {157.0, 18.0}}, identifier: 'sleep-vitals-timeline-card', label: 'Collecting sleep data...'
+                                                    StaticText, 0x10698bc00, {{49.7, 1572.3}, {201.3, 19.3}}, identifier: 'sleep-breathing-disturbance-card', label: 'Breathing Disturbances'
+                                                    StaticText, 0x10698bd40, {{48.0, 1599.6}, {157.0, 18.0}}, identifier: 'sleep-breathing-disturbance-card', label: 'Collecting sleep data...'
+                                                    Image, 0x10698be80, {{43.7, 1687.7}, {14.0, 14.0}}, identifier: 'arrow.triangle.branch', label: 'Divide'
+                                                    StaticText, 0x10699c000, {{63.3, 1685.7}, {116.0, 18.0}}, identifier: 'sleep-section-external', label: 'External Factors'
+                                                    StaticText, 0x10699c140, {{36.0, 1705.7}, {321.7, 14.3}}, label: 'Explores how exercise and environment affect your sleep'
+                                                    StaticText, 0x10699c280, {{50.0, 1748.3}, {144.0, 19.3}}, identifier: 'sleep-exercise-correlation-card', label: 'Sleep & Exercise'
+                                                    StaticText, 0x10699c3c0, {{48.0, 1776.0}, {157.0, 18.0}}, identifier: 'sleep-exercise-correlation-card', label: 'Collecting sleep data...'
+                                                    StaticText, 0x10699c500, {{50.0, 1838.6}, {154.0, 19.3}}, identifier: 'sleep-environment-card', label: 'Sleep Environment'
+                                                    StaticText, 0x10699c640, {{48.0, 1866.3}, {157.0, 18.0}}, identifier: 'sleep-environment-card', label: 'Collecting sleep data...'
+                                                    Other, 0x10699c780, {{16.0, 1936.3}, {408.0, 217.0}}, identifier: 'metric-highlights'
+                                                      StaticText, 0x10699c8c0, {{16.0, 1936.3}, {73.3, 18.0}}, label: 'Highlights'
+                                                      Other, 0x10699ca00, {{16.0, 1962.3}, {408.0, 58.3}}, identifier: 'metric-highlight-row-high'
+                                                        StaticText, 0x10699cb40, {{64.0, 1974.3}, {44.0, 14.3}}, label: 'Highest'
+                                                        Image, 0x10699cc80, {{32.7, 1984.0}, {15.0, 15.0}}, identifier: 'arrow.up.circle.fill', label: 'Arrow Up Circle'
+                                                        StaticText, 0x10699cdc0, {{64.0, 1990.7}, {66.0, 18.0}}, identifier: 'metric-highlight-value-high', label: '7h 54min'
+                                                        StaticText, 0x10699cf00, {{378.7, 1984.3}, {33.3, 14.3}}, label: 'Nov 6'
+                                                      Other, 0x10699d040, {{16.0, 2028.7}, {408.0, 58.3}}, identifier: 'metric-highlight-row-low'
+                                                        StaticText, 0x10699d180, {{64.0, 2040.7}, {40.0, 14.3}}, label: 'Lowest'
+                                                        Image, 0x10699d2c0, {{32.7, 2050.3}, {15.0, 15.0}}, identifier: 'arrow.down.circle.fill', label: 'Arrow Down Circle'
+                                                        StaticText, 0x10699d400, {{64.0, 2057.0}, {56.7, 18.0}}, identifier: 'metric-highlight-value-low', label: '7h 6min'
+                                                        StaticText, 0x10699d540, {{379.0, 2050.7}, {33.0, 14.3}}, label: 'Nov 2'
+                                                      Other, 0x10699d680, {{16.0, 2095.0}, {408.0, 58.3}}, identifier: 'metric-highlight-row-trend'
+                                                        StaticText, 0x10699d7c0, {{64.0, 2107.0}, {67.3, 14.3}}, label: 'Trending up'
+                                                        Image, 0x10699d900, {{32.0, 2117.3}, {16.0, 13.7}}, identifier: 'chart.line.uptrend.xyaxis', label: 'Chart Line'
+                                                        StaticText, 0x10699da40, {{64.0, 2123.3}, {35.0, 18.0}}, identifier: 'metric-highlight-value-trend', label: '5min'
+                                                        StaticText, 0x10699db80, {{378.7, 2117.0}, {33.3, 14.3}}, label: 'Nov 6'
+                                                    Button, 0x10699dcc0, {{16.0, 2173.3}, {408.0, 52.3}}, identifier: 'metric-detail-show-all-data', label: 'Show All Data'
+                                                      StaticText, 0x10699de00, {{32.0, 2189.3}, {105.3, 20.3}}, label: 'Show All Data'
+                                                      Image, 0x10699df40, {{401.3, 2194.3}, {6.0, 10.3}}, identifier: 'chevron.right', label: 'Forward'
+                                                  Other, 0x10699e080, {{0.0, 0.0}, {440.0, 956.0}}
+                                                    Other, 0x10699e1c0, {{0.0, 0.0}, {440.0, 156.0}}
+                                                    Other, 0x10699e300, {{0.0, 823.0}, {440.0, 133.0}}
+                                                  Other, 0x10699e440, {{0.0, 0.0}, {440.0, 956.0}}
+                                                    Other, 0x10699e580, {{0.0, 0.0}, {440.0, 156.0}}
+                                                    Other, 0x10699e6c0, {{0.0, 823.0}, {440.0, 133.0}}
+                                                  Other, 0x10699e800, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 4 pages', value: 29%
+                                                    Other, 0x10699e940, {{434.0, 262.0}, {3.0, 250.0}}
+                                                  Other, 0x10699ea80, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 4 pages', value: 29%
+                                                    Other, 0x10699ebc0, {{434.0, 262.0}, {3.0, 250.0}}
+                                        Toolbar, 0x10699ed00, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x10699ee40, {{0.0, 0.0}, {440.0, 956.0}}
+                                Toolbar, 0x10699ef80, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x10699f0c0, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x10699f200, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x10699f340, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x10699f480, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x10699f5c0, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x10699f700, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x10699f840, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x10699f980, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x10699fac0, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x10699fc00, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x10699fd40, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today', Selected
+                              Image, 0x10699fe80, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x11055c000, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity'
+                              Image, 0x11055c140, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x11055c280, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x11055c3c0, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x11055c500, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x11055c640, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x11055c780, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x11055c8c0, {{25.0, 877.0}, {104.5, 54.0}}
+                            Other, 0x11055ca00, {{25.0, 877.0}, {104.3, 54.0}}
+                              Other, 0x11055cb40, {{25.0, 877.0}, {104.3, 54.0}}
+                              Other, 0x11055cc80, {{25.0, 877.0}, {104.3, 54.0}}
+                                Other, 0x11055cdc0, {{25.0, 877.0}, {104.3, 54.0}}
+                                  Other, 0x11055cf00, {{25.0, 877.0}, {104.3, 54.0}}
+                                    Other, 0x11055d040, {{25.0, 877.0}, {104.3, 54.0}}
+                                  Other, 0x11055d180, {{25.0, 877.0}, {104.3, 54.0}}
+                                Other, 0x11055d2c0, {{25.0, 877.0}, {104.3, 54.0}}
+                    Other, 0x11055d400, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x11055d540, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x11055d680, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x11055d7c0, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x11055d900, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x11055da40, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x11055db80, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x11055dcc0, {{220.0, 492.0}, {0.0, 0.0}}
+      Other, 0x11055de00, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x11055df40, {{-440.0, -956.0}, {1320.0, 2868.0}}
+        Other, 0x11055e080, {{0.0, 62.0}, {440.0, 894.0}}
+          Button, 0x11055e1c0, {{170.0, 58.0}, {100.0, 24.0}}, label: 'Sheet Grabber', value: Expanded
+          Other, 0x11055e300, {{0.0, 62.0}, {440.0, 894.0}}
+            Other, 0x11055e440, {{0.0, 62.0}, {440.0, 894.0}}
+              Other, 0x11055e580, {{0.0, 62.0}, {440.0, 894.0}}
+                ScrollView, 0x11055e6c0, {{0.0, 62.0}, {440.0, 894.0}}, identifier: 'sleep-waso-info-sheet'
+                  Other, 0x11055e800, {{0.0, 62.0}, {440.0, 915.3}}
+                    StaticText, 0x11055e940, {{88.0, 98.0}, {142.7, 24.0}}, identifier: 'sleep-waso-info-title', label: 'What is WASO?'
+                    Button, 0x11055ea80, {{360.0, 98.0}, {44.0, 44.0}}, identifier: 'sleep-waso-info-close', label: 'Close'
+                    StaticText, 0x11055ebc0, {{36.0, 280.0}, {109.3, 32.0}}, identifier: 'sleep-waso-info-definition', label: 'Definition'
+                    StaticText, 0x11055ed00, {{36.0, 320.0}, {326.0, 58.0}}, identifier: 'sleep-waso-info-definition-body', label: 'WASO stands for Wake After Sleep Onset. It measures the total time you spend awake after initially falling asleep, until your final awakening.'
+                    StaticText, 0x11055ee40, {{36.0, 426.0}, {173.3, 32.0}}, identifier: 'sleep-waso-info-measurement', label: 'How It's Measured'
+                    StaticText, 0x11055ef80, {{36.0, 466.0}, {360.3, 78.0}}, identifier: 'sleep-waso-info-measurement-body', label: 'Apple Watch detects awakenings during sleep using motion and heart rate sensors. Only awakenings lasting 5 minutes or longer are counted — brief stirrings are filtered out as normal sleep behavior.'
+                    StaticText, 0x11055f0c0, {{36.0, 592.0}, {95.3, 32.0}}, identifier: 'sleep-waso-info-scoring', label: 'Scoring'
+                    StaticText, 0x11055f200, {{36.0, 632.0}, {365.3, 78.0}}, identifier: 'sleep-waso-info-scoring-body', label: 'The WASO Score (0–100) reflects how uninterrupted your sleep was. Less time awake means a higher score. This score contributes 15% to your overall Sleep Score.'
+                    StaticText, 0x11055f340, {{36.0, 758.0}, {127.3, 32.0}}, identifier: 'sleep-waso-info-guide', label: 'Score Guide'
+                    StaticText, 0x11055f480, {{38.0, 810.7}, {366.0, 18.0}}, identifier: 'sleep-waso-info-level-excellent', label: 'Excellent, < 10 min'
+                      Image, 0x11055f5c0, {{38.0, 811.3}, {28.7, 15.3}}, identifier: 'moon.stars.fill', label: 'Clear Night'
+                      StaticText, 0x11055f700, {{80.0, 810.7}, {61.7, 18.0}}, label: 'Excellent'
+                      StaticText, 0x11055f840, {{343.3, 810.7}, {60.7, 18.0}}, label: '< 10 min'
+                    StaticText, 0x11055f980, {{37.3, 845.0}, {366.7, 18.0}}, identifier: 'sleep-waso-info-level-good', label: 'Good, 10–20 min'
+                      Image, 0x11055fac0, {{37.3, 846.3}, {28.3, 15.0}}, identifier: 'moon.fill', label: 'Do Not Disturb'
+                      StaticText, 0x11055fc00, {{80.0, 845.0}, {37.3, 18.0}}, label: 'Good'
+                      StaticText, 0x11055fd40, {{329.7, 845.0}, {74.3, 18.0}}, label: '10–20 min'
+                    StaticText, 0x11055fe80, {{37.3, 880.7}, {366.7, 18.0}}, identifier: 'sleep-waso-info-level-fair', label: 'Fair, 20–30 min'
+                      Image, 0x110564000, {{37.3, 880.7}, {28.0, 17.0}}, identifier: 'moon.zzz.fill', label: 'Snooze'
+                      StaticText, 0x110564140, {{80.0, 880.7}, {25.0, 18.0}}, label: 'Fair'
+                      StaticText, 0x110564280, {{329.7, 880.7}, {74.3, 18.0}}, label: '20–30 min'
+                    StaticText, 0x1105643c0, {{37.0, 915.3}, {367.0, 18.0}}, identifier: 'sleep-waso-info-guide-poor', label: 'Poor, > 30 min'
+                      Image, 0x110564500, {{37.0, 917.0}, {28.3, 15.0}}, identifier: 'exclamationmark.circle.fill', label: 'Exclamation Mark In A Filled Circle'
+                      StaticText, 0x110564640, {{80.0, 915.3}, {32.0, 18.0}}, label: 'Poor'
+                      StaticText, 0x110564780, {{343.3, 915.3}, {60.7, 18.0}}, label: '> 30 min'
+                  Other, 0x1105648c0, {{407.0, 100.0}, {30.0, 794.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                    Other, 0x110564a00, {{434.0, 103.0}, {3.0, 742.7}}
+                  Other, 0x110564b40, {{407.0, 100.0}, {30.0, 794.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                    Other, 0x110564c80, {{434.0, 103.0}, {3.0, 742.7}}
+Path to element:
+ →Application, 0x1069bebc0, pid: 16100, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x110564dc0, pid: 16100, label: 'DUNE'
+  }

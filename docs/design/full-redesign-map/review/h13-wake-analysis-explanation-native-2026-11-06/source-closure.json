@@ -1,0 +1,78 @@
+{
+  "source": "04e2ec0add31d110734452d854767a25407b7eca",
+  "recordedUTC": "2026-11-05T16:54:58.669903+00:00",
+  "rows": [
+    {
+      "profile": "regular",
+      "screen": "H13",
+      "method": "SleepDetailSmokeTests/testWakeAnalysisExplanationOpens()",
+      "SDK": "Passed",
+      "archive": ".codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed",
+      "executedSource": "04e2ec0add31d110734452d854767a25407b7eca",
+      "AppFile": "DUNE/Presentation/Sleep/Components/WASOInfoSheet.swift",
+      "AppFileSHA256": "bdbd661daf424330c52f914aef142e4c65ce49905a07f6b81375200b713748c9",
+      "fixtureSHA256": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871"
+    },
+    {
+      "profile": "ipad",
+      "screen": "H13",
+      "method": "SleepDetailSmokeTests/testWakeAnalysisExplanationOpens()",
+      "SDK": "Passed",
+      "archive": ".codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed",
+      "executedSource": "2d1656bb83a3a41ce02e1c41352769e0a867b032",
+      "AppFile": "DUNE/Presentation/Sleep/Components/WASOInfoSheet.swift",
+      "AppFileSHA256": "bdbd661daf424330c52f914aef142e4c65ce49905a07f6b81375200b713748c9",
+      "fixtureSHA256": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871"
+    },
+    {
+      "profile": "duo",
+      "screen": "H13",
+      "method": "SleepDetailSmokeTests/testWakeAnalysisExplanationOpens()",
+      "SDK": "Passed",
+      "archive": ".codex-checks/batch01/evidence/duo-closed-sleep-2d1656bb-passed",
+      "executedSource": "2d1656bb83a3a41ce02e1c41352769e0a867b032",
+      "AppFile": "DUNE/Presentation/Sleep/Components/WASOInfoSheet.swift",
+      "AppFileSHA256": "bdbd661daf424330c52f914aef142e4c65ce49905a07f6b81375200b713748c9",
+      "fixtureSHA256": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871"
+    },
+    {
+      "profile": "duo-open",
+      "screen": "H13",
+      "method": "SleepDetailSmokeTests/testWakeAnalysisExplanationOpens()",
+      "SDK": "Passed",
+      "archive": ".codex-checks/batch01/evidence/duo-open-2d1656bb-passed",
+      "executedSource": "2d1656bb83a3a41ce02e1c41352769e0a867b032",
+      "AppFile": "DUNE/Presentation/Sleep/Components/WASOInfoSheet.swift",
+      "AppFileSHA256": "bdbd661daf424330c52f914aef142e4c65ce49905a07f6b81375200b713748c9",
+      "fixtureSHA256": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871"
+    },
+    {
+      "profile": "duo-MAX",
+      "screen": "H13",
+      "method": "SleepDetailSmokeTests/testSleepExplanationSheetsAtMaximumAccessibilityTextSize()",
+      "SDK": "Passed",
+      "archive": ".codex-checks/batch01/evidence/duo-closed-sleep-2d1656bb-passed",
+      "executedSource": "2d1656bb83a3a41ce02e1c41352769e0a867b032",
+      "AppFile": "DUNE/Presentation/Sleep/Components/WASOInfoSheet.swift",
+      "AppFileSHA256": "bdbd661daf424330c52f914aef142e4c65ce49905a07f6b81375200b713748c9",
+      "fixtureSHA256": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871"
+    }
+  ],
+  "H11ParentConsumer": "Stats button/loadStatistics/isPresented destination byte-identical across all relevant snapshots; H10 row activation-only delta not used by Stats. Independent static route review confirms preservation.",
+  "H11PhoneTestDelta": "Named-nav branch retained; later helper adds Duo fallback and explicit destination disappearance. Original phone post-Back PNG/AX proves History return and absent Stats destination; no claim current whole test file ran on old phone.",
+  "sameFixtureAcrossSnapshots": true,
+  "receiptPolicy": "Actual SDK receipts retain executed source and all failed/partial/timeout attempts; no receipt rewritten or claimed as whole current-HEAD validation",
+  "limits": [
+    "iOS27.2 simulators, English Light",
+    "Normal4profiles plusclosedMAX",
+    "H10newlyRecovered extra outcome inside normalmethod, not another method",
+    "No full regression, physical-device/VO/Dark/all-CI claim"
+  ],
+  "ownedDeviceCount": 0,
+  "gallery_screen": "H13",
+  "batch_scope": "20 planned screen-state/profile contributions backed by19 distinct positive method/profile combinations; shared SleepMAX counted once",
+  "batch_unique_method_profile_combinations": 19,
+  "batch_screen_state_contributions": 20,
+  "scope": "H13 subset of the audited batch; not a final-PR-HEAD runtime receipt",
+  "gallery_screen_contributions": 5
+}
