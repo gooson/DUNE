@@ -85,7 +85,7 @@ struct SleepDebtInfoSheet: View {
         icon: String,
         title: LocalizedStringKey,
         identifier: String,
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: @escaping () -> Content
     ) -> some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
