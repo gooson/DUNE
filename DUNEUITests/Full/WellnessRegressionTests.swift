@@ -758,6 +758,36 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         }
     }
 
+    func testPostureDetailAtMaximumAccessibilitySize() throws {
+        executionTimeAllowance = 600
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        openHistory(maxRevealAttempts: 36)
+        let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "8 metrics")).firstMatch
+        reveal(row)
+        XCTAssertTrue(row.exists && row.isHittable, "Synthetic posture record should be reachable")
+        row.auditTap()
+
+        // The host prepares and verifies the requested layout before this test.
+        let scoreLabel = "Posture score 86 out of 100"
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(scoreLabel, maxSwipes: 16, direction: .down),
+                      "Posture score should remain reachable at maximum text size")
+        let score = app.descendants(matching: .any)[scoreLabel].firstMatch
+        XCTAssertEqual(score.label, scoreLabel, "The stored synthetic score should be preserved")
+        XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 2, dy: 2).contains(score.frame),
+                      "The complete score card should fit in the prepared layout")
+        VisualAudit.capture("Posture static layout complete score card at maximum AX")
+
+        let assessment = app.staticTexts["Assessment Details"].firstMatch
+        reveal(assessment)
+        XCTAssertTrue(assessment.exists && assessment.isHittable,
+                      "Stored assessment metrics should be reachable at maximum text size")
+        captureScrollContent("Posture static layout assessment at maximum AX", count: 5)
+    }
+
     func testPostureCardAtMaximumAccessibilitySize() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments.append(contentsOf: [

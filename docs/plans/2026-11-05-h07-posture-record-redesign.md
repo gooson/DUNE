@@ -27,7 +27,7 @@ Wellness의 최근 자세 기록에서 H07은 `PostureRecordLookupView`를 거�
 | --- | --- |
 | `DUNE/Presentation/Posture/PostureDetailView.swift` | 동일 뷰 안에서 기존 score, metrics, photos의 순서와 크기를 정리하고 저장된 metric 상태의 간결한 2D 시각 요약을 추가. 기존 액션·데이터 경로 유지. |
 | `DUNE/Presentation/Shared/Extensions/PostureMetric+View.swift` | 신뢰도 badge에 기본값이 유지되는 전경 스타일 인자를 추가해 이 상세만 대비를 강화 |
-| `DUNEUITests/Full/WellnessRegressionTests.swift` | 기존 H07 직접 진입, P06 이력·하단 스크롤, 좌우 비교 선택자는 그대로 둔다. 기존 MAX 접힘 점수 메서드의 각 자세 점수 캡처 뒤에 기존 reveal/captureScrollContent로 Assessment Details와 아래 타일 3뷰포트만 캡처한다. 새 메서드·fixture·assertion 문장은 없음. |
+| `DUNEUITests/Full/WellnessRegressionTests.swift` | H07 직접 진입, P06 이력·하단 스크롤, 좌우 비교를 보존한다. 현재 배치를 위한 별도 MAX 상세 선택자를 추가해 준비된 Duo 접힘/펼침 각각에서 점수·평가 영역을 확인한다. 기존 세 자세 FOLD 선택자와 assertion은 유지하며 그 실패를 통과로 바꾸지 않는다. |
 | `docs/design/layout-map/` H07 전용 맵·index/README | 기존 H07과 P06이 같은 상세 뷰를 공유함을 명시하고 점수→평가→사진→추가 행동의 배치·누락 상태를 설명. |
 | `docs/design/theme-map/` H07 보존 시안·manifest/README/index | DUNE의 기존 body 테마색·SF Symbol·상태색으로 정적 표현을 보존. 시안 수치/기호와 실제 캡처를 분리. |
 | `docs/design/phone-design-map/actual/`의 H07·P06 및 갤러리 | 변경 후 실제 기기별 PNG/AX를 해당 두 ID에만 갱신하고 기존 이미지 출처를 보존. |
@@ -37,7 +37,7 @@ Wellness의 최근 자세 기록에서 H07은 `PostureRecordLookupView`를 거�
 1. H06 실제 병합 HEAD에서 `PostureDetailView`와 H07/P06 현재 맵·테스트 파일을 다시 바인딩한다. 기존 일반 iPhone·Duo 접힘/펼침·iPad H07 사진과 첫 메트릭 가시성을 비교한다. 공유 상세 뷰의 P06도 영향 범위에 포함한다.
 2. 한 상세 뷰에서 `Assessment Details`를 사진 앞에 둔다. 저장된 `frontMetrics + sideMetrics`만 기존 `PostureMetricType.iconName`/`PostureStatus.color`로 2열 타일에 표시한다. MAX 글씨는 한 열이다. 배열이 비면 기존 카탈로그 `Unable to measure`를 표시하고 값을 만들어 내지 않는다. 실제 값·단위·신뢰도 표현은 기존 함수를 재사용한다. 네 상태색 `.green/.yellow/.red/.gray`의 밝은 화면 전경만 캐시된 `mix(with: .black, by: 0.45)`로 표시하고 어두운 화면 전경과 상태색 9% 타일 배경은 그대로 둔다.
 3. Front/Side 이미지 카드는 `Data`가 있을 때 원본 표시·확대·관절 오버레이를 유지한다. 없는 사진의 자리표시자는 작은 정보 카드로 구성하되 Front/Side 구분과 부분 평가 상태를 유지한다. 합성 fixture의 `figure.stand` PNG는 사진 존재 경로만 검증하며 촬영 품질이나 실제 관절 시각화 증거가 아니다.
-4. 기존 `PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail`로 H07 직접 진입을 일반 iPhone·iPad·Duo 접힘·펼침에서 확인한다. `testPostureHistoryAndDetail`은 P06 공유 화면의 전체 스크롤을 동일한 네 프로필에서 확인한다. 기존 `testPostureDetailScoreAcrossFoldStatesAtMaximumTextSize`는 소유한 같은 Duo에서 closed→partiallyOpen→openFlat 세 자세의 실제 readback 및 MAX 점수를 확인한다. 좌우 비교의 원래 경로는 기존 `testPostureSymmetry`로 대표 접힘 프로필에서 확인한다. 합계는 H07 4 + P06 4 + Duo MAX 1 + 좌우 비교 1 = 기존 선택자 10건, 순차 실행 5회(일반 접힘과 MAX 별도)다. 동일 Duo를 자세별로 소유하고 기기는 한 번에 하나만 사용한다. MAX 메서드에만 기존 helper 호출 두 줄을 더하고 assertion 문장은 바꾸지 않는다. 실제 PNG/AX에서 첫 평가 항목과 하단 행동을 별도 검토한다. 앱/테스트·기기 실행은 표준 점유·deadline을 따른다.
+4. 기존 `testWellnessRecentPostureRecordOpensDetail`과 `testPostureHistoryAndDetail`을 일반 iPhone·iPad·Duo 접힘 0°·펼침 180°에서 확인한다. 새 `testPostureDetailAtMaximumAccessibilitySize`는 미리 검증한 두 Duo 끝점에서 각각 실행해 전체 점수 프레임·평가 영역 도달성을 assertion으로 확인하고, 아래 다섯 뷰포트에서 여덟 저장 항목의 아이콘·값·신뢰도를 실제 PNG/AX로 모두 검토한다. 기존 `testPostureSymmetry`도 접힘에서 실행한다. 펼침 3 + 접힘 4 + 일반 iPhone 2 + iPad 2 = 현재 핵심 사례 11건, 순차 실행 4회다. 기존 세 자세 `testPostureDetailScoreAcrossFoldStatesAtMaximumTextSize`와 실패 ID는 그대로 FAILED/미해결로 유지한다. 이 환경의 90° 구동 문제는 화면 코드에 없는 별도 장치 제어 문제이며 이번 끝점 검증을 세 자세 회귀 통과로 표현하지 않는다. 한 번에 소유 기기 한 대와 표준 실행기·deadline을 사용한다.
 5. 실제 PNG/AX에서 score, 첫 메트릭, 상태색과 텍스트, Front/Side, 메모·교정 운동·좌우 비교·PDF/공유·삭제 동작의 도달성을 검토한다. 이미지 없음, 한쪽만 있음, 메트릭 없음은 실제 fixture/기록으로 증거가 있는 경우만 통과로 쓴다. 검증한 기기/언어/외관만 게시하고 H07과 공유 P06 맵을 함께 갱신한다.
 
 ## 위험·대안·검증 경계
@@ -46,7 +46,7 @@ Wellness의 최근 자세 기록에서 H07은 `PostureRecordLookupView`를 거�
 - **합성 fixture:** `TestDataSeeder.seedVisualPostureFixtures`는 시스템 `figure.stand` 그림을 `frontImageData`/`sideImageData`에 저장하고 joint의 normalized image 좌표를 넣지 않는다. 기존 H07 PNG의 거대한 검은 사람 모양은 그 fixture의 결과이며 카메라 영상/관절 오버레이 품질의 증거가 아니다. 새 캡처도 동일 한계를 명시한다.
 - **시각 대안:** 새로운 3D 몸 모델이나 관절 좌표 추정 대신 2D metric 아이콘/상태 요약을 선택한다. 저장된 필드만 사용하고 기존 항목 이름·값·상태·신뢰도 표현을 재사용하기 때문이다. 새 타일의 VoiceOver 순서와 중복 여부는 실제 AX에서 확인한다.
 - **데이터·플랫폼:** 쿼리, SwiftData 모델, score 계산, Vision/ML, HealthKit, Watch UI, 카탈로그의 광범위 수정은 범위 밖이다. 새 문구가 실제로 필요해질 때만 en/ko/ja 문자열과 formatter를 좁게 갱신한다. iOS 화면 소스 변경 후 영향 타깃은 프로젝트 설정으로 다시 확인한다.
-- **검증 상태:** 비공개 소스 패치와 정적 맵 초안은 만들었고 ROOT에는 적용하지 않았다. MAX 기존 메서드의 캡처 전용 테스트 패치만 준비했고 네이티브 실행·현행 기기 캡처는 아직 없다. Apple/SwiftUI 정적 리뷰의 밝은 화면 상태 전경 대비 P2를 소스에서 두 군데만 보정했다. 0.45 혼합은 예상되는 가독성 개선이며 실제 대비 수치가 아니다. 네 상태의 아이콘·상태 글자와 평가 타일 폭·MAX 전체 텍스트는 네이티브 PNG에서 측정/확인 전까지 통과로 기록하지 않는다. MAX는 접힘 세 자세 각각 기존 점수 확인 뒤 Assessment Details를 드러내고 상단/하단 스크롤 화면을 남긴다. 이 캡처만으로 모든 8항목의 전체 가시성을 추정하지 않는다. 기존 H07/P06 이미지는 이전 소스의 역사 증거로만 사용한다. H07과 P06 각 4프로필의 새 PNG/AX가 확인되지 않으면 해당 맵 ID를 최신 캡처로 표시하지 않는다.
+- **검증 상태:** 실제 앱 소스와 아이콘 공간·신뢰도 전경 보완은 `108085b5`에 반영했고 표준 iOS 앱 빌드와 문자열 포맷 검사가 통과했다. 실제 닫힘 MAX 캡처 뒤 90° actuator/readback에서 중단된 전체 검사는 통과하지 않았다. 현재 앱의 새 긍정 SDK 결과·PNG/AX와 네 프로필 맵 갱신은 아직 남아 있다. 기존 H07/P06 이미지와 중단된 실행의 그림은 진단/역사 근거이며 새 긍정 사례를 대신하지 않는다. 원래 세 자세 검사와 모든 실패를 보존하면서 요청한 끝점과 변경한 MAX 분기만 별도 선택자로 검증한다.
 
 ## 실제 닫힘 캡처에서 확인한 보완
 
