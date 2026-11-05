@@ -41449,6 +41449,29 @@
     "Select up to %@ metrics shown at the top of Today." : {
       "extractionState" : "manual"
     },
+    "Select up to %lld metrics shown at the top of Today." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select up to %lld metrics shown at the top of Today."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todayタブの上部に表示する指標を最大%lld個選択してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘 탭 상단에 표시할 지표를 최대 %lld개 선택하세요."
+          }
+        }
+      }
+    },
     "Select up to 3 metrics shown at the top of Today." : {
       "extractionState" : "manual",
       "localizations" : {

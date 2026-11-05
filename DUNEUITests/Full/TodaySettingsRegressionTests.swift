@@ -500,9 +500,15 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             XCTAssertTrue(app.revealFullyVisible(identifier, in: editor))
             XCTAssertTrue(app.buttons[identifier].firstMatch.isSelected)
         }
-        XCTAssertTrue(app.revealTextBody("pinned-metrics-editor-footer", in: editor))
         let footer = app.staticTexts["pinned-metrics-editor-footer"].firstMatch
-        XCTAssertTrue(footer.label.contains("6"), "The six-metric guidance must remain readable")
+        let editorList = app.collectionViews[AXID.pinnedMetricsEditorScreen].firstMatch
+        XCTAssertTrue(editorList.exists)
+        for _ in 0..<8 where !footer.exists {
+            editorList.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(footer.exists, "The List footer must load after scrolling to the bottom")
+        XCTAssertTrue(app.revealTextBody("pinned-metrics-editor-footer", in: editor))
+        XCTAssertEqual(footer.label, "오늘 탭 상단에 표시할 지표를 최대 6개 선택하세요.")
         VisualAudit.capture("T18 Korean iPad selected rows and footer")
 
         try pinnedEditorToolbarAction(AXID.pinnedMetricsEditorCancel).auditTap()
