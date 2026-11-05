@@ -45,7 +45,7 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         return control
     }
 
-    private func tapPastRecordAction(_ identifier: String, expectedHabit: String? = nil) {
+    private func tapPastRecordAction(_ identifier: String) {
         let form = app.collectionViews.firstMatch
         let action = app.buttons[identifier].firstMatch
         // Restore the sheet toolbar after scrolling within the actual Form.
@@ -53,10 +53,83 @@ final class LifeFlowUITests: SeededUITestBaseCase {
             form.swipeDown(velocity: .slow)
         }
         XCTAssertTrue(action.waitForExistence(timeout: 5) && action.isHittable)
-        if let expectedHabit {
-            XCTAssertEqual(app.buttons["habit-past-record-habit"].firstMatch.label, "Habit, \(expectedHabit)")
-        }
         action.auditTap()
+    }
+
+    private func tapPastReadSave() -> Bool {
+        let total = app.textFields["habit-past-record-total"].firstMatch
+        let picker = app.buttons["habit-past-record-habit"].firstMatch
+        let forms = app.collectionViews
+        let matchingForms = forms.allElementsBoundByIndex.enumerated().filter {
+            $0.element.textFields["habit-past-record-total"].firstMatch.exists
+        }
+        guard matchingForms.count == 1 else { return false }
+        // Keep the verified Form's index when its lower row leaves the lazy AX tree.
+        let form = forms.element(boundBy: matchingForms[0].offset)
+        let originalFormCount = forms.count
+        let navigationBar = app.navigationBars["Past Record"].firstMatch
+        let save = navigationBar.buttons["habit-past-record-save"].firstMatch
+        let window = app.windows.firstMatch
+
+        func usable(_ frame: CGRect) -> Bool {
+            !frame.isEmpty && !frame.isNull &&
+                frame.minX.isFinite && frame.maxX.isFinite &&
+                frame.minY.isFinite && frame.maxY.isFinite
+        }
+
+        guard total.exists, total.value as? String == "40",
+              picker.exists, picker.label == "Habit, Read" else { return false }
+
+        // Preserve the existing ten-gesture maximum, with a final eligibility check.
+        for move in 0...10 {
+            guard window.exists, navigationBar.exists else { return false }
+            let windowFrame = window.frame
+            let navigationFrame = navigationBar.frame
+            guard usable(windowFrame), usable(navigationFrame) else { return false }
+            if save.exists {
+                let frame = save.frame
+                // Geometry must precede isHittable: a collapsed placeholder can exist.
+                if usable(frame), windowFrame.contains(frame), navigationFrame.contains(frame),
+                   save.isHittable, save.isEnabled {
+                    guard picker.exists, picker.label == "Habit, Read" else { return false }
+                    if total.exists, total.value as? String != "40" { return false }
+                    VisualAudit.capture("L09 native Save toolbar restored")
+                    save.auditTap()
+                    return true
+                }
+            }
+            guard move < 10, forms.count == originalFormCount, form.exists else { return false }
+            let formFrame = form.frame
+            guard usable(formFrame) else { return false }
+            let intersection = formFrame.intersection(windowFrame)
+            guard usable(intersection) else { return false }
+            let top = max(intersection.minY, navigationFrame.maxY)
+            var bottom = intersection.maxY
+            let keyboard = app.keyboards.firstMatch
+            if keyboard.exists {
+                let keyboardFrame = keyboard.frame
+                guard usable(keyboardFrame) else { return false }
+                if keyboardFrame.intersects(intersection) {
+                    bottom = min(bottom, keyboardFrame.minY)
+                }
+            }
+            let viewport = CGRect(x: intersection.minX, y: top,
+                                  width: intersection.width, height: max(0, bottom - top))
+                .insetBy(dx: 12, dy: 12)
+            guard usable(viewport), viewport.height >= 44 else { return false }
+            let x = (viewport.midX - formFrame.minX) / formFrame.width
+            let start = form.coordinate(withNormalizedOffset: CGVector(
+                dx: x, dy: (viewport.minY + viewport.height * 0.25 - formFrame.minY) / formFrame.height
+            ))
+            let end = form.coordinate(withNormalizedOffset: CGVector(
+                dx: x, dy: (viewport.minY + viewport.height * 0.75 - formFrame.minY) / formFrame.height
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+            VisualAudit.capture("L09 numeric Form visible-area drag \(move + 1)")
+            if picker.exists, picker.label != "Habit, Read" { return false }
+            if total.exists, total.value as? String != "40" { return false }
+        }
+        return false
     }
 
     func testCompactHeroAndTodayReadingOrder() {
@@ -183,9 +256,8 @@ final class LifeFlowUITests: SeededUITestBaseCase {
                       "Clear the original total before typing its replacement")
         total.typeText("40")
         XCTAssertEqual(total.value as? String, "40")
-        // Reach the actual toolbar through this Form; coordinate keyboard dismissal
-        // can hit its underlying Habit picker in the collapsed Duo navigation bar.
-        tapPastRecordAction("habit-past-record-save", expectedHabit: "Read")
+        capture("L09 replacement total before native Save")
+        XCTAssertTrue(tapPastReadSave(), "Save must preserve Read and its replacement total")
         XCTAssertTrue(app.navigationBars["Past Record"].waitForNonExistence(timeout: 5))
         XCTAssertEqual(hero.label, baseline, "A past record must not change today's completion")
         XCTAssertTrue(app.openLifeHabitActions(named: "Read", maxSwipes: 8))
