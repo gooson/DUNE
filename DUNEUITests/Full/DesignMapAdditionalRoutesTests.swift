@@ -24,6 +24,7 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
 
     private func openHealthQA(availableFixture: Bool, maximumAX: Bool) throws {
         var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-health-query-fixture")
         configuration.additionalArguments.append(availableFixture
             ? "--ui-health-qa-available-fixture" : "--ui-health-qa-unavailable-fixture")
         if maximumAX {
