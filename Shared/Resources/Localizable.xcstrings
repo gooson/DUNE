@@ -49404,6 +49404,29 @@
     "Top %@ Metrics" : {
       "extractionState" : "manual"
     },
+    "Top %lld Metrics" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top %lld Metrics"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主要指標%lld項目"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주요 지표 %lld개"
+          }
+        }
+      }
+    },
     "Top 3 Metrics" : {
       "extractionState" : "manual",
       "localizations" : {

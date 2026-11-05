@@ -1,4 +1,5 @@
 @preconcurrency import XCTest
+import UIKit
 
 @MainActor
 final class TodaySettingsRegressionTests: SeededUITestBaseCase {
@@ -473,6 +474,40 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         let weatherCard = revealWeatherCardForDetail()
         weatherCard.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.weatherDetailScreen].firstMatch.waitForExistence(timeout: 5))
+    }
+
+    func testPinnedMetricsEditorKoreanTitleOnIPad() throws {
+        guard UIDevice.current.userInterfaceIdiom == .pad else {
+            throw XCTSkip("iPad-only Korean title audit")
+        }
+        var configuration = launchConfiguration
+        let languageIndex = try XCTUnwrap(configuration.additionalArguments.firstIndex(of: "-AppleLanguages"))
+        let localeIndex = try XCTUnwrap(configuration.additionalArguments.firstIndex(of: "-AppleLocale"))
+        configuration.additionalArguments[languageIndex + 1] = "(ko)"
+        configuration.additionalArguments[localeIndex + 1] = "ko_KR"
+        launchApp(with: configuration)
+        navigateToDashboard()
+        try openPinnedMetricsEditor()
+
+        let editor = app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
+        XCTAssertTrue(app.revealTextBody("pinned-metrics-editor-title", in: editor))
+        let title = app.staticTexts["pinned-metrics-editor-title"].firstMatch
+        XCTAssertEqual(title.label, "주요 지표 6개")
+        VisualAudit.capture("T18 Korean iPad title and selected preview")
+
+        for key in ["hrv", "rhr"] {
+            let identifier = "pinned-metrics-editor-row-\(key)"
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: editor))
+            XCTAssertTrue(app.buttons[identifier].firstMatch.isSelected)
+        }
+        XCTAssertTrue(app.revealTextBody("pinned-metrics-editor-footer", in: editor))
+        let footer = app.staticTexts["pinned-metrics-editor-footer"].firstMatch
+        XCTAssertTrue(footer.label.contains("6"), "The six-metric guidance must remain readable")
+        VisualAudit.capture("T18 Korean iPad selected rows and footer")
+
+        try pinnedEditorToolbarAction(AXID.pinnedMetricsEditorCancel).auditTap()
+        XCTAssertTrue(editor.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.dashboardPinnedEdit].firstMatch.exists)
     }
 
     func testPinnedMetricsEditorOpensAndDismisses() throws {
