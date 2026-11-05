@@ -206,13 +206,29 @@ struct ContentView: View {
     private var dashboardInspector: some View {
         if isShowingDashboardHealthDataQA {
             HealthDataQASheet(
-                viewModel: HealthDataQAViewModel(
-                    service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService, queryService: HealthQueryService.shared),
-                    isAvailable: HealthDataQAService.isAvailable
-                )
+                viewModel: makeHealthDataQAViewModel()
             )
             .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
         }
+    }
+
+    private func makeHealthDataQAViewModel() -> HealthDataQAViewModel {
+        #if DEBUG
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("--uitesting") && arguments.contains("--ui-health-qa-available-fixture") {
+            return HealthDataQAViewModel(service: UITestHealthDataQAService(), isAvailable: true)
+        }
+        if arguments.contains("--uitesting") && arguments.contains("--ui-health-qa-unavailable-fixture") {
+            return HealthDataQAViewModel(
+                service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService, queryService: HealthQueryService.shared),
+                isAvailable: false
+            )
+        }
+        #endif
+        return HealthDataQAViewModel(
+            service: HealthDataQAService(sharedHealthDataService: sharedHealthDataService, queryService: HealthQueryService.shared),
+            isAvailable: HealthDataQAService.isAvailable
+        )
     }
 
     var body: some View {
@@ -698,3 +714,13 @@ struct NotificationSleepDetailPushView: View {
 #Preview {
     ContentView()
 }
+
+#if DEBUG
+private actor UITestHealthDataQAService: HealthDataQuestionAnswering {
+    func ask(_ question: String) async -> HealthDataQAReply {
+        HealthDataQAReply(text: "UI test response.", generatedAt: Date(), isFallback: true)
+    }
+
+    func resetConversation() async {}
+}
+#endif

@@ -8,6 +8,29 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
     }
 
     func testHealthDataQAOpensFromToday() throws {
+        try openHealthQA(availableFixture: true, maximumAX: false)
+        try assertAvailableHealthQA(checkDraft: true)
+        try openHealthQA(availableFixture: false, maximumAX: false)
+        try assertUnavailableHealthQA()
+    }
+
+    func testHealthDataQAAtMaximumAccessibilitySize() throws {
+        try openHealthQA(availableFixture: true, maximumAX: true)
+        try assertAvailableHealthQA(checkDraft: false)
+        try openHealthQA(availableFixture: false, maximumAX: true)
+        try assertUnavailableHealthQA()
+    }
+
+    private func openHealthQA(availableFixture: Bool, maximumAX: Bool) throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(availableFixture
+            ? "--ui-health-qa-available-fixture" : "--ui-health-qa-unavailable-fixture")
+        if maximumAX {
+            configuration.additionalArguments += [
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+        }
+        launchApp(with: configuration)
         navigateToDashboard()
         let briefingDismiss = app.descendants(matching: .any)[AXID.dashboardMorningBriefingDismiss].firstMatch
         if briefingDismiss.exists {
@@ -19,10 +42,99 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
         let card = app.descendants(matching: .any)[cardID].firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 5))
         card.auditTap()
+        XCTAssertTrue(app.buttons["health-qa-done"].firstMatch.waitForExistence(timeout: 5))
+    }
 
+    private func assertAvailableHealthQA(checkDraft: Bool) throws {
+        let emptyScroll = app.scrollViews["health-qa-empty-scroll"].firstMatch
+        XCTAssertTrue(emptyScroll.waitForExistence(timeout: 5), "The available inspector needs a scrollable empty state")
+        XCTAssertTrue(app.revealTextBody("health-qa-overview-body", in: emptyScroll))
+        XCTAssertEqual(app.staticTexts["health-qa-overview-body"].firstMatch.label,
+                       "Answers are informational and based on your recent DUNE health data.")
+        XCTAssertTrue(app.revealTextBody("health-qa-overview-guide", in: emptyScroll))
+        XCTAssertEqual(app.staticTexts["health-qa-overview-guide"].firstMatch.label,
+                       "Try one of these questions to get started.")
+        VisualAudit.capture("T17 available overview")
+        XCTAssertTrue(app.descendants(matching: .any)["health-qa-suggested-prompts"].firstMatch.exists)
+        let prompt = app.buttons["health-qa-prompt-sleep"].firstMatch
+        XCTAssertTrue(app.revealFullyVisible("health-qa-prompt-sleep", in: emptyScroll))
+        XCTAssertEqual(prompt.label, "How has my sleep looked this week?")
+        XCTAssertTrue(prompt.isHittable)
+        VisualAudit.capture("T17 available suggested prompt")
+        prompt.auditTap()
+        let messages = app.scrollViews["health-qa-message-list"].firstMatch
+        XCTAssertTrue(messages.waitForExistence(timeout: 8), "The prompt should create a conversation")
+        XCTAssertTrue(app.staticTexts["How has my sleep looked this week?"].firstMatch.exists)
+        let fallback = app.staticTexts["health-qa-fallback-label"].firstMatch
+        XCTAssertTrue(fallback.waitForExistence(timeout: 12), "The deterministic fixture should complete its reply")
+        XCTAssertEqual(app.staticTexts["health-qa-answer-body"].firstMatch.label, "UI test response.")
+        XCTAssertTrue(app.revealFullyVisible("health-qa-fallback-label", in: messages))
+        VisualAudit.capture("T17 available answer and composer")
+
+        let composer = app.descendants(matching: .any)["health-qa-composer"].firstMatch
         let send = app.buttons["health-qa-send"].firstMatch
-        XCTAssertTrue(send.waitForExistence(timeout: 5), "Health Q&A inspector should open")
-        VisualAudit.capture("Health Q&A inspector")
+        XCTAssertTrue(composer.exists && send.exists)
+        XCTAssertFalse(send.isEnabled, "An empty draft must not be sent")
+        if checkDraft {
+            let input = app.descendants(matching: .any)["health-qa-input"].firstMatch
+            XCTAssertTrue(input.waitForExistence(timeout: 5))
+            input.auditTap()
+            input.typeText("How was my recovery?")
+            XCTAssertTrue(send.isEnabled)
+            send.auditTap()
+            XCTAssertTrue(app.staticTexts["How was my recovery?"].firstMatch.waitForExistence(timeout: 8))
+            XCTAssertTrue(app.staticTexts["health-qa-fallback-label"].firstMatch.waitForExistence(timeout: 12))
+        }
+        try browseHealthRecordsAndReturn()
+        dismissHealthQA(captureReturn: false)
+    }
+
+    private func assertUnavailableHealthQA() throws {
+        let scroll = app.scrollViews["health-qa-unavailable-scroll"].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Unsupported hardware needs a readable explanation")
+        XCTAssertTrue(app.revealTextBody("health-qa-unavailable-title", in: scroll))
+        XCTAssertEqual(app.staticTexts["health-qa-unavailable-title"].firstMatch.label,
+                       "Health Q&A requires Apple Intelligence on a supported device.")
+        XCTAssertTrue(app.revealTextBody("health-qa-unavailable-body", in: scroll))
+        XCTAssertEqual(app.staticTexts["health-qa-unavailable-body"].firstMatch.label,
+                       "This feature uses on-device Foundation Models, so it only works on compatible hardware.")
+        VisualAudit.capture("T17 unavailable explanation")
+        let inlineBrowse = scroll.buttons["health-qa-browse-records"].firstMatch
+        for _ in 0..<8 where !inlineBrowse.isHittable { scroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(inlineBrowse.isHittable, "The unavailable state's inline Browse route must be reachable")
+        VisualAudit.capture("T17 unavailable Browse route")
+        try browseHealthRecordsAndReturn(preferred: inlineBrowse, captureQuery: false)
+        dismissHealthQA()
+    }
+
+    private func browseHealthRecordsAndReturn(preferred: XCUIElement? = nil,
+                                              captureQuery: Bool = true) throws {
+        let browse: XCUIElement
+        if let preferred {
+            browse = preferred
+        } else {
+            let candidates = app.buttons.matching(identifier: "health-qa-browse-records").allElementsBoundByIndex
+            browse = try XCTUnwrap(candidates.first(where: { $0.exists && $0.isHittable }),
+                                   "A visible Browse records route should remain available")
+        }
+        browse.auditTap()
+        let query = app.descendants(matching: .any)["health-query-screen"].firstMatch
+        XCTAssertTrue(query.waitForExistence(timeout: 8))
+        if captureQuery { VisualAudit.capture("T17 browse records") }
+        let queryDone = app.buttons["health-query-done"].firstMatch
+        XCTAssertTrue(queryDone.waitForExistence(timeout: 5))
+        queryDone.auditTap()
+        XCTAssertTrue(query.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["health-qa-done"].firstMatch.waitForExistence(timeout: 5))
+    }
+
+    private func dismissHealthQA(captureReturn: Bool = true) {
+        let done = app.buttons["health-qa-done"].firstMatch
+        XCTAssertTrue(done.isHittable)
+        done.auditTap()
+        XCTAssertTrue(done.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-health-qa-card"].firstMatch.exists)
+        if captureReturn { VisualAudit.capture("T17 returned to Today") }
     }
 
     func testSleepPredictionOpensFromWellness() throws {
