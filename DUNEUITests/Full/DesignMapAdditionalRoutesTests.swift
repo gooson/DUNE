@@ -55,7 +55,6 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
         XCTAssertEqual(app.staticTexts["health-qa-overview-guide"].firstMatch.label,
                        "Try one of these questions to get started.")
         VisualAudit.capture("T17 available overview")
-        XCTAssertTrue(app.descendants(matching: .any)["health-qa-suggested-prompts"].firstMatch.exists)
         let prompt = app.buttons["health-qa-prompt-sleep"].firstMatch
         XCTAssertTrue(app.revealFullyVisible("health-qa-prompt-sleep", in: emptyScroll))
         XCTAssertEqual(prompt.label, "How has my sleep looked this week?")
@@ -71,12 +70,11 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
         XCTAssertTrue(app.revealFullyVisible("health-qa-fallback-label", in: messages))
         VisualAudit.capture("T17 available answer and composer")
 
-        let composer = app.descendants(matching: .any)["health-qa-composer"].firstMatch
+        let input = app.descendants(matching: .any)["health-qa-input"].firstMatch
         let send = app.buttons["health-qa-send"].firstMatch
-        XCTAssertTrue(composer.exists && send.exists)
+        XCTAssertTrue(input.exists && send.exists)
         XCTAssertFalse(send.isEnabled, "An empty draft must not be sent")
         if checkDraft {
-            let input = app.descendants(matching: .any)["health-qa-input"].firstMatch
             XCTAssertTrue(input.waitForExistence(timeout: 5))
             input.auditTap()
             XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5),

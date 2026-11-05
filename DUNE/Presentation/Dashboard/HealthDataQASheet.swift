@@ -95,7 +95,6 @@ struct HealthDataQASheet: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .accessibilityIdentifier("health-qa-overview")
     }
 
     private var unavailableContent: some View {
@@ -125,7 +124,6 @@ struct HealthDataQASheet: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .accessibilityIdentifier("health-qa-unavailable")
 
                 NavigationLink {
                     HealthQueryView(queryService: HealthQueryServiceRouting.current())
@@ -173,7 +171,6 @@ struct HealthDataQASheet: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityIdentifier("health-qa-suggested-prompts")
     }
 
     private var messageList: some View {
@@ -241,7 +238,6 @@ struct HealthDataQASheet: View {
             .accessibilityLabel("Send question")
             .accessibilityIdentifier("health-qa-send")
         }
-        .accessibilityIdentifier("health-qa-composer")
     }
 }
 
