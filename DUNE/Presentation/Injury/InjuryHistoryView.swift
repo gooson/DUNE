@@ -256,6 +256,9 @@ private struct InjuryDetailDestination: Hashable {
 
 private struct InjuryDetailView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.appTheme) private var theme
+    @ScaledMetric(relativeTo: .title2) private var heroIconSize: CGFloat = 44
     let record: InjuryRecord?
     @State private var detailViewModel = InjuryViewModel()
     @State private var isShowingEditSheet = false
@@ -277,6 +280,7 @@ private struct InjuryDetailView: View {
                         }
                         .padding(DS.Spacing.lg)
                     }
+                    .accessibilityIdentifier("injury-detail-scroll")
                 } else {
                     ContentUnavailableView(
                         "Injury Not Found",
@@ -286,6 +290,8 @@ private struct InjuryDetailView: View {
                 }
             }
         }
+        .background { DetailWaveBackground() }
+        .environment(\.waveColor, DS.Color.caution)
         .englishNavigationTitle("Injury Detail")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -298,6 +304,7 @@ private struct InjuryDetailView: View {
                             Label("Mark Recovered", systemImage: "checkmark.circle")
                         }
                         .accessibilityIdentifier("injury-detail-mark-recovered")
+                        .tint(colorScheme == .light ? theme.accentColor.mix(with: .black, by: 0.45) : theme.accentColor)
                     }
 
                     Button {
@@ -307,6 +314,7 @@ private struct InjuryDetailView: View {
                         Label("Edit", systemImage: "pencil")
                     }
                     .accessibilityIdentifier("injury-detail-edit")
+                    .tint(colorScheme == .light ? theme.accentColor.mix(with: .black, by: 0.45) : theme.accentColor)
                 }
             }
         }
@@ -327,95 +335,119 @@ private struct InjuryDetailView: View {
     }
 
     private func summaryCard(_ record: InjuryRecord) -> some View {
-        StandardCard {
-            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                let layout = dynamicTypeSize.isAccessibilitySize
-                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
-                    : AnyLayout(HStackLayout(alignment: .center, spacing: DS.Spacing.sm))
-                layout {
-                    Image(systemName: record.severity.iconName)
-                        .font(.title3)
-                        .foregroundStyle(record.severity.color)
+        HeroCard(tintColor: record.severity.color) {
+            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                Image(systemName: record.severity.iconName)
+                    .font(.system(size: heroIconSize, weight: .medium))
+                    .foregroundStyle(severityForeground(record))
+                    .padding(DS.Spacing.md)
+                    .background(record.severity.color.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.lg))
+                    .accessibilityHidden(true)
 
-                    VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                        let titleLayout = dynamicTypeSize.isAccessibilitySize
-                            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
-                            : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
-                        titleLayout {
-                            Text(record.bodyPart.displayName)
-                                .font(.headline)
-                            if let side = record.bodySide {
-                                Text("(\(side.displayName))")
-                                    .font(.subheadline)
-                                    .foregroundStyle(DS.Color.textSecondary)
-                            }
-                        }
-
-                        Text(record.severity.displayName)
-                            .font(.caption)
-                            .foregroundStyle(.primary)
-
-                        Text(record.severity.severityDescription)
-                            .font(.caption2)
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text(record.bodyPart.displayName)
+                        .font(.title2.bold())
+                        .accessibilityIdentifier("injury-detail-body-part")
+                    if let side = record.bodySide {
+                        Text("(\(side.displayName))")
+                            .font(.subheadline)
                             .foregroundStyle(DS.Color.textSecondary)
+                            .accessibilityIdentifier("injury-detail-side")
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
-
-                    Text(record.isActive ? String(localized: "Active") : String(localized: "Recovered"))
-                        .font(.caption2.weight(.semibold))
-                        .padding(.horizontal, DS.Spacing.sm)
-                        .padding(.vertical, DS.Spacing.xxs)
-                        .background((record.isActive ? record.severity.color : Color.green).opacity(0.12), in: Capsule())
-                        .foregroundStyle(.primary)
+                    Text(record.severity.displayName)
+                        .font(.headline)
+                        .accessibilityIdentifier("injury-detail-severity")
                 }
+
+                Label(
+                    record.isActive ? String(localized: "Active") : String(localized: "Recovered"),
+                    systemImage: record.isActive ? "bandage.fill" : "checkmark.circle"
+                )
+                .font(.subheadline.weight(.semibold))
+                .padding(.horizontal, DS.Spacing.md)
+                .padding(.vertical, DS.Spacing.xs)
+                .background((record.isActive ? record.severity.color : Color.green).opacity(0.12), in: Capsule())
+                .accessibilityIdentifier("injury-detail-status")
+
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Label("Duration", systemImage: "clock")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
+                    Text("\(record.durationDays) days")
+                        .font(DS.Typography.heroScore)
+                        .accessibilityIdentifier("injury-detail-duration")
+                }
+
+                Text(record.severity.severityDescription)
+                    .font(.subheadline)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .accessibilityIdentifier("injury-detail-description")
             }
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("injury-detail-summary")
+    }
+
+    private func severityForeground(_ record: InjuryRecord) -> Color {
+        colorScheme == .light
+            ? record.severity.color.mix(with: .black, by: 0.45)
+            : record.severity.color
     }
 
     private func timelineCard(_ record: InjuryRecord) -> some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                Text("Timeline")
+                Label("Timeline", systemImage: "calendar")
                     .font(DS.Typography.sectionTitle)
 
-                detailRow("Start", value: record.startDate.formatted(date: .abbreviated, time: .omitted))
-                detailRow("End", value: record.endDate?.formatted(date: .abbreviated, time: .omitted) ?? String(localized: "Ongoing"))
-                detailRow("Duration", value: String(localized: "\(record.durationDays) days"))
-                detailRow("Recorded", value: record.createdAt.formatted(date: .abbreviated, time: .shortened))
+                detailRow("Start", symbol: "calendar", value: record.startDate.formatted(date: .abbreviated, time: .omitted), identifier: "injury-detail-start-value")
+                detailRow("End", symbol: "calendar.badge.checkmark", value: record.endDate?.formatted(date: .abbreviated, time: .omitted) ?? String(localized: "Ongoing"), identifier: "injury-detail-end-value")
+                detailRow("Recorded", symbol: "clock", value: record.createdAt.formatted(date: .abbreviated, time: .shortened), identifier: "injury-detail-recorded-value")
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("injury-detail-timeline")
     }
 
     private func notesCard(_ record: InjuryRecord) -> some View {
         StandardCard {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                Text("Memo")
+                Label("Memo", systemImage: "note.text")
                     .font(DS.Typography.sectionTitle)
 
                 if record.memo.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     Text("No memo")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
+                        .accessibilityIdentifier("injury-detail-memo-value")
                 } else {
                     Text(record.memo)
                         .font(.body)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityIdentifier("injury-detail-memo-value")
                 }
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("injury-detail-memo")
     }
 
-    private func detailRow(_ title: LocalizedStringKey, value: String) -> some View {
-        HStack {
-            Text(title)
+    private func detailRow(_ title: LocalizedStringKey, symbol: String, value: String, identifier: String) -> some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
+        return layout {
+            Label(title, systemImage: symbol)
                 .font(.subheadline)
                 .foregroundStyle(DS.Color.textSecondary)
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
             Text(value)
                 .font(.subheadline.weight(.medium))
-                .multilineTextAlignment(.trailing)
+                .multilineTextAlignment(dynamicTypeSize.isAccessibilitySize ? .leading : .trailing)
+                .accessibilityIdentifier(identifier)
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
