@@ -69,6 +69,8 @@ final class SleepDetailSmokeTests: UITestBaseCase {
     }
 
     func testSleepExplanationSheetsAtMaximumAccessibilityTextSize() throws {
+        // Both explanation sheets include 26 host-synchronized capture checkpoints.
+        if VisualAudit.isEnabled { executionTimeAllowance = 480 }
         var configuration = launchConfiguration
         configuration.additionalArguments += [
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
