@@ -445,12 +445,21 @@
     "L02": {
       "row_id": "L02",
       "evidence": "habit-form-name",
-      "test": "DuoLifeStarterTemplateTests/testEmptyStarterTemplateCreatesHabitAndRendersHabitsSection()",
-      "action": "tap Take Vitamins, Every day",
-      "timestamp": 1791826346.389,
-      "image": "34E63267-505E-480D-A5F6-810681621B7E.png",
-      "screen": "screen-0-1398x2034-tap Take Vitamins, Every day_0_543F749D-7649-45C9-B86A-20F24562748D.png",
-      "file": "L02.png"
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "action": "DUNE_VISUAL_AUDIT_READY L02 new habit hero [DUNEUITests/LifeRegressionTests.swift:77] DEADLINE=1793917701.581472",
+      "timestamp": 1793917673.7134151,
+      "image": "038-1398x2034.png",
+      "screen": "038-1398x2034.png",
+      "file": "L02.png",
+      "ax_file": "ax/L02.txt",
+      "image_sha256": "86676844de9ca90192dd9e4b053c0d4d82218b06a598fb7794bdf4f166a55be6",
+      "ax_sha256": "ff043403df148706277652dbeecd97a3ec0e8a4ff188184627916f3afab1ab63",
+      "source_revision": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_file_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "device_id": "866B2365-40D9-4D7A-BB9C-FDFBA2916300",
+      "profile": "duo-closed-normal",
+      "current_verification": "reviewed",
+      "current_gallery": "../../../full-redesign-map/review/l02-habit-form-2026-11-06/index.html"
     },
     "L03": {
       "row_id": "L03",

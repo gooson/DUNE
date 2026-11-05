@@ -73,10 +73,28 @@ final class LifeRegressionTests: SeededUITestBaseCase {
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 5), "Habit form should appear from the Life toolbar")
+        XCTAssertEqual(app.staticTexts["habit-form-hero-title"].firstMatch.label, "New Habit")
+        VisualAudit.capture("L02 new habit hero")
+        nameField.auditTap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("L02 focused habit name and software keyboard")
         XCTAssertTrue(app.fillTextInput(AXID.habitFormName, with: "Evening Walk"), "Habit name field should accept a new habit")
+        XCTAssertEqual(app.staticTexts["habit-form-hero-name"].firstMatch.label, "Evening Walk")
+        _ = app.dismissKeyboardIfPresent()
+        VisualAudit.capture("L02 new habit named preview")
+
+        let form = app.collectionViews.firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.revealFullyVisible("habit-form-icon-fitness", in: form))
+        let fitnessIcon = app.buttons["habit-form-icon-fitness"].firstMatch
+        fitnessIcon.auditTap()
+        XCTAssertTrue(fitnessIcon.isSelected)
+        VisualAudit.capture("L02 selected icon grid")
 
         let saveButton = app.descendants(matching: .any)[AXID.habitFormSave].firstMatch
+        for _ in 0..<8 where !(saveButton.exists && saveButton.isHittable) { form.swipeDown(velocity: .slow) }
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Habit save button should exist")
+        XCTAssertTrue(saveButton.isHittable, "Habit Save must be reachable after choosing an icon")
         saveButton.auditTap()
 
         let dismissed = NSPredicate(format: "exists == false")
@@ -161,8 +179,11 @@ final class LifeRegressionTests: SeededUITestBaseCase {
 
         let nameField = app.textFields[AXID.habitFormName].firstMatch
         XCTAssertTrue(nameField.waitForExistence(timeout: 5), "Edit habit form should appear")
+        XCTAssertEqual(app.staticTexts["habit-form-hero-title"].firstMatch.label, "Edit Habit")
+        XCTAssertEqual(app.staticTexts["habit-form-hero-name"].firstMatch.label, "Morning Stretch")
         XCTAssertTrue(app.fillTextInput(AXID.habitFormName, with: "Morning Stretch AM"), "Edit form should allow renaming a habit")
         XCTAssertEqual(nameField.value as? String, "Morning Stretch AM")
+        XCTAssertEqual(app.staticTexts["habit-form-hero-name"].firstMatch.label, "Morning Stretch AM")
         attachLifeScreenshot("L02 Edit habit name before save")
 
         let saveButton = app.buttons[AXID.habitFormSave].firstMatch
@@ -177,6 +198,43 @@ final class LifeRegressionTests: SeededUITestBaseCase {
             app.scrollToElementIfNeeded(AXID.lifeHabitActions("Morning Stretch AM"), maxSwipes: 6),
             "Edited habit should refresh its actions identifier after saving"
         )
+    }
+
+    func testHabitFormNewAndEditAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        ensureLifeRoot()
+        XCTAssertTrue(app.openLifeNewHabitForm())
+        let form = app.collectionViews.firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.revealTextBody("habit-form-hero-title", in: form))
+        XCTAssertEqual(app.staticTexts["habit-form-hero-title"].firstMatch.label, "New Habit")
+        VisualAudit.capture("L02 MAX new habit hero")
+
+        let finalIcon = app.buttons["habit-form-icon-chores"].firstMatch
+        XCTAssertTrue(app.revealFullyVisible("habit-form-icon-chores", in: form, maxMoves: 20))
+        XCTAssertTrue(finalIcon.isHittable && finalIcon.frame.width >= 44 && finalIcon.frame.height >= 44)
+        finalIcon.auditTap()
+        XCTAssertTrue(finalIcon.isSelected)
+        VisualAudit.capture("L02 MAX final icon selected")
+        let cancel = app.buttons[AXID.habitFormCancel].firstMatch
+        for _ in 0..<10 where !(cancel.exists && cancel.isHittable) { form.swipeDown(velocity: .slow) }
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
+        cancel.auditTap()
+        XCTAssertTrue(app.textFields[AXID.habitFormName].firstMatch.waitForNonExistence(timeout: 5))
+
+        openActionsMenu(for: "Morning Stretch")
+        app.buttons[AXID.lifeHabitActionEdit].firstMatch.auditTap()
+        XCTAssertTrue(app.staticTexts["habit-form-hero-title"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["habit-form-hero-title"].firstMatch.label, "Edit Habit")
+        XCTAssertEqual(app.staticTexts["habit-form-hero-name"].firstMatch.label, "Morning Stretch")
+        VisualAudit.capture("L02 MAX edit habit hero")
+        XCTAssertTrue(app.buttons[AXID.habitFormCancel].firstMatch.waitForExistence(timeout: 5))
+        app.buttons[AXID.habitFormCancel].firstMatch.auditTap()
+        XCTAssertTrue(app.textFields[AXID.habitFormName].firstMatch.waitForNonExistence(timeout: 5))
     }
 
     func testHabitHistoryShowsSeededEntriesAndDismisses() throws {

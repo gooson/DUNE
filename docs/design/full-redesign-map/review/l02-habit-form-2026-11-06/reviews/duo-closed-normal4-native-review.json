@@ -1,0 +1,372 @@
+{
+  "role": "independent SwiftUI / Apple UX native review",
+  "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+  "profile": "duo-closed-normal",
+  "pose": {
+    "angle_degrees": 0,
+    "active_display": "LCD",
+    "orientation": "rot0",
+    "actual_png_dimensions": [
+      1398,
+      2034
+    ],
+    "readback_before_after": true
+  },
+  "evidence_archive": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed",
+  "sdk_result": {
+    "status": "failed",
+    "executed": 5,
+    "passed": 4,
+    "failed": 1,
+    "skipped": 0
+  },
+  "method_results": [
+    {
+      "name": "testOpeningPastRecordMenuDoesNotMutateToday()",
+      "result": "Passed"
+    },
+    {
+      "name": "testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged()",
+      "result": "Failed"
+    },
+    {
+      "name": "testEditFlowRenamesSeededHabit()",
+      "result": "Passed"
+    },
+    {
+      "name": "testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "result": "Passed"
+    },
+    {
+      "name": "testVisualAuditHabitManagement()",
+      "result": "Passed"
+    }
+  ],
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "observations": [
+    "On the active outer LCD at 0 degrees, L02 new/edit hero, name, Save/Cancel and selected icon fit without clipping; focused keyboard leaves the name field visible and the selected Fitness tile wraps within the grid. Both saved names are shown in the passed method traces.",
+    "L04 active and archived hero counts match segmented counts, History opens and closes, Restore moves Archived 1 to 0 and Active 2 to 3, and the empty state and Back affordance remain visible on the outer LCD.",
+    "L09 Read duration, Water count and Morning Stretch check sheets show the selected habit and Nov 5, 2026; Cancel method passes for all three and retains Today."
+  ],
+  "limits": [
+    "Only four passed methods are cleared. The numeric total method failed in the aggregate and is not represented as native-pass evidence.",
+    "The aggregate five-method Duo closed run remains failed (4 passed, 1 failed).",
+    "No inner-display, unfolded Duo, physical device, dark mode, Dynamic Type or full regression pass is claimed."
+  ],
+  "selected_pair_count": 22,
+  "sha256_verified": true,
+  "selected_pairs": [
+    {
+      "index": 0,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L09 duration record hero and date [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793917420.4350328",
+      "host_sequence": 4,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/004-1398x2034.png",
+      "png_sha256": "d4dee700a919e76c7fd077ac12335209c0d6ffd793d605513f397542c3bca720",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/004-hierarchy.txt",
+      "ax_sha256": "1f0a1c968f0b6766f0230e9d4d844ce2dacd55e15336845f43260b7898d841bf"
+    },
+    {
+      "index": 1,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L09 count record [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793917454.0084882",
+      "host_sequence": 8,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/008-1398x2034.png",
+      "png_sha256": "2b8a3855baf271e15075cdc4c3730f87a0a3c8c8206abd5e198d2d8f6aa873ca",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/008-hierarchy.txt",
+      "ax_sha256": "419813ad5113aa3bc73721c8496c610d02719ffcdf438704875e14b121105488"
+    },
+    {
+      "index": 2,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L09 check record [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793917498.253735",
+      "host_sequence": 13,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/013-1398x2034.png",
+      "png_sha256": "0cc4aecab2f928a4ffc0082622f7acedc8050622e048a8d521a6f7c1ff172b34",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/013-hierarchy.txt",
+      "ax_sha256": "c1fdd1f7857ac3b0133b53f419b4aa490622750785f090a08867355d7b3e26b3"
+    },
+    {
+      "index": 3,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY before teardown -[LifeFlowUITests testOpeningPastRecordMenuDoesNotMutateToday] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793917508.122119",
+      "host_sequence": 15,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/015-1398x2034.png",
+      "png_sha256": "361828d934e00d0900ae52e5f5ddedded1a54799d9cbe417a018b160a5de8abd",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/015-hierarchy.txt",
+      "ax_sha256": "c60b044aac5e0e1026cb693298593e222b1610af1a6db82d4298fe7dd06d0999"
+    },
+    {
+      "index": 4,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L02 Edit habit name before save [DUNEUITests/LifeRegressionTests.swift:463] DEADLINE=1793917656.793293",
+      "host_sequence": 32,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitFormSheet.swift",
+      "source_app_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/032-1398x2034.png",
+      "png_sha256": "e6c8b33ac01afeccd18ab506f370b4293c6d2e8e1fe515a9caad8744ba5e7e58",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/032-hierarchy.txt",
+      "ax_sha256": "8d3a658d0b391c9aa346b33721d95cd270d4d892c616242e985432416d8b7b57"
+    },
+    {
+      "index": 5,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY tap habit-form-save [DUNEUITests/LifeRegressionTests.swift:191] DEADLINE=1793917662.74527",
+      "host_sequence": 33,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitFormSheet.swift",
+      "source_app_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/033-1398x2034.png",
+      "png_sha256": "620fa46046ad172c825f6a7569e3c5243cc42acae95d4cdf70ed56455eb405c1",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/033-hierarchy.txt",
+      "ax_sha256": "3af562c29143726656da6e3da68d25f72e76a8e9194fbad1c5edf76515fe33fa"
+    },
+    {
+      "index": 6,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY before teardown -[LifeRegressionTests testEditFlowRenamesSeededHabit] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793917669.008294",
+      "host_sequence": 34,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitFormSheet.swift",
+      "source_app_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/034-1398x2034.png",
+      "png_sha256": "620fa46046ad172c825f6a7569e3c5243cc42acae95d4cdf70ed56455eb405c1",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/034-hierarchy.txt",
+      "ax_sha256": "82afb2a556f21280725a4cf1a0babe1fe54b92d240001baf24bedb55c3e5a65d"
+    },
+    {
+      "index": 7,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L02 new habit hero [DUNEUITests/LifeRegressionTests.swift:77] DEADLINE=1793917701.581472",
+      "host_sequence": 38,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitFormSheet.swift",
+      "source_app_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/038-1398x2034.png",
+      "png_sha256": "86676844de9ca90192dd9e4b053c0d4d82218b06a598fb7794bdf4f166a55be6",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/038-hierarchy.txt",
+      "ax_sha256": "ff043403df148706277652dbeecd97a3ec0e8a4ff188184627916f3afab1ab63"
+    },
+    {
+      "index": 8,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L02 focused habit name and software keyboard [DUNEUITests/LifeRegressionTests.swift:80] DEADLINE=1793917711.712932",
+      "host_sequence": 40,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitFormSheet.swift",
+      "source_app_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/040-1398x2034.png",
+      "png_sha256": "9a5e0683e90ef8e3728b9ccac5d4573e2d87f856d8b32f346f1b4c142ec593e1",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/040-hierarchy.txt",
+      "ax_sha256": "79f2b423c1272f46997fba48cb19318e174d497314f2074da46a414003e7cecb"
+    },
+    {
+      "index": 9,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L02 new habit named preview [DUNEUITests/LifeRegressionTests.swift:84] DEADLINE=1793917731.6931992",
+      "host_sequence": 43,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitFormSheet.swift",
+      "source_app_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/043-1398x2034.png",
+      "png_sha256": "c70f05e91b79f71674326029da879dd068482ae45f813aa43ae1d89837edb1a7",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/043-hierarchy.txt",
+      "ax_sha256": "19ddc355fe38291ac16f74aff5152463b6aed23371a5cc830d6c8a895cc443ad"
+    },
+    {
+      "index": 10,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L02 selected icon grid [DUNEUITests/LifeRegressionTests.swift:92] DEADLINE=1793917745.229428",
+      "host_sequence": 45,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitFormSheet.swift",
+      "source_app_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/045-1398x2034.png",
+      "png_sha256": "1e419ddd171dae5707462bb24157294d74c39f227275731b20515037e1bcdaac",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/045-hierarchy.txt",
+      "ax_sha256": "91759da83ec474d3af7fbc6ce7837d12bcee38158aab7420e60f2738085681f5"
+    },
+    {
+      "index": 11,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY tap habit-form-save [DUNEUITests/LifeRegressionTests.swift:98] DEADLINE=1793917752.069835",
+      "host_sequence": 46,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitFormSheet.swift",
+      "source_app_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/046-1398x2034.png",
+      "png_sha256": "356b8634094d7326183b0d86bd64a784af11167573c12fc44fe11d4650459bd2",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/046-hierarchy.txt",
+      "ax_sha256": "8d392a4fdefd775b439b30c16cf2714aeff9e503822d74a04ae70fe98e47fbb0"
+    },
+    {
+      "index": 12,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY before teardown -[LifeRegressionTests testLifeRootRendersAndAddFlowCreatesNewHabit] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793917767.2030249",
+      "host_sequence": 48,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitFormSheet.swift",
+      "source_app_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/048-1398x2034.png",
+      "png_sha256": "0447c536e8fb3df32a76eabc5c6aa1445c76ea65af4fd4ee7f09f4dc171dd874",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/048-hierarchy.txt",
+      "ax_sha256": "73c3a1d701c8eb1a890f0f9d96702d1b6a744bbd3943e9ded7d1650b464316f0"
+    },
+    {
+      "index": 13,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L04 active management hero [DUNEUITests/LifeRegressionTests.swift:348] DEADLINE=1793917822.784347",
+      "host_sequence": 54,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "bbb69778b1ed51e275ae3e50d8c8895fe3977905a3b5da8be827e657409c2b4e",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/054-1398x2034.png",
+      "png_sha256": "ee28fcfc5d4d9966dc18c71742fa61b0e403b7756435bb5032b22a5438ea6476",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/054-hierarchy.txt",
+      "ax_sha256": "9804b54197b765de82af6a07f63db33a30f76fdbd27e03291fc344254616c5ea"
+    },
+    {
+      "index": 14,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L04 archived management hero [DUNEUITests/LifeRegressionTests.swift:357] DEADLINE=1793917837.5164309",
+      "host_sequence": 56,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "bbb69778b1ed51e275ae3e50d8c8895fe3977905a3b5da8be827e657409c2b4e",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/056-1398x2034.png",
+      "png_sha256": "d208fbff445551057ef09fbd99443cefe962cfe4f6ef390ac68db2976ecce3bc",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/056-hierarchy.txt",
+      "ax_sha256": "7d1f91cc3c89b664a5819c4f352d678e18faec1ba27193b2b9f4c1690d87fdc7"
+    },
+    {
+      "index": 15,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L04 archived row and History [DUNEUITests/LifeRegressionTests.swift:363] DEADLINE=1793917843.5537682",
+      "host_sequence": 57,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "bbb69778b1ed51e275ae3e50d8c8895fe3977905a3b5da8be827e657409c2b4e",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/057-1398x2034.png",
+      "png_sha256": "d208fbff445551057ef09fbd99443cefe962cfe4f6ef390ac68db2976ecce3bc",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/057-hierarchy.txt",
+      "ax_sha256": "63b41e51a26fbf5682af9f20f081b862d54b972ce279891520d536afdbfd8d8f"
+    },
+    {
+      "index": 16,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY tap habit-management-history-Morning Stretch [DUNEUITests/LifeRegressionTests.swift:364] DEADLINE=1793917847.7673368",
+      "host_sequence": 58,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "bbb69778b1ed51e275ae3e50d8c8895fe3977905a3b5da8be827e657409c2b4e",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/058-1398x2034.png",
+      "png_sha256": "7f71aa13563573613a9b111ec35ec5a4ad301a70463de7c5caa2088072d04bc0",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/058-hierarchy.txt",
+      "ax_sha256": "7045112ce04184a13b67dfd57ed09e6ac112aa1c4aa4da5658c9bc1d02b1b729"
+    },
+    {
+      "index": 17,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L04 archived history [DUNEUITests/LifeRegressionTests.swift:369] DEADLINE=1793917852.193408",
+      "host_sequence": 59,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "bbb69778b1ed51e275ae3e50d8c8895fe3977905a3b5da8be827e657409c2b4e",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/059-1398x2034.png",
+      "png_sha256": "7f71aa13563573613a9b111ec35ec5a4ad301a70463de7c5caa2088072d04bc0",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/059-hierarchy.txt",
+      "ax_sha256": "59906ad1560f5ce671bfa4ba0002c1182e83e6e52aca074d46c88250848087ee"
+    },
+    {
+      "index": 18,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY tap habit-management-history-screen [DUNEUITests/LifeRegressionTests.swift:373] DEADLINE=1793917857.3872662",
+      "host_sequence": 60,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "bbb69778b1ed51e275ae3e50d8c8895fe3977905a3b5da8be827e657409c2b4e",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/060-1398x2034.png",
+      "png_sha256": "d208fbff445551057ef09fbd99443cefe962cfe4f6ef390ac68db2976ecce3bc",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/060-hierarchy.txt",
+      "ax_sha256": "74d64776da573607561bf4d935d8f19e3a2dbe9a84a52c6c03629232ce7e3de3"
+    },
+    {
+      "index": 19,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY tap habit-management-restore-Morning Stretch [DUNEUITests/LifeRegressionTests.swift:378] DEADLINE=1793917864.052693",
+      "host_sequence": 61,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "bbb69778b1ed51e275ae3e50d8c8895fe3977905a3b5da8be827e657409c2b4e",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/061-1398x2034.png",
+      "png_sha256": "c3b1cce7217218750a00c03a9cdd477d8e0b1cf203a8491e528e5d82bee74fbe",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/061-hierarchy.txt",
+      "ax_sha256": "6a7e2fe364157c83d46dd2f9104a2f154c2c4b9385019069ccda9e93d94b9bee"
+    },
+    {
+      "index": 20,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L04 archived filter after Restore [DUNEUITests/LifeRegressionTests.swift:381] DEADLINE=1793917869.509192",
+      "host_sequence": 62,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "bbb69778b1ed51e275ae3e50d8c8895fe3977905a3b5da8be827e657409c2b4e",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/062-1398x2034.png",
+      "png_sha256": "c3b1cce7217218750a00c03a9cdd477d8e0b1cf203a8491e528e5d82bee74fbe",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/062-hierarchy.txt",
+      "ax_sha256": "1f089a7306f0db7441b45c59814ac90d57f7e45cce72aa6937690cf9cebff37a"
+    },
+    {
+      "index": 21,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY before teardown -[LifeRegressionTests testVisualAuditHabitManagement] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793917879.826066",
+      "host_sequence": 64,
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "bbb69778b1ed51e275ae3e50d8c8895fe3977905a3b5da8be827e657409c2b4e",
+      "png": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/064-1398x2034.png",
+      "png_sha256": "12c3867811ae8da9dcf8177a304a68910abc2cbcc4ed341285ffdc60ea1c81d4",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-fc308b66-normal5-partial-failed/host/064-hierarchy.txt",
+      "ax_sha256": "d302a236fe1aaac5be2aebd96b2261e0f1de4b2f6c7a5d55a219336aa19a3033"
+    }
+  ]
+}

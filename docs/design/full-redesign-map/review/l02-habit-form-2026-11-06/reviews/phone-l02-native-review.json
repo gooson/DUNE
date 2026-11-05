@@ -1,0 +1,153 @@
+{
+  "role": "independent SwiftUI / Apple UX native review",
+  "source": "55422817203b44ed98a011ccdefb93a2b238243e",
+  "profile": "iphone-normal",
+  "scope": "L02 passed new and edit methods only",
+  "evidence_archive": ".codex-checks/batch03/evidence/phone-55422817-first-failed",
+  "aggregate_sdk_result": {
+    "status": "failed",
+    "executed": 5,
+    "passed": 2,
+    "failed": 3,
+    "skipped": 0
+  },
+  "l02_methods": [
+    {
+      "name": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "result": "Passed"
+    },
+    {
+      "name": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "result": "Passed"
+    }
+  ],
+  "native_observations": [
+    "New Habit hero and name input remain visible and unclipped in initial and keyboard-focused sheet states.",
+    "Name preview displays Evening Walk and matches the name field.",
+    "Fitness icon selection is visually distinct, reflected in the hero, and exposed as Selected in AX.",
+    "Edit form shows Morning Stretch AM with focused name and visible keyboard.",
+    "After Save, the Life list shows Morning Stretch AM and Evening Walk with the selected Fitness glyph."
+  ],
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "limitations": [
+    "This review covers only L02 on iPhone normal.",
+    "The five-method SDK run failed overall: L04 and L09 methods failed; their native behavior is not cleared by this report.",
+    "No iPad, Duo, closed MAX, or broader regression pass is claimed."
+  ],
+  "selected_pair_count": 12,
+  "selected_pair_hashes_verified": true,
+  "selected_pairs": [
+    {
+      "index": 0,
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "tap habit-form-name",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/DAE83967-1E4A-4C3D-9D05-B4F5F8AA9668.png",
+      "png_sha256": "76514a23563c56cefe145a4980d17c4ef0602e1cdc7c3bf42d82732746ce0f08",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/B42239BD-09BB-4E00-BC2B-CBC0C5945B6A.txt",
+      "ax_sha256": "9122f1f324354c45da01a7fd4c35c3b93df4bd285e136904cb4cdac32ba4e85e"
+    },
+    {
+      "index": 1,
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "tap habit-form-name-clear",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/914AD035-A270-48AD-B066-3B92ADA40E1E.png",
+      "png_sha256": "b5eb704f4b549713777dd4ebbeaf1c212f67e8ef9233a078d09e5ad85059af39",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/16288172-49E8-4F65-8EA8-912217285AA5.txt",
+      "ax_sha256": "52283d61717b20872c61b827ff88751b0594776a67d32447a9729575abac7c40"
+    },
+    {
+      "index": 2,
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "L02 Edit habit name before save",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/89A7E19F-D551-45BD-81AD-97CDFAD123CE.png",
+      "png_sha256": "3034f73b57b7d3e7be9c5188e6b06c63e45ef36efe69f2b55220012996a3ea81",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/AE2D7E68-CA5D-4634-B575-198C2A7A380E.txt",
+      "ax_sha256": "3101e63c0bbf1fa2bd2a6a8bbb26fe61d917aeb1a76ad7e356bab87faa1caba3"
+    },
+    {
+      "index": 3,
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "tap habit-form-save",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/CB24D000-C4C3-44D2-98D3-F9CC814CEC4C.png",
+      "png_sha256": "98409ea6d62dd315f927e10487932bf65e4c88b6fdc4f2520e2a9e0a537ef606",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/6402E254-A5C4-4B8C-A9EA-7035BA322127.txt",
+      "ax_sha256": "2b3538adf4fc97a04b853b82524420c85b845ecf765de8e6b0ed33bac2f3672d"
+    },
+    {
+      "index": 4,
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "L02 new habit hero",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/6B94BAB9-A097-4AED-98BB-5D3BEB9892C8.png",
+      "png_sha256": "9131c19deb323d02af4efca9d140278adb31cc27f1494136de53ec47dd5b7bdd",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/84B0B91E-502E-4467-8C33-4FB2BE3F629D.txt",
+      "ax_sha256": "c296261607d08bc29329bc1545daba8c0530acb50a08900997f1290625a6edcb"
+    },
+    {
+      "index": 5,
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "tap habit-form-name",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/DAEC9A41-D2D0-459A-A0B5-5399E9B52542.png",
+      "png_sha256": "00ff6ff8085c07ccf95817c7546d8f572ef495f9eb0002208bab0c219850330f",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/0EE009FD-C676-4725-947C-8258ED4787BD.txt",
+      "ax_sha256": "7da7875a4a90e10a090be3c397cd63b3a2847153450655af773cd44bff7e1a6e"
+    },
+    {
+      "index": 6,
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "L02 focused habit name and software keyboard",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/1C164CE9-7ED5-40BD-BA6A-ECBABD2C2E93.png",
+      "png_sha256": "00ff6ff8085c07ccf95817c7546d8f572ef495f9eb0002208bab0c219850330f",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/6B6306F1-A57B-4B8A-BC91-5F82E949E4D1.txt",
+      "ax_sha256": "25899b4c4faacb06cafbc535e8d4db44a072db6a73be09ef309b87b0cf17d8ce"
+    },
+    {
+      "index": 7,
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "tap habit-form-name",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/BAFB04BA-082D-44B9-9F9E-CDA057367BE7.png",
+      "png_sha256": "f66be226bea26a319b18ed70c93d3e5f6b08924c2e9f203b1d4801576cc7ad17",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/6C642F29-BB8A-4611-83DC-5A0E88C219A1.txt",
+      "ax_sha256": "f88abe64deb51923c30ad2f996b1db050f0a9d8ea55d70ff868f8916a314ca3f"
+    },
+    {
+      "index": 8,
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "L02 new habit named preview",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/01B6881C-A5F9-456A-9FE1-B57413034A1C.png",
+      "png_sha256": "a249e227e5953ac3fe12256af22a125bce49bb5aaca715fd6e6612bf83cd6907",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/7B24949C-AD07-42B2-9553-E6DD42027294.txt",
+      "ax_sha256": "ab6a8767b24693437e7b8cc6d322504a62dad6eb4f5181436a69f695dbb689a3"
+    },
+    {
+      "index": 9,
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "tap habit-form-icon-fitness",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/27C7C6D2-2F16-40DF-9F2E-5B79C1A7FE2A.png",
+      "png_sha256": "b9176dc90f519dfd0d25fa5d7dd1b99c5bed6c5c8aafe1abfc9533196bbd2c0f",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/12F98ED9-9728-4FBD-9B0F-93DC53EF791C.txt",
+      "ax_sha256": "2f492d31c2a181819452547e86117c9e570dc8e0b158458b4c6a77de16af7ce3"
+    },
+    {
+      "index": 10,
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "L02 selected icon grid",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/E0335DC9-CFD0-42A9-A8E0-4407096C0293.png",
+      "png_sha256": "b9176dc90f519dfd0d25fa5d7dd1b99c5bed6c5c8aafe1abfc9533196bbd2c0f",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/63989B62-67CF-4396-94D4-01487B986C61.txt",
+      "ax_sha256": "b625ec70a9951ac5dd67c44e83da44597b622ef43f9cf3b6fb3a68aaa29699a3"
+    },
+    {
+      "index": 11,
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "tap habit-form-save",
+      "png": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/AC27CC17-FBC5-438D-98F3-9CDF236E27D8.png",
+      "png_sha256": "85819c6dab6a61499f995b1461d460692343d2000e70b226e17fcddd0e6422d0",
+      "ax": ".codex-checks/batch03/evidence/phone-55422817-first-failed/attachments/1989D1E5-6D92-422F-8EBA-C8F51C35522B.txt",
+      "ax_sha256": "166306920419363f1763d4f06f99f3a001f16b2850bfce826289801723b81414"
+    }
+  ]
+}
