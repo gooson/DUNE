@@ -600,13 +600,17 @@
     },
     "P06": {
       "row_id": "P06",
-      "evidence": "test-and-title:Assessment Detail",
+      "file": "P06.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "PostureVisualAuditTests/testPostureHistoryAndDetail()",
-      "action": "tap 86, October 12, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. ",
-      "timestamp": 1791830084.983,
-      "image": "564EFB0C-8F87-4872-9C56-68F710168500.png",
-      "screen": "screen-1-2006x2852-tap 86, October 12, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. _1_8B5EF930-7599-4013-8ED0-7607C9327BEE.png",
-      "file": "P06.png"
+      "action": "Posture detail top",
+      "source_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "openFlat",
+      "archive": ".codex-checks/h07/evidence/duo-open-1514deb7-passed",
+      "archive_inventory_sha256": "161d36c9472c046670c8a5728c33ad58267728a25a746f3f3470f72424d7382b",
+      "image_sha256": "8f566411069736556a205712f9d6482fe6fc7bd0250d04f3b78e58ce592ed12d",
+      "ax_sha256": "97eb6bd72b20022abb1673b27199690e40c893f223ebc7765b6f7561334922f2"
     },
     "P07": {
       "row_id": "P07",
@@ -833,13 +837,17 @@
     },
     "H07": {
       "row_id": "H07",
-      "evidence": "test-and-action:Wellness recent posture record",
+      "file": "H07.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail()",
-      "action": "tap wellness-posture-record-BB500F87-BDA0-4492-983C-99EC44F2B98E",
-      "timestamp": 1791831392.886,
-      "image": "192B68DF-AE7E-4C33-BE95-78B05F27704E.png",
-      "screen": "screen-1-2006x2852-tap wellness-posture-record-BB500F87-BDA0-4492-983C-99EC44F2B98E_1_AB141C25-AA32-4962-8AFA-15B708847167.png",
-      "file": "H07.png"
+      "action": "Wellness recent posture record detail",
+      "source_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "openFlat",
+      "archive": ".codex-checks/h07/evidence/duo-open-1514deb7-passed",
+      "archive_inventory_sha256": "161d36c9472c046670c8a5728c33ad58267728a25a746f3f3470f72424d7382b",
+      "image_sha256": "b74191668370f97940847ea1b33b0f303ed009e09c623bbd2e08488f2e6f8d35",
+      "ax_sha256": "fc58459d758789c96c05e478e957007e1eabd73bd091912f07e7429b55a90c6f"
     },
     "P04": {
       "row_id": "P04",
@@ -1493,9 +1501,10 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "438d9e8376fc4929cbf977893055eb4124d4d318",
+  "last_refresh_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
   "last_refresh_screens": [
-    "H06"
+    "H07",
+    "P06"
   ],
-  "last_refresh_note": "Reviewed native H06 rows pair; historical image retained in review gallery."
+  "last_refresh_note": "Reviewed current native H07/P06; historical images in review gallery."
 }

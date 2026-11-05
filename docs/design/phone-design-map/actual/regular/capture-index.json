@@ -737,13 +737,17 @@
     },
     "P06": {
       "row_id": "P06",
-      "evidence": "test-and-title:Assessment Detail",
+      "file": "P06.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "PostureVisualAuditTests/testPostureHistoryAndDetail()",
-      "action": "tap 86, October 12, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. ",
-      "timestamp": 1791820186.375,
-      "image": "BA392828-556F-4C5A-A8C0-ABDEBB242990.png",
-      "screen": "screen-0-1320x2868-tap 86, October 12, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. _0_5C56A923-89FB-45BF-A0BE-080CF9D105CE.png",
-      "file": "P06.png"
+      "action": "Posture detail top",
+      "source_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "device_uid": "8984BBC7-EFF6-442F-BF6B-0E9F6C9E9585",
+      "pose": "normal",
+      "archive": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed",
+      "archive_inventory_sha256": "42497d81532c9fd23e970cf99f15d56494f1f882a3d71261938cbeb686cf394c",
+      "image_sha256": "75f0c8050218832c89a3d0d9f2560961f6db4017d04b49b4ce6b53340d608cb3",
+      "ax_sha256": "35f23aa8d9b41b0c3f15484ea9e6cf773dac2b4cb36b36bed71b24b06f4dc82b"
     },
     "W14": {
       "row_id": "W14",
@@ -939,13 +943,17 @@
     },
     "H07": {
       "row_id": "H07",
-      "evidence": "test-and-action:Wellness recent posture record",
+      "file": "H07.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail()",
-      "action": "tap wellness-posture-record-C71E0B9A-8041-4ECD-AF40-B30835B02FD4",
-      "timestamp": 1791836724.012,
-      "image": "7B9B285F-CD15-42C3-8F74-6CB745BB9C53.png",
-      "screen": "screen-0-1320x2868-tap wellness-posture-record-C71E0B9A-8041-4ECD-AF40-B30835B02FD4_0_EC9FB5C4-D95A-41CB-B4AA-D1814B525891.png",
-      "file": "H07.png"
+      "action": "Wellness recent posture record detail",
+      "source_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "device_uid": "8984BBC7-EFF6-442F-BF6B-0E9F6C9E9585",
+      "pose": "normal",
+      "archive": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed",
+      "archive_inventory_sha256": "42497d81532c9fd23e970cf99f15d56494f1f882a3d71261938cbeb686cf394c",
+      "image_sha256": "75f0c8050218832c89a3d0d9f2560961f6db4017d04b49b4ce6b53340d608cb3",
+      "ax_sha256": "5fcf3d189af375dfb4ece315e69b4522284bc2539eb6f5de038d0ffd12496631"
     },
     "H14": {
       "row_id": "H14",
@@ -1450,9 +1458,10 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "438d9e8376fc4929cbf977893055eb4124d4d318",
+  "last_refresh_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
   "last_refresh_screens": [
-    "H06"
+    "H07",
+    "P06"
   ],
-  "last_refresh_note": "Reviewed native H06 rows pair; historical image retained in review gallery."
+  "last_refresh_note": "Reviewed current native H07/P06; historical images in review gallery."
 }

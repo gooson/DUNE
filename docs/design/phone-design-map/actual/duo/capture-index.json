@@ -547,13 +547,17 @@
     },
     "P06": {
       "row_id": "P06",
-      "evidence": "test-and-title:Assessment Detail",
+      "file": "P06.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "PostureVisualAuditTests/testPostureHistoryAndDetail()",
-      "action": "tap 86, October 12, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. ",
-      "timestamp": 1791826781.42,
-      "image": "14AE720B-72AE-499B-B4AA-BFEFC86546FF.png",
-      "screen": "screen-0-1398x2034-tap 86, October 12, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. _0_49899167-1CDC-449A-9E11-9DB44498601A.png",
-      "file": "P06.png"
+      "action": "Posture detail top",
+      "source_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "closed",
+      "archive": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed",
+      "archive_inventory_sha256": "df633d95aa1aa12ebb0fea36a6831f1fd32ff4c9e4dbc1496ebf6b767a213299",
+      "image_sha256": "03a56ca49beef29fa5f1271d15e499870a75f2c5383147c94c2a5471032a8a65",
+      "ax_sha256": "0f6ca4b93a9c2557d3030bb51db6999689f2a22c17cc775fffcfb1b4d04a0e2c"
     },
     "P07": {
       "row_id": "P07",
@@ -1057,13 +1061,17 @@
     },
     "H07": {
       "row_id": "H07",
-      "evidence": "test-and-action:Wellness recent posture record",
+      "file": "H07.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail()",
-      "action": "tap wellness-posture-record-32EC535C-B1EA-4D74-A4CA-791CC2D9C96C",
-      "timestamp": 1791841136.842,
-      "image": "F43C06B6-68F8-466F-8C83-9031E33FB6D4.png",
-      "screen": "screen-0-1398x2034-tap wellness-posture-record-32EC535C-B1EA-4D74-A4CA-791CC2D9C96C_0_60DE4F6E-3642-4477-86B2-647DDD3A7B01.png",
-      "file": "H07.png"
+      "action": "Wellness recent posture record detail",
+      "source_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "closed",
+      "archive": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed",
+      "archive_inventory_sha256": "df633d95aa1aa12ebb0fea36a6831f1fd32ff4c9e4dbc1496ebf6b767a213299",
+      "image_sha256": "d4fe588b7e0e009e82a868542664404cfb1b1704cdb9db22b78b17e6e04c50ce",
+      "ax_sha256": "52011af66ba6a0effe2d7d05607ac15bc8be05e19d149fa83c5750e0583b1c58"
     },
     "H14": {
       "row_id": "H14",
@@ -1492,9 +1500,10 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "438d9e8376fc4929cbf977893055eb4124d4d318",
+  "last_refresh_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
   "last_refresh_screens": [
-    "H06"
+    "H07",
+    "P06"
   ],
-  "last_refresh_note": "Reviewed native H06 rows pair; historical image retained in review gallery."
+  "last_refresh_note": "Reviewed current native H07/P06; historical images in review gallery."
 }

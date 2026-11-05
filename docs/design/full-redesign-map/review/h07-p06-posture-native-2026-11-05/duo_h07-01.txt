@@ -1,0 +1,207 @@
+Attributes: Application, 0x1075d6300, pid: 27944, label: 'DUNE'
+Element subtree:
+ →Application, 0x1075d6300, pid: 27944, label: 'DUNE'
+    Window (Main), 0x1075d5180, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x1075d7200, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x1075d61c0, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x1075d6580, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x1075d4640, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x1075d5f40, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x1075d70c0, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x1075d6e40, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x1075d48c0, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x1075d4c80, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x1075d5540, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x1075d52c0, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x1075d7980, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x1075d4b40, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x1075d5b80, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x1075d6f80, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x1075d4780, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Assessment Detail'
+                              StaticText, 0x1075d4a00, {{136.7, 39.0}, {128.3, 18.0}}, label: 'Assessment Detail'
+                                Other, 0x1075d6bc0, {{136.7, 39.0}, {128.3, 18.0}}
+                                  StaticText, 0x1075d7c00, {{136.7, 39.0}, {128.3, 18.0}}, label: 'November 4, 2026'
+                            Other, 0x1075d7e80, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x1075d7480, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x1075d5e00, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x1075d75c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                    ScrollView, 0x1075d7700, {{0.0, 0.0}, {466.3, 678.0}}
+                                      Other, 0x1075d6a80, {{0.0, 0.0}, {466.3, 678.0}}
+                                        Other, 0x1075d43c0, {{0.0, 0.0}, {466.3, 122.0}}
+                                      Other, 0x102b96e40, {{0.0, 0.0}, {466.3, 678.0}}
+                                      Other, 0x102b95cc0, {{0.0, 82.0}, {382.3, 1891.0}}
+                                        Other, 0x102b95900, {{16.0, 82.0}, {350.3, 180.3}}, label: 'Posture score 86 out of 100'
+                                          StaticText, 0x102b96940, {{167.5, 128.3}, {47.3, 43.0}}, label: '86'
+                                          StaticText, 0x102b97700, {{177.2, 173.3}, {28.0, 14.3}}, label: '/ 100'
+                                          StaticText, 0x102b97840, {{135.2, 226.0}, {112.0, 20.3}}, label: 'Posture Score'
+                                        StaticText, 0x102b96bc0, {{28.0, 290.3}, {156.3, 20.3}}, label: 'Assessment Details'
+                                        Other, 0x102b97e80, {{36.0, 330.7}, {291.5, 391.8}}
+                                          Image, 0x102b97480, {{41.7, 331.0}, {16.7, 20.0}}, identifier: 'arrow.left.arrow.right', label: 'Left And Right Arrows'
+                                          StaticText, 0x102b95400, {{72.0, 330.9}, {80.3, 38.0}}, label: 'Shoulder Asymmetry'
+                                          Image, 0x102b95e00, {{207.3, 332.3}, {20.0, 16.7}}, identifier: 'arrow.up.arrow.down', label: 'Sort'
+                                          StaticText, 0x102b966c0, {{239.2, 330.7}, {80.3, 38.0}}, label: 'Hip Asymmetry'
+                                          StaticText, 0x102b96d00, {{36.0, 372.9}, {25.7, 14.3}}, label: '5.0°'
+                                          StaticText, 0x102b95040, {{77.7, 373.4}, {24.3, 13.3}}, label: '90%'
+                                          StaticText, 0x102b96a80, {{203.2, 372.7}, {25.7, 14.3}}, label: '6.0°'
+                                          StaticText, 0x102b96300, {{244.8, 373.2}, {24.3, 13.3}}, label: '90%'
+                                          StaticText, 0x102b96580, {{37.3, 391.2}, {67.0, 14.3}}, label: 'Caution'
+                                          Image, 0x102b94000, {{37.3, 392.3}, {12.7, 11.3}}, identifier: 'exclamationmark.triangle.fill', label: 'Warning'
+                                          StaticText, 0x102b97340, {{204.3, 391.4}, {63.2, 14.3}}, label: 'Normal'
+                                          Image, 0x102b96440, {{204.3, 392.0}, {12.3, 12.3}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                                          Image, 0x102b95a40, {{40.0, 429.7}, {20.0, 20.0}}, identifier: 'arrow.triangle.branch', label: 'Divide'
+                                          StaticText, 0x102b975c0, {{72.0, 429.7}, {71.7, 38.0}}, label: 'Knee Alignment'
+                                          Image, 0x102b957c0, {{207.3, 442.3}, {20.0, 12.3}}, identifier: 'arrow.left.and.right', label: 'Left And Right Arrows'
+                                          StaticText, 0x102b96f80, {{239.2, 438.5}, {85.3, 18.0}}, label: 'Lateral Shift'
+                                          StaticText, 0x102b97ac0, {{203.2, 462.5}, {25.7, 14.3}}, label: '8.0°'
+                                          StaticText, 0x102b96800, {{244.8, 463.0}, {24.3, 13.3}}, label: '90%'
+                                          StaticText, 0x102b97200, {{36.0, 471.7}, {25.7, 14.3}}, label: '7.0°'
+                                          StaticText, 0x102b97c00, {{77.7, 472.2}, {24.3, 13.3}}, label: '90%'
+                                          StaticText, 0x102b97980, {{204.3, 481.3}, {63.2, 14.3}}, label: 'Normal'
+                                          Image, 0x102b97d40, {{204.3, 482.0}, {12.3, 12.3}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                                          StaticText, 0x110a80000, {{37.3, 490.1}, {67.0, 14.3}}, label: 'Caution'
+                                          Image, 0x110a80140, {{37.3, 491.3}, {12.7, 11.3}}, identifier: 'exclamationmark.triangle.fill', label: 'Warning'
+                                          Image, 0x110a80280, {{211.0, 528.3}, {12.3, 20.0}}, identifier: 'figure.arms.open', label: 'Figure With Arms Open'
+                                          StaticText, 0x110a803c0, {{239.2, 528.4}, {71.0, 38.0}}, label: 'Rounded Shoulders'
+                                          Image, 0x110a80500, {{40.0, 537.7}, {20.0, 20.0}}, identifier: 'person.crop.circle', label: 'Account'
+                                          StaticText, 0x110a80640, {{72.0, 537.6}, {98.7, 18.0}}, label: 'Forward Head'
+                                          StaticText, 0x110a80780, {{36.0, 561.6}, {25.7, 14.3}}, label: '1.0°'
+                                          StaticText, 0x110a808c0, {{77.7, 562.1}, {24.3, 13.3}}, label: '90%'
+                                          StaticText, 0x110a80a00, {{203.2, 570.4}, {25.7, 14.3}}, label: '2.0°'
+                                          StaticText, 0x110a80b40, {{244.8, 570.9}, {24.3, 13.3}}, label: '90%'
+                                          StaticText, 0x110a80c80, {{37.3, 579.9}, {67.0, 14.3}}, label: 'Caution'
+                                          Image, 0x110a80dc0, {{37.3, 581.3}, {12.7, 11.3}}, identifier: 'exclamationmark.triangle.fill', label: 'Warning'
+                                          StaticText, 0x110a80f00, {{204.3, 589.1}, {63.2, 14.3}}, label: 'Normal'
+                                          Image, 0x110a81040, {{204.3, 589.7}, {12.3, 12.3}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                                          Image, 0x110a81180, {{211.0, 627.3}, {12.3, 20.0}}, identifier: 'figure.walk', label: 'Walk'
+                                          StaticText, 0x110a812c0, {{239.2, 627.5}, {88.3, 58.0}}, label: 'Knee Hyperextension'
+                                          Image, 0x110a81400, {{45.7, 637.7}, {8.7, 20.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x110a81540, {{72.0, 637.7}, {65.3, 38.0}}, label: 'Thoracic Kyphosis'
+                                          StaticText, 0x110a81680, {{36.0, 679.7}, {25.7, 14.3}}, label: '3.0°'
+                                          StaticText, 0x110a817c0, {{77.7, 680.2}, {24.3, 13.3}}, label: '90%'
+                                          StaticText, 0x110a81900, {{203.2, 689.5}, {25.7, 14.3}}, label: '4.0°'
+                                          StaticText, 0x110a81a40, {{244.8, 690.0}, {24.3, 13.3}}, label: '90%'
+                                          StaticText, 0x110a81b80, {{37.3, 698.0}, {67.0, 14.3}}, label: 'Caution'
+                                          Image, 0x110a81cc0, {{37.3, 699.3}, {12.7, 11.3}}, identifier: 'exclamationmark.triangle.fill', label: 'Warning'
+                                          StaticText, 0x110a81e00, {{204.3, 708.2}, {63.2, 14.3}}, label: 'Normal'
+                                          Image, 0x110a81f40, {{204.3, 708.7}, {12.3, 12.3}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                                        Image, 0x110a82080, {{16.0, 758.7}, {169.3, 300.7}}
+                                        Image, 0x110a821c0, {{197.3, 758.7}, {169.0, 300.7}}
+                                        StaticText, 0x110a82300, {{85.2, 1067.4}, {30.7, 14.3}}, label: 'Front'
+                                        StaticText, 0x110a82440, {{268.9, 1067.4}, {25.7, 14.3}}, label: 'Side'
+                                        StaticText, 0x110a82580, {{28.0, 1109.7}, {199.7, 20.3}}, label: 'Recommended Exercises'
+                                        Other, 0x110a826c0, {{39.3, 1142.1}, {315.0, 50.3}}, label: '모빌리티 운동, Shoulder Asymmetry, Forward Head, Flexibility'
+                                          StaticText, 0x110a82800, {{72.0, 1142.1}, {82.0, 18.0}}, label: '모빌리티 운동'
+                                          Image, 0x110a82940, {{39.3, 1156.3}, {9.3, 22.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x110a82a80, {{72.0, 1162.1}, {124.0, 30.3}}, label: 'Shoulder Asymmetry, Forward Head'
+                                          StaticText, 0x110a82bc0, {{299.0, 1160.6}, {49.3, 13.3}}, label: 'Flexibility'
+                                        Other, 0x110a82d00, {{34.0, 1204.4}, {320.3, 34.3}}, label: '밴드 풀 어파트, Shoulder Asymmetry, Strength'
+                                          Image, 0x110a82e40, {{34.0, 1211.7}, {20.0, 20.0}}, identifier: 'circle.dashed', label: 'Circular Selection'
+                                          StaticText, 0x110a82f80, {{72.0, 1204.4}, {85.7, 18.0}}, label: '밴드 풀 어파트'
+                                          StaticText, 0x110a830c0, {{302.7, 1214.9}, {45.7, 13.3}}, label: 'Strength'
+                                          StaticText, 0x110a83200, {{72.0, 1224.4}, {118.0, 14.3}}, label: 'Shoulder Asymmetry'
+                                        Other, 0x110a83340, {{39.3, 1250.7}, {315.0, 34.3}}, label: '스트레칭, Forward Head, Knee Alignment, Flexibility'
+                                          Image, 0x110a83480, {{39.3, 1257.0}, {9.3, 22.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x110a835c0, {{72.0, 1250.7}, {52.0, 18.0}}, label: '스트레칭'
+                                          StaticText, 0x110a83700, {{299.0, 1261.2}, {49.3, 13.3}}, label: 'Flexibility'
+                                          StaticText, 0x110a83840, {{72.0, 1270.7}, {175.3, 14.3}}, label: 'Forward Head, Knee Alignment'
+                                        Other, 0x110a83980, {{39.3, 1297.1}, {315.0, 50.3}}, label: '요가, Forward Head, Thoracic Kyphosis, Flexibility'
+                                          StaticText, 0x110a83ac0, {{72.0, 1297.1}, {26.0, 18.0}}, label: '요가'
+                                          Image, 0x110a83c00, {{39.3, 1311.3}, {9.3, 22.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x110a83d40, {{72.0, 1317.1}, {103.7, 30.3}}, label: 'Forward Head, Thoracic Kyphosis'
+                                          StaticText, 0x110a83e80, {{299.0, 1315.6}, {49.3, 13.3}}, label: 'Flexibility'
+                                        Other, 0x110a84000, {{39.3, 1359.4}, {315.0, 34.3}}, label: '맨몸 스쿼트, Knee Alignment, Bodyweight'
+                                          Image, 0x110a84140, {{39.3, 1365.7}, {9.3, 22.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x110a84280, {{72.0, 1359.4}, {69.0, 18.0}}, label: '맨몸 스쿼트'
+                                          StaticText, 0x110a843c0, {{286.7, 1369.9}, {61.7, 13.3}}, label: 'Bodyweight'
+                                          StaticText, 0x110a84500, {{72.0, 1379.4}, {89.3, 14.3}}, label: 'Knee Alignment'
+                                        Other, 0x110a84640, {{39.3, 1405.7}, {315.0, 34.3}}, label: '글루트 브릿지, Knee Alignment, Bodyweight'
+                                          Image, 0x110a84780, {{39.3, 1412.0}, {9.3, 22.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x110a848c0, {{72.0, 1405.7}, {82.0, 18.0}}, label: '글루트 브릿지'
+                                          StaticText, 0x110a84a00, {{286.7, 1416.2}, {61.7, 13.3}}, label: 'Bodyweight'
+                                          StaticText, 0x110a84b40, {{72.0, 1425.7}, {89.3, 14.3}}, label: 'Knee Alignment'
+                                        Other, 0x110a84c80, {{39.3, 1452.1}, {315.0, 34.3}}, label: '데드 버그, Thoracic Kyphosis, Bodyweight'
+                                          Image, 0x110a84dc0, {{39.3, 1458.3}, {9.3, 22.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x110a84f00, {{72.0, 1452.1}, {56.0, 18.0}}, label: '데드 버그'
+                                          StaticText, 0x110a85040, {{286.7, 1462.6}, {61.7, 13.3}}, label: 'Bodyweight'
+                                          StaticText, 0x110a85180, {{72.0, 1472.1}, {103.7, 14.3}}, label: 'Thoracic Kyphosis'
+                                        Other, 0x110a852c0, {{34.0, 1498.4}, {320.3, 34.3}}, label: '폼롤러, Thoracic Kyphosis, Flexibility'
+                                          Image, 0x110a85400, {{34.0, 1505.7}, {20.0, 20.0}}, identifier: 'ellipsis.circle', label: 'More'
+                                          StaticText, 0x110a85540, {{72.0, 1498.4}, {39.0, 18.0}}, label: '폼롤러'
+                                          StaticText, 0x110a85680, {{299.0, 1508.9}, {49.3, 13.3}}, label: 'Flexibility'
+                                          StaticText, 0x110a857c0, {{72.0, 1518.4}, {103.7, 14.3}}, label: 'Thoracic Kyphosis'
+                                        Button, 0x110a85900, {{16.0, 1560.7}, {350.3, 58.3}}, identifier: 'posture-symmetry-link', label: 'Left-Right Comparison, Detailed symmetry analysis'
+                                          Image, 0x110a85a40, {{35.7, 1580.0}, {16.7, 20.0}}, identifier: 'arrow.left.arrow.right', label: 'Left And Right Arrows'
+                                          StaticText, 0x110a85b80, {{72.0, 1572.7}, {160.0, 18.0}}, label: 'Left-Right Comparison'
+                                          Image, 0x110a85cc0, {{347.7, 1584.7}, {6.0, 10.3}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x110a85e00, {{72.0, 1592.7}, {154.7, 14.3}}, label: 'Detailed symmetry analysis'
+                                        StaticText, 0x110a85f40, {{28.0, 1647.1}, {49.3, 20.3}}, label: 'Memo'
+                                        StaticText, 0x110a86080, {{28.0, 1675.4}, {326.3, 218.3}}, label: 'Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. '
+                                        Button, 0x110a861c0, {{16.0, 1921.7}, {350.3, 51.3}}, label: 'Delete Assessment'
+                                          StaticText, 0x110a86300, {{16.0, 1921.7}, {350.3, 51.3}}, label: 'Delete Assessment'
+                                          Image, 0x110a86440, {{106.0, 1938.0}, {16.3, 18.7}}, identifier: 'trash', label: 'Trash'
+                                      Other, 0x110a86580, {{349.5, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 4 pages', value: 0%
+                                        Other, 0x110a866c0, {{376.5, 85.0}, {3.0, 179.3}}
+                                      Other, 0x110a86800, {{349.5, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 4 pages', value: 0%
+                                        Other, 0x110a86940, {{376.5, 85.0}, {3.0, 179.3}}
+                Other, 0x110a86a80, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x110a86bc0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x110a86d00, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x110a86e40, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x110a86f80, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x110a870c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x110a87200, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x110a87340, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x110a87480, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x110a875c0, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x110a87700, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                            Other, 0x110a87840, {{394.0, 234.0}, {48.0, 48.0}}
+                              Other, 0x110a87980, {{394.0, 234.0}, {48.0, 48.0}}
+                                Other, 0x110a87ac0, {{399.0, 240.0}, {38.0, 36.0}}
+                                  Other, 0x110a87c00, {{399.0, 240.0}, {38.0, 36.0}}
+                                    Other, 0x110a87d40, {{399.0, 240.0}, {38.0, 36.0}}
+                                      Other, 0x110a87e80, {{399.0, 240.0}, {38.0, 36.0}}
+                                        Button, 0x1075a8000, {{405.3, 240.0}, {25.7, 36.0}}, identifier: 'doc.text', label: 'Plain Text Document'
+                        Other, 0x1075a8140, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x1075a8280, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1075a83c0, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x1075a8500, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x1075a8640, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x1075a8780, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x1075a88c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x1075a8a00, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1075a8b40, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x1075a8c80, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x1075a8dc0, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x1075a8f00, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x1075a9040, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x1075a9180, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x1075a92c0, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                                            Image, 0x1075a9400, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x1075a9540, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x1075a9680, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x1075a97c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1075a9900, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x1075a9a40, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x1075a9b80, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x1075a9cc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x1075a9e00, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x1075a9f40, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x1075aa080, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x1075aa1c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1075aa300, {{396.0, 544.0}, {44.0, 58.0}}
+                                          Other, 0x1075aa440, {{396.0, 544.0}, {44.0, 58.0}}
+                                            Other, 0x1075aa580, {{396.0, 544.0}, {44.0, 58.0}}
+                                            Other, 0x1075aa6c0, {{396.0, 544.0}, {44.0, 58.0}}
+                                              Other, 0x1075aa800, {{396.0, 544.0}, {44.0, 58.0}}
+                                                Other, 0x1075aa940, {{396.0, 544.0}, {44.0, 58.0}}
+                                                  Other, 0x1075aaa80, {{396.0, 544.0}, {44.0, 58.0}}
+                                                Other, 0x1075aabc0, {{396.0, 544.0}, {44.0, 58.0}}
+                                              Other, 0x1075aad00, {{396.0, 544.0}, {44.0, 58.0}}
+              Other, 0x1075aae40, {{191.0, 322.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x1075d6300, pid: 27944, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1075aaf80, pid: 27944, label: 'DUNE'
+  }
