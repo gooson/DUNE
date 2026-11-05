@@ -19,6 +19,7 @@ import os
 import queue
 import re
 import signal
+import stat
 import subprocess
 import sys
 import threading
@@ -28,6 +29,28 @@ import time
 FOLD_STATES = {"closed", "partiallyOpen", "openFlat"}
 FOLD_ANGLES = {"closed": 0, "partiallyOpen": 90, "openFlat": 180}
 ORIENTATION_STATES = {"portrait", "landscapeLeft", "landscapeRight"}
+LOCK_FD_ENV_NAMES = ("DUNE_SIM_TEST_LOCK_FD", "DUNE_SIM_TEST_WORKTREE_LOCK_FD")
+
+
+def inherited_lock_fds():
+    """Keep both held simulator locks open in children that inherit their names."""
+    if ("DUNE_SIM_TEST_WORKTREE_LOCK_FD" in os.environ
+            and "DUNE_SIM_TEST_LOCK_FD" not in os.environ):
+        raise ValueError("Worktree simulator lock FD without primary lock FD")
+    fds = []
+    for name in LOCK_FD_ENV_NAMES:
+        if name not in os.environ:
+            continue
+        value = os.environ[name]
+        if not value.isdecimal():
+            raise ValueError(f"Invalid {name}")
+        fd = int(value)
+        opened = os.fstat(fd)  # Reject stale exported descriptors before any child launch.
+        if fd < 3 or not stat.S_ISREG(opened.st_mode) or opened.st_uid != os.getuid():
+            raise ValueError(f"Invalid {name} descriptor")
+        if fd not in fds:
+            fds.append(fd)
+    return tuple(fds)
 
 
 def orientation_state(action):
@@ -89,12 +112,14 @@ def set_fold_with_cli(output, sequence, state, device, test_deadline):
     receipt = {"device": device, "state": state, "target_angle": target,
                "cli": str(cli), "actual_angle": None, "verified": False}
     try:
+        lock_fds = inherited_lock_fds()
         for command in [str(target), "get"]:
             budget = test_deadline - time.time() - 37
             if budget <= 0:
                 raise RuntimeError("Automatic fold has insufficient capture budget")
             result = subprocess.run([str(cli), "-d", device, command],
-                                    capture_output=True, text=True, timeout=min(20, budget))
+                                    capture_output=True, text=True, timeout=min(20, budget),
+                                    pass_fds=lock_fds)
             if result.returncode:
                 raise RuntimeError(f"Hinge {command} failed ({result.returncode}): {result.stderr[-600:]}")
             if command == "get":
@@ -365,8 +390,7 @@ def main():
         Path.home() / "Library/Developer/CoreSimulator/Devices" / device
         / "data/Containers/Data/Application"
     ).resolve()
-    lock_fd = os.environ.get("DUNE_SIM_TEST_LOCK_FD")
-    inherited_fds = (int(lock_fd),) if lock_fd else ()
+    inherited_fds = inherited_lock_fds()
     process = subprocess.Popen(sys.argv[4:], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                text=True, bufsize=1, pass_fds=inherited_fds, start_new_session=True)
     sequence = 0
