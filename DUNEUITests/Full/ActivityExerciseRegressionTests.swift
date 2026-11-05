@@ -4300,12 +4300,12 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
     func testVisualAuditHeartRateRecoveryExplanation() throws {
         openHeartRateRecoveryExplanation(maximumAX: false)
-        assertHeartRateRecoveryExplanation()
+        assertHeartRateRecoveryExplanation(checkInitialCloseTarget: true)
     }
 
     func testHeartRateRecoveryExplanationAtMaximumAccessibilitySize() throws {
         openHeartRateRecoveryExplanation(maximumAX: true)
-        assertHeartRateRecoveryExplanation()
+        assertHeartRateRecoveryExplanation(checkInitialCloseTarget: false)
     }
 
     private func openHeartRateRecoveryExplanation(maximumAX: Bool) {
@@ -4331,12 +4331,18 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(app.scrollViews["heart-rate-recovery-info-sheet"].firstMatch.waitForExistence(timeout: 5))
     }
 
-    private func assertHeartRateRecoveryExplanation() {
+    private func assertHeartRateRecoveryExplanation(checkInitialCloseTarget: Bool) {
         let scroll = app.scrollViews["heart-rate-recovery-info-sheet"].firstMatch
         let title = app.staticTexts["heart-rate-recovery-info-title"].firstMatch
         XCTAssertTrue(app.revealFullyVisible("heart-rate-recovery-info-title", in: scroll))
         XCTAssertEqual(title.label, "What is Heart Rate Recovery?")
         VisualAudit.capture("H14 recovery explanation title")
+        if checkInitialCloseTarget {
+            let close = app.buttons["heart-rate-recovery-info-close"].firstMatch
+            XCTAssertTrue(close.isHittable)
+            XCTAssertGreaterThanOrEqual(close.frame.width, 44)
+            XCTAssertGreaterThanOrEqual(close.frame.height, 44)
+        }
 
         let sections: [(String, String, String)] = [
             ("definition", "Definition", "Heart Rate Recovery (HRR₁) measures how quickly your heart rate drops in the first minute after exercise. A faster drop indicates better cardiovascular fitness and autonomic nervous system recovery."),

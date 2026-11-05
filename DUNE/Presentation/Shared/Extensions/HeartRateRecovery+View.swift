@@ -146,7 +146,7 @@ struct HeartRateRecoveryInfoSheet: View {
             Image(systemName: "xmark")
                 .font(.subheadline.weight(.bold))
                 .foregroundStyle(palette.ink)
-                .frame(width: 44, height: 44)
+                .frame(width: 48, height: 48)
                 .background(palette.ink.opacity(0.12), in: Circle())
         }
         .buttonStyle(.plain)
