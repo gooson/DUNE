@@ -201,11 +201,13 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(pastAction.waitForExistence(timeout: 5))
         pastAction.auditTap()
         XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
-        XCTAssertTrue(element("habit-past-record-date").exists)
         XCTAssertTrue(element("habit-past-record-habit").exists)
         let readDate = app.staticTexts["habit-past-record-hero-date"].firstMatch
         XCTAssertTrue(readDate.waitForExistence(timeout: 5) && !readDate.label.isEmpty)
         capture("L09 duration record hero and date")
+        // The medium Form can instantiate the date picker below the hero lazily.
+        revealPastRecordControl("habit-past-record-date")
+        XCTAssertTrue(element("habit-past-record-date").exists)
         tapPastRecordAction("habit-past-record-cancel")
         XCTAssertEqual(hero.label, baseline, "Opening and canceling the sheet should preserve today")
 
