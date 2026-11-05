@@ -521,6 +521,12 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("pinned-metrics-editor-row-hrv", maxSwipes: 10,
                                                           direction: .down))
         XCTAssertTrue(app.buttons["pinned-metrics-editor-row-hrv"].firstMatch.isEnabled)
+        let editor = app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
+        XCTAssertTrue(app.revealTextBody("pinned-metrics-editor-title", in: editor))
+        // Include the adjacent six-icon preview after checking the list's lower limit state.
+        editor.swipeDown(velocity: .slow)
+        XCTAssertTrue(app.revealTextBody("pinned-metrics-editor-title", in: editor))
+        VisualAudit.capture("T18 MAX six selected preview")
         let cancel = app.buttons[AXID.pinnedMetricsEditorCancel].firstMatch
         XCTAssertTrue(cancel.isHittable)
         cancel.auditTap()
