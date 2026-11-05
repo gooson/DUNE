@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-05",
+  "updated": "2026-11-06",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -833,6 +833,39 @@
         "layout": "../layout-map/waso-explanation-h13.html",
         "status": "native-targeted-verified",
         "native": "../full-redesign-map/review/h13-wake-analysis-explanation-native-2026-11-06/index.html"
+      }
+    },
+    {
+      "id": "heart-rate-recovery-explanation-h14",
+      "name": "H14 · 심박 회복 설명",
+      "title": "원래 동작과 아이콘을 유지한 히어로·읽기 위계",
+      "file": "dune-heart-rate-recovery-explanation-h14.html",
+      "detail": "정적 배치·표현 제안이다. 기존 기능·문구·상태와 아이콘을 보존하고 큰 글씨에서 자연 높이와 스크롤을 사용한다. 아직 실제 앱 실행·기기 검증 전이며 시안 자체는 실제 데이터나 네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/heart-rate-recovery-explanation-h14.html",
+        "status": "proposal-native-validation-pending"
+      }
+    },
+    {
+      "id": "today-health-qa-t17",
+      "name": "T17 · 건강 Q&A",
+      "title": "원래 동작과 아이콘을 유지한 히어로·읽기 위계",
+      "file": "dune-today-health-qa-t17.html",
+      "detail": "정적 배치·표현 제안이다. 기존 기능·문구·상태와 아이콘을 보존하고 큰 글씨에서 자연 높이와 스크롤을 사용한다. 아직 실제 앱 실행·기기 검증 전이며 시안 자체는 실제 데이터나 네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/today-health-qa-t17.html",
+        "status": "proposal-native-validation-pending"
+      }
+    },
+    {
+      "id": "today-pinned-metrics-editor-t18",
+      "name": "T18 · 고정 지표 편집",
+      "title": "원래 동작과 아이콘을 유지한 히어로·읽기 위계",
+      "file": "dune-today-pinned-metrics-editor-t18.html",
+      "detail": "정적 배치·표현 제안이다. 기존 기능·문구·상태와 아이콘을 보존하고 큰 글씨에서 자연 높이와 스크롤을 사용한다. 아직 실제 앱 실행·기기 검증 전이며 시안 자체는 실제 데이터나 네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/today-pinned-metrics-editor-t18.html",
+        "status": "proposal-native-validation-pending"
       }
     }
   ]
