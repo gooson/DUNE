@@ -11,4 +11,4 @@ status: approved
 
 앱 대상: `DUNE/Presentation/Life/HabitManagementView.swift`. 기존 데이터·유효성·저장 동작은 유지하고 히어로와 원래 아이콘을 강조한다.
 
-정상 네 프로필: `LifeRegressionTests/testVisualAuditHabitManagement()`. 접힌 Duo MAX: `DuoRemainingRouteTests/testArchivedHabitRestoresToActiveLifeList()`. 현재 SDK·실제 PNG/AX·품질 게이트는 미완료이며 통합 실행의 해당 메서드만 이 화면 증거로 사용한다.
+정상 네 프로필: `LifeRegressionTests/testVisualAuditHabitManagement()`. 접힌 Duo MAX: `DuoLifeArchiveRestoreTests/testArchivedHabitRestoresToActiveLifeList()`. 현재 SDK·실제 PNG/AX·품질 게이트는 미완료이며 통합 실행의 해당 메서드만 이 화면 증거로 사용한다.
