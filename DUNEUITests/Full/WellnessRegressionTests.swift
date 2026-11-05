@@ -563,6 +563,8 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             app.scrollToInjuryEndDateIfNeeded(maxSwipes: 4, timeoutPerCheck: 1.5),
             "End date should appear after enabling recovered"
         )
+        let endDateRow = app.cells.containing(.staticText, identifier: AXID.injuryFormEndDate).firstMatch
+        XCTAssertTrue(revealInjuryFormElement(endDateRow), "The complete End Date row must be visible")
         VisualAudit.capture("H08 add recovered end date")
 
         let saveButton = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
@@ -645,6 +647,8 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormRecoveredToggle), "Recovered must fit")
         XCTAssertTrue(app.setSwitch(AXID.injuryFormRecoveredToggle, to: true, fallbackLabel: "Recovered"))
         XCTAssertTrue(app.scrollToInjuryEndDateIfNeeded(maxSwipes: 8, timeoutPerCheck: 1))
+        let endDateRow = app.cells.containing(.staticText, identifier: AXID.injuryFormEndDate).firstMatch
+        XCTAssertTrue(revealInjuryFormElement(endDateRow), "The complete MAX End Date row must be visible")
         VisualAudit.capture("H08 MAX recovered end date")
 
         XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormMemo), "Memo must fit")
@@ -700,6 +704,10 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
     private func revealInjuryFormControl(_ identifier: String, maxMoves: Int = 12) -> Bool {
         let target = app.descendants(matching: .any)[identifier].firstMatch
+        return revealInjuryFormElement(target, maxMoves: maxMoves)
+    }
+
+    private func revealInjuryFormElement(_ target: XCUIElement, maxMoves: Int = 12) -> Bool {
         let containers = app.collectionViews.allElementsBoundByIndex
             + app.tables.allElementsBoundByIndex
             + app.scrollViews.allElementsBoundByIndex

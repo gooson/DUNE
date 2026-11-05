@@ -79,3 +79,7 @@ related_brainstorms:
 `89b6b349` iPhone의 기존 Add/Edit 2건은 SDK에서 통과했지만, 실제 Light 화면의 Cancel/Save와 선택값이 약 2.5–2.6:1, 섹션 제목·기호가 약 3.3:1로 낮았다. 해당 SDK·PNG/AX와 리뷰는 이전 소스로 보존한다. H08 NavigationStack 안의 Light tint만 현재 테마 accent를 진하게 섞어 사용하고, 네 섹션의 제목·기호는 이미 사용하던 `DS.Color.textSecondary`로 표시한다. Dark tint와 심각도 색, 원래 선택·저장 로직은 유지한다. 다른 화면의 전역 tint를 바꾸지 않는다.
 
 수정 소스에서 같은 핵심 9건·4런과 새 native를 확인한다. 미사용 전용 iPad는 바로 다음 검증에 재사용하고, 이미 끝난 iPhone 원본은 현재 수정 소스의 통과나 before 비교로 계산하지 않는다. 이번 보완은 입력값·문구·클릭 대상·도메인을 바꾸지 않는다.
+
+## iPad 종료일 캡처 보완
+
+`df28b100`의 iPad 핵심 2건과 실제 컴파일은 통과했다. 실제 Light toolbar·선택값 대비는 9.12–9.72:1, 네 섹션 헤더는 5.73–5.95:1로 전경 보완을 확인했다. 다만 Recovered 캡처는 End Date가 Form 아래에 있어 시각 증거로 부족했다. 기존 존재 검사 뒤 이미 검토한 실제 viewport 기반 reveal을 normal Add와 MAX의 End Date를 포함하는 native Cell 전체에 적용한다. 기존 ID는 라벨에 있으므로 라벨만 보였다는 assertion으로 DatePicker 전체를 보였다고 판단하지 않는다. 앱·기존 Edit 메서드는 그대로이므로 iPad Edit 결과는 재사용하고 Add 한 건만 새로 확인한다. 이후 phone 2·Duo 접힘 3·펼침 2를 최종 테스트 소스로 실행한다. 이전 실행·캡처·finding은 그대로 보존한다.
