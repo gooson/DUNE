@@ -1,0 +1,32 @@
+{
+  "profile": "iphone-normal",
+  "source": "fd01b1e93c9f78023a23c622e30ea9ebf4a7bdc0",
+  "sdk": {
+    "executed": 2,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 0
+  },
+  "reviewed_pairs": [
+    {
+      "screen": "T17",
+      "checkpoint": "T17 available answer and composer",
+      "source": "fd01b1e93c9f78023a23c622e30ea9ebf4a7bdc0",
+      "png": ".codex-checks/batch02/evidence/phone-fd01b1e9-native-fix-passed/attachments/8314286B-5C0C-48D8-8E09-6DE83A970967.png",
+      "png_sha256": "d5e7fd3820d9cc712cb5cb264c8b0290fb5cbfa7f555c3ab967d739794ad0634",
+      "ax": ".codex-checks/batch02/evidence/phone-fd01b1e9-native-fix-passed/attachments/EAB82D7F-AB21-4189-A29E-14118F4DA24D.txt",
+      "ax_sha256": "650c2e8dbd141e772a75ef6ec5dad642d2d9ee29678ee2e20f4aa6988ba6f27d"
+    },
+    {
+      "screen": "T17",
+      "checkpoint": "T17 unavailable explanation",
+      "source": "fd01b1e93c9f78023a23c622e30ea9ebf4a7bdc0",
+      "png": ".codex-checks/batch02/evidence/phone-fd01b1e9-native-fix-passed/attachments/6F3C3E54-4FE8-4A9F-B88E-D6D0854FBDC0.png",
+      "png_sha256": "f31f5caf5ca0f9f7a5bee9709c40169231f2ed03ea84fdf42c4f550dd36b33ce",
+      "ax": ".codex-checks/batch02/evidence/phone-fd01b1e9-native-fix-passed/attachments/6B74F783-2F36-4B6E-B38E-DF051A943FAA.txt",
+      "ax_sha256": "9c5054e4763ee9357e4ff3bc14b1bf1cb35eb57b1e385e75e2845bac1c4779b5"
+    }
+  ],
+  "disposition": "Both prior T17 P2 native findings resolved on the two fresh checkpoints",
+  "retained_limit": "Typed second reply completion P3 remains accepted/unverified"
+}
