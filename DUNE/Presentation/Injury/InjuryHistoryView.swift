@@ -15,6 +15,7 @@ struct InjuryHistoryView: View {
     @State private var cachedEndedRecords: [InjuryRecord] = []
 
     @State private var showingStatistics = false
+    @State private var selectedInjury: InjuryDetailDestination?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -89,7 +90,7 @@ struct InjuryHistoryView: View {
                 volumeComparisons: viewModel.volumeComparisons
             )
         }
-        .navigationDestination(for: InjuryDetailDestination.self) { destination in
+        .navigationDestination(item: $selectedInjury) { destination in
             InjuryDetailView(record: allRecords.first { $0.id == destination.recordID })
         }
         .sheet(isPresented: $viewModel.isShowingEditSheet) {
@@ -134,9 +135,21 @@ struct InjuryHistoryView: View {
     }
 
     private func injuryRow(_ record: InjuryRecord) -> some View {
-        NavigationLink(value: InjuryDetailDestination(recordID: record.id)) {
-            injuryRowContent(record)
+        let recordID = record.id
+        return Button {
+            selectedInjury = InjuryDetailDestination(recordID: recordID)
+        } label: {
+            HStack(spacing: DS.Spacing.sm) {
+                injuryRowContent(record)
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .accessibilityHidden(true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
         .accessibilityIdentifier(rowIdentifier(for: record))
         .swipeActions(edge: .trailing) {
             Button { recordToDelete = record } label: {

@@ -2,7 +2,8 @@
 tags: [injury, detail, hero, dynamic-type, batch01]
 date: 2026-11-05
 category: plan
-status: approved
+status: done
+updated: 2026-11-06
 confidence: high
 ---
 
@@ -39,3 +40,7 @@ confidence: high
 - 날짜/기간을 새 계산으로 바꾸지 않으며 durationDays의 기존 경계를 유지한다.
 - 통합 tip의 결과를 별도 PR에 연결할 때 관련 App/fixture/UI 내용과 의존성의 동일성을 확인한다.
 - UI 변경이므로 SwiftUI·Apple UX·데이터/성능/구조 리뷰와 실제 캡처는 구현 후 필요하다. 현재 계획/브라우저 시안은 검증 증거가 아니다.
+
+## 검증 결과
+
+관련 기기·상태의 SDK와 독립 PNG/AX 검토를 완료했다. [실제 화면·원본 출처](../design/full-redesign-map/review/h10-injury-detail-native-2026-11-06/index.html)의 실행 소스와 범위를 따른다. PR·머지는 GitHub 기록으로 확인한다.

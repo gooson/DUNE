@@ -1,0 +1,124 @@
+{
+  "screen": "H10",
+  "rows": [
+    "H09",
+    "H10"
+  ],
+  "pair_count": 8,
+  "expected_pairs": 8,
+  "missing": [],
+  "status": "ready",
+  "root_writes": 0,
+  "base_sha256": {
+    "portal_index_html": "34bc136d86ea4d57668471ead83079d905415f730d271dd6b359bf3b00065334",
+    "profiles": {
+      "regular": {
+        "capture_index_json": "f8821d6b6f53b5d9def546f26ac48bba8c0e4e4205e56a2538fd20c219b9c2a7",
+        "index_html": "f32d47c760b14606a8f8dbe5f484f71377e9cc2c9da6ac3458535ec2840be983",
+        "wellness_board_png": "aaa901f3a19545f42cd8a450ed14318b901cf0e53de6729e7caa3319fb545ad4"
+      },
+      "ipad": {
+        "capture_index_json": "1054dc3de557717b7894c0ef630e06dca75ad26b96d9884675629e6c4d413f30",
+        "index_html": "0b72198759eca18d397e92d4228d54b162a86bde46acdc3432459d5034104e4c",
+        "wellness_board_png": "e98576a6c04ee5a6205216001bfc86530d36c40aebeb41d59dd73eb96c9cd7b8"
+      },
+      "duo": {
+        "capture_index_json": "37811a9df1a85d266e9d5de0e639c2ea8c39f095cafd4cc3e2c842b37738e2fb",
+        "index_html": "ccc90a9912e7c771a619b49ec5a34a807820987350fb06f0511f460dbfc45c8b",
+        "wellness_board_png": "f1f22ec8d90e8c97d6088002f1d39a78ef1401b4a053f0087c4ac2ff0f9074b5"
+      },
+      "duo-open": {
+        "capture_index_json": "95230ed6351d16344e8546e6091296d7e9e9ad3ed5af3e93d7f9b13303f6a3fe",
+        "index_html": "61e61b441fc412132a2967948e56f487dc9b1bd6d400c7acc204d4b4ce084179",
+        "wellness_board_png": "593f22c5003f190b7601fa97a2c2d5f19caea930688a301afc38dd085db103db"
+      }
+    }
+  },
+  "profiles": {
+    "regular": {
+      "updated_rows": {
+        "H09": {
+          "source_png": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/h09-followup/iphone-normal/history-row-list.png",
+          "source_ax": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/h09-followup/iphone-normal/history-row-list.txt",
+          "png_sha256": "3285cc7463b1702070085ebde9b4875c38ba8c93f43f2f1aa17877182dbfd34c",
+          "ax_sha256": "a4571afa8334387fba969ca13a7c1f1aefeb1143163913ebc815d8996bb777c1"
+        },
+        "H10": {
+          "source_png": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/iphone-normal/active-summary.png",
+          "source_ax": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/iphone-normal/active-summary.txt",
+          "png_sha256": "733d63827d8a83914ea68466877d09eb123f8c49f599f92afe745c828f414292",
+          "ax_sha256": "71140517aa16e9432e04f3928d1b05f68a9859f02e3e8f2e910adc50c4827aa7"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "16707243c97931aad39a15778551a34c66ebe348020dee02c1e6e6a86e04dbe0"
+    },
+    "ipad": {
+      "updated_rows": {
+        "H09": {
+          "source_png": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/h09-followup/ipad-normal/history-row-list.png",
+          "source_ax": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/h09-followup/ipad-normal/history-row-list.txt",
+          "png_sha256": "505f5e8fe6895146f40664b44fc9ca24bd18489fd48221e0503f3cac836ca4de",
+          "ax_sha256": "784845ece7d919e7a18dee7a49154c1bb9f71c0524380d9b8d83247049f5fa03"
+        },
+        "H10": {
+          "source_png": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/ipad-normal/active-summary.png",
+          "source_ax": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/ipad-normal/active-summary.txt",
+          "png_sha256": "d9c79a9ca611c5879332e038f77e1d2cbf53e9593762e0260d783c8b147a7cb6",
+          "ax_sha256": "0c5ec81ab2ffab2dc90e87b9dce6532baf9ee5e324a3b61ef0b12bc785f19320"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "51676293e4ba20bebb681902ac838d0acb18e5c85cb1c3799cb8290eb5419ca8"
+    },
+    "duo": {
+      "updated_rows": {
+        "H09": {
+          "source_png": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/h09-followup/duo-closed/history-row-list.png",
+          "source_ax": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/h09-followup/duo-closed/history-row-list.txt",
+          "png_sha256": "5a655848a21f1848fe6088b7792e0b0a8e6be79181bb5c95be93d5047d3e52f6",
+          "ax_sha256": "35cd14117bca9deeba485ce08b56033a6d275b3e918f0254717e038771a5bef1"
+        },
+        "H10": {
+          "source_png": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/duo-closed/current/normal-summary.png",
+          "source_ax": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/duo-closed/current/normal-summary.txt",
+          "png_sha256": "99026284d81f879e7eaef1f5a27f5c37b5dcb48325c50f10c4da3fa2cce9eae7",
+          "ax_sha256": "caf875d58d24563d4eff5dee69857f6d459eee1f03543b832428da499b6f27a9"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "aa2110b04728c33cab839820e1ab59fcda2812ced0904db98eab7ca396fce4cf"
+    },
+    "duo-open": {
+      "updated_rows": {
+        "H09": {
+          "source_png": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/h09-followup/duo-open/history-row-list.png",
+          "source_ax": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/h09-followup/duo-open/history-row-list.txt",
+          "png_sha256": "c3bd341a3b4d2d2d4d8cc1b72b756f5224aab831e637b087e55befcae0f78b11",
+          "ax_sha256": "543d76af84b26e5dc49306ab8080c1b404657c6bbde5792785f04a4ec5faaa0c"
+        },
+        "H10": {
+          "source_png": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/duo-open/current/normal-summary.png",
+          "source_ax": "/private/tmp/batch01-galleries/h10-injury-detail-native-2026-11-06/assets/duo-open/current/normal-summary.txt",
+          "png_sha256": "52fb000679080109230a0b4fba646cdc1626c0bbb5aa9724b08becae609ba968",
+          "ax_sha256": "9e8658643278d12a57af046c199b06b70ade2d9063dcfddc1ec67bf0716f5e66"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "ebe5656ce527821e9d2fcc574ff7e53688c015cdc3dcd6d6fb72490ad71e3663"
+    }
+  },
+  "staged_path": "/private/tmp/batch01-actual-map-stage/H10"
+}

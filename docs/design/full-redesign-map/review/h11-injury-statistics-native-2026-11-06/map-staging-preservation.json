@@ -1,0 +1,99 @@
+{
+  "screen": "H11",
+  "rows": [
+    "H11"
+  ],
+  "pair_count": 4,
+  "expected_pairs": 4,
+  "missing": [],
+  "status": "ready",
+  "root_writes": 0,
+  "base_sha256": {
+    "portal_index_html": "512706c3767275608cc7281e2a4fc77b20813f83f7bc570949b3174fc7f3e048",
+    "profiles": {
+      "regular": {
+        "capture_index_json": "f9fda890d1bf646550df4f92ff9f351c584457cbe1b2765361b1ae8cd6950c5b",
+        "index_html": "dfb66381c6a4dd7e91ca8ccb6fe91f9da0a272ba17121b548858fde43100122c",
+        "wellness_board_png": "16707243c97931aad39a15778551a34c66ebe348020dee02c1e6e6a86e04dbe0"
+      },
+      "ipad": {
+        "capture_index_json": "4658f19ec20094d917833584cf9e34b91842ffc672342c69c069345a595fc124",
+        "index_html": "4b9a37bdb2cb0bffdeb45f79b8c75a7d0c8a06e5d5763c8d92b53c3c455cd790",
+        "wellness_board_png": "51676293e4ba20bebb681902ac838d0acb18e5c85cb1c3799cb8290eb5419ca8"
+      },
+      "duo": {
+        "capture_index_json": "c16b99da9c08ff3a04b79785509f56fd4c16a4f3902f98e3b18c5b3d896fc1ed",
+        "index_html": "13c39e5022ec115438b8601529cba57a5940c12a3d39cf5884b554806ebc1344",
+        "wellness_board_png": "aa2110b04728c33cab839820e1ab59fcda2812ced0904db98eab7ca396fce4cf"
+      },
+      "duo-open": {
+        "capture_index_json": "f80f224366b75ef7bb041b2d1e41ce386f087cad1c008d4c01bd592a8d536262",
+        "index_html": "db0494e35c47c782a03d8fccf4c9b02b3af58519abba336463f996f4e9ac26d2",
+        "wellness_board_png": "ebe5656ce527821e9d2fcc574ff7e53688c015cdc3dcd6d6fb72490ad71e3663"
+      }
+    }
+  },
+  "profiles": {
+    "regular": {
+      "updated_rows": {
+        "H11": {
+          "source_png": "/private/tmp/batch01-galleries/h11-injury-statistics-native-2026-11-06/assets/phone/h11-injury-statistics-overview-values.png",
+          "source_ax": "/private/tmp/batch01-galleries/h11-injury-statistics-native-2026-11-06/assets/phone/h11-injury-statistics-overview-values.txt",
+          "png_sha256": "7453d2b5314cd8354952e040a55716c7faf4066b9255079e50dae5dfeb41894c",
+          "ax_sha256": "41c24a3c96a511934c7bc3262c848bc7b99c37038af8eabe7117134278af16db"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "d86735149ecf3cc02f9500aac2c54608ead40960ac34ee5fa9b3a61af5fa5447"
+    },
+    "ipad": {
+      "updated_rows": {
+        "H11": {
+          "source_png": "/private/tmp/batch01-galleries/h11-injury-statistics-native-2026-11-06/assets/ipad/normal-overview.png",
+          "source_ax": "/private/tmp/batch01-galleries/h11-injury-statistics-native-2026-11-06/assets/ipad/normal-overview.txt",
+          "png_sha256": "639b93bac21954a96dcd03094b08d27a6510a516dfe2de26bdb5cb8a84e5fb21",
+          "ax_sha256": "417458e769a1c1427215a7aac0a2c1fa944c16981b5932848d68b435de5aed19"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "2506fe64c069ea63b9e88af903a26f80b2ae1b18bcb0e0cf8284e66f6cd50944"
+    },
+    "duo": {
+      "updated_rows": {
+        "H11": {
+          "source_png": "/private/tmp/batch01-galleries/h11-injury-statistics-native-2026-11-06/assets/duo-closed/normal-overview.png",
+          "source_ax": "/private/tmp/batch01-galleries/h11-injury-statistics-native-2026-11-06/assets/duo-closed/normal-overview.txt",
+          "png_sha256": "65188446b6c8ec075ffaef897f9c75a219cd1caef32ddabac1c552f40f12c16f",
+          "ax_sha256": "07ae158ebaaf4263765180a50d38347c9e31dad79ace90447c913046eb7446fc"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "2768ac92ab02e97e571dd5b992b1998411d223ec806b7ad91392de9bb8b8bb87"
+    },
+    "duo-open": {
+      "updated_rows": {
+        "H11": {
+          "source_png": "/private/tmp/batch01-galleries/h11-injury-statistics-native-2026-11-06/assets/duo-open/normal-overview.png",
+          "source_ax": "/private/tmp/batch01-galleries/h11-injury-statistics-native-2026-11-06/assets/duo-open/normal-overview.txt",
+          "png_sha256": "f40a85fb65a18e2fb40523357f80b292f0944365695f7af3d5dd4c540b90e27e",
+          "ax_sha256": "16370215d9863ececa2dd101663e69849db74e8433855c1a05e43b9e0c15e6fa"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "cfb9c79a200f0d4ef47bbb5e1e63adbd3534ebc6007c2a24ec867d6201435f38"
+    }
+  },
+  "staged_path": "/private/tmp/batch01-actual-map-stage/H11"
+}

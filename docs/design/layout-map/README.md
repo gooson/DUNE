@@ -211,3 +211,7 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-05 H12 수면 설명 시트는 [배치 계약](sleep-debt-explanation-h12.html)과 [테마 시안](../theme-map/themes/dune-sleep-debt-explanation-h12.html)의 원문·표식·스크롤 보존 기준을 따른다. 정적 제안이며 실제 검증 전이다.
 
 2026-11-05 H13 수면 설명 시트는 [배치 계약](waso-explanation-h13.html)과 [테마 시안](../theme-map/themes/dune-waso-explanation-h13.html)의 원문·표식·스크롤 보존 기준을 따른다. 정적 제안이며 실제 검증 전이다.
+
+2026-11-06 H10: [실제 화면과 출처](../full-redesign-map/review/h10-injury-detail-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.
+
+2026-11-06 H11: [실제 화면과 출처](../full-redesign-map/review/h11-injury-statistics-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.

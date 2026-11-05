@@ -1,0 +1,59 @@
+{
+  "scope": "H11 Injury Statistics only, iPad mini normal English/Light; independent archived PNG/AX review",
+  "sourceRevision": "2d1656bb83a3a41ce02e1c41352769e0a867b032",
+  "sourceSHA256": {
+    "DUNE/Presentation/Injury/InjuryStatisticsView.swift": "9571e18e2f3f1695dde6d0167f3c115665be29b7a9aeb3dd8090016ea3ba5268"
+  },
+  "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed",
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "9887CB98-B0D6-47F1-B14C-8D501AEA3962",
+    "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+    "modelName": "iPad mini (A20 Pro)",
+    "osBuildNumber": "24B8117",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "SDKaggregate": {
+    "executed": 4,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 1
+  },
+  "SDKH11case": {
+    "name": "testInjuryStatisticsRouteOpensFromHistory()",
+    "result": "Passed",
+    "durationInSeconds": 59.992095947265625
+  },
+  "SDKaggregateFailure": "H10 testInjuryHistoryRowOpensDetailAndEditForm failed at line 600; not included in H11 pass",
+  "selectedPairs": [
+    {
+      "checkpoint": "overview",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed/attachments/571117BA-A3A5-4FDA-89D6-6CE860004D91.png",
+      "PNGSHA256": "639b93bac21954a96dcd03094b08d27a6510a516dfe2de26bdb5cb8a84e5fb21",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed/attachments/774A5F82-D0E6-4085-BC5D-4B1561F587A0.txt",
+      "AXSHA256": "417458e769a1c1427215a7aac0a2c1fa944c16981b5932848d68b435de5aed19"
+    },
+    {
+      "checkpoint": "frequency graph",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed/attachments/1442B4D7-2647-41A4-93BD-A8B71C6DE11C.png",
+      "PNGSHA256": "639b93bac21954a96dcd03094b08d27a6510a516dfe2de26bdb5cb8a84e5fb21",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed/attachments/07F57A69-9132-4A97-B29D-99B0AB483283.txt",
+      "AXSHA256": "b0b63cadbe42823f890840b6544cec0ead77ddef3c1a1d0cf6fc982ce3b0a4c3"
+    },
+    {
+      "checkpoint": "tap BackButton",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed/attachments/02C33C04-1E44-4353-9765-AC70FB2B7279.png",
+      "PNGSHA256": "2b73e548cd4475b84a8f159508169e41ba52724c99b703e02eff7b852aaacf95",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed/attachments/26377F00-79B2-40C5-A34C-469271BA10BE.txt",
+      "AXSHA256": "c0272296815007b9b6d0c6ebd71c8494a9b3ddbdf1a479f85323f9b262f298a9"
+    },
+    {
+      "checkpoint": "before teardown",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed/attachments/A80FE737-7627-42CC-8E9C-5844BC8E656C.png",
+      "PNGSHA256": "2b73e548cd4475b84a8f159508169e41ba52724c99b703e02eff7b852aaacf95",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed/attachments/EAD05FE4-3826-48D3-97F4-FD0D6A2F6BD0.txt",
+      "AXSHA256": "625042b993aa1abfb7ab34045dc71bbd857f476302c8c0df3843cab55b66a798"
+    }
+  ]
+}

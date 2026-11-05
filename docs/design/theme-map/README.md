@@ -302,3 +302,7 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 - H12 수면 설명: [정적 시안](themes/dune-sleep-debt-explanation-h12.html). 원래 설명·임계값·색 표식을 보존하며 실제 기록·캡처가 아니다.
 
 - H13 수면 설명: [정적 시안](themes/dune-waso-explanation-h13.html). 원래 설명·임계값·색 표식을 보존하며 실제 기록·캡처가 아니다.
+
+2026-11-06 H10: [실제 화면과 출처](../full-redesign-map/review/h10-injury-detail-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.
+
+2026-11-06 H11: [실제 화면과 출처](../full-redesign-map/review/h11-injury-statistics-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.
