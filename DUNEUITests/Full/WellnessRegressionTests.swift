@@ -737,7 +737,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
         ])
         launchApp(with: configuration)
-        openHistory()
+        openHistory(maxRevealAttempts: 36)
         let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "8 metrics")).firstMatch
         reveal(row)
         XCTAssertTrue(row.exists && row.isHittable, "Synthetic posture record should be reachable")
@@ -906,18 +906,18 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         VisualAudit.capture("Posture result from visual audit record")
     }
 
-    private func openHistory() {
+    private func openHistory(maxRevealAttempts: Int = 18) {
         let viewAll = app.buttons["wellness-link-posturehistory"].firstMatch
-        reveal(viewAll)
+        reveal(viewAll, maxAttempts: maxRevealAttempts)
         XCTAssertTrue(viewAll.exists && viewAll.isHittable, "Posture history entry should be reachable")
         viewAll.auditTap()
         XCTAssertTrue(app.staticTexts["Posture History"].firstMatch.waitForExistence(timeout: 5))
         VisualAudit.capture("Posture history top")
     }
 
-    private func reveal(_ element: XCUIElement) {
+    private func reveal(_ element: XCUIElement, maxAttempts: Int = 18) {
         let scroll = app.scrollViews.firstMatch
-        for _ in 0..<18 {
+        for _ in 0..<maxAttempts {
             // Duo may report offscreen descendants as hittable. The target's
             // tap point must also lie inside the visible scroll viewport.
             let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
