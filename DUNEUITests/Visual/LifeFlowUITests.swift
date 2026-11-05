@@ -34,6 +34,28 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         }
     }
 
+    @discardableResult
+    private func revealPastRecordControl(_ identifier: String) -> XCUIElement {
+        let form = app.collectionViews.firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 5))
+        let control = app.descendants(matching: .any)[identifier].firstMatch
+        // The native medium Form instantiates lower rows only after scrolling.
+        for _ in 0..<8 where !control.exists { form.swipeUp(velocity: .slow) }
+        XCTAssertTrue(app.revealFullyVisible(identifier, in: form, maxMoves: 12))
+        return control
+    }
+
+    private func tapPastRecordAction(_ identifier: String) {
+        let form = app.collectionViews.firstMatch
+        let action = app.buttons[identifier].firstMatch
+        // Restore the sheet toolbar after scrolling within the actual Form.
+        for _ in 0..<10 where !(action.exists && action.isHittable) {
+            form.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(action.waitForExistence(timeout: 5) && action.isHittable)
+        action.auditTap()
+    }
+
     func testCompactHeroAndTodayReadingOrder() {
         navigateToLife()
         let hero = waitForElement(AXID.lifeHeroProgress, timeout: 15)
@@ -108,28 +130,30 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         let readDate = app.staticTexts["habit-past-record-hero-date"].firstMatch
         XCTAssertTrue(readDate.waitForExistence(timeout: 5) && !readDate.label.isEmpty)
         capture("L09 duration record hero and date")
-        app.buttons["habit-past-record-cancel"].firstMatch.auditTap()
+        tapPastRecordAction("habit-past-record-cancel")
         XCTAssertEqual(hero.label, baseline, "Opening and canceling the sheet should preserve today")
 
         XCTAssertTrue(app.openLifeHabitActions(named: "Water", maxSwipes: 8))
         app.buttons["life-habit-action-past-record"].firstMatch.auditTap()
         XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.textFields["habit-past-record-total"].firstMatch.waitForExistence(timeout: 5),
-                      "Count habits use a numeric total")
         XCTAssertTrue(app.staticTexts["habit-past-record-hero-date"].firstMatch.exists)
+        revealPastRecordControl("habit-past-record-total")
+        XCTAssertTrue(app.textFields["habit-past-record-total"].firstMatch.exists,
+                      "Count habits use a numeric total")
         capture("L09 count record")
-        app.buttons["habit-past-record-cancel"].firstMatch.auditTap()
+        tapPastRecordAction("habit-past-record-cancel")
 
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-completed-toggle", maxSwipes: 8))
         app.buttons["life-completed-toggle"].firstMatch.auditTap()
         XCTAssertTrue(app.openLifeHabitActions(named: "Morning Stretch", maxSwipes: 8))
         app.buttons["life-habit-action-past-record"].firstMatch.auditTap()
         XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.switches["habit-past-record-completed"].firstMatch.waitForExistence(timeout: 5),
-                      "Check habits use a completion toggle")
         XCTAssertTrue(app.staticTexts["habit-past-record-hero-date"].firstMatch.exists)
+        revealPastRecordControl("habit-past-record-completed")
+        XCTAssertTrue(app.switches["habit-past-record-completed"].firstMatch.exists,
+                      "Check habits use a completion toggle")
         capture("L09 check record")
-        app.buttons["habit-past-record-cancel"].firstMatch.auditTap()
+        tapPastRecordAction("habit-past-record-cancel")
         XCTAssertEqual(hero.label, baseline, "Canceling every record kind must preserve today")
     }
 
@@ -140,6 +164,7 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(app.openLifeHabitActions(named: "Read", maxSwipes: 8))
         app.buttons["life-habit-action-past-record"].firstMatch.auditTap()
         XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
+        revealPastRecordControl("habit-past-record-total")
         let total = app.textFields["habit-past-record-total"].firstMatch
         XCTAssertTrue(total.waitForExistence(timeout: 5))
         XCTAssertTrue(total.value.map { String(describing: $0).contains("30") } ?? false,
@@ -148,9 +173,8 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
         capture("L09 focused duration total and software keyboard")
         XCTAssertTrue(app.fillTextInput("habit-past-record-total", with: "40"))
-        let save = app.buttons["habit-past-record-save"].firstMatch
-        XCTAssertTrue(save.waitForExistence(timeout: 5))
-        save.auditTap()
+        _ = app.dismissKeyboardIfPresent()
+        tapPastRecordAction("habit-past-record-save")
         XCTAssertTrue(app.navigationBars["Past Record"].waitForNonExistence(timeout: 5))
         XCTAssertEqual(hero.label, baseline, "A past record must not change today's completion")
         XCTAssertTrue(app.openLifeHabitActions(named: "Read", maxSwipes: 8))
@@ -199,15 +223,15 @@ final class LifeFlowUITests: SeededUITestBaseCase {
             let displayedDate = app.staticTexts["habit-past-record-hero-date"].firstMatch.label
             XCTAssertFalse(displayedDate.isEmpty, "The actual selected past date should remain readable")
             capture("L09 MAX \(habit) selected date")
-            XCTAssertTrue(app.revealFullyVisible("habit-past-record-date", in: form))
-            XCTAssertTrue(app.revealFullyVisible(controlID, in: form))
+            revealPastRecordControl("habit-past-record-date")
+            revealPastRecordControl(controlID)
             XCTAssertTrue(app.descendants(matching: .any)[controlID].firstMatch.isHittable)
             capture("L09 MAX \(habit) record control")
 
+            let dateHero = app.staticTexts["habit-past-record-hero-date"].firstMatch
+            for _ in 0..<10 where !dateHero.exists { form.swipeDown(velocity: .slow) }
             XCTAssertTrue(app.revealTextBody("habit-past-record-hero-date", in: form))
-            let cancel = app.buttons["habit-past-record-cancel"].firstMatch
-            XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
-            cancel.auditTap()
+            tapPastRecordAction("habit-past-record-cancel")
             XCTAssertTrue(sheet.waitForNonExistence(timeout: 5))
             XCTAssertEqual(today.label, baseline, "Cancel must preserve today's progress")
         }

@@ -362,11 +362,13 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         let history = app.buttons[historyID].firstMatch
         VisualAudit.capture("L04 archived row and History")
         history.auditTap()
-        let historySheet = app.descendants(matching: .any)["habit-management-history-screen"].firstMatch
-        XCTAssertTrue(historySheet.waitForExistence(timeout: 8))
-        XCTAssertTrue(historySheet.staticTexts["Morning Stretch"].exists)
+        let historySheet = app.staticTexts.matching(identifier: "habit-management-history-screen")
+            .matching(NSPredicate(format: "label == %@", "Morning Stretch")).firstMatch
+        XCTAssertTrue(historySheet.waitForExistence(timeout: 8) && historySheet.isHittable)
+        XCTAssertEqual(historySheet.label, "Morning Stretch")
         VisualAudit.capture("L04 archived history")
-        let close = historySheet.buttons["Close"].firstMatch
+        let close = app.buttons.matching(identifier: "habit-management-history-screen")
+            .matching(NSPredicate(format: "label == %@", "Close")).firstMatch
         XCTAssertTrue(close.waitForExistence(timeout: 5) && close.isHittable)
         close.auditTap()
         XCTAssertTrue(historySheet.waitForNonExistence(timeout: 5))
