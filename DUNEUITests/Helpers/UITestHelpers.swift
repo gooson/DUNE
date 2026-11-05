@@ -1308,6 +1308,12 @@ extension XCUIApplication {
             viewport = CGRect(x: viewport.minX, y: top,
                               width: viewport.width, height: max(0, viewport.maxY - top))
         }
+        let tabBar = tabBars.firstMatch
+        if tabBar.exists && tabBar.isHittable && tabBar.frame.intersects(viewport) {
+            let bottom = min(viewport.maxY, tabBar.frame.minY)
+            viewport = CGRect(x: viewport.minX, y: viewport.minY,
+                              width: viewport.width, height: max(0, bottom - viewport.minY))
+        }
         return viewport
     }
 
