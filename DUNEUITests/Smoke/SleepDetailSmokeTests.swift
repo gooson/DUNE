@@ -68,6 +68,64 @@ final class SleepDetailSmokeTests: UITestBaseCase {
         )
     }
 
+    func testSleepExplanationSheetsAtMaximumAccessibilityTextSize() throws {
+        // Both explanation sheets include 20 host-synchronized capture checkpoints.
+        if VisualAudit.isEnabled { executionTimeAllowance = 480 }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        try navigateToSleepDetail()
+        let detailScroll = app.scrollViews[AXID.metricDetailScreen("sleep")].firstMatch
+
+        XCTAssertTrue(app.revealFullyVisible("sleep-debt-info-button", in: detailScroll))
+        app.buttons["sleep-debt-info-button"].firstMatch.auditTap()
+        let debtSheet = app.scrollViews["sleep-debt-info-sheet"].firstMatch
+        XCTAssertTrue(debtSheet.waitForExistence(timeout: 5))
+        for identifier in ["sleep-debt-info-title", "sleep-debt-info-baseline",
+                           "sleep-debt-info-calculation", "sleep-debt-info-excess",
+                           "sleep-debt-info-levels"] {
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: debtSheet), "MAX missing or clipped \(identifier)")
+            if identifier != "sleep-debt-info-title" && identifier != "sleep-debt-info-levels" {
+                XCTAssertTrue(app.revealTextBody(identifier + "-body", in: debtSheet),
+                              "MAX missing or clipped \(identifier)-body")
+            }
+        }
+        XCTAssertTrue(app.revealFullyVisible("sleep-debt-info-level-severe", in: debtSheet))
+        VisualAudit.capture("H12 MAX sleep debt levels")
+        XCTAssertTrue(app.revealFullyVisible("sleep-debt-info-close", in: debtSheet))
+        app.buttons["sleep-debt-info-close"].firstMatch.auditTap()
+        let debtDismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: debtSheet
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [debtDismissed], timeout: 5), .completed)
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5))
+
+        XCTAssertTrue(app.revealFullyVisible("sleep-waso-info-button", in: detailScroll))
+        app.buttons["sleep-waso-info-button"].firstMatch.auditTap()
+        let wasoSheet = app.scrollViews["sleep-waso-info-sheet"].firstMatch
+        XCTAssertTrue(wasoSheet.waitForExistence(timeout: 5))
+        for identifier in ["sleep-waso-info-title", "sleep-waso-info-definition",
+                           "sleep-waso-info-measurement", "sleep-waso-info-scoring",
+                           "sleep-waso-info-guide"] {
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: wasoSheet), "MAX missing or clipped \(identifier)")
+            if identifier != "sleep-waso-info-title" && identifier != "sleep-waso-info-guide" {
+                XCTAssertTrue(app.revealTextBody(identifier + "-body", in: wasoSheet),
+                              "MAX missing or clipped \(identifier)-body")
+            }
+        }
+        XCTAssertTrue(app.revealFullyVisible("sleep-waso-info-guide-poor", in: wasoSheet))
+        VisualAudit.capture("H13 MAX WASO score guide")
+        XCTAssertTrue(app.revealFullyVisible("sleep-waso-info-close", in: wasoSheet))
+        app.buttons["sleep-waso-info-close"].firstMatch.auditTap()
+        let wasoDismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: wasoSheet
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [wasoDismissed], timeout: 5), .completed)
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5))
+    }
+
     func testSleepDebtExplanationOpens() throws {
         try navigateToSleepDetail()
         let detailScroll = app.scrollViews[AXID.metricDetailScreen("sleep")].firstMatch
@@ -100,19 +158,31 @@ final class SleepDetailSmokeTests: UITestBaseCase {
 
     func testWakeAnalysisExplanationOpens() throws {
         try navigateToSleepDetail()
-        XCTAssertTrue(revealSleepInfoButton("sleep-waso-info-button"))
-        app.buttons["sleep-waso-info-button"].firstMatch.auditTap()
-        XCTAssertTrue(app.scrollViews["sleep-waso-info-sheet"].firstMatch.waitForExistence(timeout: 5))
-        VisualAudit.capture("WASO explanation")
-    }
-
-    private func revealSleepInfoButton(_ identifier: String) -> Bool {
         let detailScroll = app.scrollViews[AXID.metricDetailScreen("sleep")].firstMatch
-        guard detailScroll.waitForExistence(timeout: 5) else { return false }
-        let button = app.buttons[identifier].firstMatch
-        for _ in 0..<14 where !button.isHittable {
-            detailScroll.swipeUp(velocity: .slow)
+        XCTAssertTrue(app.revealFullyVisible("sleep-waso-info-button", in: detailScroll))
+        app.buttons["sleep-waso-info-button"].firstMatch.auditTap()
+        let sheet = app.scrollViews["sleep-waso-info-sheet"].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 5))
+        for identifier in [
+            "sleep-waso-info-title", "sleep-waso-info-definition",
+            "sleep-waso-info-measurement", "sleep-waso-info-scoring"
+        ] {
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: sheet), "Missing or clipped \(identifier)")
+            if identifier != "sleep-waso-info-title" {
+                XCTAssertTrue(app.revealTextBody(identifier + "-body", in: sheet),
+                              "Missing or clipped \(identifier)-body")
+            }
         }
-        return button.isHittable
+        VisualAudit.capture("H13 WASO explanation body")
+        XCTAssertTrue(app.revealFullyVisible("sleep-waso-info-guide", in: sheet))
+        XCTAssertTrue(app.revealFullyVisible("sleep-waso-info-guide-poor", in: sheet))
+        VisualAudit.capture("H13 WASO score guide")
+        let close = app.buttons["sleep-waso-info-close"].firstMatch
+        XCTAssertTrue(close.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.revealFullyVisible("sleep-waso-info-close", in: sheet))
+        close.auditTap()
+        let dismissed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: sheet)
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed)
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5), "Close must return to Sleep detail")
     }
 }

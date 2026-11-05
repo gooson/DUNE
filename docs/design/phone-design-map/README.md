@@ -313,3 +313,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-06 H11: [실제 화면과 출처](../full-redesign-map/review/h11-injury-statistics-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.
 
 2026-11-06 H12: [실제 화면과 출처](../full-redesign-map/review/h12-sleep-debt-explanation-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.
+
+2026-11-06 H13: [실제 화면과 출처](../full-redesign-map/review/h13-wake-analysis-explanation-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.

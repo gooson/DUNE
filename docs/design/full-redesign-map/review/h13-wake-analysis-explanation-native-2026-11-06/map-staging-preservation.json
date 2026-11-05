@@ -1,0 +1,99 @@
+{
+  "screen": "H13",
+  "rows": [
+    "H13"
+  ],
+  "pair_count": 4,
+  "expected_pairs": 4,
+  "missing": [],
+  "status": "ready",
+  "root_writes": 0,
+  "base_sha256": {
+    "portal_index_html": "ead86274e938ba441adb2d1ee6b8204740373793e15bd059c40bd37585ebde58",
+    "profiles": {
+      "regular": {
+        "capture_index_json": "d47baebd8338e410ae666ee45b06c0f3a74eb5d240d3af6bd4e7c7e845021f39",
+        "index_html": "df783dd6ecf94375414b0f73f4cab5eeb460c381dc724746a427bb3f549e0f21",
+        "wellness_board_png": "9a59a22658d8e6921b74756b78a71ba705f4f3c47954227e6e5a9d4bf04c2c00"
+      },
+      "ipad": {
+        "capture_index_json": "9759838cc0c3291762fb7a091a06216944e5752dd20b938960e4235e9c67cd38",
+        "index_html": "8cf827b9fea637782af2ae94312ea91c53b20bd1f0b82dc16b7c7d67319dc425",
+        "wellness_board_png": "df129b3d1b7ab7736e801597eb51bee850b23882bf69ec38da2e423475f0780b"
+      },
+      "duo": {
+        "capture_index_json": "4dffe55da382b4d5cc6bd7aa771510de69e63bb020832858c2e1801225e7791d",
+        "index_html": "9e06627e6bdb9cd94db5afcbe27709f1fb80ec74fa7692b93a5e1bce10a3436b",
+        "wellness_board_png": "e99218bc02ea6093128753a0d6771d02c3d2e7a80b760afe84e62a1d16c8d7b8"
+      },
+      "duo-open": {
+        "capture_index_json": "8d63e110388086c3cc687de93073db1e2cdd82cbaacddc7ea9c1b3ee579c4281",
+        "index_html": "23c9ad603c7f04a4624195f0d6593d0fe78f1dd8f5d12872d81554148d14ad6e",
+        "wellness_board_png": "ee9c9ccecf7507ae5f4c3850b834094339862a49e45b723189843e95ead43f51"
+      }
+    }
+  },
+  "profiles": {
+    "regular": {
+      "updated_rows": {
+        "H13": {
+          "source_png": "/private/tmp/batch01-galleries/h13-wake-analysis-explanation-native-2026-11-06/assets/iphone-normal/body.png",
+          "source_ax": "/private/tmp/batch01-galleries/h13-wake-analysis-explanation-native-2026-11-06/assets/iphone-normal/body.txt",
+          "png_sha256": "ed299e5f52f2930e191ced71b02f975d9aa69d39c8722de1a20ec8a668bbc65c",
+          "ax_sha256": "b472fb48047a0920503387d471069e036f2f7377b0a220933142365e68afa97c"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "2d46afacb31244ad377b09bb19155e9cf5b7e419d791fbdb75778313585afad8"
+    },
+    "ipad": {
+      "updated_rows": {
+        "H13": {
+          "source_png": "/private/tmp/batch01-galleries/h13-wake-analysis-explanation-native-2026-11-06/assets/ipad/normal-body.png",
+          "source_ax": "/private/tmp/batch01-galleries/h13-wake-analysis-explanation-native-2026-11-06/assets/ipad/normal-body.txt",
+          "png_sha256": "66b6a22a4b92b4f5b06eef7072da17341a712cd38e4c048a78fb38bd280b48b1",
+          "ax_sha256": "ebb23469530f1af823b007f1a1481121a617da2f6df6684e6926d9df610859c7"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "50a1d4833f93ac3a46597be9773be4c135d0ea3bc6ff90222b151918a36a4c6a"
+    },
+    "duo": {
+      "updated_rows": {
+        "H13": {
+          "source_png": "/private/tmp/batch01-galleries/h13-wake-analysis-explanation-native-2026-11-06/assets/duo-closed/normal-body.png",
+          "source_ax": "/private/tmp/batch01-galleries/h13-wake-analysis-explanation-native-2026-11-06/assets/duo-closed/normal-body.txt",
+          "png_sha256": "787876480d7e4f1359d402afb2cf320c1a8b6a1aa46f1096cbbd28c4862bb9ea",
+          "ax_sha256": "408c8c4b7fa8b0839d1f99e7012f4623c4ea1ad7c7b8b690d44c1d28f89975b9"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "244dfd42d7a8f5e8ca8ffa2498dc204bd181f6e3556e952c57c55224dde7dafa"
+    },
+    "duo-open": {
+      "updated_rows": {
+        "H13": {
+          "source_png": "/private/tmp/batch01-galleries/h13-wake-analysis-explanation-native-2026-11-06/assets/duo-open/normal-body.png",
+          "source_ax": "/private/tmp/batch01-galleries/h13-wake-analysis-explanation-native-2026-11-06/assets/duo-open/normal-body.txt",
+          "png_sha256": "b54336441830e1a45854ce384d968cdc4e1815327b6e6ee026ec5d69084b4abd",
+          "ax_sha256": "b2b807cadc54f343a15a76b8a94711b768c965a95f42d2b9ed6359c39b746a62"
+        }
+      },
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "only_board": "04-웰니스.png",
+      "board_sha256": "86ca2e704c7f76396bc902d9feed68717b379642f01f2bfe63199bb7ba4833b9"
+    }
+  },
+  "staged_path": "/private/tmp/batch01-actual-map-stage/H13"
+}

@@ -828,10 +828,11 @@
       "name": "H13 · 수면 설명",
       "title": "원래 설명 · 임계값 · 색 표식 · 큰 글씨 스크롤",
       "file": "dune-waso-explanation-h13.html",
-      "detail": "설명 시트의 정적 DUNE 시안. 원래 설명·등급 범위·색 점을 유지하며 실제 기록·의료 판정·네이티브 캡처가 아니다. 아직 실제 검증 전이다.",
+      "detail": "H13 배치와 표현을 설명하는 정적 시안이다. 실제 앱의 네 기본 프로필과 접힌 Duo 최대 글씨 관련 검증·출처는 연결된 네이티브 갤러리에서 확인한다. 시안 자체는 실제 기록이나 앱 캡처가 아니다.",
       "implementation": {
         "layout": "../layout-map/waso-explanation-h13.html",
-        "status": "proposal-not-native-verified"
+        "status": "native-targeted-verified",
+        "native": "../full-redesign-map/review/h13-wake-analysis-explanation-native-2026-11-06/index.html"
       }
     }
   ]
