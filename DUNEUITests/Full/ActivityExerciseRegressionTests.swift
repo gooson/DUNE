@@ -4299,8 +4299,24 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testVisualAuditHeartRateRecoveryExplanation() throws {
+        openHeartRateRecoveryExplanation(maximumAX: false)
+        assertHeartRateRecoveryExplanation()
+    }
+
+    func testHeartRateRecoveryExplanationAtMaximumAccessibilitySize() throws {
+        openHeartRateRecoveryExplanation(maximumAX: true)
+        assertHeartRateRecoveryExplanation()
+    }
+
+    private func openHeartRateRecoveryExplanation(maximumAX: Bool) {
         var configuration = launchConfiguration
         configuration.additionalArguments.append("--ui-design-map-heart-rate-recovery")
+        configuration.additionalArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        if maximumAX {
+            configuration.additionalArguments += [
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ]
+        }
         launchApp(with: configuration)
         openNotificationHub()
         let route = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationWorkoutRouteID)].firstMatch
@@ -4312,9 +4328,50 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let infoID = "heart-rate-recovery-info-button"
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(infoID, maxSwipes: 10))
         app.buttons[infoID].firstMatch.auditTap()
-        XCTAssertTrue(app.scrollViews["heart-rate-recovery-info-sheet"].firstMatch
-            .waitForExistence(timeout: 5))
-        VisualAudit.capture("Heart rate recovery explanation")
+        XCTAssertTrue(app.scrollViews["heart-rate-recovery-info-sheet"].firstMatch.waitForExistence(timeout: 5))
+    }
+
+    private func assertHeartRateRecoveryExplanation() {
+        let scroll = app.scrollViews["heart-rate-recovery-info-sheet"].firstMatch
+        let title = app.staticTexts["heart-rate-recovery-info-title"].firstMatch
+        XCTAssertTrue(app.revealFullyVisible("heart-rate-recovery-info-title", in: scroll))
+        XCTAssertEqual(title.label, "What is Heart Rate Recovery?")
+        VisualAudit.capture("H14 recovery explanation title")
+
+        let sections: [(String, String, String)] = [
+            ("definition", "Definition", "Heart Rate Recovery (HRR₁) measures how quickly your heart rate drops in the first minute after exercise. A faster drop indicates better cardiovascular fitness and autonomic nervous system recovery."),
+            ("measurement", "How It's Measured", "Your peak heart rate at the end of the workout is compared to the heart rate measured about 60 seconds after the workout ends. The difference is your HRR₁ value.")
+        ]
+        for (key, heading, body) in sections {
+            let prefix = "heart-rate-recovery-info-\(key)"
+            XCTAssertTrue(app.revealFullyVisible(prefix, in: scroll))
+            XCTAssertTrue(app.descendants(matching: .any)[prefix].firstMatch.label.contains(heading))
+            XCTAssertEqual(app.staticTexts["\(prefix)-body"].firstMatch.label, body)
+            XCTAssertTrue(app.revealTextBody("\(prefix)-body", in: scroll))
+            let paragraph = app.staticTexts["\(prefix)-body"].firstMatch
+            if paragraph.isHittable && scroll.frame.intersection(app.windows.firstMatch.frame).contains(paragraph.frame) {
+                VisualAudit.capture("H14 recovery \(key) body")
+            }
+        }
+        XCTAssertTrue(app.revealFullyVisible("heart-rate-recovery-info-guide", in: scroll))
+        XCTAssertTrue(app.descendants(matching: .any)["heart-rate-recovery-info-guide"].firstMatch.label.contains("Rating Guide"))
+        for (rating, label, range) in [("good", "Good", "> 20 bpm"),
+                                       ("normal", "Normal", "12–20 bpm"),
+                                       ("low", "Low", "< 12 bpm")] {
+            let identifier = "heart-rate-recovery-info-rating-\(rating)"
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: scroll))
+            let rowLabel = app.descendants(matching: .any)[identifier].firstMatch.label
+            XCTAssertTrue(rowLabel.contains(label) && rowLabel.contains(range))
+        }
+        VisualAudit.capture("H14 recovery rating guide")
+        XCTAssertTrue(app.revealFullyVisible("heart-rate-recovery-info-close", in: scroll))
+        let close = app.buttons["heart-rate-recovery-info-close"].firstMatch
+        XCTAssertTrue(close.isHittable)
+        XCTAssertGreaterThanOrEqual(close.frame.width, 44)
+        XCTAssertGreaterThanOrEqual(close.frame.height, 44)
+        close.auditTap()
+        XCTAssertTrue(scroll.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.healthkitWorkoutDetailScreen].firstMatch.exists)
     }
 
     func testNotificationMissingWorkoutRouteShowsFallback() throws {

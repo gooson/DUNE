@@ -65,89 +65,172 @@ struct HeartRateRecoveryRow: View {
 
 /// Explains what HRR₁ means and how the rating is determined.
 struct HeartRateRecoveryInfoSheet: View {
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 headerSection
-                definitionSection
-                measurementSection
-                Divider()
+                explanationCard(icon: "heart.text.clipboard", title: "Definition", identifier: "heart-rate-recovery-info-definition") {
+                    Text("Heart Rate Recovery (HRR₁) measures how quickly your heart rate drops in the first minute after exercise. A faster drop indicates better cardiovascular fitness and autonomic nervous system recovery.")
+                }
+                explanationCard(icon: "applewatch", title: "How It's Measured", identifier: "heart-rate-recovery-info-measurement") {
+                    Text("Your peak heart rate at the end of the workout is compared to the heart rate measured about 60 seconds after the workout ends. The difference is your HRR₁ value.")
+                }
                 ratingGuideSection
             }
             .padding(DS.Spacing.xl)
+            .frame(maxWidth: 680)
+            .frame(maxWidth: .infinity)
         }
         .accessibilityIdentifier("heart-rate-recovery-info-sheet")
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
 
-    // MARK: - Header
-
     private var headerSection: some View {
-        HStack(spacing: DS.Spacing.sm) {
-            Image(systemName: "info.circle.fill")
-                .font(.title3)
-                .foregroundStyle(DS.Color.heartRate)
+        VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            if dynamicTypeSize.isAccessibilitySize {
+                HStack(alignment: .top) {
+                    headerIcon
+                    Spacer(minLength: DS.Spacing.sm)
+                    headerCloseButton
+                }
+                headerTitle
+            } else {
+                HStack(alignment: .top, spacing: DS.Spacing.md) {
+                    headerIcon
+                    headerTitle
+                    headerCloseButton
+                }
+            }
 
-            Text("What is Heart Rate Recovery?")
-                .font(.headline)
-
-            Spacer()
+            Image(systemName: "arrow.down.heart.fill")
+                .font(.system(size: 42))
+                .foregroundStyle(palette.heroAccent)
+                .frame(width: 74, height: 74)
+                .background(palette.heroAccent.opacity(0.12), in: Circle())
+                .accessibilityHidden(true)
         }
+        .padding(DS.Spacing.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xl))
+        .overlay { RoundedRectangle(cornerRadius: DS.Radius.xl).strokeBorder(palette.border, lineWidth: 1) }
     }
 
-    // MARK: - Definition
-
-    private var definitionSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            InfoSheetHelpers.SectionHeader(icon: "heart.text.clipboard", title: "Definition")
-
-            Text("Heart Rate Recovery (HRR₁) measures how quickly your heart rate drops in the first minute after exercise. A faster drop indicates better cardiovascular fitness and autonomic nervous system recovery.")
-                .font(.subheadline)
-                .foregroundStyle(DS.Color.textSecondary)
-        }
+    private var headerIcon: some View {
+        Image(systemName: "info.circle.fill")
+            .font(.title3.weight(.semibold))
+            .foregroundStyle(palette.heroAccent)
+            .padding(DS.Spacing.sm)
+            .background(palette.heroAccent.opacity(0.16), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+            .accessibilityHidden(true)
     }
 
-    // MARK: - Measurement
-
-    private var measurementSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            InfoSheetHelpers.SectionHeader(icon: "applewatch", title: "How It's Measured")
-
-            Text("Your peak heart rate at the end of the workout is compared to the heart rate measured about 60 seconds after the workout ends. The difference is your HRR₁ value.")
-                .font(.subheadline)
-                .foregroundStyle(DS.Color.textSecondary)
-        }
+    private var headerTitle: some View {
+        Text("What is Heart Rate Recovery?")
+            .font(.title3.bold())
+            .foregroundStyle(palette.ink)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityIdentifier("heart-rate-recovery-info-title")
     }
 
-    // MARK: - Rating Guide
+    private var headerCloseButton: some View {
+        Button { dismiss() } label: {
+            Image(systemName: "xmark")
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(palette.ink)
+                .frame(width: 44, height: 44)
+                .background(palette.ink.opacity(0.12), in: Circle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text("Close"))
+        .accessibilityIdentifier("heart-rate-recovery-info-close")
+    }
+
+    private func explanationCard<Content: View>(
+        icon: String,
+        title: LocalizedStringKey,
+        identifier: String,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                InfoSheetHelpers.SectionHeader(icon: icon, title: title)
+                    .accessibilityIdentifier(identifier)
+                content()
+                    .font(.subheadline)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("\(identifier)-body")
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
 
     private var ratingGuideSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            InfoSheetHelpers.SectionHeader(icon: "gauge.with.needle", title: "Rating Guide")
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                InfoSheetHelpers.SectionHeader(icon: "gauge.with.needle", title: "Rating Guide")
+                    .accessibilityIdentifier("heart-rate-recovery-info-guide")
+                VStack(spacing: 0) {
+                    ratingRow(label: "Good", range: "> 20 bpm", color: HeartRateRecovery.Rating.good.color, identifier: "heart-rate-recovery-info-rating-good")
+                    Divider()
+                    ratingRow(label: "Normal", range: "12–20 bpm", color: HeartRateRecovery.Rating.normal.color, identifier: "heart-rate-recovery-info-rating-normal")
+                    Divider()
+                    ratingRow(label: "Low", range: "< 12 bpm", color: HeartRateRecovery.Rating.low.color, identifier: "heart-rate-recovery-info-rating-low")
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
 
-            VStack(spacing: DS.Spacing.xs) {
-                ratingRow(label: "Good", range: "> 20 bpm", color: HeartRateRecovery.Rating.good.color)
-                ratingRow(label: "Normal", range: "12–20 bpm", color: HeartRateRecovery.Rating.normal.color)
-                ratingRow(label: "Low", range: "< 12 bpm", color: HeartRateRecovery.Rating.low.color)
+    private func ratingRow(label: LocalizedStringKey, range: String, color: Color, identifier: String) -> some View {
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    HStack(spacing: DS.Spacing.md) {
+                        ratingDot(color)
+                        Text(label).font(.subheadline)
+                    }
+                    Text(range)
+                        .font(.subheadline.monospacedDigit())
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .padding(.leading, 8 + DS.Spacing.md)
+                }
+            } else {
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.md) {
+                    ratingDot(color)
+                    Text(label)
+                        .font(.subheadline)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer(minLength: DS.Spacing.sm)
+                    Text(range)
+                        .font(.subheadline.monospacedDigit())
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: true, vertical: false)
+                }
             }
         }
+        .padding(.vertical, DS.Spacing.sm)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier(identifier)
     }
 
-    // MARK: - Helpers
-
-    private func ratingRow(label: LocalizedStringKey, range: String, color: Color) -> some View {
-        HStack {
-            Circle()
-                .fill(color)
-                .frame(width: 8, height: 8)
-            Text(label)
-                .font(.subheadline)
-            Spacer()
-            Text(range)
-                .font(.subheadline.monospacedDigit())
-                .foregroundStyle(DS.Color.textSecondary)
-        }
+    private func ratingDot(_ color: Color) -> some View {
+        Circle()
+            .fill(color)
+            .frame(width: 8, height: 8)
+            .accessibilityHidden(true)
     }
+}
+
+#Preview {
+    HeartRateRecoveryInfoSheet()
 }
