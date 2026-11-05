@@ -310,3 +310,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-06 H12: [실제 화면과 출처](../full-redesign-map/review/h12-sleep-debt-explanation-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.
 
 2026-11-06 H13: [실제 화면과 출처](../full-redesign-map/review/h13-wake-analysis-explanation-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.
+
+2026-11-06 H14: [실제 선택 화면과 출처](../full-redesign-map/review/h14-heart-rate-recovery-explanation-native-2026-11-06/index.html). 영어·Light 네 기본 상태와 접힌 Duo 최대 글씨의 해당 메서드 범위다.

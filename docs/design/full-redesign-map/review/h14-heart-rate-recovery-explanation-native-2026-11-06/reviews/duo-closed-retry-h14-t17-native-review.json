@@ -1,0 +1,433 @@
+{
+  "status": "independent native review of H14 MAX and T17 MAX; completed retry SDK 3 passed/0 failed/0 skipped",
+  "source_revision": "36bc89794a2fc557239ba3db81c2c949a7af7192",
+  "host": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979",
+  "device_uid": "E48056D9-F243-45F5-8267-7F5A3FA87A01",
+  "pose_degrees": "0.0",
+  "active_lcd": "1398x2034 LCD activeOn; LCD-1 off",
+  "methods": [
+    {
+      "method": "ActivityExerciseRegressionTests/testHeartRateRecoveryExplanationAtMaximumAccessibilitySize",
+      "checkpoints": [
+        1,
+        13
+      ],
+      "raw_sdk_status": "Passed in completed retry SDK archive",
+      "findings_P1_P2": []
+    },
+    {
+      "method": "DesignMapAdditionalRoutesTests/testHealthDataQAAtMaximumAccessibilitySize",
+      "checkpoints": [
+        14,
+        35
+      ],
+      "raw_sdk_status": "Passed in completed retry SDK archive",
+      "findings_P1_P2": []
+    }
+  ],
+  "source_sha256": {
+    "DUNE/Presentation/Shared/Extensions/HeartRateRecovery+View.swift": "7d6cff27fa112e92da889171aebcdab00fe0010d18fb1c2c5281fb7dbb0e671d",
+    "DUNE/Presentation/Dashboard/HealthDataQASheet.swift": "4a3c39338a7bb2521210b0c9f332193f627b9299bd404fcac7d6d5ae8869589e",
+    "DUNE/Presentation/Dashboard/HealthDataQAViewModel.swift": "1284b0454b97683d02b5fa74eba322f87cc6680488faa6c8e9b31b11bd3abbde"
+  },
+  "close_frame_points": [
+    298.0,
+    44.0,
+    48.0,
+    48.0
+  ],
+  "required_ax_checks": {
+    "6": [
+      "heart-rate-recovery-info-title",
+      "heart-rate-recovery-info-close"
+    ],
+    "7": [
+      "heart-rate-recovery-info-title",
+      "heart-rate-recovery-info-close"
+    ],
+    "11": [
+      "heart-rate-recovery-info-guide",
+      "heart-rate-recovery-info-rating-good",
+      "heart-rate-recovery-info-rating-normal",
+      "heart-rate-recovery-info-rating-low"
+    ],
+    "12": [
+      "heart-rate-recovery-info-button"
+    ],
+    "16": [
+      "health-qa-overview-body",
+      "health-qa-overview-guide",
+      "health-qa-browse-records",
+      "health-qa-done"
+    ],
+    "19": [
+      "health-qa-prompt-sleep"
+    ],
+    "21": [
+      "health-qa-answer-body",
+      "health-qa-fallback-label",
+      "health-qa-input"
+    ],
+    "23": [
+      "health-query-done"
+    ],
+    "24": [
+      "health-qa-browse-records",
+      "health-qa-done"
+    ],
+    "27": [
+      "health-qa-unavailable-title",
+      "health-qa-unavailable-body",
+      "health-qa-browse-records",
+      "health-qa-done"
+    ],
+    "30": [
+      "health-qa-browse-records"
+    ],
+    "31": [
+      "health-query-done"
+    ],
+    "32": [
+      "health-qa-browse-records",
+      "health-qa-done"
+    ],
+    "34": [
+      "dashboard-health-qa-card"
+    ]
+  },
+  "pairs": [
+    {
+      "checkpoint": 1,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY root after setup -[ActivityExerciseRegressionTests testHeartRateRecoveryExplanationAtMaximumAccessibilitySize] [DUNEUITests/UITestBaseCase.swift:145]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/001-1398x2034.png",
+      "png_sha256": "a7cb9ab6bbd7de710932686f0f55261168b502ad88d604b3ff261f1d446024ae",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/001-hierarchy.txt",
+      "ax_sha256": "621056c9da69b646756316296e5b358b8e18a5bc2bfbe24dfc83bed45808394d"
+    },
+    {
+      "checkpoint": 2,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap tab-today [DUNEUITests/UITestHelpers.swift:699]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/002-1398x2034.png",
+      "png_sha256": "97ee6cae5335a75445f732eeffaa1af103bea49ed9d23df4aea68d7e278d83b8",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/002-hierarchy.txt",
+      "ax_sha256": "a7eba285351001cb8f7b5086145eb5c92c55760f014d339f765f640fbed24550"
+    },
+    {
+      "checkpoint": 3,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap dashboard-toolbar-notifications [DUNEUITests/ActivityExerciseRegressionTests.swift:4943]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/003-1398x2034.png",
+      "png_sha256": "59901aa39d6adb3f522b6a02bcc5d40a1bdead03ad728a22ea2e8c9000e76ceb",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/003-hierarchy.txt",
+      "ax_sha256": "0966f62b58728e29472927013107aadb87c5252d6fafda6739cb654e1b80df94"
+    },
+    {
+      "checkpoint": 4,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap notification-row-workout-ui-test-activity-workout-running [DUNEUITests/ActivityExerciseRegressionTests.swift:4334]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/004-1398x2034.png",
+      "png_sha256": "2ef1e4c44f8038750493e8a8fc99e83ec5837a531cd16cb0e81d59a8043d3a5c",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/004-hierarchy.txt",
+      "ax_sha256": "78db2f7c4d21395649a7712ba600139905f5b3f21c68a1ffdd347b3937a443db"
+    },
+    {
+      "checkpoint": 5,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap heart-rate-recovery-info-button [DUNEUITests/ActivityExerciseRegressionTests.swift:4340]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/005-1398x2034.png",
+      "png_sha256": "93472804f9e8b773e453b32a1dcb6775d7b6b7660ad04a9db6969b965409a170",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/005-hierarchy.txt",
+      "ax_sha256": "4b98c195c5810a621657b99f42238e8f132cdde5f9f5cbbb1155411a2bcb8b95"
+    },
+    {
+      "checkpoint": 6,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY H14 recovery explanation title [DUNEUITests/ActivityExerciseRegressionTests.swift:4349]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/006-1398x2034.png",
+      "png_sha256": "93472804f9e8b773e453b32a1dcb6775d7b6b7660ad04a9db6969b965409a170",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/006-hierarchy.txt",
+      "ax_sha256": "6b1f7f79af01ec34b329a06ccf1a2f0b477ed34b4181090512a1dc799eff1076"
+    },
+    {
+      "checkpoint": 7,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY heart-rate-recovery-info-definition-body top [DUNEUITests/UITestHelpers.swift:1294]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/007-1398x2034.png",
+      "png_sha256": "f6cd77ee92b07c4e03dbf6b38e725bf8ec691558c726f29607e59d290d1978d4",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/007-hierarchy.txt",
+      "ax_sha256": "66361b22a567df026ef296d2b37cf427d95ccef24a4cdbb8afac99be6d0681a1"
+    },
+    {
+      "checkpoint": 8,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY heart-rate-recovery-info-definition-body bottom [DUNEUITests/UITestHelpers.swift:1296]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/008-1398x2034.png",
+      "png_sha256": "9effe6444f06ff8504d7463c0ac4d6dccf01cbe8cbeb61766b8f03da580a16df",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/008-hierarchy.txt",
+      "ax_sha256": "86534a0a5b07f8a590588e0282e64d40c6b8145ccc3b0fcfa8feb75347a277ee"
+    },
+    {
+      "checkpoint": 9,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY heart-rate-recovery-info-measurement-body top [DUNEUITests/UITestHelpers.swift:1294]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/009-1398x2034.png",
+      "png_sha256": "9effe6444f06ff8504d7463c0ac4d6dccf01cbe8cbeb61766b8f03da580a16df",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/009-hierarchy.txt",
+      "ax_sha256": "8d31ef412e8fa7807784937b8bca7411a2f4cd0c8813717b3541ac9ad33d1c8a"
+    },
+    {
+      "checkpoint": 10,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY heart-rate-recovery-info-measurement-body bottom [DUNEUITests/UITestHelpers.swift:1296]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/010-1398x2034.png",
+      "png_sha256": "867734006af6c171cdc50985d38eabc4c8aeecaa61d430ac36c0a897a1c3838f",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/010-hierarchy.txt",
+      "ax_sha256": "070d748deb819026fa27eb463209760391511a3616d24881729899510c04d456"
+    },
+    {
+      "checkpoint": 11,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY H14 recovery rating guide [DUNEUITests/ActivityExerciseRegressionTests.swift:4382]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/011-1398x2034.png",
+      "png_sha256": "d7772518844f72e334da69831eec56dbe587fbcf4697cbdf5d0faa183807a363",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/011-hierarchy.txt",
+      "ax_sha256": "2591af0636dcb6f76aad9f16590136eabeb4897ff673761313ced97c2d6b8d41"
+    },
+    {
+      "checkpoint": 12,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap heart-rate-recovery-info-close [DUNEUITests/ActivityExerciseRegressionTests.swift:4388]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/012-1398x2034.png",
+      "png_sha256": "4314a48900b42d02bbf293212aa9594f01a8d1a31cd44d6022eb087061178b81",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/012-hierarchy.txt",
+      "ax_sha256": "7baf4f2bece2fc06415d0ed2359cbdbaa305c21b237bc52e11f2a819851ae271"
+    },
+    {
+      "checkpoint": 13,
+      "method": "H14 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY before teardown -[ActivityExerciseRegressionTests testHeartRateRecoveryExplanationAtMaximumAccessibilitySize] [DUNEUITests/UITestBaseCase.swift:120]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/013-1398x2034.png",
+      "png_sha256": "4314a48900b42d02bbf293212aa9594f01a8d1a31cd44d6022eb087061178b81",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/013-hierarchy.txt",
+      "ax_sha256": "9a39e424223c26427997a404cdea7bfd24c776f98915b30ea7c5fabf99b9a272"
+    },
+    {
+      "checkpoint": 14,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY root after setup -[DesignMapAdditionalRoutesTests testHealthDataQAAtMaximumAccessibilitySize] [DUNEUITests/UITestBaseCase.swift:145]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/014-1398x2034.png",
+      "png_sha256": "b7fa172c24162f4642fa043aee04dbe7fc714b16ad3fc3fdea669d7f8123e75a",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/014-hierarchy.txt",
+      "ax_sha256": "20e51750d9f410b17e124c8024f6d7947f15d5bb59649b4545eb3366c444b2ba"
+    },
+    {
+      "checkpoint": 15,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap dashboard-health-qa-card [DUNEUITests/DesignMapAdditionalRoutesTests.swift:45]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/015-1398x2034.png",
+      "png_sha256": "7c180409552ba730eb7942f3ec101eb652cabc7ae15f4b410f8dd0d257beb939",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/015-hierarchy.txt",
+      "ax_sha256": "cf808a8d88b12de4fc91392072027736afccc9726af94105656d82eb86dcc126"
+    },
+    {
+      "checkpoint": 16,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY health-qa-overview-guide top [DUNEUITests/UITestHelpers.swift:1294]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/016-1398x2034.png",
+      "png_sha256": "7c180409552ba730eb7942f3ec101eb652cabc7ae15f4b410f8dd0d257beb939",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/016-hierarchy.txt",
+      "ax_sha256": "fce6807f94acf07c027cb6dbed6e196ea2b052dc04e065017364ad1070404a94"
+    },
+    {
+      "checkpoint": 17,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY health-qa-overview-guide bottom [DUNEUITests/UITestHelpers.swift:1296]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/017-1398x2034.png",
+      "png_sha256": "c99fc852d7977f8b79ac4cf67d80404c19c2dd26d6e3ff695d7e8c97f3897e13",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/017-hierarchy.txt",
+      "ax_sha256": "0c3f108c6aa1ac54ca3fe17a3352c17b0974b1558fde4687dd8d7979fd7c2fad"
+    },
+    {
+      "checkpoint": 18,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY T17 available overview [DUNEUITests/DesignMapAdditionalRoutesTests.swift:58]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/018-1398x2034.png",
+      "png_sha256": "c99fc852d7977f8b79ac4cf67d80404c19c2dd26d6e3ff695d7e8c97f3897e13",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/018-hierarchy.txt",
+      "ax_sha256": "056605cdf808a28fc6bc6835e64f668d265dc205c8868c7e89efa4187befd275"
+    },
+    {
+      "checkpoint": 19,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY T17 available suggested prompt [DUNEUITests/DesignMapAdditionalRoutesTests.swift:63]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/019-1398x2034.png",
+      "png_sha256": "e6f96d4eafbec063e5c40dd4a3084dcd37576993cf87345a29d0030f15989545",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/019-hierarchy.txt",
+      "ax_sha256": "eaccef5d2c8ee3e729ab2a0fd0f09eef4ba15d9742d1437cf1c61797648648d5"
+    },
+    {
+      "checkpoint": 20,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap health-qa-prompt-sleep [DUNEUITests/DesignMapAdditionalRoutesTests.swift:64]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/020-1398x2034.png",
+      "png_sha256": "c53e7206a74e922a075dec79060eb363bf83e82a7bb3ced9a2be41fc917239ba",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/020-hierarchy.txt",
+      "ax_sha256": "571c749e09f2388caab29366a68c44ff019926c58e898ba210ad0e5d80bbaf04"
+    },
+    {
+      "checkpoint": 21,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY T17 available answer and composer [DUNEUITests/DesignMapAdditionalRoutesTests.swift:72]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/021-1398x2034.png",
+      "png_sha256": "42c9f79c6ff791aedfabed0e44d6a593790a1417ab723dea0e651dbf6b564e96",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/021-hierarchy.txt",
+      "ax_sha256": "748d3e445ea89507426f95d19aaa0262a77a357cf098ed722e6065f222f7f1de"
+    },
+    {
+      "checkpoint": 22,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap health-qa-browse-records [DUNEUITests/DesignMapAdditionalRoutesTests.swift:124]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/022-1398x2034.png",
+      "png_sha256": "d4febb21f0c351ee82d7c2f5e19a8d49b03fadb6b0289dbd60ef5efc9de59bd1",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/022-hierarchy.txt",
+      "ax_sha256": "0c973133eabde85c5501b76bcab3ef7af01dc219e0de3b6bd4f75244d2ab2e01"
+    },
+    {
+      "checkpoint": 23,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY T17 browse records [DUNEUITests/DesignMapAdditionalRoutesTests.swift:127]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/023-1398x2034.png",
+      "png_sha256": "d4febb21f0c351ee82d7c2f5e19a8d49b03fadb6b0289dbd60ef5efc9de59bd1",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/023-hierarchy.txt",
+      "ax_sha256": "e9b41c094bcf11a91ed40a5dd3ffcdd6ac94602abfca2173c1769199cfe5f572"
+    },
+    {
+      "checkpoint": 24,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap health-query-done [DUNEUITests/DesignMapAdditionalRoutesTests.swift:130]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/024-1398x2034.png",
+      "png_sha256": "1c78f97dd1c0387b7fd281f0ceb76b16d4aa417dd81c73279de1e7a1ba572dcc",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/024-hierarchy.txt",
+      "ax_sha256": "ac380942b0904d478ae944fadf307e1b21e420d408b5e2db0bbb8c71c5e8fc7c"
+    },
+    {
+      "checkpoint": 25,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap health-qa-done [DUNEUITests/DesignMapAdditionalRoutesTests.swift:159]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/025-1398x2034.png",
+      "png_sha256": "ec2664fa7e203f2f8df6783764368037ab670a515b511d519e7b5301d058e010",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/025-hierarchy.txt",
+      "ax_sha256": "689c12383d97d79be392ae0c1eb09135e4a2bde3d8e82010fa16ecbcbd1448b8"
+    },
+    {
+      "checkpoint": 26,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap dashboard-health-qa-card [DUNEUITests/DesignMapAdditionalRoutesTests.swift:45]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/026-1398x2034.png",
+      "png_sha256": "eb39889caaa9192012fec5cfec7f4fe0aea6860692f0ed2afe531b283f34fa71",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/026-hierarchy.txt",
+      "ax_sha256": "98646f7bcb5875d9df9566f5157de2a78cbab344d456e65b4af0cc39a48b953b"
+    },
+    {
+      "checkpoint": 27,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY health-qa-unavailable-body top [DUNEUITests/UITestHelpers.swift:1294]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/027-1398x2034.png",
+      "png_sha256": "eb39889caaa9192012fec5cfec7f4fe0aea6860692f0ed2afe531b283f34fa71",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/027-hierarchy.txt",
+      "ax_sha256": "4e769179f37fbf5bcbb767f52c3e89e08240b50296a4445e946e680e3711b9f5"
+    },
+    {
+      "checkpoint": 28,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY health-qa-unavailable-body bottom [DUNEUITests/UITestHelpers.swift:1296]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/028-1398x2034.png",
+      "png_sha256": "5c3af6546bb121464c2db92e650cccbba5c08212fbb21b12ea8d79ec6c55dd1e",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/028-hierarchy.txt",
+      "ax_sha256": "ab137feb0e5850e12de07db2d4b2a4acd13eb2e7b15f7cadd974934faf8529ba"
+    },
+    {
+      "checkpoint": 29,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY T17 unavailable explanation [DUNEUITests/DesignMapAdditionalRoutesTests.swift:106]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/029-1398x2034.png",
+      "png_sha256": "3a97fec1703e1d65da186474fd036e2c446f2347cb65f2a2477480c146600d7c",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/029-hierarchy.txt",
+      "ax_sha256": "b30acbc25496c73510aaf20c2c661ce990521179d8f5402ea7ecb379b70f6a25"
+    },
+    {
+      "checkpoint": 30,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY T17 unavailable Browse route [DUNEUITests/DesignMapAdditionalRoutesTests.swift:110]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/030-1398x2034.png",
+      "png_sha256": "3a97fec1703e1d65da186474fd036e2c446f2347cb65f2a2477480c146600d7c",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/030-hierarchy.txt",
+      "ax_sha256": "9764077dfd1362f8d142fd0dbaa6e3f5444c0a62eacc99f2a1958402ba49f7d2"
+    },
+    {
+      "checkpoint": 31,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap health-qa-browse-records [DUNEUITests/DesignMapAdditionalRoutesTests.swift:124]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/031-1398x2034.png",
+      "png_sha256": "2003ce3fc73e9da0689a41c6949a9783301164fbba7e4026564ec6b122590334",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/031-hierarchy.txt",
+      "ax_sha256": "954fbfed1a5bbba6173b8ae94e16e267c676860a9c60d038a4c3b1d13483c67c"
+    },
+    {
+      "checkpoint": 32,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap health-query-done [DUNEUITests/DesignMapAdditionalRoutesTests.swift:130]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/032-1398x2034.png",
+      "png_sha256": "910ad937b04e37640da63899831ffc47ffa4d262a551db132e6101d0b0a05022",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/032-hierarchy.txt",
+      "ax_sha256": "db4ca6a3b98d034c3fbe7b739802b58a10aceefc2042b1d631534e8bab1362a1"
+    },
+    {
+      "checkpoint": 33,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY tap health-qa-done [DUNEUITests/DesignMapAdditionalRoutesTests.swift:159]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/033-1398x2034.png",
+      "png_sha256": "e079e439cd6d51f49dace19345672f95166bfea70a8696f94aae9e9e18a89511",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/033-hierarchy.txt",
+      "ax_sha256": "5ee4cd990eebcd819f9d4156f821ec254a7013d7b136dc8ea9b0d3befa4040cd"
+    },
+    {
+      "checkpoint": 34,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY T17 returned to Today [DUNEUITests/DesignMapAdditionalRoutesTests.swift:162]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/034-1398x2034.png",
+      "png_sha256": "e079e439cd6d51f49dace19345672f95166bfea70a8696f94aae9e9e18a89511",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/034-hierarchy.txt",
+      "ax_sha256": "e7cb6fa0e8c6cf94a6da652d70817b2ee26b2ac2e5fce81169abd6158960a8b2"
+    },
+    {
+      "checkpoint": 35,
+      "method": "T17 MAX",
+      "action": "DUNE_VISUAL_AUDIT_READY before teardown -[DesignMapAdditionalRoutesTests testHealthDataQAAtMaximumAccessibilitySize] [DUNEUITests/UITestBaseCase.swift:120]",
+      "png": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/035-1398x2034.png",
+      "png_sha256": "e079e439cd6d51f49dace19345672f95166bfea70a8696f94aae9e9e18a89511",
+      "ax": ".codex-checks/batch02/host/duo-0-failed3-retry1-36bc8979/035-hierarchy.txt",
+      "ax_sha256": "97048ff14783c69f83f74feb9e6844b643a5891d95d6ede07d7d9c5cc80a8672"
+    }
+  ],
+  "notes": [
+    "H14 definition and measurement paragraphs have distinct top/bottom checkpoints, rating guide retains Good >20, Normal 12\u201320, Low <12 and original 8pt dots; Close is 48x48 AX and sheet disappears by checkpoint 12.",
+    "T17 available and unavailable long copy has top/bottom checkpoints; prompt button and fixture response/fallback are exposed; exact Browse and Done toolbar controls reappear after returning from Health information; unavailable inline Browse route and final Today return present.",
+    "Toolbar AX rectangles are 36pt tall; XCTest taps and exact route returns succeeded, but AX frame alone does not prove a 44pt hit region. No broader accessibility target claim.",
+    "Inactive 2007x2853 LCD-1 screenshots excluded. Completed retry SDK is 3/3 passed; no publication or cross-profile completion claim."
+  ],
+  "archive": ".codex-checks/batch02/evidence/duo-closed-36bc8979-failed3-retry-passed",
+  "retry_sdk": {
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0
+  },
+  "historical_first_closed_sdk": {
+    "passed": 3,
+    "failed": 3,
+    "skipped": 0,
+    "archive": ".codex-checks/batch02/evidence/duo-closed-fd01b1e9-partial-failed"
+  }
+}

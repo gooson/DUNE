@@ -1,0 +1,186 @@
+{
+  "integrationSource": "1ae4fb4c333c0bd8890e91c3fac9d9c355511f3e",
+  "rows": [
+    {
+      "screen": "H14",
+      "profile": "iphone-normal",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+      "result": "Passed",
+      "sourceRevision": "fd01b1e93c9f78023a23c622e30ea9ebf4a7bdc0",
+      "sourceAppFile": "DUNE/Presentation/Shared/Extensions/HeartRateRecovery+View.swift",
+      "sourceAppSHA256": "7d6cff27fa112e92da889171aebcdab00fe0010d18fb1c2c5281fb7dbb0e671d",
+      "executedCatalogSHA256": "66009388245ea22698a53391b9af72850cba33564ccb9e6fe05d55e9d323bfc2",
+      "archive": ".codex-checks/batch02/evidence/phone-fd01b1e9-native-fix-passed",
+      "enclosingSDK": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "nativeReview": "reviews/phone-h14-native-P2-resolved.md",
+      "device": [
+        {
+          "architecture": "arm64",
+          "deviceId": "DEF37CCB-8B90-43FE-BB45-29DBDD7FCF52",
+          "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-l03-19e74dbe28e2",
+          "modelName": "iPhone 18 Pro Max",
+          "osBuildNumber": "24B8117",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        }
+      ],
+      "sourceClosure": "Current App bytes identical; source-specific test/resource deltas bounded in final-evidence-reuse-scope.json. Does not claim final PR HEAD execution.",
+      "retainedLocalNativeReview": ".codex-checks/batch02/quality/phone-h14-native-P2-resolved.md"
+    },
+    {
+      "screen": "H14",
+      "profile": "duo-closed-normal",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+      "result": "Passed",
+      "sourceRevision": "fd01b1e93c9f78023a23c622e30ea9ebf4a7bdc0",
+      "sourceAppFile": "DUNE/Presentation/Shared/Extensions/HeartRateRecovery+View.swift",
+      "sourceAppSHA256": "7d6cff27fa112e92da889171aebcdab00fe0010d18fb1c2c5281fb7dbb0e671d",
+      "executedCatalogSHA256": "66009388245ea22698a53391b9af72850cba33564ccb9e6fe05d55e9d323bfc2",
+      "archive": ".codex-checks/batch02/evidence/duo-closed-fd01b1e9-partial-failed",
+      "enclosingSDK": {
+        "executed": 6,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 3
+      },
+      "nativeReview": "reviews/duo-closed-h14-normal-native-review.md",
+      "device": [
+        {
+          "architecture": "arm64",
+          "deviceId": "E48056D9-F243-45F5-8267-7F5A3FA87A01",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+          "modelName": "iPhone",
+          "osBuildNumber": "24B91016s",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        }
+      ],
+      "sourceClosure": "Current App bytes identical; source-specific test/resource deltas bounded in final-evidence-reuse-scope.json. Does not claim final PR HEAD execution.",
+      "retainedLocalNativeReview": ".codex-checks/batch02/quality/duo-closed-h14-normal-native-review.md"
+    },
+    {
+      "screen": "H14",
+      "profile": "duo-closed-MAX",
+      "test": "ActivityExerciseRegressionTests/testHeartRateRecoveryExplanationAtMaximumAccessibilitySize()",
+      "result": "Passed",
+      "sourceRevision": "36bc89794a2fc557239ba3db81c2c949a7af7192",
+      "sourceAppFile": "DUNE/Presentation/Shared/Extensions/HeartRateRecovery+View.swift",
+      "sourceAppSHA256": "7d6cff27fa112e92da889171aebcdab00fe0010d18fb1c2c5281fb7dbb0e671d",
+      "executedCatalogSHA256": "66009388245ea22698a53391b9af72850cba33564ccb9e6fe05d55e9d323bfc2",
+      "archive": ".codex-checks/batch02/evidence/duo-closed-36bc8979-failed3-retry-passed",
+      "enclosingSDK": {
+        "executed": 3,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 0
+      },
+      "nativeReview": "reviews/duo-closed-retry-h14-t17-native-review.md",
+      "device": [
+        {
+          "architecture": "arm64",
+          "deviceId": "E48056D9-F243-45F5-8267-7F5A3FA87A01",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+          "modelName": "iPhone",
+          "osBuildNumber": "24B91016s",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        }
+      ],
+      "sourceClosure": "Current App bytes identical; source-specific test/resource deltas bounded in final-evidence-reuse-scope.json. Does not claim final PR HEAD execution.",
+      "retainedLocalNativeReview": ".codex-checks/batch02/quality/duo-closed-retry-h14-t17-native-review.md"
+    },
+    {
+      "screen": "H14",
+      "profile": "duo-open-normal",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+      "result": "Passed",
+      "sourceRevision": "36bc89794a2fc557239ba3db81c2c949a7af7192",
+      "sourceAppFile": "DUNE/Presentation/Shared/Extensions/HeartRateRecovery+View.swift",
+      "sourceAppSHA256": "7d6cff27fa112e92da889171aebcdab00fe0010d18fb1c2c5281fb7dbb0e671d",
+      "executedCatalogSHA256": "66009388245ea22698a53391b9af72850cba33564ccb9e6fe05d55e9d323bfc2",
+      "archive": ".codex-checks/batch02/evidence/duo-open-36bc8979-normal3-passed",
+      "enclosingSDK": {
+        "executed": 3,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 0
+      },
+      "nativeReview": "reviews/duo-open-h14-t17-native-review.md",
+      "device": [
+        {
+          "architecture": "arm64",
+          "deviceId": "E48056D9-F243-45F5-8267-7F5A3FA87A01",
+          "deviceName": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+          "modelName": "iPhone",
+          "osBuildNumber": "24B91016s",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        }
+      ],
+      "sourceClosure": "Current App bytes identical; source-specific test/resource deltas bounded in final-evidence-reuse-scope.json. Does not claim final PR HEAD execution.",
+      "retainedLocalNativeReview": ".codex-checks/batch02/quality/duo-open-h14-t17-native-review.md"
+    },
+    {
+      "screen": "H14",
+      "profile": "ipad-normal",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+      "result": "Passed",
+      "sourceRevision": "f97392084401db4c5108f241db1cb19901e072d8",
+      "sourceAppFile": "DUNE/Presentation/Shared/Extensions/HeartRateRecovery+View.swift",
+      "sourceAppSHA256": "7d6cff27fa112e92da889171aebcdab00fe0010d18fb1c2c5281fb7dbb0e671d",
+      "executedCatalogSHA256": "66009388245ea22698a53391b9af72850cba33564ccb9e6fe05d55e9d323bfc2",
+      "archive": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed",
+      "enclosingSDK": {
+        "executed": 3,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 0
+      },
+      "nativeReview": "reviews/ipad-h14-t17-native-review.md",
+      "device": [
+        {
+          "architecture": "arm64",
+          "deviceId": "EDE87B03-4B23-4EFD-B3FA-438D02BFCF59",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+          "modelName": "iPad mini (A20 Pro)",
+          "osBuildNumber": "24B8117",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        }
+      ],
+      "sourceClosure": "Current App bytes identical; source-specific test/resource deltas bounded in final-evidence-reuse-scope.json. Does not claim final PR HEAD execution.",
+      "retainedLocalNativeReview": ".codex-checks/batch02/quality/ipad-h14-t17-native-review.md"
+    }
+  ],
+  "retryHistoryPreserved": [
+    "phone-e2c4b3a0-failed",
+    "duo-closed-fd01b1e9-partial-failed",
+    "ipad-ko-d1afd659-first-failed"
+  ],
+  "P3Accepted": "T17typedsubmission only, firstreplyverified; secondreplycompletion notclaimed",
+  "notClaimed": [
+    "allPRHEADranalltests",
+    "fullsuite",
+    "Japanese native",
+    "Dark",
+    "physicaldevice",
+    "realmodelinference"
+  ],
+  "reuseScope": "final-evidence-reuse-scope.json",
+  "batch_scope": "Batch02 exactsource/case/native provenance; normal4profiles+closedMAX3+KoreaniPadT18one",
+  "batch_unique_method_profile_combinations": 16,
+  "batch_screen_contributions": {
+    "H14": 5,
+    "T17": 5,
+    "T18": 6
+  },
+  "gallery_screen": "H14",
+  "gallery_screen_contributions": 5,
+  "scope": "H14 selected-method subset; not a final PR HEAD or full-suite receipt",
+  "retainedBatchCatalogPostBuildReceipt": "quality/post-sdk-catalog-receipt.json"
+}
