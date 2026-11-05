@@ -1,0 +1,127 @@
+{
+  "source_revision": "2d5ffaea4620b66fce991bb7bb257436b004af5d",
+  "device_uid": "E8B836BD-53F9-44F0-8177-782FAF41F65B",
+  "device_model": "iPhone 18 Pro Max",
+  "os": "iOS Simulator 27.2",
+  "locale": "en-US",
+  "appearance": "Light",
+  "text_profile": "regular",
+  "attachments_manifest": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/manifest.json",
+  "attachments_manifest_sha256": "d9c3afa31ec9155111aad3138dbe4c09655e7b44ffe3cb479faa82700b0d1299",
+  "selector_result": {
+    "status": "passed",
+    "counts": {
+      "executed": 4,
+      "passed": 4,
+      "skipped": 0,
+      "failed": 0
+    },
+    "required_selectors_missing": []
+  },
+  "selected_pairs": [
+    {
+      "checkpoint": "H12 sleep debt explanation levels",
+      "test": "SleepDetailSmokeTests/testSleepDebtExplanationOpens()",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/DAD6FA94-AE51-4456-BBC8-75028A42DDF4.png",
+      "png_sha256": "f780bd98b345847532d35c70c9542811dc28b3cdb39f4dc7f0d351a592b0fb56",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/D6343366-D9CE-4A1B-B0C3-1E92E64E743D.txt",
+      "ax_sha256": "38b0279bf1e186c1cbb23b1440cde093ced17de7f7ab717a85a42a8b259d7b9d",
+      "timestamp": 1793884916.545
+    },
+    {
+      "checkpoint": "H12 sleep debt explanation body",
+      "test": "SleepDetailSmokeTests/testSleepDebtExplanationOpens()",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/39ECBA56-5AE1-46ED-B348-B2B55659BCBB.png",
+      "png_sha256": "f780bd98b345847532d35c70c9542811dc28b3cdb39f4dc7f0d351a592b0fb56",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/99E1029E-90DC-4080-A611-D7505A8FA08D.txt",
+      "ax_sha256": "b3f24dff680285c06028d06914d585ee5bf2ed1b2910b75d872c129e950d3f8d",
+      "timestamp": 1793884912.391
+    },
+    {
+      "checkpoint": "H13 WASO score guide",
+      "test": "SleepDetailSmokeTests/testWakeAnalysisExplanationOpens()",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/8180C7B6-DF02-4F2E-9205-4EEF3E5738B4.png",
+      "png_sha256": "57132cfc5e37a97983b44fed6904dd35dbff142e89a37438109530257ab4a874",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/DE8ED1AE-7234-423E-8C25-4A6ABF2B045C.txt",
+      "ax_sha256": "1c759bf7c2b899be0959cc11ebb00f0f1f1aa92c080a7fdf61eee1bab0b7235b",
+      "timestamp": 1793884975.286
+    },
+    {
+      "checkpoint": "H13 WASO explanation body",
+      "test": "SleepDetailSmokeTests/testWakeAnalysisExplanationOpens()",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/8E632C86-F57A-407C-8173-68EF7E495481.png",
+      "png_sha256": "57132cfc5e37a97983b44fed6904dd35dbff142e89a37438109530257ab4a874",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/7AAC3261-D26E-4366-ADB1-1606DC05255E.txt",
+      "ax_sha256": "a8ac4c4e095c43473563c19d524563de4cdc56037efd91fcca12885d4f7144d0",
+      "timestamp": 1793884971.137
+    },
+    {
+      "checkpoint": "H10 active Knee detail memo",
+      "test": "WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm()",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/B240A2BF-F12D-456B-93FD-E4F6863E3C2A.png",
+      "png_sha256": "64b9f4ec05a2eee51b8aae08f80f96623e620fc056844dd1d42a4079c69d9788",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/7980228D-9DDF-431C-8C10-010106B323CD.txt",
+      "ax_sha256": "773ebd9fe57edd5a1f60bc0c66ce086f8c18d51dd079859479ee8d4490861bbc",
+      "timestamp": 1793885034.012
+    },
+    {
+      "checkpoint": "H10 active Knee detail timeline",
+      "test": "WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm()",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/3615CFA6-F78C-4E69-88CD-B25D38F48639.png",
+      "png_sha256": "64b9f4ec05a2eee51b8aae08f80f96623e620fc056844dd1d42a4079c69d9788",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/64803583-36F3-496D-91D8-6AF916BF15E5.txt",
+      "ax_sha256": "a86b0e00fc5a7eb23b05d827b066a0c046dece61131f0eb20aad4302a8c9f30c",
+      "timestamp": 1793885031.192
+    },
+    {
+      "checkpoint": "H10 active Knee detail summary",
+      "test": "WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm()",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/8ED14BE6-B5A2-4E96-93A7-FAED9A3AECD2.png",
+      "png_sha256": "64b9f4ec05a2eee51b8aae08f80f96623e620fc056844dd1d42a4079c69d9788",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/F01A7EFE-EFF8-4894-81ED-1C201571E79C.txt",
+      "ax_sha256": "9c440ccdf9a4200321f9015c5a1bda62ca732d59f1fb1483fe377ab6776839d3",
+      "timestamp": 1793885025.314
+    },
+    {
+      "checkpoint": "H11 injury statistics frequency graph",
+      "test": "WellnessRegressionTests/testInjuryStatisticsRouteOpensFromHistory()",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/09499005-C111-4984-9294-4D704FD53B28.png",
+      "png_sha256": "7453d2b5314cd8354952e040a55716c7faf4066b9255079e50dae5dfeb41894c",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/38A1BFB7-5B2A-4AAC-B923-6B4009C5CCEE.txt",
+      "ax_sha256": "f8b8909de513a73777f8732e9cdad4e0bd781608ec1a69efbe8314429f4e5544",
+      "timestamp": 1793885088.406
+    },
+    {
+      "checkpoint": "H11 injury statistics overview values",
+      "test": "WellnessRegressionTests/testInjuryStatisticsRouteOpensFromHistory()",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/73334838-DA52-4F3D-A1B8-FD1A58DC5D38.png",
+      "png_sha256": "7453d2b5314cd8354952e040a55716c7faf4066b9255079e50dae5dfeb41894c",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/6E6957C7-4EF7-4380-B613-7D0174D0A773.txt",
+      "ax_sha256": "41c24a3c96a511934c7bc3262c848bc7b99c37038af8eabe7117134278af16db",
+      "timestamp": 1793885085.646
+    }
+  ],
+  "findings": [
+    {
+      "priority": "P3",
+      "screen": "H11",
+      "title": "Chart category labels cross grid lines",
+      "evidence": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/09499005-C111-4984-9294-4D704FD53B28.png",
+      "impact": "The gray Knee/Shoulder axis labels overlap horizontal grid lines; the separate text list clearly reports both counts.",
+      "recommendation": "If polishing H11, hide the redundant chart Y-axis labels or adjust axis mark layout so labels do not sit on grid lines."
+    },
+    {
+      "priority": "P3",
+      "screen": "H10",
+      "title": "Decorative SF Symbols remain separate AX elements",
+      "evidence": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-2d5ffaea-passed/attachments/F01A7EFE-EFF8-4894-81ED-1C201571E79C.txt",
+      "impact": "The status bandage image shares injury-detail-status with Active text; the duration clock and timeline icons also appear as Image AX nodes. XCTest hierarchy alone cannot prove VoiceOver focus order.",
+      "recommendation": "Check VoiceOver on H10; if these images receive separate focus, hide decorative images or combine each label while retaining text identifiers."
+    }
+  ],
+  "blocking_findings": [],
+  "limitations": [
+    "This is normal English/light iPhone evidence only. MAX, iPad, Duo, Watch, dark mode and VoiceOver traversal were not reviewed.",
+    "Passing selectors prove navigation and target assertions for their scope, not all layout states or image quality."
+  ]
+}

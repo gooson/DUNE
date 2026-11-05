@@ -25,8 +25,9 @@ final class SleepDetailSmokeTests: UITestBaseCase {
         navigateToDashboard()
 
         let cardID = AXID.dashboardMetricCard("sleep")
-        guard app.scrollToHittableElementIfNeeded(cardID, maxSwipes: 6) else {
-            XCTFail("Seeded Sleep metric card must be reachable on Dashboard")
+        let dashboardScroll = app.scrollViews["dashboard-root-scroll"].firstMatch
+        guard app.revealFullyVisible(cardID, in: dashboardScroll) else {
+            XCTFail("Seeded Sleep metric card must be fully reachable on Dashboard")
             return
         }
 

@@ -1,0 +1,83 @@
+{
+  "scope": "H11 Injury Statistics only, Duo open normal English/Light archived native PNG/AX; no MAX claim",
+  "sourceRevision": "2d1656bb83a3a41ce02e1c41352769e0a867b032",
+  "sourceSHA256": {
+    "DUNE/Presentation/Injury/InjuryStatisticsView.swift": "9571e18e2f3f1695dde6d0167f3c115665be29b7a9aeb3dd8090016ea3ba5268"
+  },
+  "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-2d1656bb-passed",
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "081F5764-D395-45A7-9ABE-A6AFE879F4A6",
+    "deviceName": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+    "modelName": "iPhone",
+    "osBuildNumber": "24B91016s",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "poseReadback": {
+    "before": "180.0",
+    "after": "180.0"
+  },
+  "SDK": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm",
+      "DUNEUITests/WellnessRegressionTests/testInjuryStatisticsRouteOpensFromHistory",
+      "DUNEUITests/SleepDetailSmokeTests/testSleepDebtExplanationOpens",
+      "DUNEUITests/SleepDetailSmokeTests/testWakeAnalysisExplanationOpens"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 4,
+      "passed": 4,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 4,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/batch01-duo-open-retry1-2d1656bb.log"
+  },
+  "activeDisplay": "2007x2853 filename; PNG internal dimensions 2853x2007; 1398x2034 inactive black",
+  "selectedPairs": [
+    {
+      "sequence": 30,
+      "action": "DUNE_VISUAL_AUDIT_READY H11 injury statistics overview values [DUNEUITests/WellnessRegressionTests.swift:721] DEADLINE=1793894140.3235521",
+      "activePNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-2d1656bb-passed/host/030-2007x2853.png",
+      "activePNGSHA256": "f40a85fb65a18e2fb40523357f80b292f0944365695f7af3d5dd4c540b90e27e",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-2d1656bb-passed/host/030-hierarchy.txt",
+      "AXSHA256": "16370215d9863ececa2dd101663e69849db74e8433855c1a05e43b9e0c15e6fa"
+    },
+    {
+      "sequence": 31,
+      "action": "DUNE_VISUAL_AUDIT_READY H11 injury statistics frequency graph [DUNEUITests/WellnessRegressionTests.swift:726] DEADLINE=1793894145.32727",
+      "activePNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-2d1656bb-passed/host/031-2007x2853.png",
+      "activePNGSHA256": "f40a85fb65a18e2fb40523357f80b292f0944365695f7af3d5dd4c540b90e27e",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-2d1656bb-passed/host/031-hierarchy.txt",
+      "AXSHA256": "de4e99491dcf71e2e4d46a93ed97b8f527644e8b32161d556ba5be76da7728a2"
+    },
+    {
+      "sequence": 32,
+      "action": "DUNE_VISUAL_AUDIT_READY tap BackButton [DUNEUITests/WellnessRegressionTests.swift:859] DEADLINE=1793894151.791753",
+      "activePNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-2d1656bb-passed/host/032-2007x2853.png",
+      "activePNGSHA256": "565a7332ffaf22ffddd80a48f3624352da82c8347050e3d579f348810bba63ff",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-2d1656bb-passed/host/032-hierarchy.txt",
+      "AXSHA256": "4488b5523424283bc721bc07762981bccf68b312248a4e4f45452ebe84e16858"
+    },
+    {
+      "sequence": 33,
+      "action": "DUNE_VISUAL_AUDIT_READY before teardown -[WellnessRegressionTests testInjuryStatisticsRouteOpensFromHistory] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793894157.464133",
+      "activePNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-2d1656bb-passed/host/033-2007x2853.png",
+      "activePNGSHA256": "a0eb1b2e464217dc6627ab56041e46cbfae2e96b13bd69c0134526e03c3f25d9",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-2d1656bb-passed/host/033-hierarchy.txt",
+      "AXSHA256": "5dd7c7b161cb2dd8a5d7e0ce4c7eece2e15d57888c3f34e0b249a343413cdd8e"
+    }
+  ]
+}

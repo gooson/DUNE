@@ -36,31 +36,19 @@ struct SleepDebtInfoSheet: View {
 
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-            HStack(alignment: .top, spacing: DS.Spacing.md) {
-                Image(systemName: "info.circle.fill")
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(palette.heroAccent)
-                    .padding(DS.Spacing.sm)
-                    .background(palette.heroAccent.opacity(0.16), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
-                    .accessibilityHidden(true)
-
-                Text("How Sleep Debt Works")
-                    .font(.title3.bold())
-                    .foregroundStyle(palette.ink)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityIdentifier("sleep-debt-info-title")
-
-                Button { dismiss() } label: {
-                    Image(systemName: "xmark")
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(palette.ink)
-                        .frame(width: 44, height: 44)
-                        .background(palette.ink.opacity(0.12), in: Circle())
+            if dynamicTypeSize.isAccessibilitySize {
+                HStack(alignment: .top) {
+                    headerIcon
+                    Spacer(minLength: DS.Spacing.sm)
+                    headerCloseButton
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Text("Close"))
-                .accessibilityIdentifier("sleep-debt-info-close")
+                headerTitle
+            } else {
+                HStack(alignment: .top, spacing: DS.Spacing.md) {
+                    headerIcon
+                    headerTitle
+                    headerCloseButton
+                }
             }
 
             HStack(spacing: DS.Spacing.sm) {
@@ -79,6 +67,37 @@ struct SleepDebtInfoSheet: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xl))
         .overlay { RoundedRectangle(cornerRadius: DS.Radius.xl).strokeBorder(palette.border, lineWidth: 1) }
+    }
+
+    private var headerIcon: some View {
+        Image(systemName: "info.circle.fill")
+            .font(.title3.weight(.semibold))
+            .foregroundStyle(palette.heroAccent)
+            .padding(DS.Spacing.sm)
+            .background(palette.heroAccent.opacity(0.16), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+            .accessibilityHidden(true)
+    }
+
+    private var headerTitle: some View {
+        Text("How Sleep Debt Works")
+            .font(.title3.bold())
+            .foregroundStyle(palette.ink)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityIdentifier("sleep-debt-info-title")
+    }
+
+    private var headerCloseButton: some View {
+        Button { dismiss() } label: {
+            Image(systemName: "xmark")
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(palette.ink)
+                .frame(width: 44, height: 44)
+                .background(palette.ink.opacity(0.12), in: Circle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text("Close"))
+        .accessibilityIdentifier("sleep-debt-info-close")
     }
 
     private func explanationCard<Content: View>(
@@ -125,7 +144,7 @@ struct SleepDebtInfoSheet: View {
             Image(systemName: icon)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(DS.Color.sleep)
-                .frame(width: 32, height: 32)
+                .frame(minWidth: 32, minHeight: 32)
                 .background(DS.Color.sleep.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
                 .accessibilityHidden(true)
             Text(title)
@@ -145,7 +164,6 @@ struct SleepDebtInfoSheet: View {
                     Text(range)
                         .font(.subheadline.monospacedDigit())
                         .foregroundStyle(DS.Color.textSecondary)
-                        .padding(.leading, 32 + DS.Spacing.md)
                 }
             } else {
                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.md) {
@@ -175,7 +193,7 @@ struct SleepDebtInfoSheet: View {
                 .font(.subheadline)
                 .foregroundStyle(color)
         }
-        .frame(width: 32)
+        .frame(minWidth: 32)
         .accessibilityHidden(true)
     }
 
