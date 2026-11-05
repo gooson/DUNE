@@ -727,6 +727,10 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
     }
 
     func testInjuryStatisticsRouteOpensFromHistory() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-injury-history-fixture"]
+        launchApp(with: configuration)
+        navigateToWellness()
         openInjuryHistory()
 
         let statsButton = app.descendants(matching: .any)[AXID.injuryHistoryStats].firstMatch
@@ -734,14 +738,62 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         statsButton.auditTap()
 
         let screen = app.descendants(matching: .any)[AXID.injuryStatisticsScreen].firstMatch
-        XCTAssertTrue(screen.waitForExistence(timeout: 8), "Injury statistics screen should open from history")
-        if VisualAudit.isEnabled {
-            VisualAudit.capture("Injury statistics initial viewport")
-            for index in 1...4 {
-                app.scrollViews.firstMatch.swipeUp()
-                VisualAudit.capture("Injury statistics lower viewport \(index)")
+        XCTAssertTrue(screen.waitForExistence(timeout: 8), "Injury statistics should open from history")
+        let statsScroll = app.scrollViews["injury-statistics-scroll"].firstMatch
+        XCTAssertTrue(statsScroll.waitForExistence(timeout: 5))
+        let values = [
+            ("injury-statistics-overview-total-value", "2"),
+            ("injury-statistics-overview-active-value", "1"),
+            ("injury-statistics-overview-average-value", "10d"),
+            ("injury-statistics-overview-longest-value", "10d")
+        ]
+        for (identifier, expected) in values {
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: statsScroll), "Missing or clipped \(identifier)")
+            XCTAssertEqual(app.staticTexts[identifier].firstMatch.label, expected)
+        }
+        VisualAudit.capture("H11 injury statistics overview values")
+        XCTAssertTrue(app.revealFullyVisible("injury-statistics-frequency-chart", in: statsScroll),
+                      "Seeded body-part chart must fit")
+        XCTAssertTrue(app.staticTexts["Knee: 1"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["Shoulder: 1"].firstMatch.exists)
+        VisualAudit.capture("H11 injury statistics frequency graph")
+        returnToInjuryHistory(from: AXID.injuryStatisticsScreen, navigationTitle: "Injury Statistics")
+    }
+
+    func testInjuryStatisticsAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-injury-history-fixture",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+        openInjuryHistory()
+        let statsButton = app.descendants(matching: .any)[AXID.injuryHistoryStats].firstMatch
+        XCTAssertTrue(statsButton.waitForExistence(timeout: 5))
+        statsButton.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryStatisticsScreen].firstMatch.waitForExistence(timeout: 8))
+        let statsScroll = app.scrollViews["injury-statistics-scroll"].firstMatch
+        let values = [
+            ("injury-statistics-overview-total-value", "2"),
+            ("injury-statistics-overview-active-value", "1"),
+            ("injury-statistics-overview-average-value", "10d"),
+            ("injury-statistics-overview-longest-value", "10d")
+        ]
+        for (identifier, expected) in values {
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: statsScroll), "MAX missing or clipped \(identifier)")
+            XCTAssertEqual(app.staticTexts[identifier].firstMatch.label, expected)
+            if identifier == "injury-statistics-overview-active-value" {
+                VisualAudit.capture("H11 MAX injury statistics total and active")
             }
         }
+        VisualAudit.capture("H11 MAX injury statistics overview")
+        XCTAssertTrue(app.revealFullyVisible("injury-statistics-frequency-chart", in: statsScroll),
+                      "MAX frequency chart must fit")
+        XCTAssertTrue(app.staticTexts["Knee: 1"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["Shoulder: 1"].firstMatch.exists)
+        VisualAudit.capture("H11 MAX injury statistics frequency graph")
+        returnToInjuryHistory(from: AXID.injuryStatisticsScreen, navigationTitle: "Injury Statistics")
     }
 
     private func openBodyFormFromToolbar() {
