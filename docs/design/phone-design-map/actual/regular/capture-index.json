@@ -687,12 +687,21 @@
     "L02": {
       "row_id": "L02",
       "evidence": "habit-form-name",
-      "test": "DuoLifeStarterTemplateTests/testEmptyStarterTemplateCreatesHabitAndRendersHabitsSection()",
-      "action": "tap Take Vitamins, Every day",
-      "timestamp": 1791819192.012,
-      "image": "2841CC5D-9F5D-4F0B-9609-AB89639DEBBD.png",
-      "screen": "screen-0-1320x2868-tap Take Vitamins, Every day_0_2F956B90-A8F1-4A3A-B59B-6080EAF30312.png",
-      "file": "L02.png"
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "action": "L02 new habit hero",
+      "timestamp": 1793915204.937,
+      "image": "6B94BAB9-A097-4AED-98BB-5D3BEB9892C8.png",
+      "screen": "6B94BAB9-A097-4AED-98BB-5D3BEB9892C8.png",
+      "file": "L02.png",
+      "ax_file": "ax/L02.txt",
+      "image_sha256": "9131c19deb323d02af4efca9d140278adb31cc27f1494136de53ec47dd5b7bdd",
+      "ax_sha256": "c296261607d08bc29329bc1545daba8c0530acb50a08900997f1290625a6edcb",
+      "source_revision": "55422817203b44ed98a011ccdefb93a2b238243e",
+      "source_file_sha256": "13841bd633fb623d8fccababad3e41faec2e5107768538c6fba677a8ed1b4252",
+      "device_id": "C4E5D86D-A2FE-4CED-876A-760ECF073641",
+      "profile": "iphone-normal",
+      "current_verification": "reviewed",
+      "current_gallery": "../../../full-redesign-map/review/l02-habit-form-2026-11-06/index.html"
     },
     "L03": {
       "row_id": "L03",

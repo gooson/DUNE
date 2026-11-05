@@ -1,0 +1,406 @@
+{
+  "role": "independent SwiftUI / Apple UX native review",
+  "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+  "profile": "ipad-normal",
+  "evidence_archive": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed",
+  "sdk_result": {
+    "status": "passed",
+    "executed": 5,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0
+  },
+  "exact_methods": [
+    {
+      "name": "testOpeningPastRecordMenuDoesNotMutateToday()",
+      "result": "Passed"
+    },
+    {
+      "name": "testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged()",
+      "result": "Passed"
+    },
+    {
+      "name": "testEditFlowRenamesSeededHabit()",
+      "result": "Passed"
+    },
+    {
+      "name": "testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "result": "Passed"
+    },
+    {
+      "name": "testVisualAuditHabitManagement()",
+      "result": "Passed"
+    }
+  ],
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "observations": [
+    "L02 new and edit sheets keep hero, name field, icon grid, Save and Cancel readable; the software keyboard does not cover the focused name field. Evening Walk preview and selected Fitness icon are reflected in the hero and AX. Saved names appear on Today cards.",
+    "L04 active and archive heroes and segmented counts agree. History opens and closes; Restore changes Archived 1 to 0 and Active 2 to 3; empty archive state is readable.",
+    "L09 Read duration, Water count and Morning Stretch check sheets show Nov 5, 2026. Count total and check Completed switch are visible; Cancel paths preserve Today.",
+    "The iPad numeric keyboard appears as a popover next to the focused Read total field, with existing value 30 visible. Saving 40 leaves Today Read at 0/30 min and shows a Recorded later 40/30 min history entry."
+  ],
+  "limits": [
+    "Simulator iPad normal only; no physical-device, dark-mode, Dynamic Type, Duo, closed MAX, or full regression claim.",
+    "The L04 History and L09 Read history child screens are observed outputs; they are not independent wider L06/L05 coverage."
+  ],
+  "selected_pair_count": 32,
+  "selected_pair_hashes_verified": true,
+  "selected_pairs": [
+    {
+      "index": 0,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "tap habit-form-name",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/A1E2C24A-8F30-4B7E-8889-AD47F89B8B6E.png",
+      "png_sha256": "49ff1464c64146f43fade788dd6149265875e317d426a7e2d7dd023acd072ea3",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/F496DFAA-763E-4779-AED1-7AB3F710E5BE.txt",
+      "ax_sha256": "401cf58f6f5b05acb13b363fec3b1196f89217b706ae10fa43e3d08e0c495934"
+    },
+    {
+      "index": 1,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "tap habit-form-name-clear",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/E1622000-843F-44BC-9252-6B98D26E27EE.png",
+      "png_sha256": "13453869b14c0e7180eb945b9d176d081d26411d4222be20bd0db7b4d3d1c328",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/49327082-CE19-4CB2-B4E4-738888D9F585.txt",
+      "ax_sha256": "0623b277a8869b6ebf3d48f2db9a8111f7cc5d705f287b0016e902dd749aac27"
+    },
+    {
+      "index": 2,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "L02 Edit habit name before save",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/F9FB43E5-E9D6-419A-93C3-B3FBCED72BC4.png",
+      "png_sha256": "275a754f84c49c0e2f6fd587f78875098b85c48f43e576953d669c86a0df6cc7",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/08C3EC7A-60ED-455F-875B-3054A359D272.txt",
+      "ax_sha256": "2736f3aaf45881d71e9afe95538440f660196fe83a295282b6b32db6fa16660c"
+    },
+    {
+      "index": 3,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testEditFlowRenamesSeededHabit()",
+      "checkpoint": "tap habit-form-save",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/A83E90BD-5AD1-4A01-A17E-D8EC15CD422C.png",
+      "png_sha256": "2d59fffb27ccd87e6767eec8cd0ec11c524533947d8286eb17ecc71340b441f0",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/12F7B5AA-9499-4FB6-8F52-C3048C33535F.txt",
+      "ax_sha256": "37acf1ec568d1ff3679f88150f72505fd6ce6e322372f9f8c88634426d5973ab"
+    },
+    {
+      "index": 4,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "L02 new habit hero",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/C82BAD33-78B8-4819-BBFE-D57F0AD1FE7F.png",
+      "png_sha256": "c4efa19b12835d497811bbfb4626c8905719c3858df452e1405bab5755b3ad1c",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/30617FD9-A3DF-4880-A3E3-C64442A132BF.txt",
+      "ax_sha256": "999eefb28eed9b8757b1d874a9f77e8a4887481b54c6c46a42b1db9a27f6853a"
+    },
+    {
+      "index": 5,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "tap habit-form-name",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/FFEBD773-7FDF-42EA-90B9-C2B1D734274E.png",
+      "png_sha256": "1fdc4c9d1c26ed6aa70f4bc2838c0babcb30dfce37c3a7bba5cd506950c3a029",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/D115F0A2-98B2-4F4D-8F8C-761ECF64EE8C.txt",
+      "ax_sha256": "c844306d489f3972d79b80516f30c21d3743505739f3ef0cda12ca96a4e20d33"
+    },
+    {
+      "index": 6,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "L02 focused habit name and software keyboard",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/FC840851-5842-4A6D-9CCF-31CDBDF11793.png",
+      "png_sha256": "1fdc4c9d1c26ed6aa70f4bc2838c0babcb30dfce37c3a7bba5cd506950c3a029",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/CEFA7FE2-E523-428C-BC41-BECFBD8CE6CF.txt",
+      "ax_sha256": "851f46959a49eff1d324a8be8c804f48bef850f28e91a7f32b0d8af73eb2e77d"
+    },
+    {
+      "index": 7,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "tap habit-form-name",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/5F476929-CF13-4286-B4AA-4239258DD8C0.png",
+      "png_sha256": "62885615584ee5d71256bb49116a6f37d9091b30451b592973a3137920bce63e",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/5C5D0BA0-1E0B-4F9F-BE36-866B4EFCE596.txt",
+      "ax_sha256": "babb470785a9f6f7d7966422baee55b1f2cd8d213f9155d10e7879ffe4766956"
+    },
+    {
+      "index": 8,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "L02 new habit named preview",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/C28F4A0A-584A-481E-8A57-D7E76FD32148.png",
+      "png_sha256": "1ae53bad013ffa81c37b0fa761bdb89822c6c1ab04d83ffc0f25211f0acc48b3",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/30E6C9A7-7DEB-4CB1-A38C-F2ED6D65FD1D.txt",
+      "ax_sha256": "f1fee3a61a64b0c59ba94fc9ede752d0c98c3d4b71e1ddc2c26085806c12f6b7"
+    },
+    {
+      "index": 9,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "tap habit-form-icon-fitness",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/5031084E-08A9-4BB1-A58C-539A105781B3.png",
+      "png_sha256": "cf038137cc39a460365f1e317b5734fb38a1bcd6d4025bf4eed86b2b740837f0",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/9A22D145-FF56-4A65-ACEB-6FEB185FC194.txt",
+      "ax_sha256": "aa09b26460cdcf42b8eac660b84b9db362ad47155c80ce92733d5e8955cd110d"
+    },
+    {
+      "index": 10,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "L02 selected icon grid",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/BF7C05CD-BD56-4AE4-9E2C-A33AA6A79B49.png",
+      "png_sha256": "cf038137cc39a460365f1e317b5734fb38a1bcd6d4025bf4eed86b2b740837f0",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/17AF3FD6-ACB7-4B4C-8544-2C8F14AF9043.txt",
+      "ax_sha256": "d470c09a042e60691fe869b07d2e32bd797057c62645fffe3ff201e90c6b0f0d"
+    },
+    {
+      "index": 11,
+      "screen": "L02",
+      "test": "LifeRegressionTests/testLifeRootRendersAndAddFlowCreatesNewHabit()",
+      "checkpoint": "tap habit-form-save",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/875A078D-9638-40F8-9E2A-A83CBBE681D5.png",
+      "png_sha256": "49fe04cfc1d523b981d2209efc631cc7b9a5c37b04615d67a6bbe649dde89eed",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/B6B52840-144B-4AEF-A8A0-301F8214D699.txt",
+      "ax_sha256": "3ffc9ed02c0bd3055128410cf74f00b4a6f4e58045c7582c1aa56016153f1712"
+    },
+    {
+      "index": 12,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "root after setup -[LifeRegressionTests testVisualAuditHabitManagement]",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/60962531-CDF2-4169-A0A3-EF9A3E49EC1A.png",
+      "png_sha256": "f77ceb071262fcc41463fe9f6c8b03023fe042ab61e2ad3042581474bee94244",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/8272A130-F110-41C9-87CD-D9254E241191.txt",
+      "ax_sha256": "abab78b503e62bf3cdf93f23ca36d5b51dc85053a9385b1bd1cd3be4590bd74b"
+    },
+    {
+      "index": 13,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "L04 active management hero",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/8C60C864-AD8B-42EA-AFDD-C48DF42EA999.png",
+      "png_sha256": "d1fb2fe4905f77431d7cc0c500607bed761d3bd201b6459fa8f4388a9b199375",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/2121F0F7-4303-44E2-8B2B-61A06498D84A.txt",
+      "ax_sha256": "4ade9f0112106dd3ef74883d71d0b8f85f1002a5ad1f068159d0002c8a0d0696"
+    },
+    {
+      "index": 14,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "L04 archived management hero",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/F1303AA7-CCB0-41F6-BF73-67ECF7B7C257.png",
+      "png_sha256": "92fb1f9f20176b0ce9b87cda497ab589f1e5cdc72ef5954e6cc64a10c7d91972",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/FF93320F-A4AF-4CC8-B1E5-0D1D7D2463A4.txt",
+      "ax_sha256": "e5f4c9b531ba988636ea3a93be0131f5bc8019213051f21f7bc3fea14c839d98"
+    },
+    {
+      "index": 15,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "L04 archived row and History",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/CEE6BEEB-4F6F-4C6E-907F-11425D60F788.png",
+      "png_sha256": "92fb1f9f20176b0ce9b87cda497ab589f1e5cdc72ef5954e6cc64a10c7d91972",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/ECDE1D4F-333F-410E-9052-425851791223.txt",
+      "ax_sha256": "d8432421caead7ec1843d6267366dc4377ddf084ff092deba7783b4d725ff671"
+    },
+    {
+      "index": 16,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "tap habit-management-history-Morning Stretch",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/6D63B7F5-E15E-4281-85A0-D7FF8E5F2CF1.png",
+      "png_sha256": "3661a315ef5563d1ed64603d57ab3a8097528b2eec4c9ad3373313ae99f1eb9a",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/6D858A4E-CE4D-47BD-8508-077A466E787C.txt",
+      "ax_sha256": "20f2185e247da04b2902c4bfa7e7f8419cce829e2924446f7f0611edc9c3ca79"
+    },
+    {
+      "index": 17,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "L04 archived history",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/8A958556-136A-4EFE-BF7F-46F6B3258878.png",
+      "png_sha256": "3661a315ef5563d1ed64603d57ab3a8097528b2eec4c9ad3373313ae99f1eb9a",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/F840BE17-B660-4D8A-918E-F26F8BB71094.txt",
+      "ax_sha256": "00f696b5d49a6d32ac793787e3236c779a85e62c7c315ed3c771504b41399237"
+    },
+    {
+      "index": 18,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "tap habit-management-history-screen",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/7AD309D6-676B-4967-B70E-18DA3A11B350.png",
+      "png_sha256": "2fac5a771105bc2bbf9db3d2f10e6aea46bf0caeade460162f667368accac301",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/7531A3BC-38AC-45C9-A965-5F592970E84B.txt",
+      "ax_sha256": "21ec2a32ccbb06fdfabc877fdbfc38101ed34b2ca4f3a598990d905e9b2070e4"
+    },
+    {
+      "index": 19,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "tap habit-management-restore-Morning Stretch",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/4E1FFE76-E880-4535-BC7E-A1E5053FB9A1.png",
+      "png_sha256": "0560377b060ef1a345bb0c2ac983e355be3d07e1afb506518e5c8a923dafed7c",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/62399854-BBA9-4C43-AADE-3DC9C581C430.txt",
+      "ax_sha256": "9ca40137b545ee3c6c917f8f1bbd6550310706ee9be141f87ad9be6da74188f9"
+    },
+    {
+      "index": 20,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "L04 archived filter after Restore",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/5344535B-7FA1-4D94-ACCE-619D4E12D554.png",
+      "png_sha256": "0560377b060ef1a345bb0c2ac983e355be3d07e1afb506518e5c8a923dafed7c",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/38693C16-E16C-4090-827D-AFE8D2C4BA45.txt",
+      "ax_sha256": "a96b3b431e28a0a2a38fb6a9c5a55240e62f2be42934c5a7802b6a3099d3dbc6"
+    },
+    {
+      "index": 21,
+      "screen": "L04",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "before teardown -[LifeRegressionTests testVisualAuditHabitManagement]",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/49147A4F-EBAF-4007-91C5-8197DE58BAD7.png",
+      "png_sha256": "2fbeb1ac5f602fb9a8ac3eade9ec16a7755cee1aa22f541878ce4b7abe67743e",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/B1388535-BA2C-4246-8E69-A7CF273FB5C8.txt",
+      "ax_sha256": "501169c0c8c6efc21eaa14f22b0829a4bcf9ea85db4b0db65061afa64889c467"
+    },
+    {
+      "index": 22,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "L09 duration record hero and date",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/CF5A928B-1C41-4B33-9AB2-BF1F0FE4F0B7.png",
+      "png_sha256": "9e1b0f79cae84d24e4a46eaa800373400e56680ff4d6782838213bb7ae70e1a7",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/2402723F-C944-471F-BF20-1C4209A0BBB3.txt",
+      "ax_sha256": "62f96da5987001dedee40dfd8ffa30f2fa607e18b4fd233af7ad8f63b8cb9760"
+    },
+    {
+      "index": 23,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "tap habit-past-record-cancel",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/2D7BC766-32A8-4B3F-B369-22AFF8C66BC3.png",
+      "png_sha256": "cdea74be93db14919134a921d67b388cf004886cc1defeadd5b110108381a3eb",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/49DABEE7-ED29-4E87-9DA3-82C348A997F1.txt",
+      "ax_sha256": "c19f9acc901daeb35fd2c6b6a76a0cbe93a257b7404724ab8d208e174825aea7"
+    },
+    {
+      "index": 24,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "L09 count record",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/67C73BE6-9DD3-4013-BF5D-CE48E30CECBF.png",
+      "png_sha256": "3fc6cc091e4331e61143677e619501573bc503ea8f830a5d0c09933b4d203c1d",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/B33B9DE3-5D36-4FF9-AD88-3173BEFBC280.txt",
+      "ax_sha256": "60c0954ad597c969745f3df5127abcfef7c20a644301be2ce4039fb708945076"
+    },
+    {
+      "index": 25,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "tap habit-past-record-cancel",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/9263D51A-0C3F-4A74-9BB0-723DAF9D2EF9.png",
+      "png_sha256": "3d4038dd6244362432827d0586bc4fed227b6f5bbc11786ecd4c31ad7396b426",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/6FA969EA-915A-494C-A871-B93D9B8D83ED.txt",
+      "ax_sha256": "9d0a76758da239b62f347dcd2f7fba939f985fd33ab3862ad3d4ab2d8463fde1"
+    },
+    {
+      "index": 26,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "L09 check record",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/CD1032F7-051D-48DC-AF09-710B9344089C.png",
+      "png_sha256": "564eca9b65b812bfcdaae324705d214388f8b1f7793ba6b88c8f87ed6d2c0ab8",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/06E8DCF1-7C47-4D35-9686-E60425763149.txt",
+      "ax_sha256": "cfeb54eadd7834a3a22f3b297451baea38616c18af5c61c62cac1021d90bfa4a"
+    },
+    {
+      "index": 27,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "tap habit-past-record-cancel",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/02E3651F-EE82-461A-B92E-09FC793DAB0D.png",
+      "png_sha256": "563b201e3096f3dea7a450a1d2aa66d3e22fa9605fb1d33c75eedaaacf964c0a",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/67E591E8-AF65-4E01-B08B-41DD8D8084C8.txt",
+      "ax_sha256": "d7c50b9fea68d9b2e253b7575fb98c26add07095af0c7dc6c990d7a6da8b5ac8"
+    },
+    {
+      "index": 28,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged()",
+      "checkpoint": "tap habit-past-record-total",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/60BE13C1-58FA-4683-BD00-643C8CCA7CCF.png",
+      "png_sha256": "0555dd577a23722570ab60000cb25fc1423b989ac4167b3379d5dae549edf494",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/C8A5FE5E-8AD2-4879-937A-2678AB6CA725.txt",
+      "ax_sha256": "d5fb4f24eedce2eb25b7401daa8734eb3a1eb4e39d081107fd066fe569e007a7"
+    },
+    {
+      "index": 29,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged()",
+      "checkpoint": "L09 focused duration total and software keyboard",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/A884F7A4-60C4-434A-9E00-594A6DE777AD.png",
+      "png_sha256": "88c0c7e8ac0d410005536b0c3e78384448beb0a4f062196166c857f506752f46",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/FDAC1F9A-E671-4647-B122-863E42D6DA91.txt",
+      "ax_sha256": "f8f862fb41752851809d4d2a1d09b5a8177455ae42d07589746f87edf9ca2d82"
+    },
+    {
+      "index": 30,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged()",
+      "checkpoint": "tap habit-past-record-save",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/53F37DBD-E7FF-4606-9672-FB483CE39DF7.png",
+      "png_sha256": "bb6ad2b85c8193c8759825d437792f9b6f5ad632953db74c241cad33499b52f2",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/B9B02D31-2A11-49A5-BEE3-709E4269E942.txt",
+      "ax_sha256": "e74444b55865e593e38b81d2dc0df378c1c4257f778b15c2fc84230015b341d7"
+    },
+    {
+      "index": 31,
+      "screen": "L09",
+      "test": "LifeFlowUITests/testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged()",
+      "checkpoint": "L05-Life-history-recorded-later",
+      "source": "fc308b66b07e53bb2c9ed382d2d2da99f0c84c45",
+      "png": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/0590202C-5209-4EAC-A2B7-8D856879277D.png",
+      "png_sha256": "83375883b62602485f1c4d6f4b7ac98448c30e93a2e4b2c84b5ae552e1bc9e41",
+      "ax": ".codex-checks/batch03/evidence/ipad-fc308b66-normal5-passed/attachments/2D874D8E-B6B1-4239-8AA3-D6B6372FB377.txt",
+      "ax_sha256": "dcc97bd28f1cd3ea7a2e521c1cfb6e1e6039effe4281ad623e413a3510889d35"
+    }
+  ]
+}

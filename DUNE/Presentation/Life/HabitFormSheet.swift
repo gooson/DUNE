@@ -5,10 +5,16 @@ struct HabitFormSheet: View {
     let isEdit: Bool
     let onSave: () -> Void
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    formHero
+                        .listRowInsets(EdgeInsets(top: DS.Spacing.sm, leading: DS.Spacing.lg, bottom: DS.Spacing.sm, trailing: DS.Spacing.lg))
+                        .listRowBackground(Color.clear)
+                }
                 nameSection
                 iconSection
                 typeSection
@@ -48,6 +54,39 @@ struct HabitFormSheet: View {
             }
         }
         .presentationDetents([.medium, .large])
+    }
+
+    private var formHeroTitle: LocalizedStringKey { isEdit ? "Edit Habit" : "New Habit" }
+
+    private var formHero: some View {
+        HeroCard(tintColor: viewModel.selectedIconCategory.themeColor) {
+            HStack(alignment: .top, spacing: DS.Spacing.md) {
+                Image(systemName: viewModel.selectedIconCategory.iconName)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(colorScheme == .light
+                        ? viewModel.selectedIconCategory.themeColor.mix(with: .black, by: 0.35)
+                        : viewModel.selectedIconCategory.themeColor)
+                    .frame(minWidth: 48, minHeight: 48)
+                    .background(viewModel.selectedIconCategory.themeColor.opacity(0.14), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                    .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                    Text(formHeroTitle)
+                        .font(.title3.weight(.semibold))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("habit-form-hero-title")
+                    if !viewModel.name.isEmpty {
+                        Text(viewModel.name)
+                            .font(.subheadline)
+                            .foregroundStyle(DS.Color.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("habit-form-hero-name")
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 
     // MARK: - Sections
@@ -245,7 +284,12 @@ struct HabitFormSheet: View {
 
 struct HabitIconPicker: View {
     @Binding var selected: HabitIconCategory
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: DS.Spacing.sm), count: 4)
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var columns: [GridItem] {
+        [GridItem(.adaptive(minimum: dynamicTypeSize.isAccessibilitySize ? 108 : 72), spacing: DS.Spacing.sm)]
+    }
 
     var body: some View {
         Section("Icon") {
@@ -259,8 +303,10 @@ struct HabitIconPicker: View {
                                 .font(.title3)
                             Text(category.displayName)
                                 .font(.caption2)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .multilineTextAlignment(.center)
                         }
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, minHeight: 64)
                         .padding(.vertical, DS.Spacing.sm)
                         .background {
                             RoundedRectangle(cornerRadius: DS.Radius.sm)
@@ -274,7 +320,11 @@ struct HabitIconPicker: View {
                         }
                     }
                     .buttonStyle(.plain)
-                    .foregroundStyle(selected == category ? category.themeColor : .secondary)
+                    .foregroundStyle(selected == category
+                        ? (colorScheme == .light ? category.themeColor.mix(with: .black, by: 0.35) : category.themeColor)
+                        : .secondary)
+                    .accessibilityAddTraits(selected == category ? .isSelected : [])
+                    .accessibilityIdentifier("habit-form-icon-\(category.rawValue)")
                 }
             }
         }
