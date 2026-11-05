@@ -1289,11 +1289,8 @@ extension XCUIApplication {
     func revealTextBody(_ identifier: String, in scroll: XCUIElement, maxMoves: Int = 12) -> Bool {
         let target = descendants(matching: .any)[identifier].firstMatch
         guard target.waitForExistence(timeout: 5), !target.label.isEmpty else { return false }
-        let viewport = visibleViewport(of: scroll)
-        if target.frame.height <= viewport.height {
-            return reveal(identifier, in: scroll, goal: .full, maxMoves: maxMoves)
-        }
         guard reveal(identifier, in: scroll, goal: .top, maxMoves: maxMoves) else { return false }
+        if target.isHittable && visibleViewport(of: scroll).contains(target.frame) { return true }
         VisualAudit.capture("\(identifier) top")
         guard reveal(identifier, in: scroll, goal: .bottom, maxMoves: maxMoves) else { return false }
         VisualAudit.capture("\(identifier) bottom")
@@ -1322,7 +1319,8 @@ extension XCUIApplication {
         guard scroll.waitForExistence(timeout: 5) else { return false }
         let target = descendants(matching: .any)[identifier].firstMatch
         func reached(_ viewport: CGRect) -> Bool {
-            guard target.exists && target.isHittable else { return false }
+            guard target.exists else { return false }
+            if case .full = goal, !target.isHittable { return false }
             let frame = target.frame
             guard frame.width > 0 && frame.height > 0 &&
                     frame.minX.isFinite && frame.maxX.isFinite &&
