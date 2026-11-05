@@ -476,25 +476,112 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     func testPinnedMetricsEditorOpensAndDismisses() throws {
+        try openPinnedMetricsEditor()
+        assertPinnedEditorInitialState()
+        fillPinnedEditorToLimit()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("pinned-metrics-editor-row-hrv", maxSwipes: 10,
+                                                          direction: .down))
+        XCTAssertTrue(app.buttons["pinned-metrics-editor-row-hrv"].firstMatch.isEnabled,
+                      "Selected categories must remain removable at the limit")
+
+        app.buttons[AXID.pinnedMetricsEditorCancel].firstMatch.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
+            .waitForNonExistence(timeout: 5))
+        try openPinnedMetricsEditor()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("pinned-metrics-editor-row-steps", maxSwipes: 10))
+        XCTAssertFalse(app.buttons["pinned-metrics-editor-row-steps"].firstMatch.isSelected,
+                       "Cancel must discard the working selection")
+
+        let steps = app.buttons["pinned-metrics-editor-row-steps"].firstMatch
+        steps.auditTap()
+        XCTAssertTrue(steps.isSelected)
+        app.buttons[AXID.pinnedMetricsEditorDone].firstMatch.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
+            .waitForNonExistence(timeout: 5))
+        try openPinnedMetricsEditor()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("pinned-metrics-editor-row-steps", maxSwipes: 10))
+        XCTAssertTrue(app.buttons["pinned-metrics-editor-row-steps"].firstMatch.isSelected,
+                      "Done must persist the newly pinned metric")
+        VisualAudit.capture("T18 saved selection reopened")
+        app.buttons[AXID.pinnedMetricsEditorCancel].firstMatch.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
+            .waitForNonExistence(timeout: 5))
+    }
+
+    func testPinnedMetricsEditorAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        try openPinnedMetricsEditor()
+        assertPinnedEditorInitialState()
+        fillPinnedEditorToLimit()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("pinned-metrics-editor-row-hrv", maxSwipes: 10,
+                                                          direction: .down))
+        XCTAssertTrue(app.buttons["pinned-metrics-editor-row-hrv"].firstMatch.isEnabled)
+        let cancel = app.buttons[AXID.pinnedMetricsEditorCancel].firstMatch
+        XCTAssertTrue(cancel.isHittable)
+        cancel.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
+            .waitForNonExistence(timeout: 5))
+    }
+
+    private func openPinnedMetricsEditor() throws {
         dismissMorningBriefingIfNeeded()
         let editButton = app.descendants(matching: .any)[AXID.dashboardPinnedEdit].firstMatch
         XCTAssertTrue(editButton.waitForExistence(timeout: 5), "Pinned edit button should exist")
         let dashboardScroll = app.scrollViews["dashboard-root-scroll"].firstMatch
         XCTAssertTrue(dashboardScroll.waitForExistence(timeout: 5))
-        for _ in 0..<18 where !editButton.isHittable {
-            dashboardScroll.swipeUp(velocity: .slow)
-        }
+        XCTAssertTrue(app.revealFullyVisible(AXID.dashboardPinnedEdit, in: dashboardScroll, maxMoves: 18))
         XCTAssertTrue(waitForHittable(editButton, timeout: 5), "Pinned edit button should be tappable")
         editButton.auditTap()
 
         let editor = app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
         XCTAssertTrue(editor.waitForExistence(timeout: 5), "Pinned metrics editor should open")
 
-        let cancel = app.descendants(matching: .any)[AXID.pinnedMetricsEditorCancel].firstMatch
-        XCTAssertTrue(cancel.waitForExistence(timeout: 5), "Pinned metrics editor cancel button should exist")
-        cancel.auditTap()
+        XCTAssertTrue(app.buttons[AXID.pinnedMetricsEditorCancel].firstMatch.exists)
+        XCTAssertTrue(app.buttons[AXID.pinnedMetricsEditorDone].firstMatch.exists)
+    }
 
-        XCTAssertTrue(editButton.waitForExistence(timeout: 5), "Editor should dismiss back to Today dashboard")
+    private func assertPinnedEditorInitialState() {
+        let editor = app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
+        let hero = app.descendants(matching: .any)["pinned-metrics-editor-hero"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.revealTextBody("pinned-metrics-editor-title", in: editor))
+        XCTAssertEqual(app.descendants(matching: .any)["pinned-metrics-editor-title"].firstMatch.label, "Top 6 Metrics")
+        VisualAudit.capture("T18 editor hero")
+        for key in ["hrv", "rhr"] {
+            let identifier = "pinned-metrics-editor-row-\(key)"
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: editor))
+            let row = app.buttons[identifier].firstMatch
+            XCTAssertTrue(row.isSelected,
+                          "The seeded default selection must remain visible")
+        }
+        XCTAssertTrue(app.revealFullyVisible("pinned-metrics-editor-row-sleep", in: editor))
+        XCTAssertFalse(app.buttons["pinned-metrics-editor-row-sleep"].firstMatch.isSelected,
+                       "Sleep starts unpinned in the explicit UI seed")
+        VisualAudit.capture("T18 selected rows")
+    }
+
+    private func fillPinnedEditorToLimit() {
+        for key in ["sleep", "exercise", "steps", "weight"] {
+            let identifier = "pinned-metrics-editor-row-\(key)"
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 10))
+            let row = app.buttons[identifier].firstMatch
+            XCTAssertTrue(row.isEnabled)
+            row.auditTap()
+            XCTAssertTrue(row.isSelected)
+        }
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("pinned-metrics-editor-row-bmi", maxSwipes: 10))
+        XCTAssertFalse(app.buttons["pinned-metrics-editor-row-bmi"].firstMatch.isEnabled,
+                       "A seventh category must not be selectable")
+        let footer = app.staticTexts["pinned-metrics-editor-footer"].firstMatch
+        let editor = app.descendants(matching: .any)[AXID.pinnedMetricsEditorScreen].firstMatch
+        XCTAssertTrue(app.revealTextBody("pinned-metrics-editor-footer", in: editor))
+        XCTAssertEqual(footer.label, "Select up to 6 metrics shown at the top of Today.")
+        VisualAudit.capture("T18 six selected and limit footer")
     }
 
     func testNotificationHubControlsTransitionToEmptyState() throws {
