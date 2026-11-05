@@ -1,0 +1,288 @@
+{
+  "profile": "iphone-normal",
+  "source_revision": "08ad7dba980d51f2da528a1bad675fb8850c1809",
+  "sdk": {
+    "executed": 3,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0
+  },
+  "reviewed_pair_count": 30,
+  "pairs": [
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "tap dashboard-health-qa-card",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/A49A03D6-6C7C-4B7C-81D2-7F2A5AA8AD8B.png",
+      "png_sha256": "868caee6d41db36b5284748030013e052929aa6fb5a5fa73c4069a445029b9aa",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/637C02A0-E7A7-4F7A-9398-5CE3DAEFF0A4.txt",
+      "ax_sha256": "8735d85c11713869ba04fde46ccd780bdf171c7cdbd1d87c7c8e072849ea145b"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "T17 available overview",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/F53D0E37-8DDC-49ED-A000-966CDEBA64AB.png",
+      "png_sha256": "868caee6d41db36b5284748030013e052929aa6fb5a5fa73c4069a445029b9aa",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/45318136-F440-4CC5-AA9F-7A81379423A5.txt",
+      "ax_sha256": "af7ba51cb3f366ae6cf5e7f90259d2a653b428dd6c9ec2c1b03fd68918a773cc"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "T17 available suggested prompt",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/9A8F645C-FC42-49F1-9C29-95DEAFD69E37.png",
+      "png_sha256": "868caee6d41db36b5284748030013e052929aa6fb5a5fa73c4069a445029b9aa",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/983C0A62-78CA-4655-81FA-D3FA0CA102F5.txt",
+      "ax_sha256": "dad3a46f94489d9c6c6c1f216e07fb97705ea08cb3b1e411355366674ef8e4fb"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "tap health-qa-prompt-sleep",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/3390CD8D-A391-4F7B-89A3-078F6EBEAF30.png",
+      "png_sha256": "4e463b586977de45f4401be0c6fa5222688e80132d0718e0073ddd8da0c8ee6e",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/941CC64D-B992-4F3B-AD87-5E6B90795ACB.txt",
+      "ax_sha256": "8f1491f644e022bf7c3a73e0547b7969d15224f1fb29a75d335598b33bae8f9b"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "T17 available answer and composer",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/60838F0D-B07F-4AB3-AF87-5D7DA7DB8121.png",
+      "png_sha256": "4e463b586977de45f4401be0c6fa5222688e80132d0718e0073ddd8da0c8ee6e",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/972FB8AC-B2F1-4488-8613-1E9C92BC0005.txt",
+      "ax_sha256": "e4da6aef20c40e0a5dfb789a37ff41447295fb6cc0dd76534d88d382451f9004"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "tap health-qa-input",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/5410C49F-326C-4AD9-8962-224621FF22FD.png",
+      "png_sha256": "3798118c5eae34a3abb120a1c712c77ea8f8026e7184ec2d28fd74f81a641ff0",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/C85F0BE1-9EE1-46ED-888C-9F4B26FA29E0.txt",
+      "ax_sha256": "450dbedcd4387a1b266cc7443f969888e109d8f1b82986626353261a7c987360"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "T17 focused composer and software keyboard",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/E11DEEB7-6D2C-44F2-B48B-4DB636E2CAA3.png",
+      "png_sha256": "3798118c5eae34a3abb120a1c712c77ea8f8026e7184ec2d28fd74f81a641ff0",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/5B854AA1-2100-4B30-8E69-E54316C67FF2.txt",
+      "ax_sha256": "39cb99db07fa8127feed747ba242792b8c9695606735b7868c9e0ee626885e30"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "tap health-qa-send",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/8A3F1F88-1B20-4FFC-B8CC-1908CBDEFEBC.png",
+      "png_sha256": "e9ece95339c309000e21185911f4d0783b10529ff7de7a8337b273a1dbe697f6",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/2F77AEE6-8582-44ED-B97C-45BDA84BD348.txt",
+      "ax_sha256": "71f2c373fd4ce52ac3893489b87f4467fe3b481162a6d391dca05dd21f5a2680"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "tap health-qa-browse-records",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/74B4213E-FBDB-42A5-8188-25BCDD95F0F2.png",
+      "png_sha256": "ca01fb9c97d19fcd4f7c17f2c1c981c0588f78fc289197063c501f6ff072bc1a",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/1299BDDA-8B39-4648-A9E4-C5E1E26A8595.txt",
+      "ax_sha256": "258bb9fc6fac9eb8d1f8733b84cc98171a51aced82224f6af8f1d88df374b934"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "T17 browse records",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/85EF3E9D-6466-4B2B-B648-0C64CF979B2B.png",
+      "png_sha256": "ca01fb9c97d19fcd4f7c17f2c1c981c0588f78fc289197063c501f6ff072bc1a",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/523F01E1-E5EA-4FFC-AE5D-E12AEA9E9018.txt",
+      "ax_sha256": "ab148d78d7075a328f26557a4d06d5363753b6686d864f10cb18482fb6171bfe"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "tap health-qa-done",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/75C186E7-1538-45A0-990B-036CA34A86EE.png",
+      "png_sha256": "e54e304345cefb4b2aa9da79d50b21c4dc7ee6d6266ab630376498d307e52725",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/685714CD-6446-4CEA-9ADB-6157DFB11C24.txt",
+      "ax_sha256": "59b0daf9e9eacb59decd6d29a3aa2536b4da824545799f2da26d56c29508cd3c"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "tap dashboard-health-qa-card",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/EAC76D7A-8E0D-4CDE-BAE9-28C4BC8C1848.png",
+      "png_sha256": "3941f4b4a35f3b8ff8f7ecbcd084e0c86a4ea0a2c2479df2259a4bcb7cf7cdef",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/E3CBD5E6-1DF7-4383-8DA1-F0B5F315903A.txt",
+      "ax_sha256": "0d7cb5ebe4b460be22750a9d9e0e89e75f8a84c39f1f09ae26ab5cfd31c73bf0"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "T17 unavailable explanation",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/FD4A0485-27CC-4257-B298-B18488C2C6CC.png",
+      "png_sha256": "3941f4b4a35f3b8ff8f7ecbcd084e0c86a4ea0a2c2479df2259a4bcb7cf7cdef",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/21992BB8-C8D8-49FB-B4C0-A300AD79D7DF.txt",
+      "ax_sha256": "74ef93d17702d736a5bd6edc0bf2423efc737fc76b381679df4e276c9a226f8f"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "T17 unavailable Browse route",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/8E203666-D52C-477F-A0A7-2091E7356846.png",
+      "png_sha256": "3941f4b4a35f3b8ff8f7ecbcd084e0c86a4ea0a2c2479df2259a4bcb7cf7cdef",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/43397377-F1EC-49C4-A9D2-817271A0926D.txt",
+      "ax_sha256": "7af81c4ba8c2e0280debe424780b41c361ec2ad537d73624e4e8c5ee0e76e2e2"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "tap health-qa-browse-records",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/B9CCB103-B1C9-4B2F-88E0-637C646F1B7F.png",
+      "png_sha256": "d413d5e1f5610f0693496cad5405a9cd0623ae5bc2625a3b63b7a4505dcde8b1",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/A6978A7E-01B5-4832-9C85-3C6EB0CD78C4.txt",
+      "ax_sha256": "e0bf985c0e101775eead595e92179b7290c5e268d07792019e5b542d4b45ee29"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "tap health-qa-done",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/1681155B-936A-4D21-90E7-51A709069DB8.png",
+      "png_sha256": "740018fe075b350d6744ba0e9c940705e635f744c94646ea91d2b7e9de0559a0",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/AD389457-50BE-46DD-AA38-232F146139C9.txt",
+      "ax_sha256": "8ab1140f1118f11ecb26b26d0290e80695b0ae7cca81be957c72ee552a4528dc"
+    },
+    {
+      "screen": "T17",
+      "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+      "checkpoint": "T17 returned to Today",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/87A9853B-6D47-4897-944A-F2C3EDFA817D.png",
+      "png_sha256": "740018fe075b350d6744ba0e9c940705e635f744c94646ea91d2b7e9de0559a0",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/2089D92A-4EE2-47E1-971E-90A95A4FCF86.txt",
+      "ax_sha256": "2448b5ce57d9f985fa9f0cbb13f8d7bfc10c6c1006bce0765f8ff2c90808c63c"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "T18 editor hero",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/652634AB-1C02-439F-9A69-C28003217400.png",
+      "png_sha256": "b6cdf6c35cce1b71ee54be4b808a63f6ff6a4037c5000005c8367c1d196d72e3",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/43434948-DA3F-4FBC-84E8-FE9C341EBE83.txt",
+      "ax_sha256": "b935f4d7b1e6ec83107a58e7de1d93f5daac3c144c5d0a40f0dc363c82c93ab4"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "T18 selected rows",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/ED5A9E91-CAD8-4264-80B8-D2B96919FB95.png",
+      "png_sha256": "b6cdf6c35cce1b71ee54be4b808a63f6ff6a4037c5000005c8367c1d196d72e3",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/FFFBA7AB-6712-4CDC-BCBA-907D8F54C04B.txt",
+      "ax_sha256": "9a7d4f624fd51ddef34bab95a2656e2c29931c35b76d5c2979edae55f34c5e79"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "tap pinned-metrics-editor-row-sleep",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/309A04BD-1D23-48A9-B2BF-E1B93148E371.png",
+      "png_sha256": "9784d5f91ec7a7ab599e3dc26825679d37dff79f9f6714cf1a177f25245ac218",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/51A4B02F-B9FD-4F8C-AF7B-925C84DDE841.txt",
+      "ax_sha256": "e504aed013d4d7267c53a5c7de5b277dec386090e0561d7f6cea9ecb693fe4d5"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "tap pinned-metrics-editor-row-exercise",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/69813E57-D1E4-452D-B7AC-00DF72855A46.png",
+      "png_sha256": "a942f931860a56522fe9bb69db408e43167556bc6bca7dd8f19fc984ff75801b",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/6D8069DD-24A6-4989-AF5D-B3914AD8EC16.txt",
+      "ax_sha256": "8ad1fc24820c96cfe9022f08670971c9ef3e49d3e032732eb3008817828dbfeb"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "tap pinned-metrics-editor-row-steps",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/FD7190DF-4CA2-4AD5-8C43-43FEA0B0EC80.png",
+      "png_sha256": "5eb43a7337023c2333f2c9e1e47307d66f90ba71be846dbe75f62e0620deed26",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/937437F7-41CD-45CE-A1B4-3130463A4EAD.txt",
+      "ax_sha256": "835cc901056367a98b40195f2992617219e6594fa14c5717d2a1ab2848f2305f"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "tap pinned-metrics-editor-row-weight",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/0D470B81-77EE-4C14-A44C-BA0C2B9C1C50.png",
+      "png_sha256": "ce8ecf74952b84aa4d77122e3d629c0a0ce50c486ba5c791dcde178508342234",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/DCDAE807-2632-41D8-8995-81459C0B24A8.txt",
+      "ax_sha256": "ea2c9c63c925c3799fe3e7c0479de186c84d9f5e30526812b9ee74e0bdd28907"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "T18 six selected and limit footer",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/A854368D-5F67-421F-AC14-4B8D376AAAB8.png",
+      "png_sha256": "ce8ecf74952b84aa4d77122e3d629c0a0ce50c486ba5c791dcde178508342234",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/E29D30C7-2188-4888-8763-CAE23D1D4A2E.txt",
+      "ax_sha256": "36f2bc8ccd57f05109ba8d5ba8fd05486c480810c4b348a35349885b63439500"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "tap pinned-metrics-editor-cancel",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/B79AE4B2-CE76-41A8-9C85-7906C35156ED.png",
+      "png_sha256": "e37f83bd6e77241e8bdce0ff730dded771f52cf1716b68ffe8ea3e540ff5a0c5",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/B684796C-7AD9-4EAF-B489-07FC0025C62D.txt",
+      "ax_sha256": "4fd622e85bdd784138bfec033d19f9f530bd668e6c352f43d18a3a5a1293f520"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "tap pinned-metrics-editor-row-steps",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/251D1DD3-C7C1-4E39-A5BA-6E999E8B3343.png",
+      "png_sha256": "010a7ea9c547e2eaf532cd8817abae81c4924d30123577e32c0c074cbcd01995",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/8F39A062-0166-40DD-8BBF-160EB57B060C.txt",
+      "ax_sha256": "d3801aa382370f5b1547ee213f9b63b5a0cc68df466f38eb61b1f58f6f6b8cf5"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "tap pinned-metrics-editor-done",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/CD259189-DD65-4676-A253-89CD1E967B2B.png",
+      "png_sha256": "90cd513b9d2010964979ab6343fe073ad677884c249ba7ee7b683dbe83ef172f",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/877B66E7-C978-41E4-A600-456F1F5DD256.txt",
+      "ax_sha256": "f08975407f8867a4f9b3717d7d39ddd3b208c04455c289525dd4511ce7812493"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "T18 saved selection reopened",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/204C7111-260F-44BE-9061-804C1CCF8D91.png",
+      "png_sha256": "2d3a530a19bd721602c6207512361121c299b70c5573e8f1f69afbff1dbffaa0",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/960E61C0-3E0D-4770-970A-03A17DF510DA.txt",
+      "ax_sha256": "f3eaa86ea0400653d650d1705b108a2b9d4ac9ebe7af2204551d7f2191008e9d"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "tap pinned-metrics-editor-cancel",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/5BB8F8D6-4444-437D-BB5B-7D99D48335CC.png",
+      "png_sha256": "07ab50d95e4396ef75ff62d6529f6f4fb2c4d9703f7a19f152a52decca22a721",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/D2D1647B-FB17-4B0D-8709-422C1C4FCAD0.txt",
+      "ax_sha256": "b91370a8b20a4d99b4c6e50055df656ade4ab2d7f5af1077e50f7f9400adb839"
+    },
+    {
+      "screen": "T18",
+      "test": "TodaySettingsRegressionTests/testPinnedMetricsEditorOpensAndDismisses()",
+      "checkpoint": "before teardown -[TodaySettingsRegressionTests testPinnedMetricsEditorOpensAndDismisses]",
+      "png": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/1D815EC9-1DB7-4D5B-8FC3-074FB81295C2.png",
+      "png_sha256": "07ab50d95e4396ef75ff62d6529f6f4fb2c4d9703f7a19f152a52decca22a721",
+      "ax": ".codex-checks/batch02/evidence/phone-08ad7dba-passed/attachments/F93E62EC-E970-42BB-B456-CB0CF47F9104.txt",
+      "ax_sha256": "1ef28764a202fab823ec87a574ee35e85364428a3b2aba7e89be942fcf520018"
+    }
+  ],
+  "native_findings": [
+    "T17 unavailable hero blank icon",
+    "T17 fallback caption weak light contrast"
+  ],
+  "t18_max_test_only_delta_sha256": "62375241b04103fa605f2bcbd6c2a1e23c123a057450c32cd2a2a3a13312d05d"
+}

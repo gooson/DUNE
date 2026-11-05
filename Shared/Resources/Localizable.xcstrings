@@ -41449,6 +41449,29 @@
     "Select up to %@ metrics shown at the top of Today." : {
       "extractionState" : "manual"
     },
+    "Select up to %lld metrics shown at the top of Today." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select up to %lld metrics shown at the top of Today."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todayタブの上部に表示する指標を最大%lld個選択してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘 탭 상단에 표시할 지표를 최대 %lld개 선택하세요."
+          }
+        }
+      }
+    },
     "Select up to 3 metrics shown at the top of Today." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -49403,6 +49426,29 @@
     },
     "Top %@ Metrics" : {
       "extractionState" : "manual"
+    },
+    "Top %lld Metrics" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top %lld Metrics"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主要指標%lld項目"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주요 지표 %lld개"
+          }
+        }
+      }
     },
     "Top 3 Metrics" : {
       "extractionState" : "manual",
