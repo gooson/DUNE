@@ -4,10 +4,14 @@ struct InjuryFormSheet: View {
     @Bindable var viewModel: InjuryViewModel
     let isEdit: Bool
     let onSave: () -> Void
-    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @ScaledMetric(relativeTo: .title3) private var severityIconWidth: CGFloat = 28
     @State private var saveCount = 0
+
+    private func severityForeground(_ severity: InjurySeverity) -> Color {
+        colorScheme == .light ? severity.color.mix(with: .black, by: 0.45) : severity.color
+    }
 
     var body: some View {
         NavigationStack {
@@ -24,7 +28,7 @@ struct InjuryFormSheet: View {
                             .font(.caption)
                     }
 
-                    Section("Body Part") {
+                    Section {
                         Picker("Location", selection: $viewModel.selectedBodyPart) {
                             Section("Joints") {
                                 ForEach(BodyPart.allCases.filter(\.isJoint), id: \.self) { part in
@@ -51,9 +55,11 @@ struct InjuryFormSheet: View {
                             .pickerStyle(.segmented)
                             .accessibilityIdentifier("injury-form-side")
                         }
+                    } header: {
+                        Label("Body Part", systemImage: viewModel.selectedBodyPart.iconName)
                     }
 
-                    Section("Severity") {
+                    Section {
                         ForEach(InjurySeverity.allCases, id: \.self) { severity in
                             Button {
                                 viewModel.selectedSeverity = severity
@@ -61,13 +67,13 @@ struct InjuryFormSheet: View {
                                 HStack(spacing: DS.Spacing.sm) {
                                     Image(systemName: severity.iconName)
                                         .font(.title3)
-                                        .foregroundStyle(severity.color)
+                                        .foregroundStyle(severityForeground(severity))
                                         .frame(width: severityIconWidth)
 
                                     VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                                         Text(severity.displayName)
                                             .font(.subheadline.weight(.medium))
-                                            .foregroundStyle(theme.sandColor)
+                                            .foregroundStyle(.primary)
                                         Text(severity.severityDescription)
                                             .font(.caption)
                                             .foregroundStyle(DS.Color.textSecondary)
@@ -78,7 +84,7 @@ struct InjuryFormSheet: View {
                                     if viewModel.selectedSeverity == severity {
                                         Image(systemName: "checkmark")
                                             .font(.subheadline.weight(.semibold))
-                                            .foregroundStyle(severity.color)
+                                            .foregroundStyle(severityForeground(severity))
                                     }
                                 }
                                 .contentShape(Rectangle())
@@ -86,9 +92,11 @@ struct InjuryFormSheet: View {
                             .buttonStyle(.plain)
                             .accessibilityIdentifier("injury-form-severity-\(severity.displayName.lowercased())")
                         }
+                    } header: {
+                        Label("Severity", systemImage: "bandage.fill")
                     }
 
-                    Section("Duration") {
+                    Section {
                         DatePicker(
                             "Start Date",
                             selection: $viewModel.startDate,
@@ -126,12 +134,16 @@ struct InjuryFormSheet: View {
                                     .accessibilityIdentifier("injury-form-enddate")
                             }
                         }
+                    } header: {
+                        Label("Duration", systemImage: "calendar")
                     }
 
-                    Section("Notes") {
+                    Section {
                         TextField("Memo (optional)", text: $viewModel.memo, axis: .vertical)
                             .lineLimit(3...6)
                             .accessibilityIdentifier("injury-form-memo")
+                    } header: {
+                        Label("Notes", systemImage: "note.text")
                     }
                 }
                 .scrollContentBackground(.hidden)

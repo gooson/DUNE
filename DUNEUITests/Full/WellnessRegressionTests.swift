@@ -550,6 +550,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
     func testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow() throws {
         openInjuryFormFromToolbar()
+        VisualAudit.capture("H08 add initial form")
 
         let recoveredToggle = app.descendants(matching: .any)[AXID.injuryFormRecoveredToggle].firstMatch
         XCTAssertTrue(recoveredToggle.waitForExistence(timeout: 5), "Recovered toggle should exist")
@@ -562,6 +563,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             app.scrollToInjuryEndDateIfNeeded(maxSwipes: 4, timeoutPerCheck: 1.5),
             "End date should appear after enabling recovered"
         )
+        VisualAudit.capture("H08 add recovered end date")
 
         let saveButton = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Injury save button should exist")
@@ -595,6 +597,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         let form = app.descendants(matching: .any)[AXID.injuryFormScreen].firstMatch
         XCTAssertTrue(form.waitForExistence(timeout: 8), "Edit injury form should appear")
+        VisualAudit.capture("H08 edit initial form")
 
         let saveButton = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Save button should exist in edit mode")
@@ -604,6 +607,63 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         expectation(for: dismissed, evaluatedWith: form)
         waitForExpectations(timeout: 5)
         XCTAssertTrue(detail.waitForExistence(timeout: 8), "Saving edit should return to injury detail")
+    }
+
+    func testInjuryFormAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName",
+            "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+        openInjuryFormFromToolbar()
+
+        let form = app.descendants(matching: .any)[AXID.injuryFormScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let cancel = app.descendants(matching: .any)[AXID.injuryFormCancel].firstMatch
+        let save = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isEnabled && cancel.isHittable)
+        XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isEnabled && save.isHittable)
+        VisualAudit.capture("H08 MAX add title and actions")
+
+        let location = app.descendants(matching: .any)[AXID.injuryFormBodyPart].firstMatch
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormBodyPart), "Location must fit and be reachable")
+        XCTAssertTrue(location.isEnabled)
+        VisualAudit.capture("H08 MAX body part")
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormSide), "Default Knee Side must fit")
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryFormSide].firstMatch.isEnabled)
+        VisualAudit.capture("H08 MAX side")
+        for severity in ["minor", "moderate", "severe"] {
+            let identifier = "injury-form-severity-\(severity)"
+            XCTAssertTrue(revealInjuryFormControl(identifier), "Each severity must fit and be reachable")
+            XCTAssertTrue(app.descendants(matching: .any)[identifier].firstMatch.isEnabled)
+            VisualAudit.capture("H08 MAX severity \(severity)")
+        }
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormStartDate), "Start Date must fit")
+        VisualAudit.capture("H08 MAX start date")
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormRecoveredToggle), "Recovered must fit")
+        XCTAssertTrue(app.setSwitch(AXID.injuryFormRecoveredToggle, to: true, fallbackLabel: "Recovered"))
+        XCTAssertTrue(app.scrollToInjuryEndDateIfNeeded(maxSwipes: 8, timeoutPerCheck: 1))
+        VisualAudit.capture("H08 MAX recovered end date")
+
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormMemo), "Memo must fit")
+        let memo = app.descendants(matching: .any)[AXID.injuryFormMemo].firstMatch
+        XCTAssertTrue(memo.isEnabled && memo.isHittable)
+        memo.auditTap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5), "Software keyboard must appear")
+        VisualAudit.capture("H08 MAX memo software keyboard")
+        XCTAssertTrue(app.dismissKeyboardIfPresent(), "Keyboard must dismiss before Save")
+        XCTAssertFalse(app.keyboards.firstMatch.exists)
+        XCTAssertTrue(save.isEnabled && save.isHittable && app.windows.firstMatch.frame.contains(save.frame))
+        XCTAssertTrue(cancel.isEnabled && cancel.isHittable && app.windows.firstMatch.frame.contains(cancel.frame))
+        VisualAudit.capture("H08 MAX Save and Cancel after keyboard dismissal")
+        save.auditTap()
+        XCTAssertTrue(form.waitForNonExistence(timeout: 10), "Save must dismiss the MAX form")
+        openInjuryHistory()
+        let rows = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "identifier BEGINSWITH %@", "injury-history-row-"))
+        XCTAssertGreaterThanOrEqual(rows.count, 2, "MAX Save must create a history row")
     }
 
     func testInjuryStatisticsRouteOpensFromHistory() throws {
@@ -636,6 +696,48 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         let form = app.descendants(matching: .any)[AXID.bodyFormScreen].firstMatch
         XCTAssertTrue(form.waitForExistence(timeout: 8), "Body form should open from toolbar add menu")
+    }
+
+    private func revealInjuryFormControl(_ identifier: String, maxMoves: Int = 12) -> Bool {
+        let target = app.descendants(matching: .any)[identifier].firstMatch
+        let containers = app.collectionViews.allElementsBoundByIndex
+            + app.tables.allElementsBoundByIndex
+            + app.scrollViews.allElementsBoundByIndex
+        guard let scroll = containers.first(where: { $0.exists && $0.isHittable }) else { return false }
+        func visibleViewport() -> CGRect {
+            let frame = scroll.frame.intersection(app.windows.firstMatch.frame)
+            guard frame.width > 0 && frame.height > 0 else { return .null }
+            var top = frame.minY
+            var bottom = frame.maxY
+            let navigationBar = app.navigationBars.firstMatch
+            if navigationBar.exists && navigationBar.isHittable && navigationBar.frame.intersects(frame)
+                && navigationBar.frame.minY < frame.midY {
+                top = max(top, navigationBar.frame.maxY)
+            }
+            let keyboard = app.keyboards.firstMatch
+            if keyboard.exists && keyboard.isHittable && keyboard.frame.intersects(frame)
+                && keyboard.frame.minY > frame.midY {
+                bottom = min(bottom, keyboard.frame.minY)
+            }
+            return CGRect(x: frame.minX, y: top, width: frame.width, height: max(0, bottom - top))
+        }
+        for _ in 0..<maxMoves {
+            let viewport = visibleViewport()
+            guard viewport.width > 0 && viewport.height > 0 else { return false }
+            if target.exists && target.isHittable && viewport.contains(target.frame) { return true }
+            let delta = target.exists ? target.frame.midY - viewport.midY : viewport.height
+            if target.exists && abs(delta) < 1 { return false }
+            let distance = min(max(abs(delta), viewport.height * 0.2), viewport.height * 0.65)
+            let fraction = distance / scroll.frame.height
+            let startY: CGFloat = delta < 0 ? 0.3 : 0.7
+            let endY = startY + (delta < 0 ? fraction : -fraction)
+            scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
+                    withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
+                ))
+        }
+        let viewport = visibleViewport()
+        return target.exists && target.isHittable && viewport.contains(target.frame)
     }
 
     private func openInjuryFormFromToolbar() {
