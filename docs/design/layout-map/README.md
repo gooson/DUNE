@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+2026-11-05 [H07·P06 자세 기록 상세 배치 계약](posture-record-detail-h07.html)은 저장된 점수 다음에 실제 평가 항목의 값·상태·신뢰도를 두고, Front/Side 사진과 원래 행동을 뒤에 둔다. [정적 DUNE 시안](../theme-map/themes/dune-posture-record-detail-h07.html)은 실제 기록이나 앱 캡처가 아니다. H07과 P06 각 네 기기·자세의 새 네이티브 검증은 대기 중이다.
+
 2026-11-05 [H06 신체 기록 이력 배치 계약](body-history-h06.html)은 기존 날짜·측정값·수동 편집 메뉴·Apple Health 읽기 전용 행을 유지하며, 세 값의 원래 아이콘과 DUNE 신체 색의 캡슐을 한 행 구성요소로 묶는다. 수동 muscle은 Muscle Mass (kg), Apple Health의 HealthKit lean 값은 Lean Body Mass로 접근성 이름을 구분한다. 밝은 화면의 아이콘만 같은 신체 색을 진하게 표시해 두 kg 값의 기호를 읽을 수 있게 한다. [정적 표현 시안](../theme-map/themes/dune-body-history-h06.html)은 예시이며 실제 앱 캡처가 아니다. 검증 완료한 H05 입력 Form과 별개다. 일반 iPhone·iPad·Duo 접힘·펼침의 기존 여섯 사례와 실제 PNG/AX 12쌍은 [H06 네이티브 갤러리](../full-redesign-map/review/h06-body-history-native-2026-11-05/index.html)에서 확인한다.
 
 2026-11-05 [H05 신체 기록 입력·수정 배치 계약](body-record-form-h05.html)은 한 네이티브 Form의 날짜·세 측정 필드·메모·키보드·고정 저장 행동과 큰 글씨 스크롤을 정한다. [DUNE 표현 시안](../theme-map/themes/dune-body-record-form-h05.html)의 값은 설명용이며 새 앱 캡처가 아니다. H05 편집은 같은 ID이고 H06 이력 화면은 별개다.
