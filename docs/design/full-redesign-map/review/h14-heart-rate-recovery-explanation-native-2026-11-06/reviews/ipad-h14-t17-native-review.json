@@ -1,0 +1,371 @@
+{
+  "status": "independent iPad normal native review H14/T17 only",
+  "source_revision": "f97392084401db4c5108f241db1cb19901e072d8",
+  "archive": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed",
+  "sdk": {
+    "executed": 3,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0
+  },
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "EDE87B03-4B23-4EFD-B3FA-438D02BFCF59",
+    "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+    "modelName": "iPad mini (A20 Pro)",
+    "osBuildNumber": "24B8117",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "selected_index_sha256": "51b3e73fb3f294a9b0975b344af607ddb1a1a0ae077f2f9df0256eabdf45ca18",
+  "source_sha256": {
+    "DUNE/Presentation/Shared/Extensions/HeartRateRecovery+View.swift": "7d6cff27fa112e92da889171aebcdab00fe0010d18fb1c2c5281fb7dbb0e671d",
+    "DUNE/Presentation/Dashboard/HealthDataQASheet.swift": "4a3c39338a7bb2521210b0c9f332193f627b9299bd404fcac7d6d5ae8869589e",
+    "DUNE/App/ContentView.swift": "03bcef09eb49fee7f50b8f45d493d1aaa80eb8812016bccd5bed281fb1be177e",
+    "DUNE/App/Intents/HealthQueryNavigation.swift": "2b98241e2117451244f86bfe86435c49e0a0c14d1e94ad3e38144489d95a40a0",
+    "DUNE/Presentation/HealthQuery/HealthQueryUITestFixture.swift": "ccafb9ac1c5f045c461cb6e4ecab343eb07ca49194f172c31ebd14b5518acb84"
+  },
+  "H14_close_frame_points": [
+    584.0,
+    554.5,
+    48.0,
+    48.0
+  ],
+  "pairs": {
+    "H14": [
+      {
+        "checkpoint": "tap heart-rate-recovery-info-button",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/502E0D77-31FE-4E45-A292-E6691B806815.png",
+        "png_sha256": "3d550547d74acdd9ff53437eec8035e4574c194bcbe226e5968256c61a2399b9",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/594BD239-8AC2-45BD-BEA3-4068C9E86C1E.txt",
+        "ax_sha256": "b25f110e01a70882b4c460ef71b5920f01578b32fa79daaad91322f68b27325d",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909057.403
+      },
+      {
+        "checkpoint": "H14 recovery explanation title",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/4162A289-9D8F-4F71-BD4F-D4B9AAB8079A.png",
+        "png_sha256": "3d550547d74acdd9ff53437eec8035e4574c194bcbe226e5968256c61a2399b9",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/DC7188C1-9D6A-4459-A79B-B2951A5E6726.txt",
+        "ax_sha256": "f5cc7bebfd1d06a839777b769420186d7abcc8329783280164a122c50e671884",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909061.368
+      },
+      {
+        "checkpoint": "H14 recovery definition body",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/80FF86BE-0B65-4A5C-A754-AB39E82B73E5.png",
+        "png_sha256": "3d550547d74acdd9ff53437eec8035e4574c194bcbe226e5968256c61a2399b9",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/0F7F98BD-CC4D-4AC1-ABE9-DC99633913F7.txt",
+        "ax_sha256": "1bdb5c3423b94810670426d8762e6b473ae04a9bd5a9144e5cb695ca88831342",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909067.385
+      },
+      {
+        "checkpoint": "H14 recovery measurement body",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/A878CBAF-B26C-4CE5-91CD-B7EC96305773.png",
+        "png_sha256": "3d550547d74acdd9ff53437eec8035e4574c194bcbe226e5968256c61a2399b9",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/94BC0814-CB80-4AF4-BFFD-7F2E44A17C88.txt",
+        "ax_sha256": "94890b891affbdc9fbfbc2f22c2c371f0d0fd1e3b33f6574f32c556b4a24dd54",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909073.346
+      },
+      {
+        "checkpoint": "H14 recovery rating guide",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/ABE417D9-68BF-427D-9505-35E3A0AE61A3.png",
+        "png_sha256": "3d550547d74acdd9ff53437eec8035e4574c194bcbe226e5968256c61a2399b9",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/6710E754-C745-499A-BDCE-CBF3C27CDF00.txt",
+        "ax_sha256": "b3403555542c1eb9a340f255291b3a35d0c288d67fd1197c240a827c79a19067",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909080.886
+      },
+      {
+        "checkpoint": "tap heart-rate-recovery-info-close",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/87449922-1BB1-4B39-8B84-9A35852A44DE.png",
+        "png_sha256": "11a5db3c7540ca5e7de0c52b9e923e9f65999f6d9887978535927d175dcab243",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/4E91005F-4A29-43BA-A970-704901BBFCE4.txt",
+        "ax_sha256": "a52cd968e4d5d1a6d3622ad418aabe715a9a695cad8292059235202bb57b0650",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909084.576
+      },
+      {
+        "checkpoint": "before teardown -[ActivityExerciseRegressionTests testVisualAuditHeartRateRecoveryExplanation]",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditHeartRateRecoveryExplanation()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/39CFD18F-AED1-4820-B0A5-3966CF29F8CF.png",
+        "png_sha256": "11a5db3c7540ca5e7de0c52b9e923e9f65999f6d9887978535927d175dcab243",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/6836BE20-FA0C-4792-BCFB-69E72D74658D.txt",
+        "ax_sha256": "e6d54175521c2218fa3bfe8eca1efd6d967ae3ac078bba0b370ba7a67b6b1f52",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909087.031
+      }
+    ],
+    "T17": [
+      {
+        "checkpoint": "tap dashboard-health-qa-card",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/617ACB7F-E90F-45D9-B3AE-BA265F72E195.png",
+        "png_sha256": "f4744a8a7eb87577ed55ad6a910ade892b7435422f7c53a4b7a27f080b277e3c",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/B0B3277C-5D96-4D55-914F-9A0B4D57ABF3.txt",
+        "ax_sha256": "15e5f80849bc78885d365f5f1aa1e22c39d5973132cc5ef8e3b5bb69f8fd19b0",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909107.736
+      },
+      {
+        "checkpoint": "T17 available overview",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/85465F0B-D9B2-4286-9DCC-66D16833A646.png",
+        "png_sha256": "f4744a8a7eb87577ed55ad6a910ade892b7435422f7c53a4b7a27f080b277e3c",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/D9C898A0-69AF-4E71-8784-225C1F44A390.txt",
+        "ax_sha256": "e18e2793e84c99ab5bf5c90e1af69fde41e9fbc95a366dbe149408f76b0987e4",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909118.99
+      },
+      {
+        "checkpoint": "T17 available suggested prompt",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/178A0934-B15D-4432-A140-3F9AF91B3771.png",
+        "png_sha256": "f4744a8a7eb87577ed55ad6a910ade892b7435422f7c53a4b7a27f080b277e3c",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/F72632CF-6C52-4905-953F-DBAA2B0A388C.txt",
+        "ax_sha256": "1723ac33a567e9fc5eaa2618ca9bf04cbe95d340eeb76041a3d6db112148bf78",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909122.616
+      },
+      {
+        "checkpoint": "tap health-qa-prompt-sleep",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/E1841B03-9638-4478-9C7A-7387EB91000D.png",
+        "png_sha256": "8e1385077e31f03f240be60e08323b162cd0834ef9e74d39c949d8891791015d",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/C8D82654-6CB1-4F11-A3F6-45B09C457ACA.txt",
+        "ax_sha256": "28a93907f390742e276e1e92852246979b8d349df4a2f345ffbc0791ba5572b5",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909124.675
+      },
+      {
+        "checkpoint": "T17 available answer and composer",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/9B9C8094-EA24-44D2-8887-6597A3D70D98.png",
+        "png_sha256": "8e1385077e31f03f240be60e08323b162cd0834ef9e74d39c949d8891791015d",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/9D23737D-0B3C-4EAB-94B9-67B9ACF80402.txt",
+        "ax_sha256": "c900c0cab85bf0a7af00e345aff79e3bacbbc4dc53590f89cb0f2676a37ac190",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909130.673
+      },
+      {
+        "checkpoint": "tap health-qa-input",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/94DA3940-CCC9-4338-93FD-60B6A935913D.png",
+        "png_sha256": "2a4816ab86b566ee362ea644078c87da82766706c2d7fc9a6f51643ea6df181d",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/AE03487C-036C-4E87-8D5C-37C04F0F3DC2.txt",
+        "ax_sha256": "a77ca591ab1561fa97c0fe70168009794f985c9271c262748a8e8dd8a7d261d2",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909135.688
+      },
+      {
+        "checkpoint": "T17 focused composer and software keyboard",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/42DF308E-1A94-4E53-B17B-70391D17C30E.png",
+        "png_sha256": "2a4816ab86b566ee362ea644078c87da82766706c2d7fc9a6f51643ea6df181d",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/43341A68-A1BB-4585-823C-873A40B2225C.txt",
+        "ax_sha256": "fc12ec33258558bb0b3e5d4b778c57d79524c235ae4b795d36bf722d3b2c00d9",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909138.301
+      },
+      {
+        "checkpoint": "tap health-qa-send",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/C125EAEC-9D11-4422-A698-3C0CD92A4704.png",
+        "png_sha256": "e012e1d8dad3fa961bfc5ff725b91b44b56ab3827b46aef78581445a634d33a6",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/DE5A6A0D-9D41-4840-A3AF-4BB781E2D92B.txt",
+        "ax_sha256": "ae23692743a9db7bc2211ac544ab89e8f46141cf22d76ec1b3fc957f2f9dec51",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909141.987
+      },
+      {
+        "checkpoint": "tap health-qa-browse-records",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/3B6A0CA3-9856-4A06-9141-1A7578224503.png",
+        "png_sha256": "2c5f00bf34ac2d78091a9b19c0353936a33553f1d80d263452e55d86b7f036c9",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/88545384-B9BC-4D00-84DA-872073791C0F.txt",
+        "ax_sha256": "f49e50268886f44ff07c4cc1dce54b42d62265322a5fc5c67c36392506a16232",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909147.536
+      },
+      {
+        "checkpoint": "T17 browse records",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/33410D4E-A499-479F-A19C-A025F546DFE4.png",
+        "png_sha256": "2c5f00bf34ac2d78091a9b19c0353936a33553f1d80d263452e55d86b7f036c9",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/323A40E0-9F0F-4715-A67F-B5EE6E87971B.txt",
+        "ax_sha256": "eeba680bfbf2946a4a25d226f8a8f2872f54a8c4e214909854634b6019d9f539",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909150.203
+      },
+      {
+        "checkpoint": "tap health-qa-done",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/0904BEED-A71F-489A-8662-BD9822AD6687.png",
+        "png_sha256": "50bf51e293abf206a2f251472c56b84fe9f2c5b20938d9eafe9111b6ddad403d",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/2204479B-53F9-440C-A15B-1E136383A2CD.txt",
+        "ax_sha256": "0d8d82d0aac523840dd2ce62f0b3cdb7bc35bf84b31aad78b3f734041225f315",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909159.256
+      },
+      {
+        "checkpoint": "tap dashboard-health-qa-card",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/A1597607-E58B-4AC1-8E91-5A9C282A46CE.png",
+        "png_sha256": "0a464fa895f815e47d1c14b1fbef3f8f4e1582a0b1eeab56f7c00b9433946b50",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/50EB9D3C-B025-43C8-8321-1605C0BCFB7A.txt",
+        "ax_sha256": "03f1a66e7eb8ca06f01a7024c9e353ea21a118816f4b7ed4cb46f2d1bbbcfe53",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909171.917
+      },
+      {
+        "checkpoint": "T17 unavailable explanation",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/7461ED76-F095-43C4-99A8-B7005E0A6F2D.png",
+        "png_sha256": "0a464fa895f815e47d1c14b1fbef3f8f4e1582a0b1eeab56f7c00b9433946b50",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/B690A712-52F7-4DA1-8E63-F263EE6D7391.txt",
+        "ax_sha256": "dcb01731870a8765e82717b18392bb1938106999818f60a7e801e9c3942d7e79",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909183.259
+      },
+      {
+        "checkpoint": "T17 unavailable Browse route",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/FE93E8F9-A241-484B-9B67-08E16F4292FE.png",
+        "png_sha256": "0a464fa895f815e47d1c14b1fbef3f8f4e1582a0b1eeab56f7c00b9433946b50",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/4925C502-5146-42E2-B32B-A670E729691B.txt",
+        "ax_sha256": "023bc78b24274300530b1ba7c582b0774afbc383659b29d52353f1b2067f560c",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909185.297
+      },
+      {
+        "checkpoint": "tap health-qa-browse-records",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/10721B45-CE50-4EC0-AA20-86F1DCFC0673.png",
+        "png_sha256": "aab2755d94d2cd8181682a03682ce203a24bc9f425b0f61b7b28067deedbbad1",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/8BB2293B-5F26-4E0A-BBE3-8E7860A60713.txt",
+        "ax_sha256": "4053d73a1a7f6a04053078e2fa6935f796b2542af6e5b3479807aa4bc42b1292",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909187.774
+      },
+      {
+        "checkpoint": "tap health-qa-done",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/04EC3FC1-85EC-456D-B225-CC9FB827977D.png",
+        "png_sha256": "6fc7c3d7297703c97fd8ef96a2770dd12d318cf11bcbd338d5a95897a23f050e",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/1D084E66-1C83-4DB0-945F-2080D9181C91.txt",
+        "ax_sha256": "ed4591cc5c6fa97e71e3144ee4042a5e56fa18663c965fe71029bc122052132d",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909197.385
+      },
+      {
+        "checkpoint": "T17 returned to Today",
+        "test": "DesignMapAdditionalRoutesTests/testHealthDataQAOpensFromToday()",
+        "png": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/E3A4D100-E2A7-45B1-85AB-BE78D9F63217.png",
+        "png_sha256": "6fc7c3d7297703c97fd8ef96a2770dd12d318cf11bcbd338d5a95897a23f050e",
+        "ax": ".codex-checks/batch02/evidence/ipad-f9739208-normal3-passed/attachments/58DE619C-BDA4-4828-A39E-83F37129B3DD.txt",
+        "ax_sha256": "a6af6d7ff63b053a5b2254051b98dd2c98e4ee0d753e4b93b9447e9ec6b3db40",
+        "pixels": [
+          1512,
+          2316
+        ],
+        "timestamp_unix": 1793909199.953
+      }
+    ]
+  },
+  "fixture_proof": {
+    "test_launch_argument": "--ui-health-query-fixture",
+    "routing": "DEBUG and --uitesting gate in HealthQueryServiceRouting",
+    "child_screen": "Health information",
+    "child_kind": "Latest Workout",
+    "synthetic_workout": "Sample bench press",
+    "hero_value": "45:00",
+    "normal_phone_duo_metadata": "unchanged historical fixtures; no retroactive relabel"
+  },
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "limits": [
+    "Only iPad English normal H14/T17 reviewed; T18 iPad localization title gate is separate.",
+    "Fixture result is synthetic test data, not a personal health measurement.",
+    "No map publication/full CI claim."
+  ]
+}

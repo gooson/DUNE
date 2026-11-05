@@ -1,0 +1,210 @@
+Attributes: Application, 0x1130ac3c0, pid: 88035, label: 'DUNE'
+Element subtree:
+ →Application, 0x1130ac3c0, pid: 88035, label: 'DUNE'
+    Window (Main), 0x1130ac280, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x1130af700, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x1130acc80, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x1130af480, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x1130ac500, {{-466.0, -678.0}, {1398.0, 2034.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+          Other, 0x1130afac0, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x1130aef80, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x1130ac640, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x1130ac780, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x1130afd40, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x1130af5c0, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x1130aea80, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x1130aebc0, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x1130ad040, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x1130ac140, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x1130ac000, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x1130ad180, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x1085dfac0, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Running'
+                            Other, 0x1085df980, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x1085df840, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x1085df700, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x1085df5c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                    ScrollView, 0x1085df480, {{0.0, 0.0}, {466.3, 678.0}}, identifier: 'healthkit-workout-detail-screen'
+                                      Other, 0x1085df340, {{0.0, -3286.7}, {382.3, 4372.7}}
+                                        StaticText, 0x1085df200, {{105.7, -3270.7}, {207.3, 67.0}}, label: 'Running'
+                                        Image, 0x1085df0c0, {{38.7, -3182.3}, {48.3, 62.7}}, identifier: 'figure.run', label: 'Running'
+                                        StaticText, 0x1085def80, {{105.7, -3201.7}, {224.7, 116.7}}, label: 'November 5, 2026'
+                                        StaticText, 0x112fb17c0, {{105.7, -3083.0}, {114.0, 51.3}}, label: '04:35'
+                                        StaticText, 0x112fb1a40, {{32.0, -3019.7}, {116.7, 130.7}}, label: '35min'
+                                        StaticText, 0x112fb1900, {{170.2, -2994.2}, {70.3, 130.7}}, label: '420'
+                                        StaticText, 0x1085d35c0, {{262.0, -2994.2}, {83.3, 130.7}}, label: '6.20'
+                                        StaticText, 0x1085d3ac0, {{37.0, -2887.0}, {106.7, 102.3}}, label: 'Duration'
+                                        StaticText, 0x1085d3340, {{168.7, -2861.5}, {73.3, 51.3}}, label: 'kcal'
+                                        StaticText, 0x1085d3480, {{275.5, -2861.5}, {56.3, 51.3}}, label: 'km'
+                                        Other, 0x1085d3700, {{16.0, -2752.7}, {350.3, 1315.0}}, identifier: 'cardio-atlas-section'
+                                          StaticText, 0x1085d3840, {{39.0, -2736.7}, {196.3, 65.7}}, label: 'Atlas'
+                                          Image, 0x1085d3c00, {{39.0, -2730.3}, {57.0, 54.0}}, identifier: 'map', label: 'Show Map'
+                                          StaticText, 0x1085d3e80, {{32.0, -2667.0}, {151.7, 51.3}}, label: 'Outdoor'
+                                          Button, 0x1085d3d40, {{32.0, -2607.7}, {318.3, 72.7}}, identifier: 'cardio-atlas-place', label: 'Place'
+                                            StaticText, 0x1085d3980, {{32.0, -2607.7}, {318.3, 72.7}}, label: 'Place'
+                                            Image, 0x10859e940, {{57.3, -2595.7}, {36.3, 45.3}}, identifier: 'mappin.and.ellipse', label: 'Remove Map Pin'
+                                          Button, 0x10859c500, {{32.0, -2523.0}, {318.3, 72.7}}, identifier: 'cardio-atlas-share', label: 'Share'
+                                            StaticText, 0x10859c640, {{32.0, -2523.0}, {318.3, 72.7}}, label: 'Share'
+                                            Image, 0x10859e300, {{58.7, -2512.7}, {33.7, 45.7}}, identifier: 'square.and.arrow.up', label: 'Share'
+                                          ScrollView, 0x10859e440, {{32.0, -2434.3}, {318.3, 240.0}}, identifier: 'cardio-atlas-map'
+                                            Other, 0x10859e580, {{32.0, -2715.7}, {318.3, 521.3}}
+                                              StaticText, 0x10859e6c0, {{73.5, -2699.7}, {235.3, 195.7}}, label: 'Location not recorded'
+                                              StaticText, 0x10859e800, {{57.2, -2501.0}, {268.0, 260.7}}, label: 'Workout metrics are still available.'
+                                            Other, 0x10859de00, {{317.3, -2434.3}, {30.0, 240.0}}, label: 'Vertical scroll bar, 3 pages', value: 100%
+                                              Other, 0x10859c3c0, {{344.3, -2305.0}, {3.0, 107.7}}
+                                            Other, 0x10859ea80, {{317.3, -2434.3}, {30.0, 240.0}}, label: 'Vertical scroll bar, 3 pages', value: 100%
+                                              Other, 0x10859dcc0, {{344.3, -2305.0}, {3.0, 107.7}}
+                                          Button, 0x10859e080, {{32.0, -2178.3}, {318.3, 244.7}}, identifier: 'cardio-atlas-journey', label: 'Journey, 24.4 km / 20.0 km', value: 100%
+                                            StaticText, 0x10859f700, {{239.0, -2178.3}, {111.3, 232.7}}, label: '24.4 km / 20.0 km'
+                                            StaticText, 0x10859f840, {{38.0, -2119.9}, {149.0, 116.7}}, label: 'Journey'
+                                            Image, 0x10859f980, {{38.0, -2116.3}, {42.3, 52.0}}, identifier: 'point.topleft.down.to.point.bottomright.curvepath', label: 'Downward Point At The Top-Left Corner Of To Point At The Bottom-Right Corner Of Curvepath'
+                                            ProgressIndicator, 0x10859fc00, {{32.0, -1937.7}, {318.3, 4.0}}, value: 100%
+                                              ProgressIndicator, 0x10859fac0, {{32.0, -1947.7}, {318.3, 24.0}}, value: 100%
+                                          Button, 0x10859fe80, {{32.0, -1908.7}, {318.3, 234.7}}, identifier: 'cardio-atlas-passport', label: 'Passport, 3 achievements'
+                                            StaticText, 0x10859fd40, {{38.0, -1906.7}, {127.7, 232.7}}, label: 'Passport'
+                                            Image, 0x10859c280, {{38.0, -1904.3}, {46.0, 54.7}}, identifier: 'medal', label: 'Medal With A Ribbon'
+                                            StaticText, 0x10859db80, {{176.3, -1907.7}, {134.7, 232.7}}, label: '3 achievements'
+                                            Image, 0x10859c140, {{327.0, -1809.7}, {20.7, 36.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x1130ab840, {{32.0, -1658.1}, {303.7, 204.3}}, label: 'Progress from available history through this workout.'
+                                        Image, 0x1130ab200, {{29.0, -1416.3}, {37.7, 44.3}}, identifier: 'medal.fill', label: 'Medal, Filled'
+                                        StaticText, 0x1130ab700, {{75.7, -1419.7}, {54.3, 51.3}}, label: '5K'
+                                        Image, 0x1130ab340, {{157.7, -1415.0}, {44.0, 42.0}}, identifier: 'star.fill', label: 'Favorite'
+                                        StaticText, 0x1130ab0c0, {{209.3, -1419.7}, {55.0, 51.3}}, label: 'PR'
+                                        Other, 0x1130aaf80, {{28.0, -963.4}, {321.5, 1116.0}}
+                                          StaticText, 0x1130ab5c0, {{293.8, -963.4}, {55.7, 306.3}}, label: 'Elevation Gain'
+                                          StaticText, 0x1130abd40, {{82.3, -926.4}, {89.7, 102.3}}, label: 'Avg Pace'
+                                          Image, 0x1130abc00, {{31.7, -896.7}, {43.0, 43.0}}, identifier: 'speedometer', label: 'Speed'
+                                          Image, 0x1130ab980, {{210.7, -832.3}, {79.7, 44.3}}, identifier: 'mountain.2.fill', label: 'Two Mountain Peaks, Filled'
+                                          StaticText, 0x1130ab480, {{28.0, -816.1}, {70.3, 195.7}}, label: '5'38"'
+                                          StaticText, 0x1130abac0, {{100.3, -804.7}, {68.7, 51.3}}, label: '/km'
+                                          StaticText, 0x1131a4000, {{207.2, -649.1}, {70.3, 65.7}}, label: '82'
+                                          StaticText, 0x1131a4140, {{279.5, -637.7}, {35.0, 51.3}}, label: 'm'
+                                          StaticText, 0x1131a4280, {{82.3, -551.4}, {92.3, 204.3}}, label: 'Floors Climbed'
+                                          StaticText, 0x1131a43c0, {{251.8, -532.9}, {85.0, 102.3}}, label: 'Steps'
+                                          Image, 0x1131a4500, {{211.3, -506.3}, {31.3, 49.3}}, identifier: 'figure.walk', label: 'Walk'
+                                          Image, 0x1131a4640, {{33.3, -476.7}, {39.7, 54.7}}, identifier: 'figure.stairs', label: 'Figure On Stairs'
+                                          StaticText, 0x1131a4780, {{207.2, -422.6}, {83.3, 130.7}}, label: '6,540'
+                                          StaticText, 0x1131a48c0, {{292.5, -411.2}, {55.7, 102.3}}, label: 'steps'
+                                          StaticText, 0x1131a4a00, {{28.0, -339.1}, {35.3, 65.7}}, label: '9'
+                                          StaticText, 0x1131a4b40, {{65.3, -327.7}, {103.0, 51.3}}, label: 'floors'
+                                          StaticText, 0x1131a4c80, {{264.2, -241.4}, {80.3, 255.3}}, label: 'Environment'
+                                          Image, 0x1131a4dc0, {{211.0, -136.7}, {45.7, 45.7}}, identifier: 'sun.max.fill', label: 'Brightness Higher'
+                                          Image, 0x1131a4f00, {{31.7, -104.0}, {35.0, 45.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          StaticText, 0x1131a5040, {{74.3, -106.9}, {100.0, 51.3}}, label: 'Effort'
+                                          StaticText, 0x1131a5180, {{28.0, -46.7}, {83.3, 65.7}}, label: '7.5'
+                                          StaticText, 0x1131a52c0, {{113.3, -35.4}, {58.3, 51.3}}, label: '/10'
+                                          StaticText, 0x1131a5400, {{207.2, 21.9}, {115.3, 130.7}}, label: 'Outdoor'
+                                        StaticText, 0x1131a5540, {{34.7, 192.6}, {212.3, 125.3}}, label: 'Heart Rate'
+                                        Image, 0x1131a5680, {{163.7, 317.7}, {55.0, 57.3}}, identifier: 'waveform.path.ecg', label: 'Ecg Waveform Path'
+                                        StaticText, 0x1131a57c0, {{31.5, 387.9}, {319.3, 51.3}}, label: 'No heart rate data'
+                                        StaticText, 0x1131a5900, {{34.0, 437.9}, {117.0, 232.7}}, label: 'Recovery'
+                                        Button, 0x1131a5a40, {{163.3, 529.7}, {49.0, 49.0}}, identifier: 'heart-rate-recovery-info-button', label: 'Info'
+                                        StaticText, 0x1131a5b80, {{240.7, 495.9}, {31.3, 116.7}}, label: '29'
+                                        StaticText, 0x1131a5cc0, {{276.0, 477.6}, {35.0, 153.3}}, label: 'bpm'
+                                        StaticText, 0x1131a5e00, {{319.0, 452.1}, {31.3, 204.3}}, label: 'Good'
+                                        StaticText, 0x1131a5f40, {{27.0, 711.9}, {287.7, 63.3}}, label: 'Weather'
+                                        StaticText, 0x1131a6080, {{30.8, 811.1}, {71.3, 133.0}}, label: '18°'
+                                        Image, 0x1131a61c0, {{146.7, 848.0}, {59.3, 59.3}}, identifier: 'sun.max.fill', label: 'Brightness Higher'
+                                        StaticText, 0x1131a6300, {{259.8, 785.6}, {71.3, 133.0}}, label: '46%'
+                                        StaticText, 0x1131a6440, {{28.0, 946.1}, {77.0, 102.3}}, label: 'Temp'
+                                        StaticText, 0x1131a6580, {{125.0, 914.3}, {102.3, 102.3}}, label: 'Condition'
+                                        StaticText, 0x1131a66c0, {{247.3, 920.6}, {96.3, 153.3}}, label: 'Humidity'
+                                      Other, 0x1131a6800, {{349.5, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 8 pages', value: 88%
+                                        Other, 0x1131a6940, {{376.5, 481.7}, {3.0, 81.3}}
+                                      Other, 0x1131a6a80, {{349.5, 82.0}, {30.0, 537.0}}, label: 'Vertical scroll bar, 8 pages', value: 88%
+                                        Other, 0x1131a6bc0, {{376.5, 481.7}, {3.0, 81.3}}
+                Other, 0x1131a6d00, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x1131a6e40, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x1131a6f80, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x1131a70c0, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x1131a7200, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x1131a7340, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1131a7480, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x1131a75c0, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x1131a7700, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x1131a7840, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x1131a7980, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                            Other, 0x1131a7ac0, {{394.0, 234.0}, {48.0, 48.0}}
+                              Other, 0x1131a7c00, {{394.0, 234.0}, {48.0, 48.0}}
+                                Other, 0x1131a7d40, {{399.0, 239.0}, {38.0, 38.0}}
+                                  Other, 0x1131a7e80, {{399.0, 239.0}, {38.0, 38.0}}
+                                    Button, 0x1131a8000, {{399.0, 239.0}, {38.0, 38.0}}, identifier: 'healthkit-workout-edit-title', label: 'Edit Title'
+                        Other, 0x1131a8140, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x1131a8280, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1131a83c0, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x1131a8500, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x1131a8640, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x1131a8780, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x1131a88c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x1131a8a00, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1131a8b40, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x1131a8c80, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x1131a8dc0, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x1131a8f00, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x1131a9040, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                                            Image, 0x1131a9180, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x1131a92c0, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x1131a9400, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x1131a9540, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x1131a9680, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x1131a97c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1131a9900, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x1131a9a40, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x1131a9b80, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x1131a9cc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x1131a9e00, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x1131a9f40, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x1131aa080, {{396.0, 494.0}, {44.0, 58.0}}
+                                          Other, 0x1131aa1c0, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x1131aa300, {{396.0, 494.0}, {44.0, 58.0}}
+                                            Other, 0x1131aa440, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x1131aa580, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x1131aa6c0, {{396.0, 494.0}, {44.0, 58.0}}
+                                                  Other, 0x1131aa800, {{396.0, 494.0}, {44.0, 58.0}}
+                                                Other, 0x1131aa940, {{396.0, 494.0}, {44.0, 58.0}}
+                                              Other, 0x1131aaa80, {{396.0, 494.0}, {44.0, 58.0}}
+              Other, 0x1131aabc0, {{191.0, 322.0}, {0.0, 0.0}}
+      Other, 0x1131aad00, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x1131aae40, {{-466.0, -678.0}, {1398.0, 2034.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Other, 0x1131aaf80, {{8.0, 8.0}, {450.0, 670.0}}
+          Button, 0x1131ab0c0, {{183.0, 4.0}, {100.0, 24.0}}, label: 'Sheet Grabber', value: Expanded
+          Other, 0x1131ab200, {{8.0, 8.0}, {450.0, 670.0}}
+            Other, 0x1131ab340, {{8.0, 8.0}, {450.0, 670.0}}
+              Other, 0x1131ab480, {{8.0, 8.0}, {450.0, 670.0}}
+                ScrollView, 0x1131ab5c0, {{8.0, 8.0}, {450.0, 670.0}}, identifier: 'heart-rate-recovery-info-sheet'
+                  Other, 0x1131ab700, {{8.0, 8.0}, {374.0, 3190.3}}
+                    Button, 0x1131ab840, {{298.0, 44.0}, {48.0, 48.0}}, identifier: 'heart-rate-recovery-info-close', label: 'Close'
+                    StaticText, 0x1131ab980, {{44.0, 141.3}, {272.7, 195.7}}, identifier: 'heart-rate-recovery-info-title', label: 'What is Heart Rate Recovery?'
+                    StaticText, 0x1131abac0, {{49.3, 475.0}, {257.0, 58.7}}, identifier: 'heart-rate-recovery-info-definition', label: 'Definition'
+                      Image, 0x1131abc00, {{49.3, 479.0}, {35.3, 51.0}}, identifier: 'heart.text.clipboard', label: 'Heart On A Text Clipboard'
+                      StaticText, 0x1131abd40, {{94.0, 475.0}, {212.3, 58.7}}, label: 'Definition'
+                    StaticText, 0x1131abe80, {{44.0, 541.7}, {302.0, 1044.7}}, identifier: 'heart-rate-recovery-info-definition-body', label: 'Heart Rate Recovery (HRR₁) measures how quickly your heart rate drops in the first minute after exercise. A faster drop indicates better cardiovascular fitness and autonomic nervous system recovery.'
+                    StaticText, 0x1085c4000, {{51.3, 1634.3}, {259.3, 116.7}}, identifier: 'heart-rate-recovery-info-measurement', label: 'How It's Measured'
+                      StaticText, 0x1085c4140, {{91.3, 1634.3}, {219.3, 116.7}}, label: 'How It's Measured'
+                      Image, 0x1085c4280, {{51.3, 1670.3}, {30.7, 45.0}}, identifier: 'applewatch', label: 'Apple Watch'
+                    StaticText, 0x1085c43c0, {{44.0, 1759.0}, {297.0, 812.7}}, identifier: 'heart-rate-recovery-info-measurement-body', label: 'Your peak heart rate at the end of the workout is compared to the heart rate measured about 60 seconds after the workout ends. The difference is your HRR₁ value.'
+                    StaticText, 0x1085c4500, {{47.7, 2619.7}, {202.3, 116.7}}, identifier: 'heart-rate-recovery-info-guide', label: 'Rating Guide'
+                      StaticText, 0x1085c4640, {{98.3, 2619.7}, {151.7, 116.7}}, label: 'Rating Guide'
+                      Image, 0x1085c4780, {{47.7, 2656.3}, {43.0, 43.0}}, identifier: 'gauge.with.needle', label: 'Gauge With A Needle'
+                    StaticText, 0x1085c48c0, {{82.3, 2756.3}, {225.3, 121.3}}, identifier: 'heart-rate-recovery-info-rating-good', label: 'Good, > 20 bpm'
+                      StaticText, 0x1085c4a00, {{102.3, 2756.3}, {115.3, 58.7}}, label: 'Good'
+                      Other, 0x1085c4b40, {{82.3, 2781.7}, {8.0, 8.0}}
+                      StaticText, 0x1085c4c80, {{102.3, 2819.0}, {205.3, 58.7}}, label: '> 20 bpm'
+                    StaticText, 0x1085c4dc0, {{59.7, 2894.7}, {270.8, 121.3}}, identifier: 'heart-rate-recovery-info-rating-normal', label: 'Normal, 12–20 bpm'
+                      StaticText, 0x1085c4f00, {{79.5, 2894.7}, {151.3, 58.7}}, label: 'Normal'
+                      Other, 0x1085c5040, {{59.7, 2920.0}, {8.0, 8.0}}
+                      StaticText, 0x1085c5180, {{79.5, 2957.3}, {251.0, 58.7}}, label: '12–20 bpm'
+                    StaticText, 0x1085c52c0, {{82.3, 3033.0}, {225.3, 121.3}}, identifier: 'heart-rate-recovery-info-rating-low', label: 'Low, < 12 bpm'
+                      StaticText, 0x1085c5400, {{102.3, 3033.0}, {87.3, 58.7}}, label: 'Low'
+                      Other, 0x1085c5540, {{82.3, 3058.3}, {8.0, 8.0}}
+                      StaticText, 0x1085c5680, {{102.3, 3095.7}, {205.3, 58.7}}, label: '< 12 bpm'
+                  Other, 0x1085c57c0, {{425.0, 59.0}, {30.0, 593.0}}, label: 'Vertical scroll bar, 6 pages', value: 0%
+                    Other, 0x1085c5900, {{452.0, 60.7}, {3.0, 120.7}}
+                  Other, 0x1085c5a40, {{425.0, 59.0}, {30.0, 593.0}}, label: 'Vertical scroll bar, 6 pages', value: 0%
+                    Other, 0x1085c5b80, {{452.0, 60.7}, {3.0, 120.7}}
+Path to element:
+ →Application, 0x1130ac3c0, pid: 88035, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1085c5cc0, pid: 88035, label: 'DUNE'
+  }

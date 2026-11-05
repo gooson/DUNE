@@ -1,0 +1,79 @@
+{
+  "screen": "H14",
+  "status": "ready",
+  "expected_primary_pairs": 4,
+  "source_valid_pairs": 4,
+  "missing": [],
+  "root_tracked_writes": 0,
+  "target_revision": "f97392084401db4c5108f241db1cb19901e072d8",
+  "gallery": "/private/tmp/batch02-gallery-preparation/h14-heart-rate-recovery-explanation-native-2026-11-06",
+  "board": "04-웰니스.png",
+  "baseline_sha256": {
+    "portal_html": "e4a553b8ddcdbd5b1ed72593994fb189ce8228d19d98e8c7fec50032ba56c0f6",
+    "profiles": {
+      "regular": {
+        "capture_index_json": "3fdc0678c911c25a69f1140a9f86e102307e4f18e9bf551d2801c87c7d4d42c8",
+        "index_html": "f7a8c551f5574eeb8f7b1a05d91506a972e334cf64a2f001f84bbacf154e930c",
+        "board_png": "2d46afacb31244ad377b09bb19155e9cf5b7e419d791fbdb75778313585afad8"
+      },
+      "ipad": {
+        "capture_index_json": "fe6d7972af974ff86c5d833775b51c3ca59053a0306d9d1d51ad03c500e3dd28",
+        "index_html": "c28f3935ec684322d49b4c13cb92cd53cdd8c74b0af8d524159387c63b262b4b",
+        "board_png": "50a1d4833f93ac3a46597be9773be4c135d0ea3bc6ff90222b151918a36a4c6a"
+      },
+      "duo": {
+        "capture_index_json": "977ee2a24df5597f6323e2917fd13dbff12d6dd7fe25cccd95efa0ac18d66cc4",
+        "index_html": "e8134ac963682fb976e1282b20bcffd59263a398f926b29706257d0aeb004b48",
+        "board_png": "244dfd42d7a8f5e8ca8ffa2498dc204bd181f6e3556e952c57c55224dde7dafa"
+      },
+      "duo-open": {
+        "capture_index_json": "811c1897952dce470617ffa0fef376f5e8ef721e3b64b7218071ea403c88aca1",
+        "index_html": "488a85e28b12cb052f7d9a05f309907793530df35cb79c2c1f11bdce30b20cbb",
+        "board_png": "86ca2e704c7f76396bc902d9feed68717b379642f01f2bfe63199bb7ba4833b9"
+      }
+    }
+  },
+  "profiles": {
+    "regular": {
+      "updated_row": "H14",
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "board": "04-웰니스.png",
+      "board_sha256": "82b887eb5deaf9572db13fc54a6878e9dd508cdc2f20822040d09150e8a003bb",
+      "png_sha256": "03d69bcd3dbe5ba6b196a5cfab95abd701afa4e9d2bfa7a1ae89ea88842627d1",
+      "ax_sha256": "f08daecbf00ea3d1dd6626accf286991e238540cc2f4335dabbe24186abb2ed5"
+    },
+    "ipad": {
+      "updated_row": "H14",
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "board": "04-웰니스.png",
+      "board_sha256": "54dd4abff27fb0736fc1639675b81258e5cd15d1bed54c20582d9945a186ad40",
+      "png_sha256": "3d550547d74acdd9ff53437eec8035e4574c194bcbe226e5968256c61a2399b9",
+      "ax_sha256": "f5cc7bebfd1d06a839777b769420186d7abcc8329783280164a122c50e671884"
+    },
+    "duo": {
+      "updated_row": "H14",
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "board": "04-웰니스.png",
+      "board_sha256": "0b63e9f00712b1f6ba5d5c02e6047479d1a8e4b9ab49a433e9616c399606660b",
+      "png_sha256": "a29eeab2c74613b52ca038334244299391185b70c4ff7bb9770584844af1ee44",
+      "ax_sha256": "91597adc227cb56f0c40a92e35220633b7bb3bfbcf750c6ab791f6ffd0d41fde"
+    },
+    "duo-open": {
+      "updated_row": "H14",
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "board": "04-웰니스.png",
+      "board_sha256": "a47ee077520169dfabf7c16f5002491ed5fad2816510744cd781f195f7e441f7",
+      "png_sha256": "b8ec976a80dc2c5e7288ebe350f6968228a0f1bd29395810e4833c12a11e50a3",
+      "ax_sha256": "b0979291d5d666103656b99bdc9c9de782dd765a4cdbdce7d50607ccfb34cee8"
+    }
+  },
+  "staged_path": "/private/tmp/batch02-actual-map-preparation/staged/H14"
+}
