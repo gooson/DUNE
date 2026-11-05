@@ -764,6 +764,17 @@
         "layout": "../layout-map/body-history-h06.html",
         "status": "implemented-native-reviewed"
       }
+    },
+    {
+      "id": "posture-record-detail-h07",
+      "name": "H07 / P06 · 자세 기록 상세",
+      "title": "저장된 점수 · 평가 항목 · Front/Side",
+      "file": "dune-posture-record-detail-h07.html",
+      "detail": "H07과 P06이 공유하는 자세 기록 상세의 정적 표현 기준. 저장된 지표의 원래 이름·값·단위·상태·신뢰도를 사진 앞에 둔다. 밝은 전경과 최대 글씨의 기호 영역을 보완했고, 현재 1514deb7 소스의 4프로필 핵심 검사 11건·PNG/AX 20쌍을 실제 갤러리에서 검토했다. English·Light 및 Duo 0°/180° MAX 범위이며 90° FOLD 실패는 별도로 보존한다. 사진·관절·공유·삭제 행동 코드는 유지한다. 이 HTML의 기호·상태색·값은 설명용이며 실제 기록·의료 판정·네이티브 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/posture-record-detail-h07.html",
+        "status": "implemented-native-reviewed"
+      }
     }
   ]
 }

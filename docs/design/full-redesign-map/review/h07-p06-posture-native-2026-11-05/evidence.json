@@ -1,0 +1,713 @@
+{
+  "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+  "case_count": 11,
+  "selected_pair_count": 20,
+  "cases": {
+    "regular_h07": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail",
+      "device_uid": "8984BBC7-EFF6-442F-BF6B-0E9F6C9E9585",
+      "pose": "normal",
+      "archive": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "42497d81532c9fd23e970cf99f15d56494f1f882a3d71261938cbeb686cf394c",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": [
+        {
+          "role": "h07_normal_top",
+          "test_identifier": "PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail()",
+          "capture_label": "Wellness recent posture record detail",
+          "timestamp": "1793856177.919",
+          "pose": "normal",
+          "png": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed/attachments/03344B79-4BBA-466D-B577-71975C9E22FE.png",
+          "png_sha256": "75f0c8050218832c89a3d0d9f2560961f6db4017d04b49b4ce6b53340d608cb3",
+          "ax": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed/attachments/E6F47101-E71B-43E1-AD50-EC1EE5C5663B.txt",
+          "ax_sha256": "5fcf3d189af375dfb4ece315e69b4522284bc2539eb6f5de038d0ffd12496631",
+          "sdk_ax": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed/attachments/E6F47101-E71B-43E1-AD50-EC1EE5C5663B.txt",
+          "sdk_ax_sha256": "5fcf3d189af375dfb4ece315e69b4522284bc2539eb6f5de038d0ffd12496631",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "reviewed-viewport"
+          }
+        }
+      ]
+    },
+    "regular_p06": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testPostureHistoryAndDetail",
+      "device_uid": "8984BBC7-EFF6-442F-BF6B-0E9F6C9E9585",
+      "pose": "normal",
+      "archive": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "42497d81532c9fd23e970cf99f15d56494f1f882a3d71261938cbeb686cf394c",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": [
+        {
+          "role": "p06_normal_top",
+          "test_identifier": "PostureVisualAuditTests/testPostureHistoryAndDetail()",
+          "capture_label": "Posture detail top",
+          "timestamp": "1793856125.844",
+          "pose": "normal",
+          "png": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed/attachments/AAA77279-8BDD-40C4-87EA-F1B5731A2F84.png",
+          "png_sha256": "75f0c8050218832c89a3d0d9f2560961f6db4017d04b49b4ce6b53340d608cb3",
+          "ax": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed/attachments/92E62513-CFCE-47ED-BB1E-50CA9D80CB26.txt",
+          "ax_sha256": "35f23aa8d9b41b0c3f15484ea9e6cf773dac2b4cb36b36bed71b24b06f4dc82b",
+          "sdk_ax": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed/attachments/92E62513-CFCE-47ED-BB1E-50CA9D80CB26.txt",
+          "sdk_ax_sha256": "35f23aa8d9b41b0c3f15484ea9e6cf773dac2b4cb36b36bed71b24b06f4dc82b",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "reviewed-viewport"
+          }
+        }
+      ]
+    },
+    "ipad_h07": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail",
+      "device_uid": "8365A89D-6D61-4E2B-A59C-319653A50A0B",
+      "pose": "normal",
+      "archive": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "778999cedd5f898ae6b64875fd4ed2b643cbb055f07bff0f6713b9247e2eb97c",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": [
+        {
+          "role": "h07_normal_top",
+          "test_identifier": "PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail()",
+          "capture_label": "Wellness recent posture record detail",
+          "timestamp": "1793856575.358",
+          "pose": "normal",
+          "png": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed/attachments/78769BF1-BA5C-4CE2-9319-CE6936F99386.png",
+          "png_sha256": "34ee47360b8bb487e4646f5344f28ae41c90e8a79496a51942e54c6f6976876e",
+          "ax": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed/attachments/DC29C43B-0712-4B19-83A5-1DD3418F2CEB.txt",
+          "ax_sha256": "9836b6c398e256ba834da723a5d315225a25bc98300a2eadbdf72d43f7fe57e5",
+          "sdk_ax": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed/attachments/DC29C43B-0712-4B19-83A5-1DD3418F2CEB.txt",
+          "sdk_ax_sha256": "9836b6c398e256ba834da723a5d315225a25bc98300a2eadbdf72d43f7fe57e5",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "reviewed-viewport"
+          }
+        }
+      ]
+    },
+    "ipad_p06": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testPostureHistoryAndDetail",
+      "device_uid": "8365A89D-6D61-4E2B-A59C-319653A50A0B",
+      "pose": "normal",
+      "archive": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "778999cedd5f898ae6b64875fd4ed2b643cbb055f07bff0f6713b9247e2eb97c",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": [
+        {
+          "role": "p06_normal_top",
+          "test_identifier": "PostureVisualAuditTests/testPostureHistoryAndDetail()",
+          "capture_label": "Posture detail top",
+          "timestamp": "1793856535.924",
+          "pose": "normal",
+          "png": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed/attachments/7B4961EB-57B5-4E85-ACAD-6D375A4AC82D.png",
+          "png_sha256": "8540defcf024ece4e853035507d2ed6cd1489efda8f505c53668cda006433fc1",
+          "ax": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed/attachments/C4473A3E-C890-479F-B3D6-1297310D96A9.txt",
+          "ax_sha256": "1bac190e01a8797b29c6d5135570cd9add6ea30eeca69f33ddc7def6f7060613",
+          "sdk_ax": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed/attachments/C4473A3E-C890-479F-B3D6-1297310D96A9.txt",
+          "sdk_ax_sha256": "1bac190e01a8797b29c6d5135570cd9add6ea30eeca69f33ddc7def6f7060613",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "reviewed-viewport"
+          }
+        }
+      ]
+    },
+    "duo_h07": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "closed",
+      "archive": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "df633d95aa1aa12ebb0fea36a6831f1fd32ff4c9e4dbc1496ebf6b767a213299",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": [
+        {
+          "role": "h07_normal_top",
+          "test_identifier": "PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail()",
+          "capture_label": "Wellness recent posture record detail",
+          "timestamp": "1793854876.149",
+          "pose": "closed",
+          "png": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/044-1398x2034.png",
+          "png_sha256": "d4fe588b7e0e009e82a868542664404cfb1b1704cdb9db22b78b17e6e04c50ce",
+          "ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/044-hierarchy.txt",
+          "ax_sha256": "52011af66ba6a0effe2d7d05607ac15bc8be05e19d149fa83c5750e0583b1c58",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/attachments/710DF6B9-6184-41CE-B026-3B0992D4400E.txt",
+          "sdk_ax_sha256": "52011af66ba6a0effe2d7d05607ac15bc8be05e19d149fa83c5750e0583b1c58",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "closed",
+            "active_display_json": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "86ec469e1ada3f6c45f489f78bff85c2615e0db6adc5320b09b60e1d83509f9b"
+          }
+        }
+      ]
+    },
+    "duo_p06": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testPostureHistoryAndDetail",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "closed",
+      "archive": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "df633d95aa1aa12ebb0fea36a6831f1fd32ff4c9e4dbc1496ebf6b767a213299",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": [
+        {
+          "role": "p06_normal_top",
+          "test_identifier": "PostureVisualAuditTests/testPostureHistoryAndDetail()",
+          "capture_label": "Posture detail top",
+          "timestamp": "1793854696.561",
+          "pose": "closed",
+          "png": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/021-1398x2034.png",
+          "png_sha256": "03a56ca49beef29fa5f1271d15e499870a75f2c5383147c94c2a5471032a8a65",
+          "ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/021-hierarchy.txt",
+          "ax_sha256": "0f6ca4b93a9c2557d3030bb51db6999689f2a22c17cc775fffcfb1b4d04a0e2c",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/attachments/B2D8E2F4-CF34-4905-B564-860917E80F1B.txt",
+          "sdk_ax_sha256": "0f6ca4b93a9c2557d3030bb51db6999689f2a22c17cc775fffcfb1b4d04a0e2c",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "closed",
+            "active_display_json": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "86ec469e1ada3f6c45f489f78bff85c2615e0db6adc5320b09b60e1d83509f9b"
+          }
+        }
+      ]
+    },
+    "duo-open_h07": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "openFlat",
+      "archive": ".codex-checks/h07/evidence/duo-open-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "161d36c9472c046670c8a5728c33ad58267728a25a746f3f3470f72424d7382b",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": [
+        {
+          "role": "h07_normal_top",
+          "test_identifier": "PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail()",
+          "capture_label": "Wellness recent posture record detail",
+          "timestamp": "1793855734.07",
+          "pose": "openFlat",
+          "png": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/031-2007x2853.png",
+          "png_sha256": "b74191668370f97940847ea1b33b0f303ed009e09c623bbd2e08488f2e6f8d35",
+          "ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/031-hierarchy.txt",
+          "ax_sha256": "fc58459d758789c96c05e478e957007e1eabd73bd091912f07e7429b55a90c6f",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/attachments/A90E3BF8-0458-4BCF-9875-1FE593D37A1F.txt",
+          "sdk_ax_sha256": "fc58459d758789c96c05e478e957007e1eabd73bd091912f07e7429b55a90c6f",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "openFlat",
+            "active_display_json": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "9bed385e94d599b9ddaa2cdf8a668626b4d1d88e6b0f17f34a65fce98fe77d51"
+          }
+        }
+      ]
+    },
+    "duo-open_p06": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testPostureHistoryAndDetail",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "openFlat",
+      "archive": ".codex-checks/h07/evidence/duo-open-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "161d36c9472c046670c8a5728c33ad58267728a25a746f3f3470f72424d7382b",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": [
+        {
+          "role": "p06_normal_top",
+          "test_identifier": "PostureVisualAuditTests/testPostureHistoryAndDetail()",
+          "capture_label": "Posture detail top",
+          "timestamp": "1793855668.829",
+          "pose": "openFlat",
+          "png": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/021-2007x2853.png",
+          "png_sha256": "8f566411069736556a205712f9d6482fe6fc7bd0250d04f3b78e58ce592ed12d",
+          "ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/021-hierarchy.txt",
+          "ax_sha256": "97eb6bd72b20022abb1673b27199690e40c893f223ebc7765b6f7561334922f2",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/attachments/6FC73E06-3FC9-47E3-B040-ACD0FBBCDFD4.txt",
+          "sdk_ax_sha256": "97eb6bd72b20022abb1673b27199690e40c893f223ebc7765b6f7561334922f2",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "openFlat",
+            "active_display_json": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "9bed385e94d599b9ddaa2cdf8a668626b4d1d88e6b0f17f34a65fce98fe77d51"
+          }
+        }
+      ]
+    },
+    "duo_closed_symmetry": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testPostureSymmetry",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "closed",
+      "archive": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "df633d95aa1aa12ebb0fea36a6831f1fd32ff4c9e4dbc1496ebf6b767a213299",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": []
+    },
+    "duo_closed_static_max": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "closed",
+      "archive": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "df633d95aa1aa12ebb0fea36a6831f1fd32ff4c9e4dbc1496ebf6b767a213299",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": [
+        {
+          "role": "closed_max_score",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout complete score card at maximum AX",
+          "timestamp": "1793854594.277",
+          "pose": "closed",
+          "png": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/007-1398x2034.png",
+          "png_sha256": "241f1b982f80c77e7cc212bc2f1c22879e202944e18ee31d32a119785028914d",
+          "ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/007-hierarchy.txt",
+          "ax_sha256": "32452e072f7f783ab98edcab6d1c78d19b62f1ad7bc00ae89d4ff83150a0759b",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/attachments/0962ABA4-10BF-4CBD-9B37-DE7B750CB6AD.txt",
+          "sdk_ax_sha256": "32452e072f7f783ab98edcab6d1c78d19b62f1ad7bc00ae89d4ff83150a0759b",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "closed",
+            "active_display_json": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "86ec469e1ada3f6c45f489f78bff85c2615e0db6adc5320b09b60e1d83509f9b"
+          }
+        },
+        {
+          "role": "closed_max_lower_1",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout assessment at maximum AX lower viewport 1",
+          "timestamp": "1793854604.561",
+          "pose": "closed",
+          "png": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/009-1398x2034.png",
+          "png_sha256": "37b0f84302f8fdaae6aaf8407e9f3d0454454c796dd9b22469dc8169bdfb72ad",
+          "ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/009-hierarchy.txt",
+          "ax_sha256": "3bf315223e250478907f069e969a5ebc6a1e030f1be12c47d54b4ed693f8f5e2",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/attachments/E8A216B4-7DD2-42D1-A82B-B36E4AA42158.txt",
+          "sdk_ax_sha256": "3bf315223e250478907f069e969a5ebc6a1e030f1be12c47d54b4ed693f8f5e2",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "closed",
+            "active_display_json": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "86ec469e1ada3f6c45f489f78bff85c2615e0db6adc5320b09b60e1d83509f9b"
+          }
+        },
+        {
+          "role": "closed_max_lower_2",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout assessment at maximum AX lower viewport 2",
+          "timestamp": "1793854610.602",
+          "pose": "closed",
+          "png": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/010-1398x2034.png",
+          "png_sha256": "0b95240abdb93bd20ae1479e277daac5b995ec84fa73830c743432a176a0b5fb",
+          "ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/010-hierarchy.txt",
+          "ax_sha256": "1663e9e259d89d366862276d743be52a5a389af79d3d0c17f4e22d21a100f3f5",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/attachments/7BF4E735-864E-4655-B744-650DA03E87DD.txt",
+          "sdk_ax_sha256": "1663e9e259d89d366862276d743be52a5a389af79d3d0c17f4e22d21a100f3f5",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "closed",
+            "active_display_json": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "86ec469e1ada3f6c45f489f78bff85c2615e0db6adc5320b09b60e1d83509f9b"
+          }
+        },
+        {
+          "role": "closed_max_lower_3",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout assessment at maximum AX lower viewport 3",
+          "timestamp": "1793854616.814",
+          "pose": "closed",
+          "png": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/011-1398x2034.png",
+          "png_sha256": "761d7c301dac8e8a2daceb43417ecd2b5e800c7fb46085f475a553ff5b535423",
+          "ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/011-hierarchy.txt",
+          "ax_sha256": "b7302ae640829786ff0977b6c40e96f257cb7d8a43fb4aac02d472c2b71037b1",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/attachments/E4A60033-90DB-45C6-A8D0-99847A714ADF.txt",
+          "sdk_ax_sha256": "b7302ae640829786ff0977b6c40e96f257cb7d8a43fb4aac02d472c2b71037b1",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "closed",
+            "active_display_json": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "86ec469e1ada3f6c45f489f78bff85c2615e0db6adc5320b09b60e1d83509f9b"
+          }
+        },
+        {
+          "role": "closed_max_lower_4",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout assessment at maximum AX lower viewport 4",
+          "timestamp": "1793854622.944",
+          "pose": "closed",
+          "png": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/012-1398x2034.png",
+          "png_sha256": "644c17a60ab147d727d1635e20107a7cf6dc83318c3b2ee95afb1b53deaef743",
+          "ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/012-hierarchy.txt",
+          "ax_sha256": "e73f7b8f031f69cd5087d54bbc23bb2d4ab69c26bdc38a61bae1a27c68d5fa24",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/attachments/92CD1282-C845-4219-AA4E-68707C66F68E.txt",
+          "sdk_ax_sha256": "e73f7b8f031f69cd5087d54bbc23bb2d4ab69c26bdc38a61bae1a27c68d5fa24",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "closed",
+            "active_display_json": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "86ec469e1ada3f6c45f489f78bff85c2615e0db6adc5320b09b60e1d83509f9b"
+          }
+        },
+        {
+          "role": "closed_max_lower_5",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout assessment at maximum AX lower viewport 5",
+          "timestamp": "1793854629.061",
+          "pose": "closed",
+          "png": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/013-1398x2034.png",
+          "png_sha256": "1c11c36b5615909d8eb04b0ad9ebe00e2a584f21d049f36749b8c2c5b33e9a7d",
+          "ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/013-hierarchy.txt",
+          "ax_sha256": "3aea6fb4ff9a04810d1e95548c47b64da69f30a1af098baec6e316807fc7fecf",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/attachments/E5557589-F60B-40E5-A9F9-B181C3448477.txt",
+          "sdk_ax_sha256": "3aea6fb4ff9a04810d1e95548c47b64da69f30a1af098baec6e316807fc7fecf",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "closed",
+            "active_display_json": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "86ec469e1ada3f6c45f489f78bff85c2615e0db6adc5320b09b60e1d83509f9b"
+          }
+        }
+      ]
+    },
+    "duo-open_static_max": {
+      "source_head": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "status": "Passed",
+      "selector": "DUNEUITests/PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize",
+      "device_uid": "146CB867-AB0F-42C9-8BCF-008ED8353429",
+      "pose": "openFlat",
+      "archive": ".codex-checks/h07/evidence/duo-open-1514deb7-passed",
+      "inventory_name": "sealed-inventory.json",
+      "inventory_sha256": "161d36c9472c046670c8a5728c33ad58267728a25a746f3f3470f72424d7382b",
+      "result_name": "result.json",
+      "tests_name": "tests.json",
+      "attachments_manifest": "attachments/manifest.json",
+      "selected_pairs": [
+        {
+          "role": "open_max_score",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout complete score card at maximum AX",
+          "timestamp": "1793855581.621",
+          "pose": "openFlat",
+          "png": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/007-2007x2853.png",
+          "png_sha256": "1bf353ae1f92ea19aad86c3eb4816b4a91d723a34353a42c10faa86ade75043a",
+          "ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/007-hierarchy.txt",
+          "ax_sha256": "c2740e4daf2fd62d018f38290516f934babca661d8f139d48938c9caf4c62e0a",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/attachments/A8AAAC79-94E5-4BDE-A2A7-D1D43ABF8DC8.txt",
+          "sdk_ax_sha256": "c2740e4daf2fd62d018f38290516f934babca661d8f139d48938c9caf4c62e0a",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "openFlat",
+            "active_display_json": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "9bed385e94d599b9ddaa2cdf8a668626b4d1d88e6b0f17f34a65fce98fe77d51"
+          }
+        },
+        {
+          "role": "open_max_lower_1",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout assessment at maximum AX lower viewport 1",
+          "timestamp": "1793855591.669",
+          "pose": "openFlat",
+          "png": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/009-2007x2853.png",
+          "png_sha256": "e8efda73b9b14a4d2de40daae78ac26768b8c44bcb89653fc8aed2e92c1cdd78",
+          "ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/009-hierarchy.txt",
+          "ax_sha256": "829bb1ec155978570365bde39973f4fe78d538762a2d3765714af73e0cc38f9d",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/attachments/B89FBA36-77A5-40B8-AEEF-65EC5C29D9AC.txt",
+          "sdk_ax_sha256": "829bb1ec155978570365bde39973f4fe78d538762a2d3765714af73e0cc38f9d",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "openFlat",
+            "active_display_json": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "9bed385e94d599b9ddaa2cdf8a668626b4d1d88e6b0f17f34a65fce98fe77d51"
+          }
+        },
+        {
+          "role": "open_max_lower_2",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout assessment at maximum AX lower viewport 2",
+          "timestamp": "1793855597.813",
+          "pose": "openFlat",
+          "png": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/010-2007x2853.png",
+          "png_sha256": "966f4d2adf7356fb88a85bf5f7c931ccd4df41caa0edf8c3be46df6a0090ccc7",
+          "ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/010-hierarchy.txt",
+          "ax_sha256": "d8488275d375cb8fa99f7890789fb0c9be05b5a542aec9f6948dd5e7d2577d89",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/attachments/760AAF45-FA3F-46E0-92CA-0B67A7B41B1B.txt",
+          "sdk_ax_sha256": "d8488275d375cb8fa99f7890789fb0c9be05b5a542aec9f6948dd5e7d2577d89",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "openFlat",
+            "active_display_json": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "9bed385e94d599b9ddaa2cdf8a668626b4d1d88e6b0f17f34a65fce98fe77d51"
+          }
+        },
+        {
+          "role": "open_max_lower_3",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout assessment at maximum AX lower viewport 3",
+          "timestamp": "1793855603.963",
+          "pose": "openFlat",
+          "png": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/011-2007x2853.png",
+          "png_sha256": "8cba09fbe17c2823c2542257acb60e1896b96ed42c28839dc9e9ca9aea720392",
+          "ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/011-hierarchy.txt",
+          "ax_sha256": "a2f22a2e11919ca6e426103495c83b45e89ae0e8cdf7371a56d8db7313f776f4",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/attachments/2BCFB6A5-6967-4B96-8D58-C907228BDDDE.txt",
+          "sdk_ax_sha256": "a2f22a2e11919ca6e426103495c83b45e89ae0e8cdf7371a56d8db7313f776f4",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "openFlat",
+            "active_display_json": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "9bed385e94d599b9ddaa2cdf8a668626b4d1d88e6b0f17f34a65fce98fe77d51"
+          }
+        },
+        {
+          "role": "open_max_lower_4",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout assessment at maximum AX lower viewport 4",
+          "timestamp": "1793855610.124",
+          "pose": "openFlat",
+          "png": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/012-2007x2853.png",
+          "png_sha256": "8762efe299cc41ca34f256e5aa8bc7c6d5e024d429162051086fde2e6e9f1280",
+          "ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/012-hierarchy.txt",
+          "ax_sha256": "36afff34e7546af538f6b3b56b5406754b7f3976774994f39b283f0f4772d4fa",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/attachments/506B07BD-BA98-401A-A11B-83060D5E9480.txt",
+          "sdk_ax_sha256": "36afff34e7546af538f6b3b56b5406754b7f3976774994f39b283f0f4772d4fa",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "openFlat",
+            "active_display_json": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "9bed385e94d599b9ddaa2cdf8a668626b4d1d88e6b0f17f34a65fce98fe77d51"
+          }
+        },
+        {
+          "role": "open_max_lower_5",
+          "test_identifier": "PostureVisualAuditTests/testPostureDetailAtMaximumAccessibilitySize()",
+          "capture_label": "Posture static layout assessment at maximum AX lower viewport 5",
+          "timestamp": "1793855616.237",
+          "pose": "openFlat",
+          "png": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/013-2007x2853.png",
+          "png_sha256": "172a116489e25a981d421b4c914a2f628c6b9c1e117a357693b20a7c7ee622c2",
+          "ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/013-hierarchy.txt",
+          "ax_sha256": "20c85389ff089cdfce8c61e77a6db99d0fa0b99b9e25c07bffa49ba1baaefa86",
+          "sdk_ax": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/attachments/AD7C5E40-91E8-45B6-94C3-73FCEE0B250F.txt",
+          "sdk_ax_sha256": "20c85389ff089cdfce8c61e77a6db99d0fa0b99b9e25c07bffa49ba1baaefa86",
+          "display_proof": {
+            "nonblack_viewport_reviewed": true,
+            "black_inactive_display": false,
+            "kind": "explicit-active-display-json",
+            "observed_pose": "openFlat",
+            "active_display_json": ".codex-checks/h07/evidence/duo-open-1514deb7-passed/execution-proof/duo-pose-and-checkpoints/displays-after.json",
+            "active_display_json_sha256": "9bed385e94d599b9ddaa2cdf8a668626b4d1d88e6b0f17f34a65fce98fe77d51"
+          }
+        }
+      ]
+    }
+  },
+  "canonical": {
+    "regular": {
+      "H07": "h07_normal_top",
+      "P06": "p06_normal_top"
+    },
+    "ipad": {
+      "H07": "h07_normal_top",
+      "P06": "p06_normal_top"
+    },
+    "duo": {
+      "H07": "h07_normal_top",
+      "P06": "p06_normal_top"
+    },
+    "duo-open": {
+      "H07": "h07_normal_top",
+      "P06": "p06_normal_top"
+    }
+  },
+  "archive_by_run": {
+    "duo-closed": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed",
+    "duo-open": ".codex-checks/h07/evidence/duo-open-1514deb7-passed",
+    "phone": ".codex-checks/h07/evidence/phone-normal-1514deb7-passed",
+    "ipad": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed"
+  },
+  "original_fold_history": {
+    "logical_check_id": "h07-duo-max-fold-detail",
+    "status": "failed-or-host-aborted; unresolved",
+    "finalized_sdk_failed": 1,
+    "host_aborted_unknown_sdk_counts": 3,
+    "direct_prestart": 1,
+    "positive_cases": 0,
+    "failed_archives": [
+      {
+        "archive": ".codex-checks/h07/evidence/duo-max-fold-4fde0ad7-failed",
+        "sealed_inventory_sha256": "6fcc06faddf292b58c3f1e50c53816a565c824723fe279ea34ab85dcec0009d8",
+        "sdk_case_counts": {
+          "executed": 1,
+          "passed": 0,
+          "failed": 1
+        }
+      },
+      {
+        "archive": ".codex-checks/h07/evidence/duo-max-fold-ad5c04a5-host-aborted",
+        "sealed_inventory_sha256": "3196712315647f6b105a3f9a927cf0226f7815d168660f21e95aa897d779d41a",
+        "sdk_case_counts": null
+      },
+      {
+        "archive": ".codex-checks/h07/evidence/duo-max-fold-ac871d86-angle-host-aborted",
+        "sealed_inventory_sha256": "ceb080f4a34ad3bda979287a420faeb0994c5ef74d98dfb16ab1b85bdcacd8a7",
+        "sdk_case_counts": null
+      },
+      {
+        "archive": ".codex-checks/h07/evidence/duo-max-fold-108085b5-feedback-host-aborted",
+        "sealed_inventory_sha256": "78dedf408104cb8ff1bfcc356ba8ee9daab32370d72465ef718a1f680998ce43",
+        "sdk_case_counts": null
+      }
+    ],
+    "prestart_archive": ".codex-checks/h07/evidence/prestart-readiness-ac871d86-failed",
+    "prestart_inventory_sha256": "76e487a3f046729258d49646e24aa5397c548d0d375002325c30a22ae25431a4"
+  },
+  "prior_8a91_positives": {
+    "closed": {
+      "archive_seal_root_path": ".codex-checks/h07/evidence/duo-closed-8a910fe3-passed/sealed-inventory.json",
+      "archive_seal_sha256": "308c077aaf2d99310ef6183221ac0fde5700e9343f42a697b6d83408dfbdfbdd",
+      "passed_cases": 4,
+      "frozen_pipeline_private_path": "/private/tmp/h07-native-execution-1514deb7-static-max-v2/prior-8a91-closed-pipeline.json",
+      "frozen_pipeline_sha256": "69d9c3717ae5e7b48db52ad76b2346a9f5c33bdbb947cc0211e8cc34a1dd471a",
+      "frozen_pipeline_archived_path": ".codex-checks/h07/evidence/duo-closed-8a910fe3-passed/execution-proof/pipeline/check-462b176d8ca5966d495f22ad.json",
+      "logical_check_id": "h07-duo-closed-detail",
+      "current_receipt_root_path": ".codex-checks/pipeline/check-462b176d8ca5966d495f22ad.json",
+      "allowed_current_attempts_before_run": 1,
+      "source": "8a910fe3f87175db5020ae44050ebf0ef9e1020e"
+    },
+    "open": {
+      "archive_seal_root_path": ".codex-checks/h07/evidence/duo-open-8a910fe3-passed/sealed-inventory.json",
+      "archive_seal_sha256": "e8fecff3200dbcd082831bf18ee541edb94530f7e614728c44dee477bd50dc4d",
+      "passed_cases": 3,
+      "frozen_pipeline_private_path": "/private/tmp/h07-native-execution-1514deb7-static-max-v2/prior-8a91-open-pipeline.json",
+      "frozen_pipeline_sha256": "7c1e0d3e011dd5464428a884e9b5a7f8b19e252def1391103e51f53d069317e9",
+      "frozen_pipeline_archived_path": ".codex-checks/h07/evidence/duo-open-8a910fe3-passed/execution-proof/pipeline/check-ef59efce8569bfcda8f0024e.json",
+      "logical_check_id": "h07-duo-open-detail",
+      "current_receipt_root_path": ".codex-checks/pipeline/check-ef59efce8569bfcda8f0024e.json",
+      "allowed_current_attempts_before_run": 2,
+      "source": "8a910fe3f87175db5020ae44050ebf0ef9e1020e"
+    }
+  },
+  "prior_1514_prestart_failure": {
+    "id": "h07-duo-closed-detail",
+    "attempts": 2,
+    "source": "1514deb76c33aee630c7bc44173716190af6aff2",
+    "test_started": false,
+    "proof_root_path": ".codex-checks/h07/prestart-readiness-1514deb7-failed/failure-proof.json",
+    "proof_sha256": "83bc0c065825f45f2a2e9ec09dbb79a682d97aae7aa6a0b53d7e576ce6914cf9",
+    "archived_pipeline_root_path": ".codex-checks/h07/prestart-readiness-1514deb7-failed/pipeline.json",
+    "frozen_pipeline_private_path": "/private/tmp/h07-native-execution-1514deb7-static-max-v2/prior-1514-closed-prestart-pipeline.json",
+    "pipeline_sha256": "17cf2a3c973cb35c38ecbad687fde7c9388024f811258d95b67beb075e12db1c",
+    "log_sha256": "6e92c3c8d6f76c6a2990ea46b5c12a86c04efc1e08c0f4a563bf751a2c474fb8",
+    "retry_cause": "Private readiness rejected its own newly appended running attempt before XCTest",
+    "remediation": "Versioned readiness validates the exact historical prefix and current running attempt under the same owned Duo; preserve the first failed prestart receipt",
+    "retry_context": "ios-ui-h07-duo-closed-1514deb7-readiness-v2"
+  },
+  "producer_by_run": {
+    "duo-closed": {
+      "manifest_sha256": "bcbc67148064cdcef5b0cfc27e0b847bd9d4fef8249ff91886d1f6ba97c679c3",
+      "independent_approval_sha256": "85cd5a622a8dd9e2ec73d9c4424ae323ca50f0cd8c57cdc7c7a84f9c03e6d208"
+    },
+    "duo-open": {
+      "manifest_sha256": "c9074f24dabce31f48513eaadc141c8a2a47d9b9b465bf8800888e4e7111276a",
+      "independent_approval_sha256": "7469a19ab8470926d8c9bf5f6d46632724ba38b9b26f13db0eb16ae98c700ebf"
+    },
+    "phone": {
+      "manifest_sha256": "c9074f24dabce31f48513eaadc141c8a2a47d9b9b465bf8800888e4e7111276a",
+      "independent_approval_sha256": "7469a19ab8470926d8c9bf5f6d46632724ba38b9b26f13db0eb16ae98c700ebf"
+    },
+    "ipad": {
+      "manifest_sha256": "c9074f24dabce31f48513eaadc141c8a2a47d9b9b465bf8800888e4e7111276a",
+      "independent_approval_sha256": "7469a19ab8470926d8c9bf5f6d46632724ba38b9b26f13db0eb16ae98c700ebf"
+    }
+  },
+  "closed_positive_review": {
+    "archive": ".codex-checks/h07/evidence/duo-closed-1514deb7-passed",
+    "sealed_inventory_sha256": "df633d95aa1aa12ebb0fea36a6831f1fd32ff4c9e4dbc1496ebf6b767a213299",
+    "selected_pairs_path": "/private/tmp/h07-native-preparation/closed-1514-selected-eight-pairs.json",
+    "selected_pairs_sha256": "874c4f5f6609dc80fe5b286b24b6d9070ce6cf1ece2f403a2b04190d9d5cf203",
+    "native_review_path": "/private/tmp/h07-native-preparation/closed-1514-final-native-quality-review.md",
+    "native_review_sha256": "4b3c8853b8501e93f836d5cff183dcb5816474a74a991cfc297d27a5cf7d45cf",
+    "scope": "closed four cases and eight selected PNG/AX pairs only; other profiles pending"
+  },
+  "final_native_review": {
+    "path": "/private/tmp/h07-native-preparation/final-native-quality-1514.json",
+    "sha256": "f3ffd99b5f8fc4b032012f9968f3f6f3fec78ef0bee4d2cfaabeb51ae1661486"
+  },
+  "historical_scope": "identity only; current source/UID/pose/paired AX unavailable",
+  "display_proof_scope": "Current static MAX matrix only: Duo 0/180 endpoints bind explicit active-display JSON; original three-pose FOLD remains failed history outside this matrix"
+}

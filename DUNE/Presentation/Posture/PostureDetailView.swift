@@ -5,12 +5,27 @@ struct PostureDetailView: View {
     let record: PostureAssessmentRecord
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
+    private static let lightStatusColors: [PostureStatus: Color] = [
+        .normal: .green.mix(with: .black, by: 0.45),
+        .caution: .yellow.mix(with: .black, by: 0.45),
+        .warning: .red.mix(with: .black, by: 0.45),
+        .unmeasurable: .gray.mix(with: .black, by: 0.45)
+    ]
+    private static let lightBodyAccentColor = DS.Color.body.mix(with: .black, by: 0.45)
+    private static let lightPartialColor = Color.orange.mix(with: .black, by: 0.45)
     @State private var showDeleteConfirmation = false
     @State private var zoomImage: ZoomableImageItem?
     @State private var pdfURL: URL?
     @State private var correctiveRecommendations: [CorrectiveRecommendation] = []
     @ScaledMetric(relativeTo: .caption) private var scaledScoreRingDiameter: CGFloat = 120
     @ScaledMetric(relativeTo: .largeTitle) private var scaledScoreFontSize: CGFloat = 36
+    @ScaledMetric(relativeTo: .title3) private var scaledMetricSymbolSize: CGFloat = 20
+
+    private var metricSymbolSize: CGFloat {
+        min(scaledMetricSymbolSize, 40)
+    }
 
     private var scoreRingDiameter: CGFloat {
         min(scaledScoreRingDiameter, 220)
@@ -24,8 +39,8 @@ struct PostureDetailView: View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
                 scoreSection
-                captureImagesSection
                 metricsSection
+                captureImagesSection
 
                 CorrectiveExercisesSectionView(recommendations: correctiveRecommendations)
                     .padding(DS.Spacing.md)
@@ -49,7 +64,7 @@ struct PostureDetailView: View {
             ToolbarItem(placement: .principal) {
                 Text(record.date, style: .date)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
             }
             ToolbarItem(placement: .primaryAction) {
                 if let pdfURL {
@@ -98,13 +113,13 @@ struct PostureDetailView: View {
 
                     Text("/ 100")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                 }
             }
 
             Text("Posture Score")
                 .font(.headline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.primary)
 
             let hasBoth = record.frontImageData != nil && record.sideImageData != nil
             if !hasBoth {
@@ -113,7 +128,7 @@ struct PostureDetailView: View {
                     systemImage: "info.circle"
                 )
                 .font(.caption)
-                .foregroundStyle(.orange)
+                .foregroundStyle(colorScheme == .light ? Self.lightPartialColor : Color.orange)
             }
         }
         .frame(maxWidth: .infinity)
@@ -185,17 +200,17 @@ struct PostureDetailView: View {
             } else {
                 RoundedRectangle(cornerRadius: DS.Radius.sm)
                     .fill(.quaternary)
-                    .aspectRatio(3 / 4, contentMode: .fit)
+                    .frame(height: 120)
                     .overlay {
                         Image(systemName: "camera.fill")
                             .font(.title2)
-                            .foregroundStyle(.tertiary)
+                            .foregroundStyle(.primary)
                     }
             }
 
             Text(label)
                 .font(.caption.weight(.medium))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.primary)
         }
     }
 
@@ -207,8 +222,22 @@ struct PostureDetailView: View {
                 .font(.headline)
 
             let allMetrics = record.allMetrics
-            ForEach(allMetrics, id: \.type) { metric in
-                metricRow(metric)
+            if allMetrics.isEmpty {
+                Text("Unable to measure")
+                    .font(.subheadline)
+                    .foregroundStyle(.primary)
+            } else {
+                LazyVGrid(
+                    columns: dynamicTypeSize.isAccessibilitySize
+                        ? [GridItem(.flexible())]
+                        : [GridItem(.flexible()), GridItem(.flexible())],
+                    alignment: .leading,
+                    spacing: DS.Spacing.sm
+                ) {
+                    ForEach(allMetrics, id: \.type) { metric in
+                        metricRow(metric)
+                    }
+                }
             }
         }
         .padding(DS.Spacing.md)
@@ -216,32 +245,38 @@ struct PostureDetailView: View {
     }
 
     private func metricRow(_ metric: PostureMetricResult) -> some View {
-        HStack(spacing: DS.Spacing.md) {
-            Image(systemName: metric.type.iconName)
-                .font(.title3)
-                .foregroundStyle(metric.status.color)
-                .frame(width: 32)
+        let foregroundColor = colorScheme == .light
+            ? (Self.lightStatusColors[metric.status] ?? metric.status.color)
+            : metric.status.color
+        return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                Image(systemName: metric.type.iconName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: metricSymbolSize, height: metricSymbolSize)
+                    .foregroundStyle(foregroundColor)
+                    .frame(width: metricSymbolSize + DS.Spacing.sm)
 
-            VStack(alignment: .leading, spacing: 2) {
                 Text(metric.type.displayName)
                     .font(.subheadline.weight(.medium))
-
-                HStack(spacing: DS.Spacing.sm) {
-                    Text(metricValueText(metric))
-                        .font(.caption.weight(.semibold).monospacedDigit())
-                        .foregroundStyle(.primary)
-
-                    confidenceBadge(metric.confidence)
-                }
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
-            Spacer()
+            HStack(spacing: DS.Spacing.sm) {
+                Text(metricValueText(metric))
+                    .font(.caption.weight(.semibold).monospacedDigit())
+                    .foregroundStyle(.primary)
+
+                confidenceBadge(metric.confidence, textStyle: .primary)
+            }
 
             Label(metric.status.displayName, systemImage: metric.status.iconName)
                 .font(.caption.weight(.medium))
-                .foregroundStyle(metric.status.color)
+                .foregroundStyle(foregroundColor)
         }
-        .padding(.vertical, DS.Spacing.xs)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(DS.Spacing.sm)
+        .background(metric.status.color.opacity(0.09), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
@@ -254,23 +289,25 @@ struct PostureDetailView: View {
         NavigationLink(value: PostureSymmetryDestination(id: record.id)) {
             HStack(spacing: DS.Spacing.md) {
                 Image(systemName: "arrow.left.arrow.right")
-                    .font(.title3)
-                    .foregroundStyle(DS.Color.body)
-                    .frame(width: 32)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: metricSymbolSize, height: metricSymbolSize)
+                    .foregroundStyle(colorScheme == .light ? Self.lightBodyAccentColor : DS.Color.body)
+                    .frame(width: Swift.max(32, metricSymbolSize + DS.Spacing.sm))
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Left-Right Comparison")
                         .font(.subheadline.weight(.medium))
                     Text("Detailed symmetry analysis")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                 }
 
                 Spacer()
 
                 Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.primary)
             }
             .padding(DS.Spacing.md)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
@@ -289,7 +326,7 @@ struct PostureDetailView: View {
 
             Text(record.memo)
                 .font(.body)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.primary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DS.Spacing.md)

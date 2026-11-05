@@ -737,7 +737,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
         ])
         launchApp(with: configuration)
-        openHistory()
+        openHistory(maxRevealAttempts: 36)
         let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "8 metrics")).firstMatch
         reveal(row)
         XCTAssertTrue(row.exists && row.isHittable, "Synthetic posture record should be reachable")
@@ -753,7 +753,39 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
                           "The complete score card should fit in the \(state) window")
             // The combined label cannot prove the ring's painted text fits.
             VisualAudit.capture("Posture \(state) complete score card at maximum AX")
+            reveal(app.staticTexts["Assessment Details"].firstMatch)
+            captureScrollContent("Posture \(state) assessment at maximum AX", count: 5)
         }
+    }
+
+    func testPostureDetailAtMaximumAccessibilitySize() throws {
+        executionTimeAllowance = 600
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        openHistory(maxRevealAttempts: 36)
+        let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "8 metrics")).firstMatch
+        reveal(row)
+        XCTAssertTrue(row.exists && row.isHittable, "Synthetic posture record should be reachable")
+        row.auditTap()
+
+        // The host prepares and verifies the requested layout before this test.
+        let scoreLabel = "Posture score 86 out of 100"
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(scoreLabel, maxSwipes: 16, direction: .down),
+                      "Posture score should remain reachable at maximum text size")
+        let score = app.descendants(matching: .any)[scoreLabel].firstMatch
+        XCTAssertEqual(score.label, scoreLabel, "The stored synthetic score should be preserved")
+        XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 2, dy: 2).contains(score.frame),
+                      "The complete score card should fit in the prepared layout")
+        VisualAudit.capture("Posture static layout complete score card at maximum AX")
+
+        let assessment = app.staticTexts["Assessment Details"].firstMatch
+        reveal(assessment)
+        XCTAssertTrue(assessment.exists && assessment.isHittable,
+                      "Stored assessment metrics should be reachable at maximum text size")
+        captureScrollContent("Posture static layout assessment at maximum AX", count: 5)
     }
 
     func testPostureCardAtMaximumAccessibilitySize() throws {
@@ -904,18 +936,18 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         VisualAudit.capture("Posture result from visual audit record")
     }
 
-    private func openHistory() {
+    private func openHistory(maxRevealAttempts: Int = 18) {
         let viewAll = app.buttons["wellness-link-posturehistory"].firstMatch
-        reveal(viewAll)
+        reveal(viewAll, maxAttempts: maxRevealAttempts)
         XCTAssertTrue(viewAll.exists && viewAll.isHittable, "Posture history entry should be reachable")
         viewAll.auditTap()
         XCTAssertTrue(app.staticTexts["Posture History"].firstMatch.waitForExistence(timeout: 5))
         VisualAudit.capture("Posture history top")
     }
 
-    private func reveal(_ element: XCUIElement) {
+    private func reveal(_ element: XCUIElement, maxAttempts: Int = 18) {
         let scroll = app.scrollViews.firstMatch
-        for _ in 0..<18 {
+        for _ in 0..<maxAttempts {
             // Duo may report offscreen descendants as hittable. The target's
             // tap point must also lie inside the visible scroll viewport.
             let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)

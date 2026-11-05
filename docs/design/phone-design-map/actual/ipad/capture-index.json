@@ -560,13 +560,17 @@
     },
     "P06": {
       "row_id": "P06",
-      "evidence": "test-and-title:Assessment Detail",
+      "file": "P06.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "PostureVisualAuditTests/testPostureHistoryAndDetail()",
-      "action": "tap 86, October 12, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. ",
-      "timestamp": 1791823672.617,
-      "image": "9C4BEB32-6CD0-4AFB-A927-CABA0445D124.png",
-      "screen": "screen-0-2064x2752-tap 86, October 12, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. _0_D3639F4E-AA96-4CD7-AC62-2DD8BEDCD283.png",
-      "file": "P06.png"
+      "action": "Posture detail top",
+      "source_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "device_uid": "8365A89D-6D61-4E2B-A59C-319653A50A0B",
+      "pose": "normal",
+      "archive": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed",
+      "archive_inventory_sha256": "778999cedd5f898ae6b64875fd4ed2b643cbb055f07bff0f6713b9247e2eb97c",
+      "image_sha256": "8540defcf024ece4e853035507d2ed6cd1489efda8f505c53668cda006433fc1",
+      "ax_sha256": "1bac190e01a8797b29c6d5135570cd9add6ea30eeca69f33ddc7def6f7060613"
     },
     "P07": {
       "row_id": "P07",
@@ -1115,13 +1119,17 @@
     },
     "H07": {
       "row_id": "H07",
-      "evidence": "test-and-action:Wellness recent posture record",
+      "file": "H07.png",
+      "evidence": "reviewed native PNG/AX pair",
       "test": "PostureVisualAuditTests/testWellnessRecentPostureRecordOpensDetail()",
-      "action": "tap wellness-posture-record-0A2AB66E-8143-4DC8-9AB9-F6BD4F6E45E7",
-      "timestamp": 1791838730.595,
-      "image": "AF537496-8F92-4A7B-87DE-F871FAFF9D97.png",
-      "screen": "screen-0-2064x2752-tap wellness-posture-record-0A2AB66E-8143-4DC8-9AB9-F6BD4F6E45E7_0_01A00BD2-605C-4BE8-A0E3-C3936E1373B0.png",
-      "file": "H07.png"
+      "action": "Wellness recent posture record detail",
+      "source_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+      "device_uid": "8365A89D-6D61-4E2B-A59C-319653A50A0B",
+      "pose": "normal",
+      "archive": ".codex-checks/h07/evidence/ipad-normal-1514deb7-passed",
+      "archive_inventory_sha256": "778999cedd5f898ae6b64875fd4ed2b643cbb055f07bff0f6713b9247e2eb97c",
+      "image_sha256": "34ee47360b8bb487e4646f5344f28ae41c90e8a79496a51942e54c6f6976876e",
+      "ax_sha256": "9836b6c398e256ba834da723a5d315225a25bc98300a2eadbdf72d43f7fe57e5"
     },
     "H14": {
       "row_id": "H14",
@@ -1452,9 +1460,10 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "438d9e8376fc4929cbf977893055eb4124d4d318",
+  "last_refresh_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
   "last_refresh_screens": [
-    "H06"
+    "H07",
+    "P06"
   ],
-  "last_refresh_note": "Reviewed native H06 rows pair; historical image retained in review gallery."
+  "last_refresh_note": "Reviewed current native H07/P06; historical images in review gallery."
 }

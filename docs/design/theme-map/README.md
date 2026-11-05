@@ -7,6 +7,10 @@ status: in-progress
 
 # DUNE 테마 맵
 
+## H07·P06 자세 기록 상세 · 2026-11-05
+
+[정적 DUNE 표현 시안](themes/dune-posture-record-detail-h07.html)과 [배치 계약](../layout-map/posture-record-detail-h07.html)은 저장된 평가 지표를 Front/Side 사진보다 먼저 읽는 공유 상세 뷰의 기준이다. 작은 상태 아이콘·글자의 밝은 전경만 원래 색을 진하게 쓰고 어두운 화면과 상태 타일 배경은 유지한다. 시안은 실제 값·사진·SF Symbol 렌더링이나 앱 캡처가 아니다. 현재 소스 `1514deb7`의 iPhone·iPad·Duo 접힘/펼침 핵심 검사 11건과 실제 PNG/AX 20쌍은 [네이티브 갤러리](../full-redesign-map/review/h07-p06-posture-native-2026-11-05/index.html)에서 확인한다. English·Light와 Duo 두 끝점의 MAX 범위이며 기존 90° FOLD 실패는 별도로 보존한다. PDF·사진 확대·관절 오버레이·좌우 비교·교정 운동·메모·삭제 코드와 기록 없음의 기존 문구를 유지한다.
+
 T14 운동 기록 없음 화면은 [방향 시안](themes/dune-notification-target-not-found-t14.html)과 [배치 계약](../layout-map/notification-target-not-found-t14.html)을 따른다. 기존 DUNE 팔레트의 불투명 히어로와 원래 문구·아이콘·실제 ID를 보존한다. 이 브라우저 시안은 네이티브 캡처가 아니다.
 
 H03 오늘 밤 수면 예측 상세와 T15 로드 완료 소비자는 [수면 상세 방향 시안](themes/dune-sleep-prediction-detail-h03.html)과 [배치 계약](../layout-map/sleep-prediction-detail-h03.html)을 따른다. 기존 DUNE sleep 팔레트·공유 링·원래 요인/팁 아이콘을 유지한다. HTML은 실제 앱 캡처가 아니다.
