@@ -1276,3 +1276,92 @@ extension XCUIApplication {
         return self
     }
 }
+
+extension XCUIApplication {
+    private enum RevealGoal { case full, top, bottom }
+
+    /// Reveals a compact element completely within the visible scroll viewport.
+    func revealFullyVisible(_ identifier: String, in scroll: XCUIElement, maxMoves: Int = 12) -> Bool {
+        reveal(identifier, in: scroll, goal: .full, maxMoves: maxMoves)
+    }
+
+    /// For a long paragraph, proves both edges are reachable even when the Text exceeds the viewport.
+    func revealTextBody(_ identifier: String, in scroll: XCUIElement, maxMoves: Int = 12) -> Bool {
+        let target = descendants(matching: .any)[identifier].firstMatch
+        guard target.waitForExistence(timeout: 5), !target.label.isEmpty else { return false }
+        guard reveal(identifier, in: scroll, goal: .top, maxMoves: maxMoves) else { return false }
+        if target.isHittable && visibleViewport(of: scroll).contains(target.frame) { return true }
+        VisualAudit.capture("\(identifier) top")
+        guard reveal(identifier, in: scroll, goal: .bottom, maxMoves: maxMoves) else { return false }
+        VisualAudit.capture("\(identifier) bottom")
+        return true
+    }
+
+    private func visibleViewport(of scroll: XCUIElement) -> CGRect {
+        var viewport = scroll.frame.intersection(windows.firstMatch.frame)
+        let navigationBar = navigationBars.firstMatch
+        if navigationBar.exists && navigationBar.isHittable && navigationBar.frame.intersects(viewport) {
+            let top = max(viewport.minY, navigationBar.frame.maxY)
+            viewport = CGRect(x: viewport.minX, y: top,
+                              width: viewport.width, height: max(0, viewport.maxY - top))
+        }
+        let tabBar = tabBars.firstMatch
+        if tabBar.exists && tabBar.isHittable && tabBar.frame.intersects(viewport) {
+            let bottom = min(viewport.maxY, tabBar.frame.minY)
+            viewport = CGRect(x: viewport.minX, y: viewport.minY,
+                              width: viewport.width, height: max(0, bottom - viewport.minY))
+        }
+        return viewport
+    }
+
+    private func reveal(_ identifier: String, in scroll: XCUIElement,
+                        goal: RevealGoal, maxMoves: Int) -> Bool {
+        guard scroll.waitForExistence(timeout: 5) else { return false }
+        let target = descendants(matching: .any)[identifier].firstMatch
+        func reached(_ viewport: CGRect) -> Bool {
+            guard target.exists else { return false }
+            if case .full = goal, !target.isHittable { return false }
+            let frame = target.frame
+            guard frame.width > 0 && frame.height > 0 &&
+                    frame.minX.isFinite && frame.maxX.isFinite &&
+                    frame.minY.isFinite && frame.maxY.isFinite &&
+                    viewport.minX <= frame.minX && frame.maxX <= viewport.maxX else { return false }
+            switch goal {
+            case .full: return viewport.contains(frame)
+            case .top: return viewport.minY <= frame.minY && frame.minY <= viewport.maxY
+            case .bottom: return viewport.minY <= frame.maxY && frame.maxY <= viewport.maxY
+            }
+        }
+        for _ in 0..<maxMoves {
+            let scrollFrame = scroll.frame
+            let viewport = visibleViewport(of: scroll)
+            guard viewport.width > 0 && viewport.height > 0 &&
+                    scrollFrame.width > 0 && scrollFrame.height > 0 else { return false }
+            if reached(viewport) { return true }
+
+            let targetY: CGFloat
+            if target.exists {
+                switch goal {
+                case .full: targetY = target.frame.midY
+                case .top: targetY = target.frame.minY
+                case .bottom: targetY = target.frame.maxY
+                }
+            } else {
+                targetY = viewport.maxY + viewport.height
+            }
+            let delta = targetY - viewport.midY
+            let distance = min(max(abs(delta), viewport.height * 0.2), viewport.height * 0.65)
+            let startY = viewport.minY + viewport.height * (delta < 0 ? 0.25 : 0.75)
+            let endY = startY + (delta < 0 ? distance : -distance)
+            let x = (viewport.midX - scrollFrame.minX) / scrollFrame.width
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(
+                dx: x, dy: (startY - scrollFrame.minY) / scrollFrame.height
+            ))
+            let end = scroll.coordinate(withNormalizedOffset: CGVector(
+                dx: x, dy: (endY - scrollFrame.minY) / scrollFrame.height
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        return reached(visibleViewport(of: scroll))
+    }
+}

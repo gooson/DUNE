@@ -203,3 +203,13 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실제 PNG/AX 18쌍을 확인했다. [실제 화면과 검증 한계](../full-redesign-map/review/h05-body-record-native-2026-11-05/index.html)는 시안과 별도이며 첫 iPad 실패 1건도 보존한다.
 
 - [H09 부상 이력](injury-history-h09.html): 원래 두 상태·기록 필드·행동을 보존하는 배치 제안. 두 상태 fixture의 현재 611d70b1 네 프로필·다섯 사례·열 PNG/AX 쌍은 [실제 검토 갤러리](../full-redesign-map/review/h09-injury-history-native-2026-11-05/index.html)에 있다.
+
+2026-11-05 H10 부상 상세는 [전용 배치](injury-detail-h10.html)와 [DUNE 표현](../theme-map/themes/dune-injury-detail-h10.html)의 원래 부위·심각도·기간 히어로, 한 번의 날짜·메모 배치를 따른다. 아직 실제 앱 검증 전 정적 시안이다.
+
+2026-11-05 H11 부상 통계는 [배치 계약](injury-statistics-h11.html)과 [테마 시안](../theme-map/themes/dune-injury-statistics-h11.html)의 실제 건수·회복일 강조를 따른다. 구현 전 정적 제안이며 계산은 기존 서비스를 유지한다.
+
+2026-11-05 H12 수면 설명 시트는 [배치 계약](sleep-debt-explanation-h12.html)과 [테마 시안](../theme-map/themes/dune-sleep-debt-explanation-h12.html)의 원문·표식·스크롤 보존 기준을 따른다. 정적 제안이며 실제 검증 전이다.
+
+2026-11-05 H13 수면 설명 시트는 [배치 계약](waso-explanation-h13.html)과 [테마 시안](../theme-map/themes/dune-waso-explanation-h13.html)의 원문·표식·스크롤 보존 기준을 따른다. 정적 제안이며 실제 검증 전이다.
+
+2026-11-06 H10: [실제 화면과 출처](../full-redesign-map/review/h10-injury-detail-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.

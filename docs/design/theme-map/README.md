@@ -294,3 +294,13 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-05 [H09 부상 이력](themes/dune-injury-history-h09.html)은 상태별 원래 심볼과 목록 위계를 보존하는 정적 시안이다. [배치 계약](../layout-map/injury-history-h09.html)을 먼저 저장했으며 640cc681의 Duo 핵심 검사 3건과 실제 캡처는 보존했다. 통계 전경 보정 후 현재 611d70b1 네 프로필·다섯 사례·열 PNG/AX 쌍은 [실제 검토 갤러리](../full-redesign-map/review/h09-injury-history-native-2026-11-05/index.html)에 있다.
 
 H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 반영해 Light 전경을 진하게 조정한다. 원래 기호·동작·Dark accent를 유지하며 수정 소스의 밝은 화면 실제 대비 검토는 네 프로필에서 완료했다.
+
+- H10 부상 상세: [보존 시안](themes/dune-injury-detail-h10.html), 원래 기간·상태·날짜와 메모를 강조하는 구현 전 정적 제안. 실제 캡처는 별도 갱신한다.
+
+- H11 부상 통계: [시안](themes/dune-injury-statistics-h11.html), 원래 통계·회복일·부위 빈도·운동량 비교를 보존하는 정적 제안.
+
+- H12 수면 설명: [정적 시안](themes/dune-sleep-debt-explanation-h12.html). 원래 설명·임계값·색 표식을 보존하며 실제 기록·캡처가 아니다.
+
+- H13 수면 설명: [정적 시안](themes/dune-waso-explanation-h13.html). 원래 설명·임계값·색 표식을 보존하며 실제 기록·캡처가 아니다.
+
+2026-11-06 H10: [실제 화면과 출처](../full-redesign-map/review/h10-injury-detail-native-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 검증을 완료했다. 영어·Light 시뮬레이터 범위이며 기존 실패·부분 실행과 P3 메모는 갤러리에 구분했다.

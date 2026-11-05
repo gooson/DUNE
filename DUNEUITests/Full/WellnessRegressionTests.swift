@@ -598,6 +598,24 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
         let detail = app.descendants(matching: .any)[AXID.injuryDetailScreen].firstMatch
         XCTAssertTrue(detail.waitForExistence(timeout: 8), "Injury detail should open from history row")
+        let detailScroll = app.scrollViews["injury-detail-scroll"].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5))
+        for identifier in ["injury-detail-body-part", "injury-detail-side",
+                           "injury-detail-severity", "injury-detail-status",
+                           "injury-detail-duration", "injury-detail-description"] {
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: detailScroll), "Missing or clipped \(identifier)")
+        }
+        XCTAssertEqual(app.staticTexts["injury-detail-body-part"].firstMatch.label, "Knee")
+        XCTAssertEqual(app.staticTexts["injury-detail-status"].firstMatch.label, "Active")
+        VisualAudit.capture("H10 active Knee detail summary")
+        for identifier in ["injury-detail-start-value", "injury-detail-end-value",
+                           "injury-detail-recorded-value"] {
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: detailScroll), "Missing or clipped \(identifier)")
+        }
+        VisualAudit.capture("H10 active Knee detail timeline")
+        XCTAssertTrue(app.revealFullyVisible("injury-detail-memo-value", in: detailScroll))
+        XCTAssertEqual(app.staticTexts["injury-detail-memo-value"].firstMatch.label, "Mild pain during squats")
+        VisualAudit.capture("H10 active Knee detail memo")
 
         let editButton = app.descendants(matching: .any)[AXID.injuryDetailEdit].firstMatch
         XCTAssertTrue(editButton.waitForExistence(timeout: 5), "Injury detail edit button should exist")
@@ -614,6 +632,78 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         expectation(for: dismissed, evaluatedWith: form)
         waitForExpectations(timeout: 5)
         XCTAssertTrue(detail.waitForExistence(timeout: 8), "Saving edit should return to injury detail")
+
+        let markRecovered = app.buttons[AXID.injuryDetailMarkRecovered].firstMatch
+        XCTAssertTrue(markRecovered.waitForExistence(timeout: 5), "Active injury should offer Mark Recovered")
+        XCTAssertTrue(markRecovered.isHittable, "Mark Recovered must be reachable")
+        markRecovered.auditTap()
+
+        let recoveredStatus = app.staticTexts["injury-detail-status"].firstMatch
+        let statusChanged = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "label == %@", "Recovered"), object: recoveredStatus
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [statusChanged], timeout: 5), .completed,
+                       "Recovery must update the open detail")
+        XCTAssertTrue(detail.exists, "Recovery must keep the detail route open")
+        XCTAssertTrue(app.revealFullyVisible("injury-detail-status", in: detailScroll),
+                      "Recovered status must be fully visible")
+        XCTAssertEqual(recoveredStatus.label, "Recovered")
+        let recoveredActionGone = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: markRecovered
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [recoveredActionGone], timeout: 5), .completed,
+                       "Recovered injury must not offer Mark Recovered")
+        VisualAudit.capture("H10 newly recovered Knee detail")
+
+        returnToInjuryHistory(from: AXID.injuryDetailScreen, navigationTitle: "Injury Detail")
+        XCTAssertTrue(revealInjuryHistoryRow(0), "Newly recovered Knee row must remain reachable")
+        let recoveredRow = app.buttons[AXID.injuryHistoryRow(0)].firstMatch
+        XCTAssertTrue(recoveredRow.exists && recoveredRow.label.contains("Knee"),
+                      "Knee must remain in history after recovery")
+        XCTAssertFalse(recoveredRow.label.contains("Active"), "Knee must no longer be active")
+        XCTAssertTrue(app.staticTexts["Recovered"].firstMatch.exists,
+                      "Recovered section must contain the updated record")
+        XCTAssertFalse(app.staticTexts["Active"].firstMatch.exists,
+                       "No active section should remain after recovering the only active record")
+        VisualAudit.capture("H10 newly recovered Knee history")
+    }
+
+    func testInjuryDetailAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-injury-history-fixture",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+        openInjuryHistory()
+        XCTAssertTrue(revealInjuryHistoryRow(1), "MAX recovered row must fit before opening detail")
+        app.descendants(matching: .any)[AXID.injuryHistoryRow(1)].firstMatch.auditTap()
+        let detail = app.descendants(matching: .any)[AXID.injuryDetailScreen].firstMatch
+        let detailScroll = app.scrollViews["injury-detail-scroll"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 8))
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5))
+        for identifier in ["injury-detail-body-part", "injury-detail-side",
+                           "injury-detail-severity", "injury-detail-status",
+                           "injury-detail-duration", "injury-detail-description"] {
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: detailScroll), "MAX missing or clipped \(identifier)")
+            if ["injury-detail-body-part", "injury-detail-status", "injury-detail-duration"].contains(identifier) {
+                VisualAudit.capture("H10 MAX recovered Shoulder \(identifier)")
+            }
+        }
+        XCTAssertEqual(app.staticTexts["injury-detail-body-part"].firstMatch.label, "Shoulder")
+        XCTAssertEqual(app.staticTexts["injury-detail-status"].firstMatch.label, "Recovered")
+        XCTAssertFalse(app.buttons[AXID.injuryDetailMarkRecovered].firstMatch.exists)
+        XCTAssertTrue(app.buttons[AXID.injuryDetailEdit].firstMatch.exists)
+        VisualAudit.capture("H10 MAX recovered Shoulder detail summary")
+        for identifier in ["injury-detail-start-value", "injury-detail-end-value",
+                           "injury-detail-recorded-value"] {
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: detailScroll), "MAX missing or clipped \(identifier)")
+        }
+        VisualAudit.capture("H10 MAX recovered Shoulder detail timeline")
+        XCTAssertTrue(app.revealFullyVisible("injury-detail-memo-value", in: detailScroll))
+        VisualAudit.capture("H10 MAX recovered Shoulder detail memo")
+        returnToInjuryHistory(from: AXID.injuryDetailScreen, navigationTitle: "Injury Detail")
     }
 
     func testInjuryHistoryAtMaximumAccessibilityTextSize() throws {
@@ -728,6 +818,35 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         }
         let viewport = visibleList()
         return row.exists && row.isHittable && viewport.contains(row.frame)
+    }
+
+    private func returnToInjuryHistory(from destinationID: String, navigationTitle: String) {
+        let destination = app.descendants(matching: .any)[destinationID].firstMatch
+        XCTAssertTrue(destination.waitForExistence(timeout: 5), "Destination must be open before Back")
+
+        let namedBack = app.navigationBars[navigationTitle].buttons["Injury History"].firstMatch
+        if namedBack.exists && namedBack.isHittable {
+            namedBack.auditTap()
+        } else {
+            // Closed Duo places Back in the action rail rather than the navigation bar.
+            let railBackButtons = app.buttons.matching(identifier: "BackButton")
+            let railBack = railBackButtons.firstMatch
+            guard railBack.waitForExistence(timeout: 5),
+                  railBackButtons.count == 1,
+                  railBack.isHittable else {
+                XCTFail("Expected one reachable BackButton for \(navigationTitle)")
+                return
+            }
+            railBack.auditTap()
+        }
+
+        let departed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: destination
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [departed], timeout: 5), .completed,
+                       "Back must dismiss \(navigationTitle)")
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryHistoryScreen].firstMatch.waitForExistence(timeout: 5),
+                      "Back must return to Injury History")
     }
 
     private func openInjuryHistory() {

@@ -1,0 +1,141 @@
+{
+  "scope": "H09 row/H10 detail/edit/recovery/return iPhone 18 Pro Max normal English Light native review only",
+  "sourceRevision": "04e2ec0add31d110734452d854767a25407b7eca",
+  "sourceSHA256": {
+    "DUNE/Presentation/Injury/InjuryHistoryView.swift": "4d354a50e000b40da8cc0b5a3d96ada3ea8e00ed5f05ecf84aee6fc93c747416",
+    "DUNEUITests/Full/WellnessRegressionTests.swift": "6f78da54e1e93d9f96c49ba68082ddac4debbfd3a8f7d701c849a4c65e6111f2"
+  },
+  "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed",
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "5DC8A061-31BE-4045-AF68-491C4ADA21FC",
+    "deviceName": "iPhone 18 Pro Max-wt-Health-detail-redesign-l03-19e74dbe28e2",
+    "modelName": "iPhone 18 Pro Max",
+    "osBuildNumber": "24B8117",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "imagePixels": [
+    1320,
+    2868
+  ],
+  "SDK": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm",
+      "DUNEUITests/SleepDetailSmokeTests/testSleepDebtExplanationOpens",
+      "DUNEUITests/SleepDetailSmokeTests/testWakeAnalysisExplanationOpens"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 3,
+      "passed": 3,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 3,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/batch01-phone-refresh-04e2ec0a.log"
+  },
+  "selectedPairs": [
+    {
+      "checkpoint": "Injury history names and metadata",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/45AC2E93-581D-4DCA-A91B-F9C7D6300EDA.png",
+      "PNGSHA256": "3285cc7463b1702070085ebde9b4875c38ba8c93f43f2f1aa17877182dbfd34c",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/0BF8DEC8-0208-4E78-A48D-17EA8CEBB0D3.txt",
+      "AXSHA256": "a4571afa8334387fba969ca13a7c1f1aefeb1143163913ebc815d8996bb777c1"
+    },
+    {
+      "checkpoint": "H09 recovered Shoulder history row",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/5F84ACEC-0721-4908-9EB0-55F7B58D551D.png",
+      "PNGSHA256": "3285cc7463b1702070085ebde9b4875c38ba8c93f43f2f1aa17877182dbfd34c",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/75C36563-D84D-4B61-9394-EE492C2B739F.txt",
+      "AXSHA256": "dbc3069de31899452a4a9aa870fb2cf6de8d673778e97f2c74e8b223daf7cbd6"
+    },
+    {
+      "checkpoint": "tap injury-history-row-0",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/5022EB3D-D410-4375-B7F9-24FE251BA404.png",
+      "PNGSHA256": "733d63827d8a83914ea68466877d09eb123f8c49f599f92afe745c828f414292",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/030F012E-7AFE-4FA3-909C-23E46C34F926.txt",
+      "AXSHA256": "9d3c6ee39b06d6cad66263736864198e933c1f8eb66626275af5472269eaef95"
+    },
+    {
+      "checkpoint": "H10 active Knee detail summary",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/AAC9B621-35B9-450D-9518-1917FFF710E7.png",
+      "PNGSHA256": "733d63827d8a83914ea68466877d09eb123f8c49f599f92afe745c828f414292",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/7F72DE50-7441-49A6-8E75-6EDF7F2B8379.txt",
+      "AXSHA256": "71140517aa16e9432e04f3928d1b05f68a9859f02e3e8f2e910adc50c4827aa7"
+    },
+    {
+      "checkpoint": "H10 active Knee detail timeline",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/A38176C2-CF66-43F4-9DCA-62A66338B43C.png",
+      "PNGSHA256": "733d63827d8a83914ea68466877d09eb123f8c49f599f92afe745c828f414292",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/7BC89176-F6F7-4372-B458-04D406F17234.txt",
+      "AXSHA256": "417a675626ac16fac659f3c5918842929914cca0426bf8c4edb0072b7741225c"
+    },
+    {
+      "checkpoint": "H10 active Knee detail memo",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/6257B685-9668-4D11-9ECD-E62E7948B995.png",
+      "PNGSHA256": "733d63827d8a83914ea68466877d09eb123f8c49f599f92afe745c828f414292",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/77B2D616-B7EC-4050-A282-7CA6282F0673.txt",
+      "AXSHA256": "c89c61e8b429c5dcee795dece03e3201cf67c3d038f67228ce6f53611f63afa2"
+    },
+    {
+      "checkpoint": "tap injury-detail-edit",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/80DD115B-38FF-4A33-8128-1D4B0C0F699A.png",
+      "PNGSHA256": "f39761ab6e186a7721d2e8ca97b3b1ab9e28f6e28501e053a1a05c634976de30",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/5A6D920B-D166-4858-B450-F5765F50804F.txt",
+      "AXSHA256": "65ea820c67226202e310b3c7466481152840b38f2668753740dbc8598f07b195"
+    },
+    {
+      "checkpoint": "tap injury-form-save",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/065E94AC-4F17-44A1-8813-BBA812ECB42E.png",
+      "PNGSHA256": "bb623a8c03dce8a1f6e8ac101733cdcc65981650fa2a83abd6f4029408676427",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/EF7A7B6D-7F06-40D3-8C55-64288BC77AA6.txt",
+      "AXSHA256": "f9f420c2f8ad4d3e3af0839d74fc8b6bf157e97e5747903b7c064ffcdcdbfac6"
+    },
+    {
+      "checkpoint": "tap injury-detail-mark-recovered",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/BEC5CA44-1AB8-424E-BBA2-0503CDA8500E.png",
+      "PNGSHA256": "cdb179af74a2e499d76e9dce3ddd4a76e5a1548e0663653417c44604d2b6bc66",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/92216935-2C85-4DF6-9435-AC50E1D9BACC.txt",
+      "AXSHA256": "2fe450fea3e8a902a8600bec494df99e334e49eb31690442d42308de3146234f"
+    },
+    {
+      "checkpoint": "H10 newly recovered Knee detail",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/90A95D6A-32CE-4657-A0F2-9618873AD572.png",
+      "PNGSHA256": "cdb179af74a2e499d76e9dce3ddd4a76e5a1548e0663653417c44604d2b6bc66",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/7A9642C3-AFA7-4796-BEEA-3EC0624B0519.txt",
+      "AXSHA256": "fba5c930f1384a4873a95275afcc58651520b9ad7402b60a0c815d1a9adfc4b6"
+    },
+    {
+      "checkpoint": "tap BackButton",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/99995AD7-C1AF-4AB7-81DB-140A53695755.png",
+      "PNGSHA256": "679256992ec42c050f13ccd6de1d009754ddb9a368901172c0843fda158bcccc",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/5F5A2307-BACB-4BD0-9D0F-886649E308AE.txt",
+      "AXSHA256": "74683be85f6d7aad8c511b056e9f4437010f2728df00a893fea7cbacff6ef123"
+    },
+    {
+      "checkpoint": "H10 newly recovered Knee history",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/83F96C95-3AB7-49D3-A5ED-1D2274054B76.png",
+      "PNGSHA256": "679256992ec42c050f13ccd6de1d009754ddb9a368901172c0843fda158bcccc",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/503DE740-DC93-45A2-ADA8-7A6A02E8CA27.txt",
+      "AXSHA256": "d718d072c5bce1465f96cc53346b95932301920b21dbacedeb996b7789b7f07d"
+    },
+    {
+      "checkpoint": "before teardown -[WellnessRegressionTests testInjuryHistoryRowOpensDetailAndEditForm]",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/C864CE60-51EC-43CC-AE2F-4A6F2C1CBC0D.png",
+      "PNGSHA256": "679256992ec42c050f13ccd6de1d009754ddb9a368901172c0843fda158bcccc",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/phone-refresh-04e2ec0a-passed/attachments/4C80DD5E-2BCA-48B7-9D90-732E200134C2.txt",
+      "AXSHA256": "9ccfdd129bc86b3ef816c8ba5b13b2bcaf79237f60477dd6f30ebe0d09159d5e"
+    }
+  ]
+}
