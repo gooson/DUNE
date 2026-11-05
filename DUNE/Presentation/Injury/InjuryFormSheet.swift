@@ -4,10 +4,15 @@ struct InjuryFormSheet: View {
     @Bindable var viewModel: InjuryViewModel
     let isEdit: Bool
     let onSave: () -> Void
+    @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @ScaledMetric(relativeTo: .title3) private var severityIconWidth: CGFloat = 28
     @State private var saveCount = 0
+
+    private var formTint: Color {
+        colorScheme == .light ? theme.accentColor.mix(with: .black, by: 0.45) : theme.accentColor
+    }
 
     private func severityForeground(_ severity: InjurySeverity) -> Color {
         colorScheme == .light ? severity.color.mix(with: .black, by: 0.45) : severity.color
@@ -57,6 +62,7 @@ struct InjuryFormSheet: View {
                         }
                     } header: {
                         Label("Body Part", systemImage: viewModel.selectedBodyPart.iconName)
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
 
                     Section {
@@ -94,6 +100,7 @@ struct InjuryFormSheet: View {
                         }
                     } header: {
                         Label("Severity", systemImage: "bandage.fill")
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
 
                     Section {
@@ -136,6 +143,7 @@ struct InjuryFormSheet: View {
                         }
                     } header: {
                         Label("Duration", systemImage: "calendar")
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
 
                     Section {
@@ -144,6 +152,7 @@ struct InjuryFormSheet: View {
                             .accessibilityIdentifier("injury-form-memo")
                     } header: {
                         Label("Notes", systemImage: "note.text")
+                            .foregroundStyle(DS.Color.textSecondary)
                     }
                 }
                 .scrollContentBackground(.hidden)
@@ -170,6 +179,7 @@ struct InjuryFormSheet: View {
                 }
             }
         }
+        .tint(formTint)
         .sensoryFeedback(.success, trigger: saveCount)
     }
 }

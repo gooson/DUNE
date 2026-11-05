@@ -292,3 +292,5 @@ A21 보상 설명은 [배치 계약](../layout-map/activity-reward-explanation-a
 H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실제 PNG/AX 18쌍을 확인했다. [실제 화면과 검증 한계](../full-redesign-map/review/h05-body-record-native-2026-11-05/index.html)는 시안과 별도이며 첫 iPad 실패 1건도 보존한다.
 
 2026-11-05 [H08 정적 Form 표현](themes/dune-injury-record-form-h08.html)은 [입력·수정 배치 계약](../layout-map/injury-record-form-h08.html)을 따른다. 시스템 Form·Picker·DatePicker·Memo·Cancel/Save와 저장 검증을 유지하며, 네 섹션에 원래 SF Symbol 이름을 표시하고 밝은 심각도 전경 대비를 제안한다. 시안의 날짜·값·그림은 실제 앱 캡처가 아니다. 현재 실제 카탈로그의 H08 Add 대표 상태와 보조 Recovered/Edit/MAX의 새 네이티브 검증은 아직 남아 있다.
+
+H08 첫 Light 캡처의 toolbar·선택값과 섹션 전경 대비 보완: 현재 테마 accent를 진하게 섞은 H08 전용 tint와 DS.TextSecondary 섹션 헤더를 사용하며 Dark tint·기존 데이터/입력 흐름은 유지한다. 수정 후 실제 검증은 별도로 남긴다.

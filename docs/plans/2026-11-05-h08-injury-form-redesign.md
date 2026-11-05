@@ -73,3 +73,9 @@ related_brainstorms:
 | 기존 이미지 | source가 맞지 않는 before 비교나 새 구현 증거로 재사용하지 않음 |
 
 색·기호의 실제 대비, MAX 줄바꿈, 키보드·네 기기의 새 캡처는 아직 미검증이다. English·Light가 기본 증거이며 다른 언어/외관과 실제 의료 결과를 이 실행의 통과로 암시하지 않는다. 과거 unrelated Watch CI는 런타임 누락의 실행 전 실패이며 H08 iOS 범위를 Watch 전체 검사로 확대하지 않는다.
+
+## 첫 실제 캡처의 전경 보완
+
+`89b6b349` iPhone의 기존 Add/Edit 2건은 SDK에서 통과했지만, 실제 Light 화면의 Cancel/Save와 선택값이 약 2.5–2.6:1, 섹션 제목·기호가 약 3.3:1로 낮았다. 해당 SDK·PNG/AX와 리뷰는 이전 소스로 보존한다. H08 NavigationStack 안의 Light tint만 현재 테마 accent를 진하게 섞어 사용하고, 네 섹션의 제목·기호는 이미 사용하던 `DS.Color.textSecondary`로 표시한다. Dark tint와 심각도 색, 원래 선택·저장 로직은 유지한다. 다른 화면의 전역 tint를 바꾸지 않는다.
+
+수정 소스에서 같은 핵심 9건·4런과 새 native를 확인한다. 미사용 전용 iPad는 바로 다음 검증에 재사용하고, 이미 끝난 iPhone 원본은 현재 수정 소스의 통과나 before 비교로 계산하지 않는다. 이번 보완은 입력값·문구·클릭 대상·도메인을 바꾸지 않는다.
