@@ -1,0 +1,79 @@
+{
+  "screen": "T17",
+  "status": "ready",
+  "expected_primary_pairs": 4,
+  "source_valid_pairs": 4,
+  "missing": [],
+  "root_tracked_writes": 0,
+  "target_revision": "f97392084401db4c5108f241db1cb19901e072d8",
+  "gallery": "/private/tmp/batch02-gallery-preparation/t17-health-data-qa-native-2026-11-06",
+  "board": "01-시작.png",
+  "baseline_sha256": {
+    "portal_html": "f47646ae12bfc0f1e2c942ee6050d58fee903606097f83c5f9fd85629c845b48",
+    "profiles": {
+      "regular": {
+        "capture_index_json": "90c69018f0fdfc744df6c9411583acaf46e30a4136371b490b4c0fe07139f3bd",
+        "index_html": "492c93be265988045c67caa1c022a2f39e4ee30008b3123a3bd5fe6e072efadb",
+        "board_png": "6e7ec3d54a165532cacc8c255f5efcf271d8f878c705fd84d18e1d37aa061991"
+      },
+      "ipad": {
+        "capture_index_json": "e9a518fbb72897360d58eaaad388f7059518bf8cabab877d6e904f121d52e00e",
+        "index_html": "6143e26187606d4064a001bcad12899c006695559f3b96074b9c42a6dd8ceb54",
+        "board_png": "ab3b4f7461c82a94335fa77020b6ef4b2677a81bb80025c494ab84bf0d535640"
+      },
+      "duo": {
+        "capture_index_json": "43b2609f370706b84a96920521fb11afc340bb4b12802281a94d8005adcd8562",
+        "index_html": "ce6fdf9028be89fc3c83e9e90a992601d611200a17875aa561b924c62f0f3fa0",
+        "board_png": "170f237dfb7e9498c03409f7da49264424e8f67b3a180531b461d90ac0956d6a"
+      },
+      "duo-open": {
+        "capture_index_json": "abb3aace9cb6d1f4e3101eab95b57c3c67e35b9dcca4ccbe3bfda32116c2e340",
+        "index_html": "e4c3f518f7b4550b362eb71963583019851bb50bb7dcd991a2a34d8ce577ace2",
+        "board_png": "c65dec4dfd58f88b6d98d06ad2a8874efea2ac240756f397514c1edf571861b9"
+      }
+    }
+  },
+  "profiles": {
+    "regular": {
+      "updated_row": "T17",
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "board": "01-시작.png",
+      "board_sha256": "e09b4dfcca52da8f1cf381befbe67750417e0d298287a614b66482664ea4ba47",
+      "png_sha256": "1d90143305b526e6c7cde79791fac4171d26ec063426a9d08d2d98cf5e027888",
+      "ax_sha256": "46c826d225d3476c5af11ccc1bbfa9a2cf0a4578296adc701b465e74ddf54c5c"
+    },
+    "ipad": {
+      "updated_row": "T17",
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "board": "01-시작.png",
+      "board_sha256": "5d4bafb771c47a0b03a5678173a1548e919d13aa082bbe589d2453ab76c68a85",
+      "png_sha256": "f4744a8a7eb87577ed55ad6a910ade892b7435422f7c53a4b7a27f080b277e3c",
+      "ax_sha256": "e18e2793e84c99ab5bf5c90e1af69fde41e9fbc95a366dbe149408f76b0987e4"
+    },
+    "duo": {
+      "updated_row": "T17",
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "board": "01-시작.png",
+      "board_sha256": "fb2e10b8802b213a3a92a16a9780a6574f4559ea5b59c7221e9f2cf79fb97f35",
+      "png_sha256": "27106ede8ac80d332195f7fb3f4727c6ff51f3450d9f27dc832b677a5c8719fd",
+      "ax_sha256": "369f96ba52e17897a59a3fe634aa0e5777d876c2669539b5ff0d3333d1bdd8ca"
+    },
+    "duo-open": {
+      "updated_row": "T17",
+      "unselected_rows_unchanged": true,
+      "unselected_articles_unchanged": true,
+      "global_index_metadata_unchanged": true,
+      "board": "01-시작.png",
+      "board_sha256": "1e917eda1baafda0a46a262c802d100ca73044f729788732c14a123a2bf9e692",
+      "png_sha256": "27271e1b9c56999c65bc99be599b7e6b1c2a0cdb3ab6db42358cec28c96af6d6",
+      "ax_sha256": "ff6125780b285fcde6c0b955bed38c9b35ab700278656662bc3d4075e800efcc"
+    }
+  },
+  "staged_path": "/private/tmp/batch02-actual-map-preparation/staged/T17"
+}
