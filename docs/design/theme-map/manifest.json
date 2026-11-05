@@ -775,6 +775,17 @@
         "layout": "../layout-map/posture-record-detail-h07.html",
         "status": "implemented-native-reviewed"
       }
+    },
+    {
+      "id": "injury-history-h09",
+      "name": "H09 · 부상 이력",
+      "title": "원래 상태 아이콘 · 부위 이름 · 날짜와 기간",
+      "file": "dune-injury-history-h09.html",
+      "detail": "원래 Active/Recovered 구분과 심각도 심볼·실제 기록 필드를 보존하는 정적 표현 기준. 두 상태 헤더는 보조 텍스트 토큰, 기존 심각도 아이콘은 Dynamic Type 폭과 밝은 전경을 사용한다. 쿼리·정렬·편집·회복·삭제·통계·H10 이동은 유지한다. 이 HTML의 기호와 예시 값은 실제 앱 캡처나 의료 판정이 아니다. 새 iPhone·iPad·Duo 접힘·펼침 및 MAX 검증은 아직 대기 중이다.",
+      "implementation": {
+        "layout": "../layout-map/injury-history-h09.html",
+        "status": "proposal-native-pending"
+      }
     }
   ]
 }

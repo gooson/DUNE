@@ -201,3 +201,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 - [A21 보상 설명](activity-reward-explanation-a21.html): 기존 아이콘·시스템 시트와 계산을 보존한 개편. 개편 선택 검사6/6과 원본 iPhone1/1을 각각 검증하고 실제 전후 비교에 연결했다.
 
 H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실제 PNG/AX 18쌍을 확인했다. [실제 화면과 검증 한계](../full-redesign-map/review/h05-body-record-native-2026-11-05/index.html)는 시안과 별도이며 첫 iPad 실패 1건도 보존한다.
+
+- [H09 부상 이력](injury-history-h09.html): 원래 두 상태·기록 필드·행동을 보존하는 배치 제안. 두 상태 DEBUG fixture와 새 네 프로필 PNG/AX·MAX 검증은 대기 중이다.

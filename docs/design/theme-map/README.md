@@ -290,3 +290,5 @@ A21 보상 설명은 [배치 계약](../layout-map/activity-reward-explanation-a
 2026-11-04 T06 체지방률 후속: [구현 계획](../../plans/2026-11-04-t06-body-fat-survey-reference.md)에 따라 미국 성인 1999–2004 DXA 조사 평균을 개인 값과 별도로 표시하도록 계약을 갱신했다. 원문 실제 연령 구간·측정 방식 차이를 밝히고 체중/BMI와 제지방의 기존 경로를 보존한다. 2026-11-05 [체지방 DXA 실제 화면 갤러리](../full-redesign-map/review/t06-body-fat-dxa-native-2026-11-05/index.html)에 선택 검사 5건의 32개 PNG/AX 쌍을 연결한다. Duo 접힘 일반 case는 실패한 2건 집계 안에서 Passed였고 최대 글씨 case는 별도 Passed였다. 과거 iPad 이미지는 새 조사 카드의 이전 화면이나 AX 증거가 아니다. 이 페이지의 원래 브라우저 시안은 실제 앱 캡처가 아니다.
 
 H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실제 PNG/AX 18쌍을 확인했다. [실제 화면과 검증 한계](../full-redesign-map/review/h05-body-record-native-2026-11-05/index.html)는 시안과 별도이며 첫 iPad 실패 1건도 보존한다.
+
+2026-11-05 [H09 부상 이력](themes/dune-injury-history-h09.html)은 상태별 원래 심볼과 목록 위계를 보존하는 정적 시안이다. [배치 계약](../layout-map/injury-history-h09.html)을 먼저 저장했으며 새 네이티브 캡처·대비 검토는 아직 대기 중이다.
