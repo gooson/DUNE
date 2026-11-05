@@ -775,6 +775,17 @@
         "layout": "../layout-map/posture-record-detail-h07.html",
         "status": "implemented-native-reviewed"
       }
+    },
+    {
+      "id": "injury-record-form-h08",
+      "name": "H08 · 부상 기록 입력·수정",
+      "title": "원래 Form · 네 섹션 아이콘 · 심각도 대비",
+      "file": "dune-injury-record-form-h08.html",
+      "detail": "네이티브 Form의 원래 부위·Side·세 심각도·날짜·Recovered·메모·Cancel/Save를 유지하는 정적 표현 기준. 원래 SF Symbol과 기존 색을 쓰고 밝은 화면의 심각도 기호·선택 체크 및 이름을 읽기 쉽게 제안한다. 값·웹 기호는 예시이며 실제 부상 기록이나 앱 캡처가 아니다. Add/Recovered/Edit와 접힘 MAX의 새 네이티브 검증은 대기 중이다.",
+      "implementation": {
+        "layout": "../layout-map/injury-record-form-h08.html",
+        "status": "proposal-native-pending"
+      }
     }
   ]
 }

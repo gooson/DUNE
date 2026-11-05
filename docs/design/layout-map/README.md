@@ -201,3 +201,5 @@ Life Flow를 실제 앱에 반영했다. [검증 보고](../../reviews/2026-10-2
 - [A21 보상 설명](activity-reward-explanation-a21.html): 기존 아이콘·시스템 시트와 계산을 보존한 개편. 개편 선택 검사6/6과 원본 iPhone1/1을 각각 검증하고 실제 전후 비교에 연결했다.
 
 H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실제 PNG/AX 18쌍을 확인했다. [실제 화면과 검증 한계](../full-redesign-map/review/h05-body-record-native-2026-11-05/index.html)는 시안과 별도이며 첫 iPad 실패 1건도 보존한다.
+
+2026-11-05 [H08 부상 기록 입력·수정 배치 계약](injury-record-form-h08.html)은 원래 네이티브 Form의 부위·Side·세 심각도·기간·Recovered/End Date·메모와 Cancel/Save를 유지한다. [정적 DUNE 표현](../theme-map/themes/dune-injury-record-form-h08.html)의 값·날짜·웹 기호는 예시이며 앱 캡처가 아니다. 실제 맵의 정식 ID는 H08 하나이며 Add 기본과 Recovered/Edit/MAX 보조 상태의 새 PNG/AX는 검증 후 구분해 게시한다.
