@@ -154,6 +154,9 @@ final class DuoLifeArchiveRestoreTests: SeededUITestBaseCase {
 
     func testArchivedHabitRestoresToActiveLifeList() throws {
         let name = "Morning Stretch"
+        let completedToggle = app.buttons["life-completed-toggle"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-completed-toggle", maxSwipes: 8))
+        completedToggle.auditTap()
         XCTAssertTrue(app.openLifeHabitActions(named: name, maxSwipes: 8),
                       "Seeded habit actions should be reachable")
         XCTAssertTrue(app.waitAndTap(AXID.lifeHabitActionArchive), "Archive should accept the seeded habit")
