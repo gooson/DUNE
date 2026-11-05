@@ -16,6 +16,7 @@ struct HabitManagementView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var filter: HabitFilter = .active
@@ -70,6 +71,7 @@ struct HabitManagementView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
+                managementHero
                 filterPicker
 
                 if displayedHabits.isEmpty {
@@ -113,6 +115,33 @@ struct HabitManagementView: View {
             )
         }
         .accessibilityIdentifier("habit-management-screen")
+    }
+
+    private var managementHero: some View {
+        HeroCard(tintColor: DS.Color.warmGlow) {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: filter == .active ? "checklist" : "archivebox")
+                        .accessibilityHidden(true)
+                    Text("Habits")
+                        .accessibilityIdentifier("habit-management-hero-title")
+                }
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(DS.Color.textSecondary)
+
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                    Text(displayedHabits.count, format: .number)
+                        .font(DS.Typography.heroScore)
+                        .accessibilityIdentifier("habit-management-hero-count")
+                    Text(filter.displayName)
+                        .font(.title3.weight(.semibold))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("habit-management-hero-filter")
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 
     // MARK: - Filter Picker
@@ -168,52 +197,54 @@ struct HabitManagementView: View {
         let layout = dynamicTypeSize.isAccessibilitySize
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
             : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
-        return layout {
-            // Icon
-            Image(systemName: habit.iconCategory.iconName)
-                .font(.title3)
-                .foregroundStyle(habit.iconCategory.themeColor)
-                .frame(width: 36, height: 36)
-                .background(habit.iconCategory.themeColor.opacity(DS.Opacity.light), in: Circle())
+        return StandardCard {
+            layout {
+                // Icon
+                Image(systemName: habit.iconCategory.iconName)
+                    .font(.title3)
+                    .foregroundStyle(colorScheme == .light
+                        ? habit.iconCategory.themeColor.mix(with: .black, by: 0.35)
+                        : habit.iconCategory.themeColor)
+                    .frame(minWidth: 40, minHeight: 40)
+                    .background(habit.iconCategory.themeColor.opacity(DS.Opacity.light), in: Circle())
 
-            // Name + stats
-            VStack(alignment: .leading, spacing: 2) {
-                Text(habit.name)
-                    .font(.subheadline.weight(.medium))
-                    .fixedSize(horizontal: false, vertical: true)
+                // Name + stats
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(habit.name)
+                        .font(.subheadline.weight(.medium))
+                        .fixedSize(horizontal: false, vertical: true)
 
-                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    Label(
-                        String(localized: "\(totalCount) times"),
-                        systemImage: "checkmark.circle"
-                    )
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                    if bestStreak > 0 {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                         Label(
-                            String(localized: "\(bestStreak) day streak"),
-                            systemImage: "flame"
+                            String(localized: "\(totalCount) times"),
+                            systemImage: "checkmark.circle"
                         )
                         .font(.caption)
-                        .foregroundStyle(DS.Color.warmGlow)
-                    }
+                        .foregroundStyle(.secondary)
 
-                    Text(habit.createdAt.formatted(.dateTime.month(.abbreviated).year()))
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
+                        if bestStreak > 0 {
+                            Label(
+                                String(localized: "\(bestStreak) day streak"),
+                                systemImage: "flame"
+                            )
+                            .font(.caption)
+                            .foregroundStyle(DS.Color.warmGlow)
+                        }
+
+                        Text(habit.createdAt.formatted(.dateTime.month(.abbreviated).year()))
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+
+                Spacer(minLength: 0)
+
+                // Actions
+                if filter == .archived {
+                    archivedActions(habit)
                 }
             }
-
-            Spacer()
-
-            // Actions
-            if filter == .archived {
-                archivedActions(habit)
-            }
         }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.lg))
     }
 
     // MARK: - Archived Actions
@@ -231,6 +262,7 @@ struct HabitManagementView: View {
                 Image(systemName: "clock.badge.checkmark")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+                    .frame(minWidth: 44, minHeight: 44)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(String(localized: "History"))
@@ -245,6 +277,7 @@ struct HabitManagementView: View {
                     .padding(.vertical, 4)
                     .background(DS.Color.positive.opacity(DS.Opacity.light), in: Capsule())
                     .foregroundStyle(DS.Color.positive)
+                    .frame(minWidth: 44, minHeight: 44)
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("habit-management-restore-\(habit.name)")
