@@ -1,0 +1,141 @@
+{
+  "scope": "H09 row/H10 detail/edit/recovery/return iPad mini normal English Light native review only",
+  "sourceRevision": "04e2ec0add31d110734452d854767a25407b7eca",
+  "sourceSHA256": {
+    "DUNE/Presentation/Injury/InjuryHistoryView.swift": "4d354a50e000b40da8cc0b5a3d96ada3ea8e00ed5f05ecf84aee6fc93c747416",
+    "DUNEUITests/Full/WellnessRegressionTests.swift": "6f78da54e1e93d9f96c49ba68082ddac4debbfd3a8f7d701c849a4c65e6111f2"
+  },
+  "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed",
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "9887CB98-B0D6-47F1-B14C-8D501AEA3962",
+    "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-redesign-l03-19e74dbe28e2",
+    "modelName": "iPad mini (A20 Pro)",
+    "osBuildNumber": "24B8117",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "SDK": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 1,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/batch01-ipad-h10-retry1-04e2ec0a.log"
+  },
+  "previousArchive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-2d1656bb-partial-failed",
+  "previousArchiveCounts": {
+    "executed": 4,
+    "passed": 3,
+    "failed": 1
+  },
+  "selectedPairs": [
+    {
+      "checkpoint": "Injury history names and metadata",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/81715BF0-183B-4D2C-BC7A-385839905F81.png",
+      "PNGSHA256": "505f5e8fe6895146f40664b44fc9ca24bd18489fd48221e0503f3cac836ca4de",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/7629C24D-FFF0-442C-BFBA-02CD4B39E07E.txt",
+      "AXSHA256": "784845ece7d919e7a18dee7a49154c1bb9f71c0524380d9b8d83247049f5fa03"
+    },
+    {
+      "checkpoint": "H09 recovered Shoulder history row",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/2032CCE5-84FA-4490-AFE4-9890BE4B3435.png",
+      "PNGSHA256": "505f5e8fe6895146f40664b44fc9ca24bd18489fd48221e0503f3cac836ca4de",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/BF31981A-F1D5-4085-896C-7399C12584F0.txt",
+      "AXSHA256": "6432491b06c666493c75e0c6d48a2fd6dd7a7e7ada9e691caac5c6d0c662285b"
+    },
+    {
+      "checkpoint": "tap injury-history-row-0",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/9E5451A3-605E-49E5-B3F8-94A19C060899.png",
+      "PNGSHA256": "d9c79a9ca611c5879332e038f77e1d2cbf53e9593762e0260d783c8b147a7cb6",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/CE6F65E4-83E8-40A2-8229-845DDA0990F9.txt",
+      "AXSHA256": "f2fdbaab52476be91923dfc5193bc042fc7ce21f0411fd0f02d1a94c1dab4085"
+    },
+    {
+      "checkpoint": "H10 active Knee detail summary",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/9909E2C6-1DB5-40F6-85A9-FB965B9C8BA5.png",
+      "PNGSHA256": "d9c79a9ca611c5879332e038f77e1d2cbf53e9593762e0260d783c8b147a7cb6",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/D7815AC4-56C2-46E2-B1DE-59FAC8FA554F.txt",
+      "AXSHA256": "0c5ec81ab2ffab2dc90e87b9dce6532baf9ee5e324a3b61ef0b12bc785f19320"
+    },
+    {
+      "checkpoint": "H10 active Knee detail timeline",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/68A416CF-3D38-4E82-AEAD-6CED34E5E1D8.png",
+      "PNGSHA256": "d9c79a9ca611c5879332e038f77e1d2cbf53e9593762e0260d783c8b147a7cb6",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/CD744F84-CD77-47AD-B620-268DEE244A50.txt",
+      "AXSHA256": "8824a36d4f4210899a433cece75e9f74e8826311ea750d8b5f2eff12ca08fd82"
+    },
+    {
+      "checkpoint": "H10 active Knee detail memo",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/0C63F7EA-4F45-4D5C-AB12-6C3877777298.png",
+      "PNGSHA256": "59bc88a937081307aeeb69399ad998f2e7ec075a135d56d0bb79deec103839cc",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/E79ACAAF-5D73-42AF-B809-290AEEE1767B.txt",
+      "AXSHA256": "d3da613067814202074300965bb8d65c6a7073b69a855bad901c3d75f368c73e"
+    },
+    {
+      "checkpoint": "tap injury-detail-edit",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/5AFA1ACF-7D7E-4CB0-864D-6CDF2BAC6058.png",
+      "PNGSHA256": "7190edfbafa89658c574df0cf471fc8ee6c2692f42217fd1b9c90bc96aaed898",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/24F16905-DE58-42D3-B306-E4B2582C1B96.txt",
+      "AXSHA256": "1622ee08f512aa93afc0cd4ceea241f0d16b95c4b4e83353d6d888ef93ad8654"
+    },
+    {
+      "checkpoint": "tap injury-form-save",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/058AAC19-B8FA-4C9B-9CDE-9F5C9A274170.png",
+      "PNGSHA256": "59bc88a937081307aeeb69399ad998f2e7ec075a135d56d0bb79deec103839cc",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/74B2FEE5-CA74-480F-B492-E7FA9B19D813.txt",
+      "AXSHA256": "74ae145c1994bbdd966e1cec12cc5e2de2e8a4fecdb7a4fbce7f3c1ad9c406ed"
+    },
+    {
+      "checkpoint": "tap injury-detail-mark-recovered",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/91701442-0DDF-488D-9F9D-82FBF20F6960.png",
+      "PNGSHA256": "83301eccaa3523ce6ace974f23cc027d48a9384b98c77a01cc683b765c8a96c4",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/C00C1ACB-ECD5-4D14-B8B1-3218A3E31B12.txt",
+      "AXSHA256": "5e9fd7ebea7145548f2f364d32ecde52d2749160dfa599fe1ed27de174f1cad5"
+    },
+    {
+      "checkpoint": "H10 newly recovered Knee detail",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/7E0A3BB9-CC33-44C8-8284-AADAF5218E66.png",
+      "PNGSHA256": "83301eccaa3523ce6ace974f23cc027d48a9384b98c77a01cc683b765c8a96c4",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/CB712433-5EC1-4990-9B17-6D7C3652D428.txt",
+      "AXSHA256": "57c0e49b7e7352a7019a7972d0c513069a41848164a867b757a751ee8c33cbec"
+    },
+    {
+      "checkpoint": "tap BackButton",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/1FC3C0AC-DA9C-4D17-A689-BC445E92628C.png",
+      "PNGSHA256": "e4c1fc45d8628f8f832070d3ca41b939ed40dccac591ecb268cf4c6e5566da85",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/A2392083-171D-4413-A079-B6F695165387.txt",
+      "AXSHA256": "ce35dd0e6b8c680d5cbfd9ad6caf6fe80fc05df7ba1381afd35ad3eb1422b552"
+    },
+    {
+      "checkpoint": "H10 newly recovered Knee history",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/E8818CC6-C3E9-4415-AB48-B22F96865588.png",
+      "PNGSHA256": "e4c1fc45d8628f8f832070d3ca41b939ed40dccac591ecb268cf4c6e5566da85",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/40E12D32-AB1E-47E0-84B1-1546BE89550F.txt",
+      "AXSHA256": "d7ca7a1dfda97b33e30a480f6d920827bfdf67e7c99deb855bdcb0127bd9d23b"
+    },
+    {
+      "checkpoint": "before teardown -[WellnessRegressionTests testInjuryHistoryRowOpensDetailAndEditForm]",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/E39DB9CD-AC35-4E7D-8109-ED9E508F467D.png",
+      "PNGSHA256": "e4c1fc45d8628f8f832070d3ca41b939ed40dccac591ecb268cf4c6e5566da85",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/ipad-h10-04e2ec0a-passed/attachments/0FC16047-E395-4D41-8933-08D6A32A61C0.txt",
+      "AXSHA256": "fbeb0a828b171c583117f226a59200004ff4a4b44e265d78ddf297d38676e631"
+    }
+  ]
+}

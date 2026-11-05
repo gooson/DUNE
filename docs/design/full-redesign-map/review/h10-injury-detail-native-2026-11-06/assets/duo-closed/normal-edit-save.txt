@@ -1,0 +1,123 @@
+Attributes: Application, 0x115be88c0, pid: 30406, label: 'DUNE'
+Element subtree:
+ →Application, 0x115be88c0, pid: 30406, label: 'DUNE'
+    Window (Main), 0x115be8500, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x115be8a00, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x115be8780, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x115be8c80, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x115be8dc0, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x115be8f00, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x115be9040, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x115be9180, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x115beae40, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x115beaf80, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x115beb0c0, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x115bea440, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x115be9e00, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x112ab2d00, {{0.0, 0.0}, {466.0, 678.0}}
+                            Toolbar, 0x112ab3980, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x112ab3840, {{0.0, 0.0}, {466.0, 678.0}}
+                            NavigationBar, 0x112ab2a80, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Injury Detail'
+                              StaticText, 0x112ab2bc0, {{20.0, 37.7}, {95.0, 20.7}}, label: 'Injury Detail'
+                            Other, 0x112ab3ac0, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x112ab2300, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x112ab2f80, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x112ab3e80, {{0.0, 0.0}, {466.0, 678.0}}
+                                    Other, 0x112ab2440, {{0.0, 82.0}, {382.0, 1.0}}, identifier: 'injury-detail-screen'
+                                    ScrollView, 0x112ab2e40, {{0.0, 83.0}, {466.0, 595.0}}, identifier: 'injury-detail-scroll'
+                                      Other, 0x112ab2800, {{0.0, 35.3}, {382.0, 653.0}}
+                                        Other, 0x112ab3d40, {{16.0, 51.3}, {350.0, 369.0}}, identifier: 'injury-detail-summary'
+                                          Image, 0x112ab21c0, {{40.0, 75.3}, {76.7, 76.7}}, identifier: 'exclamationmark.circle', label: 'Error'
+                                          StaticText, 0x112ab2940, {{40.0, 168.0}, {52.7, 26.3}}, identifier: 'injury-detail-body-part', label: 'Knee'
+                                          StaticText, 0x112ab30c0, {{40.0, 198.3}, {37.7, 18.0}}, identifier: 'injury-detail-side', label: '(Left)'
+                                          StaticText, 0x108e5db80, {{40.0, 220.3}, {45.7, 20.3}}, identifier: 'injury-detail-severity', label: 'Minor'
+                                          StaticText, 0x108e5f5c0, {{40.0, 256.7}, {95.7, 27.0}}, identifier: 'injury-detail-status', label: 'Active'
+                                          Image, 0x108e5e940, {{53.3, 262.0}, {16.3, 16.3}}, identifier: 'injury-detail-status', label: 'Adhesive Bandage Strip, Filled'
+                                          StaticText, 0x108e5ebc0, {{41.3, 299.7}, {83.0, 18.0}}, label: 'Duration'
+                                          Image, 0x108e1c000, {{41.3, 301.3}, {15.0, 15.0}}, identifier: 'clock', label: 'Clock'
+                                          StaticText, 0x108e1c140, {{40.0, 321.7}, {105.0, 40.7}}, identifier: 'injury-detail-duration', label: '5 days'
+                                          StaticText, 0x108e1c280, {{40.0, 378.4}, {175.0, 18.0}}, identifier: 'injury-detail-description', label: 'Can exercise with caution'
+                                        Other, 0x108e1c3c0, {{16.0, 436.3}, {350.0, 135.7}}, identifier: 'injury-detail-timeline'
+                                          StaticText, 0x108e1c500, {{34.3, 452.4}, {108.7, 24.0}}, label: 'Timeline'
+                                          Image, 0x108e1c640, {{34.3, 455.0}, {20.3, 18.7}}, identifier: 'calendar', label: 'Calendar'
+                                          StaticText, 0x108e1c780, {{34.0, 484.4}, {58.3, 18.0}}, label: 'Start'
+                                          Image, 0x108e1c8c0, {{34.0, 486.3}, {14.7, 13.7}}, identifier: 'calendar', label: 'Calendar'
+                                          StaticText, 0x108e1ca00, {{259.0, 484.4}, {91.0, 18.0}}, identifier: 'injury-detail-start-value', label: 'Oct 31, 2026'
+                                          StaticText, 0x108e1cb40, {{34.0, 510.4}, {51.0, 18.3}}, label: 'End'
+                                          Image, 0x108e1cc80, {{34.0, 512.7}, {19.0, 16.0}}, identifier: 'calendar.badge.checkmark', label: 'Calendar With A Checkmark Badge'
+                                          StaticText, 0x108e1cdc0, {{290.3, 510.4}, {59.7, 18.0}}, identifier: 'injury-detail-end-value', label: 'Ongoing'
+                                          StaticText, 0x108e1cf00, {{33.3, 538.1}, {90.7, 18.0}}, label: 'Recorded'
+                                          Image, 0x108e1d040, {{33.3, 539.7}, {15.0, 15.0}}, identifier: 'clock', label: 'Clock'
+                                          StaticText, 0x108e1d180, {{203.7, 538.1}, {146.3, 18.0}}, identifier: 'injury-detail-recorded-value', label: 'Nov 5, 2026 at 23:21'
+                                        Other, 0x108e1d2c0, {{16.0, 588.0}, {350.0, 84.3}}, identifier: 'injury-detail-memo'
+                                          StaticText, 0x108e1d400, {{34.3, 604.1}, {88.0, 24.0}}, label: 'Memo'
+                                          Image, 0x108e1d540, {{34.3, 606.7}, {20.3, 18.7}}, identifier: 'note.text', label: 'Notes'
+                                          StaticText, 0x108e1d680, {{32.0, 636.1}, {177.0, 20.3}}, identifier: 'injury-detail-memo-value', label: 'Mild pain during squats'
+                                      Other, 0x108e1d7c0, {{433.0, 83.0}, {30.0, 536.0}}, label: 'Vertical scroll bar, 2 pages', value: 52%
+                                        Other, 0x108e1d900, {{460.0, 166.3}, {3.0, 494.0}}
+                                      Other, 0x108e1da40, {{433.0, 83.0}, {30.0, 536.0}}, label: 'Vertical scroll bar, 2 pages', value: 52%
+                                        Other, 0x108e1db80, {{460.0, 166.3}, {3.0, 494.0}}
+                Other, 0x108e1dcc0, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x108e1de00, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x108e1df40, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x108e1e080, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x108e1e1c0, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x108e1e300, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x108e1e440, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x108e1e580, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x108e1e6c0, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x108e1e800, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x108e1e940, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                            Other, 0x108e1ea80, {{394.0, 234.0}, {48.0, 100.0}}
+                              Other, 0x108e1ebc0, {{394.0, 234.0}, {48.0, 48.0}}
+                                Other, 0x108e1ed00, {{399.0, 239.0}, {38.0, 38.0}}
+                                  Other, 0x108e1ee40, {{399.0, 239.0}, {38.0, 38.0}}
+                                    Button, 0x108e1ef80, {{399.0, 239.0}, {38.0, 38.0}}, identifier: 'injury-detail-mark-recovered', label: 'Mark Recovered'
+                              Other, 0x108e1f0c0, {{394.0, 286.0}, {48.0, 48.0}}
+                                Other, 0x108e1f200, {{399.0, 291.0}, {38.0, 38.0}}
+                                  Other, 0x108e1f340, {{399.0, 291.0}, {38.0, 38.0}}
+                                    Button, 0x108e1f480, {{399.0, 291.0}, {38.0, 38.0}}, identifier: 'injury-detail-edit', label: 'Edit'
+                        Other, 0x108e1f5c0, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x108e1f700, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x108e1f840, {{394.0, 442.0}, {48.0, 212.0}}
+                              Other, 0x108e1f980, {{394.0, 442.0}, {48.0, 212.0}}
+                                Other, 0x108e1fac0, {{394.0, 442.0}, {48.0, 212.0}}
+                                  Other, 0x108e1fc00, {{394.0, 442.0}, {48.0, 212.0}}
+                                    Other, 0x108e1fd40, {{394.0, 442.0}, {48.0, 212.0}}
+                                      Other, 0x108e1fe80, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x112aa8000, {{394.0, 442.0}, {44.0, 58.0}}
+                                        Other, 0x112aa8140, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Button, 0x112aa8280, {{396.0, 444.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x112aa83c0, {{405.3, 456.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x112aa8500, {{396.0, 494.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x112aa8640, {{406.3, 507.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x112aa8780, {{396.0, 544.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                                            Image, 0x112aa88c0, {{403.7, 560.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x112aa8a00, {{396.0, 594.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x112aa8b40, {{402.0, 609.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x112aa8c80, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x112aa8dc0, {{394.0, 442.0}, {48.0, 212.0}}
+                                          Other, 0x112aa8f00, {{394.0, 442.0}, {48.0, 212.0}}
+                                            Other, 0x112aa9040, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x112aa9180, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x112aa92c0, {{394.0, 442.0}, {48.0, 212.0}}
+                                                  Other, 0x112aa9400, {{394.0, 442.0}, {48.0, 212.0}}
+                                              Other, 0x112aa9540, {{394.0, 442.0}, {48.0, 212.0}}
+                                                Other, 0x112aa9680, {{394.0, 442.0}, {48.0, 212.0}}
+                                        Other, 0x112aa97c0, {{396.0, 544.0}, {44.0, 58.0}}
+                                          Other, 0x112aa9900, {{396.0, 544.0}, {44.0, 58.0}}
+                                            Other, 0x112aa9a40, {{396.0, 544.0}, {44.0, 58.0}}
+                                            Other, 0x112aa9b80, {{396.0, 544.0}, {44.0, 58.0}}
+                                              Other, 0x112aa9cc0, {{396.0, 544.0}, {44.0, 58.0}}
+                                                Other, 0x112aa9e00, {{396.0, 544.0}, {44.0, 58.0}}
+                                                  Other, 0x112aa9f40, {{396.0, 544.0}, {44.0, 58.0}}
+                                                Other, 0x112aaa080, {{396.0, 544.0}, {44.0, 58.0}}
+                                              Other, 0x112aaa1c0, {{396.0, 544.0}, {44.0, 58.0}}
+              Other, 0x112aaa300, {{191.0, 322.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x115be88c0, pid: 30406, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x112aaa440, pid: 30406, label: 'DUNE'
+  }

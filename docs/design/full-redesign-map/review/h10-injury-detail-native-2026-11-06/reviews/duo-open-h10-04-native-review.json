@@ -1,0 +1,219 @@
+{
+  "scope": "H09/H10 Duo open normal English Light native review source04",
+  "sourceRevision": "04e2ec0add31d110734452d854767a25407b7eca",
+  "sourceSHA256": {
+    "DUNE/Presentation/Injury/InjuryHistoryView.swift": "4d354a50e000b40da8cc0b5a3d96ada3ea8e00ed5f05ecf84aee6fc93c747416",
+    "DUNEUITests/Full/WellnessRegressionTests.swift": "6f78da54e1e93d9f96c49ba68082ddac4debbfd3a8f7d701c849a4c65e6111f2"
+  },
+  "archive": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed",
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "8F673AD3-77DB-4951-9824-84B302DF4299",
+    "deviceName": "iPhone Duo-wt-Health-detail-redesign-l03-19e74dbe28e2",
+    "modelName": "iPhone",
+    "osBuildNumber": "24B91016s",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "angleBefore": "180.0",
+  "angleAfter": "180.0",
+  "displaysBefore": [
+    [
+      false,
+      [
+        [
+          0,
+          0
+        ],
+        [
+          1398,
+          2034
+        ]
+      ]
+    ],
+    [
+      true,
+      [
+        [
+          0,
+          0
+        ],
+        [
+          2007,
+          2853
+        ]
+      ]
+    ]
+  ],
+  "displaysAfter": [
+    [
+      false,
+      [
+        [
+          0,
+          0
+        ],
+        [
+          1398,
+          2034
+        ]
+      ]
+    ],
+    [
+      true,
+      [
+        [
+          0,
+          0
+        ],
+        [
+          2007,
+          2853
+        ]
+      ]
+    ]
+  ],
+  "activeImageFilename": "2007x2853",
+  "activeImagePixels": [
+    2853,
+    2007
+  ],
+  "SDK": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 1,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.xcodebuild/batch01-duo-open-h10-route1-04e2ec0a.log"
+  },
+  "selectedPairs": [
+    {
+      "sequence": 2,
+      "action": "DUNE_VISUAL_AUDIT_READY tap wellness-link-injuryhistory [DUNEUITests/WellnessRegressionTests.swift:909] DEADLINE=1793897394.414524",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/002-2007x2853.png",
+      "PNGSHA256": "c3bd341a3b4d2d2d4d8cc1b72b756f5224aab831e637b087e55befcae0f78b11",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/002-hierarchy.txt",
+      "AXSHA256": "7326bb764a1af6ff163bbf6927dd2d965ed9de7a905ff80204e985459ffd9a24"
+    },
+    {
+      "sequence": 3,
+      "action": "DUNE_VISUAL_AUDIT_READY Injury history names and metadata [DUNEUITests/WellnessRegressionTests.swift:592] DEADLINE=1793897400.7166982",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/003-2007x2853.png",
+      "PNGSHA256": "c3bd341a3b4d2d2d4d8cc1b72b756f5224aab831e637b087e55befcae0f78b11",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/003-hierarchy.txt",
+      "AXSHA256": "543d76af84b26e5dc49306ab8080c1b404657c6bbde5792785f04a4ec5faaa0c"
+    },
+    {
+      "sequence": 4,
+      "action": "DUNE_VISUAL_AUDIT_READY H09 recovered Shoulder history row [DUNEUITests/WellnessRegressionTests.swift:595] DEADLINE=1793897404.646312",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/004-2007x2853.png",
+      "PNGSHA256": "c82ea0ef35ef4eea3bd364ed35144f7ce2059ca4c26dcddf82e97057bd6116a2",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/004-hierarchy.txt",
+      "AXSHA256": "ab1b4cc8527ced0021ab155a7a0bdccddc583d90ef6db4135a1235211595d77f"
+    },
+    {
+      "sequence": 5,
+      "action": "DUNE_VISUAL_AUDIT_READY tap injury-history-row-0 [DUNEUITests/WellnessRegressionTests.swift:597] DEADLINE=1793897409.614324",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/005-2007x2853.png",
+      "PNGSHA256": "a5ded3e51fdec8c0ef26865086c860e437f6892006cf82e94189a26c954b83e8",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/005-hierarchy.txt",
+      "AXSHA256": "58e413282e28ed4ca1a2040cb1a69788a59e7322685977699825bbd3e310807d"
+    },
+    {
+      "sequence": 6,
+      "action": "DUNE_VISUAL_AUDIT_READY H10 active Knee detail summary [DUNEUITests/WellnessRegressionTests.swift:610] DEADLINE=1793897424.179791",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/006-2007x2853.png",
+      "PNGSHA256": "52fb000679080109230a0b4fba646cdc1626c0bbb5aa9724b08becae609ba968",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/006-hierarchy.txt",
+      "AXSHA256": "9e8658643278d12a57af046c199b06b70ade2d9063dcfddc1ec67bf0716f5e66"
+    },
+    {
+      "sequence": 7,
+      "action": "DUNE_VISUAL_AUDIT_READY H10 active Knee detail timeline [DUNEUITests/WellnessRegressionTests.swift:615] DEADLINE=1793897432.433418",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/007-2007x2853.png",
+      "PNGSHA256": "31e35873493c37b92408db07be20381967e052dc8f6bff4a71a103ed3f673895",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/007-hierarchy.txt",
+      "AXSHA256": "2a9c033b0990bd0f0491f6559507e7926b2b60ef539551088a18150a30bb1409"
+    },
+    {
+      "sequence": 8,
+      "action": "DUNE_VISUAL_AUDIT_READY H10 active Knee detail memo [DUNEUITests/WellnessRegressionTests.swift:618] DEADLINE=1793897439.5670319",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/008-2007x2853.png",
+      "PNGSHA256": "258a339190292a638eab08051bd9bd6bcddf57b0d1b5e182e165a9d7d42bff4f",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/008-hierarchy.txt",
+      "AXSHA256": "17b8295ef0fb92a28060d01e44898f97baef74bdbb0b8d2cc7055373ba98a2c4"
+    },
+    {
+      "sequence": 9,
+      "action": "DUNE_VISUAL_AUDIT_READY tap injury-detail-edit [DUNEUITests/WellnessRegressionTests.swift:622] DEADLINE=1793897445.567827",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/009-2007x2853.png",
+      "PNGSHA256": "5713c06cc5e09253474258c4d3936fdebb445ad207425aab78d12b66154298bb",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/009-hierarchy.txt",
+      "AXSHA256": "eaf5a4c29034b17265fef08b244ef405dc637848014a49eee626982c00737d9a"
+    },
+    {
+      "sequence": 10,
+      "action": "DUNE_VISUAL_AUDIT_READY tap injury-form-save [DUNEUITests/WellnessRegressionTests.swift:629] DEADLINE=1793897452.212304",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/010-2007x2853.png",
+      "PNGSHA256": "258a339190292a638eab08051bd9bd6bcddf57b0d1b5e182e165a9d7d42bff4f",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/010-hierarchy.txt",
+      "AXSHA256": "d2d0b08b69646abe554a266fcb84a49698fa3cf4576f92132dafc375a85f7c89"
+    },
+    {
+      "sequence": 11,
+      "action": "DUNE_VISUAL_AUDIT_READY tap injury-detail-mark-recovered [DUNEUITests/WellnessRegressionTests.swift:639] DEADLINE=1793897460.227926",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/011-2007x2853.png",
+      "PNGSHA256": "1bee028cad17520d4680dae25c1693f2fdbb92c36f715554a5ec737fa9004510",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/011-hierarchy.txt",
+      "AXSHA256": "b588a0962187b08bdfb069a59fdcf1ce2b601e5ad372684464ee1e8d608e04e5"
+    },
+    {
+      "sequence": 12,
+      "action": "DUNE_VISUAL_AUDIT_READY H10 newly recovered Knee detail [DUNEUITests/WellnessRegressionTests.swift:656] DEADLINE=1793897467.222161",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/012-2007x2853.png",
+      "PNGSHA256": "1bee028cad17520d4680dae25c1693f2fdbb92c36f715554a5ec737fa9004510",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/012-hierarchy.txt",
+      "AXSHA256": "af4e8dada1b6719af567ad0707ac1bd338025070a4d98282e0ab259f0275b991"
+    },
+    {
+      "sequence": 13,
+      "action": "DUNE_VISUAL_AUDIT_READY tap BackButton [DUNEUITests/WellnessRegressionTests.swift:892] DEADLINE=1793897473.894202",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/013-2007x2853.png",
+      "PNGSHA256": "aa37fb7a1140cd9a01aa95ac2102a9a44375bb1f62a2c96a8f7eb727045f67ba",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/013-hierarchy.txt",
+      "AXSHA256": "3c19f15b155ea2db2ec7a4bca793cf4f8620d293b6d7b6140a1949b7e7c09ebf"
+    },
+    {
+      "sequence": 14,
+      "action": "DUNE_VISUAL_AUDIT_READY H10 newly recovered Knee history [DUNEUITests/WellnessRegressionTests.swift:668] DEADLINE=1793897480.226606",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/014-2007x2853.png",
+      "PNGSHA256": "51a2f906a72d7060da1584aa6225fa17abb86e84646efa35920ab581a74057b8",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/014-hierarchy.txt",
+      "AXSHA256": "4be367d3a08021f60d3b2e0a2d273c48dd3ea7f01c54e1cab0f2ceadea340fa6"
+    },
+    {
+      "sequence": 15,
+      "action": "DUNE_VISUAL_AUDIT_READY before teardown -[WellnessRegressionTests testInjuryHistoryRowOpensDetailAndEditForm] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793897483.521853",
+      "PNG": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/015-2007x2853.png",
+      "PNGSHA256": "51a2f906a72d7060da1584aa6225fa17abb86e84646efa35920ab581a74057b8",
+      "AX": "/Users/shanks/.codex/worktrees/detail-redesign-l03/Health/.codex-checks/batch01/evidence/duo-open-h10-04e2ec0a-passed/host/015-hierarchy.txt",
+      "AXSHA256": "e2a896c4ce6d8885667a7f7f41f99cf8947cf7bbc0cb660312022795ac9533ec"
+    }
+  ]
+}
