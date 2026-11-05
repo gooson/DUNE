@@ -2,7 +2,7 @@
 tags: [h04, design-map, native-evidence, documentation]
 date: 2026-11-05
 category: plan
-status: reviewed
+status: implemented
 ---
 
 # H04 검증 상태 문서 정합성
@@ -21,6 +21,7 @@ status: reviewed
 | `docs/design/theme-map/README.md` | H04 대비 결과·과거 실패 이력 명확화 |
 | `docs/design/theme-map/manifest.json` | H04 study만 `implemented-native-reviewed`로 변경 |
 | `docs/design/theme-map/index.html` | manifest에서 표준 빌더로 재생성 |
+| `docs/solutions/testing/2026-11-05-shared-metric-dates-and-native-menu-evidence.md` | 발행 뒤 정적 문서 상태를 함께 대조하는 예방 기록 |
 
 ## Implementation Steps
 
@@ -30,4 +31,4 @@ status: reviewed
 
 ## 검증과 위험
 
-현재 HEAD에서 여섯 파일만 바뀌는 patch는 `git apply --check`를 통과했다. private 복사본에서 표준 테마 빌더와 `--check`가 통과했다. Manifest의 50 study 중 H04만 바뀌고, H06의 `implemented-native-reviewed` 상태와 기존 갤러리 연결은 유지된다. ROOT에는 적용하지 않았다. PR #920 병합 과정에서 문서 바이트가 달라지면 기준을 다시 확인해야 한다.
+실제 H06 병합 HEAD `c9aadf8cc3eff075606352ec99cbc8d5d01a52d7`에서 문서 여덟 파일만 수정했다. 표준 테마 빌더와 `--check`, diff 공백 검사, 앱 소스 해시 및 문서 전용 변경 범위 검사를 통과했다. Manifest의 50 study 중 H04만 바뀌고, H06의 `implemented-native-reviewed` 상태와 기존 갤러리 연결을 포함한 다른 49 study 및 열 개 theme은 보존됐다. 앱·테스트·기존 캡처가 바뀌지 않아 새 네이티브 검사나 빌드는 실행하지 않았다. 기존 PR #918의 실제 근거와 과거 실패·미검증 범위는 유지하며, 이 문서 정정을 새 앱 검증으로 표시하지 않는다.

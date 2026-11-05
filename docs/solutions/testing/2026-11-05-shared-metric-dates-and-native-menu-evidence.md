@@ -44,3 +44,7 @@ Five effective cases passed across phone, iPad, Duo closed/open and closed dark/
 One shared date range does not mean a shared value scale, and correlated plots do not establish cause. A selected-test pass, native visual approval, source identity, and complete evidence archive are separate claims. Rule promotion is proposal-only; no .claude source was modified.
 
 The solution changes MetricComparisonView.swift and H04-local WellnessRegressionTests.swift helpers; the native gallery and map updates carry the corresponding evidence. A failed first-launch AX handshake is separate from H04 behavior: the same attempt later exposed complete Wellness AX/PNG, and the next run entered H04. No precise host-lock/startup root cause was proved.
+
+## 발행 뒤 정적 문서 상태 확인
+
+실제 캡처와 원본 근거를 게시해도 레이아웃·테마 맵의 상태 문구가 구현 전의 대기로 남을 수 있다. H04는 PR #918의 앱·검증 근거를 유지한 채 문서 상태만 별도 정정했다. 이후에는 실제 갤러리뿐 아니라 배치 계약·테마 보존본·manifest와 생성 인덱스까지 같은 완료 범위와 미검증 한계가 표시되는지 함께 대조한다. 문서 정합성 수정은 새 앱 검증으로 세지 않으며, H05/H06 등 다른 화면의 내용은 보존한다.
