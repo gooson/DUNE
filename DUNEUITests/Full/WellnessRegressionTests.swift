@@ -757,10 +757,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.staticTexts["Knee: 1"].firstMatch.exists)
         XCTAssertTrue(app.staticTexts["Shoulder: 1"].firstMatch.exists)
         VisualAudit.capture("H11 injury statistics frequency graph")
-        let back = app.navigationBars["Injury Statistics"].buttons["Injury History"].firstMatch
-        XCTAssertTrue(back.waitForExistence(timeout: 5), "Statistics must provide history return")
-        back.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryHistoryScreen].firstMatch.waitForExistence(timeout: 5))
+        returnToInjuryHistory(from: AXID.injuryStatisticsScreen, navigationTitle: "Injury Statistics")
     }
 
     func testInjuryStatisticsAtMaximumAccessibilityTextSize() throws {
@@ -796,10 +793,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.staticTexts["Knee: 1"].firstMatch.exists)
         XCTAssertTrue(app.staticTexts["Shoulder: 1"].firstMatch.exists)
         VisualAudit.capture("H11 MAX injury statistics frequency graph")
-        let back = app.navigationBars["Injury Statistics"].buttons["Injury History"].firstMatch
-        XCTAssertTrue(back.waitForExistence(timeout: 5))
-        back.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryHistoryScreen].firstMatch.waitForExistence(timeout: 5))
+        returnToInjuryHistory(from: AXID.injuryStatisticsScreen, navigationTitle: "Injury Statistics")
     }
 
     private func openBodyFormFromToolbar() {

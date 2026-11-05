@@ -2,7 +2,8 @@
 tags: [injury, statistics, hero, batch01]
 date: 2026-11-05
 category: plan
-status: approved
+status: done
+updated: 2026-11-06
 confidence: high
 ---
 
@@ -32,3 +33,7 @@ confidence: high
 ## Testing Strategy / Risks
 
 기존 opt-in injury fixture의 실제 총수/활성수/완료 회복일/두 부위 빈도를 확인한다. 일반 네 프로필 + Duo 접힘 MAX가 대상이며 정확한 selector와 1200초 예산은 통합 후보 고정 후 기록한다. 서비스·도메인 로직 미변경으로 새 unit/full 회귀는 추가하지 않는다. 빈 데이터는 원래 섹션 생략/nil 회복 — 처리 코드 보존을 리뷰한다. 같은 통합 실행의 다른 화면 결과를 H11 결과로 대신하지 않는다.
+
+## 검증 결과
+
+관련 기기·상태의 SDK와 독립 PNG/AX 검토를 완료했다. [실제 화면·원본 출처](../design/full-redesign-map/review/h11-injury-statistics-native-2026-11-06/index.html)의 실행 소스와 범위를 따른다. PR·머지는 GitHub 기록으로 확인한다.
