@@ -1,0 +1,105 @@
+Attributes: Application, 0x10698af80, pid: 18469, label: 'DUNE'
+Element subtree:
+ →Application, 0x10698af80, pid: 18469, label: 'DUNE'
+    Window (Main), 0x10698b0c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x10698a080, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x10698a1c0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x10698a300, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x10698a440, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x10698a580, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x10698a6c0, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x10698b480, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x10698b5c0, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x10698b700, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x11056ed00, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x11056c3c0, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x11056c500, {{0.0, 0.0}, {440.0, 956.0}}
+                            NavigationBar, 0x11056c640, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Injury Detail'
+                              Button, 0x11056c780, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Injury History'
+                              StaticText, 0x11056c8c0, {{172.3, 73.7}, {95.0, 20.7}}, label: 'Injury Detail'
+                              Button, 0x11056ca00, {{380.0, 66.0}, {36.0, 36.0}}, identifier: 'injury-detail-edit', label: 'Edit'
+                            Other, 0x11056da40, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x11056db80, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x11056de00, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x11056df40, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x11056e6c0, {{0.0, 116.0}, {440.0, 1.0}}, identifier: 'injury-detail-screen'
+                                    ScrollView, 0x11056e800, {{0.0, 117.0}, {440.0, 839.0}}, identifier: 'injury-detail-scroll'
+                                      Other, 0x11056e940, {{0.0, 117.0}, {440.0, 652.3}}
+                                        Other, 0x11056fd40, {{16.0, 133.0}, {408.0, 368.0}}, identifier: 'injury-detail-summary'
+                                          Image, 0x11056f0c0, {{40.0, 157.0}, {76.7, 76.7}}, identifier: 'exclamationmark.circle', label: 'Error'
+                                          StaticText, 0x11056ebc0, {{40.0, 249.7}, {52.7, 26.3}}, identifier: 'injury-detail-body-part', label: 'Knee'
+                                          StaticText, 0x11056c000, {{40.0, 280.0}, {37.7, 18.0}}, identifier: 'injury-detail-side', label: '(Left)'
+                                          StaticText, 0x11056c280, {{40.0, 302.0}, {45.7, 20.3}}, identifier: 'injury-detail-severity', label: 'Minor'
+                                          StaticText, 0x11056dcc0, {{40.0, 338.3}, {125.7, 26.0}}, identifier: 'injury-detail-status', label: 'Recovered'
+                                          Image, 0x1069bed00, {{53.3, 343.7}, {15.3, 15.3}}, identifier: 'injury-detail-status', label: 'Selected', Selected
+                                          StaticText, 0x110576bc0, {{41.3, 380.4}, {83.0, 18.0}}, label: 'Duration'
+                                          Image, 0x110577c00, {{41.3, 382.0}, {15.0, 15.0}}, identifier: 'clock', label: 'Clock'
+                                          StaticText, 0x110577840, {{40.0, 402.4}, {105.0, 40.7}}, identifier: 'injury-detail-duration', label: '5 days'
+                                          StaticText, 0x110577700, {{40.0, 459.1}, {175.0, 18.0}}, identifier: 'injury-detail-description', label: 'Can exercise with caution'
+                                        Other, 0x110574f00, {{16.0, 517.0}, {408.0, 136.0}}, identifier: 'injury-detail-timeline'
+                                          StaticText, 0x1105775c0, {{34.3, 533.1}, {108.7, 24.0}}, label: 'Timeline'
+                                          Image, 0x110577200, {{34.3, 535.7}, {20.3, 18.7}}, identifier: 'calendar', label: 'Calendar'
+                                          StaticText, 0x110574dc0, {{34.0, 565.1}, {58.3, 18.0}}, label: 'Start'
+                                          Image, 0x110577ac0, {{34.0, 567.0}, {14.7, 13.7}}, identifier: 'calendar', label: 'Calendar'
+                                          StaticText, 0x110577980, {{324.3, 565.1}, {83.7, 18.0}}, identifier: 'injury-detail-start-value', label: 'Nov 1, 2026'
+                                          StaticText, 0x110577340, {{34.0, 591.1}, {51.0, 18.2}}, label: 'End'
+                                          Image, 0x110576e40, {{34.0, 593.3}, {19.0, 16.0}}, identifier: 'calendar.badge.checkmark', label: 'Calendar With A Checkmark Badge'
+                                          StaticText, 0x110577d40, {{321.7, 591.1}, {86.3, 18.0}}, identifier: 'injury-detail-end-value', label: 'Nov 6, 2026'
+                                          StaticText, 0x110576f80, {{33.3, 618.8}, {90.7, 18.0}}, label: 'Recorded'
+                                          Image, 0x1105770c0, {{33.3, 620.7}, {15.0, 15.0}}, identifier: 'clock', label: 'Clock'
+                                          StaticText, 0x1105752c0, {{260.7, 618.8}, {147.3, 18.0}}, identifier: 'injury-detail-recorded-value', label: 'Nov 6, 2026 at 01:30'
+                                        Other, 0x110576d00, {{16.0, 669.0}, {408.0, 84.3}}, identifier: 'injury-detail-memo'
+                                          StaticText, 0x110577e80, {{34.3, 684.9}, {88.0, 24.0}}, label: 'Memo'
+                                          Image, 0x110574000, {{34.3, 687.3}, {20.3, 18.7}}, identifier: 'note.text', label: 'Notes'
+                                          StaticText, 0x1105748c0, {{32.0, 716.9}, {177.0, 20.3}}, identifier: 'injury-detail-memo-value', label: 'Mild pain during squats'
+                                      Other, 0x110575400, {{0.0, 117.0}, {440.0, 839.0}}
+                                        Other, 0x110575040, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x110574640, {{0.0, 117.0}, {440.0, 839.0}}
+                                      Other, 0x110577480, {{407.0, 117.0}, {30.0, 756.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x110574b40, {{434.0, 339.0}, {3.0, 556.3}}
+                                      Other, 0x110574500, {{407.0, 117.0}, {30.0, 756.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x110574780, {{434.0, 339.0}, {3.0, 556.3}}
+                            Toolbar, 0x110574a00, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x110574140, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x110574c80, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x110575180, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x1105743c0, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x1033cfc00, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x1033cde00, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x1033cdb80, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x1069b9900, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x1069bb840, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today'
+                              Image, 0x1069ba940, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x1069ba080, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity'
+                              Image, 0x1069baf80, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x1069b9a40, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                              Image, 0x1069ba6c0, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x1069babc0, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x1069bae40, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x1069b9b80, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x1069b9cc0, {{215.3, 877.0}, {104.5, 54.0}}
+                            Other, 0x1069ba1c0, {{215.3, 877.0}, {104.3, 54.0}}
+                              Other, 0x1069b9f40, {{215.3, 877.0}, {104.3, 54.0}}
+                              Other, 0x1069ba800, {{215.3, 877.0}, {104.3, 54.0}}
+                                Other, 0x1069b9e00, {{215.3, 877.0}, {104.3, 54.0}}
+                                  Other, 0x10699c000, {{215.3, 877.0}, {104.3, 54.0}}
+                                    Other, 0x10699c140, {{215.3, 877.0}, {104.3, 54.0}}
+                                  Other, 0x10699c280, {{215.3, 877.0}, {104.3, 54.0}}
+                                Other, 0x10699c3c0, {{215.3, 877.0}, {104.3, 54.0}}
+                    Other, 0x10699c500, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x10699c640, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x10699c780, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x10699c8c0, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x10699ca00, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x10699cb40, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x10699cc80, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x10699cdc0, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x10699cf00, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x10699d040, {{220.0, 492.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x10698af80, pid: 18469, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10699d180, pid: 18469, label: 'DUNE'
+  }

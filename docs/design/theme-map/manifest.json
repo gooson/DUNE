@@ -792,10 +792,11 @@
       "name": "H10 · 부상 상세",
       "title": "원래 부위·심각도·기간 히어로와 날짜·메모",
       "file": "dune-injury-detail-h10.html",
-      "detail": "원래 상태·아이콘·durationDays를 강조하고 날짜 중복을 줄인 정적 표현. 값은 설명용이며 실제 기록·네이티브 캡처가 아니다. 아직 구현·검증 전이다.",
+      "detail": "H10 배치와 표현을 설명하는 정적 시안이다. 실제 앱의 네 기본 프로필과 접힌 Duo 최대 글씨 관련 검증·출처는 연결된 네이티브 갤러리에서 확인한다. 시안 자체는 실제 기록이나 앱 캡처가 아니다.",
       "implementation": {
         "layout": "../layout-map/injury-detail-h10.html",
-        "status": "proposal-not-native-verified"
+        "status": "native-targeted-verified",
+        "native": "../full-redesign-map/review/h10-injury-detail-native-2026-11-06/index.html"
       }
     },
     {
