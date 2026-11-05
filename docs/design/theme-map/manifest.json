@@ -786,6 +786,50 @@
         "layout": "../layout-map/injury-history-h09.html",
         "status": "implemented-native-reviewed"
       }
+    },
+    {
+      "id": "injury-detail-h10",
+      "name": "H10 · 부상 상세",
+      "title": "원래 부위·심각도·기간 히어로와 날짜·메모",
+      "file": "dune-injury-detail-h10.html",
+      "detail": "원래 상태·아이콘·durationDays를 강조하고 날짜 중복을 줄인 정적 표현. 값은 설명용이며 실제 기록·네이티브 캡처가 아니다. 아직 구현·검증 전이다.",
+      "implementation": {
+        "layout": "../layout-map/injury-detail-h10.html",
+        "status": "proposal-not-native-verified"
+      }
+    },
+    {
+      "id": "injury-statistics-h11",
+      "name": "H11 · 부상 통계",
+      "title": "총 기록·활성 기록 히어로 · 회복일 · 부위별 막대",
+      "file": "dune-injury-statistics-h11.html",
+      "detail": "기존 서비스의 통계와 운동량 비교를 유지하는 정적 시안. 새 의료 판정·계산을 만들지 않으며 아직 실제 앱 검증 전이다.",
+      "implementation": {
+        "layout": "../layout-map/injury-statistics-h11.html",
+        "status": "proposal-not-native-verified"
+      }
+    },
+    {
+      "id": "sleep-debt-explanation-h12",
+      "name": "H12 · 수면 설명",
+      "title": "원래 설명 · 임계값 · 색 표식 · 큰 글씨 스크롤",
+      "file": "dune-sleep-debt-explanation-h12.html",
+      "detail": "설명 시트의 정적 DUNE 시안. 원래 설명·등급 범위·색 점을 유지하며 실제 기록·의료 판정·네이티브 캡처가 아니다. 아직 실제 검증 전이다.",
+      "implementation": {
+        "layout": "../layout-map/sleep-debt-explanation-h12.html",
+        "status": "proposal-not-native-verified"
+      }
+    },
+    {
+      "id": "waso-explanation-h13",
+      "name": "H13 · 수면 설명",
+      "title": "원래 설명 · 임계값 · 색 표식 · 큰 글씨 스크롤",
+      "file": "dune-waso-explanation-h13.html",
+      "detail": "설명 시트의 정적 DUNE 시안. 원래 설명·등급 범위·색 점을 유지하며 실제 기록·의료 판정·네이티브 캡처가 아니다. 아직 실제 검증 전이다.",
+      "implementation": {
+        "layout": "../layout-map/waso-explanation-h13.html",
+        "status": "proposal-not-native-verified"
+      }
     }
   ]
 }
