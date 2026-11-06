@@ -903,6 +903,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         row.auditTap()
 
         XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
+        dismissNumberPadBeforeNextFieldOnIPad()
         XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
         _ = app.dismissKeyboardIfPresent()
         app.buttons[AXID.exerciseDefaultEditSave].firstMatch.auditTap()
@@ -975,6 +976,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         }
 
         XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
+        dismissNumberPadBeforeNextFieldOnIPad()
         XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
         _ = app.dismissKeyboardIfPresent()
         let save = app.buttons[AXID.exerciseDefaultEditSave].firstMatch
@@ -1313,11 +1315,49 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         if closeSearch.exists { closeSearch.auditTap() }
 
         let back = navigationBar.buttons["BackButton"].firstMatch
-        XCTAssertTrue(back.waitForExistence(timeout: 5) && back.isHittable,
-                      "Back to Settings should be available after closing search")
-        back.auditTap()
+        if back.waitForExistence(timeout: 2) {
+            XCTAssertTrue(back.isHittable, "Back to Settings should be reachable")
+            back.auditTap()
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            // iPad AX omits Back while the trailing search field is active,
+            // although the round Back control remains visible at the leading edge.
+            XCTAssertTrue(navigationBar.exists, "Filtered list navigation bar remains visible")
+            // 1512px native PNG / scale 2: Back center is 32pt from the bar leading edge.
+            let point = CGPoint(x: navigationBar.frame.minX + 32, y: navigationBar.frame.minY + 22)
+            XCTAssertTrue(navigationBar.frame.contains(point))
+            XCTAssertFalse(navigationBar.searchFields.firstMatch.frame.contains(point))
+            navigationBar.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+                .withOffset(CGVector(dx: 32, dy: 22)).auditTap()
+        } else {
+            XCTFail("Back to Settings should be available after closing search")
+        }
         XCTAssertTrue(app.navigationBars["Settings"].firstMatch.waitForExistence(timeout: 5),
                       "Settings root should reopen after leaving the filtered list")
+    }
+
+    private func dismissNumberPadBeforeNextFieldOnIPad() {
+        guard UIDevice.current.userInterfaceIdiom == .pad else { return }
+        // The floating number pad covers the reps field; its 3 key overlaps the
+        // trailing tap point. AX exposes Hide keyboard on the docked keyboard.
+        let hideKeyboard = app.keyboards.buttons["Hide keyboard"].firstMatch
+        if hideKeyboard.waitForExistence(timeout: 2) && hideKeyboard.isHittable {
+            hideKeyboard.auditTap()
+        } else {
+            let navigationBar = app.navigationBars["Exercise Default"].firstMatch
+            XCTAssertTrue(navigationBar.exists, "Editor header is available outside the number pad")
+            let headerPoint = CGPoint(x: navigationBar.frame.midX, y: navigationBar.frame.midY)
+            let keyboardLayouts = app.descendants(matching: .any)
+                .matching(identifier: "UIKeyboardLayoutStar Preview").allElementsBoundByIndex
+            XCTAssertFalse(keyboardLayouts.contains(where: { $0.frame.contains(headerPoint) }),
+                           "Keyboard dismissal tap stays outside the floating number pad")
+            navigationBar.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).auditTap()
+        }
+        let keyboard = app.keyboards.firstMatch
+        let dismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: keyboard
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 3), .completed,
+                       "Weight keyboard dismisses before focusing reps")
     }
 
     private func hasCompleteConventionalDeadliftName(_ label: String) -> Bool {
@@ -1331,7 +1371,23 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
         // The captured number-pad path left Command-A ineffective. Place the caret after
         // the right-aligned number, erase its digits, then verify the new value.
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let fieldFrame = field.frame
+            let tapPoint = CGPoint(x: fieldFrame.minX + fieldFrame.width * 0.98,
+                                   y: fieldFrame.midY)
+            let keyboardLayouts = app.descendants(matching: .any)
+                .matching(identifier: "UIKeyboardLayoutStar Preview").allElementsBoundByIndex
+            guard field.isHittable && !keyboardLayouts.contains(where: { $0.frame.contains(tapPoint) }) else {
+                return false
+            }
+        }
         field.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.5)).auditTap()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let focused = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "hasKeyboardFocus == true"), object: field
+            )
+            guard XCTWaiter.wait(for: [focused], timeout: 3) == .completed else { return false }
+        }
         let existing = (field.value as? String) ?? ""
         if !existing.isEmpty && existing != field.placeholderValue {
             field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: existing.count))
