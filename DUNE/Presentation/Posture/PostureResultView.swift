@@ -9,28 +9,49 @@ struct PostureResultView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .largeTitle) private var scoreFontSize: CGFloat = 36
+    @ScaledMetric(relativeTo: .caption) private var scoreRingSize: CGFloat = 120
+    @ScaledMetric(relativeTo: .title3) private var metricSymbolSize: CGFloat = 20
+
+    private static let lightStatusColors: [PostureStatus: Color] = [
+        .normal: .green.mix(with: .black, by: 0.45),
+        .caution: .yellow.mix(with: .black, by: 0.45),
+        .warning: .red.mix(with: .black, by: 0.45),
+        .unmeasurable: .gray.mix(with: .black, by: 0.45)
+    ]
+
+    private func statusColor(_ status: PostureStatus) -> Color {
+        colorScheme == .light ? Self.lightStatusColors[status, default: status.color] : status.color
+    }
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     @State private var animatedScore: Double = 0
     @State private var zoomImage: ZoomableImageItem?
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: DS.Spacing.lg) {
                 scoreSection
                 captureImagesSection
                 metricsSection
 
-                CorrectiveExercisesSectionView(recommendations: viewModel.correctiveRecommendations)
-                    .padding()
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+                StandardCard {
+                    CorrectiveExercisesSectionView(recommendations: viewModel.correctiveRecommendations)
+                }
 
                 memoSection
                 actionButtons
             }
-            .padding()
+            .frame(maxWidth: 680)
+            .padding(DS.Spacing.lg)
+            .frame(maxWidth: .infinity)
         }
+        .scrollBounceBehavior(.basedOnSize)
         .accessibilityIdentifier("posture-result-screen")
-        .background(Color(.systemGroupedBackground))
+        .background { DetailWaveBackground() }
+        .environment(\.waveColor, DS.Color.body)
         .postureImageZoom($zoomImage)
     }
 
@@ -38,26 +59,26 @@ struct PostureResultView: View {
 
     private var scoreSection: some View {
         let score = viewModel.combinedAssessment.overallScore
-        return VStack(spacing: 8) {
+        return VStack(spacing: DS.Spacing.md) {
             ZStack {
                 Circle()
-                    .stroke(.quaternary, lineWidth: 12)
-                    .frame(width: 120, height: 120)
+                    .stroke(palette.track, lineWidth: 12)
+                    .frame(width: min(scoreRingSize, 220), height: min(scoreRingSize, 220))
 
                 Circle()
                     .trim(from: 0, to: animatedScore)
                     .stroke(scoreColor(score), style: StrokeStyle(lineWidth: 12, lineCap: .round))
-                    .frame(width: 120, height: 120)
+                    .frame(width: min(scoreRingSize, 220), height: min(scoreRingSize, 220))
                     .rotationEffect(.degrees(-90))
 
                 VStack(spacing: 2) {
                     Text("\(Int((animatedScore * 100).rounded()))")
-                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                        .font(.system(size: min(scoreFontSize, 72), weight: .bold, design: .rounded))
                         .contentTransition(.numericText())
 
                     Text("/ 100")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(palette.muted)
                 }
             }
             .task(id: score) {
@@ -73,7 +94,7 @@ struct PostureResultView: View {
 
             Text("Posture Score")
                 .font(.headline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(palette.ink)
 
             if !viewModel.hasBothCaptures {
                 Label(
@@ -81,15 +102,24 @@ struct PostureResultView: View {
                     systemImage: "info.circle"
                 )
                 .font(.caption)
-                .foregroundStyle(.orange)
+                .foregroundStyle(palette.heroHighlight)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("posture-result-partial")
             }
         }
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .frame(maxWidth: .infinity)
+        .foregroundStyle(palette.ink)
+        .padding(DS.Spacing.xl)
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xl))
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.xl)
+                .strokeBorder(palette.border, lineWidth: 1)
+        }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(viewModel.hasBothCaptures
             ? "Posture score \(score) out of 100"
             : "Posture score \(score) out of 100, partial assessment"))
+        .accessibilityIdentifier("posture-result-score")
     }
 
     private func scoreColor(_ score: Int) -> Color {
@@ -99,7 +129,10 @@ struct PostureResultView: View {
     // MARK: - Capture Images
 
     private var captureImagesSection: some View {
-        HStack(alignment: .top, spacing: 12) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.lg))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
+        return layout {
             captureImageCard(
                 label: String(localized: "Front"),
                 captureType: .front,
@@ -220,25 +253,28 @@ struct PostureResultView: View {
     // MARK: - Metrics
 
     private var metricsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Assessment Details")
-                .font(.headline)
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                Text("Assessment Details")
+                    .font(.headline)
 
-            let allMetrics = viewModel.combinedAssessment.allMetrics
-            ForEach(allMetrics) { metric in
-                metricRow(metric)
+                let allMetrics = viewModel.combinedAssessment.allMetrics
+                ForEach(allMetrics) { metric in
+                    metricRow(metric)
+                }
             }
         }
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 
     private func metricRow(_ metric: PostureMetricResult) -> some View {
-        HStack(spacing: 12) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return layout {
             Image(systemName: metric.type.iconName)
                 .font(.title3)
-                .foregroundStyle(metric.status.color)
-                .frame(width: 32)
+                .foregroundStyle(statusColor(metric.status))
+                .frame(width: min(metricSymbolSize, 40) + DS.Spacing.md)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(metric.type.displayName)
@@ -253,15 +289,16 @@ struct PostureResultView: View {
                 }
             }
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
             Label(metric.status.displayName, systemImage: metric.status.iconName)
                 .font(.caption.weight(.medium))
-                .foregroundStyle(metric.status.color)
+                .foregroundStyle(statusColor(metric.status))
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, DS.Spacing.xs)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("\(metric.type.displayName), \(metric.status.displayName), \(metricValueText(metric))"))
+        .accessibilityIdentifier("posture-result-metric-\(metric.type.rawValue)")
     }
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
@@ -271,20 +308,21 @@ struct PostureResultView: View {
     // MARK: - Memo
 
     private var memoSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Memo")
-                .font(.headline)
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                Text("Memo")
+                    .font(.headline)
 
-            TextField(
-                String(localized: "Add a note about this assessment..."),
-                text: $viewModel.memo,
-                axis: .vertical
-            )
-            .lineLimit(3...6)
-            .textFieldStyle(.roundedBorder)
+                TextField(
+                    String(localized: "Add a note about this assessment..."),
+                    text: $viewModel.memo,
+                    axis: .vertical
+                )
+                .lineLimit(3...6)
+                .textFieldStyle(.roundedBorder)
+                .accessibilityIdentifier("posture-result-memo-field")
+            }
         }
-        .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 
     // MARK: - Actions
@@ -301,6 +339,7 @@ struct PostureResultView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
+                .accessibilityIdentifier("posture-result-capture-side")
             }
 
             Button {
@@ -313,6 +352,7 @@ struct PostureResultView: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .disabled(!viewModel.canSave || viewModel.isSaving)
+            .accessibilityIdentifier("posture-result-save")
             .accessibilityHint(Text("Saves the posture assessment to your history"))
 
             Button {
@@ -323,6 +363,7 @@ struct PostureResultView: View {
             }
             .buttonStyle(.bordered)
             .controlSize(.large)
+            .accessibilityIdentifier("posture-result-retake")
 
             if let error = viewModel.validationError {
                 Text(error)
