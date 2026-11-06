@@ -1050,7 +1050,10 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         let compare = app.buttons["Compare"].firstMatch
         XCTAssertTrue(compare.waitForExistence(timeout: 5))
         compare.auditTap()
-        let metrics = app.staticTexts.matching(NSPredicate(format: "label == %@", "8 metrics"))
+        let metrics = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND label == %@",
+            "posture-history-row-metric-count-", "8 metrics"
+        ))
         XCTAssertEqual(metrics.count, 2, "Both synthetic records should be selectable")
         for index in 0..<2 {
             let metric = metrics.element(boundBy: index)
@@ -1463,7 +1466,10 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         let compare = app.buttons["Compare"].firstMatch
         XCTAssertTrue(compare.waitForExistence(timeout: 5))
         compare.auditTap()
-        let metrics = app.staticTexts.matching(NSPredicate(format: "label == %@", "8 metrics"))
+        let metrics = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND label == %@",
+            "posture-history-row-metric-count-", "8 metrics"
+        ))
         XCTAssertEqual(metrics.count, 2)
         for index in 0..<2 {
             let metric = metrics.element(boundBy: index)

@@ -392,18 +392,17 @@ struct PostureHistoryView: View {
     }
 
     private func recordRow(_ record: PostureAssessmentRecord) -> some View {
-        StandardCard {
-            recordRowContent(record)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .contentShape(Rectangle())
-        .contextMenu {
-            Button(role: .destructive) {
-                recordToDelete = record
-            } label: {
-                Label("Delete", systemImage: "trash")
+        recordRowContent(record)
+            .padding(DS.Spacing.md)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+            .contentShape(Rectangle())
+            .contextMenu {
+                Button(role: .destructive) {
+                    recordToDelete = record
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
             }
-        }
     }
 
     @ViewBuilder
@@ -452,6 +451,7 @@ struct PostureHistoryView: View {
                     Text(String(localized: "\(record.allMetrics.count) metrics"))
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
+                        .accessibilityIdentifier("posture-history-row-metric-count-\(record.id)")
 
                     if !record.memo.isEmpty {
                         if !dynamicTypeSize.isAccessibilitySize {
