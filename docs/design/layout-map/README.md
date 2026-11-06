@@ -247,3 +247,5 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 - [P02 배치 계약](posture-realtime-p02.html): 원래 기능·아이콘 보존. native 검증 범위는 전용 실제 갤러리 참조.
 
 - [P04 배치 계약](posture-result-p04.html): 원래 기능·아이콘 보존. native 검증 범위는 전용 실제 갤러리 참조.
+
+- [P03 배치 계약](posture-exercise-picker-p03.html): 원래 기능·아이콘 보존. native 검증 범위는 전용 실제 갤러리 참조.
