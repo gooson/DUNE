@@ -1,0 +1,156 @@
+{
+  "review": "B13 first iPhone native evidence; read-only",
+  "source_revision": "c6708751213657f7a1624ac944d7660e8bbed19d",
+  "run_result": {
+    "executed": 4,
+    "passed": 1,
+    "failed": 3,
+    "skipped": 0
+  },
+  "gallery_status": {
+    "W12": {
+      "after": 1,
+      "diagnostic": 1
+    },
+    "W15": {
+      "after": 3,
+      "diagnostic": 3
+    }
+  },
+  "verified_assets": [
+    {
+      "screen": "W12",
+      "title": "Normal seeded template row and exercise names",
+      "kind": "after",
+      "profile": "regular",
+      "image": "/private/tmp/dune-b13-gallery-prep/W12/assets/01-regular-phone-normal-after.png",
+      "ax": "/private/tmp/dune-b13-gallery-prep/W12/assets/01-regular-phone-normal-after.txt",
+      "image_sha256": "28afe335bb76d9c9dac714459db48368146fe4cec0591660b160eede8f1d7b23",
+      "ax_sha256": "22a89400ffc496dc73a1cd8a43fe4dcc86ddfe7483e9c5dbe9ddecb1286c9120",
+      "manifest_hashes_match": true
+    },
+    {
+      "screen": "W12",
+      "title": "MAX seeded template row and exercise names",
+      "kind": "diagnostic",
+      "profile": "regular",
+      "image": "/private/tmp/dune-b13-gallery-prep/W12/assets/02-regular-phone-max-diagnostic.png",
+      "ax": "/private/tmp/dune-b13-gallery-prep/W12/assets/02-regular-phone-max-diagnostic.txt",
+      "image_sha256": "eea4383143d4ac54d90735f2a6224b9b2ba11d34f084b53d0a185ab6b3492939",
+      "ax_sha256": "ee083e421cce3aa97525e61e4b8333e44f6c7cf05e722aefa6309fa39e696d18",
+      "manifest_hashes_match": true
+    },
+    {
+      "screen": "W15",
+      "title": "Normal current seven-day plan and template pane",
+      "kind": "after",
+      "profile": "regular",
+      "image": "/private/tmp/dune-b13-gallery-prep/W15/assets/01-regular-phone-normal-after.png",
+      "ax": "/private/tmp/dune-b13-gallery-prep/W15/assets/01-regular-phone-normal-after.txt",
+      "image_sha256": "360f1dcc15d7efc58a6383a7a35fbda171a2094ebc18a0cb97570c45888fb67a",
+      "ax_sha256": "98e3608d861417ab983837cf36a97de346d889815e6dfd58ecaea4f95926d370",
+      "manifest_hashes_match": true
+    },
+    {
+      "screen": "W15",
+      "title": "Normal next week dates",
+      "kind": "after",
+      "profile": "regular",
+      "image": "/private/tmp/dune-b13-gallery-prep/W15/assets/02-regular-phone-normal-after.png",
+      "ax": "/private/tmp/dune-b13-gallery-prep/W15/assets/02-regular-phone-normal-after.txt",
+      "image_sha256": "87f90b92db133ea1c2b99bc49bd71563a2dc18cd48b1fac50acf158c16ac2dfa",
+      "ax_sha256": "8646185dd878db7a1fb46fc58b56e2aa073594e7572efdd62bbca54539e71ba6",
+      "manifest_hashes_match": true
+    },
+    {
+      "screen": "W15",
+      "title": "Normal assigned seeded template",
+      "kind": "after",
+      "profile": "regular",
+      "image": "/private/tmp/dune-b13-gallery-prep/W15/assets/03-regular-phone-normal-after.png",
+      "ax": "/private/tmp/dune-b13-gallery-prep/W15/assets/03-regular-phone-normal-after.txt",
+      "image_sha256": "9fafac9c1a87e185756bb8a2c78f0604318dbf167876fb0133a62be9158c8422",
+      "ax_sha256": "f03e5a8b2d787fc2d7e7bd06ef929cf697169fc973eb73e6e7c5456999eafd2b",
+      "manifest_hashes_match": true
+    },
+    {
+      "screen": "W15",
+      "title": "MAX current seven-day plan and template pane",
+      "kind": "diagnostic",
+      "profile": "regular",
+      "image": "/private/tmp/dune-b13-gallery-prep/W15/assets/04-regular-phone-max-diagnostic.png",
+      "ax": "/private/tmp/dune-b13-gallery-prep/W15/assets/04-regular-phone-max-diagnostic.txt",
+      "image_sha256": "c8ff4ccbc87a3ccad186f81283373864fcf338c755fc8550147b4e4155b8f188",
+      "ax_sha256": "d0eef0b6a5b1018423c8673c3bda0212a957e4657ef161bd79cec213479d6442",
+      "manifest_hashes_match": true
+    },
+    {
+      "screen": "W15",
+      "title": "MAX next week dates",
+      "kind": "diagnostic",
+      "profile": "regular",
+      "image": "/private/tmp/dune-b13-gallery-prep/W15/assets/05-regular-phone-max-diagnostic.png",
+      "ax": "/private/tmp/dune-b13-gallery-prep/W15/assets/05-regular-phone-max-diagnostic.txt",
+      "image_sha256": "6795b75c036375924cd4654e9f72aceb333ecb96856e02c3adb1fc45af920b7a",
+      "ax_sha256": "4ec3bff4695b33326ea028bfa8f0acd61820771dafdd8ef60293eea619dda591",
+      "manifest_hashes_match": true
+    },
+    {
+      "screen": "W15",
+      "title": "MAX assigned seeded template",
+      "kind": "diagnostic",
+      "profile": "regular",
+      "image": "/private/tmp/dune-b13-gallery-prep/W15/assets/06-regular-phone-max-diagnostic.png",
+      "ax": "/private/tmp/dune-b13-gallery-prep/W15/assets/06-regular-phone-max-diagnostic.txt",
+      "image_sha256": "905ccf06112a41888d429fc3004283b614808db74afb1e5f62b97484724da722",
+      "ax_sha256": "2ca60fc8430393f92d7dc8f57f5fb83f7c89a87a015acca77ea7845203da7cf7",
+      "manifest_hashes_match": true
+    }
+  ],
+  "observations": [
+    {
+      "screen": "W12",
+      "kind": "passed-after",
+      "profile": "regular-phone-normal",
+      "finding": "Seeded Circuit Builder and Strength Starter rows show original counts/names; Circuit row displays 2 exercises and Squat, Bench Press; play icons, toolbar calendar/add and tab bar are visible. The normal plan selector passed after this capture."
+    },
+    {
+      "screen": "W12",
+      "kind": "failed-prefix-diagnostic",
+      "profile": "regular-phone-MAX",
+      "finding": "Circuit row remains readable with full 3-line title, 2 exercises and Squat, Bench Press; second row and play icons remain visible above tab bar. This image is a prefix capture from failed MAX plan test, not a passed W12 MAX case."
+    },
+    {
+      "screen": "W15",
+      "kind": "passed-after",
+      "profile": "regular-phone-normal",
+      "finding": "Previous/Next week chevrons are visible; Nov 1–7 changes to Nov 8–14 and back; selected Codex Strength Starter and Remove from Plan are visible. Existing selected-day assignment was present at initial current-week capture, so that image is not evidence of an empty/rest-only plan. The normal selector passed."
+    },
+    {
+      "screen": "W15",
+      "kind": "failed-prefix-diagnostic",
+      "profile": "regular-phone-MAX",
+      "finding": "Week navigation changes visible dates Nov 1–7 to Nov 8–14 and back; day labels and template assignment remain in AX. At the captured assigned state, selected-template frame y=710..911 partly overlaps the tab-bar zone y=873..956 and Remove frame y=923..986 is below it; original MAX selector failed before Remove tap. Retry is in progress; do not promote these images to after."
+    },
+    {
+      "screen": "W13/W14",
+      "kind": "pre-route-failure",
+      "profile": "regular-phone-normal-and-MAX",
+      "finding": "Both authoring selectors failed at c670 test line 3606 before the form/picker. Raw teardown AX places activity-ai-workout-builder at y=2276.3..2346.6 normal and y=6702.3..6941 MAX while tab bar begins y=873; prior helper returned but button was offscreen. No W13/W14 after capture exists from this run."
+    }
+  ],
+  "limits": [
+    "Original 4 executed/1 passed/3 failed count is preserved.",
+    "MAX W12/W15 snapshots are diagnostic prefixes only; retry1 e95 result is not read or inferred here.",
+    "W13/W14 have no form/picker native proof from this first run.",
+    "iPad W12/W15 remains pending due known B09 template-toolbar More route; Duo current capture remains pending.",
+    "Historical gallery images are baselines, not current-source after proof."
+  ],
+  "raw_failure_evidence": {
+    "W13_MAX_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b13/phone-attachments/36CD48A6-CC86-4BEE-B416-67E479DFEC82.png",
+    "W13_MAX_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b13/phone-attachments/1A142EBE-585E-4CEE-BC6C-CD752987F4AC.txt",
+    "W13_normal_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b13/phone-attachments/BE47FB88-581D-4259-B02B-E71F597B263C.txt",
+    "W15_MAX_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b13/phone-attachments/B5B37435-74A3-41D9-BCD1-C6E94460314B.png",
+    "W15_MAX_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b13/phone-attachments/6D36D9DB-1738-4EBC-A44E-029CCE1DAEA4.txt"
+  }
+}
