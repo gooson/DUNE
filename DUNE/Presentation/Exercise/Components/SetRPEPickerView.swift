@@ -3,6 +3,7 @@ import SwiftUI
 /// RPE slider picker for individual sets (6.0–10.0, 0.5 step) with color spectrum.
 struct SetRPEPickerView: View {
     @Binding var rpe: Double?
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var sliderValue: Double
     @State private var isActive: Bool
@@ -131,7 +132,10 @@ struct SetRPEPickerView: View {
     // MARK: - RPE Display
 
     private var rpeDisplay: some View {
-        HStack(spacing: DS.Spacing.sm) {
+        let displayLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return displayLayout {
             Text(RPELevel.format(sliderValue))
                 .font(.title2.weight(.bold).monospacedDigit())
                 .foregroundStyle(currentColor)
@@ -181,19 +185,37 @@ struct SetRPEPickerView: View {
     // MARK: - Category Labels
 
     private var rpeCategoryLabels: some View {
-        HStack {
-            ForEach(Self.categoryLabels, id: \.position) { item in
-                let isCurrentCategory = isCurrent(position: item.position)
-                Text(item.label)
-                    .font(.caption2)
-                    .foregroundStyle(isCurrentCategory ? currentColor : DS.Color.textSecondary)
-                    .fontWeight(isCurrentCategory ? .semibold : .regular)
-                if item.position < 10.0 {
-                    Spacer()
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                ScrollView(.horizontal, showsIndicators: true) {
+                    HStack(spacing: DS.Spacing.lg) {
+                        categoryLabelItems(spaced: false)
+                    }
+                    .padding(.horizontal, DS.Spacing.xs)
                 }
+                .accessibilityIdentifier("set-rpe-category-labels")
+            } else {
+                HStack {
+                    categoryLabelItems(spaced: true)
+                }
+                .padding(.horizontal, DS.Spacing.xs)
             }
         }
-        .padding(.horizontal, DS.Spacing.xs)
+    }
+
+    @ViewBuilder
+    private func categoryLabelItems(spaced: Bool) -> some View {
+        ForEach(Self.categoryLabels, id: \.position) { item in
+            let isCurrentCategory = isCurrent(position: item.position)
+            Text(item.label)
+                .font(dynamicTypeSize.isAccessibilitySize ? .caption : .caption2)
+                .foregroundStyle(isCurrentCategory ? currentColor : DS.Color.textSecondary)
+                .fontWeight(isCurrentCategory ? .semibold : .regular)
+                .fixedSize(horizontal: dynamicTypeSize.isAccessibilitySize, vertical: false)
+            if spaced && item.position < 10.0 {
+                Spacer()
+            }
+        }
     }
 
     private func isCurrent(position: Double) -> Bool {

@@ -3332,6 +3332,121 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Exercise picker initial viewport")
     }
 
+    func testVisualAuditSetAssistanceAtNormalText() throws {
+        try auditSetAssistance(maximumText: false)
+    }
+
+    func testVisualAuditSetAssistanceAtMaximumText() throws {
+        try auditSetAssistance(maximumText: true)
+    }
+
+    private func auditSetAssistance(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B11 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        // The Activity template lane opens WorkoutSessionView, whose rest timer is separate.
+        // Use the existing Compound setup route, which instantiates RestTimerView and SetRPEPickerView.
+        openExerciseViewFromRecentWorkouts()
+        let add = app.descendants(matching: .any)[AXID.exerciseToolbarAdd].firstMatch
+        XCTAssertTrue(add.waitForExistence(timeout: 5) && add.isHittable)
+        add.auditTap()
+        let compound = app.descendants(matching: .any)[AXID.exerciseMenuCompound].firstMatch
+        XCTAssertTrue(compound.waitForExistence(timeout: 5) && compound.isHittable)
+        compound.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.compoundWorkoutSetupScreen].firstMatch
+            .waitForExistence(timeout: 8))
+        addCompoundExercise(Fixture.benchPressID)
+        addCompoundExercise("barbell-squat")
+
+        let setup = app.collectionViews[AXID.compoundWorkoutSetupScreen].firstMatch
+        let startID = AXID.compoundWorkoutSetupStart
+        let startCandidate = app.descendants(matching: .any)[startID].firstMatch
+        for _ in 0..<10 where !(startCandidate.exists && startCandidate.isHittable) {
+            setup.swipeUp(velocity: .slow)
+        }
+        let start = app.descendants(matching: .any).matching(identifier: startID)
+            .allElementsBoundByIndex.last ?? startCandidate
+        XCTAssertTrue(start.waitForExistence(timeout: 5) && waitForEnabled(start, timeout: 5) && start.isHittable)
+        start.auditTap()
+
+        let scroll = app.scrollViews[AXID.compoundWorkoutScreen].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.fillTextInput(AXID.setRowField(1, "weight"), with: "60"))
+        XCTAssertTrue(app.fillTextInput(AXID.setRowField(1, "reps"), with: "8"))
+        let complete = app.buttons[AXID.setRowComplete(1)].firstMatch
+        for _ in 0..<12 where !(complete.exists && complete.isHittable) { scroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(complete.waitForExistence(timeout: 5) && complete.isHittable)
+        complete.auditTap()
+
+        let addTime = app.buttons.matching(NSPredicate(format: "label == %@", "+30s")).firstMatch
+        for _ in 0..<16 where !(addTime.exists && addTime.isHittable) { scroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(addTime.waitForExistence(timeout: 5) && addTime.isHittable,
+                      "W07 rest timer +30s must be reachable in Compound workout")
+        let skip = app.buttons["rest-timer-skip"].firstMatch
+        XCTAssertTrue(skip.waitForExistence(timeout: 5))
+        VisualAudit.capture("W07 \(size) rest timer before adding time")
+        addTime.auditTap()
+        XCTAssertTrue(skip.exists && skip.isHittable, "W07 Skip must remain reachable after adding time")
+        VisualAudit.capture("W07 \(size) rest timer after adding time")
+        skip.auditTap()
+
+        let activate = app.buttons["set-rpe-activate"].firstMatch
+        for _ in 0..<16 where !(activate.exists && activate.isHittable) { scroll.swipeDown(velocity: .slow) }
+        XCTAssertTrue(activate.waitForExistence(timeout: 5) && activate.isHittable)
+        activate.auditTap()
+        let slider = app.sliders["set-rpe-slider"].firstMatch
+        for _ in 0..<8 where !(slider.exists && slider.isHittable) { scroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(slider.waitForExistence(timeout: 5) && slider.isHittable)
+        VisualAudit.capture("W08 \(size) active RPE and category labels")
+        if maximumText {
+            let legend = app.scrollViews["set-rpe-category-labels"].firstMatch
+            let sessionViewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+            for _ in 0..<8 where !(legend.exists && sessionViewport.contains(legend.frame)) {
+                scroll.swipeUp(velocity: .slow)
+            }
+            XCTAssertTrue(legend.waitForExistence(timeout: 5) && sessionViewport.contains(legend.frame),
+                          "W08 MAX category legend must fit in the session viewport")
+            let lastCategory = legend.staticTexts["Max"].firstMatch
+            let legendViewport = legend.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 2, dy: 2)
+            for _ in 0..<8 where !(lastCategory.exists && legendViewport.contains(lastCategory.frame)) {
+                legend.swipeLeft(velocity: .slow)
+            }
+            XCTAssertTrue(lastCategory.exists && legendViewport.contains(lastCategory.frame),
+                          "W08 MAX final category must be readable after horizontal panning")
+            VisualAudit.capture("W08 MAX category legend end")
+        }
+
+        let help = app.buttons["set-rpe-help"].firstMatch
+        for _ in 0..<8 where !(help.exists && help.isHittable) { scroll.swipeDown(velocity: .slow) }
+        XCTAssertTrue(help.waitForExistence(timeout: 5) && help.isHittable)
+        help.auditTap()
+        let helpSheet = app.scrollViews["rpe-help-sheet"].firstMatch
+        XCTAssertTrue(helpSheet.waitForExistence(timeout: 5))
+        VisualAudit.capture("W09 \(size) RPE help sheet initial")
+        let lastRange = helpSheet.staticTexts["9–10"].firstMatch
+        let lastRIR = helpSheet.staticTexts["0–1 reps left"].firstMatch
+        for _ in 0..<8 where !(lastRange.exists && helpSheet.frame.contains(lastRange.frame)
+                              && lastRIR.exists && helpSheet.frame.contains(lastRIR.frame)) {
+            helpSheet.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(lastRange.exists && helpSheet.frame.contains(lastRange.frame),
+                      "W09 last range must be readable after scrolling the help sheet")
+        XCTAssertTrue(lastRIR.exists && helpSheet.frame.contains(lastRIR.frame),
+                      "W09 last effort meaning must remain readable")
+        VisualAudit.capture("W09 \(size) RPE help sheet last range")
+        let done = app.navigationBars["RPE Guide"].buttons["Done"].firstMatch
+        XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable)
+        done.auditTap()
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+    }
+
     func testVisualAuditTemplateWorkoutFirstSession() throws {
         openTemplateList()
         let rowID = AXID.workoutTemplateRow(Fixture.circuitTemplate)
