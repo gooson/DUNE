@@ -363,3 +363,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-07 W01: [B09 새 실제 PNG·AX](../full-redesign-map/review/exercise-library-w01-2026-11-07/index.html)에 일반/MAX와 원본 실행 수를 보존했다. Duo 현재 캡처는 미갱신이다.
 
 2026-11-07 W02: [B09 새 실제 PNG·AX](../full-redesign-map/review/exercise-picker-w02-2026-11-07/index.html)에 일반/MAX와 원본 실행 수를 보존했다. Duo 현재 캡처는 미갱신이다.
+
+2026-11-07 W03: [B09 새 실제 PNG·AX](../full-redesign-map/review/exercise-detail-w03-2026-11-07/index.html)에 일반/MAX와 원본 실행 수를 보존했다. Duo 현재 캡처는 미갱신이다.
