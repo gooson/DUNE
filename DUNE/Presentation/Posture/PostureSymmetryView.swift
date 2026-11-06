@@ -10,6 +10,18 @@ struct PostureSymmetryView: View {
 
     private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
+    private static let lightStatusColors: [PostureStatus: Color] = [
+        .normal: .green.mix(with: .black, by: 0.55),
+        .caution: .yellow.mix(with: .black, by: 0.55),
+        .warning: .red.mix(with: .black, by: 0.55),
+        .unmeasurable: .gray.mix(with: .black, by: 0.55)
+    ]
+
+    private func statusColor(_ status: PostureStatus) -> Color {
+        colorScheme == .light ? Self.lightStatusColors[status, default: status.color] : status.color
+    }
+
+
     var body: some View {
         ScrollView {
             VStack(spacing: DS.Spacing.lg) {
@@ -78,7 +90,7 @@ struct PostureSymmetryView: View {
                 titleLayout {
                     HStack {
                         Image(systemName: detail.metric.iconName)
-                            .foregroundStyle(detail.status.color)
+                            .foregroundStyle(statusColor(detail.status))
                         Text(detail.metric.displayName)
                             .font(.subheadline.weight(.medium))
                             .fixedSize(horizontal: false, vertical: true)
@@ -86,7 +98,7 @@ struct PostureSymmetryView: View {
                     if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                     Label(detail.status.displayName, systemImage: detail.status.iconName)
                         .font(.caption.weight(.medium))
-                        .foregroundStyle(detail.status.color)
+                        .foregroundStyle(statusColor(detail.status))
                 }
 
                 // Left-right bar comparison
@@ -128,7 +140,7 @@ struct PostureSymmetryView: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Image(systemName: differenceIcon(detail))
                         .font(.caption)
-                        .foregroundStyle(detail.status.color)
+                        .foregroundStyle(statusColor(detail.status))
 
                     Text(differenceSummary(detail))
                         .font(.caption)
