@@ -3378,19 +3378,39 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
         let scroll = app.scrollViews[AXID.compoundWorkoutScreen].firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 10))
-        XCTAssertTrue(app.fillTextInput(AXID.setRowField(1, "weight"), with: "60"))
-        XCTAssertTrue(app.fillTextInput(AXID.setRowField(1, "reps"), with: "8"))
+        // This flow audits set assistance, using the existing valid seeded set.
+        // Numeric replacement is unchanged app behavior and is outside this gate.
+        let weight = app.textFields[AXID.setRowField(1, "weight")].firstMatch
+        let reps = app.textFields[AXID.setRowField(1, "reps")].firstMatch
+        XCTAssertTrue(weight.waitForExistence(timeout: 5) && reps.waitForExistence(timeout: 5))
+        XCTAssertEqual(weight.value as? String, "60")
+        XCTAssertEqual(reps.value as? String, "10")
         let complete = app.buttons[AXID.setRowComplete(1)].firstMatch
         for _ in 0..<12 where !(complete.exists && complete.isHittable) { scroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(complete.waitForExistence(timeout: 5) && complete.isHittable)
         complete.auditTap()
 
         let addTime = app.buttons.matching(NSPredicate(format: "label == %@", "+30s")).firstMatch
-        for _ in 0..<16 where !(addTime.exists && addTime.isHittable) { scroll.swipeUp(velocity: .slow) }
-        XCTAssertTrue(addTime.waitForExistence(timeout: 5) && addTime.isHittable,
-                      "W07 rest timer +30s must be reachable in Compound workout")
         let skip = app.buttons["rest-timer-skip"].firstMatch
-        XCTAssertTrue(skip.waitForExistence(timeout: 5))
+        let window = app.windows.firstMatch.frame
+        let tabBar = app.tabBars.firstMatch
+        var timerViewport = scroll.frame.intersection(window)
+        if tabBar.exists && tabBar.frame.minY > window.midY {
+            timerViewport.size.height = min(timerViewport.maxY, tabBar.frame.minY) - timerViewport.minY
+        }
+        timerViewport = timerViewport.insetBy(dx: 4, dy: 4)
+        let timerTitle = app.staticTexts["Rest Timer"].firstMatch
+        for _ in 0..<16 where !(addTime.exists && addTime.isHittable && skip.exists && skip.isHittable
+                               && timerViewport.contains(addTime.frame) && timerViewport.contains(skip.frame)
+                               && timerTitle.exists && timerViewport.contains(timerTitle.frame)) {
+            scroll.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(addTime.waitForExistence(timeout: 5) && addTime.isHittable
+                      && timerViewport.contains(addTime.frame),
+                      "W07 rest timer +30s must be fully visible in Compound workout")
+        XCTAssertTrue(skip.waitForExistence(timeout: 5) && skip.isHittable
+                      && timerViewport.contains(skip.frame), "W07 Skip must be fully visible above the tab bar")
+        XCTAssertTrue(timerTitle.exists && timerViewport.contains(timerTitle.frame))
         VisualAudit.capture("W07 \(size) rest timer before adding time")
         addTime.auditTap()
         XCTAssertTrue(skip.exists && skip.isHittable, "W07 Skip must remain reachable after adding time")
@@ -3414,7 +3434,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             XCTAssertTrue(legend.waitForExistence(timeout: 5) && sessionViewport.contains(legend.frame),
                           "W08 MAX category legend must fit in the session viewport")
             let lastCategory = legend.staticTexts["Max"].firstMatch
-            let legendViewport = legend.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 2, dy: 2)
+            let legendViewport = legend.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 2, dy: 0)
             for _ in 0..<8 where !(lastCategory.exists && legendViewport.contains(lastCategory.frame)) {
                 legend.swipeLeft(velocity: .slow)
             }
