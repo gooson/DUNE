@@ -16,53 +16,88 @@ struct ExercisePickerSheet: View {
     private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     var body: some View {
-        NavigationStack {
-            List {
-                // General posture mode (no exercise)
-                Button {
-                    onSelect(nil)
-                    dismiss()
-                } label: {
-                    exerciseLabel("General Posture", icon: "figure.stand", selected: selectedExerciseID == nil)
-                }
-                .tint(.primary)
-                .listRowBackground(palette.surface)
-                .foregroundStyle(palette.ink)
-                .accessibilityIdentifier("posture-exercise-general")
-                .accessibilityAddTraits(selectedExerciseID == nil ? .isSelected : [])
-
-                Section("Form Check") {
-                    ForEach(exercises) { exercise in
-                        Button {
-                            onSelect(exercise)
-                            dismiss()
-                        } label: {
-                            exerciseLabel(
-                                LocalizedStringKey(exercise.displayName),
-                                icon: iconName(for: exercise),
-                                selected: selectedExerciseID == exercise.exerciseID
-                            )
-                        }
-                        .tint(.primary)
-                        .accessibilityIdentifier("posture-exercise-\(exercise.exerciseID)")
-                        .accessibilityAddTraits(selectedExerciseID == exercise.exerciseID ? .isSelected : [])
+        Group {
+            if dynamicTypeSize == .accessibility5 {
+                // Keep dismissal outside the scrolling navigation toolbar at MAX.
+                exerciseList
+                    .safeAreaInset(edge: .top, spacing: 0) {
+                        maximumSizeHeader
                     }
-                }
-            }
-            .accessibilityIdentifier("posture-exercise-list")
-            .scrollContentBackground(.hidden)
-            .background { SheetWaveBackground().opacity(0.45) }
-            .navigationTitle("Exercise Mode")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") { dismiss() }
-                        .accessibilityIdentifier("posture-exercise-close")
+            } else {
+                NavigationStack {
+                    exerciseList
+                        .navigationTitle("Exercise Mode")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                closeButton
+                            }
+                        }
                 }
             }
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents(dynamicTypeSize == .accessibility5 ? [.large] : [.medium, .large])
         .presentationDragIndicator(.visible)
+    }
+
+    private var maximumSizeHeader: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            closeButton
+                .font(.body)
+                .buttonStyle(.bordered)
+                .frame(minHeight: 44)
+            Text(verbatim: "Exercise Mode")
+                .font(.headline)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, DS.Spacing.lg)
+        .padding(.vertical, DS.Spacing.sm)
+        .background(.regularMaterial)
+    }
+
+    private var closeButton: some View {
+        Button("Close") { dismiss() }
+            .accessibilityIdentifier("posture-exercise-close")
+    }
+
+    private var exerciseList: some View {
+        List {
+            // General posture mode (no exercise)
+            Button {
+                onSelect(nil)
+                dismiss()
+            } label: {
+                exerciseLabel("General Posture", icon: "figure.stand", selected: selectedExerciseID == nil)
+            }
+            .tint(.primary)
+            .listRowBackground(palette.surface)
+            .foregroundStyle(palette.ink)
+            .accessibilityIdentifier("posture-exercise-general")
+            .accessibilityAddTraits(selectedExerciseID == nil ? .isSelected : [])
+
+            Section("Form Check") {
+                ForEach(exercises) { exercise in
+                    Button {
+                        onSelect(exercise)
+                        dismiss()
+                    } label: {
+                        exerciseLabel(
+                            LocalizedStringKey(exercise.displayName),
+                            icon: iconName(for: exercise),
+                            selected: selectedExerciseID == exercise.exerciseID
+                        )
+                    }
+                    .tint(.primary)
+                    .accessibilityIdentifier("posture-exercise-\(exercise.exerciseID)")
+                    .accessibilityAddTraits(selectedExerciseID == exercise.exerciseID ? .isSelected : [])
+                }
+            }
+        }
+        .accessibilityIdentifier("posture-exercise-list")
+        .scrollContentBackground(.hidden)
+        .background { SheetWaveBackground().opacity(0.45) }
     }
 
     private func exerciseLabel(_ title: LocalizedStringKey, icon: String, selected: Bool) -> some View {

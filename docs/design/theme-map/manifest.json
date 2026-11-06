@@ -989,10 +989,10 @@
       "name": "P03 · 운동 선택",
       "title": "원래 General Posture 선택 행 → Form Check 운동 목록. 기존 아이콘·체크를 유지하고 앞자리 심볼 면·선택 위계를 보강한다. medium에서 시작하고 large로 확장한다.",
       "file": "dune-posture-exercise-picker-p03.html",
-      "detail": "2026-11-06 구현 기준 정적 시안. onSelect(nil)·각 운동·selected checkmark·Close·scroll 보존. MAX는 세로 레이블, 끝 행 도달·선택/복귀 확인. 새 native 검증 전이며 설명용 수치/기호는 실제 앱 캡처가 아니다.",
+      "detail": "2026-11-06 P03 정적 표현 시안. 기존 General Posture·운동·아이콘·선택·Close를 보존한다. MAX(accessibility5)는 사라진 native toolbar 대신 고정 Close/제목과 large 시트를 제안하고, 나머지 크기는 원래 toolbar·medium/large다. iPhone 재검증과 Duo MAX 수정 확인 전이며 실제 앱 캡처가 아니다.",
       "implementation": {
         "layout": "../layout-map/posture-exercise-picker-p03.html",
-        "status": "proposed"
+        "status": "implemented-awaiting-max-header-validation"
       }
     },
     {

@@ -342,3 +342,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 - [P03 운동 선택](themes/dune-posture-exercise-picker-p03.html): 원래 기능·기호를 보존하는 정적 표현. 실제 캡처는 별도.
 
 - [P04 자세 결과](themes/dune-posture-result-p04.html): 원래 기능·기호를 보존하는 정적 표현. 실제 캡처는 별도.
+
+2026-11-06 P03 MAX 후속 시안은 고정 Close/제목과 large 시트로 원래 닫기 행동을 보존한다. 일반 크기의 toolbar·medium/large는 유지하며, Duo MAX 실패·검증 한도는 새 실제 검증과 별도로 기록한다.

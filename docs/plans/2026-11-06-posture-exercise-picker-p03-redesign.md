@@ -12,7 +12,7 @@ related_solutions: [../solutions/architecture/2026-03-16-posture-orientation-coo
 
 ## Context / Requirements
 
-기존 상세 개편을 B05 P01–P04로 묶어 이어간다. 원래 General Posture 선택 행 → Form Check 운동 목록. 기존 아이콘·체크를 유지하고 앞자리 심볼 면·선택 위계를 보강한다. medium에서 시작하고 large로 확장한다.
+기존 상세 개편을 B05 P01–P04로 묶어 이어간다. 원래 General Posture 선택 행 → Form Check 운동 목록. 기존 아이콘·체크를 유지하고 앞자리 심볼 면·선택 위계를 보강한다. 일반 글씨는 medium에서 시작하고 large로 확장한다. MAX(accessibility5)는 large만 사용하며, 목록 밖 상단 안전 영역에 기존 Close와 Exercise Mode를 고정한다. MAX에서 NavigationStack toolbar 대신 이 헤더 한 개를 사용한다.
 onSelect(nil)·각 운동·selected checkmark·Close·scroll 보존. MAX는 세로 레이블, 끝 행 도달·선택/복귀 확인.
 카메라/추론/모델/저장 boundary는 변경하지 않는다. .claude 원본과 다른 활성 작업은 보존한다.
 
@@ -56,3 +56,7 @@ onSelect(nil)·각 운동·selected checkmark·Close·scroll 보존. MAX는 세�
 ## Confidence
 
 표현/기능 보존 high, 실제 카메라·환경별 검증 medium. 완료 건수는 실제 merge 후에만 차감한다.
+
+## MAX Close 보완 · 2026-11-06
+
+Duo 접힘 MAX의 재진입·마지막 행 스크롤 후 Exercise Mode 내비게이션 바에는 자식이 없고 Close 식별자도 없었다. PNG에서도 시트 제목·Close가 사라져 테스트 조회만의 문제는 아니다. 프레임워크 내부 원인은 미확정이며, MAX에서 toolbar 의존성을 제거하고 large로 표시해 고정 헤더와 전체 행 공간을 분리한다. General의 onSelect(nil), 운동 선택, 원래 기호·체크, Close의 dismiss 의미는 유지한다. 기존 Duo 실패 및 재시도 예산을 보존하고 해당 기기의 변경 후 검증은 미완료로 남긴다. 새 실행은 허용된 범위만 수행한다.
