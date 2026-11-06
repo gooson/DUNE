@@ -1399,12 +1399,21 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         VisualAudit.capture("P08 actual older and newer score delta")
 
         let front = app.descendants(matching: .any)["posture-comparison-photo-front-older"].firstMatch
-        XCTAssertTrue(front.waitForExistence(timeout: 5) && front.isHittable)
+        XCTAssertTrue(front.waitForExistence(timeout: 5))
+        for _ in 0..<12 {
+            let viewport = photos.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 6, dy: 6)
+            if front.isHittable && viewport.contains(CGPoint(x: front.frame.midX, y: front.frame.midY)) { break }
+            photos.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(front.isHittable && photos.frame.intersection(app.windows.firstMatch.frame)
+            .insetBy(dx: 6, dy: 6).contains(CGPoint(x: front.frame.midX, y: front.frame.midY)),
+                      "Photo center must be inside its own visible pane before opening zoom")
         front.auditTap()
         XCTAssertTrue(app.navigationBars["Front"].firstMatch.waitForExistence(timeout: 5))
         let close = app.navigationBars["Front"].buttons.firstMatch
         XCTAssertTrue(close.exists && close.isHittable)
         close.auditTap()
+        XCTAssertFalse(app.navigationBars["Front"].firstMatch.exists, "Close dismisses the zoom route")
         XCTAssertTrue(photos.waitForExistence(timeout: 5), "Closing zoom returns to comparison")
         metrics.swipeUp(velocity: .slow)
         VisualAudit.capture("P08 lower metric comparison pane")
