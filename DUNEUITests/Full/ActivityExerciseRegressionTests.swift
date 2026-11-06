@@ -3641,10 +3641,25 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
         revealAndTapAddExercise()
 
+        func typeInFullPickerSearch(_ value: String) {
+            // Full-mode .searchable exposes a native SearchField in this sheet's
+            // navigation bar; picker-search-field is quick-start-only.
+            let search = app.navigationBars["Select Exercise"].searchFields["Search exercises"].firstMatch
+            XCTAssertTrue(search.waitForExistence(timeout: 5) && search.isHittable,
+                          "The presented full picker should expose its native search field")
+            search.auditTap()
+            search.typeText(value)
+            let filled = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "value == %@", value), object: search
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [filled], timeout: 3), .completed,
+                           "Full picker search must contain the requested exercise name")
+        }
+
         let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         XCTAssertTrue(picker.waitForExistence(timeout: 8), "W14 full exercise picker should open")
         VisualAudit.capture("W14 \(size) template exercise picker initial")
-        XCTAssertTrue(app.fillTextInput(AXID.pickerSearchField, with: "Bench Press"))
+        typeInFullPickerSearch("Bench Press")
         dismissSearchKeyboardIfPresent()
         let rowID = AXID.pickerExerciseRow(Fixture.benchPressID)
         XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(rowID, maxSwipes: 10))
@@ -3686,7 +3701,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
         revealAndTapAddExercise()
         XCTAssertTrue(picker.waitForExistence(timeout: 8), "W14 full picker should reopen for session exercise")
-        XCTAssertTrue(app.fillTextInput(AXID.pickerSearchField, with: "Running"))
+        typeInFullPickerSearch("Running")
         dismissSearchKeyboardIfPresent()
         let runningID = AXID.pickerExerciseRow(Fixture.runningID)
         XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(runningID, maxSwipes: 10))
