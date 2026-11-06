@@ -1,0 +1,248 @@
+{
+  "screen_id": "W16",
+  "scope": "B14+B15 W16/W19/W20/W21/W22/W23/W24/W25 private native review staging",
+  "original_source": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+  "source_contract": ".codex-checks/b14b15/execution-contract.json",
+  "rows": [
+    {
+      "profile": "regular",
+      "kind": "historical",
+      "title": "W16 historical baseline",
+      "image": "historical/regular-W16.png",
+      "ax": null,
+      "capture_index_entry": "historical/regular-W16-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateWorkoutFirstSession()",
+      "sha256": "e8a3c0b92d28cdfc6b7e702abec128b0d48f83fdc90175775073d8bd3f0b9bfe",
+      "source_image": "/private/tmp/dune-b14b15-gallery-prep/_baseline/regular/W16.png",
+      "is_primary": false
+    },
+    {
+      "profile": "ipad",
+      "kind": "historical",
+      "title": "W16 historical baseline",
+      "image": "historical/ipad-W16.png",
+      "ax": null,
+      "capture_index_entry": "historical/ipad-W16-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateWorkoutFirstSession()",
+      "sha256": "2463bd3d81b63ff8c4007197fa0cc0fa8fb414e9ab383b74995358a986f97ec4",
+      "source_image": "/private/tmp/dune-b14b15-gallery-prep/_baseline/ipad/W16.png",
+      "is_primary": false
+    },
+    {
+      "profile": "duo",
+      "kind": "historical",
+      "title": "W16 historical baseline",
+      "image": "historical/duo-W16.png",
+      "ax": null,
+      "capture_index_entry": "historical/duo-W16-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateWorkoutFirstSession()",
+      "sha256": "8cdd0a42c92cb393078e19675414ef43ee65c73fb6c4c36c2f29568251240c95",
+      "source_image": "/private/tmp/dune-b14b15-gallery-prep/_baseline/duo/W16.png",
+      "is_primary": false
+    },
+    {
+      "profile": "duo-open",
+      "kind": "historical",
+      "title": "W16 historical baseline",
+      "image": "historical/duo-open-W16.png",
+      "ax": null,
+      "capture_index_entry": "historical/duo-open-W16-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateWorkoutFirstSession()",
+      "sha256": "1959ec9f7699e9af460e062c2f50eff9e98a578d5cfa33f9c8cf3331f24d0582",
+      "source_image": "/private/tmp/dune-b14b15-gallery-prep/_baseline/duo-open/W16.png",
+      "is_primary": false
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "title": "W16 MAX first template session after transition",
+      "image": "assets/01-regular-phone-retry1-MAX-after.png",
+      "ax": "assets/01-regular-phone-retry1-MAX-after.txt",
+      "source_revision": "b62dc5b98c453810706928fb831b5c8c6d749fa8",
+      "run_id": "phone-retry1",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtMaximumText()",
+      "selector_state": "passed",
+      "capture_uuid": "cb7837e2-bdf7-4315-a095-a50f304dc0fb",
+      "timestamp": 1794004565.821,
+      "sha256": "a261a0b73d2aeeac632e9887b53b67539c1ba0281a01997c35a084105e4b7d95",
+      "ax_sha256": "6ee25cafa83c058f9a0a49609af46f12728ed08bb3e34e18af03d9e28c9e7164",
+      "source_image": ".codex-checks/b14b15/phone-retry1-attachments/E4AF6803-08F7-464A-BF8E-46FF27873667.png",
+      "source_ax": ".codex-checks/b14b15/phone-retry1-attachments/0F4B9349-04EF-489A-A9D4-45937A4B4E4C.txt",
+      "pair_manifest": ".codex-checks/b14b15/phone-retry1-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null
+    },
+    {
+      "profile": "ipad",
+      "kind": "after",
+      "title": "W16 normal first template session after transition",
+      "image": "assets/02-ipad-ipad-normal-after.png",
+      "ax": "assets/02-ipad-ipad-normal-after.txt",
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "run_id": "ipad",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtNormalText()",
+      "selector_state": "passed",
+      "capture_uuid": "fc96ba1a-56d3-4279-9107-9bad1437d3f1",
+      "timestamp": 1794005882.86,
+      "sha256": "33eae357017550f17c67220fa6c12877d510d352c679440116950ea2a3e2caf9",
+      "ax_sha256": "9abf7792407cdb633135048ca4477adc45886feb2e40202bbb19c2bd2aea381e",
+      "source_image": ".codex-checks/b14b15/ipad-attachments/4CF2E08C-D261-482C-9651-590312C4AE86.png",
+      "source_ax": ".codex-checks/b14b15/ipad-attachments/C90BD141-AD6A-403D-9B7B-26DC401446C9.txt",
+      "pair_manifest": ".codex-checks/b14b15/ipad-attachments/manifest.json",
+      "is_primary": true,
+      "actual_angle": null
+    },
+    {
+      "profile": "ipad",
+      "kind": "after",
+      "title": "W16 MAX first template session after transition",
+      "image": "assets/03-ipad-ipad-MAX-after.png",
+      "ax": "assets/03-ipad-ipad-MAX-after.txt",
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "run_id": "ipad",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtMaximumText()",
+      "selector_state": "passed",
+      "capture_uuid": "6c8ed838-3313-489c-ad0f-fa43a4712710",
+      "timestamp": 1794005845.51,
+      "sha256": "fd5962b9dc070a7ce36096c7d7cb38c0b5c13ad3cb1679c518eab9cac1a4243a",
+      "ax_sha256": "7ee700a6b674b7cd5222923fd657b5b7d80ec97d40fd671ec4d93f603a31f03b",
+      "source_image": ".codex-checks/b14b15/ipad-attachments/2494F5CB-7760-4F0B-9A2E-8958CD9B6494.png",
+      "source_ax": ".codex-checks/b14b15/ipad-attachments/0A3D0F44-6CD1-4509-A19F-B15FB7104127.txt",
+      "pair_manifest": ".codex-checks/b14b15/ipad-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null
+    }
+  ],
+  "gates": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+      "counts": {
+        "executed": 7,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 4
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "passed",
+        "testVisualAuditCompoundSessionAtMaximumText": "passed",
+        "testVisualAuditTemplateTransitionAtNormalText": "failed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "failed",
+        "testCardioFlowReachesSummary": "failed",
+        "testVisualAuditCardioAtDefaultTextSize": "failed",
+        "testStairClimberLevelChangesAppearInSummary": "passed"
+      },
+      "receipt": ".codex-checks/b14b15/phone-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "b62dc5b98c453810706928fb831b5c8c6d749fa8",
+      "counts": {
+        "executed": 4,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "not_executed",
+        "testVisualAuditCompoundSessionAtMaximumText": "not_executed",
+        "testVisualAuditTemplateTransitionAtNormalText": "failed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "passed",
+        "testCardioFlowReachesSummary": "passed",
+        "testVisualAuditCardioAtDefaultTextSize": "passed",
+        "testStairClimberLevelChangesAppearInSummary": "not_executed"
+      },
+      "receipt": ".codex-checks/b14b15/phone-retry1-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "counts": {
+        "executed": 7,
+        "passed": 6,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "passed",
+        "testVisualAuditCompoundSessionAtMaximumText": "passed",
+        "testVisualAuditTemplateTransitionAtNormalText": "passed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "passed",
+        "testCardioFlowReachesSummary": "passed",
+        "testVisualAuditCardioAtDefaultTextSize": "passed",
+        "testStairClimberLevelChangesAppearInSummary": "failed"
+      },
+      "receipt": ".codex-checks/b14b15/ipad-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/ipad-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad-retry1",
+      "profile": "ipad",
+      "source_revision": "324b0b30033583cc8a218805afb6e4b609e55137",
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "not_executed",
+        "testVisualAuditCompoundSessionAtMaximumText": "not_executed",
+        "testVisualAuditTemplateTransitionAtNormalText": "not_executed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "not_executed",
+        "testCardioFlowReachesSummary": "not_executed",
+        "testVisualAuditCardioAtDefaultTextSize": "not_executed",
+        "testStairClimberLevelChangesAppearInSummary": "passed"
+      },
+      "receipt": ".codex-checks/b14b15/ipad-retry1-ui.log.result.json",
+      "result_note": "all requested selectors passed",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/ipad-retry1-attachments/manifest.json"
+    }
+  ],
+  "evidence": [
+    "evidence/ipad-retry1-summary.json",
+    "evidence/ipad-retry1-ui.log.result.json",
+    "evidence/ipad-summary.json",
+    "evidence/ipad-ui.log.result.json",
+    "evidence/phone-retry1-summary.json",
+    "evidence/phone-retry1-ui.log.result.json",
+    "evidence/phone-summary.json",
+    "evidence/phone-ui.log.result.json"
+  ],
+  "pending": [
+    "phone W16 normal first template session after transition: named PNG/AX pair absent",
+    "phone W16 MAX first template session after transition: named PNG/AX pair absent",
+    "phone-retry1 W16 normal first template session after transition: named PNG/AX pair absent",
+    "ipad-retry1 W16 normal first template session after transition: named PNG/AX pair absent",
+    "ipad-retry1 W16 MAX first template session after transition: named PNG/AX pair absent",
+    "Duo closed/open current-source capture pending; historical baselines only",
+    "Before-teardown failure attachments never count as passed B14+B15 evidence"
+  ],
+  "limits": [
+    "Historical before images are older-source context, never current B14+B15 proof.",
+    "Only completed passed selector captures are classified after.",
+    "Named captures from failed or unattributable selectors are diagnostic.",
+    "No Duo current-source result or hinge angle is claimed.",
+    "This private gallery is not the repository actual-map update."
+  ]
+}
