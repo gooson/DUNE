@@ -76,14 +76,25 @@ struct PreferredExercisesListView: View {
 
     private func preferredToggleRow(for exercise: ExerciseDefinition) -> some View {
         Toggle(isOn: preferredBinding(for: exercise)) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(exercise.localizedName)
-                    .font(.body)
+            HStack(spacing: DS.Spacing.md) {
+                exercise.equipment.svgIcon(size: 22)
+                    .foregroundStyle(DS.Color.activity)
+                    .frame(width: 44, height: 44)
+                    .background(DS.Color.activity.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                    .accessibilityHidden(true)
 
-                Text(exercise.primaryMuscles.map(\.displayName).joined(separator: ", "))
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text(exercise.localizedName)
+                        .font(.body.weight(.semibold))
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    Text(exercise.primaryMuscles.map(\.displayName).joined(separator: ", "))
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
+            .padding(.vertical, DS.Spacing.xs)
         }
         .accessibilityIdentifier("preferred-exercise-toggle-\(exercise.id)")
     }
