@@ -1064,13 +1064,25 @@
     },
     "P04": {
       "row_id": "P04",
-      "evidence": "posture-result-screen",
-      "test": "PostureVisualAuditTests/testVisualAuditPostureResultOnSimulator()",
-      "action": "tap wellness-menu-posture",
-      "timestamp": 1791836696.89,
-      "image": "99A442A7-119E-43A4-918A-CDAFA3F69414.png",
-      "screen": "screen-0-1320x2868-tap wellness-menu-posture_0_EBD3BA5A-3FC5-4F35-9E97-E20022B5AD61.png",
-      "file": "P04.png"
+      "file": "P04.png",
+      "test": "PostureVisualAuditTests/testP04SeededResultScoreMetricsMemoSaveAndRetake()",
+      "action": "screen-0-1320x2868-P04 complete synthetic score and image cards_0_6C17D217-5411-43BE-B3DE-92772BE8D076.png",
+      "timestamp": 1793964431.335,
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "source_worktree_dirty": false,
+      "device_udid": "B9C76CF6-96F3-4DEF-B263-46820019EA01",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "de0865c8e54c1d1291266e2567ef2a060e3876ec54d3511fce43a39957cda97c",
+      "ax_sha256": "c350a3a511f64f1621ce19ddd16afbcf368637c44c1aa6f183fd281170bf9f8d",
+      "source_json": "../../../full-redesign-map/review/posture-result-p04-2026-11-06/manifest.json",
+      "source_record": "records: profile=regular,kind=after,is_primary=true",
+      "capture_scope": "selected affected flows verified; see limits",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1320,
+        2868
+      ]
     },
     "H07": {
       "row_id": "H07",

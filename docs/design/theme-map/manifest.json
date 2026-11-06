@@ -985,6 +985,18 @@
         "status": "implemented-selected-native-flows-verified",
         "actual": "../full-redesign-map/review/posture-realtime-p02-2026-11-06/index.html"
       }
+    },
+    {
+      "id": "posture-result-p04",
+      "name": "P04 · 자세 결과",
+      "title": "실제 점수·기존 링의 불투명 ScoreHeroPalette 강조 → Front/Side 사진 → 원래 metrics/confidence → 교정 운동 → memo → Capture Side View/Save/Retake.",
+      "file": "dune-posture-result-p04.html",
+      "detail": "2026-11-06 구현 기준 정적 시안. combined/partial 점수·실제 사진/zoom/joints·metric/confidence·recommendations·memo·validated Save/isSaving/insert/dismiss·Retake 보존. 일반 iPhone·iPad·Duo 양쪽 활성 화면의 native fallback/합성 흐름 검증을 보존하며 설명용 수치/기호는 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/posture-result-p04.html",
+        "status": "implemented-selected-native-flows-verified",
+        "actual": "../full-redesign-map/review/posture-result-p04-2026-11-06/index.html"
+      }
     }
   ]
 }
