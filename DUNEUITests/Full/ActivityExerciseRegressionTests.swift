@@ -3402,9 +3402,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             [Fixture.benchPressLocalizedName, "Barbell Bench Press"]
         )).firstMatch
         XCTAssertTrue(name.waitForExistence(timeout: 5), "W06 overview must retain the exercise name")
-        XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionOverview,
-                                           maxSwipes: 10, mustFitInViewport: true),
-                      "W06 full exercise name and icon must fit in the visible workout overview")
+        let sessionWindow = app.windows.firstMatch.frame.insetBy(dx: 8, dy: 8)
+        if !(name.isHittable && sessionWindow.contains(name.frame)) {
+            XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionOverview,
+                                               maxSwipes: 10, mustFitInViewport: true),
+                          "W06 full exercise name must be reachable in the workout overview")
+        }
+        XCTAssertTrue(name.isHittable && sessionWindow.contains(name.frame),
+                      "W06 full exercise name must fit in the visible window")
         VisualAudit.capture("W06 \(size) overview icon and exercise name")
         for field in ["kg", "reps"] {
             XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionField(field), maxSwipes: 10),
@@ -3419,8 +3424,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             button.auditTap()
         }
         let complete = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
-        XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionCompleteSet, maxSwipes: 10))
-        XCTAssertTrue(complete.isHittable)
+        XCTAssertTrue(complete.waitForExistence(timeout: 5) && complete.isEnabled && complete.isHittable,
+                      "Fixed Complete Set action must be enabled and reachable")
+        XCTAssertTrue(app.windows.firstMatch.frame.contains(complete.frame),
+                      "Fixed Complete Set action must fit in the visible window")
         complete.auditTap()
 
         let sheet = app.scrollViews[AXID.workoutSessionLastSetSheet].firstMatch
@@ -3429,7 +3436,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let finish = app.buttons[AXID.workoutSessionFinish].firstMatch
         XCTAssertTrue(addSet.waitForExistence(timeout: 5))
         XCTAssertTrue(finish.waitForExistence(timeout: 5))
-        VisualAudit.capture("W31 \(size) medium last-set choices")
+        VisualAudit.capture(UIDevice.current.userInterfaceIdiom == .phone
+                            ? "W31 \(size) medium last-set choices"
+                            : "W31 \(size) initial last-set choices")
 
         if UIDevice.current.userInterfaceIdiom == .phone {
             let before = sheet.frame
