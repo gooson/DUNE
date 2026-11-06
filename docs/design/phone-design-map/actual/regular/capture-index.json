@@ -566,13 +566,25 @@
     },
     "W23": {
       "row_id": "W23",
-      "evidence": "cardio-start-screen",
-      "test": "ActivityExerciseRegressionTests/testRecommendedRoutineCardOpensExerciseStart()",
-      "action": "tap activity-recommended-routine-card",
-      "timestamp": 1791818542.418,
-      "image": "BC1200AB-F823-469D-9E43-D6AE48E7EAD1.png",
-      "screen": "screen-0-1320x2868-tap activity-recommended-routine-card_0_3B09D2CE-7AD0-435D-961B-5D8B2287D296.png",
-      "file": "W23.png"
+      "file": "W23.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
+      "action": "W23 cardio normal header and Indoor",
+      "timestamp": 1794004449.7,
+      "source_revision": "b62dc5b98c453810706928fb831b5c8c6d749fa8",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "dade498448caedfa289addd9c7bbcfed396ba965591673e1e26fe76ea9919803",
+      "ax_sha256": "f35a4509e9be9b6409b32f92fdcb0b9d320b20d27710566ee2eee6c5e7d964e3",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/cardio-start-w23-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W22": {
       "row_id": "W22",

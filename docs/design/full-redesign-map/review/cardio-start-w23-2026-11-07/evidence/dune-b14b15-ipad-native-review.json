@@ -1,0 +1,51 @@
+{
+  "status": "iPad native review final: first six passed, one same-ID Stair Climber retry passed; W25 MAX cadence proof gap remains",
+  "frozen_source": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+  "first_run": {
+    "executed": 7,
+    "passed": 6,
+    "failed": 1,
+    "failed_selector": "testStairClimberLevelChangesAppearInSummary"
+  },
+  "provenance": {
+    "passed_named_png_ax_pairs": 38,
+    "failed_selector_diagnostic_pairs": 2,
+    "all_37_gallery_png_and_ax_sha256_equal_source_attachments_and_manifest": true,
+    "contact_sheets": "/private/tmp/dune-b14b15-gallery-prep/ipad-contact",
+    "gallery": "/private/tmp/dune-b14b15-gallery-prep",
+    "raw": ".codex-checks/b14b15/ipad-attachments",
+    "all_40_gallery_png_and_ax_sha256_equal_source_attachments_and_manifest": true,
+    "retry_raw": ".codex-checks/b14b15/ipad-retry1-attachments"
+  },
+  "per_screen": {
+    "W16": "Normal/MAX first template session after auto transition: Exercise 1 of 2, Set 1 of 3, planned reps 6, 80 kg, full Complete Set. Original transition 2 sets is not proved applied to session.",
+    "W19": "Normal/MAX Circuit mode, original explanation/settings, two seeded selected exercises and Start route passed. MAX selected-exercises capture is scrolled so Start is below its frame; selector subsequently starts session.",
+    "W20": "Normal/MAX full picker route passed; native picker names, search, recent rows visible. MAX lower rows and filter chips outside initial frame; picker wrapper unchanged.",
+    "W21": "Normal/MAX round/time/tabs, two names in summary, transition +30/Start passed. MAX captures span scrolled states; 0-set summary is original seeded state, not set-completion claim.",
+    "W22": "Normal/MAX transition visibly shows original 2 sets, 6 reps, 80 kg and Start (1); normal/MAX selector passed after auto 5 seconds.",
+    "W23": "Normal/MAX Running Indoor and Outdoor choices, native icons and location guidance. MAX first view clips guidance, later passed location frame shows full message. Outdoor GPS start/permission remains untested.",
+    "W24": "Running normal/MAX elapsed/distance/pace/lower steps/spm and full pinned Pause/End passed. Stair Climber default retry passed and shows Level 3, average 2.8, max 3, pause/end in two named current-source pairs. First-run Stair diagnostics remain diagnostic, not promoted.",
+    "W25": "Running normal/MAX summary top/full pinned Save passed; normal lower Steps/Cadence visible. MAX lower Steps visible, but cadence named capture and later teardown hide cadence label/value under Save (AX Cadence y858–909, Save y815.5–893), leaving strict MAX cadence legibility unproved. Stair Climber default retry passed; level history rows 0:08 Level 2 and 0:11 Level 3 plus full Save visibly shown in a new named pair. Save was not tapped."
+  },
+  "introduced_app_P1_P2_verified": [],
+  "capture_or_gate_limits": [
+    "W25 iPad MAX lower cadence is a material proof gap for the requested lower Steps/Cadence gate; hold that claim without an existing unobscured current-source frame.",
+    "W24/W25 Stair Climber default selector failed before history; diagnostic session frames are not passed after rows.",
+    "Some W19/W20/W21 MAX images are scrolled checkpoints; no claim all selected names, bottom controls, and settings are simultaneously visible.",
+    "No live motion/GPS numerical measurement, summary Save action/persistence, or Duo current-source proof."
+  ],
+  "pending": [
+    "No SDK runs pending in this family; Phone family closed and iPad one failed-case retry consumed.",
+    "W25 strict MAX cadence native legibility remains unproved; no passed later or teardown frame closes it.",
+    "Duo closed/open current-source captures pending."
+  ],
+  "retry": {
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "selector": "testStairClimberLevelChangesAppearInSummary",
+    "revision": "324b0b30033583cc8a218805afb6e4b609e55137",
+    "test_sha256": "b748ffebc14c4e7f93eb27db222ef0378ec5d51db9ecdd8fe05cb0b64f955b00",
+    "app_and_catalog_bytes_same_as_initial_contract": true
+  }
+}

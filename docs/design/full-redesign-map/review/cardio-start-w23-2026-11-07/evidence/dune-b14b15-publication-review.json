@@ -1,0 +1,26 @@
+{
+  "status": "read-only private publication source review",
+  "files": {
+    "/private/tmp/dune-b14b15-prepare-pr.py": "6aacc815e71f999264280beb52475c2c20979a1400fb524d3a85b58769687b9f",
+    "/private/tmp/dune-b14b15-commit.py": "a293ffcf3f2c85fa39226484e513e735f7055e62358439d941efed38e7e98d6c",
+    "/private/tmp/dune-b14b15-held.py": "a9ad903a6b4d77f4680e3f6f02ccdece5598b03c139f299639e81b2e7499739d",
+    "/private/tmp/dune-b14b15-split.py": "e7f57a2b12d8d4fdceb9637eeefc8460e33d56f7dd42f34e3930ff06d7134108",
+    "/private/tmp/dune-b14b15-maps.py": "7809cdb587a20fdfc2a87286c2c55ba0ebb1343f7f91e9e5c3a0d708401f0d38",
+    "/private/tmp/dune-b14b15-max-maps.py": "48ec2b87a58ab3b7f48907487a6d38731f102193574beb2e40c108a111b51a15",
+    "/private/tmp/dune-b14b15-docs.py": "394e90f60cab42b2b4f6a4e7b9ed40cc13d842dc0b1e5f031332467dd7635ee2"
+  },
+  "blocking_introduced_source_findings": [],
+  "checks": [
+    "prepare-pr checks clean branch, fresh origin/main, final gate W25 held equality, owner byte SHA and source revision before phase receipts/commit.",
+    "split projects only owned app and test groups; W16/W20 no app patch, W21 Compound2 test owner, W16 Template2 test owner, W25 held cardio group projected after accepted Compound/Template without dropping them.",
+    "commit allowlists exact app/test/doc/map paths, rejects unmerged/staged/unowned changes, verifies frozen app owner and full expected test projection, parses owned Swift and checks catalog/theme map before commit/push.",
+    "W25 held helper copies gallery/evidence, verifies pending pinned-Save note and actual-map file hashes before/after, updates only inventory/theme/plan/held solution; commit forbids all actual-map paths.",
+    "Normal map helper requires completed passed Phone/iPad title PNG+AX; MAX conditional helper requires Phone MAX plus iPad normal/MAX and leaves Phone regular historical/pending. Failed/diagnostic rows are not chosen.",
+    "Docs explicitly preserve original raw run counts and separate historical Duo/normal Phone, simulated -- readings, and unsaved Summary state."
+  ],
+  "nonblocking_limit": [
+    "Generic map helper has a dead W27 branch inherited from earlier scaffolding; W27 is absent from the eight-item publication list and this branch is not reachable.",
+    "W25 gallery includes passed Running named images for review despite HELD status; actual-map images/index/boards remain unchanged.",
+    "New per-screen scoped pipeline phase receipts reference frozen source and independent gate; they must not be presented as replacement for original failed SDK receipts."
+  ]
+}
