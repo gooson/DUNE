@@ -2,7 +2,7 @@
 tags: [detail-redesign, habits, targeted-ui, l07]
 date: 2026-11-06
 category: plan
-status: done
+status: implemented
 ---
 
 # L07 · 습관 활동 히트맵 상세
