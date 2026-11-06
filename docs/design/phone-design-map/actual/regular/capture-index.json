@@ -1393,13 +1393,24 @@
     },
     "W02": {
       "row_id": "W02",
-      "evidence": "test-and-action:tap picker-search-done",
-      "test": "ActivityExerciseRegressionTests/testQuickStartPickerShowsDetailAndSearchResults()",
-      "action": "tap picker-search-done",
-      "timestamp": 1792374878.152,
-      "image": "2B7DC127-985E-4ACA-8ABC-EF46BAC1C4F7.png",
-      "screen": "screen-0-1206x2622-tap picker-search-done_0_B11203E8-0720-480A-AF45-079B8A892E9F.png",
-      "file": "W02.png"
+      "file": "W02.png",
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText()",
+      "action": "Exercise picker",
+      "timestamp": 1793987040.544,
+      "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "839b17bed517c21488a0de667263767f03e2dce567919e2a426153d6fbf94f40",
+      "ax_sha256": "1bca7691b8a0e9b0792b0f78df6fba6ddf7aca4ea6f999fefedaacde41fdaa04",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/exercise-picker-w02-2026-11-07/manifest.json",
+      "capture_scope": "B09 manual normal; MAX and source section equivalence in gallery proof",
+      "current_verification": "normal-captured",
+      "actual_angle": null
     },
     "W03": {
       "row_id": "W03",
