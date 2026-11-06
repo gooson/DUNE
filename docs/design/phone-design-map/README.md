@@ -383,3 +383,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-07 W28: [B12 새 실제 PNG·AX](../full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/index.html)에 Phone/iPad 일반·MAX 통과, Duo 미갱신을 기록했다.
 
 2026-11-07 W19: [B14+B15 새 실제 PNG·AX](../full-redesign-map/review/compound-workout-setup-w19-2026-11-07/index.html)에 Phone/iPad 일반·MAX 통과, Duo 미갱신을 기록했다.
+
+2026-11-07 W20: [B14+B15 새 실제 PNG·AX](../full-redesign-map/review/compound-exercise-picker-w20-2026-11-07/index.html)에 Phone/iPad 일반·MAX 통과, Duo 미갱신을 기록했다.
