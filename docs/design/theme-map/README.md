@@ -328,3 +328,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-06 L06: [실제 선택 화면·출처](../full-redesign-map/review/l06-habit-history-detail-2026-11-06/index.html). 관련 메서드·기기 범위다.
 
 2026-11-06 L07: [실제 선택 화면·출처](../full-redesign-map/review/l07-habit-heatmap-2026-11-06/index.html). 관련 메서드·기기 범위다.
+
+2026-11-06 L08: [실제 선택 화면·출처](../full-redesign-map/review/l08-habit-weekly-report-2026-11-06/index.html). 관련 메서드·기기 범위다.

@@ -1,0 +1,8 @@
+# Duo open normal native review
+
+- Source `a967f801b0bff9e91d0b4c31d2637541485973d1`; owned Duo UID `FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3`. Open at 180°, active `LCD-1` rotated 90° before and after. Actual PNG IHDR is 2853×2007, despite the `-2007x2853` capture filename.
+- Archived SDK aggregate: **4 executed, 3 passed, 1 failed, 0 skipped; Failed, exit 65**. This review accepts only the 3 individually passing methods (L05, L07, L08) and 10 selected PNG/AX pairs. L06 Management timed out at 300 seconds; its sequences 028–029 are excluded.
+- Viewed all 10 actual archived PNGs and read paired AX trees. Exact PNG, AX and frozen 10-source SHA-256 values match the validated pair index `duo-open-normal3-pairs.json`. The [numeric adjudication](open-sdk-numeric-adjudication.json) and [security peer review](open-sdk-numeric-peer-review.json) bind the archive-specific XCTest restart discrepancy: `summary.json` and `tests.json` prove 4/3/1, while canonical `result.json` and metadata retain last-suite 1/1 counts. Both views retain failed status and exit 65.
+- P1/P2: none in the passed-method frames. P3: L05 seeded history says “1 records”; preexisting copy defect.
+
+L05 shows the history hero, count, Close and Past Record route. L07 shows total, activity grid, legend, Friday count 1 and Back. L08 shows 4%, 1 of 21 completed, current 4% versus previous 0%, both ranking sections and Back. Text, icons and actions are legible without blocking overlap in these frames. The full open SDK run remains failed; this review makes no claim for L06, the later MAX retry, a full 19-method matrix, Dark Mode, VoiceOver, or design-map publication. [JSON inventory](duo-open-normal3-native-review.json) records exact paths, checkpoints, hashes, and scope.

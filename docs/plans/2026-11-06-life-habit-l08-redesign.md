@@ -2,7 +2,7 @@
 tags: [detail-redesign, habits, targeted-ui, l08]
 date: 2026-11-06
 category: plan
-status: approved
+status: done
 ---
 
 # L08 · 주간 습관 리포트
@@ -12,7 +12,7 @@ status: approved
 | 파일 | 변경 |
 |---|---|
 | `DUNE/Presentation/Life/WeeklyHabitReportView.swift` | 원래 상태·계산·아이콘에서 시각 위계를 보강한다. |
-| `DUNEUITests/Full/LifeRegressionTests.swift` | `testVisualAuditWeeklyReport`와 해당 closed MAX 검사로 실제 읽기·기록·닫기/뒤로를 확인한다. |
+| `DUNEUITests/Full/LifeRegressionTests.swift` | `testVisualAuditWeeklyReport`와 공유 `testHabitAnalyticsAtMaximumAccessibilitySize`로 주간 수치·비교·순위 목록과 Back 복귀를 확인한다. |
 | `docs/design/layout-map/life-habit-l08.html` | 앱 변경 전에 배치를 보존한다. |
 | `docs/design/theme-map/themes/dune-life-habit-l08.html` | 테마 표현 시안이며 실제 캡처와 구분한다. |
 
@@ -24,4 +24,8 @@ status: approved
 
 ## Testing Strategy and Risks
 
-네 기본 프로필과 접힌 Duo MAX에서 기존 닫기/뒤로·스크롤·리프 텍스트·아이콘·실제 수치를 확인한다. L05 빈 기록은 iPhone의 기존 empty selector를 한 번 추가한다. 헤더가 medium sheet의 모든 공간을 차지하지 않도록 한 스크롤 영역에 두며, MAX의 행·닫기·범례 접근을 직접 확인한다. 기존 정렬·필터·날짜·합계·비율·저장·권한을 변경하지 않는다. 아직 build·SDK·native 결과는 없다.
+이 화면은 push 리포트이며 Back으로 Life 루트에 복귀한다. iPhone·iPad·Duo 접힘·펼침 기본 글씨와 접힌 Duo MAX에서 주간 기간, 현재 완료율과 완료/목표 수, 이번 주·지난주 수치와 추세, Best Habits·Needs Improvement의 원래 아이콘과 목록을 확인한다. MAX에서는 비교 영역을 한 열로 읽고 각 수치와 제목을 스크롤로 드러낸다. 비율·분자/분모·순위·빈 상태 계산은 원래 코드로 유지했다. 고정 소스 `83c350b0`에서 이 화면의 5개 메서드·기기 기여와 PNG·AX 22쌍이 통과했다. L07과 공유하는 Analytics MAX 한 케이스만 기존 최대 한도 600초를 명시해 388.580초에 통과했고 나머지 기본 한도는 300초다. 전체 묶음 19개 조합·21개 화면 기여와 PR·CI 상태는 별도 기록을 따른다.
+
+## 실제 선택 화면 검증
+
+[L08 PNG·AX·출처](../design/full-redesign-map/review/l08-habit-weekly-report-2026-11-06/index.html). PR/CI 상태는 별도 기록을 따른다.
