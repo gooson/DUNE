@@ -410,9 +410,24 @@ final class LifeRegressionTests: SeededUITestBaseCase {
             .matching(NSPredicate(format: "label == %@", "Morning Stretch")).firstMatch
         XCTAssertTrue(historySheet.waitForExistence(timeout: 8) && historySheet.isHittable)
         XCTAssertEqual(historySheet.label, "Morning Stretch")
-        VisualAudit.capture("L04 archived history")
-        let close = app.buttons.matching(identifier: "habit-management-history-screen")
-            .matching(NSPredicate(format: "label == %@", "Close")).firstMatch
+        let historyScroll = app.scrollViews["habit-management-history-scroll"].firstMatch
+        XCTAssertTrue(historyScroll.waitForExistence(timeout: 5) && historyScroll.isHittable)
+        XCTAssertTrue(app.revealTextBody("habit-management-history-screen", in: historyScroll))
+        XCTAssertTrue(historyScroll.staticTexts["History"].firstMatch.exists)
+        let completed = historyScroll.staticTexts.matching(NSPredicate(format: "label == %@", "Completed")).firstMatch
+        for _ in 0..<10 where !completed.exists { historyScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(completed.waitForExistence(timeout: 5))
+        let actionID = completed.identifier
+        XCTAssertTrue(actionID.hasPrefix("habit-management-history-action-"))
+        let dateID = actionID.replacingOccurrences(of: "-action-", with: "-date-")
+        XCTAssertTrue(app.revealTextBody(actionID, in: historyScroll, maxMoves: 10))
+        XCTAssertTrue(app.revealTextBody(dateID, in: historyScroll, maxMoves: 10))
+        XCTAssertFalse(historyScroll.staticTexts[dateID].firstMatch.label.isEmpty)
+        VisualAudit.capture("L06 archived history hero and action")
+        let close = app.buttons["habit-management-history-close"].firstMatch
+        for _ in 0..<10 where !(close.exists && close.isHittable) {
+            historyScroll.swipeDown(velocity: .slow)
+        }
         XCTAssertTrue(close.waitForExistence(timeout: 5) && close.isHittable)
         close.auditTap()
         XCTAssertTrue(historySheet.waitForNonExistence(timeout: 5))
@@ -433,6 +448,76 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         back?.auditTap()
         XCTAssertTrue(management.waitForNonExistence(timeout: 8))
         XCTAssertTrue(app.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch.waitForExistence(timeout: 8))
+    }
+
+    func testHabitHistoryAndManagementAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        launchApp(with: configuration)
+        openHistory(for: "Morning Stretch")
+        let title = app.staticTexts["life-habit-history-screen"].firstMatch
+        let count = app.staticTexts["life-habit-history-count"].firstMatch
+        let sheetScroll = app.scrollViews["life-habit-history-scroll"].firstMatch
+        XCTAssertTrue(sheetScroll.waitForExistence(timeout: 5) && sheetScroll.isHittable)
+        XCTAssertTrue(app.revealTextBody("life-habit-history-screen", in: sheetScroll))
+        XCTAssertEqual(title.label, "Morning Stretch")
+        XCTAssertTrue(count.waitForExistence(timeout: 5))
+        VisualAudit.capture("L05 MAX history title and count")
+        let row = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "identifier BEGINSWITH %@", "life-habit-history-row-"))
+            .firstMatch
+        for _ in 0..<20 where !row.exists { sheetScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.revealFullyVisible(row.identifier, in: sheetScroll, maxMoves: 20))
+        let rowText = ([row.label] + row.staticTexts.allElementsBoundByIndex.map(\.label))
+            .joined(separator: " ")
+        XCTAssertTrue(rowText.contains("Completed"))
+        VisualAudit.capture("L05 MAX history row and date")
+        let close = app.buttons[AXID.lifeHabitHistoryClose].firstMatch
+        for _ in 0..<12 where !(close.exists && close.isHittable) { sheetScroll.swipeDown(velocity: .slow) }
+        XCTAssertTrue(close.waitForExistence(timeout: 5) && close.isHittable)
+        XCTAssertGreaterThanOrEqual(close.frame.width, 44)
+        XCTAssertGreaterThanOrEqual(close.frame.height, 44)
+        close.auditTap()
+        XCTAssertTrue(title.waitForNonExistence(timeout: 5))
+
+        // The existing L04 archive/restore method covers management state transitions.
+        // This MAX case inspects the redesigned history sheet after opening management.
+        XCTAssertTrue(app.openLifeHabitActions(named: "Morning Stretch", maxSwipes: 8))
+        XCTAssertTrue(app.waitAndTap(AXID.lifeHabitActionArchive))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-archived-habits-link", maxSwipes: 12))
+        app.descendants(matching: .any)["life-archived-habits-link"].firstMatch.auditTap()
+        let management = app.scrollViews[AXID.habitManagementScreen].firstMatch
+        XCTAssertTrue(management.waitForExistence(timeout: 8))
+        let archived = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Archived")).firstMatch
+        XCTAssertTrue(app.revealFullyVisible(AXID.habitManagementFilter, in: management))
+        archived.auditTap()
+        XCTAssertTrue(app.revealFullyVisible("habit-management-history-Morning Stretch", in: management, maxMoves: 20))
+        app.buttons["habit-management-history-Morning Stretch"].firstMatch.auditTap()
+        let managementTitle = app.staticTexts["habit-management-history-screen"].firstMatch
+        let managementScroll = app.scrollViews["habit-management-history-scroll"].firstMatch
+        XCTAssertTrue(managementScroll.waitForExistence(timeout: 5) && managementScroll.isHittable)
+        XCTAssertTrue(app.revealTextBody("habit-management-history-screen", in: managementScroll))
+        XCTAssertEqual(managementTitle.label, "Morning Stretch")
+        let completed = managementScroll.staticTexts.matching(NSPredicate(format: "label == %@", "Completed")).firstMatch
+        for _ in 0..<12 where !completed.exists { managementScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(completed.waitForExistence(timeout: 5))
+        let actionID = completed.identifier
+        XCTAssertTrue(actionID.hasPrefix("habit-management-history-action-"))
+        let dateID = actionID.replacingOccurrences(of: "-action-", with: "-date-")
+        XCTAssertTrue(app.revealTextBody(actionID, in: managementScroll, maxMoves: 20))
+        XCTAssertTrue(app.revealTextBody(dateID, in: managementScroll, maxMoves: 20))
+        XCTAssertFalse(managementScroll.staticTexts[dateID].firstMatch.label.isEmpty)
+        VisualAudit.capture("L06 MAX history title and action")
+        let managementClose = app.buttons["habit-management-history-close"].firstMatch
+        for _ in 0..<12 where !(managementClose.exists && managementClose.isHittable) {
+            managementScroll.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(managementClose.waitForExistence(timeout: 5) && managementClose.isHittable)
+        XCTAssertGreaterThanOrEqual(managementClose.frame.width, 44)
+        XCTAssertGreaterThanOrEqual(managementClose.frame.height, 44)
+        managementClose.auditTap()
+        XCTAssertTrue(managementTitle.waitForNonExistence(timeout: 5))
     }
 
     private func captureLifeAuditScroll(_ route: String) {
