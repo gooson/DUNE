@@ -1174,6 +1174,184 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         VisualAudit.capture("Posture result from visual audit record")
     }
 
+    func testP01CaptureFallbackRetryAndClose() throws {
+        openPostureRoute("wellness-menu-posture")
+        let error = app.staticTexts["posture-capture-error"].firstMatch
+        XCTAssertTrue(error.waitForExistence(timeout: 10), "Simulator camera fallback should be visible")
+        let retry = app.buttons["posture-capture-retry"].firstMatch
+        XCTAssertTrue(retry.exists && retry.isHittable)
+        VisualAudit.capture("P01 camera unavailable with retry and Close")
+
+        retry.tap()
+        let capture = app.buttons["posture-capture-button"].firstMatch
+        XCTAssertTrue(capture.waitForExistence(timeout: 5), "Retry returns to preparing controls")
+        VisualAudit.capture("P01 preparing after retry without camera inference")
+
+        app.buttons["posture-capture-close"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch
+            .waitForExistence(timeout: 5), "Close should return to Wellness")
+    }
+
+    func testP02RealtimeFallbackAndP03ExerciseSelection() throws {
+        openPostureRoute("wellness-menu-realtime-posture")
+        let fallback = app.descendants(matching: .any)["realtime-camera-unavailable"].firstMatch
+        XCTAssertTrue(fallback.waitForExistence(timeout: 10), "Simulator camera fallback should be visible")
+        let retry = app.buttons["realtime-camera-retry"].firstMatch
+        XCTAssertTrue(retry.exists && retry.isHittable)
+        VisualAudit.capture("P02 camera unavailable and exercise entry")
+
+        retry.tap()
+        XCTAssertTrue(fallback.waitForExistence(timeout: 5), "Camera retry remains unavailable on simulator")
+        let mode = app.buttons["realtime-exercise-picker-button"].firstMatch
+        XCTAssertTrue(mode.exists && mode.isHittable, "Picker remains available without camera")
+        mode.tap()
+        let list = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        let general = app.buttons["posture-exercise-general"].firstMatch
+        XCTAssertTrue(general.isSelected, "General mode starts selected")
+        VisualAudit.capture("P03 General Posture selected")
+
+        let squat = app.buttons["posture-exercise-barbell-squat"].firstMatch
+        XCTAssertTrue(squat.exists && squat.isHittable)
+        squat.tap()
+        XCTAssertTrue(mode.waitForExistence(timeout: 5))
+        XCTAssertEqual(mode.value as? String, "barbell-squat")
+        mode.tap()
+        XCTAssertTrue(squat.waitForExistence(timeout: 5) && squat.isSelected)
+        XCTAssertFalse(general.isSelected)
+        VisualAudit.capture("P03 barbell squat selection retained on reopen")
+
+        general.tap()
+        XCTAssertEqual(mode.value as? String, "general")
+        mode.tap()
+        XCTAssertTrue(general.waitForExistence(timeout: 5) && general.isSelected)
+        VisualAudit.capture("P03 General Posture restored")
+        app.buttons["posture-exercise-close"].tap()
+        XCTAssertTrue(mode.waitForExistence(timeout: 5))
+        app.buttons["realtime-posture-close"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch
+            .waitForExistence(timeout: 5))
+    }
+
+    func testP03ExerciseListAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        openPostureRoute("wellness-menu-realtime-posture")
+        app.buttons["realtime-exercise-picker-button"].tap()
+        let list = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        VisualAudit.capture("P03 MAX General Posture and first exercise")
+        let last = app.buttons["posture-exercise-lunge"].firstMatch
+        XCTAssertTrue(revealExerciseRow(last, in: list), "Last exercise must fit in the visible list at MAX")
+        VisualAudit.capture("P03 MAX final exercise reachable by scrolling")
+        last.tap()
+        let mode = app.buttons["realtime-exercise-picker-button"].firstMatch
+        XCTAssertEqual(mode.value as? String, "lunge")
+        mode.tap()
+        let reopenedList = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(reopenedList.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealExerciseRow(last, in: reopenedList), "Selected final row must remain reachable")
+        XCTAssertTrue(last.isSelected)
+        VisualAudit.capture("P03 MAX final exercise selected on reopen")
+        app.buttons["posture-exercise-close"].tap()
+    }
+
+    func testP04SeededResultScoreMetricsMemoSaveAndRetake() throws {
+        openSeededPostureResult()
+        let score = app.descendants(matching: .any)["posture-result-score"].firstMatch
+        XCTAssertTrue(score.waitForExistence(timeout: 5))
+        XCTAssertEqual(score.label, "Posture score 86 out of 100")
+        XCTAssertFalse(app.buttons["posture-result-capture-side"].exists,
+                       "Full synthetic result should not request a side capture")
+        VisualAudit.capture("P04 complete synthetic score and image cards")
+
+        let metric = app.descendants(matching: .any)["posture-result-metric-forwardHead"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("posture-result-metric-forwardHead", maxSwipes: 12))
+        XCTAssertTrue(metric.label.contains("Forward Head"), "Original metric name should remain")
+        let frontalMetric = app.descendants(matching: .any)["posture-result-metric-shoulderAsymmetry"].firstMatch
+        XCTAssertTrue(frontalMetric.exists && frontalMetric.label.contains("Shoulder"),
+                      "Front and side synthetic metrics should both remain present")
+        VisualAudit.capture("P04 original metric value and confidence")
+        let memo = app.descendants(matching: .any)["posture-result-memo-field"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("posture-result-memo-field", maxSwipes: 12))
+        XCTAssertTrue(memo.exists && memo.isHittable)
+        XCTAssertTrue((memo.value as? String)?.contains("Visual audit fixture") == true,
+                      "The synthetic memo should remain editable and populated")
+        let save = app.buttons["posture-result-save"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("posture-result-save", maxSwipes: 8))
+        XCTAssertTrue(save.isEnabled)
+        VisualAudit.capture("P04 memo and Save Retake actions")
+        save.tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch
+            .waitForExistence(timeout: 5), "Save should dismiss the result")
+        VisualAudit.capture("P04 saved result returns to Wellness")
+
+        openSeededPostureResult()
+        let retake = app.buttons["posture-result-retake"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("posture-result-retake", maxSwipes: 12))
+        retake.tap()
+        XCTAssertTrue(app.buttons["posture-capture-button"].firstMatch.waitForExistence(timeout: 5),
+                      "Retake returns to preparing controls")
+        VisualAudit.capture("P04 Retake returns to capture preparation")
+    }
+
+    func testP04SeededResultAtMaximumAccessibilitySize() throws {
+        openSeededPostureResult(maximumTextSize: true)
+        let scroll = app.scrollViews["posture-result-screen"].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        let targets = ["posture-result-score", "posture-result-metric-forwardHead",
+                       "posture-result-memo-field", "posture-result-save", "posture-result-retake"]
+        for identifier in targets {
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 16),
+                          "MAX result element must be reachable: \(identifier)")
+            let element = app.descendants(matching: .any)[identifier].firstMatch
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+            if identifier == "posture-result-score" {
+                XCTAssertTrue(viewport.contains(element.frame), "Entire MAX score card must fit")
+            } else {
+                XCTAssertTrue(viewport.intersects(element.frame), "MAX element must enter viewport: \(identifier)")
+            }
+            VisualAudit.capture("P04 MAX visible \(identifier)")
+        }
+    }
+
+    private func revealExerciseRow(_ row: XCUIElement, in list: XCUIElement) -> Bool {
+        for _ in 0..<12 {
+            let viewport = list.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+            if row.exists && row.isHittable && viewport.contains(row.frame) { return true }
+            if row.exists && row.frame.midY < viewport.midY {
+                list.swipeDown(velocity: .slow)
+            } else {
+                list.swipeUp(velocity: .slow)
+            }
+        }
+        let viewport = list.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+        return row.exists && row.isHittable && viewport.contains(row.frame)
+    }
+
+    private func openPostureRoute(_ menuIdentifier: String) {
+        navigateToWellness()
+        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.wellnessToolbarAdd))
+        XCTAssertTrue(app.waitAndTap(menuIdentifier))
+    }
+
+    private func openSeededPostureResult(maximumTextSize: Bool = false) {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append("--ui-design-map-posture-result")
+        if maximumTextSize {
+            configuration.additionalArguments.append(contentsOf: [
+                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+            ])
+        }
+        launchApp(with: configuration)
+        openPostureRoute("wellness-menu-posture")
+        XCTAssertTrue(app.scrollViews["posture-result-screen"].firstMatch.waitForExistence(timeout: 10),
+                      "Synthetic complete result should open")
+    }
+
     private func openHistory(maxRevealAttempts: Int = 18) {
         let viewAll = app.buttons["wellness-link-posturehistory"].firstMatch
         reveal(viewAll, maxAttempts: maxRevealAttempts)

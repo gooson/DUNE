@@ -334,3 +334,11 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-06 L07: [실제 선택 화면·출처](../full-redesign-map/review/l07-habit-heatmap-2026-11-06/index.html). 관련 메서드·기기 범위다.
 
 2026-11-06 L08: [실제 선택 화면·출처](../full-redesign-map/review/l08-habit-weekly-report-2026-11-06/index.html). 관련 메서드·기기 범위다.
+
+- [P01 자세 촬영](themes/dune-posture-capture-p01.html): 원래 기능·기호를 보존하는 정적 표현. 실제 캡처는 별도.
+
+- [P02 실시간 자세](themes/dune-posture-realtime-p02.html): 원래 기능·기호를 보존하는 정적 표현. 실제 캡처는 별도.
+
+- [P03 운동 선택](themes/dune-posture-exercise-picker-p03.html): 원래 기능·기호를 보존하는 정적 표현. 실제 캡처는 별도.
+
+- [P04 자세 결과](themes/dune-posture-result-p04.html): 원래 기능·기호를 보존하는 정적 표현. 실제 캡처는 별도.
