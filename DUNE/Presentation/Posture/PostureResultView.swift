@@ -14,6 +14,17 @@ struct PostureResultView: View {
     @ScaledMetric(relativeTo: .caption) private var scoreRingSize: CGFloat = 120
     @ScaledMetric(relativeTo: .title3) private var metricSymbolSize: CGFloat = 20
 
+    private static let lightStatusColors: [PostureStatus: Color] = [
+        .normal: .green.mix(with: .black, by: 0.45),
+        .caution: .yellow.mix(with: .black, by: 0.45),
+        .warning: .red.mix(with: .black, by: 0.45),
+        .unmeasurable: .gray.mix(with: .black, by: 0.45)
+    ]
+
+    private func statusColor(_ status: PostureStatus) -> Color {
+        colorScheme == .light ? Self.lightStatusColors[status, default: status.color] : status.color
+    }
+
     private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     @State private var animatedScore: Double = 0
@@ -262,7 +273,7 @@ struct PostureResultView: View {
         return layout {
             Image(systemName: metric.type.iconName)
                 .font(.title3)
-                .foregroundStyle(metric.status.color)
+                .foregroundStyle(statusColor(metric.status))
                 .frame(width: min(metricSymbolSize, 40) + DS.Spacing.md)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -282,7 +293,7 @@ struct PostureResultView: View {
 
             Label(metric.status.displayName, systemImage: metric.status.iconName)
                 .font(.caption.weight(.medium))
-                .foregroundStyle(metric.status.color)
+                .foregroundStyle(statusColor(metric.status))
         }
         .padding(.vertical, DS.Spacing.xs)
         .accessibilityIdentifier("posture-result-metric-\(metric.type.rawValue)")
