@@ -2,7 +2,7 @@
 tags: [detail-redesign, habits, targeted-ui, l08]
 date: 2026-11-06
 category: plan
-status: done
+status: implemented
 ---
 
 # L08 · 주간 습관 리포트
