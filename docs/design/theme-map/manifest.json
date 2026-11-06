@@ -1021,6 +1021,50 @@
         "status": "targeted-phone-ipad-verified-duo-captures-pending",
         "actual": "../full-redesign-map/review/posture-symmetry-p07-2026-11-06/index.html"
       }
+    },
+    {
+      "id": "settings-s01",
+      "name": "S01 · Settings",
+      "title": "Native Form → 운동 기본값 → Live Activity → 운동별 설정 → 알림·브리핑 → 테마 → 데이터·개인정보 → 정보. 안전 영역을 중복 가산하지 않고 DS 간격과 system-primary 섹션 제목을 사용한다. 기존 모든 컨트롤·값·아이콘·동작은 유지한다.",
+      "file": "dune-settings-s01.html",
+      "detail": "구현 전 정적 시안. native compile/capture 전이며 실제 PNG가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/settings-s01.html",
+        "status": "proposed-native-validation-pending"
+      }
+    },
+    {
+      "id": "exercise-defaults-s02",
+      "name": "S02 · Settings",
+      "title": "Native 검색 List → 원래 Configured → All Exercises. 기존 운동 activity 심볼과 이름·실제 기본값·원래 별/핀을 보존한다. 원래 정렬·검색·편집 목적지와 저장 데이터는 유지한다.",
+      "file": "dune-exercise-defaults-s02.html",
+      "detail": "구현 전 정적 시안. native compile/capture 전이며 실제 PNG가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/exercise-defaults-s02.html",
+        "status": "proposed-native-validation-pending"
+      }
+    },
+    {
+      "id": "exercise-default-edit-s03",
+      "name": "S03 · Settings",
+      "title": "Native Form → 기존 무게·횟수 필드 → 기존 토글 → Save와 Clear 확인. 일반 글씨는 원래 우측 필드, 접근성 글씨는 라벨 위·필드 아래로 전환한다. kg/reps·입력 바인딩·검증·저장·Watch 동기화·취소를 유지한다.",
+      "file": "dune-exercise-default-edit-s03.html",
+      "detail": "구현 전 정적 시안. native compile/capture 전이며 실제 PNG가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/exercise-default-edit-s03.html",
+        "status": "proposed-native-validation-pending"
+      }
+    },
+    {
+      "id": "preferred-exercises-s04",
+      "name": "S04 · Settings",
+      "title": "Native 검색 List → Preferred → All Exercises 또는 Results. 기존 equipment SVG와 이름·근육 부제·원래 Toggle을 사용한다. 본문은 세로로 감싸고 Switch 동작·검색·정렬·실제 저장·Watch 동기화는 유지한다.",
+      "file": "dune-preferred-exercises-s04.html",
+      "detail": "구현 전 정적 시안. native compile/capture 전이며 실제 PNG가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/preferred-exercises-s04.html",
+        "status": "proposed-native-validation-pending"
+      }
     }
   ]
 }
