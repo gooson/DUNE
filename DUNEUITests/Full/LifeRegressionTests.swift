@@ -242,6 +242,22 @@ final class LifeRegressionTests: SeededUITestBaseCase {
 
         let historyScreen = app.descendants(matching: .any)[AXID.lifeHabitHistoryScreen].firstMatch
         XCTAssertTrue(historyScreen.waitForExistence(timeout: 8), "History should open from the seeded habit actions menu")
+        XCTAssertEqual(historyScreen.label, "Morning Stretch")
+        let recordCount = app.staticTexts["life-habit-history-count"].firstMatch
+        XCTAssertTrue(recordCount.waitForExistence(timeout: 5))
+        XCTAssertFalse(recordCount.label.isEmpty)
+        let historyScroll = app.scrollViews["life-habit-history-scroll"].firstMatch
+        XCTAssertTrue(historyScroll.waitForExistence(timeout: 5) && historyScroll.isHittable)
+        if app.windows.firstMatch.horizontalSizeClass == .regular {
+            let countFrame = recordCount.frame
+            let viewport = historyScroll.frame.intersection(app.windows.firstMatch.frame)
+            XCTAssertGreaterThan(countFrame.width, 0)
+            XCTAssertGreaterThan(countFrame.height, 0)
+            XCTAssertTrue(recordCount.isHittable && viewport.contains(countFrame))
+        } else {
+            XCTAssertTrue(app.revealTextBody("life-habit-history-count", in: historyScroll))
+        }
+        VisualAudit.capture("L05 seeded history hero and count")
 
         let habitSummary = app.descendants(matching: .any)[AXID.lifeHabitRow("Morning Stretch")].firstMatch
         if app.windows.firstMatch.horizontalSizeClass == .regular {
@@ -251,10 +267,20 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         let firstRow = app.descendants(matching: .any)
             .matching(NSPredicate(format: "identifier BEGINSWITH %@", "life-habit-history-row-"))
             .firstMatch
+        for _ in 0..<12 where !firstRow.exists { historyScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5), "Seeded habit history should expose at least one action row")
         let rowText = ([firstRow.label] + firstRow.staticTexts.allElementsBoundByIndex.map(\.label))
             .joined(separator: " ")
         XCTAssertTrue(rowText.contains("Completed"), "Seeded Morning Stretch history should show its completion")
+        XCTAssertTrue(app.revealFullyVisible(firstRow.identifier, in: historyScroll, maxMoves: 12))
+        VisualAudit.capture("L05 seeded history action and date")
+        let pastRecord = app.buttons["life-habit-history-past-record"].firstMatch
+        XCTAssertTrue(pastRecord.exists, "History retains its optional Past Record route")
+        let historyClose = app.buttons[AXID.lifeHabitHistoryClose].firstMatch
+        for _ in 0..<10 where !(historyClose.exists && historyClose.isHittable) {
+            historyScroll.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(historyClose.waitForExistence(timeout: 5) && historyClose.isHittable)
 
         XCTAssertTrue(
             app.dismissModalIfPresent(cancelIdentifiers: [AXID.lifeHabitHistoryClose]),
@@ -263,6 +289,17 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: historyScreen)
         waitForExpectations(timeout: 5)
         XCTAssertTrue(habitSummary.waitForExistence(timeout: 5), "Closing history should preserve the original habit summary")
+        XCTAssertTrue(app.openLifeHabitActions(named: "Morning Stretch", maxSwipes: 8))
+        app.buttons[AXID.lifeHabitActionHistory].firstMatch.auditTap()
+        let directPastRecord = app.buttons["life-habit-history-past-record"].firstMatch
+        XCTAssertTrue(directPastRecord.waitForExistence(timeout: 5))
+        directPastRecord.auditTap()
+        XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5),
+                      "History's Past Record action should open the existing form")
+        XCTAssertTrue(app.staticTexts["habit-past-record-hero-date"].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("L05 Past Record route from history")
+        app.buttons["habit-past-record-cancel"].firstMatch.auditTap()
+        XCTAssertTrue(app.navigationBars["Past Record"].waitForNonExistence(timeout: 5))
     }
 
     func testHabitHistoryShowsEmptyStateForHabitWithoutLogs() throws {
@@ -273,6 +310,13 @@ final class LifeRegressionTests: SeededUITestBaseCase {
 
         let emptyState = app.descendants(matching: .any)[AXID.lifeHabitHistoryEmpty].firstMatch
         XCTAssertTrue(emptyState.waitForExistence(timeout: 5), "History sheet should show an empty state when no cycle actions exist")
+        let historyScroll = app.scrollViews["life-habit-history-scroll"].firstMatch
+        XCTAssertTrue(historyScroll.waitForExistence(timeout: 5) && historyScroll.isHittable)
+        XCTAssertTrue(app.revealTextBody(AXID.lifeHabitHistoryEmpty, in: historyScroll))
+        VisualAudit.capture("L05 empty history")
+        let close = app.buttons[AXID.lifeHabitHistoryClose].firstMatch
+        for _ in 0..<10 where !(close.exists && close.isHittable) { historyScroll.swipeDown(velocity: .slow) }
+        XCTAssertTrue(close.waitForExistence(timeout: 5) && close.isHittable)
 
         XCTAssertTrue(
             app.dismissModalIfPresent(cancelIdentifiers: [AXID.lifeHabitHistoryClose]),
