@@ -359,7 +359,37 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("Life root heatmap before opening detail")
         app.descendants(matching: .any)["habit-heatmap"].firstMatch.auditTap()
         XCTAssertTrue(app.navigationBars["Activity Detail"].waitForExistence(timeout: 5), "Heatmap detail should open")
-        captureLifeAuditScroll("Life heatmap detail")
+        let detailScroll = app.scrollViews["habit-heatmap-detail-scroll"].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 5) && detailScroll.isHittable)
+        XCTAssertTrue(app.revealTextBody("habit-heatmap-period", in: detailScroll))
+        XCTAssertEqual(app.staticTexts["habit-heatmap-period"].firstMatch.label, "Last 90 Days")
+        for identifier in ["habit-heatmap-total", "habit-heatmap-average", "habit-heatmap-streak", "habit-heatmap-active-days"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: detailScroll, maxMoves: 16),
+                          "Actual heatmap value must be reachable: \(identifier)")
+            let value = app.staticTexts[identifier].firstMatch
+            XCTAssertFalse(value.label.isEmpty, "Actual heatmap value missing: \(identifier)")
+            VisualAudit.capture("L07 heatmap value \(identifier)")
+        }
+        for identifier in ["habit-heatmap-map-title", "habit-heatmap-weekday-title"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: detailScroll, maxMoves: 16))
+            VisualAudit.capture("L07 heatmap section \(identifier)")
+        }
+        for day in 0..<7 {
+            let identifier = "habit-heatmap-detail-grid-day-\(day)"
+            XCTAssertTrue(app.revealTextBody(identifier, in: detailScroll, maxMoves: 16))
+            XCTAssertFalse(app.staticTexts[identifier].firstMatch.label.isEmpty)
+        }
+        for identifier in ["habit-heatmap-detail-legend-less", "habit-heatmap-detail-legend-more"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: detailScroll, maxMoves: 16))
+        }
+        VisualAudit.capture("L07 heatmap grid and legend")
+        for day in 0..<7 {
+            let identifier = "habit-heatmap-weekday-count-\(day)"
+            XCTAssertTrue(app.revealTextBody(identifier, in: detailScroll, maxMoves: 16))
+            XCTAssertNotNil(Int(app.staticTexts[identifier].firstMatch.label))
+        }
+        VisualAudit.capture("L07 heatmap weekday values")
+        XCTAssertTrue(app.staticTexts["By Weekday"].firstMatch.exists)
     }
 
     func testVisualAuditHabitManagement() throws {

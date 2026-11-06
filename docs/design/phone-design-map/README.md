@@ -331,3 +331,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-06 L05: [실제 선택 화면·출처](../full-redesign-map/review/l05-habit-history-2026-11-06/index.html). 관련 메서드·기기 범위다.
 
 2026-11-06 L06: [실제 선택 화면·출처](../full-redesign-map/review/l06-habit-history-detail-2026-11-06/index.html). 관련 메서드·기기 범위다.
+
+2026-11-06 L07: [실제 선택 화면·출처](../full-redesign-map/review/l07-habit-heatmap-2026-11-06/index.html). 관련 메서드·기기 범위다.
