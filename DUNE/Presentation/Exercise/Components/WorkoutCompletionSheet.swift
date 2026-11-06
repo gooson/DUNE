@@ -38,6 +38,7 @@ struct WorkoutCompletionSheet: View {
     @State private var celebrationTrigger = 0
     @State private var effort: Int?
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         NavigationStack {
@@ -65,6 +66,7 @@ struct WorkoutCompletionSheet: View {
                             .foregroundStyle(DS.Color.textSecondary)
                     }
                     .padding(.top, DS.Spacing.lg)
+                    .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier("workout-completion-sheet")
 
                     // PR achievements section
@@ -125,6 +127,8 @@ struct WorkoutCompletionSheet: View {
                     .padding(.horizontal, DS.Spacing.lg)
                     .padding(.bottom, DS.Spacing.lg)
                 }
+                .frame(maxWidth: 640)
+                .frame(maxWidth: .infinity)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -174,7 +178,10 @@ struct WorkoutCompletionSheet: View {
     }
 
     private func prRow(_ pr: WorkoutPRAchievement) -> some View {
-        HStack(spacing: DS.Spacing.sm) {
+        let rowLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return rowLayout {
             Image(systemName: pr.kind.iconName)
                 .font(.caption)
                 .foregroundStyle(pr.kind.tintColor)
@@ -189,9 +196,9 @@ struct WorkoutCompletionSheet: View {
                     .foregroundStyle(.tertiary)
             }
 
-            Spacer(minLength: 0)
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
 
-            VStack(alignment: .trailing, spacing: 2) {
+            VStack(alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .trailing, spacing: 2) {
                 Text(pr.value.formattedWithSeparator() + " kg")
                     .font(.subheadline.weight(.bold))
                     .foregroundStyle(theme.heroTextGradient)
