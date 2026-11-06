@@ -2,7 +2,7 @@
 tags: [detail-redesign, habits, targeted-ui, l06]
 date: 2026-11-06
 category: plan
-status: done
+status: implemented
 ---
 
 # L06 · 관리에서 연 습관 기록
@@ -12,7 +12,7 @@ status: done
 | 파일 | 변경 |
 |---|---|
 | `DUNE/Presentation/Life/HabitManagementView.swift` | 원래 상태·계산·아이콘에서 시각 위계를 보강한다. |
-| `DUNEUITests/Full/LifeRegressionTests.swift` | `testVisualAuditHabitManagement`와 해당 closed MAX 검사로 실제 읽기·기록·닫기/뒤로를 확인한다. |
+| `DUNEUITests/Full/LifeRegressionTests.swift` | `testVisualAuditHabitManagement`와 공유 History MAX 검사로 관리에서 연 이력의 이름·동작·값·날짜, 시트 Close 및 관리 화면 복귀를 확인한다. |
 | `docs/design/layout-map/life-habit-l06.html` | 앱 변경 전에 배치를 보존한다. |
 | `docs/design/theme-map/themes/dune-life-habit-l06.html` | 테마 표현 시안이며 실제 캡처와 구분한다. |
 
@@ -24,7 +24,7 @@ status: done
 
 ## Testing Strategy and Risks
 
-네 기본 프로필과 접힌 Duo MAX에서 기존 닫기/뒤로·스크롤·리프 텍스트·아이콘·실제 수치를 확인한다. L05 빈 기록은 iPhone의 기존 empty selector를 한 번 추가한다. 헤더가 medium sheet의 모든 공간을 차지하지 않도록 한 스크롤 영역에 두며, MAX의 행·닫기·범례 접근을 직접 확인한다. 기존 정렬·필터·날짜·합계·비율·저장·권한을 변경하지 않는다. 아직 build·SDK·native 결과는 없다.
+이 화면은 관리 화면에서 여는 medium/large 기록 시트다. iPhone·iPad·Duo 접힘·펼침 기본 글씨와 접힌 Duo MAX에서 원래 아이콘·이름·History, 실제 로그 동작·값·날짜와 Close가 스크롤로 읽히는지 확인한다. cachedLogSnapshots·sortedEntries와 관리의 기존 Restore·Back 동작은 유지했다. L05의 빈 상태 검사를 이 화면의 검사로 합산하지 않는다. 고정 소스 `83c350b0`의 화면별 5개 메서드·기기 기여와 PNG·AX 5쌍이 통과했고 PR #936으로 머지했다. Open L06은 원래 실패 기록을 보존하고 동일 소스·300초 한도의 단독 검사에서 127.365초에 통과했으며 앱 수정으로 해결했다고 주장하지 않는다.
 
 ## 실제 선택 화면 검증
 

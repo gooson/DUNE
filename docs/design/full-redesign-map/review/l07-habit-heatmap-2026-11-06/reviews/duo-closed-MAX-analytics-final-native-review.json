@@ -1,0 +1,612 @@
+{
+  "schema": 1,
+  "review": "duo-closed-MAX-analytics-final-native-review",
+  "source": "83c350b09599505c4b6e90722f2218345c639431",
+  "profile": "duo-closed-MAX",
+  "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+  "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+  "SDK": {
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "status": "Passed",
+    "exit": 0,
+    "duration_seconds": 388.58,
+    "sourceUnchanged": true,
+    "case_execution_time_allowance_seconds": 600
+  },
+  "pose_verified": {
+    "angle_degrees": 0,
+    "active_display": "LCD",
+    "orientation": "rot0",
+    "actual_png_dimensions": [
+      1398,
+      2034
+    ],
+    "readback_before_after": true,
+    "inactive_LCD1_backlight_before": "activeOn",
+    "inactive_LCD1_backlight_after": "off",
+    "inactive_LCD1_active_before_after": false
+  },
+  "pose_qualification": {
+    "scope": "exact final 83c MAX archive only; active LCD/UID/angle/orientation/dimensions unchanged; inactive LCD-1 active=false before and after despite before backlight activeOn",
+    "preparation_path": ".codex-checks/batch04/quality/final-max-pose-indexer-preparation.json",
+    "preparation_sha256": "3ee3fad776ec11de8bc87d4c6a76d38a47360fc7efaedd63e44c14a324a42211",
+    "peer_path": ".codex-checks/batch04/quality/private-final-83c-evidence-helper-review.json",
+    "peer_sha256": "d174a77e5fb939bd8250ad58821b7ef3a9ec5e0ce928b4137f64b5c0debd6cd3",
+    "peer_findings": {
+      "P1": [],
+      "P2": [],
+      "P3": []
+    }
+  },
+  "full_source_sha256": {
+    "DUNE/Presentation/Life/LifeView.swift": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+    "DUNE/Presentation/Life/HabitManagementView.swift": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+    "DUNE/Presentation/Life/HabitHeatmapDetailView.swift": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+    "DUNE/Presentation/Life/WeeklyHabitReportView.swift": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+    "DUNEUITests/Full/LifeRegressionTests.swift": "f4030919df7cda3c92596d0cbfbc9ccfa8ebe4b306fbdfd3733fced8b13945f7",
+    "DUNEUITests/Visual/LifeFlowUITests.swift": "8029e519a4911309ce5d15d43277207feac5ef3bbd63191fdb1adf664dfc9c34",
+    "DUNEUITests/Full/DuoRemainingRouteTests.swift": "15802d4906836e92cb278c832c34a49dcd8d7d5420a518a2c648c18b4166e5df",
+    "DUNEUITests/Helpers/UITestHelpers.swift": "e4c0cf9dc77295486fdf688bcf8c55de1b0cf28cbffa77efb5263650083e9d7b",
+    "DUNE/App/TestDataSeeder.swift": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871",
+    "Shared/Resources/Localizable.xcstrings": "83bd89e2b1252596fac87c7e58b8a6ad173dab29cbdbf81fcb793144d0b5a462"
+  },
+  "validated_pair_index": {
+    "path": "duo-closed-MAX-analytics-final-pairs.json",
+    "sha256": "22a393c0c25d4602ff91245fe0280a84f1ade22a386e4f8e7611ead65a3d338f",
+    "pairs": 16
+  },
+  "passed_test_methods": [
+    "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()"
+  ],
+  "selected_pairs": [
+    {
+      "screen": "L07",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 MAX habit-heatmap-period [DUNEUITests/LifeRegressionTests.swift:616] DEADLINE=1793933518.779526",
+      "host_sequence": 11,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933492.7074347,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/011-1398x2034.png",
+      "png_sha256": "ee852cdbdc96209267da05e96104ece21ffa90e646a42cdf499ef4bb64713789",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/011-hierarchy.txt",
+      "ax_sha256": "5de14a0af1398a556d966651c647c7835597ee2a8066b9605e834a835c2f039b",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 MAX habit-heatmap-total [DUNEUITests/LifeRegressionTests.swift:616] DEADLINE=1793933527.7073631",
+      "host_sequence": 12,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933500.2710173,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/012-1398x2034.png",
+      "png_sha256": "ee852cdbdc96209267da05e96104ece21ffa90e646a42cdf499ef4bb64713789",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/012-hierarchy.txt",
+      "ax_sha256": "d5b666763cf7892e2b10cd46395a046473e23d299953bcbf6bf4a4dcc8ae0af2",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 MAX habit-heatmap-total-label [DUNEUITests/LifeRegressionTests.swift:616] DEADLINE=1793933534.930933",
+      "host_sequence": 13,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933507.365608,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/013-1398x2034.png",
+      "png_sha256": "ee852cdbdc96209267da05e96104ece21ffa90e646a42cdf499ef4bb64713789",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/013-hierarchy.txt",
+      "ax_sha256": "bab19e83836c54d052b825c943db1efc6cdb2127f0e9bf3158ecf7a964dbe898",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 MAX habit-heatmap-average [DUNEUITests/LifeRegressionTests.swift:616] DEADLINE=1793933541.94683",
+      "host_sequence": 14,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933515.2374096,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/014-1398x2034.png",
+      "png_sha256": "ee852cdbdc96209267da05e96104ece21ffa90e646a42cdf499ef4bb64713789",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/014-hierarchy.txt",
+      "ax_sha256": "b9652c893490b49e47f46203af589fe54b6698085dbd5afd2c4e0dbd9a8c41f5",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 MAX habit-heatmap-streak [DUNEUITests/LifeRegressionTests.swift:616] DEADLINE=1793933552.667615",
+      "host_sequence": 15,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933524.8391511,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/015-1398x2034.png",
+      "png_sha256": "f8c4d249086bd4d68857f0637fe4147c7a0635c5227ecd97eeec3d5375d86326",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/015-hierarchy.txt",
+      "ax_sha256": "a81a2e8e4b0a363f4d6a3531aa0ea581f8e2d6c3e214d54e0896ea2cce9deca4",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 MAX habit-heatmap-active-days [DUNEUITests/LifeRegressionTests.swift:616] DEADLINE=1793933572.173841",
+      "host_sequence": 18,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933544.7535384,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/018-1398x2034.png",
+      "png_sha256": "f9fcbf5d6311d50db264d53deb3594f628cf1eab29a00af1a7dd02e29175a428",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/018-hierarchy.txt",
+      "ax_sha256": "1933bb29e01607a926ecf608c408b3a35b826bd9aab7cf901c4359e2715268d8",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 MAX habit-heatmap-map-title [DUNEUITests/LifeRegressionTests.swift:616] DEADLINE=1793933579.299151",
+      "host_sequence": 19,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933551.4827228,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/019-1398x2034.png",
+      "png_sha256": "f9fcbf5d6311d50db264d53deb3594f628cf1eab29a00af1a7dd02e29175a428",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/019-hierarchy.txt",
+      "ax_sha256": "b67556b0b1a15b0471fd7a285c2b7badbbc8e83c5361a0a5d56594928b9164fa",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 MAX habit-heatmap-weekday-title [DUNEUITests/LifeRegressionTests.swift:616] DEADLINE=1793933589.8090138",
+      "host_sequence": 20,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933562.9267387,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/020-1398x2034.png",
+      "png_sha256": "3aeeedf6ef9623682661a52bfd84b4ab385eed79ac73a207b3eae5cfb2bb624c",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/020-hierarchy.txt",
+      "ax_sha256": "80fcbe79b9607e5cf511766bb6bd496ee16b70f8a1e59fde30a8cd547fa6918a",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 MAX grid and legend [DUNEUITests/LifeRegressionTests.swift:626] DEADLINE=1793933628.606755",
+      "host_sequence": 21,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933603.19097,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/021-1398x2034.png",
+      "png_sha256": "b85fe53c0821b5b6954bbfa2c63b74aedced564706e5014023390bfdbdd64170",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/021-hierarchy.txt",
+      "ax_sha256": "4d47e1770a7dd6b398245f41a6afcf3aab6479316d1d221636c4051a304175f4",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 MAX weekday values [DUNEUITests/LifeRegressionTests.swift:632] DEADLINE=1793933663.711896",
+      "host_sequence": 22,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933642.7112486,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/022-1398x2034.png",
+      "png_sha256": "86256af274c7aab26b7a5f5d54dc425b715fba9ffc1abe96bf69c33c0426bb11",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/022-hierarchy.txt",
+      "ax_sha256": "a063f53a92319faf32ce57888c6f1e968646423fe573ae924626ebdc0198c23d",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L08",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 MAX life-weekly-report-period [DUNEUITests/LifeRegressionTests.swift:590] DEADLINE=1793933391.370796",
+      "host_sequence": 3,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933364.0068042,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/003-1398x2034.png",
+      "png_sha256": "b0f9ce014256f970a59c44d9c24c7af12df9eeacd4b0c3e2139d137ec64deeb9",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/003-hierarchy.txt",
+      "ax_sha256": "85bbb31bcab2d50a1117bbeb43259a49130a2e008ce8f54888b3f410089f3233",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L08",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 MAX life-weekly-report-rate [DUNEUITests/LifeRegressionTests.swift:590] DEADLINE=1793933398.648566",
+      "host_sequence": 4,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933374.0496907,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/004-1398x2034.png",
+      "png_sha256": "b0f9ce014256f970a59c44d9c24c7af12df9eeacd4b0c3e2139d137ec64deeb9",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/004-hierarchy.txt",
+      "ax_sha256": "96ad3e074706dc42f4c5c79c322f8f64b770edf0b56f5cccebd7663b0e96b085",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L08",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 MAX life-weekly-report-total [DUNEUITests/LifeRegressionTests.swift:590] DEADLINE=1793933408.56886",
+      "host_sequence": 5,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933381.4824667,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/005-1398x2034.png",
+      "png_sha256": "b0f9ce014256f970a59c44d9c24c7af12df9eeacd4b0c3e2139d137ec64deeb9",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/005-hierarchy.txt",
+      "ax_sha256": "74bff37ccac187b4947fca645db7db4a3ecfe889eebc1acfd218542c16291e19",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L08",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 MAX life-weekly-report-best [DUNEUITests/LifeRegressionTests.swift:590] DEADLINE=1793933419.8544168",
+      "host_sequence": 6,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933393.04701,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/006-1398x2034.png",
+      "png_sha256": "57f9a206697137841a1e6891c1839182b0f7fb713308192b5aea59224bcef3ac",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/006-hierarchy.txt",
+      "ax_sha256": "d148f42b574615810fc72c9857a869adccc92c4b0feff4a6acd537b3198985d7",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L08",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 MAX life-weekly-report-improvement [DUNEUITests/LifeRegressionTests.swift:590] DEADLINE=1793933431.61616",
+      "host_sequence": 7,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933404.8505948,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/007-1398x2034.png",
+      "png_sha256": "d077ec696082a8fee0667fa9bbf36a5817670146a162db905c63f887a1ae46b1",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/007-hierarchy.txt",
+      "ax_sha256": "b3a930e6e14a1ef279e191f4396e701630b402efc4b23a16245439224d1f3051",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L08",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 MAX comparison values and trend [DUNEUITests/LifeRegressionTests.swift:600] DEADLINE=1793933450.835182",
+      "host_sequence": 8,
+      "source": "83c350b09599505c4b6e90722f2218345c639431",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793933426.813711,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/008-1398x2034.png",
+      "png_sha256": "0c5a4cd6bd648884df1c02e30c92fd2e6f916e705c73603b63020f6322485661",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/008-hierarchy.txt",
+      "ax_sha256": "5a33cefc7fa3610a1d2ec75b025157bee6573a011d75a6cf0b14340631a14c65",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    }
+  ],
+  "selected_pairs_count": 16,
+  "supplemental_nonindexed_pairs": [
+    {
+      "host_sequence": 16,
+      "purpose": "active-days top/bottom long stat and Activity Map body visibility; supplementary only, no additional indexed pair",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/016-1398x2034.png",
+      "png_sha256": "f8c4d249086bd4d68857f0637fe4147c7a0635c5227ecd97eeec3d5375d86326",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/016-hierarchy.txt",
+      "ax_sha256": "99893ce326ae6077f36784293da2051e7a38816da9a06dd22b5080d8465fe4fd",
+      "png_dimensions": [
+        1398,
+        2034
+      ]
+    },
+    {
+      "host_sequence": 17,
+      "purpose": "active-days top/bottom long stat and Activity Map body visibility; supplementary only, no additional indexed pair",
+      "png": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/017-1398x2034.png",
+      "png_sha256": "f9fcbf5d6311d50db264d53deb3594f628cf1eab29a00af1a7dd02e29175a428",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed/host/017-hierarchy.txt",
+      "ax_sha256": "b7dc6ea924be006d00b2867b755267935b61359dd65479dec916616148801e38",
+      "png_dimensions": [
+        1398,
+        2034
+      ]
+    }
+  ],
+  "visual_inspection": "Viewed all 16 selected actual active LCD PNGs and read paired AX trees; viewed and read supplemental 016/017 for long stat/body. Rehashed PNG/AX, verified IHDR 1398x2034 and frozen 10-source SHA-256.",
+  "observations": "L08 MAX shows This Week 4%, 1 of 21 completed, current 4% versus previous 0% with up trend, Best Habits and Needs Improvement sections across scroll positions. L07 MAX shows Last 90 Days, total 1, Daily Average 0.0, Longest Streak 1, Active Days 1, Activity Map and its long description, seven grid-day labels, Less–More legend, and seven weekday counts [0,0,0,0,1,0,0]. Back remains reachable; text wraps and scrolls at accessibility XXXL without blocking overlap in selected frames.",
+  "functional_assertions": "The independently passed combined MAX method covers L08 comparison/rankings and Back to Life, L07 period/stat/grid/legend/weekday values and Back/root. Its SDK assertions are distinct from selected visual frames.",
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "passed_only_visual_review": true,
+  "native_aggregate_pass": true,
+  "prior_failed_MAX_source_a967": {
+    "source": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+    "archive": ".codex-checks/batch04/evidence/duo-closed-a967f801-analytics-route-retry1-budget-failed",
+    "status": "Failed",
+    "accepted_pairs": 0,
+    "preserved": true
+  },
+  "not_claimed": [
+    "full App or PR pass",
+    "old failed MAX aggregate pass",
+    "Dark Mode/VoiceOver audit",
+    "actual-map publication"
+  ]
+}

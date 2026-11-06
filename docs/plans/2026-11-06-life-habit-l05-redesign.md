@@ -2,7 +2,7 @@
 tags: [detail-redesign, habits, targeted-ui, l05]
 date: 2026-11-06
 category: plan
-status: done
+status: implemented
 ---
 
 # L05 · 습관 이력
@@ -12,7 +12,7 @@ status: done
 | 파일 | 변경 |
 |---|---|
 | `DUNE/Presentation/Life/LifeView.swift` | 원래 상태·계산·아이콘에서 시각 위계를 보강한다. |
-| `DUNEUITests/Full/LifeRegressionTests.swift` | `testHabitHistoryShowsSeededEntriesAndDismisses`와 해당 closed MAX 검사로 실제 읽기·기록·닫기/뒤로를 확인한다. |
+| `DUNEUITests/Full/LifeRegressionTests.swift` | `testHabitHistoryShowsSeededEntriesAndDismisses`·iPhone 빈 기록 검사와 L06에서 도입한 공유 History MAX 검사로 기록 수·행·날짜·Past Record·시트 Close를 확인한다. |
 | `docs/design/layout-map/life-habit-l05.html` | 앱 변경 전에 배치를 보존한다. |
 | `docs/design/theme-map/themes/dune-life-habit-l05.html` | 테마 표현 시안이며 실제 캡처와 구분한다. |
 
@@ -24,7 +24,7 @@ status: done
 
 ## Testing Strategy and Risks
 
-네 기본 프로필과 접힌 Duo MAX에서 기존 닫기/뒤로·스크롤·리프 텍스트·아이콘·실제 수치를 확인한다. L05 빈 기록은 iPhone의 기존 empty selector를 한 번 추가한다. 헤더가 medium sheet의 모든 공간을 차지하지 않도록 한 스크롤 영역에 두며, MAX의 행·닫기·범례 접근을 직접 확인한다. 기존 정렬·필터·날짜·합계·비율·저장·권한을 변경하지 않는다. 아직 build·SDK·native 결과는 없다.
+이 화면은 medium/large detents를 유지하는 기록 시트다. iPhone·iPad·Duo 접힘·펼침 기본 글씨와 접힌 Duo MAX에서 실제 습관 아이콘·이름·기록 수, 행의 동작·값·날짜, 조건부 Past Record와 Close를 확인한다. iPhone의 기존 빈 기록 selector를 한 번 추가했으며 모든 프로필에서 빈 상태를 반복하지 않았다. Hero와 기록·동작은 하나의 스크롤 안에서 읽힌다. 기록 조회·정렬·저장과 내비게이션은 원래 코드로 유지했다. 고정 소스 `83c350b0`의 화면별 6개 메서드·기기 기여와 PNG·AX 14쌍이 통과했고 PR #935로 머지했다.
 
 ## 실제 선택 화면 검증
 

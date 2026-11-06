@@ -4,6 +4,12 @@ struct HabitHeatmapDetailView: View {
     let data: [DailyCompletionCount]
     var weeklyRates: [WeeklyCompletionRate] = []
     var monthlyRates: [MonthlyCompletionRate] = []
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var lifeAccent: Color {
+        colorScheme == .light ? DS.Color.tabLife.mix(with: .black, by: 0.35) : DS.Color.tabLife
+    }
 
     var body: some View {
         ScrollView {
@@ -20,6 +26,7 @@ struct HabitHeatmapDetailView: View {
             }
             .padding(DS.Spacing.md)
         }
+        .accessibilityIdentifier("habit-heatmap-detail-scroll")
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Activity Detail")
         .navigationBarTitleDisplayMode(.inline)
@@ -28,92 +35,89 @@ struct HabitHeatmapDetailView: View {
     // MARK: - Summary
 
     private var summaryCard: some View {
-        VStack(spacing: DS.Spacing.md) {
-            Text("Last 90 Days")
-                .font(.subheadline)
+        HeroCard(tintColor: DS.Color.tabLife) {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                    Image(systemName: "square.grid.3x3.fill")
+                        .accessibilityHidden(true)
+                    Text("Last 90 Days")
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("habit-heatmap-period")
+                }
+                .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
-
-            Text("\(totalCompletions)")
-                .font(.system(size: 48, weight: .bold, design: .rounded))
-                .foregroundStyle(DS.Color.tabLife)
-
-            Text("Total Completions")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(DS.Spacing.xl)
-        .background {
-            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .fill(.ultraThinMaterial)
+                Text("\(totalCompletions)")
+                    .font(DS.Typography.heroScore)
+                    .foregroundStyle(lifeAccent)
+                    .accessibilityIdentifier("habit-heatmap-total")
+                Text("Total Completions")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .accessibilityIdentifier("habit-heatmap-total-label")
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
     // MARK: - Stats Row
 
     private var statsRow: some View {
-        HStack(spacing: DS.Spacing.md) {
-            statCard(
-                title: "Daily Average",
-                value: dailyAverage.formatted(.number.precision(.fractionLength(1))),
-                icon: "chart.line.uptrend.xyaxis"
-            )
-
-            statCard(
-                title: "Longest Streak",
-                value: "\(longestStreak)",
-                icon: "flame.fill"
-            )
-
-            statCard(
-                title: "Active Days",
-                value: "\(activeDays)",
-                icon: "checkmark.circle.fill"
-            )
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return layout {
+            statCard(title: "Daily Average",
+                     value: dailyAverage.formatted(.number.precision(.fractionLength(1))),
+                     icon: "chart.line.uptrend.xyaxis", identifier: "habit-heatmap-average")
+            statCard(title: "Longest Streak", value: "\(longestStreak)",
+                     icon: "flame.fill", identifier: "habit-heatmap-streak")
+            statCard(title: "Active Days", value: "\(activeDays)",
+                     icon: "checkmark.circle.fill", identifier: "habit-heatmap-active-days")
         }
     }
 
-    private func statCard(title: LocalizedStringKey, value: String, icon: String) -> some View {
-        VStack(spacing: DS.Spacing.xs) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundStyle(DS.Color.tabLife)
-
-            Text(value)
-                .font(.title2.bold())
-
-            Text(title)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, DS.Spacing.md)
-        .background {
-            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .fill(.ultraThinMaterial)
+    private func statCard(title: LocalizedStringKey, value: String, icon: String, identifier: String) -> some View {
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                Image(systemName: icon)
+                    .font(.title3)
+                    .foregroundStyle(lifeAccent)
+                    .frame(minWidth: 32, minHeight: 32)
+                    .accessibilityHidden(true)
+                Text(value)
+                    .font(.title2.bold())
+                    .accessibilityIdentifier(identifier)
+                Text(title)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
     // MARK: - Heatmap (expanded)
 
     private var heatmapCard: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            Text("Activity Map")
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                    Image(systemName: "square.grid.3x3.fill")
+                        .accessibilityHidden(true)
+                    Text("Activity Map")
+                        .accessibilityIdentifier("habit-heatmap-map-title")
+                }
                 .font(.headline)
 
-            Text("Daily habit completions over the last 90 days")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                Text("Daily habit completions over the last 90 days")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
-            HabitHeatmapGridView(data: data)
+                HabitHeatmapGridView(data: data, axPrefix: "habit-heatmap-detail")
 
-            HabitHeatmapLegend()
-        }
-        .padding(DS.Spacing.md)
-        .background {
-            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .fill(.ultraThinMaterial)
+                HabitHeatmapLegend(axPrefix: "habit-heatmap-detail")
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -124,8 +128,13 @@ struct HabitHeatmapDetailView: View {
         let maxTotal = stats.map(\.count).max() ?? 1
 
         return VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            Text("By Weekday")
-                .font(.headline)
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                Image(systemName: "calendar")
+                    .accessibilityHidden(true)
+                Text("By Weekday")
+                    .accessibilityIdentifier("habit-heatmap-weekday-title")
+            }
+            .font(.headline)
 
             ForEach(stats, id: \.weekday) { stat in
                 HStack {
@@ -149,6 +158,7 @@ struct HabitHeatmapDetailView: View {
                         .font(.caption.monospacedDigit())
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: true, vertical: false)
+                        .accessibilityIdentifier("habit-heatmap-weekday-count-\(stat.weekday)")
                 }
             }
         }
@@ -227,6 +237,7 @@ struct HabitHeatmapDetailView: View {
 
 struct HabitHeatmapGridView: View {
     let data: [DailyCompletionCount]
+    var axPrefix: String? = nil
 
     private let cellSpacing: CGFloat = 3
     private let rows = 7
@@ -244,10 +255,15 @@ struct HabitHeatmapGridView: View {
     var body: some View {
         HabitHeatmapLayout(columnCount: columns.count, spacing: cellSpacing) {
             ForEach(0..<rows, id: \.self) { row in
-                Text(Self.dayLabels[row])
+                let label = Text(Self.dayLabels[row])
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                     .fixedSize()
+                if let axPrefix {
+                    label.accessibilityIdentifier("\(axPrefix)-grid-day-\(row)")
+                } else {
+                    label
+                }
             }
             ForEach(paddedData) { item in
                 RoundedRectangle(cornerRadius: 2)
@@ -312,13 +328,19 @@ struct HabitHeatmapGridView: View {
 // MARK: - Shared Legend
 
 struct HabitHeatmapLegend: View {
+    var axPrefix: String? = nil
     private static let levels: [Double] = [0.0, 0.25, 0.5, 0.75, 1.0]
 
     var body: some View {
         HStack(spacing: DS.Spacing.xs) {
-            Text("Less")
+            let less = Text("Less")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+            if let axPrefix {
+                less.accessibilityIdentifier("\(axPrefix)-legend-less")
+            } else {
+                less
+            }
 
             ForEach(Self.levels.indices, id: \.self) { index in
                 RoundedRectangle(cornerRadius: 2)
@@ -326,9 +348,14 @@ struct HabitHeatmapLegend: View {
                     .frame(width: 12, height: 12)
             }
 
-            Text("More")
+            let more = Text("More")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+            if let axPrefix {
+                more.accessibilityIdentifier("\(axPrefix)-legend-more")
+            } else {
+                more
+            }
         }
     }
 }

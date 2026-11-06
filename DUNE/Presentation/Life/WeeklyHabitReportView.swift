@@ -23,24 +23,28 @@ struct WeeklyHabitReportView: View {
     // MARK: - Overview
 
     private var overviewCard: some View {
-        VStack(spacing: DS.Spacing.md) {
-            Text("This Week")
-                .font(.subheadline)
+        HeroCard(tintColor: DS.Color.tabLife) {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                    Image(systemName: "calendar")
+                        .accessibilityHidden(true)
+                    Text("This Week")
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("life-weekly-report-period")
+                }
+                .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
-
-            Text("\(Int(report.overallCompletionRate * 100))%")
-                .font(.system(size: 48, weight: .bold, design: .rounded))
-                .foregroundStyle(rateColor(report.overallCompletionRate))
-
-            Text("\(report.totalCompletions) of \(report.totalGoals) completed")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(DS.Spacing.xl)
-        .background {
-            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .fill(.ultraThinMaterial)
+                Text("\(Int(report.overallCompletionRate * 100))%")
+                    .font(DS.Typography.heroScore)
+                    .foregroundStyle(rateColor(report.overallCompletionRate))
+                    .accessibilityIdentifier("life-weekly-report-rate")
+                Text("\(report.totalCompletions) of \(report.totalGoals) completed")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("life-weekly-report-total")
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -50,34 +54,34 @@ struct WeeklyHabitReportView: View {
         let layout = dynamicTypeSize.isAccessibilitySize
             ? AnyLayout(VStackLayout(spacing: DS.Spacing.lg))
             : AnyLayout(HStackLayout(spacing: DS.Spacing.lg))
-        return layout {
-            VStack(spacing: DS.Spacing.xs) {
-                Text("This Week")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("\(Int(report.overallCompletionRate * 100))%")
-                    .font(.title2.bold())
-                    .foregroundStyle(rateColor(report.overallCompletionRate))
-            }
+        return StandardCard {
+            layout {
+                VStack(spacing: DS.Spacing.xs) {
+                    Text("This Week")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("\(Int(report.overallCompletionRate * 100))%")
+                        .font(.title2.bold())
+                        .foregroundStyle(rateColor(report.overallCompletionRate))
+                        .accessibilityIdentifier("life-weekly-report-comparison-current")
+                }
 
-            Image(systemName: trendIcon)
-                .font(.title)
-                .foregroundStyle(trendColor)
+                Image(systemName: trendIcon)
+                    .font(.title)
+                    .foregroundStyle(trendColor)
+                    .accessibilityIdentifier("life-weekly-report-comparison-trend")
 
-            VStack(spacing: DS.Spacing.xs) {
-                Text("Last Week")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("\(Int(report.previousWeekRate * 100))%")
-                    .font(.title2.bold())
-                    .foregroundStyle(rateColor(report.previousWeekRate))
+                VStack(spacing: DS.Spacing.xs) {
+                    Text("Last Week")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("\(Int(report.previousWeekRate * 100))%")
+                        .font(.title2.bold())
+                        .foregroundStyle(rateColor(report.previousWeekRate))
+                        .accessibilityIdentifier("life-weekly-report-comparison-previous")
+                }
             }
-        }
-        .frame(maxWidth: .infinity)
-        .padding(DS.Spacing.lg)
-        .background {
-            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .fill(.ultraThinMaterial)
+            .frame(maxWidth: .infinity)
         }
     }
 
@@ -85,8 +89,7 @@ struct WeeklyHabitReportView: View {
 
     private var bestHabitsCard: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            reportHeading("Best Habits", systemImage: "star.fill")
-                .accessibilityIdentifier("life-weekly-report-best")
+            reportHeading("Best Habits", systemImage: "star.fill", identifier: "life-weekly-report-best")
                 .font(.headline)
                 .foregroundStyle(DS.Color.positive)
 
@@ -112,8 +115,7 @@ struct WeeklyHabitReportView: View {
 
     private var worstHabitsCard: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            reportHeading("Needs Improvement", systemImage: "arrow.up.right")
-                .accessibilityIdentifier("life-weekly-report-improvement")
+            reportHeading("Needs Improvement", systemImage: "arrow.up.right", identifier: "life-weekly-report-improvement")
                 .font(.headline)
                 .foregroundStyle(DS.Color.negative)
 
@@ -137,13 +139,13 @@ struct WeeklyHabitReportView: View {
 
     // MARK: - Helpers
 
-    @ViewBuilder
-    private func reportHeading(_ title: LocalizedStringKey, systemImage: String) -> some View {
-        if dynamicTypeSize.isAccessibilitySize {
+    private func reportHeading(_ title: LocalizedStringKey, systemImage: String, identifier: String) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+            Image(systemName: systemImage)
+                .accessibilityHidden(true)
             Text(title)
                 .fixedSize(horizontal: false, vertical: true)
-        } else {
-            Label(title, systemImage: systemImage)
+                .accessibilityIdentifier(identifier)
         }
     }
 

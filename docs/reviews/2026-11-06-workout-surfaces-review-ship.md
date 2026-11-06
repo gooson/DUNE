@@ -39,3 +39,9 @@ iOS unit 10건(`WorkoutLocationTests`), Watch unit 25건(`WorkoutRouteRecorderTe
 기본 이름 iPhone17로 선택된 unit clone의 실제 type은 iPhone-Duo였다. 그 기기에서 지도 2건은 통과했고 Live Activity 2건은 원격 Widget 접근성 서버(kAXErrorServerNotFound) 때문에 실패했다. 새 PNG에는 두 카드가 정상 렌더링되어 있었다. 앱 코드는 변경하지 않고 실제 type iPhone18Pro를 확인한 전용 clone에서 같은 4개 selector를 한 번 재검증했고, 실제 4건 실행·4건 통과·skip 0·runner exit 0을 확인했다. 실패한 Duo 결과를 정상 iPhone 통과 증거로 쓰지 않는다.
 
 Watch 3개 testcase 통과 후, 기기 목록에서 이미 없어진 Watch에 대한 `simctl diagnose`가 결과 정리를 지연했다. 사용자 정리 요청에 따라 해당 실행의 소유 PID만 종료했고 기존 xcodebuild·runner가 exit 0으로 정상 종료한 뒤 3/3 receipt를 확인했다. 이번 실행의 idle iPhone 2개를 순서대로 shutdown/delete/재조회했고, Watch 2개는 이미 없음으로 확인했다. 다른 작업의 기기는 조작하지 않았다.
+
+## Ship 직전 main 통합
+
+검증 중 main이 `5815bba6ec7e7c9f4c170fc7b7299e75b2a98080`으로 갱신돼 feature에 통합했다. 코드 변경은 Life 히트맵·주간 리포트와 해당 UI 테스트뿐이며, 앞서 통과한 운동 코드·카탈로그·핵심 테스트 소스 해시는 동일하다. 공유 README·실제 포털·테마 manifest의 문서 충돌은 양쪽 링크와 기록을 보존해 해결하고 테마 index를 다시 생성했다(10테마·67시안). 통합 컴파일은 기기를 만들지 않는 generic iOS Simulator build로 확인했고 exit 0으로 통과했다. 같은 운동 UI·unit 검사는 반복하지 않는다.
+
+통합 후 독립 최종 리뷰에서도 새 P1/P2/P3는 없었다. 코드·문서 충돌이 모두 해소됐으며, 초기 작업 공간에서 이번 캡처에 사용한 Watch도 별도로 삭제 확인했다. 원래 작업 공간의 소스 69개 SHA-256은 예약 격리 이후 변하지 않았다. 향후 전용 기기는 검증이 끝나는 순서대로 정리하며 여러 idle 기기를 누적하지 않는다.
