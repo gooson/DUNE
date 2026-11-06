@@ -1,0 +1,87 @@
+Attributes: Application, 0x106fa5f40, pid: 73969, label: 'DUNE'
+Element subtree:
+ →Application, 0x106fa5f40, pid: 73969, label: 'DUNE'
+    Window (Main), 0x106fa5a40, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x106fa6580, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x106fa5900, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x106fa7200, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x106fa5540, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x106fa6a80, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x106fa6e40, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x106fa7700, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x106fa6300, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x106fa7ac0, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x106fa6bc0, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x106fa6f80, {{0.0, 0.0}, {756.0, 1158.0}}
+                          Other, 0x106fa4500, {{0.0, 0.0}, {756.0, 1158.0}}
+                            NavigationBar, 0x106fa6800, {{0.0, 96.0}, {756.0, 108.0}}, identifier: 'Symmetry Analysis'
+                              Button, 0x106fa75c0, {{10.0, 96.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Assessment Detail'
+                              StaticText, 0x106fa5e00, {{301.5, 161.5}, {153.0, 21.0}}, label: 'Symmetry Analysis'
+                            Other, 0x106fa7c00, {{0.0, 0.0}, {756.0, 1158.0}}
+                              Other, 0x106fa5180, {{0.0, 0.0}, {756.0, 1158.0}}
+                                Other, 0x106e71040, {{0.0, 0.0}, {756.0, 1158.0}}
+                                  Other, 0x106e73980, {{0.0, 0.0}, {756.0, 1158.0}}
+                                    ScrollView, 0x106e73840, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'posture-symmetry-screen'
+                                      Other, 0x106e73700, {{0.0, 0.0}, {756.0, 1158.0}}
+                                        Other, 0x106e73ac0, {{0.0, 0.0}, {756.0, 244.0}}
+                                      Other, 0x106e708c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                                      Other, 0x106e735c0, {{0.0, 204.0}, {756.0, 629.5}}
+                                        Image, 0x10a56c000, {{364.5, 242.5}, {27.0, 32.5}}, identifier: 'arrow.left.arrow.right', label: 'Left And Right Arrows'
+                                        StaticText, 0x10a56c140, {{278.0, 285.5}, {200.0, 20.5}}, label: 'Left vs Right Comparison'
+                                        StaticText, 0x10a56c280, {{325.2, 314.0}, {105.5, 14.5}}, label: 'November 5, 2026'
+                                        Image, 0x10a56c3c0, {{60.0, 386.0}, {16.5, 20.0}}, identifier: 'arrow.left.arrow.right', label: 'Left And Right Arrows'
+                                        StaticText, 0x10a56c500, {{86.5, 387.0}, {147.5, 18.0}}, label: 'Shoulder Asymmetry'
+                                        StaticText, 0x10a56c640, {{631.5, 388.8}, {66.5, 14.5}}, label: 'Caution'
+                                        StaticText, 0x10a56c780, {{111.0, 419.5}, {7.0, 13.5}}, identifier: 'posture-symmetry-side-shoulderAsymmetry-left', label: 'L'
+                                        StaticText, 0x10a56c8c0, {{638.0, 419.5}, {8.0, 13.5}}, identifier: 'posture-symmetry-side-shoulderAsymmetry-right', label: 'R'
+                                        StaticText, 0x10a56ca00, {{78.5, 437.0}, {39.5, 40.5}}, identifier: 'posture-symmetry-value-shoulderAsymmetry-left', label: '50.0 cm'
+                                        StaticText, 0x10a56cb40, {{638.0, 437.0}, {39.5, 40.5}}, identifier: 'posture-symmetry-value-shoulderAsymmetry-right', label: '48.0 cm'
+                                        Image, 0x10a56cc80, {{59.5, 492.5}, {11.0, 9.0}}, identifier: 'arrow.left', label: 'Left'
+                                        StaticText, 0x10a56cdc0, {{76.0, 489.5}, {120.0, 14.5}}, label: 'Left higher by 2.0 cm'
+                                        Image, 0x10a56cf00, {{60.0, 557.5}, {20.0, 16.5}}, identifier: 'arrow.up.arrow.down', label: 'Sort'
+                                        StaticText, 0x10a56d040, {{90.0, 556.8}, {108.5, 18.0}}, label: 'Hip Asymmetry'
+                                        StaticText, 0x10a56d180, {{634.5, 558.5}, {63.5, 14.5}}, label: 'Normal'
+                                        StaticText, 0x10a56d2c0, {{111.0, 587.5}, {7.0, 13.5}}, identifier: 'posture-symmetry-side-hipAsymmetry-left', label: 'L'
+                                        StaticText, 0x10a56d400, {{638.0, 587.5}, {8.0, 13.5}}, identifier: 'posture-symmetry-side-hipAsymmetry-right', label: 'R'
+                                        StaticText, 0x10a56d540, {{65.5, 605.0}, {52.5, 19.5}}, identifier: 'posture-symmetry-value-hipAsymmetry-left', label: '0.0 cm'
+                                        StaticText, 0x10a56d680, {{638.0, 605.0}, {60.0, 19.5}}, identifier: 'posture-symmetry-value-hipAsymmetry-right', label: '-1.0 cm'
+                                        Image, 0x10a56d7c0, {{59.5, 639.5}, {11.0, 9.0}}, identifier: 'arrow.left', label: 'Left'
+                                        StaticText, 0x10a56d900, {{76.0, 636.5}, {118.5, 14.5}}, label: 'Left higher by 1.0 cm'
+                                        Image, 0x10a56da40, {{60.0, 704.5}, {15.5, 16.0}}, identifier: 'arrow.triangle.branch', label: 'Divide'
+                                        StaticText, 0x10a56db80, {{85.5, 703.5}, {111.0, 18.0}}, label: 'Knee Alignment'
+                                        StaticText, 0x10a56dcc0, {{631.5, 705.2}, {66.5, 14.5}}, label: 'Caution'
+                                        StaticText, 0x10a56de00, {{111.0, 734.0}, {7.0, 13.5}}, identifier: 'posture-symmetry-side-kneeAlignment-left', label: 'L'
+                                        StaticText, 0x10a56df40, {{638.0, 734.0}, {8.0, 13.5}}, identifier: 'posture-symmetry-side-kneeAlignment-right', label: 'R'
+                                        StaticText, 0x10a56e080, {{85.0, 751.5}, {33.0, 19.5}}, identifier: 'posture-symmetry-value-kneeAlignment-left', label: '8.1°'
+                                        StaticText, 0x10a56e1c0, {{638.0, 751.5}, {33.0, 19.5}}, identifier: 'posture-symmetry-value-kneeAlignment-right', label: '2.7°'
+                                        Image, 0x10a56e300, {{59.5, 786.0}, {11.0, 9.0}}, identifier: 'arrow.left', label: 'Left'
+                                        StaticText, 0x10a56e440, {{76.0, 783.0}, {105.5, 14.5}}, label: 'Left higher by 5.4°'
+                                      Other, 0x10a56e580, {{723.0, 204.0}, {30.0, 907.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x10a56e6c0, {{750.0, 511.5}, {3.0, 601.0}}
+                                      Other, 0x10a56e800, {{723.0, 204.0}, {30.0, 907.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x10a56e940, {{750.0, 511.5}, {3.0, 601.0}}
+                            Toolbar, 0x10a56ea80, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x10a56ebc0, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x10a56ed00, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x10a56ee40, {{0.0, 32.0}, {756.0, 44.0}}
+                    Button, 0x10a56ef80, {{183.5, 36.0}, {56.0, 36.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x10a56f0c0, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x10a56f200, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x10a56f340, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                      Button, 0x10a56f480, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                    Button, 0x10a56f5c0, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                      Button, 0x10a56f700, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                    Button, 0x10a56f840, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x10a56f980, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x10a56fac0, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x10a56fc00, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x10a56fd40, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x10a56fe80, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x10a57c000, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x106fa5f40, pid: 73969, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10a57c140, pid: 73969, label: 'DUNE'
+  }

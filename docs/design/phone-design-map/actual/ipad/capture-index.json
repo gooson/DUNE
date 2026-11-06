@@ -664,13 +664,25 @@
     },
     "P07": {
       "row_id": "P07",
-      "evidence": "posture-symmetry-screen",
-      "test": "PostureVisualAuditTests/testPostureSymmetry()",
-      "action": "tap posture-symmetry-link",
-      "timestamp": 1791823728.784,
-      "image": "EA19E4D1-011B-4228-9681-89E29AC7D862.png",
-      "screen": "screen-0-2064x2752-tap posture-symmetry-link_0_A210FFF0-10CB-42D4-850E-9912A754DBBA.png",
-      "file": "P07.png"
+      "file": "P07.png",
+      "test": "PostureVisualAuditTests/testP07SymmetryKeepsSeededValuesAndUnits()",
+      "action": "iPad normal symmetry",
+      "timestamp": 1793973647.424,
+      "source_revision": "0d6a724bc6dae494fd867186b667aa0e3517c3af",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "229c11eae68ffa284e4951212acc7ee097885e6e288999171d0ebd19c6363e29",
+      "ax_sha256": "d155e3b7d04062de041a04429602112680842972df1fc567881fb3de342edf48",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/posture-symmetry-p07-2026-11-06/manifest.json",
+      "source_record": "records: profile=ipad,kind=after,is_primary=true,normal",
+      "capture_scope": "B06 selected normal state; see gallery gates and limits",
+      "actual_angle": null,
+      "current_verification": "normal-captured"
     },
     "H05": {
       "row_id": "H05",
