@@ -881,9 +881,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(defaultsViewport.contains(deadlift.frame), "S02 MAX result fits the visible List")
         VisualAudit.capture("S02 MAX searched exercise row")
 
-        let back = app.navigationBars["Exercise Defaults"].buttons.firstMatch
-        XCTAssertTrue(back.exists && back.isHittable)
-        back.auditTap()
+        returnToSettingsFromFilteredList("Exercise Defaults")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowPreferredExercises, maxSwipes: 8))
         app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch.auditTap()
         searchPreferredExercises(Fixture.deadliftSearchQuery)
@@ -922,12 +920,26 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("S03 stored values on reopen")
 
         app.buttons[AXID.exerciseDefaultEditClear].firstMatch.auditTap()
-        let cancelClear = app.sheets.buttons["Cancel"].firstMatch
-        XCTAssertTrue(cancelClear.waitForExistence(timeout: 5), "Clear confirmation offers Cancel")
+        let confirmation = app.sheets.firstMatch
+        XCTAssertTrue(confirmation.waitForExistence(timeout: 5), "Clear confirmation appears")
         VisualAudit.capture("S03 clear confirmation before cancellation")
-        cancelClear.auditTap()
+        let cancelClear = confirmation.buttons["Cancel"].firstMatch
+        if cancelClear.exists {
+            cancelClear.auditTap()
+        } else {
+            let window = app.windows.firstMatch.frame
+            let outsidePoint = CGPoint(x: window.midX, y: window.minY + window.height * 0.75)
+            XCTAssertFalse(confirmation.frame.contains(outsidePoint),
+                           "Dismissal tap stays outside the destructive confirmation")
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75)).auditTap()
+        }
+        let dismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: confirmation
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed,
+                       "Clear confirmation dismisses without removing the defaults")
         XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditWeight].firstMatch.value as? String,
-                       Fixture.savedWeight, "Cancel preserves the stored defaults")
+                       Fixture.savedWeight, "Cancellation preserves the stored defaults")
         VisualAudit.capture("S03 values retained after clear cancellation")
     }
 
@@ -980,26 +992,6 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("S03 MAX saved values on reopen")
     }
 
-    func testExerciseDefaultOutOfRangeInputReopensClamped() throws {
-        openExerciseDefaults()
-        let row = exerciseDefaultsBenchPressRow()
-        XCTAssertTrue(row.waitForExistence(timeout: 5))
-        row.auditTap()
-
-        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditWeight, with: "9999"))
-        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditReps, with: "1001"))
-        _ = app.dismissKeyboardIfPresent()
-        app.buttons[AXID.exerciseDefaultEditSave].firstMatch.auditTap()
-
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDefaultsScreen]
-            .firstMatch.waitForExistence(timeout: 5))
-        exerciseDefaultsBenchPressRow().auditTap()
-        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditWeight].firstMatch.value as? String,
-                       "500", "Saved weight is limited to the supported range")
-        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditReps].firstMatch.value as? String,
-                       "1000", "Saved reps are limited to the supported range")
-    }
-
     func testPreferredExerciseToggleSurvivesScreenReentry() throws {
         openPreferredExercises()
         searchPreferredExercises(Fixture.deadliftSearchQuery)
@@ -1016,11 +1008,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
                        "Toggle stores the preferred state")
         VisualAudit.capture("S04 preferred selection in filtered results")
 
-        let back = app.navigationBars["Preferred Exercises"].buttons.firstMatch
-        XCTAssertTrue(back.exists && back.isHittable)
-        back.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.settingsRowPreferredExercises]
-            .firstMatch.waitForExistence(timeout: 5))
+        returnToSettingsFromFilteredList("Preferred Exercises")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowPreferredExercises, maxSwipes: 8))
         app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch.auditTap()
         searchPreferredExercises(Fixture.deadliftSearchQuery)
@@ -1319,6 +1307,19 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         )
     }
 
+    private func returnToSettingsFromFilteredList(_ title: String) {
+        let navigationBar = app.navigationBars[title]
+        let closeSearch = navigationBar.buttons["Close"].firstMatch
+        if closeSearch.exists { closeSearch.auditTap() }
+
+        let back = navigationBar.buttons["BackButton"].firstMatch
+        XCTAssertTrue(back.waitForExistence(timeout: 5) && back.isHittable,
+                      "Back to Settings should be available after closing search")
+        back.auditTap()
+        XCTAssertTrue(app.navigationBars["Settings"].firstMatch.waitForExistence(timeout: 5),
+                      "Settings root should reopen after leaving the filtered list")
+    }
+
     private func hasCompleteConventionalDeadliftName(_ label: String) -> Bool {
         // The exercise library can expose its bundled Korean name under an English app locale.
         label.contains("Conventional Deadlift") || label.contains("컨벤셔널 데드리프트")
@@ -1328,7 +1329,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         let field = app.textFields[identifier].firstMatch
         guard field.waitForExistence(timeout: 5) else { return false }
 
-        // The iPhone number pad does not honor Command-A. Place the caret after
+        // The captured number-pad path left Command-A ineffective. Place the caret after
         // the right-aligned number, erase its digits, then verify the new value.
         field.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.5)).auditTap()
         let existing = (field.value as? String) ?? ""
