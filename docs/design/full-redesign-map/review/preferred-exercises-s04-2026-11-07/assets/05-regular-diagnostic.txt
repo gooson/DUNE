@@ -1,0 +1,182 @@
+Attributes: Application, 0x1111c7e80, pid: 28282, label: 'DUNE'
+Element subtree:
+ →Application, 0x1111c7e80, pid: 28282, label: 'DUNE'
+    Window (Main), 0x1111c4500, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1111c7700, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1111c5a40, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1111c5680, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1111c6440, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1111c7c00, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1111c6300, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1111c52c0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1111c70c0, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x1111c4640, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x1111c75c0, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x1111c5900, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x1111c4f00, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x1111c7ac0, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x1111c4b40, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x1111c5540, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x1111c57c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x1111c6580, {{0.0, 0.0}, {440.0, 956.0}}
+                                      Other, 0x1111c7340, {{0.0, 0.0}, {440.0, 956.0}}
+                                        NavigationBar, 0x1111c4000, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Preferred Exercises'
+                                          Button, 0x1111c4a00, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Settings'
+                                          StaticText, 0x1111c5cc0, {{142.3, 73.7}, {155.3, 20.7}}, label: 'Preferred Exercises'
+                                        Other, 0x1111c5400, {{0.0, 0.0}, {440.0, 956.0}}
+                                          Other, 0x1111c5b80, {{0.0, 0.0}, {440.0, 956.0}}
+                                            Other, 0x1111c6bc0, {{0.0, 0.0}, {440.0, 956.0}}
+                                              Other, 0x1111c66c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                                CollectionView, 0x1111c7840, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'preferred-exercises-screen'
+                                                  Other, 0x1111c6800, {{-20.0, -1796.0}, {480.0, 11078.3}}
+                                                  Other, 0x1111c5040, {{0.0, 0.0}, {440.0, 956.0}}
+                                                    Other, 0x1111c6e40, {{0.0, 0.0}, {440.0, 156.0}}
+                                                  Other, 0x1111c6940, {{0.0, 0.0}, {440.0, 956.0}}
+                                                  Cell, 0x1111c7480, {{20.0, 116.0}, {400.0, 40.3}}
+                                                    Other, 0x1111c61c0, {{20.0, 116.0}, {400.0, 40.3}}
+                                                    Other, 0x1111c43c0, {{20.0, 116.0}, {400.0, 40.3}}
+                                                      Other, 0x1111c5e00, {{20.0, 116.0}, {400.0, 40.3}}
+                                                        Other, 0x1111c4dc0, {{20.0, 116.0}, {400.0, 40.3}}
+                                                          StaticText, 0x1111c5180, {{20.0, 116.0}, {400.0, 40.3}}, label: 'All Exercises'
+                                                  Cell, 0x110a2f340, {{20.0, 156.3}, {400.0, 82.0}}
+                                                    Other, 0x110a2d040, {{20.0, 156.3}, {400.0, 82.0}}
+                                                      Other, 0x110a2d180, {{20.0, 156.3}, {400.0, 82.0}}
+                                                    Other, 0x110a2d2c0, {{20.0, 156.3}, {400.0, 82.0}}
+                                                      Other, 0x110a2d400, {{20.0, 156.3}, {400.0, 82.0}}
+                                                        Other, 0x110a2d540, {{20.0, 156.3}, {400.0, 82.0}}
+                                                          Switch, 0x110a2d680, {{20.0, 156.3}, {400.0, 82.0}}, identifier: 'preferred-exercise-toggle-trx-row', label: 'TRX 로우, Back, Lats', value: 0
+                                                            Image, 0x110a2d7c0, {{40.0, 175.3}, {44.0, 44.0}}, label: 'Equipment/equipment.trx'
+                                                            StaticText, 0x110a2d900, {{96.0, 179.0}, {67.0, 20.3}}, label: 'TRX 로우'
+                                                            Switch, 0x110a2da40, {{339.0, 183.3}, {63.0, 28.0}}, value: 0
+                                                            StaticText, 0x110a2db80, {{96.0, 201.3}, {58.7, 14.3}}, label: 'Back, Lats'
+                                                  Cell, 0x110a2dcc0, {{20.0, 238.3}, {400.0, 82.0}}
+                                                    Other, 0x110a2de00, {{20.0, 238.3}, {400.0, 82.0}}
+                                                      Other, 0x110a2df40, {{20.0, 238.3}, {400.0, 82.0}}
+                                                    Other, 0x110a2e080, {{20.0, 238.3}, {400.0, 82.0}}
+                                                      Other, 0x110a2e1c0, {{20.0, 238.3}, {400.0, 82.0}}
+                                                        Other, 0x110a2e300, {{20.0, 238.3}, {400.0, 82.0}}
+                                                          Switch, 0x110a2e440, {{20.0, 238.3}, {400.0, 82.0}}, identifier: 'preferred-exercise-toggle-trx-chest-press', label: 'TRX 체스트 프레스, Chest', value: 0
+                                                            Image, 0x110a2e580, {{40.0, 257.3}, {44.0, 44.0}}, label: 'Equipment/equipment.trx'
+                                                            StaticText, 0x110a2e6c0, {{96.0, 261.0}, {130.0, 20.3}}, label: 'TRX 체스트 프레스'
+                                                            Switch, 0x110a2e800, {{339.0, 265.3}, {63.0, 28.0}}, value: 0
+                                                            StaticText, 0x110a2e940, {{96.0, 283.3}, {33.3, 14.3}}, label: 'Chest'
+                                                  Other, 0x110a2ea80, {{96.0, 237.3}, {304.0, 1.0}}
+                                                  Cell, 0x110a2ebc0, {{20.0, 320.3}, {400.0, 82.0}}
+                                                    Other, 0x110a2ed00, {{20.0, 320.3}, {400.0, 82.0}}
+                                                      Other, 0x110a2ee40, {{20.0, 320.3}, {400.0, 82.0}}
+                                                    Other, 0x110a2ef80, {{20.0, 320.3}, {400.0, 82.0}}
+                                                      Other, 0x110a2f0c0, {{20.0, 320.3}, {400.0, 82.0}}
+                                                        Other, 0x110a2f200, {{20.0, 320.3}, {400.0, 82.0}}
+                                                          Switch, 0x110a24000, {{20.0, 320.3}, {400.0, 82.0}}, identifier: 'preferred-exercise-toggle-walking', label: '걷기, Quads, Calves', value: 0
+                                                            Image, 0x110a24140, {{40.0, 339.3}, {44.0, 44.0}}, label: 'Equipment/equipment.bodyweight'
+                                                            StaticText, 0x110a24280, {{96.0, 343.0}, {29.7, 20.3}}, label: '걷기'
+                                                            Switch, 0x110a243c0, {{339.0, 347.3}, {63.0, 28.0}}, value: 0
+                                                            StaticText, 0x110a24500, {{96.0, 365.3}, {81.3, 14.3}}, label: 'Quads, Calves'
+                                                  Other, 0x110a24640, {{96.0, 319.3}, {304.0, 1.0}}
+                                                  Cell, 0x110a24780, {{20.0, 402.3}, {400.0, 82.0}}
+                                                    Other, 0x110a248c0, {{20.0, 402.3}, {400.0, 82.0}}
+                                                      Other, 0x110a24a00, {{20.0, 402.3}, {400.0, 82.0}}
+                                                    Other, 0x110a24b40, {{20.0, 402.3}, {400.0, 82.0}}
+                                                      Other, 0x110a24c80, {{20.0, 402.3}, {400.0, 82.0}}
+                                                        Other, 0x110a24dc0, {{20.0, 402.3}, {400.0, 82.0}}
+                                                          Switch, 0x110a24f00, {{20.0, 402.3}, {400.0, 82.0}}, identifier: 'preferred-exercise-toggle-goblet-squat', label: '고블릿 스쿼트, Quads, Glutes', value: 0
+                                                            Image, 0x110a25040, {{40.0, 421.3}, {44.0, 44.0}}, label: 'Equipment/equipment.dumbbell'
+                                                            StaticText, 0x110a25180, {{96.0, 425.0}, {92.3, 20.3}}, label: '고블릿 스쿼트'
+                                                            Switch, 0x110a252c0, {{339.0, 429.3}, {63.0, 28.0}}, value: 0
+                                                            StaticText, 0x110a25400, {{96.0, 447.3}, {80.0, 14.3}}, label: 'Quads, Glutes'
+                                                  Other, 0x110a25540, {{96.0, 401.3}, {304.0, 1.0}}
+                                                  Cell, 0x110a25680, {{20.0, 484.3}, {400.0, 82.0}}
+                                                    Other, 0x110a257c0, {{20.0, 484.3}, {400.0, 82.0}}
+                                                      Other, 0x110a25900, {{20.0, 484.3}, {400.0, 82.0}}
+                                                    Other, 0x110a25a40, {{20.0, 484.3}, {400.0, 82.0}}
+                                                      Other, 0x110a25b80, {{20.0, 484.3}, {400.0, 82.0}}
+                                                        Other, 0x110a25cc0, {{20.0, 484.3}, {400.0, 82.0}}
+                                                          Switch, 0x110a25e00, {{20.0, 484.3}, {400.0, 82.0}}, identifier: 'preferred-exercise-toggle-good-morning', label: '굿모닝, Hamstrings, Back', value: 0
+                                                            Image, 0x110a25f40, {{40.0, 503.3}, {44.0, 44.0}}, label: 'Equipment/equipment.barbell'
+                                                            StaticText, 0x110a26080, {{96.0, 507.0}, {44.3, 20.3}}, label: '굿모닝'
+                                                            Switch, 0x110a261c0, {{339.0, 511.3}, {63.0, 28.0}}, value: 0
+                                                            StaticText, 0x110a26300, {{96.0, 529.3}, {99.7, 14.3}}, label: 'Hamstrings, Back'
+                                                  Other, 0x110a26440, {{96.0, 483.3}, {304.0, 1.0}}
+                                                  Cell, 0x110a26580, {{20.0, 566.3}, {400.0, 82.0}}
+                                                    Other, 0x110a266c0, {{20.0, 566.3}, {400.0, 82.0}}
+                                                      Other, 0x110a26800, {{20.0, 566.3}, {400.0, 82.0}}
+                                                    Other, 0x110a26940, {{20.0, 566.3}, {400.0, 82.0}}
+                                                      Other, 0x110a26a80, {{20.0, 566.3}, {400.0, 82.0}}
+                                                        Other, 0x110a26bc0, {{20.0, 566.3}, {400.0, 82.0}}
+                                                          Switch, 0x110a26d00, {{20.0, 566.3}, {400.0, 82.0}}, identifier: 'preferred-exercise-toggle-glute-bridge', label: '글루트 브릿지, Glutes', value: 0
+                                                            Image, 0x110a26e40, {{40.0, 585.3}, {44.0, 44.0}}, label: 'Equipment/equipment.bodyweight'
+                                                            StaticText, 0x110a26f80, {{96.0, 589.0}, {92.3, 20.3}}, label: '글루트 브릿지'
+                                                            Switch, 0x110a270c0, {{339.0, 593.3}, {63.0, 28.0}}, value: 0
+                                                            StaticText, 0x110a27200, {{96.0, 611.3}, {36.7, 14.3}}, label: 'Glutes'
+                                                  Other, 0x110a27340, {{96.0, 565.3}, {304.0, 1.0}}
+                                                  Cell, 0x110a27480, {{20.0, 648.3}, {400.0, 82.0}}
+                                                    Other, 0x110a275c0, {{20.0, 648.3}, {400.0, 82.0}}
+                                                      Other, 0x110a27700, {{20.0, 648.3}, {400.0, 82.0}}
+                                                    Other, 0x110a27840, {{20.0, 648.3}, {400.0, 82.0}}
+                                                      Other, 0x110a27980, {{20.0, 648.3}, {400.0, 82.0}}
+                                                        Other, 0x110a27ac0, {{20.0, 648.3}, {400.0, 82.0}}
+                                                          Switch, 0x110a27c00, {{20.0, 648.3}, {400.0, 82.0}}, identifier: 'preferred-exercise-toggle-narrow-stance-leg-press', label: '내로우 스탠스 레그 프레스, Quads', value: 0
+                                                            Image, 0x110a27d40, {{40.0, 667.3}, {44.0, 44.0}}, label: 'Equipment/equipment.leg-press'
+                                                            StaticText, 0x110a27e80, {{96.0, 671.0}, {174.3, 20.3}}, label: '내로우 스탠스 레그 프레스'
+                                                            Switch, 0x110a30000, {{339.0, 675.3}, {63.0, 28.0}}, value: 0
+                                                            StaticText, 0x110a30140, {{96.0, 693.3}, {36.7, 14.3}}, label: 'Quads'
+                                                  Other, 0x110a30280, {{96.0, 647.3}, {304.0, 1.0}}
+                                                  Cell, 0x110a303c0, {{20.0, 730.3}, {400.0, 82.0}}
+                                                    Other, 0x110a30500, {{20.0, 730.3}, {400.0, 82.0}}
+                                                      Other, 0x110a30640, {{20.0, 730.3}, {400.0, 82.0}}
+                                                    Other, 0x110a30780, {{20.0, 730.3}, {400.0, 82.0}}
+                                                      Other, 0x110a308c0, {{20.0, 730.3}, {400.0, 82.0}}
+                                                        Other, 0x110a30a00, {{20.0, 730.3}, {400.0, 82.0}}
+                                                          Switch, 0x110a30b40, {{20.0, 730.3}, {400.0, 82.0}}, identifier: 'preferred-exercise-toggle-neutral-grip-chest-press-machine', label: '뉴트럴 그립 체스트 프레스 머신, Chest', value: 0
+                                                            Image, 0x110a30c80, {{40.0, 749.3}, {44.0, 44.0}}, label: 'Equipment/equipment.chest-press'
+                                                            StaticText, 0x110a30dc0, {{96.0, 753.0}, {207.7, 20.3}}, label: '뉴트럴 그립 체스트 프레스 머신'
+                                                            Switch, 0x110a30f00, {{339.0, 757.3}, {63.0, 28.0}}, value: 0
+                                                            StaticText, 0x110a31040, {{96.0, 775.3}, {33.3, 14.3}}, label: 'Chest'
+                                                  Other, 0x110a31180, {{96.0, 729.3}, {304.0, 1.0}}
+                                                  Cell, 0x110a312c0, {{20.0, 812.3}, {400.0, 82.0}}
+                                                    Other, 0x110a31400, {{20.0, 812.3}, {400.0, 82.0}}
+                                                      Other, 0x110a31540, {{20.0, 812.3}, {400.0, 82.0}}
+                                                    Other, 0x110a31680, {{20.0, 812.3}, {400.0, 82.0}}
+                                                      Other, 0x110a317c0, {{20.0, 812.3}, {400.0, 82.0}}
+                                                        Other, 0x110a31900, {{20.0, 812.3}, {400.0, 82.0}}
+                                                          Switch, 0x110a31a40, {{20.0, 812.3}, {400.0, 82.0}}, identifier: 'preferred-exercise-toggle-neutral-lat-pulldown-machine', label: '뉴트럴 랫 풀다운 머신, Lats, Back', value: 0
+                                                            Image, 0x110a31b80, {{40.0, 831.3}, {44.0, 44.0}}, label: 'Equipment/equipment.lat-pulldown'
+                                                            StaticText, 0x110a31cc0, {{96.0, 835.0}, {144.7, 20.3}}, label: '뉴트럴 랫 풀다운 머신'
+                                                            Switch, 0x110a31e00, {{339.0, 839.3}, {63.0, 28.0}}, value: 0
+                                                            StaticText, 0x110a31f40, {{96.0, 857.3}, {58.7, 14.3}}, label: 'Lats, Back'
+                                                  Other, 0x110a32080, {{96.0, 811.3}, {304.0, 1.0}}
+                                                  Cell, 0x110a321c0, {{20.0, 894.3}, {400.0, 82.0}}
+                                                    Other, 0x110a32300, {{20.0, 894.3}, {400.0, 82.0}}
+                                                      Other, 0x110a32440, {{20.0, 894.3}, {400.0, 82.0}}
+                                                    Other, 0x110a32580, {{20.0, 894.3}, {400.0, 82.0}}
+                                                      Other, 0x110a326c0, {{20.0, 894.3}, {400.0, 82.0}}
+                                                        Other, 0x110a32800, {{20.0, 894.3}, {400.0, 82.0}}
+                                                          Switch, 0x110a32940, {{20.0, 894.3}, {400.0, 82.0}}, identifier: 'preferred-exercise-toggle-running', label: '달리기, Quads, Hamstrings, Calves', value: 0
+                                                            Image, 0x110a32a80, {{40.0, 913.3}, {44.0, 44.0}}, label: 'Equipment/equipment.bodyweight'
+                                                            StaticText, 0x110a32bc0, {{96.0, 917.0}, {44.3, 20.3}}, label: '달리기'
+                                                            Switch, 0x110a32d00, {{339.0, 921.3}, {63.0, 28.0}}, value: 0
+                                                            StaticText, 0x110a32e40, {{96.0, 939.3}, {153.0, 14.3}}, label: 'Quads, Hamstrings, Calves'
+                                                  Other, 0x110a32f80, {{96.0, 893.3}, {304.0, 1.0}}
+                                                  Other, 0x110a330c0, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 10 pages', value: 0%
+                                                    Other, 0x110a33200, {{434.0, 838.3}, {3.0, 31.7}}
+                                                  Other, 0x110a33340, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 10 pages', value: 0%
+                                                    Other, 0x110a33480, {{434.0, 838.3}, {3.0, 31.7}}
+                                        Toolbar, 0x110a335c0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x110a33700, {{0.0, 0.0}, {440.0, 956.0}}
+                                Toolbar, 0x110a33840, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x110a33980, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x110a33ac0, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x110a33c00, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x110a33d40, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x110a33e80, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x110a20000, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x110a20140, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x110a20280, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x110a203c0, {{220.0, 492.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x1111c7e80, pid: 28282, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x110a20500, pid: 28282, label: 'DUNE'
+  }

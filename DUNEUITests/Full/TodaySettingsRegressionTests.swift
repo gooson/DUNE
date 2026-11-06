@@ -1200,6 +1200,32 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
                       "Settings root should reopen after leaving the filtered list")
     }
 
+    func testPreferredExerciseToggleSurvivesScreenReentry() throws {
+        openPreferredExercises()
+        searchPreferredExercises(Fixture.deadliftSearchQuery)
+        let toggle = app.switches[AXID.preferredExerciseToggle(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        XCTAssertEqual(toggle.value as? String, "0", "Seeded Deadlift starts unpreferred")
+        let control = toggle.descendants(matching: .switch).firstMatch
+        XCTAssertTrue(control.exists && control.isHittable, "Native switch control should be reachable")
+        control.auditTap()
+        let selected = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "value == %@", "1"), object: toggle
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [selected], timeout: 5), .completed,
+                       "Toggle stores the preferred state")
+        VisualAudit.capture("S04 preferred selection in filtered results")
+
+        returnToSettingsFromFilteredList("Preferred Exercises")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowPreferredExercises, maxSwipes: 8))
+        app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch.auditTap()
+        searchPreferredExercises(Fixture.deadliftSearchQuery)
+        let reopened = app.switches[AXID.preferredExerciseToggle(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(reopened.waitForExistence(timeout: 5))
+        XCTAssertEqual(reopened.value as? String, "1", "Preferred state survives navigation reentry")
+        VisualAudit.capture("S04 preferred selection after reentry")
+    }
+
     private func openExerciseDefaults() {
         openSettings()
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowExerciseDefaults, maxSwipes: 12),
