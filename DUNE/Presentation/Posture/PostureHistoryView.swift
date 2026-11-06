@@ -7,8 +7,12 @@ struct PostureHistoryView: View {
     private var records: [PostureAssessmentRecord]
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .caption2) private var scoreDiameter: CGFloat = 40
+    @ScaledMetric(relativeTo: .title) private var heroDiameter: CGFloat = 96
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     @State private var isCompareMode = false
     @State private var recordToDelete: PostureAssessmentRecord?
@@ -20,6 +24,9 @@ struct PostureHistoryView: View {
                 if records.isEmpty {
                     emptyState
                 } else {
+                    if let latest = records.first {
+                        latestAssessmentHero(latest)
+                    }
                     reminderBanner
                     chartSection
                     metricFilterPills
@@ -27,8 +34,11 @@ struct PostureHistoryView: View {
                     historyList
                 }
             }
-            .padding(.horizontal, DS.Spacing.lg)
+            .frame(maxWidth: 680)
+            .padding(DS.Spacing.lg)
+            .frame(maxWidth: .infinity)
         }
+        .scrollBounceBehavior(.basedOnSize)
         .englishNavigationTitle("Posture History")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -124,6 +134,55 @@ struct PostureHistoryView: View {
         .padding(.top, DS.Spacing.xxxl)
     }
 
+    // MARK: - Latest Assessment
+
+    private func latestAssessmentHero(_ record: PostureAssessmentRecord) -> some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.lg))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.xl))
+        return layout {
+            ZStack {
+                Circle()
+                    .stroke(palette.track.opacity(0.4), lineWidth: 9)
+                Circle()
+                    .trim(from: 0, to: min(1, max(0, CGFloat(record.overallScore) / 100)))
+                    .stroke(scoreColor(record.overallScore), style: StrokeStyle(lineWidth: 9, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+                Image(systemName: "figure.stand")
+                    .font(.title2)
+                    .foregroundStyle(palette.ink)
+            }
+            .frame(width: min(heroDiameter, 160), height: min(heroDiameter, 160))
+            .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                Text("Posture Score")
+                    .font(.headline)
+                    .foregroundStyle(palette.muted)
+                Text("\(record.overallScore) / 100")
+                    .font(DS.Typography.heroScore)
+                    .foregroundStyle(palette.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(record.date, style: .date)
+                    .font(.subheadline)
+                    .foregroundStyle(palette.muted)
+                Text(String(localized: "\(record.allMetrics.count) metrics"))
+                    .font(.caption)
+                    .foregroundStyle(palette.muted)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(DS.Spacing.xl)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xxl))
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.xxl)
+                .strokeBorder(palette.border, lineWidth: 1)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("posture-history-latest-score")
+    }
+
     // MARK: - Reminder Banner
 
     @ViewBuilder
@@ -152,22 +211,23 @@ struct PostureHistoryView: View {
     // MARK: - Chart
 
     private var chartSection: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            if viewModel.chartData.count >= 2 {
-                DotLineChartView(
-                    data: viewModel.chartData,
-                    baseline: nil,
-                    yAxisLabel: chartYLabel,
-                    tintColor: DS.Color.body
-                )
-            } else if viewModel.chartData.count == 1 {
-                singleDataPointView
-            } else {
-                noDataForMetricView
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                if viewModel.chartData.count >= 2 {
+                    DotLineChartView(
+                        data: viewModel.chartData,
+                        baseline: nil,
+                        yAxisLabel: chartYLabel,
+                        tintColor: DS.Color.body
+                    )
+                } else if viewModel.chartData.count == 1 {
+                    singleDataPointView
+                } else {
+                    noDataForMetricView
+                }
             }
+            .frame(maxWidth: .infinity)
         }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     private var chartYLabel: String {
@@ -243,6 +303,7 @@ struct PostureHistoryView: View {
                 .foregroundStyle(isSelected ? .white : .primary)
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     // MARK: - Stats
@@ -284,21 +345,21 @@ struct PostureHistoryView: View {
     }
 
     private func statCard(title: LocalizedStringKey, value: String, icon: String, color: Color) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: icon)
-                    .font(.caption)
-                    .foregroundStyle(color)
-                Text(title)
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: icon)
+                        .font(.caption)
+                        .foregroundStyle(color)
+                    Text(title)
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+                Text(value)
+                    .font(.title3.weight(.semibold))
             }
-            Text(value)
-                .font(.title3.weight(.semibold))
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
     // MARK: - History List
@@ -331,17 +392,18 @@ struct PostureHistoryView: View {
     }
 
     private func recordRow(_ record: PostureAssessmentRecord) -> some View {
-        recordRowContent(record)
-            .padding(DS.Spacing.md)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
-            .contentShape(Rectangle())
-            .contextMenu {
-                Button(role: .destructive) {
-                    recordToDelete = record
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                }
+        StandardCard {
+            recordRowContent(record)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .contentShape(Rectangle())
+        .contextMenu {
+            Button(role: .destructive) {
+                recordToDelete = record
+            } label: {
+                Label("Delete", systemImage: "trash")
             }
+        }
     }
 
     @ViewBuilder
