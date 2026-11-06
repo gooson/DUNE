@@ -1297,6 +1297,18 @@
         "status": "native-captured-with-explicit-limits",
         "actual": "../full-redesign-map/review/cardio-session-w24-2026-11-07/index.html"
       }
+    },
+    {
+      "id": "cardio-summary-w25",
+      "name": "W25 · 유산소 요약",
+      "title": "원래 기능·값·아이콘·기간과 강조를 보존한 큰 글씨 배치",
+      "file": "dune-cardio-summary-w25.html",
+      "detail": "iPad 최대 글씨의 마지막 Running 캡처에서 Cadence 문구(y858–909)가 고정 Save(y815.5–893)에 일부 가려졌다. 스크롤 위치는 73%였으나 더 내린 통과 캡처가 없어 전체 가독성은 미입증이다. 선택자 통과와 문구 중점의 ScrollView 포함 검사는 가려짐 검사를 대신하지 않는다. 앱 결함이나 이번 변경의 도입 여부를 확정하지 않는다. 시안은 실제 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/cardio-summary-w25.html",
+        "status": "held-ipad-MAX-cadence-native-proof",
+        "actual": "../full-redesign-map/review/cardio-summary-w25-2026-11-07/index.html"
+      }
     }
   ]
 }
