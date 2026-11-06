@@ -1,0 +1,112 @@
+Attributes: Application, 0x1061a8140, pid: 46686, label: 'DUNE'
+Element subtree:
+ →Application, 0x1061a8140, pid: 46686, label: 'DUNE'
+    Window (Main), 0x1061a8000, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1061abe80, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1061a8f00, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1061a97c0, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x1061a8dc0, {{-756.0, -1158.0}, {2268.0, 3474.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+          Other, 0x1061a9b80, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x1061a8c80, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x1061a8b40, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x1061a9cc0, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1061a8280, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x1061a9400, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x1061ab700, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x1061a8500, {{0.0, 96.0}, {756.0, 1062.0}}
+                          Other, 0x1061a83c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                            Other, 0x1103bd400, {{0.0, 96.0}, {756.0, 1062.0}}
+                              Other, 0x1103bd180, {{0.0, 96.0}, {756.0, 1062.0}}
+                                Other, 0x1103bd040, {{0.0, 96.0}, {756.0, 1062.0}}
+                                  Other, 0x1103bcdc0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                    Other, 0x10ffab980, {{0.0, 96.0}, {756.0, 1062.0}}
+                                      Other, 0x10ffa30c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                        NavigationBar, 0x10ffa0000, {{0.0, 150.0}, {756.0, 106.0}}, identifier: 'Habits'
+                                          Button, 0x10ffa0780, {{10.0, 150.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Life'
+                                          StaticText, 0x10ffa08c0, {{20.0, 207.5}, {103.5, 41.0}}, label: 'Habits'
+                                        Other, 0x10ffa3700, {{0.0, 96.0}, {756.0, 1062.0}}
+                                          Other, 0x10ffa0140, {{0.0, 96.0}, {756.0, 1062.0}}
+                                            Other, 0x10ffa0280, {{0.0, 96.0}, {756.0, 1062.0}}
+                                              Other, 0x10ffa03c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                ScrollView, 0x10ffa0500, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'habit-management-screen'
+                                                  Other, 0x10ffa2e40, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                    Other, 0x10ffa2f80, {{0.0, 96.0}, {756.0, 148.0}}
+                                                  Other, 0x1061cd540, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                  Other, 0x1061cde00, {{0.0, 256.0}, {756.0, 339.0}}
+                                                    StaticText, 0x1061cca00, {{71.5, 304.0}, {46.5, 18.0}}, identifier: 'habit-management-hero-title', label: 'Habits'
+                                                    StaticText, 0x1061cd680, {{48.0, 330.0}, {17.0, 41.0}}, identifier: 'habit-management-hero-count', label: '1'
+                                                    StaticText, 0x1061cd2c0, {{73.0, 343.5}, {81.5, 24.0}}, identifier: 'habit-management-hero-filter', label: 'Archived'
+                                                    SegmentedControl, 0x1061cd400, {{16.0, 419.0}, {724.0, 31.0}}, identifier: 'habit-management-filter'
+                                                      Button, 0x1061ce080, {{16.0, 419.0}, {362.0, 32.0}}, label: 'Active (2)'
+                                                      Button, 0x1061cdcc0, {{378.0, 419.0}, {362.0, 32.0}}, label: 'Archived (1)', Selected
+                                                    Other, 0x1061b0000, {{47.5, 486.0}, {672.5, 72.5}}
+                                                      StaticText, 0x1061b0140, {{88.0, 486.0}, {114.0, 18.0}}, label: 'Morning Stretch'
+                                                      Image, 0x1061b0280, {{47.5, 511.0}, {17.0, 22.0}}, identifier: 'figure.run', label: 'Running'
+                                                      StaticText, 0x1061b03c0, {{89.0, 506.0}, {61.0, 14.5}}, label: '1 times'
+                                                      Image, 0x1061b0500, {{89.0, 507.0}, {12.0, 12.0}}, identifier: 'checkmark.circle', label: 'Selected', Selected
+                                                      StaticText, 0x1061b0640, {{89.0, 525.5}, {87.0, 14.5}}, label: '1 day streak'
+                                                      Image, 0x1061b0780, {{89.0, 525.5}, {10.0, 13.0}}, identifier: 'flame', label: 'Flame'
+                                                      Button, 0x1061b08c0, {{621.5, 514.0}, {19.0, 16.5}}, identifier: 'habit-management-history-Morning Stretch', label: 'History'
+                                                      Button, 0x1061b0a00, {{659.0, 511.0}, {61.0, 22.5}}, identifier: 'habit-management-restore-Morning Stretch', label: 'Restore'
+                                                      StaticText, 0x1061b0b40, {{88.0, 544.0}, {55.5, 14.5}}, label: 'Nov 2026'
+                                                  Other, 0x1061b0c80, {{723.0, 204.0}, {30.0, 907.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x1061b0dc0, {{750.0, 750.0}, {3.0, 358.0}}
+                                                  Other, 0x1061b0f00, {{723.0, 204.0}, {30.0, 907.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x1061b1040, {{750.0, 750.0}, {3.0, 358.0}}
+                                        Toolbar, 0x1061b1180, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x1061b12c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                Toolbar, 0x1061b1400, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x1061b1540, {{0.0, 96.0}, {756.0, 1062.0}}
+                            Other, 0x1061b1680, {{0.0, 96.0}, {756.0, 1062.0}}
+                              Other, 0x1061b17c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                Other, 0x1061b1900, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1061b1a40, {{0.0, 32.0}, {756.0, 44.0}}
+                    Button, 0x1061b1b80, {{183.5, 36.0}, {56.0, 36.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x1061b1cc0, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x1061b1e00, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x1061b1f40, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                      Button, 0x1061b2080, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                    Button, 0x1061b21c0, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                      Button, 0x1061b2300, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                    Button, 0x1061b2440, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life', Selected
+                      Button, 0x1061b2580, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life', Selected
+              Other, 0x1061b26c0, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x1061b2800, {{378.0, 585.0}, {0.0, 0.0}}
+      Other, 0x1061b2940, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1061b2a80, {{-756.0, -1158.0}, {2268.0, 3474.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Other, 0x1061b2bc0, {{88.0, 518.5}, {580.0, 619.5}}
+          Button, 0x1061b2d00, {{328.0, 514.5}, {100.0, 24.0}}, label: 'Sheet Grabber', value: Half screen
+          Other, 0x1061b2e40, {{88.0, 518.5}, {580.0, 619.5}}
+            Other, 0x1061b2f80, {{88.0, 518.5}, {580.0, 619.5}}
+              Other, 0x1061b30c0, {{88.0, 518.5}, {580.0, 619.5}}
+                ScrollView, 0x1061b3200, {{88.0, 518.5}, {580.0, 619.5}}, identifier: 'habit-management-history-scroll'
+                  Other, 0x1061b3340, {{88.0, 518.5}, {580.0, 190.5}}
+                    StaticText, 0x1061b3480, {{172.0, 550.5}, {148.5, 24.0}}, identifier: 'habit-management-history-screen', label: 'Morning Stretch'
+                    Button, 0x1061b35c0, {{598.0, 564.5}, {20.0, 20.0}}, identifier: 'habit-management-history-close', label: 'Close'
+                    StaticText, 0x1061b3700, {{145.5, 606.5}, {49.5, 18.0}}, label: 'History'
+                    Other, 0x1061b3840, {{120.5, 676.0}, {523.5, 18.0}}
+                      Image, 0x1061b3980, {{120.5, 677.5}, {15.0, 15.0}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                      StaticText, 0x1061b3ac0, {{156.0, 676.0}, {77.5, 18.0}}, identifier: 'habit-management-history-action-0', label: 'Completed'
+                      StaticText, 0x1061b3c00, {{574.5, 677.8}, {69.5, 14.5}}, identifier: 'habit-management-history-date-0', label: 'Nov 6, 2026'
+                  Other, 0x1061b3d40, {{635.0, 550.5}, {30.0, 555.5}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                    Other, 0x1061b3e80, {{662.0, 1096.0}, {3.0, 7.0}}
+                  Other, 0x10ff9c000, {{635.0, 550.5}, {30.0, 555.5}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                    Other, 0x10ff9c140, {{662.0, 1096.0}, {3.0, 7.0}}
+          Other, 0x10ff9c280, {{88.0, 518.5}, {580.0, 619.5}}
+            Other, 0x10ff9c3c0, {{88.0, 518.5}, {580.0, 619.5}}
+              Other, 0x10ff9c500, {{88.0, 518.5}, {580.0, 619.5}}
+                Other, 0x10ff9c640, {{88.0, 518.5}, {580.0, 619.5}}
+                  Other, 0x10ff9c780, {{88.0, 518.5}, {580.0, 619.5}}
+                    Other, 0x10ff9c8c0, {{88.0, 518.5}, {580.0, 619.5}}
+                Other, 0x10ff9ca00, {{88.0, 518.5}, {580.0, 619.5}}
+                  Other, 0x10ff9cb40, {{88.0, 518.5}, {580.0, 619.5}}
+    Window, 0x10ff9cc80, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x10ff9cdc0, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x10ff9cf00, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x1061a8140, pid: 46686, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10ff9d040, pid: 46686, label: 'DUNE'
+  }

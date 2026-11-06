@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "review": "duo-open-management-isolated1-native-review",
+  "source": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+  "profile": "duo-open-normal",
+  "archive": ".codex-checks/batch04/evidence/duo-open-a967f801-management-isolated1-passed",
+  "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+  "SDK": {
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "status": "Passed",
+    "exit": 0,
+    "duration_seconds": 127.36509203910828,
+    "sourceUnchanged": true
+  },
+  "pose_verified": {
+    "angle_degrees": 180,
+    "active_display": "LCD-1",
+    "orientation": "rot90",
+    "actual_png_dimensions": [
+      2853,
+      2007
+    ],
+    "readback_before_after": true
+  },
+  "full_source_sha256": {
+    "DUNE/Presentation/Life/LifeView.swift": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+    "DUNE/Presentation/Life/HabitManagementView.swift": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+    "DUNE/Presentation/Life/HabitHeatmapDetailView.swift": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+    "DUNE/Presentation/Life/WeeklyHabitReportView.swift": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+    "DUNEUITests/Full/LifeRegressionTests.swift": "6c3f28a558f2414c5c3f738e0302dc530d7cbb8fd3c460d3cf7696a802bee372",
+    "DUNEUITests/Visual/LifeFlowUITests.swift": "8029e519a4911309ce5d15d43277207feac5ef3bbd63191fdb1adf664dfc9c34",
+    "DUNEUITests/Full/DuoRemainingRouteTests.swift": "15802d4906836e92cb278c832c34a49dcd8d7d5420a518a2c648c18b4166e5df",
+    "DUNEUITests/Helpers/UITestHelpers.swift": "e4c0cf9dc77295486fdf688bcf8c55de1b0cf28cbffa77efb5263650083e9d7b",
+    "DUNE/App/TestDataSeeder.swift": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871",
+    "Shared/Resources/Localizable.xcstrings": "83bd89e2b1252596fac87c7e58b8a6ad173dab29cbdbf81fcb793144d0b5a462"
+  },
+  "validated_pair_index": {
+    "path": "duo-open-management-isolated1-pairs.json",
+    "sha256": "d8d52643258a0e84eed871d438b02864c1d5bae78b8358081f8a9d2f81c3756c",
+    "pairs": 1
+  },
+  "passed_test_methods": [
+    "LifeRegressionTests/testVisualAuditHabitManagement()"
+  ],
+  "selected_pairs": [
+    {
+      "screen": "L06",
+      "profile": "duo-open-normal",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L06 archived history hero and action [DUNEUITests/LifeRegressionTests.swift:475] DEADLINE=1793932946.918823",
+      "host_sequence": 11,
+      "source": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+      "archive": ".codex-checks/batch04/evidence/duo-open-a967f801-management-isolated1-passed",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793932919.369455,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-open-a967f801-management-isolated1-passed/host/011-2007x2853.png",
+      "png_sha256": "8432e58aeccafc96c70dc1b4fa3651dc2f4e5742c31a0fccb8c2753314fe94da",
+      "ax": ".codex-checks/batch04/evidence/duo-open-a967f801-management-isolated1-passed/host/011-hierarchy.txt",
+      "ax_sha256": "25f95eb3e70f9687daf976b1f0a45e3d52d4d1e221d8844f6cee4406558b7ea2",
+      "png_dimensions": [
+        2853,
+        2007
+      ],
+      "angle_degrees": 180,
+      "active_display": "LCD-1",
+      "orientation": "rot90"
+    }
+  ],
+  "selected_pairs_count": 1,
+  "visual_inspection": "Viewed one actual open LCD-1 archived PNG and read paired AX tree; PNG/AX and frozen 10-source SHA-256 plus 2853x2007 IHDR verified.",
+  "observations": "L06 archived management shows Habits hero with archive icon, 1 Archived, Archived (1) filter, Morning Stretch row and History. History sheet shows Morning Stretch icon/name, Close, History, Completed and Nov 6, 2026, all fully visible without blocking overlap. Restore and Back are present in the underlying management AX tree; their interactions are covered by the passing method assertions.",
+  "functional_assertions": "The isolated method passed independently at source a967 within its unchanged 300-second limit. Its test code asserts History sheet opens, action/date appear, Close dismisses, Restore removes the archived row, No Archived Habits appears, Back returns to Life. These are SDK assertions, distinct from the one selected visual frame.",
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "passed_only_visual_review": true,
+  "native_aggregate_pass": true,
+  "original_four_method_aggregate": {
+    "archive": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed",
+    "executed": 4,
+    "passed": 3,
+    "failed": 1,
+    "status": "Failed",
+    "exit": 65,
+    "preserved": true
+  },
+  "not_claimed": [
+    "original four-method aggregate pass",
+    "app-animation fix or cause of earlier notification stall",
+    "full 19-method matrix pass",
+    "Dark Mode/VoiceOver audit",
+    "actual-map publication"
+  ]
+}
