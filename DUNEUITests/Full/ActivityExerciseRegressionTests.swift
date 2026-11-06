@@ -66,6 +66,17 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         historyLink.auditTap()
         let history = app.scrollViews[AXID.exerciseHistoryScreen].firstMatch
         XCTAssertTrue(history.waitForExistence(timeout: 10))
+        // ExerciseView's inspector can remain in front while the history destination
+        // is already present behind it. Close only the original inspector chrome.
+        let inspectorDone = app.buttons["exercise-inspector-close"].firstMatch
+        if inspectorDone.exists && inspectorDone.isHittable {
+            inspectorDone.auditTap()
+            let inspectorDismissed = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "exists == false"), object: inspectorDone
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [inspectorDismissed], timeout: 5), .completed)
+        }
+        XCTAssertTrue(history.waitForExistence(timeout: 5) && history.isHittable)
         VisualAudit.capture("W26 \(size) history chart and selected metric")
         let sessionsStat = app.staticTexts.matching(NSPredicate(format: "label == %@", "Sessions")).firstMatch
         for _ in 0..<12 where !(sessionsStat.exists && sessionsStat.isHittable) {
@@ -180,7 +191,12 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let size = maximumText ? "MAX" : "normal"
 
         openNotificationHub()
+        let hub = app.collectionViews[AXID.notificationHubScreen].firstMatch
+        XCTAssertTrue(hub.waitForExistence(timeout: 5))
         let row = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationWorkoutRouteID)].firstMatch
+        for _ in 0..<16 where !(row.exists && row.isHittable) {
+            hub.swipeUp(velocity: .slow)
+        }
         XCTAssertTrue(row.waitForExistence(timeout: 8) && row.isHittable)
         row.auditTap()
         let detail = app.scrollViews[AXID.healthkitWorkoutDetailScreen].firstMatch
