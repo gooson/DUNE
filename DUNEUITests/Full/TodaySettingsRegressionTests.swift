@@ -777,6 +777,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
         let confirmClear = app.sheets.buttons["Clear Exercise Settings"].firstMatch
         XCTAssertTrue(confirmClear.waitForExistence(timeout: 5), "Clear Exercise Settings confirmation should appear")
+        VisualAudit.capture("S03 clear saved exercise settings confirmation")
         confirmClear.auditTap()
 
         XCTAssertTrue(
@@ -787,6 +788,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             app.descendants(matching: .any)[AXID.exerciseDefaultsConfiguredSection].firstMatch.waitForNonExistence(timeout: 8),
             "Configured section should disappear after clearing the only saved default"
         )
+        VisualAudit.capture("S02 configured section removed after S03 clear")
     }
 
     func testPreferredExercisesSearchShowsToggle() throws {
@@ -801,6 +803,227 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             "Deadlift preferred toggle should exist in filtered preferred exercises results"
         )
         XCTAssertTrue(waitForHittable(toggle, timeout: 5), "Deadlift preferred toggle should be hittable")
+    }
+
+    func testSettingsMaxTextKeepsFirstControlAndLastRowReachable() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        openSettings()
+
+        let increment = app.buttons["settings-row-resttime-Increment"].firstMatch
+        XCTAssertTrue(increment.waitForExistence(timeout: 5) && increment.isHittable,
+                      "First native Stepper control stays reachable at maximum text size")
+        VisualAudit.capture("S01 MAX native controls at top")
+
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowVersion, maxSwipes: 40),
+                      "Last Settings row stays reachable in the native Form")
+        VisualAudit.capture("S01 MAX final section")
+    }
+
+    func testExerciseDefaultsSearchResultOpensOriginalEditor() throws {
+        openExerciseDefaults()
+        var search = app.searchFields.firstMatch
+        if !search.waitForExistence(timeout: 2) {
+            let list = app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch.exists
+                ? app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch
+                : app.collectionViews.firstMatch
+            if list.exists { list.swipeDown() }
+            search = app.searchFields.firstMatch
+        }
+        XCTAssertTrue(search.waitForExistence(timeout: 5), "Native exercise search is available")
+        search.auditTap()
+        search.typeText(Fixture.deadliftSearchQuery)
+        _ = app.dismissKeyboardIfPresent()
+
+        let deadlift = app.descendants(matching: .any)[AXID.exerciseDefaultsRow(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(deadlift.waitForExistence(timeout: 5), "Search shows the matching exercise")
+        XCTAssertFalse(app.descendants(matching: .any)[AXID.exerciseDefaultsConfiguredSection].firstMatch.exists,
+                       "Search hides the configured section while showing results")
+        VisualAudit.capture("S02 filtered exercise results")
+        deadlift.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDefaultEditScreen]
+            .firstMatch.waitForExistence(timeout: 5), "Search result opens the same default editor")
+        VisualAudit.capture("S03 editor opened from S02 search")
+    }
+
+    func testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        openExerciseDefaults()
+
+        var search = app.searchFields.firstMatch
+        if !search.waitForExistence(timeout: 2) {
+            let list = app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch.exists
+                ? app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch
+                : app.collectionViews.firstMatch
+            if list.exists { list.swipeDown() }
+            search = app.searchFields.firstMatch
+        }
+        XCTAssertTrue(search.waitForExistence(timeout: 5))
+        search.auditTap()
+        search.typeText(Fixture.deadliftSearchQuery)
+        _ = app.dismissKeyboardIfPresent()
+        let defaultsList = app.descendants(matching: .any)[AXID.exerciseDefaultsScreen].firstMatch
+        let deadlift = app.descendants(matching: .any)[AXID.exerciseDefaultsRow(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(deadlift.waitForExistence(timeout: 5) && deadlift.isHittable)
+        XCTAssertTrue(deadlift.label.contains("Deadlift"), "S02 row keeps the complete exercise name")
+        let defaultsViewport = defaultsList.frame.intersection(app.windows.firstMatch.frame)
+            .insetBy(dx: 4, dy: 4)
+        XCTAssertTrue(defaultsViewport.contains(deadlift.frame), "S02 MAX result fits the visible List")
+        VisualAudit.capture("S02 MAX searched exercise row")
+
+        let back = app.navigationBars["Exercise Defaults"].buttons.firstMatch
+        XCTAssertTrue(back.exists && back.isHittable)
+        back.auditTap()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowPreferredExercises, maxSwipes: 8))
+        app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch.auditTap()
+        searchPreferredExercises(Fixture.deadliftSearchQuery)
+        let preferredList = app.descendants(matching: .any)[AXID.preferredExercisesScreen].firstMatch
+        let toggle = app.switches[AXID.preferredExerciseToggle(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5) && toggle.isHittable)
+        XCTAssertTrue(toggle.label.contains("Deadlift"), "S04 switch keeps the complete exercise name")
+        let preferredViewport = preferredList.frame.intersection(app.windows.firstMatch.frame)
+            .insetBy(dx: 4, dy: 4)
+        XCTAssertTrue(preferredViewport.contains(toggle.frame), "S04 MAX switch fits the visible List")
+        VisualAudit.capture("S04 MAX searched exercise and switch")
+    }
+
+    func testExerciseDefaultSaveReopensWithStoredValues() throws {
+        openExerciseDefaults()
+        let row = exerciseDefaultsBenchPressRow()
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        row.auditTap()
+
+        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
+        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
+        _ = app.dismissKeyboardIfPresent()
+        app.buttons[AXID.exerciseDefaultEditSave].firstMatch.auditTap()
+
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDefaultsScreen]
+            .firstMatch.waitForExistence(timeout: 5), "Save returns to the list")
+        VisualAudit.capture("S02 configured exercise after S03 save")
+        let savedRow = exerciseDefaultsBenchPressRow()
+        XCTAssertTrue(savedRow.waitForExistence(timeout: 5))
+        savedRow.auditTap()
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditWeight].firstMatch.value as? String,
+                       Fixture.savedWeight, "Reopened editor shows the saved weight")
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditReps].firstMatch.value as? String,
+                       Fixture.savedReps, "Reopened editor shows the saved reps")
+        VisualAudit.capture("S03 stored values on reopen")
+
+        app.buttons[AXID.exerciseDefaultEditClear].firstMatch.auditTap()
+        let cancelClear = app.sheets.buttons["Cancel"].firstMatch
+        XCTAssertTrue(cancelClear.waitForExistence(timeout: 5), "Clear confirmation offers Cancel")
+        VisualAudit.capture("S03 clear confirmation before cancellation")
+        cancelClear.auditTap()
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditWeight].firstMatch.value as? String,
+                       Fixture.savedWeight, "Cancel preserves the stored defaults")
+        VisualAudit.capture("S03 values retained after clear cancellation")
+    }
+
+    func testExerciseDefaultFieldsFitAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        openExerciseDefaults()
+        let row = exerciseDefaultsBenchPressRow()
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        row.auditTap()
+
+        let form = app.descendants(matching: .any)[AXID.exerciseDefaultEditScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 5))
+        for (labelText, fieldID) in [
+            ("Default Weight", AXID.exerciseDefaultEditWeight),
+            ("Default Reps", AXID.exerciseDefaultEditReps)
+        ] {
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(fieldID, maxSwipes: 12),
+                          "MAX input remains reachable: \(fieldID)")
+            let label = app.staticTexts[labelText].firstMatch
+            let field = app.textFields[fieldID].firstMatch
+            XCTAssertTrue(label.exists && field.exists)
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 6, dy: 6)
+            XCTAssertTrue(viewport.contains(label.frame) && viewport.contains(field.frame),
+                          "MAX label and full field remain visible: \(fieldID)")
+            XCTAssertGreaterThan(field.frame.minY, label.frame.minY,
+                                 "MAX input stacks below its label")
+            VisualAudit.capture("S03 MAX \(labelText) and full input")
+        }
+
+        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
+        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
+        _ = app.dismissKeyboardIfPresent()
+        let save = app.buttons[AXID.exerciseDefaultEditSave].firstMatch
+        XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isHittable,
+                      "Save stays reachable above the MAX Form")
+        VisualAudit.capture("S03 MAX edited values and Save")
+        save.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDefaultsScreen]
+            .firstMatch.waitForExistence(timeout: 5))
+        exerciseDefaultsBenchPressRow().auditTap()
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditWeight].firstMatch.value as? String,
+                       Fixture.savedWeight)
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditReps].firstMatch.value as? String,
+                       Fixture.savedReps)
+        VisualAudit.capture("S03 MAX saved values on reopen")
+    }
+
+    func testExerciseDefaultOutOfRangeInputReopensClamped() throws {
+        openExerciseDefaults()
+        let row = exerciseDefaultsBenchPressRow()
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        row.auditTap()
+
+        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditWeight, with: "9999"))
+        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditReps, with: "1001"))
+        _ = app.dismissKeyboardIfPresent()
+        app.buttons[AXID.exerciseDefaultEditSave].firstMatch.auditTap()
+
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDefaultsScreen]
+            .firstMatch.waitForExistence(timeout: 5))
+        exerciseDefaultsBenchPressRow().auditTap()
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditWeight].firstMatch.value as? String,
+                       "500", "Saved weight is limited to the supported range")
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditReps].firstMatch.value as? String,
+                       "1000", "Saved reps are limited to the supported range")
+    }
+
+    func testPreferredExerciseToggleSurvivesScreenReentry() throws {
+        openPreferredExercises()
+        searchPreferredExercises(Fixture.deadliftSearchQuery)
+        let toggle = app.switches[AXID.preferredExerciseToggle(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5))
+        XCTAssertEqual(toggle.value as? String, "0", "Seeded Deadlift starts unpreferred")
+        toggle.auditTap()
+        let selected = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "value == %@", "1"), object: toggle
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [selected], timeout: 5), .completed,
+                       "Toggle stores the preferred state")
+        VisualAudit.capture("S04 preferred selection in filtered results")
+
+        let back = app.navigationBars["Preferred Exercises"].buttons.firstMatch
+        XCTAssertTrue(back.exists && back.isHittable)
+        back.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.settingsRowPreferredExercises]
+            .firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowPreferredExercises, maxSwipes: 8))
+        app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch.auditTap()
+        searchPreferredExercises(Fixture.deadliftSearchQuery)
+        let reopened = app.switches[AXID.preferredExerciseToggle(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(reopened.waitForExistence(timeout: 5))
+        XCTAssertEqual(reopened.value as? String, "1", "Preferred state survives navigation reentry")
+        VisualAudit.capture("S04 preferred selection after reentry")
     }
 
     func testVisualAuditCumulativeStress() throws {
@@ -1059,9 +1282,18 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         dismissMorningBriefingIfNeeded(timeout: 1.5)
 
         let settingsButton = app.descendants(matching: .any)[AXID.dashboardToolbarSettings].firstMatch
-        XCTAssertTrue(settingsButton.waitForExistence(timeout: 5), "Settings toolbar button should exist")
-        XCTAssertTrue(waitForHittable(settingsButton, timeout: 5), "Settings toolbar button should be tappable")
-        settingsButton.auditTap()
+        if settingsButton.waitForExistence(timeout: 5) && waitForHittable(settingsButton, timeout: 5) {
+            settingsButton.auditTap()
+        } else {
+            let more = app.navigationBars.buttons["More"].firstMatch
+            XCTAssertTrue(more.waitForExistence(timeout: 5), "Settings action should be visible or in More")
+            if !app.waitAndTapToolbarAction(AXID.dashboardToolbarSettings) {
+                // Native overflow can retain an English label while dropping the source identifier.
+                let menuSettings = app.buttons["Settings"].firstMatch
+                XCTAssertTrue(menuSettings.waitForExistence(timeout: 5), "Settings action should be available in More")
+                menuSettings.auditTap()
+            }
+        }
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.settingsRowRestTime].firstMatch.waitForExistence(timeout: 8),
