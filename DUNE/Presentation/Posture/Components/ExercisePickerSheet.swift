@@ -9,6 +9,11 @@ struct ExercisePickerSheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+    @ScaledMetric(relativeTo: .body) private var symbolSize: CGFloat = 22
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     var body: some View {
         NavigationStack {
@@ -21,6 +26,10 @@ struct ExercisePickerSheet: View {
                     exerciseLabel("General Posture", icon: "figure.stand", selected: selectedExerciseID == nil)
                 }
                 .tint(.primary)
+                .listRowBackground(palette.surface)
+                .foregroundStyle(palette.ink)
+                .accessibilityIdentifier("posture-exercise-general")
+                .accessibilityAddTraits(selectedExerciseID == nil ? .isSelected : [])
 
                 Section("Form Check") {
                     ForEach(exercises) { exercise in
@@ -35,9 +44,12 @@ struct ExercisePickerSheet: View {
                             )
                         }
                         .tint(.primary)
+                        .accessibilityIdentifier("posture-exercise-\(exercise.exerciseID)")
+                        .accessibilityAddTraits(selectedExerciseID == exercise.exerciseID ? .isSelected : [])
                     }
                 }
             }
+            .accessibilityIdentifier("posture-exercise-list")
             .scrollContentBackground(.hidden)
             .background { SheetWaveBackground().opacity(0.45) }
             .navigationTitle("Exercise Mode")
@@ -45,10 +57,12 @@ struct ExercisePickerSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") { dismiss() }
+                        .accessibilityIdentifier("posture-exercise-close")
                 }
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
     }
 
     private func exerciseLabel(_ title: LocalizedStringKey, icon: String, selected: Bool) -> some View {
@@ -57,14 +71,20 @@ struct ExercisePickerSheet: View {
             : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
         return layout {
             Image(systemName: icon)
+                .font(.system(size: min(symbolSize, 36)))
+                .frame(width: min(symbolSize, 36) + DS.Spacing.lg, height: min(symbolSize, 36) + DS.Spacing.lg)
+                .background(DS.Color.body.opacity(0.14), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
             Text(title)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
             if selected {
                 Image(systemName: "checkmark")
                     .foregroundStyle(DS.Color.warmGlow)
+                    .accessibilityHidden(true)
             }
         }
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        .contentShape(Rectangle())
     }
 
     private func iconName(for exercise: ExerciseFormRule) -> String {
