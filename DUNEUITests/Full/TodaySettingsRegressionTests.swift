@@ -874,7 +874,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         let defaultsList = app.descendants(matching: .any)[AXID.exerciseDefaultsScreen].firstMatch
         let deadlift = app.descendants(matching: .any)[AXID.exerciseDefaultsRow(Fixture.deadliftID)].firstMatch
         XCTAssertTrue(deadlift.waitForExistence(timeout: 5) && deadlift.isHittable)
-        XCTAssertTrue(deadlift.label.contains("Deadlift"), "S02 row keeps the complete exercise name")
+        XCTAssertTrue(hasCompleteConventionalDeadliftName(deadlift.label),
+                      "S02 row keeps the complete exercise name")
         let defaultsViewport = defaultsList.frame.intersection(app.windows.firstMatch.frame)
             .insetBy(dx: 4, dy: 4)
         XCTAssertTrue(defaultsViewport.contains(deadlift.frame), "S02 MAX result fits the visible List")
@@ -889,7 +890,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         let preferredList = app.descendants(matching: .any)[AXID.preferredExercisesScreen].firstMatch
         let toggle = app.switches[AXID.preferredExerciseToggle(Fixture.deadliftID)].firstMatch
         XCTAssertTrue(toggle.waitForExistence(timeout: 5) && toggle.isHittable)
-        XCTAssertTrue(toggle.label.contains("Deadlift"), "S04 switch keeps the complete exercise name")
+        XCTAssertTrue(hasCompleteConventionalDeadliftName(toggle.label),
+                      "S04 switch keeps the complete exercise name")
         let preferredViewport = preferredList.frame.intersection(app.windows.firstMatch.frame)
             .insetBy(dx: 4, dy: 4)
         XCTAssertTrue(preferredViewport.contains(toggle.frame), "S04 MAX switch fits the visible List")
@@ -902,8 +904,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(row.waitForExistence(timeout: 5))
         row.auditTap()
 
-        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
-        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
+        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
+        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
         _ = app.dismissKeyboardIfPresent()
         app.buttons[AXID.exerciseDefaultEditSave].firstMatch.auditTap()
 
@@ -960,8 +962,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             VisualAudit.capture("S03 MAX \(labelText) and full input")
         }
 
-        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
-        XCTAssertTrue(app.fillTextInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
+        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
+        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
         _ = app.dismissKeyboardIfPresent()
         let save = app.buttons[AXID.exerciseDefaultEditSave].firstMatch
         XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isHittable,
@@ -1004,7 +1006,9 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         let toggle = app.switches[AXID.preferredExerciseToggle(Fixture.deadliftID)].firstMatch
         XCTAssertTrue(toggle.waitForExistence(timeout: 5))
         XCTAssertEqual(toggle.value as? String, "0", "Seeded Deadlift starts unpreferred")
-        toggle.auditTap()
+        let control = toggle.descendants(matching: .switch).firstMatch
+        XCTAssertTrue(control.exists && control.isHittable, "Native switch control should be reachable")
+        control.auditTap()
         let selected = XCTNSPredicateExpectation(
             predicate: NSPredicate(format: "value == %@", "1"), object: toggle
         )
@@ -1303,6 +1307,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     private func openExerciseDefaults() {
         openSettings()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowExerciseDefaults, maxSwipes: 12),
+                      "Exercise Defaults row should be reachable in Settings")
         let row = app.descendants(matching: .any)[AXID.settingsRowExerciseDefaults].firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 5), "Exercise Defaults row should exist in Settings")
         row.auditTap()
@@ -1311,6 +1317,29 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             app.descendants(matching: .any)[AXID.exerciseDefaultsScreen].firstMatch.waitForExistence(timeout: 8),
             "Exercise Defaults screen should open from Settings"
         )
+    }
+
+    private func hasCompleteConventionalDeadliftName(_ label: String) -> Bool {
+        // The exercise library can expose its bundled Korean name under an English app locale.
+        label.contains("Conventional Deadlift") || label.contains("컨벤셔널 데드리프트")
+    }
+
+    private func replaceDefaultNumericInput(_ identifier: String, with replacement: String) -> Bool {
+        let field = app.textFields[identifier].firstMatch
+        guard field.waitForExistence(timeout: 5) else { return false }
+
+        // The iPhone number pad does not honor Command-A. Place the caret after
+        // the right-aligned number, erase its digits, then verify the new value.
+        field.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.5)).auditTap()
+        let existing = (field.value as? String) ?? ""
+        if !existing.isEmpty && existing != field.placeholderValue {
+            field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: existing.count))
+            guard (field.value as? String).map({ $0.isEmpty || $0 == field.placeholderValue }) == true else {
+                return false
+            }
+        }
+        field.typeText(replacement)
+        return (field.value as? String) == replacement
     }
 
     private func openPreferredExercises() {
