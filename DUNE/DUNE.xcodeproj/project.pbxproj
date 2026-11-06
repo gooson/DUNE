@@ -82,6 +82,7 @@
 		0A6A5F2EB3C46EB2BDE872DD /* RealtimePoseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B272A719E42194AD3662924B /* RealtimePoseState.swift */; };
 		0A7B80A06C41645FE897A275 /* DailyDigestScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA638E26D2A6F372D740C6E /* DailyDigestScheduler.swift */; };
 		0A93E0EE9047FF9F38CF5C64 /* HealthQueryService+Workouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B274CC518173A78BF6250E6E /* HealthQueryService+Workouts.swift */; };
+		0AE6732F6F27BC4B08EA3A69 /* HabitReminderSyncState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49A955C597F50C5F428E14C /* HabitReminderSyncState.swift */; };
 		0B20EED3AED4599D11DBCF44 /* HeartRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02591BC92210A67137B6E0B7 /* HeartRateChartView.swift */; };
 		0B38AD86745E73402D662B9D /* ExerciseFormAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6B5CFB6CBC3FCAC3FEFC78 /* ExerciseFormAnalyzer.swift */; };
 		0B495001260BF239928A8F5C /* LaunchExperienceSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606C6F1EB73B5AA13662C421 /* LaunchExperienceSmokeTests.swift */; };
@@ -716,6 +717,7 @@
 		7B83E8CC3B21248D345C7ED6 /* 0.1.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 277091EEE879AF5A61DD3BAB /* 0.1.0.json */; };
 		7BC6428999C2838FACA61540 /* CompoundWorkoutMode+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA7833EB71B7220F7C732F8 /* CompoundWorkoutMode+View.swift */; };
 		7C6A778BA3263EB1C222BB10 /* WidgetSurfaceAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B61F201B0EA208C0C4A3EA0 /* WidgetSurfaceAccessibility.swift */; };
+		7CE956F9945533DCA98D0A3D /* HabitReminderSyncStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B953144D3D9B2D93E36F43 /* HabitReminderSyncStateTests.swift */; };
 		7CF0B76EE2FBDE5583250AB8 /* CorrelateSleepExerciseUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F99608D605707AD556DC674 /* CorrelateSleepExerciseUseCaseTests.swift */; };
 		7CFF578131ABC68977F6D929 /* CardioAtlasPlaceSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF8850DFD6D7F1108384C82 /* CardioAtlasPlaceSearch.swift */; };
 		7D00E31FD4CBFDC0074BEC46 /* HealthSnapshotMirrorMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F36139BA51FE43673B11D1 /* HealthSnapshotMirrorMapperTests.swift */; };
@@ -2126,6 +2128,7 @@
 		74EE9B72FE8804A28C49892E /* ScoreDetailChartHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreDetailChartHeader.swift; sourceTree = "<group>"; };
 		758C76D7A3BC248ED7B11F96 /* CalculationMethodCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculationMethodCard.swift; sourceTree = "<group>"; };
 		76491A7E2F3903E58990B299 /* WorkoutAchievementBoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutAchievementBoardTests.swift; sourceTree = "<group>"; };
+		76B953144D3D9B2D93E36F43 /* HabitReminderSyncStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitReminderSyncStateTests.swift; sourceTree = "<group>"; };
 		76CF9FCAF3F58BB28A805F26 /* WorkoutMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutMode.swift; sourceTree = "<group>"; };
 		7709AE695D79910EB260512D /* WeeklyStatsGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyStatsGrid.swift; sourceTree = "<group>"; };
 		771595A0D4E02F1F4377AC7C /* WidgetPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPlaceholderView.swift; sourceTree = "<group>"; };
@@ -2580,6 +2583,7 @@
 		D3897C53EAD361B927BF3ED1 /* Comparable+Clamped.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clamped.swift"; sourceTree = "<group>"; };
 		D3FDB2DA9908F5F63BBE4303 /* GlassCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCard.swift; sourceTree = "<group>"; };
 		D40EACA3501CAE5BDCB6FD33 /* TemplateWorkoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateWorkoutViewModel.swift; sourceTree = "<group>"; };
+		D49A955C597F50C5F428E14C /* HabitReminderSyncState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitReminderSyncState.swift; sourceTree = "<group>"; };
 		D4B4EEDF0D9588A7DF08B19E /* BodyGuideOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyGuideOverlay.swift; sourceTree = "<group>"; };
 		D530D2C14A697D9504E53935 /* HourlySparklineDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlySparklineDataTests.swift; sourceTree = "<group>"; };
 		D59264C570F446879E08646B /* SuggestedExerciseRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestedExerciseRow.swift; sourceTree = "<group>"; };
@@ -2968,6 +2972,7 @@
 				A56D42D95139ED0AC6E0148C /* HabitLogResolution.swift */,
 				AC6E1C2A562F13B576BFBB3F /* HabitManagementView.swift */,
 				910B1A5425548E6FA9CC54C9 /* HabitPastRecordSheet.swift */,
+				D49A955C597F50C5F428E14C /* HabitReminderSyncState.swift */,
 				FB294CD60DE4377538627626 /* HabitReminderSyncView.swift */,
 				5C6DE0BC1CC33992D4FA1DEB /* HabitRowView.swift */,
 				C26594D42A6F70141D194137 /* HabitTemplateSheet.swift */,
@@ -4758,6 +4763,7 @@
 				CB7323A508B439AFC9547CFD /* HabitAnalyticsServiceTests.swift */,
 				6770AE6BC1FC25D2F1C4C54A /* HabitCycleSnapshotTests.swift */,
 				415032E654D24958864A6204 /* HabitReminderSchedulerTests.swift */,
+				76B953144D3D9B2D93E36F43 /* HabitReminderSyncStateTests.swift */,
 				9A17E1B32410A97AC25B4136 /* HabitStreakServiceTests.swift */,
 				6231431C8771D9773B1FE09D /* HabitTypeTests.swift */,
 				083DB1C3C2077AE6F1985210 /* HealthDataAccessWindowTests.swift */,
@@ -5573,6 +5579,7 @@
 				CB8441BEF91C1A514252A476 /* HabitManagementView.swift in Sources */,
 				F3025A987303FDEB0F449B21 /* HabitPastRecordSheet.swift in Sources */,
 				08782A7E0DB340F7684566F8 /* HabitPurpose+View.swift in Sources */,
+				0AE6732F6F27BC4B08EA3A69 /* HabitReminderSyncState.swift in Sources */,
 				2F7C093EE52C3174306FBF64 /* HabitReminderSyncView.swift in Sources */,
 				C8363E02381E3BA5F1016B8C /* HabitRowView.swift in Sources */,
 				0201CA89E1D30EBD36900F45 /* HabitStreakService.swift in Sources */,
@@ -6528,6 +6535,7 @@
 				580ED2ADC23624CEA86E1943 /* HabitAnalyticsServiceTests.swift in Sources */,
 				E62C449B536CC36046C86D7F /* HabitCycleSnapshotTests.swift in Sources */,
 				C8B64A15359492FEDE6E5458 /* HabitReminderSchedulerTests.swift in Sources */,
+				7CE956F9945533DCA98D0A3D /* HabitReminderSyncStateTests.swift in Sources */,
 				462AAA0EBA82076B85E31C8D /* HabitStreakServiceTests.swift in Sources */,
 				3B75E5D1F813E1A7C0FF286D /* HabitTypeTests.swift in Sources */,
 				D258F62C87FA9E5A62C9FE27 /* HealthDataAccessWindowTests.swift in Sources */,

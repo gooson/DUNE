@@ -393,19 +393,47 @@ final class LifeViewModel {
         )
     }
 
-    func refreshReminderSchedule(for habit: HabitDefinition, referenceDate: Date = Date(), additionalLogs: [HabitLog] = []) {
-        let snapshot = cycleSnapshot(for: habit, referenceDate: referenceDate, additionalLogs: additionalLogs)
+    func refreshReminderSchedule(
+        for habit: HabitDefinition,
+        referenceDate: Date = Date(),
+        additionalLogs: [HabitLog] = [],
+        todayExerciseExists: Bool = false,
+        scheduler: HabitReminderScheduler = .shared
+    ) {
+        guard !habit.isArchived else {
+            scheduler.enqueueRefresh(habitID: habit.id, requests: [])
+            return
+        }
+        let calendar = Calendar.current
+        let logs = rawLogs(for: habit, additionalLogs: additionalLogs)
+        let nextDueDate: Date?
+        let isCompletedToday: Bool
+        switch habit.frequency {
+        case .daily, .weekly:
+            nextDueDate = nil
+            let isAutoCompleted = habit.isAutoLinked && habit.autoLinkSourceRaw == "exercise" && todayExerciseExists
+            let todayValue = HabitLogResolution.resolve(logs, habitID: habit.id)
+                .filter { calendar.isDate($0.date, inSameDayAs: referenceDate) }
+                .reduce(0.0) { $0 + $1.value }
+            isCompletedToday = isAutoCompleted || todayValue >= habit.goalValue
+        case .interval:
+            nextDueDate = makeCycleSnapshot(
+                for: habit, referenceDate: referenceDate, calendar: calendar, logsOverride: logs
+            )?.nextDueDate
+            isCompletedToday = false
+        }
         let requests = HabitReminderScheduler.makeRequests(
             habitID: habit.id,
             habitName: habit.name,
             frequency: habit.frequency,
-            nextDueDate: snapshot?.nextDueDate,
+            nextDueDate: nextDueDate,
             isArchived: habit.isArchived,
+            isCompletedToday: isCompletedToday,
             reminderHour: habit.reminderHour,
             reminderMinute: habit.reminderMinute,
             now: referenceDate
         )
-        HabitReminderScheduler.shared.enqueueRefresh(habitID: habit.id, requests: requests)
+        scheduler.enqueueRefresh(habitID: habit.id, requests: requests)
     }
 
     /// Cancel all pending reminders for a deleted or archived habit.
@@ -970,6 +998,7 @@ final class HabitReminderScheduler {
         frequency: HabitFrequency,
         nextDueDate: Date?,
         isArchived: Bool,
+        isCompletedToday: Bool = false,
         reminderHour: Int = 9,
         reminderMinute: Int = 0,
         now: Date = Date(),
@@ -981,6 +1010,21 @@ final class HabitReminderScheduler {
 
         switch frequency {
         case .daily, .weekly:
+            if isCompletedToday {
+                // Calendar repeats cannot skip one occurrence. Keep the next week queued
+                // while the app is closed; the next lifecycle refresh restores daily repeats.
+                return (1...7).compactMap { day in
+                    guard let date = calendar.date(byAdding: .day, value: day, to: now) else { return nil }
+                    var components = calendar.dateComponents([.year, .month, .day], from: date)
+                    components.hour = hour
+                    components.minute = minute
+                    return UNNotificationRequest(
+                        identifier: "dune.life.habit.\(habitID.uuidString).next\(day)d",
+                        content: reminderContent(habitName: habitName, offset: 0),
+                        trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+                    )
+                }
+            }
             var components = DateComponents()
             components.hour = hour
             components.minute = minute
@@ -1038,8 +1082,29 @@ final class HabitReminderScheduler {
         latestOperationID = operationID
         pendingOperation = Task { [client] in
             await previous?.value
-            await Self.removeAllReminders(habitID: habitID, client: client)
-            for request in requests {
+            let pending = await Self.removeAllReminders(habitID: habitID, client: client)
+            // Share the system's pending-request budget with other notification features.
+            // Preserve baseline schedules before filling spare slots with a rolling week.
+            let habitRequests = pending.filter { Self.habitID(from: $0.identifier) != nil }
+            let otherCount = pending.count - habitRequests.count
+            let candidates = (habitRequests + requests).map { request in
+                (
+                    request: request,
+                    isRolling: request.identifier.contains(".next"),
+                    date: (request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() ?? .distantFuture
+                )
+            }
+            let retained = candidates.sorted {
+                if $0.isRolling != $1.isRolling { return !$0.isRolling }
+                if $0.date != $1.date { return $0.date < $1.date }
+                return $0.request.identifier < $1.request.identifier
+            }.prefix(max(0, 64 - otherCount))
+            let retainedIDs = Set(retained.map { $0.request.identifier })
+            let evictedIDs = habitRequests.map(\.identifier).filter { !retainedIDs.contains($0) }
+            if !evictedIDs.isEmpty {
+                client.removePendingNotificationRequests(withIdentifiers: evictedIDs)
+            }
+            for request in requests where retainedIDs.contains(request.identifier) {
                 do {
                     try await client.add(request)
                 } catch {
@@ -1092,16 +1157,18 @@ final class HabitReminderScheduler {
         await pendingOperation?.value
     }
 
+    @discardableResult
     private static func removeAllReminders(
         habitID: UUID,
         client: any HabitReminderNotificationScheduling
-    ) async {
+    ) async -> [UNNotificationRequest] {
         let prefix = "dune.life.habit.\(habitID.uuidString)."
         let pending = await client.pendingNotificationRequests()
         let matching = pending.filter { $0.identifier.hasPrefix(prefix) }.map(\.identifier)
         if !matching.isEmpty {
             client.removePendingNotificationRequests(withIdentifiers: matching)
         }
+        return pending.filter { !$0.identifier.hasPrefix(prefix) }
     }
 
     private static func notificationID(for habitID: UUID, offsetInDays: Int) -> String {

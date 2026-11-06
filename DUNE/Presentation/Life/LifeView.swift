@@ -181,7 +181,7 @@ struct LifeView: View {
                 onSave: {
                     if let habit = viewModel.createValidatedHabit() {
                         modelContext.insert(habit)
-                        viewModel.refreshReminderSchedule(for: habit)
+                        refreshReminderSchedule(for: habit)
                         viewModel.didFinishSaving()
                         viewModel.resetForm()
                         viewModel.isShowingAddSheet = false
@@ -200,7 +200,7 @@ struct LifeView: View {
                             do {
                                 let descriptor = FetchDescriptor<HabitLog>(predicate: #Predicate { $0.habitDefinition?.id == habitID })
                                 let logs = try modelContext.fetch(descriptor)
-                                viewModel.refreshReminderSchedule(for: habit, additionalLogs: logs)
+                                refreshReminderSchedule(for: habit, additionalLogs: logs)
                             } catch {
                                 AppLogger.notification.error("Habit reminder query failed: \(error.localizedDescription, privacy: .private)")
                             }
@@ -213,6 +213,29 @@ struct LifeView: View {
             }
         }
         .englishNavigationTitle("Life")
+    }
+
+    private func refreshReminderSchedule(for habit: HabitDefinition, additionalLogs: [HabitLog] = []) {
+        var todayExerciseExists = false
+        if habit.isAutoLinked, habit.autoLinkSourceRaw == "exercise" {
+            let calendar = Calendar.current
+            let today = calendar.startOfDay(for: Date())
+            let tomorrow = calendar.date(byAdding: .day, value: 1, to: today) ?? today
+            var descriptor = FetchDescriptor<ExerciseRecord>(predicate: #Predicate {
+                $0.date >= today && $0.date < tomorrow
+            })
+            descriptor.fetchLimit = 1
+            do {
+                let records = try modelContext.fetch(descriptor)
+                todayExerciseExists = !records.isEmpty
+            } catch {
+                AppLogger.notification.error("Habit reminder exercise query failed: \(error.localizedDescription, privacy: .private)")
+                return
+            }
+        }
+        viewModel.refreshReminderSchedule(
+            for: habit, additionalLogs: additionalLogs, todayExerciseExists: todayExerciseExists
+        )
     }
 }
 
@@ -905,7 +928,7 @@ private struct HabitListQueryView: View {
         undoRecord = UndoRecord(habitID: habit.id, removed: saved,
                                 insertedIDs: Set(replacement.newLog.map { [$0.id] } ?? []), expectedSignature: logSignature(replacement.newLog.map { [$0] } ?? []), date: Calendar.current.startOfDay(for: date))
         viewModel.didFinishSaving()
-        viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit))
+        viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: cachedTodayExerciseExists)
         recalculate()
         let isCompleted = viewModel.habitProgresses.first { $0.id == habit.id }?.isCompleted ?? false
         if !isPastEntry && !showsCompleted && wasCompleted != isCompleted { todayFocused = true }
@@ -935,7 +958,7 @@ private struct HabitListQueryView: View {
             }
         }
         undoRecord = nil
-        viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit))
+        viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: cachedTodayExerciseExists)
         recalculate()
         todayFocused = true
     }
@@ -950,7 +973,7 @@ private struct HabitListQueryView: View {
             undoRecord = UndoRecord(habitID: habit.id, removed: [], insertedIDs: [log.id],
                 expectedSignature: logSignature(allLogs(for: habit).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: log.date) }), date: log.date)
             viewModel.didFinishSaving()
-            viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit))
+            viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: cachedTodayExerciseExists)
             recalculate()
         }
     }
@@ -968,7 +991,7 @@ private struct HabitListQueryView: View {
             undoRecord = UndoRecord(habitID: habit.id, removed: [], insertedIDs: [log.id],
                 expectedSignature: logSignature(allLogs(for: habit).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: log.date) }), date: log.date)
             viewModel.didFinishSaving()
-            viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit))
+            viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: cachedTodayExerciseExists)
             recalculate()
         }
     }
