@@ -216,7 +216,7 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
             maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
         ]
         launchApp(with: configuration)
-        if maximumText {
+        if maximumText || app.windows.firstMatch.frame.width >= 600 {
             openAuditFullPicker()
         } else {
             openTemplateFormPicker()
@@ -301,8 +301,12 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         openExerciseViewFromRecentWorkouts()
 
         let templatesButton = app.descendants(matching: .any)[AXID.exerciseToolbarTemplates].firstMatch
-        XCTAssertTrue(templatesButton.waitForExistence(timeout: 5))
-        templatesButton.auditTap()
+        if templatesButton.exists && templatesButton.isHittable {
+            templatesButton.auditTap()
+        } else {
+            XCTAssertTrue(app.waitAndTapToolbarAction("List On A Clipboard", timeout: 8),
+                          "Templates action should be reachable through the native More menu")
+        }
         let templateList = app.descendants(matching: .any)[AXID.workoutTemplateListScreen].firstMatch
         XCTAssertTrue(templateList.waitForExistence(timeout: 8))
         let addTemplate = app.descendants(matching: .any)[AXID.workoutTemplateListAdd].firstMatch
