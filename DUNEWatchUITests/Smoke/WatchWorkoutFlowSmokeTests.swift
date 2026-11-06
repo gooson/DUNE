@@ -392,6 +392,14 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
             XCTAssertFalse(metricText.contains("--"), "Seeded running metric should have a measurement: \(identifier)")
         }
         XCTAssertTrue(accessibleMetricText(app.staticTexts["watch-running-heart-rate-value"].firstMatch).contains("148"))
+        let zone = app.staticTexts["watch-running-heart-rate-zone-label"].firstMatch
+        XCTAssertTrue(zone.exists)
+        XCTAssertFalse(zone.label.contains("--"))
+        let zoneBar = app.descendants(matching: .any)["watch-running-heart-rate-zones"].firstMatch
+        XCTAssertTrue(zoneBar.exists)
+        XCTAssertEqual(zoneBar.value as? String, "5")
+        XCTAssertLessThanOrEqual(zoneBar.frame.maxY, app.frame.maxY - 8,
+                                 "The zone bar must fit above the small-Watch bottom edge")
         XCTAssertLessThanOrEqual(
             app.staticTexts["watch-running-heart-rate-value"].firstMatch.frame.maxY,
             app.frame.maxY,
@@ -420,12 +428,38 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         captureDesignState("C15", visible: "watch-running-paused-indicator")
         XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 5))
         XCTAssertEqual(accessibleMetricText(app.staticTexts["watch-running-distance-value"].firstMatch), initialDistance)
+        XCTAssertTrue(app.staticTexts["watch-running-heart-rate-zone-label"].firstMatch.exists)
 
         app.swipeRight()
         XCTAssertTrue(tapElement(WatchAXID.sessionControlsPauseResumeButton))
         app.swipeLeft()
         XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 5))
         XCTAssertFalse(elementExists("watch-running-paused-indicator", timeout: 1))
+    }
+
+    func testRunningDistanceShowsPersonalizedZoneCount() {
+        var configuration = runningLaunchConfiguration(seededDistance: true)
+        configuration.additionalArguments += ["--ui-watch-six-zones", "--ui-watch-first-zone"]
+        launchApp(with: configuration)
+        startRunningWorkoutFromHome()
+        let zone = app.staticTexts["watch-running-heart-rate-zone-label"].firstMatch
+        XCTAssertTrue(zone.waitForExistence(timeout: 5))
+        XCTAssertTrue(zone.label.contains("1"))
+        let bar = app.descendants(matching: .any)["watch-running-heart-rate-zones"].firstMatch
+        XCTAssertEqual(bar.value as? String, "6")
+        captureDesignState("C21", visible: "watch-running-heart-rate-zone-label")
+    }
+
+    func testRunningDistanceWithoutHeartRateShowsNoZone() {
+        var configuration = runningLaunchConfiguration(seededDistance: true)
+        configuration.additionalArguments += ["--ui-watch-no-heart-rate"]
+        launchApp(with: configuration)
+        startRunningWorkoutFromHome()
+        let zone = app.staticTexts["watch-running-heart-rate-zone-label"].firstMatch
+        XCTAssertTrue(zone.waitForExistence(timeout: 5))
+        XCTAssertTrue(zone.label.contains("--"))
+        XCTAssertTrue(accessibleMetricText(app.staticTexts["watch-running-heart-rate-value"].firstMatch).contains("--"))
+        captureDesignState("C20", visible: "watch-running-heart-rate-zone-label")
     }
 
     func testRunningVoiceFeedbackTogglePersistsAcrossNavigationAndRelaunch() throws {

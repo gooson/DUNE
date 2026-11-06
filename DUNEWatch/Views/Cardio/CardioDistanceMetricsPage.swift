@@ -58,15 +58,14 @@ struct CardioDistanceMetricsPage: View {
                     }
 
                     HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
-                        Text("Heart Rate")
+                        Image(systemName: "heart.fill")
                             .font(DS.Typography.metricLabel)
-                            .foregroundStyle(.secondary)
-
-                        Spacer(minLength: DS.Spacing.xs)
+                            .foregroundStyle(zoneColor)
+                            .accessibilityHidden(true)
 
                         Text(workoutManager.heartRate > 0 ? Int(workoutManager.heartRate).formatted() : "--")
                             .font(DS.Typography.secondaryMetric)
-                            .foregroundStyle(DS.Color.heartRate)
+                            .foregroundStyle(zoneColor)
                             .contentTransition(.numericText())
                             .accessibilityIdentifier("watch-running-heart-rate-value")
                             .accessibilityLabel("Heart Rate")
@@ -76,7 +75,27 @@ struct CardioDistanceMetricsPage: View {
                         Text("bpm")
                             .font(DS.Typography.metricLabel)
                             .foregroundStyle(.secondary)
+
+                        Spacer(minLength: DS.Spacing.xs)
+
+                        Group {
+                            if let index = workoutManager.displayedZoneIndex {
+                                Text("Zone \(index)")
+                            } else {
+                                Text("Zone \("--")")
+                            }
+                        }
+                        .font(DS.Typography.metricLabel.weight(.semibold))
+                        .foregroundStyle(zoneColor)
+                        .lineLimit(1)
+                        .accessibilityIdentifier("watch-running-heart-rate-zone-label")
                     }
+
+                    HRZoneBar(
+                        activeIndex: workoutManager.displayedZoneIndex,
+                        zoneCount: workoutManager.displayedZoneCount
+                    )
+                    .accessibilityIdentifier("watch-running-heart-rate-zones")
                 }
                 .padding(.horizontal, DS.Spacing.sm)
                 .padding(.bottom, DS.Spacing.md)
@@ -85,6 +104,12 @@ struct CardioDistanceMetricsPage: View {
             .scrollBounceBehavior(.basedOnSize)
         }
         .accessibilityIdentifier("watch-running-distance-metrics")
+    }
+
+    private var zoneColor: Color {
+        workoutManager.displayedZoneIndex.map {
+            HRZoneBar.color(for: $0, count: workoutManager.displayedZoneCount)
+        } ?? .secondary
     }
 
     private func metric(

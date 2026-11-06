@@ -30,26 +30,22 @@
     "iphone_notification_running": {
       "path": "images/iphone_notification_running.png",
       "test": "WatchWorkoutLiveActivityUITests/testRunningNotificationCenterPresentation()",
-      "xcresult": "Test-DUNEUITests-2026.10.25_16-16-50-+0900.xcresult",
-      "device": "iPhone 18 Pro-wt-Health-4592-aaa7381c832d",
-      "device_id": "B52BB289-B70B-46C6-9E57-C6C0D5D11D60",
-      "runtime": "iOS 27.0",
-      "timestamp": 1792912717.7350855,
-      "timestamp_source": "xcresult PNG payload modification time",
-      "source_revision": "015c3672",
+      "xcresult": ".deriveddata/unit-tests/Logs/Test/Test-DUNEUITests-2026.11.06_13-14-05-+0900.xcresult",
+      "device": "iPhone 18 Pro-wt-dune-workout-review-ship-20261106-tmp-42a88a61797a",
+      "device_id": "0B834DC4-6CF9-4B38-B046-11FED898CD01",
+      "timestamp": 1793938846.085,
+      "source_revision": "6b5befdf2447eaabef0e37cbe92bc4d468d77834",
       "source_worktree_dirty": true,
-      "appearance": "dark",
-      "provenance": "seeded_springboard_element_raw_png",
-      "raw_payload": "data.0~kXcm3uo55s3KCWQYQeWSjCOURQmskLWxmJYneDvJUPVi0D6wXSeXvWWxVDEbVN2igjQHBzvSDkLBGgxA-8e2vg==",
-      "sha256": "c1de5468a218ab404a5f78b89c086c5001c197abf210b76d90111f0b3ad862f8",
+      "sha256": "f2de626b31e72eb52c84f24a4a50166c927b1e2a9c93232279815018b804ba31",
+      "current_layout": true,
+      "layout_revision": "2026-11-06-vertical-insets",
+      "provenance": "XCTest native app/system screenshot with synthetic workout data",
       "validation": {
-        "method": "passed in XCTest log",
-        "bundle": "interrupted during SDK result finalization",
-        "runner_exit": 124
+        "method": "passed",
+        "runner_exit": 0
       },
-      "note": "Actual ActivityKit element screenshot. Copied unchanged from PNG payload in interrupted xcresult (missing Info.plist); 3 methods passed, stale failed, SDK finalization timed out. Not a successful suite/result bundle or paired-Watch proof.",
-      "layout_revision": "2026-10-25-before-dune-wordmark",
-      "current_layout": false
+      "note": "ActivityKit surface only; permission prompt excluded. Top 20pt, bottom about 20pt.",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-2"
     },
     "iphone_notification_strength_long_name": {
       "path": "images/iphone_notification_strength_long_name.png",
@@ -74,12 +70,32 @@
       "note": "Actual ActivityKit element screenshot. Copied unchanged from PNG payload in interrupted xcresult (missing Info.plist); 3 methods passed, stale failed, SDK finalization timed out. Not a successful suite/result bundle or paired-Watch proof.",
       "layout_revision": "2026-10-25-before-dune-wordmark",
       "current_layout": false
+    },
+    "iphone_notification_gold_distance": {
+      "path": "images/iphone_notification_gold_distance.png",
+      "test": "WatchWorkoutLiveActivityUITests/testGoldCardioDistancePresentation()",
+      "xcresult": ".deriveddata/unit-tests/Logs/Test/Test-DUNEUITests-2026.11.06_13-14-05-+0900.xcresult",
+      "device": "iPhone 18 Pro-wt-dune-workout-review-ship-20261106-tmp-42a88a61797a",
+      "device_id": "0B834DC4-6CF9-4B38-B046-11FED898CD01",
+      "timestamp": 1793938808.319,
+      "source_revision": "6b5befdf2447eaabef0e37cbe92bc4d468d77834",
+      "source_worktree_dirty": true,
+      "sha256": "a9409e44d59301c9dd0ffb93135ea27a6825ac79a25efb7e0872c8a5d2161721",
+      "current_layout": true,
+      "layout_revision": "2026-11-06-vertical-insets",
+      "provenance": "XCTest native app/system screenshot with synthetic workout data",
+      "validation": {
+        "method": "passed",
+        "runner_exit": 0
+      },
+      "note": "ActivityKit surface only; permission prompt excluded. Top 20pt, bottom about 20pt.",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-2"
     }
   },
   "states": {
     "iphone_notification_running": {
-      "status": "outdated",
-      "caption": "iPhone 알림 센터 · 운동 진행"
+      "status": "captured",
+      "caption": "WLA01 · 시간 우선 · 상하 20pt"
     },
     "iphone_notification_paused": {
       "status": "outdated",
@@ -112,6 +128,10 @@
     "iphone_watch_ended_dismissal": {
       "status": "pending",
       "caption": "실제 Watch 종료 후 iPhone 카드 제거"
+    },
+    "iphone_notification_gold_distance": {
+      "status": "captured",
+      "caption": "WLA01 · 거리 우선 · 상하 20pt"
     }
   },
   "other_surfaces": {
@@ -193,7 +213,7 @@
     "runner_exit": 1,
     "ui_exception": "approved_by_user_2026-10-30"
   },
-  "pending_layout_note": "WLA01 Gold Impact·선택 지표 최종 캡처 미완료: UI 앱 빌드는 통과했으나 환경 조회가 응답하지 않아 새 testcase 0건. 이전 PNG는 현재 구현의 증거가 아니다.",
+  "pending_layout_note": "WLA01 일반 iPhone 시간·거리 우선 카드의 새 캡처와 여백 검증 완료. iPad·Duo·Island·small·일시 정지·연결 대기·큰 글씨는 이번 수정 후 미갱신.",
   "gold_preferences_update": {
     "source_revision": "93fa6959",
     "status": "ui_gate_blocked",

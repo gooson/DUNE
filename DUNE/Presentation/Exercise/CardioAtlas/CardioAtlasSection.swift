@@ -30,6 +30,7 @@ struct CardioAtlasSection: View {
     @AppStorage("cardioAtlas.journey.durationGoalSeconds") private var durationGoal = 10_800.0
     @State private var workouts: [WorkoutSummary] = []
     @State private var healthKitRoute: [WorkoutRoutePoint] = []
+    @State private var healthKitPlace: WorkoutPlace?
     @State private var isLoading = true
     @State private var routeUnavailable = false
     @State private var historyUnavailable = false
@@ -62,7 +63,7 @@ struct CardioAtlasSection: View {
         let next = WorkoutLocationPayload(
             isIndoor: saved?.isIndoor ?? session.isIndoor,
             route: saved?.route.isEmpty == false ? (saved?.route ?? []) : healthKitRoute,
-            place: saved?.place
+            place: saved == nil ? healthKitPlace : saved?.place
         )
         if next != displayLocation {
             displayLocation = next
@@ -122,7 +123,7 @@ struct CardioAtlasSection: View {
                 Button("Try again") { Task { await loadHistory() } }
             }
             if let place = displayLocation.place {
-                Label(place.name, systemImage: "mappin.and.ellipse")
+                Label(place.displayName, systemImage: "mappin.and.ellipse")
                     .font(.subheadline)
                     .accessibilityIdentifier("cardio-atlas-place-name")
             }
@@ -292,9 +293,10 @@ struct CardioAtlasSection: View {
         async let loadedWorkouts = loadWorkouts()
         if let healthKitWorkoutID, locationRecords.first?.payload?.route.isEmpty != false {
             do {
-                let route = try await WorkoutRouteQueryService().fetchRoute(workoutID: healthKitWorkoutID)
+                let location = try await WorkoutRouteQueryService().fetchLocation(workoutID: healthKitWorkoutID)
                 guard !Task.isCancelled else { return }
-                healthKitRoute = route
+                healthKitRoute = location.route
+                healthKitPlace = location.place
             } catch {
                 guard !Task.isCancelled else { return }
                 routeUnavailable = true

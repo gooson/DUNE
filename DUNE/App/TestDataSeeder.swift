@@ -570,9 +570,10 @@ enum TestDataSeeder {
             duration: 1_200, calories: 180, exerciseDefinitionID: "elliptical"
         )
         context.insert(elliptical)
+        let autoPlace = ProcessInfo.processInfo.arguments.contains("--ui-cardio-atlas-auto-place")
         let place = WorkoutPlace(
             latitude: 37.5445, longitude: 127.0438,
-            name: "Atlas Indoor Gym (UI Fixture)", source: .manual
+            name: autoPlace ? "" : "Atlas Indoor Gym (UI Fixture)", source: autoPlace ? .gps : .manual
         )
         context.insert(WorkoutLocationRecord(
             localRecordID: elliptical.id,

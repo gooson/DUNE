@@ -7,7 +7,11 @@ import OSLog
 protocol WorkoutRouteLocationProviding: AnyObject {
     var delegate: CLLocationManagerDelegate? { get set }
     var authorizationStatus: CLAuthorizationStatus { get }
+    var desiredAccuracy: CLLocationAccuracy { get set }
+    var distanceFilter: CLLocationDistance { get set }
+    var allowsBackgroundLocationUpdates: Bool { get set }
     func requestWhenInUseAuthorization()
+    func requestLocation()
     func startUpdatingLocation()
     func stopUpdatingLocation()
 }
@@ -19,22 +23,25 @@ extension CLLocationManager: WorkoutRouteLocationProviding {}
 final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
     private let locationManager: any WorkoutRouteLocationProviding
     private(set) var points: [WorkoutRoutePoint] = []
+    private(set) var capturedPlace: WorkoutPlace?
     private(set) var isRecording = false
     private(set) var isPaused = false
     private var acceptsSamplesFrom: Date?
     private var previousPoint: WorkoutRoutePoint?
     private var isUpdatingLocation = false
+    private var capturesPlaceOnly = false
+    private var hasRequestedPlace = false
+    private var placeTimeoutTask: Task<Void, Never>?
 
     init(locationManager: any WorkoutRouteLocationProviding = CLLocationManager()) {
         self.locationManager = locationManager
         super.init()
         locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = 10
+        locationManager.allowsBackgroundLocationUpdates = true
         if let manager = locationManager as? CLLocationManager {
-            manager.desiredAccuracy = kCLLocationAccuracyBest
-            manager.distanceFilter = 10
             manager.activityType = .fitness
-            // The Watch target declares location + workout-processing background modes.
-            manager.allowsBackgroundLocationUpdates = true
         }
     }
 
@@ -43,12 +50,36 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         return false
     }
 
-    func start(at date: Date) {
+    static func shouldCapturePlace(mode: WorkoutMode) -> Bool {
+        if case .cardio(_, let isOutdoor) = mode { return !isOutdoor }
+        return false
+    }
+
+    func start(at date: Date, capturesPlaceOnly: Bool = false) {
         cancel()
+        self.capturesPlaceOnly = capturesPlaceOnly
+        hasRequestedPlace = false
+        locationManager.desiredAccuracy = capturesPlaceOnly ? kCLLocationAccuracyHundredMeters : kCLLocationAccuracyBest
+        locationManager.distanceFilter = capturesPlaceOnly ? kCLDistanceFilterNone : 10
+        locationManager.allowsBackgroundLocationUpdates = !capturesPlaceOnly
         points = []
         acceptsSamplesFrom = date
         isRecording = true
         applyAuthorization(locationManager.authorizationStatus, requestsPermission: true)
+        if capturesPlaceOnly {
+            placeTimeoutTask = Task { @MainActor [weak self] in
+                do { try await Task.sleep(for: .seconds(30)) } catch { return }
+                self?.finishPlaceCapture()
+            }
+        }
+    }
+
+    func finishPlaceCapture() {
+        guard capturesPlaceOnly else { return }
+        isRecording = false
+        placeTimeoutTask?.cancel()
+        placeTimeoutTask = nil
+        stopUpdates()
     }
 
     func pause(at date: Date) {
@@ -56,6 +87,8 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         isPaused = true
         previousPoint = nil
         stopUpdates()
+        // A paused one-shot request is cancelled; resume may make one fresh request.
+        if capturesPlaceOnly, capturedPlace == nil { hasRequestedPlace = false }
     }
 
     func resume(at date: Date) {
@@ -67,6 +100,8 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
     }
 
     func stop() -> [WorkoutRoutePoint] {
+        placeTimeoutTask?.cancel()
+        placeTimeoutTask = nil
         isRecording = false
         isPaused = false
         acceptsSamplesFrom = nil
@@ -78,6 +113,7 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
     func cancel() {
         _ = stop()
         points = []
+        capturedPlace = nil
     }
 
     private func stopUpdates() {
@@ -90,6 +126,13 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
             guard !isUpdatingLocation else { return }
+            if capturesPlaceOnly {
+                guard !hasRequestedPlace else { return }
+                hasRequestedPlace = true
+                isUpdatingLocation = true
+                locationManager.requestLocation()
+                return
+            }
             isUpdatingLocation = true
             locationManager.startUpdatingLocation()
         case .notDetermined:
@@ -107,13 +150,20 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
             guard location.timestamp >= acceptsSamplesFrom,
                   location.timestamp <= now.addingTimeInterval(1),
                   now.timeIntervalSince(location.timestamp) <= 15,
-                  location.horizontalAccuracy >= 0, location.horizontalAccuracy < 20,
+                  location.horizontalAccuracy >= 0,
+                  (capturesPlaceOnly ? location.horizontalAccuracy <= 100 : location.horizontalAccuracy < 20),
                   var point = WorkoutRoutePoint(
                     latitude: location.coordinate.latitude, longitude: location.coordinate.longitude,
                     timestamp: location.timestamp,
                     altitude: location.verticalAccuracy >= 0 ? location.altitude : nil,
                     horizontalAccuracy: location.horizontalAccuracy
                   ) else { previousPoint = nil; continue }
+            if capturesPlaceOnly {
+                capturedPlace = WorkoutPlace(latitude: point.latitude, longitude: point.longitude,
+                                             name: "", source: .gps)
+                finishPlaceCapture()
+                return
+            }
             point.startsNewSegment = previousPoint == nil
             if let previousPoint {
                 let interval = point.timestamp.timeIntervalSince(previousPoint.timestamp)

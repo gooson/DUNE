@@ -65,6 +65,7 @@ final class WorkoutManager: NSObject {
     private var finalizationTimeoutTask: Task<Void, Never>?
     private var routeRecorder: WorkoutRouteRecorder?
     private var capturedRoute: [WorkoutRoutePoint] = []
+    private var capturedPlace: WorkoutPlace?
     // Completed-workout jobs are independent of session/reset generation and own immutable inputs.
     private var routeSaveJobs: [UUID: WorkoutRouteSaveJob] = [:]
     /// Ensures `workoutEnded` signal is sent only once per session.
@@ -513,6 +514,7 @@ final class WorkoutManager: NSObject {
         routeRecorder?.cancel()
         routeRecorder = nil
         capturedRoute = []
+        capturedPlace = nil
         runningVoiceFeedback.stop()
         runningVoiceFeedback.resetProgress()
         stopMirrorTransport()
@@ -593,6 +595,7 @@ final class WorkoutManager: NSObject {
             routeRecorder?.cancel()
             routeRecorder = nil
             capturedRoute = []
+            capturedPlace = nil
             Self.logger.error("Failed to start HK session: \(String(describing: error), privacy: .public)")
             newSession.end()
             session = nil
@@ -652,6 +655,10 @@ final class WorkoutManager: NSObject {
             lastAnnouncedKilometer = 3
             currentPace = 1_170 / 3.24
             heartRate = 148
+        }
+        if ProcessInfo.processInfo.arguments.contains("--ui-watch-no-heart-rate") {
+            heartRate = 0
+            liveZoneIndex = nil
         }
 #endif
         persistRecoveryState()
@@ -1022,6 +1029,7 @@ final class WorkoutManager: NSObject {
         routeRecorder?.cancel()
         routeRecorder = nil
         capturedRoute = []
+        capturedPlace = nil
         runningVoiceFeedback.stop()
         runningVoiceFeedback.resetProgress()
         stopMirrorTransport()
@@ -1514,15 +1522,17 @@ final class WorkoutManager: NSObject {
     private func startRouteCaptureIfNeeded(at date: Date) {
         guard !Self.isSimulatorRuntime, !isSessionEnded, !isPaused,
               routeRecorder == nil, session?.state == .running,
-              WorkoutRouteRecorder.shouldRecord(mode: workoutMode) else { return }
+              WorkoutRouteRecorder.shouldRecord(mode: workoutMode)
+                || WorkoutRouteRecorder.shouldCapturePlace(mode: workoutMode) else { return }
         let recorder = WorkoutRouteRecorder()
         routeRecorder = recorder
-        recorder.start(at: date)
+        recorder.start(at: date, capturesPlaceOnly: WorkoutRouteRecorder.shouldCapturePlace(mode: workoutMode))
     }
 
     private func stopRouteCapture() {
         guard let routeRecorder else { return }
         capturedRoute = routeRecorder.stop()
+        capturedPlace = routeRecorder.capturedPlace
         self.routeRecorder = nil
     }
 
@@ -1842,6 +1852,8 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                 stopRouteCapture()
                 let endedRoute = capturedRoute
                 capturedRoute = []
+                let endedPlace = capturedPlace
+                capturedPlace = nil
                 if completedDuration == nil { completedDuration = activeElapsedTime(at: date) }
                 endPause(at: date, announcesResume: false)
                 isSessionEnded = true
@@ -1849,6 +1861,9 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                 isFinalizingWorkout = true
                 notifyWorkoutEndedIfNeeded()
                 startFinalizationTimeoutWatchdog()
+                // Give optional metadata at most the first second of the six-second watchdog,
+                // before endCollection. Reserve the remainder for core workout finalization.
+                let placeMetadataDeadline = ContinuousClock.now.advanced(by: .seconds(1))
                 let endedBuilder = builder
                 let endedWorkoutMode = workoutMode
                 defer {
@@ -1859,6 +1874,18 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                     }
                 }
                 do {
+                    if endedWorkoutMode != .strength, let endedBuilder, let endedPlace,
+                       let value = WorkoutPlaceMetadata.encodedValue(for: endedPlace) {
+                        do {
+                            try await WorkoutPlaceMetadataWrite.perform(
+                                timeout: ContinuousClock.now.duration(to: placeMetadataDeadline)
+                            ) { completion in
+                                endedBuilder.addMetadata([WorkoutPlaceMetadata.key: value], completion: completion)
+                            }
+                        } catch {
+                            Self.logger.error("Could not save workout place: \(error.localizedDescription, privacy: .private)")
+                        }
+                    }
                     try await endedBuilder?.endCollection(at: date)
                     if endedWorkoutMode == .strength {
                         // Strength template: discard the merged workout so individual
@@ -1895,6 +1922,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
             routeRecorder?.cancel()
             routeRecorder = nil
             capturedRoute = []
+            capturedPlace = nil
             Self.logger.error("Workout session failed: \(error.localizedDescription, privacy: .public)")
             runningVoiceFeedback.stop()
             finalizationTimeoutTask?.cancel()

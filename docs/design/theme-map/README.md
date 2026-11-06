@@ -326,3 +326,7 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-06 L05: [실제 선택 화면·출처](../full-redesign-map/review/l05-habit-history-2026-11-06/index.html). 관련 메서드·기기 범위다.
 
 2026-11-06 L06: [실제 선택 화면·출처](../full-redesign-map/review/l06-habit-history-detail-2026-11-06/index.html). 관련 메서드·기기 범위다.
+
+## Watch 러닝 현재 존 시안 (2026-11-06)
+
+[거리·시간·현재 존 V1/V2 비교](themes/dune-watch-running-zone.html)를 보존했다. 큰 km와 경과 시간·평균 페이스를 유지하고 심박 행에 존 번호를 추가한다. V2는 가변 개수의 구간 막대를 더한다. 40mm 비율·진행/정지/미수신 상태를 제시하며 [배치 계약](../layout-map/watch-running-zone-proposal.md)을 따른다. 사용자가 2026-11-06 V2를 승인했다. 브라우저 시안과 이후 Watch 앱 구현·실제 검증은 구분한다.

@@ -418,7 +418,7 @@ struct CardioAtlasShareCard: View {
             }
 
             if let place = location.place {
-                Label(place.name, systemImage: "mappin")
+                Label(place.displayName, systemImage: "mappin")
                     .font(.caption)
                     .foregroundStyle(theme.accentColor)
             }

@@ -235,3 +235,5 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-06 L05: [실제 선택 화면·출처](../full-redesign-map/review/l05-habit-history-2026-11-06/index.html). 관련 메서드·기기 범위다.
 
 2026-11-06 L06: [실제 선택 화면·출처](../full-redesign-map/review/l06-habit-history-detail-2026-11-06/index.html). 관련 메서드·기기 범위다.
+
+2026-11-06 [Watch 러닝 거리·시간·현재 존 시안](watch-running-zone-proposal.md)을 추가했다. [V1/V2 비교](../theme-map/themes/dune-watch-running-zone.html)는 V2 승인된 브라우저 제안이며 Watch 앱 실제 캡처가 아니다.
