@@ -1,0 +1,104 @@
+{
+  "screen": "W05",
+  "reference": "5a18f60911d3fd92801371993ebf112d4afcf8fa",
+  "scope": "full ExerciseStartView",
+  "scope_byte_identical": true,
+  "scope_sha256": "2dc232282663f7f917a9caf993bc6643858c8d4f221a2c52a237c05b33388b9d",
+  "raw_runs": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "4fd3b3aadfa39908948538587aea81856ad14c48",
+      "counts": {
+        "executed": 2,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 2
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditStrengthStartSessionLastSetAtNormalText": "failed",
+        "testVisualAuditStrengthStartSessionLastSetAtMaximumText": "failed"
+      },
+      "receipt": ".codex-checks/b10/phone-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b10/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "26a7f821ea433c1542c957575617e31d670c263d",
+      "counts": {
+        "executed": 2,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 2
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditStrengthStartSessionLastSetAtNormalText": "failed",
+        "testVisualAuditStrengthStartSessionLastSetAtMaximumText": "failed"
+      },
+      "receipt": ".codex-checks/b10/phone-retry1-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b10/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "0e1de4237331328f7c64db341cde5de5559181d5",
+      "counts": {
+        "executed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditStrengthStartSessionLastSetAtNormalText": "passed",
+        "testVisualAuditStrengthStartSessionLastSetAtMaximumText": "failed"
+      },
+      "receipt": ".codex-checks/b10/ipad-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b10/ipad-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad-retry1",
+      "profile": "ipad",
+      "source_revision": "5a18f60911d3fd92801371993ebf112d4afcf8fa",
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditStrengthStartSessionLastSetAtNormalText": "not_executed",
+        "testVisualAuditStrengthStartSessionLastSetAtMaximumText": "passed"
+      },
+      "receipt": ".codex-checks/b10/ipad-retry1-ui.log.result.json",
+      "result_note": "all requested selectors passed",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b10/ipad-retry1-attachments/manifest.json"
+    }
+  ],
+  "phone": "first0/2 thenretry0/2; actualW05/W06prefix/PNGAX observed but noPhone selector pass. Twofailedchecksclosed, no3rdSDK.",
+  "iPad": "first1/2 normalpassed; MAX-onlyretry1/1passed sameapp",
+  "harness": "combined2UItests retained on remote frozen integration and deferred to W31 draft; no test requiring unmergedScrollView added to earlyPRs",
+  "Duo": "current absent, historicalnotpromoted",
+  "held": "W31Phoneunreached; priorH08/P03/P08/S03/W04 failurecountsunchanged",
+  "phase_ledger": {
+    "0": "sameworktree owneddevices oneSDKdeadline",
+    "1": "mapbeforecode, exact2coreselectors",
+    "2": "threeviewhunks implemented4fd3, test-onlytype/viewport corrections, appunchanged",
+    "2.5": "iPadnormal/MAX fullcorepass; Phone diagnosticprefix only, noallgreen",
+    "3": "independent source/nativequality andsplitstrategy reviews",
+    "4": "test nameleaf andadaptivefooter corrected, Phoneclosed2failure; W31heldPhonegap",
+    "5": "actualiPadmap/Phone diagnostic+pending andcompound",
+    "6": "separatePR ordinaryexpectedSHAmerge; trackedhandoffafteractualGitHubsuccess"
+  }
+}
