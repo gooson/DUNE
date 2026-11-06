@@ -65,6 +65,7 @@ struct PostureHistoryView: View {
                             : String(localized: "Compare"))
                             .font(.subheadline)
                     }
+                    .accessibilityIdentifier("posture-history-compare-button")
                 }
             }
         }
