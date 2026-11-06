@@ -469,13 +469,25 @@
     },
     "W10": {
       "row_id": "W10",
-      "evidence": "workout-completion-sheet",
-      "test": "ActivityExerciseRegressionTests/testManualWorkoutSessionSavesAndDismissesCompletionSheet()",
-      "action": "tap workout-session-done",
-      "timestamp": 1791818301.485,
-      "image": "2D8DC47B-F4CD-48AB-BA03-CAD1E740C07C.png",
-      "screen": "screen-0-1320x2868-tap workout-session-done_0_D9431787-C86F-4CB3-9D74-440D515BFB6E.png",
-      "file": "W10.png"
+      "file": "W10.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutCompletionAtNormalText()",
+      "action": "Normal saved workout summary",
+      "timestamp": 1793995898.602,
+      "source_revision": "80e12fcad184a6061a2e445ff8adfe60f0e8de83",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "49dbf503b69a941bb4d44808d19a1c999d6d4e8dcf749475927bd1349b6dbc3c",
+      "ax_sha256": "e00d4dd6e80632a795f4acc0fccddda6e3ddcd0c88ac4932a94081b599369c09",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/workout-completion-w10-2026-11-07/manifest.json",
+      "capture_scope": "B12 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "T14": {
       "row_id": "T14",
