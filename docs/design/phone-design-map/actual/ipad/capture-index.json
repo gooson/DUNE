@@ -449,13 +449,25 @@
     },
     "W22": {
       "row_id": "W22",
-      "evidence": "template-workout-transition-screen",
-      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
-      "action": "tap workout-template-row-codex-circuit-builder",
-      "timestamp": 1791854775.552,
-      "image": "E9C7DDCD-3516-4FB5-AF45-6264B9C05256.png",
-      "screen": "screen-0-2064x2752-tap workout-template-row-codex-circuit-builder_0_4E012550-CC78-4930-BAF8-0300A00EA71F.png",
-      "file": "W22.png"
+      "file": "W22.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtNormalText()",
+      "action": "W22 normal template defaults transition",
+      "timestamp": 1794005879.866,
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "ea5c2bffdaa6f385599627f0d53bb3f0d46177cca6b47731043ad4e8d2d709f7",
+      "ax_sha256": "ca0968a5ab862e25068aa868a0e867a8247315aad3d26c797215396411b58a27",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/exercise-transition-w22-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed interaction in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W12": {
       "row_id": "W12",
