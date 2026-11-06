@@ -1430,11 +1430,17 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         XCTAssertTrue(photos.waitForExistence(timeout: 5) && metrics.waitForExistence(timeout: 5))
         for score in ["73", "86", "+13"] {
             let value = app.staticTexts[score].firstMatch
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded(score, maxSwipes: 16),
-                          "MAX comparison score must be reachable: \(score)")
-            XCTAssertTrue(photos.frame.intersection(app.windows.firstMatch.frame)
+            XCTAssertTrue(value.waitForExistence(timeout: 5))
+            for _ in 0..<16 {
+                let viewport = photos.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                if value.isHittable && viewport.contains(value.frame) { break }
+                if value.frame.midY < viewport.midY { photos.swipeDown(velocity: .slow) }
+                else { photos.swipeUp(velocity: .slow) }
+            }
+            XCTAssertTrue(value.isHittable && photos.frame.intersection(app.windows.firstMatch.frame)
                 .insetBy(dx: 4, dy: 4).contains(value.frame),
-                          "The whole score text must fit: \(score)")
+                          "The whole score text must fit in its own pane: \(score)")
+            VisualAudit.capture("P08 MAX visible comparison score \(score)")
         }
         metrics.swipeUp(velocity: .slow)
         XCTAssertTrue(metrics.isHittable, "MAX metric pane remains independently scrollable")
