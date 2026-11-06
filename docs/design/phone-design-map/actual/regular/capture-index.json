@@ -1033,13 +1033,25 @@
     },
     "W20": {
       "row_id": "W20",
-      "evidence": "test-and-action:Compound exercise picker",
-      "test": "ActivityExerciseRegressionTests/testCompoundWorkoutSetupStartsWorkoutAndFinishesFlow()",
-      "action": "Compound exercise picker",
-      "timestamp": 1791835807.527,
-      "image": "AA07AEDE-782F-44E6-9329-A625A1D34902.png",
-      "screen": "screen-0-1320x2868-Compound exercise picker_0_A176440C-8D07-486A-AE8D-BB9FEF4A11B0.png",
-      "file": "W20.png"
+      "file": "W20.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditCompoundSessionAtNormalText()",
+      "action": "W20 normal full compound exercise picker",
+      "timestamp": 1794002988.6,
+      "source_revision": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "ae8f6a1ce2941eb6d0ff8edf4ca3d99c83d897eec3f40bf0e148fb14fe8f0d66",
+      "ax_sha256": "87cc7ec01a62998fc6629d52a27f2c3ec0d544559946b1ceb252d44163d13957",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/compound-exercise-picker-w20-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W33": {
       "row_id": "W33",
