@@ -4383,10 +4383,16 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(transition.exists, "W22 auto transition must be observed before its five-second advance")
         let defaults = ["2 sets", "6 reps", "80 kg"]
         for label in defaults {
-            XCTAssertTrue(transition.staticTexts[label].firstMatch.exists, "W22 original \(label) default should appear")
+            let value = app.staticTexts.matching(NSPredicate(
+                format: "identifier == %@ AND label == %@", AXID.templateWorkoutTransitionScreen, label
+            )).firstMatch
+            XCTAssertTrue(value.exists, "W22 original \(label) default should appear")
         }
         VisualAudit.capture("W22 \(size) template defaults transition")
-        let start = app.buttons[AXID.templateWorkoutTransitionStart].firstMatch
+        let start = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ AND label BEGINSWITH %@",
+            AXID.templateWorkoutTransitionScreen, "Start"
+        )).firstMatch
         if start.exists && start.isHittable { start.auditTap() }
         XCTAssertTrue(app.staticTexts["Exercise 1 of 2"].firstMatch.waitForExistence(timeout: 10),
                       "W16 should advance to the first session")
@@ -4611,11 +4617,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 let startScroll = app.scrollViews.containing(.any, identifier: AXID.cardioStartScreen).firstMatch
                 XCTAssertTrue(startScroll.waitForExistence(timeout: 5), "MAX cardio start sheet should scroll")
                 for _ in 0..<8 {
-                    let viewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                    let viewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 0, dy: 4)
                     if outdoorButton.exists && outdoorButton.isHittable && viewport.contains(outdoorButton.frame) { break }
                     startScroll.swipeUp(velocity: .slow)
                 }
-                let outdoorViewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                let outdoorViewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 0, dy: 4)
                 XCTAssertTrue(outdoorButton.isHittable && outdoorViewport.contains(outdoorButton.frame),
                               "The whole Outdoor card must fit in the MAX sheet")
                 VisualAudit.capture("W23 cardio MAX full Outdoor choice")
@@ -4647,6 +4653,20 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             "Cardio session should start"
         )
         if VisualAudit.isEnabled {
+            let motionNotice = app.alerts["Notice"].firstMatch
+            if motionNotice.waitForExistence(timeout: 3) {
+                XCTAssertTrue(motionNotice.staticTexts[
+                    "Could not start motion tracking. Steps may be incomplete."
+                ].firstMatch.exists, "Only the observed motion-start Notice may be acknowledged")
+                VisualAudit.capture("W24 cardio motion tracking Notice before acknowledgment")
+                let okay = motionNotice.buttons["OK"].firstMatch
+                XCTAssertTrue(okay.exists && okay.isHittable)
+                okay.auditTap()
+                let dismissed = XCTNSPredicateExpectation(
+                    predicate: NSPredicate(format: "exists == false"), object: motionNotice
+                )
+                XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed)
+            }
             let sessionScroll = app.scrollViews.containing(.any, identifier: AXID.cardioSessionScreen).firstMatch
             XCTAssertTrue(sessionScroll.waitForExistence(timeout: 5), "W24 metrics should have one active scroll")
             let elapsed = app.staticTexts["Elapsed Time"].firstMatch
