@@ -1,0 +1,181 @@
+{
+  "schema": 1,
+  "review": "ipad-history-retry1-native-review",
+  "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+  "profile": "ipad",
+  "archive": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed",
+  "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+  "SDK": {
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "full_source_sha256": {
+    "DUNE/Presentation/Life/LifeView.swift": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+    "DUNE/Presentation/Life/HabitManagementView.swift": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+    "DUNE/Presentation/Life/HabitHeatmapDetailView.swift": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+    "DUNE/Presentation/Life/WeeklyHabitReportView.swift": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+    "DUNEUITests/Full/LifeRegressionTests.swift": "ce3ca12c9f036932f36d3cbcbba2d03f8f87f20203c0ed113eae4dae1a57bc0c",
+    "DUNEUITests/Visual/LifeFlowUITests.swift": "8029e519a4911309ce5d15d43277207feac5ef3bbd63191fdb1adf664dfc9c34",
+    "DUNEUITests/Full/DuoRemainingRouteTests.swift": "15802d4906836e92cb278c832c34a49dcd8d7d5420a518a2c648c18b4166e5df",
+    "DUNEUITests/Helpers/UITestHelpers.swift": "e4c0cf9dc77295486fdf688bcf8c55de1b0cf28cbffa77efb5263650083e9d7b",
+    "DUNE/App/TestDataSeeder.swift": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871",
+    "Shared/Resources/Localizable.xcstrings": "83bd89e2b1252596fac87c7e58b8a6ad173dab29cbdbf81fcb793144d0b5a462"
+  },
+  "passed_test_methods": [
+    "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()"
+  ],
+  "selected_pairs": [
+    {
+      "screen": "L05",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history hero and count [DUNEUITests/LifeRegressionTests.swift:260] DEADLINE=1793928883.363752",
+      "host_sequence": 5,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793928855.1608763,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/005-1512x2316.png",
+      "png_sha256": "94e8742051da65686c7361bddc34243c2b5fb743002a1979f9717c6538583685",
+      "ax": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/005-hierarchy.txt",
+      "ax_sha256": "0db248ab08fdb885693c254274250d0cb9b1c336ded2b74f808520833f30da70",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "screen": "L05",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history action and date [DUNEUITests/LifeRegressionTests.swift:276] DEADLINE=1793928890.597204",
+      "host_sequence": 6,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793928862.46328,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/006-1512x2316.png",
+      "png_sha256": "94e8742051da65686c7361bddc34243c2b5fb743002a1979f9717c6538583685",
+      "ax": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/006-hierarchy.txt",
+      "ax_sha256": "54d0239ba1565f3186f7533b87ad041835acff86148594af3b2c87e344048a7d",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "screen": "L05",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 Past Record route from history [DUNEUITests/LifeRegressionTests.swift:300] DEADLINE=1793928926.965409",
+      "host_sequence": 11,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793928901.9498188,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/011-1512x2316.png",
+      "png_sha256": "798ab1fd83b441726f322c764703994b6cc20ae48970ed9df48adf42a56ce76d",
+      "ax": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/011-hierarchy.txt",
+      "ax_sha256": "e1dd536a1d97176bef3cb2abc875c6f195aa29a84de94e8780fdd8e83967ec0d",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    }
+  ],
+  "selected_pairs_count": 3,
+  "visual_inspection": "all 3 actual iPad 1512x2316 PNG frames viewed and all 3 paired AX trees read; PNG/AX/App/10-source hashes verified",
+  "geometry_logical_points": {
+    "life_navbar": [
+      0,
+      150,
+      756,
+      106
+    ],
+    "history_scroll": [
+      448,
+      96,
+      308,
+      1062
+    ],
+    "count": [
+      484,
+      249,
+      63,
+      18
+    ],
+    "count_contained_in_own_scroll_and_window": true,
+    "visual_note": "Count is visibly inside the right inspector; the full-width Life nav AX frame crosses its y range but does not visually occlude it."
+  },
+  "observations": {
+    "hero_and_count": "Right inspector shows Morning Stretch, one record count, Close, Past Record, and completed row while Life remains in the left pane.",
+    "action_and_date": "Completed, Today, and Nov 6 2026 visible in the history row.",
+    "past_record_route": "Past Record sheet shows Cancel, disabled Save, Nov 5 2026, selected Morning Stretch, and unavailable past-date explanation."
+  },
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": [
+      {
+        "id": "ipad-L05-singular-record-count",
+        "priority": "P3",
+        "screen": "L05",
+        "summary": "Seeded history inspector displays “1 records” for one completion.",
+        "evidence": {
+          "png": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/005-1512x2316.png",
+          "ax": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/005-hierarchy.txt",
+          "ax_identifier": "life-habit-history-count",
+          "observed_label": "1 records",
+          "current_source": "DUNE/Presentation/Life/LifeView.swift:1166",
+          "base_source": "fa19dd2a:DUNE/Presentation/Life/LifeView.swift:1156"
+        },
+        "scope": "Preexisting localization/plural copy issue; nonblocking and previously recorded in phone review."
+      }
+    ]
+  },
+  "native_visual_pass_for_retry_selector": true,
+  "prior_failed_aggregate": {
+    "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+    "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+    "executed": 4,
+    "passed": 3,
+    "failed": 1,
+    "status": "preserved failed; not relabeled passed"
+  },
+  "not_claimed": [
+    "original four-method iPad aggregate pass",
+    "new full four-method iPad aggregate run",
+    "Duo/MAX or full 19-method matrix pass",
+    "Dark Mode/VoiceOver audit",
+    "actual-map publication"
+  ]
+}

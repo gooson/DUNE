@@ -1,0 +1,430 @@
+{
+  "schema": 1,
+  "review": "duo-closed-normal-native-review",
+  "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+  "profile": "duo-closed-normal",
+  "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+  "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+  "SDK": {
+    "executed": 6,
+    "passed": 5,
+    "failed": 1,
+    "skipped": 0
+  },
+  "pose_verified": {
+    "angle_degrees": 0,
+    "active_display": "LCD",
+    "orientation": "rot0",
+    "actual_png_dimensions": [
+      1398,
+      2034
+    ],
+    "readback_before_after": true
+  },
+  "full_source_sha256": {
+    "DUNE/Presentation/Life/LifeView.swift": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+    "DUNE/Presentation/Life/HabitManagementView.swift": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+    "DUNE/Presentation/Life/HabitHeatmapDetailView.swift": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+    "DUNE/Presentation/Life/WeeklyHabitReportView.swift": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+    "DUNEUITests/Full/LifeRegressionTests.swift": "ce3ca12c9f036932f36d3cbcbba2d03f8f87f20203c0ed113eae4dae1a57bc0c",
+    "DUNEUITests/Visual/LifeFlowUITests.swift": "8029e519a4911309ce5d15d43277207feac5ef3bbd63191fdb1adf664dfc9c34",
+    "DUNEUITests/Full/DuoRemainingRouteTests.swift": "15802d4906836e92cb278c832c34a49dcd8d7d5420a518a2c648c18b4166e5df",
+    "DUNEUITests/Helpers/UITestHelpers.swift": "e4c0cf9dc77295486fdf688bcf8c55de1b0cf28cbffa77efb5263650083e9d7b",
+    "DUNE/App/TestDataSeeder.swift": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871",
+    "Shared/Resources/Localizable.xcstrings": "83bd89e2b1252596fac87c7e58b8a6ad173dab29cbdbf81fcb793144d0b5a462"
+  },
+  "passed_test_methods": [
+    "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+    "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+    "LifeRegressionTests/testVisualAuditHabitManagement()",
+    "LifeRegressionTests/testVisualAuditWeeklyReport()"
+  ],
+  "selected_pairs": [
+    {
+      "screen": "L05",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history hero and count [DUNEUITests/LifeRegressionTests.swift:260] DEADLINE=1793930114.1960258",
+      "host_sequence": 30,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930086.4532952,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/030-1398x2034.png",
+      "png_sha256": "24a9025f5a7993760359c4b841961dd96472977eed09292745cc879f65d4b56b",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/030-hierarchy.txt",
+      "ax_sha256": "f3a2a1cf098d37b6cec55271d0f9833e1e5f15b018626af760fcfa57be705856",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history action and date [DUNEUITests/LifeRegressionTests.swift:276] DEADLINE=1793930121.012068",
+      "host_sequence": 31,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930093.276182,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/031-1398x2034.png",
+      "png_sha256": "24a9025f5a7993760359c4b841961dd96472977eed09292745cc879f65d4b56b",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/031-hierarchy.txt",
+      "ax_sha256": "e3efeef5be242cc9fd9deafaf2ca21fb0a7e4e25b60cb7d58d9004146cbd098f",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 Past Record route from history [DUNEUITests/LifeRegressionTests.swift:300] DEADLINE=1793930158.794118",
+      "host_sequence": 36,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930131.0169284,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/036-1398x2034.png",
+      "png_sha256": "49abccc81b4ef106f307a55ab182633377486de33b617928513f83da2963cf1d",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/036-hierarchy.txt",
+      "ax_sha256": "37c6ae703a1eaa16b2f71836b41df7c077ca7bb7a951abac31e84b29f3691bb7",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 heatmap value habit-heatmap-total [DUNEUITests/LifeRegressionTests.swift:390] DEADLINE=1793930213.090121",
+      "host_sequence": 42,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930185.2191489,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/042-1398x2034.png",
+      "png_sha256": "2ae772d5bd600cb69221ca555c2a76de6c7d0d560358a59c234c37f001d52d5a",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/042-hierarchy.txt",
+      "ax_sha256": "03acfa32ab6d7c696222d50a4dff06e0a5db41bd96363c29647425c234b187c6",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 heatmap grid and legend [DUNEUITests/LifeRegressionTests.swift:404] DEADLINE=1793930284.290831",
+      "host_sequence": 48,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930256.7274158,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/048-1398x2034.png",
+      "png_sha256": "60972d0af0dfbde3bbe1004632c363536c610ea2beb80b9fb00ee54c1b7aa23d",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/048-hierarchy.txt",
+      "ax_sha256": "53b642ef174716d4ca25963971cb51dfb5b8c9f5028918199a946c293a80fc91",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L07",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 heatmap weekday values [DUNEUITests/LifeRegressionTests.swift:410] DEADLINE=1793930312.191588",
+      "host_sequence": 49,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930284.4776225,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/049-1398x2034.png",
+      "png_sha256": "75efaecced495f78d8f3f830f66cd604e37add608266d2c48ecbf998b48d086e",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/049-hierarchy.txt",
+      "ax_sha256": "d19996f26c9fc0c1104d1d1aa5df9285031b5f1c9f9b101689e5cd65d3139585",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L06",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L06 archived history hero and action [DUNEUITests/LifeRegressionTests.swift:475] DEADLINE=1793930433.199225",
+      "host_sequence": 61,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930406.659357,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/061-1398x2034.png",
+      "png_sha256": "3079ea4e7783fa50e571bc521601f1a851da3b13d7b421937a2dc69a74397229",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/061-hierarchy.txt",
+      "ax_sha256": "5e85de35cf06fc49325a285264047be3a3e70a6995807337530e3d74ce8f9acc",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L08",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testVisualAuditWeeklyReport()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 weekly report rate [DUNEUITests/LifeRegressionTests.swift:342] DEADLINE=1793930514.514608",
+      "host_sequence": 69,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930487.0478885,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/069-1398x2034.png",
+      "png_sha256": "d985cb5d3492e6cb9f9b4ecb75b461b048dc54a14cf6dfa881c42c9e993ab4e6",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/069-hierarchy.txt",
+      "ax_sha256": "6d66e112533b46b2283413485c7ccc701fc163fce376c8970ea575c0d3f16b1c",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L08",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testVisualAuditWeeklyReport()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 weekly report total and comparison [DUNEUITests/LifeRegressionTests.swift:352] DEADLINE=1793930530.299358",
+      "host_sequence": 70,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930503.5187595,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/070-1398x2034.png",
+      "png_sha256": "d985cb5d3492e6cb9f9b4ecb75b461b048dc54a14cf6dfa881c42c9e993ab4e6",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/070-hierarchy.txt",
+      "ax_sha256": "82fa8c73e87595791c7150911d1dc0fa6bded3907cd8fda4019ff182955b0589",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L08",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testVisualAuditWeeklyReport()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 weekly report section life-weekly-report-best [DUNEUITests/LifeRegressionTests.swift:359] DEADLINE=1793930541.4453568",
+      "host_sequence": 71,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930514.8093235,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/071-1398x2034.png",
+      "png_sha256": "d985cb5d3492e6cb9f9b4ecb75b461b048dc54a14cf6dfa881c42c9e993ab4e6",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/071-hierarchy.txt",
+      "ax_sha256": "cdf30a37a09d58b622189d243114a2885ca979bb5edb3c63edf573d05843ec1e",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L08",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testVisualAuditWeeklyReport()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 weekly report section life-weekly-report-improvement [DUNEUITests/LifeRegressionTests.swift:359] DEADLINE=1793930555.522569",
+      "host_sequence": 72,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930528.770231,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/072-1398x2034.png",
+      "png_sha256": "e746fdfc15b13e8b4b3e4b1171a839e117c2ef13592e514342da33d1237757d3",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/072-hierarchy.txt",
+      "ax_sha256": "72a7e2ad54f3b44e6d127ad9baef27af141326eb23a36c20322912040f30646a",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    }
+  ],
+  "selected_pairs_count": 11,
+  "visual_inspection": "All 11 archived actual active-display PNGs viewed and paired AX trees read; PNG/AX/App/10-source SHA and 1398x2034 dimensions verified",
+  "observations": "Four passing normal selectors show L05 history/Past Record, L06 archived history, L07 total/grid/legend/weekdays, and L08 rate/comparison/rankings.",
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": [
+      {
+        "id": "duo-closed-normal-native-review-singular-count",
+        "priority": "P3",
+        "screen": "L05",
+        "summary": "L05 seeded history says “1 records”; preexisting copy defect.",
+        "evidence": {
+          "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/030-1398x2034.png",
+          "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/030-hierarchy.txt",
+          "current_source": "DUNE/Presentation/Life/LifeView.swift:1166",
+          "base_source": "fa19dd2a:DUNE/Presentation/Life/LifeView.swift:1156"
+        },
+        "scope": "Nonblocking and previously recorded in phone/iPad review."
+      }
+    ]
+  },
+  "passed_only_visual_review": true,
+  "native_aggregate_pass": false,
+  "excluded_failed_method": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+  "excluded_failed_sequences": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "not_claimed": [
+    "failed analytics MAX method or its L07/L08 frames",
+    "entire closed 6-method aggregate pass",
+    "future route-fix retry pass",
+    "open Duo or full 19-method matrix pass",
+    "Dark Mode/VoiceOver audit",
+    "actual-map publication"
+  ]
+}
