@@ -1357,6 +1357,58 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         return alert
     }
 
+    func testP07SymmetryKeepsSeededValuesAndUnits() throws {
+        openSeededSymmetry()
+        let scroll = app.scrollViews["posture-symmetry-screen"].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        for (metric, side, expected) in seededSymmetryValues {
+            let id = "posture-symmetry-value-\(metric)-\(side)"
+            let value = app.staticTexts[id].firstMatch
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(id, maxSwipes: 16),
+                          "Seeded symmetry value must remain reachable: \(id)")
+            XCTAssertEqual(value.label, expected, "Keep the recorded value and unit")
+        }
+        VisualAudit.capture("P07 three stored left-right metric pairs")
+    }
+
+    func testP07SymmetryValuesFitAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openSeededSymmetry()
+        let scroll = app.scrollViews["posture-symmetry-screen"].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        for (metric, side, expected) in seededSymmetryValues {
+            let id = "posture-symmetry-value-\(metric)-\(side)"
+            let value = app.staticTexts[id].firstMatch
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(id, maxSwipes: 16),
+                          "MAX symmetry value must remain reachable: \(id)")
+            XCTAssertEqual(value.label, expected)
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 6, dy: 6)
+            XCTAssertTrue(viewport.contains(value.frame), "The whole value and unit must fit: \(id)")
+            VisualAudit.capture("P07 MAX \(metric) \(side) full value")
+        }
+    }
+
+    private var seededSymmetryValues: [(String, String, String)] {
+        [("shoulderAsymmetry", "left", "50.0 cm"), ("shoulderAsymmetry", "right", "48.0 cm"),
+         ("hipAsymmetry", "left", "0.0 cm"), ("hipAsymmetry", "right", "-1.0 cm"),
+         ("kneeAlignment", "left", "8.1°"), ("kneeAlignment", "right", "2.7°")]
+    }
+
+    private func openSeededSymmetry() {
+        openHistory()
+        let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "8 metrics")).firstMatch
+        reveal(row)
+        row.auditTap()
+        let link = app.buttons["posture-symmetry-link"].firstMatch
+        reveal(link)
+        link.auditTap()
+        XCTAssertTrue(app.scrollViews["posture-symmetry-screen"].firstMatch.waitForExistence(timeout: 5))
+    }
+
     private func openHistory(maxRevealAttempts: Int = 18) {
         let viewAll = app.buttons["wellness-link-posturehistory"].firstMatch
         reveal(viewAll, maxAttempts: maxRevealAttempts)

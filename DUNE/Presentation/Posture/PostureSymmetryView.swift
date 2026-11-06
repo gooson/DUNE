@@ -5,6 +5,22 @@ struct PostureSymmetryView: View {
     let record: PostureAssessmentRecord
     @State private var viewModel = PostureSymmetryViewModel()
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+
+    private static let lightStatusColors: [PostureStatus: Color] = [
+        .normal: .green.mix(with: .black, by: 0.55),
+        .caution: .yellow.mix(with: .black, by: 0.55),
+        .warning: .red.mix(with: .black, by: 0.55),
+        .unmeasurable: .gray.mix(with: .black, by: 0.55)
+    ]
+
+    private func statusColor(_ status: PostureStatus) -> Color {
+        colorScheme == .light ? Self.lightStatusColors[status, default: status.color] : status.color
+    }
+
 
     var body: some View {
         ScrollView {
@@ -16,8 +32,11 @@ struct PostureSymmetryView: View {
                     noDataView
                 }
             }
-            .padding(.horizontal, DS.Spacing.lg)
+            .frame(maxWidth: 680)
+            .padding(DS.Spacing.lg)
+            .frame(maxWidth: .infinity)
         }
+        .scrollBounceBehavior(.basedOnSize)
         .englishNavigationTitle("Symmetry Analysis")
         .accessibilityIdentifier("posture-symmetry-screen")
         .navigationBarTitleDisplayMode(.inline)
@@ -32,18 +51,23 @@ struct PostureSymmetryView: View {
         VStack(spacing: DS.Spacing.sm) {
             Image(systemName: "arrow.left.arrow.right")
                 .font(.title)
-                .foregroundStyle(DS.Color.body)
+                .foregroundStyle(palette.heroAccent)
 
             Text("Left vs Right Comparison")
                 .font(.headline)
+                .foregroundStyle(palette.ink)
 
             Text(record.date, style: .date)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(palette.muted)
         }
         .frame(maxWidth: .infinity)
-        .padding(DS.Spacing.lg)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .padding(DS.Spacing.xl)
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xl))
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.xl)
+                .strokeBorder(palette.border, lineWidth: 1)
+        }
     }
 
     // MARK: - Symmetry Cards
@@ -57,73 +81,73 @@ struct PostureSymmetryView: View {
     }
 
     private func symmetryCard(_ detail: SymmetryDetail) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            // Metric title + status
-            let titleLayout = dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
-                : AnyLayout(HStackLayout())
-            titleLayout {
-                HStack {
-                    Image(systemName: detail.metric.iconName)
-                        .foregroundStyle(detail.status.color)
-                    Text(detail.metric.displayName)
-                        .font(.subheadline.weight(.medium))
-                        .fixedSize(horizontal: false, vertical: true)
+        StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                // Metric title + status
+                let titleLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                    : AnyLayout(HStackLayout())
+                titleLayout {
+                    HStack {
+                        Image(systemName: detail.metric.iconName)
+                            .foregroundStyle(statusColor(detail.status))
+                        Text(detail.metric.displayName)
+                            .font(.subheadline.weight(.medium))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
+                    Label(detail.status.displayName, systemImage: detail.status.iconName)
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(statusColor(detail.status))
                 }
-                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
-                Label(detail.status.displayName, systemImage: detail.status.iconName)
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(detail.status.color)
-            }
 
-            // Left-right bar comparison
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(spacing: DS.Spacing.sm) {
-                    HStack(spacing: DS.Spacing.xs) {
-                        sideLabel("L", metric: detail.metric, side: "left")
-                        metricValue(detail.leftValue, detail: detail, side: "left")
-                        Spacer(minLength: 0)
+                // Left-right bar comparison
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(spacing: DS.Spacing.sm) {
+                        HStack(spacing: DS.Spacing.xs) {
+                            sideLabel("L", metric: detail.metric, side: "left")
+                            metricValue(detail.leftValue, detail: detail, side: "left")
+                            Spacer(minLength: 0)
+                        }
+
+                        symmetryBar(detail)
+
+                        HStack(spacing: DS.Spacing.xs) {
+                            Spacer(minLength: 0)
+                            sideLabel("R", metric: detail.metric, side: "right")
+                            metricValue(detail.rightValue, detail: detail, side: "right")
+                        }
                     }
+                } else {
+                    HStack(spacing: DS.Spacing.md) {
+                        VStack(alignment: .trailing, spacing: 4) {
+                            sideLabel("L", metric: detail.metric, side: "left")
+                            metricValue(detail.leftValue, detail: detail, side: "left")
+                        }
+                        .frame(width: 60, alignment: .trailing)
 
-                    symmetryBar(detail)
+                        symmetryBar(detail)
 
-                    HStack(spacing: DS.Spacing.xs) {
-                        Spacer(minLength: 0)
-                        sideLabel("R", metric: detail.metric, side: "right")
-                        metricValue(detail.rightValue, detail: detail, side: "right")
+                        VStack(alignment: .leading, spacing: 4) {
+                            sideLabel("R", metric: detail.metric, side: "right")
+                            metricValue(detail.rightValue, detail: detail, side: "right")
+                        }
+                        .frame(width: 60, alignment: .leading)
                     }
                 }
-            } else {
-                HStack(spacing: DS.Spacing.md) {
-                    VStack(alignment: .trailing, spacing: 4) {
-                        sideLabel("L", metric: detail.metric, side: "left")
-                        metricValue(detail.leftValue, detail: detail, side: "left")
-                    }
-                    .frame(width: 60, alignment: .trailing)
 
-                    symmetryBar(detail)
+                // Difference summary
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: differenceIcon(detail))
+                        .font(.caption)
+                        .foregroundStyle(statusColor(detail.status))
 
-                    VStack(alignment: .leading, spacing: 4) {
-                        sideLabel("R", metric: detail.metric, side: "right")
-                        metricValue(detail.rightValue, detail: detail, side: "right")
-                    }
-                    .frame(width: 60, alignment: .leading)
+                    Text(differenceSummary(detail))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
-            }
-
-            // Difference summary
-            HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: differenceIcon(detail))
-                    .font(.caption)
-                    .foregroundStyle(detail.status.color)
-
-                Text(differenceSummary(detail))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
         }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
     private func sideLabel(_ label: LocalizedStringKey, metric: PostureMetricType, side: String) -> some View {
