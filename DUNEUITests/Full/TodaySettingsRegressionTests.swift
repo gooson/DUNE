@@ -1059,14 +1059,42 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         dismissMorningBriefingIfNeeded(timeout: 1.5)
 
         let settingsButton = app.descendants(matching: .any)[AXID.dashboardToolbarSettings].firstMatch
-        XCTAssertTrue(settingsButton.waitForExistence(timeout: 5), "Settings toolbar button should exist")
-        XCTAssertTrue(waitForHittable(settingsButton, timeout: 5), "Settings toolbar button should be tappable")
-        settingsButton.auditTap()
+        if settingsButton.waitForExistence(timeout: 5) && waitForHittable(settingsButton, timeout: 5) {
+            settingsButton.auditTap()
+        } else {
+            let more = app.navigationBars.buttons["More"].firstMatch
+            XCTAssertTrue(more.waitForExistence(timeout: 5), "Settings action should be visible or in More")
+            if !app.waitAndTapToolbarAction(AXID.dashboardToolbarSettings) {
+                // Native overflow can retain an English label while dropping the source identifier.
+                let menuSettings = app.buttons["Settings"].firstMatch
+                XCTAssertTrue(menuSettings.waitForExistence(timeout: 5), "Settings action should be available in More")
+                menuSettings.auditTap()
+            }
+        }
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.settingsRowRestTime].firstMatch.waitForExistence(timeout: 8),
             "Settings root should open from Today toolbar"
         )
+    }
+
+    func testSettingsMaxTextKeepsFirstControlAndLastRowReachable() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        openSettings()
+
+        let increment = app.buttons["settings-row-resttime-Increment"].firstMatch
+        XCTAssertTrue(increment.waitForExistence(timeout: 5) && increment.isHittable,
+                      "First native Stepper control stays reachable at maximum text size")
+        VisualAudit.capture("S01 MAX native controls at top")
+
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowVersion, maxSwipes: 40),
+                      "Last Settings row stays reachable in the native Form")
+        VisualAudit.capture("S01 MAX final section")
     }
 
     private func openExerciseDefaults() {

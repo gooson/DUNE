@@ -1,0 +1,183 @@
+Attributes: Application, 0x1111c8000, pid: 29331, label: 'DUNE'
+Element subtree:
+ →Application, 0x1111c8000, pid: 29331, label: 'DUNE'
+    Window (Main), 0x1111c8640, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1111c8b40, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1111c9680, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1111c9540, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1111c9cc0, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1111c8f00, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1111ca440, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1111ca080, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1111cad00, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x1111c88c0, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x1111c8500, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x1111cb5c0, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x1111c8c80, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x1111cabc0, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x1111cbe80, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x1111c8140, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x1111c97c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x1111cb0c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                      Other, 0x1111cb480, {{0.0, 0.0}, {440.0, 956.0}}
+                                        NavigationBar, 0x1111cb840, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Settings'
+                                          Button, 0x1111cb200, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Today'
+                                          StaticText, 0x1111c8dc0, {{186.7, 73.7}, {66.7, 20.7}}, label: 'Settings'
+                                        Other, 0x1111cbc00, {{0.0, 0.0}, {440.0, 956.0}}
+                                          Other, 0x1111c9f40, {{0.0, 0.0}, {440.0, 956.0}}
+                                            Other, 0x1111c8780, {{0.0, 0.0}, {440.0, 956.0}}
+                                              Other, 0x1111c9b80, {{0.0, 0.0}, {440.0, 956.0}}
+                                                CollectionView, 0x1111cb340, {{0.0, 0.0}, {440.0, 956.0}}
+                                                  Other, 0x1111caa80, {{-16.0, -1784.0}, {472.0, 2277.3}}
+                                                  Other, 0x1111caf80, {{0.0, 0.0}, {440.0, 956.0}}
+                                                    Other, 0x1111c9a40, {{0.0, 0.0}, {440.0, 156.0}}
+                                                  Other, 0x1111c8a00, {{0.0, 0.0}, {440.0, 956.0}}
+                                                  Cell, 0x1111c9400, {{16.0, 128.0}, {408.0, 38.0}}
+                                                    Other, 0x1111ca300, {{16.0, 128.0}, {408.0, 38.0}}
+                                                    Other, 0x1111cb980, {{16.0, 128.0}, {408.0, 38.0}}
+                                                      Other, 0x1111c92c0, {{16.0, 128.0}, {408.0, 38.0}}
+                                                        Other, 0x1111c9040, {{16.0, 128.0}, {408.0, 38.0}}
+                                                          StaticText, 0x1111c8280, {{16.0, 128.0}, {408.0, 38.0}}, label: 'Workout Defaults'
+                                                  Cell, 0x1111ca6c0, {{16.0, 166.0}, {408.0, 94.3}}
+                                                    Other, 0x1111cbd40, {{16.0, 166.0}, {408.0, 94.3}}
+                                                      Other, 0x1111ca940, {{16.0, 166.0}, {408.0, 94.3}}
+                                                    Other, 0x1111cae40, {{16.0, 166.0}, {408.0, 94.3}}
+                                                      Other, 0x1111ca580, {{16.0, 166.0}, {408.0, 94.3}}
+                                                        Other, 0x1111ca1c0, {{16.0, 166.0}, {408.0, 94.3}}
+                                                          Stepper, 0x1111c83c0, {{36.0, 182.3}, {368.0, 63.0}}, identifier: 'settings-row-resttime', label: 'Rest Time, 1m 30s', value: 90
+                                                            Button, 0x1111cbac0, {{310.0, 197.3}, {47.0, 32.0}}, identifier: 'settings-row-resttime-Decrement', label: 'Rest Time, 1m 30s, Decrement', value: 90
+                                                            Button, 0x1111ca800, {{357.0, 197.3}, {47.0, 32.0}}, identifier: 'settings-row-resttime-Increment', label: 'Rest Time, 1m 30s, Increment', value: 90
+                                                          Image, 0x1111c9180, {{37.3, 182.3}, {17.0, 17.0}}, identifier: 'timer', label: 'Timer'
+                                                          StaticText, 0x1111cb700, {{36.0, 202.7}, {76.0, 20.3}}, label: 'Rest Time'
+                                                          StaticText, 0x1111c9900, {{36.0, 225.0}, {55.3, 20.3}}, label: '1m 30s'
+                                                  Cell, 0x1065f6e40, {{16.0, 260.3}, {408.0, 91.3}}
+                                                    Other, 0x10660cf00, {{16.0, 260.3}, {408.0, 91.3}}
+                                                      Other, 0x10660f480, {{16.0, 260.3}, {408.0, 91.3}}
+                                                    Other, 0x10660e6c0, {{16.0, 260.3}, {408.0, 91.3}}
+                                                      Other, 0x10660f700, {{16.0, 260.3}, {408.0, 91.3}}
+                                                        Other, 0x10660ca00, {{16.0, 260.3}, {408.0, 91.3}}
+                                                          Stepper, 0x10660c780, {{36.0, 276.7}, {368.0, 60.0}}, label: 'Default Sets, 5', value: 5
+                                                            Button, 0x10660e1c0, {{310.0, 290.0}, {47.0, 32.0}}, identifier: 'Decrement', label: 'Default Sets, 5, Decrement', value: 5
+                                                            Button, 0x10660cb40, {{357.0, 290.0}, {47.0, 32.0}}, identifier: 'Increment', label: 'Default Sets, 5, Increment', value: 5
+                                                          Image, 0x10660fe80, {{38.0, 276.7}, {17.0, 14.0}}, identifier: 'list.number', label: 'Numbered List'
+                                                          StaticText, 0x10660f980, {{36.0, 294.0}, {93.0, 20.3}}, label: 'Default Sets'
+                                                          StaticText, 0x10660c000, {{36.0, 316.3}, {10.3, 20.3}}, label: '5'
+                                                  Other, 0x10660d7c0, {{36.0, 259.3}, {368.0, 1.0}}
+                                                  Cell, 0x10660c280, {{16.0, 351.7}, {408.0, 96.0}}
+                                                    Other, 0x10660ed00, {{16.0, 351.7}, {408.0, 96.0}}
+                                                      Other, 0x10660ebc0, {{16.0, 351.7}, {408.0, 96.0}}
+                                                    Other, 0x10660f340, {{16.0, 351.7}, {408.0, 96.0}}
+                                                      Other, 0x10660de00, {{16.0, 351.7}, {408.0, 96.0}}
+                                                        Other, 0x10660f200, {{16.0, 351.7}, {408.0, 96.0}}
+                                                          Stepper, 0x10660cdc0, {{36.0, 368.0}, {368.0, 64.7}}, label: 'Body Weight, 70.0 kg', value: 70
+                                                            Button, 0x10660cc80, {{310.0, 383.7}, {47.0, 32.0}}, identifier: 'Decrement', label: 'Body Weight, 70.0 kg, Decrement', value: 70
+                                                            Button, 0x10660f5c0, {{357.0, 383.7}, {47.0, 32.0}}, identifier: 'Increment', label: 'Body Weight, 70.0 kg, Increment', value: 70
+                                                          Image, 0x10660fd40, {{38.0, 368.0}, {8.0, 18.7}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                                          StaticText, 0x10660f0c0, {{36.0, 390.0}, {97.0, 20.3}}, label: 'Body Weight'
+                                                          StaticText, 0x10660ef80, {{36.0, 412.3}, {55.7, 20.3}}, label: '70.0 kg'
+                                                  Other, 0x10660d040, {{36.0, 350.7}, {368.0, 1.0}}
+                                                  Cell, 0x10660f840, {{16.0, 447.7}, {408.0, 45.7}}
+                                                    Other, 0x10660e800, {{16.0, 447.7}, {408.0, 45.7}}
+                                                    Other, 0x10660fc00, {{16.0, 447.7}, {408.0, 45.7}}
+                                                      Other, 0x10660c8c0, {{16.0, 447.7}, {408.0, 45.7}}
+                                                        Other, 0x10660d2c0, {{16.0, 447.7}, {408.0, 45.7}}
+                                                          StaticText, 0x10660dcc0, {{16.0, 447.7}, {408.0, 45.7}}, label: 'These values are used as defaults when starting a new workout session.'
+                                                  Other, 0x10660d180, {{-16.0, 513.3}, {472.0, 223.7}}
+                                                  Cell, 0x10660df40, {{16.0, 513.3}, {408.0, 38.0}}
+                                                    Other, 0x10660ea80, {{16.0, 513.3}, {408.0, 38.0}}
+                                                    Other, 0x10660c500, {{16.0, 513.3}, {408.0, 38.0}}
+                                                      Other, 0x10660d900, {{16.0, 513.3}, {408.0, 38.0}}
+                                                        Other, 0x10660c640, {{16.0, 513.3}, {408.0, 38.0}}
+                                                          StaticText, 0x10660c3c0, {{16.0, 513.3}, {408.0, 38.0}}, label: 'Workout Live Activity'
+                                                  Cell, 0x10660fac0, {{16.0, 551.3}, {408.0, 52.0}}
+                                                    Other, 0x10660e940, {{16.0, 551.3}, {408.0, 52.0}}
+                                                      Other, 0x10660db80, {{16.0, 551.3}, {408.0, 52.0}}
+                                                    Other, 0x10660d400, {{16.0, 551.3}, {408.0, 52.0}}
+                                                      Other, 0x10660e440, {{16.0, 551.3}, {408.0, 52.0}}
+                                                        Other, 0x10660ee40, {{16.0, 551.3}, {408.0, 52.0}}
+                                                          Button, 0x10660d680, {{36.0, 560.3}, {368.0, 34.3}}, identifier: 'settings-watch-live-activity-cardio-metric', label: 'Cardio Metric, Elapsed Time'
+                                                            StaticText, 0x1111c61c0, {{285.3, 567.3}, {102.3, 20.3}}, label: 'Elapsed Time'
+                                                          StaticText, 0x1111c4c80, {{36.0, 567.2}, {102.7, 20.3}}, label: 'Cardio Metric'
+                                                  Cell, 0x1111c4dc0, {{16.0, 603.3}, {408.0, 52.0}}
+                                                    Other, 0x1111c4000, {{16.0, 603.3}, {408.0, 52.0}}
+                                                      Other, 0x1111c70c0, {{16.0, 603.3}, {408.0, 52.0}}
+                                                    Other, 0x1111c6580, {{16.0, 603.3}, {408.0, 52.0}}
+                                                      Other, 0x1111c5400, {{16.0, 603.3}, {408.0, 52.0}}
+                                                        Other, 0x1111c7c00, {{16.0, 603.3}, {408.0, 52.0}}
+                                                          Button, 0x1111c6f80, {{36.0, 612.3}, {368.0, 34.3}}, identifier: 'settings-watch-live-activity-strength-metric', label: 'Strength Metric, Elapsed Time'
+                                                            StaticText, 0x1111c52c0, {{285.3, 619.3}, {102.3, 20.3}}, label: 'Elapsed Time'
+                                                          StaticText, 0x1111c7e80, {{36.0, 619.2}, {118.7, 20.3}}, label: 'Strength Metric'
+                                                  Other, 0x1111c4780, {{36.0, 602.3}, {368.0, 1.0}}
+                                                  Cell, 0x1111c6800, {{16.0, 655.3}, {408.0, 52.0}}
+                                                    Other, 0x1111c4a00, {{16.0, 655.3}, {408.0, 52.0}}
+                                                      Other, 0x1111c6e40, {{16.0, 655.3}, {408.0, 52.0}}
+                                                    Other, 0x1111c5cc0, {{16.0, 655.3}, {408.0, 52.0}}
+                                                      Other, 0x1111c6bc0, {{16.0, 655.3}, {408.0, 52.0}}
+                                                        Other, 0x1111c6940, {{16.0, 655.3}, {408.0, 52.0}}
+                                                          Button, 0x1111c7980, {{36.0, 664.3}, {368.0, 34.3}}, identifier: 'settings-watch-live-activity-style', label: 'Live Activity Style, Gold Impact'
+                                                            StaticText, 0x1111c5f40, {{295.0, 671.3}, {92.7, 20.3}}, label: 'Gold Impact'
+                                                          StaticText, 0x1111c6d00, {{36.0, 671.2}, {134.0, 20.3}}, label: 'Live Activity Style'
+                                                  Other, 0x1111c5540, {{36.0, 654.3}, {368.0, 1.0}}
+                                                  Cell, 0x1111c7200, {{16.0, 707.3}, {408.0, 29.7}}
+                                                    Other, 0x1111c4280, {{16.0, 707.3}, {408.0, 29.7}}
+                                                    Other, 0x1111c5a40, {{16.0, 707.3}, {408.0, 29.7}}
+                                                      Other, 0x1111c5180, {{16.0, 707.3}, {408.0, 29.7}}
+                                                        Other, 0x1111c5900, {{16.0, 707.3}, {408.0, 29.7}}
+                                                          StaticText, 0x1111c6300, {{16.0, 707.3}, {408.0, 29.7}}, label: 'Unavailable readings show elapsed time instead.'
+                                                  Other, 0x1111c57c0, {{-16.0, 757.0}, {472.0, 187.7}}
+                                                  Cell, 0x1111c7ac0, {{16.0, 757.0}, {408.0, 38.0}}
+                                                    Other, 0x102fb7200, {{16.0, 757.0}, {408.0, 38.0}}
+                                                    Other, 0x102fb5e00, {{16.0, 757.0}, {408.0, 38.0}}
+                                                      Other, 0x102fb75c0, {{16.0, 757.0}, {408.0, 38.0}}
+                                                        Other, 0x102fb6800, {{16.0, 757.0}, {408.0, 38.0}}
+                                                          StaticText, 0x102fb5900, {{16.0, 757.0}, {408.0, 38.0}}, label: 'Per-Exercise'
+                                                  Cell, 0x102fb43c0, {{16.0, 795.0}, {408.0, 52.0}}
+                                                    Other, 0x102fb6940, {{16.0, 795.0}, {408.0, 52.0}}
+                                                      Other, 0x102fb5180, {{16.0, 795.0}, {408.0, 52.0}}
+                                                    Other, 0x102fb6bc0, {{16.0, 795.0}, {408.0, 52.0}}
+                                                      Other, 0x102fb7840, {{16.0, 795.0}, {408.0, 52.0}}
+                                                        Other, 0x102fb4a00, {{16.0, 795.0}, {408.0, 52.0}}
+                                                          Button, 0x102fb4b40, {{16.0, 795.0}, {408.0, 52.0}}, identifier: 'settings-row-exercisedefaults', label: 'Exercise Defaults'
+                                                            StaticText, 0x102fb52c0, {{35.0, 810.8}, {172.0, 20.3}}, label: 'Exercise Defaults'
+                                                            Image, 0x102fb7700, {{35.0, 813.3}, {26.0, 15.7}}, identifier: 'dumbbell', label: 'Dumbbell Weight'
+                                                            Image, 0x102fb5cc0, {{394.7, 815.0}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Cell, 0x102fb48c0, {{16.0, 847.0}, {408.0, 52.0}}
+                                                    Other, 0x102fb5f40, {{16.0, 847.0}, {408.0, 52.0}}
+                                                      Other, 0x102fb57c0, {{16.0, 847.0}, {408.0, 52.0}}
+                                                    Other, 0x102fb7980, {{16.0, 847.0}, {408.0, 52.0}}
+                                                      Other, 0x102fb6a80, {{16.0, 847.0}, {408.0, 52.0}}
+                                                        Other, 0x102fb7e80, {{16.0, 847.0}, {408.0, 52.0}}
+                                                          Button, 0x102fb7480, {{16.0, 847.0}, {408.0, 52.0}}, identifier: 'settings-row-preferredexercises', label: 'Preferred Exercises'
+                                                            Image, 0x102fb5b80, {{36.0, 861.7}, {24.0, 22.7}}, identifier: 'star', label: 'Favorite'
+                                                            StaticText, 0x102fb5400, {{36.0, 861.7}, {187.7, 22.7}}, label: 'Preferred Exercises'
+                                                            Image, 0x102fb70c0, {{394.7, 867.0}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x102fb6440, {{76.0, 846.0}, {328.0, 1.0}}
+                                                  Cell, 0x102fb4f00, {{16.0, 899.0}, {408.0, 45.7}}
+                                                    Other, 0x102fb6e40, {{16.0, 899.0}, {408.0, 45.7}}
+                                                    Other, 0x102fb7d40, {{16.0, 899.0}, {408.0, 45.7}}
+                                                      Other, 0x102fb7ac0, {{16.0, 899.0}, {408.0, 45.7}}
+                                                        Other, 0x102fb6d00, {{16.0, 899.0}, {408.0, 45.7}}
+                                                          StaticText, 0x102fb5040, {{16.0, 899.0}, {408.0, 45.7}}, label: 'Set default values and choose exercises that should stay near the top of Quick Start.'
+                                                  Other, 0x102fb6f80, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 5 pages', value: 0%
+                                                    Other, 0x102fb6080, {{434.0, 119.0}, {3.0, 217.0}}
+                                                  Other, 0x102fb6300, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 5 pages', value: 0%
+                                                    Other, 0x102fb6580, {{434.0, 119.0}, {3.0, 217.0}}
+                                        Toolbar, 0x102fb5a40, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x102fb7340, {{0.0, 0.0}, {440.0, 956.0}}
+                                Toolbar, 0x102fb7c00, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x113028000, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x113028140, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x113028280, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1130283c0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x113028500, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x113028640, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x113028780, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x1130288c0, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x113028a00, {{220.0, 492.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x1111c8000, pid: 29331, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x113028b40, pid: 29331, label: 'DUNE'
+  }

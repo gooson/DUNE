@@ -1,0 +1,258 @@
+{
+  "screen_id": "S01",
+  "scope": "B07 S01-S04 native review staging",
+  "source_contract": ".codex-checks/b07/execution-contract.json",
+  "records": [
+    {
+      "profile": "regular",
+      "kind": "before",
+      "name": "Historical S01 baseline",
+      "image": "before/regular-S01-before.png",
+      "ax": null,
+      "capture_index_entry": "before/regular-S01-capture-index-entry.json",
+      "source_revision": "5ef25439",
+      "test": "LiveActivitySettingsUITests/testSportMetricsAndStylePersistIndependently()",
+      "timestamp": 1793333556.522,
+      "sha256": "6a9e7f7bf9946f1816267c646f7dd2059bf07b9fe2565e260cb9671c143fc64f",
+      "ax_sha256": null,
+      "is_primary": false,
+      "source_image": "docs/design/phone-design-map/actual/regular/images/S01.png",
+      "actual_angle": null
+    },
+    {
+      "profile": "ipad",
+      "kind": "before",
+      "name": "Historical S01 baseline",
+      "image": "before/ipad-S01-before.png",
+      "ax": null,
+      "capture_index_entry": "before/ipad-S01-capture-index-entry.json",
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "SettingsSmokeTests/testWhatsNewMuscleMapDetailExists()",
+      "timestamp": 1791820521.937,
+      "sha256": "7ecd1c25380bc034e538968d681cf2aa762e8416a5f0939912945efbb32f31ed",
+      "ax_sha256": null,
+      "is_primary": false,
+      "source_image": "docs/design/phone-design-map/actual/ipad/images/S01.png",
+      "actual_angle": null
+    },
+    {
+      "profile": "duo",
+      "kind": "before",
+      "name": "Historical S01 baseline",
+      "image": "before/duo-S01-before.png",
+      "ax": null,
+      "capture_index_entry": "before/duo-S01-capture-index-entry.json",
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "SettingsSmokeTests/testWhatsNewMuscleMapDetailExists()",
+      "timestamp": 1791824343.826,
+      "sha256": "9a08062dc9f571e5af30880e56eaf4331c4d118d38ebd64d83861a1fedade2b3",
+      "ax_sha256": null,
+      "is_primary": false,
+      "source_image": "docs/design/phone-design-map/actual/duo/images/S01.png",
+      "actual_angle": null
+    },
+    {
+      "profile": "duo-open",
+      "kind": "before",
+      "name": "Historical S01 baseline",
+      "image": "before/duo-open-S01-before.png",
+      "ax": null,
+      "capture_index_entry": "before/duo-open-S01-capture-index-entry.json",
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "SettingsSmokeTests/testWhatsNewMuscleMapDetailExists()",
+      "timestamp": 1791827412.691,
+      "sha256": "87677c7d8f8917b457278e4129c8b8f8998bfc4e9b7fb01ec60067d04df8c55e",
+      "ax_sha256": null,
+      "is_primary": false,
+      "source_image": "docs/design/phone-design-map/actual/duo-open/images/S01.png",
+      "actual_angle": null
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "name": "Current normal Settings top controls",
+      "image": "assets/05-regular-after.png",
+      "ax": "assets/05-regular-after.txt",
+      "source_revision": "2930ba45dd419634932ef3e4ced117ae13b7556e",
+      "test": "TodaySettingsRegressionTests/testSettingsShowsPhaseTwoRows()",
+      "timestamp": 1793978469.385,
+      "sha256": "403d7cd7ace9e4be857acb5eebdaa3fbc709fa1ca951288b83cff1ea71194be9",
+      "ax_sha256": "b7bb40de4a872df01deab2884ea4183373ed8edb7eef75a70ed1a72afaeb362f",
+      "is_primary": true,
+      "capture_uuid": "b01d5dc5-4f58-4475-a1c2-c697395e827f",
+      "source_image": ".codex-checks/b07/phone-attachments/0C1EB467-AFEC-4939-A56F-2E0377F9A4EA.png",
+      "source_ax": ".codex-checks/b07/phone-attachments/9F7DE620-3A8A-4149-ACD1-4DFDD4EA532F.txt",
+      "pair_manifest": ".codex-checks/b07/phone-attachments/manifest.json",
+      "actual_angle": null,
+      "run_id": "phone-first"
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "name": "Current MAX Settings top controls",
+      "image": "assets/06-regular-after.png",
+      "ax": "assets/06-regular-after.txt",
+      "source_revision": "2930ba45dd419634932ef3e4ced117ae13b7556e",
+      "test": "TodaySettingsRegressionTests/testSettingsMaxTextKeepsFirstControlAndLastRowReachable()",
+      "timestamp": 1793978371.604,
+      "sha256": "16b32c9208f1b41b15f28b5768a3183073651aee43e074afd785024adffc1ee6",
+      "ax_sha256": "04c696c61ce14e2ad26dc613d3abef95f9a878c17b2d5d926c904467c17700f7",
+      "is_primary": false,
+      "capture_uuid": "af6ab360-b2f1-4c4e-a3a4-6080fefcf054",
+      "source_image": ".codex-checks/b07/phone-attachments/528379C2-EA1A-4FB7-BA25-C0BDAC308654.png",
+      "source_ax": ".codex-checks/b07/phone-attachments/663B1EE8-7A42-4549-9514-3AAFFDFA18A9.txt",
+      "pair_manifest": ".codex-checks/b07/phone-attachments/manifest.json",
+      "actual_angle": null,
+      "run_id": "phone-first"
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "name": "Current MAX Settings final section",
+      "image": "assets/07-regular-after.png",
+      "ax": "assets/07-regular-after.txt",
+      "source_revision": "2930ba45dd419634932ef3e4ced117ae13b7556e",
+      "test": "TodaySettingsRegressionTests/testSettingsMaxTextKeepsFirstControlAndLastRowReachable()",
+      "timestamp": 1793978448.836,
+      "sha256": "0b9d4f743ead01a63b56fd06626edd58671ad8c2cab125cb91359a6c8e8fefd7",
+      "ax_sha256": "d37ebc223e1e1a9695a0b2ab4f5f46acf5f2ef81b0f023e4c9e1f665fde8918c",
+      "is_primary": false,
+      "capture_uuid": "61a4c29c-4685-4ba6-936f-381c24237750",
+      "source_image": ".codex-checks/b07/phone-attachments/78192D6A-D50F-4D63-BAA8-80DCD9483252.png",
+      "source_ax": ".codex-checks/b07/phone-attachments/4C080145-0825-4997-A094-AD4314346098.txt",
+      "pair_manifest": ".codex-checks/b07/phone-attachments/manifest.json",
+      "actual_angle": null,
+      "run_id": "phone-first"
+    },
+    {
+      "profile": "ipad",
+      "kind": "after",
+      "name": "Current normal Settings top controls",
+      "image": "assets/08-ipad-after.png",
+      "ax": "assets/08-ipad-after.txt",
+      "source_revision": "23c6d0948808b76e2e1233d70bf5a1d9faa68c36",
+      "test": "TodaySettingsRegressionTests/testSettingsShowsPhaseTwoRows()",
+      "timestamp": 1793980032.508,
+      "sha256": "c046480d58d57d4f20005df01f0bf353a01ff63750376ea638d470ff06c865b8",
+      "ax_sha256": "bed65b24bc9431d027dbf68bc489b17ab86edf3c7a3107984f0c143e7916011b",
+      "is_primary": true,
+      "capture_uuid": "5a4179d3-a445-487a-9599-04512bffcc99",
+      "source_image": ".codex-checks/b07/ipad-attachments/E00D8F50-1639-48CF-93EF-F06B586DCF3F.png",
+      "source_ax": ".codex-checks/b07/ipad-attachments/07DBD2DF-85D0-47AB-A835-5B38619AC9D6.txt",
+      "pair_manifest": ".codex-checks/b07/ipad-attachments/manifest.json",
+      "actual_angle": null,
+      "run_id": "ipad-first"
+    }
+  ],
+  "gates": {
+    "runs": [
+      {
+        "run_id": "phone-first",
+        "profile": "regular",
+        "source_revision": "2930ba45dd419634932ef3e4ced117ae13b7556e",
+        "result": "evidence/phone-ui.log.result.json",
+        "counts": {
+          "executed": 8,
+          "passed": 4,
+          "skipped": 0,
+          "failed": 4
+        },
+        "selector_pass": {
+          "testSettingsShowsPhaseTwoRows": true,
+          "testSettingsMaxTextKeepsFirstControlAndLastRowReachable": true,
+          "testExerciseDefaultsSearchResultOpensOriginalEditor": true,
+          "testExerciseDefaultSaveReopensWithStoredValues": false,
+          "testExerciseDefaultEditClearsSavedValues": true,
+          "testExerciseDefaultFieldsFitAtMaximumAccessibilitySize": false,
+          "testPreferredExerciseToggleSurvivesScreenReentry": false,
+          "testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize": false
+        },
+        "result_note": "Completed mixed result; only nonfailed requested selectors attributed"
+      },
+      {
+        "run_id": "phone-retry1",
+        "profile": "regular",
+        "source_revision": "47feceb7b4d68d248717457a369d5e337d848c56",
+        "result": "evidence/phone-retry1-ui.log.result.json",
+        "counts": {
+          "executed": 4,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 3
+        },
+        "selector_pass": {
+          "testExerciseDefaultSaveReopensWithStoredValues": false,
+          "testExerciseDefaultFieldsFitAtMaximumAccessibilitySize": true,
+          "testPreferredExerciseToggleSurvivesScreenReentry": false,
+          "testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize": false
+        },
+        "result_note": "Completed mixed result; only nonfailed requested selectors attributed"
+      },
+      {
+        "run_id": "ipad-first",
+        "profile": "ipad",
+        "source_revision": "23c6d0948808b76e2e1233d70bf5a1d9faa68c36",
+        "result": "evidence/ipad-ui.log.result.json",
+        "counts": {
+          "executed": 5,
+          "passed": 2,
+          "skipped": 0,
+          "failed": 3
+        },
+        "selector_pass": {
+          "testSettingsShowsPhaseTwoRows": true,
+          "testExerciseDefaultsSearchResultOpensOriginalEditor": true,
+          "testExerciseDefaultSaveReopensWithStoredValues": false,
+          "testPreferredExerciseToggleSurvivesScreenReentry": false,
+          "testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize": false
+        },
+        "result_note": "Completed mixed result; only nonfailed requested selectors attributed"
+      },
+      {
+        "run_id": "ipad-retry1",
+        "profile": "ipad",
+        "source_revision": "1c1b4bf26f6c1f681561aac825f78b750b93eb1a",
+        "result": "evidence/ipad-retry1-ui.log.result.json",
+        "counts": {
+          "executed": 4,
+          "passed": 3,
+          "skipped": 0,
+          "failed": 1
+        },
+        "selector_pass": {
+          "testExerciseDefaultsSearchResultOpensOriginalEditor": true,
+          "testExerciseDefaultSaveReopensWithStoredValues": false,
+          "testPreferredExerciseToggleSurvivesScreenReentry": true,
+          "testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize": true
+        },
+        "result_note": "Completed mixed result; only nonfailed requested selectors attributed"
+      }
+    ],
+    "original_result_json": [
+      "evidence/phone-ui.log.result.json",
+      "evidence/phone-retry1-ui.log.result.json",
+      "evidence/ipad-ui.log.result.json",
+      "evidence/ipad-retry1-ui.log.result.json"
+    ],
+    "original_counts_preserved": true
+  },
+  "pending": [
+    "phone-retry1 Current normal Settings top controls: capture absent or selector not executed; Completed mixed result; only nonfailed requested selectors attributed",
+    "phone-retry1 Current MAX Settings top controls: capture absent or selector not executed; Completed mixed result; only nonfailed requested selectors attributed",
+    "phone-retry1 Current MAX Settings final section: capture absent or selector not executed; Completed mixed result; only nonfailed requested selectors attributed",
+    "ipad-first Current MAX Settings top controls: capture absent or selector not executed; Completed mixed result; only nonfailed requested selectors attributed",
+    "ipad-first Current MAX Settings final section: capture absent or selector not executed; Completed mixed result; only nonfailed requested selectors attributed",
+    "ipad-retry1 Current normal Settings top controls: capture absent or selector not executed; Completed mixed result; only nonfailed requested selectors attributed",
+    "ipad-retry1 Current MAX Settings top controls: capture absent or selector not executed; Completed mixed result; only nonfailed requested selectors attributed",
+    "ipad-retry1 Current MAX Settings final section: capture absent or selector not executed; Completed mixed result; only nonfailed requested selectors attributed",
+    "Duo closed and open have no B07 current-source provider/capture; historical before only",
+    "Maximum Dynamic Type completion is represented only by explicit passed MAX selectors; failed-selector MAX frames are diagnostic"
+  ],
+  "limits": [
+    "Historical before images are separate older-source captures, not B07 proof.",
+    "Only passed selector captures are classified as after; failed selector screenshots are diagnostic.",
+    "No four-profile pass is claimed; Duo current-source captures are pending.",
+    "actual_angle is null; no hinge angle was measured.",
+    "This private gallery is not an official actual-map update."
+  ]
+}

@@ -1,0 +1,101 @@
+Attributes: Application, 0x1111c6580, pid: 28665, label: 'DUNE'
+Element subtree:
+ →Application, 0x1111c6580, pid: 28665, label: 'DUNE'
+    Window (Main), 0x1111c4640, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1111c6f80, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1111c5040, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1111c70c0, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1111c4000, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1111c4dc0, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1111c5cc0, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1111c6e40, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1111c6940, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x1111c6bc0, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x1111c4a00, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x1111c6800, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x1111c61c0, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x1111c5900, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x1111c5400, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x1111c5b80, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x1111c4280, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x1111c5f40, {{0.0, 0.0}, {440.0, 956.0}}
+                                      Other, 0x1111c5a40, {{0.0, 0.0}, {440.0, 956.0}}
+                                        NavigationBar, 0x1111c7d40, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Settings'
+                                          Button, 0x1111c4c80, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Today'
+                                          StaticText, 0x1111c5680, {{179.7, 71.3}, {80.3, 25.3}}, label: 'Settings'
+                                        Other, 0x1111c7e80, {{0.0, 0.0}, {440.0, 956.0}}
+                                          Other, 0x1111c6440, {{0.0, 0.0}, {440.0, 956.0}}
+                                            Other, 0x1111c7c00, {{0.0, 0.0}, {440.0, 956.0}}
+                                              Other, 0x1111c4500, {{0.0, 0.0}, {440.0, 956.0}}
+                                                CollectionView, 0x1111c4780, {{0.0, 0.0}, {440.0, 956.0}}
+                                                  Other, 0x1111c48c0, {{-16.0, -1784.0}, {472.0, 3103.7}}
+                                                  Other, 0x1111c7200, {{0.0, 0.0}, {440.0, 956.0}}
+                                                    Other, 0x1111c7340, {{0.0, 0.0}, {440.0, 156.0}}
+                                                  Other, 0x1111c5540, {{0.0, 0.0}, {440.0, 956.0}}
+                                                  Cell, 0x1111c6300, {{16.0, 128.0}, {408.0, 136.7}}
+                                                    Other, 0x1111c4b40, {{16.0, 128.0}, {408.0, 136.7}}
+                                                    Other, 0x1111c7ac0, {{16.0, 128.0}, {408.0, 136.7}}
+                                                      Other, 0x1111c52c0, {{16.0, 128.0}, {408.0, 136.7}}
+                                                        Other, 0x1111c5180, {{16.0, 128.0}, {408.0, 136.7}}
+                                                          StaticText, 0x1111c6d00, {{16.0, 128.0}, {408.0, 136.7}}, label: 'Workout Defaults'
+                                                  Cell, 0x1111c7980, {{16.0, 264.7}, {408.0, 223.0}}
+                                                    Other, 0x1111c57c0, {{16.0, 264.7}, {408.0, 223.0}}
+                                                      Other, 0x1111c7700, {{16.0, 264.7}, {408.0, 223.0}}
+                                                    Other, 0x1111c9900, {{16.0, 264.7}, {408.0, 223.0}}
+                                                      Other, 0x1111caa80, {{16.0, 264.7}, {408.0, 223.0}}
+                                                        Other, 0x1111c9a40, {{16.0, 264.7}, {408.0, 223.0}}
+                                                          Stepper, 0x1111cbe80, {{36.0, 284.3}, {368.0, 188.3}}, identifier: 'settings-row-resttime', label: 'Rest Time, 1m 30s', value: 90
+                                                            Button, 0x1111cb340, {{310.0, 360.3}, {47.0, 32.0}}, identifier: 'settings-row-resttime-Decrement', label: 'Rest Time, 1m 30s, Decrement', value: 90
+                                                            Button, 0x1111cabc0, {{357.0, 360.3}, {47.0, 32.0}}, identifier: 'settings-row-resttime-Increment', label: 'Rest Time, 1m 30s, Increment', value: 90
+                                                          Image, 0x1111c8c80, {{40.7, 284.3}, {53.0, 53.0}}, identifier: 'timer', label: 'Timer'
+                                                          StaticText, 0x1111ca800, {{36.0, 344.0}, {223.7, 63.3}}, label: 'Rest Time'
+                                                          StaticText, 0x1111cb5c0, {{36.0, 409.3}, {167.0, 63.3}}, label: '1m 30s'
+                                                  Cell, 0x1111c8dc0, {{16.0, 487.7}, {408.0, 275.7}}
+                                                    Other, 0x1111cb700, {{16.0, 487.7}, {408.0, 275.7}}
+                                                      Other, 0x1111ca940, {{16.0, 487.7}, {408.0, 275.7}}
+                                                    Other, 0x1111cb480, {{16.0, 487.7}, {408.0, 275.7}}
+                                                      Other, 0x1111cb200, {{16.0, 487.7}, {408.0, 275.7}}
+                                                        Other, 0x1111cae40, {{16.0, 487.7}, {408.0, 275.7}}
+                                                          Stepper, 0x1111c9f40, {{36.0, 507.3}, {368.0, 241.0}}, label: 'Default Sets, 5', value: 5
+                                                            Button, 0x1111c9400, {{310.0, 609.7}, {47.0, 32.0}}, identifier: 'Decrement', label: 'Default Sets, 5, Decrement', value: 5
+                                                            Button, 0x1111c97c0, {{357.0, 609.7}, {47.0, 32.0}}, identifier: 'Increment', label: 'Default Sets, 5, Increment', value: 5
+                                                          Image, 0x1111c8140, {{42.7, 507.3}, {52.3, 43.7}}, identifier: 'list.number', label: 'Numbered List'
+                                                          StaticText, 0x1111cbd40, {{36.0, 557.7}, {172.3, 125.3}}, label: 'Default Sets'
+                                                          StaticText, 0x1111c8500, {{36.0, 685.0}, {31.3, 63.3}}, label: '5'
+                                                  Other, 0x1111cb840, {{36.0, 486.7}, {368.0, 1.0}}
+                                                  Cell, 0x1111cb0c0, {{16.0, 763.3}, {408.0, 289.7}}
+                                                    Other, 0x1111c9b80, {{16.0, 763.3}, {408.0, 289.7}}
+                                                      Other, 0x1111ca300, {{16.0, 763.3}, {408.0, 289.7}}
+                                                    Other, 0x1111caf80, {{16.0, 763.3}, {408.0, 289.7}}
+                                                      Other, 0x1111cbc00, {{16.0, 763.3}, {408.0, 289.7}}
+                                                        Other, 0x1111cb980, {{16.0, 763.3}, {408.0, 289.7}}
+                                                          Stepper, 0x1111c8780, {{36.0, 783.0}, {368.0, 255.0}}, label: 'Body Weight, 70.0 kg', value: 70
+                                                            Button, 0x1111c8a00, {{310.0, 892.0}, {47.0, 32.0}}, identifier: 'Decrement', label: 'Body Weight, 70.0 kg, Decrement', value: 70
+                                                            Button, 0x106621680, {{357.0, 892.0}, {47.0, 32.0}}, identifier: 'Increment', label: 'Body Weight, 70.0 kg, Increment', value: 70
+                                                          Image, 0x106622080, {{42.7, 783.0}, {24.7, 57.7}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                                          StaticText, 0x106621900, {{36.0, 847.3}, {160.0, 125.3}}, label: 'Body Weight'
+                                                          StaticText, 0x106620780, {{36.0, 974.7}, {169.7, 63.3}}, label: '70.0 kg'
+                                                  Other, 0x1066217c0, {{36.0, 762.3}, {368.0, 1.0}}
+                                                  Other, 0x106620140, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 6 pages', value: 0%
+                                                    Other, 0x1066212c0, {{434.0, 119.0}, {3.0, 157.7}}
+                                                  Other, 0x1066221c0, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 6 pages', value: 0%
+                                                    Other, 0x106621b80, {{434.0, 119.0}, {3.0, 157.7}}
+                                        Toolbar, 0x106620640, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x106621540, {{0.0, 0.0}, {440.0, 956.0}}
+                                Toolbar, 0x106620000, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x106621e00, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x106620280, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x106621f40, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x106621cc0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1066203c0, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x106621400, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x106621a40, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x106620500, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x106622300, {{220.0, 492.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x1111c6580, pid: 28665, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x110af9f40, pid: 28665, label: 'DUNE'
+  }

@@ -37,26 +37,24 @@ struct SettingsView: View {
     private let store = WorkoutSettingsStore.shared
 
     var body: some View {
-        GeometryReader { geometry in
-            Form {
-                workoutDefaultsSection
-                liveActivitySection
-                exerciseDefaultsSection
-                NotificationSettingsSection()
-                morningBriefingSection
-                appearanceSection
-                if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
-                    simulatorMockDataSection
-                }
-                dataPrivacySection
-                aboutSection
+        Form {
+            workoutDefaultsSection
+            liveActivitySection
+            exerciseDefaultsSection
+            NotificationSettingsSection()
+            morningBriefingSection
+            appearanceSection
+            if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
+                simulatorMockDataSection
             }
-            .scrollContentBackground(.hidden)
-            .contentMargins(.top, geometry.safeAreaInsets.top + DS.Spacing.md, for: .scrollContent)
-            .contentMargins(.leading, geometry.safeAreaInsets.leading + DS.Spacing.lg, for: .scrollContent)
-            .contentMargins(.bottom, geometry.safeAreaInsets.bottom + DS.Spacing.lg, for: .scrollContent)
-            .contentMargins(.trailing, geometry.safeAreaInsets.trailing + DS.Spacing.lg, for: .scrollContent)
+            dataPrivacySection
+            aboutSection
         }
+        .scrollContentBackground(.hidden)
+        .contentMargins(.top, DS.Spacing.md, for: .scrollContent)
+        .contentMargins(.horizontal, DS.Spacing.lg, for: .scrollContent)
+        .contentMargins(.bottom, DS.Spacing.lg, for: .scrollContent)
+        .listSectionSpacing(DS.Spacing.xl)
         .background { DetailWaveBackground() }
         .englishNavigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
@@ -79,6 +77,12 @@ struct SettingsView: View {
                 locationStatus = CLLocationManager().authorizationStatus
             }
         }
+    }
+
+    private func settingsSectionHeader(_ title: LocalizedStringKey) -> some View {
+        Text(title)
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(.primary)
     }
 
     // MARK: - Workout Defaults
@@ -113,7 +117,7 @@ struct SettingsView: View {
                 }
             }
         } header: {
-            Text("Workout Defaults")
+            settingsSectionHeader("Workout Defaults")
         } footer: {
             Text("These values are used as defaults when starting a new workout session.")
         }
@@ -168,7 +172,7 @@ struct SettingsView: View {
             }
             .accessibilityIdentifier("settings-watch-live-activity-style")
         } header: {
-            Text("Workout Live Activity")
+            settingsSectionHeader("Workout Live Activity")
         } footer: {
             Text("Unavailable readings show elapsed time instead.")
         }
@@ -215,7 +219,7 @@ struct SettingsView: View {
             }
             .accessibilityIdentifier("settings-row-preferredexercises")
         } header: {
-            Text("Per-Exercise")
+            settingsSectionHeader("Per-Exercise")
         } footer: {
             Text("Set default values and choose exercises that should stay near the top of Quick Start.")
         }
@@ -235,7 +239,7 @@ struct SettingsView: View {
             }
             .accessibilityIdentifier("settings-row-morning-briefing")
         } header: {
-            Text("Morning Briefing")
+            settingsSectionHeader("Morning Briefing")
         } footer: {
             Text("Show a daily briefing with your condition, recovery insights, and recommendations when you first open the app each morning.")
         }
@@ -247,7 +251,7 @@ struct SettingsView: View {
         Section {
             ThemePickerSection()
         } header: {
-            Text("Appearance")
+            settingsSectionHeader("Appearance")
                 .accessibilityIdentifier("settings-section-appearance")
         }
     }
@@ -293,7 +297,7 @@ struct SettingsView: View {
             .accessibilityIdentifier("settings-button-reset-mock-data")
             .disabled(isProcessingSimulatorMockData || !isSimulatorMockEnabled)
         } header: {
-            Text("Mock Data")
+            settingsSectionHeader("Mock Data")
         } footer: {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Simulator only. Seeds advanced athlete health trends, workouts, and per-exercise history.")
@@ -306,7 +310,7 @@ struct SettingsView: View {
     }
 
     private var dataPrivacySection: some View {
-        Section("Data & Privacy") {
+        Section {
             Toggle(isOn: cloudSyncBinding) {
                 Label("iCloud Sync", systemImage: "icloud")
             }
@@ -351,6 +355,8 @@ struct SettingsView: View {
                 }
             }
             .accessibilityIdentifier("settings-row-location-access")
+        } header: {
+            settingsSectionHeader("Data & Privacy")
         }
     }
 
@@ -401,7 +407,7 @@ struct SettingsView: View {
     // MARK: - About
 
     private var aboutSection: some View {
-        Section("About") {
+        Section {
             NavigationLink {
                 NotificationHubView(
                     sharedHealthDataService: sharedHealthDataService,
@@ -437,6 +443,8 @@ struct SettingsView: View {
                     .foregroundStyle(DS.Color.textSecondary)
                     .font(.caption)
             }
+        } header: {
+            settingsSectionHeader("About")
         }
     }
 
