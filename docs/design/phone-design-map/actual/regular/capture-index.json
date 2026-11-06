@@ -1030,13 +1030,24 @@
     },
     "S06": {
       "row_id": "S06",
-      "evidence": "test-and-unmapped-title:근육 지도",
-      "test": "SettingsSmokeTests/testWhatsNewMuscleMapDetailExists()",
-      "action": "before teardown -[SettingsSmokeTests testWhatsNewMuscleMapDetailExists]",
-      "timestamp": 1791836324.083,
-      "image": "A7E93DB4-EFF4-40D0-9E79-FCE49677FAE7.png",
-      "screen": "screen-0-1320x2868-before teardown -[SettingsSmokeTests testWhatsNewMuscleMapDetailExists]_0_45E3D1B5-BD4E-4E5D-82A4-BE208057A4BA.png",
-      "file": "S06.png"
+      "file": "S06.png",
+      "test": "WhatsNewVisualAuditTests/testManualReleaseListOpensFeatureAndReturns()",
+      "action": "Manual current feature detail",
+      "timestamp": 1793985611.468,
+      "source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "a2e5c12fb40e85c8b132a51f17dfae7cd0cd986b5d98f2fca23dfb016144f66e",
+      "ax_sha256": "c6c34bae8c79a0a8f94b1663d4c6aedc58a3f1f3514807a31928800b13aef05e",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/whats-new-detail-s06-2026-11-07/manifest.json",
+      "capture_scope": "B08 manual normal; MAX and source section equivalence in gallery proof",
+      "current_verification": "normal-captured",
+      "actual_angle": null
     },
     "W27": {
       "row_id": "W27",

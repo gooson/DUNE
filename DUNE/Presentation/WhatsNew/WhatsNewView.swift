@@ -167,6 +167,8 @@ private struct WhatsNewFeatureDetailView: View {
     let feature: WhatsNewFeatureItem
     let mode: WhatsNewPresentationMode
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     private var tintColor: Color {
         WhatsNewStyle.tintColor(for: feature.area)
     }
@@ -174,7 +176,10 @@ private struct WhatsNewFeatureDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.xl) {
-                HStack(alignment: .top, spacing: DS.Spacing.md) {
+                let headerLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+                    : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
+                headerLayout {
                     Image(systemName: feature.symbolName)
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(.white)
@@ -197,7 +202,7 @@ private struct WhatsNewFeatureDetailView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    Spacer(minLength: 0)
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
 
                     WhatsNewVersionBadge(version: release.version)
                 }
@@ -211,9 +216,12 @@ private struct WhatsNewFeatureDetailView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
+            .frame(maxWidth: 680)
             .padding(DS.Spacing.lg)
+            .frame(maxWidth: .infinity)
         }
         .scrollIndicators(.hidden)
+        .scrollBounceBehavior(.basedOnSize)
         .background {
             switch mode {
             case .automatic:
