@@ -1097,8 +1097,113 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("S01 MAX final section")
     }
 
+    func testExerciseDefaultsSearchResultOpensOriginalEditor() throws {
+        openExerciseDefaults()
+        var search = app.searchFields.firstMatch
+        if !search.waitForExistence(timeout: 2) {
+            let list = app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch.exists
+                ? app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch
+                : app.collectionViews.firstMatch
+            if list.exists { list.swipeDown() }
+            search = app.searchFields.firstMatch
+        }
+        XCTAssertTrue(search.waitForExistence(timeout: 5), "Native exercise search is available")
+        search.auditTap()
+        search.typeText(Fixture.deadliftSearchQuery)
+        _ = app.dismissKeyboardIfPresent()
+
+        let deadlift = app.descendants(matching: .any)[AXID.exerciseDefaultsRow(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(deadlift.waitForExistence(timeout: 5), "Search shows the matching exercise")
+        XCTAssertFalse(app.descendants(matching: .any)[AXID.exerciseDefaultsConfiguredSection].firstMatch.exists,
+                       "Search hides the configured section while showing results")
+        VisualAudit.capture("S02 filtered exercise results")
+        deadlift.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDefaultEditScreen]
+            .firstMatch.waitForExistence(timeout: 5), "Search result opens the same default editor")
+        VisualAudit.capture("S03 editor opened from S02 search")
+    }
+
+    func testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        openExerciseDefaults()
+
+        var search = app.searchFields.firstMatch
+        if !search.waitForExistence(timeout: 2) {
+            let list = app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch.exists
+                ? app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch
+                : app.collectionViews.firstMatch
+            if list.exists { list.swipeDown() }
+            search = app.searchFields.firstMatch
+        }
+        XCTAssertTrue(search.waitForExistence(timeout: 5))
+        search.auditTap()
+        search.typeText(Fixture.deadliftSearchQuery)
+        _ = app.dismissKeyboardIfPresent()
+        let defaultsList = app.descendants(matching: .any)[AXID.exerciseDefaultsScreen].firstMatch
+        let deadlift = app.descendants(matching: .any)[AXID.exerciseDefaultsRow(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(deadlift.waitForExistence(timeout: 5) && deadlift.isHittable)
+        XCTAssertTrue(hasCompleteConventionalDeadliftName(deadlift.label),
+                      "S02 row keeps the complete exercise name")
+        let defaultsViewport = defaultsList.frame.intersection(app.windows.firstMatch.frame)
+            .insetBy(dx: 4, dy: 4)
+        XCTAssertTrue(defaultsViewport.contains(deadlift.frame), "S02 MAX result fits the visible List")
+        VisualAudit.capture("S02 MAX searched exercise row")
+
+        returnToSettingsFromFilteredList("Exercise Defaults")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowPreferredExercises, maxSwipes: 8))
+        app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch.auditTap()
+        searchPreferredExercises(Fixture.deadliftSearchQuery)
+        let preferredList = app.descendants(matching: .any)[AXID.preferredExercisesScreen].firstMatch
+        let toggle = app.switches[AXID.preferredExerciseToggle(Fixture.deadliftID)].firstMatch
+        XCTAssertTrue(toggle.waitForExistence(timeout: 5) && toggle.isHittable)
+        XCTAssertTrue(hasCompleteConventionalDeadliftName(toggle.label),
+                      "S04 switch keeps the complete exercise name")
+        let preferredViewport = preferredList.frame.intersection(app.windows.firstMatch.frame)
+            .insetBy(dx: 4, dy: 4)
+        XCTAssertTrue(preferredViewport.contains(toggle.frame), "S04 MAX switch fits the visible List")
+        VisualAudit.capture("S04 MAX searched exercise and switch")
+    }
+
+    private func hasCompleteConventionalDeadliftName(_ label: String) -> Bool {
+        // The exercise library can expose its bundled Korean name under an English app locale.
+        label.contains("Conventional Deadlift") || label.contains("컨벤셔널 데드리프트")
+    }
+
+    private func returnToSettingsFromFilteredList(_ title: String) {
+        let navigationBar = app.navigationBars[title]
+        let closeSearch = navigationBar.buttons["Close"].firstMatch
+        if closeSearch.exists { closeSearch.auditTap() }
+
+        let back = navigationBar.buttons["BackButton"].firstMatch
+        if back.waitForExistence(timeout: 2) {
+            XCTAssertTrue(back.isHittable, "Back to Settings should be reachable")
+            back.auditTap()
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            // iPad AX omits Back while the trailing search field is active,
+            // although the round Back control remains visible at the leading edge.
+            XCTAssertTrue(navigationBar.exists, "Filtered list navigation bar remains visible")
+            // 1512px native PNG / scale 2: Back center is 32pt from the bar leading edge.
+            let point = CGPoint(x: navigationBar.frame.minX + 32, y: navigationBar.frame.minY + 22)
+            XCTAssertTrue(navigationBar.frame.contains(point))
+            XCTAssertFalse(navigationBar.searchFields.firstMatch.frame.contains(point))
+            navigationBar.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+                .withOffset(CGVector(dx: 32, dy: 22)).auditTap()
+        } else {
+            XCTFail("Back to Settings should be available after closing search")
+        }
+        XCTAssertTrue(app.navigationBars["Settings"].firstMatch.waitForExistence(timeout: 5),
+                      "Settings root should reopen after leaving the filtered list")
+    }
+
     private func openExerciseDefaults() {
         openSettings()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowExerciseDefaults, maxSwipes: 12),
+                      "Exercise Defaults row should be reachable in Settings")
         let row = app.descendants(matching: .any)[AXID.settingsRowExerciseDefaults].firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 5), "Exercise Defaults row should exist in Settings")
         row.auditTap()

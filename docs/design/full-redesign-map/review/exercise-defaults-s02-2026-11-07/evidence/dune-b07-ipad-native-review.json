@@ -1,0 +1,80 @@
+{
+  "status": "Read-only iPad native review, no SDK or repository edit",
+  "source_revisions": {
+    "S01_normal": "23c6d094",
+    "S02_S03_S04": "1c1b4bf2"
+  },
+  "run_counts": {
+    "ipad_first": {
+      "executed": 5,
+      "passed": 2,
+      "failed": 3
+    },
+    "ipad_retry1": {
+      "executed": 4,
+      "passed": 3,
+      "failed": 1
+    }
+  },
+  "findings_P1_P2_on_inspected_current_iPad": [],
+  "prior_S02_P2": {
+    "status": "closed on inspected iPad normal and MAX captures at source 1c1b4bf2; current fixed-source phone MAX pending",
+    "source": "DUNE/Presentation/Settings/Components/ExerciseDefaultsListView.swift:103",
+    "normal_AX": "S02/assets/17-ipad-after.txt: icon x40..68, title starts x80; 12pt separation",
+    "MAX_AX": "S02/assets/18-ipad-after.txt: icon x40..68, title starts x80; 12pt separation",
+    "visual": "S02/assets/18-ipad-after.png shows distinct icon and full Korean names with no overlap",
+    "fix": "Image font is fixed 18pt while icon container remains 28pt; resolvedActivityType.iconName is preserved"
+  },
+  "screen_assessments": {
+    "S01": {
+      "recommendation": "Accept inspected iPad normal visual and passed selector only",
+      "assets": [
+        "S01/assets/08-ipad-after.png"
+      ],
+      "evidence": "Current iPad normal top controls, sections, and icons are legible without observed overlap. iPad MAX was not part of this review; iPhone normal/MAX selectors passed earlier."
+    },
+    "S02": {
+      "recommendation": "Accept inspected iPad normal and MAX source 1c1b4bf2 visuals and relevant passed selectors",
+      "assets": [
+        "S02/assets/15-ipad-after.png",
+        "S02/assets/17-ipad-after.png",
+        "S02/assets/18-ipad-after.png"
+      ],
+      "evidence": "Configured/all/search rows display current Korean exercise names, original row destinations and distinct activity icons; MAX icon/name frames separated 12pt. Search route and MAX list selectors passed. Save route remains separate."
+    },
+    "S03": {
+      "recommendation": "Hold iPad save/reopen quality claim",
+      "assets": [
+        "S03/assets/12-ipad-after.png"
+      ],
+      "evidence": "Normal iPad editor reached from S02 route and visible labels/icons/fields have no observed overlap. Dedicated iPad save/reopen selector failed in both runs; latest failure was waiting for keyboard dismissal. Earlier phone MAX saved reopen showed 72.5 and 8 on a passed selector, which does not substitute for iPad save/reopen."
+    },
+    "S04": {
+      "recommendation": "Accept inspected iPad normal toggle/reentry and MAX list proof",
+      "assets": [
+        "S04/assets/10-ipad-after.png",
+        "S04/assets/11-ipad-after.png",
+        "S04/assets/12-ipad-after.png",
+        "S04/assets/13-ipad-after.png"
+      ],
+      "evidence": "Native equipment icons and names remain readable. Identified conventional-deadlift switch value 1 in filtered ON and after reentry AX; MAX searched row has full Korean name and visible switch with no observed overlap. Both relevant iPad selectors passed."
+    }
+  },
+  "not_claimed": [
+    "Current fixed-source iPhone MAX S02 visual pass",
+    "Duo closed or open current-source proof",
+    "iPad S03 save/reopen pass",
+    "All B07 selectors green",
+    "Dark mode or all-locale contrast approval"
+  ],
+  "manifests": [
+    "/private/tmp/dune-b07-gallery-prep/S01/manifest.json",
+    "/private/tmp/dune-b07-gallery-prep/S02/manifest.json",
+    "/private/tmp/dune-b07-gallery-prep/S03/manifest.json",
+    "/private/tmp/dune-b07-gallery-prep/S04/manifest.json"
+  ],
+  "result_files": [
+    "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b07/ipad-ui.log.result.json",
+    "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b07/ipad-retry1-ui.log.result.json"
+  ]
+}

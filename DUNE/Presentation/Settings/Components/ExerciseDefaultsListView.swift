@@ -98,7 +98,14 @@ struct ExerciseDefaultsListView: View {
     // MARK: - Row
 
     private func exerciseRow(exercise: ExerciseDefinition, record: ExerciseDefaultRecord?) -> some View {
-        HStack {
+        HStack(spacing: DS.Spacing.md) {
+            Image(systemName: exercise.resolvedActivityType.iconName)
+                .font(.system(size: 18, weight: .medium))
+                .foregroundStyle(theme.accentColor)
+                .frame(width: 28, height: 28)
+                .background(theme.accentColor.opacity(0.10), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+                .accessibilityHidden(true)
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(exercise.localizedName)
                     .font(.body)

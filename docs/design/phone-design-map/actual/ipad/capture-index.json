@@ -121,13 +121,25 @@
     },
     "S02": {
       "row_id": "S02",
-      "evidence": "exercise-defaults-screen",
-      "test": "TodaySettingsRegressionTests/testExerciseDefaultsListSearchesAndOpensEditRoute()",
-      "action": "tap settings-row-exercisedefaults",
-      "timestamp": 1791820735.042,
-      "image": "0A1C1091-A245-48E0-9AE0-4A9404DEB1BB.png",
-      "screen": "screen-0-2064x2752-tap settings-row-exercisedefaults_0_A49FF311-8FA9-48BF-BBFF-481F277E8DE4.png",
-      "file": "S02.png"
+      "file": "S02.png",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultsSearchResultOpensOriginalEditor()",
+      "action": "Current unfiltered Exercise Defaults List",
+      "timestamp": 1793980841.405,
+      "source_revision": "1c1b4bf26f6c1f681561aac825f78b750b93eb1a",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "04b696196fad680de17697ea16b33f36a4bbfbf2c493ec5c895029323a879e9a",
+      "ax_sha256": "59b96b09d7311e26abfd6e8a2382faa803bab466d360e8ce6dbab843564c368b",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/exercise-defaults-s02-2026-11-07/manifest.json",
+      "source_record": "records: profile=ipad,kind=after,run_id=ipad-retry1",
+      "capture_scope": "B07 selected normal state; see gallery gates and limits",
+      "actual_angle": null,
+      "current_verification": "normal-captured"
     },
     "T11": {
       "row_id": "T11",

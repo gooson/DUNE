@@ -1,0 +1,275 @@
+Attributes: Application, 0x112cc0280, pid: 46965, label: 'DUNE'
+Element subtree:
+ →Application, 0x112cc0280, pid: 46965, label: 'DUNE'
+    Window (Main), 0x112cc03c0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x112cc2bc0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x112cc2d00, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x112cc2e40, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x112cc2f80, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x112cc0500, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x112cc0b40, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x112cc2940, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x112cc2a80, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x112cc30c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x112cc3200, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x112cc3340, {{0.0, 32.0}, {756.0, 1126.0}}
+                          Other, 0x112cc3d40, {{0.0, 32.0}, {756.0, 1126.0}}
+                            Other, 0x112cc3e80, {{0.0, 32.0}, {756.0, 1126.0}}
+                              Other, 0x112cc3480, {{0.0, 32.0}, {756.0, 1126.0}}
+                                Other, 0x112cc3700, {{0.0, 32.0}, {756.0, 1126.0}}
+                                  Other, 0x112cc0000, {{0.0, 32.0}, {756.0, 1126.0}}
+                                    Other, 0x112cc0780, {{0.0, 32.0}, {756.0, 1126.0}}
+                                      Other, 0x112cc26c0, {{0.0, 32.0}, {756.0, 1126.0}}
+                                        NavigationBar, 0x112cc3980, {{0.0, 42.0}, {756.0, 54.0}}, identifier: 'Exercise Defaults'
+                                          Button, 0x112cbbe80, {{10.0, 42.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Settings'
+                                          StaticText, 0x112cbb0c0, {{309.0, 53.5}, {137.5, 21.0}}, label: 'Exercise Defaults'
+                                          SearchField, 0x112cbb200, {{506.0, 42.0}, {240.0, 44.0}}, label: 'Search exercises', placeholderValue: 'Search exercises'
+                                            Image, 0x112cbb340, {{518.0, 53.5}, {20.5, 20.0}}, identifier: 'magnifyingglass', label: 'Search'
+                                        Other, 0x112cbb980, {{0.0, 32.0}, {756.0, 1126.0}}
+                                          Other, 0x112cbbc00, {{0.0, 32.0}, {756.0, 1126.0}}
+                                            Other, 0x112cbbd40, {{0.0, 32.0}, {756.0, 1126.0}}
+                                              Other, 0x112cbb5c0, {{0.0, 32.0}, {756.0, 1126.0}}
+                                                CollectionView, 0x112cbb700, {{0.0, 32.0}, {756.0, 1126.0}}, identifier: 'exercise-defaults-screen'
+                                                  Other, 0x112cbb480, {{-20.0, -2156.0}, {796.0, 2377.0}}
+                                                  Other, 0x10568c640, {{0.0, 32.0}, {756.0, 1126.0}}
+                                                    Other, 0x112cc8000, {{0.0, 32.0}, {756.0, 104.0}}
+                                                  Other, 0x112cc8140, {{0.0, 32.0}, {756.0, 1126.0}}
+                                                  Cell, 0x112cc8280, {{20.0, 96.0}, {716.0, 40.5}}
+                                                    Other, 0x112cc83c0, {{20.0, 96.0}, {716.0, 40.5}}
+                                                    Other, 0x112cc8500, {{20.0, 96.0}, {716.0, 40.5}}
+                                                      Other, 0x112cc8640, {{20.0, 96.0}, {716.0, 40.5}}
+                                                        Other, 0x112cc8780, {{20.0, 96.0}, {716.0, 40.5}}
+                                                          StaticText, 0x112cc88c0, {{20.0, 96.0}, {716.0, 40.5}}, identifier: 'exercise-defaults-configured-section', label: 'Configured'
+                                                  Cell, 0x112cc8a00, {{20.0, 136.5}, {716.0, 67.0}}
+                                                    Other, 0x112cc8b40, {{20.0, 136.5}, {716.0, 67.0}}
+                                                      Other, 0x112cc8c80, {{20.0, 136.5}, {716.0, 67.0}}
+                                                    Other, 0x112cc8dc0, {{20.0, 136.5}, {716.0, 67.0}}
+                                                      Other, 0x112cc8f00, {{20.0, 136.5}, {716.0, 67.0}}
+                                                        Other, 0x112cc9040, {{20.0, 136.5}, {716.0, 67.0}}
+                                                          Button, 0x112cc9180, {{20.0, 136.5}, {716.0, 67.0}}, identifier: 'exercise-defaults-configured-section', label: '바벨 벤치프레스, 60 kg'
+                                                            StaticText, 0x112cc92c0, {{40.0, 151.5}, {147.5, 37.0}}, identifier: 'exercise-defaults-row-barbell-bench-press', label: '바벨 벤치프레스, 60 kg'
+                                                              Image, 0x112cc9400, {{40.0, 156.0}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112cc9540, {{80.0, 151.5}, {107.5, 20.5}}, label: '바벨 벤치프레스'
+                                                              StaticText, 0x112cc9680, {{80.0, 174.0}, {32.5, 14.5}}, label: '60 kg'
+                                                            Image, 0x112cc97c0, {{706.5, 164.0}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112cc9900, {{-20.0, 221.0}, {796.0, 9278.5}}
+                                                  Cell, 0x112cc9a40, {{20.0, 221.0}, {716.0, 40.5}}
+                                                    Other, 0x112cc9b80, {{20.0, 221.0}, {716.0, 40.5}}
+                                                    Other, 0x112cc9cc0, {{20.0, 221.0}, {716.0, 40.5}}
+                                                      Other, 0x112cc9e00, {{20.0, 221.0}, {716.0, 40.5}}
+                                                        Other, 0x112cc9f40, {{20.0, 221.0}, {716.0, 40.5}}
+                                                          StaticText, 0x112cca080, {{20.0, 221.0}, {716.0, 40.5}}, identifier: 'exercise-defaults-all-section', label: 'All Exercises'
+                                                  Cell, 0x112cca1c0, {{20.0, 261.5}, {716.0, 58.0}}
+                                                    Other, 0x112cca300, {{20.0, 261.5}, {716.0, 58.0}}
+                                                      Other, 0x112cca440, {{20.0, 261.5}, {716.0, 58.0}}
+                                                    Other, 0x112cca580, {{20.0, 261.5}, {716.0, 58.0}}
+                                                      Other, 0x112cca6c0, {{20.0, 261.5}, {716.0, 58.0}}
+                                                        Other, 0x112cca800, {{20.0, 261.5}, {716.0, 58.0}}
+                                                          Button, 0x112cca940, {{20.0, 261.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: 'TRX 로우'
+                                                            StaticText, 0x112ccaa80, {{40.0, 276.5}, {106.0, 28.0}}, identifier: 'exercise-defaults-row-trx-row', label: 'TRX 로우'
+                                                              Image, 0x112ccabc0, {{40.0, 276.5}, {28.0, 28.0}}, identifier: 'figure.strengthtraining.functional', label: 'Figure Doing Functional Strength Training'
+                                                              StaticText, 0x112ccad00, {{80.0, 280.2}, {66.0, 20.5}}, label: 'TRX 로우'
+                                                            Image, 0x112ccae40, {{706.5, 284.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Cell, 0x112ccaf80, {{20.0, 319.5}, {716.0, 58.0}}
+                                                    Other, 0x112ccb0c0, {{20.0, 319.5}, {716.0, 58.0}}
+                                                      Other, 0x112ccb200, {{20.0, 319.5}, {716.0, 58.0}}
+                                                    Other, 0x112ccb340, {{20.0, 319.5}, {716.0, 58.0}}
+                                                      Other, 0x112ccb480, {{20.0, 319.5}, {716.0, 58.0}}
+                                                        Other, 0x112ccb5c0, {{20.0, 319.5}, {716.0, 58.0}}
+                                                          Button, 0x112ccb700, {{20.0, 319.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: 'TRX 체스트 프레스'
+                                                            StaticText, 0x112ccb840, {{40.0, 334.5}, {169.5, 28.0}}, identifier: 'exercise-defaults-row-trx-chest-press', label: 'TRX 체스트 프레스'
+                                                              Image, 0x112ccb980, {{40.0, 334.5}, {28.0, 28.0}}, identifier: 'figure.strengthtraining.functional', label: 'Figure Doing Functional Strength Training'
+                                                              StaticText, 0x112ccbac0, {{80.0, 338.2}, {129.5, 20.5}}, label: 'TRX 체스트 프레스'
+                                                            Image, 0x112ccbc00, {{706.5, 342.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112ccbd40, {{80.0, 318.5}, {636.0, 1.0}}
+                                                  Cell, 0x112ccbe80, {{20.0, 377.5}, {716.0, 58.0}}
+                                                    Other, 0x112da4000, {{20.0, 377.5}, {716.0, 58.0}}
+                                                      Other, 0x112da4140, {{20.0, 377.5}, {716.0, 58.0}}
+                                                    Other, 0x112da4280, {{20.0, 377.5}, {716.0, 58.0}}
+                                                      Other, 0x112da43c0, {{20.0, 377.5}, {716.0, 58.0}}
+                                                        Other, 0x112da4500, {{20.0, 377.5}, {716.0, 58.0}}
+                                                          Button, 0x112da4640, {{20.0, 377.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '걷기'
+                                                            StaticText, 0x112da4780, {{40.0, 392.5}, {69.5, 28.0}}, identifier: 'exercise-defaults-row-walking', label: '걷기'
+                                                              Image, 0x112da48c0, {{40.0, 392.5}, {28.0, 28.0}}, identifier: 'figure.walk', label: 'Walk'
+                                                              StaticText, 0x112da4a00, {{80.0, 396.2}, {29.5, 20.5}}, label: '걷기'
+                                                            Image, 0x112da4b40, {{706.5, 400.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112da4c80, {{80.0, 376.5}, {636.0, 1.0}}
+                                                  Cell, 0x112da4dc0, {{20.0, 435.5}, {716.0, 58.0}}
+                                                    Other, 0x112da4f00, {{20.0, 435.5}, {716.0, 58.0}}
+                                                      Other, 0x112da5040, {{20.0, 435.5}, {716.0, 58.0}}
+                                                    Other, 0x112da5180, {{20.0, 435.5}, {716.0, 58.0}}
+                                                      Other, 0x112da52c0, {{20.0, 435.5}, {716.0, 58.0}}
+                                                        Other, 0x112da5400, {{20.0, 435.5}, {716.0, 58.0}}
+                                                          Button, 0x112da5540, {{20.0, 435.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '고블릿 스쿼트'
+                                                            StaticText, 0x112da5680, {{40.0, 450.5}, {133.0, 28.0}}, identifier: 'exercise-defaults-row-goblet-squat', label: '고블릿 스쿼트'
+                                                              Image, 0x112da57c0, {{40.0, 450.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112da5900, {{80.0, 454.2}, {93.0, 20.5}}, label: '고블릿 스쿼트'
+                                                            Image, 0x112da5a40, {{706.5, 458.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112da5b80, {{80.0, 434.5}, {636.0, 1.0}}
+                                                  Cell, 0x112da5cc0, {{20.0, 493.5}, {716.0, 58.0}}
+                                                    Other, 0x112da5e00, {{20.0, 493.5}, {716.0, 58.0}}
+                                                      Other, 0x112da5f40, {{20.0, 493.5}, {716.0, 58.0}}
+                                                    Other, 0x112da6080, {{20.0, 493.5}, {716.0, 58.0}}
+                                                      Other, 0x112da61c0, {{20.0, 493.5}, {716.0, 58.0}}
+                                                        Other, 0x112da6300, {{20.0, 493.5}, {716.0, 58.0}}
+                                                          Button, 0x112da6440, {{20.0, 493.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '굿모닝'
+                                                            StaticText, 0x112da6580, {{40.0, 508.5}, {84.5, 28.0}}, identifier: 'exercise-defaults-row-good-morning', label: '굿모닝'
+                                                              Image, 0x112da66c0, {{40.0, 508.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112da6800, {{80.0, 512.2}, {44.5, 20.5}}, label: '굿모닝'
+                                                            Image, 0x112da6940, {{706.5, 516.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112da6a80, {{80.0, 492.5}, {636.0, 1.0}}
+                                                  Cell, 0x112da6bc0, {{20.0, 551.5}, {716.0, 58.0}}
+                                                    Other, 0x112da6d00, {{20.0, 551.5}, {716.0, 58.0}}
+                                                      Other, 0x112da6e40, {{20.0, 551.5}, {716.0, 58.0}}
+                                                    Other, 0x112da6f80, {{20.0, 551.5}, {716.0, 58.0}}
+                                                      Other, 0x112da70c0, {{20.0, 551.5}, {716.0, 58.0}}
+                                                        Other, 0x112da7200, {{20.0, 551.5}, {716.0, 58.0}}
+                                                          Button, 0x112da7340, {{20.0, 551.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '글루트 브릿지'
+                                                            StaticText, 0x112da7480, {{40.0, 566.5}, {133.0, 28.0}}, identifier: 'exercise-defaults-row-glute-bridge', label: '글루트 브릿지'
+                                                              Image, 0x112da75c0, {{40.0, 566.5}, {28.0, 28.0}}, identifier: 'figure.strengthtraining.functional', label: 'Figure Doing Functional Strength Training'
+                                                              StaticText, 0x112da7700, {{80.0, 570.2}, {93.0, 20.5}}, label: '글루트 브릿지'
+                                                            Image, 0x112da7840, {{706.5, 574.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112da7980, {{80.0, 550.5}, {636.0, 1.0}}
+                                                  Cell, 0x112da7ac0, {{20.0, 609.5}, {716.0, 58.0}}
+                                                    Other, 0x112da7c00, {{20.0, 609.5}, {716.0, 58.0}}
+                                                      Other, 0x112da7d40, {{20.0, 609.5}, {716.0, 58.0}}
+                                                    Other, 0x112da7e80, {{20.0, 609.5}, {716.0, 58.0}}
+                                                      Other, 0x112dac000, {{20.0, 609.5}, {716.0, 58.0}}
+                                                        Other, 0x112dac140, {{20.0, 609.5}, {716.0, 58.0}}
+                                                          Button, 0x112dac280, {{20.0, 609.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '내로우 스탠스 레그 프레스'
+                                                            StaticText, 0x112dac3c0, {{40.0, 624.5}, {215.0, 28.0}}, identifier: 'exercise-defaults-row-narrow-stance-leg-press', label: '내로우 스탠스 레그 프레스'
+                                                              Image, 0x112dac500, {{40.0, 624.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112dac640, {{80.0, 628.2}, {175.0, 20.5}}, label: '내로우 스탠스 레그 프레스'
+                                                            Image, 0x112dac780, {{706.5, 632.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112dac8c0, {{80.0, 608.5}, {636.0, 1.0}}
+                                                  Cell, 0x112daca00, {{20.0, 667.5}, {716.0, 58.0}}
+                                                    Other, 0x112dacb40, {{20.0, 667.5}, {716.0, 58.0}}
+                                                      Other, 0x112dacc80, {{20.0, 667.5}, {716.0, 58.0}}
+                                                    Other, 0x112dacdc0, {{20.0, 667.5}, {716.0, 58.0}}
+                                                      Other, 0x112dacf00, {{20.0, 667.5}, {716.0, 58.0}}
+                                                        Other, 0x112dad040, {{20.0, 667.5}, {716.0, 58.0}}
+                                                          Button, 0x112dad180, {{20.0, 667.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '뉴트럴 그립 체스트 프레스 머신'
+                                                            StaticText, 0x112dad2c0, {{40.0, 682.5}, {249.0, 28.0}}, identifier: 'exercise-defaults-row-neutral-grip-chest-press-machine', label: '뉴트럴 그립 체스트 프레스 머신'
+                                                              Image, 0x112dad400, {{40.0, 682.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112dad540, {{80.0, 686.2}, {209.0, 20.5}}, label: '뉴트럴 그립 체스트 프레스 머신'
+                                                            Image, 0x112dad680, {{706.5, 690.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112dad7c0, {{80.0, 666.5}, {636.0, 1.0}}
+                                                  Cell, 0x112dad900, {{20.0, 725.5}, {716.0, 58.0}}
+                                                    Other, 0x112dada40, {{20.0, 725.5}, {716.0, 58.0}}
+                                                      Other, 0x112dadb80, {{20.0, 725.5}, {716.0, 58.0}}
+                                                    Other, 0x112dadcc0, {{20.0, 725.5}, {716.0, 58.0}}
+                                                      Other, 0x112dade00, {{20.0, 725.5}, {716.0, 58.0}}
+                                                        Other, 0x112dadf40, {{20.0, 725.5}, {716.0, 58.0}}
+                                                          Button, 0x112dae080, {{20.0, 725.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '뉴트럴 랫 풀다운 머신'
+                                                            StaticText, 0x112dae1c0, {{40.0, 740.5}, {185.5, 28.0}}, identifier: 'exercise-defaults-row-neutral-lat-pulldown-machine', label: '뉴트럴 랫 풀다운 머신'
+                                                              Image, 0x112dae300, {{40.0, 740.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112dae440, {{80.0, 744.2}, {145.5, 20.5}}, label: '뉴트럴 랫 풀다운 머신'
+                                                            Image, 0x112dae580, {{706.5, 748.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112dae6c0, {{80.0, 724.5}, {636.0, 1.0}}
+                                                  Cell, 0x112dae800, {{20.0, 783.5}, {716.0, 58.0}}
+                                                    Other, 0x112dae940, {{20.0, 783.5}, {716.0, 58.0}}
+                                                      Other, 0x112daea80, {{20.0, 783.5}, {716.0, 58.0}}
+                                                    Other, 0x112daebc0, {{20.0, 783.5}, {716.0, 58.0}}
+                                                      Other, 0x112daed00, {{20.0, 783.5}, {716.0, 58.0}}
+                                                        Other, 0x112daee40, {{20.0, 783.5}, {716.0, 58.0}}
+                                                          Button, 0x112daef80, {{20.0, 783.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '달리기'
+                                                            StaticText, 0x112daf0c0, {{40.0, 798.5}, {84.5, 28.0}}, identifier: 'exercise-defaults-row-running', label: '달리기'
+                                                              Image, 0x112daf200, {{40.0, 798.5}, {28.0, 28.0}}, identifier: 'figure.run', label: 'Running'
+                                                              StaticText, 0x112daf340, {{80.0, 802.2}, {44.5, 20.5}}, label: '달리기'
+                                                            Image, 0x112daf480, {{706.5, 806.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112daf5c0, {{80.0, 782.5}, {636.0, 1.0}}
+                                                  Cell, 0x112daf700, {{20.0, 841.5}, {716.0, 58.0}}
+                                                    Other, 0x112daf840, {{20.0, 841.5}, {716.0, 58.0}}
+                                                      Other, 0x112daf980, {{20.0, 841.5}, {716.0, 58.0}}
+                                                    Other, 0x112dafac0, {{20.0, 841.5}, {716.0, 58.0}}
+                                                      Other, 0x112dafc00, {{20.0, 841.5}, {716.0, 58.0}}
+                                                        Other, 0x112dafd40, {{20.0, 841.5}, {716.0, 58.0}}
+                                                          Button, 0x112dafe80, {{20.0, 841.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '덤벨 로우'
+                                                            StaticText, 0x112db0000, {{40.0, 856.5}, {103.5, 28.0}}, identifier: 'exercise-defaults-row-dumbbell-row', label: '덤벨 로우'
+                                                              Image, 0x112db0140, {{40.0, 856.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112db0280, {{80.0, 860.2}, {63.5, 20.5}}, label: '덤벨 로우'
+                                                            Image, 0x112db03c0, {{706.5, 864.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112db0500, {{80.0, 840.5}, {636.0, 1.0}}
+                                                  Cell, 0x112db0640, {{20.0, 899.5}, {716.0, 58.0}}
+                                                    Other, 0x112db0780, {{20.0, 899.5}, {716.0, 58.0}}
+                                                      Other, 0x112db08c0, {{20.0, 899.5}, {716.0, 58.0}}
+                                                    Other, 0x112db0a00, {{20.0, 899.5}, {716.0, 58.0}}
+                                                      Other, 0x112db0b40, {{20.0, 899.5}, {716.0, 58.0}}
+                                                        Other, 0x112db0c80, {{20.0, 899.5}, {716.0, 58.0}}
+                                                          Button, 0x112db0dc0, {{20.0, 899.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '덤벨 벤치프레스'
+                                                            StaticText, 0x112db0f00, {{40.0, 914.5}, {147.5, 28.0}}, identifier: 'exercise-defaults-row-dumbbell-bench-press', label: '덤벨 벤치프레스'
+                                                              Image, 0x112db1040, {{40.0, 914.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112db1180, {{80.0, 918.2}, {107.5, 20.5}}, label: '덤벨 벤치프레스'
+                                                            Image, 0x112db12c0, {{706.5, 922.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112db1400, {{80.0, 898.5}, {636.0, 1.0}}
+                                                  Cell, 0x112db1540, {{20.0, 957.5}, {716.0, 58.0}}
+                                                    Other, 0x112db1680, {{20.0, 957.5}, {716.0, 58.0}}
+                                                      Other, 0x112db17c0, {{20.0, 957.5}, {716.0, 58.0}}
+                                                    Other, 0x112db1900, {{20.0, 957.5}, {716.0, 58.0}}
+                                                      Other, 0x112db1a40, {{20.0, 957.5}, {716.0, 58.0}}
+                                                        Other, 0x112db1b80, {{20.0, 957.5}, {716.0, 58.0}}
+                                                          Button, 0x112db1cc0, {{20.0, 957.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '덤벨 숄더 프레스'
+                                                            StaticText, 0x112db1e00, {{40.0, 972.5}, {152.0, 28.0}}, identifier: 'exercise-defaults-row-dumbbell-shoulder-press', label: '덤벨 숄더 프레스'
+                                                              Image, 0x112db1f40, {{40.0, 972.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112db2080, {{80.0, 976.2}, {112.0, 20.5}}, label: '덤벨 숄더 프레스'
+                                                            Image, 0x112db21c0, {{706.5, 980.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112db2300, {{80.0, 956.5}, {636.0, 1.0}}
+                                                  Cell, 0x112db2440, {{20.0, 1015.5}, {716.0, 58.0}}
+                                                    Other, 0x112db2580, {{20.0, 1015.5}, {716.0, 58.0}}
+                                                      Other, 0x112db26c0, {{20.0, 1015.5}, {716.0, 58.0}}
+                                                    Other, 0x112db2800, {{20.0, 1015.5}, {716.0, 58.0}}
+                                                      Other, 0x112db2940, {{20.0, 1015.5}, {716.0, 58.0}}
+                                                        Other, 0x112db2a80, {{20.0, 1015.5}, {716.0, 58.0}}
+                                                          Button, 0x112db2bc0, {{20.0, 1015.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '덤벨 컬'
+                                                            StaticText, 0x112db2d00, {{40.0, 1030.5}, {88.5, 28.0}}, identifier: 'exercise-defaults-row-dumbbell-curl', label: '덤벨 컬'
+                                                              Image, 0x112db2e40, {{40.0, 1030.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112db2f80, {{80.0, 1034.2}, {48.5, 20.5}}, label: '덤벨 컬'
+                                                            Image, 0x112db30c0, {{706.5, 1038.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112db3200, {{80.0, 1014.5}, {636.0, 1.0}}
+                                                  Cell, 0x112db3340, {{20.0, 1073.5}, {716.0, 58.0}}
+                                                    Other, 0x112db3480, {{20.0, 1073.5}, {716.0, 58.0}}
+                                                      Other, 0x112db35c0, {{20.0, 1073.5}, {716.0, 58.0}}
+                                                    Other, 0x112db3700, {{20.0, 1073.5}, {716.0, 58.0}}
+                                                      Other, 0x112db3840, {{20.0, 1073.5}, {716.0, 58.0}}
+                                                        Other, 0x112db3980, {{20.0, 1073.5}, {716.0, 58.0}}
+                                                          Button, 0x112db3ac0, {{20.0, 1073.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '덤벨 플라이'
+                                                            StaticText, 0x112db3c00, {{40.0, 1088.5}, {118.0, 28.0}}, identifier: 'exercise-defaults-row-dumbbell-fly', label: '덤벨 플라이'
+                                                              Image, 0x112db3d40, {{40.0, 1088.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                              StaticText, 0x112db3e80, {{80.0, 1092.2}, {78.0, 20.5}}, label: '덤벨 플라이'
+                                                            Image, 0x112db4000, {{706.5, 1096.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112db4140, {{80.0, 1072.5}, {636.0, 1.0}}
+                                                  Cell, 0x112db4280, {{20.0, 1131.5}, {716.0, 58.0}}
+                                                    Other, 0x112db43c0, {{20.0, 1131.5}, {716.0, 58.0}}
+                                                      Other, 0x112db4500, {{20.0, 1131.5}, {716.0, 58.0}}
+                                                    Other, 0x112db4640, {{20.0, 1131.5}, {716.0, 58.0}}
+                                                      Other, 0x112db4780, {{20.0, 1131.5}, {716.0, 58.0}}
+                                                        Other, 0x112db48c0, {{20.0, 1131.5}, {716.0, 58.0}}
+                                                          Button, 0x112db4a00, {{20.0, 1131.5}, {716.0, 58.0}}, identifier: 'exercise-defaults-all-section', label: '데드 버그'
+                                                            StaticText, 0x112db4b40, {{40.0, 1146.5}, {103.5, 28.0}}, identifier: 'exercise-defaults-row-dead-bug', label: '데드 버그'
+                                                              Image, 0x112db4c80, {{40.0, 1146.5}, {28.0, 28.0}}, identifier: 'figure.strengthtraining.functional', label: 'Figure Doing Functional Strength Training'
+                                                              StaticText, 0x112db4dc0, {{80.0, 1150.2}, {63.5, 20.5}}, label: '데드 버그'
+                                                            Image, 0x112db4f00, {{706.5, 1154.5}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Other, 0x112db5040, {{80.0, 1130.5}, {636.0, 1.0}}
+                                                  Other, 0x112db5180, {{723.0, 96.0}, {30.0, 1015.0}}, label: 'Vertical scroll bar, 7 pages', value: 0%
+                                                    Other, 0x112db52c0, {{750.0, 1016.5}, {3.0, 96.0}}
+                                                  Other, 0x112db5400, {{723.0, 96.0}, {30.0, 1015.0}}, label: 'Vertical scroll bar, 7 pages', value: 0%
+                                                    Other, 0x112db5540, {{750.0, 1016.5}, {3.0, 96.0}}
+                                        Toolbar, 0x112db5680, {{0.0, 32.0}, {756.0, 1126.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x112db57c0, {{0.0, 32.0}, {756.0, 1126.0}}
+                                Toolbar, 0x112db5900, {{0.0, 32.0}, {756.0, 1126.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x112db5a40, {{0.0, 32.0}, {756.0, 1126.0}}
+                            Other, 0x112db5b80, {{0.0, 32.0}, {756.0, 1126.0}}
+                              Other, 0x112db5cc0, {{0.0, 32.0}, {756.0, 1126.0}}
+                Other, 0x112db5e00, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x112db5f40, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x112db6080, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x112db61c0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x112db6300, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x112db6440, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x112cc0280, pid: 46965, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x112db6580, pid: 46965, label: 'DUNE'
+  }
