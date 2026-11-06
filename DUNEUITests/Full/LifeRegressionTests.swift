@@ -248,7 +248,15 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertFalse(recordCount.label.isEmpty)
         let historyScroll = app.scrollViews["life-habit-history-scroll"].firstMatch
         XCTAssertTrue(historyScroll.waitForExistence(timeout: 5) && historyScroll.isHittable)
-        XCTAssertTrue(app.revealTextBody("life-habit-history-count", in: historyScroll))
+        if app.windows.firstMatch.horizontalSizeClass == .regular {
+            let countFrame = recordCount.frame
+            let viewport = historyScroll.frame.intersection(app.windows.firstMatch.frame)
+            XCTAssertGreaterThan(countFrame.width, 0)
+            XCTAssertGreaterThan(countFrame.height, 0)
+            XCTAssertTrue(recordCount.isHittable && viewport.contains(countFrame))
+        } else {
+            XCTAssertTrue(app.revealTextBody("life-habit-history-count", in: historyScroll))
+        }
         VisualAudit.capture("L05 seeded history hero and count")
 
         let habitSummary = app.descendants(matching: .any)[AXID.lifeHabitRow("Morning Stretch")].firstMatch
