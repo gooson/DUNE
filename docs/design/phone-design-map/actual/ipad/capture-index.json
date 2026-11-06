@@ -374,13 +374,25 @@
     },
     "W28": {
       "row_id": "W28",
-      "evidence": "healthkit-workout-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testNotificationWorkoutRouteOpensHealthKitDetailAndTitleEditor()",
-      "action": "tap notification-row-workout-ui-test-activity-workout-running",
-      "timestamp": 1791822101.31,
-      "image": "219C4511-ED0F-4B0F-AB6C-9E333941DB9F.png",
-      "screen": "screen-0-2064x2752-tap notification-row-workout-ui-test-activity-workout-running_0_7F792BAF-373A-411E-8887-D3E2A1929CAC.png",
-      "file": "W28.png"
+      "file": "W28.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtNormalText()",
+      "action": "Normal imported workout header",
+      "timestamp": 1793997200.277,
+      "source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "086767005859f0ef3f129415d8f204fdc232cae9afaea238db09c1361a287385",
+      "ax_sha256": "4fdff0d4d08eeb59f801d6cf414e4612ba5be384361e43b39fb48626226d2403",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/manifest.json",
+      "capture_scope": "B12 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W02": {
       "row_id": "W02",
