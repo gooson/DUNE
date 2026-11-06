@@ -115,11 +115,11 @@ struct PostureResultView: View {
             RoundedRectangle(cornerRadius: DS.Radius.xl)
                 .strokeBorder(palette.border, lineWidth: 1)
         }
-        .accessibilityIdentifier("posture-result-score")
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(viewModel.hasBothCaptures
             ? "Posture score \(score) out of 100"
             : "Posture score \(score) out of 100, partial assessment"))
+        .accessibilityIdentifier("posture-result-score")
     }
 
     private func scoreColor(_ score: Int) -> Color {
@@ -296,9 +296,9 @@ struct PostureResultView: View {
                 .foregroundStyle(statusColor(metric.status))
         }
         .padding(.vertical, DS.Spacing.xs)
-        .accessibilityIdentifier("posture-result-metric-\(metric.type.rawValue)")
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("\(metric.type.displayName), \(metric.status.displayName), \(metricValueText(metric))"))
+        .accessibilityIdentifier("posture-result-metric-\(metric.type.rawValue)")
     }
 
     private func metricValueText(_ metric: PostureMetricResult) -> String {
