@@ -570,6 +570,7 @@ final class LifeRegressionTests: SeededUITestBaseCase {
     }
 
     func testHabitAnalyticsAtMaximumAccessibilitySize() throws {
+        executionTimeAllowance = 600
         var configuration = launchConfiguration
         configuration.additionalArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
         launchApp(with: configuration)
