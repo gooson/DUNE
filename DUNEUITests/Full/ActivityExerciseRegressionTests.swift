@@ -278,7 +278,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         if useQuickStart {
             let statsScroll = app.scrollViews["activity-weeklystats-detail-screen"].firstMatch
             let chartHeading = statsScroll.staticTexts["weeklystats-chart-heading"].firstMatch
-            let metricPicker = statsScroll.buttons["weeklystats-chart-metric-picker"].firstMatch
+            let metricPicker = checkPeriodMenu
+                ? statsScroll.buttons["weeklystats-chart-metric-picker"].firstMatch
+                : statsScroll.segmentedControls["weeklystats-chart-metric-picker"].firstMatch
             let window = app.windows.firstMatch
             let close = app.buttons["workout-insights-close"].firstMatch
             XCTAssertTrue(statsScroll.exists && window.exists && close.exists,
@@ -379,20 +381,41 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                           "The complete chart heading and menu must share the visible scroll viewport")
             XCTAssertTrue(chartHeading.isHittable && metricPicker.isHittable,
                           "The chart title and metric menu must both be reachable at maximum accessibility size")
-            XCTAssertLessThanOrEqual(chartHeading.frame.maxY, metricPicker.frame.minY,
-                                     "The chart title must remain above its metric menu")
+            if checkPeriodMenu {
+                XCTAssertLessThanOrEqual(chartHeading.frame.maxY, metricPicker.frame.minY,
+                                         "The chart title must remain above its metric menu")
+            } else {
+                XCTAssertLessThanOrEqual(chartHeading.frame.maxX, metricPicker.frame.minX,
+                                         "The normal chart title must remain beside its segmented control")
+                let sharedRowHeight = min(chartHeading.frame.maxY, metricPicker.frame.maxY)
+                    - max(chartHeading.frame.minY, metricPicker.frame.minY)
+                XCTAssertGreaterThan(sharedRowHeight, 0,
+                                     "The normal title and segmented control must share a row")
+            }
             addScreenshotAttachment(named: "Daily chart heading and accessible metric menu")
             VisualAudit.capture("Daily chart heading and accessible metric menu")
-            metricPicker.auditTap()
-            let volume = app.buttons.matching(NSPredicate(
-                format: "label IN %@", ["Volume (kg)", "볼륨 (kg)", "ボリューム (kg)"]
-            )).firstMatch
-            XCTAssertTrue(volume.waitForExistence(timeout: 5) && volume.isHittable,
-                          "The chart menu must expose the complete volume label")
-            VisualAudit.capture("Daily chart metric choices")
-            volume.auditTap()
-            XCTAssertTrue(metricPicker.label.contains("kg"),
-                          "Selecting volume must update the chart metric")
+            if checkPeriodMenu {
+                metricPicker.auditTap()
+                let volume = app.buttons.matching(NSPredicate(
+                    format: "label IN %@", ["Volume (kg)", "볼륨 (kg)", "ボリューム (kg)"]
+                )).firstMatch
+                XCTAssertTrue(volume.waitForExistence(timeout: 5) && volume.isHittable,
+                              "The chart menu must expose the complete volume label")
+                VisualAudit.capture("Daily chart metric choices")
+                volume.auditTap()
+                XCTAssertTrue(metricPicker.label.contains("kg"),
+                              "Selecting volume must update the chart metric")
+            } else {
+                let volume = metricPicker.buttons.matching(NSPredicate(
+                    format: "label IN %@", ["Volume (kg)", "볼륨 (kg)", "ボリューム (kg)"]
+                )).firstMatch
+                XCTAssertTrue(volume.waitForExistence(timeout: 5) && volume.isHittable,
+                              "The segmented control must expose the original Volume choice")
+                VisualAudit.capture("Daily chart normal segmented metric choices")
+                volume.auditTap()
+                XCTAssertTrue(volume.isSelected || (volume.value as? String) == "1",
+                              "Selecting Volume must select its actual segmented child")
+            }
             VisualAudit.capture("Daily volume chart after selecting volume")
         }
         for index in 1...3 {
@@ -4762,7 +4785,53 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         for _ in 0..<8 where !created.isHittable { list.swipeUp(velocity: .slow) }
         XCTAssertTrue(created.waitForExistence(timeout: 8) && created.isHittable)
         XCTAssertTrue(app.staticTexts["Duration + Distance"].firstMatch.exists)
-        VisualAudit.capture("W29 \(size) long custom category row and input type")
+        if maximumText {
+            let categoryList = app.collectionViews[AXID.userCategoryManagementScreen].firstMatch
+            let row = categoryList.buttons.matching(
+                NSPredicate(format: "label CONTAINS %@", categoryName)
+            ).firstMatch
+            let rowName = row.staticTexts[categoryName].firstMatch
+            let rowInputType = row.staticTexts["Duration + Distance"].firstMatch
+            let navigation = app.navigationBars["Categories"].firstMatch
+            let tabBar = app.tabBars.firstMatch
+            XCTAssertTrue(categoryList.exists && navigation.exists)
+            if UIDevice.current.userInterfaceIdiom == .phone { XCTAssertTrue(tabBar.exists) }
+
+            func visibleCategoryListFrame() -> CGRect {
+                let window = app.windows.firstMatch.frame
+                let frame = categoryList.frame.intersection(window)
+                var top = max(frame.minY, navigation.frame.maxY)
+                var bottom = frame.maxY
+                if tabBar.exists {
+                    if tabBar.frame.midY >= window.midY {
+                        bottom = min(bottom, tabBar.frame.minY)
+                    } else {
+                        top = max(top, tabBar.frame.maxY)
+                    }
+                }
+                top += 4
+                bottom -= 4
+                return CGRect(x: frame.minX, y: top, width: frame.width,
+                              height: max(0, bottom - top))
+            }
+
+            for _ in 0..<12 {
+                let viewport = visibleCategoryListFrame()
+                if row.exists && rowName.exists && rowInputType.exists &&
+                    viewport.contains(row.frame) && viewport.contains(rowName.frame) &&
+                    viewport.contains(rowInputType.frame) { break }
+                categoryList.swipeUp(velocity: .slow)
+            }
+            let viewport = visibleCategoryListFrame()
+            XCTAssertTrue(row.exists && rowName.exists && rowInputType.exists,
+                          "MAX custom row must expose its own name and input type")
+            XCTAssertTrue(viewport.contains(row.frame) && viewport.contains(rowName.frame) &&
+                          viewport.contains(rowInputType.frame),
+                          "MAX custom row, full long name, and input type must fit above the tab bar")
+        }
+        VisualAudit.capture(maximumText
+            ? "W29 MAX full custom category row and input type"
+            : "W29 normal long custom category row and input type")
         created.auditTap()
         XCTAssertTrue(form.waitForExistence(timeout: 8))
         XCTAssertEqual(name.value as? String, categoryName)
