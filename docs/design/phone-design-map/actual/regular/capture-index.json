@@ -818,13 +818,25 @@
     },
     "P05": {
       "row_id": "P05",
-      "evidence": "posture-history-screen",
-      "test": "PostureVisualAuditTests/testPostureComparison()",
-      "action": "tap wellness-link-posturehistory",
-      "timestamp": 1791820127.336,
-      "image": "048B9325-8ACE-4EF7-9B0E-A1E59A3C4708.png",
-      "screen": "screen-0-1320x2868-tap wellness-link-posturehistory_0_4BFCB2FB-0200-4B8C-AFA4-03F99C1F1F40.png",
-      "file": "P05.png"
+      "file": "P05.png",
+      "test": "PostureVisualAuditTests/testP07SymmetryKeepsSeededValuesAndUnits()",
+      "action": "Current normal history entry",
+      "timestamp": 1793975602.193,
+      "source_revision": "7b9138b6dbcc7687f6df8393aaba1020abdff068",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "4116f5aab9cf342b38eb75cdf0b50f8436789b9770a15d4df699af94fdbc8e20",
+      "ax_sha256": "70ab95572a763b3398f3a1a07e44ebcdbe0648135f71fa57f74f993f7bf10a79",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/posture-history-p05-2026-11-06/manifest.json",
+      "source_record": "records: profile=regular,kind=after,is_primary=true,normal",
+      "capture_scope": "B06 selected normal state; see gallery gates and limits",
+      "actual_angle": null,
+      "current_verification": "normal-captured"
     },
     "P07": {
       "row_id": "P07",
