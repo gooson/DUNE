@@ -5,6 +5,7 @@ struct ExerciseDetailSheet: View {
     let onSelect: () -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         NavigationStack {
@@ -44,33 +45,67 @@ struct ExerciseDetailSheet: View {
     // MARK: - Header
 
     private var headerSection: some View {
-        HStack(spacing: DS.Spacing.md) {
-            exercise.equipment.svgIcon(size: 40)
-                .foregroundStyle(exercise.resolvedActivityType.color)
-                .frame(width: 64, height: 64)
-                .background(DS.Color.activity.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
-
-            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                Text(exercise.localizedName)
-                    .font(.title3.weight(.semibold))
-                Text(exercise.name)
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
-                HStack(spacing: DS.Spacing.sm) {
-                    Label(exercise.category.displayName, systemImage: categoryIcon)
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
-                    Label {
-                        Text(exercise.equipment.displayName)
-                    } icon: {
-                        exercise.equipment.svgIcon(size: 12)
-                    }
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                    headerIcon
+                    headerLabels
+                }
+            } else {
+                HStack(spacing: DS.Spacing.md) {
+                    headerIcon
+                    headerLabels
                 }
             }
         }
         .padding(.top, DS.Spacing.md)
+    }
+
+    private var headerIcon: some View {
+        exercise.equipment.svgIcon(size: 40)
+            .foregroundStyle(exercise.resolvedActivityType.color)
+            .frame(width: 64, height: 64)
+            .background(DS.Color.activity.opacity(0.12), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+    }
+
+    private var headerLabels: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            Text(exercise.localizedName)
+                .font(.title3.weight(.semibold))
+                .fixedSize(horizontal: false, vertical: true)
+            Text(exercise.name)
+                .font(.caption)
+                .foregroundStyle(DS.Color.textSecondary)
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        categoryLabel
+                        equipmentLabel
+                    }
+                } else {
+                    HStack(spacing: DS.Spacing.sm) {
+                        categoryLabel
+                        equipmentLabel
+                    }
+                }
+            }
+        }
+    }
+
+    private var categoryLabel: some View {
+        Label(exercise.category.displayName, systemImage: categoryIcon)
+            .font(.caption)
+            .foregroundStyle(DS.Color.textSecondary)
+    }
+
+    private var equipmentLabel: some View {
+        Label {
+            Text(exercise.equipment.displayName)
+        } icon: {
+            exercise.equipment.svgIcon(size: 12)
+        }
+        .font(.caption)
+        .foregroundStyle(DS.Color.textSecondary)
     }
 
     private var categoryIcon: String {
@@ -113,7 +148,7 @@ struct ExerciseDetailSheet: View {
                         Text("\(index + 1)")
                             .font(.caption.weight(.bold))
                             .foregroundStyle(.white)
-                            .frame(width: 20, height: 20)
+                            .frame(minWidth: 24, minHeight: 24)
                             .background(DS.Color.activity, in: Circle())
                         Text(cue)
                             .font(.subheadline)
@@ -194,9 +229,18 @@ struct ExerciseDetailSheet: View {
             Text("Details")
                 .font(.headline)
 
-            HStack(spacing: DS.Spacing.lg) {
-                infoItem(label: "Input", value: inputTypeLabel)
-                infoItem(label: "MET", value: exercise.metValue.formattedWithSeparator(fractionDigits: 1))
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        infoItem(label: "Input", value: inputTypeLabel)
+                        infoItem(label: "MET", value: exercise.metValue.formattedWithSeparator(fractionDigits: 1))
+                    }
+                } else {
+                    HStack(spacing: DS.Spacing.lg) {
+                        infoItem(label: "Input", value: inputTypeLabel)
+                        infoItem(label: "MET", value: exercise.metValue.formattedWithSeparator(fractionDigits: 1))
+                    }
+                }
             }
         }
     }

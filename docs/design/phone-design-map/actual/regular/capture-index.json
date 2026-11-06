@@ -1414,13 +1414,24 @@
     },
     "W03": {
       "row_id": "W03",
-      "evidence": "test-and-action:tap picker-detail-barbell-bench-press",
-      "test": "ActivityExerciseRegressionTests/testQuickStartPickerShowsDetailAndSearchResults()",
-      "action": "tap picker-detail-barbell-bench-press",
-      "timestamp": 1792374860.551,
-      "image": "9FCD4F77-4098-4CBB-A297-FFE9A0263506.png",
-      "screen": "screen-0-1206x2622-tap picker-detail-barbell-bench-press_0_D14AF4AA-6856-4336-B034-75D93FBCC02E.png",
-      "file": "W03.png"
+      "file": "W03.png",
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText()",
+      "action": "Exercise detail",
+      "timestamp": 1793987064.049,
+      "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "bc6b8eab563b9c5a3d9b7bf6f5e3d585819b2629ead8d390082165cc79ee84e3",
+      "ax_sha256": "04e2d8088c3878fd34981ccce896b4339c57d44f37aa90458979975ed72e421a",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/exercise-detail-w03-2026-11-07/manifest.json",
+      "capture_scope": "B09 manual normal; MAX and source section equivalence in gallery proof",
+      "current_verification": "normal-captured",
+      "actual_angle": null
     },
     "A18": {
       "row_id": "A18",

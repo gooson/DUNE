@@ -505,13 +505,24 @@
     },
     "W03": {
       "row_id": "W03",
-      "evidence": "exercise-detail-screen",
-      "test": "ActivityExerciseRegressionTests/testManualWorkoutSessionSavesAndDismissesCompletionSheet()",
-      "action": "tap picker-detail-barbell-bench-press",
-      "timestamp": 1791854688.553,
-      "image": "0038BAE2-11E8-472D-A74D-E57EF3F15362.png",
-      "screen": "screen-0-2064x2752-tap picker-detail-barbell-bench-press_0_552BF494-52C8-4DF1-AC0A-A3B2BCFC0584.png",
-      "file": "W03.png"
+      "file": "W03.png",
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText()",
+      "action": "Exercise detail",
+      "timestamp": 1793987688.554,
+      "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "dfb240caac0fb255532ceb58110eddde2b6f14d727a21689345c5354c245434c",
+      "ax_sha256": "3440b0ccf44fbdb230b59eee048ff7a98a321f804af07563c136942e9848882b",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/exercise-detail-w03-2026-11-07/manifest.json",
+      "capture_scope": "B09 manual normal; MAX and source section equivalence in gallery proof",
+      "current_verification": "normal-captured",
+      "actual_angle": null
     },
     "A04": {
       "row_id": "A04",
