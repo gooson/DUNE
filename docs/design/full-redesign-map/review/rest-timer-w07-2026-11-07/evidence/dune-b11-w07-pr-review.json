@@ -1,0 +1,30 @@
+{
+  "scope": "Read-only final W07 split PR diff review on uncommitted codex/rest-timer-w07-redesign branch",
+  "branch": "codex/rest-timer-w07-redesign",
+  "base": "7c7e21fa5c11ef1585e493288f258bbe0eb082d8",
+  "frozen_integration_source": "4e2c408d72da82e7e65114942aa4b37bc7cfe193",
+  "app_changed_files": [
+    "DUNE/Presentation/Exercise/Components/RestTimerView.swift"
+  ],
+  "app_sha256": "4d00caf138b16dbf1dcc2f48aa2a9f2b6593eb03516b8aa1afdf5f51e46317df",
+  "source_isolation": "Only RestTimerView.swift app code changed; actions timer.addTime(30) and timer.stop unchanged. All other changes are W07 plans/layout/theme/actual-map/gallery/solution artifacts; no .claude files.",
+  "evidence": {
+    "ipad": "Actual W07 PNG+AX hashes match passed normal iPad gallery row from first 2/2 iPad run; MAX paired captures and source hash present in gallery.",
+    "phone": "Regular W07 PNG byte-identical to main, current_verification pending. Passed phone MAX paired captures linked in gallery; failed normal lookup remains raw 1/2 retry.",
+    "duo": "Closed/open W07 PNG byte-identical to main, both current_verification pending.",
+    "boards": "Regular and Duo activity boards render W07 placeholders; iPad board includes new W07 thumbnail.",
+    "receipts": "Gallery evidence retains initial phone 0/2, retry phone 1/2, iPad 2/2 plus independent and final gate JSON."
+  },
+  "introduced_P1_P2": [],
+  "minor_findings": [
+    {
+      "priority": "P3",
+      "path": "docs/design/full-redesign-map/index.html",
+      "finding": "W07 capture link text still says iPad existing capture even though its actual W07 PNG/AX was replaced with the passed iPad normal capture. Status column is accurate; update link label for consistency."
+    }
+  ],
+  "condition": "Commit/PR should retain the exact W07 app hash and current pending Phone normal/Duo map states; no new SDK is implied.",
+  "parent_resolution": {
+    "P3": "resolved targeted W07 iPad link label now 새 실제 캡처; common map helper corrected before W08/W09; app/captures unchanged"
+  }
+}

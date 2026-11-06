@@ -1,0 +1,30 @@
+{
+  "review": "Parent native Phone B11 inspection",
+  "app_source": "670c46d695a30b485528e799e92afbacaa91bd41",
+  "phone_retry_source": "5179e21e0b2fd95fe68e368a8a22c9b1aafbdd40",
+  "raw_results": [
+    {
+      "run": "phone",
+      "passed": 0,
+      "failed": 2
+    },
+    {
+      "run": "phone-retry1",
+      "passed": 1,
+      "failed": 1
+    }
+  ],
+  "native_MAX": {
+    "W07": "title/countdown/progress/+30s/Skip allfullyvisible; after+30timeincreases; Skipdismisses",
+    "W08": "8 Hard 2repsleft;slider6–10;finalMaxcategoryfullyvisibleafterpan;helpopens",
+    "W09": "fourrange/RIRcardsordered6–7through9–10,fullwidthleading;last0–1repsleftvisible;Donepasses"
+  },
+  "phone_normal": "FAILEDquerySkipAXIDoverriddeninoriginalsafeAreaInset;actualnormalPNGfullyvisiblebuttonSkip at230.3,820.7,49.3,28.3 aboveTabBar873; no3rdtest",
+  "P1_P2_introduced_app": [],
+  "limits": [
+    "Phone normalW08/W09 notreached; originalnormalafterevidenceabsent",
+    "Duo currentnotcaptured",
+    "Source/fixture60x10 asserted; no numericreplacementtested",
+    "NoFinish/save/HealthKit/fullregression"
+  ]
+}

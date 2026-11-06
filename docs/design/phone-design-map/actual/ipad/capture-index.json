@@ -570,13 +570,25 @@
     },
     "W07": {
       "row_id": "W07",
-      "evidence": "test-and-action:Rest timer after first completed set",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditRestTimerFromQuickStart()",
-      "action": "Rest timer after first completed set",
-      "timestamp": 1791855061.338,
-      "image": "607B87A4-C031-4C8F-AB5E-E2B6A335C55B.png",
-      "screen": "screen-0-2064x2752-Rest timer after first completed set_0_860850FD-CD98-4FFF-B2D2-DB0CC902145B.png",
-      "file": "W07.png"
+      "file": "W07.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtNormalText()",
+      "action": "Normal rest timer and actions",
+      "timestamp": 1793994318.971,
+      "source_revision": "4e2c408d72da82e7e65114942aa4b37bc7cfe193",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "e418b65461d084079a717a4cc9e4d1defc496863aedac848a1b7a15f1645bf94",
+      "ax_sha256": "f18e2eebdc7b3e1f624d75f9d59e5329a950dcf115869e83682ea9d811a313d5",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/rest-timer-w07-2026-11-07/manifest.json",
+      "capture_scope": "B11 normal actual; MAX and changed interaction in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "L02": {
       "row_id": "L02",
