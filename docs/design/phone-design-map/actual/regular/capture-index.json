@@ -1481,13 +1481,25 @@
     },
     "P03": {
       "row_id": "P03",
-      "evidence": "test-and-action:Realtime exercise picker",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "Realtime exercise picker",
-      "timestamp": 1792375327.081,
-      "image": "EEB5B959-659A-4D90-BDAB-8DFF1C88E649.png",
-      "screen": "screen-0-1206x2622-Realtime exercise picker_0_5DC6B954-02D6-4233-8A87-458FCC7E99D9.png",
-      "file": "P03.png"
+      "file": "P03.png",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "action": "screen-0-1320x2868-P03 General Posture selected_0_F24D41D1-F923-4E9B-B95D-143AB1055DE8.png",
+      "timestamp": 1793963907.775,
+      "source_revision": "23fa2883f7f8f02e7418a1fcfed16fb9f516d8ce",
+      "source_worktree_dirty": false,
+      "device_udid": "B9C76CF6-96F3-4DEF-B263-46820019EA01",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "2646c3f84ba69d125cbc119c3f23f5643531e4aa6dbbac2b20979a7aed62488a",
+      "ax_sha256": "0bf8e7618f9168f40d1aeb59a23d8040adc70e30611bb76edd89153a5c5ef3d4",
+      "source_json": "../../../full-redesign-map/review/posture-exercise-picker-p03-2026-11-06/manifest.json",
+      "source_record": "records: profile=regular,kind=after,is_primary=true",
+      "capture_scope": "P03 corrected closed MAX pending approval and execution",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1320,
+        2868
+      ]
     },
     "H04": {
       "row_id": "H04",

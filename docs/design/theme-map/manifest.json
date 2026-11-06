@@ -997,6 +997,18 @@
         "status": "implemented-selected-native-flows-verified",
         "actual": "../full-redesign-map/review/posture-result-p04-2026-11-06/index.html"
       }
+    },
+    {
+      "id": "posture-exercise-picker-p03",
+      "name": "P03 · 운동 선택",
+      "title": "원래 General Posture 선택 행 → Form Check 운동 목록. 기존 아이콘·체크를 유지하고 앞자리 심볼 면·선택 위계를 보강한다. medium에서 시작하고 large로 확장한다.",
+      "file": "dune-posture-exercise-picker-p03.html",
+      "detail": "2026-11-06 P03 정적 표현 시안. 기존 General Posture·운동·아이콘·선택·Close를 보존한다. MAX(accessibility5)는 사라진 native toolbar 대신 고정 Close/제목과 large 시트를 제안하고, 나머지 크기는 원래 toolbar·medium/large다. 수정 후 iPhone MAX1/1 통과·Duo MAX 추가 확인 승인 대기이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/posture-exercise-picker-p03.html",
+        "status": "normal-native-verified-corrected-duo-max-pending",
+        "actual": "../full-redesign-map/review/posture-exercise-picker-p03-2026-11-06/index.html"
+      }
     }
   ]
 }

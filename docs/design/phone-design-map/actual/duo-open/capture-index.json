@@ -627,13 +627,25 @@
     },
     "P03": {
       "row_id": "P03",
-      "evidence": "title:Exercise Mode",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap Select Exercise",
-      "timestamp": 1791829989.687,
-      "image": "0E2F3BDA-47ED-4BBF-B77F-F3FD93B24A6C.png",
-      "screen": "screen-1-2006x2852-tap Select Exercise_1_C8DD360F-199B-46DC-8674-F9BCBB45DE4F.png",
-      "file": "P03.png"
+      "file": "P03.png",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "action": "P03 General Posture selected",
+      "timestamp": 1793967674.3258977,
+      "source_revision": "d6ac3110864dca932e58c08dd9806aced6fdd944",
+      "source_worktree_dirty": false,
+      "device_udid": "55387DCF-57FD-4663-BC1B-EBEF2C89DFB2",
+      "capture_kind": "native-active-display-PNG+AX",
+      "sha256": "55a8bae94b20cd140c71bdc43a65d2426704150238db39af9bb3ba6655d99339",
+      "ax_sha256": "78a585f1462e081ef3aafdec8ab67851bd812472001eb41bfbc78fb80b1b531c",
+      "source_json": "../../../full-redesign-map/review/posture-exercise-picker-p03-2026-11-06/manifest.json",
+      "source_record": "records: profile=duo-open,kind=after,is_primary=true",
+      "capture_scope": "P03 corrected closed MAX pending approval and execution",
+      "active_display": "LCD-1",
+      "actual_angle": null,
+      "native_dimensions": [
+        2853,
+        2007
+      ]
     },
     "P01": {
       "row_id": "P01",
