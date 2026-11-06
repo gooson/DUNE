@@ -1,0 +1,11 @@
+{
+  "screen": "P02",
+  "integrated_source": "d6ac3110864dca932e58c08dd9806aced6fdd944",
+  "app_file": "DUNE/Presentation/Posture/RealtimePostureView.swift",
+  "app_sha256": "867f6cbc023f9fff18bf26f5c224bf3eac78f41b4a0bd9af1731f61a0143c568",
+  "app_blob_identical_to_tested_integration": true,
+  "exact_copied_selector_methods": [],
+  "runtime_evidence": "../manifest.json records source_revision + evidence/*.result.json; each preserves source and selector scope",
+  "scope_adjudication": "Presentation APIs and camera/service/model/seeder boundaries unchanged; same app-file bytes. Other B05 sibling View presentation changes do not change this screen callback contract. P02 runtime portion of combined P02/P03 method is reused; partner selection selectors are added in separate P03 PR. No claim of a standalone PR-HEAD full test run.",
+  "gate": "selected affected flows passed"
+}

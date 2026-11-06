@@ -9,6 +9,8 @@ struct RealtimePostureView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
 
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -95,6 +97,7 @@ struct RealtimePostureView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(String(localized: "Close")) { dismiss() }
+                        .accessibilityIdentifier("realtime-posture-close")
                 }
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     if viewModel.isActive, viewModel.isFormMode {
@@ -136,38 +139,71 @@ struct RealtimePostureView: View {
     }
 
     private var cameraUnavailable: some View {
-        VStack(spacing: DS.Spacing.md) {
-            Image(systemName: "camera.fill")
-                .font(.largeTitle)
-            Text("Camera is not available")
-                .font(.headline)
-                .multilineTextAlignment(.center)
-            Button("Try Again") {
-                viewModel.stop()
-                viewModel.start()
+        GeometryReader { geometry in
+            ScrollView {
+                VStack {
+                    Spacer(minLength: 88)
+
+                    VStack(spacing: DS.Spacing.xl) {
+                        Image(systemName: "camera.fill")
+                            .font(.largeTitle)
+                            .foregroundStyle(palette.heroAccent)
+                            .accessibilityHidden(true)
+
+                        Text("Camera is not available")
+                            .font(.headline)
+                            .foregroundStyle(palette.ink)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("realtime-camera-unavailable")
+
+                        Button("Try Again") {
+                            viewModel.stop()
+                            viewModel.start()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
+                        .controlSize(.large)
+                        .frame(minHeight: 44)
+                        .accessibilityIdentifier("realtime-camera-retry")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(DS.Spacing.xxl)
+                    .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xxl))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: DS.Radius.xxl)
+                            .strokeBorder(palette.border, lineWidth: 1)
+                    }
+                    .frame(maxWidth: 460)
+
+                    Spacer(minLength: DS.Spacing.xxl)
+                }
+                .padding(DS.Spacing.lg)
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: geometry.size.height)
             }
-            .buttonStyle(.borderedProminent)
-            .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
+            .scrollBounceBehavior(.basedOnSize)
         }
-        .foregroundStyle(.white)
-        .padding(DS.Spacing.xl)
-        .accessibilityIdentifier("realtime-camera-unavailable")
     }
 
     private var exerciseModeButton: some View {
         Button {
             viewModel.showExercisePicker = true
         } label: {
-            HStack(spacing: 4) {
+            HStack(spacing: DS.Spacing.sm) {
                 Image(systemName: viewModel.isFormMode ? "figure.strengthtraining.traditional" : "figure.stand")
                 Text(LocalizedStringKey(viewModel.selectedExercise?.displayName ?? "Select Exercise"))
-                    .font(.caption)
+                    .font(.subheadline)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundStyle(.white)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(.black.opacity(0.75), in: Capsule())
+            .padding(.horizontal, DS.Spacing.md)
+            .frame(minHeight: 44)
+            .background(.black.opacity(0.75), in: RoundedRectangle(cornerRadius: DS.Radius.lg))
         }
+        .accessibilityIdentifier("realtime-exercise-picker-button")
+        .accessibilityValue(viewModel.selectedExercise?.exerciseID ?? "general")
     }
 }
 #endif

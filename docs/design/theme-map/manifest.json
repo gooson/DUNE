@@ -973,6 +973,18 @@
         "status": "implemented-selected-native-flows-verified",
         "actual": "../full-redesign-map/review/posture-capture-p01-2026-11-06/index.html"
       }
+    },
+    {
+      "id": "posture-realtime-p02",
+      "name": "P02 · 실시간 자세",
+      "title": "camera preview → 실제 score/skeleton/angles → 작은 운동 선택·폼·가이드 overlay. 미가용 시 camera.fill·원래 오류·Try Again을 강한 중앙면에 둔다.",
+      "file": "dune-posture-realtime-p02.html",
+      "detail": "2026-11-06 구현 기준 정적 시안. start/stop·retry·switch·voice·form mode·운동 선택·Close 보존. 카메라 없어도 가능한 운동 선택을 유지한다. 일반 iPhone·iPad·Duo 양쪽 활성 화면의 native fallback/합성 흐름 검증을 보존하며 설명용 수치/기호는 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/posture-realtime-p02.html",
+        "status": "implemented-selected-native-flows-verified",
+        "actual": "../full-redesign-map/review/posture-realtime-p02-2026-11-06/index.html"
+      }
     }
   ]
 }

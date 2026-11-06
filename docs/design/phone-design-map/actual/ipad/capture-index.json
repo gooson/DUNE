@@ -574,13 +574,25 @@
     },
     "P02": {
       "row_id": "P02",
-      "evidence": "title:Realtime Analysis",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap wellness-menu-realtime-posture",
-      "timestamp": 1791823585.347,
-      "image": "BFB97918-F13A-4691-8A65-80A95453BEA0.png",
-      "screen": "screen-0-2064x2752-tap wellness-menu-realtime-posture_0_ABFB9404-154B-4E58-BA73-4A11E4697B75.png",
-      "file": "P02.png"
+      "file": "P02.png",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "action": "screen-0-1512x2316-P02 camera unavailable and exercise entry_0_4A693F03-9F6F-459E-A058-EA3BE7B25D89.png",
+      "timestamp": 1793964905.21,
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "41a3ed631dd28774efe8c5aa8ccfea15fa0412e6a28134fa1ce7900169239568",
+      "ax_sha256": "a84802748fbfadedc074c5974addc0a2ab4a1699ebd9266481af5d9d6334c28e",
+      "source_json": "../../../full-redesign-map/review/posture-realtime-p02-2026-11-06/manifest.json",
+      "source_record": "records: profile=ipad,kind=after,is_primary=true",
+      "capture_scope": "selected affected flows verified; see limits",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1512,
+        2316
+      ]
     },
     "P03": {
       "row_id": "P03",
