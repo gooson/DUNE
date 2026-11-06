@@ -3601,9 +3601,21 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let size = maximumText ? "MAX" : "normal"
 
         ensureActivityRoot()
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.activityAIWorkoutBuilder, maxSwipes: 12))
-        let builder = app.descendants(matching: .any)[AXID.activityAIWorkoutBuilder].firstMatch
-        XCTAssertTrue(builder.waitForExistence(timeout: 8) && builder.isHittable)
+        let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
+        let builder = app.buttons[AXID.activityAIWorkoutBuilder].firstMatch
+        for _ in 0..<24 {
+            let viewport = activityScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
+            if builder.exists && builder.isHittable && viewport.contains(builder.frame) { break }
+            if builder.exists && builder.frame.midY < viewport.midY {
+                activityScroll.swipeDown(velocity: .slow)
+            } else {
+                activityScroll.swipeUp(velocity: .slow)
+            }
+        }
+        let builderViewport = activityScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
+        XCTAssertTrue(builder.exists && builder.isHittable && builderViewport.contains(builder.frame),
+                      "The whole Activity AI Builder action must be visible before opening W13")
         builder.auditTap()
         let form = app.collectionViews[AXID.templateFormScreen].firstMatch
         XCTAssertTrue(form.waitForExistence(timeout: 8))
@@ -3790,10 +3802,18 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                       && selected.label.contains(Fixture.singleTemplate))
         VisualAudit.capture("W15 \(size) assigned seeded template")
         let remove = app.buttons["weekly-plan-remove"].firstMatch
-        for _ in 0..<8 where !(remove.exists && remove.isHittable) {
-            templateList.swipeDown(velocity: .slow)
+        for _ in 0..<8 {
+            let viewport = templateList.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            if remove.exists && remove.isHittable && viewport.contains(remove.frame) { break }
+            if remove.exists && remove.frame.midY < viewport.midY {
+                templateList.swipeDown(velocity: .slow)
+            } else {
+                templateList.swipeUp(velocity: .slow)
+            }
         }
-        XCTAssertTrue(remove.waitForExistence(timeout: 5) && remove.isHittable)
+        let removeViewport = templateList.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+        XCTAssertTrue(remove.exists && remove.isHittable && removeViewport.contains(remove.frame),
+                      "The whole Remove action must be visible in the active template pane")
         remove.auditTap()
         let assignmentRemoved = XCTNSPredicateExpectation(
             predicate: NSPredicate(format: "exists == false"), object: selected
