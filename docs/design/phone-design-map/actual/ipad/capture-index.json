@@ -1597,13 +1597,25 @@
     },
     "W08": {
       "row_id": "W08",
-      "evidence": "test-and-action:RPE active picker",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditSetRPEAndHelp()",
-      "action": "RPE active picker",
-      "timestamp": 1791839415.965,
-      "image": "054713D5-A83C-4608-98DF-DFD3E43D2850.png",
-      "screen": "screen-0-2064x2752-RPE active picker_0_211AA869-6EDA-4572-B0F5-45B3283CBFAE.png",
-      "file": "W08.png"
+      "file": "W08.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtNormalText()",
+      "action": "Normal active RPE and category labels",
+      "timestamp": 1793994331.951,
+      "source_revision": "4e2c408d72da82e7e65114942aa4b37bc7cfe193",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "4df65d2fc26f08c2d8ba89af97cb7be6cd550187eb5ee7d5635aaa3c9041146f",
+      "ax_sha256": "95d7ff36229a6bdd5df8c6d257d09452b9869f1fa6d2a106651248ba386b983a",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/set-rpe-w08-2026-11-07/manifest.json",
+      "capture_scope": "B11 normal actual; MAX and changed interaction in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W32": {
       "row_id": "W32",

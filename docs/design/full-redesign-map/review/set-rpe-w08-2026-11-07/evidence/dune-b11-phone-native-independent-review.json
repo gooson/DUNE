@@ -1,0 +1,27 @@
+{
+  "scope": "Independent native Phone MAX B11 review and private map/docs helper adaptation; no SDK or repository writes",
+  "phone_run_counts": {
+    "first": {
+      "passed": 0,
+      "failed": 2
+    },
+    "same_id_retry": {
+      "passed": 1,
+      "failed": 1
+    }
+  },
+  "MAX_selector": "passed full W07/W08/W09 and Done in same-ID retry",
+  "normal_selector": "failed W07 Skip ID lookup; native PNG/AX shows visible Skip; W08/W09 not reached",
+  "native_png_ax_review": {
+    "W07": "Passed MAX before/after +30s images and AX show full Rest Timer title, value, +30s, Skip above tab bar; value 1:07 to 1:34 confirms time addition.",
+    "W08": "Passed MAX activated RPE 8, Hard, 2 reps left, slider value 8; horizontal legend panned to reveal Max fully within 392pt viewport. Some unrelated set-row content is outside this scroll capture.",
+    "W09": "Passed MAX RPE Guide initial sheet and scrolled last range 9–10 / Near Max / 0–1 reps left; Done visible. Initial medium detent shows top explanation but not all rows, hence second capture."
+  },
+  "introduced_app_P1_P2": [],
+  "private_helpers": {
+    "/private/tmp/dune-b11-maps.py": "a72eb439b6c72378448e6659ea4508d2913c8a53208b49c2a2e097f863593ae8",
+    "/private/tmp/dune-b11-docs.py": "c4a2485b23774753619a3049b3ffec931f2ae2f4bba6da910441388bef2b9b73"
+  },
+  "helper_gate": "Requires passed Phone MAX rows for each screen and passed iPad normal/MAX rows; only iPad primary actual image is replaced. Phone ordinary historical image is marked pending and links to passed MAX gallery. Duo remains historical/pending. All failed captures remain diagnostic.",
+  "pending": "iPad first normal/MAX native result and final source/hash/map preflight. Do not execute helpers or claim full gate yet."
+}
