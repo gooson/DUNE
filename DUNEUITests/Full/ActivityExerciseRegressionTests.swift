@@ -3397,10 +3397,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(session.waitForExistence(timeout: 10))
         let overview = app.descendants(matching: .any)[AXID.workoutSessionOverview].firstMatch
         XCTAssertTrue(overview.waitForExistence(timeout: 8))
-        let name = overview.descendants(matching: .any).matching(NSPredicate(
-            format: "label IN %@", [Fixture.benchPressLocalizedName, "Barbell Bench Press"]
+        let name = app.staticTexts.matching(NSPredicate(
+            format: "identifier == %@ AND label IN %@", AXID.workoutSessionOverview,
+            [Fixture.benchPressLocalizedName, "Barbell Bench Press"]
         )).firstMatch
         XCTAssertTrue(name.waitForExistence(timeout: 5), "W06 overview must retain the exercise name")
+        XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionOverview,
+                                           maxSwipes: 10, mustFitInViewport: true),
+                      "W06 full exercise name and icon must fit in the visible workout overview")
+        VisualAudit.capture("W06 \(size) overview icon and exercise name")
         for field in ["kg", "reps"] {
             XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionField(field), maxSwipes: 10),
                           "W06 \(field) input must remain reachable")
