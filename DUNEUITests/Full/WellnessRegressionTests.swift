@@ -1047,7 +1047,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     func testPostureComparison() throws {
         openHistory()
-        XCTAssertTrue(app.waitAndTapToolbarAction("posture-history-compare-button"),
+        XCTAssertTrue(app.waitAndTapToolbarAction("Compare"),
                       "Compare must remain reachable directly or through native toolbar overflow")
         let metrics = app.staticTexts.matching(NSPredicate(
             format: "identifier BEGINSWITH %@ AND label == %@",
@@ -1477,7 +1477,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     private func openSeededComparison() {
         openHistory()
-        XCTAssertTrue(app.waitAndTapToolbarAction("posture-history-compare-button"),
+        XCTAssertTrue(app.waitAndTapToolbarAction("Compare"),
                       "Compare must remain reachable directly or through native toolbar overflow")
         let metrics = app.staticTexts.matching(NSPredicate(
             format: "identifier BEGINSWITH %@ AND label == %@",
