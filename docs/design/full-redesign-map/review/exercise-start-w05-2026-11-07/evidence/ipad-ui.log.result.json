@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 1,
+  "failures": [
+    "669: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:3427: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditStrengthStartSessionLastSetAtMaximumText] : XCTAssertTrue failed - Fixed Complete Set action must be enabled and r…",
+    "680: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditStrengthStartSessionLastSetAtMaximumText]' failed (106.588 seconds).",
+    "1154: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-11-07 03:42:10.477.",
+    "1156: Test Suite 'DUNEUITests.xctest' failed at 2026-11-07 03:42:10.477.",
+    "1158: Test Suite 'Selected tests' failed at 2026-11-07 03:42:10.479.",
+    "1170: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-ui.log"
+}

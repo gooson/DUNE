@@ -1,0 +1,29 @@
+{
+  "review": "B10 private focused UI test source/API review",
+  "status": "private candidate only; no repository edit, SDK or native pass",
+  "baseline_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+  "baseline_sha256": "6f1e1e9770080924fc77b338641f49c59b006d2789d2ca80e2d3c5bb3a439e01",
+  "candidate_sha256": "26e046a273f3926be5889c7281cd9bf58026947fdd8ee7adf8c047e414197a1e",
+  "patch_sha256": "e54c3fd140864ce363cc4a883d99c11b4ba236153765d5ed180e4ce8d929a426",
+  "patch_check": "git apply --check passed against unchanged target baseline",
+  "selectors": [
+    "testVisualAuditStrengthStartSessionLastSetAtNormalText",
+    "testVisualAuditStrengthStartSessionLastSetAtMaximumText"
+  ],
+  "introduced_P1_P2_source_findings": [],
+  "fix": "Replaced W06 overview name predicate with exact label membership in [Fixture.benchPressLocalizedName (바벨 벤치프레스), Barbell Bench Press]. The app renders exercise.localizedName; actual B09 seeded AX showed Korean despite forced English locale. Query stays scoped to W06 overview and requires a real exercise name.",
+  "verified_static_assumptions": [
+    "Both methods are appended in existing @MainActor ActivityExerciseRegressionTests/seeded base class, with available app, launchConfiguration, launchApp and VisualAudit APIs.",
+    "AXID exercise start/session/overview/last-set sheet/add-set/finish and picker detail/start constants exist; ScrollView identifier is placed on new W31 ScrollView candidate.",
+    "Existing search, keyboard dismissal, picker scrolling, workout control scrolling and auditTap helpers are callable in this test class; coordinate drag signature is used elsewhere in the suite.",
+    "W05 Start remains a pinned button, W06 Set count text uses Set N of totalSets, and W31 +1 Set calls addExtraSet → viewModel.addSet, supporting the focused post-action count assertion.",
+    "The new methods use original seeded fixture and one-set launch flag; they do not call Finish/save or mutate real service/sync settings."
+  ],
+  "native_risks": [
+    "W06 Label AX may group icon and name differently; confirm the scoped exact-name query in the first native export before changing it.",
+    "W31 medium→large gesture and sheet.frame.height on iPhone require actual proof; iPad skips the detent height assertion.",
+    "W31 rest overlay after +1 Set may affect visibility of Set 2 of 2 even though source updates count; inspect native AX if the final assertion fails.",
+    "W05 long name and pinned CTA, W06 icon/input fit, W31 both actions in medium/large normal/MAX need focused captures; source review is not a runtime pass."
+  ],
+  "scope_limit": "Exactly two normal/MAX selectors; existing methods and helpers untouched; no broad regression requested."
+}

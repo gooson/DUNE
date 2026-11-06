@@ -495,13 +495,25 @@
     },
     "W05": {
       "row_id": "W05",
-      "evidence": "exercise-start-screen",
-      "test": "ActivityExerciseRegressionTests/testManualWorkoutSessionSavesAndDismissesCompletionSheet()",
-      "action": "tap exercise-detail-start",
-      "timestamp": 1791854693.879,
-      "image": "1BFA8C59-C067-4B14-AB68-B79E76BF4B88.png",
-      "screen": "screen-0-2064x2752-tap exercise-detail-start_0_99BC600D-5D6A-4FD4-8275-063DE84D646C.png",
-      "file": "W05.png"
+      "file": "W05.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtNormalText()",
+      "action": "Strength start and pinned action",
+      "timestamp": 1793990483.85,
+      "source_revision": "0e1de4237331328f7c64db341cde5de5559181d5",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "27fd34b1a071d764794e598c6bd5b93ccde9ce4db5f4b9b08736d315c0df0935",
+      "ax_sha256": "81d789168a77cd9066f5c9e94f5b7065aaf393177c38ebbd2d18761e97777e34",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/exercise-start-w05-2026-11-07/manifest.json",
+      "capture_scope": "B10 manual normal; MAX and source section equivalence in gallery proof",
+      "current_verification": "normal-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W03": {
       "row_id": "W03",

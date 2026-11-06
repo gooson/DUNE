@@ -26,13 +26,25 @@
     },
     "W05": {
       "row_id": "W05",
-      "evidence": "exercise-start-screen",
-      "test": "ActivityExerciseRegressionTests/testCrunchCanAddAndRemoveWeightDuringSession()",
-      "action": "tap exercise-detail-start",
-      "timestamp": 1791816793.839,
-      "image": "59A0459B-1804-4249-9252-8354DE3B8D6C.png",
-      "screen": "screen-0-1320x2868-tap exercise-detail-start_0_06132187-26C0-4CC2-94F5-2ACB39DFA132.png",
-      "file": "W05.png"
+      "file": "W05.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtNormalText()",
+      "action": "Strength start and pinned action",
+      "timestamp": 1793989868.842,
+      "source_revision": "26a7f821ea433c1542c957575617e31d670c263d",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX-diagnostic",
+      "sha256": "3ced7fd9173a4ac5c796efc1f3320c6b522de3c0cd81dd06a4efd89ef4d3eca3",
+      "ax_sha256": "b071964221bbfd9d9a2495beff69c3b1030daad77b346754d356964859bf25e0",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/exercise-start-w05-2026-11-07/manifest.json",
+      "capture_scope": "B10 manual normal; MAX and source section equivalence in gallery proof",
+      "current_verification": "pending",
+      "current_verification_note": "Phone 공유 XCTest는 이후 완료 버튼 검사에서 실패했습니다. 시작/이름·아이콘·입력의 실제 prefix 캡처이며 전체 경로 통과가 아닙니다.",
+      "actual_angle": null
     },
     "A06": {
       "row_id": "A06",

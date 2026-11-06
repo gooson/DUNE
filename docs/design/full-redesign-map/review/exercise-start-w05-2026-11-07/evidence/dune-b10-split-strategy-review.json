@@ -1,0 +1,31 @@
+{
+  "review": "B10 W05/W06/W31 PR split and test-placement source-quality check",
+  "status": "source-only while corrected phone SDK active; no native result inferred",
+  "frozen_integration_source": "4fd3b3aadfa39908948538587aea81856ad14c48",
+  "corrected_test_revision": "26a7f821ea433c1542c957575617e31d670c263d",
+  "introduced_P1_P2_findings": [],
+  "strategy": [
+    {
+      "PR": "W05",
+      "contents": "ExerciseStartView layout hunk and W05 maps only",
+      "test_placement": "Do not include the two new combined tests yet: they exercise a W31 ScrollView not present in this PR. Reuse completed combined-source native W05 capture only if exact W05 app bytes/hunk and map provenance match."
+    },
+    {
+      "PR": "W06",
+      "contents": "WorkoutSessionView overview Label hunk and W06 maps only, after W05 main",
+      "test_placement": "Keep the combined tests out because W31 ScrollView ID is still absent. Reuse completed combined-source W06 capture only if overview hunk is exact and source inputs/route are unchanged."
+    },
+    {
+      "PR": "W31",
+      "contents": "WorkoutSessionView final-sheet ScrollView hunk, W31 maps and both focused normal/MAX combined tests after W05/W06 main",
+      "test_placement": "The W31 ScrollView AX query now exists, so the tests are executable and cover the combined W05\u2192W06\u2192W31 path. Preserve original failed phone receipt and cause-specific retry as separate evidence."
+    }
+  ],
+  "conditions": [
+    "Do not describe the current phone retry as passed until its runner receipt and named PNG+AX export complete.",
+    "All three app source hunks and catalog must be byte-identical to the frozen integration candidate at their respective split points; changing shared source invalidates native reuse.",
+    "Each screen needs its fresh actual-map image/AX/index or an explicit uncaptured status; historical Duo images remain historical.",
+    "W31 sheet source and its two new tests should enter together to avoid introducing tests that fail solely because the ScrollView identifier is not yet present."
+  ],
+  "agent_native": "N/A: no agent-facing tool/action/data contract is changed."
+}
