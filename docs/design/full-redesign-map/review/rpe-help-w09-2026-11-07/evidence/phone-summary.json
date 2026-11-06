@@ -1,0 +1,54 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+        "deviceName": "iPhone 18 Pro Max B06-wt-Health-detail-posture-b05-b88b6a4ff04b",
+        "modelName": "iPhone 18 Pro Max",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "expectedFailures": 0,
+      "failedTests": 2,
+      "passedTests": 0,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Design Capture"
+      }
+    }
+  ],
+  "environmentDescription": "DUNEUITests-DesignCapture \u00b7 Built with macOS 27.2",
+  "expectedFailures": 0,
+  "failedTests": 2,
+  "finishTime": 1793993024.395,
+  "passedTests": 0,
+  "result": "Failed",
+  "runtimeWarnings": [],
+  "skippedTests": 0,
+  "startTime": 1793992611.639,
+  "statistics": [],
+  "testFailures": [
+    {
+      "failureText": "XCTAssertTrue failed - W08 MAX final category must be readable after horizontal panning",
+      "targetName": "DUNEUITests",
+      "testIdentifier": 1,
+      "testIdentifierString": "ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtMaximumText()",
+      "testIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtMaximumText",
+      "testName": "testVisualAuditSetAssistanceAtMaximumText()"
+    },
+    {
+      "failureText": "XCTAssertTrue failed",
+      "targetName": "DUNEUITests",
+      "testIdentifier": 2,
+      "testIdentifierString": "ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtNormalText()",
+      "testIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtNormalText",
+      "testName": "testVisualAuditSetAssistanceAtNormalText()"
+    }
+  ],
+  "title": "Test - DUNEUITests",
+  "topInsights": [],
+  "totalTestCount": 2
+}

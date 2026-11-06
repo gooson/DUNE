@@ -1587,13 +1587,25 @@
     },
     "W09": {
       "row_id": "W09",
-      "evidence": "rpe-help-sheet",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditSetRPEAndHelp()",
-      "action": "tap set-rpe-help",
-      "timestamp": 1791839421.047,
-      "image": "9A14A26F-9380-4278-B00A-DF966DE3D361.png",
-      "screen": "screen-0-2064x2752-tap set-rpe-help_0_1DBE6B06-E803-43C3-9816-05DFE69766B0.png",
-      "file": "W09.png"
+      "file": "W09.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtNormalText()",
+      "action": "Normal RPE help sheet initial",
+      "timestamp": 1793994338.938,
+      "source_revision": "4e2c408d72da82e7e65114942aa4b37bc7cfe193",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "b4a030c1bc61190f570683939ebba8296c7c74c1af6a26e288b14c78892c55a1",
+      "ax_sha256": "841c5f918e18e17b024fb4fe98ec769dfef01dda4aec7962e9c1a2d086470953",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/rpe-help-w09-2026-11-07/manifest.json",
+      "capture_scope": "B11 normal actual; MAX and changed interaction in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W08": {
       "row_id": "W08",
