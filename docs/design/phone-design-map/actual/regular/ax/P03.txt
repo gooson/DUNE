@@ -1,0 +1,487 @@
+Attributes: Application, 0x108de7480, pid: 37491, label: 'DUNE'
+Element subtree:
+ →Application, 0x108de7480, pid: 37491, label: 'DUNE'
+    Window (Main), 0x108de75c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x108de7700, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x108de7840, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x108de7980, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x108de7ac0, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x108de7c00, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x108de7d40, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x108de7e80, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x105660780, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x105663840, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x1056635c0, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x105663980, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x105660f00, {{0.0, 0.0}, {440.0, 956.0}}
+                            NavigationBar, 0x105663700, {{0.0, 62.0}, {440.0, 106.0}}, identifier: 'Wellness'
+                              Button, 0x1057c8a00, {{319.7, 66.0}, {42.7, 36.0}}, identifier: 'wellness-compare-metrics', label: 'Compare Metrics'
+                              Other, 0x1057c9a40, {{378.3, 66.0}, {37.7, 36.0}}
+                                Other, 0x1057cb980, {{378.3, 66.0}, {37.7, 36.0}}
+                                  Button, 0x1057c92c0, {{378.3, 66.0}, {37.7, 36.0}}, identifier: 'wellness-toolbar-add', label: 'Add record'
+                                    Button, 0x1057ca1c0, {{378.3, 66.0}, {37.7, 36.0}}
+                                      Image, 0x1057ca940, {{388.0, 75.0}, {18.0, 18.0}}, identifier: 'plus', label: 'Add'
+                              StaticText, 0x1057cb200, {{20.0, 119.7}, {142.7, 40.7}}, label: 'Wellness'
+                            Other, 0x1057cbc00, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x1057cabc0, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x1057caa80, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x1057c9400, {{0.0, 0.0}, {440.0, 956.0}}
+                                    ScrollView, 0x1057cbac0, {{0.0, 0.0}, {440.0, 956.0}}
+                                      Other, 0x1057c9e00, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x11320c000, {{0.0, 0.0}, {440.0, 156.0}}
+                                        Other, 0x11320c140, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x11320c280, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x11320c3c0, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x11320c500, {{0.0, 168.0}, {440.0, 3340.3}}
+                                        Button, 0x11320c640, {{36.0, 212.0}, {368.0, 186.7}}, identifier: 'wellness-hero-score', label: 'Wellness score 87, Excellent', value: Sleep is strong — ...
+                                          StaticText, 0x11320c780, {{36.0, 212.0}, {368.0, 14.3}}, identifier: 'card-navigation-header', label: 'WELLNESS'
+                                            StaticText, 0x11320c8c0, {{36.0, 212.0}, {368.0, 14.3}}, identifier: 'wellness-hero-heading', label: 'WELLNESS'
+                                            Image, 0x11320ca00, {{120.0, 213.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          Other, 0x11320cb40, {{36.0, 238.3}, {104.0, 104.0}}, identifier: 'wellness-hero-ring', label: 'Wellness score 87, Excellent'
+                                            StaticText, 0x11320cc80, {{64.8, 268.8}, {46.3, 43.0}}, label: '87'
+                                          StaticText, 0x11320cdc0, {{156.0, 280.2}, {72.3, 20.3}}, label: 'Excellent'
+                                          StaticText, 0x11320cf00, {{36.0, 354.3}, {268.0, 18.0}}, identifier: 'wellness-hero-narrative', label: 'Sleep is strong — body needs attention'
+                                          StaticText, 0x11320d040, {{36.0, 384.3}, {82.7, 14.3}}, label: 'Nov 6 at 20:18'
+                                        StaticText, 0x11320d180, {{36.0, 414.7}, {109.7, 18.0}}, identifier: 'wellness-hero-evidence', label: 'Score evidence'
+                                        StaticText, 0x11320d2c0, {{322.0, 418.7}, {82.0, 13.3}}, label: 'Each out of 100'
+                                        StaticText, 0x11320d400, {{39.0, 447.5}, {365.0, 14.3}}, identifier: 'wellness-hero-component-sleep', label: 'Sleep, 99'
+                                          Image, 0x11320d540, {{39.0, 448.7}, {12.0, 12.0}}, identifier: 'moon.fill', label: 'Do Not Disturb'
+                                          StaticText, 0x11320d680, {{62.0, 447.5}, {32.0, 14.3}}, label: 'Sleep'
+                                          StaticText, 0x11320d7c0, {{388.7, 447.5}, {15.3, 14.3}}, label: '99'
+                                        StaticText, 0x11320d900, {{39.3, 483.5}, {364.7, 14.3}}, identifier: 'wellness-hero-component-condition', label: 'Condition, 90'
+                                          Image, 0x11320da40, {{39.3, 485.3}, {11.7, 11.0}}, identifier: 'heart.fill', label: 'Love'
+                                          StaticText, 0x11320db80, {{62.0, 483.5}, {54.7, 14.3}}, label: 'Condition'
+                                          StaticText, 0x11320dcc0, {{388.7, 483.5}, {15.3, 14.3}}, label: '90'
+                                        StaticText, 0x11320de00, {{42.3, 519.5}, {361.7, 14.3}}, identifier: 'wellness-hero-component-body', label: 'Body, 75'
+                                          Image, 0x11320df40, {{42.3, 520.0}, {5.7, 13.3}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x11320e080, {{62.0, 519.5}, {29.0, 14.3}}, label: 'Body'
+                                          StaticText, 0x11320e1c0, {{388.7, 519.5}, {15.3, 14.3}}, label: '75'
+                                        StaticText, 0x11320e300, {{42.3, 555.5}, {361.7, 14.3}}, identifier: 'wellness-hero-component-posture', label: 'Posture, 86'
+                                          Image, 0x11320e440, {{42.3, 556.0}, {5.7, 13.3}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x11320e580, {{62.0, 555.5}, {43.7, 14.3}}, label: 'Posture'
+                                          StaticText, 0x11320e6c0, {{388.7, 555.5}, {15.3, 14.3}}, label: '86'
+                                        Button, 0x11320e800, {{36.0, 584.7}, {368.0, 44.0}}, identifier: 'wellness-hero-evidence-disclosure', label: 'How this score is calculated'
+                                          StaticText, 0x11320e940, {{36.0, 599.5}, {164.7, 14.3}}, label: 'How this score is calculated'
+                                          Image, 0x11320ea80, {{392.0, 603.7}, {10.7, 6.3}}, identifier: 'chevron.down', label: 'Go Down'
+                                        Button, 0x11320ebc0, {{32.0, 684.7}, {376.0, 216.3}}, identifier: 'wellness-hero-sleep', label: 'Recent Sleep, 7h 54min, Nov 6, 7-day average · 7h 26min, Oct 31, 7h 21min, Nov 1, 7h 9min, Nov 2, 7h 6min, Nov 3, 7h 18min, Nov 4, 7h 30min, Nov 5, 7h 42min, Nov 6, 7h 54min, 31, 1, 2, 3, 4, 5, 6'
+                                          StaticText, 0x11320ed00, {{32.0, 684.7}, {376.0, 44.0}}, identifier: 'card-navigation-header', label: 'Recent Sleep'
+                                            StaticText, 0x11320ee40, {{32.0, 684.7}, {376.0, 44.0}}, identifier: 'wellness-sleep-summary-card', label: 'Recent Sleep'
+                                            Image, 0x11320ef80, {{143.0, 703.3}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x11320f0c0, {{32.0, 740.7}, {98.7, 26.3}}, identifier: 'wellness-sleep-latest', label: '7h 54min'
+                                          StaticText, 0x11320f200, {{32.0, 771.0}, {33.3, 14.3}}, label: 'Nov 6'
+                                          StaticText, 0x11320f340, {{32.0, 789.3}, {149.3, 14.3}}, identifier: 'wellness-sleep-average', label: '7-day average · 7h 26min'
+                                          Other, 0x11320f480, {{49.0, 832.7}, {16.0, 47.0}}, identifier: 'wellness-sleep-bar-0', label: 'Oct 31, 7h 21min'
+                                          Other, 0x11320f5c0, {{103.3, 834.0}, {16.0, 45.7}}, identifier: 'wellness-sleep-bar-1', label: 'Nov 1, 7h 9min'
+                                          Other, 0x11320f700, {{157.7, 834.3}, {16.0, 45.3}}, identifier: 'wellness-sleep-bar-2', label: 'Nov 2, 7h 6min'
+                                          Other, 0x11320f840, {{212.0, 833.0}, {16.0, 46.7}}, identifier: 'wellness-sleep-bar-3', label: 'Nov 3, 7h 18min'
+                                          Other, 0x11320f980, {{266.3, 831.7}, {16.0, 48.0}}, identifier: 'wellness-sleep-bar-4', label: 'Nov 4, 7h 30min'
+                                          Other, 0x11320fac0, {{320.7, 830.3}, {16.0, 49.3}}, identifier: 'wellness-sleep-bar-5', label: 'Nov 5, 7h 42min'
+                                          Other, 0x11320fc00, {{375.0, 829.0}, {16.0, 50.7}}, identifier: 'wellness-sleep-bar-6', label: 'Nov 6, 7h 54min'
+                                          StaticText, 0x11320fd40, {{51.0, 887.7}, {12.3, 13.3}}, identifier: 'wellness-sleep-date-0', label: '31'
+                                          StaticText, 0x11320fe80, {{108.8, 887.7}, {5.3, 13.3}}, identifier: 'wellness-sleep-date-1', label: '1'
+                                          StaticText, 0x113210000, {{162.2, 887.7}, {7.0, 13.3}}, identifier: 'wellness-sleep-date-2', label: '2'
+                                          StaticText, 0x113210140, {{216.5, 887.7}, {7.0, 13.3}}, identifier: 'wellness-sleep-date-3', label: '3'
+                                          StaticText, 0x113210280, {{270.6, 887.7}, {7.3, 13.3}}, identifier: 'wellness-sleep-date-4', label: '4'
+                                          StaticText, 0x1132103c0, {{325.1, 887.7}, {7.0, 13.3}}, identifier: 'wellness-sleep-date-5', label: '5'
+                                          StaticText, 0x113210500, {{379.2, 887.7}, {7.3, 13.3}}, identifier: 'wellness-sleep-date-6', label: '6'
+                                        Button, 0x113210640, {{32.0, 949.0}, {376.0, 283.3}}, identifier: 'wellness-sleep-prediction-detail-link', label: 'Tonight's Sleep, Predicted score, 72, Predicted score, Good, Medium Confidence, Good sleep conditions tonight, Light activity during the day can improve sleep', value: 72 / 100
+                                          StaticText, 0x113210780, {{32.0, 949.0}, {376.0, 44.0}}, identifier: 'card-navigation-header', label: 'Tonight's Sleep'
+                                            StaticText, 0x1132108c0, {{32.0, 949.0}, {376.0, 44.0}}, identifier: 'wellness-sleep-prediction-card', label: 'Tonight's Sleep'
+                                            Image, 0x113210a00, {{161.0, 967.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x113210b40, {{32.0, 1011.5}, {89.3, 14.3}}, label: 'Predicted score'
+                                          Image, 0x113210c80, {{336.0, 1005.0}, {72.0, 72.0}}, identifier: 'moon.stars', label: 'Clear Night'
+                                          StaticText, 0x113210dc0, {{32.0, 1029.8}, {45.0, 40.7}}, identifier: 'wellness-prediction-score-value', label: '72'
+                                          Other, 0x113210f00, {{32.0, 1089.0}, {376.0, 27.3}}, identifier: 'wellness-prediction-score-meter', label: 'Predicted score', value: 72 / 100
+                                            StaticText, 0x113211040, {{32.0, 1103.0}, {7.0, 13.3}}, label: '0'
+                                            StaticText, 0x113211180, {{388.7, 1103.0}, {19.3, 13.3}}, label: '100'
+                                          StaticText, 0x1132112c0, {{32.0, 1130.5}, {38.3, 18.0}}, label: 'Good'
+                                          StaticText, 0x113211400, {{252.0, 1128.3}, {156.0, 22.3}}, identifier: 'wellness-prediction-confidence', label: 'Medium Confidence'
+                                            Other, 0x113211540, {{260.0, 1133.7}, {16.0, 12.0}}
+                                            StaticText, 0x113211680, {{284.0, 1132.3}, {116.0, 14.3}}, label: 'Medium Confidence'
+                                          StaticText, 0x1132117c0, {{32.0, 1162.7}, {205.7, 18.0}}, label: 'Good sleep conditions tonight'
+                                          Image, 0x113211900, {{45.3, 1205.7}, {11.0, 13.7}}, identifier: 'sparkles', label: 'Sparkle'
+                                          StaticText, 0x113211a40, {{65.7, 1204.7}, {264.0, 14.3}}, label: 'Light activity during the day can improve sleep'
+                                        Button, 0x113211b80, {{32.0, 1244.3}, {376.0, 44.0}}, identifier: 'wellness-prediction-factors-disclosure', label: 'Prediction factors'
+                                          Image, 0x113211cc0, {{33.3, 1261.0}, {12.3, 10.7}}, identifier: 'slider.horizontal.3', label: 'Edit'
+                                          StaticText, 0x113211e00, {{55.0, 1259.2}, {105.7, 14.3}}, label: 'Prediction factors'
+                                          Image, 0x113211f40, {{396.0, 1263.3}, {10.7, 6.3}}, identifier: 'chevron.down', label: 'Go Down'
+                                        Button, 0x113212080, {{32.0, 1340.3}, {376.0, 44.0}}, identifier: 'wellness-link-injuryhistory', label: 'Injuries'
+                                          StaticText, 0x1132121c0, {{32.0, 1340.3}, {376.0, 44.0}}, label: 'Injuries'
+                                          Image, 0x113212300, {{33.3, 1354.3}, {16.3, 16.3}}, identifier: 'bandage.fill', label: 'Adhesive Bandage Strip, Filled'
+                                          Image, 0x113212440, {{118.0, 1358.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                        Button, 0x113212580, {{32.0, 1392.3}, {376.0, 93.0}}, label: 'Knee, (L), Minor, 5d, 11/1~, Mild pain during squats'
+                                          StaticText, 0x1132126c0, {{92.0, 1404.3}, {36.3, 18.0}}, label: 'Knee'
+                                          StaticText, 0x113212800, {{132.3, 1406.2}, {16.0, 14.3}}, label: '(L)'
+                                          Image, 0x113212940, {{56.0, 1433.0}, {12.0, 12.0}}, identifier: 'exclamationmark.circle', label: 'Error'
+                                          StaticText, 0x113212a80, {{100.0, 1426.3}, {30.7, 13.3}}, label: 'Minor'
+                                          StaticText, 0x113212bc0, {{142.7, 1425.8}, {15.0, 14.3}}, label: '5d'
+                                          StaticText, 0x113212d00, {{92.0, 1443.7}, {26.0, 13.3}}, label: '11/1~'
+                                          StaticText, 0x113212e40, {{92.0, 1459.0}, {132.0, 14.3}}, label: 'Mild pain during squats'
+                                        Image, 0x113212f80, {{44.0, 1539.7}, {13.7, 13.7}}, identifier: 'heart.text.square', label: 'Heart With Text In A Square'
+                                        StaticText, 0x1132130c0, {{63.7, 1537.3}, {122.3, 18.0}}, identifier: 'wellness-section-health-indicators', label: 'Health Indicators'
+                                        Button, 0x113213200, {{32.0, 1567.3}, {184.0, 209.3}}, identifier: 'wellness-card-hrv', label: 'HRV, 75, ms, Recent records · own scale, Today, Nov 6 at 00:00', value: 73.3 → 75.2 ms
+                                          StaticText, 0x113213340, {{48.0, 1583.3}, {152.0, 44.0}}, identifier: 'card-navigation-header', label: 'HRV'
+                                            StaticText, 0x113213480, {{48.0, 1583.3}, {152.0, 44.0}}, label: 'HRV'
+                                            Image, 0x1132135c0, {{49.3, 1597.3}, {15.0, 16.0}}, identifier: 'waveform.path.ecg', label: 'Ecg Waveform Path'
+                                            Image, 0x113213700, {{111.3, 1600.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x113213840, {{48.0, 1635.3}, {62.7, 40.7}}, label: '75, ms'
+                                            StaticText, 0x113213980, {{48.0, 1635.3}, {41.7, 40.7}}, label: '75'
+                                            StaticText, 0x113213ac0, {{93.7, 1656.3}, {17.0, 14.3}}, label: 'ms'
+                                          Other, 0x113213c00, {{47.1, 1686.4}, {155.6, 31.6}}
+                                          StaticText, 0x113213d40, {{48.0, 1726.0}, {141.3, 13.3}}, label: 'Recent records · own scale', value: 73.3 → 75.2 ms
+                                          StaticText, 0x113213e80, {{48.0, 1747.3}, {31.3, 13.3}}, label: 'Today'
+                                          StaticText, 0x113218000, {{83.3, 1747.3}, {78.7, 13.3}}, label: 'Nov 6 at 00:00'
+                                        Button, 0x113218140, {{224.0, 1567.3}, {184.0, 209.3}}, identifier: 'wellness-card-rhr', label: 'Resting HR, 50, bpm, Recent records · own scale, Today, Nov 6 at 00:00', value: 53.6 → 50.0 bpm
+                                          StaticText, 0x113218280, {{240.0, 1583.3}, {152.0, 44.0}}, identifier: 'card-navigation-header', label: 'Resting HR'
+                                            StaticText, 0x1132183c0, {{240.0, 1583.3}, {152.0, 44.0}}, label: 'Resting HR'
+                                            Image, 0x113218500, {{242.0, 1598.7}, {15.0, 14.0}}, identifier: 'heart.fill', label: 'Love'
+                                            Image, 0x113218640, {{352.7, 1601.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x113218780, {{240.0, 1635.3}, {73.7, 40.7}}, label: '50, bpm'
+                                            StaticText, 0x1132188c0, {{240.0, 1635.3}, {44.3, 40.7}}, label: '50'
+                                            StaticText, 0x113218a00, {{288.3, 1656.3}, {25.3, 14.3}}, label: 'bpm'
+                                          Other, 0x113218b40, {{239.1, 1686.4}, {155.6, 31.6}}
+                                          StaticText, 0x113218c80, {{240.0, 1726.0}, {141.3, 13.3}}, label: 'Recent records · own scale', value: 53.6 → 50.0 bpm
+                                          StaticText, 0x113218dc0, {{240.0, 1747.3}, {31.3, 13.3}}, label: 'Today'
+                                          StaticText, 0x113218f00, {{275.3, 1747.3}, {78.7, 13.3}}, label: 'Nov 6 at 00:00'
+                                        Button, 0x113219040, {{32.0, 1784.7}, {184.0, 209.3}}, identifier: 'wellness-card-heartRate', label: 'Heart Rate, 67, bpm, Recent records · own scale, Today, Nov 6 at 00:00', value: 67.5 → 66.8 bpm
+                                          StaticText, 0x113219180, {{48.0, 1800.7}, {152.0, 44.0}}, identifier: 'card-navigation-header', label: 'Heart Rate'
+                                            StaticText, 0x1132192c0, {{48.0, 1800.7}, {152.0, 44.0}}, label: 'Heart Rate'
+                                            Image, 0x113219400, {{50.0, 1816.0}, {15.0, 14.0}}, identifier: 'bolt.heart.fill', label: 'Lightning Bolt On A Filled Heart'
+                                            Image, 0x113219540, {{158.0, 1818.3}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x113219680, {{48.0, 1852.7}, {71.7, 40.7}}, label: '67, bpm'
+                                            StaticText, 0x1132197c0, {{48.0, 1852.7}, {42.3, 40.7}}, label: '67'
+                                            StaticText, 0x113219900, {{94.3, 1873.7}, {25.3, 14.3}}, label: 'bpm'
+                                          Other, 0x113219a40, {{47.1, 1903.7}, {155.6, 31.6}}
+                                          StaticText, 0x113219b80, {{48.0, 1943.3}, {141.3, 13.3}}, label: 'Recent records · own scale', value: 67.5 → 66.8 bpm
+                                          StaticText, 0x113219cc0, {{48.0, 1964.7}, {31.3, 13.3}}, label: 'Today'
+                                          StaticText, 0x113219e00, {{83.3, 1964.7}, {78.7, 13.3}}, label: 'Nov 6 at 00:00'
+                                        Button, 0x113219f40, {{224.0, 1784.7}, {184.0, 209.3}}, identifier: 'wellness-card-spo2', label: 'Blood Oxygen, 98, %, Recent records · own scale, Today, Nov 6 at 00:00', value: 97.9 → 98.0 %
+                                          StaticText, 0x11321a080, {{240.0, 1800.7}, {152.0, 44.0}}, identifier: 'card-navigation-header', label: 'Blood Oxygen'
+                                            StaticText, 0x11321a1c0, {{240.0, 1800.7}, {152.0, 44.0}}, label: 'Blood Oxygen'
+                                            Image, 0x11321a300, {{241.3, 1815.3}, {21.0, 14.7}}, identifier: 'lungs.fill', label: 'Lungs, Filled'
+                                            Image, 0x11321a440, {{377.3, 1818.3}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x11321a580, {{240.0, 1852.7}, {60.3, 40.7}}, label: '98, %'
+                                            StaticText, 0x11321a6c0, {{240.0, 1852.7}, {45.0, 40.7}}, label: '98'
+                                            StaticText, 0x11321a800, {{289.0, 1873.7}, {11.3, 14.3}}, label: '%'
+                                          Other, 0x11321a940, {{239.1, 1902.0}, {155.6, 33.3}}
+                                          StaticText, 0x11321aa80, {{240.0, 1943.3}, {141.3, 13.3}}, label: 'Recent records · own scale', value: 97.9 → 98.0 %
+                                          StaticText, 0x11321abc0, {{240.0, 1964.7}, {31.3, 13.3}}, label: 'Today'
+                                          StaticText, 0x11321ad00, {{275.3, 1964.7}, {78.7, 13.3}}, label: 'Nov 6 at 00:00'
+                                        Button, 0x11321ae40, {{32.0, 2002.0}, {184.0, 209.3}}, identifier: 'wellness-card-respiratoryRate', label: 'Respiratory Rate, 14, breaths/min, Recent records · own scale, Today, Nov 6 at 00:00', value: 14.6 → 14.1 breath...
+                                          StaticText, 0x11321af80, {{48.0, 2018.0}, {152.0, 44.0}}, identifier: 'card-navigation-header', label: 'Respiratory Rate'
+                                            StaticText, 0x11321b0c0, {{48.0, 2018.0}, {152.0, 44.0}}, label: 'Respiratory Rate'
+                                            Image, 0x11321b200, {{49.7, 2023.0}, {15.7, 13.7}}, identifier: 'wind', label: 'Breezy'
+                                            Image, 0x11321b340, {{167.7, 2025.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x11321b480, {{48.0, 2070.0}, {110.7, 40.7}}, label: '14, breaths/min'
+                                            StaticText, 0x11321b5c0, {{48.0, 2070.0}, {39.3, 40.7}}, label: '14'
+                                            StaticText, 0x11321b700, {{91.3, 2091.0}, {67.3, 14.3}}, label: 'breaths/min'
+                                          Other, 0x11321b840, {{47.1, 2121.1}, {155.6, 31.6}}
+                                          StaticText, 0x11321b980, {{48.0, 2160.7}, {141.3, 13.3}}, label: 'Recent records · own scale', value: 14.6 → 14.1 breath...
+                                          StaticText, 0x11321bac0, {{48.0, 2182.0}, {31.3, 13.3}}, label: 'Today'
+                                          StaticText, 0x11321bc00, {{83.3, 2182.0}, {78.7, 13.3}}, label: 'Nov 6 at 00:00'
+                                        Button, 0x11321bd40, {{224.0, 2002.0}, {184.0, 247.7}}, identifier: 'wellness-card-wristTemperature', label: 'Wrist Temp, +0.0, °C, Change from personal baseline, Recent records · own scale, Today, Nov 6 at 00:00', value: 0.0 → 0.0 °C
+                                          StaticText, 0x11321be80, {{240.0, 2018.0}, {152.0, 44.0}}, identifier: 'card-navigation-header', label: 'Wrist Temp'
+                                            StaticText, 0x113224000, {{240.0, 2018.0}, {152.0, 44.0}}, label: 'Wrist Temp'
+                                            Image, 0x113224140, {{242.0, 2031.7}, {10.3, 16.7}}, identifier: 'thermometer.medium', label: 'Thermometer At A Medium Temperature'
+                                            Image, 0x113224280, {{347.7, 2035.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x1132243c0, {{240.0, 2070.0}, {94.7, 40.7}}, label: '+0.0, °C'
+                                            StaticText, 0x113224500, {{240.0, 2070.0}, {76.3, 40.7}}, label: '+0.0'
+                                            StaticText, 0x113224640, {{320.3, 2091.0}, {14.3, 14.3}}, label: '°C'
+                                          StaticText, 0x113224780, {{240.0, 2118.7}, {99.3, 30.3}}, label: 'Change from personal baseline'
+                                          Other, 0x1132248c0, {{239.1, 2165.0}, {155.6, 26.0}}
+                                          StaticText, 0x113224a00, {{240.0, 2199.0}, {141.3, 13.3}}, label: 'Recent records · own scale', value: 0.0 → 0.0 °C
+                                          StaticText, 0x113224b40, {{240.0, 2220.3}, {31.3, 13.3}}, label: 'Today'
+                                          StaticText, 0x113224c80, {{275.3, 2220.3}, {78.7, 13.3}}, label: 'Nov 6 at 00:00'
+                                        Button, 0x113224dc0, {{32.0, 2261.7}, {376.0, 22.3}}, identifier: 'wellness-fitness-disclosure', label: 'Cardio Fitness and Heart Rate Recovery'
+                                          StaticText, 0x113224f00, {{32.0, 2261.7}, {376.0, 22.3}}, label: 'Cardio Fitness and Heart Rate Recovery'
+                                          Image, 0x113225040, {{400.3, 2266.7}, {7.0, 12.0}}, identifier: 'collapsed'
+                                        Button, 0x113225180, {{32.0, 2332.0}, {376.0, 44.0}}, identifier: 'wellness-link-bodyhistory', label: 'Body Changes'
+                                          StaticText, 0x1132252c0, {{32.0, 2332.0}, {376.0, 44.0}}, label: 'Body Changes'
+                                          Image, 0x113225400, {{34.3, 2342.7}, {10.0, 22.7}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          Image, 0x113225540, {{194.3, 2351.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                        Button, 0x113225680, {{32.0, 2392.0}, {182.0, 268.3}}, identifier: 'wellness-card-weight', label: 'Weight, 78.3, kg, +0.4, kg, Previous measurement, 77.9, kg, Oct 29, Recent records · own scale, Today, Nov 6 at 00:00', value: 77.6 → 78.3 kg
+                                          StaticText, 0x1132257c0, {{48.0, 2408.0}, {150.0, 44.0}}, identifier: 'card-navigation-header', label: 'Weight'
+                                            StaticText, 0x113225900, {{48.0, 2408.0}, {150.0, 44.0}}, label: 'Weight'
+                                            Image, 0x113225a40, {{49.7, 2422.0}, {15.7, 16.3}}, identifier: 'scalemass.fill', label: 'Scale For Weighing Mass, Filled'
+                                            Image, 0x113225b80, {{131.7, 2425.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x113225cc0, {{48.0, 2460.0}, {91.3, 40.7}}, label: '78.3, kg'
+                                            StaticText, 0x113225e00, {{48.0, 2460.0}, {73.7, 40.7}}, label: '78.3'
+                                            StaticText, 0x113225f40, {{125.7, 2481.0}, {13.7, 14.3}}, label: 'kg'
+                                          Image, 0x113226080, {{49.3, 2511.0}, {9.0, 9.0}}, identifier: 'arrow.up.right', label: 'Up-Right Diagonal Arrow'
+                                          StaticText, 0x1132261c0, {{63.7, 2508.7}, {27.3, 14.3}}, label: '+0.4'
+                                          StaticText, 0x113226300, {{95.0, 2508.7}, {13.7, 14.3}}, label: 'kg'
+                                          StaticText, 0x113226440, {{48.0, 2531.0}, {119.7, 13.3}}, label: 'Previous measurement'
+                                          StaticText, 0x113226580, {{48.0, 2546.3}, {21.7, 13.3}}, label: '77.9'
+                                          StaticText, 0x1132266c0, {{73.7, 2546.3}, {12.7, 13.3}}, label: 'kg'
+                                          StaticText, 0x113226800, {{90.3, 2546.3}, {36.0, 13.3}}, label: 'Oct 29'
+                                          Other, 0x113226940, {{47.1, 2568.3}, {153.6, 33.3}}
+                                          StaticText, 0x113226a80, {{48.0, 2609.7}, {141.3, 13.3}}, label: 'Recent records · own scale', value: 77.6 → 78.3 kg
+                                          StaticText, 0x113226bc0, {{48.0, 2631.0}, {31.3, 13.3}}, label: 'Today'
+                                          StaticText, 0x113226d00, {{83.3, 2631.0}, {78.7, 13.3}}, label: 'Nov 6 at 00:00'
+                                        Button, 0x113226e40, {{226.0, 2392.0}, {182.0, 268.3}}, identifier: 'wellness-card-bodyFat', label: 'Body Fat, 17.8, %, +0.3, %p, Previous measurement, 17.5, %, Oct 29, Recent records · own scale, Today, Nov 6 at 00:00', value: 16.7 → 17.8 %
+                                          StaticText, 0x113226f80, {{242.0, 2408.0}, {150.0, 44.0}}, identifier: 'card-navigation-header', label: 'Body Fat'
+                                            StaticText, 0x1132270c0, {{242.0, 2408.0}, {150.0, 44.0}}, label: 'Body Fat'
+                                            Image, 0x113227200, {{244.0, 2422.7}, {15.0, 14.3}}, identifier: 'percent', label: 'Percent Sign'
+                                            Image, 0x113227340, {{338.0, 2425.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x113227480, {{242.0, 2460.0}, {81.0, 40.7}}, label: '17.8, %'
+                                            StaticText, 0x1132275c0, {{242.0, 2460.0}, {65.7, 40.7}}, label: '17.8'
+                                            StaticText, 0x113227700, {{311.7, 2481.0}, {11.3, 14.3}}, label: '%'
+                                          Image, 0x113227840, {{243.3, 2511.0}, {9.0, 9.0}}, identifier: 'arrow.up.right', label: 'Up-Right Diagonal Arrow'
+                                          StaticText, 0x113227980, {{257.7, 2508.7}, {27.0, 14.3}}, label: '+0.3'
+                                          StaticText, 0x113227ac0, {{288.7, 2508.7}, {18.7, 14.3}}, label: '%p'
+                                          StaticText, 0x113227c00, {{242.0, 2531.0}, {119.7, 13.3}}, label: 'Previous measurement'
+                                          StaticText, 0x113227d40, {{242.0, 2546.3}, {20.3, 13.3}}, label: '17.5'
+                                          StaticText, 0x113227e80, {{266.3, 2546.3}, {10.3, 13.3}}, label: '%'
+                                          StaticText, 0x108d9c000, {{280.7, 2546.3}, {36.0, 13.3}}, label: 'Oct 29'
+                                          Other, 0x108d9c140, {{241.1, 2568.3}, {153.6, 33.3}}
+                                          StaticText, 0x108d9c280, {{242.0, 2609.7}, {141.3, 13.3}}, label: 'Recent records · own scale', value: 16.7 → 17.8 %
+                                          StaticText, 0x108d9c3c0, {{242.0, 2631.0}, {31.3, 13.3}}, label: 'Today'
+                                          StaticText, 0x108d9c500, {{277.3, 2631.0}, {78.7, 13.3}}, label: 'Nov 6 at 00:00'
+                                        Button, 0x108d9c640, {{32.0, 2672.3}, {182.0, 205.0}}, identifier: 'wellness-card-leanBodyMass', label: 'Lean Body Mass, 63.1, kg, -0.4, kg, Previous measurement, 63.5, kg, Oct 29, Today, Nov 6 at 00:00'
+                                          StaticText, 0x108d9c780, {{48.0, 2688.3}, {150.0, 44.0}}, identifier: 'card-navigation-header', label: 'Lean Body Mass'
+                                            StaticText, 0x108d9c8c0, {{48.0, 2688.3}, {150.0, 44.0}}, label: 'Lean Body Mass'
+                                            Image, 0x108d9ca00, {{50.0, 2692.0}, {18.0, 18.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                            Image, 0x108d9cb40, {{162.7, 2696.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x108d9cc80, {{48.0, 2740.3}, {86.3, 40.7}}, label: '63.1, kg'
+                                            StaticText, 0x108d9cdc0, {{48.0, 2740.3}, {68.7, 40.7}}, label: '63.1'
+                                            StaticText, 0x108d9cf00, {{120.7, 2761.3}, {13.7, 14.3}}, label: 'kg'
+                                          Image, 0x108d9d040, {{49.3, 2791.3}, {9.0, 9.0}}, identifier: 'arrow.down.right', label: 'Down-Right Diagonal Arrow'
+                                          StaticText, 0x108d9d180, {{63.7, 2789.0}, {25.0, 14.3}}, label: '-0.4'
+                                          StaticText, 0x108d9d2c0, {{92.7, 2789.0}, {13.7, 14.3}}, label: 'kg'
+                                          StaticText, 0x108d9d400, {{48.0, 2811.3}, {119.7, 13.3}}, label: 'Previous measurement'
+                                          StaticText, 0x108d9d540, {{48.0, 2826.7}, {23.7, 13.3}}, label: '63.5'
+                                          StaticText, 0x108d9d680, {{75.7, 2826.7}, {12.7, 13.3}}, label: 'kg'
+                                          StaticText, 0x108d9d7c0, {{92.3, 2826.7}, {36.0, 13.3}}, label: 'Oct 29'
+                                          StaticText, 0x108d9d900, {{48.0, 2848.0}, {31.3, 13.3}}, label: 'Today'
+                                          StaticText, 0x108d9da40, {{83.3, 2848.0}, {78.7, 13.3}}, label: 'Nov 6 at 00:00'
+                                        Button, 0x108d9db80, {{226.0, 2672.3}, {182.0, 205.0}}, identifier: 'wellness-card-bmi', label: 'BMI, 24.7, +0.1, Previous measurement, 24.6, Oct 29, Today, Nov 6 at 00:00'
+                                          StaticText, 0x108d9dcc0, {{242.0, 2688.3}, {150.0, 44.0}}, identifier: 'card-navigation-header', label: 'BMI'
+                                            StaticText, 0x108d9de00, {{242.0, 2688.3}, {150.0, 44.0}}, label: 'BMI'
+                                            Image, 0x108d9df40, {{244.0, 2702.0}, {7.3, 17.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                            Image, 0x108d9e080, {{295.3, 2706.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x108d9e1c0, {{242.0, 2740.3}, {71.7, 40.7}}, label: '24.7'
+                                          Image, 0x108d9e300, {{243.3, 2791.3}, {9.0, 9.0}}, identifier: 'arrow.up.right', label: 'Up-Right Diagonal Arrow'
+                                          StaticText, 0x108d9e440, {{257.7, 2789.0}, {24.7, 14.3}}, label: '+0.1'
+                                          StaticText, 0x108d9e580, {{242.0, 2811.3}, {119.7, 13.3}}, label: 'Previous measurement'
+                                          StaticText, 0x108d9e6c0, {{242.0, 2826.7}, {23.3, 13.3}}, label: '24.6'
+                                          StaticText, 0x108d9e800, {{269.3, 2826.7}, {36.0, 13.3}}, label: 'Oct 29'
+                                          StaticText, 0x108d9e940, {{242.0, 2848.0}, {31.3, 13.3}}, label: 'Today'
+                                          StaticText, 0x108d9ea80, {{277.3, 2848.0}, {78.7, 13.3}}, label: 'Nov 6 at 00:00'
+                                          StaticText, 0x108d9ebc0, {{0.0, 0.0}, {0.0, 0.0}}
+                                        Button, 0x108d9ed00, {{34.0, 2905.2}, {156.7, 20.3}}, identifier: 'wellness-add-body-record', label: 'Add Body Record'
+                                          StaticText, 0x108d9ee40, {{34.0, 2905.2}, {156.7, 20.3}}, label: 'Add Body Record'
+                                          Image, 0x108d9ef80, {{34.0, 2908.7}, {14.0, 14.0}}, identifier: 'plus', label: 'Add'
+                                        Image, 0x108d9f0c0, {{34.0, 2990.3}, {8.7, 12.7}}, identifier: 'applewatch', label: 'Apple Watch'
+                                        StaticText, 0x108d9f200, {{48.0, 2989.5}, {84.7, 14.3}}, label: 'Watch Posture'
+                                        StaticText, 0x108d9f340, {{60.0, 3016.0}, {161.0, 19.3}}, label: 'Apple Watch required'
+                                        Image, 0x108d9f480, {{32.3, 3031.3}, {19.3, 21.0}}, identifier: 'applewatch.slash', label: 'Apple Watch With A Diagonal Slash'
+                                        StaticText, 0x108d9f5c0, {{60.0, 3037.3}, {319.7, 30.3}}, label: 'Pair an Apple Watch to monitor your posture throughout the day.'
+                                        Button, 0x108d9f700, {{32.0, 3119.7}, {376.0, 44.0}}, identifier: 'wellness-link-posturehistory', label: 'Posture Assessment'
+                                          StaticText, 0x108d9f840, {{32.0, 3119.7}, {376.0, 44.0}}, label: 'Posture Assessment'
+                                          Image, 0x108d9f980, {{34.0, 3134.3}, {14.7, 14.7}}, identifier: 'viewfinder', label: 'Scan'
+                                          Image, 0x108d9fac0, {{211.7, 3137.3}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                        Button, 0x108d9fc00, {{32.0, 3175.7}, {376.0, 142.3}}, identifier: 'wellness-posture-record-62A6CE99-7F43-4398-8125-0C7C42FE3899', label: 'Nov 5, 86, /100, Photo assessment'
+                                          StaticText, 0x108d9fd40, {{160.0, 3196.7}, {33.3, 14.3}}, label: 'Nov 5'
+                                          Image, 0x108d9fe80, {{78.3, 3205.3}, {19.0, 48.7}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x108da0000, {{160.0, 3219.0}, {44.0, 40.7}}, identifier: 'wellness-posture-score', label: '86'
+                                          StaticText, 0x108da0140, {{208.0, 3240.0}, {24.7, 14.3}}, label: '/100'
+                                          Other, 0x108da0280, {{160.0, 3267.7}, {248.0, 7.0}}
+                                          StaticText, 0x108da03c0, {{48.8, 3279.7}, {78.3, 26.3}}, label: 'Front and side capture guide'
+                                          StaticText, 0x108da0500, {{160.0, 3282.7}, {103.7, 14.3}}, label: 'Photo assessment'
+                                        StaticText, 0x108da0640, {{33.3, 3330.0}, {367.0, 14.3}}, label: 'Photo assessments and Watch records are shown separately.'
+                                        Button, 0x108da0780, {{32.0, 3356.3}, {184.0, 44.0}}, identifier: 'wellness-button-posture-capture', label: 'Capture'
+                                          Image, 0x108da08c0, {{91.3, 3372.7}, {14.7, 11.3}}, identifier: 'camera.fill', label: 'Camera'
+                                          StaticText, 0x108da0a00, {{111.3, 3371.2}, {46.7, 14.3}}, label: 'Capture'
+                                        Button, 0x108da0b40, {{224.0, 3356.3}, {184.0, 44.0}}, identifier: 'wellness-button-posture-realtime', label: 'Realtime'
+                                          Image, 0x108da0c80, {{281.7, 3371.3}, {14.3, 14.0}}, identifier: 'figure.walk.motion', label: 'Figure Walking With Motion Lines'
+                                          StaticText, 0x108da0dc0, {{301.3, 3371.2}, {50.3, 14.3}}, label: 'Realtime'
+                                        Button, 0x108da0f00, {{32.0, 3412.3}, {376.0, 64.0}}, identifier: 'wellness-posture-record-AFBB789B-75F0-4638-99FA-5DF83FB1BDB8', label: '73, Oct 23, 8 metrics measured'
+                                          StaticText, 0x108da1040, {{96.0, 3429.7}, {300.0, 14.3}}, identifier: 'card-navigation-header', label: 'Oct 23'
+                                            StaticText, 0x108da1180, {{96.0, 3429.7}, {300.0, 14.3}}, label: 'Oct 23'
+                                            Image, 0x108da12c0, {{141.7, 3431.3}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x108da1400, {{57.0, 3437.7}, {14.0, 13.3}}, label: '73'
+                                          StaticText, 0x108da1540, {{96.0, 3445.8}, {104.3, 13.3}}, label: '8 metrics measured'
+                                      Other, 0x108da1680, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 5 pages', value: 0%
+                                        Other, 0x108da17c0, {{434.0, 171.0}, {3.0, 348.3}}
+                                      Other, 0x108da1900, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 5 pages', value: 0%
+                                        Other, 0x108da1a40, {{434.0, 171.0}, {3.0, 348.3}}
+                                    Button, 0x108da1b80, {{190.0, 284.0}, {60.0, 24.0}}, identifier: 'wave-refresh-test-trigger', label: 'Trigger Refresh', value: 0
+                                    Other, 0x108da1cc0, {{220.0, 520.7}, {0.0, 0.0}}
+                            Toolbar, 0x108da1e00, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x108da1f40, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x108da2080, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x108da21c0, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x108da2300, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x108da2440, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x108da2580, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x108da26c0, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x108da2800, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x108da2940, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today'
+                              Image, 0x108da2a80, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x108da2bc0, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity'
+                              Image, 0x108da2d00, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x108da2e40, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                              Image, 0x108da2f80, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x108da30c0, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x108da3200, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x108da3340, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x108da3480, {{215.3, 877.0}, {104.5, 54.0}}
+                            Other, 0x108da35c0, {{215.3, 877.0}, {104.3, 54.0}}
+                              Other, 0x108da3700, {{215.3, 877.0}, {104.3, 54.0}}
+                              Other, 0x108da3840, {{215.3, 877.0}, {104.3, 54.0}}
+                                Other, 0x108da3980, {{215.3, 877.0}, {104.3, 54.0}}
+                                  Other, 0x108da3ac0, {{215.3, 877.0}, {104.3, 54.0}}
+                                    Other, 0x108da3c00, {{215.3, 877.0}, {104.3, 54.0}}
+                                  Other, 0x108da3d40, {{215.3, 877.0}, {104.3, 54.0}}
+                                Other, 0x108da3e80, {{215.3, 877.0}, {104.3, 54.0}}
+                    Other, 0x108dd4000, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x108dd4140, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x108dd4280, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x108dd43c0, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x108dd4500, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x108dd4640, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x108dd4780, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x108dd48c0, {{220.0, 492.0}, {0.0, 0.0}}
+      Other, 0x108dd4a00, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x108dd4b40, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x108dd4c80, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x108dd4dc0, {{0.0, 0.0}, {440.0, 956.0}}
+              NavigationBar, 0x108dd4f00, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Realtime Analysis'
+                Other, 0x108dd5040, {{24.0, 66.0}, {68.3, 36.0}}
+                  Other, 0x108dd5180, {{24.0, 66.0}, {68.3, 36.0}}
+                    Button, 0x108dd52c0, {{24.0, 66.0}, {68.3, 36.0}}, identifier: 'realtime-posture-close', label: 'Close'
+                StaticText, 0x108dd5400, {{150.0, 73.7}, {140.0, 20.7}}, label: 'Realtime Analysis'
+                Other, 0x108dd5540, {{380.0, 66.0}, {36.0, 36.0}}
+                  Other, 0x108dd5680, {{380.0, 66.0}, {36.0, 36.0}}
+                    Button, 0x108dd57c0, {{380.0, 66.0}, {36.0, 36.0}}, identifier: 'camera.rotate', label: 'Switch camera', Disabled
+              Other, 0x108dd5900, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x108dd5a40, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x108dd5b80, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x108dd5cc0, {{0.0, 0.0}, {440.0, 956.0}}
+                      ScrollView, 0x108dd5e00, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x108dd5f40, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x108dd6080, {{0.0, 0.0}, {440.0, 156.0}}
+                        Other, 0x108dd61c0, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x108dd6300, {{0.0, 116.0}, {440.0, 806.0}}
+                          StaticText, 0x108dd6440, {{128.5, 502.5}, {183.0, 20.3}}, identifier: 'realtime-camera-unavailable', label: 'Camera is not available'
+                          Button, 0x108dd6580, {{164.3, 543.0}, {111.3, 50.3}}, identifier: 'realtime-camera-retry', label: 'Try Again'
+                        Other, 0x108dd66c0, {{407.0, 116.0}, {30.0, 778.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                          Other, 0x108dd6800, {{434.0, 119.0}, {3.0, 772.0}}
+                        Other, 0x108dd6940, {{407.0, 116.0}, {30.0, 778.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                          Other, 0x108dd6a80, {{434.0, 119.0}, {3.0, 772.0}}
+                      Button, 0x108dd6bc0, {{275.7, 124.0}, {148.3, 44.0}}, identifier: 'realtime-exercise-picker-button', label: 'Select Exercise', value: general
+                        Image, 0x108dd6d00, {{289.7, 136.7}, {8.0, 18.7}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                        StaticText, 0x108dd6e40, {{307.7, 137.0}, {104.3, 18.0}}, label: 'Select Exercise'
+              Toolbar, 0x108dd6f80, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                Other, 0x108dd70c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x108dd7200, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x108dd7340, {{-440.0, -956.0}, {1320.0, 2868.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Other, 0x108dd7480, {{8.0, 451.1}, {424.0, 496.9}}
+          Button, 0x108dd75c0, {{171.8, 447.2}, {96.4, 23.1}}, label: 'Sheet Grabber', value: Half screen
+          Other, 0x108dd7700, {{8.0, 451.1}, {424.0, 496.9}}
+            Other, 0x108dd7840, {{8.0, 451.1}, {424.0, 496.9}}
+              Other, 0x108dd7980, {{8.0, 451.1}, {424.0, 496.9}}
+                Other, 0x108dd7ac0, {{8.0, 451.1}, {424.0, 496.9}}
+                  NavigationBar, 0x108dd7c00, {{8.0, 470.4}, {424.0, 52.0}}, identifier: 'Exercise Mode'
+                    Other, 0x108dd7d40, {{31.1, 474.2}, {65.8, 34.7}}
+                      Other, 0x108dd7e80, {{31.1, 474.2}, {65.8, 34.7}}
+                        Button, 0x113220000, {{31.1, 474.2}, {65.8, 34.7}}, identifier: 'posture-exercise-close', label: 'Close'
+                    StaticText, 0x113220140, {{164.1, 481.6}, {111.5, 19.9}}, label: 'Exercise Mode'
+                  Other, 0x113220280, {{8.0, 451.1}, {424.0, 496.9}}
+                    Other, 0x1132203c0, {{8.0, 451.1}, {424.0, 496.9}}
+                      Other, 0x113220500, {{8.0, 451.1}, {424.0, 496.9}}
+                        Other, 0x113220640, {{8.0, 451.1}, {424.0, 496.9}}
+                          CollectionView, 0x113220780, {{8.0, 451.1}, {424.0, 496.9}}, identifier: 'posture-exercise-list'
+                            Other, 0x1132208c0, {{-11.3, -471.4}, {462.5, 1115.9}}
+                            Other, 0x113220a00, {{8.0, 451.1}, {424.0, 496.9}}
+                              Other, 0x113220b40, {{8.0, 451.1}, {424.0, 109.9}}
+                            Other, 0x113220c80, {{8.0, 451.1}, {424.0, 496.9}}
+                            Cell, 0x113220dc0, {{27.3, 556.1}, {385.5, 71.3}}
+                              Other, 0x113220f00, {{27.3, 556.1}, {385.5, 71.3}}
+                                Other, 0x113221040, {{27.3, 556.1}, {385.5, 71.3}}
+                                  Other, 0x113221180, {{27.3, 556.1}, {385.5, 71.3}}
+                                    Other, 0x1132212c0, {{27.3, 556.1}, {385.5, 71.3}}
+                              Other, 0x113221400, {{27.3, 556.1}, {385.5, 71.3}}
+                                Other, 0x113221540, {{27.3, 556.1}, {385.5, 71.3}}
+                                  Other, 0x113221680, {{27.3, 556.1}, {385.5, 71.3}}
+                                    Button, 0x1132217c0, {{27.3, 556.1}, {385.5, 71.3}}, identifier: 'posture-exercise-general', label: 'General Posture', Selected
+                                      Image, 0x113221900, {{60.0, 580.2}, {10.0, 23.1}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                      StaticText, 0x113221a40, {{90.9, 582.0}, {117.6, 19.6}}, label: 'General Posture'
+                                      Image, 0x113221b80, {{377.7, 585.0}, {13.8, 13.8}}, identifier: 'checkmark', label: 'Selected', Selected
+                            Other, 0x113221cc0, {{-11.3, 644.5}, {462.5, 1458.6}}
+                            Cell, 0x113221e00, {{27.3, 644.5}, {385.5, 38.9}}
+                              Other, 0x113221f40, {{27.3, 644.5}, {385.5, 38.9}}
+                              Other, 0x113222080, {{27.3, 644.5}, {385.5, 38.9}}
+                                Other, 0x1132221c0, {{27.3, 644.5}, {385.5, 38.9}}
+                                  Other, 0x113222300, {{27.3, 644.5}, {385.5, 38.9}}
+                                    StaticText, 0x113222440, {{27.3, 644.5}, {385.5, 38.9}}, label: 'Form Check'
+                            Cell, 0x113222580, {{27.3, 683.3}, {385.5, 71.3}}
+                              Other, 0x1132226c0, {{27.3, 683.3}, {385.5, 71.3}}
+                                Other, 0x113222800, {{27.3, 683.3}, {385.5, 71.3}}
+                                  Other, 0x113222940, {{27.3, 683.3}, {385.5, 71.3}}
+                              Other, 0x113222a80, {{27.3, 683.3}, {385.5, 71.3}}
+                                Other, 0x113222bc0, {{27.3, 683.3}, {385.5, 71.3}}
+                                  Other, 0x113222d00, {{27.3, 683.3}, {385.5, 71.3}}
+                                    Button, 0x113222e40, {{27.3, 683.3}, {385.5, 71.3}}, identifier: 'posture-exercise-barbell-squat', label: 'Barbell Squat'
+                                      Image, 0x113222f80, {{52.6, 706.4}, {24.7, 25.4}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                      StaticText, 0x1132230c0, {{90.9, 709.2}, {98.0, 19.6}}, label: 'Barbell Squat'
+                            Cell, 0x113223200, {{27.3, 754.6}, {385.5, 71.3}}
+                              Other, 0x113223340, {{27.3, 754.6}, {385.5, 71.3}}
+                                Other, 0x113223480, {{27.3, 754.6}, {385.5, 71.3}}
+                                  Other, 0x1132235c0, {{27.3, 754.6}, {385.5, 71.3}}
+                              Other, 0x113223700, {{27.3, 754.6}, {385.5, 71.3}}
+                                Other, 0x113223840, {{27.3, 754.6}, {385.5, 71.3}}
+                                  Other, 0x113223980, {{27.3, 754.6}, {385.5, 71.3}}
+                                    Button, 0x113223ac0, {{27.3, 754.6}, {385.5, 71.3}}, identifier: 'posture-exercise-conventional-deadlift', label: 'Conventional Deadlift'
+                                      Image, 0x113223c00, {{55.9, 779.0}, {18.3, 22.8}}, identifier: 'figure.strengthtraining.functional', label: 'Figure Doing Functional Strength Training'
+                                      StaticText, 0x113223d40, {{90.9, 780.5}, {157.1, 19.6}}, label: 'Conventional Deadlift'
+                            Other, 0x113223e80, {{90.9, 753.7}, {302.6, 1.0}}
+                              Other, 0x108dbc000, {{90.9, 753.7}, {302.6, 1.0}}
+                            Cell, 0x108dbc140, {{27.3, 825.9}, {385.5, 71.3}}
+                              Other, 0x108dbc280, {{27.3, 825.9}, {385.5, 71.3}}
+                                Other, 0x108dbc3c0, {{27.3, 825.9}, {385.5, 71.3}}
+                                  Other, 0x108dbc500, {{27.3, 825.9}, {385.5, 71.3}}
+                              Other, 0x108dbc640, {{27.3, 825.9}, {385.5, 71.3}}
+                                Other, 0x108dbc780, {{27.3, 825.9}, {385.5, 71.3}}
+                                  Other, 0x108dbc8c0, {{27.3, 825.9}, {385.5, 71.3}}
+                                    Button, 0x108dbca00, {{27.3, 825.9}, {385.5, 71.3}}, identifier: 'posture-exercise-overhead-press', label: 'Overhead Press'
+                                      Image, 0x108dbcb40, {{57.8, 850.0}, {14.5, 23.1}}, identifier: 'figure.arms.open', label: 'Figure With Arms Open'
+                                      StaticText, 0x108dbcc80, {{90.9, 851.8}, {116.6, 19.6}}, label: 'Overhead Press'
+                            Other, 0x108dbcdc0, {{90.9, 825.0}, {302.6, 1.0}}
+                              Other, 0x108dbcf00, {{90.9, 825.0}, {302.6, 1.0}}
+                            Cell, 0x108dbd040, {{27.3, 897.2}, {385.5, 71.3}}
+                              Other, 0x108dbd180, {{27.3, 897.2}, {385.5, 71.3}}
+                                Other, 0x108dbd2c0, {{27.3, 897.2}, {385.5, 71.3}}
+                                  Other, 0x108dbd400, {{27.3, 897.2}, {385.5, 71.3}}
+                              Other, 0x108dbd540, {{27.3, 897.2}, {385.5, 71.3}}
+                                Other, 0x108dbd680, {{27.3, 897.2}, {385.5, 71.3}}
+                                  Other, 0x108dbd7c0, {{27.3, 897.2}, {385.5, 71.3}}
+                                    Button, 0x108dbd900, {{27.3, 897.2}, {385.5, 71.3}}, identifier: 'posture-exercise-pull-up', label: 'Pull-up'
+                                      Image, 0x108dbda40, {{57.1, 920.1}, {16.1, 25.7}}, identifier: 'figure.highintensity.intervaltraining', label: 'Figure Doing High-Intensity Interval Training'
+                                      StaticText, 0x108dbdb80, {{90.9, 923.1}, {52.7, 19.6}}, label: 'Pull-up'
+                            Other, 0x108dbdcc0, {{90.9, 896.3}, {302.6, 1.0}}
+                              Other, 0x108dbde00, {{90.9, 896.3}, {302.6, 1.0}}
+                            Other, 0x108dbdf40, {{400.2, 522.4}, {28.9, 373.6}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                              Other, 0x108dbe080, {{426.2, 887.6}, {2.9, 6.7}}
+                            Other, 0x108dbe1c0, {{400.2, 522.4}, {28.9, 373.6}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                              Other, 0x108dbe300, {{426.2, 887.6}, {2.9, 6.7}}
+                  Toolbar, 0x108dbe440, {{8.0, 451.1}, {424.0, 496.9}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x108dbe580, {{8.0, 451.1}, {424.0, 496.9}}
+          Other, 0x108dbe6c0, {{8.0, 451.1}, {424.0, 496.9}}
+            Other, 0x108dbe800, {{8.0, 451.1}, {424.0, 496.9}}
+              Other, 0x108dbe940, {{8.0, 451.1}, {424.0, 496.9}}
+                Other, 0x108dbea80, {{8.0, 451.1}, {424.0, 496.9}}
+                  Other, 0x108dbebc0, {{8.0, 451.1}, {424.0, 496.9}}
+                    Other, 0x108dbed00, {{8.0, 451.1}, {424.0, 496.9}}
+                Other, 0x108dbee40, {{8.0, 451.1}, {424.0, 496.9}}
+                  Other, 0x108dbef80, {{8.0, 451.1}, {424.0, 496.9}}
+    Window, 0x108dbf0c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x108dbf200, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x108dbf340, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x108de7480, pid: 37491, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x108dbf480, pid: 37491, label: 'DUNE'
+  }

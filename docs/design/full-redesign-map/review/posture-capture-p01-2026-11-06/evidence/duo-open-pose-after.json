@@ -1,0 +1,83 @@
+{
+  "target_angle": 180.0,
+  "actual_angle": null,
+  "angle_readback": "unavailable: Xcode27.2 has no device motion command",
+  "active_display": "LCD-1",
+  "displays": [
+    {
+      "active": false,
+      "backlightState": "off",
+      "bounds": [
+        [
+          0,
+          0
+        ],
+        [
+          1398,
+          2034
+        ]
+      ],
+      "chromeIdentifier": "com.apple.dt.devicekit.chrome.phone15",
+      "currentOrientation": "rot0",
+      "displayId": 1,
+      "framebufferMaskIdentifier": "1C896A2B-F0D7-405C-8D0F-66E4B80AD044",
+      "name": "LCD",
+      "nativeOrientation": "rot0",
+      "nativeSize": [
+        1398,
+        2034
+      ],
+      "physicalSize": [
+        3.039130449295044,
+        4.421739101409912
+      ],
+      "pointScale": 3,
+      "primary": true,
+      "type": {
+        "integrated": {}
+      },
+      "uniqueId": "A6BAD5B4-394D-4958-B8AA-929E5C59176A"
+    },
+    {
+      "active": true,
+      "backlightState": "activeOn",
+      "bounds": [
+        [
+          0,
+          0
+        ],
+        [
+          2007,
+          2853
+        ]
+      ],
+      "chromeIdentifier": "com.apple.dt.devicekit.chrome.phone14",
+      "currentOrientation": "rot90",
+      "displayId": 3,
+      "framebufferMaskIdentifier": "BF0DC480-5EE2-4EC1-B02B-C75E94759832",
+      "name": "LCD-1",
+      "nativeOrientation": "rot0",
+      "nativeSize": [
+        2007,
+        2853
+      ],
+      "physicalSize": [
+        4.363043308258057,
+        6.202173709869385
+      ],
+      "pointScale": 3,
+      "primary": false,
+      "type": {
+        "integrated": {}
+      },
+      "uniqueId": "D1B8AAF8-4D7A-41C1-A4AD-C9CF37457AD2"
+    }
+  ],
+  "orientation": {
+    "deviceIdentifier": "55387DCF-57FD-4663-BC1B-EBEF2C89DFB2",
+    "deviceIsOrientationLocked": false,
+    "deviceOrientation": "portrait",
+    "deviceOrientationNonFlat": "portrait"
+  },
+  "proof": "setter exit plus official active display; native PNG and AX reviewed separately"
+}

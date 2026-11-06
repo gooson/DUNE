@@ -242,10 +242,10 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 
 2026-11-06 L08: [실제 선택 화면·출처](../full-redesign-map/review/l08-habit-weekly-report-2026-11-06/index.html). 관련 메서드·기기 범위다.
 
-- [P01 자세 촬영](posture-capture-p01.html): B05 구현 기준 정적 시안. 새 actual 검증 전.
+- [P01 자세 촬영](posture-capture-p01.html): B05 정적 시안. 새 일반 상태 actual은 전용 갤러리 참조; P03 수정된 Duo MAX는 미검증.
 
-- [P02 실시간 자세](posture-realtime-p02.html): B05 구현 기준 정적 시안. 새 actual 검증 전.
+- [P02 실시간 자세](posture-realtime-p02.html): B05 정적 시안. 새 일반 상태 actual은 전용 갤러리 참조; P03 수정된 Duo MAX는 미검증.
 
-- [P03 운동 선택](posture-exercise-picker-p03.html): B05 구현 기준 정적 시안. 새 actual 검증 전.
+- [P03 운동 선택](posture-exercise-picker-p03.html): B05 정적 시안. 새 일반 상태 actual은 전용 갤러리 참조; P03 수정된 Duo MAX는 미검증.
 
-- [P04 자세 결과](posture-result-p04.html): B05 구현 기준 정적 시안. 새 actual 검증 전.
+- [P04 자세 결과](posture-result-p04.html): B05 정적 시안. 새 일반 상태 actual은 전용 갤러리 참조; P03 수정된 Duo MAX는 미검증.

@@ -574,33 +574,69 @@
     },
     "P02": {
       "row_id": "P02",
-      "evidence": "title:Realtime Analysis",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap wellness-menu-realtime-posture",
-      "timestamp": 1791823585.347,
-      "image": "BFB97918-F13A-4691-8A65-80A95453BEA0.png",
-      "screen": "screen-0-2064x2752-tap wellness-menu-realtime-posture_0_ABFB9404-154B-4E58-BA73-4A11E4697B75.png",
-      "file": "P02.png"
+      "file": "P02.png",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "action": "screen-0-1512x2316-P02 camera unavailable and exercise entry_0_4A693F03-9F6F-459E-A058-EA3BE7B25D89.png",
+      "timestamp": 1793964905.21,
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "41a3ed631dd28774efe8c5aa8ccfea15fa0412e6a28134fa1ce7900169239568",
+      "ax_sha256": "a84802748fbfadedc074c5974addc0a2ab4a1699ebd9266481af5d9d6334c28e",
+      "source_json": "../../../full-redesign-map/review/posture-realtime-p02-2026-11-06/manifest.json",
+      "source_record": "records: profile=ipad,kind=after,is_primary=true",
+      "capture_scope": "selected affected flows verified; see limits",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1512,
+        2316
+      ]
     },
     "P03": {
       "row_id": "P03",
-      "evidence": "title:Exercise Mode",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap Select Exercise",
-      "timestamp": 1791823591.098,
-      "image": "7E8B9C6A-308D-4791-A5E7-78A50BE908E6.png",
-      "screen": "screen-0-2064x2752-tap Select Exercise_0_BFA7621A-B4F1-4161-AC56-01BC592C0FFB.png",
-      "file": "P03.png"
+      "file": "P03.png",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "action": "screen-0-1512x2316-P03 General Posture selected_0_5A3D4B13-EFB1-4D45-AF64-8512FE15B4F9.png",
+      "timestamp": 1793964915.574,
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "11214c1be49dbae2e384ae7c1a3d6cf5f11c05c1485103bebcd53dbe1f1a2a3d",
+      "ax_sha256": "199db4c833fa0d6c2a79ce3080776e3340d91c9fb070341f2599e9b3168a6aef",
+      "source_json": "../../../full-redesign-map/review/posture-exercise-picker-p03-2026-11-06/manifest.json",
+      "source_record": "records: profile=ipad,kind=after,is_primary=true",
+      "capture_scope": "P03 corrected closed MAX pending approval and execution",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1512,
+        2316
+      ]
     },
     "P01": {
       "row_id": "P01",
-      "evidence": "title:Posture Assessment",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap wellness-menu-posture",
-      "timestamp": 1791823574.383,
-      "image": "988B982B-DBE7-4F8B-B6DE-EA2C1C839173.png",
-      "screen": "screen-0-2064x2752-tap wellness-menu-posture_0_D53B0016-C7D6-416D-8DED-311056034AED.png",
-      "file": "P01.png"
+      "file": "P01.png",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "action": "screen-0-1512x2316-P01 camera unavailable with retry and Close_0_57337553-36A3-4BFB-9728-0CBC0A96CB66.png",
+      "timestamp": 1793964827.248,
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "a624abc0db9a85613f419d87b4dc3c72ddaacc20931adf98a18aea922509f798",
+      "ax_sha256": "22cbf04066ef43bc57d941091e41eaf45f1770275506752ced269495f1eb5344",
+      "source_json": "../../../full-redesign-map/review/posture-capture-p01-2026-11-06/manifest.json",
+      "source_record": "records: profile=ipad,kind=after,is_primary=true",
+      "capture_scope": "selected affected flows verified; see limits",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1512,
+        2316
+      ]
     },
     "P08": {
       "row_id": "P08",
@@ -1216,13 +1252,25 @@
     },
     "P04": {
       "row_id": "P04",
-      "evidence": "posture-result-screen",
-      "test": "PostureVisualAuditTests/testVisualAuditPostureResultOnSimulator()",
-      "action": "tap wellness-menu-posture",
-      "timestamp": 1791838707.306,
-      "image": "A2D68F6E-6342-442D-A1C0-DCC455775879.png",
-      "screen": "screen-0-2064x2752-tap wellness-menu-posture_0_2F357BF4-DBB4-4D46-AFBC-0E29A47E85A1.png",
-      "file": "P04.png"
+      "file": "P04.png",
+      "test": "PostureVisualAuditTests/testP04SeededResultScoreMetricsMemoSaveAndRetake()",
+      "action": "screen-0-1512x2316-P04 complete synthetic score and image cards_0_320ADBC5-3569-4CE5-8995-5FD6430EFCD5.png",
+      "timestamp": 1793964980.417,
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "fc0581d1e831cd6963e4675a54d14ac63eecee457f17a5157e7a0be12da8cc76",
+      "ax_sha256": "c32b6ddd2196574d540917967845ab1f2b9dd665f87fcb5633b5f5f75ac353c1",
+      "source_json": "../../../full-redesign-map/review/posture-result-p04-2026-11-06/manifest.json",
+      "source_record": "records: profile=ipad,kind=after,is_primary=true",
+      "capture_scope": "selected affected flows verified; see limits",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1512,
+        2316
+      ]
     },
     "H07": {
       "row_id": "H07",

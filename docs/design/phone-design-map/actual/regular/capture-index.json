@@ -774,23 +774,47 @@
     },
     "P02": {
       "row_id": "P02",
-      "evidence": "title:Realtime Analysis",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap wellness-menu-realtime-posture",
-      "timestamp": 1791820091.948,
-      "image": "5110B1CC-CF2C-4810-9924-2410458F703F.png",
-      "screen": "screen-0-1320x2868-tap wellness-menu-realtime-posture_0_8609A374-0A2D-49FE-BD0E-1AF1E58C9941.png",
-      "file": "P02.png"
+      "file": "P02.png",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "action": "screen-0-1320x2868-P02 camera unavailable and exercise entry_0_1F9C91F5-9B56-4F9C-8AE4-0B0854A34C5B.png",
+      "timestamp": 1793963901.544,
+      "source_revision": "23fa2883f7f8f02e7418a1fcfed16fb9f516d8ce",
+      "source_worktree_dirty": false,
+      "device_udid": "B9C76CF6-96F3-4DEF-B263-46820019EA01",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "5a109eb9c74bbfa543538674d78dc395cb9f79302806f139aa6a967b0ba7b73e",
+      "ax_sha256": "26c52f16f941efcecdf15b41fb1af63b4f54bc747591290ac7280a2fada3e620",
+      "source_json": "../../../full-redesign-map/review/posture-realtime-p02-2026-11-06/manifest.json",
+      "source_record": "records: profile=regular,kind=after,is_primary=true",
+      "capture_scope": "selected affected flows verified; see limits",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1320,
+        2868
+      ]
     },
     "P01": {
       "row_id": "P01",
-      "evidence": "title:Posture Assessment",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap wellness-menu-posture",
-      "timestamp": 1791820081,
-      "image": "512B0CCE-86EE-4FC5-AE17-D9B2018541D8.png",
-      "screen": "screen-0-1320x2868-tap wellness-menu-posture_0_017D18C2-49E7-4C0B-9791-54692982AD09.png",
-      "file": "P01.png"
+      "file": "P01.png",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "action": "screen-0-1320x2868-P01 camera unavailable with retry and Close_0_6EF51624-D16E-470D-A7D2-7EB4B347F61D.png",
+      "timestamp": 1793963866.541,
+      "source_revision": "23fa2883f7f8f02e7418a1fcfed16fb9f516d8ce",
+      "source_worktree_dirty": false,
+      "device_udid": "B9C76CF6-96F3-4DEF-B263-46820019EA01",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "ddd18f48862dc2d4f52b7bf2fce7b45a55a6af0cb20bd3e64ef1011836660e57",
+      "ax_sha256": "156ac40cb1d907c94a989352c352df560807ea449958f91cdf37ecd6f263a20d",
+      "source_json": "../../../full-redesign-map/review/posture-capture-p01-2026-11-06/manifest.json",
+      "source_record": "records: profile=regular,kind=after,is_primary=true",
+      "capture_scope": "selected affected flows verified; see limits",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1320,
+        2868
+      ]
     },
     "P05": {
       "row_id": "P05",
@@ -1040,13 +1064,25 @@
     },
     "P04": {
       "row_id": "P04",
-      "evidence": "posture-result-screen",
-      "test": "PostureVisualAuditTests/testVisualAuditPostureResultOnSimulator()",
-      "action": "tap wellness-menu-posture",
-      "timestamp": 1791836696.89,
-      "image": "99A442A7-119E-43A4-918A-CDAFA3F69414.png",
-      "screen": "screen-0-1320x2868-tap wellness-menu-posture_0_EBD3BA5A-3FC5-4F35-9E97-E20022B5AD61.png",
-      "file": "P04.png"
+      "file": "P04.png",
+      "test": "PostureVisualAuditTests/testP04SeededResultScoreMetricsMemoSaveAndRetake()",
+      "action": "screen-0-1320x2868-P04 complete synthetic score and image cards_0_6C17D217-5411-43BE-B3DE-92772BE8D076.png",
+      "timestamp": 1793964431.335,
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "source_worktree_dirty": false,
+      "device_udid": "B9C76CF6-96F3-4DEF-B263-46820019EA01",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "de0865c8e54c1d1291266e2567ef2a060e3876ec54d3511fce43a39957cda97c",
+      "ax_sha256": "c350a3a511f64f1621ce19ddd16afbcf368637c44c1aa6f183fd281170bf9f8d",
+      "source_json": "../../../full-redesign-map/review/posture-result-p04-2026-11-06/manifest.json",
+      "source_record": "records: profile=regular,kind=after,is_primary=true",
+      "capture_scope": "selected affected flows verified; see limits",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1320,
+        2868
+      ]
     },
     "H07": {
       "row_id": "H07",
@@ -1445,13 +1481,25 @@
     },
     "P03": {
       "row_id": "P03",
-      "evidence": "test-and-action:Realtime exercise picker",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "Realtime exercise picker",
-      "timestamp": 1792375327.081,
-      "image": "EEB5B959-659A-4D90-BDAB-8DFF1C88E649.png",
-      "screen": "screen-0-1206x2622-Realtime exercise picker_0_5DC6B954-02D6-4233-8A87-458FCC7E99D9.png",
-      "file": "P03.png"
+      "file": "P03.png",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "action": "screen-0-1320x2868-P03 General Posture selected_0_F24D41D1-F923-4E9B-B95D-143AB1055DE8.png",
+      "timestamp": 1793963907.775,
+      "source_revision": "23fa2883f7f8f02e7418a1fcfed16fb9f516d8ce",
+      "source_worktree_dirty": false,
+      "device_udid": "B9C76CF6-96F3-4DEF-B263-46820019EA01",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "2646c3f84ba69d125cbc119c3f23f5643531e4aa6dbbac2b20979a7aed62488a",
+      "ax_sha256": "0bf8e7618f9168f40d1aeb59a23d8040adc70e30611bb76edd89153a5c5ef3d4",
+      "source_json": "../../../full-redesign-map/review/posture-exercise-picker-p03-2026-11-06/manifest.json",
+      "source_record": "records: profile=regular,kind=after,is_primary=true",
+      "capture_scope": "P03 corrected closed MAX pending approval and execution",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1320,
+        2868
+      ]
     },
     "H04": {
       "row_id": "H04",

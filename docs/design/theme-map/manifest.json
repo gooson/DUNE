@@ -967,10 +967,11 @@
       "name": "P01 · 자세 촬영",
       "title": "camera preview → 작은 준비 가이드·원래 체크리스트 → 촬영 버튼. 실패 시 원래 오류·기호·Try Again을 스크롤 가능한 중앙 강조면에 둔다.",
       "file": "dune-posture-capture-p01.html",
-      "detail": "2026-11-06 구현 기준 정적 시안. camera session·권한·방향·mirror·front/side·countdown·auto capture·결과 전환·외부 화면 안내·Close 보존. 새 native 검증 전이며 설명용 수치/기호는 실제 앱 캡처가 아니다.",
+      "detail": "2026-11-06 구현 기준 정적 시안. camera session·권한·방향·mirror·front/side·countdown·auto capture·결과 전환·외부 화면 안내·Close 보존. 일반 iPhone·iPad·Duo 양쪽 활성 화면의 native fallback/합성 흐름 검증을 보존하며 설명용 수치/기호는 실제 앱 캡처가 아니다.",
       "implementation": {
         "layout": "../layout-map/posture-capture-p01.html",
-        "status": "proposed"
+        "status": "implemented-selected-native-flows-verified",
+        "actual": "../full-redesign-map/review/posture-capture-p01-2026-11-06/index.html"
       }
     },
     {
@@ -978,10 +979,11 @@
       "name": "P02 · 실시간 자세",
       "title": "camera preview → 실제 score/skeleton/angles → 작은 운동 선택·폼·가이드 overlay. 미가용 시 camera.fill·원래 오류·Try Again을 강한 중앙면에 둔다.",
       "file": "dune-posture-realtime-p02.html",
-      "detail": "2026-11-06 구현 기준 정적 시안. start/stop·retry·switch·voice·form mode·운동 선택·Close 보존. 카메라 없어도 가능한 운동 선택을 유지한다. 새 native 검증 전이며 설명용 수치/기호는 실제 앱 캡처가 아니다.",
+      "detail": "2026-11-06 구현 기준 정적 시안. start/stop·retry·switch·voice·form mode·운동 선택·Close 보존. 카메라 없어도 가능한 운동 선택을 유지한다. 일반 iPhone·iPad·Duo 양쪽 활성 화면의 native fallback/합성 흐름 검증을 보존하며 설명용 수치/기호는 실제 앱 캡처가 아니다.",
       "implementation": {
         "layout": "../layout-map/posture-realtime-p02.html",
-        "status": "proposed"
+        "status": "implemented-selected-native-flows-verified",
+        "actual": "../full-redesign-map/review/posture-realtime-p02-2026-11-06/index.html"
       }
     },
     {
@@ -989,10 +991,11 @@
       "name": "P03 · 운동 선택",
       "title": "원래 General Posture 선택 행 → Form Check 운동 목록. 기존 아이콘·체크를 유지하고 앞자리 심볼 면·선택 위계를 보강한다. medium에서 시작하고 large로 확장한다.",
       "file": "dune-posture-exercise-picker-p03.html",
-      "detail": "2026-11-06 P03 정적 표현 시안. 기존 General Posture·운동·아이콘·선택·Close를 보존한다. MAX(accessibility5)는 사라진 native toolbar 대신 고정 Close/제목과 large 시트를 제안하고, 나머지 크기는 원래 toolbar·medium/large다. iPhone 재검증과 Duo MAX 수정 확인 전이며 실제 앱 캡처가 아니다.",
+      "detail": "2026-11-06 P03 정적 표현 시안. 기존 General Posture·운동·아이콘·선택·Close를 보존한다. MAX(accessibility5)는 사라진 native toolbar 대신 고정 Close/제목과 large 시트를 제안하고, 나머지 크기는 원래 toolbar·medium/large다. 수정 후 iPhone MAX1/1 통과·Duo MAX 추가 확인 승인 대기이며 실제 앱 캡처가 아니다.",
       "implementation": {
         "layout": "../layout-map/posture-exercise-picker-p03.html",
-        "status": "implemented-awaiting-max-header-validation"
+        "status": "normal-native-verified-corrected-duo-max-pending",
+        "actual": "../full-redesign-map/review/posture-exercise-picker-p03-2026-11-06/index.html"
       }
     },
     {
@@ -1000,10 +1003,11 @@
       "name": "P04 · 자세 결과",
       "title": "실제 점수·기존 링의 불투명 ScoreHeroPalette 강조 → Front/Side 사진 → 원래 metrics/confidence → 교정 운동 → memo → Capture Side View/Save/Retake.",
       "file": "dune-posture-result-p04.html",
-      "detail": "2026-11-06 구현 기준 정적 시안. combined/partial 점수·실제 사진/zoom/joints·metric/confidence·recommendations·memo·validated Save/isSaving/insert/dismiss·Retake 보존. 새 native 검증 전이며 설명용 수치/기호는 실제 앱 캡처가 아니다.",
+      "detail": "2026-11-06 구현 기준 정적 시안. combined/partial 점수·실제 사진/zoom/joints·metric/confidence·recommendations·memo·validated Save/isSaving/insert/dismiss·Retake 보존. 일반 iPhone·iPad·Duo 양쪽 활성 화면의 native fallback/합성 흐름 검증을 보존하며 설명용 수치/기호는 실제 앱 캡처가 아니다.",
       "implementation": {
         "layout": "../layout-map/posture-result-p04.html",
-        "status": "proposed"
+        "status": "implemented-selected-native-flows-verified",
+        "actual": "../full-redesign-map/review/posture-result-p04-2026-11-06/index.html"
       }
     }
   ]

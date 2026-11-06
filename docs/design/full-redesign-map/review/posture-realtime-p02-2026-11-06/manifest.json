@@ -1,0 +1,364 @@
+{
+  "screen_id": "P02",
+  "scope": "B05 P01-P04 posture visual redesign",
+  "gallery_kind": "native simulator captures; synthetic/camera-unavailable fixtures; historical before separated",
+  "new_evidence": [
+    {
+      "profile": "regular",
+      "state": "screen-0-1320x2868-P02 camera unavailable and exercise entry_0_1F9C91F5-9B56-4F9C-8AE4-0B0854A34C5B.png",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "source_commit": "23fa2883",
+      "pair_index": ".codex-checks/b05/phone-attachments-pairs.json",
+      "source_png": ".codex-checks/b05/phone-attachments/1E4233D5-CC58-4F93-A743-8E0108B0CB5E.png",
+      "source_ax": ".codex-checks/b05/phone-attachments/D940F640-1DDE-4A3B-842B-E820ED9215C0.txt",
+      "png": "assets/regular-screen-0-1320x2868-p02-camera-unavailable-and-exercise-entry-0-1f9c91f.png",
+      "ax": "assets/regular-screen-0-1320x2868-p02-camera-unavailable-and-exercise-entry-0-1f9c91f.txt",
+      "png_sha256": "5a109eb9c74bbfa543538674d78dc395cb9f79302806f139aa6a967b0ba7b73e",
+      "ax_sha256": "26c52f16f941efcecdf15b41fb1af63b4f54bc747591290ac7280a2fada3e620",
+      "dimensions_px": [
+        1320,
+        2868
+      ],
+      "capture_timestamp": 1793963901.544,
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "valid_evidence": true
+    },
+    {
+      "profile": "ipad",
+      "state": "screen-0-1512x2316-P02 camera unavailable and exercise entry_0_4A693F03-9F6F-459E-A058-EA3BE7B25D89.png",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "source_commit": "6fe1f089",
+      "pair_index": ".codex-checks/b05/ipad-attachments-pairs.json",
+      "source_png": ".codex-checks/b05/ipad-attachments/5D480404-CFA3-4EE0-BCF6-1A4A308D27B1.png",
+      "source_ax": ".codex-checks/b05/ipad-attachments/27F169B1-5455-4214-A14C-57D1FE034800.txt",
+      "png": "assets/ipad-screen-0-1512x2316-p02-camera-unavailable-and-exercise-entry-0-4a693f0.png",
+      "ax": "assets/ipad-screen-0-1512x2316-p02-camera-unavailable-and-exercise-entry-0-4a693f0.txt",
+      "png_sha256": "41a3ed631dd28774efe8c5aa8ccfea15fa0412e6a28134fa1ce7900169239568",
+      "ax_sha256": "a84802748fbfadedc074c5974addc0a2ab4a1699ebd9266481af5d9d6334c28e",
+      "dimensions_px": [
+        1512,
+        2316
+      ],
+      "capture_timestamp": 1793964905.21,
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo",
+      "state": "P02 camera unavailable and exercise entry",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "source_commit": "6fe1f089",
+      "pair_index": ".codex-checks/b05/duo-closed-pairs.json",
+      "source_png": ".codex-checks/b05/duo-closed-host/010-1398x2034.png",
+      "source_ax": ".codex-checks/b05/duo-closed-host/010-hierarchy.txt",
+      "png": "assets/duo-p02-camera-unavailable-and-exercise-entry.png",
+      "ax": "assets/duo-p02-camera-unavailable-and-exercise-entry.txt",
+      "png_sha256": "4ec65c6a2b2d0293185f544d3bc0e6627942db28ab80c01882023b4fc2de5980",
+      "ax_sha256": "0696a3979fa75ee9e1596953569530963160562527bf398b29ef2649f2d3b710",
+      "dimensions_px": [
+        1398,
+        2034
+      ],
+      "capture_timestamp": 1793965793.8711321,
+      "active_display": "LCD",
+      "readback_dimensions": [
+        1398,
+        2034
+      ],
+      "native_display_size": [
+        1398,
+        2034
+      ],
+      "actual_angle": null,
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo-open",
+      "state": "P02 camera unavailable and exercise entry",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "source_commit": "d6ac",
+      "pair_index": ".codex-checks/b05/duo-open-pairs.json",
+      "source_png": ".codex-checks/b05/duo-open-host/010-2007x2853.png",
+      "source_ax": ".codex-checks/b05/duo-open-host/010-hierarchy.txt",
+      "png": "assets/duo-open-p02-camera-unavailable-and-exercise-entry.png",
+      "ax": "assets/duo-open-p02-camera-unavailable-and-exercise-entry.txt",
+      "png_sha256": "4d04aefafe15a94121d796839ccfe3d9ded869f6b46b78a4a8131cb1c538c66c",
+      "ax_sha256": "2d51916824b7dfc8439f5955daac7d66daf8290779a53b3ee5aa32bd2a524a3a",
+      "dimensions_px": [
+        2853,
+        2007
+      ],
+      "capture_timestamp": 1793967666.2274845,
+      "active_display": "LCD-1",
+      "readback_dimensions": [
+        2853,
+        2007
+      ],
+      "native_display_size": [
+        2007,
+        2853
+      ],
+      "actual_angle": null,
+      "valid_evidence": true
+    }
+  ],
+  "before_evidence": [
+    {
+      "profile": "regular",
+      "png": "before/regular-P02-before.png",
+      "capture_index_entry": "before/regular-capture-index-entry.json",
+      "png_sha256": "9327d5c12d9fbf0d08eade0333455c3b5475ed2cf1a2dc58aba83c7cd7d780a7",
+      "dimensions_px": [
+        1320,
+        2868
+      ],
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "capture_timestamp": 1791820091.948,
+      "note": "Historical actual-map image; separate from B05 new evidence."
+    },
+    {
+      "profile": "ipad",
+      "png": "before/ipad-P02-before.png",
+      "capture_index_entry": "before/ipad-capture-index-entry.json",
+      "png_sha256": "3e708f9b513df5d9bef60253779ec494331abea4376b199ac111a1e218495e19",
+      "dimensions_px": [
+        2064,
+        2752
+      ],
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "capture_timestamp": 1791823585.347,
+      "note": "Historical actual-map image; separate from B05 new evidence."
+    },
+    {
+      "profile": "duo",
+      "png": "before/duo-P02-before.png",
+      "capture_index_entry": "before/duo-capture-index-entry.json",
+      "png_sha256": "9578eda3890da0c6338995e8696b76330e9b2047b937d9e3c32879fdef64f6c2",
+      "dimensions_px": [
+        1398,
+        2034
+      ],
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "capture_timestamp": 1791826670.476,
+      "note": "Historical actual-map image; separate from B05 new evidence."
+    },
+    {
+      "profile": "duo-open",
+      "png": "before/duo-open-P02-before.png",
+      "capture_index_entry": "before/duo-open-capture-index-entry.json",
+      "png_sha256": "030f7d75f927012339561a8420989ffdff04ac09e5e76875e4a64709ee84ff17",
+      "dimensions_px": [
+        2006,
+        2852
+      ],
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "capture_timestamp": 1791829984.443,
+      "note": "Historical actual-map image; separate from B05 new evidence."
+    }
+  ],
+  "source_commit_rule": "Capture-specific source only; never infer current HEAD as all capture sources.",
+  "profile_notes": {
+    "duo": "Active LCD; posture readback numeric angle null; physical closed portrait observed.",
+    "duo-open": "Active LCD-1; posture readback numeric angle null; physical open/internal rotation 90 observed."
+  },
+  "limits": [
+    "Camera-unavailable captures do not verify real camera or posture inference.",
+    "P01 retry verifies preparing controls only.",
+    "P04 uses synthetic complete score 86 and two system-symbol fixture photos; partial result remains unverified.",
+    "P03 closed MAX repaired source remains unverified/pending user limit exception; closed MAX screenshots are not completion evidence."
+  ],
+  "records": [
+    {
+      "profile": "regular",
+      "name": "P02 historical actual map",
+      "action": "tap wellness-menu-realtime-posture",
+      "image": "before/regular-P02-before.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "timestamp": 1791820091.948,
+      "sha256": "9327d5c12d9fbf0d08eade0333455c3b5475ed2cf1a2dc58aba83c7cd7d780a7",
+      "ax_sha256": null,
+      "kind": "before",
+      "is_primary": false,
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "capture_index_entry": "before/regular-capture-index-entry.json"
+    },
+    {
+      "profile": "ipad",
+      "name": "P02 historical actual map",
+      "action": "tap wellness-menu-realtime-posture",
+      "image": "before/ipad-P02-before.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "timestamp": 1791823585.347,
+      "sha256": "3e708f9b513df5d9bef60253779ec494331abea4376b199ac111a1e218495e19",
+      "ax_sha256": null,
+      "kind": "before",
+      "is_primary": false,
+      "native_dimensions": [
+        2064,
+        2752
+      ],
+      "capture_index_entry": "before/ipad-capture-index-entry.json"
+    },
+    {
+      "profile": "duo",
+      "name": "P02 historical actual map",
+      "action": "tap wellness-menu-realtime-posture",
+      "image": "before/duo-P02-before.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "timestamp": 1791826670.476,
+      "sha256": "9578eda3890da0c6338995e8696b76330e9b2047b937d9e3c32879fdef64f6c2",
+      "ax_sha256": null,
+      "kind": "before",
+      "is_primary": false,
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "capture_index_entry": "before/duo-capture-index-entry.json"
+    },
+    {
+      "profile": "duo-open",
+      "name": "P02 historical actual map",
+      "action": "tap wellness-menu-realtime-posture",
+      "image": "before/duo-open-P02-before.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "timestamp": 1791829984.443,
+      "sha256": "030f7d75f927012339561a8420989ffdff04ac09e5e76875e4a64709ee84ff17",
+      "ax_sha256": null,
+      "kind": "before",
+      "is_primary": false,
+      "native_dimensions": [
+        2006,
+        2852
+      ],
+      "capture_index_entry": "before/duo-open-capture-index-entry.json"
+    },
+    {
+      "profile": "regular",
+      "name": "screen-0-1320x2868-P02 camera unavailable and exercise entry_0_1F9C91F5-9B56-4F9C-8AE4-0B0854A34C5B.png",
+      "action": "screen-0-1320x2868-P02 camera unavailable and exercise entry_0_1F9C91F5-9B56-4F9C-8AE4-0B0854A34C5B.png",
+      "image": "assets/regular-screen-0-1320x2868-p02-camera-unavailable-and-exercise-entry-0-1f9c91f.png",
+      "ax": "assets/regular-screen-0-1320x2868-p02-camera-unavailable-and-exercise-entry-0-1f9c91f.txt",
+      "source_revision": "23fa2883f7f8f02e7418a1fcfed16fb9f516d8ce",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "timestamp": 1793963901.544,
+      "sha256": "5a109eb9c74bbfa543538674d78dc395cb9f79302806f139aa6a967b0ba7b73e",
+      "ax_sha256": "26c52f16f941efcecdf15b41fb1af63b4f54bc747591290ac7280a2fada3e620",
+      "kind": "after",
+      "is_primary": true,
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/phone-attachments-pairs.json",
+      "valid_evidence": true
+    },
+    {
+      "profile": "ipad",
+      "name": "screen-0-1512x2316-P02 camera unavailable and exercise entry_0_4A693F03-9F6F-459E-A058-EA3BE7B25D89.png",
+      "action": "screen-0-1512x2316-P02 camera unavailable and exercise entry_0_4A693F03-9F6F-459E-A058-EA3BE7B25D89.png",
+      "image": "assets/ipad-screen-0-1512x2316-p02-camera-unavailable-and-exercise-entry-0-4a693f0.png",
+      "ax": "assets/ipad-screen-0-1512x2316-p02-camera-unavailable-and-exercise-entry-0-4a693f0.txt",
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "timestamp": 1793964905.21,
+      "sha256": "41a3ed631dd28774efe8c5aa8ccfea15fa0412e6a28134fa1ce7900169239568",
+      "ax_sha256": "a84802748fbfadedc074c5974addc0a2ab4a1699ebd9266481af5d9d6334c28e",
+      "kind": "after",
+      "is_primary": true,
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/ipad-attachments-pairs.json",
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo",
+      "name": "P02 camera unavailable and exercise entry",
+      "action": "P02 camera unavailable and exercise entry",
+      "image": "assets/duo-p02-camera-unavailable-and-exercise-entry.png",
+      "ax": "assets/duo-p02-camera-unavailable-and-exercise-entry.txt",
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "timestamp": 1793965793.8711321,
+      "sha256": "4ec65c6a2b2d0293185f544d3bc0e6627942db28ab80c01882023b4fc2de5980",
+      "ax_sha256": "0696a3979fa75ee9e1596953569530963160562527bf398b29ef2649f2d3b710",
+      "kind": "after",
+      "is_primary": true,
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "active_display": "LCD",
+      "readback_dimensions": [
+        1398,
+        2034
+      ],
+      "native_display_size": [
+        1398,
+        2034
+      ],
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/duo-closed-pairs.json",
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo-open",
+      "name": "P02 camera unavailable and exercise entry",
+      "action": "P02 camera unavailable and exercise entry",
+      "image": "assets/duo-open-p02-camera-unavailable-and-exercise-entry.png",
+      "ax": "assets/duo-open-p02-camera-unavailable-and-exercise-entry.txt",
+      "source_revision": "d6ac3110864dca932e58c08dd9806aced6fdd944",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "timestamp": 1793967666.2274845,
+      "sha256": "4d04aefafe15a94121d796839ccfe3d9ded869f6b46b78a4a8131cb1c538c66c",
+      "ax_sha256": "2d51916824b7dfc8439f5955daac7d66daf8290779a53b3ee5aa32bd2a524a3a",
+      "kind": "after",
+      "is_primary": true,
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "active_display": "LCD-1",
+      "readback_dimensions": [
+        2853,
+        2007
+      ],
+      "native_display_size": [
+        2007,
+        2853
+      ],
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/duo-open-pairs.json",
+      "valid_evidence": true
+    }
+  ],
+  "completion": "selected affected flows verified; see limits",
+  "supporting_evidence": "evidence/ (raw run result/readback; each result retains original full selector scope)"
+}

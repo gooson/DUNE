@@ -339,3 +339,11 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-06 L07: [실제 선택 화면·출처](../full-redesign-map/review/l07-habit-heatmap-2026-11-06/index.html). 관련 메서드·기기 범위다.
 
 2026-11-06 L08: [실제 선택 화면·출처](../full-redesign-map/review/l08-habit-weekly-report-2026-11-06/index.html). 관련 메서드·기기 범위다.
+
+2026-11-06 P01의 [새 실제 PNG·AX와 변경 전 비교](../full-redesign-map/review/posture-capture-p01-2026-11-06/index.html)를 보존했다. iPhone·iPad·Duo 외부/내부의 일반 상태만 해당 출처로 갱신한다. 실제 카메라·다른 locale·전체 회귀는 범위 밖이다.
+
+2026-11-06 P02의 [새 실제 PNG·AX와 변경 전 비교](../full-redesign-map/review/posture-realtime-p02-2026-11-06/index.html)를 보존했다. iPhone·iPad·Duo 외부/내부의 일반 상태만 해당 출처로 갱신한다. 실제 카메라·다른 locale·전체 회귀는 범위 밖이다.
+
+2026-11-06 P03의 [새 실제 PNG·AX와 변경 전 비교](../full-redesign-map/review/posture-exercise-picker-p03-2026-11-06/index.html)를 보존했다. iPhone·iPad·Duo 외부/내부의 일반 상태만 해당 출처로 갱신한다. 수정된 Duo MAX는 미검증·승인 대기다.
+
+2026-11-06 P04의 [새 실제 PNG·AX와 변경 전 비교](../full-redesign-map/review/posture-result-p04-2026-11-06/index.html)를 보존했다. iPhone·iPad·Duo 외부/내부의 일반 상태만 해당 출처로 갱신한다. 실제 카메라·다른 locale·전체 회귀는 범위 밖이다.
