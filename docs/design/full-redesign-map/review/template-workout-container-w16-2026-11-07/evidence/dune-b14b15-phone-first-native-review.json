@@ -1,0 +1,68 @@
+{
+  "status": "independent first-phone native review; retry active, no retry result read",
+  "frozen_source": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+  "first_run": {
+    "executed": 7,
+    "passed": 3,
+    "failed": 4,
+    "skipped": 0,
+    "receipt": ".codex-checks/b14b15/phone-ui.log.result.json",
+    "summary": ".codex-checks/b14b15/phone-summary.json"
+  },
+  "provenance": {
+    "after_png_ax_pairs": 15,
+    "diagnostic_png_ax_pairs": 3,
+    "all_18_gallery_pairs_match_source_attachments_and_manifest_sha256": true,
+    "historical_pairs": 32,
+    "current_capture_kind": "XCTest native PNG plus AX; only passed selector rows after"
+  },
+  "screens": {
+    "W16": {
+      "after": 0,
+      "proof": "No named current-source after pair; template test failed at W22 defaults before W16 capture.",
+      "limit": "Only generic raw transition diagnostics; no W16 native route proof yet."
+    },
+    "W19": {
+      "after": 4,
+      "proof": "Normal Circuit mode and explanation, then Superset with two seeded exercise names, original 3 rounds/30s and enabled Start; MAX Circuit label, selected two exercises, settings and full Start. Passed compound normal/MAX selectors.",
+      "limit": "MAX selected/Start capture is scrolled down; first exercise top is under navigation chrome in that frame. AX retains both names, and normal capture shows both fully. Do not claim both MAX names simultaneously fully visible in this PNG."
+    },
+    "W20": {
+      "after": 2,
+      "proof": "Normal and MAX native full exercise picker, seeded Korean names with English aliases, icon/info controls, filter chips/search field; compound test selected Bench Press and Squat and returned to setup.",
+      "limit": "W20 wrapper app source is byte-identical; screenshots show initial picker viewport, not every filtered or bottom row."
+    },
+    "W21": {
+      "after": 6,
+      "proof": "Normal and MAX Round 1/3, elapsed timer, two exercise tabs, seeded weight/reps and 0-set summary; transition shows Up Next squat, +30s and Start. Passed compound test tapped both tabs and Start.",
+      "limit": "MAX initial tab strip shows the second tab partially at right; test horizontally reveals and taps it, but named initial frame alone does not show both full names. MAX changed set form extends below viewport and was not an edit/save flow."
+    },
+    "W22": {
+      "after": 0,
+      "proof": "No named after pair. Raw diagnostic PNG/AX shows 2 sets, 6 reps, 80 kg and Start, but test failed leaf query before named capture.",
+      "limit": "Do not promote generic failure PNG to after or infer W16 transition advance."
+    },
+    "W23": {
+      "after": 0,
+      "diagnostic": 3,
+      "proof": "Failed cardio selectors yield only diagnostic normal Indoor/Outdoor initial choices and MAX header/Indoor; first-run MAX whole-card assertion used impossible dx4 horizontal inset.",
+      "limit": "No passed Running start choice, location notice, or full flow yet."
+    },
+    "W24": {
+      "after": 2,
+      "proof": "Passed Stair Climber machine default-text selector: level adjustment reaches 3; current/average/max level and energy values, Pause and End are readable/hittable. Native AX End button exists.",
+      "limit": "This is default text machine branch only. Running normal/MAX metrics and lower steps/cadence remain unproven after first run."
+    },
+    "W25": {
+      "after": 1,
+      "proof": "Passed Stair Climber machine default-text selector: summary shows elapsed 0:23, average level 2.8, max level 3, history rows 0:08 level 2 and 0:10 level 3; full Save Workout pinned and AX frame within 440x956 window.",
+      "limit": "Save is visible, not tapped; no Running normal/MAX summary or lower Steps/Cadence proof."
+    }
+  },
+  "introduced_P1_P2_from_passed_first_phone_native": [],
+  "pending": [
+    "Same-ID retry of only failed four currently active; no result assumed.",
+    "Planned iPad normal/MAX selectors not yet reviewed.",
+    "Duo closed/open current-source captures pending."
+  ]
+}

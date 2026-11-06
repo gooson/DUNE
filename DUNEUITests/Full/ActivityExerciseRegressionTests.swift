@@ -4330,6 +4330,70 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.waitForExistence(timeout: 8))
     }
 
+    func testVisualAuditTemplateTransitionAtNormalText() throws {
+        try auditB14TemplateTransition(maximumText: false)
+    }
+
+    func testVisualAuditTemplateTransitionAtMaximumText() throws {
+        try auditB14TemplateTransition(maximumText: true)
+    }
+
+    private func auditB14TemplateTransition(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B14 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+        ensureActivityRoot()
+        let root = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(root.waitForExistence(timeout: 5))
+        let card = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", Fixture.circuitTemplate)).firstMatch
+        for _ in 0..<40 {
+            let viewport = root.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 12)
+            if card.exists && card.isHittable && viewport.contains(card.frame) { break }
+            if card.exists && card.frame.midY >= viewport.minY && card.frame.midY <= viewport.maxY
+                && (card.frame.minX >= viewport.maxX || card.frame.maxX <= viewport.minX) {
+                // Normal text uses a horizontal template strip; MAX uses a vertical stack.
+                let window = app.windows.firstMatch
+                let direction: CGFloat = card.frame.minX >= viewport.maxX ? -1 : 1
+                let startX = direction < 0 ? viewport.maxX - 32 : viewport.minX + 32
+                let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                    dx: startX - window.frame.minX, dy: card.frame.midY - window.frame.minY
+                ))
+                start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(
+                    dx: direction * viewport.width * 0.55, dy: 0
+                )))
+            } else if card.exists && card.frame.midY < viewport.midY {
+                root.swipeDown(velocity: .slow)
+            } else {
+                root.swipeUp(velocity: .slow)
+            }
+        }
+        let viewport = root.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 12)
+        XCTAssertTrue(card.exists && card.isHittable && viewport.contains(card.frame),
+                      "Seeded Circuit Builder card must be fully visible in Activity")
+        card.auditTap()
+        let container = app.descendants(matching: .any)[AXID.templateWorkoutContainerScreen].firstMatch
+        XCTAssertTrue(container.waitForExistence(timeout: 5), "W16 wrapper should open from Activity template card")
+        let transition = app.descendants(matching: .any)[AXID.templateWorkoutTransitionScreen].firstMatch
+        XCTAssertTrue(transition.exists, "W22 auto transition must be observed before its five-second advance")
+        let defaults = ["2 sets", "6 reps", "80 kg"]
+        for label in defaults {
+            let value = app.staticTexts.matching(NSPredicate(
+                format: "identifier == %@ AND label == %@", AXID.templateWorkoutTransitionScreen, label
+            )).firstMatch
+            XCTAssertTrue(value.exists, "W22 original \(label) default should appear")
+        }
+        VisualAudit.capture("W22 \(size) template defaults transition")
+        XCTAssertTrue(app.staticTexts["Exercise 1 of 2"].firstMatch.waitForExistence(timeout: 10),
+                      "W16 should advance to the first session")
+        VisualAudit.capture("W16 \(size) first template session after transition")
+    }
+
     func testTemplateWorkoutContainerCloseDismissesFullScreenFlow() throws {
         openTemplateList()
 

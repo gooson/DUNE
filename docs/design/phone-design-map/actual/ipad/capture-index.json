@@ -1572,13 +1572,25 @@
     },
     "W16": {
       "row_id": "W16",
-      "evidence": "test-and-action:Template workout first session",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateWorkoutFirstSession()",
-      "action": "Template workout first session",
-      "timestamp": 1791838984.661,
-      "image": "F2F6FD88-C68F-4171-AAA5-D4447AB98797.png",
-      "screen": "screen-0-2064x2752-Template workout first session_0_96B5D0D8-DB67-4EFC-8D28-C56763CE6986.png",
-      "file": "W16.png"
+      "file": "W16.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtNormalText()",
+      "action": "W16 normal first template session after transition",
+      "timestamp": 1794005882.86,
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "33eae357017550f17c67220fa6c12877d510d352c679440116950ea2a3e2caf9",
+      "ax_sha256": "9abf7792407cdb633135048ca4477adc45886feb2e40202bbb19c2bd2aea381e",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/template-workout-container-w16-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed interaction in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "A16": {
       "row_id": "A16",
