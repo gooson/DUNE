@@ -21,6 +21,120 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         static let notificationMissingRouteID = "ui-test-activity-workout-missing"
     }
 
+    func testVisualAuditWorkoutCompletionAtNormalText() throws {
+        try auditWorkoutCompletion(maximumText: false)
+    }
+
+    func testVisualAuditWorkoutCompletionAtMaximumText() throws {
+        try auditWorkoutCompletion(maximumText: true)
+    }
+
+    private func auditWorkoutCompletion(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B12 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        openExerciseSingleExercisePicker()
+        startQuickStartExerciseFromDetail(search: "Bench Press", exerciseID: Fixture.benchPressID)
+        for control in ["+2.5", "+1"] {
+            XCTAssertTrue(scrollToWorkoutControl(control, maxSwipes: 10))
+            let button = app.buttons[control].firstMatch
+            XCTAssertTrue(button.exists && button.isHittable)
+            button.auditTap()
+        }
+        let complete = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
+        XCTAssertTrue(complete.waitForExistence(timeout: 5) && complete.isEnabled)
+        if !complete.isHittable || !app.windows.firstMatch.frame.contains(complete.frame) {
+            XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionCompleteSet, maxSwipes: 10),
+                          "W10 Complete Set should be reachable when inline at iPad MAX")
+        }
+        XCTAssertTrue(complete.isHittable && app.windows.firstMatch.frame.contains(complete.frame))
+        complete.auditTap()
+        let sessionDone = app.buttons[AXID.workoutSessionDone].firstMatch
+        let sessionControls = app.scrollViews["workout-session-controls"].firstMatch
+        for _ in 0..<6 where !(sessionDone.exists && sessionDone.isHittable) {
+            sessionControls.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(sessionDone.waitForExistence(timeout: 8) && waitForEnabled(sessionDone, timeout: 8)
+            && sessionDone.isHittable)
+        sessionDone.auditTap()
+
+        let sheet = app.descendants(matching: .any)[AXID.workoutCompletionSheet].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10))
+        let summary = app.staticTexts["\(Fixture.benchPressLocalizedName) · 1 set"].firstMatch
+        XCTAssertTrue(summary.waitForExistence(timeout: 5))
+        VisualAudit.capture("W10 \(size) saved workout summary")
+        let effort = app.staticTexts["workout-effort-selection-status"].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("workout-effort-selection-status", maxSwipes: 8))
+        XCTAssertTrue(effort.exists && effort.isHittable)
+        VisualAudit.capture("W10 \(size) effort input and selection status")
+        let done = app.buttons[AXID.workoutCompletionDone].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.workoutCompletionDone, maxSwipes: 8))
+        XCTAssertTrue(done.exists && done.isHittable)
+        VisualAudit.capture("W10 \(size) completion Done action")
+        done.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.waitForExistence(timeout: 10))
+    }
+
+    func testVisualAuditImportedWorkoutAtNormalText() throws {
+        try auditImportedWorkout(maximumText: false)
+    }
+
+    func testVisualAuditImportedWorkoutAtMaximumText() throws {
+        try auditImportedWorkout(maximumText: true)
+    }
+
+    private func auditImportedWorkout(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B12 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        openNotificationHub()
+        let hub = app.collectionViews[AXID.notificationHubScreen].firstMatch
+        XCTAssertTrue(hub.waitForExistence(timeout: 5))
+        let row = app.buttons[AXID.notificationWorkoutRow(Fixture.notificationWorkoutRouteID)].firstMatch
+        for _ in 0..<16 where !(row.exists && row.isHittable) {
+            hub.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(row.waitForExistence(timeout: 8) && row.isHittable)
+        row.auditTap()
+        let detail = app.scrollViews[AXID.healthkitWorkoutDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10))
+        VisualAudit.capture("W28 \(size) imported workout header")
+        let heartRateStat = app.staticTexts.matching(NSPredicate(format: "label == %@", "Avg Heart Rate")).firstMatch
+        for _ in 0..<12 where !(heartRateStat.exists && heartRateStat.isHittable) {
+            detail.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(heartRateStat.exists && heartRateStat.isHittable,
+                      "W28 running workout heart-rate stat should be readable")
+        VisualAudit.capture("W28 \(size) imported workout metric card")
+        let edit = app.buttons[AXID.healthkitWorkoutEditTitle].firstMatch
+        for _ in 0..<6 where !(edit.exists && edit.isHittable) {
+            detail.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(edit.waitForExistence(timeout: 5) && edit.isHittable)
+        edit.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.healthkitWorkoutTitleEditorScreen].firstMatch
+            .waitForExistence(timeout: 8))
+        VisualAudit.capture("W28 \(size) title editor")
+        let cancel = app.buttons[AXID.healthkitWorkoutTitleCancel].firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
+        cancel.auditTap()
+        XCTAssertTrue(detail.waitForExistence(timeout: 8))
+    }
+
     func testWeeklyStatsValuesAtMaximumAccessibilityTextSize() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments.append(contentsOf: [
