@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-06",
+  "updated": "2026-11-07",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -1020,6 +1020,18 @@
         "layout": "../layout-map/posture-symmetry-p07.html",
         "status": "targeted-phone-ipad-verified-duo-captures-pending",
         "actual": "../full-redesign-map/review/posture-symmetry-p07-2026-11-06/index.html"
+      }
+    },
+    {
+      "id": "settings-s01",
+      "name": "S01 · Settings",
+      "title": "Native Form → 운동 기본값 → Live Activity → 운동별 설정 → 알림·브리핑 → 테마 → 데이터·개인정보 → 정보. 안전 영역을 중복 가산하지 않고 DS 간격과 system-primary 섹션 제목을 사용한다. 기존 모든 컨트롤·값·아이콘·동작은 유지한다.",
+      "file": "dune-settings-s01.html",
+      "detail": "정적 시안이며 실제 PNG가 아니다. 실제 소스·기기·검사 수·실패·미갱신 범위는 별도 native 갤러리에 보존한다.",
+      "implementation": {
+        "layout": "../layout-map/settings-s01.html",
+        "status": "selected-native-core-verified-with-explicit-capture-limits",
+        "actual": "../full-redesign-map/review/settings-s01-2026-11-07/index.html"
       }
     }
   ]

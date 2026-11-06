@@ -1,0 +1,49 @@
+{
+  "review": "B07 integration source read-only Security/Data Integrity/Architecture/Agent-Native",
+  "base_revision": "908b642cf69142ed9977f9b615b7b83d5cecd424",
+  "head_revision": "5c2d952743ca32103010ff0b2c6299c06a1e0540",
+  "branch": "codex/settings-b07-integration",
+  "source_files": [
+    {
+      "path": "DUNE/Presentation/Settings/SettingsView.swift",
+      "sha256": "565cb84ed3fb057b6e08ca0fad9ba60dfbb2a1611b4e1a8aaf46d976a01390ce"
+    },
+    {
+      "path": "DUNE/Presentation/Settings/Components/ExerciseDefaultsListView.swift",
+      "sha256": "9ce97cebe94192aee4bb6cbe9c6634d6a4fb5a8dc6c7a00c45940cf832a9e1d6"
+    },
+    {
+      "path": "DUNE/Presentation/Settings/Components/ExerciseDefaultEditView.swift",
+      "sha256": "92f215f4a2b3a94ca474e5bd61cc8585f900e8a75d9c02bf21c98dd2d9e6a080"
+    },
+    {
+      "path": "DUNE/Presentation/Settings/Components/PreferredExercisesListView.swift",
+      "sha256": "8288aea1259cd006afedcf04a592c0566b2753b217a05f4b607c68eabf67a6b9"
+    }
+  ],
+  "findings": [],
+  "role_results": {
+    "security": "no introduced actionable P1/P2/P3 findings",
+    "data_integrity": "no introduced actionable P1/P2/P3 findings",
+    "architecture": "no introduced actionable P1/P2/P3 findings",
+    "agent_native": "not applicable; changed files contain no agent/AI functionality"
+  },
+  "verified_static_scope": [
+    "S01 retains every native Form section/control, value binding, persistence callback, Watch sync callback, navigation route, and visible action; only layout margins/spacing and section-header presentation change.",
+    "S02 retains native List/ForEach/search/sort/filter, record lookup, row navigation, persisted values, star/pin status; added activity icon is decorative and accessibility-hidden.",
+    "S03 retains kg/reps bindings and keyboards, validation and clamps, Save/dismiss, clear confirmation/deletion, toggles, persistence and Watch sync; only Dynamic Type row layout changes.",
+    "S04 retains native List/ForEach/search/preferred binding, record update/delete, Watch sync and toggle identifiers; added equipment icon reuses existing svgIcon and mapped asset names.",
+    "No new localized keys, external state, schema, network, HealthKit, or CloudKit paths are introduced."
+  ],
+  "phase_gates": {
+    "source_review": "passed for four named perspectives on exact diff",
+    "focused_ui": "pending parent-owned 8 selectors (7 core plus MAX lists)",
+    "runtime_visual": "pending parent-owned actual captures",
+    "sdk_started_by_this_review": false,
+    "ship_approval": "not assessed"
+  },
+  "remaining_uncertainty": [
+    "Native Form safe-area/section spacing across iPhone, iPad and Duo requires runtime visual evidence.",
+    "S02/S04 row fit, search/toggle interaction and S03 maximum Dynamic Type field geometry require focused UI evidence."
+  ]
+}

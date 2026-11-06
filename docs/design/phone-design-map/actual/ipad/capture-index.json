@@ -89,15 +89,25 @@
     },
     "S01": {
       "row_id": "S01",
-      "evidence": "title:Settings",
-      "test": "SettingsSmokeTests/testWhatsNewMuscleMapDetailExists()",
-      "action": "tap dashboard-toolbar-settings",
-      "timestamp": 1791820521.937,
-      "image": "3B07E3E2-6C2A-4290-B706-2FF40F774700.png",
-      "screen": "screen-0-2064x2752-tap dashboard-toolbar-settings_0_E3227901-8F96-416C-B440-BA7741EB554A.png",
       "file": "S01.png",
-      "current_verification": "pending",
-      "current_verification_note": "S01 Live Activity 설정 추가 후 ipad 새 캡처 미수행. 이전 PNG를 새 구현 증거로 사용하지 않음."
+      "test": "TodaySettingsRegressionTests/testSettingsShowsPhaseTwoRows()",
+      "action": "Current normal Settings top controls",
+      "timestamp": 1793980032.508,
+      "source_revision": "23c6d0948808b76e2e1233d70bf5a1d9faa68c36",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "c046480d58d57d4f20005df01f0bf353a01ff63750376ea638d470ff06c865b8",
+      "ax_sha256": "bed65b24bc9431d027dbf68bc489b17ab86edf3c7a3107984f0c143e7916011b",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/settings-s01-2026-11-07/manifest.json",
+      "source_record": "records: profile=ipad,kind=after,run_id=ipad-first",
+      "capture_scope": "B07 selected normal state; see gallery gates and limits",
+      "actual_angle": null,
+      "current_verification": "normal-captured"
     },
     "S03": {
       "row_id": "S03",
