@@ -3391,7 +3391,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         complete.auditTap()
 
         let addTime = app.buttons.matching(NSPredicate(format: "label == %@", "+30s")).firstMatch
-        let skip = app.buttons["rest-timer-skip"].firstMatch
+        let skip = app.buttons.matching(NSPredicate(format: "label == %@", "Skip")).firstMatch
         let window = app.windows.firstMatch.frame
         let tabBar = app.tabBars.firstMatch
         var timerViewport = scroll.frame.intersection(window)
