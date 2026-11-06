@@ -43,6 +43,7 @@ struct ExercisePickerSheet: View {
     private var maximumSizeHeader: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             closeButton
+                .foregroundStyle(.primary)
                 .font(.body)
                 .buttonStyle(.bordered)
                 .frame(minHeight: 44)
