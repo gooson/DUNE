@@ -113,9 +113,9 @@ struct HabitHeatmapDetailView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                HabitHeatmapGridView(data: data)
+                HabitHeatmapGridView(data: data, axPrefix: "habit-heatmap-detail")
 
-                HabitHeatmapLegend()
+                HabitHeatmapLegend(axPrefix: "habit-heatmap-detail")
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -158,6 +158,7 @@ struct HabitHeatmapDetailView: View {
                         .font(.caption.monospacedDigit())
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: true, vertical: false)
+                        .accessibilityIdentifier("habit-heatmap-weekday-count-\(stat.weekday)")
                 }
             }
         }
@@ -236,6 +237,7 @@ struct HabitHeatmapDetailView: View {
 
 struct HabitHeatmapGridView: View {
     let data: [DailyCompletionCount]
+    var axPrefix: String? = nil
 
     private let cellSpacing: CGFloat = 3
     private let rows = 7
@@ -253,10 +255,15 @@ struct HabitHeatmapGridView: View {
     var body: some View {
         HabitHeatmapLayout(columnCount: columns.count, spacing: cellSpacing) {
             ForEach(0..<rows, id: \.self) { row in
-                Text(Self.dayLabels[row])
+                let label = Text(Self.dayLabels[row])
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                     .fixedSize()
+                if let axPrefix {
+                    label.accessibilityIdentifier("\(axPrefix)-grid-day-\(row)")
+                } else {
+                    label
+                }
             }
             ForEach(paddedData) { item in
                 RoundedRectangle(cornerRadius: 2)
@@ -321,13 +328,19 @@ struct HabitHeatmapGridView: View {
 // MARK: - Shared Legend
 
 struct HabitHeatmapLegend: View {
+    var axPrefix: String? = nil
     private static let levels: [Double] = [0.0, 0.25, 0.5, 0.75, 1.0]
 
     var body: some View {
         HStack(spacing: DS.Spacing.xs) {
-            Text("Less")
+            let less = Text("Less")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+            if let axPrefix {
+                less.accessibilityIdentifier("\(axPrefix)-legend-less")
+            } else {
+                less
+            }
 
             ForEach(Self.levels.indices, id: \.self) { index in
                 RoundedRectangle(cornerRadius: 2)
@@ -335,9 +348,14 @@ struct HabitHeatmapLegend: View {
                     .frame(width: 12, height: 12)
             }
 
-            Text("More")
+            let more = Text("More")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+            if let axPrefix {
+                more.accessibilityIdentifier("\(axPrefix)-legend-more")
+            } else {
+                more
+            }
         }
     }
 }

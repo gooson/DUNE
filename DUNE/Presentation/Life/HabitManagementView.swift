@@ -412,7 +412,7 @@ private struct HabitHistoryDetailSheet: View {
 
     private var entryList: some View {
         LazyVStack(spacing: DS.Spacing.sm) {
-            ForEach(Array(sortedEntries.enumerated()), id: \.offset) { _, entry in
+            ForEach(Array(sortedEntries.enumerated()), id: \.offset) { offset, entry in
                 let layout = dynamicTypeSize.isAccessibilitySize
                     ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
                     : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
@@ -425,6 +425,7 @@ private struct HabitHistoryDetailSheet: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(actionTitle(entry.action))
                             .font(.subheadline.weight(.medium))
+                            .accessibilityIdentifier("habit-management-history-action-\(offset)")
 
                         if habitType != .check, entry.action == "complete" {
                             Text(formattedValue(entry.value))
@@ -438,6 +439,7 @@ private struct HabitHistoryDetailSheet: View {
                     Text(entry.date.formatted(.dateTime.month(.abbreviated).day().year()))
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("habit-management-history-date-\(offset)")
                 }
                 .padding(DS.Spacing.sm)
             }

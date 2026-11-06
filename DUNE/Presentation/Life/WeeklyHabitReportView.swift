@@ -63,11 +63,13 @@ struct WeeklyHabitReportView: View {
                     Text("\(Int(report.overallCompletionRate * 100))%")
                         .font(.title2.bold())
                         .foregroundStyle(rateColor(report.overallCompletionRate))
+                        .accessibilityIdentifier("life-weekly-report-comparison-current")
                 }
 
                 Image(systemName: trendIcon)
                     .font(.title)
                     .foregroundStyle(trendColor)
+                    .accessibilityIdentifier("life-weekly-report-comparison-trend")
 
                 VStack(spacing: DS.Spacing.xs) {
                     Text("Last Week")
@@ -76,6 +78,7 @@ struct WeeklyHabitReportView: View {
                     Text("\(Int(report.previousWeekRate * 100))%")
                         .font(.title2.bold())
                         .foregroundStyle(rateColor(report.previousWeekRate))
+                        .accessibilityIdentifier("life-weekly-report-comparison-previous")
                 }
             }
             .frame(maxWidth: .infinity)

@@ -302,6 +302,13 @@ final class LifeRegressionTests: SeededUITestBaseCase {
 
         let emptyState = app.descendants(matching: .any)[AXID.lifeHabitHistoryEmpty].firstMatch
         XCTAssertTrue(emptyState.waitForExistence(timeout: 5), "History sheet should show an empty state when no cycle actions exist")
+        let historyScroll = app.scrollViews["life-habit-history-scroll"].firstMatch
+        XCTAssertTrue(historyScroll.waitForExistence(timeout: 5) && historyScroll.isHittable)
+        XCTAssertTrue(app.revealTextBody(AXID.lifeHabitHistoryEmpty, in: historyScroll))
+        VisualAudit.capture("L05 empty history")
+        let close = app.buttons[AXID.lifeHabitHistoryClose].firstMatch
+        for _ in 0..<10 where !(close.exists && close.isHittable) { historyScroll.swipeDown(velocity: .slow) }
+        XCTAssertTrue(close.waitForExistence(timeout: 5) && close.isHittable)
 
         XCTAssertTrue(
             app.dismissModalIfPresent(cancelIdentifiers: [AXID.lifeHabitHistoryClose]),
@@ -322,10 +329,18 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         let rate = app.staticTexts["life-weekly-report-rate"].firstMatch
         let total = app.staticTexts["life-weekly-report-total"].firstMatch
         XCTAssertTrue(app.revealTextBody("life-weekly-report-rate", in: reportScroll))
-        XCTAssertTrue(rate.label.hasSuffix("%"))
+        let observedHeroRate = rate.label
+        XCTAssertTrue(observedHeroRate.hasSuffix("%"))
         VisualAudit.capture("L08 weekly report rate")
         XCTAssertTrue(app.revealTextBody("life-weekly-report-total", in: reportScroll))
         XCTAssertTrue(total.label.contains("completed"))
+        for identifier in ["life-weekly-report-comparison-current", "life-weekly-report-comparison-previous"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: reportScroll))
+            XCTAssertTrue(app.staticTexts[identifier].firstMatch.label.hasSuffix("%"))
+        }
+        XCTAssertEqual(app.staticTexts["life-weekly-report-comparison-current"].firstMatch.label, observedHeroRate)
+        XCTAssertTrue(app.revealFullyVisible("life-weekly-report-comparison-trend", in: reportScroll))
+        XCTAssertTrue(app.images["life-weekly-report-comparison-trend"].firstMatch.exists)
         VisualAudit.capture("L08 weekly report total and comparison")
         for identifier in ["life-weekly-report-best", "life-weekly-report-improvement"] {
             let landmark = app.descendants(matching: .any)[identifier].firstMatch
@@ -335,6 +350,8 @@ final class LifeRegressionTests: SeededUITestBaseCase {
             XCTAssertTrue(app.revealTextBody(identifier, in: reportScroll), "Report section must be reachable: \(identifier)")
             VisualAudit.capture("L08 weekly report section \(identifier)")
         }
+        XCTAssertTrue(returnFromLifeDetail(named: "Weekly Report"))
+        XCTAssertTrue(reportScroll.waitForNonExistence(timeout: 5))
     }
 
     func testVisualAuditHabitHeatmap() throws {
@@ -368,6 +385,21 @@ final class LifeRegressionTests: SeededUITestBaseCase {
             XCTAssertTrue(app.revealTextBody(identifier, in: detailScroll, maxMoves: 16))
             VisualAudit.capture("L07 heatmap section \(identifier)")
         }
+        for day in 0..<7 {
+            let identifier = "habit-heatmap-detail-grid-day-\(day)"
+            XCTAssertTrue(app.revealTextBody(identifier, in: detailScroll, maxMoves: 16))
+            XCTAssertFalse(app.staticTexts[identifier].firstMatch.label.isEmpty)
+        }
+        for identifier in ["habit-heatmap-detail-legend-less", "habit-heatmap-detail-legend-more"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: detailScroll, maxMoves: 16))
+        }
+        VisualAudit.capture("L07 heatmap grid and legend")
+        for day in 0..<7 {
+            let identifier = "habit-heatmap-weekday-count-\(day)"
+            XCTAssertTrue(app.revealTextBody(identifier, in: detailScroll, maxMoves: 16))
+            XCTAssertNotNil(Int(app.staticTexts[identifier].firstMatch.label))
+        }
+        VisualAudit.capture("L07 heatmap weekday values")
         XCTAssertTrue(app.staticTexts["By Weekday"].firstMatch.exists)
     }
 
@@ -423,9 +455,15 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(historyScroll.waitForExistence(timeout: 5) && historyScroll.isHittable)
         XCTAssertTrue(app.revealTextBody("habit-management-history-screen", in: historyScroll))
         XCTAssertTrue(historyScroll.staticTexts["History"].firstMatch.exists)
-        let completed = historyScroll.staticTexts["Completed"].firstMatch
+        let completed = historyScroll.staticTexts.matching(NSPredicate(format: "label == %@", "Completed")).firstMatch
         for _ in 0..<10 where !completed.exists { historyScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(completed.waitForExistence(timeout: 5))
+        let actionID = completed.identifier
+        XCTAssertTrue(actionID.hasPrefix("habit-management-history-action-"))
+        let dateID = actionID.replacingOccurrences(of: "-action-", with: "-date-")
+        XCTAssertTrue(app.revealTextBody(actionID, in: historyScroll, maxMoves: 10))
+        XCTAssertTrue(app.revealTextBody(dateID, in: historyScroll, maxMoves: 10))
+        XCTAssertFalse(historyScroll.staticTexts[dateID].firstMatch.label.isEmpty)
         VisualAudit.capture("L06 archived history hero and action")
         let close = app.buttons["habit-management-history-close"].firstMatch
         for _ in 0..<10 where !(close.exists && close.isHittable) {
@@ -502,9 +540,15 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(managementScroll.waitForExistence(timeout: 5) && managementScroll.isHittable)
         XCTAssertTrue(app.revealTextBody("habit-management-history-screen", in: managementScroll))
         XCTAssertEqual(managementTitle.label, "Morning Stretch")
-        let completed = managementScroll.staticTexts["Completed"].firstMatch
+        let completed = managementScroll.staticTexts.matching(NSPredicate(format: "label == %@", "Completed")).firstMatch
         for _ in 0..<12 where !completed.exists { managementScroll.swipeUp(velocity: .slow) }
         XCTAssertTrue(completed.waitForExistence(timeout: 5))
+        let actionID = completed.identifier
+        XCTAssertTrue(actionID.hasPrefix("habit-management-history-action-"))
+        let dateID = actionID.replacingOccurrences(of: "-action-", with: "-date-")
+        XCTAssertTrue(app.revealTextBody(actionID, in: managementScroll, maxMoves: 20))
+        XCTAssertTrue(app.revealTextBody(dateID, in: managementScroll, maxMoves: 20))
+        XCTAssertFalse(managementScroll.staticTexts[dateID].firstMatch.label.isEmpty)
         VisualAudit.capture("L06 MAX history title and action")
         let managementClose = app.buttons["habit-management-history-close"].firstMatch
         for _ in 0..<12 where !(managementClose.exists && managementClose.isHittable) {
@@ -526,11 +570,25 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         app.buttons["life-weekly-report-button"].firstMatch.auditTap()
         let reportScroll = app.scrollViews["life-weekly-report-scroll"].firstMatch
         XCTAssertTrue(reportScroll.waitForExistence(timeout: 5))
+        var observedHeroRate = ""
         for identifier in ["life-weekly-report-period", "life-weekly-report-rate", "life-weekly-report-total",
                            "life-weekly-report-best", "life-weekly-report-improvement"] {
             XCTAssertTrue(app.revealTextBody(identifier, in: reportScroll, maxMoves: 20), "L08 MAX content: \(identifier)")
+            if identifier == "life-weekly-report-rate" {
+                observedHeroRate = app.staticTexts[identifier].firstMatch.label
+                XCTAssertTrue(observedHeroRate.hasSuffix("%"))
+            }
             VisualAudit.capture("L08 MAX \(identifier)")
         }
+        for identifier in ["life-weekly-report-comparison-current", "life-weekly-report-comparison-previous"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: reportScroll, maxMoves: 20))
+            XCTAssertTrue(app.staticTexts[identifier].firstMatch.label.hasSuffix("%"))
+        }
+        XCTAssertEqual(app.staticTexts["life-weekly-report-comparison-current"].firstMatch.label,
+                       observedHeroRate)
+        XCTAssertTrue(app.revealFullyVisible("life-weekly-report-comparison-trend", in: reportScroll, maxMoves: 20))
+        XCTAssertTrue(app.images["life-weekly-report-comparison-trend"].firstMatch.exists)
+        VisualAudit.capture("L08 MAX comparison values and trend")
         XCTAssertTrue(returnFromLifeDetail(named: "Weekly Report"))
         XCTAssertTrue(reportScroll.waitForNonExistence(timeout: 5))
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("habit-heatmap", maxSwipes: 16))
@@ -544,6 +602,21 @@ final class LifeRegressionTests: SeededUITestBaseCase {
             XCTAssertTrue(app.revealTextBody(identifier, in: heatmapScroll, maxMoves: 20), "L07 MAX content: \(identifier)")
             VisualAudit.capture("L07 MAX \(identifier)")
         }
+        for day in 0..<7 {
+            let identifier = "habit-heatmap-detail-grid-day-\(day)"
+            XCTAssertTrue(app.revealTextBody(identifier, in: heatmapScroll, maxMoves: 20))
+            XCTAssertFalse(app.staticTexts[identifier].firstMatch.label.isEmpty)
+        }
+        for identifier in ["habit-heatmap-detail-legend-less", "habit-heatmap-detail-legend-more"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: heatmapScroll, maxMoves: 20))
+        }
+        VisualAudit.capture("L07 MAX grid and legend")
+        for day in 0..<7 {
+            let identifier = "habit-heatmap-weekday-count-\(day)"
+            XCTAssertTrue(app.revealTextBody(identifier, in: heatmapScroll, maxMoves: 20))
+            XCTAssertNotNil(Int(app.staticTexts[identifier].firstMatch.label))
+        }
+        VisualAudit.capture("L07 MAX weekday values")
         XCTAssertTrue(returnFromLifeDetail(named: "Activity Detail"))
         XCTAssertTrue(heatmapScroll.waitForNonExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch.waitForExistence(timeout: 5))
