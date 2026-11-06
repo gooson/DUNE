@@ -1111,27 +1111,31 @@ struct HabitHistorySheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Header with single close button
-            header
+        ScrollView {
+            VStack(spacing: 0) {
+                header
 
-            if let onAddPastRecord {
-                Button(action: onAddPastRecord) {
-                    Label("Past Record", systemImage: "plus")
-                        .frame(maxWidth: .infinity, minHeight: 44)
+                if let onAddPastRecord {
+                    Button(action: onAddPastRecord) {
+                        Label("Past Record", systemImage: "plus")
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .accessibilityIdentifier("life-habit-history-past-record")
                 }
-                .accessibilityIdentifier("life-habit-history-past-record")
-            }
-            Divider()
+                Divider()
 
-            if entries.isEmpty {
-                emptyState
-            } else {
-                entryList
+                if entries.isEmpty {
+                    emptyState
+                } else {
+                    entryList
+                }
             }
         }
+        .scrollBounceBehavior(.basedOnSize)
+        .accessibilityIdentifier("life-habit-history-scroll")
         .background { SheetWaveBackground() }
         .presentationDetents([.medium, .large])
     }
@@ -1139,40 +1143,57 @@ struct HabitHistorySheet: View {
     // MARK: - Header
 
     private var header: some View {
-        HStack(spacing: DS.Spacing.sm) {
-            Image(systemName: iconCategory.iconName)
-                .font(.title3)
-                .foregroundStyle(iconCategory.themeColor)
-                .frame(width: 36, height: 36)
-                .background {
-                    Circle()
-                        .fill(iconCategory.themeColor.opacity(DS.Opacity.light))
+        HeroCard(tintColor: iconCategory.themeColor) {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                    Image(systemName: iconCategory.iconName)
+                        .font(.title3)
+                        .foregroundStyle(colorScheme == .light
+                            ? iconCategory.themeColor.mix(with: .black, by: 0.35)
+                            : iconCategory.themeColor)
+                        .frame(minWidth: 40, minHeight: 40)
+                        .background(iconCategory.themeColor.opacity(DS.Opacity.light), in: Circle())
+                        .accessibilityHidden(true)
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        historyTitle
+                    }
+                    Spacer(minLength: 0)
+                    closeButton
                 }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(habitName)
-                    .font(.headline)
-                    .accessibilityIdentifier("life-habit-history-screen")
+                if dynamicTypeSize.isAccessibilitySize {
+                    historyTitle
+                }
                 Text(String(localized: "\(entries.count) records"))
-                    .font(.caption)
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
+                    .accessibilityIdentifier("life-habit-history-count")
             }
-
-            Spacer()
-
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "xmark.circle.fill")
-                    .font(.title3)
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 44, height: 44)
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("life-habit-history-close")
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(DS.Spacing.md)
+        .padding(.horizontal, DS.Spacing.md)
+        .padding(.top, DS.Spacing.sm)
+        .padding(.bottom, DS.Spacing.md)
+    }
+
+    private var historyTitle: some View {
+        Text(habitName)
+            .font(DS.Typography.sectionTitle)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityIdentifier("life-habit-history-screen")
+    }
+
+    private var closeButton: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: "xmark.circle.fill")
+                .font(.title3)
+                .symbolRenderingMode(.hierarchical)
+                .foregroundStyle(.secondary)
+                .frame(minWidth: 48, minHeight: 48)
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("life-habit-history-close")
     }
 
     // MARK: - Entry List
@@ -1184,19 +1205,17 @@ struct HabitHistorySheet: View {
 
     private var entryList: some View {
         let today = todayStartOfDay
-        return ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(entries) { entry in
-                    entryRow(entry, today: today)
+        return LazyVStack(spacing: 0) {
+            ForEach(entries) { entry in
+                entryRow(entry, today: today)
 
-                    if entry.id != entries.last?.id {
-                        Divider()
-                            .padding(.leading, 52)
-                    }
+                if entry.id != entries.last?.id {
+                    Divider()
+                        .padding(.leading, 52)
                 }
             }
-            .padding(.horizontal, DS.Spacing.md)
         }
+        .padding(.horizontal, DS.Spacing.md)
     }
 
     private func entryRow(_ entry: LifeViewModel.HabitHistoryEntry, today: Date) -> some View {
@@ -1228,7 +1247,7 @@ struct HabitHistorySheet: View {
         Image(systemName: iconName(for: entry.action))
             .font(.body)
             .foregroundStyle(color(for: entry.action))
-            .frame(width: 32, height: 32)
+            .frame(minWidth: 36, minHeight: 36)
             .background {
                 Circle()
                     .fill(color(for: entry.action).opacity(0.12))
@@ -1293,6 +1312,7 @@ struct HabitHistorySheet: View {
             Spacer()
         }
         .padding(DS.Spacing.xl)
+        .frame(minHeight: 200)
     }
 
     // MARK: - Helpers
