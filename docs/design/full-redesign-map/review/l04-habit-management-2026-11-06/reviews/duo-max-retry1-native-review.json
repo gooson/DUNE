@@ -1,0 +1,137 @@
+{
+  "status": "independent-native-reviewed",
+  "scope": "L04 Duo closed MAX archived habit restore selector only",
+  "source": "1012c7fccb4e1d8c6a785b53af279de59b644a34",
+  "profile": "duo-closed-MAX",
+  "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+  "source_app_sha256": "bbb69778b1ed51e275ae3e50d8c8895fe3977905a3b5da8be827e657409c2b4e",
+  "archive": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed",
+  "test": "DuoLifeArchiveRestoreTests/testArchivedHabitRestoresToActiveLifeList()",
+  "SDK": {
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "case_result": "Passed",
+  "pose_verified": {
+    "angle_degrees": 0,
+    "active_display": "LCD",
+    "orientation": "rot0",
+    "actual_png_dimensions": [
+      1398,
+      2034
+    ],
+    "readback_before_after": true
+  },
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": [
+      {
+        "summary": "AX reports native segmented filter buttons at 175×32 pt and shared BackButton at 38×38 pt in MAX. No tap miss, overlap or clipping was observed in the passed flow; consider 44 pt effective targets in a future accessibility pass.",
+        "evidence_sequences": [
+          7,
+          9,
+          10,
+          11,
+          12,
+          14
+        ]
+      }
+    ]
+  },
+  "selected_pairs": [
+    {
+      "host_sequence": 5,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY Life archived habit link before management [DUNEUITests/DuoRemainingRouteTests.swift:180] DEADLINE=1793920293.233614",
+      "png": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/005-1398x2034.png",
+      "png_sha256": "3a1eae114ea3d75ba359a3b1a95e090ce0260422c629610e5d2d254cf6484131",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/005-hierarchy.txt",
+      "ax_sha256": "39f0d85193d3272f0ef4d6c2602125467c7b8eb9333f0a9135cf479fc9745f04",
+      "observation": "Life root shows Manage Habits and 1 archived habits link; both readable.",
+      "scope": "passed-method"
+    },
+    {
+      "host_sequence": 7,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY Habit management active upper viewport [DUNEUITests/DuoRemainingRouteTests.swift:189] DEADLINE=1793920306.4639091",
+      "png": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/007-1398x2034.png",
+      "png_sha256": "f244b31ea3e6a836706f737bcf8da7f617c36ae54be7b455e8f5a01c90cae363",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/007-hierarchy.txt",
+      "ax_sha256": "f2a0dbb9d555095f5c66fdb9c974d9f7922040cd5597bf7dae2a8dcfa44f2b60",
+      "observation": "Management Active hero reads 2 Active; filter and first card visible.",
+      "scope": "passed-method"
+    },
+    {
+      "host_sequence": 9,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY Habit management archived MAX hero [DUNEUITests/DuoRemainingRouteTests.swift:198] DEADLINE=1793920321.173112",
+      "png": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/009-1398x2034.png",
+      "png_sha256": "a83b007d69f4d70b4bd3e7d717491c44544db94c29acf9d9e09b84bb97dfaa9f",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/009-hierarchy.txt",
+      "ax_sha256": "d690b7a031749654233fbb998c52054c7c4a368c1bcc096adb218afc9c7d90be",
+      "observation": "Archived hero reads 1 Archived; Morning Stretch card visible.",
+      "scope": "passed-method"
+    },
+    {
+      "host_sequence": 10,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY Habit management archived with Restore control [DUNEUITests/DuoRemainingRouteTests.swift:205] DEADLINE=1793920329.8270922",
+      "png": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/010-1398x2034.png",
+      "png_sha256": "02c6e83dd10c0579b33a0c3cd406945bfae03e1128e0bca83a8691bab1461287",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/010-hierarchy.txt",
+      "ax_sha256": "da4fe2456ea58002fea2194285448588f32c16633bf44d5f78f0f2735e02a137",
+      "observation": "Scrolled archived card exposes Restore and History; Restore label unobscured.",
+      "scope": "passed-method"
+    },
+    {
+      "host_sequence": 11,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY tap habit-management-restore-Morning Stretch [DUNEUITests/DuoRemainingRouteTests.swift:206] DEADLINE=1793920333.523761",
+      "png": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/011-1398x2034.png",
+      "png_sha256": "3f8d8de31c42b1829bf561bb0c139bbbf1e44626e5914e59cb13aa0c4b7b6b89",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/011-hierarchy.txt",
+      "ax_sha256": "1548091150a529f6818aad906a82d8e2ac2cec3c2a7427441339df78f21d1194",
+      "observation": "After Restore, Archived count is 0 and empty state reads No Archived Habits.",
+      "scope": "passed-method"
+    },
+    {
+      "host_sequence": 12,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY Habit management archived after Restore [DUNEUITests/DuoRemainingRouteTests.swift:213] DEADLINE=1793920338.9571838",
+      "png": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/012-1398x2034.png",
+      "png_sha256": "3f8d8de31c42b1829bf561bb0c139bbbf1e44626e5914e59cb13aa0c4b7b6b89",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/012-hierarchy.txt",
+      "ax_sha256": "6d4d4723bc11ffed8f49884f705ce323b1e0d96a944188450f2bc3806b3b1b89",
+      "observation": "Empty archived state remains readable, with Active (3) available.",
+      "scope": "passed-method"
+    },
+    {
+      "host_sequence": 14,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY Habit management active after Restore [DUNEUITests/DuoRemainingRouteTests.swift:220] DEADLINE=1793920349.79372",
+      "png": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/014-1398x2034.png",
+      "png_sha256": "23a61fe72cc4551ebb3016867a02a04abce97badb7de83b0abe1c0d84e980149",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/014-hierarchy.txt",
+      "ax_sha256": "e697a723c10a7614199d6d767271364272a2fee869a2dd03e3049de2c00f3c30",
+      "observation": "Active filter reads 3 Active and Morning Stretch appears among active cards.",
+      "scope": "passed-method"
+    },
+    {
+      "host_sequence": 17,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY before teardown -[DuoLifeArchiveRestoreTests testArchivedHabitRestoresToActiveLifeList] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793920426.4473271",
+      "png": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/017-1398x2034.png",
+      "png_sha256": "7ccbd1cb12e689f4438023d9ed2c5c966762e0744fa2b782fa89117a618fc0b2",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-1012c7fc-max-retry1-passed/host/017-hierarchy.txt",
+      "ax_sha256": "a39811c862a8a9c5eb729d13dac5b76e57238758997c92bdc242ce0b92c3c3b5",
+      "observation": "Returned Life root shows Morning Stretch and a readable actions menu.",
+      "scope": "passed-method"
+    }
+  ],
+  "prior_negative_aggregate": "The original closed MAX 3 executed / 2 passed / 1 failed remains failed; this is a separate exact-selector retry 1/1 passed.",
+  "not_claimed": [
+    "batch03-full-matrix-pass",
+    "Duo-open-native-pass",
+    "actual-map-published",
+    "final-PR-HEAD-runtime",
+    "full-suite",
+    "Dark",
+    "physical-device",
+    "VoiceOver"
+  ]
+}
