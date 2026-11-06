@@ -67,13 +67,25 @@
     },
     "P05": {
       "row_id": "P05",
-      "evidence": "posture-history-screen",
-      "test": "PostureVisualAuditTests/testPostureComparison()",
-      "action": "tap wellness-link-posturehistory",
-      "timestamp": 1791823617.945,
-      "image": "06C9191F-5E68-4E1E-AF51-416DE09C616D.png",
-      "screen": "screen-0-2064x2752-tap wellness-link-posturehistory_0_A49F431A-8255-4107-8F53-C8C654BB5872.png",
-      "file": "P05.png"
+      "file": "P05.png",
+      "test": "PostureVisualAuditTests/testP05HistoryLatestScoreFilterAndDetailReturn()",
+      "action": "iPad current normal latest score",
+      "timestamp": 1793973552.15,
+      "source_revision": "0d6a724bc6dae494fd867186b667aa0e3517c3af",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "7f7e8c28c23939c378f9b3b5a465096ce998f4b768701bfa375c8bc60ea37615",
+      "ax_sha256": "a01e55801e9614dc8adc1e5a457be280b596198d6e2870751814f02a88062d96",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/posture-history-p05-2026-11-06/manifest.json",
+      "source_record": "records: profile=ipad,kind=after,is_primary=true,normal",
+      "capture_scope": "B06 selected normal state; see gallery gates and limits",
+      "actual_angle": null,
+      "current_verification": "normal-captured"
     },
     "S01": {
       "row_id": "S01",

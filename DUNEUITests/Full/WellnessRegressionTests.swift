@@ -1047,10 +1047,12 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     func testPostureComparison() throws {
         openHistory()
-        let compare = app.buttons["Compare"].firstMatch
-        XCTAssertTrue(compare.waitForExistence(timeout: 5))
-        compare.auditTap()
-        let metrics = app.staticTexts.matching(NSPredicate(format: "label == %@", "8 metrics"))
+        XCTAssertTrue(app.waitAndTapToolbarAction("Compare"),
+                      "Compare must remain reachable directly or through native toolbar overflow")
+        let metrics = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND label == %@",
+            "posture-history-row-metric-count-", "8 metrics"
+        ))
         XCTAssertEqual(metrics.count, 2, "Both synthetic records should be selectable")
         for index in 0..<2 {
             let metric = metrics.element(boundBy: index)
@@ -1269,6 +1271,90 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         openPostureRoute("wellness-menu-posture")
         XCTAssertTrue(app.scrollViews["posture-result-screen"].firstMatch.waitForExistence(timeout: 10),
                       "Synthetic complete result should open")
+    }
+
+    func testP05HistoryLatestScoreFilterAndDetailReturn() throws {
+        openHistory()
+        let hero = app.descendants(matching: .any)["posture-history-latest-score"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 5))
+        XCTAssertTrue(hero.label.contains("Posture Score")
+                      && hero.label.contains("86 / 100")
+                      && hero.label.contains("8 metrics"),
+                      "Combined hero must expose the stored score and metric count")
+        XCTAssertFalse(app.staticTexts["Time for a new assessment"].exists,
+                       "The newest fixture is one day old, so the seven-day reminder stays hidden")
+        VisualAudit.capture("P05 latest recorded score and trend")
+
+        let filter = app.buttons["Forward Head"].firstMatch
+        reveal(filter)
+        filter.auditTap()
+        XCTAssertTrue(filter.isSelected, "The selected metric filter should be exposed to accessibility")
+        let rows = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "8 metrics"))
+        XCTAssertEqual(rows.count, 2, "Both seeded records remain in descending history")
+        let row = rows.firstMatch
+        reveal(row)
+        row.auditTap()
+        XCTAssertTrue(app.navigationBars["Assessment Detail"].waitForExistence(timeout: 5))
+        let back = app.navigationBars["Assessment Detail"].buttons.firstMatch
+        XCTAssertTrue(back.exists && back.isHittable)
+        back.auditTap()
+        XCTAssertTrue(hero.waitForExistence(timeout: 5), "Back returns to the same history")
+
+        let latest = rows.firstMatch
+        let cancelAlert = requestPostureHistoryDeletion(latest)
+        cancelAlert.buttons["Cancel"].auditTap()
+        XCTAssertEqual(rows.count, 2, "Cancel keeps both seeded assessments")
+
+        let deleteLatestAlert = requestPostureHistoryDeletion(rows.firstMatch)
+        deleteLatestAlert.buttons["Delete"].auditTap()
+        let remainingScore = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "label CONTAINS %@", "73 / 100"), object: hero
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [remainingScore], timeout: 5), .completed,
+                       "Deleting the newest record reveals the original older score")
+        let reminder = app.staticTexts["Time for a new assessment"].firstMatch
+        XCTAssertTrue(reminder.waitForExistence(timeout: 5), "The remaining record is fourteen days old")
+        XCTAssertEqual(rows.count, 1)
+        reveal(reminder)
+        VisualAudit.capture("P05 real remaining score and seven-day reminder")
+
+        let deleteRemainingAlert = requestPostureHistoryDeletion(rows.firstMatch)
+        deleteRemainingAlert.buttons["Delete"].auditTap()
+        let empty = app.staticTexts["No Posture Assessments"].firstMatch
+        XCTAssertTrue(empty.waitForExistence(timeout: 5), "Deleting the last fixture shows the empty state")
+        XCTAssertFalse(hero.exists)
+        VisualAudit.capture("P05 empty history after isolated fixture deletion")
+    }
+
+    func testP05HistoryLatestScoreAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openHistory(maxRevealAttempts: 36)
+        let hero = app.descendants(matching: .any)["posture-history-latest-score"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 5))
+        XCTAssertTrue(hero.label.contains("Posture Score")
+                      && hero.label.contains("86 / 100")
+                      && hero.label.contains("8 metrics"),
+                      "Combined hero must expose the stored score and metric count")
+        let scroll = app.scrollViews["posture-history-screen"].firstMatch
+        XCTAssertTrue(scroll.exists)
+        XCTAssertTrue(scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+            .contains(hero.frame), "The complete latest-score hero must fit at maximum text size")
+        VisualAudit.capture("P05 MAX latest recorded score")
+    }
+
+    private func requestPostureHistoryDeletion(_ row: XCUIElement) -> XCUIElement {
+        reveal(row)
+        row.press(forDuration: 1.1)
+        let delete = app.buttons["Delete"].firstMatch
+        XCTAssertTrue(delete.waitForExistence(timeout: 5), "History context menu must offer Delete")
+        delete.auditTap()
+        let alert = app.alerts["Delete Assessment"].firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 5), "Delete must require confirmation")
+        return alert
     }
 
     private func openHistory(maxRevealAttempts: Int = 18) {
