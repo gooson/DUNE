@@ -102,24 +102,32 @@
     "C14": {
       "file": "C14.png",
       "test": "WatchWorkoutFlowSmokeTests/testRunningDistanceMetricsAndPausedDesignMap()",
-      "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1792922905.417,
-      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-07-40-+0900.xcresult",
-      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "device": "Apple Watch SE 3 (40mm)-wt-dune-workout-review-ship-20261106-tmp-42a88a61797a",
+      "device_id": "5CDCCCE7-7760-45D5-A7F4-9B3862738F09",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.watchOS-27-2",
+      "timestamp": 1793939182.045,
+      "resultBundle": ".deriveddata/unit-tests/Logs/Test/Test-DUNEWatchUITests-2026.11.06_13-24-15-+0900.xcresult",
+      "source_revision": "6b5befdf2447eaabef0e37cbe92bc4d468d77834",
       "source_worktree_dirty": true,
       "locale": "en_US",
-      "text_size": "system default"
+      "text_size": "system default",
+      "provenance": "2026-11-06 예약 review-ship · Resolve 후 40mm Watch 새 XCTest 캡처",
+      "sha256": "1cfecd3eccaf9dae255f10bb1d27db7afbadbb8bf88fac5877910b9c63574228"
     },
     "C15": {
       "file": "C15.png",
       "test": "WatchWorkoutFlowSmokeTests/testRunningDistanceMetricsAndPausedDesignMap()",
-      "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1792922914.254,
-      "resultBundle": "Test-DUNEWatchUITests-2026.10.25_19-07-40-+0900.xcresult",
-      "source_revision": "40be85ade3c9670767cf8c71fe77db8e099bad6c",
+      "device": "Apple Watch SE 3 (40mm)-wt-dune-workout-review-ship-20261106-tmp-42a88a61797a",
+      "device_id": "5CDCCCE7-7760-45D5-A7F4-9B3862738F09",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.watchOS-27-2",
+      "timestamp": 1793939191.237,
+      "resultBundle": ".deriveddata/unit-tests/Logs/Test/Test-DUNEWatchUITests-2026.11.06_13-24-15-+0900.xcresult",
+      "source_revision": "6b5befdf2447eaabef0e37cbe92bc4d468d77834",
       "source_worktree_dirty": true,
       "locale": "en_US",
-      "text_size": "system default"
+      "text_size": "system default",
+      "provenance": "2026-11-06 예약 review-ship · Resolve 후 40mm Watch 새 XCTest 캡처",
+      "sha256": "a097f9990803bb6c59db4528d0ffdba036a36c439e9f3285da91fa24994f1c9d"
     },
     "C16": {
       "file": "C16.png",
@@ -556,6 +564,36 @@
       "device": "Apple Watch SE 3 (40mm)",
       "timestamp": 1791865251.246,
       "resultBundle": "watch-capture-x07-crown-20261013.xcresult"
+    },
+    "C21": {
+      "file": "C21.png",
+      "test": "WatchWorkoutFlowSmokeTests/testRunningDistanceShowsPersonalizedZoneCount()",
+      "device": "Apple Watch SE 3 (40mm)-wt-dune-workout-review-ship-20261106-tmp-42a88a61797a",
+      "device_id": "5CDCCCE7-7760-45D5-A7F4-9B3862738F09",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.watchOS-27-2",
+      "timestamp": 1793939231.268,
+      "resultBundle": ".deriveddata/unit-tests/Logs/Test/Test-DUNEWatchUITests-2026.11.06_13-24-15-+0900.xcresult",
+      "source_revision": "6b5befdf2447eaabef0e37cbe92bc4d468d77834",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default",
+      "provenance": "2026-11-06 예약 review-ship · Resolve 후 40mm Watch 새 XCTest 캡처",
+      "sha256": "d38d8b7c76527cfe3e6d7a2076d9a6960a2963f5dcc4aabb297932e7c28c05fa"
+    },
+    "C20": {
+      "file": "C20.png",
+      "test": "WatchWorkoutFlowSmokeTests/testRunningDistanceWithoutHeartRateShowsNoZone()",
+      "device": "Apple Watch SE 3 (40mm)-wt-dune-workout-review-ship-20261106-tmp-42a88a61797a",
+      "device_id": "5CDCCCE7-7760-45D5-A7F4-9B3862738F09",
+      "runtime": "com.apple.CoreSimulator.SimRuntime.watchOS-27-2",
+      "timestamp": 1793939280.482,
+      "resultBundle": ".deriveddata/unit-tests/Logs/Test/Test-DUNEWatchUITests-2026.11.06_13-24-15-+0900.xcresult",
+      "source_revision": "6b5befdf2447eaabef0e37cbe92bc4d468d77834",
+      "source_worktree_dirty": true,
+      "locale": "en_US",
+      "text_size": "system default",
+      "provenance": "2026-11-06 예약 review-ship · Resolve 후 40mm Watch 새 XCTest 캡처",
+      "sha256": "e8d765f6e1af378270391c313fa40a01216e8d2cefed29772facab867b4a6a71"
     }
   }
 }

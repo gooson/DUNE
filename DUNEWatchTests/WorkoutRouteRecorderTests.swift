@@ -11,10 +11,15 @@ struct WorkoutRouteRecorderTests {
     private final class LocationProvider: WorkoutRouteLocationProviding {
         var delegate: CLLocationManagerDelegate?
         var authorizationStatus: CLAuthorizationStatus = .authorizedWhenInUse
+        var desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBest
+        var distanceFilter: CLLocationDistance = 10
+        var allowsBackgroundLocationUpdates = true
         var requestCount = 0
+        var requestLocationCount = 0
         var startCount = 0
         var stopCount = 0
         func requestWhenInUseAuthorization() { requestCount += 1 }
+        func requestLocation() { requestLocationCount += 1 }
         func startUpdatingLocation() { startCount += 1 }
         func stopUpdatingLocation() { stopCount += 1 }
     }
@@ -46,6 +51,115 @@ struct WorkoutRouteRecorderTests {
         #expect(recorder.stop().isEmpty)
         recorder.authorizationChanged(.authorizedWhenInUse)
         #expect(provider.startCount == 0)
+    }
+
+    @Test("Indoor cardio captures one place without generating a route")
+    func indoorPlaceCapture() throws {
+        #expect(WorkoutRouteRecorder.shouldCapturePlace(mode: .cardio(activityType: .running, isOutdoor: false)))
+        #expect(WorkoutRouteRecorder.shouldCapturePlace(mode: .cardio(activityType: .stairClimbing, isOutdoor: false)))
+        #expect(!WorkoutRouteRecorder.shouldCapturePlace(mode: .cardio(activityType: .running, isOutdoor: true)))
+        #expect(!WorkoutRouteRecorder.shouldCapturePlace(mode: .strength))
+        let provider = LocationProvider()
+        let recorder = WorkoutRouteRecorder(locationManager: provider)
+        recorder.start(at: date, capturesPlaceOnly: true)
+        #expect(provider.desiredAccuracy == kCLLocationAccuracyHundredMeters)
+        #expect(provider.distanceFilter == kCLDistanceFilterNone)
+        #expect(!provider.allowsBackgroundLocationUpdates)
+        #expect(provider.requestLocationCount == 1)
+        #expect(provider.startCount == 0)
+        recorder.receive([location(-1), location(1, accuracy: 101)], at: date.addingTimeInterval(1))
+        #expect(recorder.capturedPlace == nil)
+        recorder.receive([location(2, accuracy: 100)], at: date.addingTimeInterval(2))
+        let place = try #require(recorder.capturedPlace)
+        #expect(place.latitude == 37)
+        #expect(place.longitude == 127)
+        #expect(place.source == .gps)
+        #expect(place.name.isEmpty)
+        #expect(!recorder.isRecording)
+        #expect(recorder.stop().isEmpty)
+        recorder.resume(at: date.addingTimeInterval(3))
+        recorder.authorizationChanged(.authorizedWhenInUse)
+        recorder.receive([location(4, longitude: 128)], at: date.addingTimeInterval(4))
+        #expect(recorder.capturedPlace == place)
+        #expect(provider.requestLocationCount == 1)
+        #expect(provider.startCount == 0)
+        recorder.cancel()
+        #expect(recorder.capturedPlace == nil)
+    }
+
+    @Test("Indoor place deadline stops updates and ignores late permission or sensor callbacks")
+    func indoorPlaceDeadline() {
+        let provider = LocationProvider()
+        provider.authorizationStatus = .notDetermined
+        let recorder = WorkoutRouteRecorder(locationManager: provider)
+        recorder.start(at: date, capturesPlaceOnly: true)
+        #expect(provider.requestCount == 1)
+        #expect(provider.requestLocationCount == 0)
+        recorder.finishPlaceCapture()
+        recorder.authorizationChanged(.authorizedAlways)
+        recorder.receive([location(31)], at: date.addingTimeInterval(31))
+        #expect(provider.startCount == 0)
+        #expect(provider.requestLocationCount == 0)
+        #expect(recorder.capturedPlace == nil)
+        #expect(recorder.stop().isEmpty)
+    }
+
+    @Test("Authorization requests once per active indoor interval within the deadline")
+    func indoorPlaceAuthorization() {
+        let provider = LocationProvider()
+        provider.authorizationStatus = .notDetermined
+        let recorder = WorkoutRouteRecorder(locationManager: provider)
+        recorder.start(at: date, capturesPlaceOnly: true)
+        #expect(provider.requestCount == 1)
+        #expect(provider.requestLocationCount == 0)
+        recorder.authorizationChanged(.authorizedWhenInUse)
+        recorder.authorizationChanged(.authorizedWhenInUse)
+        #expect(provider.requestLocationCount == 1)
+        recorder.pause(at: date.addingTimeInterval(1))
+        recorder.authorizationChanged(.authorizedWhenInUse)
+        #expect(provider.requestLocationCount == 1)
+        recorder.resume(at: date.addingTimeInterval(2))
+        recorder.authorizationChanged(.authorizedWhenInUse)
+        #expect(provider.requestLocationCount == 2)
+        #expect(provider.startCount == 0)
+        recorder.cancel()
+    }
+
+    @Test("Indoor place collection excludes paused movement and denial")
+    func indoorPlacePauseAndDenial() {
+        let provider = LocationProvider()
+        let recorder = WorkoutRouteRecorder(locationManager: provider)
+        recorder.start(at: date, capturesPlaceOnly: true)
+        recorder.pause(at: date.addingTimeInterval(1))
+        recorder.receive([location(2)], at: date.addingTimeInterval(2))
+        #expect(recorder.capturedPlace == nil)
+        recorder.resume(at: date.addingTimeInterval(3))
+        #expect(provider.requestLocationCount == 2)
+        #expect(provider.startCount == 0)
+        recorder.receive([location(2, longitude: 128)], at: date.addingTimeInterval(4))
+        #expect(recorder.capturedPlace == nil)
+        recorder.receive([location(4)], at: date.addingTimeInterval(4))
+        #expect(recorder.capturedPlace?.longitude == 127)
+        recorder.cancel()
+        provider.authorizationStatus = .denied
+        recorder.start(at: date, capturesPlaceOnly: true)
+        recorder.receive([location(1)], at: date.addingTimeInterval(1))
+        #expect(recorder.capturedPlace == nil)
+        #expect(provider.requestLocationCount == 2)
+        recorder.cancel()
+    }
+
+    @Test("Outdoor route uses continuous high-accuracy updates instead of a place request")
+    func outdoorRouteEnergyConfiguration() {
+        let provider = LocationProvider()
+        let recorder = WorkoutRouteRecorder(locationManager: provider)
+        recorder.start(at: date)
+        #expect(provider.desiredAccuracy == kCLLocationAccuracyBest)
+        #expect(provider.distanceFilter == 10)
+        #expect(provider.allowsBackgroundLocationUpdates)
+        #expect(provider.startCount == 1)
+        #expect(provider.requestLocationCount == 0)
+        recorder.cancel()
     }
 
     @Test("Paused movement is excluded and resumed route starts a distinct segment")

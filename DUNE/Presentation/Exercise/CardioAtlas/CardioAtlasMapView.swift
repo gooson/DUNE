@@ -1,6 +1,12 @@
 import SwiftUI
 import MapKit
 
+extension WorkoutPlace {
+    var displayName: String {
+        name.isEmpty ? String(localized: "Workout location") : name
+    }
+}
+
 /// Displays only coordinates recorded for this workout. A missing location has no map tiles.
 struct CardioAtlasMapView: View {
     let location: WorkoutLocationPayload
@@ -31,11 +37,11 @@ struct CardioAtlasMapView: View {
                             .stroke(theme.accentColor, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
                     }
                     if segments.isEmpty, let place = location.place {
-                        Annotation(place.name, coordinate: coordinate) {
+                        Annotation(place.displayName, coordinate: coordinate) {
                             Image(systemName: "mappin.circle.fill")
                                 .font(.title)
                                 .foregroundStyle(theme.accentColor)
-                                .accessibilityLabel(place.name)
+                                .accessibilityLabel(place.displayName)
                         }
                     }
                 }

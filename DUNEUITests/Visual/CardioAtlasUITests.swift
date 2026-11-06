@@ -8,6 +8,19 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
          "-morningBriefingDisabled", "YES"]
     }
 
+    func testIndoorAutomaticPlacePin() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-cardio-atlas-auto-place"]
+        launchApp(with: configuration)
+        openRecord("elliptical")
+        XCTAssertTrue(element("cardio-atlas-map").waitForExistence(timeout: 10))
+        XCTAssertFalse(element("cardio-atlas-map-empty").exists)
+        let place = element("cardio-atlas-place-name")
+        XCTAssertTrue(place.exists)
+        XCTAssertTrue(["Workout location", "운동 장소", "ワークアウトの場所"].contains(place.label))
+        atlasScreenshot(named: "Cardio Atlas indoor automatic location pin")
+    }
+
     func testRecordedRouteDetailAndProgress() {
         openRecord("running")
         XCTAssertTrue(element("cardio-atlas-section").waitForExistence(timeout: 10))

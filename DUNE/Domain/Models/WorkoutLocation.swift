@@ -75,7 +75,7 @@ struct WorkoutLocationPayload: Codable, Sendable, Hashable {
     init(isIndoor: Bool? = nil, route: [WorkoutRoutePoint] = [], place: WorkoutPlace? = nil) {
         self.isIndoor = isIndoor
         // Indoor metadata describes the workout, not whether an actual route can exist.
-        // Indoor recording never requests GPS automatically, but imported recorded paths survive.
+        // Indoor sessions capture a place pin, while imported recorded paths survive.
         self.route = Self.normalizedRoute(route)
         self.place = place.flatMap {
             WorkoutPlace(latitude: $0.latitude, longitude: $0.longitude, name: $0.name, source: $0.source)
@@ -111,5 +111,25 @@ struct WorkoutLocationPayload: Codable, Sendable, Hashable {
             previousIndex = sourceIndex
         }
         return result
+    }
+}
+
+/// Shared Watch/iPhone storage contract for an observed workout place, separate from a route.
+enum WorkoutPlaceMetadata {
+    static let key = "com.dune.workout.place"
+
+    static func encodedValue(for place: WorkoutPlace) -> String? {
+        // Encoding this bounded value has no recoverable caller action.
+        guard let data = try? JSONEncoder().encode(place) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+
+    static func place(from metadata: [String: Any]?) -> WorkoutPlace? {
+        guard let value = metadata?[key] as? String, value.utf8.count <= 2_000,
+              let data = value.data(using: .utf8),
+              // Optional enrichment from older or malformed metadata can be absent.
+              let decoded = try? JSONDecoder().decode(WorkoutPlace.self, from: data) else { return nil }
+        return WorkoutPlace(latitude: decoded.latitude, longitude: decoded.longitude,
+                            name: decoded.name, source: decoded.source)
     }
 }

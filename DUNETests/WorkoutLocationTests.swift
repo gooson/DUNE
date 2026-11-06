@@ -6,6 +6,68 @@ import Testing
 struct WorkoutLocationTests {
     private let date = Date(timeIntervalSince1970: 1_800_000_000)
 
+    private enum RouteFailure: Error { case unavailable }
+
+    @Test("A route failure preserves an indoor place already loaded from HealthKit")
+    func routeFailurePreservesPlace() async throws {
+        let place = try #require(WorkoutPlace(latitude: 37.54, longitude: 127.04, name: "", source: .gps))
+        let result = try await WorkoutRouteQueryService.loadLocation(isIndoor: true, place: place) {
+            throw RouteFailure.unavailable
+        }
+        #expect(result.isIndoor == true)
+        #expect(result.place == place)
+        #expect(result.route.isEmpty)
+    }
+
+    @Test("A route failure without a place remains an error")
+    func routeFailureWithoutPlace() async {
+        do {
+            _ = try await WorkoutRouteQueryService.loadLocation(isIndoor: false, place: nil) {
+                throw RouteFailure.unavailable
+            }
+            Issue.record("Missing route and place must preserve the loading error")
+        } catch {
+            #expect(error is RouteFailure)
+        }
+    }
+
+    @Test("Cancelling route loading never presents a place from an obsolete request")
+    func routeCancellation() async throws {
+        let place = try #require(WorkoutPlace(latitude: 37.54, longitude: 127.04, name: "", source: .gps))
+        do {
+            _ = try await WorkoutRouteQueryService.loadLocation(isIndoor: true, place: place) {
+                throw CancellationError()
+            }
+            Issue.record("Cancellation must propagate even when place metadata exists")
+        } catch {
+            #expect(error is CancellationError)
+        }
+    }
+
+    @Test("Successful imported indoor routes and place metadata are both retained")
+    func routeAndPlaceSuccess() async throws {
+        let place = try #require(WorkoutPlace(latitude: 37.54, longitude: 127.04, name: "", source: .gps))
+        let point = try #require(WorkoutRoutePoint(latitude: 37.54, longitude: 127.04, timestamp: date, startsNewSegment: true))
+        let result = try await WorkoutRouteQueryService.loadLocation(isIndoor: true, place: place) { [point] }
+        #expect(result.place == place)
+        #expect(result.route == [point])
+    }
+
+    @Test("Watch indoor place metadata round trips independently of route data")
+    func watchPlaceMetadata() throws {
+        let place = try #require(WorkoutPlace(latitude: 37.54, longitude: 127.04, name: "", source: .gps))
+        let value = try #require(WorkoutPlaceMetadata.encodedValue(for: place))
+        #expect(WorkoutPlaceMetadata.place(from: [WorkoutPlaceMetadata.key: value]) == place)
+        #expect(place.displayName == String(localized: "Workout location"))
+        let named = try #require(WorkoutPlace(latitude: 37, longitude: 127, name: "Gym", source: .manual))
+        #expect(named.displayName == "Gym")
+        #expect(WorkoutPlaceMetadata.place(from: nil) == nil)
+        #expect(WorkoutPlaceMetadata.place(from: [WorkoutPlaceMetadata.key: "invalid"]) == nil)
+        #expect(WorkoutPlaceMetadata.place(from: [WorkoutPlaceMetadata.key: String(repeating: "x", count: 2_001)]) == nil)
+        let invalid = "{\"latitude\":91,\"longitude\":127,\"name\":\"\",\"source\":\"gps\"}"
+        #expect(WorkoutPlaceMetadata.place(from: [WorkoutPlaceMetadata.key: invalid]) == nil)
+    }
+
     @Test("Rejects non-finite, unbounded and inaccurate location inputs")
     func invalidPoints() {
         for latitude in [Double.nan, .infinity, -91, 91] {

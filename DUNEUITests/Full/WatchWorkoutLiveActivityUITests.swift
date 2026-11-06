@@ -171,9 +171,9 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         let allow = springboard.buttons.matching(NSPredicate(format: "label IN %@", ["Allow", "허용", "許可"])).firstMatch
         if allow.waitForExistence(timeout: 2) { allow.tap() }
 
-        // The system card owns the complete surface. A Group accessibility ID
-        // can propagate to a decorative descendant and is not a card boundary.
-        let activity = springboard.buttons.matching(identifier: "ListCell").allElementsBoundByIndex
+        // SpringBoard's list cell can also contain its permission prompt.
+        // Measure and capture the actual ActivityKit surface inside that cell.
+        let activity = springboard.otherElements.matching(identifier: "activity-content-view").allElementsBoundByIndex
             .filter { $0.frame.contains(title.frame) }
             .min { $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height }
         if phase == "stale", let activity {
@@ -190,6 +190,8 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
         if let activity {
             XCTAssertTrue(springboard.windows.firstMatch.frame.contains(activity.frame),
                           "The complete Live Activity must fit in the system viewport")
+            XCTAssertGreaterThanOrEqual(title.frame.minY - activity.frame.minY, 14,
+                                        "The header needs breathing room above it")
             // The header icon is decorative for VoiceOver. Verify its glyph visually
             // in the attachment; snapshot unit tests cover symbol selection.
             let brand = activity.staticTexts["watch-workout-brand"].firstMatch
@@ -212,6 +214,10 @@ final class WatchWorkoutLiveActivityUITests: UITestBaseCase {
                     XCTAssertTrue(element.exists, "The system should expose \(identifier)")
                     if element.exists {
                         XCTAssertTrue(activity.frame.contains(element.frame), "\(identifier) must fit inside the activity")
+                        if identifier != "watch-workout-elapsed" {
+                            XCTAssertGreaterThanOrEqual(activity.frame.maxY - element.frame.maxY, 14,
+                                                        "The bottom metrics need breathing room below them")
+                        }
                     }
                 }
                 let primary = activity.descendants(matching: .any)["watch-workout-primary-metric"].firstMatch

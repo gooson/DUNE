@@ -4957,7 +4957,27 @@
       }
     },
     "Zone %@" : {
-      "extractionState" : "manual"
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zone %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーン%@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "존 %@"
+          }
+        }
+      }
     },
     "Zone %lld" : {
       "extractionState" : "manual",

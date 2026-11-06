@@ -1,25 +1,49 @@
 import Foundation
 import HealthKit
-
-protocol WorkoutRouteQuerying: Sendable {
-    func fetchRoute(workoutID: String) async throws -> [WorkoutRoutePoint]
-}
+import OSLog
 
 /// Reads both iPhone and imported Apple Watch routes; absent results do not imply read permission.
-struct WorkoutRouteQueryService: WorkoutRouteQuerying, Sendable {
+struct WorkoutRouteQueryService: Sendable {
     private let manager: HealthKitManager
 
     init(manager: HealthKitManager = .shared) { self.manager = manager }
 
-    func fetchRoute(workoutID: String) async throws -> [WorkoutRoutePoint] {
-        guard let id = UUID(uuidString: workoutID) else { return [] }
-        guard manager.isAvailable else { return [] }
+    func fetchLocation(workoutID: String) async throws -> WorkoutLocationPayload {
+        guard let id = UUID(uuidString: workoutID) else { return WorkoutLocationPayload() }
+        guard manager.isAvailable else { return WorkoutLocationPayload() }
         try Task.checkCancellation()
         let workoutQuery = HKSampleQueryDescriptor(
             predicates: [.workout(HKQuery.predicateForObject(with: id))],
             sortDescriptors: [], limit: 1
         )
-        guard let workout = try await manager.execute(workoutQuery).first else { return [] }
+        guard let workout = try await manager.execute(workoutQuery).first else { return WorkoutLocationPayload() }
+        return try await Self.loadLocation(
+            isIndoor: workout.metadata?[HKMetadataKeyIndoorWorkout] as? Bool,
+            place: WorkoutPlaceMetadata.place(from: workout.metadata)
+        ) {
+            try await fetchRoutePoints(for: workout)
+        }
+    }
+
+    /// A failed optional route must not hide a place already recorded with the workout.
+    static func loadLocation(
+        isIndoor: Bool?, place: WorkoutPlace?,
+        routeLoader: @Sendable () async throws -> [WorkoutRoutePoint]
+    ) async throws -> WorkoutLocationPayload {
+        do {
+            let route = try await routeLoader()
+            try Task.checkCancellation()
+            return WorkoutLocationPayload(isIndoor: isIndoor, route: route, place: place)
+        } catch {
+            if error is CancellationError { throw error }
+            try Task.checkCancellation()
+            guard let place else { throw error }
+            AppLogger.healthKit.warning("Could not load recorded route; preserving workout place: \(error.localizedDescription, privacy: .private)")
+            return WorkoutLocationPayload(isIndoor: isIndoor, place: place)
+        }
+    }
+
+    private func fetchRoutePoints(for workout: HKWorkout) async throws -> [WorkoutRoutePoint] {
         let routeQuery = HKSampleQueryDescriptor(
             predicates: [.workoutRoute(HKQuery.predicateForObjects(from: workout))],
             sortDescriptors: [SortDescriptor(\HKWorkoutRoute.startDate)]

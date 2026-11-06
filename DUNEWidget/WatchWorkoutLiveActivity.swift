@@ -103,6 +103,7 @@ private struct WatchWorkoutActivityContent: View {
     private var palette: WorkoutPalette { WorkoutPalette(style: preferences.style) }
     @Environment(\.activityFamily) private var activityFamily
     @Environment(\.showsWidgetContainerBackground) private var showsContainerBackground
+    @ScaledMetric(relativeTo: .caption) private var headerTimerWidth = 64.0
 
     let state: WatchWorkoutSnapshot
     let isStale: Bool
@@ -119,7 +120,8 @@ private struct WatchWorkoutActivityContent: View {
                 fullContent
             }
         }
-        .padding(isSmall ? 10 : 16)
+        .padding(.horizontal, isSmall ? 10 : 16)
+        .padding(.vertical, isSmall ? 10 : 20)
         .foregroundStyle(palette.primary)
         .background {
             if preferences.style == .goldImpact && showsContainerBackground {
@@ -129,11 +131,23 @@ private struct WatchWorkoutActivityContent: View {
     }
 
     private var fullContent: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            WatchWorkoutHeader(state: state, isStale: isStale)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                WatchWorkoutHeader(state: state, isStale: isStale)
+
+                if !isStale, preferences.resolvedMetric(for: state) != .elapsedTime {
+                    WorkoutElapsedTime(state: state)
+                        .font(.caption)
+                        .foregroundStyle(palette.secondary)
+                        // System timer text needs a finite proposal during widget layout.
+                        .frame(width: headerTimerWidth, alignment: .trailing)
+                        .multilineTextAlignment(.trailing)
+                        .minimumScaleFactor(0.75)
+                }
+            }
 
             if !isStale {
-                WorkoutMetricHero(state: state, preferences: preferences)
+                WorkoutMetricHero(state: state, preferences: preferences, compact: true)
 
                 WatchWorkoutMetrics(state: state, primaryMetric: preferences.resolvedMetric(for: state))
                     .padding(.top, 2)
@@ -410,6 +424,7 @@ private struct WorkoutMetricHero: View {
     let state: WatchWorkoutSnapshot
     let preferences: WorkoutLiveActivityPreferences
     var isIsland = false
+    var compact = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -418,7 +433,7 @@ private struct WorkoutMetricHero: View {
                     WorkoutPrimaryMetric(state: state, preferences: preferences)
                         .fixedSize(horizontal: true, vertical: false)
                     if preferences.style == .goldImpact {
-                        WorkoutGoldEmblem(state: state)
+                        WorkoutGoldEmblem(state: state, compact: compact)
                     }
                 }
                 WorkoutPrimaryMetric(state: state, preferences: preferences)
@@ -427,7 +442,7 @@ private struct WorkoutMetricHero: View {
             .font(.system(.largeTitle, design: .rounded, weight: .bold))
             .foregroundStyle(isIsland ? palette.islandAccent : palette.accent)
             .frame(maxWidth: .infinity, alignment: .leading)
-            if preferences.resolvedMetric(for: state) != .elapsedTime {
+            if !compact, preferences.resolvedMetric(for: state) != .elapsedTime {
                 WorkoutElapsedTime(state: state)
                     .font(.caption)
                     .foregroundStyle(isIsland ? .white.opacity(0.7) : palette.secondary)
@@ -439,19 +454,20 @@ private struct WorkoutMetricHero: View {
 private struct WorkoutGoldEmblem: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let state: WatchWorkoutSnapshot
+    var compact = false
 
     var body: some View {
         if !dynamicTypeSize.isAccessibilitySize {
             WatchWorkoutPhaseIcon(state: state, isStale: false)
-                .font(.system(size: 28, weight: .semibold))
+                .font(.system(size: compact ? 22 : 28, weight: .semibold))
                 .foregroundStyle(Color("WorkoutMedalEngraving"))
-                .frame(width: 56, height: 62)
+                .frame(width: compact ? 40 : 56, height: compact ? 44 : 62)
                 .background {
-                    RoundedRectangle(cornerRadius: 17)
+                    RoundedRectangle(cornerRadius: compact ? 13 : 17)
                         .fill(LinearGradient(colors: [Color("WorkoutMedalGold"), WidgetDS.Color.warmAccent],
                                              startPoint: .topLeading, endPoint: .bottomTrailing))
                         .overlay {
-                            RoundedRectangle(cornerRadius: 13)
+                            RoundedRectangle(cornerRadius: compact ? 9 : 13)
                                 .strokeBorder(.white.opacity(0.3), lineWidth: 1).padding(4)
                         }
                 }

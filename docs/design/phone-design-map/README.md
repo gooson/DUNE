@@ -332,6 +332,10 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 2026-11-06 L06: [실제 선택 화면·출처](../full-redesign-map/review/l06-habit-history-detail-2026-11-06/index.html). 관련 메서드·기기 범위다.
 
+## 2026-11-06 운동 화면 갱신
+
+[새 실제 캡처 8장과 출처](actual/workout-surfaces-2026-11-06/index.html): 일반 iPhone WLA01 시간/거리 우선·실내 장소 핀·기존 실외 경로, 40mm Watch C14·C15·C20·C21. iPhone UI 4건·Watch UI 3건, 위치 모델 6건·Watch 수집기 15건이 통과했다. 실내 자동 위치는 좌표 fixture로 지도 표시를 검증했고 실기기 GPS·HealthKit 기기 간 동기화는 미검증이다. 다른 기기·큰 글씨·Always-On 캡처를 이번 결과로 대체하지 않는다. Watch 맵은 68 / 71개 상태다.
+
 2026-11-06 L07: [실제 선택 화면·출처](../full-redesign-map/review/l07-habit-heatmap-2026-11-06/index.html). 관련 메서드·기기 범위다.
 
 2026-11-06 L08: [실제 선택 화면·출처](../full-redesign-map/review/l08-habit-weekly-report-2026-11-06/index.html). 관련 메서드·기기 범위다.
