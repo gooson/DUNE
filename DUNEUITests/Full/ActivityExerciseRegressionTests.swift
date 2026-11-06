@@ -3581,6 +3581,262 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(scroll.waitForExistence(timeout: 5))
     }
 
+    func testVisualAuditTemplateAuthoringAtNormalText() throws {
+        try auditTemplateAuthoring(maximumText: false)
+    }
+
+    func testVisualAuditTemplateAuthoringAtMaximumText() throws {
+        try auditTemplateAuthoring(maximumText: true)
+    }
+
+    private func auditTemplateAuthoring(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B13 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        ensureActivityRoot()
+        let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
+        let builder = app.buttons[AXID.activityAIWorkoutBuilder].firstMatch
+        for _ in 0..<24 {
+            let viewport = activityScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
+            if builder.exists && builder.isHittable && viewport.contains(builder.frame) { break }
+            if builder.exists && builder.frame.midY < viewport.midY {
+                activityScroll.swipeDown(velocity: .slow)
+            } else {
+                activityScroll.swipeUp(velocity: .slow)
+            }
+        }
+        let builderViewport = activityScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
+        XCTAssertTrue(builder.exists && builder.isHittable && builderViewport.contains(builder.frame),
+                      "The whole Activity AI Builder action must be visible before opening W13")
+        builder.auditTap()
+        let form = app.collectionViews[AXID.templateFormScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let save = app.buttons[AXID.templateFormSave].firstMatch
+        XCTAssertTrue(save.waitForExistence(timeout: 5) && !save.isEnabled)
+        VisualAudit.capture("W13 \(size) blank template form and disabled Save")
+
+        let addExercise = app.buttons[AXID.templateFormAddExercise].firstMatch
+        func revealAndTapAddExercise() {
+            for _ in 0..<12 {
+                let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+                if addExercise.exists && viewport.contains(addExercise.frame) && addExercise.isHittable { break }
+                if addExercise.exists && addExercise.frame.midY < viewport.midY {
+                    form.swipeDown(velocity: .slow)
+                } else {
+                    form.swipeUp(velocity: .slow)
+                }
+            }
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            XCTAssertTrue(addExercise.exists && addExercise.isHittable && viewport.contains(addExercise.frame),
+                          "W13 Add Exercise must be wholly visible in the active Form")
+            if addExercise.exists && addExercise.isHittable { addExercise.auditTap() }
+        }
+        revealAndTapAddExercise()
+
+        func typeInFullPickerSearch(_ value: String) {
+            // Full-mode .searchable exposes a native SearchField in this sheet's
+            // navigation bar; picker-search-field is quick-start-only.
+            let search = app.navigationBars["Select Exercise"].searchFields["Search exercises"].firstMatch
+            XCTAssertTrue(search.waitForExistence(timeout: 5) && search.isHittable,
+                          "The presented full picker should expose its native search field")
+            search.auditTap()
+            search.typeText(value)
+            let filled = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "value == %@", value), object: search
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [filled], timeout: 3), .completed,
+                           "Full picker search must contain the requested exercise name")
+        }
+
+        let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
+        XCTAssertTrue(picker.waitForExistence(timeout: 8), "W14 full exercise picker should open")
+        VisualAudit.capture("W14 \(size) template exercise picker initial")
+        typeInFullPickerSearch("Bench Press")
+        dismissSearchKeyboardIfPresent()
+        let rowID = AXID.pickerExerciseRow(Fixture.benchPressID)
+        XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(rowID, maxSwipes: 10))
+        let row = app.buttons[rowID].firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 8) && row.isHittable)
+        VisualAudit.capture("W14 \(size) seeded Bench Press selection")
+        row.auditTap()
+
+        XCTAssertTrue(form.waitForExistence(timeout: 8), "Selection should return to W13 form")
+        let benchName = app.staticTexts[Fixture.benchPressLocalizedName].firstMatch
+        for _ in 0..<12 {
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            if benchName.exists && viewport.contains(benchName.frame) { break }
+            if benchName.exists && benchName.frame.midY < viewport.midY {
+                form.swipeDown(velocity: .slow)
+            } else {
+                form.swipeUp(velocity: .slow)
+            }
+        }
+        let nameViewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+        XCTAssertTrue(benchName.waitForExistence(timeout: 5) && nameViewport.contains(benchName.frame),
+                      "W13 selected strength exercise name must fit in the Form viewport")
+        VisualAudit.capture("W13 \(size) strength exercise name")
+        let sets = app.steppers.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND identifier ENDSWITH %@", "template-entry-", "-sets"
+        )).firstMatch
+        for _ in 0..<12 where !(sets.exists && sets.isHittable) { form.swipeUp(velocity: .slow) }
+        XCTAssertTrue(sets.waitForExistence(timeout: 5) && sets.isHittable)
+        let entryID = String(sets.identifier.dropFirst("template-entry-".count).dropLast("-sets".count))
+        XCTAssertNotNil(UUID(uuidString: entryID))
+        let reps = app.steppers["template-entry-\(entryID)-reps"].firstMatch
+        XCTAssertTrue(reps.waitForExistence(timeout: 5))
+        XCTAssertTrue(sets.label.contains("3") || (sets.value as? String)?.contains("3") == true,
+                      "New strength entry retains three default sets")
+        XCTAssertTrue(reps.label.contains("10") || (reps.value as? String)?.contains("10") == true,
+                      "New strength entry retains ten default reps")
+        XCTAssertFalse(save.isEnabled, "An unnamed selected exercise must not enable Save")
+        VisualAudit.capture("W13 \(size) strength defaults 3 sets and 10 reps")
+
+        revealAndTapAddExercise()
+        XCTAssertTrue(picker.waitForExistence(timeout: 8), "W14 full picker should reopen for session exercise")
+        typeInFullPickerSearch("Running")
+        dismissSearchKeyboardIfPresent()
+        let runningID = AXID.pickerExerciseRow(Fixture.runningID)
+        XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(runningID, maxSwipes: 10))
+        let running = app.buttons[runningID].firstMatch
+        XCTAssertTrue(running.waitForExistence(timeout: 8) && running.isHittable)
+        running.auditTap()
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let duration = app.staticTexts["Duration"].firstMatch
+        let distance = app.staticTexts["Distance"].firstMatch
+        let runningName = app.staticTexts["달리기"].firstMatch
+        for _ in 0..<12 {
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            if runningName.exists && duration.exists && distance.exists
+                && viewport.contains(runningName.frame)
+                && viewport.contains(duration.frame) && viewport.contains(distance.frame) { break }
+            form.swipeUp(velocity: .slow)
+        }
+        let summaryViewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+        XCTAssertTrue(runningName.waitForExistence(timeout: 5)
+                      && duration.waitForExistence(timeout: 5) && distance.waitForExistence(timeout: 5)
+                      && summaryViewport.contains(runningName.frame)
+                      && summaryViewport.contains(duration.frame) && summaryViewport.contains(distance.frame),
+                      "W13 Running must show the session-driven Duration · Distance summary")
+        VisualAudit.capture("W13 \(size) session exercise Duration and Distance summary")
+        let name = app.textFields[AXID.templateFormName].firstMatch
+        for _ in 0..<12 where !(name.exists && name.isHittable) { form.swipeDown(velocity: .slow) }
+        XCTAssertTrue(name.exists && name.isHittable)
+        XCTAssertTrue(app.fillTextInput(AXID.templateFormName, with: "B13 Audit Template"))
+        XCTAssertTrue(save.isEnabled, "Name plus selected exercises should enable Save")
+        VisualAudit.capture("W13 \(size) filled name and enabled Save before Cancel")
+        let cancel = app.buttons[AXID.templateFormCancel].firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
+        cancel.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+            .waitForExistence(timeout: 10), "Cancel should return without saving a template")
+    }
+
+    func testVisualAuditTemplatePlanAtNormalText() throws {
+        try auditTemplatePlan(maximumText: false)
+    }
+
+    func testVisualAuditTemplatePlanAtMaximumText() throws {
+        try auditTemplatePlan(maximumText: true)
+    }
+
+    private func auditTemplatePlan(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B13 native visual audit only") }
+        guard UIDevice.current.userInterfaceIdiom == .phone else {
+            throw XCTSkip("W12/W15 iPad Templates toolbar route held after B09 native More failure")
+        }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        openTemplateList()
+        let list = app.collectionViews[AXID.workoutTemplateListScreen].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 8))
+        let row = app.buttons[AXID.workoutTemplateRow(Fixture.circuitTemplate)].firstMatch
+        for _ in 0..<12 where !(row.exists && row.isHittable) { list.swipeUp(velocity: .slow) }
+        XCTAssertTrue(row.waitForExistence(timeout: 8) && row.isHittable)
+        XCTAssertTrue(row.label.contains("2 exercises") && row.label.contains("Squat"),
+                      "W12 seeded circuit row should preserve count and exercise names")
+        VisualAudit.capture("W12 \(size) seeded template row and exercise names")
+
+        XCTAssertTrue(app.waitAndTapToolbarAction("workout-weekly-plan-open"))
+        let plan = app.descendants(matching: .any)["weekly-workout-plan"].firstMatch
+        XCTAssertTrue(plan.waitForExistence(timeout: 8))
+        let templateList = app.scrollViews["weekly-plan-template-list"].firstMatch
+        XCTAssertTrue(templateList.waitForExistence(timeout: 5))
+        // The isolated model is seeded, but weekly assignments live in AppStorage
+        // and may persist across launches. Count the seven day buttons regardless
+        // of whether their second label is Rest Day or an assigned template.
+        let calendarPane = plan.scrollViews.element(boundBy: 0)
+        XCTAssertTrue(calendarPane.waitForExistence(timeout: 5))
+        let next = calendarPane.buttons.matching(NSPredicate(format: "label == %@", "Next Week")).firstMatch
+        let previous = calendarPane.buttons.matching(NSPredicate(format: "label == %@", "Previous Week")).firstMatch
+        func dayLabels() -> [String] {
+            calendarPane.buttons.allElementsBoundByIndex.map(\.label).filter {
+                $0 != "Previous Week" && $0 != "Next Week"
+            }
+        }
+        let before = dayLabels()
+        XCTAssertEqual(before.count, 7, "W15 should display seven calendar day rows")
+        VisualAudit.capture("W15 \(size) current seven-day plan and template pane")
+        XCTAssertTrue(next.waitForExistence(timeout: 5) && next.isHittable)
+        next.auditTap()
+        let after = dayLabels()
+        XCTAssertEqual(after.count, 7)
+        XCTAssertNotEqual(after, before, "Next Week must change the visible seven-day period")
+        VisualAudit.capture("W15 \(size) next week dates")
+        XCTAssertTrue(previous.exists && previous.isHittable)
+        previous.auditTap()
+        XCTAssertEqual(dayLabels(), before,
+                       "Previous Week must restore the original period")
+
+        let templateID = "22222222-2222-4222-8222-222222222222"
+        let assign = app.buttons["weekly-plan-template-\(templateID)"].firstMatch
+        for _ in 0..<8 where !(assign.exists && assign.isHittable) {
+            templateList.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(assign.waitForExistence(timeout: 5) && assign.isHittable)
+        assign.auditTap()
+        let selected = app.buttons["weekly-plan-selected-template"].firstMatch
+        for _ in 0..<8 where !(selected.exists && selected.isHittable) {
+            templateList.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(selected.waitForExistence(timeout: 5) && selected.isHittable
+                      && selected.label.contains(Fixture.singleTemplate))
+        VisualAudit.capture("W15 \(size) assigned seeded template")
+        let remove = app.buttons["weekly-plan-remove"].firstMatch
+        for _ in 0..<8 {
+            let viewport = templateList.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            if remove.exists && remove.isHittable && viewport.contains(remove.frame) { break }
+            if remove.exists && remove.frame.midY < viewport.midY {
+                templateList.swipeDown(velocity: .slow)
+            } else {
+                templateList.swipeUp(velocity: .slow)
+            }
+        }
+        let removeViewport = templateList.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+        XCTAssertTrue(remove.exists && remove.isHittable && removeViewport.contains(remove.frame),
+                      "The whole Remove action must be visible in the active template pane")
+        remove.auditTap()
+        let assignmentRemoved = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: selected
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [assignmentRemoved], timeout: 5), .completed,
+                       "Removing assignment must restore Rest Day")
+    }
+
     func testVisualAuditTemplateWorkoutFirstSession() throws {
         openTemplateList()
         let rowID = AXID.workoutTemplateRow(Fixture.circuitTemplate)
