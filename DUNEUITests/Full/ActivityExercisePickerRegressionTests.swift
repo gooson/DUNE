@@ -195,6 +195,10 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         }
     }
 
+    func testVisualAuditLibraryPickerDetailAtMaximumText() throws {
+        try auditLibraryPickerDetail(maximumText: true)
+    }
+
     // MARK: - Helpers
 
     private func ensureActivityRoot() {
