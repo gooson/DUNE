@@ -1162,13 +1162,25 @@
     },
     "W24": {
       "row_id": "W24",
-      "evidence": "cardio-session-screen",
+      "file": "W24.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
-      "action": "tap cardio-start-indoor",
-      "timestamp": 1791854862.289,
-      "image": "88FFEF23-7553-4CF2-B9E5-DDC571439220.png",
-      "screen": "screen-0-2064x2752-tap cardio-start-indoor_0_FE433014-5007-46D4-9D29-5A345A3415F5.png",
-      "file": "W24.png"
+      "action": "W24 cardio normal elapsed and status",
+      "timestamp": 1794005424.732,
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "fb789cfa50fb2882b66162f663d9810cfe81e98f761f82d41f33707ab6fe5a57",
+      "ax_sha256": "88bd1ab802169e81a2f70f4153699ab244ad9e5d39c2cd367f19c41ec13400c0",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/cardio-session-w24-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W21": {
       "row_id": "W21",
