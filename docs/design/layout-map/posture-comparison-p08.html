@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P08 · 자세 전후 비교 배치 계약</title>
+<style>
+body{font:17px/1.6 system-ui;max-width:880px;margin:auto;padding:24px;background:#faf8f3;color:#302a24}
+a{color:inherit}section{margin:18px 0;padding:20px;border:1px solid #d9cbb8;border-radius:20px;background:#fffdf8}
+.hero{background:#352e29;color:#fff5e8;border-color:#746147}
+.pair{display:flex;align-items:center;justify-content:space-around;gap:18px;text-align:center}
+.score{width:112px;height:112px;border:8px solid #d4a336;border-radius:50%;display:grid;place-items:center;font-size:42px;font-weight:750}
+.score.new{border-color:#38c96d}.date{font-size:14px;color:#decfbd}.delta{font-size:26px;font-weight:700;color:#65db8c}
+p{margin:.5em 0}small{color:#68615a}
+@media(max-width:430px){.pair{gap:7px}.score{width:72px;height:72px;font-size:26px}}
+.max-preview .pair{flex-direction:column;align-items:center;gap:22px}.max-preview{font-size:28px}.max-preview .date{font-size:24px}.max-preview .score,.max-preview .ring{width:136px;height:136px;font-size:46px}.preview-control{display:block;margin:18px 0;font-size:17px}
+</style>
+<a href="index.html">배치 맵</a>
+<label class="preview-control"><input type="checkbox" onchange="document.body.classList.toggle('max-preview',this.checked)"> 최대 접근성 글씨 시안</label><h1>P08 · 자세 전후 비교</h1>
+<p>구현 전 정적 배치 계약. 숫자·링·아이콘은 설명용이며 실제 기록, SF Symbol 또는 앱 캡처가 아니다.</p>
+<section><h2>정보 순서</h2><p>선택한 두 실제 기록의 날짜와 점수를 같은 히어로에서 대조 → 기존 Front/Side 사진과 관절 오버레이 → 실제 지표 값의 전후 변화와 상태 아이콘. 기존 비교 화면 제목과 두 개의 독립 스크롤 pane을 유지한다.</p></section>
+<section class="hero"><div class="pair"><div><div class="score">73</div><div class="date">Sep 29</div></div><div class="delta">↗ +13</div><div><div class="score new">86</div><div class="date">Oct 12</div></div></div></section>
+<section><h2>동작·데이터 계약</h2><p>PostureHistoryView의 두 record ID 선택과 날짜 정렬을 그대로 사용한다. 새 점수·변화량·개선 판정을 계산하거나 보정하지 않는다. 사진은 각 record의 원본 imageData, jointPositions, metrics와 captureType을 유지하고 탭 확대를 보존한다. 한쪽 사진이 없는 경우 기존 자리 표시를 유지한다. Metric Changes의 원래 이름·단위·전후 값·점수 차·색·아이콘을 유지한다.</p></section>
+<section><h2>기기·큰 글씨·검증</h2><p>iPhone에서는 연속된 사진 pane/지표 pane, iPad와 Duo에서는 AdaptivePaneView의 기존 분할·접힘 규칙을 따른다. 각 pane의 기존 accessibility ID를 보존하고, 점수 히어로의 새 ID를 추가한다. MAX에서는 점수·화살표를 세로로 배치하며 각 pane을 따로 스크롤한다. 실제 iPhone·iPad·Duo 접힘/펼침의 PNG/AX와 사진 확대·두 pane 도달 검증 전에는 적용 완료로 표시하지 않는다.</p></section>
+<small>기존 실제 기준: docs/design/phone-design-map/actual/{regular,ipad,duo,duo-open}/images/P08.png.</small>
+</html>

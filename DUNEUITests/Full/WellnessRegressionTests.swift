@@ -1409,6 +1409,107 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         XCTAssertTrue(app.scrollViews["posture-symmetry-screen"].firstMatch.waitForExistence(timeout: 5))
     }
 
+    func testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom() throws {
+        openSeededComparison()
+        let photos = app.scrollViews["posture-comparison-photos-scroll"].firstMatch
+        let metrics = app.scrollViews["posture-comparison-metrics-scroll"].firstMatch
+        XCTAssertTrue(photos.waitForExistence(timeout: 5) && metrics.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["73"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["86"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["+13"].firstMatch.exists)
+        for offset in [14, 1] {
+            let date = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -offset, to: .now))
+                .formatted(Date.FormatStyle.dateTime.month(.abbreviated).day()
+                    .locale(Locale(identifier: "en_US")))
+            XCTAssertTrue(app.staticTexts[date].firstMatch.exists, "Keep both fixture dates")
+        }
+        VisualAudit.capture("P08 actual older and newer score delta")
+
+        let front = app.descendants(matching: .any)["posture-comparison-photo-front-older"].firstMatch
+        XCTAssertTrue(front.waitForExistence(timeout: 5))
+        let window = app.windows.firstMatch
+        for _ in 0..<12 {
+            let viewport = photos.frame.intersection(window.frame).insetBy(dx: 6, dy: 6)
+            let visible = front.frame.intersection(viewport)
+            if front.isHittable && !visible.isNull && visible.width >= 24 && visible.height >= 24 {
+                break
+            }
+            let startY: CGFloat = front.frame.midY > viewport.midY ? 0.65 : 0.35
+            let endY: CGFloat = front.frame.midY > viewport.midY ? 0.35 : 0.65
+            let start = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+            let end = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        let visible = front.frame.intersection(
+            photos.frame.intersection(window.frame).insetBy(dx: 6, dy: 6))
+        guard front.isHittable && !visible.isNull && visible.width >= 24 && visible.height >= 24 else {
+            XCTFail("Front photo must have a 24-point tappable area inside its own visible pane before opening zoom")
+            return
+        }
+        let frontFrame = front.frame
+        let tapPoint = front.coordinate(withNormalizedOffset: CGVector(
+            dx: (visible.midX - frontFrame.minX) / frontFrame.width,
+            dy: (visible.midY - frontFrame.minY) / frontFrame.height))
+        tapPoint.auditTap()
+        XCTAssertTrue(app.navigationBars["Front"].firstMatch.waitForExistence(timeout: 5))
+        let close = app.navigationBars["Front"].buttons.firstMatch
+        XCTAssertTrue(close.exists && close.isHittable)
+        close.auditTap()
+        XCTAssertFalse(app.navigationBars["Front"].firstMatch.exists, "Close dismisses the zoom route")
+        XCTAssertTrue(photos.waitForExistence(timeout: 5), "Closing zoom returns to comparison")
+        metrics.swipeUp(velocity: .slow)
+        VisualAudit.capture("P08 lower metric comparison pane")
+    }
+
+    func testP08ComparisonAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openSeededComparison()
+        let photos = app.scrollViews["posture-comparison-photos-scroll"].firstMatch
+        let metrics = app.scrollViews["posture-comparison-metrics-scroll"].firstMatch
+        XCTAssertTrue(photos.waitForExistence(timeout: 5) && metrics.waitForExistence(timeout: 5))
+        for score in ["73", "86", "+13"] {
+            let value = app.staticTexts[score].firstMatch
+            XCTAssertTrue(value.waitForExistence(timeout: 5))
+            for _ in 0..<16 {
+                let viewport = photos.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                if value.isHittable && viewport.contains(value.frame) { break }
+                if value.frame.midY < viewport.midY { photos.swipeDown(velocity: .slow) }
+                else { photos.swipeUp(velocity: .slow) }
+            }
+            XCTAssertTrue(value.isHittable && photos.frame.intersection(app.windows.firstMatch.frame)
+                .insetBy(dx: 4, dy: 4).contains(value.frame),
+                          "The whole score text must fit in its own pane: \(score)")
+            VisualAudit.capture("P08 MAX visible comparison score \(score)")
+        }
+        metrics.swipeUp(velocity: .slow)
+        XCTAssertTrue(metrics.isHittable, "MAX metric pane remains independently scrollable")
+        VisualAudit.capture("P08 MAX score and two panes")
+    }
+
+    private func openSeededComparison() {
+        openHistory()
+        XCTAssertTrue(app.waitAndTapToolbarAction("Compare"),
+                      "Compare must remain reachable directly or through native toolbar overflow")
+        let metrics = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND label == %@",
+            "posture-history-row-metric-count-", "8 metrics"
+        ))
+        XCTAssertEqual(metrics.count, 2)
+        for index in 0..<2 {
+            let metric = metrics.element(boundBy: index)
+            reveal(metric)
+            metric.auditTap()
+        }
+        let selected = app.buttons["Compare Selected"].firstMatch
+        reveal(selected)
+        selected.auditTap()
+        XCTAssertTrue(app.navigationBars["Comparison"].firstMatch.waitForExistence(timeout: 5))
+    }
+
     private func openHistory(maxRevealAttempts: Int = 18) {
         let viewAll = app.buttons["wellness-link-posturehistory"].firstMatch
         reveal(viewAll, maxAttempts: maxRevealAttempts)
