@@ -322,3 +322,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-06 L04: [실제 선택 화면·출처](../full-redesign-map/review/l04-habit-management-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 메서드 범위다.
 
 2026-11-06 L09: [실제 선택 화면·출처](../full-redesign-map/review/l09-habit-past-record-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 메서드 범위다.
+
+2026-11-06 L05–L08: 각 life-habit 상세의 정적 배치·테마 맵을 앱 변경 전에 추가했다. 실제 캡처 검증은 진행 전이다.
