@@ -372,7 +372,6 @@ final class WhatsNewVisualAuditTests: UITestBaseCase {
 
     private func openSettingsForAudit() {
         navigateToDashboard()
-        dismissMorningBriefingIfNeeded(timeout: 1.5)
         let settings = app.descendants(matching: .any)[AXID.dashboardToolbarSettings].firstMatch
         if settings.waitForExistence(timeout: 3) && settings.isHittable {
             settings.auditTap()
