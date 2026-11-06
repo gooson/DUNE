@@ -137,6 +137,64 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         XCTAssertTrue(saveButton.isEnabled, "Template save should enable after one picked exercise and a name")
     }
 
+    func testVisualAuditLibraryPickerDetailAtNormalText() throws {
+        try auditLibraryPickerDetail(maximumText: false)
+    }
+
+    private func auditLibraryPickerDetail(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B09 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        openExerciseViewFromRecentWorkouts()
+        let size = maximumText ? "MAX" : "normal"
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.exists)
+        VisualAudit.capture("W01 \(size) exercise library")
+
+        let add = app.descendants(matching: .any)[AXID.exerciseToolbarAdd].firstMatch
+        XCTAssertTrue(add.waitForExistence(timeout: 8) && add.isHittable)
+        add.auditTap()
+        let single = app.descendants(matching: .any)[AXID.exerciseMenuSingle].firstMatch
+        XCTAssertTrue(single.waitForExistence(timeout: 5))
+        single.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pickerRootList].firstMatch.waitForExistence(timeout: 8))
+        VisualAudit.capture("W02 \(size) exercise picker")
+
+        XCTAssertTrue(app.fillTextInput(AXID.pickerSearchField, with: "Bench Press"))
+        dismissSearchKeyboardIfPresent()
+        XCTAssertTrue(scrollPickerToHittableElementIfNeeded(
+            AXID.pickerExerciseDetailButton(Fixture.benchPressID), maxSwipes: 10
+        ))
+        let info = app.descendants(matching: .any)[AXID.pickerExerciseDetailButton(Fixture.benchPressID)].firstMatch
+        XCTAssertTrue(info.isHittable)
+        VisualAudit.capture("W02 \(size) filtered Bench Press info")
+        info.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDetailScreen].firstMatch.waitForExistence(timeout: 8))
+        let close = app.descendants(matching: .any)[AXID.exerciseDetailClose].firstMatch
+        XCTAssertTrue(close.waitForExistence(timeout: 5) && close.isHittable)
+        VisualAudit.capture("W03 \(size) exercise detail")
+        close.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pickerRootList].firstMatch.waitForExistence(timeout: 8))
+        if maximumText {
+            let rowID = AXID.pickerExerciseRow(Fixture.benchPressID)
+            XCTAssertTrue(scrollPickerToHittableElementIfNeeded(rowID, maxSwipes: 10))
+            let row = app.descendants(matching: .any)[rowID].firstMatch
+            XCTAssertTrue(row.isHittable)
+            row.auditTap()
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseStartScreen].firstMatch.waitForExistence(timeout: 10),
+                          "Selecting the original exercise row should open Exercise Start")
+        } else {
+            let cancel = app.descendants(matching: .any)[AXID.pickerCancelButton].firstMatch
+            XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
+            cancel.auditTap()
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.waitForExistence(timeout: 8))
+        }
+    }
+
     // MARK: - Helpers
 
     private func ensureActivityRoot() {
