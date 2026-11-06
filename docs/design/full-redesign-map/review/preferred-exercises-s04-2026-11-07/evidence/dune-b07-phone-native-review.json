@@ -1,0 +1,94 @@
+{
+  "status": "read-only native iPhone visual review; no SDK or source changes",
+  "provenance": {
+    "phone_first": {
+      "revision": "2930ba45dd419634932ef3e4ced117ae13b7556e",
+      "executed": 8,
+      "passed": 4,
+      "failed": 4
+    },
+    "phone_retry1": {
+      "revision": "47feceb7b4d68d248717457a369d5e337d848c56",
+      "executed": 4,
+      "passed": 1,
+      "failed": 3
+    }
+  },
+  "viewed_assets": [
+    "/private/tmp/dune-b07-gallery-prep/S01/assets/05-regular-after.png",
+    "/private/tmp/dune-b07-gallery-prep/S01/assets/06-regular-after.png",
+    "/private/tmp/dune-b07-gallery-prep/S01/assets/07-regular-after.png",
+    "/private/tmp/dune-b07-gallery-prep/S02/assets/05-regular-after.png",
+    "/private/tmp/dune-b07-gallery-prep/S02/assets/07-regular-after.png",
+    "/private/tmp/dune-b07-gallery-prep/S02/assets/09-regular-diagnostic.png",
+    "/private/tmp/dune-b07-gallery-prep/S02/assets/10-regular-diagnostic.png",
+    "/private/tmp/dune-b07-gallery-prep/S03/assets/05-regular-after.png",
+    "/private/tmp/dune-b07-gallery-prep/S03/assets/10-regular-after.png",
+    "/private/tmp/dune-b07-gallery-prep/S04/assets/07-regular-diagnostic.png"
+  ],
+  "introduced_findings": [
+    {
+      "priority": "P2",
+      "screen": "S02 Exercise Defaults List",
+      "source": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNE/Presentation/Settings/Components/ExerciseDefaultsListView.swift:102",
+      "title": "Decorative icon overlaps exercise name at MAX text size",
+      "evidence": {
+        "png": "/private/tmp/dune-b07-gallery-prep/S02/assets/10-regular-diagnostic.png",
+        "ax": "/private/tmp/dune-b07-gallery-prep/S02/assets/10-regular-diagnostic.txt",
+        "frame_detail": "First result icon x=22.3..86.0, y=338.7..375.7; Korean exercise-name text x=80.0..309.3, y=294.3..419.6. Frames intersect by 6.0pt horizontally and 37.0pt vertically. Screenshot visibly places dumbbell over the wrapped name."
+      },
+      "cause": "New .subheadline SF Symbol scales at accessibility MAX while the row reserves only a 28pt icon frame. The icon was introduced in this B07 diff.",
+      "bounded_fix": "Keep the same resolvedActivityType.iconName and accent treatment, but use a fixed decorative SF Symbol font around 18pt inside the 28pt frame (or reserve enough width for its measured MAX size); confirm the same searched row with fresh MAX capture."
+    }
+  ],
+  "observations": [
+    {
+      "screen": "S01",
+      "assets": [
+        "05-regular-after.png",
+        "06-regular-after.png",
+        "07-regular-after.png"
+      ],
+      "result": "Normal top controls and MAX first controls/final section are legible with wrapping and no observed overlap in inspected frames. MAX selector passed. Does not establish all middle sections."
+    },
+    {
+      "screen": "S02",
+      "assets": [
+        "05-regular-after.png",
+        "07-regular-after.png",
+        "09-regular-diagnostic.png",
+        "10-regular-diagnostic.png"
+      ],
+      "result": "Normal configured/all/search rows retain distinct activity icons, full visible Korean names, and chevrons. The 72.5 kg configured row is a diagnostic frame from a failed selector; MAX search row has the P2 overlap above."
+    },
+    {
+      "screen": "S03",
+      "assets": [
+        "05-regular-after.png",
+        "10-regular-after.png"
+      ],
+      "result": "Normal editor preserves labels, icons, switches, Save. Passed MAX saved reopen frame shows 72.5 and 8 in separate readable fields, with no observed row overlap. MAX focused selector passed on retry; separate save/reopen selector failed."
+    },
+    {
+      "screen": "S04",
+      "assets": [
+        "07-regular-diagnostic.png"
+      ],
+      "result": "Filtered normal frame shows the original equipment icons and the selected native switch visually ON. It is diagnostic from a selector that failed later at screen reentry, so persistence is not passed."
+    }
+  ],
+  "not_verified": [
+    "S04 MAX compact layout; its selector failed",
+    "S04 reentry persistence",
+    "S02 separate Save route completion",
+    "Duo closed/open current-source captures",
+    "iPad current-source capture and route",
+    "Any universal dark/contrast claims"
+  ],
+  "source_of_manifests": [
+    "/private/tmp/dune-b07-gallery-prep/S01/manifest.json",
+    "/private/tmp/dune-b07-gallery-prep/S02/manifest.json",
+    "/private/tmp/dune-b07-gallery-prep/S03/manifest.json",
+    "/private/tmp/dune-b07-gallery-prep/S04/manifest.json"
+  ]
+}

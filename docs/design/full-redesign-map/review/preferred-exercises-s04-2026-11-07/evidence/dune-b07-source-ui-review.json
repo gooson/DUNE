@@ -1,0 +1,38 @@
+{
+  "source_revision": "5c2d952743ca32103010ff0b2c6299c06a1e0540",
+  "base_revision": "908b642cf69142ed9977f9b615b7b83d5cecd424",
+  "scope": [
+    "DUNE/Presentation/Settings/SettingsView.swift",
+    "DUNE/Presentation/Settings/Components/ExerciseDefaultsListView.swift",
+    "DUNE/Presentation/Settings/Components/ExerciseDefaultEditView.swift",
+    "DUNE/Presentation/Settings/Components/PreferredExercisesListView.swift"
+  ],
+  "review_lenses": [
+    "Performance",
+    "Simplicity",
+    "SwiftUI",
+    "Apple UX"
+  ],
+  "findings": [],
+  "resolved_prior_candidates": [
+    "S01 section headers now use .foregroundStyle(.primary), removing the low-contrast MetricBody tint from small text.",
+    "S03 ordinary HStack rows now retain conditional Spacer(minLength: DS.Spacing.sm) before each capped TextField; accessibility sizes switch to VStack and full-width field."
+  ],
+  "source_observations": [
+    "S01 remains a native Form with the same section order and controls; GeometryReader safe-area addition is removed, and contentMargins/section spacing are declarative.",
+    "S02 remains a native List with existing configured/all/search sections, stable exercise IDs, NavigationLink destinations, star and pin statuses; newly added activity icon is accessibility-hidden.",
+    "S03 retains existing field bindings, keyboards, labels, validation/persistence and Save/Clear actions; AnyLayout changes only row direction at accessibility sizes.",
+    "S04 remains a native List with preferred/all/search sections, stable toggle IDs and bindings, sorted/cached library, and Watch sync; newly added equipment asset icon is accessibility-hidden and row strings wrap."
+  ],
+  "native_checks_needed": [
+    "Compile iOS target to verify AnyLayout, Form contentMargins and listSectionSpacing availability.",
+    "Normal and MAX iPhone: S01 first section inset, section heading contrast, bottom row reachability and toolbar; S03 right-aligned normal values and full MAX labels/fields with keyboard.",
+    "Normal iPhone/iPad: S02 long localized exercise name, icons, configured row star/pin and navigation; S04 long names/muscles, toggle hit target, preferred row relocation, search and scrolling.",
+    "Affected iPad and Duo layouts and actual design-map captures per project policy; no claim from source review.",
+    "Theme/dark appearances for accent icon legibility and section header system foreground."
+  ],
+  "limits": [
+    "Read-only source diff review; no SDK, simulator, build, native capture or runtime behavior claim.",
+    "No conclusion that upcoming eight focused selectors pass; their evidence belongs to parent."
+  ]
+}

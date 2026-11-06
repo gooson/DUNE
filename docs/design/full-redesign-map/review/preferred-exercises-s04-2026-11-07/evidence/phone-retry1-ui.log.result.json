@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize",
+    "DUNEUITests/TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 3
+  },
+  "passed_cases": 1,
+  "failures": [
+    "902: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:926: error: -[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultSaveReopensWithStoredValues] : XCTAssertTrue failed - Clear confirmation offers Cancel",
+    "913: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultSaveReopensWithStoredValues]' failed (62.607 seconds).",
+    "1570: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:887: error: -[DUNEUITests.TodaySettingsRegressionTests testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize] : XCTAssertTrue failed",
+    "1581: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize]' failed (128.178 seconds).",
+    "1772: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:1022: error: -[DUNEUITests.TodaySettingsRegressionTests testPreferredExerciseToggleSurvivesScreenReentry] : XCTAssertTrue failed",
+    "1783: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testPreferredExerciseToggleSurvivesScreenReentry]' failed (48.399 seconds).",
+    "1784: Test Suite 'TodaySettingsRegressionTests' failed at 2026-11-07 00:35:20.785.",
+    "1786: Test Suite 'DUNEUITests.xctest' failed at 2026-11-07 00:35:20.795.",
+    "1788: Test Suite 'Selected tests' failed at 2026-11-07 00:35:20.795.",
+    "1802: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 3 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues",
+    "DUNEUITests/TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b07/phone-retry1-ui.log"
+}

@@ -331,13 +331,26 @@
     },
     "S04": {
       "row_id": "S04",
-      "evidence": "preferred-exercises-screen",
-      "test": "TodaySettingsRegressionTests/testPreferredExercisesSearchShowsToggle()",
-      "action": "tap settings-row-preferredexercises",
-      "timestamp": 1791817557.17,
-      "image": "FE9A7878-1D21-45F5-B866-027798BD56B7.png",
-      "screen": "screen-0-1320x2868-tap settings-row-preferredexercises_0_E5B33260-310D-42C8-8D98-A28E052A6BE5.png",
-      "file": "S04.png"
+      "file": "S04.png",
+      "test": "TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry()",
+      "action": "Preferred selection in filtered results (failed selector; diagnostic)",
+      "timestamp": 1793979310.064,
+      "source_revision": "47feceb7b4d68d248717457a369d5e337d848c56",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX-diagnostic",
+      "sha256": "1631dcc8e61874aa03f7c5f981bd629136a77dfd83e64c2f4705a2004af52817",
+      "ax_sha256": "1cdf6380fe89dec39b924182406cfc9d37dc270c38f3e77d808c110c2c872c22",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/preferred-exercises-s04-2026-11-07/manifest.json",
+      "source_record": "records: profile=regular,kind=diagnostic,run_id=phone-retry1",
+      "capture_scope": "Native ON switch seen; phone case failed later at Back; full flow pending",
+      "actual_angle": null,
+      "current_verification": "pending",
+      "current_verification_note": "선호 운동 스위치 ON은 실제 접근성 트리에서 확인했습니다. 휴대폰 테스트는 이후 뒤로 가기 단계에서 실패해 전체 흐름 검증은 대기 중입니다."
     },
     "T06": {
       "row_id": "T06",

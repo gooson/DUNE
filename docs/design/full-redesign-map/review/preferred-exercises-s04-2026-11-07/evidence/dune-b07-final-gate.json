@@ -1,0 +1,57 @@
+{
+  "review_kind": "read-only app-quality and final PR gate",
+  "source_revision": "1c1b4bf26f6c1f681561aac825f78b750b93eb1a",
+  "base_revision": "e62575c85051d9c04b20d6fe12552a54e3079d99",
+  "scoped_screens": [
+    "S01 Settings",
+    "S02 Exercise Defaults list",
+    "S04 Preferred Exercises list"
+  ],
+  "excluded": "S03 Exercise Default Edit remains a separate draft; iPad Save/reopen selector is held at keyboard dismissal",
+  "view_sha256": {
+    "S01": "565cb84ed3fb057b6e08ca0fad9ba60dfbb2a1611b4e1a8aaf46d976a01390ce",
+    "S02": "4829dc61e492bcdcb103461d3d6183fc823879bf60042a09f98ccb0d7996fe4d",
+    "S04": "8288aea1259cd006afedcf04a592c0566b2753b217a05f4b607c68eabf67a6b9",
+    "TodaySettingsRegressionTests": "13da73ec1c221d67841e7c98df8fb95f56e42e462dadff1580bedf2f658fb0cf"
+  },
+  "introduced_findings": [],
+  "resolved_finding": {
+    "S02_iPad_MAX_icon_name_overlap": "Earlier enlarged symbol escaped its 28pt tile; current 18pt icon is contained, as shown by fresh iPad MAX screenshot .codex-checks/b07/ipad-retry1-attachments/07D272D9-E276-493B-932A-05BA721F5168.png. Text, icon and chevron no longer overlap."
+  },
+  "source_review": {
+    "S01": "Native Form, section/control/action order and original values preserved. Changes are content margins, section spacing and primary semibold section headings; no eager row cards or model edits.",
+    "S02": "Native List/search/sections/navigation, configured records, star/pin data and original sort retained. Only decorative activity glyph tile added; glyph is accessibility-hidden.",
+    "S04": "Native List/search/sections/toggle binding/Watch sync retained. Equipment icon is decorative and accessibility-hidden; name and muscles wrap."
+  },
+  "positive_native_evidence": {
+    "S01": [
+      "phone normal testSettingsShowsPhaseTwoRows passed in phone-ui.log",
+      "phone MAX testSettingsMaxTextKeepsFirstControlAndLastRowReachable passed in phone-ui.log",
+      "iPad normal testSettingsShowsPhaseTwoRows passed in ipad-ui.log"
+    ],
+    "S02": [
+      "phone normal testExerciseDefaultsSearchResultOpensOriginalEditor passed in phone-ui.log",
+      "iPad normal same selector passed on current S02 font18 source in ipad-retry1-ui.log",
+      "iPad MAX combined testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize passed on current source; screenshot and AX at ipad-retry1-attachments/07D272D9-E276-493B-932A-05BA721F5168.png and FAFA2836-CE1B-4D79-B662-DDF96FCE6E2F.txt"
+    ],
+    "S04": [
+      "phone retry1 native AX and screenshot show seeded toggle changed to ON; reentry had then failed due wrong search-back selector",
+      "iPad normal testPreferredExerciseToggleSurvivesScreenReentry passed on current source in ipad-retry1-ui.log",
+      "iPad MAX combined list test passed on current source; screenshot ipad-retry1-attachments/10AB896A-9395-4079-8D39-E702656C2C44.png"
+    ]
+  },
+  "limits": [
+    "No full eight-selector pass: phone first 4/8, phone retry1 1/4, iPad first 2/5, iPad retry1 3/4; later failures were test navigation/input setup, but do not report suites green.",
+    "Latest S02 18pt glyph lacks a fresh phone capture; S04 compact phone MAX route did not complete. iPad MAX covers current wide layout but cannot stand in for compact proof.",
+    "Fresh affected regular/iPad/Duo actual design-map files have not been committed in this diff; historical PNGs are not current evidence. Current iPad exports may supply S02/S04, and unavailable devices must be labeled as uncaptured.",
+    "Owned Duo boot reported DataMigrationFailed before XCTest, so no Duo app or screenshot claim. No third phone run or Duo replay is recommended under current retry budget.",
+    "No Watch/shared-data/widget behavior changed; no Watch UI claim. Dark appearance and other locales were not run."
+  ],
+  "gate": {
+    "S01": "Code and targeted phone/iPad core UI pass. Eligible for a scoped PR once S01 actual-map capture obligations are reconciled; no whole-branch approval.",
+    "S02": "Source and current iPad normal/MAX core pass; earlier overlap P2 resolved on current iPad image. Conditional scoped PR only with explicit latest-phone capture gap and actual-map status; do not claim compact current-source MAX proof.",
+    "S04": "Source and current iPad normal reentry/MAX layout pass; phone native ON observed but compact MAX/reentry on current test route remains unverified. Conditional scoped PR with those limits and actual-map status.",
+    "S03": "Draft only; iPad normal Save/reopen remains unverified due keyboard dismissal failure.",
+    "whole_B07": "Not approved as green or merged from this evidence. Split scoped PRs can be reviewed separately; actual design-map synchronization remains a separate required deliverable."
+  }
+}
