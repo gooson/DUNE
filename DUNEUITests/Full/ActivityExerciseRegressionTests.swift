@@ -4550,6 +4550,16 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         app.buttons[AXID.cardioSessionEnd].firstMatch.auditTap()
         app.buttons[AXID.cardioSessionConfirmEnd].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.waitForExistence(timeout: 10))
+        if VisualAudit.isEnabled {
+            let summaryScroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen]
+                .firstMatch.scrollViews.firstMatch
+            XCTAssertTrue(summaryScroll.waitForExistence(timeout: 5))
+            let first = app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch
+            let second = app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch
+            for _ in 0..<10 where !(first.exists && second.exists) {
+                summaryScroll.swipeUp(velocity: .slow)
+            }
+        }
         XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch.exists)
         XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch.exists)
         if VisualAudit.isEnabled {
