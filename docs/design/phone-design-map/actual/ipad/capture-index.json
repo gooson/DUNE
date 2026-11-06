@@ -415,13 +415,25 @@
     },
     "W06": {
       "row_id": "W06",
-      "evidence": "workout-session-screen",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutSharePreview()",
-      "action": "tap exercise-start-button",
-      "timestamp": 1791822833.375,
-      "image": "C86EB015-1489-4427-BA15-3E1DAD532E1C.png",
-      "screen": "screen-0-2064x2752-tap exercise-start-button_0_D377F9C4-A58E-4799-899F-163D989C8E1A.png",
-      "file": "W06.png"
+      "file": "W06.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtNormalText()",
+      "action": "Overview icon and full exercise name",
+      "timestamp": 1793990497.177,
+      "source_revision": "0e1de4237331328f7c64db341cde5de5559181d5",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "cc4dea581ed45afa2bc5dcc0c85612205f8640096661f1da9f52562a33e84fee",
+      "ax_sha256": "8220e532bde0976404b9d1097ce149980e4466e58b7325294640e7993b6ad516",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/workout-session-w06-2026-11-07/manifest.json",
+      "capture_scope": "B10 manual normal; MAX and source section equivalence in gallery proof",
+      "current_verification": "normal-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W22": {
       "row_id": "W22",
