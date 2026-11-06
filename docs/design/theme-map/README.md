@@ -346,3 +346,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 - [P07 정적 표현](themes/dune-posture-symmetry-p07.html): 구현 전 시안이며 실제 PNG가 아니다.
 
 - [P08 정적 표현](themes/dune-posture-comparison-p08.html): 구현 전 시안이며 실제 PNG가 아니다.
+
+- [P03 정적 표현](themes/dune-posture-exercise-picker-p03.html): PR944 원격 보존본, 승인된 MAX1회 공유 실행 전.

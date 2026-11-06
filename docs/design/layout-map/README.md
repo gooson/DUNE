@@ -253,3 +253,5 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 - [P07 배치 계약](posture-symmetry-p07.html): 구현 전 보존. 원래 기능·아이콘·값·단위를 유지한다.
 
 - [P08 배치 계약](posture-comparison-p08.html): 구현 전 보존. 원래 기능·아이콘·값·단위를 유지한다.
+
+- [P03 운동 선택](posture-exercise-picker-p03.html): 사용자 승인된 MAX1회만 B06와 같은 Duo 실행에서 검증한다. 원래 두 실패 기록·H08 보류 유지.
