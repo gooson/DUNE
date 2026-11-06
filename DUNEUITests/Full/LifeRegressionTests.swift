@@ -332,15 +332,34 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(app.navigationBars["Weekly Report"].waitForExistence(timeout: 5), "Weekly report should open")
         let reportScroll = app.scrollViews["life-weekly-report-scroll"].firstMatch
         XCTAssertTrue(reportScroll.waitForExistence(timeout: 5), "The report must own its scroll container")
-        VisualAudit.capture("Life weekly report upper viewport")
+        XCTAssertTrue(app.revealTextBody("life-weekly-report-period", in: reportScroll))
+        XCTAssertEqual(app.staticTexts["life-weekly-report-period"].firstMatch.label, "This Week")
+        let rate = app.staticTexts["life-weekly-report-rate"].firstMatch
+        let total = app.staticTexts["life-weekly-report-total"].firstMatch
+        XCTAssertTrue(app.revealTextBody("life-weekly-report-rate", in: reportScroll))
+        let observedHeroRate = rate.label
+        XCTAssertTrue(observedHeroRate.hasSuffix("%"))
+        VisualAudit.capture("L08 weekly report rate")
+        XCTAssertTrue(app.revealTextBody("life-weekly-report-total", in: reportScroll))
+        XCTAssertTrue(total.label.contains("completed"))
+        for identifier in ["life-weekly-report-comparison-current", "life-weekly-report-comparison-previous"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: reportScroll))
+            XCTAssertTrue(app.staticTexts[identifier].firstMatch.label.hasSuffix("%"))
+        }
+        XCTAssertEqual(app.staticTexts["life-weekly-report-comparison-current"].firstMatch.label, observedHeroRate)
+        XCTAssertTrue(app.revealFullyVisible("life-weekly-report-comparison-trend", in: reportScroll))
+        XCTAssertTrue(app.images["life-weekly-report-comparison-trend"].firstMatch.exists)
+        VisualAudit.capture("L08 weekly report total and comparison")
         for identifier in ["life-weekly-report-best", "life-weekly-report-improvement"] {
             let landmark = app.descendants(matching: .any)[identifier].firstMatch
             for _ in 0..<10 where !(landmark.exists && landmark.isHittable) {
                 reportScroll.swipeUp(velocity: .slow)
             }
-            XCTAssertTrue(landmark.exists && landmark.isHittable, "Report section must be reachable: \(identifier)")
-            VisualAudit.capture("Life weekly report section \(identifier)")
+            XCTAssertTrue(app.revealTextBody(identifier, in: reportScroll), "Report section must be reachable: \(identifier)")
+            VisualAudit.capture("L08 weekly report section \(identifier)")
         }
+        XCTAssertTrue(returnFromLifeDetail(named: "Weekly Report"))
+        XCTAssertTrue(reportScroll.waitForNonExistence(timeout: 5))
     }
 
     func testVisualAuditHabitHeatmap() throws {
@@ -548,6 +567,85 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         XCTAssertGreaterThanOrEqual(managementClose.frame.height, 44)
         managementClose.auditTap()
         XCTAssertTrue(managementTitle.waitForNonExistence(timeout: 5))
+    }
+
+    func testHabitAnalyticsAtMaximumAccessibilitySize() throws {
+        executionTimeAllowance = 600
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        launchApp(with: configuration)
+        ensureLifeRoot()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-weekly-report-button", maxSwipes: 12))
+        app.buttons["life-weekly-report-button"].firstMatch.auditTap()
+        let reportScroll = app.scrollViews["life-weekly-report-scroll"].firstMatch
+        XCTAssertTrue(reportScroll.waitForExistence(timeout: 5))
+        var observedHeroRate = ""
+        for identifier in ["life-weekly-report-period", "life-weekly-report-rate", "life-weekly-report-total",
+                           "life-weekly-report-best", "life-weekly-report-improvement"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: reportScroll, maxMoves: 20), "L08 MAX content: \(identifier)")
+            if identifier == "life-weekly-report-rate" {
+                observedHeroRate = app.staticTexts[identifier].firstMatch.label
+                XCTAssertTrue(observedHeroRate.hasSuffix("%"))
+            }
+            VisualAudit.capture("L08 MAX \(identifier)")
+        }
+        for identifier in ["life-weekly-report-comparison-current", "life-weekly-report-comparison-previous"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: reportScroll, maxMoves: 20))
+            XCTAssertTrue(app.staticTexts[identifier].firstMatch.label.hasSuffix("%"))
+        }
+        XCTAssertEqual(app.staticTexts["life-weekly-report-comparison-current"].firstMatch.label,
+                       observedHeroRate)
+        XCTAssertTrue(app.revealFullyVisible("life-weekly-report-comparison-trend", in: reportScroll, maxMoves: 20))
+        XCTAssertTrue(app.images["life-weekly-report-comparison-trend"].firstMatch.exists)
+        VisualAudit.capture("L08 MAX comparison values and trend")
+        XCTAssertTrue(returnFromLifeDetail(named: "Weekly Report"))
+        XCTAssertTrue(reportScroll.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.revealFullyVisible(
+            "habit-heatmap",
+            in: app.scrollViews.containing(.button, identifier: "habit-heatmap").firstMatch,
+            maxMoves: 20
+        ))
+        app.buttons["habit-heatmap"].firstMatch.auditTap()
+        XCTAssertTrue(app.navigationBars["Activity Detail"].waitForExistence(timeout: 5))
+        let heatmapScroll = app.scrollViews["habit-heatmap-detail-scroll"].firstMatch
+        XCTAssertTrue(heatmapScroll.waitForExistence(timeout: 5) && heatmapScroll.isHittable)
+        for identifier in ["habit-heatmap-period", "habit-heatmap-total", "habit-heatmap-total-label",
+                           "habit-heatmap-average", "habit-heatmap-streak", "habit-heatmap-active-days",
+                           "habit-heatmap-map-title", "habit-heatmap-weekday-title"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: heatmapScroll, maxMoves: 20), "L07 MAX content: \(identifier)")
+            VisualAudit.capture("L07 MAX \(identifier)")
+        }
+        for day in 0..<7 {
+            let identifier = "habit-heatmap-detail-grid-day-\(day)"
+            XCTAssertTrue(app.revealTextBody(identifier, in: heatmapScroll, maxMoves: 20))
+            XCTAssertFalse(app.staticTexts[identifier].firstMatch.label.isEmpty)
+        }
+        for identifier in ["habit-heatmap-detail-legend-less", "habit-heatmap-detail-legend-more"] {
+            XCTAssertTrue(app.revealTextBody(identifier, in: heatmapScroll, maxMoves: 20))
+        }
+        VisualAudit.capture("L07 MAX grid and legend")
+        for day in 0..<7 {
+            let identifier = "habit-heatmap-weekday-count-\(day)"
+            XCTAssertTrue(app.revealTextBody(identifier, in: heatmapScroll, maxMoves: 20))
+            XCTAssertNotNil(Int(app.staticTexts[identifier].firstMatch.label))
+        }
+        VisualAudit.capture("L07 MAX weekday values")
+        XCTAssertTrue(returnFromLifeDetail(named: "Activity Detail"))
+        XCTAssertTrue(heatmapScroll.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.lifeHeroProgress].firstMatch.waitForExistence(timeout: 5))
+    }
+
+    private func returnFromLifeDetail(named route: String) -> Bool {
+        let named = app.navigationBars[route].buttons["Life"].firstMatch
+        if named.exists && named.isHittable {
+            named.auditTap()
+            return true
+        }
+        let floating = app.buttons.matching(identifier: "BackButton").allElementsBoundByIndex
+            .filter { $0.exists && $0.isHittable }
+        guard floating.count == 1 else { return false }
+        floating[0].auditTap()
+        return true
     }
 
     private func captureLifeAuditScroll(_ route: String) {
