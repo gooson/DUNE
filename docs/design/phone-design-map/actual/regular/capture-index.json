@@ -179,13 +179,25 @@
     },
     "W21": {
       "row_id": "W21",
-      "evidence": "compound-workout-screen",
-      "test": "ActivityExerciseRegressionTests/testCompoundWorkoutSetupStartsWorkoutAndFinishesFlow()",
-      "action": "tap compound-workout-setup-start",
-      "timestamp": 1791816660.389,
-      "image": "75A6C2C9-CEC8-45DB-8E22-496B07499082.png",
-      "screen": "screen-0-1320x2868-tap compound-workout-setup-start_0_BF9B5EF6-628A-4B60-941D-41153EA48F46.png",
-      "file": "W21.png"
+      "file": "W21.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditCompoundSessionAtNormalText()",
+      "action": "W21 normal round time and exercise tabs",
+      "timestamp": 1794003050.418,
+      "source_revision": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "56257dceabaec128b3b8e48626981f72fd16c6484439239ee7995f12655c84e0",
+      "ax_sha256": "3a539938daf361626297bccbfa334e204d77d8403086c8da797231b037379d0c",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/compound-workout-w21-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W19": {
       "row_id": "W19",

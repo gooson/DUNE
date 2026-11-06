@@ -4229,6 +4229,107 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                       "Cancel should return to the template list without saving a test exercise")
     }
 
+    func testVisualAuditCompoundSessionAtNormalText() throws {
+        try auditB14CompoundSession(maximumText: false)
+    }
+
+    func testVisualAuditCompoundSessionAtMaximumText() throws {
+        try auditB14CompoundSession(maximumText: true)
+    }
+
+    private func auditB14CompoundSession(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B14 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+        openExerciseViewFromRecentWorkouts()
+        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.exerciseToolbarAdd, timeout: 8))
+        let option = app.buttons[AXID.exerciseMenuCompound].firstMatch
+        XCTAssertTrue(option.waitForExistence(timeout: 5) && option.isHittable)
+        option.auditTap()
+        let setup = app.collectionViews[AXID.compoundWorkoutSetupScreen].firstMatch
+        XCTAssertTrue(setup.waitForExistence(timeout: 8))
+        let superset = setup.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "Superset")).firstMatch
+        XCTAssertTrue(superset.waitForExistence(timeout: 5) && superset.isHittable)
+        if maximumText { superset.auditTap() }
+        let circuit = app.buttons.matching(NSPredicate(format: "label == %@", "Circuit")).firstMatch
+        XCTAssertTrue(circuit.waitForExistence(timeout: 5) && circuit.isHittable)
+        circuit.auditTap()
+        XCTAssertTrue(app.staticTexts["Cycle through 3+ exercises in rounds."].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("W19 \(size) Circuit mode and full label")
+        let circuitSelected = setup.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "Circuit")).firstMatch
+        if maximumText { circuitSelected.auditTap() }
+        let supersetChoice = app.buttons.matching(NSPredicate(format: "label == %@", "Superset")).firstMatch
+        XCTAssertTrue(supersetChoice.waitForExistence(timeout: 5) && supersetChoice.isHittable)
+        supersetChoice.auditTap()
+        XCTAssertTrue(app.staticTexts["Alternate between 2 exercises with minimal rest."].firstMatch
+            .waitForExistence(timeout: 5))
+
+        let add = app.buttons[AXID.compoundWorkoutSetupAddExercise].firstMatch
+        XCTAssertTrue(openCompoundPicker(using: add, in: setup), "W20 full picker should open")
+        let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
+        XCTAssertTrue(picker.waitForExistence(timeout: 5))
+        VisualAudit.capture("W20 \(size) full compound exercise picker")
+        let benchID = AXID.pickerExerciseRow(Fixture.benchPressID)
+        XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(benchID, maxSwipes: 8))
+        let bench = app.buttons[benchID].firstMatch
+        XCTAssertTrue(bench.waitForExistence(timeout: 5) && bench.isHittable)
+        bench.auditTap()
+        XCTAssertTrue(setup.waitForExistence(timeout: 8))
+        addCompoundExercise("barbell-squat")
+        let count = app.descendants(matching: .any)[AXID.compoundWorkoutSetupSelectionCount].firstMatch
+        XCTAssertTrue(count.waitForExistence(timeout: 5))
+        XCTAssertEqual(count.label, "Exercises (2)")
+        let start = app.buttons[AXID.compoundWorkoutSetupStart].firstMatch
+        for _ in 0..<12 where !(start.exists && start.isHittable) { setup.swipeUp(velocity: .slow) }
+        XCTAssertTrue(start.waitForExistence(timeout: 5) && start.isHittable && start.isEnabled)
+        VisualAudit.capture("W19 \(size) selected exercises and Start")
+        start.auditTap()
+
+        let session = app.scrollViews[AXID.compoundWorkoutScreen].firstMatch
+        XCTAssertTrue(session.waitForExistence(timeout: 10))
+        XCTAssertTrue(session.staticTexts["Round 1 / 3"].firstMatch.waitForExistence(timeout: 5))
+        let elapsed = session.staticTexts.matching(NSPredicate(format: "label MATCHES %@", "[0-9]+:[0-9]{2}")).firstMatch
+        XCTAssertTrue(elapsed.waitForExistence(timeout: 5), "W21 elapsed time must remain visible")
+        let squatTab = session.buttons.matching(NSPredicate(format: "label CONTAINS %@", "바벨 스쿼트")).firstMatch
+        let tabStrip = session.scrollViews.firstMatch
+        for _ in 0..<8 where !(squatTab.exists && squatTab.isHittable) { tabStrip.swipeLeft(velocity: .slow) }
+        XCTAssertTrue(squatTab.waitForExistence(timeout: 5) && squatTab.isHittable)
+        VisualAudit.capture("W21 \(size) round time and exercise tabs")
+        squatTab.auditTap()
+        let benchTab = session.buttons.matching(NSPredicate(format: "label CONTAINS %@", Fixture.benchPressLocalizedName)).firstMatch
+        for _ in 0..<8 where !(benchTab.exists && benchTab.isHittable) { tabStrip.swipeRight(velocity: .slow) }
+        XCTAssertTrue(benchTab.exists && benchTab.isHittable)
+        benchTab.auditTap()
+        let summary = session.staticTexts["Summary"].firstMatch
+        for _ in 0..<16 where !(summary.exists && summary.isHittable) { session.swipeUp(velocity: .slow) }
+        XCTAssertTrue(summary.exists && summary.isHittable)
+        XCTAssertGreaterThanOrEqual(session.staticTexts.matching(NSPredicate(format: "label == %@", "0 sets")).count, 2)
+        VisualAudit.capture("W21 \(size) two-exercise summary")
+        let next = session.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Next Exercise")).firstMatch
+        for _ in 0..<10 where !(next.exists && next.isHittable) { session.swipeDown(velocity: .slow) }
+        XCTAssertTrue(next.waitForExistence(timeout: 5) && next.isHittable)
+        next.auditTap()
+        let addTime = app.buttons["+30s"].firstMatch
+        let transitionStart = app.buttons["Start"].firstMatch
+        for _ in 0..<16 where !(addTime.exists && addTime.isHittable && transitionStart.exists && transitionStart.isHittable) {
+            session.swipeUp(velocity: .slow)
+        }
+        let window = app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4)
+        XCTAssertTrue(addTime.exists && addTime.isHittable && window.contains(addTime.frame))
+        XCTAssertTrue(transitionStart.exists && transitionStart.isHittable && window.contains(transitionStart.frame))
+        VisualAudit.capture("W21 \(size) transition plus30 and Start")
+        transitionStart.auditTap()
+        XCTAssertTrue(session.staticTexts["Round 1 / 3"].firstMatch.waitForExistence(timeout: 5))
+        tapBackButton()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.waitForExistence(timeout: 8))
+    }
+
     func testTemplateWorkoutContainerCloseDismissesFullScreenFlow() throws {
         openTemplateList()
 
