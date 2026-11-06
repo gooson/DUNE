@@ -599,7 +599,11 @@ final class LifeRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("L08 MAX comparison values and trend")
         XCTAssertTrue(returnFromLifeDetail(named: "Weekly Report"))
         XCTAssertTrue(reportScroll.waitForNonExistence(timeout: 5))
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded("habit-heatmap", maxSwipes: 16))
+        XCTAssertTrue(app.revealFullyVisible(
+            "habit-heatmap",
+            in: app.scrollViews.containing(.button, identifier: "habit-heatmap").firstMatch,
+            maxMoves: 20
+        ))
         app.buttons["habit-heatmap"].firstMatch.auditTap()
         XCTAssertTrue(app.navigationBars["Activity Detail"].waitForExistence(timeout: 5))
         let heatmapScroll = app.scrollViews["habit-heatmap-detail-scroll"].firstMatch
