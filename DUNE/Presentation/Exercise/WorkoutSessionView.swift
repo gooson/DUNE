@@ -376,15 +376,10 @@ struct WorkoutSessionView: View {
 
     private var sessionOverview: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-            if dynamicTypeSize.isAccessibilitySize {
-                Text(exercise.localizedName)
-                    .font(.title2.bold())
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                Label(exercise.localizedName, systemImage: exercise.resolvedActivityType.iconName)
-                    .font(.title2.bold())
-            }
+            Label(exercise.localizedName, systemImage: exercise.resolvedActivityType.iconName)
+                .font(.title2.bold())
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
             Text("Previous Workout")
                 .font(DS.Typography.sectionTitle)
             if viewModel.previousSets.isEmpty {

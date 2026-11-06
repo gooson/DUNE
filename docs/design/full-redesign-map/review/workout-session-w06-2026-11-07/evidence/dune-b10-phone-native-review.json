@@ -1,0 +1,99 @@
+{
+  "scope": "B10 W05/W06 normal and MAX phone diagnostic native review; W31 absent",
+  "source_revision": "0e1de4237331328f7c64db341cde5de5559181d5",
+  "app_source_unchanged_from_initial": "4fd3b3aadfa39908948538587aea81856ad14c48",
+  "test_source_sha256": "6435e2d70cb3f0b8d870e316aa9ec6e6ac3d2b170926afbe64b197bb319ea340",
+  "runs": [
+    {
+      "id": "phone",
+      "executed": 2,
+      "passed": 0,
+      "failed": 2,
+      "failure": "Both selectors failed at original descendant-only exercise-name query before W06 and W31 steps."
+    },
+    {
+      "id": "phone-retry1",
+      "executed": 2,
+      "passed": 0,
+      "failed": 2,
+      "failure": "Both selectors failed at scrollToWorkoutControl(CompleteSet): Complete Set is the fixed footer outside the controls scroll view. W05 and W06 prefix captures precede failure."
+    }
+  ],
+  "screens": {
+    "W05": {
+      "status": "diagnostic prefix observed; no passing selector",
+      "captures": [
+        {
+          "png": "/private/tmp/dune-b10-gallery-prep/W05/assets/01-regular-phone-normal-diagnostic.png",
+          "ax": "/private/tmp/dune-b10-gallery-prep/W05/assets/01-regular-phone-normal-diagnostic.txt"
+        },
+        {
+          "png": "/private/tmp/dune-b10-gallery-prep/W05/assets/02-regular-phone-max-diagnostic.png",
+          "ax": "/private/tmp/dune-b10-gallery-prep/W05/assets/02-regular-phone-max-diagnostic.txt"
+        },
+        {
+          "png": "/private/tmp/dune-b10-gallery-prep/W05/assets/03-regular-phone-retry1-normal-diagnostic.png",
+          "ax": "/private/tmp/dune-b10-gallery-prep/W05/assets/03-regular-phone-retry1-normal-diagnostic.txt"
+        },
+        {
+          "png": "/private/tmp/dune-b10-gallery-prep/W05/assets/04-regular-phone-retry1-max-diagnostic.png",
+          "ax": "/private/tmp/dune-b10-gallery-prep/W05/assets/04-regular-phone-retry1-max-diagnostic.txt"
+        }
+      ],
+      "observations": [
+        "Original and retry captures agree: icon, Korean exercise name, Strength, muscle labels, Barbell and one-set value are present at normal and MAX.",
+        "Pinned Start Workout action is visible within the 440x956 point window; AX shows exercise-start-button frame normal (16,846,408,64) and MAX (16,770.7,408,139.3).",
+        "At MAX the pinned action wraps to two lines without visible collision; title remains visible."
+      ],
+      "introduced_p1_p2_verified": []
+    },
+    "W06": {
+      "status": "diagnostic prefix observed in retry only; no passing selector",
+      "captures": [
+        {
+          "png": "/private/tmp/dune-b10-gallery-prep/W06/assets/01-regular-phone-retry1-normal-diagnostic.png",
+          "ax": "/private/tmp/dune-b10-gallery-prep/W06/assets/01-regular-phone-retry1-normal-diagnostic.txt"
+        },
+        {
+          "png": "/private/tmp/dune-b10-gallery-prep/W06/assets/02-regular-phone-retry1-normal-diagnostic.png",
+          "ax": "/private/tmp/dune-b10-gallery-prep/W06/assets/02-regular-phone-retry1-normal-diagnostic.txt"
+        },
+        {
+          "png": "/private/tmp/dune-b10-gallery-prep/W06/assets/03-regular-phone-retry1-max-diagnostic.png",
+          "ax": "/private/tmp/dune-b10-gallery-prep/W06/assets/03-regular-phone-retry1-max-diagnostic.txt"
+        },
+        {
+          "png": "/private/tmp/dune-b10-gallery-prep/W06/assets/04-regular-phone-retry1-max-diagnostic.png",
+          "ax": "/private/tmp/dune-b10-gallery-prep/W06/assets/04-regular-phone-retry1-max-diagnostic.txt"
+        }
+      ],
+      "observations": [
+        "Overview captures show the original exercise icon and full Korean name at normal and MAX; AX identifies the name as workout-session-overview.",
+        "Input captures show 60 KG and 10 REPS with increment/decrement controls and a pinned Complete Set action at normal and MAX.",
+        "At MAX the scroll position of the input capture places the +1 reps control near the fixed footer; this capture alone does not prove its complete visible area or interaction. Earlier retry AX at failure reported the changed 62.5 kg and 11 reps values, but these prefix screenshots show the initial 60/10 state.",
+        "The English navigation title truncates in the phone screenshots; the full exercise name appears in the body."
+      ],
+      "introduced_p1_p2_verified": []
+    },
+    "W31": {
+      "status": "not reached on phone; no native capture or test result for the last-set sheet",
+      "captures": [],
+      "introduced_p1_p2_verified": []
+    }
+  },
+  "gate": "No W05/W06/W31 phone test pass or actual-map after capture can be claimed from these failed selectors. iPad first run is active and has not been exported here.",
+  "builder": {
+    "path": "/private/tmp/dune-b10-gallery-prep/build.py",
+    "sha256": "472e3825361e5631d332ff03e16319b9b425db032687ce39d94e7381fc8a2aac",
+    "ipad_capture_titles": [
+      "W31 normal initial last-set choices",
+      "W31 MAX initial last-set choices"
+    ],
+    "phone_capture_titles": [
+      "W31 normal medium last-set choices",
+      "W31 normal large last-set choices",
+      "W31 MAX medium last-set choices",
+      "W31 MAX large last-set choices"
+    ]
+  }
+}
