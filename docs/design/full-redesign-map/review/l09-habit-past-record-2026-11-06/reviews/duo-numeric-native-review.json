@@ -1,0 +1,131 @@
+{
+  "role": "independent SwiftUI / Apple UX native review",
+  "source": "dbb21495ba4454da89f2918dca7ee026f58dabb0",
+  "profile": "duo-closed-normal",
+  "pose": {
+    "angle_degrees": 0,
+    "active_display": "LCD",
+    "orientation": "rot0",
+    "actual_png_dimensions": [
+      1398,
+      2034
+    ],
+    "readback_before_after": true
+  },
+  "evidence_archive": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed",
+  "exact_selector": "DUNEUITests/LifeFlowUITests/testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged",
+  "selector_result": {
+    "status": "passed",
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "archived_case": {
+      "name": "testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged()",
+      "result": "Passed"
+    }
+  },
+  "original_check_id": "batch03-duo-closed-normal",
+  "original_check_prior_failures": 2,
+  "original_check_prior_pipeline_sha256": "d71594c1c41e1471d08304703a9d4a784a035ca3199aff8c2b0626fab25eba22",
+  "original_check_prior_pipeline_unchanged": true,
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "observations": [
+    "The focused decimal field shows existing value 30 and AX reports Keyboard Focused with value 30.",
+    "Replacement 40 is visible in the same field and AX before any Save action.",
+    "One bounded visible-Form drag changes the content position; the native Past Record Save toolbar returns in the AX at frame x315.7 y30 width62.3 height36 while the keyboard remains open.",
+    "The native Save action returns to Today with Read at 0/30 min and Record updated.",
+    "Read history on the outer LCD shows Recorded later, Yesterday, Nov 5, 2026 and 40/30 min; AX exposes the exact 40/30 min value."
+  ],
+  "limits": [
+    "This separate exact-selector pass does not turn either of the original two same-ID negative executions into a pass. The first closed normal-five aggregate remains 4 passed, 1 failed.",
+    "This verifies the test recovery and app flow at 0-degree active LCD. It does not establish general keyboard-dismissal behavior for every gesture.",
+    "No unfolded/inner-display, physical device, dark mode, Dynamic Type, closed MAX, or full regression pass is claimed."
+  ],
+  "references": [
+    ".codex-checks/batch03/quality/duo-keyboard-cause-expert.md",
+    ".codex-checks/batch03/quality/duo-numeric-viewport-source-review.md",
+    ".codex-checks/batch03/quality/duo-numeric-extra1-pair-contract.json",
+    ".codex-checks/batch03/extra-executions/duo-numeric-original-check-attempt3.json"
+  ],
+  "selected_pair_count": 6,
+  "sha256_verified": true,
+  "selected_pairs": [
+    {
+      "index": 0,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L09 focused duration total and software keyboard [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793919183.578518",
+      "host_sequence": 5,
+      "source": "dbb21495ba4454da89f2918dca7ee026f58dabb0",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/005-1398x2034.png",
+      "png_sha256": "005d06f9f104872ad98a5fd3db48182173dca3a4bc2417e2d8f1fcc2db549bcf",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/005-hierarchy.txt",
+      "ax_sha256": "0ee31aa44614f42feb8f8fd504e9dce05a36727e4259aefaab2db2ddc4900d5c"
+    },
+    {
+      "index": 1,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L09 replacement total before native Save [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793919189.531132",
+      "host_sequence": 6,
+      "source": "dbb21495ba4454da89f2918dca7ee026f58dabb0",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/006-1398x2034.png",
+      "png_sha256": "e88d2198b06c11b3d3b696ffd40b9cc8338685a9e3214276d72215ea551c16eb",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/006-hierarchy.txt",
+      "ax_sha256": "dcb4cc7a79d3dd7a382d989c086c614ed02c66ccd35b6edad4c674b4b877863d"
+    },
+    {
+      "index": 2,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L09 numeric Form visible-area drag 1 [DUNEUITests/LifeFlowUITests.swift:128] DEADLINE=1793919195.963371",
+      "host_sequence": 7,
+      "source": "dbb21495ba4454da89f2918dca7ee026f58dabb0",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/007-1398x2034.png",
+      "png_sha256": "c2082718f97d7defe7a78855387d631909fab31e75a4a072b401dff04f7d6abf",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/007-hierarchy.txt",
+      "ax_sha256": "b65507ebb9ce9347be0fafe2c63e33add520ac9a4f6b6eb7e8c4b40b800448d0"
+    },
+    {
+      "index": 3,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L09 native Save toolbar restored [DUNEUITests/LifeFlowUITests.swift:96] DEADLINE=1793919200.7751741",
+      "host_sequence": 8,
+      "source": "dbb21495ba4454da89f2918dca7ee026f58dabb0",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/008-1398x2034.png",
+      "png_sha256": "c1105a715948dbb3e39f35ec841e4d5ecdfdfb95dd7b59c43877b5ecb9f1d440",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/008-hierarchy.txt",
+      "ax_sha256": "a1c4fc9e7e77e99b440abd84a7ae8ff90f94ab7087182759b772ff216a8225d6"
+    },
+    {
+      "index": 4,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY tap habit-past-record-save [DUNEUITests/LifeFlowUITests.swift:97] DEADLINE=1793919205.457553",
+      "host_sequence": 9,
+      "source": "dbb21495ba4454da89f2918dca7ee026f58dabb0",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/009-1398x2034.png",
+      "png_sha256": "663ea103e92605b3f5e3dd381f06edc3a3ae9139256353ec35d0861fbcd47f92",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/009-hierarchy.txt",
+      "ax_sha256": "10d8ae4115740a6aa5c594d029525c648e9637a55243f1a4246bbc1624713e1e"
+    },
+    {
+      "index": 5,
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05-Life-history-recorded-later [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793919229.024584",
+      "host_sequence": 12,
+      "source": "dbb21495ba4454da89f2918dca7ee026f58dabb0",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/012-1398x2034.png",
+      "png_sha256": "3cc5df16eab4682a66979e3c1035465ebd4281a434e43e1d132373cbced0645c",
+      "ax": ".codex-checks/batch03/evidence/duo-closed-dbb21495-numeric-extra1-passed/host/012-hierarchy.txt",
+      "ax_sha256": "161f69a4bc0e696f1c22f0669d909b0d0e4fb6b5780592315d528ea5a49e6abb"
+    }
+  ]
+}
