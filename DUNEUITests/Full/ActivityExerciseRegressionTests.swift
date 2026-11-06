@@ -4389,11 +4389,6 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             XCTAssertTrue(value.exists, "W22 original \(label) default should appear")
         }
         VisualAudit.capture("W22 \(size) template defaults transition")
-        let start = app.buttons.matching(NSPredicate(
-            format: "identifier == %@ AND label BEGINSWITH %@",
-            AXID.templateWorkoutTransitionScreen, "Start"
-        )).firstMatch
-        if start.exists && start.isHittable { start.auditTap() }
         XCTAssertTrue(app.staticTexts["Exercise 1 of 2"].firstMatch.waitForExistence(timeout: 10),
                       "W16 should advance to the first session")
         VisualAudit.capture("W16 \(size) first template session after transition")
