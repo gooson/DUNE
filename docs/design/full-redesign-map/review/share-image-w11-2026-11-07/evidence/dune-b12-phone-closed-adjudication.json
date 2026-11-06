@@ -1,0 +1,49 @@
+{
+  "batch": "B12",
+  "source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+  "status": "Phone closed; no third SDK run or manual bypass",
+  "runs": [
+    {
+      "attempt": "phone",
+      "executed": 6,
+      "passed": 3,
+      "failed": 3,
+      "receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b12/phone-ui.log.result.json"
+    },
+    {
+      "attempt": "phone-retry1",
+      "executed": 3,
+      "passed": 1,
+      "failed": 2,
+      "receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b12/phone-retry1-ui.log.result.json"
+    }
+  ],
+  "passed_cases": [
+    "W10 normal",
+    "W10 MAX",
+    "W28 imported normal",
+    "W28 imported MAX on retry1"
+  ],
+  "records_failure": {
+    "cases": [
+      "normal",
+      "MAX"
+    ],
+    "observed": "After inspector Done, W27 detail disappears but blank white inspector shell and Done remain above pushed Exercise History. The History AX tree, including stats, exists behind the shell; wait for inspector-close to disappear times out.",
+    "normal_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b12/phone-retry1-attachments/F7121B35-6F6B-41E3-BC1E-50FDD250F2B9.png",
+    "normal_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b12/phone-retry1-attachments/A4593681-1A9E-40F1-99B1-D293B6B00868.txt",
+    "max_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b12/phone-retry1-attachments/3ECE69B3-EF07-4DF8-93DE-34573303C12A.png",
+    "max_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b12/phone-retry1-attachments/8BEDF0E3-94BE-403E-BE97-97BFFB44A795.txt",
+    "source_context": "ExerciseView.swift:104-117 owns inspector binding and Done; unchanged by B12. W27 pushes History from inside inspector. Native shell failure observed; baseline reproducibility not proven.",
+    "classification": "No introduced P1/P2 assignable to B12 layout from this evidence; records cases failed."
+  },
+  "coverage": {
+    "W10": "Phone normal/MAX passed, PR achievement variant absent",
+    "W11": "Phone target never reached",
+    "W26": "stats target not reached; diagnostic only",
+    "W27": "header and sets diagnostic normal/MAX only; case failed",
+    "W28": "Phone normal/MAX passed"
+  },
+  "gate": "No whole-batch approval. W10/W28 Phone-positive only; W11/W26/W27 remain unproven on Phone. Wait for first planned iPad six-selector run without extrapolating.",
+  "introduced_blocking_findings": []
+}
