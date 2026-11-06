@@ -326,6 +326,54 @@ final class WhatsNewVisualAuditTests: UITestBaseCase {
 
 
 
+    func testManualReleaseListAndDetailAtMaximumAccessibilitySize() throws {
+        relaunchAtMaximumTextSize()
+        openSettingsForAudit()
+        openManualReleaseFromSettings()
+        let window = app.windows.firstMatch.frame
+        let release = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
+        let version = release.staticTexts["0.8.0"].firstMatch
+        XCTAssertTrue(version.waitForExistence(timeout: 5), "S05 MAX shows the catalog version")
+        XCTAssertGreaterThan(version.frame.width, 0)
+        XCTAssertLessThanOrEqual(version.frame.maxX, window.maxX - 4,
+                                 "S05 MAX version stays inside the window")
+        VisualAudit.capture("S05 MAX version header")
+
+        let feature = app.descendants(matching: .any)[AXID.whatsNewRow("ios27Support")].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.whatsNewRow("ios27Support"), maxSwipes: 8),
+                      "S05 MAX feature row remains reachable")
+        XCTAssertTrue(feature.label.contains("iOS 27 Support"), "S05 MAX keeps the full feature title")
+        XCTAssertLessThanOrEqual(feature.frame.maxX, window.maxX - 4)
+        VisualAudit.capture("S05 MAX feature row")
+        feature.auditTap()
+
+        let detail = app.descendants(matching: .any)["whatsnew-detail-ios27Support"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 5), "S06 MAX feature detail opens")
+        let title = detail.staticTexts["iOS 27 Support"].firstMatch
+        let summary = detail.staticTexts["Refined for iOS 27, with the familiar experience you know."].firstMatch
+        XCTAssertTrue(title.waitForExistence(timeout: 5) && summary.waitForExistence(timeout: 5),
+                      "S06 MAX retains its supplied title and summary")
+        XCTAssertLessThanOrEqual(title.frame.maxX, window.maxX - 4)
+        XCTAssertLessThanOrEqual(summary.frame.maxX, window.maxX - 4)
+        XCTAssertTrue(detail.staticTexts["0.8.0"].firstMatch.exists,
+                      "S06 MAX retains the supplied version badge")
+        VisualAudit.capture("S06 MAX feature header")
+        for _ in 0..<4 where !summary.isHittable { detail.swipeUp() }
+        XCTAssertTrue(summary.isHittable, "S06 MAX summary remains readable by scrolling")
+        VisualAudit.capture("S06 MAX readable summary")
+        let back = app.navigationBars["iOS 27 Support"].buttons["BackButton"].firstMatch
+        XCTAssertTrue(back.waitForExistence(timeout: 5) && back.isHittable,
+                      "S06 MAX native Back stays reachable")
+    }
+
+    private func relaunchAtMaximumTextSize() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+    }
+
     private func openSettingsForAudit() {
         navigateToDashboard()
         let settings = app.descendants(matching: .any)[AXID.dashboardToolbarSettings].firstMatch

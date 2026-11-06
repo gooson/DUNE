@@ -1,0 +1,49 @@
+{
+  "review": "B08 S05/S06 iPhone native visual review",
+  "source_revision": "e48783e1",
+  "app_diff": "1deb3f21..e48783e1",
+  "manifest": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/manifest.json",
+  "test_result": "3 requested, 3 executed, 3 passed, 0 failed, 0 skipped in phone retry 1",
+  "viewed_assets": {
+    "S05_manual_release_list": {
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/6AD543E1-2FA2-4B06-97E2-B49BED517D98.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/6D44F341-847D-49C2-B488-A312D943EA83.txt"
+    },
+    "S06_manual_feature_detail": {
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/12A3948E-3461-4853-9D2B-039077BA94E4.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/4497A6DC-1BDE-4E12-90DF-70570705C5CF.txt"
+    },
+    "S05_MAX_version_header": {
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/5F271261-96F8-4E7B-909C-EBD9E1F81150.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/1450A3E8-7CE8-43A4-934E-9EB9D0E37DA9.txt"
+    },
+    "S05_MAX_feature_row": {
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/E2270A51-070A-4DF2-B3DF-CA87B06A0C44.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/2F4F64C1-1ACC-4D4D-9C0D-EDC8A0698E63.txt"
+    },
+    "S06_MAX_feature_header": {
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/72472E51-6238-4B1C-95C9-77F43EDAEAB1.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/60FBE255-0D1B-40C7-ADC3-B1DB373CC3FB.txt"
+    },
+    "S06_MAX_readable_summary": {
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/3C6DBE8A-06C0-405A-BFC8-E533408923D4.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/B542D021-E50B-4018-8FD6-BEA776AA9656.txt"
+    },
+    "S05_MAX_automatic_release_and_Done": {
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/5C9EFEEF-BAB5-4898-98C7-325C32014232.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-attachments/8B15D6CC-C559-4502-98E1-DAE2D658D77C.txt"
+    }
+  },
+  "introduced_findings": [],
+  "observations": [
+    "Normal manual release list and feature detail show the current version, category, title, summary, preserved icon, and navigation without visible overlap.",
+    "At maximum accessibility text size, the version label and 0.8.0 occupy separate rows; the full introductory copy and iOS 27 Support row title and summary are represented in AX and visually flow vertically.",
+    "At maximum accessibility text size, the detail category, title, full summary, and version badge flow vertically without observed overlap; the automatic release modal retains a visible Done button.",
+    "The repeated title inside the detail hero artwork is visually ellipsized at MAX. Hero artwork source was unchanged by this app diff and the main title is fully visible; this is not classified as an introduced layout finding."
+  ],
+  "limits": [
+    "Only one iPhone light English normal/MAX sample and the named states were inspected; no dark mode or other language inference.",
+    "iPad SDK evidence was still pending at review time; no current Duo capture or validation.",
+    "The screenshots show the top viewport. AX contains offscreen row content; the passed native selectors support navigation and Done behavior but do not establish every release row visually."
+  ]
+}
