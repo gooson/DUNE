@@ -784,13 +784,25 @@
     },
     "P01": {
       "row_id": "P01",
-      "evidence": "title:Posture Assessment",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap wellness-menu-posture",
-      "timestamp": 1791820081,
-      "image": "512B0CCE-86EE-4FC5-AE17-D9B2018541D8.png",
-      "screen": "screen-0-1320x2868-tap wellness-menu-posture_0_017D18C2-49E7-4C0B-9791-54692982AD09.png",
-      "file": "P01.png"
+      "file": "P01.png",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "action": "screen-0-1320x2868-P01 camera unavailable with retry and Close_0_6EF51624-D16E-470D-A7D2-7EB4B347F61D.png",
+      "timestamp": 1793963866.541,
+      "source_revision": "23fa2883f7f8f02e7418a1fcfed16fb9f516d8ce",
+      "source_worktree_dirty": false,
+      "device_udid": "B9C76CF6-96F3-4DEF-B263-46820019EA01",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "ddd18f48862dc2d4f52b7bf2fce7b45a55a6af0cb20bd3e64ef1011836660e57",
+      "ax_sha256": "156ac40cb1d907c94a989352c352df560807ea449958f91cdf37ecd6f263a20d",
+      "source_json": "../../../full-redesign-map/review/posture-capture-p01-2026-11-06/manifest.json",
+      "source_record": "records: profile=regular,kind=after,is_primary=true",
+      "capture_scope": "selected affected flows verified; see limits",
+      "active_display": null,
+      "actual_angle": null,
+      "native_dimensions": [
+        1320,
+        2868
+      ]
     },
     "P05": {
       "row_id": "P05",
