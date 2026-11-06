@@ -61,3 +61,7 @@ Relevant existing focused UI selectors:
 Add targeted checks for S02 search/filter/order/long names and S03 Save, Cancel/back, toggle persistence, kg/reps and maximum Dynamic Type only where current tests leave the changed behavior unverified. Run via the standard UI wrapper with a single owned simulator after the current B06 run finishes. Do not rerun unrelated P03/H08 work.
 
 Apply each patch only after rechecking its target SHA-256 and current branch. Patch files use repository-relative `a/` and `b/` labels; the full candidate files are easier to review.
+
+## Native Resolve
+
+Phone MAX source2930/47fe showed the dynamically scaled subheadline symbol extending beyond its fixed 28pt tile into the Korean name. Keep the exact original activity glyph and cap its decorative font at 18pt; new iPad normal/MAX capture is required. The phone check retains two failures and will not be replayed; current fixed-source phone captures remain explicitly pending.

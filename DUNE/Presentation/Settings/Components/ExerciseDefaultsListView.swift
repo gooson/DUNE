@@ -100,7 +100,7 @@ struct ExerciseDefaultsListView: View {
     private func exerciseRow(exercise: ExerciseDefinition, record: ExerciseDefaultRecord?) -> some View {
         HStack(spacing: DS.Spacing.md) {
             Image(systemName: exercise.resolvedActivityType.iconName)
-                .font(.subheadline.weight(.medium))
+                .font(.system(size: 18, weight: .medium))
                 .foregroundStyle(theme.accentColor)
                 .frame(width: 28, height: 28)
                 .background(theme.accentColor.opacity(0.10), in: RoundedRectangle(cornerRadius: DS.Radius.sm))
