@@ -2,7 +2,7 @@
 tags: [detail-redesign, habits, targeted-ui, l06]
 date: 2026-11-06
 category: plan
-status: approved
+status: done
 ---
 
 # L06 · 관리에서 연 습관 기록
@@ -25,3 +25,7 @@ status: approved
 ## Testing Strategy and Risks
 
 네 기본 프로필과 접힌 Duo MAX에서 기존 닫기/뒤로·스크롤·리프 텍스트·아이콘·실제 수치를 확인한다. L05 빈 기록은 iPhone의 기존 empty selector를 한 번 추가한다. 헤더가 medium sheet의 모든 공간을 차지하지 않도록 한 스크롤 영역에 두며, MAX의 행·닫기·범례 접근을 직접 확인한다. 기존 정렬·필터·날짜·합계·비율·저장·권한을 변경하지 않는다. 아직 build·SDK·native 결과는 없다.
+
+## 실제 선택 화면 검증
+
+[L06 PNG·AX·출처](../design/full-redesign-map/review/l06-habit-history-detail-2026-11-06/index.html). PR/CI 상태는 별도 기록을 따른다.

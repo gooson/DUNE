@@ -1,0 +1,146 @@
+Attributes: Application, 0x1061c5a40, pid: 78329, label: 'DUNE'
+Element subtree:
+ →Application, 0x1061c5a40, pid: 78329, label: 'DUNE'
+    Window, 0x1061c7700, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x1061c5e00, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x1061c75c0, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x1061c7480, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x1061c7ac0, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x1061c70c0, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x1061c6580, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x1061c57c0, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x1061c7200, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x1061c4500, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x1061c52c0, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x1061c43c0, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x1061c4f00, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x1061c5900, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x1061c5040, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x1061c6d00, {{0.0, -0.0}, {951.0, 669.0}}
+                                Toolbar, 0x1061c5400, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x1061c5180, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x1061c61c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x1061c7e80, {{0.0, -0.0}, {951.0, 669.0}}
+                                    Other, 0x1061c7340, {{0.0, -0.0}, {951.0, 669.0}}
+                                      Other, 0x1061c6800, {{0.0, -0.0}, {951.0, 669.0}}
+                                        NavigationBar, 0x1061c5f40, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Activity Detail'
+                                        Toolbar, 0x1061c5b80, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x1061c4c80, {{0.0, -0.0}, {951.0, 669.0}}
+                                        Other, 0x1061c5680, {{0.0, -0.0}, {951.0, 669.0}}
+                                          Other, 0x1061c4280, {{0.0, -0.0}, {951.0, 669.0}}
+                                            Other, 0x1061c5cc0, {{0.0, -0.0}, {951.0, 669.0}}
+                                              Other, 0x1061c6f80, {{0.0, -0.0}, {951.0, 669.0}}
+                                                ScrollView, 0x1061c7c00, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'habit-heatmap-detail-scroll'
+                                                  Other, 0x1061c4140, {{0.0, -546.0}, {867.0, 1449.7}}
+                                                    StaticText, 0x1061c6e40, {{67.3, -502.0}, {93.0, 18.0}}, identifier: 'habit-heatmap-period', label: 'Last 90 Days'
+                                                    StaticText, 0x1061c4a00, {{44.0, -472.0}, {17.0, 40.7}}, identifier: 'habit-heatmap-total', label: '1'
+                                                    StaticText, 0x1061c7d40, {{44.0, -419.3}, {123.7, 18.0}}, identifier: 'habit-heatmap-total-label', label: 'Total Completions'
+                                                    StaticText, 0x1061c6440, {{32.0, -297.3}, {33.7, 26.3}}, identifier: 'habit-heatmap-average', label: '0.0'
+                                                    StaticText, 0x1061c4000, {{317.0, -297.3}, {10.7, 26.3}}, identifier: 'habit-heatmap-streak', label: '1'
+                                                    StaticText, 0x1061c6bc0, {{602.0, -297.3}, {10.7, 26.3}}, identifier: 'habit-heatmap-active-days', label: '1'
+                                                    StaticText, 0x1061c6a80, {{32.0, -267.0}, {77.0, 14.3}}, label: 'Daily Average'
+                                                    StaticText, 0x102e78780, {{317.0, -267.0}, {85.3, 14.3}}, label: 'Longest Streak'
+                                                    StaticText, 0x102e7be80, {{602.0, -267.0}, {66.3, 14.3}}, label: 'Active Days'
+                                                    StaticText, 0x102e792c0, {{57.7, -196.7}, {99.0, 20.3}}, identifier: 'habit-heatmap-map-title', label: 'Activity Map'
+                                                    StaticText, 0x1105043c0, {{32.0, -164.3}, {253.7, 14.3}}, label: 'Daily habit completions over the last 90 days'
+                                                    StaticText, 0x110504f00, {{32.0, -118.3}, {23.0, 13.3}}, identifier: 'habit-heatmap-detail-grid-day-0', label: 'Mon'
+                                                    StaticText, 0x110505400, {{32.0, -62.7}, {19.3, 13.3}}, identifier: 'habit-heatmap-detail-grid-day-1', label: 'Tue'
+                                                    StaticText, 0x110504b40, {{32.0, -7.0}, {23.7, 13.3}}, identifier: 'habit-heatmap-detail-grid-day-2', label: 'Wed'
+                                                    StaticText, 0x110504c80, {{32.0, 48.7}, {20.3, 13.3}}, identifier: 'habit-heatmap-detail-grid-day-3', label: 'Thu'
+                                                    StaticText, 0x110504a00, {{32.0, 104.3}, {13.7, 13.3}}, identifier: 'habit-heatmap-detail-grid-day-4', label: 'Fri'
+                                                    StaticText, 0x110504780, {{32.0, 160.0}, {17.3, 13.3}}, identifier: 'habit-heatmap-detail-grid-day-5', label: 'Sat'
+                                                    StaticText, 0x110507200, {{32.0, 215.7}, {20.3, 13.3}}, identifier: 'habit-heatmap-detail-grid-day-6', label: 'Sun'
+                                                    StaticText, 0x110504140, {{32.0, 260.7}, {24.0, 13.3}}, identifier: 'habit-heatmap-detail-legend-less', label: 'Less'
+                                                    StaticText, 0x110507700, {{140.0, 260.7}, {27.0, 13.3}}, identifier: 'habit-heatmap-detail-legend-more', label: 'More'
+                                                    StaticText, 0x110506d00, {{49.3, 322.0}, {97.3, 20.3}}, identifier: 'habit-heatmap-weekday-title', label: 'By Weekday'
+                                                    StaticText, 0x110506e40, {{24.0, 355.3}, {30.3, 18.0}}, label: 'Mon'
+                                                    StaticText, 0x1105075c0, {{835.3, 357.2}, {7.7, 14.3}}, identifier: 'habit-heatmap-weekday-count-0', label: '0'
+                                                    StaticText, 0x110505f40, {{24.0, 387.3}, {25.3, 18.0}}, label: 'Tue'
+                                                    StaticText, 0x110507480, {{835.3, 389.2}, {7.7, 14.3}}, identifier: 'habit-heatmap-weekday-count-1', label: '0'
+                                                    StaticText, 0x110506300, {{24.0, 419.3}, {31.0, 18.0}}, label: 'Wed'
+                                                    StaticText, 0x110507e80, {{835.3, 421.2}, {7.7, 14.3}}, identifier: 'habit-heatmap-weekday-count-2', label: '0'
+                                                    StaticText, 0x1105066c0, {{24.0, 451.3}, {26.7, 18.0}}, label: 'Thu'
+                                                    StaticText, 0x1105048c0, {{835.3, 453.2}, {7.7, 14.3}}, identifier: 'habit-heatmap-weekday-count-3', label: '0'
+                                                    StaticText, 0x110505b80, {{24.0, 483.3}, {17.3, 18.0}}, label: 'Fri'
+                                                    StaticText, 0x110504dc0, {{835.3, 485.2}, {7.7, 14.3}}, identifier: 'habit-heatmap-weekday-count-4', label: '1'
+                                                    StaticText, 0x1107a8000, {{24.0, 515.3}, {22.7, 18.0}}, label: 'Sat'
+                                                    StaticText, 0x1107a8140, {{835.3, 517.2}, {7.7, 14.3}}, identifier: 'habit-heatmap-weekday-count-5', label: '0'
+                                                    StaticText, 0x1107a8280, {{24.0, 547.3}, {26.7, 18.0}}, label: 'Sun'
+                                                    StaticText, 0x1107a83c0, {{835.3, 549.2}, {7.7, 14.3}}, identifier: 'habit-heatmap-weekday-count-6', label: '0'
+                                                    StaticText, 0x1107a8500, {{330.8, 594.3}, {205.3, 14.3}}, label: 'Based on currently registered habits'
+                                                    Other, 0x1107a8640, {{12.0, 624.7}, {843.0, 267.0}}, identifier: 'habit-completion-chart'
+                                                      StaticText, 0x1107a8780, {{26.0, 642.0}, {163.0, 20.3}}, identifier: 'habit-completion-chart-title', label: 'Completion Rate'
+                                                      Image, 0x1107a88c0, {{26.0, 644.3}, {21.0, 15.7}}, identifier: 'habit-completion-chart-title', label: 'Chart Column'
+                                                      SegmentedControl, 0x1107a8a00, {{683.0, 636.7}, {160.0, 31.0}}
+                                                        Button, 0x1107a8b40, {{683.0, 636.7}, {80.0, 32.0}}, label: 'Weekly', Selected
+                                                        Button, 0x1107a8c80, {{763.0, 636.7}, {80.0, 32.0}}, label: 'Monthly'
+                                                      Other, 0x1107a8dc0, {{24.0, 694.7}, {819.0, 178.0}}
+                                                        Other, 0x1107a8f00, {{24.0, 694.7}, {98.1, 160.0}}, label: 'Sep 13, 2026 at 00 to Sep 20, 2026 at 00', value: 0
+                                                        Other, 0x1107a9040, {{122.1, 694.7}, {98.1, 160.0}}, label: 'Sep 20, 2026 at 00 to Sep 27, 2026 at 00', value: 0
+                                                        Other, 0x1107a9180, {{220.2, 694.7}, {98.1, 160.0}}, label: 'Sep 27, 2026 at 00 to Oct 4, 2026 at 00', value: 0
+                                                        Other, 0x1107a92c0, {{318.4, 694.7}, {98.1, 160.0}}, label: 'Oct 4, 2026 at 00 to Oct 11, 2026 at 00', value: 0
+                                                        Other, 0x1107a9400, {{416.5, 694.7}, {98.1, 160.0}}, label: 'Oct 11, 2026 at 00 to Oct 18, 2026 at 00', value: 0
+                                                        Other, 0x1107a9540, {{514.6, 694.7}, {98.1, 160.0}}, label: 'Oct 18, 2026 at 00 to Oct 25, 2026 at 00', value: 0
+                                                        Other, 0x1107a9680, {{612.8, 694.7}, {98.1, 160.0}}, label: 'Oct 25, 2026 at 00 to Nov 1, 2026 at 00', value: 0
+                                                        Other, 0x1107a97c0, {{710.9, 694.7}, {98.1, 160.0}}, label: 'Nov 1, 2026 at 00 to Nov 8, 2026 at 00', value: 0.05
+                                                  Other, 0x1107a9900, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 3 pages', value: 68%
+                                                    Other, 0x1107a9a40, {{945.0, 284.0}, {3.0, 233.3}}
+                                                  Other, 0x1107a9b80, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 3 pages', value: 68%
+                                                    Other, 0x1107a9cc0, {{945.0, 284.0}, {3.0, 233.3}}
+                            Other, 0x1107a9e00, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x1107a9f40, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x1107aa080, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x1107aa1c0, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x1107aa300, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x1107aa440, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x1107aa580, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x1107aa6c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1107aa800, {{879.0, 124.0}, {48.0, 48.0}}
+                              Other, 0x1107aa940, {{879.0, 124.0}, {48.0, 48.0}}
+                                Other, 0x1107aaa80, {{884.0, 129.0}, {38.0, 38.0}}
+                                  Other, 0x1107aabc0, {{884.0, 129.0}, {38.0, 38.0}}
+                                    Button, 0x1107aad00, {{884.0, 129.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x1107aae40, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x1107aaf80, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1107ab0c0, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x1107ab200, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x1107ab340, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x1107ab480, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x1107ab5c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x1107ab700, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x1107ab840, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x1107ab980, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x1107abac0, {{881.0, 435.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x1107abc00, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x1107abd40, {{881.0, 485.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x1107abe80, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x1061a8000, {{881.0, 535.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x1061a8140, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x1061a8280, {{881.0, 585.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life', Selected
+                                            Image, 0x1061a83c0, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x1061a8500, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x1061a8640, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x1061a8780, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x1061a88c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x1061a8a00, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x1061a8b40, {{879.0, 433.0}, {48.0, 212.0}}
+                                                  Other, 0x1061a8c80, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x1061a8dc0, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x1061a8f00, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x1061a9040, {{881.0, 585.0}, {44.0, 58.0}}
+                                          Other, 0x1061a9180, {{881.0, 585.0}, {44.0, 58.0}}
+                                            Other, 0x1061a92c0, {{881.0, 585.0}, {44.0, 58.0}}
+                                            Other, 0x1061a9400, {{881.0, 585.0}, {44.0, 58.0}}
+                                              Other, 0x1061a9540, {{881.0, 585.0}, {44.0, 58.0}}
+                                                Other, 0x1061a9680, {{881.0, 585.0}, {44.0, 58.0}}
+                                                  Other, 0x1061a97c0, {{881.0, 585.0}, {44.0, 58.0}}
+                                                Other, 0x1061a9900, {{881.0, 585.0}, {44.0, 58.0}}
+                                              Other, 0x1061a9a40, {{881.0, 585.0}, {44.0, 58.0}}
+              Other, 0x1061a9b80, {{433.5, 317.5}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x1061c5a40, pid: 78329, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1061a9cc0, pid: 78329, label: 'DUNE'
+  }

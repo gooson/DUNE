@@ -1,0 +1,179 @@
+{
+  "schema": 1,
+  "review": "duo-closed-MAX-history-native-review",
+  "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+  "profile": "duo-closed-MAX",
+  "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+  "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+  "SDK": {
+    "executed": 6,
+    "passed": 5,
+    "failed": 1,
+    "skipped": 0
+  },
+  "pose_verified": {
+    "angle_degrees": 0,
+    "active_display": "LCD",
+    "orientation": "rot0",
+    "actual_png_dimensions": [
+      1398,
+      2034
+    ],
+    "readback_before_after": true
+  },
+  "full_source_sha256": {
+    "DUNE/Presentation/Life/LifeView.swift": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+    "DUNE/Presentation/Life/HabitManagementView.swift": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+    "DUNE/Presentation/Life/HabitHeatmapDetailView.swift": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+    "DUNE/Presentation/Life/WeeklyHabitReportView.swift": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+    "DUNEUITests/Full/LifeRegressionTests.swift": "ce3ca12c9f036932f36d3cbcbba2d03f8f87f20203c0ed113eae4dae1a57bc0c",
+    "DUNEUITests/Visual/LifeFlowUITests.swift": "8029e519a4911309ce5d15d43277207feac5ef3bbd63191fdb1adf664dfc9c34",
+    "DUNEUITests/Full/DuoRemainingRouteTests.swift": "15802d4906836e92cb278c832c34a49dcd8d7d5420a518a2c648c18b4166e5df",
+    "DUNEUITests/Helpers/UITestHelpers.swift": "e4c0cf9dc77295486fdf688bcf8c55de1b0cf28cbffa77efb5263650083e9d7b",
+    "DUNE/App/TestDataSeeder.swift": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871",
+    "Shared/Resources/Localizable.xcstrings": "83bd89e2b1252596fac87c7e58b8a6ad173dab29cbdbf81fcb793144d0b5a462"
+  },
+  "passed_test_methods": [
+    "LifeRegressionTests/testHabitHistoryAndManagementAtMaximumAccessibilitySize()"
+  ],
+  "selected_pairs": [
+    {
+      "screen": "L05",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitHistoryAndManagementAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 MAX history title and count [DUNEUITests/LifeRegressionTests.swift:514] DEADLINE=1793929946.181963",
+      "host_sequence": 15,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793929929.5134091,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/015-1398x2034.png",
+      "png_sha256": "a108e0d360656ffffaea093b358d0e2078172c1889cb9a23add7bfbaec95b973",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/015-hierarchy.txt",
+      "ax_sha256": "6f288b032b2766f87b9d362f56592d97171c93cf5e1fb915b3e22da2714a6219",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitHistoryAndManagementAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 MAX history row and date [DUNEUITests/LifeRegressionTests.swift:524] DEADLINE=1793929964.408539",
+      "host_sequence": 16,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793929936.9736161,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/016-1398x2034.png",
+      "png_sha256": "a108e0d360656ffffaea093b358d0e2078172c1889cb9a23add7bfbaec95b973",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/016-hierarchy.txt",
+      "ax_sha256": "ae9eee4ca68c98f4abe13bd6b814b0720186da88211150fedd99dfa63ccedd82",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    },
+    {
+      "screen": "L06",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitHistoryAndManagementAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L06 MAX history title and action [DUNEUITests/LifeRegressionTests.swift:560] DEADLINE=1793930049.196646",
+      "host_sequence": 23,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930022.2471538,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/023-1398x2034.png",
+      "png_sha256": "0541f00a9d5f95e2b50243ca7f504d30e52478a1d43bf305939247203f841b1b",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/023-hierarchy.txt",
+      "ax_sha256": "41eb791a54ece7f3b8f3d4fc3fd2e89c0acb062807bc402c85625c67247719db",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0"
+    }
+  ],
+  "selected_pairs_count": 3,
+  "visual_inspection": "All 3 archived actual active-display PNGs viewed and paired AX trees read; PNG/AX/App/10-source SHA and 1398x2034 dimensions verified",
+  "observations": "The passing combined MAX selector shows L05 title/count/full Completed row and date, then L06 archived history title/Completed/date.",
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": [
+      {
+        "id": "duo-closed-MAX-history-native-review-singular-count",
+        "priority": "P3",
+        "screen": "L05",
+        "summary": "L05 MAX seeded history says “1 records”; preexisting copy defect.",
+        "evidence": {
+          "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/015-1398x2034.png",
+          "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/015-hierarchy.txt",
+          "current_source": "DUNE/Presentation/Life/LifeView.swift:1166",
+          "base_source": "fa19dd2a:DUNE/Presentation/Life/LifeView.swift:1156"
+        },
+        "scope": "Nonblocking and previously recorded in phone/iPad review."
+      }
+    ]
+  },
+  "passed_only_visual_review": true,
+  "native_aggregate_pass": false,
+  "excluded_failed_method": "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()",
+  "excluded_failed_sequences": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "not_claimed": [
+    "failed analytics MAX method or its L07/L08 frames",
+    "entire closed 6-method aggregate pass",
+    "future route-fix retry pass",
+    "open Duo or full 19-method matrix pass",
+    "Dark Mode/VoiceOver audit",
+    "actual-map publication"
+  ]
+}

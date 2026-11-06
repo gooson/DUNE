@@ -1,0 +1,295 @@
+{
+  "schema": 1,
+  "review": "ipad-normal3-native-review",
+  "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+  "profile": "ipad",
+  "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+  "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+  "SDK": {
+    "executed": 4,
+    "passed": 3,
+    "failed": 1,
+    "skipped": 0
+  },
+  "aggregate_status": "failed: 4 executed, 3 passed, 1 failed; L05 excluded from acceptance",
+  "full_source_sha256": {
+    "DUNE/Presentation/Life/LifeView.swift": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+    "DUNE/Presentation/Life/HabitManagementView.swift": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+    "DUNE/Presentation/Life/HabitHeatmapDetailView.swift": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+    "DUNE/Presentation/Life/WeeklyHabitReportView.swift": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+    "DUNEUITests/Full/LifeRegressionTests.swift": "1df4729b5cc0d5b8f0cc6e8fac0bd0eaa74c8263462bac9e3548c6c0b15c83a3",
+    "DUNEUITests/Visual/LifeFlowUITests.swift": "8029e519a4911309ce5d15d43277207feac5ef3bbd63191fdb1adf664dfc9c34",
+    "DUNEUITests/Full/DuoRemainingRouteTests.swift": "15802d4906836e92cb278c832c34a49dcd8d7d5420a518a2c648c18b4166e5df",
+    "DUNEUITests/Helpers/UITestHelpers.swift": "e4c0cf9dc77295486fdf688bcf8c55de1b0cf28cbffa77efb5263650083e9d7b",
+    "DUNE/App/TestDataSeeder.swift": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871",
+    "Shared/Resources/Localizable.xcstrings": "83bd89e2b1252596fac87c7e58b8a6ad173dab29cbdbf81fcb793144d0b5a462"
+  },
+  "passed_test_methods": [
+    "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+    "LifeRegressionTests/testVisualAuditHabitManagement()",
+    "LifeRegressionTests/testVisualAuditWeeklyReport()"
+  ],
+  "selected_pairs": [
+    {
+      "screen": "L07",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 heatmap value habit-heatmap-total [DUNEUITests/LifeRegressionTests.swift:382] DEADLINE=1793927534.679154",
+      "host_sequence": 9,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793927506.3409226,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/009-1512x2316.png",
+      "png_sha256": "7e9db466cdc9631b5767d59b1ea6fec6f8154ca633c7ad3b060f197cb1f6f4db",
+      "ax": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/009-hierarchy.txt",
+      "ax_sha256": "8072174c03b388f75e24196c3c5d01c58180870294de7b34314a631b93603f1e",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "screen": "L07",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 heatmap grid and legend [DUNEUITests/LifeRegressionTests.swift:396] DEADLINE=1793927596.127639",
+      "host_sequence": 15,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793927567.9769518,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/015-1512x2316.png",
+      "png_sha256": "15c0a6cb1f9ebdb6d771e6bb7f9176b9f2c1fe2e246ae17ca993e4e3818011f2",
+      "ax": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/015-hierarchy.txt",
+      "ax_sha256": "30e954569f9dc748fcf05b6390ff6b0448ca3d726d8688fa19b360741a24cfc6",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "screen": "L07",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L07 heatmap weekday values [DUNEUITests/LifeRegressionTests.swift:402] DEADLINE=1793927632.323107",
+      "host_sequence": 18,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/HabitHeatmapDetailView.swift",
+      "source_app_sha256": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793927603.9783316,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/018-1512x2316.png",
+      "png_sha256": "5f469550d5ba152585ef0f6adf9ef1dd57f59c0de7e25752ca284d8c05a8e987",
+      "ax": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/018-hierarchy.txt",
+      "ax_sha256": "dfc500c01f8b3b98bf1b64504dd93c894ed7194f68b4748d0c9923d3db7c81bb",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "screen": "L06",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testVisualAuditHabitManagement()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L06 archived history hero and action [DUNEUITests/LifeRegressionTests.swift:467] DEADLINE=1793927719.062741",
+      "host_sequence": 30,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/HabitManagementView.swift",
+      "source_app_sha256": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793927690.6830356,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/030-1512x2316.png",
+      "png_sha256": "569d67c33a2302a9cd4cd43054c5caff8a31cb94482786b211d54f62ea6b1d86",
+      "ax": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/030-hierarchy.txt",
+      "ax_sha256": "699745e7cf49d85de8e11427b8a219b086d2dec584e56818fa4507e24192c25b",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "screen": "L08",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testVisualAuditWeeklyReport()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 weekly report rate [DUNEUITests/LifeRegressionTests.swift:334] DEADLINE=1793927780.8481",
+      "host_sequence": 38,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793927752.5171685,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/038-1512x2316.png",
+      "png_sha256": "404264db8a9ac3167c7105a92671adf340f8e50ce06fd71763634668ab9226e8",
+      "ax": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/038-hierarchy.txt",
+      "ax_sha256": "3e0a9047a977bd756630366c6666e40f7ee9949d5b706d0bf1fac0ee3b880ec2",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "screen": "L08",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testVisualAuditWeeklyReport()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 weekly report total and comparison [DUNEUITests/LifeRegressionTests.swift:344] DEADLINE=1793927794.327355",
+      "host_sequence": 39,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793927765.9909933,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/039-1512x2316.png",
+      "png_sha256": "898f1f036157c9afaf44b600798a6ec3eaed77169cc896ce3239309266eb19f2",
+      "ax": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/039-hierarchy.txt",
+      "ax_sha256": "296a103335d345b79e7de5a865d1105da84f69d695a1c926d11fd7a28f346803",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "screen": "L08",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testVisualAuditWeeklyReport()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 weekly report section life-weekly-report-best [DUNEUITests/LifeRegressionTests.swift:351] DEADLINE=1793927801.692064",
+      "host_sequence": 40,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793927773.3912,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/040-1512x2316.png",
+      "png_sha256": "898f1f036157c9afaf44b600798a6ec3eaed77169cc896ce3239309266eb19f2",
+      "ax": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/040-hierarchy.txt",
+      "ax_sha256": "58658e3639314c6ebf718e305e765918479efd23fa1503d5d950414e52a74033",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    },
+    {
+      "screen": "L08",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testVisualAuditWeeklyReport()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L08 weekly report section life-weekly-report-improvement [DUNEUITests/LifeRegressionTests.swift:351] DEADLINE=1793927809.324418",
+      "host_sequence": 41,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/WeeklyHabitReportView.swift",
+      "source_app_sha256": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793927780.9479856,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/041-1512x2316.png",
+      "png_sha256": "898f1f036157c9afaf44b600798a6ec3eaed77169cc896ce3239309266eb19f2",
+      "ax": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/041-hierarchy.txt",
+      "ax_sha256": "58bd2edb5082c1a6303a0b334ff725c5b069f1961f6d9cb99ebc6bfec967ba9e",
+      "png_dimensions": [
+        1512,
+        2316
+      ]
+    }
+  ],
+  "selected_pairs_count": 8,
+  "visual_inspection": "all 8 actual iPad PNG frames viewed and all 8 paired AX trees read; PNG/AX/App source SHA and dimensions verified",
+  "observations": {
+    "L06": "Archived history sheet shows Morning Stretch, Completed, Nov 6 2026, and Close, with Restore behind it; preexisting 1 times text on underlying card.",
+    "L07": "90-day header/total 1, Daily Average 0.0, Streak 1, Active Days 1; grid/legend and seven weekday rows with Friday 1 visible after scroll.",
+    "L08": "4% and 1 of 21, 4% vs prior 0% with up trend, Best Habits and Needs Improvement rows visible."
+  },
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": [
+      {
+        "id": "ipad-L06-singular-times",
+        "priority": "P3",
+        "screen": "L06",
+        "summary": "Archived habit card displays “1 times” for one completion.",
+        "evidence": {
+          "png": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/030-1512x2316.png",
+          "ax": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed/host/030-hierarchy.txt",
+          "current_source": "DUNE/Presentation/Life/HabitManagementView.swift:219",
+          "base_source": "fa19dd2a:DUNE/Presentation/Life/HabitManagementView.swift:219"
+        },
+        "scope": "Preexisting singular/plural copy issue, visible behind history sheet; nonblocking."
+      }
+    ]
+  },
+  "passed_only_visual_review": true,
+  "native_aggregate_pass": false,
+  "L05_accepted": false,
+  "not_claimed": [
+    "L05 iPad visual/native pass",
+    "entire first iPad aggregate pass",
+    "final HEAD SDK pass after test-only fix",
+    "Duo/MAX or full 19-method matrix pass",
+    "actual-map publication",
+    "Dark Mode/VoiceOver audit"
+  ]
+}

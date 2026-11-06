@@ -1,0 +1,992 @@
+{
+  "schema": 1,
+  "status": "complete",
+  "source": "83c350b09599505c4b6e90722f2218345c639431",
+  "source_sha256": {
+    "DUNE/Presentation/Life/LifeView.swift": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+    "DUNE/Presentation/Life/HabitManagementView.swift": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+    "DUNE/Presentation/Life/HabitHeatmapDetailView.swift": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+    "DUNE/Presentation/Life/WeeklyHabitReportView.swift": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949",
+    "DUNEUITests/Full/LifeRegressionTests.swift": "f4030919df7cda3c92596d0cbfbc9ccfa8ebe4b306fbdfd3733fced8b13945f7",
+    "DUNEUITests/Visual/LifeFlowUITests.swift": "8029e519a4911309ce5d15d43277207feac5ef3bbd63191fdb1adf664dfc9c34",
+    "DUNEUITests/Full/DuoRemainingRouteTests.swift": "15802d4906836e92cb278c832c34a49dcd8d7d5420a518a2c648c18b4166e5df",
+    "DUNEUITests/Helpers/UITestHelpers.swift": "e4c0cf9dc77295486fdf688bcf8c55de1b0cf28cbffa77efb5263650083e9d7b",
+    "DUNE/App/TestDataSeeder.swift": "2b1206c4befde2357ddb38e9cb21a8de6e8bf9b082c663d91bdf439cfb887871",
+    "Shared/Resources/Localizable.xcstrings": "83bd89e2b1252596fac87c7e58b8a6ad173dab29cbdbf81fcb793144d0b5a462"
+  },
+  "source_app_sha256": {
+    "L05": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+    "L06": "8adf691f44f82a82efcb86367e3e1615d12f6b5cae1f9124f2d3a70c4d80af94",
+    "L07": "df93981c05ac03da0b88047beaae997cd765b823babb00cf6cfc71363f11e664",
+    "L08": "ce93535ca30e39d7314b092b0cd8ecfa5128b55c8f4d51b1191003a404a61949"
+  },
+  "source_reuse_adjudication": {
+    "path": ".codex-checks/batch04/quality/source-reuse-adjudication.json",
+    "sha256": "7c172c6cb33a39cd2eeaba8e0f4cce683c6eb2805994796cac6dd2518cc39457"
+  },
+  "expected_method_profile_combinations": 19,
+  "expected_screen_contributions": 21,
+  "accepted_screen_contributions": 21,
+  "pending_screen_contributions": [],
+  "runs": [
+    {
+      "archive": ".codex-checks/batch04/evidence/phone-719721b8-first-physical5-passed",
+      "profile": "phone",
+      "source_revision": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "enclosing_sdk": {
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      "case_results": {
+        "LifeRegressionTests/testHabitHistoryShowsEmptyStateForHabitWithoutLogs()": "Passed",
+        "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()": "Passed",
+        "LifeRegressionTests/testVisualAuditHabitHeatmap()": "Passed",
+        "LifeRegressionTests/testVisualAuditHabitManagement()": "Passed",
+        "LifeRegressionTests/testVisualAuditWeeklyReport()": "Passed"
+      },
+      "sha256": {
+        "summary.json": "8cce62aebe8856c141b3b926e4b530a6729566640cb3641415f47f387a04e0b2",
+        "tests.json": "d22fbd6ed295fb58477b6c4b401287956de87fa338b2197b7cd084a074100297",
+        "execution-metadata.json": "86fe5c08ffa2e36414956c663c8bcc3cb680080ace2799f8492e0e94e23da3e8",
+        "result.json": "167706c6e00fb4166f6ef76ae3419e100604074a12d7c486c59b74e91b20237c",
+        "run.log.gz": "21c76dbf93c3d5d65243dec98319ce0c7f757346b4346131b7a9ee5167b07d3b"
+      },
+      "accepted_methods": [
+        "LifeRegressionTests/testHabitHistoryShowsEmptyStateForHabitWithoutLogs()",
+        "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+        "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+        "LifeRegressionTests/testVisualAuditHabitManagement()",
+        "LifeRegressionTests/testVisualAuditWeeklyReport()"
+      ],
+      "accepted_screen_contributions": 5,
+      "accepted_pair_count": 11,
+      "native_reviews": [
+        ".codex-checks/batch04/quality/phone-native-review.json"
+      ]
+    },
+    {
+      "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+      "profile": "ipad",
+      "source_revision": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "case_results": {
+        "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()": "Failed",
+        "LifeRegressionTests/testVisualAuditHabitHeatmap()": "Passed",
+        "LifeRegressionTests/testVisualAuditHabitManagement()": "Passed",
+        "LifeRegressionTests/testVisualAuditWeeklyReport()": "Passed"
+      },
+      "sha256": {
+        "summary.json": "9c7dd46c0e0b99aa07ae5aaa63aaf364e46640ffa4bf270a11d85e41929295bc",
+        "tests.json": "189f6603b382305dd4fd3d45a096b4b9f70567c28e23150ad5d7fe5a165302f6",
+        "execution-metadata.json": "afbe73ddecd026da789c26cc7f49677f6dd20afaabc4ced718d7657d7bf821b8",
+        "result.json": "db9c0b18a939d27db9516babbf125daabaf326b8abae7a32cc0891f037986550",
+        "run.log.gz": "feb6ca7d0dc18aa75c372793ad32df440ebb5c9aadf479c4892175ebb468e322"
+      },
+      "accepted_methods": [
+        "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+        "LifeRegressionTests/testVisualAuditHabitManagement()",
+        "LifeRegressionTests/testVisualAuditWeeklyReport()"
+      ],
+      "accepted_screen_contributions": 3,
+      "accepted_pair_count": 8,
+      "native_reviews": [
+        ".codex-checks/batch04/quality/ipad-normal3-native-review.json"
+      ]
+    },
+    {
+      "archive": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed",
+      "profile": "ipad",
+      "source_revision": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "case_results": {
+        "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()": "Passed"
+      },
+      "sha256": {
+        "summary.json": "f7eeb3b291774fe2c1f2a325c43c691be56e93715aef995201dc352b4d54f85f",
+        "tests.json": "6a28cbce03d7eb7d4119f2adefa035885ee427b4f29f02adfef953e621e1eea4",
+        "execution-metadata.json": "b79c9e26b6e7a7619575b476efe935c059d9ae69f73505040ce11c8846d5dc9d",
+        "result.json": "23d8805aa6f00c16f378829abf4b4ef261d462ef93920ffbf634df3ce3637212",
+        "run.log.gz": "944eb0911bcaa2a8a43835d7d9f4620567cc44c917dded8ec029bf4ac78199aa"
+      },
+      "accepted_methods": [
+        "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()"
+      ],
+      "accepted_screen_contributions": 1,
+      "accepted_pair_count": 3,
+      "native_reviews": [
+        ".codex-checks/batch04/quality/ipad-history-retry1-native-review.json"
+      ]
+    },
+    {
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "profile": "duo-closed",
+      "source_revision": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "case_results": {
+        "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()": "Failed",
+        "LifeRegressionTests/testHabitHistoryAndManagementAtMaximumAccessibilitySize()": "Passed",
+        "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()": "Passed",
+        "LifeRegressionTests/testVisualAuditHabitHeatmap()": "Passed",
+        "LifeRegressionTests/testVisualAuditHabitManagement()": "Passed",
+        "LifeRegressionTests/testVisualAuditWeeklyReport()": "Passed"
+      },
+      "sha256": {
+        "summary.json": "cc523f177f151f1935367b9a0602cb8bfd8294f0c9020fa00ad573a373f3a4c1",
+        "tests.json": "bfe216239ded8dd60670f7ded5f5d3a1f07c46b897f69a8327a789786071cb29",
+        "execution-metadata.json": "2b6e28d63f5894ecc3ce045c7e15f442e347f8a7fadfd07b89ef30c0afc597dd",
+        "result.json": "10466e46290916f5089b7ce60d3e737ae66ebf9c26786ee5865670d35c7995f8",
+        "run.log.gz": "1d0e963ed79021055352e68d1a5263028f316e0e9d990eeed02a9af796444bff"
+      },
+      "accepted_methods": [
+        "LifeRegressionTests/testHabitHistoryAndManagementAtMaximumAccessibilitySize()",
+        "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+        "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+        "LifeRegressionTests/testVisualAuditHabitManagement()",
+        "LifeRegressionTests/testVisualAuditWeeklyReport()"
+      ],
+      "accepted_screen_contributions": 6,
+      "accepted_pair_count": 14,
+      "native_reviews": [
+        ".codex-checks/batch04/quality/duo-closed-normal-native-review.json",
+        ".codex-checks/batch04/quality/duo-closed-MAX-history-native-review.json"
+      ]
+    },
+    {
+      "archive": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed",
+      "profile": "duo-open-normal",
+      "source_revision": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "case_results": {
+        "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()": "Passed",
+        "LifeRegressionTests/testVisualAuditHabitHeatmap()": "Passed",
+        "LifeRegressionTests/testVisualAuditHabitManagement()": "Failed",
+        "LifeRegressionTests/testVisualAuditWeeklyReport()": "Passed"
+      },
+      "sha256": {
+        "summary.json": "0f16f54902a96e058184d589caf6a0de40435a9872fb31a6f8c07cdb6919dd3e",
+        "tests.json": "57b900ec976c2ccaf1a55722071e6e531e832f440b1047b94cbdc110846e4972",
+        "execution-metadata.json": "9328c7c7df3f04a7c6ca3e9a2365bc99c3a08d7e096bd442288b588e2c897899",
+        "result.json": "901fdc1787d01dc330f032cb3213c1f8d3b0b1f6b20f6800342759263df87978",
+        "run.log.gz": "0e5a238565c299eeb969804b12d072d51c52ea2cf74bc5238f40b613caf98bee"
+      },
+      "canonical_reported_counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "numeric_adjudication": {
+        "path": ".codex-checks/batch04/quality/open-sdk-numeric-adjudication.json",
+        "sha256": "d6de7219febf72a0554ed09dcb1b3138225b56814dd7e830fc1c74548bbf8046"
+      },
+      "accepted_methods": [
+        "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+        "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+        "LifeRegressionTests/testVisualAuditWeeklyReport()"
+      ],
+      "accepted_screen_contributions": 3,
+      "accepted_pair_count": 10,
+      "native_reviews": [
+        ".codex-checks/batch04/quality/duo-open-normal3-native-review.json"
+      ]
+    },
+    {
+      "archive": ".codex-checks/batch04/evidence/duo-open-a967f801-management-isolated1-passed",
+      "profile": "duo-open-normal",
+      "source_revision": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "case_results": {
+        "LifeRegressionTests/testVisualAuditHabitManagement()": "Passed"
+      },
+      "sha256": {
+        "summary.json": "c239c891fc6dcd3d75031bd6ef5b3dfcbc28bfd9551cba91bec8f39e0df042ac",
+        "tests.json": "5a87554fb995210f51ae0b138d0997e88e9cc990887b682e9b45b580f66b19f9",
+        "execution-metadata.json": "ef0f5796ab205893abfc22b5e6d8adb397158e7672c6c95bddba283772bef72f",
+        "result.json": "1f41a37534dc6fdf488ad1503d6476b8b9d89c7cff9d06b145fa49a53f4d8d26",
+        "run.log.gz": "c2354bd362bdde1ef6309b0552901df60c5c09392111385a732f7c8816072b98"
+      },
+      "accepted_methods": [
+        "LifeRegressionTests/testVisualAuditHabitManagement()"
+      ],
+      "accepted_screen_contributions": 1,
+      "accepted_pair_count": 1,
+      "native_reviews": [
+        ".codex-checks/batch04/quality/duo-open-management-isolated1-native-review.json"
+      ]
+    },
+    {
+      "archive": ".codex-checks/batch04/evidence/duo-closed-83c350b0-analytics-MAX1-passed",
+      "profile": "duo-closed",
+      "source_revision": "83c350b09599505c4b6e90722f2218345c639431",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "case_results": {
+        "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()": "Passed"
+      },
+      "sha256": {
+        "summary.json": "11ed160c9d97e1e008b5c4a42e45b7b829dbf505f7cf09b0128b4f64fb0efd74",
+        "tests.json": "b3fdfcb57f22f8f1cebb704a64ee8fd7b58b7bd081ffc2c4b619a8612a1b0492",
+        "execution-metadata.json": "fdaf9f9bae8380fcc26e145c28f0eb2fe494153ed461bc0a530e4980e2a2e68c",
+        "result.json": "f6f65dbcda605d0aa7b7dbb957cebfe8e37d2e0fbf0b0a2d0ba0273a7f95db8b",
+        "run.log.gz": "748dac119c5f3faf01d739b22fcc0deff054c4378f07ee9d975c718441fad1f6"
+      },
+      "accepted_methods": [
+        "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()"
+      ],
+      "accepted_screen_contributions": 2,
+      "accepted_pair_count": 16,
+      "native_reviews": [
+        ".codex-checks/batch04/quality/duo-closed-MAX-analytics-final-native-review.json"
+      ]
+    }
+  ],
+  "selected_pairs": [
+    {
+      "screen": "L05",
+      "profile": "phone",
+      "test": "LifeRegressionTests/testHabitHistoryShowsEmptyStateForHabitWithoutLogs()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 empty history [DUNEUITests/LifeRegressionTests.swift:308] DEADLINE=1793926118.25721",
+      "host_sequence": 4,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/phone-719721b8-first-physical5-passed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "912F87ED-CA21-4569-A01C-8B876BE9DE64",
+      "enclosing_sdk": {
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793926089.1353238,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/phone-719721b8-first-physical5-passed/host/004-1320x2868.png",
+      "png_sha256": "8bce242a57c5d594dd347bcb8019dc57a4414f6d7204fa9a5a34e344b57f479a",
+      "ax": ".codex-checks/batch04/evidence/phone-719721b8-first-physical5-passed/host/004-hierarchy.txt",
+      "ax_sha256": "e09a6896a9029e933012289376b37d1e386346683104dbd4512fce201a07e5f8",
+      "png_dimensions": [
+        1320,
+        2868
+      ],
+      "native_review": "reviews/phone-native-review.md",
+      "png_href": "assets/l05-001.png",
+      "ax_href": "assets/l05-001.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/phone-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "phone",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history hero and count [DUNEUITests/LifeRegressionTests.swift:252] DEADLINE=1793926187.0156941",
+      "host_sequence": 11,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/phone-719721b8-first-physical5-passed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "912F87ED-CA21-4569-A01C-8B876BE9DE64",
+      "enclosing_sdk": {
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793926158.4327736,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/phone-719721b8-first-physical5-passed/host/011-1320x2868.png",
+      "png_sha256": "2f73424a84139789e277adeab7c2d52909b1ad642678772766a6ad5fe2924ea5",
+      "ax": ".codex-checks/batch04/evidence/phone-719721b8-first-physical5-passed/host/011-hierarchy.txt",
+      "ax_sha256": "769d6f4b7d7f3d4a39891f21abc4eb5c46886b295dd1c227b9dcb24d8fec5d1e",
+      "png_dimensions": [
+        1320,
+        2868
+      ],
+      "native_review": "reviews/phone-native-review.md",
+      "png_href": "assets/l05-002.png",
+      "ax_href": "assets/l05-002.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/phone-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "phone",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 Past Record route from history [DUNEUITests/LifeRegressionTests.swift:292] DEADLINE=1793926240.1081018",
+      "host_sequence": 17,
+      "source": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+      "archive": ".codex-checks/batch04/evidence/phone-719721b8-first-physical5-passed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "912F87ED-CA21-4569-A01C-8B876BE9DE64",
+      "enclosing_sdk": {
+        "executed": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793926211.1445854,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/phone-719721b8-first-physical5-passed/host/017-1320x2868.png",
+      "png_sha256": "48847bc6b111ab269fceab4009fb61388eaba73c8a26b09326d096101d4e8e9e",
+      "ax": ".codex-checks/batch04/evidence/phone-719721b8-first-physical5-passed/host/017-hierarchy.txt",
+      "ax_sha256": "05119dfe0c9b37f0b79d280dbc5d6ffbb7c84b0136be2d4e23b9fffc4cbe2fcd",
+      "png_dimensions": [
+        1320,
+        2868
+      ],
+      "native_review": "reviews/phone-native-review.md",
+      "png_href": "assets/l05-003.png",
+      "ax_href": "assets/l05-003.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/phone-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history hero and count [DUNEUITests/LifeRegressionTests.swift:260] DEADLINE=1793928883.363752",
+      "host_sequence": 5,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793928855.1608763,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/005-1512x2316.png",
+      "png_sha256": "94e8742051da65686c7361bddc34243c2b5fb743002a1979f9717c6538583685",
+      "ax": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/005-hierarchy.txt",
+      "ax_sha256": "0db248ab08fdb885693c254274250d0cb9b1c336ded2b74f808520833f30da70",
+      "png_dimensions": [
+        1512,
+        2316
+      ],
+      "native_review": "reviews/ipad-history-retry1-native-review.md",
+      "png_href": "assets/l05-004.png",
+      "ax_href": "assets/l05-004.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/ipad-history-retry1-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history action and date [DUNEUITests/LifeRegressionTests.swift:276] DEADLINE=1793928890.597204",
+      "host_sequence": 6,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793928862.46328,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/006-1512x2316.png",
+      "png_sha256": "94e8742051da65686c7361bddc34243c2b5fb743002a1979f9717c6538583685",
+      "ax": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/006-hierarchy.txt",
+      "ax_sha256": "54d0239ba1565f3186f7533b87ad041835acff86148594af3b2c87e344048a7d",
+      "png_dimensions": [
+        1512,
+        2316
+      ],
+      "native_review": "reviews/ipad-history-retry1-native-review.md",
+      "png_href": "assets/l05-005.png",
+      "ax_href": "assets/l05-005.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/ipad-history-retry1-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "ipad",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 Past Record route from history [DUNEUITests/LifeRegressionTests.swift:300] DEADLINE=1793928926.965409",
+      "host_sequence": 11,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "684B8F53-8EF7-48BB-9F9C-7BCEF7AF4549",
+      "enclosing_sdk": {
+        "executed": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "timestamp": 1793928901.9498188,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/011-1512x2316.png",
+      "png_sha256": "798ab1fd83b441726f322c764703994b6cc20ae48970ed9df48adf42a56ce76d",
+      "ax": ".codex-checks/batch04/evidence/ipad-0def4ff9-retry1-history1-passed/host/011-hierarchy.txt",
+      "ax_sha256": "e1dd536a1d97176bef3cb2abc875c6f195aa29a84de94e8780fdd8e83967ec0d",
+      "png_dimensions": [
+        1512,
+        2316
+      ],
+      "native_review": "reviews/ipad-history-retry1-native-review.md",
+      "png_href": "assets/l05-006.png",
+      "ax_href": "assets/l05-006.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/ipad-history-retry1-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitHistoryAndManagementAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 MAX history title and count [DUNEUITests/LifeRegressionTests.swift:514] DEADLINE=1793929946.181963",
+      "host_sequence": 15,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793929929.5134091,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/015-1398x2034.png",
+      "png_sha256": "a108e0d360656ffffaea093b358d0e2078172c1889cb9a23add7bfbaec95b973",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/015-hierarchy.txt",
+      "ax_sha256": "6f288b032b2766f87b9d362f56592d97171c93cf5e1fb915b3e22da2714a6219",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0",
+      "native_review": "reviews/duo-closed-MAX-history-native-review.md",
+      "png_href": "assets/l05-007.png",
+      "ax_href": "assets/l05-007.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/duo-closed-MAX-history-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-closed-MAX",
+      "test": "LifeRegressionTests/testHabitHistoryAndManagementAtMaximumAccessibilitySize()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 MAX history row and date [DUNEUITests/LifeRegressionTests.swift:524] DEADLINE=1793929964.408539",
+      "host_sequence": 16,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793929936.9736161,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/016-1398x2034.png",
+      "png_sha256": "a108e0d360656ffffaea093b358d0e2078172c1889cb9a23add7bfbaec95b973",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/016-hierarchy.txt",
+      "ax_sha256": "ae9eee4ca68c98f4abe13bd6b814b0720186da88211150fedd99dfa63ccedd82",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0",
+      "native_review": "reviews/duo-closed-MAX-history-native-review.md",
+      "png_href": "assets/l05-008.png",
+      "ax_href": "assets/l05-008.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/duo-closed-MAX-history-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history hero and count [DUNEUITests/LifeRegressionTests.swift:260] DEADLINE=1793930114.1960258",
+      "host_sequence": 30,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930086.4532952,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/030-1398x2034.png",
+      "png_sha256": "24a9025f5a7993760359c4b841961dd96472977eed09292745cc879f65d4b56b",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/030-hierarchy.txt",
+      "ax_sha256": "f3a2a1cf098d37b6cec55271d0f9833e1e5f15b018626af760fcfa57be705856",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0",
+      "native_review": "reviews/duo-closed-normal-native-review.md",
+      "png_href": "assets/l05-009.png",
+      "ax_href": "assets/l05-009.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/duo-closed-normal-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history action and date [DUNEUITests/LifeRegressionTests.swift:276] DEADLINE=1793930121.012068",
+      "host_sequence": 31,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930093.276182,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/031-1398x2034.png",
+      "png_sha256": "24a9025f5a7993760359c4b841961dd96472977eed09292745cc879f65d4b56b",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/031-hierarchy.txt",
+      "ax_sha256": "e3efeef5be242cc9fd9deafaf2ca21fb0a7e4e25b60cb7d58d9004146cbd098f",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0",
+      "native_review": "reviews/duo-closed-normal-native-review.md",
+      "png_href": "assets/l05-010.png",
+      "ax_href": "assets/l05-010.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/duo-closed-normal-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-closed-normal",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 Past Record route from history [DUNEUITests/LifeRegressionTests.swift:300] DEADLINE=1793930158.794118",
+      "host_sequence": 36,
+      "source": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+      "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793930131.0169284,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/036-1398x2034.png",
+      "png_sha256": "49abccc81b4ef106f307a55ab182633377486de33b617928513f83da2963cf1d",
+      "ax": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed/host/036-hierarchy.txt",
+      "ax_sha256": "37c6ae703a1eaa16b2f71836b41df7c077ca7bb7a951abac31e84b29f3691bb7",
+      "png_dimensions": [
+        1398,
+        2034
+      ],
+      "angle_degrees": 0,
+      "active_display": "LCD",
+      "orientation": "rot0",
+      "native_review": "reviews/duo-closed-normal-native-review.md",
+      "png_href": "assets/l05-011.png",
+      "ax_href": "assets/l05-011.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/duo-closed-normal-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-open-normal",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history hero and count [DUNEUITests/LifeRegressionTests.swift:260] DEADLINE=1793931195.52419",
+      "host_sequence": 5,
+      "source": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+      "archive": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793931167.8790355,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed/host/005-2007x2853.png",
+      "png_sha256": "161380a1ab32750cf046dabcd36773d8744c39d949805f5422572f6d346e4a7c",
+      "ax": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed/host/005-hierarchy.txt",
+      "ax_sha256": "163ad57a0c590b5f044118cb45748ebd8953c09f4cce2bc689847b2f90ce8f2f",
+      "png_dimensions": [
+        2853,
+        2007
+      ],
+      "angle_degrees": 180,
+      "active_display": "LCD-1",
+      "orientation": "rot90",
+      "native_review": "reviews/duo-open-normal3-native-review.md",
+      "png_href": "assets/l05-012.png",
+      "ax_href": "assets/l05-012.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/duo-open-normal3-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-open-normal",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 seeded history action and date [DUNEUITests/LifeRegressionTests.swift:276] DEADLINE=1793931203.520794",
+      "host_sequence": 6,
+      "source": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+      "archive": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793931175.9264922,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed/host/006-2007x2853.png",
+      "png_sha256": "161380a1ab32750cf046dabcd36773d8744c39d949805f5422572f6d346e4a7c",
+      "ax": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed/host/006-hierarchy.txt",
+      "ax_sha256": "a98990f5956aa7fed888bf690b130a5a08815b78363d9ce5b6f99cb125a827d6",
+      "png_dimensions": [
+        2853,
+        2007
+      ],
+      "angle_degrees": 180,
+      "active_display": "LCD-1",
+      "orientation": "rot90",
+      "native_review": "reviews/duo-open-normal3-native-review.md",
+      "png_href": "assets/l05-013.png",
+      "ax_href": "assets/l05-013.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/duo-open-normal3-native-review.json"
+    },
+    {
+      "screen": "L05",
+      "profile": "duo-open-normal",
+      "test": "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L05 Past Record route from history [DUNEUITests/LifeRegressionTests.swift:300] DEADLINE=1793931245.8782501",
+      "host_sequence": 11,
+      "source": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+      "archive": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed",
+      "source_app_file": "DUNE/Presentation/Life/LifeView.swift",
+      "source_app_sha256": "90202857442e7f34517b4b9fa94e1d126312a43ba5d9e8f939c1afce20407472",
+      "device_uid": "FDCCC089-68AB-4B67-9C1B-7BDBC5438FC3",
+      "enclosing_sdk": {
+        "executed": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "timestamp": 1793931218.1783378,
+      "timestamp_basis": "archived pair file mtime in SDK bounds; raw log case order",
+      "png": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed/host/011-2007x2853.png",
+      "png_sha256": "d484b341a352ffaca322f205d32cefd799100432f6370f74b792346c1567cd44",
+      "ax": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed/host/011-hierarchy.txt",
+      "ax_sha256": "708ca8c15994e808482c251ebdf39d930df80cbc71acc8077bf50333a91fb8f8",
+      "png_dimensions": [
+        2853,
+        2007
+      ],
+      "angle_degrees": 180,
+      "active_display": "LCD-1",
+      "orientation": "rot90",
+      "native_review": "reviews/duo-open-normal3-native-review.md",
+      "png_href": "assets/l05-014.png",
+      "ax_href": "assets/l05-014.txt",
+      "retained_local_native_review": ".codex-checks/batch04/quality/duo-open-normal3-native-review.json"
+    }
+  ],
+  "failure_history": {
+    "negative_aggregates": [
+      {
+        "archive": ".codex-checks/batch04/evidence/ipad-719721b8-first4-partial-failed",
+        "profile": "ipad",
+        "source_revision": "719721b8aa2351e7051c7bf95b49e2ed6229287a",
+        "enclosing_sdk": {
+          "executed": 4,
+          "passed": 3,
+          "failed": 1,
+          "skipped": 0
+        },
+        "case_results": {
+          "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()": "Failed",
+          "LifeRegressionTests/testVisualAuditHabitHeatmap()": "Passed",
+          "LifeRegressionTests/testVisualAuditHabitManagement()": "Passed",
+          "LifeRegressionTests/testVisualAuditWeeklyReport()": "Passed"
+        },
+        "sha256": {
+          "summary.json": "9c7dd46c0e0b99aa07ae5aaa63aaf364e46640ffa4bf270a11d85e41929295bc",
+          "tests.json": "189f6603b382305dd4fd3d45a096b4b9f70567c28e23150ad5d7fe5a165302f6",
+          "execution-metadata.json": "afbe73ddecd026da789c26cc7f49677f6dd20afaabc4ced718d7657d7bf821b8",
+          "result.json": "db9c0b18a939d27db9516babbf125daabaf326b8abae7a32cc0891f037986550",
+          "run.log.gz": "feb6ca7d0dc18aa75c372793ad32df440ebb5c9aadf479c4892175ebb468e322"
+        },
+        "accepted_methods": [
+          "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+          "LifeRegressionTests/testVisualAuditHabitManagement()",
+          "LifeRegressionTests/testVisualAuditWeeklyReport()"
+        ],
+        "accepted_screen_contributions": 3,
+        "accepted_pair_count": 8,
+        "native_reviews": [
+          ".codex-checks/batch04/quality/ipad-normal3-native-review.json"
+        ]
+      },
+      {
+        "archive": ".codex-checks/batch04/evidence/duo-closed-0def4ff9-physical6-partial-failed",
+        "profile": "duo-closed",
+        "source_revision": "0def4ff9b167b2d067e1244e42258722e9bbdf33",
+        "enclosing_sdk": {
+          "executed": 6,
+          "passed": 5,
+          "failed": 1,
+          "skipped": 0
+        },
+        "case_results": {
+          "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()": "Failed",
+          "LifeRegressionTests/testHabitHistoryAndManagementAtMaximumAccessibilitySize()": "Passed",
+          "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()": "Passed",
+          "LifeRegressionTests/testVisualAuditHabitHeatmap()": "Passed",
+          "LifeRegressionTests/testVisualAuditHabitManagement()": "Passed",
+          "LifeRegressionTests/testVisualAuditWeeklyReport()": "Passed"
+        },
+        "sha256": {
+          "summary.json": "cc523f177f151f1935367b9a0602cb8bfd8294f0c9020fa00ad573a373f3a4c1",
+          "tests.json": "bfe216239ded8dd60670f7ded5f5d3a1f07c46b897f69a8327a789786071cb29",
+          "execution-metadata.json": "2b6e28d63f5894ecc3ce045c7e15f442e347f8a7fadfd07b89ef30c0afc597dd",
+          "result.json": "10466e46290916f5089b7ce60d3e737ae66ebf9c26786ee5865670d35c7995f8",
+          "run.log.gz": "1d0e963ed79021055352e68d1a5263028f316e0e9d990eeed02a9af796444bff"
+        },
+        "accepted_methods": [
+          "LifeRegressionTests/testHabitHistoryAndManagementAtMaximumAccessibilitySize()",
+          "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+          "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+          "LifeRegressionTests/testVisualAuditHabitManagement()",
+          "LifeRegressionTests/testVisualAuditWeeklyReport()"
+        ],
+        "accepted_screen_contributions": 6,
+        "accepted_pair_count": 14,
+        "native_reviews": [
+          ".codex-checks/batch04/quality/duo-closed-normal-native-review.json",
+          ".codex-checks/batch04/quality/duo-closed-MAX-history-native-review.json"
+        ]
+      },
+      {
+        "archive": ".codex-checks/batch04/evidence/duo-open-a967f801-first4-partial-failed",
+        "profile": "duo-open-normal",
+        "source_revision": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+        "enclosing_sdk": {
+          "executed": 4,
+          "passed": 3,
+          "failed": 1,
+          "skipped": 0
+        },
+        "case_results": {
+          "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()": "Passed",
+          "LifeRegressionTests/testVisualAuditHabitHeatmap()": "Passed",
+          "LifeRegressionTests/testVisualAuditHabitManagement()": "Failed",
+          "LifeRegressionTests/testVisualAuditWeeklyReport()": "Passed"
+        },
+        "sha256": {
+          "summary.json": "0f16f54902a96e058184d589caf6a0de40435a9872fb31a6f8c07cdb6919dd3e",
+          "tests.json": "57b900ec976c2ccaf1a55722071e6e531e832f440b1047b94cbdc110846e4972",
+          "execution-metadata.json": "9328c7c7df3f04a7c6ca3e9a2365bc99c3a08d7e096bd442288b588e2c897899",
+          "result.json": "901fdc1787d01dc330f032cb3213c1f8d3b0b1f6b20f6800342759263df87978",
+          "run.log.gz": "0e5a238565c299eeb969804b12d072d51c52ea2cf74bc5238f40b613caf98bee"
+        },
+        "canonical_reported_counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "numeric_adjudication": {
+          "path": ".codex-checks/batch04/quality/open-sdk-numeric-adjudication.json",
+          "sha256": "d6de7219febf72a0554ed09dcb1b3138225b56814dd7e830fc1c74548bbf8046"
+        },
+        "accepted_methods": [
+          "LifeRegressionTests/testHabitHistoryShowsSeededEntriesAndDismisses()",
+          "LifeRegressionTests/testVisualAuditHabitHeatmap()",
+          "LifeRegressionTests/testVisualAuditWeeklyReport()"
+        ],
+        "accepted_screen_contributions": 3,
+        "accepted_pair_count": 10,
+        "native_reviews": [
+          ".codex-checks/batch04/quality/duo-open-normal3-native-review.json"
+        ]
+      },
+      {
+        "archive": ".codex-checks/batch04/evidence/duo-closed-a967f801-analytics-route-retry1-budget-failed",
+        "profile": "duo-closed",
+        "source_revision": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+        "enclosing_sdk": {
+          "executed": 1,
+          "passed": 0,
+          "failed": 1,
+          "skipped": 0
+        },
+        "case_results": {
+          "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()": "Failed"
+        },
+        "sha256": {
+          "summary.json": "19225d739cffe74f8ac6e986a8e5e18f7ecb603c0142ef60bce046b585f99fec",
+          "tests.json": "0551f3acf410a6b44e9b02f9a4cad9d076b6db04c75e1cf5423a26343aacee5b",
+          "execution-metadata.json": "f539e36a7693dc2d7044d760165445b9960af8a684308414f627c9b7b10a05e3",
+          "result.json": "56c9df1831175cc5f0cfca9c93e6b748e9217542a63696bfc961933e90322fb1",
+          "run.log.gz": "7885276a21befe7b78240fc91fd3b76f3872122d4dfcffd0b16e76ec54a76834"
+        },
+        "canonical_reported_counts": {
+          "executed": 0,
+          "passed": 0,
+          "skipped": 0,
+          "failed": 0
+        },
+        "numeric_adjudication": {
+          "path": ".codex-checks/batch04/quality/max-sdk-numeric-adjudication.json",
+          "sha256": "953d96f753e7ef1aededf8ae9dbc55accfa682eda13295a0dba271673aca5f47"
+        },
+        "reason": "Routefixworked,combinedMAXcontinuousprogressbutdefault300expired; originalSDKfailed,noacceptedmethods/pairs; rawwrapperzero preserved withstrictnumericreceipt.",
+        "accepted_slots_from_this_receipt": 0
+      }
+    ],
+    "zero_contribution_historical_runs": [
+      {
+        "archive": ".codex-checks/batch04/evidence/duo-closed-a967f801-analytics-route-retry1-budget-failed",
+        "profile": "duo-closed",
+        "source_revision": "a967f801b0bff9e91d0b4c31d2637541485973d1",
+        "enclosing_sdk": {
+          "executed": 1,
+          "passed": 0,
+          "failed": 1,
+          "skipped": 0
+        },
+        "case_results": {
+          "LifeRegressionTests/testHabitAnalyticsAtMaximumAccessibilitySize()": "Failed"
+        },
+        "sha256": {
+          "summary.json": "19225d739cffe74f8ac6e986a8e5e18f7ecb603c0142ef60bce046b585f99fec",
+          "tests.json": "0551f3acf410a6b44e9b02f9a4cad9d076b6db04c75e1cf5423a26343aacee5b",
+          "execution-metadata.json": "f539e36a7693dc2d7044d760165445b9960af8a684308414f627c9b7b10a05e3",
+          "result.json": "56c9df1831175cc5f0cfca9c93e6b748e9217542a63696bfc961933e90322fb1",
+          "run.log.gz": "7885276a21befe7b78240fc91fd3b76f3872122d4dfcffd0b16e76ec54a76834"
+        },
+        "canonical_reported_counts": {
+          "executed": 0,
+          "passed": 0,
+          "skipped": 0,
+          "failed": 0
+        },
+        "numeric_adjudication": {
+          "path": ".codex-checks/batch04/quality/max-sdk-numeric-adjudication.json",
+          "sha256": "953d96f753e7ef1aededf8ae9dbc55accfa682eda13295a0dba271673aca5f47"
+        },
+        "reason": "Routefixworked,combinedMAXcontinuousprogressbutdefault300expired; originalSDKfailed,noacceptedmethods/pairs; rawwrapperzero preserved withstrictnumericreceipt.",
+        "accepted_slots_from_this_receipt": 0
+      }
+    ],
+    "original_pipeline_exception_receipts": [
+      {
+        "path": ".codex-checks/batch04/quality/prestart-failures/phone-selector-transport-attempt1.json",
+        "sha256": "b6896a9d61979f762ba17152fac67ff47c603a9221fb0fb38a6aa5965411360d",
+        "pipeline_id": "batch04-phone-normal",
+        "source_pipeline_record": ".codex-checks/pipeline/check-f089b2525a4031bb21e55609.json",
+        "source_attempt_ordinal": 1,
+        "source_attempt_sha256": "e559396c0da41baabc523639804b2fea7b01f652e411a79d4593dd99aea3414c",
+        "preserved_log": ".codex-checks/batch04/quality/prestart-failures/phone-selector-transport-attempt1.log",
+        "preserved_log_sha256": "99076471c9506a4c54c60a9978481884b46d1daf9489b15745cc510e86cd065c",
+        "classification": "private selector transport before test-ui/xcodebuild",
+        "SDK_started": false,
+        "SDK_counts": null,
+        "SDK_pass_claimed": false
+      },
+      {
+        "path": ".codex-checks/batch04/quality/prestart-failures/phone-create-repository-lock-attempt1.json",
+        "sha256": "4ed721fa67efdcf140192d4c932d1ad2538a86b1fb7a69112f69252dd795a28f",
+        "pipeline_id": "batch04-create-phone",
+        "source_pipeline_record": ".codex-checks/pipeline/check-b003306d6e800d5ebca10fa0.json",
+        "source_attempt_ordinal": 1,
+        "source_attempt_sha256": "4ad6973aaa2edf351e8be887e2a15311643bd1c706f2dcb4c544d4935316fa9c",
+        "preserved_log": ".codex-checks/batch04/quality/prestart-failures/phone-create-repository-lock-attempt1.log",
+        "preserved_log_sha256": "3bb7ce9270ff1e04b8d47e4beff8671b5335617885966ae2a92e742e978c49ef",
+        "classification": "repository lock busy before device factory",
+        "SDK_started": false,
+        "SDK_counts": null,
+        "SDK_pass_claimed": false
+      },
+      {
+        "path": ".codex-checks/batch04/quality/prestart-failures/duo-not-booted-attempt1.json",
+        "sha256": "64f5adb8407e7792b8c0cb05bb84fb8388c4050362e5b12fd444f5dde1c42b84",
+        "pipeline_id": "batch04-duo-closed",
+        "source_pipeline_record": ".codex-checks/pipeline/check-8f3ed6cfa449df12199e613d.json",
+        "source_attempt_ordinal": 1,
+        "source_attempt_sha256": "c343b748a9f6bc3009fd566a228362c58a29f2498ea71f36673a8e22ee186516",
+        "preserved_log": ".codex-checks/batch04/quality/prestart-failures/duo-not-booted-attempt1.log",
+        "preserved_log_sha256": "041fa52f34e5d04cf0822ab607acf59f07d01ae66e4caf5353992ff254e56573",
+        "classification": "FreshfactorysimulatorwasShutdown;hingespawnfailedbeforetest-ui/xcode",
+        "SDK_started": false,
+        "SDK_counts": null,
+        "SDK_pass_claimed": false
+      }
+    ],
+    "note": "Prestart failures are separate from SDK aggregates and 19 method/profile slots; no Batch03 ordinal exceptions inferred."
+  },
+  "not_claimed": [
+    "actual-map-published",
+    "full-suite",
+    "final-PR-HEAD-runtime",
+    "CI-or-merge"
+  ],
+  "batch_accepted_method_profile_combinations": 19,
+  "gallery_screen": "L05",
+  "gallery_screen_method_profile_combinations": 6,
+  "scope": "Selected screen subset of B4; not final PR HEAD runtime receipt"
+}
