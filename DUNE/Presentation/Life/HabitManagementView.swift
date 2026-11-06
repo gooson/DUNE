@@ -303,6 +303,8 @@ private struct HabitHistoryDetailSheet: View {
     let logs: [HabitLogSnapshot]
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.colorScheme) private var colorScheme
 
     private static let skipMemoMarker = "[dune-life-cycle-skip]"
     private static let snoozeMemoMarker = "[dune-life-cycle-snooze]"
@@ -322,51 +324,75 @@ private struct HabitHistoryDetailSheet: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            header
-            Divider()
+        ScrollView {
+            VStack(spacing: 0) {
+                header
+                Divider()
 
-            if sortedEntries.isEmpty {
-                emptyState
-            } else {
-                entryList
+                if sortedEntries.isEmpty {
+                    emptyState
+                } else {
+                    entryList
+                }
             }
         }
+        .scrollBounceBehavior(.basedOnSize)
+        .accessibilityIdentifier("habit-management-history-scroll")
         .background { SheetWaveBackground() }
         .presentationDetents([.medium, .large])
-        .accessibilityIdentifier("habit-management-history-screen")
     }
 
     private var header: some View {
-        HStack(spacing: DS.Spacing.sm) {
-            Image(systemName: iconCategory.iconName)
-                .font(.title3)
-                .foregroundStyle(iconCategory.themeColor)
-                .frame(width: 36, height: 36)
-                .background(iconCategory.themeColor.opacity(DS.Opacity.light), in: Circle())
-
-            VStack(alignment: .leading) {
-                Text(habitName)
-                    .font(.headline)
-                Text("History")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+        HeroCard(tintColor: iconCategory.themeColor) {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                HStack(alignment: .top, spacing: DS.Spacing.sm) {
+                    Image(systemName: iconCategory.iconName)
+                        .font(.title3)
+                        .foregroundStyle(colorScheme == .light
+                            ? iconCategory.themeColor.mix(with: .black, by: 0.35)
+                            : iconCategory.themeColor)
+                        .frame(minWidth: 40, minHeight: 40)
+                        .background(iconCategory.themeColor.opacity(DS.Opacity.light), in: Circle())
+                        .accessibilityHidden(true)
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Text(habitName)
+                            .font(DS.Typography.sectionTitle)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("habit-management-history-screen")
+                    }
+                    Spacer(minLength: 0)
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title3)
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(.secondary)
+                            .frame(minWidth: 48, minHeight: 48)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Close")
+                    .accessibilityIdentifier("habit-management-history-close")
+                }
+                if dynamicTypeSize.isAccessibilitySize {
+                    Text(habitName)
+                        .font(DS.Typography.sectionTitle)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("habit-management-history-screen")
+                }
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: "clock.arrow.circlepath")
+                        .accessibilityHidden(true)
+                    Text("History")
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
             }
-
-            Spacer()
-
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "xmark.circle.fill")
-                    .font(.title3)
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(.secondary)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Close")
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding()
+        .padding(.horizontal, DS.Spacing.md)
+        .padding(.top, DS.Spacing.sm)
+        .padding(.bottom, DS.Spacing.md)
     }
 
     private var emptyState: some View {
@@ -381,40 +407,42 @@ private struct HabitHistoryDetailSheet: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
+        .frame(minHeight: 200)
     }
 
     private var entryList: some View {
-        ScrollView {
-            LazyVStack(spacing: DS.Spacing.sm) {
-                ForEach(Array(sortedEntries.enumerated()), id: \.offset) { _, entry in
-                    HStack(spacing: DS.Spacing.md) {
-                        Image(systemName: actionIcon(entry.action))
-                            .font(.subheadline)
-                            .foregroundStyle(actionColor(entry.action))
-                            .frame(width: 24)
+        LazyVStack(spacing: DS.Spacing.sm) {
+            ForEach(Array(sortedEntries.enumerated()), id: \.offset) { _, entry in
+                let layout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                    : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+                layout {
+                    Image(systemName: actionIcon(entry.action))
+                        .font(.subheadline)
+                        .foregroundStyle(actionColor(entry.action))
+                        .frame(minWidth: 32, minHeight: 32)
 
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(actionTitle(entry.action))
-                                .font(.subheadline.weight(.medium))
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(actionTitle(entry.action))
+                            .font(.subheadline.weight(.medium))
 
-                            if habitType != .check, entry.action == "complete" {
-                                Text(formattedValue(entry.value))
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
+                        if habitType != .check, entry.action == "complete" {
+                            Text(formattedValue(entry.value))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
-
-                        Spacer()
-
-                        Text(entry.date.formatted(.dateTime.month(.abbreviated).day().year()))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
                     }
-                    .padding(DS.Spacing.sm)
+
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
+
+                    Text(entry.date.formatted(.dateTime.month(.abbreviated).day().year()))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
+                .padding(DS.Spacing.sm)
             }
-            .padding(.horizontal)
         }
+        .padding(.horizontal)
     }
 
     private func actionIcon(_ action: String) -> String {
