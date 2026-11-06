@@ -351,3 +351,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-06 P07의 [새 iPhone·iPad 실제 PNG·AX와 변경 전 비교](../full-redesign-map/review/posture-symmetry-p07-2026-11-06/index.html)를 보존했다. Duo 접힘·펼침은 현재 캡처가 없어 이전 이미지를 유지하고 갤러리·화면 카드에 미갱신으로 표시했다.
 
 2026-11-07 S01의 [실제 PNG·AX와 변경 전 비교](../full-redesign-map/review/settings-s01-2026-11-07/index.html)를 보존했다. 갤러리·화면 카드에는 기기별 통과·진단·미갱신 범위를 표시했다.
+
+2026-11-07 S02의 [실제 PNG·AX와 변경 전 비교](../full-redesign-map/review/exercise-defaults-s02-2026-11-07/index.html)를 보존했다. 갤러리·화면 카드에는 기기별 통과·진단·미갱신 범위를 표시했다.
