@@ -4229,6 +4229,170 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                       "Cancel should return to the template list without saving a test exercise")
     }
 
+    func testVisualAuditCompoundSessionAtNormalText() throws {
+        try auditB14CompoundSession(maximumText: false)
+    }
+
+    func testVisualAuditCompoundSessionAtMaximumText() throws {
+        try auditB14CompoundSession(maximumText: true)
+    }
+
+    private func auditB14CompoundSession(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B14 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+        openExerciseViewFromRecentWorkouts()
+        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.exerciseToolbarAdd, timeout: 8))
+        let option = app.buttons[AXID.exerciseMenuCompound].firstMatch
+        XCTAssertTrue(option.waitForExistence(timeout: 5) && option.isHittable)
+        option.auditTap()
+        let setup = app.collectionViews[AXID.compoundWorkoutSetupScreen].firstMatch
+        XCTAssertTrue(setup.waitForExistence(timeout: 8))
+        let superset = setup.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "Superset")).firstMatch
+        XCTAssertTrue(superset.waitForExistence(timeout: 5) && superset.isHittable)
+        if maximumText { superset.auditTap() }
+        let circuit = app.buttons.matching(NSPredicate(format: "label == %@", "Circuit")).firstMatch
+        XCTAssertTrue(circuit.waitForExistence(timeout: 5) && circuit.isHittable)
+        circuit.auditTap()
+        XCTAssertTrue(app.staticTexts["Cycle through 3+ exercises in rounds."].firstMatch.waitForExistence(timeout: 5))
+        VisualAudit.capture("W19 \(size) Circuit mode and full label")
+        let circuitSelected = setup.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "Circuit")).firstMatch
+        if maximumText { circuitSelected.auditTap() }
+        let supersetChoice = app.buttons.matching(NSPredicate(format: "label == %@", "Superset")).firstMatch
+        XCTAssertTrue(supersetChoice.waitForExistence(timeout: 5) && supersetChoice.isHittable)
+        supersetChoice.auditTap()
+        XCTAssertTrue(app.staticTexts["Alternate between 2 exercises with minimal rest."].firstMatch
+            .waitForExistence(timeout: 5))
+
+        let add = app.buttons[AXID.compoundWorkoutSetupAddExercise].firstMatch
+        XCTAssertTrue(openCompoundPicker(using: add, in: setup), "W20 full picker should open")
+        let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
+        XCTAssertTrue(picker.waitForExistence(timeout: 5))
+        VisualAudit.capture("W20 \(size) full compound exercise picker")
+        let benchID = AXID.pickerExerciseRow(Fixture.benchPressID)
+        XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(benchID, maxSwipes: 8))
+        let bench = app.buttons[benchID].firstMatch
+        XCTAssertTrue(bench.waitForExistence(timeout: 5) && bench.isHittable)
+        bench.auditTap()
+        XCTAssertTrue(setup.waitForExistence(timeout: 8))
+        addCompoundExercise("barbell-squat")
+        let count = app.descendants(matching: .any)[AXID.compoundWorkoutSetupSelectionCount].firstMatch
+        XCTAssertTrue(count.waitForExistence(timeout: 5))
+        XCTAssertEqual(count.label, "Exercises (2)")
+        let start = app.buttons[AXID.compoundWorkoutSetupStart].firstMatch
+        for _ in 0..<12 where !(start.exists && start.isHittable) { setup.swipeUp(velocity: .slow) }
+        XCTAssertTrue(start.waitForExistence(timeout: 5) && start.isHittable && start.isEnabled)
+        VisualAudit.capture("W19 \(size) selected exercises and Start")
+        start.auditTap()
+
+        let session = app.scrollViews[AXID.compoundWorkoutScreen].firstMatch
+        XCTAssertTrue(session.waitForExistence(timeout: 10))
+        XCTAssertTrue(session.staticTexts["Round 1 / 3"].firstMatch.waitForExistence(timeout: 5))
+        let elapsed = session.staticTexts.matching(NSPredicate(format: "label MATCHES %@", "[0-9]+:[0-9]{2}")).firstMatch
+        XCTAssertTrue(elapsed.waitForExistence(timeout: 5), "W21 elapsed time must remain visible")
+        let squatTab = session.buttons.matching(NSPredicate(format: "label CONTAINS %@", "바벨 스쿼트")).firstMatch
+        let tabStrip = session.scrollViews.firstMatch
+        for _ in 0..<8 where !(squatTab.exists && squatTab.isHittable) { tabStrip.swipeLeft(velocity: .slow) }
+        XCTAssertTrue(squatTab.waitForExistence(timeout: 5) && squatTab.isHittable)
+        VisualAudit.capture("W21 \(size) round time and exercise tabs")
+        squatTab.auditTap()
+        let benchTab = session.buttons.matching(NSPredicate(format: "label CONTAINS %@", Fixture.benchPressLocalizedName)).firstMatch
+        for _ in 0..<8 where !(benchTab.exists && benchTab.isHittable) { tabStrip.swipeRight(velocity: .slow) }
+        XCTAssertTrue(benchTab.exists && benchTab.isHittable)
+        benchTab.auditTap()
+        let summary = session.staticTexts["Summary"].firstMatch
+        for _ in 0..<16 where !(summary.exists && summary.isHittable) { session.swipeUp(velocity: .slow) }
+        XCTAssertTrue(summary.exists && summary.isHittable)
+        XCTAssertGreaterThanOrEqual(session.staticTexts.matching(NSPredicate(format: "label == %@", "0 sets")).count, 2)
+        VisualAudit.capture("W21 \(size) two-exercise summary")
+        let next = session.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Next Exercise")).firstMatch
+        for _ in 0..<10 where !(next.exists && next.isHittable) { session.swipeDown(velocity: .slow) }
+        XCTAssertTrue(next.waitForExistence(timeout: 5) && next.isHittable)
+        next.auditTap()
+        let addTime = app.buttons["+30s"].firstMatch
+        let transitionStart = app.buttons["Start"].firstMatch
+        for _ in 0..<16 where !(addTime.exists && addTime.isHittable && transitionStart.exists && transitionStart.isHittable) {
+            session.swipeUp(velocity: .slow)
+        }
+        let window = app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4)
+        XCTAssertTrue(addTime.exists && addTime.isHittable && window.contains(addTime.frame))
+        XCTAssertTrue(transitionStart.exists && transitionStart.isHittable && window.contains(transitionStart.frame))
+        VisualAudit.capture("W21 \(size) transition plus30 and Start")
+        transitionStart.auditTap()
+        XCTAssertTrue(session.staticTexts["Round 1 / 3"].firstMatch.waitForExistence(timeout: 5))
+        tapBackButton()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.waitForExistence(timeout: 8))
+    }
+
+    func testVisualAuditTemplateTransitionAtNormalText() throws {
+        try auditB14TemplateTransition(maximumText: false)
+    }
+
+    func testVisualAuditTemplateTransitionAtMaximumText() throws {
+        try auditB14TemplateTransition(maximumText: true)
+    }
+
+    private func auditB14TemplateTransition(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B14 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+        ensureActivityRoot()
+        let root = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(root.waitForExistence(timeout: 5))
+        let card = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", Fixture.circuitTemplate)).firstMatch
+        for _ in 0..<40 {
+            let viewport = root.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 12)
+            if card.exists && card.isHittable && viewport.contains(card.frame) { break }
+            if card.exists && card.frame.midY >= viewport.minY && card.frame.midY <= viewport.maxY
+                && (card.frame.minX >= viewport.maxX || card.frame.maxX <= viewport.minX) {
+                // Normal text uses a horizontal template strip; MAX uses a vertical stack.
+                let window = app.windows.firstMatch
+                let direction: CGFloat = card.frame.minX >= viewport.maxX ? -1 : 1
+                let startX = direction < 0 ? viewport.maxX - 32 : viewport.minX + 32
+                let start = window.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                    dx: startX - window.frame.minX, dy: card.frame.midY - window.frame.minY
+                ))
+                start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(
+                    dx: direction * viewport.width * 0.55, dy: 0
+                )))
+            } else if card.exists && card.frame.midY < viewport.midY {
+                root.swipeDown(velocity: .slow)
+            } else {
+                root.swipeUp(velocity: .slow)
+            }
+        }
+        let viewport = root.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 12)
+        XCTAssertTrue(card.exists && card.isHittable && viewport.contains(card.frame),
+                      "Seeded Circuit Builder card must be fully visible in Activity")
+        card.auditTap()
+        let container = app.descendants(matching: .any)[AXID.templateWorkoutContainerScreen].firstMatch
+        XCTAssertTrue(container.waitForExistence(timeout: 5), "W16 wrapper should open from Activity template card")
+        let transition = app.descendants(matching: .any)[AXID.templateWorkoutTransitionScreen].firstMatch
+        XCTAssertTrue(transition.exists, "W22 auto transition must be observed before its five-second advance")
+        let defaults = ["2 sets", "6 reps", "80 kg"]
+        for label in defaults {
+            XCTAssertTrue(transition.staticTexts[label].firstMatch.exists, "W22 original \(label) default should appear")
+        }
+        VisualAudit.capture("W22 \(size) template defaults transition")
+        let start = app.buttons[AXID.templateWorkoutTransitionStart].firstMatch
+        if start.exists && start.isHittable { start.auditTap() }
+        XCTAssertTrue(app.staticTexts["Exercise 1 of 2"].firstMatch.waitForExistence(timeout: 10),
+                      "W16 should advance to the first session")
+        VisualAudit.capture("W16 \(size) first template session after transition")
+    }
+
     func testTemplateWorkoutContainerCloseDismissesFullScreenFlow() throws {
         openTemplateList()
 
@@ -4372,12 +4536,30 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         increase.auditTap()
         increase.auditTap()
         XCTAssertEqual(app.staticTexts["cardio-level-value"].firstMatch.label, "3")
+        if VisualAudit.isEnabled {
+            VisualAudit.capture("W24 stair climber machine Level 3 controls")
+            let sessionScroll = app.scrollViews.containing(.any, identifier: AXID.cardioSessionScreen).firstMatch
+            XCTAssertTrue(sessionScroll.waitForExistence(timeout: 5))
+            let end = app.buttons[AXID.cardioSessionEnd].firstMatch
+            for _ in 0..<6 where !end.isHittable { sessionScroll.swipeUp(velocity: .slow) }
+            XCTAssertTrue(end.waitForExistence(timeout: 5) && end.isHittable)
+            VisualAudit.capture("W24 stair climber machine metrics and End")
+        }
 
         app.buttons[AXID.cardioSessionEnd].firstMatch.auditTap()
         app.buttons[AXID.cardioSessionConfirmEnd].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.waitForExistence(timeout: 10))
         XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch.exists)
         XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch.exists)
+        if VisualAudit.isEnabled {
+            let history = app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch
+            let summaryScroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen]
+                .firstMatch.scrollViews.firstMatch
+            XCTAssertTrue(summaryScroll.waitForExistence(timeout: 5))
+            for _ in 0..<10 where !history.isHittable { summaryScroll.swipeUp(velocity: .slow) }
+            XCTAssertTrue(history.isHittable)
+            VisualAudit.capture("W25 stair climber Level 3 history")
+        }
     }
 
     func testVisualAuditCardioAtDefaultTextSize() throws {
@@ -4420,12 +4602,77 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
         let indoorButton = app.buttons[AXID.cardioStartIndoor].firstMatch
         XCTAssertTrue(indoorButton.waitForExistence(timeout: 5), "Indoor cardio start button should exist")
+        if VisualAudit.isEnabled {
+            let outdoorButton = app.buttons[AXID.cardioStartOutdoor].firstMatch
+            XCTAssertTrue(outdoorButton.waitForExistence(timeout: 5), "Running should offer Outdoor")
+            XCTAssertTrue(indoorButton.isHittable)
+            VisualAudit.capture("W23 cardio \(accessibilityText ? "MAX" : "normal") header and Indoor")
+            if accessibilityText {
+                let startScroll = app.scrollViews.containing(.any, identifier: AXID.cardioStartScreen).firstMatch
+                XCTAssertTrue(startScroll.waitForExistence(timeout: 5), "MAX cardio start sheet should scroll")
+                for _ in 0..<8 {
+                    let viewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                    if outdoorButton.exists && outdoorButton.isHittable && viewport.contains(outdoorButton.frame) { break }
+                    startScroll.swipeUp(velocity: .slow)
+                }
+                let outdoorViewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                XCTAssertTrue(outdoorButton.isHittable && outdoorViewport.contains(outdoorButton.frame),
+                              "The whole Outdoor card must fit in the MAX sheet")
+                VisualAudit.capture("W23 cardio MAX full Outdoor choice")
+                let notice = app.staticTexts["Outdoor mode will request location permission."].firstMatch
+                let warning = app.staticTexts["Location access denied. Enable in Settings for outdoor distance tracking."].firstMatch
+                let locationMessage = notice.exists ? notice : warning
+                if locationMessage.exists {
+                    for _ in 0..<8 {
+                        let viewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                        if locationMessage.isHittable && viewport.contains(locationMessage.frame) { break }
+                        startScroll.swipeUp(velocity: .slow)
+                    }
+                    let viewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                    XCTAssertTrue(locationMessage.isHittable && viewport.contains(locationMessage.frame),
+                                  "Visible location guidance must fit in the MAX sheet")
+                    VisualAudit.capture("W23 cardio MAX location guidance")
+                }
+                for _ in 0..<8 where !indoorButton.isHittable { startScroll.swipeDown(velocity: .slow) }
+                XCTAssertTrue(indoorButton.isHittable)
+            } else {
+                XCTAssertTrue(outdoorButton.isHittable)
+                VisualAudit.capture("W23 cardio normal Indoor and Outdoor choices")
+            }
+        }
         indoorButton.auditTap()
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.cardioSessionScreen].firstMatch.waitForExistence(timeout: 10),
             "Cardio session should start"
         )
+        if VisualAudit.isEnabled {
+            let sessionScroll = app.scrollViews.containing(.any, identifier: AXID.cardioSessionScreen).firstMatch
+            XCTAssertTrue(sessionScroll.waitForExistence(timeout: 5), "W24 metrics should have one active scroll")
+            let elapsed = app.staticTexts["Elapsed Time"].firstMatch
+            XCTAssertTrue(elapsed.waitForExistence(timeout: 5) && elapsed.isHittable)
+            VisualAudit.capture("W24 cardio \(accessibilityText ? "MAX" : "normal") elapsed and status")
+            let paceUnit = app.staticTexts["/km"].firstMatch
+            let distanceUnit = app.staticTexts["km"].firstMatch
+            for _ in 0..<8 where !paceUnit.isHittable { sessionScroll.swipeUp(velocity: .slow) }
+            XCTAssertTrue(distanceUnit.exists && paceUnit.isHittable,
+                          "Running must retain distance and pace units")
+            VisualAudit.capture("W24 cardio \(accessibilityText ? "MAX" : "normal") distance and pace")
+            let end = app.buttons[AXID.cardioSessionEnd].firstMatch
+            for unit in ["steps", "spm"] {
+                let metric = app.staticTexts[unit].firstMatch
+                for _ in 0..<10 where !metric.isHittable { sessionScroll.swipeUp(velocity: .slow) }
+                XCTAssertTrue(metric.waitForExistence(timeout: 5) && metric.isHittable,
+                              "W24 lower \(unit) metric must remain readable")
+                if accessibilityText {
+                    XCTAssertTrue(end.isHittable && app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(end.frame),
+                                  "W24 MAX End must stay wholly visible in the bottom inset")
+                }
+                VisualAudit.capture("W24 cardio \(accessibilityText ? "MAX" : "normal") lower \(unit) and Pause End controls")
+            }
+            for _ in 0..<8 where !end.isHittable { sessionScroll.swipeUp(velocity: .slow) }
+            XCTAssertTrue(end.waitForExistence(timeout: 5) && end.isHittable)
+        }
 
         let cardioSessionEndButton = app.descendants(matching: .any)[AXID.cardioSessionEnd].firstMatch
         XCTAssertTrue(cardioSessionEndButton.waitForExistence(timeout: 5), "Cardio end button should exist")
@@ -4454,7 +4701,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(waitForHittable(save, timeout: 5), "Summary Save must be reachable\n\(app.debugDescription)")
         XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
                       "The whole summary Save action should fit above the window edge")
-        VisualAudit.capture("Cardio summary top title and full Save after permission dismissal")
+        VisualAudit.capture("W25 cardio \(accessibilityText ? "MAX" : "normal") summary top and full Save")
         if VisualAudit.isEnabled {
             let summaryScroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
             XCTAssertTrue(summaryScroll.waitForExistence(timeout: 5), "Cardio summary should own a metric scroll view")
@@ -4471,7 +4718,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 XCTAssertTrue(save.isHittable, "Save should remain reachable while reviewing summary metrics")
                 XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
                               "Summary Save should remain wholly visible while metrics scroll")
-                VisualAudit.capture("Cardio summary lower \(checkpoint) and full Save")
+                VisualAudit.capture("W25 cardio \(accessibilityText ? "MAX" : "normal") lower \(checkpoint) and full Save")
             }
         }
     }

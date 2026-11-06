@@ -151,14 +151,17 @@ struct CompoundWorkoutView: View {
     // MARK: - Round Indicator
 
     private var roundIndicator: some View {
-        HStack(spacing: DS.Spacing.sm) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return layout {
             Image(systemName: config.mode == .superset ? "arrow.triangle.2.circlepath" : "repeat")
                 .foregroundStyle(DS.Color.activity)
 
             Text("Round \(viewModel.currentRound) / \(config.totalRounds)")
                 .font(.subheadline.weight(.semibold))
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
             // Session elapsed time
             Text(formattedElapsedTime)
@@ -196,15 +199,17 @@ struct CompoundWorkoutView: View {
             VStack(spacing: DS.Spacing.xxs) {
                 Text(exercise.localizedName)
                     .font(.caption.weight(isCurrent ? .bold : .regular))
-                    .lineLimit(1)
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                    .fixedSize(horizontal: false, vertical: true)
                 if completed > 0 {
                     Text("\(completed.formattedWithSeparator) sets")
-                        .font(.system(size: 9))
+                        .font(dynamicTypeSize.isAccessibilitySize ? .caption2 : .system(size: 9))
                         .foregroundStyle(DS.Color.textSecondary)
                 }
             }
             .padding(.horizontal, DS.Spacing.md)
             .padding(.vertical, DS.Spacing.sm)
+            .frame(minHeight: dynamicTypeSize.isAccessibilitySize ? 44 : nil)
             .background(
                 isCurrent ? DS.Color.activity.opacity(0.15) : Color.secondary.opacity(0.08),
                 in: RoundedRectangle(cornerRadius: DS.Radius.sm)
@@ -222,14 +227,20 @@ struct CompoundWorkoutView: View {
 
         return VStack(alignment: .leading, spacing: DS.Spacing.md) {
             // Exercise header
-            HStack(spacing: DS.Spacing.sm) {
+            let headerLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+            headerLayout {
                 Image(systemName: exercise.resolvedActivityType.iconName)
                     .font(.title2)
                     .foregroundStyle(exercise.resolvedActivityType.color)
                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                     Text(exercise.localizedName)
                         .font(.title3.weight(.semibold))
-                    HStack(spacing: DS.Spacing.xs) {
+                    let muscleLayout = dynamicTypeSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                        : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+                    muscleLayout {
                         ForEach(exercise.primaryMuscles, id: \.self) { muscle in
                             Text(muscle.displayName)
                                 .font(.caption2.weight(.medium))
@@ -240,7 +251,7 @@ struct CompoundWorkoutView: View {
                         }
                     }
                 }
-                Spacer()
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
             }
 
             // Set list for current exercise
@@ -390,10 +401,13 @@ struct CompoundWorkoutView: View {
             ForEach(config.exercises.indices, id: \.self) { index in
                 let exercise = config.exercises[index]
                 let vm = viewModel.exerciseViewModels[index]
-                HStack {
+                let rowLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                    : AnyLayout(HStackLayout())
+                rowLayout {
                     Text(exercise.localizedName)
                         .font(.subheadline)
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                     Text("\(vm.completedSetCount.formattedWithSeparator) sets")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
@@ -426,7 +440,10 @@ struct CompoundWorkoutView: View {
                     .tint(DS.Color.activity)
             }
 
-            HStack(spacing: DS.Spacing.lg) {
+            let controlLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.lg))
+            controlLayout {
                 if transitionTimer.isRunning {
                     Button {
                         transitionTimer.addTime(30)
