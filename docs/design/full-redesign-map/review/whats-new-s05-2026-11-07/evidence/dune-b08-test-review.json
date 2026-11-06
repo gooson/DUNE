@@ -1,0 +1,63 @@
+{
+  "review": "B08 S05/S06 appended WhatsNewVisualAuditTests only",
+  "status": "read-only source review; no SDK, simulator, runner, or app mutation",
+  "source_revision": "2e17b2e3f0769980d340e308f41dd2f7f1d25e66",
+  "base_revision": "1deb3f21807ede3e60ff8cd212b4c163208df0e5",
+  "test_file": "DUNEUITests/Smoke/SettingsSmokeTests.swift",
+  "baseline_sha256": "9448cefb46d50f85b4d638d54ef907a17120bf6273f0cfd62ed95eaa29603506",
+  "current_sha256": "c4acfd95b200adf754b8fc94e1f70258f7dd8e0a65e0d2c5e54af1520a3b93f1",
+  "original_class_byte_exact_prefix": true,
+  "app_source_reuse": {
+    "current_sha256": "57ae2373f7025192e8e5dfa5c62e34cb95097bf1060fcaa7d34cba12b9f27d68",
+    "matches_existing_private_source_reviews": true
+  },
+  "selectors": [
+    "WhatsNewVisualAuditTests/testManualReleaseListOpensFeatureAndReturns",
+    "WhatsNewVisualAuditTests/testManualReleaseListAndDetailAtMaximumAccessibilitySize",
+    "WhatsNewVisualAuditTests/testAutomaticReleaseDoneAtMaximumAccessibilitySize"
+  ],
+  "blockers": [],
+  "introduced_P1_P2_P3_findings": [],
+  "verified_static_contracts": [
+    "New class is appended in the existing UI test file; all prior SettingsSmokeTests setup, methods, and helper bytes are unchanged.",
+    "Manual route follows existing Settings→NotificationHub News selected filter→notifications-news-release→whatsnew-screen path. Existing current app MARKETING_VERSION and catalog first release are 0.8.0, with ios27Support in 0.8.0.json.",
+    "Manual mode has no Done button in WhatsNewView; feature detail and list use native Back. New assertions target exact BackButton under named nonsearch navigation bars rather than the first bar button.",
+    "Automatic mode uses existing --force-automatic-whatsnew test flag and existing whatsnew-close-button. Done dismissal waits for screen nonexistence.",
+    "Normal S05/S06 and MAX S05/S06 capture points are explicit; MAX version header is captured before scrolling to the feature row.",
+    "New class alone forces English and uses a local Today Settings toolbar More fallback; no shared UI helper or existing smoke fixture is changed."
+  ],
+  "runtime_risks_to_confirm_in_first_run": [
+    "No current S05/S06 native AX export yet confirms exact navigation bar identifiers iOS 27 Support and What’s New; if native title identity differs, export AX before changing the selector.",
+    "0.8.0 and ios27Support are intentional current-catalog assertions. A future release version/catalog update requires updating this focused test.",
+    "MAX title, summary and version badge use exact scoped static text queries; native SwiftUI AX grouping/visibility must be confirmed. Horizontal frame assertions and summary scrollability do not alone prove visual line completeness.",
+    "The automatic sheet may present asynchronously after the forced launch; the test waits 8 seconds but has no native proof yet."
+  ],
+  "gate": "Current e487 test source has no identified remaining helper visibility issue; initial 2e17 attempt had zero executed tests due compile failure. Await phone retry1 SDK receipt and AX before any runtime or merge claim.",
+  "reviewed_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+  "resolved_compile_failure": {
+    "initial_source": "2e17b2e3f0769980d340e308f41dd2f7f1d25e66",
+    "receipt": ".codex-checks/b08/phone-ui.log.result.json",
+    "observed": "xcodebuild exited 65 before UI execution: new UITestBaseCase subclass called dismissMorningBriefingIfNeeded, which is private to TodaySettingsRegressionTests/SeededUITestBaseCase path",
+    "fix": "e48783e1 removes only the inaccessible helper call; B08 app source and original SettingsSmokeTests bytes remain unchanged",
+    "retry_status": "phone retry1 pending at review time; no executed selector or native pass can be inferred from the compile-failed attempt"
+  },
+  "api_visibility_check": {
+    "available_in_UITestBaseCase": [
+      "app",
+      "launchConfiguration",
+      "launchApp(with:)",
+      "navigateToDashboard()"
+    ],
+    "available_in_XCUIApplication_or_extensions": [
+      "scrollToHittableElementIfNeeded",
+      "waitAndTapToolbarAction",
+      "auditTap"
+    ],
+    "available_in_module": [
+      "AXID",
+      "VisualAudit.capture"
+    ],
+    "remaining_known_seeded_only_helper_calls": 0,
+    "limit": "Static visibility check only; retry compile outcome belongs to runner receipt."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WhatsNewVisualAuditTests/testManualReleaseListOpensFeatureAndReturns",
+    "DUNEUITests/WhatsNewVisualAuditTests/testManualReleaseListAndDetailAtMaximumAccessibilitySize",
+    "DUNEUITests/WhatsNewVisualAuditTests/testAutomaticReleaseDoneAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": null,
+    "passed": null,
+    "skipped": null,
+    "failed": null
+  },
+  "passed_cases": 0,
+  "failures": [
+    "728: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Smoke/SettingsSmokeTests.swift:375:9: error: cannot find 'dismissMorningBriefingIfNeeded' in scope",
+    "732: |         `- error: cannot find 'dismissMorningBriefingIfNeeded' in scope",
+    "756: Testing failed:",
+    "760: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no executed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WhatsNewVisualAuditTests/testManualReleaseListOpensFeatureAndReturns",
+    "DUNEUITests/WhatsNewVisualAuditTests/testManualReleaseListAndDetailAtMaximumAccessibilitySize",
+    "DUNEUITests/WhatsNewVisualAuditTests/testAutomaticReleaseDoneAtMaximumAccessibilitySize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-ui.log"
+}
