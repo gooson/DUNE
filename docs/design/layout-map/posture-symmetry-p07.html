@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P07 자세 좌우 비교 배치 계약</title>
+<style>:root{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;color:#302a24;background:#faf8f3}*{box-sizing:border-box}body{max-width:850px;margin:auto;padding:24px}h1{font-size:clamp(1.6rem,4vw,2.2rem)}a{color:#79532f}.box{background:#fffdf9;border:1px solid #d8cabc;border-radius:18px;padding:20px;margin:16px 0}ol{padding-left:1.4em}li{margin:8px 0}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #ded2c5;text-align:left;vertical-align:top;padding:10px}th{width:11rem}@media(max-width:600px){body{padding:16px}td,th{display:block;width:100%}}</style>
+<a href="index.html">배치 맵</a> · <a href="../theme-map/themes/dune-posture-symmetry-p07.html">DUNE 정적 표현</a>
+<h1>P07 · 자세 좌우 비교</h1>
+<p>구현 기준 시안이다. 실제 기록·카메라 사진·SF Symbol 렌더링·앱 캡처가 아니다.</p>
+<section class="box"><h2>정보 순서</h2><ol><li>기존 Left vs Right Comparison 제목과 기록 날짜를 테마 히어로에 표시</li><li>실제로 분석된 각 SymmetryDetail을 원래 순서대로 카드에 표시: 지표 기호·이름·상태, 좌우 값과 단위, 기존 중심선 막대, 차이 요약</li><li>전면 관절이 없거나 분석 결과가 비면 기존 No Symmetry Data 상태와 설명을 표시</li></ol></section>
+<table><tr><th>값 계약</th><td>각 leftValue/rightValue와 원래 단위 포매터를 그대로 사용한다. 음수·0·소수점과 원래 좌우 순서를 보존한다. 막대 비율·higherSide·상태·차이 계산을 새 히어로나 시안에서 재정의하지 않는다. 정규화 점수나 비율을 새로 만들지 않는다.</td></tr><tr><th>동작·내비게이션</th><td>기존 PostureDetailView의 좌우 비교 링크, 시스템 뒤로 가기, 날짜, 세 지표의 조건부 표시, 각 값과 측면 접근성 ID를 보존한다. 사진 확대·관절 표시·원본 기록 지표는 이전 상세 화면의 동작이며 P07 변경 범위 밖에서 그대로 둔다.</td></tr><tr><th>폭·큰 글씨</th><td>스크롤 안쪽은 최대 680pt로 제한한다. 일반 크기는 좌우 값이 막대 양옆, 접근성 크기는 왼쪽 값 → 막대 → 오른쪽 값 순서다. MAX에서 값 전체와 단위가 한 줄로 읽히는 기존 full-frame 검사 계약을 유지한다.</td></tr><tr><th>검증</th><td>기존 testPostureSymmetry와 opt-in testPostureSymmetryValuesAcrossFoldStatesAtMaximumTextSize의 정확한 셀렉터를 사용한다. iPhone·iPad·Duo 접힘/펼침 중 영향 기기와 새 PNG/AX를 확인한 후 실제 디자인맵을 갱신한다. 이 HTML만으로 통과를 주장하지 않는다.</td></tr></table>
+</html>

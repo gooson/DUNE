@@ -340,3 +340,9 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 - [P02 정적 시안](themes/dune-posture-realtime-p02.html): 실제 앱 PNG와 구분. [새 실제 화면](../full-redesign-map/review/posture-realtime-p02-2026-11-06/index.html).
 
 - [P04 정적 시안](themes/dune-posture-result-p04.html): 실제 앱 PNG와 구분. [새 실제 화면](../full-redesign-map/review/posture-result-p04-2026-11-06/index.html).
+
+- [P05 정적 표현](themes/dune-posture-history-p05.html): 구현 전 시안이며 실제 PNG가 아니다.
+
+- [P07 정적 표현](themes/dune-posture-symmetry-p07.html): 구현 전 시안이며 실제 PNG가 아니다.
+
+- [P08 정적 표현](themes/dune-posture-comparison-p08.html): 구현 전 시안이며 실제 PNG가 아니다.
