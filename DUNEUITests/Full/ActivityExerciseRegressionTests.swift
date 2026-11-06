@@ -3641,7 +3641,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
         revealAndTapAddExercise()
 
-        let picker = app.tables[AXID.pickerRootList].firstMatch
+        let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         XCTAssertTrue(picker.waitForExistence(timeout: 8), "W14 full exercise picker should open")
         VisualAudit.capture("W14 \(size) template exercise picker initial")
         XCTAssertTrue(app.fillTextInput(AXID.pickerSearchField, with: "Bench Press"))
