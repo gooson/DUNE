@@ -1,0 +1,11 @@
+{
+  "review": "B10 W05/W06/W31 independent Security, Data Integrity, Architecture source review",
+  "status": "source-only; no SDK, simulator, repository edit or native pass",
+  "source_revision": "4fd3b3aadfa39908948538587aea81856ad14c48",
+  "introduced_P1_P2_P3_findings": [],
+  "security": "W05/W06/W31 change only layout wrappers and Label presentation. No new external action, permission, secret, network, HealthKit access, file access or unsafe input path. Original Start, +1 Set and Finish/Next closures are unmodified.",
+  "data_integrity": "Exercise definition, template defaults, prior set query, input fields, units, set completion, rest, draft persistence and save logic remain unchanged. W31 ScrollView does not create alternate state or commit path; source after // MARK: - Actions is byte-identical to baseline. No new catalog key or value conversion.",
+  "architecture": "Changes remain in presentation Views. W05 keeps sheet and NavigationStack ownership; W06 keeps workout ViewModel and existing routing; W31 remains an inline W06 sheet. No new model/service dependency or navigation owner.",
+  "native_risks": "MAX W05 pinned CTA and long name, W06 icon/name/input viewport, and W31 medium/large sheet scroll/hit testing need named native evidence. Static review cannot establish AX structure or detent gesture behavior.",
+  "agent_native": "N/A: human-facing exercise screens and XCTest only, no agent-facing tool/action/data contract."
+}

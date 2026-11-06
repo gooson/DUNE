@@ -953,6 +953,14 @@ struct WorkoutSessionView: View {
     // MARK: - All Sets Done Sheet
 
     private var allSetsDoneSheet: some View {
+        ScrollView {
+            allSetsDoneContent
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .accessibilityIdentifier("workout-session-last-set-sheet")
+    }
+
+    private var allSetsDoneContent: some View {
         VStack(spacing: DS.Spacing.lg) {
             VStack(spacing: DS.Spacing.xs) {
                 Image(systemName: "checkmark.circle.fill")
@@ -1034,7 +1042,8 @@ struct WorkoutSessionView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
-        .accessibilityIdentifier("workout-session-last-set-sheet")
+        .frame(maxWidth: .infinity)
+        .padding(.bottom, DS.Spacing.lg)
     }
 
     // MARK: - Actions

@@ -1,0 +1,60 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+        "deviceName": "iPhone 18 Pro Max B06-wt-Health-detail-posture-b05-b88b6a4ff04b",
+        "modelName": "iPhone 18 Pro Max",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "expectedFailures": 0,
+      "failedTests": 2,
+      "passedTests": 0,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Design Capture"
+      }
+    }
+  ],
+  "environmentDescription": "DUNEUITests-DesignCapture \u00b7 Built with macOS 27.2",
+  "expectedFailures": 0,
+  "failedTests": 2,
+  "finishTime": 1793989206.032,
+  "passedTests": 0,
+  "result": "Failed",
+  "runtimeWarnings": [],
+  "skippedTests": 0,
+  "startTime": 1793988977.399,
+  "statistics": [],
+  "testFailures": [
+    {
+      "failureText": "XCTAssertTrue failed - W06 overview must retain the exercise name",
+      "targetName": "DUNEUITests",
+      "testIdentifier": 1,
+      "testIdentifierString": "ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText()",
+      "testIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText",
+      "testName": "testVisualAuditStrengthStartSessionLastSetAtMaximumText()"
+    },
+    {
+      "failureText": "XCTAssertTrue failed - W06 overview must retain the exercise name",
+      "targetName": "DUNEUITests",
+      "testIdentifier": 2,
+      "testIdentifierString": "ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtNormalText()",
+      "testIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtNormalText",
+      "testName": "testVisualAuditStrengthStartSessionLastSetAtNormalText()"
+    }
+  ],
+  "title": "Test - DUNEUITests",
+  "topInsights": [
+    {
+      "category": "Common Failures",
+      "impact": "100% of failures",
+      "text": "2 runs of 2 tests failed with XCTAssertTrue failed - W06 overview must retain the exercise name"
+    }
+  ],
+  "totalTestCount": 2
+}
