@@ -34,6 +34,104 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         }
     }
 
+    @discardableResult
+    private func revealPastRecordControl(_ identifier: String) -> XCUIElement {
+        let form = app.collectionViews.firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 5))
+        let control = app.descendants(matching: .any)[identifier].firstMatch
+        // The native medium Form instantiates lower rows only after scrolling.
+        for _ in 0..<8 where !control.exists { form.swipeUp(velocity: .slow) }
+        XCTAssertTrue(app.revealFullyVisible(identifier, in: form, maxMoves: 12))
+        return control
+    }
+
+    private func tapPastRecordAction(_ identifier: String) {
+        let form = app.collectionViews.firstMatch
+        let action = app.buttons[identifier].firstMatch
+        // Restore the sheet toolbar after scrolling within the actual Form.
+        for _ in 0..<10 where !(action.exists && action.isHittable) {
+            form.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(action.waitForExistence(timeout: 5) && action.isHittable)
+        action.auditTap()
+    }
+
+    private func tapPastReadSave() -> Bool {
+        let total = app.textFields["habit-past-record-total"].firstMatch
+        let picker = app.buttons["habit-past-record-habit"].firstMatch
+        let forms = app.collectionViews
+        let matchingForms = forms.allElementsBoundByIndex.enumerated().filter {
+            $0.element.textFields["habit-past-record-total"].firstMatch.exists
+        }
+        guard matchingForms.count == 1 else { return false }
+        // Keep the verified Form's index when its lower row leaves the lazy AX tree.
+        let form = forms.element(boundBy: matchingForms[0].offset)
+        let originalFormCount = forms.count
+        let navigationBar = app.navigationBars["Past Record"].firstMatch
+        let save = navigationBar.buttons["habit-past-record-save"].firstMatch
+        let window = app.windows.firstMatch
+
+        func usable(_ frame: CGRect) -> Bool {
+            !frame.isEmpty && !frame.isNull &&
+                frame.minX.isFinite && frame.maxX.isFinite &&
+                frame.minY.isFinite && frame.maxY.isFinite
+        }
+
+        guard total.exists, total.value as? String == "40",
+              picker.exists, picker.label == "Habit, Read" else { return false }
+
+        // Preserve the existing ten-gesture maximum, with a final eligibility check.
+        for move in 0...10 {
+            guard window.exists, navigationBar.exists else { return false }
+            let windowFrame = window.frame
+            let navigationFrame = navigationBar.frame
+            guard usable(windowFrame), usable(navigationFrame) else { return false }
+            if save.exists {
+                let frame = save.frame
+                // Geometry must precede isHittable: a collapsed placeholder can exist.
+                if usable(frame), windowFrame.contains(frame), navigationFrame.contains(frame),
+                   save.isHittable, save.isEnabled {
+                    guard picker.exists, picker.label == "Habit, Read" else { return false }
+                    if total.exists, total.value as? String != "40" { return false }
+                    VisualAudit.capture("L09 native Save toolbar restored")
+                    save.auditTap()
+                    return true
+                }
+            }
+            guard move < 10, forms.count == originalFormCount, form.exists else { return false }
+            let formFrame = form.frame
+            guard usable(formFrame) else { return false }
+            let intersection = formFrame.intersection(windowFrame)
+            guard usable(intersection) else { return false }
+            let top = max(intersection.minY, navigationFrame.maxY)
+            var bottom = intersection.maxY
+            let keyboard = app.keyboards.firstMatch
+            if keyboard.exists {
+                let keyboardFrame = keyboard.frame
+                guard usable(keyboardFrame) else { return false }
+                if keyboardFrame.intersects(intersection) {
+                    bottom = min(bottom, keyboardFrame.minY)
+                }
+            }
+            let viewport = CGRect(x: intersection.minX, y: top,
+                                  width: intersection.width, height: max(0, bottom - top))
+                .insetBy(dx: 12, dy: 12)
+            guard usable(viewport), viewport.height >= 44 else { return false }
+            let x = (viewport.midX - formFrame.minX) / formFrame.width
+            let start = form.coordinate(withNormalizedOffset: CGVector(
+                dx: x, dy: (viewport.minY + viewport.height * 0.25 - formFrame.minY) / formFrame.height
+            ))
+            let end = form.coordinate(withNormalizedOffset: CGVector(
+                dx: x, dy: (viewport.minY + viewport.height * 0.75 - formFrame.minY) / formFrame.height
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+            VisualAudit.capture("L09 numeric Form visible-area drag \(move + 1)")
+            if picker.exists, picker.label != "Habit, Read" { return false }
+            if total.exists, total.value as? String != "40" { return false }
+        }
+        return false
+    }
+
     func testCompactHeroAndTodayReadingOrder() {
         navigateToLife()
         let hero = waitForElement(AXID.lifeHeroProgress, timeout: 15)
@@ -103,10 +201,38 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(pastAction.waitForExistence(timeout: 5))
         pastAction.auditTap()
         XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
-        XCTAssertTrue(element("habit-past-record-date").exists)
         XCTAssertTrue(element("habit-past-record-habit").exists)
-        app.buttons["habit-past-record-cancel"].firstMatch.auditTap()
+        let readDate = app.staticTexts["habit-past-record-hero-date"].firstMatch
+        XCTAssertTrue(readDate.waitForExistence(timeout: 5) && !readDate.label.isEmpty)
+        capture("L09 duration record hero and date")
+        // The medium Form can instantiate the date picker below the hero lazily.
+        revealPastRecordControl("habit-past-record-date")
+        XCTAssertTrue(element("habit-past-record-date").exists)
+        tapPastRecordAction("habit-past-record-cancel")
         XCTAssertEqual(hero.label, baseline, "Opening and canceling the sheet should preserve today")
+
+        XCTAssertTrue(app.openLifeHabitActions(named: "Water", maxSwipes: 8))
+        app.buttons["life-habit-action-past-record"].firstMatch.auditTap()
+        XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["habit-past-record-hero-date"].firstMatch.exists)
+        revealPastRecordControl("habit-past-record-total")
+        XCTAssertTrue(app.textFields["habit-past-record-total"].firstMatch.exists,
+                      "Count habits use a numeric total")
+        capture("L09 count record")
+        tapPastRecordAction("habit-past-record-cancel")
+
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-completed-toggle", maxSwipes: 8))
+        app.buttons["life-completed-toggle"].firstMatch.auditTap()
+        XCTAssertTrue(app.openLifeHabitActions(named: "Morning Stretch", maxSwipes: 8))
+        app.buttons["life-habit-action-past-record"].firstMatch.auditTap()
+        XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["habit-past-record-hero-date"].firstMatch.exists)
+        revealPastRecordControl("habit-past-record-completed")
+        XCTAssertTrue(app.switches["habit-past-record-completed"].firstMatch.exists,
+                      "Check habits use a completion toggle")
+        capture("L09 check record")
+        tapPastRecordAction("habit-past-record-cancel")
+        XCTAssertEqual(hero.label, baseline, "Canceling every record kind must preserve today")
     }
 
     func testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged() {
@@ -116,14 +242,24 @@ final class LifeFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(app.openLifeHabitActions(named: "Read", maxSwipes: 8))
         app.buttons["life-habit-action-past-record"].firstMatch.auditTap()
         XCTAssertTrue(app.navigationBars["Past Record"].waitForExistence(timeout: 5))
+        revealPastRecordControl("habit-past-record-total")
         let total = app.textFields["habit-past-record-total"].firstMatch
         XCTAssertTrue(total.waitForExistence(timeout: 5))
         XCTAssertTrue(total.value.map { String(describing: $0).contains("30") } ?? false,
                       "The fixture should preload yesterday's 30-minute total")
-        XCTAssertTrue(app.fillTextInput("habit-past-record-total", with: "40"))
-        let save = app.buttons["habit-past-record-save"].firstMatch
-        XCTAssertTrue(save.waitForExistence(timeout: 5))
-        save.auditTap()
+        total.auditTap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+        capture("L09 focused duration total and software keyboard")
+        let existingTotal = total.value as? String ?? ""
+        XCTAssertEqual(existingTotal, "30")
+        total.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: existingTotal.count))
+        let clearedTotal = total.value as? String ?? ""
+        XCTAssertTrue(clearedTotal.isEmpty || clearedTotal == total.placeholderValue,
+                      "Clear the original total before typing its replacement")
+        total.typeText("40")
+        XCTAssertEqual(total.value as? String, "40")
+        capture("L09 replacement total before native Save")
+        XCTAssertTrue(tapPastReadSave(), "Save must preserve Read and its replacement total")
         XCTAssertTrue(app.navigationBars["Past Record"].waitForNonExistence(timeout: 5))
         XCTAssertEqual(hero.label, baseline, "A past record must not change today's completion")
         XCTAssertTrue(app.openLifeHabitActions(named: "Read", maxSwipes: 8))
@@ -141,6 +277,49 @@ final class LifeFlowUITests: SeededUITestBaseCase {
             .firstMatch
         XCTAssertTrue(late.waitForExistence(timeout: 5), "The past entry should identify late recording")
         capture("L05-Life-history-recorded-later")
+    }
+
+    func testPastRecordKindsAtMaximumAccessibilitySize() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToLife()
+        let today = waitForElement(AXID.lifeHeroProgress, timeout: 15)
+        let baseline = today.label
+
+        for (habit, controlID) in [("Read", "habit-past-record-total"),
+                                   ("Water", "habit-past-record-total"),
+                                   ("Morning Stretch", "habit-past-record-completed")] {
+            if habit == "Morning Stretch" {
+                XCTAssertTrue(app.scrollToHittableElementIfNeeded("life-completed-toggle", maxSwipes: 8))
+                app.buttons["life-completed-toggle"].firstMatch.auditTap()
+            }
+            XCTAssertTrue(app.openLifeHabitActions(named: habit, maxSwipes: 10))
+            let action = app.buttons["life-habit-action-past-record"].firstMatch
+            XCTAssertTrue(action.waitForExistence(timeout: 5))
+            action.auditTap()
+            let sheet = app.navigationBars["Past Record"]
+            XCTAssertTrue(sheet.waitForExistence(timeout: 5))
+            let form = app.collectionViews.firstMatch
+            XCTAssertTrue(form.waitForExistence(timeout: 5))
+            XCTAssertTrue(app.revealTextBody("habit-past-record-hero-date", in: form))
+            let displayedDate = app.staticTexts["habit-past-record-hero-date"].firstMatch.label
+            XCTAssertFalse(displayedDate.isEmpty, "The actual selected past date should remain readable")
+            capture("L09 MAX \(habit) selected date")
+            revealPastRecordControl("habit-past-record-date")
+            revealPastRecordControl(controlID)
+            XCTAssertTrue(app.descendants(matching: .any)[controlID].firstMatch.isHittable)
+            capture("L09 MAX \(habit) record control")
+
+            let dateHero = app.staticTexts["habit-past-record-hero-date"].firstMatch
+            for _ in 0..<10 where !dateHero.exists { form.swipeDown(velocity: .slow) }
+            XCTAssertTrue(app.revealTextBody("habit-past-record-hero-date", in: form))
+            tapPastRecordAction("habit-past-record-cancel")
+            XCTAssertTrue(sheet.waitForNonExistence(timeout: 5))
+            XCTAssertEqual(today.label, baseline, "Cancel must preserve today's progress")
+        }
     }
 
     func testWeeklyWorkoutBoardSeededContentAndCollapse() {

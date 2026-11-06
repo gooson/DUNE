@@ -325,3 +325,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-06 L02: [실제 선택 화면·출처](../full-redesign-map/review/l02-habit-form-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 메서드 범위다.
 
 2026-11-06 L04: [실제 선택 화면·출처](../full-redesign-map/review/l04-habit-management-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 메서드 범위다.
+
+2026-11-06 L09: [실제 선택 화면·출처](../full-redesign-map/review/l09-habit-past-record-2026-11-06/index.html). 네 기본 프로필과 접힌 Duo 최대 글씨의 관련 메서드 범위다.

@@ -1601,6 +1601,25 @@
       "image_sha256": "56d463e8dd4cd34849092911da784f7b6e3e0d4fb1d766ace1dabfcd3fbb1af9",
       "ax_sha256": "e7444eee34822a8c432fa00414200d1a0c64b0773e83dd60d7eb97173a6b0d0a",
       "evidence": "activity-personal-records-reward-info-sheet"
+    },
+    "L09": {
+      "row_id": "L09",
+      "evidence": "habit-past-record-hero-date",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "action": "DUNE_VISUAL_AUDIT_READY L09 duration record hero and date [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793921762.452574",
+      "timestamp": 1793921734.7285156,
+      "image": "004-2007x2853.png",
+      "screen": "004-2007x2853.png",
+      "file": "L09.png",
+      "ax_file": "ax/L09.txt",
+      "image_sha256": "a5eeba60768d84cb2995af26ec84381811d080e8dc1fcbeee7f99147c3fb464b",
+      "ax_sha256": "7507e21655c199cdecbfb9203836b0900fab4bec9a5d8ce2e1d2781f8720bf30",
+      "source_revision": "945e40e4d2566a8cfbc051760d5e3008b1801cea",
+      "source_file_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "device_id": "866B2365-40D9-4D7A-BB9C-FDFBA2916300",
+      "profile": "duo-open-normal",
+      "current_verification": "reviewed",
+      "current_gallery": "../../../full-redesign-map/review/l09-habit-past-record-2026-11-06/index.html"
     }
   },
   "unmatched": [],

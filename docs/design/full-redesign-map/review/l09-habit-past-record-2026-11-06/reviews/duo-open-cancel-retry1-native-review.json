@@ -1,0 +1,138 @@
+{
+  "role": "independent app-quality-gate / Apple UX native review",
+  "source": "945e40e4d2566a8cfbc051760d5e3008b1801cea",
+  "profile": "duo-open-normal",
+  "pose": {
+    "angle_degrees": 180,
+    "active_display": "LCD-1",
+    "orientation": "rot90",
+    "actual_png_dimensions": [
+      2853,
+      2007
+    ],
+    "readback_before_after": true
+  },
+  "evidence_archive": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed",
+  "sdk_result": {
+    "status": "passed",
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "passed_test_methods": [
+    "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()"
+  ],
+  "prior_failed_archive": ".codex-checks/batch03/evidence/duo-open-1012c7fc-normal5-partial-failed",
+  "prior_sdk_result": {
+    "status": "failed",
+    "executed": 5,
+    "passed": 4,
+    "failed": 1,
+    "skipped": 0
+  },
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "observations": [
+    "004 Read hero shows Nov 5, 2026; date picker is below initial medium-sheet viewport, and the passed method explicitly reveals and asserts it before Cancel. 005 returns to Life with Today 1/3, Read 0/30 min.",
+    "008 Water count sheet visibly shows Nov 5, date picker, numeric total/glasses; 009 Cancel returns with Today 1/3 and Water unchanged.",
+    "013 Morning Stretch check sheet visibly shows Nov 5, date picker and Completed toggle; 015 after Cancel shows the prior completed row, with AX Life progress 1 of 3.",
+    "All six active-display PNG/AX pairs were visually inspected; SHA, 2853x2007 pixel dimensions, source revision, and App source SHA verified."
+  ],
+  "limits": [
+    "This is one passed retry method, not a pass for the original five-method aggregate.",
+    "The first date picker is not in checkpoint 004 image; the executed test asserts its revealed existence before the first Cancel.",
+    "English Light normal text on unfolded Duo LCD-1 only; no dark/MAX/physical device/full regression claim."
+  ],
+  "selected_pair_count": 6,
+  "sha256_verified": true,
+  "selected_pairs": [
+    {
+      "screen": "L09",
+      "profile": "duo-open-normal",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L09 duration record hero and date [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793921762.452574",
+      "host_sequence": 4,
+      "source": "945e40e4d2566a8cfbc051760d5e3008b1801cea",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/004-2007x2853.png",
+      "png_sha256": "a5eeba60768d84cb2995af26ec84381811d080e8dc1fcbeee7f99147c3fb464b",
+      "ax": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/004-hierarchy.txt",
+      "ax_sha256": "7507e21655c199cdecbfb9203836b0900fab4bec9a5d8ce2e1d2781f8720bf30"
+    },
+    {
+      "screen": "L09",
+      "profile": "duo-open-normal",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY tap habit-past-record-cancel [DUNEUITests/LifeFlowUITests.swift:56] DEADLINE=1793921775.058542",
+      "host_sequence": 5,
+      "source": "945e40e4d2566a8cfbc051760d5e3008b1801cea",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/005-2007x2853.png",
+      "png_sha256": "22358678964bb54b73a0a8eefc7a2e56b9d266ad4aaae6665a09248ec7f01494",
+      "ax": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/005-hierarchy.txt",
+      "ax_sha256": "970dc109e80e99e1fb8b9d1ec2f4eacfbaf30c1d6e16602ab04ea8860293c037"
+    },
+    {
+      "screen": "L09",
+      "profile": "duo-open-normal",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L09 count record [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793921802.159823",
+      "host_sequence": 8,
+      "source": "945e40e4d2566a8cfbc051760d5e3008b1801cea",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/008-2007x2853.png",
+      "png_sha256": "a1bab7bc613b8e89bb85eed0b64a9bd2e4b75bb787d4041c5aaa06c73b8f8410",
+      "ax": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/008-hierarchy.txt",
+      "ax_sha256": "e988c025342aa9acefdc3fe3836d9a860826e9bc651d3dfd26e93f3b32364b8b"
+    },
+    {
+      "screen": "L09",
+      "profile": "duo-open-normal",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY tap habit-past-record-cancel [DUNEUITests/LifeFlowUITests.swift:56] DEADLINE=1793921808.496275",
+      "host_sequence": 9,
+      "source": "945e40e4d2566a8cfbc051760d5e3008b1801cea",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/009-2007x2853.png",
+      "png_sha256": "c0fcc3b14b6f5c4ca1601129530bc4ba97c94b4e969c149814203a87fbd5a14c",
+      "ax": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/009-hierarchy.txt",
+      "ax_sha256": "1f580d1088cf8de4f78cc2e31a625f9fe73bba819fd2e6ee30efe0a63e108819"
+    },
+    {
+      "screen": "L09",
+      "profile": "duo-open-normal",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY L09 check record [DUNEUITests/LifeFlowUITests.swift:31] DEADLINE=1793921848.862071",
+      "host_sequence": 13,
+      "source": "945e40e4d2566a8cfbc051760d5e3008b1801cea",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/013-2007x2853.png",
+      "png_sha256": "5a90c6f9a063b5decff66955fe6def7618a4a44a4949e9e04c36bcaa51b1c8e7",
+      "ax": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/013-hierarchy.txt",
+      "ax_sha256": "d1b263a848134db8c6b97c1df88a780defc946cdf80fb480cc0f40292d512dfb"
+    },
+    {
+      "screen": "L09",
+      "profile": "duo-open-normal",
+      "test": "LifeFlowUITests/testOpeningPastRecordMenuDoesNotMutateToday()",
+      "checkpoint": "DUNE_VISUAL_AUDIT_READY before teardown -[LifeFlowUITests testOpeningPastRecordMenuDoesNotMutateToday] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1793921859.048841",
+      "host_sequence": 15,
+      "source": "945e40e4d2566a8cfbc051760d5e3008b1801cea",
+      "source_app_file": "DUNE/Presentation/Life/HabitPastRecordSheet.swift",
+      "source_app_sha256": "83fb52c11256408cd4e59a841132982ccec86b4f2beb46035548afba1ae36916",
+      "png": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/015-2007x2853.png",
+      "png_sha256": "b3e83e8c2bf7b35993ba3b1079305021ed2e9e4b270a687c0a9b15826147b030",
+      "ax": ".codex-checks/batch03/evidence/duo-open-945e40e4-cancel-retry1-passed/host/015-hierarchy.txt",
+      "ax_sha256": "d4fa19e9ec1629df70915d605f7652311edebd894b1aa5dfd81980a6e3d56cfe"
+    }
+  ]
+}

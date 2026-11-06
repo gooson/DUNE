@@ -1,0 +1,72 @@
+{
+  "role": "independent SwiftUI / Apple UX native review",
+  "source": "608fe5eb568d74fe9ca7f03187bab8e2977cf763",
+  "profile": "iphone-normal",
+  "evidence_archive": ".codex-checks/batch03/evidence/phone-608fe5eb-numeric-extra1-passed",
+  "exact_selector": "DUNEUITests/LifeFlowUITests/testPastReadTotalReplacesYesterdayAndLeavesTodayUnchanged",
+  "extra_execution_result": {
+    "status": "passed",
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "original_check_id": "batch03-phone-normal",
+  "original_check_aggregate": "Two earlier executions failed and remain failed in the original pipeline; this separate exact-selector execution does not rewrite those records.",
+  "policy_and_provenance": [
+    ".codex-checks/batch03/quality/phone-numeric-entry-standing-grant-resolution.md",
+    ".codex-checks/batch03/extra-executions/phone-numeric-original-check-attempt3.json"
+  ],
+  "findings": {
+    "P1": [],
+    "P2": [],
+    "P3": []
+  },
+  "observations": [
+    "Focused duration field visibly retains 30 with the numeric keyboard; AX reports value 30 and Keyboard Focused.",
+    "Current total 30, Nov 5, 2026, Read selection, Cancel and Save remain readable in keyboard state.",
+    "After Save, Today list shows Read 0/30 min and a Record updated message.",
+    "Read history shows Recorded later, Yesterday, Nov 5, 2026, and 40/30 min; AX independently exposes 40/30 min."
+  ],
+  "limitations": [
+    "The separate extra selector passed 1/1; the original two aggregate failures are not converted to passes.",
+    "The history sheet is an existing L05 child view, observed as output of this L09 path.",
+    "No iPad, Duo, closed MAX, broader phone inventory, or full regression pass is claimed."
+  ],
+  "selected_pair_count": 4,
+  "sha256_verified": true,
+  "selected_pairs": [
+    {
+      "index": 0,
+      "checkpoint": "tap habit-past-record-total",
+      "png": ".codex-checks/batch03/evidence/phone-608fe5eb-numeric-extra1-passed/attachments/4FBEC779-6328-4177-98A8-F91EE741D11C.png",
+      "png_sha256": "5c9d579ed375089989c26ea2f192376287f938cd38797b8741dac16d56b49321",
+      "ax": ".codex-checks/batch03/evidence/phone-608fe5eb-numeric-extra1-passed/attachments/54F0D13A-0A1B-49AF-BB31-2ECE40E2F245.txt",
+      "ax_sha256": "683a82175cb9411a22b187600c3170ac360060ba1e9221d8f762cacd753ca816"
+    },
+    {
+      "index": 1,
+      "checkpoint": "L09 focused duration total and software keyboard",
+      "png": ".codex-checks/batch03/evidence/phone-608fe5eb-numeric-extra1-passed/attachments/71292AFD-A877-4157-8C05-F35A9356ACEF.png",
+      "png_sha256": "101ad47a649e8416092ed6e6e3547f45fd1f90c44353f306f589e1651a50ef41",
+      "ax": ".codex-checks/batch03/evidence/phone-608fe5eb-numeric-extra1-passed/attachments/6C833645-3897-47BF-A279-C4408507CC2E.txt",
+      "ax_sha256": "4c5b5a19b09343aefb564d80cb5b0cf88793a15baf8a641b777ecb8b794c1aed"
+    },
+    {
+      "index": 2,
+      "checkpoint": "tap habit-past-record-save",
+      "png": ".codex-checks/batch03/evidence/phone-608fe5eb-numeric-extra1-passed/attachments/F4D11274-34AA-422B-ACCC-2B5D779AA53F.png",
+      "png_sha256": "d65783a8d309484183c0cec54edfec0cd944fa8c450fde9ccd2f4232eae12131",
+      "ax": ".codex-checks/batch03/evidence/phone-608fe5eb-numeric-extra1-passed/attachments/9191CAED-4846-48BA-B8ED-8033D72C98EF.txt",
+      "ax_sha256": "4255955e5327e54e78496d6d9d871875570e99ad175e1e96e5790f016449b8ba"
+    },
+    {
+      "index": 3,
+      "checkpoint": "L05-Life-history-recorded-later",
+      "png": ".codex-checks/batch03/evidence/phone-608fe5eb-numeric-extra1-passed/attachments/37D0C024-DC1E-4DDA-BC49-D19A9DD04BB3.png",
+      "png_sha256": "518e0fdbc66d5feaf3e89e92b5f8506de7492dc53dce56dfbeea02ef2cff1b82",
+      "ax": ".codex-checks/batch03/evidence/phone-608fe5eb-numeric-extra1-passed/attachments/694F700D-1861-4C1E-9C86-EFCBE85D0CF0.txt",
+      "ax_sha256": "81e24f154ab933735262429c4c9825f1c8a3fc10e1e7ec2f14272d43dd05183a"
+    }
+  ]
+}
