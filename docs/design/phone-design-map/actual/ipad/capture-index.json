@@ -1186,13 +1186,25 @@
     },
     "W27": {
       "row_id": "W27",
-      "evidence": "exercise-session-detail-scroll",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditExerciseHistoryFromSelectedWorkout()",
-      "action": "tap exercise-row-barbell-bench-press",
-      "timestamp": 1791838266.325,
-      "image": "B45F1772-546B-41D5-8AF3-68D22D7C8ECE.png",
-      "screen": "screen-0-2064x2752-tap exercise-row-barbell-bench-press_0_19F6D0AA-43A3-45F2-85B1-C17D8D5843D8.png",
-      "file": "W27.png"
+      "file": "W27.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutRecordsAtNormalText()",
+      "action": "Normal strength record header",
+      "timestamp": 1793997611.92,
+      "source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "340040f424ec348dca30b5ccf5b9d630720fe6bef5aeb3968967040979b728c4",
+      "ax_sha256": "f241bfbdc7ea92ffcbcfe81d33e5c8920125e90c353dea148ec5fd7a6cf8148e",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/exercise-session-detail-w27-2026-11-07/manifest.json",
+      "capture_scope": "B12 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "L06": {
       "row_id": "L06",
