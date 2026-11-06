@@ -1174,6 +1174,30 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         VisualAudit.capture("Posture result from visual audit record")
     }
 
+    func testP01CaptureFallbackRetryAndClose() throws {
+        openPostureRoute("wellness-menu-posture")
+        let error = app.staticTexts["posture-capture-error"].firstMatch
+        XCTAssertTrue(error.waitForExistence(timeout: 10), "Simulator camera fallback should be visible")
+        let retry = app.buttons["posture-capture-retry"].firstMatch
+        XCTAssertTrue(retry.exists && retry.isHittable)
+        VisualAudit.capture("P01 camera unavailable with retry and Close")
+
+        retry.tap()
+        let capture = app.buttons["posture-capture-button"].firstMatch
+        XCTAssertTrue(capture.waitForExistence(timeout: 5), "Retry returns to preparing controls")
+        VisualAudit.capture("P01 preparing after retry without camera inference")
+
+        app.buttons["posture-capture-close"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch
+            .waitForExistence(timeout: 5), "Close should return to Wellness")
+    }
+
+    private func openPostureRoute(_ menuIdentifier: String) {
+        navigateToWellness()
+        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.wellnessToolbarAdd))
+        XCTAssertTrue(app.waitAndTap(menuIdentifier))
+    }
+
     private func openHistory(maxRevealAttempts: Int = 18) {
         let viewAll = app.buttons["wellness-link-posturehistory"].firstMatch
         reveal(viewAll, maxAttempts: maxRevealAttempts)

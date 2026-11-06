@@ -334,3 +334,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-06 L07: [실제 선택 화면·출처](../full-redesign-map/review/l07-habit-heatmap-2026-11-06/index.html). 관련 메서드·기기 범위다.
 
 2026-11-06 L08: [실제 선택 화면·출처](../full-redesign-map/review/l08-habit-weekly-report-2026-11-06/index.html). 관련 메서드·기기 범위다.
+
+- [P01 정적 시안](themes/dune-posture-capture-p01.html): 실제 앱 PNG와 구분. [새 실제 화면](../full-redesign-map/review/posture-capture-p01-2026-11-06/index.html).

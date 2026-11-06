@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose",
+    "DUNEUITests/PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection",
+    "DUNEUITests/PostureVisualAuditTests/testP04SeededResultScoreMetricsMemoSaveAndRetake",
+    "DUNEUITests/PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize",
+    "DUNEUITests/PostureVisualAuditTests/testP04SeededResultAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 5,
+    "passed": 4,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 4,
+  "failures": [
+    "637: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/WellnessRegressionTests.swift:1259: error: -[DUNEUITests.PostureVisualAuditTests testP03ExerciseListAtMaximumAccessibilitySize] : Failed to tap \"posture-exercise-close\" Button: No matches found for Elements matching predicate …",
+    "705: Test Case '-[DUNEUITests.PostureVisualAuditTests testP03ExerciseListAtMaximumAccessibilitySize]' failed (92.445 seconds).",
+    "1355: Test Suite 'PostureVisualAuditTests' failed at 2026-11-06 20:56:52.317.",
+    "1357: Test Suite 'DUNEUITests.xctest' failed at 2026-11-06 20:56:52.319.",
+    "1359: Test Suite 'Selected tests' failed at 2026-11-06 20:56:52.319.",
+    "1374: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b05/duo-closed-ui.log"
+}

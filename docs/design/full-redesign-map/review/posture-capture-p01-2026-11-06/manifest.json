@@ -1,0 +1,576 @@
+{
+  "screen_id": "P01",
+  "scope": "B05 P01-P04 posture visual redesign",
+  "gallery_kind": "native simulator captures; synthetic/camera-unavailable fixtures; historical before separated",
+  "new_evidence": [
+    {
+      "profile": "regular",
+      "state": "screen-0-1320x2868-P01 preparing after retry without camera inference_0_3341EE74-3907-4DC8-9C51-83FA93B2284B.png",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "source_commit": "23fa2883",
+      "pair_index": ".codex-checks/b05/phone-attachments-pairs.json",
+      "source_png": ".codex-checks/b05/phone-attachments/B48F3313-5729-4F3F-884C-090CC75ADBD2.png",
+      "source_ax": ".codex-checks/b05/phone-attachments/E76C7CDC-581E-4644-9F56-0727E3833AD7.txt",
+      "png": "assets/regular-screen-0-1320x2868-p01-preparing-after-retry-without-camera-inference-.png",
+      "ax": "assets/regular-screen-0-1320x2868-p01-preparing-after-retry-without-camera-inference-.txt",
+      "png_sha256": "b23151684e25962dc413d4c5e0cedd2f6bc27bf2ddce0f0a466cfc419768de63",
+      "ax_sha256": "1ca1ac30efd51caa79d876aac81b2b4889e94863c5a92d3f40a74936cc09df97",
+      "dimensions_px": [
+        1320,
+        2868
+      ],
+      "capture_timestamp": 1793963870.509,
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "valid_evidence": true
+    },
+    {
+      "profile": "regular",
+      "state": "screen-0-1320x2868-P01 camera unavailable with retry and Close_0_6EF51624-D16E-470D-A7D2-7EB4B347F61D.png",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "source_commit": "23fa2883",
+      "pair_index": ".codex-checks/b05/phone-attachments-pairs.json",
+      "source_png": ".codex-checks/b05/phone-attachments/AC24211B-1C92-4C6F-B736-C8D54DC3F8A4.png",
+      "source_ax": ".codex-checks/b05/phone-attachments/F6CD41CF-E2A2-4313-B39A-BF38BBDEEC7C.txt",
+      "png": "assets/regular-screen-0-1320x2868-p01-camera-unavailable-with-retry-and-close-0-6ef51.png",
+      "ax": "assets/regular-screen-0-1320x2868-p01-camera-unavailable-with-retry-and-close-0-6ef51.txt",
+      "png_sha256": "ddd18f48862dc2d4f52b7bf2fce7b45a55a6af0cb20bd3e64ef1011836660e57",
+      "ax_sha256": "156ac40cb1d907c94a989352c352df560807ea449958f91cdf37ecd6f263a20d",
+      "dimensions_px": [
+        1320,
+        2868
+      ],
+      "capture_timestamp": 1793963866.541,
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "valid_evidence": true
+    },
+    {
+      "profile": "ipad",
+      "state": "screen-0-1512x2316-P01 preparing after retry without camera inference_0_EEC7A0FA-FE7D-4FA5-A152-C1C9E616200B.png",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "source_commit": "6fe1f089",
+      "pair_index": ".codex-checks/b05/ipad-attachments-pairs.json",
+      "source_png": ".codex-checks/b05/ipad-attachments/982CFF4F-5FB9-4C34-A34F-DF7670F32E3F.png",
+      "source_ax": ".codex-checks/b05/ipad-attachments/E7CF0D5A-A08D-45C0-875A-7BB4FF6FC923.txt",
+      "png": "assets/ipad-screen-0-1512x2316-p01-preparing-after-retry-without-camera-inference-.png",
+      "ax": "assets/ipad-screen-0-1512x2316-p01-preparing-after-retry-without-camera-inference-.txt",
+      "png_sha256": "1c0f378d1c7d0531cea0fcaa63029d7e529f9e309ac62e6c0fcc63f43a036acb",
+      "ax_sha256": "46e846cece10e8f10405330fb633c4e1b3145c7dc93bd78bbac68e3f794063a6",
+      "dimensions_px": [
+        1512,
+        2316
+      ],
+      "capture_timestamp": 1793964832.302,
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "valid_evidence": true
+    },
+    {
+      "profile": "ipad",
+      "state": "screen-0-1512x2316-P01 camera unavailable with retry and Close_0_57337553-36A3-4BFB-9728-0CBC0A96CB66.png",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "source_commit": "6fe1f089",
+      "pair_index": ".codex-checks/b05/ipad-attachments-pairs.json",
+      "source_png": ".codex-checks/b05/ipad-attachments/1D638AC8-6EB8-42E3-85B3-AD7A1CEDFD67.png",
+      "source_ax": ".codex-checks/b05/ipad-attachments/E1B40D26-4B30-4185-A5A9-E3B41D9B12F9.txt",
+      "png": "assets/ipad-screen-0-1512x2316-p01-camera-unavailable-with-retry-and-close-0-57337.png",
+      "ax": "assets/ipad-screen-0-1512x2316-p01-camera-unavailable-with-retry-and-close-0-57337.txt",
+      "png_sha256": "a624abc0db9a85613f419d87b4dc3c72ddaacc20931adf98a18aea922509f798",
+      "ax_sha256": "22cbf04066ef43bc57d941091e41eaf45f1770275506752ced269495f1eb5344",
+      "dimensions_px": [
+        1512,
+        2316
+      ],
+      "capture_timestamp": 1793964827.248,
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo",
+      "state": "P01 camera unavailable with retry and Close",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "source_commit": "6fe1f089",
+      "pair_index": ".codex-checks/b05/duo-closed-pairs.json",
+      "source_png": ".codex-checks/b05/duo-closed-host/004-1398x2034.png",
+      "source_ax": ".codex-checks/b05/duo-closed-host/004-hierarchy.txt",
+      "png": "assets/duo-p01-camera-unavailable-with-retry-and-close.png",
+      "ax": "assets/duo-p01-camera-unavailable-with-retry-and-close.txt",
+      "png_sha256": "8a70757e44b75518d385c1e7728ff2acb742894d178af1329fcdfa6a526f1df0",
+      "ax_sha256": "d189038434e6bb378321424f6b05a0f9eb0d0666803fb9b495f844292d24a419",
+      "dimensions_px": [
+        1398,
+        2034
+      ],
+      "capture_timestamp": 1793965723.9659019,
+      "active_display": "LCD",
+      "readback_dimensions": [
+        1398,
+        2034
+      ],
+      "native_display_size": [
+        1398,
+        2034
+      ],
+      "actual_angle": null,
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo",
+      "state": "P01 preparing after retry without camera inference",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "source_commit": "6fe1f089",
+      "pair_index": ".codex-checks/b05/duo-closed-pairs.json",
+      "source_png": ".codex-checks/b05/duo-closed-host/005-1398x2034.png",
+      "source_ax": ".codex-checks/b05/duo-closed-host/005-hierarchy.txt",
+      "png": "assets/duo-p01-preparing-after-retry-without-camera-inference.png",
+      "ax": "assets/duo-p01-preparing-after-retry-without-camera-inference.txt",
+      "png_sha256": "0b40bbc337738f5b334b041e4c8a8bc178a27cafd454126ec0a4f35424eac8c2",
+      "ax_sha256": "0cf63f15cd94820496f9f8ca3ee180815d02ec997fee15d61e2cf256c1e5e74b",
+      "dimensions_px": [
+        1398,
+        2034
+      ],
+      "capture_timestamp": 1793965729.623869,
+      "active_display": "LCD",
+      "readback_dimensions": [
+        1398,
+        2034
+      ],
+      "native_display_size": [
+        1398,
+        2034
+      ],
+      "actual_angle": null,
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo-open",
+      "state": "P01 camera unavailable with retry and Close",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "source_commit": "d6ac",
+      "pair_index": ".codex-checks/b05/duo-open-pairs.json",
+      "source_png": ".codex-checks/b05/duo-open-host/004-2007x2853.png",
+      "source_ax": ".codex-checks/b05/duo-open-host/004-hierarchy.txt",
+      "png": "assets/duo-open-p01-camera-unavailable-with-retry-and-close.png",
+      "ax": "assets/duo-open-p01-camera-unavailable-with-retry-and-close.txt",
+      "png_sha256": "7b526f5ad539e0a503fffbd129efbdfcb72d4fdf5b14330f1b39faf59bbc4829",
+      "ax_sha256": "0855856eb0e8339ecf992662ea9ce5a2e4c9459ab00b8871e90fc26a63f12cb8",
+      "dimensions_px": [
+        2853,
+        2007
+      ],
+      "capture_timestamp": 1793967625.0927796,
+      "active_display": "LCD-1",
+      "readback_dimensions": [
+        2853,
+        2007
+      ],
+      "native_display_size": [
+        2007,
+        2853
+      ],
+      "actual_angle": null,
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo-open",
+      "state": "P01 preparing after retry without camera inference",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "source_commit": "d6ac",
+      "pair_index": ".codex-checks/b05/duo-open-pairs.json",
+      "source_png": ".codex-checks/b05/duo-open-host/005-2007x2853.png",
+      "source_ax": ".codex-checks/b05/duo-open-host/005-hierarchy.txt",
+      "png": "assets/duo-open-p01-preparing-after-retry-without-camera-inference.png",
+      "ax": "assets/duo-open-p01-preparing-after-retry-without-camera-inference.txt",
+      "png_sha256": "2bb7fa83a8db5a57725a4fc802b743ed500f9cdeaacc5da4fccaa246fa1bcc42",
+      "ax_sha256": "d1d21b6b4ff73444c86ff6db301bded177a991bd1e322997d0c6c24405fed738",
+      "dimensions_px": [
+        2853,
+        2007
+      ],
+      "capture_timestamp": 1793967630.728786,
+      "active_display": "LCD-1",
+      "readback_dimensions": [
+        2853,
+        2007
+      ],
+      "native_display_size": [
+        2007,
+        2853
+      ],
+      "actual_angle": null,
+      "valid_evidence": true
+    }
+  ],
+  "before_evidence": [
+    {
+      "profile": "regular",
+      "png": "before/regular-P01-before.png",
+      "capture_index_entry": "before/regular-capture-index-entry.json",
+      "png_sha256": "ca6c60e3ca4969f48023f0604bebf46c5c1b12afcccaea61bc2ef16a59d4bcfd",
+      "dimensions_px": [
+        1320,
+        2868
+      ],
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "capture_timestamp": 1791820081,
+      "note": "Historical actual-map image; separate from B05 new evidence."
+    },
+    {
+      "profile": "ipad",
+      "png": "before/ipad-P01-before.png",
+      "capture_index_entry": "before/ipad-capture-index-entry.json",
+      "png_sha256": "de0fdb1d4648ed396ee315f2de376358dfb3f607bb02a681c895efebb123f36c",
+      "dimensions_px": [
+        2064,
+        2752
+      ],
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "capture_timestamp": 1791823574.383,
+      "note": "Historical actual-map image; separate from B05 new evidence."
+    },
+    {
+      "profile": "duo",
+      "png": "before/duo-P01-before.png",
+      "capture_index_entry": "before/duo-capture-index-entry.json",
+      "png_sha256": "f39b7420264cc2b1065f5a683ee23690d79b64994c5ff0e50b05f3daaa2259b1",
+      "dimensions_px": [
+        1398,
+        2034
+      ],
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "capture_timestamp": 1791826658.709,
+      "note": "Historical actual-map image; separate from B05 new evidence."
+    },
+    {
+      "profile": "duo-open",
+      "png": "before/duo-open-P01-before.png",
+      "capture_index_entry": "before/duo-open-capture-index-entry.json",
+      "png_sha256": "05ce2831ade44bf0aa4e0b1a72c84bf9ede1afe2b0ee8f96fe252c4820798c8d",
+      "dimensions_px": [
+        2006,
+        2852
+      ],
+      "index_source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "capture_timestamp": 1791829972.54,
+      "note": "Historical actual-map image; separate from B05 new evidence."
+    }
+  ],
+  "source_commit_rule": "Capture-specific source only; never infer current HEAD as all capture sources.",
+  "profile_notes": {
+    "duo": "Active LCD; posture readback numeric angle null; physical closed portrait observed.",
+    "duo-open": "Active LCD-1; posture readback numeric angle null; physical open/internal rotation 90 observed."
+  },
+  "limits": [
+    "Camera-unavailable captures do not verify real camera or posture inference.",
+    "P01 retry verifies preparing controls only.",
+    "P04 uses synthetic complete score 86 and two system-symbol fixture photos; partial result remains unverified.",
+    "P03 closed MAX repaired source remains unverified/pending user limit exception; closed MAX screenshots are not completion evidence."
+  ],
+  "records": [
+    {
+      "profile": "regular",
+      "name": "P01 historical actual map",
+      "action": "tap wellness-menu-posture",
+      "image": "before/regular-P01-before.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "timestamp": 1791820081,
+      "sha256": "ca6c60e3ca4969f48023f0604bebf46c5c1b12afcccaea61bc2ef16a59d4bcfd",
+      "ax_sha256": null,
+      "kind": "before",
+      "is_primary": false,
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "capture_index_entry": "before/regular-capture-index-entry.json"
+    },
+    {
+      "profile": "ipad",
+      "name": "P01 historical actual map",
+      "action": "tap wellness-menu-posture",
+      "image": "before/ipad-P01-before.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "timestamp": 1791823574.383,
+      "sha256": "de0fdb1d4648ed396ee315f2de376358dfb3f607bb02a681c895efebb123f36c",
+      "ax_sha256": null,
+      "kind": "before",
+      "is_primary": false,
+      "native_dimensions": [
+        2064,
+        2752
+      ],
+      "capture_index_entry": "before/ipad-capture-index-entry.json"
+    },
+    {
+      "profile": "duo",
+      "name": "P01 historical actual map",
+      "action": "tap wellness-menu-posture",
+      "image": "before/duo-P01-before.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "timestamp": 1791826658.709,
+      "sha256": "f39b7420264cc2b1065f5a683ee23690d79b64994c5ff0e50b05f3daaa2259b1",
+      "ax_sha256": null,
+      "kind": "before",
+      "is_primary": false,
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "capture_index_entry": "before/duo-capture-index-entry.json"
+    },
+    {
+      "profile": "duo-open",
+      "name": "P01 historical actual map",
+      "action": "tap wellness-menu-posture",
+      "image": "before/duo-open-P01-before.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "timestamp": 1791829972.54,
+      "sha256": "05ce2831ade44bf0aa4e0b1a72c84bf9ede1afe2b0ee8f96fe252c4820798c8d",
+      "ax_sha256": null,
+      "kind": "before",
+      "is_primary": false,
+      "native_dimensions": [
+        2006,
+        2852
+      ],
+      "capture_index_entry": "before/duo-open-capture-index-entry.json"
+    },
+    {
+      "profile": "regular",
+      "name": "screen-0-1320x2868-P01 preparing after retry without camera inference_0_3341EE74-3907-4DC8-9C51-83FA93B2284B.png",
+      "action": "screen-0-1320x2868-P01 preparing after retry without camera inference_0_3341EE74-3907-4DC8-9C51-83FA93B2284B.png",
+      "image": "assets/regular-screen-0-1320x2868-p01-preparing-after-retry-without-camera-inference-.png",
+      "ax": "assets/regular-screen-0-1320x2868-p01-preparing-after-retry-without-camera-inference-.txt",
+      "source_revision": "23fa2883f7f8f02e7418a1fcfed16fb9f516d8ce",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "timestamp": 1793963870.509,
+      "sha256": "b23151684e25962dc413d4c5e0cedd2f6bc27bf2ddce0f0a466cfc419768de63",
+      "ax_sha256": "1ca1ac30efd51caa79d876aac81b2b4889e94863c5a92d3f40a74936cc09df97",
+      "kind": "after",
+      "is_primary": false,
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/phone-attachments-pairs.json",
+      "valid_evidence": true
+    },
+    {
+      "profile": "regular",
+      "name": "screen-0-1320x2868-P01 camera unavailable with retry and Close_0_6EF51624-D16E-470D-A7D2-7EB4B347F61D.png",
+      "action": "screen-0-1320x2868-P01 camera unavailable with retry and Close_0_6EF51624-D16E-470D-A7D2-7EB4B347F61D.png",
+      "image": "assets/regular-screen-0-1320x2868-p01-camera-unavailable-with-retry-and-close-0-6ef51.png",
+      "ax": "assets/regular-screen-0-1320x2868-p01-camera-unavailable-with-retry-and-close-0-6ef51.txt",
+      "source_revision": "23fa2883f7f8f02e7418a1fcfed16fb9f516d8ce",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "timestamp": 1793963866.541,
+      "sha256": "ddd18f48862dc2d4f52b7bf2fce7b45a55a6af0cb20bd3e64ef1011836660e57",
+      "ax_sha256": "156ac40cb1d907c94a989352c352df560807ea449958f91cdf37ecd6f263a20d",
+      "kind": "after",
+      "is_primary": true,
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/phone-attachments-pairs.json",
+      "valid_evidence": true
+    },
+    {
+      "profile": "ipad",
+      "name": "screen-0-1512x2316-P01 preparing after retry without camera inference_0_EEC7A0FA-FE7D-4FA5-A152-C1C9E616200B.png",
+      "action": "screen-0-1512x2316-P01 preparing after retry without camera inference_0_EEC7A0FA-FE7D-4FA5-A152-C1C9E616200B.png",
+      "image": "assets/ipad-screen-0-1512x2316-p01-preparing-after-retry-without-camera-inference-.png",
+      "ax": "assets/ipad-screen-0-1512x2316-p01-preparing-after-retry-without-camera-inference-.txt",
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "timestamp": 1793964832.302,
+      "sha256": "1c0f378d1c7d0531cea0fcaa63029d7e529f9e309ac62e6c0fcc63f43a036acb",
+      "ax_sha256": "46e846cece10e8f10405330fb633c4e1b3145c7dc93bd78bbac68e3f794063a6",
+      "kind": "after",
+      "is_primary": false,
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/ipad-attachments-pairs.json",
+      "valid_evidence": true
+    },
+    {
+      "profile": "ipad",
+      "name": "screen-0-1512x2316-P01 camera unavailable with retry and Close_0_57337553-36A3-4BFB-9728-0CBC0A96CB66.png",
+      "action": "screen-0-1512x2316-P01 camera unavailable with retry and Close_0_57337553-36A3-4BFB-9728-0CBC0A96CB66.png",
+      "image": "assets/ipad-screen-0-1512x2316-p01-camera-unavailable-with-retry-and-close-0-57337.png",
+      "ax": "assets/ipad-screen-0-1512x2316-p01-camera-unavailable-with-retry-and-close-0-57337.txt",
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "timestamp": 1793964827.248,
+      "sha256": "a624abc0db9a85613f419d87b4dc3c72ddaacc20931adf98a18aea922509f798",
+      "ax_sha256": "22cbf04066ef43bc57d941091e41eaf45f1770275506752ced269495f1eb5344",
+      "kind": "after",
+      "is_primary": true,
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "active_display": null,
+      "readback_dimensions": null,
+      "native_display_size": null,
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/ipad-attachments-pairs.json",
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo",
+      "name": "P01 camera unavailable with retry and Close",
+      "action": "P01 camera unavailable with retry and Close",
+      "image": "assets/duo-p01-camera-unavailable-with-retry-and-close.png",
+      "ax": "assets/duo-p01-camera-unavailable-with-retry-and-close.txt",
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "timestamp": 1793965723.9659019,
+      "sha256": "8a70757e44b75518d385c1e7728ff2acb742894d178af1329fcdfa6a526f1df0",
+      "ax_sha256": "d189038434e6bb378321424f6b05a0f9eb0d0666803fb9b495f844292d24a419",
+      "kind": "after",
+      "is_primary": true,
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "active_display": "LCD",
+      "readback_dimensions": [
+        1398,
+        2034
+      ],
+      "native_display_size": [
+        1398,
+        2034
+      ],
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/duo-closed-pairs.json",
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo",
+      "name": "P01 preparing after retry without camera inference",
+      "action": "P01 preparing after retry without camera inference",
+      "image": "assets/duo-p01-preparing-after-retry-without-camera-inference.png",
+      "ax": "assets/duo-p01-preparing-after-retry-without-camera-inference.txt",
+      "source_revision": "6fe1f08919c2e9afd5bc65fbe47b46ef131e79aa",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "timestamp": 1793965729.623869,
+      "sha256": "0b40bbc337738f5b334b041e4c8a8bc178a27cafd454126ec0a4f35424eac8c2",
+      "ax_sha256": "0cf63f15cd94820496f9f8ca3ee180815d02ec997fee15d61e2cf256c1e5e74b",
+      "kind": "after",
+      "is_primary": false,
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "active_display": "LCD",
+      "readback_dimensions": [
+        1398,
+        2034
+      ],
+      "native_display_size": [
+        1398,
+        2034
+      ],
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/duo-closed-pairs.json",
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo-open",
+      "name": "P01 camera unavailable with retry and Close",
+      "action": "P01 camera unavailable with retry and Close",
+      "image": "assets/duo-open-p01-camera-unavailable-with-retry-and-close.png",
+      "ax": "assets/duo-open-p01-camera-unavailable-with-retry-and-close.txt",
+      "source_revision": "d6ac3110864dca932e58c08dd9806aced6fdd944",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "timestamp": 1793967625.0927796,
+      "sha256": "7b526f5ad539e0a503fffbd129efbdfcb72d4fdf5b14330f1b39faf59bbc4829",
+      "ax_sha256": "0855856eb0e8339ecf992662ea9ce5a2e4c9459ab00b8871e90fc26a63f12cb8",
+      "kind": "after",
+      "is_primary": true,
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "active_display": "LCD-1",
+      "readback_dimensions": [
+        2853,
+        2007
+      ],
+      "native_display_size": [
+        2007,
+        2853
+      ],
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/duo-open-pairs.json",
+      "valid_evidence": true
+    },
+    {
+      "profile": "duo-open",
+      "name": "P01 preparing after retry without camera inference",
+      "action": "P01 preparing after retry without camera inference",
+      "image": "assets/duo-open-p01-preparing-after-retry-without-camera-inference.png",
+      "ax": "assets/duo-open-p01-preparing-after-retry-without-camera-inference.txt",
+      "source_revision": "d6ac3110864dca932e58c08dd9806aced6fdd944",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "timestamp": 1793967630.728786,
+      "sha256": "2bb7fa83a8db5a57725a4fc802b743ed500f9cdeaacc5da4fccaa246fa1bcc42",
+      "ax_sha256": "d1d21b6b4ff73444c86ff6db301bded177a991bd1e322997d0c6c24405fed738",
+      "kind": "after",
+      "is_primary": false,
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "active_display": "LCD-1",
+      "readback_dimensions": [
+        2853,
+        2007
+      ],
+      "native_display_size": [
+        2007,
+        2853
+      ],
+      "actual_angle": null,
+      "pair_index": ".codex-checks/b05/duo-open-pairs.json",
+      "valid_evidence": true
+    }
+  ],
+  "completion": "selected affected flows verified; see limits",
+  "supporting_evidence": "evidence/ (raw run result/readback; each result retains original full selector scope)"
+}

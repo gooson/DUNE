@@ -625,13 +625,25 @@
     },
     "P01": {
       "row_id": "P01",
-      "evidence": "title:Posture Assessment",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap wellness-menu-posture",
-      "timestamp": 1791829972.54,
-      "image": "7FBA022E-5B5E-48A9-BAC0-EB6EBC496F81.png",
-      "screen": "screen-1-2006x2852-tap wellness-menu-posture_1_14B259CA-98AD-4237-9AEC-0B81DB454692.png",
-      "file": "P01.png"
+      "file": "P01.png",
+      "test": "PostureVisualAuditTests/testP01CaptureFallbackRetryAndClose()",
+      "action": "P01 camera unavailable with retry and Close",
+      "timestamp": 1793967625.0927796,
+      "source_revision": "d6ac3110864dca932e58c08dd9806aced6fdd944",
+      "source_worktree_dirty": false,
+      "device_udid": "55387DCF-57FD-4663-BC1B-EBEF2C89DFB2",
+      "capture_kind": "native-active-display-PNG+AX",
+      "sha256": "7b526f5ad539e0a503fffbd129efbdfcb72d4fdf5b14330f1b39faf59bbc4829",
+      "ax_sha256": "0855856eb0e8339ecf992662ea9ce5a2e4c9459ab00b8871e90fc26a63f12cb8",
+      "source_json": "../../../full-redesign-map/review/posture-capture-p01-2026-11-06/manifest.json",
+      "source_record": "records: profile=duo-open,kind=after,is_primary=true",
+      "capture_scope": "selected affected flows verified; see limits",
+      "active_display": "LCD-1",
+      "actual_angle": null,
+      "native_dimensions": [
+        2853,
+        2007
+      ]
     },
     "P08": {
       "row_id": "P08",

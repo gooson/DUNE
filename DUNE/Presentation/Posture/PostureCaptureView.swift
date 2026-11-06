@@ -13,6 +13,8 @@ struct PostureCaptureView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
 
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -31,9 +33,13 @@ struct PostureCaptureView: View {
             }
             .navigationTitle("Posture Assessment")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.black, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(String(localized: "Close")) { dismiss() }
+                        .accessibilityIdentifier("posture-capture-close")
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     cameraControls
@@ -238,6 +244,7 @@ struct PostureCaptureView: View {
                     }
                 }
                 .accessibilityLabel(Text("Capture photo"))
+                .accessibilityIdentifier("posture-capture-button")
                 .accessibilityHint(Text("Starts a 3-second countdown before capturing"))
                 .padding(.bottom, 40)
             }
@@ -372,28 +379,52 @@ struct PostureCaptureView: View {
     // MARK: - Error
 
     private func errorOverlay(_ message: String) -> some View {
-        ZStack {
-            Color.black.opacity(0.7)
+        GeometryReader { geometry in
+            ScrollView {
+                VStack {
+                    Spacer(minLength: DS.Spacing.xxl)
 
-            VStack(spacing: 20) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .font(.system(size: 48))
-                    .foregroundStyle(.yellow)
+                    VStack(spacing: DS.Spacing.xl) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 48))
+                            .foregroundStyle(.yellow)
+                            .accessibilityHidden(true)
 
-                Text(message)
-                    .font(.headline)
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 32)
+                        Text(message)
+                            .font(.headline)
+                            .foregroundStyle(palette.ink)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityLabel(Text("Error: \(message)"))
+                            .accessibilityIdentifier("posture-capture-error")
 
-                Button(String(localized: "Try Again")) {
-                    viewModel.retakeCurrentCapture()
+                        Button(String(localized: "Try Again")) {
+                            viewModel.retakeCurrentCapture()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
+                        .controlSize(.large)
+                        .frame(minHeight: 44)
+                        .accessibilityIdentifier("posture-capture-retry")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(DS.Spacing.xxl)
+                    .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xxl))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: DS.Radius.xxl)
+                            .strokeBorder(palette.border, lineWidth: 1)
+                    }
+                    .frame(maxWidth: 460)
+
+                    Spacer(minLength: DS.Spacing.xxl)
                 }
-                .buttonStyle(.borderedProminent)
+                .padding(DS.Spacing.lg)
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: geometry.size.height)
             }
+            .scrollBounceBehavior(.basedOnSize)
+            .background(.black.opacity(0.78))
         }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(Text("Error: \(message)"))
     }
 }
 

@@ -1,0 +1,33 @@
+{
+  "source": "d6ac3110864dca932e58c08dd9806aced6fdd944",
+  "base": "f044aa096720f95cc218ce50fd6f8e455c041eb8",
+  "final_pr_review": {
+    "agent": "review_architecture",
+    "role": "pr-reviewer",
+    "findings": []
+  },
+  "source_files": {
+    "DUNE/Presentation/Posture/PostureCaptureView.swift": "bcf38bb300d3c306c182ffc09f9c58a2d1b627b40db953ba29c228aa973da192",
+    "DUNE/Presentation/Posture/RealtimePostureView.swift": "867f6cbc023f9fff18bf26f5c224bf3eac78f41b4a0bd9af1731f61a0143c568",
+    "DUNE/Presentation/Posture/Components/ExercisePickerSheet.swift": "bc244517f206e93808c7ffeab61390e40ca6606df3bde221fda8e760403bb7fc",
+    "DUNE/Presentation/Posture/PostureResultView.swift": "0ad07efc644d6866d563fd3931f71f27046e0a32d6d6142150e0e8a52d5f875a"
+  },
+  "test_source_sha256": "a3202d3f0e892eb48dc761875ce494340db2c4500ba04d311fd872e936b672cd",
+  "gates": {
+    "P01": "passed",
+    "P02": "passed",
+    "P03": "held: corrected closed Duo MAX unverified; user exception pending",
+    "P04": "passed"
+  },
+  "reuse": "Per-screen extraction must compare app blobs, shared seed/service/model dependencies and exact copied selector methods against integrated evidence. Document-only changes do not warrant SDK repetition. Never relabel raw receipt fingerprint.",
+  "native_reviews": [
+    "duo-native-review.json",
+    "parent phone+ipad inspected pairs"
+  ],
+  "unverified": [
+    "real camera/inference/auto capture",
+    "partial result",
+    "other locale/dark/full regression",
+    "P03 corrected closed Duo MAX"
+  ]
+}
