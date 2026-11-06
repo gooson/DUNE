@@ -8,6 +8,7 @@ struct ExerciseDefaultEditView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @Query(sort: \ExerciseDefaultRecord.lastUsedDate, order: .reverse)
     private var allDefaults: [ExerciseDefaultRecord]
@@ -41,25 +42,29 @@ struct ExerciseDefaultEditView: View {
         Form {
             Section {
                 if supportsWeight {
-                    HStack {
+                    inputRowLayout {
                         Label("Default Weight", systemImage: "scalemass")
-                        Spacer()
+                        if !dynamicTypeSize.isAccessibilitySize {
+                            Spacer(minLength: DS.Spacing.sm)
+                        }
                         TextField("kg", text: $weightText)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
-                            .frame(width: 80)
+                            .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : 80)
                             .accessibilityIdentifier("exercise-default-edit-weight")
                     }
                 }
 
                 if exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps {
-                    HStack {
+                    inputRowLayout {
                         Label("Default Reps", systemImage: "repeat")
-                        Spacer()
+                        if !dynamicTypeSize.isAccessibilitySize {
+                            Spacer(minLength: DS.Spacing.sm)
+                        }
                         TextField("reps", text: $repsText)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
-                            .frame(width: 80)
+                            .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : 80)
                             .accessibilityIdentifier("exercise-default-edit-reps")
                     }
                 }
@@ -117,6 +122,15 @@ struct ExerciseDefaultEditView: View {
         } message: {
             Text("This will remove the saved defaults and preferred status for \(exercise.localizedName). This change syncs across all your devices.")
         }
+    }
+
+    // MARK: - Layout
+
+    private func inputRowLayout<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return layout { content() }
     }
 
     // MARK: - Data

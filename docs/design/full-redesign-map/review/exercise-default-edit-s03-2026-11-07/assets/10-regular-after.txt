@@ -1,0 +1,110 @@
+Attributes: Application, 0x114a143c0, pid: 33342, label: 'DUNE'
+Element subtree:
+ →Application, 0x114a143c0, pid: 33342, label: 'DUNE'
+    Window (Main), 0x114a14140, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x114a14000, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x114a14280, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x114a27980, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x114a26440, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x114a27480, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x114a25f40, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x114a27ac0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x114a27200, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x114a26f80, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x114a26940, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x114a261c0, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x114a26bc0, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x114a26300, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x114a26a80, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x114a26080, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x114a27e80, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x114a275c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                      Other, 0x114a270c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                        NavigationBar, 0x114a26e40, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Exercise Default'
+                                          Button, 0x114a25cc0, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Exercise Defaults'
+                                          StaticText, 0x114a27340, {{142.7, 71.3}, {154.7, 25.3}}, label: 'Exercise Default'
+                                          Other, 0x114a26580, {{345.3, 66.0}, {70.7, 36.0}}
+                                            Other, 0x114a25b80, {{345.3, 66.0}, {70.7, 36.0}}
+                                              Button, 0x114a26d00, {{345.3, 66.0}, {70.7, 36.0}}, identifier: 'exercise-default-edit-save', label: 'Save'
+                                        Other, 0x114a27d40, {{0.0, 0.0}, {440.0, 956.0}}
+                                          Other, 0x114a266c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                            Other, 0x114a26800, {{0.0, 0.0}, {440.0, 956.0}}
+                                              Other, 0x114a27700, {{0.0, 0.0}, {440.0, 956.0}}
+                                                CollectionView, 0x114a27c00, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'exercise-default-edit-screen'
+                                                  Other, 0x1073f3200, {{-20.0, -1796.0}, {480.0, 3129.3}}
+                                                  Other, 0x10a9dd900, {{0.0, 0.0}, {440.0, 956.0}}
+                                                    Other, 0x10aa13700, {{0.0, 0.0}, {440.0, 156.0}}
+                                                  Other, 0x10aa13980, {{0.0, 0.0}, {440.0, 956.0}}
+                                                  Cell, 0x10a9fd900, {{20.0, 116.0}, {400.0, 83.3}}
+                                                    Other, 0x10a9fd400, {{20.0, 116.0}, {400.0, 83.3}}
+                                                    Other, 0x10a9fcc80, {{20.0, 116.0}, {400.0, 83.3}}
+                                                      Other, 0x10a9fd040, {{20.0, 116.0}, {400.0, 83.3}}
+                                                        Other, 0x10a9fd180, {{20.0, 116.0}, {400.0, 83.3}}
+                                                          StaticText, 0x10a9ff980, {{20.0, 116.0}, {400.0, 83.3}}, label: '바벨 벤치프레스'
+                                                  Cell, 0x10a9fd7c0, {{20.0, 199.3}, {400.0, 228.3}}
+                                                    Other, 0x10a9fcf00, {{20.0, 199.3}, {400.0, 228.3}}
+                                                      Other, 0x10a9fc780, {{20.0, 199.3}, {400.0, 228.3}}
+                                                    Other, 0x10a9fcb40, {{20.0, 199.3}, {400.0, 228.3}}
+                                                      Other, 0x10a9ff700, {{20.0, 199.3}, {400.0, 228.3}}
+                                                        Other, 0x10a9ff840, {{20.0, 199.3}, {400.0, 228.3}}
+                                                          StaticText, 0x10a9fc000, {{52.7, 214.3}, {243.3, 125.3}}, label: 'Default Weight'
+                                                          Image, 0x10a9fc3c0, {{52.7, 224.0}, {42.3, 43.7}}, identifier: 'scalemass', label: 'Scale For Weighing Mass'
+                                                          TextField, 0x10a9fc500, {{40.0, 347.7}, {360.0, 65.0}}, identifier: 'exercise-default-edit-weight', placeholderValue: 'kg', value: 72.5
+                                                  Cell, 0x10a9fca00, {{20.0, 427.7}, {400.0, 228.3}}
+                                                    Other, 0x10a9fd680, {{20.0, 427.7}, {400.0, 228.3}}
+                                                      Other, 0x10a9fef80, {{20.0, 427.7}, {400.0, 228.3}}
+                                                    Other, 0x10a9fc8c0, {{20.0, 427.7}, {400.0, 228.3}}
+                                                      Other, 0x10a9ffc00, {{20.0, 427.7}, {400.0, 228.3}}
+                                                        Other, 0x10a9fc140, {{20.0, 427.7}, {400.0, 228.3}}
+                                                          StaticText, 0x10a9fcdc0, {{51.3, 442.7}, {244.7, 125.3}}, label: 'Default Reps'
+                                                          Image, 0x10a9ffd40, {{51.3, 455.7}, {44.7, 37.0}}, identifier: 'repeat', label: 'Repeat 1'
+                                                          TextField, 0x10a9f8000, {{40.0, 576.0}, {360.0, 65.0}}, identifier: 'exercise-default-edit-reps', placeholderValue: 'reps', value: 8
+                                                  Other, 0x10a9f8140, {{40.0, 426.7}, {360.0, 1.0}}
+                                                  Cell, 0x10a9f8280, {{20.0, 656.0}, {400.0, 155.3}}
+                                                    Other, 0x10a9f83c0, {{20.0, 656.0}, {400.0, 155.3}}
+                                                      Other, 0x10a9f8500, {{20.0, 656.0}, {400.0, 155.3}}
+                                                    Other, 0x10a9f8640, {{20.0, 656.0}, {400.0, 155.3}}
+                                                      Other, 0x10a9f8780, {{20.0, 656.0}, {400.0, 155.3}}
+                                                        Other, 0x10a9f88c0, {{20.0, 656.0}, {400.0, 155.3}}
+                                                          Switch, 0x10a9f8a00, {{20.0, 656.0}, {400.0, 155.3}}, identifier: 'exercise-default-edit-manual-override', label: 'Manual Override', value: 0
+                                                            StaticText, 0x10a9f8b40, {{123.7, 671.0}, {176.3, 125.3}}, label: 'Manual Override'
+                                                            Image, 0x10a9f8c80, {{57.7, 679.0}, {32.3, 48.0}}, identifier: 'pin', label: 'Pin'
+                                                            Switch, 0x10a9f8dc0, {{339.0, 719.7}, {63.0, 28.0}}, value: 0
+                                                  Other, 0x10a9f8f00, {{40.0, 655.0}, {360.0, 1.0}}
+                                                  Cell, 0x10a9f9040, {{20.0, 811.3}, {400.0, 155.3}}
+                                                    Other, 0x10a9f9180, {{20.0, 811.3}, {400.0, 155.3}}
+                                                      Other, 0x10a9f92c0, {{20.0, 811.3}, {400.0, 155.3}}
+                                                    Other, 0x10a9f9400, {{20.0, 811.3}, {400.0, 155.3}}
+                                                      Other, 0x10a9f9540, {{20.0, 811.3}, {400.0, 155.3}}
+                                                        Other, 0x10a9f9680, {{20.0, 811.3}, {400.0, 155.3}}
+                                                          Switch, 0x10a9f97c0, {{20.0, 811.3}, {400.0, 155.3}}, identifier: 'exercise-default-edit-preferred', label: 'Preferred Exercise', value: 0
+                                                            Image, 0x10a9f9900, {{50.7, 833.7}, {46.3, 44.0}}, identifier: 'star', label: 'Favorite'
+                                                            StaticText, 0x10a9f9a40, {{123.7, 826.3}, {207.3, 125.3}}, label: 'Preferred Exercise'
+                                                            Switch, 0x10a9f9b80, {{339.0, 875.0}, {63.0, 28.0}}, value: 0
+                                                  Other, 0x10a9f9cc0, {{123.7, 810.3}, {276.3, 1.0}}
+                                                  Other, 0x10a9f9e00, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                                    Other, 0x10a9f9f40, {{434.0, 119.0}, {3.0, 446.3}}
+                                                  Other, 0x10a9fa080, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                                    Other, 0x10a9fa1c0, {{434.0, 119.0}, {3.0, 446.3}}
+                                        Toolbar, 0x10a9fa300, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x10a9fa440, {{0.0, 0.0}, {440.0, 956.0}}
+                                Toolbar, 0x10a9fa580, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x10a9fa6c0, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x10a9fa800, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x10a9fa940, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x10a9faa80, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x10a9fabc0, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x10a9fad00, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x10a9fae40, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x10a9faf80, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x10a9fb0c0, {{220.0, 492.0}, {0.0, 0.0}}
+    Window, 0x10a9fb200, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x10a9fb340, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x10a9fb480, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x114a143c0, pid: 33342, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10a9fb5c0, pid: 33342, label: 'DUNE'
+  }
