@@ -17,13 +17,24 @@
   "captured": {
     "S05": {
       "row_id": "S05",
-      "evidence": "whatsnew-screen",
-      "test": "TodaySettingsRegressionTests/testVisualAuditWhatsNew()",
-      "action": "tap dashboard-toolbar-whatsnew",
-      "timestamp": 1791821121.568,
-      "image": "A5CFF18D-71D9-4E9A-A18B-E45BBC38EF57.png",
-      "screen": "screen-0-2064x2752-tap dashboard-toolbar-whatsnew_0_A1C08DAA-0D92-457C-BBED-44597696E53E.png",
-      "file": "S05.png"
+      "file": "S05.png",
+      "test": "WhatsNewVisualAuditTests/testManualReleaseListOpensFeatureAndReturns()",
+      "action": "Manual current release list",
+      "timestamp": 1793985904.803,
+      "source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "80e956b77f826d245e1588fdbe9b1bab7f4ce37fc984de8315db0975de71bcaa",
+      "ax_sha256": "251c2bb0b9aaa0dc2ffa079d830a39784c1a306c592fe4de83a6d26cb9d7c536",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/whats-new-s05-2026-11-07/manifest.json",
+      "capture_scope": "B08 manual normal; MAX and source section equivalence in gallery proof",
+      "current_verification": "normal-captured",
+      "actual_angle": null
     },
     "T15": {
       "row_id": "T15",

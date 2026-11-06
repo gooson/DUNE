@@ -1,0 +1,45 @@
+{
+  "status": "source-only review; no SDK, simulator, capture, or repository edit",
+  "candidate": "/private/tmp/dune-b08-whats-new-prep/WhatsNewView.swift",
+  "baseline_sha256": "2c797c4e30038e39c0b98d8f67e7f3b28d79d471f02f7614a8df9eb2ea9de340",
+  "candidate_sha256": "57ae2373f7025192e8e5dfa5c62e34cb95097bf1060fcaa7d34cba12b9f27d68",
+  "review_scope": [
+    "Performance",
+    "Simplicity",
+    "SwiftUI layout",
+    "Apple UX/accessibility"
+  ],
+  "introduced_P1_P2_findings": [],
+  "source_observations": [
+    {
+      "lines": "27-38, 65-83",
+      "result": "S05 keeps the existing ScrollView, release and feature identities, navigation link, and feature.symbolName; adds centered 680-point content width and size-based bounce. Existing eager VStack is unchanged, with no introduced query or per-row I/O."
+    },
+    {
+      "lines": "88-110, 125-160",
+      "result": "S05 stacks actual version and feature row content at accessibility sizes. Title gains vertical growth and summary is unlimited only at accessibility sizes; original icon, badge, combined accessibility element, and ordinary three-line summary remain."
+    },
+    {
+      "lines": "176-235",
+      "result": "S06 keeps existing image/symbol artwork path and navigation. At accessibility sizes the header stacks icon, text, and version badge; ordinary horizontal header retains its Spacer. Detail content gets centered 680-point content width."
+    }
+  ],
+  "apple_design_principles": {
+    "Purpose": "conforms",
+    "Agency": "conforms",
+    "Responsibility": "not applicable to this layout-only change",
+    "Familiarity": "conforms",
+    "Flexibility": "conforms in source; native fit pending",
+    "Simplicity": "conforms",
+    "Craft": "conforms in source; native visual check pending",
+    "Delight": "not applicable to this layout-only change"
+  },
+  "independent_boundaries": "S05 and S06 are conceptually independent and touch separate view types in the same Swift file. S05 owns the top-level dynamicTypeSize property and release/row hunks; S06 owns its private detail dynamicTypeSize property and detail hunk. Separate commits or PRs are technically feasible with hunk-level patches, but the supplied patch is combined and should be treated as one source change if both screens ship together.",
+  "native_checks_needed": [
+    "S05 manual and automatic mode on current release data; row tap and Done dismissal",
+    "S05 and S06 normal/MAX on affected iPhone, iPad, and Duo widths, including version, full row summary, header badge, artwork, scrolling, and VoiceOver row order",
+    "S06 screenshot asset and SF Symbol fallback branches where current data makes each reachable",
+    "Fresh actual-map captures; historic S05/S06 PNGs are baseline only"
+  ],
+  "limits": "No native rendering or XCTest result is inferred. Source review cannot establish text contrast over live materials, clipping, AX order, or actual scroll/tap behavior."
+}

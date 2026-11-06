@@ -11,6 +11,7 @@ struct WhatsNewView: View {
     var onPresented: () -> Void = {}
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     /// In automatic mode, show only the latest (first) release.
     private var visibleReleases: [WhatsNewReleaseData] {
@@ -29,9 +30,12 @@ struct WhatsNewView: View {
                     releaseSection(release: release)
                 }
             }
+            .frame(maxWidth: 680)
             .padding(.vertical, DS.Spacing.md)
+            .frame(maxWidth: .infinity)
         }
         .scrollIndicators(.hidden)
+        .scrollBounceBehavior(.basedOnSize)
         .background {
             switch mode {
             case .automatic:
@@ -82,14 +86,18 @@ struct WhatsNewView: View {
     }
 
     private func sectionHeader(release: WhatsNewReleaseData) -> some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            HStack(alignment: .center) {
+        let versionLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(alignment: .center, spacing: DS.Spacing.sm))
+        return VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            versionLayout {
                 Text("Version")
                     .font(.system(.largeTitle, design: .rounded, weight: .bold))
 
                 Text(verbatim: release.version)
                     .font(.system(.largeTitle, design: .rounded, weight: .bold))
                     .foregroundStyle(DS.Color.textSecondary)
+                    .monospacedDigit()
             }
 
             Text(release.intro)
@@ -108,12 +116,17 @@ struct WhatsNewView: View {
 private struct WhatsNewFeatureRow: View {
     let feature: WhatsNewFeatureItem
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     private var tintColor: Color {
         WhatsNewStyle.tintColor(for: feature.area)
     }
 
     var body: some View {
-        HStack(alignment: .top, spacing: DS.Spacing.md) {
+        let rowLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
+        return rowLayout {
             Image(systemName: feature.symbolName)
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(.white)
@@ -129,11 +142,12 @@ private struct WhatsNewFeatureRow: View {
 
                 Text(feature.title)
                     .font(DS.Typography.sectionTitle)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 Text(feature.summary)
                     .font(.subheadline)
                     .foregroundStyle(DS.Color.textSecondary)
-                    .lineLimit(3)
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 3)
             }
         }
         .padding(DS.Spacing.md)
