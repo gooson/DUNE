@@ -216,7 +216,11 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
             maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
         ]
         launchApp(with: configuration)
-        openTemplateFormPicker()
+        if maximumText {
+            openAuditFullPicker()
+        } else {
+            openTemplateFormPicker()
+        }
         let createCustom = app.descendants(matching: .any)[AXID.pickerCreateCustomButton].firstMatch
         XCTAssertTrue(scrollPickerToHittableElementIfNeeded(AXID.pickerCreateCustomButton, maxSwipes: 10))
         XCTAssertTrue(createCustom.waitForExistence(timeout: 5) && createCustom.isHittable)
@@ -291,6 +295,30 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
             app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.waitForExistence(timeout: 10),
             "Exercise screen should appear from Activity"
         )
+    }
+
+    private func openAuditFullPicker() {
+        openExerciseViewFromRecentWorkouts()
+
+        let templatesButton = app.descendants(matching: .any)[AXID.exerciseToolbarTemplates].firstMatch
+        XCTAssertTrue(templatesButton.waitForExistence(timeout: 5))
+        templatesButton.auditTap()
+        let templateList = app.descendants(matching: .any)[AXID.workoutTemplateListScreen].firstMatch
+        XCTAssertTrue(templateList.waitForExistence(timeout: 8))
+        let addTemplate = app.descendants(matching: .any)[AXID.workoutTemplateListAdd].firstMatch
+        XCTAssertTrue(addTemplate.waitForExistence(timeout: 5))
+        addTemplate.auditTap()
+
+        let form = app.collectionViews[AXID.templateFormScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let addExercise = app.descendants(matching: .any)[AXID.templateFormAddExercise].firstMatch
+        for _ in 0..<12 where !(addExercise.exists && addExercise.isHittable) {
+            form.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(addExercise.exists && addExercise.isHittable,
+                      "Add Exercise should be reachable after scrolling the template Form")
+        addExercise.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pickerRootList].firstMatch.waitForExistence(timeout: 8))
     }
 
     private func openTemplateFormPicker(prefillName: String? = nil) {
