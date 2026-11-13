@@ -1082,13 +1082,24 @@
     },
     "W33": {
       "row_id": "W33",
-      "evidence": "healthkit-workout-title-editor-screen",
-      "test": "ActivityExerciseRegressionTests/testNotificationWorkoutRouteOpensHealthKitDetailAndTitleEditor()",
-      "action": "tap healthkit-workout-edit-title",
-      "timestamp": 1791835903.722,
-      "image": "F27A34F2-6D29-45AA-B2EE-ABFD41FFF73C.png",
-      "screen": "screen-0-1320x2868-tap healthkit-workout-edit-title_0_47EE39BD-A012-4321-B15C-F085A4AFA0BC.png",
-      "file": "W33.png"
+      "file": "W33.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtNormalText()",
+      "action": "W33 normal workout name editor fresh",
+      "timestamp": 1794008166.466,
+      "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "aab7267f2031dd9984650538c987f6197aeaa0bb4298f421c1ff90b30967bf52",
+      "ax_sha256": "b3d7adcac4ac7ef7e615cc13984b2af20ae2d6ff8046a04b309699ac1944214f",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "source_json": "../../../full-redesign-map/review/workout-name-editor-w33-2026-11-07/manifest.json",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W07": {
       "row_id": "W07",
