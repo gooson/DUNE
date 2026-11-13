@@ -11,3 +11,5 @@ The app AI section matches compiled f7bc00cb2; last SDK test revision is 6ad8445
 Only English/light current available-device state is observed. Generate and Save were never pressed; model output is not validated. Duo/dark/other locales/unavailable state are uncaptured. MAX example placeholder truncation predates the change; the typing keyboard can cover Generate, with Done available. Original strings, generation logic and icons are unchanged.
 
 The 12 positive PNG/AX pairs and two failed diagnostic pairs retain their original bytes and timestamps; see manifest.json and proofs.
+
+Numeric clarification: the navigation bar ends at y313; the test adds a 12pt margin, making its safe top y325. The retry button starts y301.5, so it overlaps the bar by 11.5pt and misses the stricter test viewport by 23.5pt. These are different measurements of the same failed diagnostic. Copied original review files are unchanged. “Available” means the simulator generator reports available; no hardware capability or model response was exercised.
