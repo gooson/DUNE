@@ -21,6 +21,97 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         static let notificationMissingRouteID = "ui-test-activity-workout-missing"
     }
 
+    func testVisualAuditWorkoutRecordsAtNormalText() throws {
+        try auditWorkoutRecords(maximumText: false)
+    }
+
+    func testVisualAuditWorkoutRecordsAtMaximumText() throws {
+        try auditWorkoutRecords(maximumText: true)
+    }
+
+    private func auditWorkoutRecords(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B12 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        openExerciseViewFromRecentWorkouts()
+        let workoutID = AXID.exerciseRow(Fixture.benchPressID)
+        XCTAssertTrue(app.scrollToElementIfNeeded(workoutID, maxSwipes: 12))
+        let workout = app.descendants(matching: .any)[workoutID].firstMatch
+        XCTAssertTrue(workout.waitForExistence(timeout: 8) && workout.isHittable)
+        workout.auditTap()
+        let detail = app.scrollViews["exercise-session-detail-scroll"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 8))
+        VisualAudit.capture("W27 \(size) strength record header")
+        let setOne = app.staticTexts.matching(NSPredicate(format: "label == %@", "Set 1")).firstMatch
+        let reps = app.staticTexts.matching(NSPredicate(format: "label == %@", "10 reps")).firstMatch
+        for _ in 0..<12 where !(setOne.exists && setOne.isHittable && reps.exists && reps.isHittable) {
+            detail.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(setOne.exists && setOne.isHittable && reps.exists && reps.isHittable,
+                      "W27 seeded set number and repetitions should be readable")
+        VisualAudit.capture("W27 \(size) completed set values")
+
+        let historyLink = app.buttons[AXID.exerciseSessionViewHistory].firstMatch
+        for _ in 0..<12 where !(historyLink.exists && historyLink.isHittable) {
+            detail.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(historyLink.exists && historyLink.isHittable)
+        historyLink.auditTap()
+        let history = app.scrollViews[AXID.exerciseHistoryScreen].firstMatch
+        XCTAssertTrue(history.waitForExistence(timeout: 10) && history.isHittable,
+                      "History must be in front of the selected workout inspector")
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            let historyClose = app.buttons["exercise-history-close"].firstMatch
+            XCTAssertTrue(historyClose.waitForExistence(timeout: 5) && historyClose.isHittable,
+                          "Compact History must own a reachable Done action")
+            historyClose.auditTap()
+            XCTAssertTrue(detail.waitForExistence(timeout: 5) && detail.isHittable,
+                          "Closing compact History returns to the selected workout detail")
+            XCTAssertTrue(historyLink.waitForExistence(timeout: 5) && historyLink.isHittable)
+            historyLink.auditTap()
+            XCTAssertTrue(history.waitForExistence(timeout: 10) && history.isHittable,
+                          "Reopened History must remain in front of the inspector")
+        }
+        VisualAudit.capture("W26 \(size) history chart and selected metric")
+        let sessionsStat = app.staticTexts.matching(NSPredicate(format: "label == %@", "Sessions")).firstMatch
+        for _ in 0..<12 where !(sessionsStat.exists && sessionsStat.isHittable) {
+            history.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(sessionsStat.exists && sessionsStat.isHittable, "W26 Sessions stat should be readable")
+        VisualAudit.capture("W26 \(size) sessions stat card")
+        let repsStat = app.staticTexts.matching(NSPredicate(format: "label == %@", "Total Reps")).firstMatch
+        for _ in 0..<12 where !(repsStat.exists && repsStat.isHittable) {
+            history.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(repsStat.exists && repsStat.isHittable, "W26 Total Reps stat should be readable")
+        VisualAudit.capture("W26 \(size) total reps stat card")
+
+        // The seeded Bench Press record has three completed sets; its native row has no AXID.
+        let session = history.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "3 sets")).firstMatch
+        for _ in 0..<12 where !(session.exists && session.isHittable) {
+            history.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(session.exists && session.isHittable, "W26 session row should be reachable")
+        session.press(forDuration: 1.1)
+        let share = app.buttons["Share"].firstMatch
+        XCTAssertTrue(share.waitForExistence(timeout: 5) && share.isHittable,
+                      "W26 session context menu should retain Share")
+        share.auditTap()
+        let shareSheet = app.descendants(matching: .any)["share-image-sheet"].firstMatch
+        XCTAssertTrue(shareSheet.waitForExistence(timeout: 10), "W11 rendered image sheet should open")
+        let shareAction = app.buttons.matching(NSPredicate(format: "label == %@", "Share")).firstMatch
+        XCTAssertTrue(shareAction.waitForExistence(timeout: 5) && shareAction.isHittable,
+                      "W11 native Share action should remain reachable")
+        VisualAudit.capture("W11 \(size) rendered workout share action")
+    }
+
     func testVisualAuditWorkoutCompletionAtNormalText() throws {
         try auditWorkoutCompletion(maximumText: false)
     }
@@ -4744,12 +4835,91 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
         let indoorButton = app.buttons[AXID.cardioStartIndoor].firstMatch
         XCTAssertTrue(indoorButton.waitForExistence(timeout: 5), "Indoor cardio start button should exist")
+        if VisualAudit.isEnabled {
+            let outdoorButton = app.buttons[AXID.cardioStartOutdoor].firstMatch
+            XCTAssertTrue(outdoorButton.waitForExistence(timeout: 5), "Running should offer Outdoor")
+            XCTAssertTrue(indoorButton.isHittable)
+            VisualAudit.capture("W23 cardio \(accessibilityText ? "MAX" : "normal") header and Indoor")
+            if accessibilityText {
+                let startScroll = app.scrollViews.containing(.any, identifier: AXID.cardioStartScreen).firstMatch
+                XCTAssertTrue(startScroll.waitForExistence(timeout: 5), "MAX cardio start sheet should scroll")
+                for _ in 0..<8 {
+                    let viewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 0, dy: 4)
+                    if outdoorButton.exists && outdoorButton.isHittable && viewport.contains(outdoorButton.frame) { break }
+                    startScroll.swipeUp(velocity: .slow)
+                }
+                let outdoorViewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 0, dy: 4)
+                XCTAssertTrue(outdoorButton.isHittable && outdoorViewport.contains(outdoorButton.frame),
+                              "The whole Outdoor card must fit in the MAX sheet")
+                VisualAudit.capture("W23 cardio MAX full Outdoor choice")
+                let notice = app.staticTexts["Outdoor mode will request location permission."].firstMatch
+                let warning = app.staticTexts["Location access denied. Enable in Settings for outdoor distance tracking."].firstMatch
+                let locationMessage = notice.exists ? notice : warning
+                if locationMessage.exists {
+                    for _ in 0..<8 {
+                        let viewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                        if locationMessage.isHittable && viewport.contains(locationMessage.frame) { break }
+                        startScroll.swipeUp(velocity: .slow)
+                    }
+                    let viewport = startScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                    XCTAssertTrue(locationMessage.isHittable && viewport.contains(locationMessage.frame),
+                                  "Visible location guidance must fit in the MAX sheet")
+                    VisualAudit.capture("W23 cardio MAX location guidance")
+                }
+                for _ in 0..<8 where !indoorButton.isHittable { startScroll.swipeDown(velocity: .slow) }
+                XCTAssertTrue(indoorButton.isHittable)
+            } else {
+                XCTAssertTrue(outdoorButton.isHittable)
+                VisualAudit.capture("W23 cardio normal Indoor and Outdoor choices")
+            }
+        }
         indoorButton.auditTap()
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.cardioSessionScreen].firstMatch.waitForExistence(timeout: 10),
             "Cardio session should start"
         )
+        if VisualAudit.isEnabled {
+            let motionNotice = app.alerts["Notice"].firstMatch
+            if motionNotice.waitForExistence(timeout: 3) {
+                XCTAssertTrue(motionNotice.staticTexts[
+                    "Could not start motion tracking. Steps may be incomplete."
+                ].firstMatch.exists, "Only the observed motion-start Notice may be acknowledged")
+                VisualAudit.capture("W24 cardio motion tracking Notice before acknowledgment")
+                let okay = motionNotice.buttons["OK"].firstMatch
+                XCTAssertTrue(okay.exists && okay.isHittable)
+                okay.auditTap()
+                let dismissed = XCTNSPredicateExpectation(
+                    predicate: NSPredicate(format: "exists == false"), object: motionNotice
+                )
+                XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed)
+            }
+            let sessionScroll = app.scrollViews.containing(.any, identifier: AXID.cardioSessionScreen).firstMatch
+            XCTAssertTrue(sessionScroll.waitForExistence(timeout: 5), "W24 metrics should have one active scroll")
+            let elapsed = app.staticTexts["Elapsed Time"].firstMatch
+            XCTAssertTrue(elapsed.waitForExistence(timeout: 5) && elapsed.isHittable)
+            VisualAudit.capture("W24 cardio \(accessibilityText ? "MAX" : "normal") elapsed and status")
+            let paceUnit = app.staticTexts["/km"].firstMatch
+            let distanceUnit = app.staticTexts["km"].firstMatch
+            for _ in 0..<8 where !paceUnit.isHittable { sessionScroll.swipeUp(velocity: .slow) }
+            XCTAssertTrue(distanceUnit.exists && paceUnit.isHittable,
+                          "Running must retain distance and pace units")
+            VisualAudit.capture("W24 cardio \(accessibilityText ? "MAX" : "normal") distance and pace")
+            let end = app.buttons[AXID.cardioSessionEnd].firstMatch
+            for unit in ["steps", "spm"] {
+                let metric = app.staticTexts[unit].firstMatch
+                for _ in 0..<10 where !metric.isHittable { sessionScroll.swipeUp(velocity: .slow) }
+                XCTAssertTrue(metric.waitForExistence(timeout: 5) && metric.isHittable,
+                              "W24 lower \(unit) metric must remain readable")
+                if accessibilityText {
+                    XCTAssertTrue(end.isHittable && app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(end.frame),
+                                  "W24 MAX End must stay wholly visible in the bottom inset")
+                }
+                VisualAudit.capture("W24 cardio \(accessibilityText ? "MAX" : "normal") lower \(unit) and Pause End controls")
+            }
+            for _ in 0..<8 where !end.isHittable { sessionScroll.swipeUp(velocity: .slow) }
+            XCTAssertTrue(end.waitForExistence(timeout: 5) && end.isHittable)
+        }
 
         let cardioSessionEndButton = app.descendants(matching: .any)[AXID.cardioSessionEnd].firstMatch
         XCTAssertTrue(cardioSessionEndButton.waitForExistence(timeout: 5), "Cardio end button should exist")
@@ -4778,24 +4948,30 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(waitForHittable(save, timeout: 5), "Summary Save must be reachable\n\(app.debugDescription)")
         XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
                       "The whole summary Save action should fit above the window edge")
-        VisualAudit.capture("Cardio summary top title and full Save after permission dismissal")
+        VisualAudit.capture("W25 cardio \(accessibilityText ? "MAX" : "normal") summary top and full Save")
         if VisualAudit.isEnabled {
             let summaryScroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
             XCTAssertTrue(summaryScroll.waitForExistence(timeout: 5), "Cardio summary should own a metric scroll view")
             for (metric, checkpoint) in [("Steps", "steps"), ("Cadence", "cadence")] {
                 let label = app.staticTexts[metric].firstMatch
                 for _ in 0..<8 {
-                    let viewport = summaryScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
-                    if label.exists && viewport.contains(CGPoint(x: label.frame.midX, y: label.frame.midY)) { break }
+                    let scrollFrame = summaryScroll.frame.intersection(app.windows.firstMatch.frame)
+                    let viewport = CGRect(x: scrollFrame.minX + 8, y: scrollFrame.minY + 8,
+                                          width: max(0, scrollFrame.width - 16),
+                                          height: max(0, min(scrollFrame.maxY, save.frame.minY) - scrollFrame.minY - 16))
+                    if label.exists && viewport.contains(label.frame) { break }
                     summaryScroll.swipeUp(velocity: .slow)
                 }
-                let viewport = summaryScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
-                XCTAssertTrue(label.exists && viewport.contains(CGPoint(x: label.frame.midX, y: label.frame.midY)),
+                let scrollFrame = summaryScroll.frame.intersection(app.windows.firstMatch.frame)
+                    let viewport = CGRect(x: scrollFrame.minX + 8, y: scrollFrame.minY + 8,
+                                          width: max(0, scrollFrame.width - 16),
+                                          height: max(0, min(scrollFrame.maxY, save.frame.minY) - scrollFrame.minY - 16))
+                XCTAssertTrue(label.exists && viewport.contains(label.frame),
                               "Cardio summary \(checkpoint) should reach the visible scroll viewport")
                 XCTAssertTrue(save.isHittable, "Save should remain reachable while reviewing summary metrics")
                 XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
                               "Summary Save should remain wholly visible while metrics scroll")
-                VisualAudit.capture("Cardio summary lower \(checkpoint) and full Save")
+                VisualAudit.capture("W25 cardio \(accessibilityText ? "MAX" : "normal") lower \(checkpoint) and full Save")
             }
         }
     }
