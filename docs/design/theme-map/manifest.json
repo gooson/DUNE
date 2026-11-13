@@ -1357,6 +1357,66 @@
         "status": "native-captured-with-explicit-limits",
         "actual": "../full-redesign-map/review/workout-insights-sheet-w32-2026-11-07/index.html"
       }
+    },
+    {
+      "id": "create-custom-exercise-w04",
+      "name": "W04 · Exercise",
+      "title": "기존 native 컨트롤·원래 아이콘·실제 데이터 보존과 읽기/접근성 배치",
+      "file": "dune-create-custom-exercise-w04.html",
+      "detail": "보류 초안: Phone 일반/MAX만 통과. iPad 진입 실패 두 기록과 한도를 유지하고 현재 캡처를 완료로 표시하지 않는다.",
+      "implementation": {
+        "layout": "../layout-map/create-custom-exercise-w04.html",
+        "status": "held-ipad-template-route",
+        "actual": "../full-redesign-map/review/create-custom-exercise-w04-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "workout-template-list-w12",
+      "name": "W12 · 운동 템플릿 목록",
+      "title": "원래 값·아이콘·기간·동작을 보존한 큰 글씨 배치",
+      "file": "dune-workout-template-list-w12.html",
+      "detail": "구현 전 정적 시안이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/workout-template-list-w12.html",
+        "status": "held-required-native-core-incomplete",
+        "actual": "../full-redesign-map/review/workout-template-list-w12-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "weekly-workout-plan-w15",
+      "name": "W15 · 주간 운동 계획",
+      "title": "원래 값·아이콘·기간·동작을 보존한 큰 글씨 배치",
+      "file": "dune-weekly-workout-plan-w15.html",
+      "detail": "구현 전 정적 시안이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/weekly-workout-plan-w15.html",
+        "status": "held-required-native-core-incomplete",
+        "actual": "../full-redesign-map/review/weekly-workout-plan-w15-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "exercise-categories-w29",
+      "name": "W29 · source layout",
+      "title": "기존 기능과 데이터 보존 · 큰 글씨 배치",
+      "file": "dune-exercise-categories-w29.html",
+      "detail": "Duo current-source capture pending. No full regression or Watch parity result is inferred. No manual Save/HealthKit write is inferred from visual captures. Skipped iPad Categories toolbar overflow is pending, not pass; no closed More route replay. 시안은 실제 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/exercise-categories-w29.html",
+        "status": "held-native-proof",
+        "actual": "../full-redesign-map/review/exercise-categories-w29-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "exercise-category-editor-w30",
+      "name": "W30 · source layout",
+      "title": "기존 기능과 데이터 보존 · 큰 글씨 배치",
+      "file": "dune-exercise-category-editor-w30.html",
+      "detail": "Duo current-source capture pending. No full regression or Watch parity result is inferred. No manual Save/HealthKit write is inferred from visual captures. Skipped iPad Categories toolbar overflow is pending, not pass; no closed More route replay. 시안은 실제 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/exercise-category-editor-w30.html",
+        "status": "held-native-proof",
+        "actual": "../full-redesign-map/review/exercise-category-editor-w30-2026-11-07/index.html"
+      }
     }
   ]
 }
