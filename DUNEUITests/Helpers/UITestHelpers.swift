@@ -830,7 +830,7 @@ extension XCUIApplication {
         timeoutPerCheck: TimeInterval = 0.25
     ) -> Bool {
         let element = descendants(matching: .any)[identifier].firstMatch
-        let pickerList = tables[AXID.pickerRootList].firstMatch
+        let pickerList = descendants(matching: .any)[AXID.pickerRootList].firstMatch
 
         guard pickerList.waitForExistence(timeout: 5) else {
             return element.exists
@@ -870,7 +870,7 @@ extension XCUIApplication {
             return false
         }
 
-        let pickerList = tables[AXID.pickerRootList].firstMatch
+        let pickerList = descendants(matching: .any)[AXID.pickerRootList].firstMatch
         guard pickerList.waitForExistence(timeout: 5) else {
             return element.exists && element.isHittable
         }
@@ -1258,7 +1258,7 @@ extension XCUIApplication {
 
     private func preferredScrollContainer() -> XCUIElement {
         let prioritizedContainers = [
-            tables[AXID.pickerRootList].firstMatch,
+            descendants(matching: .any)[AXID.pickerRootList].firstMatch,
             descendants(matching: .any)[AXID.activityRootScroll].firstMatch
         ]
 
