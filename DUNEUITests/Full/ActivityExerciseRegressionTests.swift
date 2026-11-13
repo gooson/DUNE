@@ -3634,6 +3634,112 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(scroll.waitForExistence(timeout: 5))
     }
 
+    func testVisualAuditTemplatePlanAtNormalText() throws {
+        try auditTemplatePlan(maximumText: false)
+    }
+
+    func testVisualAuditTemplatePlanAtMaximumText() throws {
+        try auditTemplatePlan(maximumText: true)
+    }
+
+    private func auditTemplatePlan(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B13 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        openTemplateList()
+        let list = app.collectionViews[AXID.workoutTemplateListScreen].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 8))
+        let row = app.buttons[AXID.workoutTemplateRow(Fixture.circuitTemplate)].firstMatch
+        for _ in 0..<12 where !(row.exists && row.isHittable) { list.swipeUp(velocity: .slow) }
+        XCTAssertTrue(row.waitForExistence(timeout: 8) && row.isHittable)
+        XCTAssertTrue(row.label.contains("2 exercises") && row.label.contains("Squat"),
+                      "W12 seeded circuit row should preserve count and exercise names")
+        VisualAudit.capture("W12 \(size) seeded template row and exercise names")
+
+        XCTAssertTrue(app.waitAndTapToolbarAction("workout-weekly-plan-open"))
+        let plan = app.descendants(matching: .any)["weekly-workout-plan"].firstMatch
+        XCTAssertTrue(plan.waitForExistence(timeout: 8))
+        let templateList = app.scrollViews["weekly-plan-template-list"].firstMatch
+        XCTAssertTrue(templateList.waitForExistence(timeout: 5))
+        // The isolated model is seeded, but weekly assignments live in AppStorage
+        // and may persist across launches. Count the seven day buttons regardless
+        // of whether their second label is Rest Day or an assigned template.
+        let calendarPane = plan.scrollViews.element(boundBy: 0)
+        XCTAssertTrue(calendarPane.waitForExistence(timeout: 5))
+        let next = calendarPane.buttons.matching(NSPredicate(format: "label == %@", "Next Week")).firstMatch
+        let previous = calendarPane.buttons.matching(NSPredicate(format: "label == %@", "Previous Week")).firstMatch
+        func dayLabels() -> [String] {
+            calendarPane.buttons.allElementsBoundByIndex.map(\.label).filter {
+                $0 != "Previous Week" && $0 != "Next Week"
+            }
+        }
+        let before = dayLabels()
+        XCTAssertEqual(before.count, 7, "W15 should display seven calendar day rows")
+        VisualAudit.capture("W15 \(size) current seven-day plan and template pane")
+        XCTAssertTrue(next.waitForExistence(timeout: 5) && next.isHittable)
+        next.auditTap()
+        let after = dayLabels()
+        XCTAssertEqual(after.count, 7)
+        XCTAssertNotEqual(after, before, "Next Week must change the visible seven-day period")
+        VisualAudit.capture("W15 \(size) next week dates")
+        XCTAssertTrue(previous.exists && previous.isHittable)
+        previous.auditTap()
+        XCTAssertEqual(dayLabels(), before,
+                       "Previous Week must restore the original period")
+
+        let templateID = "22222222-2222-4222-8222-222222222222"
+        let assign = app.buttons["weekly-plan-template-\(templateID)"].firstMatch
+        for _ in 0..<8 where !(assign.exists && assign.isHittable) {
+            templateList.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(assign.waitForExistence(timeout: 5) && assign.isHittable)
+        assign.auditTap()
+        let selected = app.buttons["weekly-plan-selected-template"].firstMatch
+        for _ in 0..<8 where !(selected.exists && selected.isHittable) {
+            templateList.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(selected.waitForExistence(timeout: 5) && selected.isHittable
+                      && selected.label.contains(Fixture.singleTemplate))
+        VisualAudit.capture("W15 \(size) assigned seeded template")
+        let remove = app.buttons["weekly-plan-remove"].firstMatch
+        func removeViewport() -> CGRect {
+            let window = app.windows.firstMatch.frame
+            let pane = templateList.frame.intersection(window)
+            let tabBar = app.tabBars.firstMatch
+            let bottom = tabBar.exists && tabBar.frame.minY > pane.minY
+                ? min(pane.maxY, tabBar.frame.minY) : pane.maxY
+            return CGRect(x: pane.minX + 8, y: pane.minY + 12,
+                          width: max(0, pane.width - 16),
+                          height: max(0, bottom - pane.minY - 24))
+        }
+        for _ in 0..<12 {
+            let viewport = removeViewport()
+            if remove.exists && remove.isHittable && viewport.contains(remove.frame) { break }
+            let moveUp = !remove.exists || remove.frame.midY >= viewport.midY
+            let startY: CGFloat = moveUp ? 0.68 : 0.42
+            let endY: CGFloat = moveUp ? 0.46 : 0.64
+            templateList.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                .press(forDuration: 0.05, thenDragTo: templateList.coordinate(
+                    withNormalizedOffset: CGVector(dx: 0.5, dy: endY)))
+        }
+        let removeViewport = removeViewport()
+        XCTAssertTrue(remove.exists && remove.isHittable && removeViewport.contains(remove.frame),
+                      "The whole Remove action must be visible in the active template pane")
+        remove.auditTap()
+        let assignmentRemoved = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: selected
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [assignmentRemoved], timeout: 5), .completed,
+                       "Removing assignment must restore Rest Day")
+    }
+
     func testVisualAuditTemplateWorkoutFirstSession() throws {
         openTemplateList()
         let rowID = AXID.workoutTemplateRow(Fixture.circuitTemplate)
@@ -4694,12 +4800,159 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
     }
 
+    func testVisualAuditUserCategoriesAtNormalText() throws {
+        try auditUserCategories(maximumText: false)
+    }
+
+    func testVisualAuditUserCategoriesAtMaximumText() throws {
+        try auditUserCategories(maximumText: true)
+    }
+
+    private func auditUserCategories(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B16 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        openExerciseViewFromRecentWorkouts()
+        XCTAssertTrue(app.waitAndTapExerciseSecondaryAction(AXID.exerciseToolbarCategories),
+                      "Categories route should open through its visible toolbar action")
+        let list = app.descendants(matching: .any)[AXID.userCategoryManagementScreen].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 8))
+        XCTAssertTrue(app.staticTexts["Built-in"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["Strength"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["Default"].firstMatch.exists)
+        VisualAudit.capture("W29 \(size) built-in name icon and Default")
+        let add = app.descendants(matching: .any)[AXID.userCategoryAdd].firstMatch
+        XCTAssertTrue(add.waitForExistence(timeout: 5) && add.isHittable)
+        add.auditTap()
+
+        let form = app.descendants(matching: .any)[AXID.userCategoryEditScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let name = app.textFields[AXID.userCategoryName].firstMatch
+        let save = app.buttons[AXID.userCategorySave].firstMatch
+        XCTAssertTrue(name.exists && save.exists && !save.isEnabled)
+        XCTAssertTrue(app.staticTexts["Icon"].firstMatch.exists)
+        VisualAudit.capture("W30 \(size) empty name and original icon choices")
+
+        // Icon and color buttons have no individual IDs in the unchanged source.
+        // Select the second visible grid button by its position under each section header.
+        let iconHeader = app.staticTexts["Icon"].firstMatch
+        let colorHeader = app.staticTexts["Color"].firstMatch
+        let iconButtons = form.buttons.allElementsBoundByIndex.filter {
+            $0.frame.minY > iconHeader.frame.maxY &&
+                $0.frame.maxY < (colorHeader.exists ? colorHeader.frame.minY : app.windows.firstMatch.frame.maxY) &&
+                $0.isHittable
+        }
+        XCTAssertGreaterThanOrEqual(iconButtons.count, 2, "At least two original icon choices should fit")
+        XCTAssertTrue(app.windows.firstMatch.frame.contains(iconButtons[1].frame))
+        iconButtons[1].auditTap()
+        VisualAudit.capture("W30 \(size) selected original icon choice")
+
+        for _ in 0..<8 where !colorHeader.isHittable { form.swipeUp(velocity: .slow) }
+        XCTAssertTrue(colorHeader.exists && colorHeader.isHittable)
+        let inputHeader = app.staticTexts["Default Input Type"].firstMatch
+        let colorButtons = form.buttons.allElementsBoundByIndex.filter {
+            $0.frame.minY > colorHeader.frame.maxY &&
+                $0.frame.maxY < (inputHeader.exists ? inputHeader.frame.minY : app.windows.firstMatch.frame.maxY) &&
+                $0.isHittable
+        }
+        XCTAssertGreaterThanOrEqual(colorButtons.count, 2, "At least two original color choices should fit")
+        XCTAssertTrue(app.windows.firstMatch.frame.contains(colorButtons[1].frame))
+        colorButtons[1].auditTap()
+        VisualAudit.capture("W30 \(size) selected original color choice")
+
+        let inputType = form.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Input Type")).firstMatch
+        for _ in 0..<8 where !inputType.isHittable { form.swipeUp(velocity: .slow) }
+        XCTAssertTrue(inputType.exists && inputType.isHittable)
+        inputType.auditTap()
+        let durationDistance = app.descendants(matching: .any)["Duration + Distance"].firstMatch
+        XCTAssertTrue(durationDistance.waitForExistence(timeout: 5))
+        durationDistance.auditTap()
+        VisualAudit.capture("W30 \(size) selected Duration and Distance input type")
+
+        let categoryName = "Codex Recovery Readability Category For Long Rows"
+        for _ in 0..<8 where !name.isHittable { form.swipeDown(velocity: .slow) }
+        XCTAssertTrue(name.exists && name.isHittable)
+        XCTAssertTrue(app.fillTextInput(AXID.userCategoryName, with: categoryName))
+        XCTAssertTrue(save.isEnabled)
+        VisualAudit.capture("W30 \(size) long name valid Save and editor")
+        save.auditTap()
+        let created = app.staticTexts[categoryName].firstMatch
+        for _ in 0..<8 where !created.isHittable { list.swipeUp(velocity: .slow) }
+        XCTAssertTrue(created.waitForExistence(timeout: 8) && created.isHittable)
+        XCTAssertTrue(app.staticTexts["Duration + Distance"].firstMatch.exists)
+        if maximumText {
+            let categoryList = app.collectionViews[AXID.userCategoryManagementScreen].firstMatch
+            let row = categoryList.buttons.matching(
+                NSPredicate(format: "label CONTAINS %@", categoryName)
+            ).firstMatch
+            let rowName = row.staticTexts[categoryName].firstMatch
+            let rowInputType = row.staticTexts["Duration + Distance"].firstMatch
+            let navigation = app.navigationBars["Categories"].firstMatch
+            let tabBar = app.tabBars.firstMatch
+            XCTAssertTrue(categoryList.exists && navigation.exists)
+            if UIDevice.current.userInterfaceIdiom == .phone { XCTAssertTrue(tabBar.exists) }
+
+            func visibleCategoryListFrame() -> CGRect {
+                let window = app.windows.firstMatch.frame
+                let frame = categoryList.frame.intersection(window)
+                var top = max(frame.minY, navigation.frame.maxY)
+                var bottom = frame.maxY
+                if tabBar.exists {
+                    if tabBar.frame.midY >= window.midY {
+                        bottom = min(bottom, tabBar.frame.minY)
+                    } else {
+                        top = max(top, tabBar.frame.maxY)
+                    }
+                }
+                top += 4
+                bottom -= 4
+                return CGRect(x: frame.minX, y: top, width: frame.width,
+                              height: max(0, bottom - top))
+            }
+
+            for _ in 0..<12 {
+                let viewport = visibleCategoryListFrame()
+                if row.exists && rowName.exists && rowInputType.exists &&
+                    viewport.contains(row.frame) && viewport.contains(rowName.frame) &&
+                    viewport.contains(rowInputType.frame) { break }
+                categoryList.swipeUp(velocity: .slow)
+            }
+            let viewport = visibleCategoryListFrame()
+            XCTAssertTrue(row.exists && rowName.exists && rowInputType.exists,
+                          "MAX custom row must expose its own name and input type")
+            XCTAssertTrue(viewport.contains(row.frame) && viewport.contains(rowName.frame) &&
+                          viewport.contains(rowInputType.frame),
+                          "MAX custom row, full long name, and input type must fit above the tab bar")
+        }
+        VisualAudit.capture(maximumText
+            ? "W29 MAX full custom category row and input type"
+            : "W29 normal long custom category row and input type")
+        created.auditTap()
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        XCTAssertEqual(name.value as? String, categoryName)
+        VisualAudit.capture("W30 \(size) reopened custom category editor")
+        let cancel = app.navigationBars["Edit Category"].buttons["Cancel"].firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
+        cancel.auditTap()
+        let editorDismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: form
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [editorDismissed], timeout: 8), .completed)
+        XCTAssertTrue(list.waitForExistence(timeout: 8))
+    }
+
     func testUserCategoryManagementCreatesCategory() throws {
         openExerciseViewFromRecentWorkouts()
 
-        let categoriesButton = app.descendants(matching: .any)[AXID.exerciseToolbarCategories].firstMatch
-        XCTAssertTrue(categoriesButton.waitForExistence(timeout: 5), "Categories toolbar button should exist")
-        categoriesButton.auditTap()
+        XCTAssertTrue(app.waitAndTapExerciseSecondaryAction(AXID.exerciseToolbarCategories),
+                      "Categories route should open through its visible toolbar action")
 
         XCTAssertTrue(
             app.descendants(matching: .any)[AXID.userCategoryManagementScreen].firstMatch.waitForExistence(timeout: 8),
@@ -5249,9 +5502,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
     private func openTemplateList() {
         openExerciseViewFromRecentWorkouts()
-        let templatesButton = app.descendants(matching: .any)[AXID.exerciseToolbarTemplates].firstMatch
-        XCTAssertTrue(templatesButton.waitForExistence(timeout: 5), "Templates toolbar button should exist")
-        templatesButton.auditTap()
+        XCTAssertTrue(app.waitAndTapExerciseSecondaryAction(AXID.exerciseToolbarTemplates),
+                      "Templates route should open through its visible toolbar action")
 
         let templateScreen = app.descendants(matching: .any)[AXID.workoutTemplateListScreen].firstMatch
         XCTAssertTrue(templateScreen.waitForExistence(timeout: 8), "Template list screen should appear")
