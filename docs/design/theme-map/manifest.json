@@ -1453,6 +1453,54 @@
         "status": "held-ipad-MAX-cadence-native-proof",
         "actual": "../full-redesign-map/review/cardio-summary-w25-2026-11-07/index.html"
       }
+    },
+    {
+      "id": "template-form-w13",
+      "name": "W13 · 템플릿 편집",
+      "title": "원래 값·아이콘·기간·동작을 보존한 큰 글씨 배치",
+      "file": "dune-template-form-w13.html",
+      "detail": "구현 전 정적 시안이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/template-form-w13.html",
+        "status": "held-required-native-core-incomplete",
+        "actual": "../full-redesign-map/review/template-form-w13-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "template-exercise-picker-w14",
+      "name": "W14 · 템플릿 운동 선택",
+      "title": "원래 값·아이콘·기간·동작을 보존한 큰 글씨 배치",
+      "file": "dune-template-exercise-picker-w14.html",
+      "detail": "구현 전 정적 시안이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/template-exercise-picker-w14.html",
+        "status": "held-required-native-core-incomplete",
+        "actual": "../full-redesign-map/review/template-exercise-picker-w14-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "exercise-default-edit-s03",
+      "name": "S03 · Settings",
+      "title": "Native Form → 기존 무게·횟수 필드 → 기존 토글 → Save와 Clear 확인. 일반 글씨는 원래 우측 필드, 접근성 글씨는 라벨 위·필드 아래로 전환한다. kg/reps·입력 바인딩·검증·저장·Watch 동기화·취소를 유지한다.",
+      "file": "dune-exercise-default-edit-s03.html",
+      "detail": "정적 시안이며 실제 PNG가 아니다. 실제 소스·기기·검사 수·실패·미갱신 범위는 별도 native 갤러리에 보존한다.",
+      "implementation": {
+        "layout": "../layout-map/exercise-default-edit-s03.html",
+        "status": "held-ipad-save-automation",
+        "actual": "../full-redesign-map/review/exercise-default-edit-s03-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "all-sets-done-w31",
+      "name": "W31 · Strength",
+      "title": "원래 기호·고정 CTA·세트 동작을 유지한 접근성 읽기와 스크롤",
+      "file": "dune-all-sets-done-w31.html",
+      "detail": "정적 시안. 실제 native 갤러리에 원본 실패 수와 통과/진단/미갱신 범위를 보존한다.",
+      "implementation": {
+        "layout": "../layout-map/all-sets-done-w31.html",
+        "status": "held-phone-lastset-unreached",
+        "actual": "../full-redesign-map/review/all-sets-done-w31-2026-11-07/index.html"
+      }
     }
   ]
 }
