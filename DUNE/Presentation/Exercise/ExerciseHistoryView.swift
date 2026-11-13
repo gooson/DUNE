@@ -8,6 +8,7 @@ struct ExerciseHistoryView: View {
     @State private var shareImage: UIImage?
     @State private var recordToDelete: ExerciseRecord?
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
 
     @Query private var exerciseRecords: [ExerciseRecord]
@@ -59,7 +60,7 @@ struct ExerciseHistoryView: View {
             set: { if $0 == nil { shareImage = nil } }
         )) { shareable in
             ShareImageSheet(image: shareable.image, title: "\(exerciseName) Workout")
-                .presentationDetents([.medium])
+                .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [.medium])
         }
         .confirmDeleteRecord($recordToDelete, context: modelContext)
         .background { DetailWaveBackground() }
@@ -176,7 +177,9 @@ struct ExerciseHistoryView: View {
     // MARK: - Stats
 
     private var statsCards: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: DS.Spacing.md) {
+        LazyVGrid(columns: dynamicTypeSize.isAccessibilitySize
+            ? [GridItem(.flexible())]
+            : [GridItem(.flexible()), GridItem(.flexible())], spacing: DS.Spacing.md) {
             if let best = viewModel.personalBest {
                 statCard(title: "Personal Best", value: formattedValue(best), icon: "trophy.fill", color: .orange)
             }
@@ -223,6 +226,7 @@ struct ExerciseHistoryView: View {
             }
             Text(value)
                 .font(.title3.weight(.semibold))
+                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DS.Spacing.md)
