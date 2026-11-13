@@ -17,7 +17,8 @@ struct ExerciseDefaultEditView: View {
     @State private var repsText: String = ""
     @State private var isManualOverride: Bool = false
     @State private var isPreferred: Bool = false
-    @FocusState private var isNumericInputFocused: Bool
+    private enum NumericField: Hashable { case weight, reps }
+    @FocusState private var focusedNumericField: NumericField?
     /// Correction #6/#11: Prevent duplicate saves on double-tap
     @State private var isSaving: Bool = false
     /// Correction #50: Confirmation before CloudKit delete
@@ -52,7 +53,7 @@ struct ExerciseDefaultEditView: View {
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
                             .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : 80)
-                            .focused($isNumericInputFocused)
+                            .focused($focusedNumericField, equals: .weight)
                             .accessibilityIdentifier("exercise-default-edit-weight")
                     }
                 }
@@ -67,7 +68,7 @@ struct ExerciseDefaultEditView: View {
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
                             .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : 80)
-                            .focused($isNumericInputFocused)
+                            .focused($focusedNumericField, equals: .reps)
                             .accessibilityIdentifier("exercise-default-edit-reps")
                     }
                 }
@@ -100,10 +101,10 @@ struct ExerciseDefaultEditView: View {
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            if isNumericInputFocused {
+            if focusedNumericField != nil {
                 HStack {
                     Spacer()
-                    Button("Done") { isNumericInputFocused = false }
+                    Button("Done") { focusedNumericField = nil }
                         .font(.body.weight(.semibold))
                         .accessibilityIdentifier("exercise-default-keyboard-done")
                 }
