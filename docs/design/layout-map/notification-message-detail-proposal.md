@@ -7,6 +7,12 @@ status: native-source-implemented-pending-runtime-validation
 
 # T12 알림 메시지 상세 배치
 
+## 후속 배치 · 2026-11-14
+
+사용자가 실제 체성분 알림의 단조로움을 지적해 추가 개편을 요청했다. [후속 계획](../../plans/2026-11-14-notification-detail-reading.md)과 [새 표현 시안](../theme-map/themes/dune-notification-message-reading.html)을 따른다. 작은 유형 아이콘·전체 제목·저장 시각 아래에 체성분의 원래 `이름: 값` 문장을 큰 값 카드로 배치한다. 기본은 두 열, 접근성 글씨는 한 열이며 읽기 폭 680pt를 유지한다. 모든 줄이 분리될 때만 수치 카드로 표시하고 일반·혼합·비어 있는 본문은 원문으로 읽는다. 수치·단위·순서를 보존한다. 헤더는 고정 높이 없이 내용만큼 커진다.
+
+새 구현·실제 캡처의 검증 범위는 후속 계획에서 기록한다. 아래는 2026-10-31 첫 개편의 계약 이력이다.
+
 [보존한 브라우저 제안](../theme-map/themes/dune-notification-message-detail.html) · [알림함 배치](notification-inbox-proposal.md) · [실제 화면 맵](../phone-design-map/actual/index.html)
 
 ## 승인 시안과 실제 데이터

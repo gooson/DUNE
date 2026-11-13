@@ -307,8 +307,98 @@ final class DesignMapAdditionalRoutesTests: SeededUITestBaseCase {
 final class DesignMapNotificationDetailTests: SeededUITestBaseCase {
     override var uiScenario: LaunchScenario? { .notificationRoutingSeeded }
 
+    private let bodyCompositionTitle = "Body Composition Update"
+
     override var additionalLaunchArguments: [String] {
         ["-AppleLanguages", "(en)", "-AppleLocale", "en_US", "--ui-design-map-notification-details"]
+    }
+
+    func testBodyCompositionNotificationDetail() throws {
+        openNotificationDetail(title: bodyCompositionTitle,
+                               screen: "notification-message-detail-screen")
+
+        let scroll = app.scrollViews["notification-message-detail-screen"].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 8))
+        let title = app.staticTexts["notification-message-title"].firstMatch
+        let date = app.staticTexts["notification-message-date"].firstMatch
+        XCTAssertEqual(title.label, bodyCompositionTitle)
+        XCTAssertEqual(date.label, bodyCompositionFixtureDate())
+        XCTAssertTrue(app.descendants(matching: .any)["notification-message-measurements"].firstMatch.exists)
+        XCTAssertFalse(app.staticTexts["notification-message-body"].firstMatch.exists)
+
+        let bmi = app.staticTexts["notification-measurement-value-0"].firstMatch
+        let bodyFat = app.staticTexts["notification-measurement-value-1"].firstMatch
+        XCTAssertEqual(app.staticTexts["BMI"].firstMatch.label, "BMI")
+        XCTAssertEqual(app.staticTexts["Body fat"].firstMatch.label, "Body fat")
+        XCTAssertEqual(bmi.label, "24.9")
+        XCTAssertEqual(bodyFat.label, "23.5%")
+        let viewport = detailViewport(for: scroll)
+        XCTAssertTrue(viewport.contains(title.frame) && viewport.contains(date.frame))
+        XCTAssertTrue(viewport.contains(bmi.frame) && viewport.contains(bodyFat.frame),
+                      "Both measurement values should fit in the initial viewport")
+        XCTAssertLessThan(abs(bmi.frame.midY - bodyFat.frame.midY), 32,
+                          "Normal text should show the two measurements in columns")
+        XCTAssertLessThan(bmi.frame.maxX, bodyFat.frame.minX)
+        VisualAudit.capture("T12 body composition header and two cards")
+
+        tapBodyCompositionBack()
+    }
+
+    func testBodyCompositionNotificationDetailDarkMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-test-style", "dark",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openNotificationDetail(title: bodyCompositionTitle,
+                               screen: "notification-message-detail-screen")
+
+        let scroll = app.scrollViews["notification-message-detail-screen"].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 8))
+        let title = app.staticTexts["notification-message-title"].firstMatch
+        let date = app.staticTexts["notification-message-date"].firstMatch
+        XCTAssertEqual(title.label, bodyCompositionTitle)
+        XCTAssertEqual(date.label, bodyCompositionFixtureDate())
+        XCTAssertTrue(app.descendants(matching: .any)["notification-message-measurements"].firstMatch.exists)
+        XCTAssertFalse(app.staticTexts["notification-message-body"].firstMatch.exists)
+        revealDetailText(title, in: scroll, position: .whole)
+        revealDetailText(date, in: scroll, position: .whole)
+        VisualAudit.capture("T12 body composition dark maximum text header")
+
+        let bmi = app.staticTexts["notification-measurement-value-0"].firstMatch
+        let bodyFat = app.staticTexts["notification-measurement-value-1"].firstMatch
+        XCTAssertEqual(app.staticTexts["BMI"].firstMatch.label, "BMI")
+        XCTAssertEqual(bmi.label, "24.9")
+        revealDetailText(bmi, in: scroll, position: .whole)
+        VisualAudit.capture("T12 body composition dark maximum text BMI")
+        for _ in 0..<8 where !bodyFat.exists { scroll.swipeUp(velocity: .slow) }
+        XCTAssertEqual(app.staticTexts["Body fat"].firstMatch.label, "Body fat")
+        XCTAssertEqual(bodyFat.label, "23.5%")
+        revealDetailText(bodyFat, in: scroll, position: .whole)
+        XCTAssertLessThan(bmi.frame.maxY, bodyFat.frame.minY,
+                          "Accessibility text should stack the measurement cards")
+        VisualAudit.capture("T12 body composition dark maximum text body fat")
+
+        tapBodyCompositionBack()
+    }
+
+    private func bodyCompositionFixtureDate() -> String {
+        Date(timeIntervalSince1970: 1_794_645_780).formatted(
+            .dateTime.year().month(.abbreviated).day().hour().minute()
+                .locale(Locale(identifier: "en_US"))
+        )
+    }
+
+    private func tapBodyCompositionBack() {
+        let railBack = app.buttons["BackButton"].firstMatch
+        let back = railBack.exists && railBack.isHittable
+            ? railBack : app.navigationBars["Notification"].buttons.firstMatch
+        XCTAssertTrue(back.waitForExistence(timeout: 5) && back.isHittable,
+                      "The native Back control should be tappable")
+        back.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.notificationHubScreen].firstMatch
+            .waitForExistence(timeout: 8), "Back should return to the notification hub")
     }
 
     func testNotificationMessageDetail() throws {
