@@ -319,7 +319,8 @@ struct ExerciseView: View {
                 record: record,
                 activityType: item.activityType,
                 displayName: item.displayName,
-                equipment: item.equipment
+                equipment: item.equipment,
+                presentsHistoryFromInspector: true
             )
         } else if let summary = item.workoutSummary {
             HealthKitWorkoutDetailView(workout: summary)

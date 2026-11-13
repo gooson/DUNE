@@ -8,6 +8,7 @@ struct ExerciseSessionDetailView: View {
     var displayName: String?
     var equipment: Equipment?
     var showHistoryLink: Bool = true
+    var presentsHistoryFromInspector: Bool = false
 
     /// Resolved title: explicit displayName → record.exerciseType fallback
     private var resolvedTitle: String {
@@ -17,6 +18,8 @@ struct ExerciseSessionDetailView: View {
 
     @Environment(\.appTheme) private var theme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @State private var isCompactHistoryPresented = false
     @State private var heartRateSummary: HeartRateSummary?
     @State private var heartRateRecovery: HeartRateRecovery?
     @State private var isLoadingHR = false
@@ -399,26 +402,42 @@ struct ExerciseSessionDetailView: View {
     @ViewBuilder
     private var viewHistoryLink: some View {
         if showHistoryLink, let defID = record.exerciseDefinitionID, !defID.isEmpty {
-            NavigationLink {
-                ExerciseHistoryView(
-                    exerciseDefinitionID: defID,
-                    exerciseName: record.exerciseType
-                )
-            } label: {
-                HStack {
-                    Label("View All Sessions", systemImage: "clock.arrow.circlepath")
-                        .font(.subheadline)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                }
-                .padding(DS.Spacing.md)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+            if presentsHistoryFromInspector && horizontalSizeClass == .compact {
+                Button { isCompactHistoryPresented = true } label: { historyLinkLabel }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("exercise-session-view-history")
+                    .sheet(isPresented: $isCompactHistoryPresented) {
+                        NavigationStack {
+                            ExerciseHistoryView(exerciseDefinitionID: defID, exerciseName: record.exerciseType)
+                                .toolbar {
+                                    ToolbarItem(placement: .confirmationAction) {
+                                        Button("Done") { isCompactHistoryPresented = false }
+                                            .accessibilityIdentifier("exercise-history-close")
+                                    }
+                                }
+                        }
+                    }
+            } else {
+                NavigationLink {
+                    ExerciseHistoryView(exerciseDefinitionID: defID, exerciseName: record.exerciseType)
+                } label: { historyLinkLabel }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("exercise-session-view-history")
             }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("exercise-session-view-history")
         }
+    }
+
+    private var historyLinkLabel: some View {
+        HStack {
+            Label("View All Sessions", systemImage: "clock.arrow.circlepath")
+                .font(.subheadline)
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+        }
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
     }
 
     // MARK: - Data Loading
