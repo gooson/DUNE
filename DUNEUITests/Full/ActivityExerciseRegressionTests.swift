@@ -182,6 +182,25 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(app.descendants(matching: .any)["activity-weeklystats-detail-screen"].firstMatch
             .waitForExistence(timeout: 10), "Workout Insights sheet should open on iPad")
         VisualAudit.capture("Workout Insights iPad sheet fallback")
+        VisualAudit.capture("W32 iPad sheet fallback normal top")
+        let done = app.buttons["workout-insights-close"].firstMatch
+        XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable,
+                      "W32 fallback sheet must keep Done reachable")
+        XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(done.frame),
+                      "W32 Done must fit fully within the iPad window")
+        done.auditTap()
+        let dismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"),
+            object: app.descendants(matching: .any)["activity-weeklystats-detail-screen"].firstMatch
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 10), .completed,
+                       "W32 sheet must close before returning to the workout")
+        let controls = app.scrollViews["workout-session-controls"].firstMatch
+        XCTAssertTrue(controls.waitForExistence(timeout: 10) && controls.isHittable,
+                      "Dismissing W32 must restore the active workout")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.workoutSessionCompleteSet, maxSwipes: 8),
+                      "The workout must remain interactive after W32 dismissal")
+        VisualAudit.capture("W32 iPad sheet fallback returned to workout")
     }
 
     func testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize() throws {
@@ -249,11 +268,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         )
         XCTAssertFalse(app.staticTexts["Unable to load data."].exists)
         VisualAudit.capture("Workout Insights presentation")
+        if VisualAudit.isEnabled {
+            let route = UIDevice.current.userInterfaceIdiom == .pad
+                ? "S07 iPad separate window" : "W32 workout insights sheet"
+            let size = checkPeriodMenu ? "MAX" : "normal"
+            VisualAudit.capture("\(route) \(size) loaded statistics and close")
+        }
         captureFunctionalCheckpoint("Insights loaded at maximum accessibility size")
         if useQuickStart {
             let statsScroll = app.scrollViews["activity-weeklystats-detail-screen"].firstMatch
             let chartHeading = statsScroll.staticTexts["weeklystats-chart-heading"].firstMatch
-            let metricPicker = statsScroll.buttons["weeklystats-chart-metric-picker"].firstMatch
+            let metricPicker = checkPeriodMenu
+                ? statsScroll.buttons["weeklystats-chart-metric-picker"].firstMatch
+                : statsScroll.segmentedControls["weeklystats-chart-metric-picker"].firstMatch
             let window = app.windows.firstMatch
             let close = app.buttons["workout-insights-close"].firstMatch
             XCTAssertTrue(statsScroll.exists && window.exists && close.exists,
@@ -296,6 +323,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 XCTAssertTrue(["This Week", "이번 주", "今週"].contains(period.value as? String ?? ""),
                               "The selected period must expose the complete translated label")
                 VisualAudit.capture("Weekly stats maximum AX period menu")
+                if VisualAudit.isEnabled {
+                    let route = UIDevice.current.userInterfaceIdiom == .pad ? "S07" : "W32"
+                    VisualAudit.capture("\(route) MAX period menu fully visible")
+                }
                 addScreenshotAttachment(named: "Weekly stats maximum AX period menu")
                 var previousRange = initialRange
                 for choice in choices {
@@ -350,20 +381,41 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                           "The complete chart heading and menu must share the visible scroll viewport")
             XCTAssertTrue(chartHeading.isHittable && metricPicker.isHittable,
                           "The chart title and metric menu must both be reachable at maximum accessibility size")
-            XCTAssertLessThanOrEqual(chartHeading.frame.maxY, metricPicker.frame.minY,
-                                     "The chart title must remain above its metric menu")
+            if checkPeriodMenu {
+                XCTAssertLessThanOrEqual(chartHeading.frame.maxY, metricPicker.frame.minY,
+                                         "The chart title must remain above its metric menu")
+            } else {
+                XCTAssertLessThanOrEqual(chartHeading.frame.maxX, metricPicker.frame.minX,
+                                         "The normal chart title must remain beside its segmented control")
+                let sharedRowHeight = min(chartHeading.frame.maxY, metricPicker.frame.maxY)
+                    - max(chartHeading.frame.minY, metricPicker.frame.minY)
+                XCTAssertGreaterThan(sharedRowHeight, 0,
+                                     "The normal title and segmented control must share a row")
+            }
             addScreenshotAttachment(named: "Daily chart heading and accessible metric menu")
             VisualAudit.capture("Daily chart heading and accessible metric menu")
-            metricPicker.auditTap()
-            let volume = app.buttons.matching(NSPredicate(
-                format: "label IN %@", ["Volume (kg)", "볼륨 (kg)", "ボリューム (kg)"]
-            )).firstMatch
-            XCTAssertTrue(volume.waitForExistence(timeout: 5) && volume.isHittable,
-                          "The chart menu must expose the complete volume label")
-            VisualAudit.capture("Daily chart metric choices")
-            volume.auditTap()
-            XCTAssertTrue(metricPicker.label.contains("kg"),
-                          "Selecting volume must update the chart metric")
+            if checkPeriodMenu {
+                metricPicker.auditTap()
+                let volume = app.buttons.matching(NSPredicate(
+                    format: "label IN %@", ["Volume (kg)", "볼륨 (kg)", "ボリューム (kg)"]
+                )).firstMatch
+                XCTAssertTrue(volume.waitForExistence(timeout: 5) && volume.isHittable,
+                              "The chart menu must expose the complete volume label")
+                VisualAudit.capture("Daily chart metric choices")
+                volume.auditTap()
+                XCTAssertTrue(metricPicker.label.contains("kg"),
+                              "Selecting volume must update the chart metric")
+            } else {
+                let volume = metricPicker.buttons.matching(NSPredicate(
+                    format: "label IN %@", ["Volume (kg)", "볼륨 (kg)", "ボリューム (kg)"]
+                )).firstMatch
+                XCTAssertTrue(volume.waitForExistence(timeout: 5) && volume.isHittable,
+                              "The segmented control must expose the original Volume choice")
+                VisualAudit.capture("Daily chart normal segmented metric choices")
+                volume.auditTap()
+                XCTAssertTrue(volume.isSelected || (volume.value as? String) == "1",
+                              "Selecting Volume must select its actual segmented child")
+            }
             VisualAudit.capture("Daily volume chart after selecting volume")
         }
         for index in 1...3 {

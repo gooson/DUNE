@@ -399,3 +399,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-07 W33: [새 실제 PNG/AX](../full-redesign-map/review/workout-name-editor-w33-2026-11-07/index.html)에 통과 범위와 미갱신 기기를 기록했다.
 
 2026-11-07 S07: [새 실제 PNG/AX](../full-redesign-map/review/workout-insights-window-s07-2026-11-07/index.html)에 통과 범위와 미갱신 기기를 기록했다.
+
+2026-11-07 W32: [새 실제 PNG/AX](../full-redesign-map/review/workout-insights-sheet-w32-2026-11-07/index.html)에 통과 범위와 미갱신 기기를 기록했다.

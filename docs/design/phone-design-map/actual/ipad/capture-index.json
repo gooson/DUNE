@@ -1773,13 +1773,24 @@
     },
     "W32": {
       "row_id": "W32",
-      "evidence": "test-and-action:Workout Insights iPad sheet fallback",
+      "file": "W32.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutInsightsSheetFallback()",
-      "action": "Workout Insights iPad sheet fallback",
-      "timestamp": 1791839500.757,
-      "image": "D324F5A3-37D4-4D40-912E-63598303DAD4.png",
-      "screen": "screen-0-2064x2752-Workout Insights iPad sheet fallback_0_79895E7D-3084-4254-9033-63C2F7BB8E81.png",
-      "file": "W32.png"
+      "action": "W32 iPad sheet fallback normal top",
+      "timestamp": 1794010298.706,
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "5aa89c00907f007c3834f8bd0543fe78bd9da8e7b27578505b80f64ca6a48f2a",
+      "ax_sha256": "1261067525d0ced300c2084bb62308c6e67135100b0dd7863bc2b247bc00852b",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/workout-insights-sheet-w32-2026-11-07/manifest.json",
+      "current_verification": "normal-captured-MAX-pending",
+      "current_verification_note": "W32 iPad forced sheet fallback is normal only; iPad MAX uses S07 separate window.",
+      "actual_angle": null
     },
     "H03": {
       "row_id": "H03",
