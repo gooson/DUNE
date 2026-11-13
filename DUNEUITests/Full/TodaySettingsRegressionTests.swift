@@ -1226,6 +1226,152 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("S04 preferred selection after reentry")
     }
 
+    func testExerciseDefaultSaveReopensWithStoredValues() throws {
+        openExerciseDefaults()
+        let row = exerciseDefaultsBenchPressRow()
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        row.auditTap()
+
+        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
+        dismissNumberPadBeforeNextFieldOnIPad()
+        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
+        dismissNumberPadBeforeNextFieldOnIPad()
+        app.buttons[AXID.exerciseDefaultEditSave].firstMatch.auditTap()
+
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDefaultsScreen]
+            .firstMatch.waitForExistence(timeout: 5), "Save returns to the list")
+        VisualAudit.capture("S02 configured exercise after S03 save")
+        let savedRow = exerciseDefaultsBenchPressRow()
+        XCTAssertTrue(savedRow.waitForExistence(timeout: 5))
+        savedRow.auditTap()
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditWeight].firstMatch.value as? String,
+                       Fixture.savedWeight, "Reopened editor shows the saved weight")
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditReps].firstMatch.value as? String,
+                       Fixture.savedReps, "Reopened editor shows the saved reps")
+        VisualAudit.capture("S03 stored values on reopen")
+
+        app.buttons[AXID.exerciseDefaultEditClear].firstMatch.auditTap()
+        let confirmation = app.sheets.firstMatch
+        XCTAssertTrue(confirmation.waitForExistence(timeout: 5), "Clear confirmation appears")
+        VisualAudit.capture("S03 clear confirmation before cancellation")
+        let cancelClear = confirmation.buttons["Cancel"].firstMatch
+        if cancelClear.exists {
+            cancelClear.auditTap()
+        } else {
+            let window = app.windows.firstMatch.frame
+            let outsidePoint = CGPoint(x: window.midX, y: window.minY + window.height * 0.75)
+            XCTAssertFalse(confirmation.frame.contains(outsidePoint),
+                           "Dismissal tap stays outside the destructive confirmation")
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75)).auditTap()
+        }
+        let dismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: confirmation
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed,
+                       "Clear confirmation dismisses without removing the defaults")
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditWeight].firstMatch.value as? String,
+                       Fixture.savedWeight, "Cancellation preserves the stored defaults")
+        VisualAudit.capture("S03 values retained after clear cancellation")
+    }
+
+    func testExerciseDefaultFieldsFitAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        openExerciseDefaults()
+        let row = exerciseDefaultsBenchPressRow()
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        row.auditTap()
+
+        let form = app.descendants(matching: .any)[AXID.exerciseDefaultEditScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 5))
+        for (labelText, fieldID) in [
+            ("Default Weight", AXID.exerciseDefaultEditWeight),
+            ("Default Reps", AXID.exerciseDefaultEditReps)
+        ] {
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(fieldID, maxSwipes: 12),
+                          "MAX input remains reachable: \(fieldID)")
+            let label = app.staticTexts[labelText].firstMatch
+            let field = app.textFields[fieldID].firstMatch
+            XCTAssertTrue(label.exists && field.exists)
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 6, dy: 6)
+            XCTAssertTrue(viewport.contains(label.frame) && viewport.contains(field.frame),
+                          "MAX label and full field remain visible: \(fieldID)")
+            XCTAssertGreaterThan(field.frame.minY, label.frame.minY,
+                                 "MAX input stacks below its label")
+            VisualAudit.capture("S03 MAX \(labelText) and full input")
+        }
+
+        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
+        dismissNumberPadBeforeNextFieldOnIPad()
+        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
+        dismissNumberPadBeforeNextFieldOnIPad()
+        let save = app.buttons[AXID.exerciseDefaultEditSave].firstMatch
+        XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isHittable,
+                      "Save stays reachable above the MAX Form")
+        VisualAudit.capture("S03 MAX edited values and Save")
+        save.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDefaultsScreen]
+            .firstMatch.waitForExistence(timeout: 5))
+        exerciseDefaultsBenchPressRow().auditTap()
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditWeight].firstMatch.value as? String,
+                       Fixture.savedWeight)
+        XCTAssertEqual(app.textFields[AXID.exerciseDefaultEditReps].firstMatch.value as? String,
+                       Fixture.savedReps)
+        VisualAudit.capture("S03 MAX saved values on reopen")
+    }
+
+    private func replaceDefaultNumericInput(_ identifier: String, with replacement: String) -> Bool {
+        let field = app.textFields[identifier].firstMatch
+        guard field.waitForExistence(timeout: 5) else { return false }
+
+        // The captured number-pad path left Command-A ineffective. Place the caret after
+        // the right-aligned number, erase its digits, then verify the new value.
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let fieldFrame = field.frame
+            let tapPoint = CGPoint(x: fieldFrame.minX + fieldFrame.width * 0.98,
+                                   y: fieldFrame.midY)
+            let keyboardLayouts = app.descendants(matching: .any)
+                .matching(identifier: "UIKeyboardLayoutStar Preview").allElementsBoundByIndex
+            guard field.isHittable && !keyboardLayouts.contains(where: { $0.frame.contains(tapPoint) }) else {
+                return false
+            }
+        }
+        field.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.5)).auditTap()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let focused = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "hasKeyboardFocus == true"), object: field
+            )
+            guard XCTWaiter.wait(for: [focused], timeout: 3) == .completed else { return false }
+        }
+        let existing = (field.value as? String) ?? ""
+        if !existing.isEmpty && existing != field.placeholderValue {
+            field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: existing.count))
+            guard (field.value as? String).map({ $0.isEmpty || $0 == field.placeholderValue }) == true else {
+                return false
+            }
+        }
+        field.typeText(replacement)
+        return (field.value as? String) == replacement
+    }
+
+    private func dismissNumberPadBeforeNextFieldOnIPad() {
+        guard UIDevice.current.userInterfaceIdiom == .pad else { return }
+        let done = app.buttons["exercise-default-keyboard-done"].firstMatch
+        XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable,
+                      "Numeric input must offer a reachable explicit Done action")
+        done.auditTap()
+        let keyboard = app.keyboards.firstMatch
+        let dismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: keyboard
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed,
+                       "Done clears numeric focus before the next action")
+    }
+
     private func openExerciseDefaults() {
         openSettings()
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowExerciseDefaults, maxSwipes: 12),

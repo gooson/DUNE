@@ -8,6 +8,7 @@ struct ExerciseDefaultEditView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @Query(sort: \ExerciseDefaultRecord.lastUsedDate, order: .reverse)
     private var allDefaults: [ExerciseDefaultRecord]
@@ -16,6 +17,7 @@ struct ExerciseDefaultEditView: View {
     @State private var repsText: String = ""
     @State private var isManualOverride: Bool = false
     @State private var isPreferred: Bool = false
+    @FocusState private var isNumericInputFocused: Bool
     /// Correction #6/#11: Prevent duplicate saves on double-tap
     @State private var isSaving: Bool = false
     /// Correction #50: Confirmation before CloudKit delete
@@ -41,25 +43,31 @@ struct ExerciseDefaultEditView: View {
         Form {
             Section {
                 if supportsWeight {
-                    HStack {
+                    inputRowLayout {
                         Label("Default Weight", systemImage: "scalemass")
-                        Spacer()
+                        if !dynamicTypeSize.isAccessibilitySize {
+                            Spacer(minLength: DS.Spacing.sm)
+                        }
                         TextField("kg", text: $weightText)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
-                            .frame(width: 80)
+                            .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : 80)
+                            .focused($isNumericInputFocused)
                             .accessibilityIdentifier("exercise-default-edit-weight")
                     }
                 }
 
                 if exercise.inputType == .setsRepsWeight || exercise.inputType == .setsReps {
-                    HStack {
+                    inputRowLayout {
                         Label("Default Reps", systemImage: "repeat")
-                        Spacer()
+                        if !dynamicTypeSize.isAccessibilitySize {
+                            Spacer(minLength: DS.Spacing.sm)
+                        }
                         TextField("reps", text: $repsText)
                             .keyboardType(.numberPad)
                             .multilineTextAlignment(.trailing)
-                            .frame(width: 80)
+                            .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : 80)
+                            .focused($isNumericInputFocused)
                             .accessibilityIdentifier("exercise-default-edit-reps")
                     }
                 }
@@ -91,6 +99,19 @@ struct ExerciseDefaultEditView: View {
         .accessibilityIdentifier("exercise-default-edit-screen")
         .scrollContentBackground(.hidden)
         .background { DetailWaveBackground() }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if isNumericInputFocused {
+                HStack {
+                    Spacer()
+                    Button("Done") { isNumericInputFocused = false }
+                        .font(.body.weight(.semibold))
+                        .accessibilityIdentifier("exercise-default-keyboard-done")
+                }
+                .padding(.horizontal, DS.Spacing.lg)
+                .padding(.vertical, DS.Spacing.sm)
+                .background(.regularMaterial)
+            }
+        }
         .englishNavigationTitle("Exercise Default")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -117,6 +138,15 @@ struct ExerciseDefaultEditView: View {
         } message: {
             Text("This will remove the saved defaults and preferred status for \(exercise.localizedName). This change syncs across all your devices.")
         }
+    }
+
+    // MARK: - Layout
+
+    private func inputRowLayout<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return layout { content() }
     }
 
     // MARK: - Data
