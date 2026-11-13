@@ -5,6 +5,7 @@ import SwiftData
 struct UserCategoryManagementView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \UserCategory.sortOrder) private var categories: [UserCategory]
     @State private var showingAddSheet = false
     @State private var editingCategory: UserCategory?
@@ -19,11 +20,20 @@ struct UserCategoryManagementView: View {
                             .font(.caption)
                             .foregroundStyle(DS.Color.activity)
                             .frame(width: 24)
-                        Text(cat.displayName)
-                        Spacer()
-                        Text("Default")
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
+                        if dynamicTypeSize.isAccessibilitySize {
+                            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                                Text(cat.displayName)
+                                Text("Default")
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                        } else {
+                            Text(cat.displayName)
+                            Spacer()
+                            Text("Default")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
                     }
                 }
             }
@@ -47,6 +57,7 @@ struct UserCategoryManagementView: View {
                                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                                     Text(category.name)
                                         .foregroundStyle(theme.sandColor)
+                                        .fixedSize(horizontal: false, vertical: true)
                                     Text(category.defaultInputType.displayLabel)
                                         .font(.caption)
                                         .foregroundStyle(DS.Color.textSecondary)

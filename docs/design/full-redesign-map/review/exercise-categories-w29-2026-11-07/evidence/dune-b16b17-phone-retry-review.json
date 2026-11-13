@@ -1,0 +1,21 @@
+{
+  "status": "source-only eligible; native retry unexecuted",
+  "patch_sha256": "68d36bb845b4a73a99a219cdc24f6912b55abce6b75be7a48844aef00b43d65b",
+  "first_phone": {
+    "executed": 7,
+    "passed": 6,
+    "failed": 1
+  },
+  "retry_scope": [
+    "testVisualAuditWorkoutInsights",
+    "testVisualAuditUserCategoriesAtMaximumText"
+  ],
+  "review": "Normal Insights query adapts to native SegmentedControl/HStack and original Volume child; MAX menu and all downstream checks remain. W29 MAX new bounded reveal queries actual CollectionView and row Button (AX label contains long name); row owns exact name and input type StaticTexts in AX. Viewport clamps collection to window, below Categories navigation (maxY116) and above TabBar (minY873), 4-point vertical inset. 507.7-point row fits roughly 749-point available viewport after scrolling. New distinct capture avoids promotion of first clipped passed capture. No app/fixture/shared helper changes. Rev3 makes TabBar mandatory only on Phone; iPad uses Categories navigation/window and excludes top or bottom tab only if AX exposes one. Original Phone viewport remains nav116 to tab873. Both-or-neither W32 split guard verified in private helper.",
+  "preexisting_gate_failure": "First Phone MAX method passed but named long row clipped below tab bar; retry is native visual gate remediation, not a prior XCTest fail.",
+  "risks": [
+    "A collection swipe may not expose the entire row; if bounded 12 swipes cannot produce full containment, W29 remains held.",
+    "Normal W32 remains failed until same-ID retry passes."
+  ],
+  "introduced_blockers": [],
+  "publisher": "W29 MAX fresh full-row title is required; old clipped first-run pair is diagnostic with selector_state passed/native_gate failed, not promoted."
+}
