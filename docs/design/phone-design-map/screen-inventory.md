@@ -60,6 +60,8 @@ SwiftUI View와 인라인 프레젠테이션 **110개**를 화면 단위로 대�
 
 ## 운동 · 계획 · 기록 (33)
 
+원래 배포 대기열의 **W34 AI 운동 빌더**는 W13 생성 Form 안의 `aiGenerationSection` 상태입니다. 별도 화면이나 경로로 세지 않습니다.
+
 | ID | 화면 | 진입 | 표시 방식 | 일반 iPhone | iPad | Duo | 코드 |
 |---|---|---|---|---|---|---|---|
 | W01 | 운동 목록 | 활동 최근 운동 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Exercise/ExerciseView.swift:10` |
@@ -75,7 +77,6 @@ SwiftUI View와 인라인 프레젠테이션 **110개**를 화면 단위로 대�
 | W11 | 운동 공유 | 운동 완료·기록 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/Components/ShareImageSheet.swift:10` |
 | W12 | 운동 템플릿 목록 | 운동 도구막대 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Exercise/Components/WorkoutTemplateListView.swift:4` |
 | W13 | 템플릿 편집 | 템플릿·추천 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/Components/CreateTemplateView.swift:13` |
-| W34 | AI 운동 빌더 (W13 내장 상태) | W13 생성 모드 | state | W13 Form 내부 | W13 Form 내부 | 생성 모드에서만 노출 · 별도 경로 없음 | `DUNE/Presentation/Exercise/Components/CreateTemplateView.swift:169` |
 | W14 | 템플릿 운동 선택 | 템플릿 편집 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/Components/CreateTemplateView.swift:551` |
 | W15 | 주간 운동 계획 | 템플릿 목록 | push | 상세 push · 한 열 | 적응형 두 pane | 접힘 후 pane 재배치 | `DUNE/Presentation/Exercise/WeeklyWorkoutPlanView.swift:4` |
 | W16 | 템플릿 운동 세션 | 템플릿 시작 | cover | 전체 화면 흐름 | 전체 화면 흐름 | 촬영·세션 상태 유지 | `DUNE/Presentation/Exercise/TemplateWorkoutContainerView.swift:16` |
