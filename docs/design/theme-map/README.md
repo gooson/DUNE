@@ -400,3 +400,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-07 S07: 정적 배치 계약과 실제 PNG/AX를 구분한다.
 
 2026-11-07 W32: 정적 배치 계약과 실제 PNG/AX를 구분한다.
+
+2026-11-14 W34 is the embedded W13 AI state, not a separate route. [Actual positive evidence and failed iPad MAX diagnostics](../full-redesign-map/review/ai-workout-builder-w34-2026-11-14/index.html) remain HELD; two MAX failures are preserved.

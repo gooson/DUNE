@@ -62,6 +62,8 @@ SwiftUI View와 인라인 프레젠테이션 **110개**를 화면 단위로 대�
 
 | ID | 화면 | 진입 | 표시 방식 | 일반 iPhone | iPad | Duo | 코드 |
 |---|---|---|---|---|---|---|---|
+원래 대기열 W34는 W13 생성 Form 내장 AI 상태이며 별도 화면으로 세지 않습니다. [배치 계약](../layout-map/ai-workout-builder-w34.html)을 따릅니다.
+
 | W01 | 운동 목록 | 활동 최근 운동 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Exercise/ExerciseView.swift:10` |
 | W02 | 운동 선택 | 활동 추가·운동 시작 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/Components/ExercisePickerView.swift:9` |
 | W03 | 운동 정보 | 운동 선택·추천 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/Components/ExerciseDetailSheet.swift:3` |
