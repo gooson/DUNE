@@ -13,6 +13,8 @@ status: native-source-implemented-pending-runtime-validation
 
 새 구현·실제 캡처의 검증 범위는 후속 계획에서 기록한다. 아래는 2026-10-31 첫 개편의 계약 이력이다.
 
+접근성 최대 글씨의 실제 캡처에서 장식 아이콘이 제목 폭을 차지해 단어가 나뉘는 문제를 확인했다. 접근성 글씨에서는 장식 아이콘을 생략해 제목·시각을 전체 폭으로 읽고, 측정 카드는 한 열로 표시한다.
+
 [보존한 브라우저 제안](../theme-map/themes/dune-notification-message-detail.html) · [알림함 배치](notification-inbox-proposal.md) · [실제 화면 맵](../phone-design-map/actual/index.html)
 
 ## 승인 시안과 실제 데이터

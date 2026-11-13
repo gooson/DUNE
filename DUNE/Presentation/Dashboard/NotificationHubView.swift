@@ -787,15 +787,17 @@ private struct NotificationMessageDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 HStack(alignment: .top, spacing: DS.Spacing.lg) {
-                    Image(systemName: insightType.settingsIcon)
-                        .font(.title2)
-                        .foregroundStyle(palette.heroAccent)
-                        .padding(DS.Spacing.md)
-                        .background(
-                            palette.muted.opacity(DS.Opacity.overlay),
-                            in: RoundedRectangle(cornerRadius: DS.Radius.lg)
-                        )
-                        .accessibilityHidden(true)
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Image(systemName: insightType.settingsIcon)
+                            .font(.title2)
+                            .foregroundStyle(palette.heroAccent)
+                            .padding(DS.Spacing.md)
+                            .background(
+                                palette.muted.opacity(DS.Opacity.overlay),
+                                in: RoundedRectangle(cornerRadius: DS.Radius.lg)
+                            )
+                            .accessibilityHidden(true)
+                    }
 
                     VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                         Text(title)

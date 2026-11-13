@@ -322,7 +322,7 @@ final class DesignMapNotificationDetailTests: SeededUITestBaseCase {
         let title = app.staticTexts["notification-message-title"].firstMatch
         let date = app.staticTexts["notification-message-date"].firstMatch
         XCTAssertEqual(title.label, bodyCompositionTitle)
-        XCTAssertEqual(date.label, bodyCompositionFixtureDate())
+        assertBodyCompositionFixtureDate(date.label)
         XCTAssertTrue(app.descendants(matching: .any)["notification-message-measurements"].firstMatch.exists)
         XCTAssertFalse(app.staticTexts["notification-message-body"].firstMatch.exists)
 
@@ -359,11 +359,13 @@ final class DesignMapNotificationDetailTests: SeededUITestBaseCase {
         let title = app.staticTexts["notification-message-title"].firstMatch
         let date = app.staticTexts["notification-message-date"].firstMatch
         XCTAssertEqual(title.label, bodyCompositionTitle)
-        XCTAssertEqual(date.label, bodyCompositionFixtureDate())
+        assertBodyCompositionFixtureDate(date.label)
         XCTAssertTrue(app.descendants(matching: .any)["notification-message-measurements"].firstMatch.exists)
         XCTAssertFalse(app.staticTexts["notification-message-body"].firstMatch.exists)
         revealDetailText(title, in: scroll, position: .whole)
         revealDetailText(date, in: scroll, position: .whole)
+        XCTAssertGreaterThan(title.frame.width, min(scroll.frame.width, 680) * 0.75,
+                             "Accessibility titles should use the reading width without a decorative icon column")
         VisualAudit.capture("T12 body composition dark maximum text header")
 
         let bmi = app.staticTexts["notification-measurement-value-0"].firstMatch
@@ -383,11 +385,19 @@ final class DesignMapNotificationDetailTests: SeededUITestBaseCase {
         tapBodyCompositionBack()
     }
 
-    private func bodyCompositionFixtureDate() -> String {
-        Date(timeIntervalSince1970: 1_794_645_780).formatted(
+    private func assertBodyCompositionFixtureDate(_ label: String) {
+        let date = Date(timeIntervalSince1970: 1_794_645_780)
+        let localized = date.formatted(
             .dateTime.year().month(.abbreviated).day().hour().minute()
                 .locale(Locale(identifier: "en_US"))
         )
+        // Text's environment also respects the device's 24-hour clock preference.
+        let clock24 = DateFormatter()
+        clock24.locale = Locale(identifier: "en_US_POSIX")
+        clock24.timeZone = .current
+        clock24.dateFormat = "MMM d, yyyy 'at' HH:mm"
+        XCTAssertTrue([localized, clock24.string(from: date)].contains(label),
+                      "The saved timestamp should respect either clock preference: \(label)")
     }
 
     private func tapBodyCompositionBack() {
