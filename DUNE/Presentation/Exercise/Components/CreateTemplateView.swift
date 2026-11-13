@@ -218,6 +218,7 @@ struct TemplateFormView: View {
         return VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             Text(entry.wrappedValue.exerciseName)
                 .font(.subheadline.weight(.medium))
+                .fixedSize(horizontal: false, vertical: true)
 
             if profile.showsStrengthDefaultsEditor {
                 strengthDefaultsEditor(entry: entry)
@@ -352,21 +353,28 @@ struct TemplateFormView: View {
     }
 
     private func sessionDrivenSummary(profile: TemplateExerciseProfile) -> some View {
-        HStack(spacing: DS.Spacing.sm) {
+        let summaryLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+        return summaryLayout {
             Text(profile.primarySummaryLabel)
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(DS.Color.textSecondary)
+                .fixedSize(horizontal: false, vertical: dynamicTypeSize.isAccessibilitySize)
 
             if let secondary = profile.secondarySummaryLabel {
-                Text("\u{00B7}")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Text("\u{00B7}")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
                 Text(secondary)
                     .font(.caption)
                     .foregroundStyle(.tertiary)
+                    .fixedSize(horizontal: false, vertical: dynamicTypeSize.isAccessibilitySize)
             }
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
         }
     }
 
