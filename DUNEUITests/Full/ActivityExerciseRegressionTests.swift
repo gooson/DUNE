@@ -3920,7 +3920,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 let endY: CGFloat = moveUp ? startY - fraction : startY + fraction
                 form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
                     .press(forDuration: 0.05, thenDragTo: form.coordinate(
-                        withNormalizedOffset: CGVector(dx: 0.5, dy: endY)))
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: endY)),
+                        withVelocity: XCUIGestureVelocity(rawValue: 80),
+                        thenHoldForDuration: 0.35)
             }
             let viewport = visibleFormViewport()
             XCTAssertTrue(generate.isHittable
