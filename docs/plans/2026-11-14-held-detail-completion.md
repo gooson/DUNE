@@ -27,3 +27,13 @@ Review staged diff independently using canonical agent roles; resolve findings, 
 ## Risks and edges
 
 NavigationStack ownership, MAX clipping despite AX existence, floating number pad focus, fixed footer/tab occlusion, native menu accessibility type, unsupported simulator Apple Intelligence, Duo migration/display readback. No relaxed assertion or fake state to pass. Prior captures dated2026-11-07 are historical, fresh captures carry actual execution date. Watch/notification #987 scope is baseline and not retested without impact.
+
+## Prepared checkpoint; completion gates remain open
+
+All16 source candidates are committed on `codex/held-detail-completion`; no additional screen merged in this continuation (31 complete,16 remain). All app/UI-test targets compiled in sourcef7bc00cb2. W34 Phone normal/MAX passed2/2; iPad normal passed in the first iPad run; iPad MAX first and same-ID retry failed whole Generate+availability containment. Original failures remain closed. Sourcee590df822 changes only that iPad MAX drag to80px/s plus0.35s end hold, syntax checked but unexecuted. W34 is isolated as HELD draft#988, source/docs review complete; it must not merge with the required native gate open.
+
+Two remaining iPad raw SDKs (168 files) are archived outside the worktree with SHA-256 equality. The first Phone xcresult was not archived before subsequent runs and is no longer present in the current Xcode log directory; cause/recovery is unconfirmed. Its original PNG/AX, export manifest, complete test log, passed receipt and pipeline log/hash remain. Do not claim all raw bundles survived. Archive each future SDK immediately before the next run rather than relying on retention in DerivedData. This Phone SDK absence does not establish the cause/recovery of original l03/batch04 loss.
+
+Two duplicate exported MP4s (227216818bytes) were removed only after preserving/validating their original iPad SDKs. Both owned devices are Shutdown; no heavy execution remains. Keep the one incremental UI cache for the authorized pending grouped checks; do not touch other worktree/main caches or devices. Existing folder was reused, no new worktree added.
+
+Latest user-input question supersedes earlier two questions and requests one additional attempt per modified required check across all16, including newly-closed W34. H08 original count stays unknown/closed; P03’s original2+spent approved extra remain. Until explicit answer arrives, do not replay closed families under new IDs. Continue with first5 shared More/Categories group after authorization; reuse valid unchanged evidence and share compile, then per-screen review/docs/PR/normal merge. No whole regression is required.
