@@ -550,6 +550,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
     func testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow() throws {
         openInjuryFormFromToolbar()
+        VisualAudit.capture("H08 add initial form")
 
         let recoveredToggle = app.descendants(matching: .any)[AXID.injuryFormRecoveredToggle].firstMatch
         XCTAssertTrue(recoveredToggle.waitForExistence(timeout: 5), "Recovered toggle should exist")
@@ -562,9 +563,16 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             app.scrollToInjuryEndDateIfNeeded(maxSwipes: 4, timeoutPerCheck: 1.5),
             "End date should appear after enabling recovered"
         )
+        let endDateRow = app.cells.containing(.staticText, identifier: AXID.injuryFormEndDate).firstMatch
+        XCTAssertTrue(revealInjuryFormElement(endDateRow), "The complete End Date row must be visible")
+        VisualAudit.capture("H08 add recovered end date")
 
         let saveButton = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Injury save button should exist")
+        let cancelButton = app.descendants(matching: .any)[AXID.injuryFormCancel].firstMatch
+        let windowFrame = app.windows.firstMatch.frame
+        XCTAssertTrue(saveButton.isEnabled && saveButton.isHittable && windowFrame.contains(saveButton.frame))
+        XCTAssertTrue(cancelButton.exists && cancelButton.isHittable && windowFrame.contains(cancelButton.frame))
         saveButton.auditTap()
 
         let form = app.descendants(matching: .any)[AXID.injuryFormScreen].firstMatch
@@ -726,6 +734,133 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("H09 MAX recovered Shoulder whole row")
     }
 
+    func testInjuryFormAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName",
+            "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+        openInjuryFormFromToolbar()
+
+        let form = app.descendants(matching: .any)[AXID.injuryFormScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let cancel = app.descendants(matching: .any)[AXID.injuryFormCancel].firstMatch
+        let save = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isEnabled && cancel.isHittable)
+        XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isEnabled && save.isHittable)
+        VisualAudit.capture("H08 MAX add title and actions")
+
+        let location = app.descendants(matching: .any)[AXID.injuryFormBodyPart].firstMatch
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormBodyPart), "Location must fit and be reachable")
+        XCTAssertTrue(location.isEnabled)
+        VisualAudit.capture("H08 MAX body part")
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormSide), "Default Knee Side must fit")
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryFormSide].firstMatch.isEnabled)
+        VisualAudit.capture("H08 MAX side")
+        for severity in ["minor", "moderate", "severe"] {
+            let identifier = "injury-form-severity-\(severity)"
+            XCTAssertTrue(revealInjuryFormControl(identifier), "Each severity must fit and be reachable")
+            XCTAssertTrue(app.descendants(matching: .any)[identifier].firstMatch.isEnabled)
+            VisualAudit.capture("H08 MAX severity \(severity)")
+        }
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormStartDate), "Start Date must fit")
+        VisualAudit.capture("H08 MAX start date")
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormRecoveredToggle), "Recovered must fit")
+        XCTAssertTrue(app.setSwitch(AXID.injuryFormRecoveredToggle, to: true, fallbackLabel: "Recovered"))
+        XCTAssertTrue(app.scrollToInjuryEndDateIfNeeded(maxSwipes: 8, timeoutPerCheck: 1))
+        let endDateRow = app.cells.containing(.staticText, identifier: AXID.injuryFormEndDate).firstMatch
+        XCTAssertTrue(revealInjuryFormElement(endDateRow), "The complete MAX End Date row must be visible")
+        VisualAudit.capture("H08 MAX recovered end date")
+
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormMemo), "Memo must fit")
+        let memo = app.descendants(matching: .any)[AXID.injuryFormMemo].firstMatch
+        XCTAssertTrue(memo.isEnabled && memo.isHittable)
+        memo.auditTap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5), "Software keyboard must appear")
+        VisualAudit.capture("H08 MAX memo software keyboard")
+        let keyboard = app.keyboards.firstMatch
+        let formScroll = app.collectionViews.firstMatch
+        XCTAssertTrue(formScroll.exists && formScroll.isHittable)
+        for _ in 0..<2 {
+            if !keyboard.exists { break }
+            let window = app.windows.firstMatch
+            let viewport = formScroll.frame.intersection(window.frame)
+            let keyboardFrame = keyboard.frame.intersection(window.frame)
+            XCTAssertGreaterThan(keyboardFrame.minY, viewport.minY, "A visible Form region must remain above the keyboard")
+            let startY = (viewport.minY + keyboardFrame.minY) / 2
+            XCTAssertGreaterThan(keyboardFrame.midY, startY, "Keyboard dismissal must drag downward inside the window")
+            let origin = window.coordinate(withNormalizedOffset: .zero)
+            let start = origin.withOffset(CGVector(
+                dx: viewport.midX - window.frame.minX,
+                dy: startY - window.frame.minY
+            ))
+            let end = origin.withOffset(CGVector(
+                dx: viewport.midX - window.frame.minX,
+                dy: keyboardFrame.midY - window.frame.minY
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+            if keyboard.waitForNonExistence(timeout: 2) { break }
+        }
+        XCTAssertFalse(app.keyboards.firstMatch.exists)
+        XCTAssertTrue(save.isEnabled && save.isHittable && app.windows.firstMatch.frame.contains(save.frame))
+        XCTAssertTrue(cancel.isEnabled && cancel.isHittable && app.windows.firstMatch.frame.contains(cancel.frame))
+        VisualAudit.capture("H08 MAX Save and Cancel after keyboard dismissal")
+        save.auditTap()
+        XCTAssertTrue(form.waitForNonExistence(timeout: 10), "Save must dismiss the MAX form")
+        openInjuryHistory()
+        let rows = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "identifier BEGINSWITH %@", "injury-history-row-"))
+        XCTAssertGreaterThanOrEqual(rows.count, 2, "MAX Save must create a history row")
+    }
+
+    private func revealInjuryFormControl(_ identifier: String, maxMoves: Int = 12) -> Bool {
+        let target = app.descendants(matching: .any)[identifier].firstMatch
+        return revealInjuryFormElement(target, maxMoves: maxMoves)
+    }
+
+    private func revealInjuryFormElement(_ target: XCUIElement, maxMoves: Int = 12) -> Bool {
+        let containers = app.collectionViews.allElementsBoundByIndex
+            + app.tables.allElementsBoundByIndex
+            + app.scrollViews.allElementsBoundByIndex
+        guard let scroll = containers.first(where: { $0.exists && $0.isHittable }) else { return false }
+        func visibleViewport() -> CGRect {
+            let frame = scroll.frame.intersection(app.windows.firstMatch.frame)
+            guard frame.width > 0 && frame.height > 0 else { return .null }
+            var top = frame.minY
+            var bottom = frame.maxY
+            let navigationBar = app.navigationBars.firstMatch
+            if navigationBar.exists && navigationBar.isHittable && navigationBar.frame.intersects(frame)
+                && navigationBar.frame.minY < frame.midY {
+                top = max(top, navigationBar.frame.maxY)
+            }
+            let keyboard = app.keyboards.firstMatch
+            if keyboard.exists && keyboard.isHittable && keyboard.frame.intersects(frame)
+                && keyboard.frame.minY > frame.midY {
+                bottom = min(bottom, keyboard.frame.minY)
+            }
+            return CGRect(x: frame.minX, y: top, width: frame.width, height: max(0, bottom - top))
+        }
+        for _ in 0..<maxMoves {
+            let viewport = visibleViewport()
+            guard viewport.width > 0 && viewport.height > 0 else { return false }
+            if target.exists && target.isHittable && viewport.contains(target.frame) { return true }
+            let delta = target.exists ? target.frame.midY - viewport.midY : viewport.height
+            if target.exists && abs(delta) < 1 { return false }
+            let distance = min(max(abs(delta), viewport.height * 0.2), viewport.height * 0.65)
+            let fraction = distance / scroll.frame.height
+            let startY: CGFloat = delta < 0 ? 0.3 : 0.7
+            let endY = startY + (delta < 0 ? fraction : -fraction)
+            scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
+                    withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
+                ))
+        }
+        let viewport = visibleViewport()
+        return target.exists && target.isHittable && viewport.contains(target.frame)
+    }
+
     func testInjuryStatisticsRouteOpensFromHistory() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments += ["--ui-injury-history-fixture"]
@@ -812,9 +947,11 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
     private func openInjuryFormFromToolbar() {
         ensureWellnessRoot()
-        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
-        XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Wellness add menu should exist")
-        addMenu.auditTap()
+        guard app.waitAndTapToolbarAction("Add record") else {
+            VisualAudit.capture("H08 Add record route unavailable")
+            XCTFail("Wellness Add record must be reachable before choosing Injury")
+            return
+        }
 
         let injuryButton = app.descendants(matching: .any)[AXID.wellnessMenuInjury].firstMatch
         XCTAssertTrue(injuryButton.waitForExistence(timeout: 5), "Injury menu action should exist")
@@ -1047,8 +1184,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     func testPostureComparison() throws {
         openHistory()
-        XCTAssertTrue(app.waitAndTapToolbarAction("Compare"),
-                      "Compare must remain reachable directly or through native toolbar overflow")
+        openPostureHistoryComparisonMenuAction()
         let metrics = app.staticTexts.matching(NSPredicate(
             format: "identifier BEGINSWITH %@ AND label == %@",
             "posture-history-row-metric-count-", "8 metrics"
@@ -1407,6 +1543,207 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         reveal(link)
         link.auditTap()
         XCTAssertTrue(app.scrollViews["posture-symmetry-screen"].firstMatch.waitForExistence(timeout: 5))
+    }
+
+    func testP02RealtimeFallbackAndP03ExerciseSelection() throws {
+        openPostureRoute("wellness-menu-realtime-posture")
+        let fallback = app.descendants(matching: .any)["realtime-camera-unavailable"].firstMatch
+        XCTAssertTrue(fallback.waitForExistence(timeout: 10), "Simulator camera fallback should be visible")
+        let retry = app.buttons["realtime-camera-retry"].firstMatch
+        XCTAssertTrue(retry.exists && retry.isHittable)
+        VisualAudit.capture("P02 camera unavailable and exercise entry")
+
+        retry.tap()
+        XCTAssertTrue(fallback.waitForExistence(timeout: 5), "Camera retry remains unavailable on simulator")
+        let mode = app.buttons["realtime-exercise-picker-button"].firstMatch
+        XCTAssertTrue(mode.exists && mode.isHittable, "Picker remains available without camera")
+        mode.tap()
+        let list = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        let general = app.buttons["posture-exercise-general"].firstMatch
+        XCTAssertTrue(general.isSelected, "General mode starts selected")
+        VisualAudit.capture("P03 General Posture selected")
+
+        let squat = app.buttons["posture-exercise-barbell-squat"].firstMatch
+        XCTAssertTrue(squat.exists && squat.isHittable)
+        squat.tap()
+        XCTAssertTrue(mode.waitForExistence(timeout: 5))
+        XCTAssertEqual(mode.value as? String, "barbell-squat")
+        mode.tap()
+        XCTAssertTrue(squat.waitForExistence(timeout: 5) && squat.isSelected)
+        XCTAssertFalse(general.isSelected)
+        VisualAudit.capture("P03 barbell squat selection retained on reopen")
+
+        general.tap()
+        XCTAssertEqual(mode.value as? String, "general")
+        mode.tap()
+        XCTAssertTrue(general.waitForExistence(timeout: 5) && general.isSelected)
+        VisualAudit.capture("P03 General Posture restored")
+        app.buttons["posture-exercise-close"].tap()
+        XCTAssertTrue(mode.waitForExistence(timeout: 5))
+        app.buttons["realtime-posture-close"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch
+            .waitForExistence(timeout: 5))
+    }
+
+    func testP03ExerciseListAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        openPostureRoute("wellness-menu-realtime-posture")
+        app.buttons["realtime-exercise-picker-button"].tap()
+        let list = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        VisualAudit.capture("P03 MAX General Posture and first exercise")
+        let last = app.buttons["posture-exercise-lunge"].firstMatch
+        XCTAssertTrue(revealExerciseRow(last, in: list), "Last exercise must fit in the visible list at MAX")
+        VisualAudit.capture("P03 MAX final exercise reachable by scrolling")
+        last.tap()
+        let mode = app.buttons["realtime-exercise-picker-button"].firstMatch
+        XCTAssertEqual(mode.value as? String, "lunge")
+        mode.tap()
+        let reopenedList = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(reopenedList.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealExerciseRow(last, in: reopenedList), "Selected final row must remain reachable")
+        XCTAssertTrue(last.isSelected)
+        VisualAudit.capture("P03 MAX final exercise selected on reopen")
+        let close = app.buttons["posture-exercise-close"].firstMatch
+        XCTAssertTrue(close.exists && close.isHittable
+                      && app.windows.firstMatch.frame.contains(close.frame),
+                      "MAX Close must fit outside the scrolling list")
+        close.tap()
+        XCTAssertTrue(reopenedList.waitForNonExistence(timeout: 5), "Close must dismiss the exercise list")
+        XCTAssertTrue(mode.waitForExistence(timeout: 5) && mode.isHittable)
+        XCTAssertEqual(mode.value as? String, "lunge", "Close must preserve the selected exercise")
+    }
+
+    private func revealExerciseRow(_ row: XCUIElement, in list: XCUIElement) -> Bool {
+        for _ in 0..<12 {
+            let viewport = list.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+            if row.exists && row.isHittable && viewport.contains(row.frame) { return true }
+            if row.exists && row.frame.midY < viewport.midY {
+                list.swipeDown(velocity: .slow)
+            } else {
+                list.swipeUp(velocity: .slow)
+            }
+        }
+        let viewport = list.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+        return row.exists && row.isHittable && viewport.contains(row.frame)
+    }
+
+    func testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom() throws {
+        openSeededComparison()
+        let photos = app.scrollViews["posture-comparison-photos-scroll"].firstMatch
+        let metrics = app.scrollViews["posture-comparison-metrics-scroll"].firstMatch
+        XCTAssertTrue(photos.waitForExistence(timeout: 5) && metrics.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["73"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["86"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["+13"].firstMatch.exists)
+        for offset in [14, 1] {
+            let date = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -offset, to: .now))
+                .formatted(Date.FormatStyle.dateTime.month(.abbreviated).day()
+                    .locale(Locale(identifier: "en_US")))
+            XCTAssertTrue(app.staticTexts[date].firstMatch.exists, "Keep both fixture dates")
+        }
+        VisualAudit.capture("P08 actual older and newer score delta")
+
+        let front = app.descendants(matching: .any)["posture-comparison-photo-front-older"].firstMatch
+        XCTAssertTrue(front.waitForExistence(timeout: 5))
+        let window = app.windows.firstMatch
+        for _ in 0..<12 {
+            let viewport = photos.frame.intersection(window.frame).insetBy(dx: 6, dy: 6)
+            let visible = front.frame.intersection(viewport)
+            if front.isHittable && !visible.isNull && visible.width >= 24 && visible.height >= 24 {
+                break
+            }
+            let startY: CGFloat = front.frame.midY > viewport.midY ? 0.65 : 0.35
+            let endY: CGFloat = front.frame.midY > viewport.midY ? 0.35 : 0.65
+            let start = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+            let end = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        let visible = front.frame.intersection(
+            photos.frame.intersection(window.frame).insetBy(dx: 6, dy: 6))
+        guard front.isHittable && !visible.isNull && visible.width >= 24 && visible.height >= 24 else {
+            XCTFail("Front photo must have a 24-point tappable area inside its own visible pane before opening zoom")
+            return
+        }
+        let frontFrame = front.frame
+        let tapPoint = front.coordinate(withNormalizedOffset: CGVector(
+            dx: (visible.midX - frontFrame.minX) / frontFrame.width,
+            dy: (visible.midY - frontFrame.minY) / frontFrame.height))
+        tapPoint.auditTap()
+        XCTAssertTrue(app.navigationBars["Front"].firstMatch.waitForExistence(timeout: 5))
+        let close = app.navigationBars["Front"].buttons.firstMatch
+        XCTAssertTrue(close.exists && close.isHittable)
+        close.auditTap()
+        XCTAssertFalse(app.navigationBars["Front"].firstMatch.exists, "Close dismisses the zoom route")
+        XCTAssertTrue(photos.waitForExistence(timeout: 5), "Closing zoom returns to comparison")
+        metrics.swipeUp(velocity: .slow)
+        VisualAudit.capture("P08 lower metric comparison pane")
+    }
+
+    func testP08ComparisonAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openSeededComparison()
+        let photos = app.scrollViews["posture-comparison-photos-scroll"].firstMatch
+        let metrics = app.scrollViews["posture-comparison-metrics-scroll"].firstMatch
+        XCTAssertTrue(photos.waitForExistence(timeout: 5) && metrics.waitForExistence(timeout: 5))
+        for score in ["73", "86", "+13"] {
+            let value = app.staticTexts[score].firstMatch
+            XCTAssertTrue(value.waitForExistence(timeout: 5))
+            for _ in 0..<16 {
+                let viewport = photos.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                if value.isHittable && viewport.contains(value.frame) { break }
+                if value.frame.midY < viewport.midY { photos.swipeDown(velocity: .slow) }
+                else { photos.swipeUp(velocity: .slow) }
+            }
+            XCTAssertTrue(value.isHittable && photos.frame.intersection(app.windows.firstMatch.frame)
+                .insetBy(dx: 4, dy: 4).contains(value.frame),
+                          "The whole score text must fit in its own pane: \(score)")
+            VisualAudit.capture("P08 MAX visible comparison score \(score)")
+        }
+        metrics.swipeUp(velocity: .slow)
+        XCTAssertTrue(metrics.isHittable, "MAX metric pane remains independently scrollable")
+        VisualAudit.capture("P08 MAX score and two panes")
+    }
+
+    private func openPostureHistoryComparisonMenuAction() {
+        let menu = app.buttons["posture-history-actions-menu"].firstMatch
+        guard menu.waitForExistence(timeout: 5), menu.isHittable else {
+            XCTFail("The explicit posture actions menu must be reachable")
+            return
+        }
+        menu.auditTap()
+        let compare = app.buttons["posture-history-compare-button"].firstMatch
+        XCTAssertTrue(compare.waitForExistence(timeout: 5) && compare.isHittable)
+        XCTAssertEqual(compare.label, "Compare")
+        compare.auditTap()
+    }
+
+    private func openSeededComparison() {
+        openHistory()
+        openPostureHistoryComparisonMenuAction()
+        let metrics = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND label == %@",
+            "posture-history-row-metric-count-", "8 metrics"
+        ))
+        XCTAssertEqual(metrics.count, 2)
+        for index in 0..<2 {
+            let metric = metrics.element(boundBy: index)
+            reveal(metric)
+            metric.auditTap()
+        }
+        let selected = app.buttons["Compare Selected"].firstMatch
+        reveal(selected)
+        selected.auditTap()
+        XCTAssertTrue(app.navigationBars["Comparison"].firstMatch.waitForExistence(timeout: 5))
     }
 
     private func openHistory(maxRevealAttempts: Int = 18) {
