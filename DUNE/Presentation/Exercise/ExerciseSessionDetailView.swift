@@ -64,6 +64,20 @@ struct ExerciseSessionDetailView: View {
         .task {
             await loadHeartRate()
         }
+        // Keep presentation ownership stable when an inspector changes width.
+        .sheet(isPresented: $isCompactHistoryPresented) {
+            if let defID = record.exerciseDefinitionID, !defID.isEmpty {
+                NavigationStack {
+                    ExerciseHistoryView(exerciseDefinitionID: defID, exerciseName: record.exerciseType)
+                        .toolbar {
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Done") { isCompactHistoryPresented = false }
+                                    .accessibilityIdentifier("exercise-history-close")
+                            }
+                        }
+                }
+            }
+        }
     }
 
     // MARK: - Header
@@ -406,17 +420,7 @@ struct ExerciseSessionDetailView: View {
                 Button { isCompactHistoryPresented = true } label: { historyLinkLabel }
                     .buttonStyle(.plain)
                     .accessibilityIdentifier("exercise-session-view-history")
-                    .sheet(isPresented: $isCompactHistoryPresented) {
-                        NavigationStack {
-                            ExerciseHistoryView(exerciseDefinitionID: defID, exerciseName: record.exerciseType)
-                                .toolbar {
-                                    ToolbarItem(placement: .confirmationAction) {
-                                        Button("Done") { isCompactHistoryPresented = false }
-                                            .accessibilityIdentifier("exercise-history-close")
-                                    }
-                                }
-                        }
-                    }
+
             } else {
                 NavigationLink {
                     ExerciseHistoryView(exerciseDefinitionID: defID, exerciseName: record.exerciseType)
