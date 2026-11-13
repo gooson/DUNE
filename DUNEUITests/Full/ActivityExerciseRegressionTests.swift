@@ -3871,6 +3871,26 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let generate = app.buttons[AXID.templateFormAIGenerate].firstMatch
         let availability = app.staticTexts["template-form-ai-availability"].firstMatch
         XCTAssertTrue(prompt.waitForExistence(timeout: 5))
+        func revealPromptAndCapture(_ caption: String) {
+            for _ in 0..<12 {
+                let frame = form.frame.intersection(app.windows.firstMatch.frame)
+                let keyboard = app.keyboards.firstMatch
+                let bottom = keyboard.exists ? min(frame.maxY, keyboard.frame.minY) : frame.maxY
+                let viewport = CGRect(x: frame.minX + 8, y: frame.minY + 12,
+                                      width: max(0, frame.width - 16),
+                                      height: max(0, bottom - frame.minY - 24))
+                if prompt.isHittable && viewport.contains(prompt.frame) {
+                    VisualAudit.capture(caption)
+                    return
+                }
+                let down = prompt.frame.midY < viewport.midY
+                form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: down ? 0.4 : 0.65))
+                    .press(forDuration: 0.05, thenDragTo: form.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: down ? 0.65 : 0.4)))
+            }
+            XCTFail("W34 prompt must fit wholly above the keyboard inside its own Form")
+        }
+        revealPromptAndCapture("W34 \(size) empty full prompt")
         XCTAssertTrue(generate.waitForExistence(timeout: 5) && !generate.isEnabled,
                       "An empty prompt keeps Generate Template disabled")
         XCTAssertTrue(availability.waitForExistence(timeout: 5))
@@ -3896,7 +3916,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(app.fillTextInput(AXID.templateFormAIPrompt, with: "30 minute shoulder workout"))
         XCTAssertEqual(generate.isEnabled, supportsGeneration,
                        "Prompt enables generation only on supported devices")
-        VisualAudit.capture("W34 \(size) filled AI prompt and supported state")
+        revealPromptAndCapture("W34 \(size) filled full prompt and supported state")
         let cancel = app.buttons[AXID.templateFormCancel].firstMatch
         XCTAssertTrue(cancel.waitForExistence(timeout: 5))
         cancel.auditTap()
