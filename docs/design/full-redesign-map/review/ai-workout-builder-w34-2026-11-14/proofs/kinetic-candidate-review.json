@@ -1,0 +1,11 @@
+{
+  "diagnosis": "Second iPad MAX PNG/AX shows Generate y301.5–462 and availability y462–645.5. Both fit vertically in the sheet, but Generate begins 23.5pt above the nav-safe viewport y325. Prior position after first failure had availability ending y958, 61pt below viewport y897. The default-velocity short drags overshot between these two states rather than finding the feasible middle.",
+  "candidate": "Only iPad MAX conditional drag call adds explicit XCUIGestureVelocity(rawValue:80) and thenHoldForDuration:0.35. The measured overflow/union target, nav-aware viewport, bounded drag count, and final entire-union containment plus hittability assertion remain unchanged.",
+  "api_source": "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCUIAutomation.framework/Headers/XCUICoordinate.h:46",
+  "validation": [
+    "git apply --check passed on 6ad8445ac",
+    "swiftc -frontend -parse passed candidate test file",
+    "no SDK/build/test/simulator/device/process or app source changes"
+  ],
+  "execution_gate": "Prior iPad MAX first and same-ID retry failed; this private candidate has no native outcome. No third retry is authorized by old limit. Root may make a reviewable held draft, but do not claim native closure or ship from this source-only review."
+}
