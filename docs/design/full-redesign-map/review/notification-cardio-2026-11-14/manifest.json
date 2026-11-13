@@ -1,6 +1,6 @@
 {
   "date": "2026-11-14",
-  "scope": "T12 saved body composition and general messages; iPhone normal/dark MAX and iPad normal. Duo closed passed; open capture unavailable because active display remains LCD after reviewed setter. Watch final verification awaiting explicit retry exception.",
+  "scope": "T12 saved body composition and general messages; iPhone normal/dark MAX and iPad normal. Duo closed passed; open capture unavailable because active display remains LCD after reviewed setter. Watch C01/C02 final 40mm layouts captured; running six-zone, stairs six-zone and nil-HR3/3 passed in one user-approved additional run.",
   "captures": [
     {
       "device": "iphone",
@@ -163,17 +163,57 @@
         1398,
         2034
       ]
+    },
+    {
+      "device": "watch",
+      "screen": "C01",
+      "action": "Running time-first metrics with six zones",
+      "file": "assets/watch-C01.png",
+      "test": "WatchWorkoutFlowSmokeTests/testRunningDistanceShowsPersonalizedZoneCount()",
+      "timestamp": 1794589871.54,
+      "timestamp_kind": "native-XCTest-attachment",
+      "device_name": "Apple Watch SE 3 (40mm)-wt-Health-detail-posture-b05-b88b6a4ff04b",
+      "device_udid": "A11886D2-F5F9-4CC6-BE82-F8E9112FD01E",
+      "sha256": "e37f4364c8dfa2a13474aeb1af368e35494cec595fb2970fe18f5c506fa472bc",
+      "source_export": "watch-approved-export",
+      "status": "passed",
+      "source_revision": "7fc2db200f8a97efcab2adf68a135c051326f81d",
+      "pixel_size": [
+        324,
+        394
+      ],
+      "hierarchy": "not-collected-by-watch-capture-helper"
+    },
+    {
+      "device": "watch",
+      "screen": "C02",
+      "action": "Stair climber level and six zones",
+      "file": "assets/watch-C02.png",
+      "test": "WatchWorkoutFlowSmokeTests/testStairTimeFirstMetricsShowsPersonalizedHeartRateZone()",
+      "timestamp": 1794589911.522,
+      "timestamp_kind": "native-XCTest-attachment",
+      "device_name": "Apple Watch SE 3 (40mm)-wt-Health-detail-posture-b05-b88b6a4ff04b",
+      "device_udid": "A11886D2-F5F9-4CC6-BE82-F8E9112FD01E",
+      "sha256": "243a63ad6b73f5d0ff5c5fe22988fe0b9e52e72dd747994ee49bd607c89e4e68",
+      "source_export": "watch-approved-export",
+      "status": "passed",
+      "source_revision": "7fc2db200f8a97efcab2adf68a135c051326f81d",
+      "pixel_size": [
+        324,
+        394
+      ],
+      "hierarchy": "not-collected-by-watch-capture-helper"
     }
   ],
   "limits": [
     "English iPhone/iPad fixtures; no claims for all languages/themes.",
     "iPhone captured from working diff before63022ff33; relevant T12 app/test content equivalent to that commit.",
-    "Watch prior C01/C02 overlap captures are diagnostic; final inline metric layout is not yet verified."
+    "Watch default text on SE3 40mm only; no large-text/AOD/VoiceOver native session. Nil-HR selector passed; its screenshot was not captured."
   ],
   "watch": {
-    "source_commit": "d21d0b31d",
+    "source_commit": "7fc2db200f8a97efcab2adf68a135c051326f81d",
     "build_for_testing": "passed",
-    "native_ui_status": "awaiting-user-retry-exception",
+    "native_ui_status": "passed-targeted-3",
     "affected_ids": [
       "C01",
       "C02"
@@ -181,7 +221,9 @@
     "source_sha256": {
       "DUNEWatch/Views/Cardio/CardioMainMetricsPage.swift": "4e22d5d4178108f276d0d7d6f9a191018f245ceb33c51309877d241a90b7ad1d",
       "DUNEWatchUITests/Smoke/WatchWorkoutFlowSmokeTests.swift": "985703831ef1feb534478330076d1d27fe1f48658d93d46309e8fa19befda7f4"
-    }
+    },
+    "receipt": "proofs/watch-approved-result.json",
+    "user_approved_additional_executions": 1
   },
   "ios_source_hashes": {
     "DUNE/Presentation/Dashboard/NotificationHubView.swift": "8c62108ca990c79e32d6955863920392d6a9581360b9f7cb387f2fb1e1474ddb",

@@ -9,7 +9,7 @@ status: in-progress
 
 2026-11-14 [T12 수치 강조 후속 시안](themes/dune-notification-message-reading.html)은 작은 헤더·실제 저장 시각과 체성분 값 카드를 제안한다. [Watch 유산소 현재 존 시안](themes/dune-watch-cardio-time-zone.html)은 시간 우선 계단·유산소 화면에 러닝과 같은 존 번호·가변 구간 막대를 통합한다. 두 HTML은 설명용 예시이며 실제 앱 캡처는 별도로 보존한다.
 
-[새 실제 화면과 검증 범위](../full-redesign-map/review/notification-cardio-2026-11-14/index.html)에 T12의 iPhone 기본·다크 최대 글씨와 iPad·Duo 접힘을 보존했다. Duo 펼침은 실제 활성 화면 전환이 확인되지 않아 미갱신이다. Watch C01·C02는 최종 한 줄 지표 보정의 native 검증 승인 대기이며 시안을 완료 캡처로 표시하지 않는다.
+[새 실제 화면과 검증 범위](../full-redesign-map/review/notification-cardio-2026-11-14/index.html)에 T12의 iPhone 기본·다크 최대 글씨와 iPad·Duo 접힘을 보존했다. Duo 펼침은 실제 활성 화면 전환이 확인되지 않아 미갱신이다. Watch C01·C02는 40mm 최종 native2장을 갱신했으며 관련 UI3/3을 통과했다. 큰 글씨·AOD·VoiceOver는 별도 미검증이다.
 
 ## H07·P06 자세 기록 상세 · 2026-11-05
 

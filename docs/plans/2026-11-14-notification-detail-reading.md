@@ -2,7 +2,7 @@
 tags: [notification, T12, readability, body-composition]
 date: 2026-11-14
 category: plan
-status: implementing
+status: implemented-with-capture-limit
 ---
 
 # T12 알림 상세 수치 강조
@@ -44,6 +44,5 @@ status: implementing
 - iPad 기본 1건, Duo 접힘 1건 통과. 접힘은 전후 LCD active와 7 checkpoint ACK를 확인했다. 숫자 힌지 각도는 현재 CLI로 측정되지 않았다.
 - [실제 PNG·AX와 출처](../design/full-redesign-map/review/notification-cardio-2026-11-14/index.html)에 완료한 T12만 출판했다. 기존 이미지·다른 화면의 출처를 유지한다.
 - Duo 펼침은 setter 이후 LCD active/LCD-1 inactive여서 UI 실행 전에 중단했다. 공식 CLI 도움말과 검토된 setter의 실제 결과를 확인했고 기기 허브 접근도 Mac 잠금으로 차단됐다. 펼침 T12는 미갱신이다.
-- 추가 Watch 요청은 C01·C02에 영향을 준다. 마지막 한 줄 레벨·거리/페이스 배치는 소스에 준비했으며 40mm의 native 재검증은 자동 재시도 한도를 적용해 사용자 예외 승인을 기다린다. Watch UI 게이트 통과를 주장하지 않는다.
-
-Watch 마지막 소스의 `DUNEWatchUITests` build-for-testing을 표준 실행기와 900초 deadline으로 확인했고 통과했다. 앱·UI 테스트 컴파일을 확인한 범위이며 UI 실행 승인은 대기 중이다.
+- 추가 Watch 요청 C01·C02: 사용자 승인 추가1회에서 러닝 시간 우선6존·계단6존·계단 미수신3개 UI 검사가 통과했다. 40mm 기본 글씨의 새2장과 출처를 실제 맵에 반영했고 하단 겹침 P2는 해소됐다. 큰 글씨·AOD·VoiceOver는 별도 미검증이다.
+- 이전 운동 카테고리3개 커밋은 원래 브랜치에 보존하고 이번 PR에서 제외했다. 실제 기준은 최신 `origin/main`이며 앱/seed/선택 테스트 소스7개는 이전 통과본과 바이트가 동일하다. 원문 분리 unit·알림 UI 증거를 재사용했다.

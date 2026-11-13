@@ -26,10 +26,10 @@ status: partial-verification
 
 시간 우선 유산소의 심박·현재 존·가변 구간 막대를 합쳤다. 칼로리는 상단에 두고 레벨 또는 거리·페이스/속도를 한 줄로 정리해 공간을 확보했다. 심박 미수신은 기존 `Zone --`와 비활성 막대로 표현한다.
 
-40mm의 이전 두 실행에서는 존 막대가 하단 페이지 점과 겹쳤다. 마지막 레벨·거리 행의 한 줄 보정은 Swift 구문 검사와 앱·UI 테스트 컴파일을 통과했고 최종 native 검증은 자동 재시도 한도에 따라 사용자 예외 승인을 기다린다. 이 상태를 UI 게이트 통과나 C01·C02 새 완료 캡처로 표시하지 않는다. 기존 C05–C07은 별도 보조 상세 페이지여서 이번 변경 화면 ID에 포함하지 않는다.
+40mm 이전 두 실행의 하단 겹침을 보존하고, 사용자가 승인한 추가1회에서 러닝 시간 우선·계단6존·계단 심박 미수신3개 검사가 모두 통과했다(실패0·skip0). 새 C01·C02 원본 PNG를 별도 최종 리뷰어와 주 에이전트가 확인했고 막대와 페이지 표시점 사이 간격을 확인했다. 레벨·거리/페이스·심박·존·칼로리가 첫 화면에 보인다. [기계 생성 실행 결과](proofs/watch-approved-result.json)를 보존했다.
 
-마지막 소스의 `DUNEWatchUITests` 표준 `build-for-testing`이 통과했다. [컴파일 결과 발췌](proofs/watch-build-excerpt.txt)를 보존했다. 최종 40mm UI 검증은 승인 대기다.
+기본 글씨의 Apple Watch SE3 40mm·watchOS27.2 범위다. C02 캡처는 한국어, C01은 러닝 명칭과 존이 영어다. 큰 글씨·Always-On·VoiceOver와 모든 언어·테마 조합은 검증하지 않았다. 심박 미수신 테스트는 통과했지만 별도 PNG를 저장하지 않았다. C05–C07은 별도 보조 페이지로 갱신 대상이 아니다. 이전 C01·C02 PNG는 `assets/watch-before-C01.png`, `assets/watch-before-C02.png`에 역사적 화면으로 보존했다.
 
 ## 원본 보존
 
-로컬 실행 로그·receipt·초기 실패 PNG와 내보낸 첨부 원본은 `.codex-checks/notification-cardio/evidence/`에 보존한다. 남아 있는 xcresult 원본 3개는 `.codex-checks/notification-cardio/original-xcresults/`로 원자 이동해 보관했다. 소유 시뮬레이터 4개와 완료된 빌드 캐시를 정리했으며 소유권·보관 기록은 `.codex-checks/notification-cardio/cache-cleanup.json`에 있다. 갤러리의 완료 캡처는 T12의 검증된 8장이다.
+로컬 실행 로그·receipt·초기 실패 PNG와 내보낸 첨부 원본은 `.codex-checks/notification-cardio/evidence/`에 보존한다. 남아 있는 xcresult 원본 3개는 `.codex-checks/notification-cardio/original-xcresults/`로 원자 이동해 보관했다. 소유 시뮬레이터 4개와 완료된 빌드 캐시를 정리했으며 소유권·보관 기록은 `.codex-checks/notification-cardio/cache-cleanup.json`에 있다. 최종 Watch 실행의 xcresult와 로그도 함께 보존한다. 갤러리의 새 완료 캡처는 T12 8장과 Watch2장이다.
