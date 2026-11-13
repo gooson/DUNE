@@ -129,6 +129,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(app.descendants(matching: .any)[AXID.healthkitWorkoutTitleEditorScreen].firstMatch
             .waitForExistence(timeout: 8))
         VisualAudit.capture("W28 \(size) title editor")
+        VisualAudit.capture("W33 \(size) workout name editor fresh")
         let cancel = app.buttons[AXID.healthkitWorkoutTitleCancel].firstMatch
         XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
         cancel.auditTap()
