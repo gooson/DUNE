@@ -1236,21 +1236,23 @@
     "T12": {
       "row_id": "T12",
       "evidence": "notification-message-detail-screen",
-      "test": "DUNEUITests/DesignMapNotificationDetailTests/testNotificationMessageDetail",
-      "action": "T12 notification message detail verified_0_F25A6D62-6917-4B1E-9B6A-CEBD3277957D.png",
-      "timestamp": 1793395708.887,
+      "test": "DUNEUITests/DesignMapNotificationDetailTests/testBodyCompositionNotificationDetail",
+      "action": "T12 body composition header and two cards",
+      "timestamp": 1794586292.077,
       "timestamp_kind": "native-XCTest-attachment",
-      "image": "6C34F89E-4E58-4AFE-B762-6559387B0970.png",
-      "screen": "T12 notification message detail verified_0_F25A6D62-6917-4B1E-9B6A-CEBD3277957D.png",
+      "image": "assets/iphone-01.png",
+      "screen": "T12 body composition header and two cards",
       "file": "T12.png",
-      "source_revision": "583dcaf1",
-      "source_worktree_dirty": false,
-      "device_udid": "340663C8-85BB-42D2-B4DA-E5D791121B8D",
-      "sha256": "e585fc34706d4f40a55c06a9ca6e05c28304b880cff3f09c26c5553f6d71571f",
-      "source_json": "../../../full-redesign-map/review/t12-notification-message-native-2026-11-02/evidence.json",
-      "source_record": "pairs.regular.after",
-      "capture_scope": "T12 exact stored title/body and native back; historical Phone normal+MAX separate from new normal cases",
-      "pose_readback_verified": false
+      "source_revision": "63022ff33",
+      "source_worktree_dirty": true,
+      "source_closure": "T12 iOS app and selected test source exact to63022ff33; whole worktree differs in Watch/docs",
+      "device_udid": "B53F5BC2-8AC1-4E39-A9AB-530186740918",
+      "sha256": "92d4add127cae5baabf2791ff79060713e17759c8f6a1521679f2937124a8860",
+      "source_json": "../../../full-redesign-map/review/notification-cardio-2026-11-14/manifest.json",
+      "source_record": "captures.0",
+      "capture_scope": "Body composition title/date/two exact values, native Back and hub return; English normal",
+      "pose_readback_verified": false,
+      "current_verification": "passed"
     },
     "P04": {
       "row_id": "P04",
@@ -1897,10 +1899,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+  "last_refresh_revision": "63022ff33",
   "last_refresh_screens": [
-    "H07",
-    "P06"
+    "T12"
   ],
-  "last_refresh_note": "Reviewed current native H07/P06; historical images in review gallery."
+  "last_refresh_note": "2026-11-14 T12 body composition native update; other rows preserve their original sources."
 }

@@ -7,6 +7,10 @@ status: in-progress
 
 # DUNE 테마 맵
 
+2026-11-14 [T12 수치 강조 후속 시안](themes/dune-notification-message-reading.html)은 작은 헤더·실제 저장 시각과 체성분 값 카드를 제안한다. [Watch 유산소 현재 존 시안](themes/dune-watch-cardio-time-zone.html)은 시간 우선 계단·유산소 화면에 러닝과 같은 존 번호·가변 구간 막대를 통합한다. 두 HTML은 설명용 예시이며 실제 앱 캡처는 별도로 보존한다.
+
+[새 실제 화면과 검증 범위](../full-redesign-map/review/notification-cardio-2026-11-14/index.html)에 T12의 iPhone 기본·다크 최대 글씨와 iPad·Duo 접힘을 보존했다. Duo 펼침은 실제 활성 화면 전환이 확인되지 않아 미갱신이다. Watch C01·C02는 40mm 최종 native2장을 갱신했으며 관련 UI3/3을 통과했다. 큰 글씨·AOD·VoiceOver는 별도 미검증이다.
+
 ## H07·P06 자세 기록 상세 · 2026-11-05
 
 [정적 DUNE 표현 시안](themes/dune-posture-record-detail-h07.html)과 [배치 계약](../layout-map/posture-record-detail-h07.html)은 저장된 평가 지표를 Front/Side 사진보다 먼저 읽는 공유 상세 뷰의 기준이다. 작은 상태 아이콘·글자의 밝은 전경만 원래 색을 진하게 쓰고 어두운 화면과 상태 타일 배경은 유지한다. 시안은 실제 값·사진·SF Symbol 렌더링이나 앱 캡처가 아니다. 현재 소스 `1514deb7`의 iPhone·iPad·Duo 접힘/펼침 핵심 검사 11건과 실제 PNG/AX 20쌍은 [네이티브 갤러리](../full-redesign-map/review/h07-p06-posture-native-2026-11-05/index.html)에서 확인한다. English·Light와 Duo 두 끝점의 MAX 범위이며 기존 90° FOLD 실패는 별도로 보존한다. PDF·사진 확대·관절 오버레이·좌우 비교·교정 운동·메모·삭제 코드와 기록 없음의 기존 문구를 유지한다.
