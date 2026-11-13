@@ -1,0 +1,95 @@
+Attributes: Application, 0x112d3a1c0, pid: 38424, label: 'DUNE'
+Element subtree:
+ →Application, 0x112d3a1c0, pid: 38424, label: 'DUNE'
+    Window (Main), 0x112d3a300, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112d3a440, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112d3a580, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112d3a6c0, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x105277700, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1053f9a40, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1053f8dc0, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1053f8a00, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1053fbac0, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x1053f8780, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x1053faf80, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x1053fabc0, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x1053fb840, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x1053fb480, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x1053faa80, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x1053f9180, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x1053f9900, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x1053fa800, {{0.0, 0.0}, {440.0, 956.0}}
+                                      Other, 0x1053fb340, {{0.0, 0.0}, {440.0, 956.0}}
+                                        NavigationBar, 0x1053f92c0, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Notification'
+                                          Button, 0x1053fa6c0, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Notifications'
+                                          StaticText, 0x1053fae40, {{164.0, 71.3}, {111.7, 25.3}}, label: 'Notification'
+                                        Other, 0x1053fb700, {{0.0, 0.0}, {440.0, 956.0}}
+                                          Other, 0x1053fbc00, {{0.0, 0.0}, {440.0, 956.0}}
+                                            Other, 0x1053fbe80, {{0.0, 0.0}, {440.0, 956.0}}
+                                              Other, 0x1053f9040, {{0.0, 0.0}, {440.0, 956.0}}
+                                                ScrollView, 0x1053f9680, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'notification-message-detail-screen'
+                                                  Other, 0x1053f97c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                                    Other, 0x1053fb5c0, {{0.0, 0.0}, {440.0, 156.0}}
+                                                    Other, 0x1053f9e00, {{0.0, 823.0}, {440.0, 133.0}}
+                                                  Other, 0x1053fb200, {{0.0, 0.0}, {440.0, 956.0}}
+                                                    Other, 0x112d31680, {{0.0, 823.0}, {440.0, 133.0}}
+                                                  Other, 0x112d317c0, {{0.0, 116.0}, {440.0, 758.3}}
+                                                    StaticText, 0x112d31900, {{36.0, 152.0}, {340.3, 199.0}}, identifier: 'notification-message-title', label: 'Body Composition Update'
+                                                    StaticText, 0x112d31a40, {{36.0, 359.0}, {301.7, 102.3}}, identifier: 'notification-message-date', label: 'Nov 14, 2026 at 17:43'
+                                                    Other, 0x112d31b80, {{16.0, 497.3}, {408.0, 360.7}}, identifier: 'notification-message-measurements'
+                                                      StaticText, 0x112d31cc0, {{32.0, 513.3}, {82.7, 58.7}}, label: 'BMI'
+                                                      StaticText, 0x112d31e00, {{16.0, 568.0}, {159.3, 103.7}}, identifier: 'notification-measurement-value-0', label: '24.9'
+                                                      StaticText, 0x112d33980, {{32.0, 699.7}, {172.3, 58.7}}, label: 'Body fat'
+                                                      StaticText, 0x112d32bc0, {{16.0, 754.3}, {208.7, 103.7}}, identifier: 'notification-measurement-value-1', label: '23.5%'
+                                                  Other, 0x112d32f80, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x112d30500, {{434.0, 119.0}, {3.0, 750.0}}
+                                                  Other, 0x112d303c0, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x112d32e40, {{434.0, 119.0}, {3.0, 750.0}}
+                                        Toolbar, 0x112d32d00, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x108970000, {{0.0, 0.0}, {440.0, 956.0}}
+                                Toolbar, 0x108970140, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x108970280, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x1089703c0, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x108970500, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x108970640, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x108970780, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x1089708c0, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x108970a00, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x108970b40, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x108970c80, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x108970dc0, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x108970f00, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today', Selected
+                              Image, 0x108971040, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x108971180, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity'
+                              Image, 0x1089712c0, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x108971400, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x108971540, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x108971680, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x1089717c0, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x108971900, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x108971a40, {{25.0, 877.0}, {104.5, 54.0}}
+                            Other, 0x108971b80, {{25.0, 877.0}, {104.3, 54.0}}
+                              Other, 0x108971cc0, {{25.0, 877.0}, {104.3, 54.0}}
+                              Other, 0x108971e00, {{25.0, 877.0}, {104.3, 54.0}}
+                                Other, 0x108971f40, {{25.0, 877.0}, {104.3, 54.0}}
+                                  Other, 0x108972080, {{25.0, 877.0}, {104.3, 54.0}}
+                                    Other, 0x1089721c0, {{25.0, 877.0}, {104.3, 54.0}}
+                                  Other, 0x108972300, {{25.0, 877.0}, {104.3, 54.0}}
+                                Other, 0x108972440, {{25.0, 877.0}, {104.3, 54.0}}
+                    Other, 0x108972580, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x1089726c0, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x108972800, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x108972940, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x108972a80, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x108972bc0, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x108972d00, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x108972e40, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x108972f80, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x1089730c0, {{220.0, 492.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x112d3a1c0, pid: 38424, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x108973200, pid: 38424, label: 'DUNE'
+  }

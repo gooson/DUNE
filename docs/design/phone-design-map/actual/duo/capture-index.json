@@ -1222,27 +1222,23 @@
     "T12": {
       "row_id": "T12",
       "evidence": "notification-message-detail-screen",
-      "test": "DUNEUITests/DesignMapNotificationDetailTests/testNotificationMessageDetail",
-      "action": "DUNE_VISUAL_AUDIT_READY T12 notification message detail verified [DUNEUITests/DesignMapAdditionalRoutesTests.swift:180] DEADLINE=1793615913.5702848",
-      "timestamp": 1793615889.736731,
-      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
-      "image": "005-1398x2034.png",
-      "screen": "DUNE_VISUAL_AUDIT_READY T12 notification message detail verified [DUNEUITests/DesignMapAdditionalRoutesTests.swift:180] DEADLINE=1793615913.5702848",
+      "test": "DUNEUITests/DesignMapNotificationDetailTests/testBodyCompositionNotificationDetail",
+      "action": "T12 body composition header and two cards",
+      "timestamp": 1794586820.0424287,
+      "timestamp_kind": "host-file-mtime-native-paired-capture",
+      "image": "assets/duo-closed.png",
+      "screen": "T12 body composition header and two cards",
       "file": "T12.png",
-      "source_revision": "3fac15d4",
-      "source_worktree_dirty": false,
-      "device_udid": "C34568F0-90E0-4FBB-9D7A-14B3B81CEE3D",
-      "sha256": "21f8d672cf661a5f9d087b7bdd37407f98337e7c7bf842ef429cfa2d57324009",
-      "source_json": "../../../full-redesign-map/review/t12-notification-message-native-2026-11-02/evidence.json",
-      "source_record": "pairs.duo.after",
-      "capture_scope": "T12 exact stored title/body and native back; historical Phone normal+MAX separate from new normal cases",
+      "source_revision": "63022ff33",
+      "source_worktree_dirty": true,
+      "source_closure": "T12 iOS app and selected test source exact to63022ff33; whole worktree differs in Watch/docs",
+      "device_udid": "BE823107-8D8A-4D4B-BC09-A1CD1367F62C",
+      "sha256": "6c2b9ac39ff264c2fb88161d7078311dbb2352bb5930ed00464f6ed631e0996f",
+      "source_json": "../../../full-redesign-map/review/notification-cardio-2026-11-14/manifest.json",
+      "source_record": "captures.7",
+      "capture_scope": "Body composition title/date/two exact values, native Back and hub return; English normal",
       "pose_readback_verified": true,
-      "ack_count": 7,
-      "angle_before": 0,
-      "angle_after": 0,
-      "active_display": "LCD",
-      "raw_pose_sha256": "ee06effaa949470911c1991f9dbbea8821d44ddd6617b33fac1ba52493816f76",
-      "raw_checkpoints_sha256": "90552648439d02a7e145ca7cbb8e4d310fae839aede4344b2891184e3016fdaa"
+      "current_verification": "passed"
     },
     "P04": {
       "row_id": "P04",
@@ -1774,10 +1770,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+  "last_refresh_revision": "63022ff33",
   "last_refresh_screens": [
-    "H07",
-    "P06"
+    "T12"
   ],
-  "last_refresh_note": "Reviewed current native H07/P06; historical images in review gallery."
+  "last_refresh_note": "2026-11-14 T12 body composition native update; other rows preserve their original sources."
 }

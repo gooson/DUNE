@@ -36,3 +36,14 @@ status: implementing
 ## 검증 예산
 
 한 worktree에서 한 실행기만 사용한다. 관련 unit/UI만 선택하며 unit/UI 각 1200초 deadline, build jobs 2, index store OFF를 따른다. 같은 원인 재시도는 근거가 있는 1회로 제한한다. Watch 추가 요청은 별도 cardio zone 계획·파일로 구현하고 실행은 순차 진행한다.
+
+## 2026-11-14 검증 결과
+
+- 문장 분리 단위 테스트 5개 통과. 초기 stale 파서 바이너리의 세 경계 실패를 보존했고 마지막 파서로 다시 컴파일한 결과를 사용한다.
+- 최종 iPhone 체성분 기본·다크 최대 글씨와 일반 본문 다크 최대 글씨 3건 통과. 일반 본문의 기본 검사는 초기 집계 안에서 개별 통과했고 해당 기본 분기 출력은 동일하다. 날짜는 12·24시간 설정 차이를 반영한 테스트로 검증한다.
+- iPad 기본 1건, Duo 접힘 1건 통과. 접힘은 전후 LCD active와 7 checkpoint ACK를 확인했다. 숫자 힌지 각도는 현재 CLI로 측정되지 않았다.
+- [실제 PNG·AX와 출처](../design/full-redesign-map/review/notification-cardio-2026-11-14/index.html)에 완료한 T12만 출판했다. 기존 이미지·다른 화면의 출처를 유지한다.
+- Duo 펼침은 setter 이후 LCD active/LCD-1 inactive여서 UI 실행 전에 중단했다. 공식 CLI 도움말과 검토된 setter의 실제 결과를 확인했고 기기 허브 접근도 Mac 잠금으로 차단됐다. 펼침 T12는 미갱신이다.
+- 추가 Watch 요청은 C01·C02에 영향을 준다. 마지막 한 줄 레벨·거리/페이스 배치는 소스에 준비했으며 40mm의 native 재검증은 자동 재시도 한도를 적용해 사용자 예외 승인을 기다린다. Watch UI 게이트 통과를 주장하지 않는다.
+
+Watch 마지막 소스의 `DUNEWatchUITests` build-for-testing을 표준 실행기와 900초 deadline으로 확인했고 통과했다. 앱·UI 테스트 컴파일을 확인한 범위이며 UI 실행 승인은 대기 중이다.

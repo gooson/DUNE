@@ -178,7 +178,8 @@
       "detail": "2026-11-14 후속 시안. 저장된 이름·값·단위를 강조하며 일반·혼합 메시지는 원문으로 읽는다. 실제 앱 캡처는 별도 검증한다.",
       "implementation": {
         "layout": "../layout-map/notification-message-detail-proposal.md",
-        "status": "native-pending"
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/notification-cardio-2026-11-14/index.html"
       }
     },
     {
@@ -189,7 +190,8 @@
       "detail": "러닝과 같은 현재 존 번호·가변 구간 막대를 시간 우선 유산소 화면에 표시한다. 정적 예시이며 실제 Watch 캡처는 별도 검증한다.",
       "implementation": {
         "layout": "../layout-map/watch-cardio-time-zone-proposal.md",
-        "status": "native-pending"
+        "status": "native-pending",
+        "actual": "../full-redesign-map/review/notification-cardio-2026-11-14/index.html"
       }
     },
     {
