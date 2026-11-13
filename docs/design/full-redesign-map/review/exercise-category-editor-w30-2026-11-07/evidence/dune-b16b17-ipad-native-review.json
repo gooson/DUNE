@@ -1,0 +1,96 @@
+{
+  "platform": "ipad",
+  "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+  "capture_date": "2026-11-07 Asia/Seoul (original XCTest screenshots; not recaptured today)",
+  "screens": {
+    "W29": {
+      "decision": "HELD",
+      "status": "held",
+      "ipad": {
+        "normal": "skipped",
+        "MAX": "skipped"
+      },
+      "native_findings": [
+        "First Phone MAX long-row capture clipped below tab bar despite selector pass; diagnostic only.",
+        "Retry full custom row AX y345.0–852.7 is fully within viewport bounded by nav maxY116 and tab minY873; screenshot shows name and Duration + Distance."
+      ],
+      "pending": [
+        "iPad route is unavailable through known closed native More; no retry.",
+        "Duo current-source capture."
+      ],
+      "status_explanation": "Phone normal/MAX native evidence passes; iPad Categories normal/MAX skipped before known closed native More route. Duo current-source pending."
+    },
+    "W30": {
+      "decision": "HELD",
+      "status": "held",
+      "ipad": {
+        "normal": "skipped",
+        "MAX": "skipped"
+      },
+      "native_findings": [
+        "MAX selected input-type picker visually ellipsizes Duration + Distance, though AX value is complete. This is outside the changed icon/color grid; full visible string is unproven."
+      ],
+      "pending": [
+        "iPad Categories route unresolved without a new user-authorized route.",
+        "Duo current-source capture."
+      ],
+      "status_explanation": "Phone normal/MAX icon, color, save and reopen flow passes; iPad Categories normal/MAX skipped."
+    },
+    "W33": {
+      "decision": "PASS_WITH_LIMITS",
+      "status": "eligible",
+      "ipad": {
+        "normal": "passed",
+        "MAX": "passed"
+      },
+      "native_findings": [
+        "Field, Cancel, Save and sheet title are accessible.",
+        "MAX Phone sheet title visually ellipsizes; AX title remains complete. W33 app source was unchanged."
+      ],
+      "pending": [
+        "Duo current-source capture if four-profile approval is required."
+      ],
+      "status_explanation": "Fresh Phone and iPad normal/MAX name-editor pairs pass on current frozen source."
+    },
+    "S07": {
+      "decision": "PASS_WITH_LIMITS",
+      "status": "eligible",
+      "ipad": {
+        "normal": "passed loaded view",
+        "MAX": "passed loaded view, close, and fully visible closed period Picker control"
+      },
+      "native_findings": [
+        "Normal and MAX iPad show loaded statistics and close; scrolling exposes additional statistics.",
+        "MAX Picker button is fully readable and contained in viewport (AX frame x261–495.5, y175–252.5); same-view PNG is expected before tap.",
+        "Passed selector subsequently taps Last Week, This Month, This Week; checks localized option labels, hittability, actual comparison range changes, and restored initial range."
+      ],
+      "pending": [
+        "Opened popup screenshot was not captured and is outside the agreed control-visibility gate.",
+        "Duo current-source capture if four-profile approval is required."
+      ],
+      "status_explanation": "iPad separate-window normal/MAX loaded statistics and close, plus MAX closed period Picker control fully visible, pass in scoped route."
+    },
+    "W32": {
+      "decision": "PASS_WITH_LIMITS",
+      "status": "conditional",
+      "ipad": {
+        "normal": "passed forced sheet fallback and return to workout",
+        "MAX": "not tested: MAX visits S07 separate window"
+      },
+      "native_findings": [
+        "First Phone normal capture belongs to failed chart metric role selector and remains diagnostic; same-ID retry passes.",
+        "Phone MAX Picker button is fully readable and contained in viewport (AX frame x102.7–337.7, y330.3–407.6); same-view PNG is expected before tap. Passed selector subsequently checks all three option labels, changed ranges, and restore.",
+        "iPad normal fallback sheet top and returned interactive workout are distinct current-source pairs."
+      ],
+      "pending": [
+        "iPad MAX sheet path was not tested: MAX visits S07 separate window.",
+        "Opened popup screenshot was not captured and is outside the agreed control-visibility gate.",
+        "Duo current-source capture if four-profile approval is required."
+      ],
+      "status_explanation": "Phone normal/MAX sheet and iPad normal forced fallback/return pass within scoped routes; iPad MAX sheet remains untested."
+    }
+  },
+  "overall_decision": "THREE_SCOPED_POSITIVE_TWO_HELD",
+  "original_execution_source": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+  "final_integration_source": "d731fd8cc162c7be5134e7100330fdff83bef64a"
+}

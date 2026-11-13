@@ -4694,6 +4694,158 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
     }
 
+    func testVisualAuditUserCategoriesAtNormalText() throws {
+        try auditUserCategories(maximumText: false)
+    }
+
+    func testVisualAuditUserCategoriesAtMaximumText() throws {
+        try auditUserCategories(maximumText: true)
+    }
+
+    private func auditUserCategories(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B16 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        openExerciseViewFromRecentWorkouts()
+        let categories = app.descendants(matching: .any)[AXID.exerciseToolbarCategories].firstMatch
+        if UIDevice.current.userInterfaceIdiom == .pad && !categories.isHittable {
+            throw XCTSkip("iPad Categories toolbar is in native overflow; unchanged More routing is pending")
+        }
+        XCTAssertTrue(categories.waitForExistence(timeout: 5) && categories.isHittable)
+        categories.auditTap()
+        let list = app.descendants(matching: .any)[AXID.userCategoryManagementScreen].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 8))
+        XCTAssertTrue(app.staticTexts["Built-in"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["Strength"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["Default"].firstMatch.exists)
+        VisualAudit.capture("W29 \(size) built-in name icon and Default")
+        let add = app.descendants(matching: .any)[AXID.userCategoryAdd].firstMatch
+        XCTAssertTrue(add.waitForExistence(timeout: 5) && add.isHittable)
+        add.auditTap()
+
+        let form = app.descendants(matching: .any)[AXID.userCategoryEditScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let name = app.textFields[AXID.userCategoryName].firstMatch
+        let save = app.buttons[AXID.userCategorySave].firstMatch
+        XCTAssertTrue(name.exists && save.exists && !save.isEnabled)
+        XCTAssertTrue(app.staticTexts["Icon"].firstMatch.exists)
+        VisualAudit.capture("W30 \(size) empty name and original icon choices")
+
+        // Icon and color buttons have no individual IDs in the unchanged source.
+        // Select the second visible grid button by its position under each section header.
+        let iconHeader = app.staticTexts["Icon"].firstMatch
+        let colorHeader = app.staticTexts["Color"].firstMatch
+        let iconButtons = form.buttons.allElementsBoundByIndex.filter {
+            $0.frame.minY > iconHeader.frame.maxY &&
+                $0.frame.maxY < (colorHeader.exists ? colorHeader.frame.minY : app.windows.firstMatch.frame.maxY) &&
+                $0.isHittable
+        }
+        XCTAssertGreaterThanOrEqual(iconButtons.count, 2, "At least two original icon choices should fit")
+        XCTAssertTrue(app.windows.firstMatch.frame.contains(iconButtons[1].frame))
+        iconButtons[1].auditTap()
+        VisualAudit.capture("W30 \(size) selected original icon choice")
+
+        for _ in 0..<8 where !colorHeader.isHittable { form.swipeUp(velocity: .slow) }
+        XCTAssertTrue(colorHeader.exists && colorHeader.isHittable)
+        let inputHeader = app.staticTexts["Default Input Type"].firstMatch
+        let colorButtons = form.buttons.allElementsBoundByIndex.filter {
+            $0.frame.minY > colorHeader.frame.maxY &&
+                $0.frame.maxY < (inputHeader.exists ? inputHeader.frame.minY : app.windows.firstMatch.frame.maxY) &&
+                $0.isHittable
+        }
+        XCTAssertGreaterThanOrEqual(colorButtons.count, 2, "At least two original color choices should fit")
+        XCTAssertTrue(app.windows.firstMatch.frame.contains(colorButtons[1].frame))
+        colorButtons[1].auditTap()
+        VisualAudit.capture("W30 \(size) selected original color choice")
+
+        let inputType = form.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Input Type")).firstMatch
+        for _ in 0..<8 where !inputType.isHittable { form.swipeUp(velocity: .slow) }
+        XCTAssertTrue(inputType.exists && inputType.isHittable)
+        inputType.auditTap()
+        let durationDistance = app.descendants(matching: .any)["Duration + Distance"].firstMatch
+        XCTAssertTrue(durationDistance.waitForExistence(timeout: 5))
+        durationDistance.auditTap()
+        VisualAudit.capture("W30 \(size) selected Duration and Distance input type")
+
+        let categoryName = "Codex Recovery Readability Category For Long Rows"
+        for _ in 0..<8 where !name.isHittable { form.swipeDown(velocity: .slow) }
+        XCTAssertTrue(name.exists && name.isHittable)
+        XCTAssertTrue(app.fillTextInput(AXID.userCategoryName, with: categoryName))
+        XCTAssertTrue(save.isEnabled)
+        VisualAudit.capture("W30 \(size) long name valid Save and editor")
+        save.auditTap()
+        let created = app.staticTexts[categoryName].firstMatch
+        for _ in 0..<8 where !created.isHittable { list.swipeUp(velocity: .slow) }
+        XCTAssertTrue(created.waitForExistence(timeout: 8) && created.isHittable)
+        XCTAssertTrue(app.staticTexts["Duration + Distance"].firstMatch.exists)
+        if maximumText {
+            let categoryList = app.collectionViews[AXID.userCategoryManagementScreen].firstMatch
+            let row = categoryList.buttons.matching(
+                NSPredicate(format: "label CONTAINS %@", categoryName)
+            ).firstMatch
+            let rowName = row.staticTexts[categoryName].firstMatch
+            let rowInputType = row.staticTexts["Duration + Distance"].firstMatch
+            let navigation = app.navigationBars["Categories"].firstMatch
+            let tabBar = app.tabBars.firstMatch
+            XCTAssertTrue(categoryList.exists && navigation.exists)
+            if UIDevice.current.userInterfaceIdiom == .phone { XCTAssertTrue(tabBar.exists) }
+
+            func visibleCategoryListFrame() -> CGRect {
+                let window = app.windows.firstMatch.frame
+                let frame = categoryList.frame.intersection(window)
+                var top = max(frame.minY, navigation.frame.maxY)
+                var bottom = frame.maxY
+                if tabBar.exists {
+                    if tabBar.frame.midY >= window.midY {
+                        bottom = min(bottom, tabBar.frame.minY)
+                    } else {
+                        top = max(top, tabBar.frame.maxY)
+                    }
+                }
+                top += 4
+                bottom -= 4
+                return CGRect(x: frame.minX, y: top, width: frame.width,
+                              height: max(0, bottom - top))
+            }
+
+            for _ in 0..<12 {
+                let viewport = visibleCategoryListFrame()
+                if row.exists && rowName.exists && rowInputType.exists &&
+                    viewport.contains(row.frame) && viewport.contains(rowName.frame) &&
+                    viewport.contains(rowInputType.frame) { break }
+                categoryList.swipeUp(velocity: .slow)
+            }
+            let viewport = visibleCategoryListFrame()
+            XCTAssertTrue(row.exists && rowName.exists && rowInputType.exists,
+                          "MAX custom row must expose its own name and input type")
+            XCTAssertTrue(viewport.contains(row.frame) && viewport.contains(rowName.frame) &&
+                          viewport.contains(rowInputType.frame),
+                          "MAX custom row, full long name, and input type must fit above the tab bar")
+        }
+        VisualAudit.capture(maximumText
+            ? "W29 MAX full custom category row and input type"
+            : "W29 normal long custom category row and input type")
+        created.auditTap()
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        XCTAssertEqual(name.value as? String, categoryName)
+        VisualAudit.capture("W30 \(size) reopened custom category editor")
+        let cancel = app.navigationBars["Edit Category"].buttons["Cancel"].firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
+        cancel.auditTap()
+        let editorDismissed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: form
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [editorDismissed], timeout: 8), .completed)
+        XCTAssertTrue(list.waitForExistence(timeout: 8))
+    }
+
     func testUserCategoryManagementCreatesCategory() throws {
         openExerciseViewFromRecentWorkouts()
 
