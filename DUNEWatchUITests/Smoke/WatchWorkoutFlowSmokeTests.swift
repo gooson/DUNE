@@ -448,6 +448,37 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         let bar = app.descendants(matching: .any)["watch-running-heart-rate-zones"].firstMatch
         XCTAssertEqual(bar.value as? String, "6")
         captureDesignState("C21", visible: "watch-running-heart-rate-zone-label")
+        app.swipeLeft()
+        let timeFirstZone = app.staticTexts["watch-cardio-main-heart-rate-zone-label"].firstMatch
+        XCTAssertTrue(timeFirstZone.waitForExistence(timeout: 5))
+        XCTAssertTrue(timeFirstZone.label.contains("1"))
+        let timeFirstBar = app.descendants(matching: .any)["watch-cardio-main-heart-rate-zones"].firstMatch
+        XCTAssertEqual(timeFirstBar.value as? String, "6")
+        captureDesignState("C01", visible: "watch-cardio-main-heart-rate-zone-label")
+    }
+
+    func testStairTimeFirstMetricsShowsPersonalizedHeartRateZone() {
+        startStairZoneWorkout(arguments: ["--ui-watch-six-zones", "--ui-watch-first-zone"])
+
+        XCTAssertTrue(app.staticTexts["watch-cardio-elapsed-time"].firstMatch.exists)
+        let zone = app.staticTexts["watch-cardio-main-heart-rate-zone-label"].firstMatch
+        XCTAssertTrue(zone.waitForExistence(timeout: 5))
+        XCTAssertTrue(zone.label.contains("1"))
+        let bar = app.descendants(matching: .any)["watch-cardio-main-heart-rate-zones"].firstMatch
+        XCTAssertEqual(bar.value as? String, "6")
+        assertStairZoneInFirstViewport(zone: zone, bar: bar)
+        captureDesignState("C02", visible: "watch-cardio-main-heart-rate-zone-label")
+    }
+
+    func testStairTimeFirstMetricsWithoutHeartRateShowsNoZone() {
+        startStairZoneWorkout(arguments: ["--ui-watch-six-zones", "--ui-watch-no-heart-rate"])
+
+        let zone = app.staticTexts["watch-cardio-main-heart-rate-zone-label"].firstMatch
+        XCTAssertTrue(zone.waitForExistence(timeout: 5))
+        XCTAssertTrue(zone.label.contains("--"))
+        let bar = app.descendants(matching: .any)["watch-cardio-main-heart-rate-zones"].firstMatch
+        XCTAssertEqual(bar.value as? String, "6")
+        assertStairZoneInFirstViewport(zone: zone, bar: bar)
     }
 
     func testRunningDistanceWithoutHeartRateShowsNoZone() {
@@ -695,6 +726,36 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         running.tap()
         XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton))
         XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 10))
+    }
+
+    private func startStairZoneWorkout(arguments: [String]) {
+        launchApp(with: LaunchConfiguration(
+            scenario: .responsiveLayout,
+            additionalArguments: ["--ui-watch-home-empty"] + arguments
+        ))
+        openAllExercises()
+        guard let stair = findQuickStartExercise(identifier: "watch-quickstart-exercise-stair-climber") else {
+            XCTFail("Stair climber fixture must be reachable")
+            return
+        }
+        stair.tap()
+        XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton))
+        XCTAssertTrue(elementExists("watch-cardio-main-metrics", timeout: 10))
+    }
+
+    private func assertStairZoneInFirstViewport(zone: XCUIElement, bar: XCUIElement) {
+        let heartRate = app.staticTexts["watch-cardio-main-heart-rate-value"].firstMatch
+        let calories = app.descendants(matching: .any)["watch-cardio-calories-value"].firstMatch
+        let level = app.staticTexts["watch-cardio-machine-level"].firstMatch
+        XCTAssertTrue(heartRate.exists)
+        XCTAssertTrue(calories.exists)
+        XCTAssertTrue(level.exists)
+        for element in [level, heartRate, zone, bar, calories] {
+            XCTAssertGreaterThan(element.frame.height, 0)
+            XCTAssertGreaterThanOrEqual(element.frame.minY, app.frame.minY)
+            XCTAssertLessThanOrEqual(element.frame.maxY, app.frame.maxY - 8,
+                                     "Level, heart rate, zone, bar and calories must fit without scrolling")
+        }
     }
 
     func testCaptureMachineDesignMap() throws {

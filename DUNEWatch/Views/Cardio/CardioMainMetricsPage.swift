@@ -6,7 +6,6 @@ import WatchKit
 struct CardioMainMetricsPage: View {
     @Environment(WorkoutManager.self) private var workoutManager
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
-    @Environment(\.appTheme) private var theme
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { context in
@@ -25,10 +24,10 @@ struct CardioMainMetricsPage: View {
                         distanceRow
                     }
 
-                    // HR + Calories (compact 2-col)
-                    bottomRow
+                    heartRateZone
                 }
                 .padding(.horizontal, DS.Spacing.sm)
+                .padding(.bottom, DS.Spacing.md)
             }
             .scrollBounceBehavior(.basedOnSize)
         }
@@ -56,8 +55,28 @@ struct CardioMainMetricsPage: View {
                 Text(LocalizedStringKey(type.typeName))
                     .font(DS.Typography.metricLabel)
                     .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
             Spacer()
+
+            HStack(spacing: DS.Spacing.xxs) {
+                Image(systemName: "flame.fill")
+                    .foregroundStyle(DS.Color.caution)
+                    .accessibilityHidden(true)
+                Text(workoutManager.activeCalories > 0
+                    ? Int(workoutManager.activeCalories).formatted()
+                    : "--")
+                Text("kcal")
+            }
+            .font(DS.Typography.metricLabel)
+            .foregroundStyle(.secondary)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Calories")
+            .accessibilityValue(Text(verbatim: workoutManager.activeCalories > 0
+                ? "\(Int(workoutManager.activeCalories)) kcal"
+                : "-- kcal"))
+            .accessibilityIdentifier("watch-cardio-calories-value")
         }
     }
 
@@ -136,7 +155,7 @@ struct CardioMainMetricsPage: View {
         return String(format: "%.1f", speedKmh)
     }
 
-    // MARK: - Bottom Row (HR + Calories)
+    // MARK: - Machine Level
 
     private var currentLevelRow: some View {
         VStack(spacing: DS.Spacing.xxs) {
@@ -144,6 +163,7 @@ struct CardioMainMetricsPage: View {
                 .font(DS.Typography.secondaryMetric)
                 .foregroundStyle(DS.Color.activity)
                 .contentTransition(.numericText())
+                .accessibilityIdentifier("watch-cardio-machine-level")
 
             Text("Level")
                 .font(DS.Typography.metricLabel)
@@ -153,35 +173,59 @@ struct CardioMainMetricsPage: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
-    private var bottomRow: some View {
-        HStack(spacing: DS.Spacing.sm) {
-            // Heart Rate
-            WorkoutMetricCard(
-                icon: "heart.fill",
-                value: workoutManager.heartRate > 0
-                    ? "\(Int(workoutManager.heartRate))"
-                    : "--",
-                unit: "bpm",
-                color: workoutManager.displayedZoneIndex.map {
-                    HRZoneBar.color(for: $0, count: workoutManager.displayedZoneCount)
-                } ?? theme.metricHeartRate,
-                size: .compact
-            )
-            .frame(maxWidth: .infinity, minHeight: 48)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+    // MARK: - Heart Rate Zone
 
-            // Calories
-            WorkoutMetricCard(
-                icon: "flame.fill",
-                value: workoutManager.activeCalories > 0
-                    ? "\(Int(workoutManager.activeCalories))"
-                    : "--",
-                unit: "kcal",
-                color: DS.Color.caution,
-                size: .compact
+    private var heartRateZone: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
+                Image(systemName: "heart.fill")
+                    .font(DS.Typography.metricLabel)
+                    .foregroundStyle(zoneColor)
+                    .accessibilityHidden(true)
+
+                Text(workoutManager.heartRate > 0
+                    ? Int(workoutManager.heartRate).formatted()
+                    : "--")
+                    .font(DS.Typography.secondaryMetric)
+                    .foregroundStyle(zoneColor)
+                    .contentTransition(.numericText())
+                    .accessibilityIdentifier("watch-cardio-main-heart-rate-value")
+                    .accessibilityLabel("Heart Rate")
+                    .accessibilityValue(Text(verbatim: workoutManager.heartRate > 0
+                        ? "\(Int(workoutManager.heartRate)) bpm"
+                        : "-- bpm"))
+
+                Text("bpm")
+                    .font(DS.Typography.metricLabel)
+                    .foregroundStyle(.secondary)
+
+                Spacer(minLength: DS.Spacing.xs)
+
+                Group {
+                    if let index = workoutManager.displayedZoneIndex {
+                        Text("Zone \(index)")
+                    } else {
+                        Text("Zone \("--")")
+                    }
+                }
+                .font(DS.Typography.metricLabel.weight(.semibold))
+                .foregroundStyle(zoneColor)
+                .lineLimit(1)
+                .accessibilityIdentifier("watch-cardio-main-heart-rate-zone-label")
+            }
+
+            HRZoneBar(
+                activeIndex: workoutManager.displayedZoneIndex,
+                zoneCount: workoutManager.displayedZoneCount
             )
-            .frame(maxWidth: .infinity, minHeight: 48)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+            .accessibilityIdentifier("watch-cardio-main-heart-rate-zones")
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var zoneColor: Color {
+        workoutManager.displayedZoneIndex.map {
+            HRZoneBar.color(for: $0, count: workoutManager.displayedZoneCount)
+        } ?? .secondary
     }
 }

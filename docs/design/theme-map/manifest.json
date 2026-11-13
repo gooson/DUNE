@@ -171,6 +171,28 @@
   ],
   "studies": [
     {
+      "id": "notification-message-reading",
+      "name": "T12 · 알림 수치 강조",
+      "title": "작은 제목·저장 시각과 체성분 값 카드",
+      "file": "dune-notification-message-reading.html",
+      "detail": "2026-11-14 후속 시안. 저장된 이름·값·단위를 강조하며 일반·혼합 메시지는 원문으로 읽는다. 실제 앱 캡처는 별도 검증한다.",
+      "implementation": {
+        "layout": "../layout-map/notification-message-detail-proposal.md",
+        "status": "native-pending"
+      }
+    },
+    {
+      "id": "watch-cardio-time-zone",
+      "name": "Watch 유산소 · 현재 존",
+      "title": "시간·레벨·심박과 현재 존 통합",
+      "file": "dune-watch-cardio-time-zone.html",
+      "detail": "러닝과 같은 현재 존 번호·가변 구간 막대를 시간 우선 유산소 화면에 표시한다. 정적 예시이며 실제 Watch 캡처는 별도 검증한다.",
+      "implementation": {
+        "layout": "../layout-map/watch-cardio-time-zone-proposal.md",
+        "status": "native-pending"
+      }
+    },
+    {
       "id": "training-volume-detail-a06",
       "name": "A06 · Training Volume 상세",
       "title": "현재 지표·이전 기간·분 단위 차트",
