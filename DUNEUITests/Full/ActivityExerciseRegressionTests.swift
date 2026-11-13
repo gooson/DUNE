@@ -3898,20 +3898,50 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             "Generating a template will replace the current exercise list."
         XCTAssertTrue(supportsGeneration || availability.label ==
             "Workout generation is available on supported Apple Intelligence devices.")
-        for _ in 0..<8 {
-            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
-            if generate.isHittable && viewport.contains(generate.frame)
-                && viewport.contains(availability.frame) { break }
-            if generate.frame.midY < viewport.midY {
-                form.swipeDown(velocity: .slow)
-            } else {
-                form.swipeUp(velocity: .slow)
+        if maximumText && UIDevice.current.userInterfaceIdiom == .pad {
+            let navigationBar = app.navigationBars["New Template"].firstMatch
+            XCTAssertTrue(navigationBar.waitForExistence(timeout: 5))
+            func visibleFormViewport() -> CGRect {
+                let frame = form.frame.intersection(app.windows.firstMatch.frame)
+                let top = max(frame.minY + 12, navigationBar.frame.maxY + 12)
+                return CGRect(x: frame.minX + 8, y: top,
+                              width: max(0, frame.width - 16),
+                              height: max(0, frame.maxY - 12 - top))
             }
+            for _ in 0..<12 {
+                let viewport = visibleFormViewport()
+                let combined = generate.frame.union(availability.frame)
+                if generate.isHittable && viewport.contains(combined) { break }
+                let moveUp = combined.maxY > viewport.maxY
+                let overflow = moveUp ? combined.maxY - viewport.maxY
+                                      : viewport.minY - combined.minY
+                let fraction = min(0.14, max(0.035, (overflow + 12) / max(form.frame.height, 1)))
+                let startY: CGFloat = moveUp ? 0.62 : 0.38
+                let endY: CGFloat = moveUp ? startY - fraction : startY + fraction
+                form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                    .press(forDuration: 0.05, thenDragTo: form.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: endY)))
+            }
+            let viewport = visibleFormViewport()
+            XCTAssertTrue(generate.isHittable
+                          && viewport.contains(generate.frame.union(availability.frame)),
+                          "W34 button and availability message must be fully visible below navigation")
+        } else {
+            for _ in 0..<8 {
+                let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+                if generate.isHittable && viewport.contains(generate.frame)
+                    && viewport.contains(availability.frame) { break }
+                if generate.frame.midY < viewport.midY {
+                    form.swipeDown(velocity: .slow)
+                } else {
+                    form.swipeUp(velocity: .slow)
+                }
+            }
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            XCTAssertTrue(generate.isHittable && viewport.contains(generate.frame)
+                          && viewport.contains(availability.frame),
+                          "W34 button and availability message must be fully visible")
         }
-        let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
-        XCTAssertTrue(generate.isHittable && viewport.contains(generate.frame)
-                      && viewport.contains(availability.frame),
-                      "W34 button and availability message must be fully visible")
         VisualAudit.capture("W34 \(size) empty AI prompt and availability")
         XCTAssertTrue(app.fillTextInput(AXID.templateFormAIPrompt, with: "30 minute shoulder workout"))
         XCTAssertEqual(generate.isEnabled, supportsGeneration,
