@@ -454,6 +454,8 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertTrue(timeFirstZone.label.contains("1"))
         let timeFirstBar = app.descendants(matching: .any)["watch-cardio-main-heart-rate-zones"].firstMatch
         XCTAssertEqual(timeFirstBar.value as? String, "6")
+        XCTAssertTrue(app.frame.insetBy(dx: 0, dy: 8).contains(timeFirstBar.frame),
+                      "The time-first zone bar should clear the page indicators")
         captureDesignState("C01", visible: "watch-cardio-main-heart-rate-zone-label")
     }
 

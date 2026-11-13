@@ -10,7 +10,7 @@ struct CardioMainMetricsPage: View {
     var body: some View {
         TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { context in
             ScrollView(.vertical) {
-                VStack(spacing: DS.Spacing.md) {
+                VStack(spacing: DS.Spacing.xs) {
                     // Activity type header
                     activityHeader
 
@@ -106,7 +106,7 @@ struct CardioMainMetricsPage: View {
     private var distanceRow: some View {
         HStack(spacing: DS.Spacing.sm) {
             // Distance
-            VStack(spacing: DS.Spacing.xxs) {
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
                 Text(String(format: "%.2f", workoutManager.distanceKm))
                     .font(DS.Typography.secondaryMetric)
                     .contentTransition(.numericText())
@@ -115,12 +115,14 @@ struct CardioMainMetricsPage: View {
                     .font(DS.Typography.metricLabel)
                     .foregroundStyle(.tertiary)
             }
-            .frame(maxWidth: .infinity, minHeight: 52)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+            .frame(maxWidth: .infinity, minHeight: 32)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
 
             // Pace or Speed
             if profile.showsPace {
-                VStack(spacing: DS.Spacing.xxs) {
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
                     Text(workoutManager.formattedPace)
                         .font(DS.Typography.secondaryMetric)
                         .contentTransition(.numericText())
@@ -129,10 +131,12 @@ struct CardioMainMetricsPage: View {
                         .font(DS.Typography.metricLabel)
                         .foregroundStyle(.tertiary)
                 }
-                .frame(maxWidth: .infinity, minHeight: 52)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .frame(maxWidth: .infinity, minHeight: 32)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
             } else if profile.showsSpeed {
-                VStack(spacing: DS.Spacing.xxs) {
+                HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
                     Text(formattedSpeed)
                         .font(DS.Typography.secondaryMetric)
                         .contentTransition(.numericText())
@@ -141,7 +145,9 @@ struct CardioMainMetricsPage: View {
                         .font(DS.Typography.metricLabel)
                         .foregroundStyle(.tertiary)
                 }
-                .frame(maxWidth: .infinity, minHeight: 52)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .frame(maxWidth: .infinity, minHeight: 32)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
             }
         }
@@ -158,7 +164,7 @@ struct CardioMainMetricsPage: View {
     // MARK: - Machine Level
 
     private var currentLevelRow: some View {
-        VStack(spacing: DS.Spacing.xxs) {
+        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
             Text(workoutManager.formattedCurrentMachineLevel)
                 .font(DS.Typography.secondaryMetric)
                 .foregroundStyle(DS.Color.activity)
@@ -169,7 +175,7 @@ struct CardioMainMetricsPage: View {
                 .font(DS.Typography.metricLabel)
                 .foregroundStyle(.tertiary)
         }
-        .frame(maxWidth: .infinity, minHeight: 52)
+        .frame(maxWidth: .infinity, minHeight: 32)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
