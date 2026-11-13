@@ -32,4 +32,4 @@ status: partial-verification
 
 ## 원본 보존
 
-로컬 실행 로그·receipt·xcresult와 초기 실패 PNG는 `.codex-checks/notification-cardio/evidence/` 및 worktree 전용 DerivedData의 원본 Test 로그에서 보존한다. 이 갤러리는 검증한 화면만 출판한다. Watch의 보정 전 실패 PNG를 최종 모습으로 복사하지 않는다.
+로컬 실행 로그·receipt·초기 실패 PNG와 내보낸 첨부 원본은 `.codex-checks/notification-cardio/evidence/`에 보존한다. 남아 있는 xcresult 원본 3개는 `.codex-checks/notification-cardio/original-xcresults/`로 원자 이동해 보관했다. 소유 시뮬레이터 4개와 완료된 빌드 캐시를 정리했으며 소유권·보관 기록은 `.codex-checks/notification-cardio/cache-cleanup.json`에 있다. 갤러리의 완료 캡처는 T12의 검증된 8장이다.
