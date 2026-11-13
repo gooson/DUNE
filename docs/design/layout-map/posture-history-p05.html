@@ -6,4 +6,4 @@
 <p>검토용 배치 계약 초안입니다. <a href="../theme-map/themes/dune-posture-history-p05.html">DUNE 정적 시안</a>은 실제 앱 캡처나 개인 기록이 아닙니다.</p>
 <section><h2>기록이 있을 때 읽기 순서</h2><ol><li>가장 최근 저장 기록의 점수, 날짜, 실제 평가 항목 수를 상단 어두운 히어로에 표시</li><li>7일 이상 경과한 경우에만 기존 알림 배너 표시</li><li>기존 선택 지표의 점수 추세 차트 또는 실제 데이터 수에 따른 대체 상태 표시</li><li>원래 지표 필터와 평균·평가 수·최고·조건부 변화 통계</li><li>날짜 내림차순 실제 기록 목록, 비교 모드, 선택과 상세 진입</li></ol></section>
 <section><h2>상태와 동작</h2><ul><li>기록이 없으면 기존 빈 상태만 보이고 상단 기록 히어로·차트·통계를 만들지 않습니다. 상단 Capture 행동은 그대로 둡니다.</li><li>히어로 점수는 <code>@Query</code>의 최신 기록을 읽습니다. 고정 예시 숫자나 임의 지표를 앱에 넣지 않습니다.</li><li>기존 Capture, Compare/Cancel, Compare Selected, 행 상세 이동, 길게 누르기 삭제 확인을 그대로 유지합니다.</li><li>접근성 크기는 히어로를 세로로 전환하고 통계를 한 열로 유지합니다. 긴 메모는 기존 세로 확장 규칙을 유지합니다.</li><li>iPhone·iPad·Duo 접힘/펼침의 기록 있음·빈 상태·비교/삭제 동작을 실제 UI와 PNG/AX로 확인해야 합니다. 이 문서는 검증 증거가 아닙니다.</li><li>목록 행은 원래 가벼운 material 표면·padding·컨텍스트 메뉴를 유지한다. 기존 두 기록 선택 검사는 요약이 아닌 기록 행의 metric-count 식별자로 범위를 좁힌다.</li></ul></section>
-</html>
+<p>2026-11-14 P08 진입 보완: Capture와 Compare/Cancel은 단일 명시적 More 메뉴에 둔다. 비교 모드·두 선택·Cancel 초기화·촬영 callback은 유지한다. 새 actual 캡처 대기.</p></html>

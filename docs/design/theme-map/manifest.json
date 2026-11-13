@@ -1501,6 +1501,39 @@
         "status": "held-phone-lastset-unreached",
         "actual": "../full-redesign-map/review/all-sets-done-w31-2026-11-07/index.html"
       }
+    },
+    {
+      "id": "injury-record-form-h08",
+      "name": "H08 · source-only 복원 시안",
+      "title": "기존 데이터와 동작 보존",
+      "file": "dune-injury-record-form-h08.html",
+      "detail": "보류 원본 시안. 새 실제 캡처 또는 테스트 통과 증거가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/injury-record-form-h08.html",
+        "status": "held-source-only-native-validation-pending"
+      }
+    },
+    {
+      "id": "posture-exercise-picker-p03",
+      "name": "P03 · source-only 복원 시안",
+      "title": "기존 데이터와 동작 보존",
+      "file": "dune-posture-exercise-picker-p03.html",
+      "detail": "보류 원본 시안. 새 실제 캡처 또는 테스트 통과 증거가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/posture-exercise-picker-p03.html",
+        "status": "held-source-only-native-validation-pending"
+      }
+    },
+    {
+      "id": "posture-comparison-p08",
+      "name": "P08 · source-only 복원 시안",
+      "title": "기존 데이터와 동작 보존",
+      "file": "dune-posture-comparison-p08.html",
+      "detail": "보류 원본 시안. 새 실제 캡처 또는 테스트 통과 증거가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/posture-comparison-p08.html",
+        "status": "held-source-only-native-validation-pending"
+      }
     }
   ]
 }
