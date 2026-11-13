@@ -1,0 +1,3 @@
+# Compact workout History and Share
+
+2026-11-14 source proposal, not an actual screenshot. On compact layouts only, ExerciseView inspector-origin View All Sessions presents History in a local sheet with its own NavigationStack and Done. Done returns to the same selected session; other callers and regular-width push remain. The original clock.arrow.circlepath/chevron, exercise identity, statistics and ShareLink remain. At accessibility text sizes the History share preview uses a large detent and retains its 300pt image cap; normal text keeps medium. Fresh Phone and iPad normal/MAX foreground/readback, close-return and Share screenshots/AX remain required. B12 screenshots are historical and failures remain unchanged.
