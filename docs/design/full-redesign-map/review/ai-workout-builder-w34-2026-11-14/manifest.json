@@ -206,5 +206,17 @@
     "No Generate or Save, no model response validated",
     "Duo, dark, ko/ja and unavailable state not freshly captured",
     "MAX example placeholder ellipsis predates change; keyboard can cover Generate while typing; Done is present"
-  ]
+  ],
+  "raw_sdk_preservation": {
+    "phone_raw_bundle_present": false,
+    "phone_raw_absence_cause": "unconfirmed; unavailable before archive, not recovered",
+    "phone_preserved": [
+      "original exported PNG/AX/manifest",
+      "complete test execution log",
+      "passed result receipt",
+      "pipeline log/hash"
+    ],
+    "ipad_raw_bundles": 2,
+    "ipad_verified_files": 168
+  }
 }
