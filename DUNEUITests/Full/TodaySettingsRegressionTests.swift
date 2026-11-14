@@ -1372,10 +1372,9 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     private func dismissNumberPadBeforeNextField() {
         // The native iPad number-pad popover covers the app with a dismissal
         // region even when the app's Done button remains visibly unobstructed.
-        let numberPadPopover = app.popovers.containing(
-            .other, identifier: "UIKeyboardLayoutStar Preview"
-        ).firstMatch
-        if UIDevice.current.userInterfaceIdiom == .pad && numberPadPopover.exists {
+        let dismissRegion = app.otherElements["PopoverDismissRegion"].firstMatch
+        if UIDevice.current.userInterfaceIdiom == .pad && dismissRegion.exists {
+            let numberPadPopover = app.popovers.firstMatch
             let keyboard = app.keyboards.firstMatch
             let done = app.buttons["exercise-default-keyboard-done"].firstMatch
             let numericFields = [
@@ -1395,8 +1394,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
                 XCTFail("The app's Done action must be fully visible before dismissing the native popup")
                 return
             }
-            let dismissRegion = app.otherElements["PopoverDismissRegion"].firstMatch
-            guard dismissRegion.waitForExistence(timeout: 3), dismissRegion.isHittable else {
+            guard numberPadPopover.waitForExistence(timeout: 3),
+                  dismissRegion.waitForExistence(timeout: 3), dismissRegion.isHittable else {
                 XCTFail("The native number-pad popup must expose its dismissal region")
                 return
             }
