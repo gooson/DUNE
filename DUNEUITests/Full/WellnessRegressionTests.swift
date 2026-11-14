@@ -1196,8 +1196,54 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     private func openPostureRoute(_ menuIdentifier: String) {
         navigateToWellness()
-        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.wellnessToolbarAdd))
-        XCTAssertTrue(app.waitAndTap(menuIdentifier))
+        guard app.waitAndTapToolbarAction("Add record") else {
+            XCTFail("Wellness Add record must be reachable before opening the posture route")
+            return
+        }
+        let actionLabel: String
+        switch menuIdentifier {
+        case "wellness-menu-posture": actionLabel = "Posture Assessment"
+        case "wellness-menu-realtime-posture": actionLabel = "Realtime Analysis"
+        default:
+            XCTFail("Unexpected posture route: \(menuIdentifier)")
+            return
+        }
+        let action = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ OR label == %@", menuIdentifier, actionLabel
+        )).firstMatch
+        guard action.waitForExistence(timeout: 5) else {
+            XCTFail("The requested posture menu action must exist: \(actionLabel)")
+            return
+        }
+        if !action.isHittable {
+            // At MAX on the closed Duo, the fourth item sits below the native menu viewport.
+            let menu = app.collectionViews.containing(.button, identifier: menuIdentifier).firstMatch
+            for _ in 0..<4 {
+                if action.isHittable { break }
+                guard menu.exists, menu.isHittable else { break }
+                let window = app.windows.firstMatch
+                let viewport = menu.frame.intersection(window.frame).insetBy(dx: 8, dy: 8)
+                guard !viewport.isNull, viewport.width > 0, viewport.height > 0 else { break }
+                let towardLaterItems = action.frame.midY > viewport.midY
+                let origin = window.coordinate(withNormalizedOffset: .zero)
+                let start = origin.withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX,
+                    dy: viewport.minY + viewport.height * (towardLaterItems ? 0.65 : 0.35) - window.frame.minY
+                ))
+                let end = origin.withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX,
+                    dy: viewport.minY + viewport.height * (towardLaterItems ? 0.35 : 0.65) - window.frame.minY
+                ))
+                start.press(forDuration: 0.05, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80),
+                            thenHoldForDuration: 0.35)
+            }
+        }
+        guard action.isHittable else {
+            XCTFail("The requested posture menu action must be visible: \(actionLabel)")
+            return
+        }
+        action.auditTap()
     }
 
     func testP04SeededResultScoreMetricsMemoSaveAndRetake() throws {
@@ -1407,6 +1453,94 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         reveal(link)
         link.auditTap()
         XCTAssertTrue(app.scrollViews["posture-symmetry-screen"].firstMatch.waitForExistence(timeout: 5))
+    }
+
+    func testP02RealtimeFallbackAndP03ExerciseSelection() throws {
+        openPostureRoute("wellness-menu-realtime-posture")
+        let fallback = app.descendants(matching: .any)["realtime-camera-unavailable"].firstMatch
+        XCTAssertTrue(fallback.waitForExistence(timeout: 10), "Simulator camera fallback should be visible")
+        let retry = app.buttons["realtime-camera-retry"].firstMatch
+        XCTAssertTrue(retry.exists && retry.isHittable)
+        VisualAudit.capture("P02 camera unavailable and exercise entry")
+
+        retry.tap()
+        XCTAssertTrue(fallback.waitForExistence(timeout: 5), "Camera retry remains unavailable on simulator")
+        let mode = app.buttons["realtime-exercise-picker-button"].firstMatch
+        XCTAssertTrue(mode.exists && mode.isHittable, "Picker remains available without camera")
+        mode.tap()
+        let list = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        let general = app.buttons["posture-exercise-general"].firstMatch
+        XCTAssertTrue(general.isSelected, "General mode starts selected")
+        VisualAudit.capture("P03 General Posture selected")
+
+        let squat = app.buttons["posture-exercise-barbell-squat"].firstMatch
+        XCTAssertTrue(squat.exists && squat.isHittable)
+        squat.tap()
+        XCTAssertTrue(mode.waitForExistence(timeout: 5))
+        XCTAssertEqual(mode.value as? String, "barbell-squat")
+        mode.tap()
+        XCTAssertTrue(squat.waitForExistence(timeout: 5) && squat.isSelected)
+        XCTAssertFalse(general.isSelected)
+        VisualAudit.capture("P03 barbell squat selection retained on reopen")
+
+        general.tap()
+        XCTAssertEqual(mode.value as? String, "general")
+        mode.tap()
+        XCTAssertTrue(general.waitForExistence(timeout: 5) && general.isSelected)
+        VisualAudit.capture("P03 General Posture restored")
+        app.buttons["posture-exercise-close"].tap()
+        XCTAssertTrue(mode.waitForExistence(timeout: 5))
+        app.buttons["realtime-posture-close"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch
+            .waitForExistence(timeout: 5))
+    }
+
+    func testP03ExerciseListAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        openPostureRoute("wellness-menu-realtime-posture")
+        app.buttons["realtime-exercise-picker-button"].tap()
+        let list = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        VisualAudit.capture("P03 MAX General Posture and first exercise")
+        let last = app.buttons["posture-exercise-lunge"].firstMatch
+        XCTAssertTrue(revealExerciseRow(last, in: list), "Last exercise must fit in the visible list at MAX")
+        VisualAudit.capture("P03 MAX final exercise reachable by scrolling")
+        last.tap()
+        let mode = app.buttons["realtime-exercise-picker-button"].firstMatch
+        XCTAssertEqual(mode.value as? String, "lunge")
+        mode.tap()
+        let reopenedList = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(reopenedList.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealExerciseRow(last, in: reopenedList), "Selected final row must remain reachable")
+        XCTAssertTrue(last.isSelected)
+        VisualAudit.capture("P03 MAX final exercise selected on reopen")
+        let close = app.buttons["posture-exercise-close"].firstMatch
+        XCTAssertTrue(close.exists && close.isHittable
+                      && app.windows.firstMatch.frame.contains(close.frame),
+                      "MAX Close must fit outside the scrolling list")
+        close.tap()
+        XCTAssertTrue(reopenedList.waitForNonExistence(timeout: 5), "Close must dismiss the exercise list")
+        XCTAssertTrue(mode.waitForExistence(timeout: 5) && mode.isHittable)
+        XCTAssertEqual(mode.value as? String, "lunge", "Close must preserve the selected exercise")
+    }
+
+    private func revealExerciseRow(_ row: XCUIElement, in list: XCUIElement) -> Bool {
+        for _ in 0..<12 {
+            let viewport = list.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+            if row.exists && row.isHittable && viewport.contains(row.frame) { return true }
+            if row.exists && row.frame.midY < viewport.midY {
+                list.swipeDown(velocity: .slow)
+            } else {
+                list.swipeUp(velocity: .slow)
+            }
+        }
+        let viewport = list.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+        return row.exists && row.isHittable && viewport.contains(row.frame)
     }
 
     private func openHistory(maxRevealAttempts: Int = 18) {

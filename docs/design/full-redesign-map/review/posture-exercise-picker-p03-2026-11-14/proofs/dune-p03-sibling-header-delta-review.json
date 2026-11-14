@@ -1,0 +1,21 @@
+{
+  "screen": "P03",
+  "scope": "Read-only source delta review: 45a756b98999435059bb54d23c792c61bfafb9a9 to ad9a21bea, ExercisePickerSheet.swift only",
+  "decision": "NO_INTRODUCED_P1_P2_FOUND",
+  "findings": [],
+  "source_delta": "At accessibility5 only, replaces exerciseList.safeAreaInset(top: maximumSizeHeader) with VStack(spacing: 0) containing the same maximumSizeHeader as a sibling before the same exerciseList. Normal-size NavigationStack branch is byte-for-byte unchanged.",
+  "source_sha256": "f3528f2f1926b81049366748f21b414b04fc89c5be0b22634397afdb626a385b",
+  "behavior_preserved": [
+    "Exactly one Close button is composed in each exclusive size branch; MAX sibling header owns the existing dismiss action and AX identifier posture-exercise-close.",
+    "General Posture, exercise selection, icon mapping, selected traits, onSelect callbacks, and dismiss calls are unchanged.",
+    "Medium/large normal detents and large MAX detent are unchanged; the caller still presents ExercisePickerSheet with the same selection callback."
+  ],
+  "native_correspondence": {
+    "source_revision": "ad9a21bea",
+    "ipad_MAX_case": "extra-ipad-04 P03 MAX passed 49.294s; global batch 3/3 pass",
+    "initial_pair": ["/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-04-attachments/FC93A7C6-730A-4D3C-9483-26AD68ECA859.png", "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-04-attachments/777B95E0-D0A3-4791-AE5B-7EC1FEBF5D5D.txt"],
+    "selected_reopen_pair": ["/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-04-attachments/0F0AA372-E9BC-4051-BD6B-91ADB207B4E4.png", "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-04-attachments/76160ECA-5D3F-4A9F-9650-43632229BAD8.txt"],
+    "observation": "Initial sheet shows Close and Exercise Mode above the list, with General Posture and first exercise readable. After scrolling and selection, Lunge remains selected on reopen while Close/title remain at identical AX frames: Close y257–334.5, title y342.5–406, list y414–909. The final Lunge row y674–889 fits within the list."
+  },
+  "limits": ["This reviews the two-line layout composition delta and native iPad MAX evidence only; Duo MAX remains unverified.", "Phone MAX pass was parent-reported at 48.663s; another reviewer owns its PNG/AX inspection."]
+}

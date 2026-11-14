@@ -420,3 +420,6 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-14 W26 구현 검증: Phone/iPad 일반·MAX의 실제 화면은 [W26 검증 갤러리](../full-redesign-map/review/exercise-history-w26-2026-11-14/index.html)에 보존했다. 테마 방향 시안은 실제 캡처가 아니다. Duo는 갱신하지 않았다.
 
 2026-11-14 W31: 정적 시안과 [Phone·iPad 일반/MAX 실제 PNG/AX](../full-redesign-map/review/all-sets-done-w31-2026-11-14/index.html)를 구분한다. iPad 일반·MAX 검증; Nov 7 HELD 원본 보존.
+
+
+2026-11-14 [P03 정적 시안과 별도 실제 검증](../full-redesign-map/review/posture-exercise-picker-p03-2026-11-14/index.html). 혼합 배치와 과거 실패는 해당 갤러리에 보존한다.

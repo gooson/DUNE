@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow",
+    "DUNEUITests/WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm",
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize",
+    "DUNEUITests/PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection",
+    "DUNEUITests/PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 7,
+    "passed": 5,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 5,
+  "failures": [
+    "2266: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:1916: error: -[DUNEUITests.PostureVisualAuditTests testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom] : XCTAssertTrue failed - Posture target must have a visible tap point",
+    "2279: Test Case '-[DUNEUITests.PostureVisualAuditTests testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom]' failed (91.287 seconds).",
+    "2280: Test Suite 'PostureVisualAuditTests' failed at 2026-11-14 13:40:55.159.",
+    "3014: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:824: error: -[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize] : XCTAssertGreaterThanOrEqual failed: (\"1\") is less than (\"2\") - MAX Save must create a histor…",
+    "3027: Test Case '-[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize]' failed (143.612 seconds).",
+    "3459: Test Suite 'WellnessRegressionTests' failed at 2026-11-14 13:46:24.820.",
+    "3461: Test Suite 'DUNEUITests.xctest' failed at 2026-11-14 13:46:24.821.",
+    "3463: Test Suite 'Selected tests' failed at 2026-11-14 13:46:24.822.",
+    "3479: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-duo-open-01-ui.log"
+}

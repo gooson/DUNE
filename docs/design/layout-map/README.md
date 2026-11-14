@@ -325,3 +325,6 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-14 W26 운동 이력은 Phone/iPad 일반·MAX의 새 실제 캡처와 AX를 [검증 갤러리](../full-redesign-map/review/exercise-history-w26-2026-11-14/index.html)에 연결했다. Duo 원본은 갱신하지 않았다.
 
 2026-11-14 W31: [`all-sets-done-w31.html`](all-sets-done-w31.html)는 정적 배치 계약이며 [실제 Phone 범위 증거](../full-redesign-map/review/all-sets-done-w31-2026-11-14/index.html)와 구분한다. iPad 일반·MAX 검증.
+
+
+2026-11-14 [P03 일반/MAX 4개 기기 실제 검증](../full-redesign-map/review/posture-exercise-picker-p03-2026-11-14/index.html). 혼합 배치와 과거 실패는 해당 갤러리에 보존한다.

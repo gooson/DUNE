@@ -1,0 +1,15 @@
+{
+  "screen": "P03",
+  "integrated_source": "d6ac3110864dca932e58c08dd9806aced6fdd944",
+  "app_file": "DUNE/Presentation/Posture/Components/ExercisePickerSheet.swift",
+  "app_sha256": "bc244517f206e93808c7ffeab61390e40ca6606df3bde221fda8e760403bb7fc",
+  "app_blob_identical_to_tested_integration": true,
+  "exact_copied_selector_methods": [
+    "testP02RealtimeFallbackAndP03ExerciseSelection",
+    "testP03ExerciseListAtMaximumAccessibilitySize",
+    "revealExerciseRow"
+  ],
+  "runtime_evidence": "../manifest.json records source_revision + evidence/*.result.json; each preserves source and selector scope",
+  "scope_adjudication": "Presentation APIs and camera/service/model/seeder boundaries unchanged; same app-file bytes. Other B05 sibling View presentation changes do not change this screen callback contract. P02 runtime portion of combined P02/P03 method is reused; partner selection selectors are added in separate P03 PR. No claim of a standalone PR-HEAD full test run.",
+  "gate": "held: corrected Duo closed MAX not yet verified"
+}

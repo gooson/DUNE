@@ -1755,13 +1755,20 @@
     },
     "P03": {
       "row_id": "P03",
-      "evidence": "test-and-action:Realtime exercise picker",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "Realtime exercise picker",
-      "timestamp": 1792375327.081,
-      "image": "EEB5B959-659A-4D90-BDAB-8DFF1C88E649.png",
-      "screen": "screen-0-1206x2622-Realtime exercise picker_0_5DC6B954-02D6-4233-8A87-458FCC7E99D9.png",
-      "file": "P03.png"
+      "evidence": "fresh native PNG/AX; normal/MAX exact selectors passed; see gallery for scope",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "action": "P03 General Posture selected",
+      "file": "P03.png",
+      "image": "854AFAC2-90B0-4AE7-91CC-3A90A797D4EA.png",
+      "source_revision": "4c27c4499526635c49822d44963fe4d67a11407f",
+      "source_file_sha256": "bc244517f206e93808c7ffeab61390e40ca6606df3bde221fda8e760403bb7fc",
+      "source_equivalence": "normal path unchanged; details in gallery manifest",
+      "png_sha256": "ab96b737e3a96dc1dac199c34cff783e0eb88cc1472139afd693e55470e30bd0",
+      "native_dimensions": [
+        1320,
+        2868
+      ],
+      "gallery": "../../../full-redesign-map/review/posture-exercise-picker-p03-2026-11-14/index.html"
     },
     "H04": {
       "row_id": "H04",

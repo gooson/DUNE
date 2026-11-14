@@ -812,13 +812,20 @@
     },
     "P03": {
       "row_id": "P03",
-      "evidence": "title:Exercise Mode",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap Select Exercise",
-      "timestamp": 1791823591.098,
-      "image": "7E8B9C6A-308D-4791-A5E7-78A50BE908E6.png",
-      "screen": "screen-0-2064x2752-tap Select Exercise_0_BFA7621A-B4F1-4161-AC56-01BC592C0FFB.png",
-      "file": "P03.png"
+      "evidence": "fresh native PNG/AX; normal/MAX exact selectors passed; see gallery for scope",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "action": "P03 General Posture selected",
+      "file": "P03.png",
+      "image": "A255D562-837C-4E4B-A91A-DFC3A9F9DC18.png",
+      "source_revision": "45a756b98999435059bb54d23c792c61bfafb9a9",
+      "source_file_sha256": "bc244517f206e93808c7ffeab61390e40ca6606df3bde221fda8e760403bb7fc",
+      "source_equivalence": "normal path unchanged; details in gallery manifest",
+      "png_sha256": "593b473b2079b749eef317216f428b7cbf7cc791a4eb8433858a72202dc9ea98",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "gallery": "../../../full-redesign-map/review/posture-exercise-picker-p03-2026-11-14/index.html"
     },
     "P01": {
       "row_id": "P01",
