@@ -1,0 +1,67 @@
+{
+  "original": {
+    "candidate": "1274a9ffb2bc56f2640fa5ad5a9e90fb43af196b",
+    "counter": "UNKNOWN",
+    "status": "original failure/retry closed; missing counter not reconstructed or reset",
+    "missing_counter": ".codex-checks/h08/continuation-state.json",
+    "new_PR": true
+  },
+  "current_failed_batches": [
+    {
+      "run": "extra-duo-closed-01",
+      "source": "4758aa004",
+      "H08_failures": [
+        "Add Save/Cancel disappeared after scroll",
+        "MAX Moderate whole-row reveal overshoot"
+      ],
+      "positive": "History/detail/edit111.164s passed"
+    },
+    {
+      "run": "extra-duo-closed-02",
+      "source": "ce7be698",
+      "H08_failures": [
+        "MAX Memo must fit atline783; keyboard/Save/history not reached"
+      ],
+      "positive": "Add84.712s passed; oldModerate/Severe andEndDate guards passed"
+    },
+    {
+      "run": "extra-duo-open-01",
+      "source": "6323abf88",
+      "H08_failures": [
+        "MAX postSave lazy AX rows.count1<2"
+      ],
+      "positive": "Add74.011s andHistory/edit112.030s passed"
+    },
+    {
+      "run": "extra-duo-open-02",
+      "source": "ce7be698",
+      "H08_failures": [
+        "MAX postSave same lazy AX count after4drags; bothfailedOpenrecords preserved"
+      ],
+      "positive": "No newMAXpass"
+    },
+    {
+      "run": "renewed-h08-duo-closed",
+      "source": "d7812cf204693d51211916131dd7d63ac50985fe",
+      "H08_failures": [
+        "MAX absent lazy Start Date target.identifier snapshot at line927, before Memo; 112.568s"
+      ],
+      "remediation": "Known selector passes prefersCompactGutter Boolean; no lazy element property read for classification",
+      "subsequent_result": "Same renewed check conditional at db147523: PASS203.609s; original failure preserved"
+    }
+  ],
+  "renewed_authorization": "renewed-autonomous-authorization.json explicitly permits required additional cause-responsive checks; old attempts unchanged",
+  "pending": [],
+  "rule": "No blind replay; preserve actual failures and originalunknown counter. New user authorization is additional scope, not retroactive success.",
+  "latest_positive": {
+    "DuoClosedMAX": "PASS203.609s at db147523; whole controls, actual memo keyboard focus/dismissal, completeSaveCancel, actualSave and distinct sequential saved rows",
+    "DuoOpenMAX": "PASS149.472s at db147523; original/new saved rows observed sequentially after real Save"
+  },
+  "counter_summary": {
+    "original": "UNKNOWN; no reconstructed count",
+    "known_current_failed_batches": 5,
+    "known_current_failed_H08_cases": 6,
+    "explanation": "First Closed batch had Add and MAX failures; three following old Duo batches each had one MAX failure; renewed Closed first attempt had one lazy-target snapshot failure. All remain immutable. Renewed Closed conditional and renewed Open then passed.",
+    "reset": false
+  }
+}

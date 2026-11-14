@@ -1,0 +1,42 @@
+{
+  "scope": "Independent read-only source review of H08/P03/P08 app deltas at ce7be698 against origin/main ddfbe940; architecture, simplicity, security, data integrity, performance, SwiftUI, Apple UX and app quality gate",
+  "decision": "ONE_P2_FINDING",
+  "source_hashes": {
+    "DUNE/Presentation/Injury/InjuryFormSheet.swift": "c4cc74a7dbb50e0e46f1456ea04d42cfc734cef7869b958a6d8012f96be4be3e",
+    "DUNE/Presentation/Posture/Components/ExercisePickerSheet.swift": "f3528f2f1926b81049366748f21b414b04fc89c5be0b22634397afdb626a385b",
+    "DUNE/Presentation/Posture/PostureComparisonView.swift": "7986295917d46376fa9ffa695a92e6333094765ef7d6a7368b14981e95a62d23",
+    "DUNE/Presentation/Posture/PostureHistoryView.swift": "907972081378f8e3dbb8bf66836b2b87b990570a631a45e02909c2d5b36735fa"
+  },
+  "findings": [
+    {
+      "priority": "P2",
+      "category": "localization/accessibility",
+      "file": "DUNE/Presentation/Posture/Components/ExercisePickerSheet.swift",
+      "line": 50,
+      "issue": "MAX-only header uses Text(verbatim: \"Exercise Mode\"), bypassing the existing localized Exercise Mode key. The normal NavigationStack title localizes; MAX users in ko/ja will see English.",
+      "evidence": "Shared/Resources/Localizable.xcstrings has ko 운동 모드 and ja エクササイズモード for Exercise Mode; .claude/rules/localization.md requires Text localized literals.",
+      "remedy": "Use Text(\"Exercise Mode\") in the MAX sibling header; keep header frame, dismiss action and AX assertions. No catalog change needed.",
+      "candidate_patch": "/private/tmp/dune-p03-localization-candidate/p03-max-title-localization.patch"
+    }
+  ],
+  "non_findings": {
+    "architecture": "Sheet-local navigation remains scoped to the sheet; P03 MAX fixed sibling header has one Close action, shared selection callbacks and List identifiers; P08 More menu retains Capture and Compare/Cancel callbacks and clears selection on cancel.",
+    "simplicity": "No blocking over-abstraction. P08 has a redundant inner #if !os(visionOS) inside the #else branch (P3 cleanup only).",
+    "security": "No new input trust boundary, sensitive logging, network operation or permission bypass in these presentation deltas.",
+    "data_integrity": "Injury save validation/insert and posture comparison selection state mutations are unchanged; P03 selectedExerciseID onSelect/dismiss semantics are preserved.",
+    "performance": "No new database query, image decode loop, unbounded task or retained object; added palette and layout calculations are bounded view work.",
+    "P08_UX": "Single More menu is explicitly described in the P08 layout map and exposes Capture plus Compare/Cancel, so no separate discoverability finding is raised on source alone. Runtime native route evidence remains a separate gate.",
+    "H08_compact_actions": "Native Duo Closed scroll-end state temporarily removes Save/Cancel from AX/PNG, but the agreed H08 layout contract explicitly permits scrolling Form to reach the top toolbar actions and requires full frames after keyboard dismissal. The test performs bounded native restoration and preserves full action/save assertions. Baseline persistence was not established, so this is an observed limit, not a demonstrated introduced P2 regression."
+  },
+  "limits": [
+    "Read-only source and previously exported native evidence; no SDK run, device action, app/test/repo mutation or claim that current Closed retry passes.",
+    "No .claude agent files changed; Agent-Native perspective skipped per review skill.",
+    "P03 one-line localization patch is private and unexecuted; Korean/Japanese runtime rendering is not yet verified."
+  ],
+  "p03_candidate_resolution": {
+    "expected_source_sha256_after_private_patch": "c44141b841650aa46e774057a9ab4539f533173c5db2e2f054a3f35ccd1551e1",
+    "patch_status": "prepared privately; parent applying after active SDK",
+    "compile_status": "unexecuted at review time",
+    "native_locales_status": "Korean/Japanese runtime not verified"
+  }
+}
