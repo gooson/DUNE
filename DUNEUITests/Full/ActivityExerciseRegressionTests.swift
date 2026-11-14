@@ -4055,13 +4055,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
         let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         func typeInFullPickerSearch(_ value: String) {
-            // Native .searchable belongs to the picker collection on Phone and
-            // the Select Exercise navigation bar on iPad.
-            let collectionSearch = picker.searchFields["Search exercises"].firstMatch
-            let navigationSearch = app.navigationBars["Select Exercise"].searchFields["Search exercises"].firstMatch
-            let search = collectionSearch.exists ? collectionSearch : navigationSearch
+            // SwiftUI places .searchable in a picker Toolbar on Phone and in
+            // the picker navigation bar on iPad. The exact native label is unique.
+            let matches = app.searchFields.matching(NSPredicate(format: "label == %@", "Search exercises"))
+            let search = matches.firstMatch
             XCTAssertTrue(search.waitForExistence(timeout: 5) && search.isHittable,
                           "The presented full picker should expose its native search field")
+            XCTAssertEqual(matches.count, 1, "The presented picker should own one Search exercises field")
+            XCTAssertTrue(picker.frame.contains(search.frame),
+                          "The Search exercises field must be inside the visible full picker")
             search.auditTap()
             search.typeText(value)
             let filled = XCTNSPredicateExpectation(
