@@ -3987,6 +3987,128 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Template workout first session")
     }
 
+    func testVisualAuditStrengthStartSessionLastSetAtNormalText() throws {
+        try auditStrengthStartSessionLastSet(maximumText: false)
+    }
+
+    func testVisualAuditStrengthStartSessionLastSetAtMaximumText() throws {
+        try auditStrengthStartSessionLastSet(maximumText: true)
+    }
+
+    private func auditStrengthStartSessionLastSet(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B10 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-design-map-one-set", "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        openQuickStartPicker()
+        XCTAssertTrue(app.fillTextInput(AXID.pickerSearchField, with: "Bench Press"))
+        dismissSearchKeyboardIfPresent()
+        let detailID = AXID.pickerExerciseDetailButton(Fixture.benchPressID)
+        XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(detailID, maxSwipes: 8))
+        let detail = app.descendants(matching: .any)[detailID].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 8) && detail.isHittable)
+        detail.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDetailScreen].firstMatch.waitForExistence(timeout: 8))
+        let detailStart = app.descendants(matching: .any)[AXID.exerciseDetailStart].firstMatch
+        XCTAssertTrue(detailStart.waitForExistence(timeout: 5) && detailStart.isHittable)
+        detailStart.auditTap()
+
+        let size = maximumText ? "MAX" : "normal"
+        let startScreen = app.descendants(matching: .any)[AXID.exerciseStartScreen].firstMatch
+        XCTAssertTrue(startScreen.waitForExistence(timeout: 10))
+        let start = app.buttons[AXID.exerciseStartButton].firstMatch
+        XCTAssertTrue(start.waitForExistence(timeout: 5) && start.isHittable,
+                      "W05 fixed Start Workout action must remain reachable")
+        VisualAudit.capture("W05 \(size) strength start and pinned action")
+        start.auditTap()
+
+        let session = app.descendants(matching: .any)[AXID.workoutSessionScreen].firstMatch
+        XCTAssertTrue(session.waitForExistence(timeout: 10))
+        let overview = app.descendants(matching: .any)[AXID.workoutSessionOverview].firstMatch
+        XCTAssertTrue(overview.waitForExistence(timeout: 8))
+        let name = app.staticTexts.matching(NSPredicate(
+            format: "identifier == %@ AND label IN %@", AXID.workoutSessionOverview,
+            [Fixture.benchPressLocalizedName, "Barbell Bench Press"]
+        )).firstMatch
+        XCTAssertTrue(name.waitForExistence(timeout: 5), "W06 overview must retain the exercise name")
+        let sessionWindow = app.windows.firstMatch.frame.insetBy(dx: 8, dy: 8)
+        if !(name.isHittable && sessionWindow.contains(name.frame)) {
+            XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionOverview,
+                                               maxSwipes: 10, mustFitInViewport: true),
+                          "W06 full exercise name must be reachable in the workout overview")
+        }
+        XCTAssertTrue(name.isHittable && sessionWindow.contains(name.frame),
+                      "W06 full exercise name must fit in the visible window")
+        VisualAudit.capture("W06 \(size) overview icon and exercise name")
+        for field in ["kg", "reps"] {
+            XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionField(field), maxSwipes: 10),
+                          "W06 \(field) input must remain reachable")
+        }
+        VisualAudit.capture("W06 \(size) strength input and exercise icon")
+
+        for control in ["+2.5", "+1"] {
+            XCTAssertTrue(scrollToWorkoutControl(control, maxSwipes: 10))
+            let button = app.buttons[control].firstMatch
+            XCTAssertTrue(button.isHittable)
+            button.auditTap()
+        }
+        let complete = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
+        XCTAssertTrue(complete.waitForExistence(timeout: 5) && complete.isEnabled,
+                      "Complete Set action must remain enabled")
+        let actionViewport = app.windows.firstMatch.frame.insetBy(dx: 8, dy: 8)
+        if !(complete.isHittable && actionViewport.contains(complete.frame)) {
+            XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionCompleteSet,
+                                                maxSwipes: 10, mustFitInViewport: true),
+                          "Complete Set must be fully reachable in compact scroll chrome")
+        }
+        XCTAssertTrue(complete.isHittable && actionViewport.contains(complete.frame),
+                      "The whole Complete Set action must fit and be reachable in the window")
+        VisualAudit.capture("W31 \(size) whole Complete Set before last-set sheet")
+        complete.auditTap()
+
+        let sheet = app.scrollViews[AXID.workoutSessionLastSetSheet].firstMatch
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10), "W31 scrollable last-set sheet should open")
+        let addSet = app.buttons[AXID.workoutSessionAddSet].firstMatch
+        let finish = app.buttons[AXID.workoutSessionFinish].firstMatch
+        XCTAssertTrue(addSet.waitForExistence(timeout: 5))
+        XCTAssertTrue(finish.waitForExistence(timeout: 5))
+        VisualAudit.capture(UIDevice.current.userInterfaceIdiom == .phone
+                            ? "W31 \(size) medium last-set choices"
+                            : "W31 \(size) initial last-set choices")
+
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            let before = sheet.frame
+            let window = app.windows.firstMatch
+            let windowHeight = window.frame.height
+            let startY = (before.minY + 10) / windowHeight
+            let endY = max(0.05, startY - 0.25)
+            window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                .press(forDuration: 0.1, thenDragTo: window.coordinate(
+                    withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
+                ), withVelocity: .slow, thenHoldForDuration: 0.2)
+            XCTAssertGreaterThan(sheet.frame.height, before.height + 20,
+                                 "W31 sheet must expand from medium to large")
+            VisualAudit.capture("W31 \(size) large last-set choices")
+        }
+
+        for _ in 0..<8 where !(finish.exists && finish.isHittable) {
+            sheet.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(finish.exists && finish.isHittable, "Finish choice must be reachable without saving")
+        for _ in 0..<8 where !(addSet.exists && addSet.isHittable) {
+            sheet.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(addSet.exists && addSet.isHittable, "+1 Set choice must be reachable")
+        addSet.auditTap()
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(
+            format: "label CONTAINS %@", "of 2"
+        )).firstMatch.waitForExistence(timeout: 8), "Original +1 Set action should increase the count to two")
+    }
+
     func testVisualAuditLastSetOptions() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments += ["--ui-design-map-one-set", "-AppleLanguages", "(en)",

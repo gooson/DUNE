@@ -1,0 +1,46 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+        "deviceName": "iPad mini (A20 Pro)-wt-Health-detail-posture-b05-b88b6a4ff04b",
+        "modelName": "iPad mini (A20 Pro)",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "expectedFailures": 0,
+      "failedTests": 1,
+      "passedTests": 1,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Design Capture"
+      }
+    }
+  ],
+  "environmentDescription": "DUNEUITests-DesignCapture \u00b7 Built with macOS 27.2",
+  "expectedFailures": 0,
+  "failedTests": 1,
+  "finishTime": 1793990530.78,
+  "passedTests": 1,
+  "result": "Failed",
+  "runtimeWarnings": [],
+  "skippedTests": 0,
+  "startTime": 1793990258.625,
+  "statistics": [],
+  "testFailures": [
+    {
+      "failureText": "XCTAssertTrue failed - Fixed Complete Set action must be enabled and reachable",
+      "targetName": "DUNEUITests",
+      "testIdentifier": 1,
+      "testIdentifierString": "ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText()",
+      "testIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText",
+      "testName": "testVisualAuditStrengthStartSessionLastSetAtMaximumText()"
+    }
+  ],
+  "title": "Test - DUNEUITests",
+  "topInsights": [],
+  "totalTestCount": 2
+}

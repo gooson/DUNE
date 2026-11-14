@@ -25,3 +25,5 @@
 2026-11-14 W11: [Phone/iPad normal/MAX 실제 캡처](../../full-redesign-map/review/share-image-w11-2026-11-14/index.html). Share action 표시·도달성 검증; OS 공유 시트는 열지 않았다. Nov 7 HELD 원본 보존.
 
 2026-11-14 W15: [Phone MAX/iPad normal/MAX 실제 캡처](../../full-redesign-map/review/weekly-workout-plan-w15-2026-11-14/index.html). Phone normal은 Nov 7 통과 이력을 별도 표기하며 새 캡처로 간주하지 않는다.
+
+2026-11-14 W31: [Phone·iPad 일반/MAX 실제 캡처](../../full-redesign-map/review/all-sets-done-w31-2026-11-14/index.html). iPad 일반·MAX 검증; Nov 7 HELD 원본은 새 캡처로 간주하지 않는다.
