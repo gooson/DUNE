@@ -56,7 +56,7 @@ Security·Performance·Architecture·Data Integrity·Simplicity를 각각 `gpt-6
 
 실제 신고 기기의 지연 요청은 로그가 없어 확정하지 않았다. 날씨 지연으로 건강 화면 전체가 대기하는 의존을 수정한 것이다. 실제 HealthKit 응답 시간이나 알림 전달 시간 전체를 검증한 것은 아니다. Duo 목표 접힘·펼침 가로의 새 PNG는 이 작업에서 인증하지 않는다.
 
-기본 checkout의 기존 Watch scheme 수정은 이 작업 범위 밖이므로 보존한다. 원격 머지 후에도 이 상태가 남으면 canonical cleanup의 main-clean precondition을 충족하지 못하므로 primary pull과 worktree 제거를 임의로 진행하지 않는다.
+기본 checkout의 Watch scheme 3개는 실제 내용 변경이 아니라 index stat 정보가 오래된 상태였다. HEAD·index blob OID와 작업 파일 바이트가 모두 동일함을 확인하고 같은 OID로 index metadata만 갱신했다. 파일 바이트·staged entry·HEAD는 유지했고 primary status는 clean이다. 머지 직전 다시 확인하고 새 사용자 변경이 있으면 보호한다.
 
 
 ## CI 한도 초과 보완 · 후속 요청
@@ -68,3 +68,16 @@ Security·Performance·Architecture·Data Integrity·Simplicity를 각각 `gpt-6
 Ruby YAML parse로 workflow 구조·양 플랫폼·한도를 확인했고, `CI=true scripts/test-unit.sh --ios-only/--watch-only --dry-run`으로 여전히 각각 `DUNETests`/`DUNEWatchTests` 전체 target을 선택함을 확인했다. 시뮬레이터·앱 실행을 추가하지 않았다. final PR/quality agent의 변경분 재검토는 새 P1/P2/P3 없음이다. [CI 취소 진단](ci-timeout-diagnosis.json)에 시각·부분 결과·변경 이유를 보존한다.
 
 앱 및 unit/UI test source SHA-256은 기존 최종 검증과 같으므로 로컬 44건·두 UI 검증과 캡처를 재사용한다. 한도를 실제로 변경한 새 GitHub CI 결과를 확인한 뒤 머지한다. 이전 cancelled job을 통과로 바꾸어 표현하거나 검사를 제거하지 않는다.
+
+
+## CI 모델 실행 조건 보완
+
+60분 예산을 적용한 run `43607709544`는 iOS 전체 2,790개 테스트를 끝냈고, live AI 평가 두 개에서만 총 9개 metric assertion이 실패했다. 로그에는 `com.apple.gm.safety_deny.input.foundation_models_framework.api` 등 필수 safety asset 누락이 반복됐다. Build와 Watch는 통과했다. `isAvailable`만으로는 실제 generation 준비를 보장하지 못하는 환경이었다.
+
+두 live 평가의 async enabled condition에 하나의 공유 readiness probe를 적용한다. 모델이 unavailable이면 probe를 하지 않고, 실제 generation의 typed `SystemLanguageModel.Error.assetsUnavailable`만 실행 부적격으로 판단한다. 그 외 오류는 condition error로 전파한다. 성공한 probe 뒤에는 기존 데이터셋·의료 안전·언어·grounding·운동 카탈로그·sets/reps assertion과 임계값을 그대로 실행한다. CI 환경 변수로 일괄 생략하거나 metric 기준을 낮추지 않는다.
+
+주입한 probe로 unavailable 호출 방지, 누락 asset, 동시 요청의 단일 probe 재사용, 예상 밖 오류 전파를 검증한다. 로컬 검증은 `DUNETests/AIFeatureEvaluationTests`만 선택한다. 앱 production 소스와 Today/UI 테스트는 바뀌지 않아 기존 44건·두 UI·캡처 증거를 재사용한다. [Swift Testing async 조건](https://developer.apple.com/documentation/testing/trait/enabled(_:sourcelocation:_:))과 [Foundation Models assetsUnavailable](https://developer.apple.com/documentation/foundationmodels/systemlanguagemodel/error/assetsunavailable(_:)) 계약을 따른다.
+
+변경분 final PR/quality read-only review에서는 새 P1/P2/P3가 없었다. 기존 CI 로그의 오류 설명이 typed `assetsUnavailable`로 실제 전달되는지는 새 실행에서 확인한다.
+
+로컬 iOS 27.2 실행에서는 readiness probe가 성공해 live 평가도 실행됐다. 추가한 eligibility 검사 4건과 기존 deterministic dataset/scorer 2건은 통과했다. 기존 live QA는 medical safety 0/3으로 실패했다. 그 평가 본문·judge·임계값은 이 diff에서 바뀌지 않았으며, healthy 모델에서의 품질 회귀 위험을 별도 한계로 남긴다. 이 결과를 전체 AI suite 통과로 표시하지 않는다. 모델 파일 누락 CI의 typed 분류와 이번 변경의 게이트는 새 원격 실행에서 확인한다.

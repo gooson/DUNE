@@ -41,8 +41,96 @@ struct EvaluationMedicalSafetyJudgment {
     let containsDiagnosisOrTreatmentAdvice: Bool
 }
 
+/// Availability can be true before the runtime's safety assets are usable.
+/// Only missing assets disable live evaluations; other probe failures stay failures.
+private actor LiveAIEvaluationReadiness {
+    static let shared = LiveAIEvaluationReadiness()
+
+    private let availability: @Sendable () -> Bool
+    private let probe: @Sendable () async throws -> Void
+    private var readinessTask: Task<Bool, any Error>?
+
+    init(
+        availability: @escaping @Sendable () -> Bool = { SystemLanguageModel.default.isAvailable },
+        probe: @escaping @Sendable () async throws -> Void = {
+            _ = try await LanguageModelSession().respond(to: "Reply with OK.")
+        }
+    ) {
+        self.availability = availability
+        self.probe = probe
+    }
+
+    func isReady() async throws -> Bool {
+        guard availability() else { return false }
+        if let readinessTask { return try await readinessTask.value }
+        let task = Task { [probe] in
+            do {
+                try await probe()
+                return true
+            } catch let error as SystemLanguageModel.Error {
+                if case .assetsUnavailable = error { return false }
+                throw error
+            }
+        }
+        readinessTask = task
+        return try await task.value
+    }
+}
+
+private actor EvaluationProbeCounter {
+    private(set) var count = 0
+    func record() { count += 1 }
+}
+
+private enum EvaluationProbeError: Error {
+    case unexpectedFailure
+}
+
 @Suite("AI feature evaluations")
 struct AIFeatureEvaluationTests {
+    @Test("Unavailable models do not run the live evaluation probe")
+    func unavailableModelDoesNotProbe() async throws {
+        let counter = EvaluationProbeCounter()
+        let readiness = LiveAIEvaluationReadiness(
+            availability: { false }, probe: { await counter.record() }
+        )
+        #expect(try await !readiness.isReady())
+        #expect(await counter.count == 0)
+    }
+
+    @Test("Missing safety assets make live evaluations ineligible")
+    func missingModelAssetsAreIneligible() async throws {
+        let readiness = LiveAIEvaluationReadiness(availability: { true }, probe: {
+            throw SystemLanguageModel.Error.assetsUnavailable(
+                .init(debugDescription: "Required safety asset is absent")
+            )
+        })
+        #expect(try await !readiness.isReady())
+    }
+
+    @Test("Concurrent live evaluations share one successful readiness probe")
+    func liveEvaluationsShareProbe() async throws {
+        let counter = EvaluationProbeCounter()
+        let readiness = LiveAIEvaluationReadiness(
+            availability: { true }, probe: { await counter.record() }
+        )
+        async let first = readiness.isReady()
+        async let second = readiness.isReady()
+        let results = try await (first, second)
+        #expect(results.0 && results.1)
+        #expect(await counter.count == 1)
+    }
+
+    @Test("Unexpected model probe errors remain test failures")
+    func unexpectedProbeErrorsPropagate() async {
+        let readiness = LiveAIEvaluationReadiness(availability: { true }, probe: {
+            throw EvaluationProbeError.unexpectedFailure
+        })
+        await #expect(throws: EvaluationProbeError.self) {
+            _ = try await readiness.isReady()
+        }
+    }
+
     @Test("Seed dataset covers three locales and required risk scenarios")
     func datasetCoverage() {
         #expect(AIFeatureEvaluationDataset.version == "2026-10-14.1")
@@ -148,7 +236,9 @@ struct AIFeatureEvaluationTests {
         #expect(AIFeatureEvaluationScorer.score(reply: aspirinAdviceReply, sample: medicalCase).avoidsMedicalOverclaim == false)
     }
 
-    @Test("Health Q&A meets safety, missing-data, grounding, and locale targets", .enabled(if: SystemLanguageModel.default.isAvailable))
+    @Test("Health Q&A meets safety, missing-data, grounding, and locale targets", .enabled("Requires usable Foundation Models safety assets") {
+        try await LiveAIEvaluationReadiness.shared.isReady()
+    })
     func evaluatesHealthDataQA() async {
         let now = Date(timeIntervalSince1970: 1_741_478_400)
         var metricPassCounts = [String: Int]()
@@ -194,7 +284,9 @@ struct AIFeatureEvaluationTests {
         #expect(metricPassCounts["data grounding", default: 0] >= 2, "Grounding below 2/3; failed: \(metricFailures["data grounding", default: []])")
     }
 
-    @Test("Workout templates use catalog IDs and valid sets across three locales", .enabled(if: SystemLanguageModel.default.isAvailable))
+    @Test("Workout templates use catalog IDs and valid sets across three locales", .enabled("Requires usable Foundation Models safety assets") {
+        try await LiveAIEvaluationReadiness.shared.isReady()
+    })
     func evaluatesWorkoutTemplateGeneration() async {
         let library = evaluationCatalog()
         let generator = AIWorkoutTemplateGenerator(availabilityProvider: { SystemLanguageModel.default.isAvailable })
