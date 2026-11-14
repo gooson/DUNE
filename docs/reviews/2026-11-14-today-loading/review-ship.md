@@ -57,3 +57,14 @@ Security·Performance·Architecture·Data Integrity·Simplicity를 각각 `gpt-6
 실제 신고 기기의 지연 요청은 로그가 없어 확정하지 않았다. 날씨 지연으로 건강 화면 전체가 대기하는 의존을 수정한 것이다. 실제 HealthKit 응답 시간이나 알림 전달 시간 전체를 검증한 것은 아니다. Duo 목표 접힘·펼침 가로의 새 PNG는 이 작업에서 인증하지 않는다.
 
 기본 checkout의 기존 Watch scheme 수정은 이 작업 범위 밖이므로 보존한다. 원격 머지 후에도 이 상태가 남으면 canonical cleanup의 main-clean precondition을 충족하지 못하므로 primary pull과 worktree 제거를 임의로 진행하지 않는다.
+
+
+## CI 한도 초과 보완 · 후속 요청
+
+최초 GitHub run `43604236903`의 iOS job은 시작 21분 후(`14:40:34Z`) Swift Testing을 시작했고, named test 1,469건 통과·0건 실패 상태에서 `14:49:52Z`에 취소됐다. 이 수치는 **부분 실행**이며 전체 통과가 아니다. 빌드 CI와 Watch 단위 CI는 통과했다. 사용자의 “다해결해 / 머지까지 완료해” 후속 요청에 따라 이 차단 원인을 같은 PR 범위에서 해결한다.
+
+`.github/workflows/test-unit.yml`의 matrix에 iOS 60분·Watch 30분을 명시했다. iOS의 cold compile·전체 단위 실행·결과 보존을 수용하는 유한 예산이며 full suite, 플랫폼 분리, fail-fast, runner 명령과 리소스 기본값은 유지한다. GitHub의 [context availability](https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#context-availability)는 job timeout에서 matrix 사용을 허용한다.
+
+Ruby YAML parse로 workflow 구조·양 플랫폼·한도를 확인했고, `CI=true scripts/test-unit.sh --ios-only/--watch-only --dry-run`으로 여전히 각각 `DUNETests`/`DUNEWatchTests` 전체 target을 선택함을 확인했다. 시뮬레이터·앱 실행을 추가하지 않았다. final PR/quality agent의 변경분 재검토는 새 P1/P2/P3 없음이다. [CI 취소 진단](ci-timeout-diagnosis.json)에 시각·부분 결과·변경 이유를 보존한다.
+
+앱 및 unit/UI test source SHA-256은 기존 최종 검증과 같으므로 로컬 44건·두 UI 검증과 캡처를 재사용한다. 한도를 실제로 변경한 새 GitHub CI 결과를 확인한 뒤 머지한다. 이전 cancelled job을 통과로 바꾸어 표현하거나 검사를 제거하지 않는다.

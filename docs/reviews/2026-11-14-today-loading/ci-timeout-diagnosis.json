@@ -1,0 +1,20 @@
+{
+  "run": 43604236903,
+  "job": 132475317485,
+  "url": "https://github.com/gooson/DUNE/actions/runs/43604236903/job/132475317485",
+  "job_started_at": "2026-11-14T14:19:19Z",
+  "swift_tests_started_at": "2026-11-14T14:40:34Z",
+  "test_step_cancelled_at": "2026-11-14T14:49:52Z",
+  "named_swift_tests_started": 1470,
+  "named_swift_tests_passed": 1469,
+  "named_swift_tests_failed": 0,
+  "result": "partial, cancelled; not a passed suite",
+  "fix": {
+    "ios_timeout_minutes": 60,
+    "watch_timeout_minutes": 30,
+    "full_suites_preserved": true,
+    "local_app_source_hashes_unchanged": true
+  },
+  "static_validation": "Ruby YAML parse and full-target CI dry-runs passed for both platforms",
+  "review": "final pr-reviewer/app-quality-gate delta review: no new P1/P2/P3"
+}
