@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import Testing
 import UIKit
 @testable import DUNE
@@ -139,6 +140,35 @@ struct AppThemeTests {
                 }
             }
         }
+    }
+
+    @Test("Today data trace and timestamps stay readable on its dark hero")
+    @MainActor
+    func todayDataContrast() {
+        for scheme in [ColorScheme.light, .dark] {
+            let traits = UITraitCollection(userInterfaceStyle: scheme == .light ? .light : .dark)
+            for theme in AppTheme.allCases {
+                let palette = ScoreHeroPalette(theme: theme, colorScheme: scheme)
+                let surface = UIColor(palette.surface).resolvedColor(with: traits)
+                let line = UIColor(palette.trendLine).resolvedColor(with: traits)
+                let caption = UIColor(palette.muted).resolvedColor(with: traits)
+                #expect(contrast(line, on: surface) >= 3,
+                        "\(theme.rawValue) \(scheme): real trend must remain distinguishable")
+                #expect(contrast(caption, on: surface) >= 4.5,
+                        "\(theme.rawValue) \(scheme): small time labels must remain readable")
+            }
+        }
+    }
+
+    private func contrast(_ foreground: UIColor, on background: UIColor) -> Double {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        var br: CGFloat = 0, bg: CGFloat = 0, bb: CGFloat = 0, ba: CGFloat = 0
+        foreground.getRed(&r, green: &g, blue: &b, alpha: &a)
+        background.getRed(&br, green: &bg, blue: &bb, alpha: &ba)
+        let composite = UIColor(red: r * a + br * (1 - a), green: g * a + bg * (1 - a),
+                                blue: b * a + bb * (1 - a), alpha: 1)
+        let values = [luminance(composite), luminance(background)].sorted()
+        return (values[1] + 0.05) / (values[0] + 0.05)
     }
 
     private func luminance(_ color: UIColor) -> Double {

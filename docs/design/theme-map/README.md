@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 테마 맵
 
+어두운 Today 카드의 실제 추세선·작은 날짜는 장식 능선/dusk와 분리한다. 최신 [Today 상태 계약](../layout-map/today-case-matrix.md)의 Light/Dark 대비 기준을 사용하며, 원본 방향 시안과 네이티브 캡처는 별도로 보존한다.
+
 2026-11-14 [8개 테마 마무리 계획](../../plans/2026-11-14-theme-overhaul-completion.md)과 [새 네이티브 실행 상태](../full-redesign-map/review/theme-overhaul-2026-11-14/README.md)를 현재 검증 기준으로 사용한다. Today Compact·Activity Flow·Wellness Flow·현재 Life의 승인된 배치를 보존한다. 컨디션/누적 스트레스 상세 두 시안은 별도 테마가 아닌 화면 연구안이므로 manifest의 `studies`에 보존한다. WATER LILIES 원본 시안의 수련 깊이/수면 질감을 네이티브에 보완했으며 시안 HTML은 실제 앱 캡처가 아니다.
 
 2026-11-14 [T12 수치 강조 후속 시안](themes/dune-notification-message-reading.html)은 작은 헤더·실제 저장 시각과 체성분 값 카드를 제안한다. [Watch 유산소 현재 존 시안](themes/dune-watch-cardio-time-zone.html)은 시간 우선 계단·유산소 화면에 러닝과 같은 존 번호·가변 구간 막대를 통합한다. 두 HTML은 설명용 예시이며 실제 앱 캡처는 별도로 보존한다.

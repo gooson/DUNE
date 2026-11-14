@@ -6,6 +6,7 @@ import Charts
 struct HourlySparklineView: View {
     let data: HourlySparklineData
     let tintColor: Color
+    var timeRangeColor: Color? = nil
     var height: CGFloat = 32
     var showsReferenceLabels = false
     var showsArea = true
@@ -71,7 +72,7 @@ struct HourlySparklineView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .font(.caption2)
-                .foregroundStyle(tintColor.opacity(0.9))
+                .foregroundStyle(timeRangeColor ?? tintColor.opacity(0.9))
             }
             if showsReferenceLabels {
                 HStack {

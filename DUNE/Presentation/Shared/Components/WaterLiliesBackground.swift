@@ -60,8 +60,8 @@ private struct WaterLiliesScene: View {
 
     private var markCount: Int {
         switch kind {
-            case .detail: 100
-            case .sheet: 60
+        case .detail: 100
+        case .sheet: 60
         case .tab:
             switch preset {
             case .today: 560

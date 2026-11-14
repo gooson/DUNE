@@ -100,6 +100,52 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         }
     }
 
+    func testVoiceOverConditionDetailEntryAndReturn() {
+        // The host enables VoiceOver and verifies its device setting before
+        // this selector. XCTest tap is a hit-point event, so this checks the
+        // app route and AX labels in that real environment, not spoken output.
+        attachVoiceOverReadback("Today root")
+        XCTAssertTrue(UIAccessibility.isVoiceOverRunning,
+                      "VoiceOver must be running on the simulator before this selector starts")
+
+        let hero = app.buttons[AXID.dashboardHeroCondition].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 15), "Seeded Today hero must load")
+        XCTAssertTrue(hero.isHittable, "Condition hero should be reachable")
+        XCTAssertFalse(hero.label.isEmpty, "Condition hero needs an accessible name")
+        captureRootEvidence("Water Lilies VoiceOver Today root")
+
+        hero.tap()
+        let detail = app.scrollViews[AXID.conditionScoreDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10),
+                      "Condition hero should open the detail route with VoiceOver enabled")
+        XCTAssertTrue(detail.isHittable, "Condition detail should be visible")
+        attachVoiceOverReadback("Condition detail")
+        captureRootEvidence("Water Lilies VoiceOver Condition detail")
+
+        let railBack = app.buttons["BackButton"].firstMatch
+        let navigationBack = app.navigationBars.buttons.element(boundBy: 0)
+        let back = railBack.exists && railBack.isHittable ? railBack : navigationBack
+        XCTAssertTrue(back.waitForExistence(timeout: 5), "A native Back action should be available")
+        XCTAssertTrue(back.isHittable, "Back action should be reachable")
+        XCTAssertFalse(back.label.isEmpty, "Back action needs an accessible name")
+        back.tap()
+        XCTAssertTrue(hero.waitForExistence(timeout: 10),
+                      "Back should return to Today with VoiceOver enabled")
+        XCTAssertTrue(hero.isHittable, "Today hero should be visible after returning")
+        attachVoiceOverReadback("returned to Today")
+        captureRootEvidence("Water Lilies VoiceOver Today returned")
+    }
+
+    private func attachVoiceOverReadback(_ stage: String) {
+        let attachment = XCTAttachment(string: """
+            Stage: \(stage)
+            UIKit UIAccessibility.isVoiceOverRunning: \(UIAccessibility.isVoiceOverRunning)
+            """)
+        attachment.name = "Water Lilies VoiceOver \(stage) readback"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
     func testSystemReduceMotionPreservesConditionDetailState() throws {
         // The design capture plan may disable app animations. This selector
         // needs the real system preference, so relaunch without that argument.

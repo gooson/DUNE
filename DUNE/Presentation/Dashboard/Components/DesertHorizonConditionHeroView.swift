@@ -131,7 +131,8 @@ struct DesertHorizonConditionHeroView: View {
             if let validHourlySparkline {
                 HourlySparklineView(
                     data: validHourlySparkline,
-                    tintColor: heroHighlight,
+                    tintColor: palette.trendLine,
+                    timeRangeColor: muted,
                     height: 48,
                     showsArea: false,
                     showsTimeRange: true,
@@ -142,7 +143,7 @@ struct DesertHorizonConditionHeroView: View {
             } else if hasWeeklyTrend {
                 TrendChartView(
                     scores: weeklyTrendScores,
-                    lineColor: heroHighlight,
+                    lineColor: palette.trendLine,
                     labelColor: muted,
                     referenceColor: muted.opacity(0.55),
                     compact: true
