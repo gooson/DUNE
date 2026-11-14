@@ -1,0 +1,368 @@
+{
+  "screen": "S03",
+  "device": "iPad mini (A20 Pro)",
+  "date": "2026-11-14",
+  "source_revision": "334150759",
+  "status": "pass",
+  "selectors": {
+    "MAX": {
+      "name": "TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize()",
+      "seconds": 109.867
+    },
+    "normal": {
+      "name": "TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues()",
+      "seconds": 99.478
+    }
+  },
+  "findings": [
+    "Both numeric fields show exact 72.5 and 8 in all selected states.",
+    "In both normal and MAX, for each field: the native numeric popup is present before the outside tap; the outside tap removes its PopoverDismissRegion marker while keyboard and app Done remain; the explicit Done tap then removes keyboard and Done.",
+    "Saved values appear on actual reopen in normal and MAX. The normal clear-confirmation screenshot has a distinct PopoverDismissRegion marker with no keyboard; cancellation leaves 72.5 and 8.",
+    "Selected images visually reviewed for MAX first numeric popup, after outside tap, and normal clear confirmation; AX and named source captures confirm the remaining transitions."
+  ],
+  "limitations": [
+    "The marker on clear confirmation is its confirmation popup, not the numeric keyboard popup.",
+    "The outside tap alone does not dismiss the keyboard or actuate app Done.",
+    "Historical iPhone evidence is not re-dated or claimed as a fresh run."
+  ],
+  "states": [
+    {
+      "state": "max-weight-before-outside",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize()",
+      "capture_name": "screen-0-1512x2316-S03 iPad numeric dismissal before decision_0_5402D58E-B7A5-45D3-854E-86159CB16B46.png",
+      "timestamp": 1794639219.97,
+      "png": "assets/ipad/max-03.png",
+      "ax": "assets/ipad/max-03.txt",
+      "source_png": "B9CDA3C9-CB78-4126-BE53-F80A65728E57.png",
+      "source_ax": "B090333C-9DB7-40CC-8F6E-C6CE50C16857.txt",
+      "sha256": {
+        "png": "308f665c41f09f6f9689b38ffda372ac0c6d24a6091216a7e09b5606498f29c4",
+        "ax": "8b5658c13adcc769d96525dcf4880c5a4a6d33377d12371338f434531326c9fe"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 1,
+        "keyboard": 1,
+        "keyboard_done": 1,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "max-weight-after-outside",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize()",
+      "capture_name": "screen-0-1512x2316-S03 iPad numeric dismissal after outside tap_0_AB542A01-9D7D-4873-8B5C-285E689B642A.png",
+      "timestamp": 1794639229.624,
+      "png": "assets/ipad/max-04.png",
+      "ax": "assets/ipad/max-04.txt",
+      "source_png": "6568E912-E83B-4BB1-A8B8-585078DCB926.png",
+      "source_ax": "63AB120B-41DA-44F0-A737-86D4FF381AD8.txt",
+      "sha256": {
+        "png": "834f0d7ce80747f9ee4701985b5c59ee878a641eb255ab6ccfecd9dbed3b1900",
+        "ax": "52c4a25723246febe711efbf31fb98c2cdbf82720083771f8f2b2348c36bae81"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 1,
+        "keyboard_done": 1,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "max-weight-after-done",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize()",
+      "capture_name": "screen-0-1512x2316-tap exercise-default-keyboard-done_0_4DC36128-8AF9-4AF3-99F8-A58A0E0B0515.png",
+      "timestamp": 1794639236.207,
+      "png": "assets/ipad/max-weight-after-done.png",
+      "ax": "assets/ipad/max-weight-after-done.txt",
+      "source_png": "9809FAD9-EF93-4128-A953-2B9F6BE07EC6.png",
+      "source_ax": "D436D1EF-5F6B-43D9-B0A0-1E60AB88867B.txt",
+      "sha256": {
+        "png": "aeba07ea37e5e55c9b18f5c2672a49d52218c4e4b28f40b7b7ea35d7ac81fdc8",
+        "ax": "54d5929a8c98b72ac55c83088a350b325f546c5b9b2adf91ce7ad73a00c2eb31"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 0,
+        "keyboard_done": 0,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "max-reps-before-outside",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize()",
+      "capture_name": "screen-0-1512x2316-S03 iPad numeric dismissal before decision_0_1D68FFAA-78E8-40C7-8C14-271E2FAFFBA0.png",
+      "timestamp": 1794639245.976,
+      "png": "assets/ipad/max-05.png",
+      "ax": "assets/ipad/max-05.txt",
+      "source_png": "26CE9B93-85D1-454F-9830-8D7DD6B07EA9.png",
+      "source_ax": "7B3F7CC8-83AB-436F-851B-E75A5AABC191.txt",
+      "sha256": {
+        "png": "ea5034fe7351e3932311c69bfc55679b90b215c0565fb4a8c6ea88333c94b7d4",
+        "ax": "464c80c42c4761980392841f91d0210844ff4a6f1d859447e2d454f92d52ae28"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 1,
+        "keyboard": 1,
+        "keyboard_done": 1,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "max-reps-after-outside",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize()",
+      "capture_name": "screen-0-1512x2316-S03 iPad numeric dismissal after outside tap_0_34767F0A-BED3-4301-BCCE-4A7648928A5D.png",
+      "timestamp": 1794639255.56,
+      "png": "assets/ipad/max-06.png",
+      "ax": "assets/ipad/max-06.txt",
+      "source_png": "32C76138-2179-4AC1-8F8C-DDAB12413C56.png",
+      "source_ax": "70FAC4B5-0931-4DEE-BB12-F986EB5329C4.txt",
+      "sha256": {
+        "png": "a8c8dd64c12754933496c80472e13f9c8d0f3e02b1668c8d21a292b4e9d43e28",
+        "ax": "34c25349e9a724ef06c8ef6b657052493d3f5ceb7a7b94ec135450fa3bfd48ff"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 1,
+        "keyboard_done": 1,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "max-reps-after-done",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize()",
+      "capture_name": "screen-0-1512x2316-tap exercise-default-keyboard-done_0_3A557409-4C07-4940-913C-35DB7C353E32.png",
+      "timestamp": 1794639262.107,
+      "png": "assets/ipad/max-reps-after-done.png",
+      "ax": "assets/ipad/max-reps-after-done.txt",
+      "source_png": "D8BA2248-6E16-4E8C-9E13-8A0E5DE0A79E.png",
+      "source_ax": "DDEAD7F2-ABF3-4DF8-8F36-D129EEE66A75.txt",
+      "sha256": {
+        "png": "61b509bcdd84004f5f2675c37808167a31113c837ff5d40f623cccdca5b1de65",
+        "ax": "e3285f31b4f5a6be9ed324d2ec1520e5f54c78d1dfd6f29650e090939c1753d7"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 0,
+        "keyboard_done": 0,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "max-saved-reopened",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize()",
+      "capture_name": "screen-0-1512x2316-S03 MAX saved values on reopen_0_38088F16-0CBF-4FA1-9C37-20FD61F43C1B.png",
+      "timestamp": 1794639272.509,
+      "png": "assets/ipad/max-08.png",
+      "ax": "assets/ipad/max-08.txt",
+      "source_png": "8D6B3A8A-2C31-4D9A-BF88-E368BC3654CF.png",
+      "source_ax": "330F50C8-F6D7-44E3-B5B1-D193C8E807B0.txt",
+      "sha256": {
+        "png": "61b509bcdd84004f5f2675c37808167a31113c837ff5d40f623cccdca5b1de65",
+        "ax": "fb317ce63b82ab1ea60dee724339f18566e9061889f3c630df8f07e8d7675d32"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 0,
+        "keyboard_done": 0,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "normal-weight-before-outside",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues()",
+      "capture_name": "screen-0-1512x2316-S03 iPad numeric dismissal before decision_0_E978F5D4-993D-441A-80AF-1D53214DC06F.png",
+      "timestamp": 1794639309.949,
+      "png": "assets/ipad/normal-01.png",
+      "ax": "assets/ipad/normal-01.txt",
+      "source_png": "C86D8D64-CEE9-4844-B132-447C42730860.png",
+      "source_ax": "4A3504A3-5E95-4325-A916-98206A6D0A52.txt",
+      "sha256": {
+        "png": "07233671dcbfd2e426ddb8305c3daf2095d8866affba20114a928536449bd27d",
+        "ax": "f094f8c34a180f4d0b079057efc7e965450cfe7de0fa17a352b7d818259aaa73"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 1,
+        "keyboard": 1,
+        "keyboard_done": 1,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "normal-weight-after-outside",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues()",
+      "capture_name": "screen-0-1512x2316-S03 iPad numeric dismissal after outside tap_0_61CC6B15-57CD-48E4-91B1-E60E75A8F05C.png",
+      "timestamp": 1794639319.539,
+      "png": "assets/ipad/normal-02.png",
+      "ax": "assets/ipad/normal-02.txt",
+      "source_png": "06DD4573-C6F9-4B20-A54A-C31144614877.png",
+      "source_ax": "B954C2A6-6960-477F-8DF9-3836B4202602.txt",
+      "sha256": {
+        "png": "f6dd2e3de3f7d214e002b071b7b74b95dbd629a2ef136899028c24815f3eedae",
+        "ax": "f67f1a8044ddb9d9a8422c3b390a37d177f331c77c86ad502902ea324e370c09"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 1,
+        "keyboard_done": 1,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "normal-weight-after-done",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues()",
+      "capture_name": "screen-0-1512x2316-tap exercise-default-keyboard-done_0_51610831-F4C1-4A60-9AF6-826B4EC8F81F.png",
+      "timestamp": 1794639326.047,
+      "png": "assets/ipad/normal-weight-after-done.png",
+      "ax": "assets/ipad/normal-weight-after-done.txt",
+      "source_png": "EAD58D1F-0619-4E5F-A80F-B3B2F4143DA1.png",
+      "source_ax": "EA7F05E8-FA6B-4200-80C9-078F6C8A0B3B.txt",
+      "sha256": {
+        "png": "b430e52f10d8f453676575dcb62873b9548214aaa9a187112fe6fd171940677e",
+        "ax": "fd5f81cdf8eef74b80b3d93d8268eb68a39e05d5af0bd8e3bb92698b586a5b25"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 0,
+        "keyboard_done": 0,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "normal-reps-before-outside",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues()",
+      "capture_name": "screen-0-1512x2316-S03 iPad numeric dismissal before decision_0_06E1ACCB-A296-46EB-BEBB-CE4C8201B3A4.png",
+      "timestamp": 1794639335.779,
+      "png": "assets/ipad/normal-03.png",
+      "ax": "assets/ipad/normal-03.txt",
+      "source_png": "EFDD6B8D-71BF-48A8-84F0-A327FB51DFDC.png",
+      "source_ax": "6AB2B5F6-F5C8-4A20-8DDD-C99C53B57480.txt",
+      "sha256": {
+        "png": "7fae4dc52e04f90eba52592d27186c1b729de776daae88049990618c5a004cf0",
+        "ax": "d1c3878bde3a6c643eab0645e05bff26351c8e01b20fce5e993ce54a8946d54a"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 1,
+        "keyboard": 1,
+        "keyboard_done": 1,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "normal-reps-after-outside",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues()",
+      "capture_name": "screen-0-1512x2316-S03 iPad numeric dismissal after outside tap_0_7AA3A991-D728-4E65-8B11-CBC12DFDD3C1.png",
+      "timestamp": 1794639345.291,
+      "png": "assets/ipad/normal-04.png",
+      "ax": "assets/ipad/normal-04.txt",
+      "source_png": "CA3FAB30-140D-474E-B75F-6A14AA2E615C.png",
+      "source_ax": "F22ED169-5E9E-4B7F-95C7-84950660727E.txt",
+      "sha256": {
+        "png": "f80c7aa52864f58fc822729f63d78dcd2d19c984cd9b4c1b3908c45be412499f",
+        "ax": "41a0983c2b71dd81f6440b59779738ee5106f0fbf9a622b8aa6e063d699bcc9b"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 1,
+        "keyboard_done": 1,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "normal-reps-after-done",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues()",
+      "capture_name": "screen-0-1512x2316-tap exercise-default-keyboard-done_0_FA522201-419D-467A-99E9-9657E14DB10D.png",
+      "timestamp": 1794639351.841,
+      "png": "assets/ipad/normal-reps-after-done.png",
+      "ax": "assets/ipad/normal-reps-after-done.txt",
+      "source_png": "CEC05F9F-9E46-4161-8342-B6ADFF783EC5.png",
+      "source_ax": "8AA3F5EB-9F88-4D9D-B8E6-2C82E61AE161.txt",
+      "sha256": {
+        "png": "b430e52f10d8f453676575dcb62873b9548214aaa9a187112fe6fd171940677e",
+        "ax": "263c880e3f13acd208affb59ca451aef46398fe0b0b60fabd9d751a4b31efc57"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 0,
+        "keyboard_done": 0,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "normal-saved-reopened",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues()",
+      "capture_name": "screen-0-1512x2316-S03 stored values on reopen_0_DB050489-C872-4D9F-9124-363B224E3D42.png",
+      "timestamp": 1794639363.043,
+      "png": "assets/ipad/normal-06.png",
+      "ax": "assets/ipad/normal-06.txt",
+      "source_png": "6533BB7A-D21E-42DE-9435-592BA010C047.png",
+      "source_ax": "2B47FBFA-49A6-424A-B51A-F3860A85EF11.txt",
+      "sha256": {
+        "png": "1b1b6ead473465e9bf07fee0720f767653abc16cc6d24e3bfdce10925dd9a71b",
+        "ax": "4ff6bdcc092d90e9e521577277967ea61c87c15bb4ca8515bce43897545fbb8f"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 0,
+        "keyboard_done": 0,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "normal-clear-confirmation",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues()",
+      "capture_name": "screen-0-1512x2316-S03 clear confirmation before cancellation_0_8B2D5CE6-B5E3-4B76-B8D8-CE9610FD6A47.png",
+      "timestamp": 1794639367.552,
+      "png": "assets/ipad/normal-07.png",
+      "ax": "assets/ipad/normal-07.txt",
+      "source_png": "174B39CD-C74C-4A9E-865E-FFA53538A4CC.png",
+      "source_ax": "0E776601-1F78-4FC6-82FB-7B9B31E0540D.txt",
+      "sha256": {
+        "png": "e5e2f43ceced6978a76613106c397b0138d3372ac5cf657aa1669b6fc4b4c212",
+        "ax": "f3af4275aecb0937ffdce68134c39dc89bae45828aa80cc0901acabc3b189be5"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 1,
+        "keyboard": 0,
+        "keyboard_done": 0,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    },
+    {
+      "state": "normal-clear-cancel-values-retained",
+      "test": "TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues()",
+      "capture_name": "screen-0-1512x2316-S03 values retained after clear cancellation_0_ADC57808-22F8-4E6A-8254-3BE114E295AB.png",
+      "timestamp": 1794639372.046,
+      "png": "assets/ipad/normal-08.png",
+      "ax": "assets/ipad/normal-08.txt",
+      "source_png": "2E287F0D-DF9F-4314-AFE9-9F35A0B2B72E.png",
+      "source_ax": "BC51E3B0-040A-408A-8EA9-71703AE2E31C.txt",
+      "sha256": {
+        "png": "1b1b6ead473465e9bf07fee0720f767653abc16cc6d24e3bfdce10925dd9a71b",
+        "ax": "6accfa0d4fa798ed6e3191288c72b46c46751ab82f5985fe840cc3b4bb58a321"
+      },
+      "ax_observation": {
+        "numeric_popover_marker": 0,
+        "keyboard": 0,
+        "keyboard_done": 0,
+        "weight_72_5": 1,
+        "reps_8": 1
+      }
+    }
+  ],
+  "asset_path_note": "PNG/AX paths normalized to this gallery; source filenames and SHA-256 unchanged.",
+  "original_review_sha256": "992c4455eb0169b77d68f45c9367821685d9da21530ae2894952e60f9894f3d3"
+}

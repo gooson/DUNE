@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 0,
+  "failures": [
+    "391: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:1432: error: -[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultFieldsFitAtMaximumAccessibilitySize] : XCTAssertTrue failed - Numeric input must offer a reachable explicit Do…",
+    "402: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultFieldsFitAtMaximumAccessibilitySize]' failed (55.926 seconds).",
+    "554: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:1432: error: -[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultSaveReopensWithStoredValues] : XCTAssertTrue failed - Numeric input must offer a reachable explicit Done actio…",
+    "565: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultSaveReopensWithStoredValues]' failed (36.263 seconds).",
+    "566: Test Suite 'TodaySettingsRegressionTests' failed at 2026-11-14 15:02:34.795.",
+    "568: Test Suite 'DUNEUITests.xctest' failed at 2026-11-14 15:02:34.796.",
+    "570: Test Suite 'Selected tests' failed at 2026-11-14 15:02:34.796.",
+    "583: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/renewed-s03-pad-ui.log"
+}

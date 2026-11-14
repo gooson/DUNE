@@ -432,3 +432,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 
 
 2026-11-14 [H08 시안과 별도실제증거](../full-redesign-map/review/injury-record-form-h08-2026-11-14/index.html). 과거실패는 보존하며 대기범위를 통과로 표시하지 않는다.
+
+2026-11-14 S03: 정적 시안과 [Phone·iPad 일반/MAX 실제 PNG/AX](../full-redesign-map/review/exercise-default-edit-s03-2026-11-14/index.html)를 구분한다. iPad 일반·MAX 검증; Nov 7 HELD 원본 보존.

@@ -1,0 +1,22 @@
+{
+  "base_main": "26877a0701283070f3ce26107a8a1a92e57e31a1",
+  "source_root": "3341507593bad11a022820acc94c87c88c582659",
+  "v1_unchanged_sha256": "b4803d46191562e98690e7cdbfdb09c462d47f738667563a2d406ef6565f220f",
+  "v2_test_sha256": "22398fe57e5ec31ab6459013764ff006cebdd91ce9cd672d2b3bd9dbe65faba2",
+  "first_class_contains_all_five_s03_functions": true,
+  "all_three_classes_single_instance": true,
+  "main_suffix_from_openExerciseDefaults_byte_exact": true,
+  "source_s03_block_byte_exact": true,
+  "baseline_class_membership_preserved": true,
+  "five_functions": [
+    "testExerciseDefaultSaveReopensWithStoredValues",
+    "testExerciseDefaultFieldsFitAtMaximumAccessibilitySize",
+    "replaceDefaultNumericInput",
+    "dismissNumberPadBeforeNextFieldOnIPad",
+    "dismissNumberPadBeforeNextField"
+  ],
+  "bad_unmerged_head": "60a2461e817ffc6095d12826f7c7d9ad5966fd69",
+  "tested_root": "334150759",
+  "fixed_file_sha256": "22398fe57e5ec31ab6459013764ff006cebdd91ce9cd672d2b3bd9dbe65faba2",
+  "reconciliation": "Whole TodaySettings file byte-identical to actual passed root. All production Swift files match tested root. Activity file unchanged from PR base and audited with no duplicate/missing methods; preserve its prior main changes. No extra UI replay for unchanged tested file."
+}

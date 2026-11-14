@@ -35,3 +35,5 @@
 
 
 2026-11-14 [H08 새원본·4개 기기 검증 완료](../../full-redesign-map/review/injury-record-form-h08-2026-11-14/index.html). 과거실패는 보존하며 대기범위를 통과로 표시하지 않는다.
+
+2026-11-14 S03: [Phone·iPad 일반/MAX 실제 캡처](../../full-redesign-map/review/exercise-default-edit-s03-2026-11-14/index.html). iPad 일반·MAX 검증; Nov 7 HELD 원본은 새 캡처로 간주하지 않는다.

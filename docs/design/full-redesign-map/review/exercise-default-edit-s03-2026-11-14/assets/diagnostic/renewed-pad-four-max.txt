@@ -1,0 +1,217 @@
+Attributes: Application, 0x1139c0500, pid: 28026, label: 'DUNE'
+Element subtree:
+ →Application, 0x1139c0500, pid: 28026, label: 'DUNE'
+    Window, 0x1139c0140, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1139c3700, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1139c0000, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1139c1cc0, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x1139c3ac0, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x1139c1040, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x1139c3980, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x1139c0280, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1139c1e00, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x1139c2a80, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x1139c2e40, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x1139c2800, {{0.0, 32.0}, {756.0, 1126.0}}
+                          Other, 0x1139c0b40, {{0.0, 32.0}, {756.0, 1126.0}}
+                            Other, 0x1139c0c80, {{0.0, 32.0}, {756.0, 1126.0}}
+                              Other, 0x1139c08c0, {{0.0, 32.0}, {756.0, 1126.0}}
+                                Other, 0x1139c0780, {{0.0, 32.0}, {756.0, 1126.0}}
+                                  Other, 0x1147cb340, {{0.0, 32.0}, {756.0, 1126.0}}
+                                    Other, 0x1147cbac0, {{0.0, 32.0}, {756.0, 1126.0}}
+                                      Other, 0x1147cb5c0, {{0.0, 32.0}, {756.0, 1126.0}}
+                                        NavigationBar, 0x1147cbc00, {{0.0, 42.0}, {756.0, 54.0}}, identifier: 'Exercise Default'
+                                          Button, 0x1147cb700, {{10.0, 42.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Exercise Defaults'
+                                          StaticText, 0x1147cae40, {{300.5, 51.0}, {155.0, 26.0}}, label: 'Exercise Default'
+                                          Other, 0x1147cad00, {{671.0, 46.0}, {71.0, 36.0}}
+                                            Other, 0x1147caa80, {{671.0, 46.0}, {71.0, 36.0}}
+                                              Button, 0x1147cb480, {{671.0, 46.0}, {71.0, 36.0}}, identifier: 'exercise-default-edit-save', label: 'Save'
+                                        Other, 0x1147cbe80, {{0.0, 32.0}, {756.0, 1126.0}}
+                                          Other, 0x105277840, {{0.0, 32.0}, {756.0, 1126.0}}
+                                            Other, 0x105277700, {{0.0, 32.0}, {756.0, 1126.0}}
+                                              Other, 0x1052761c0, {{0.0, 32.0}, {756.0, 1126.0}}
+                                                CollectionView, 0x105274780, {{0.0, 32.0}, {756.0, 1126.0}}, identifier: 'exercise-default-edit-screen'
+                                                  Other, 0x1052775c0, {{-20.0, -2156.0}, {796.0, 3072.5}}
+                                                  Other, 0x105277980, {{0.0, 32.0}, {756.0, 1126.0}}
+                                                    Other, 0x1085ec280, {{0.0, 32.0}, {756.0, 104.0}}
+                                                  Other, 0x1085ee940, {{0.0, 32.0}, {756.0, 1126.0}}
+                                                  Cell, 0x1085eda40, {{20.0, 96.0}, {716.0, 83.5}}
+                                                    Other, 0x1085eca00, {{20.0, 96.0}, {716.0, 83.5}}
+                                                    Other, 0x1053e3200, {{20.0, 96.0}, {716.0, 83.5}}
+                                                      Other, 0x1053e2a80, {{20.0, 96.0}, {716.0, 83.5}}
+                                                        Other, 0x1053e3d40, {{20.0, 96.0}, {716.0, 83.5}}
+                                                          StaticText, 0x1053e0640, {{20.0, 96.0}, {716.0, 83.5}}, label: '바벨 벤치프레스'
+                                                  Cell, 0x1053e1a40, {{20.0, 179.5}, {716.0, 166.5}}
+                                                    Other, 0x1053e1f40, {{20.0, 179.5}, {716.0, 166.5}}
+                                                      Other, 0x1053e2bc0, {{20.0, 179.5}, {716.0, 166.5}}
+                                                    Other, 0x1053e3e80, {{20.0, 179.5}, {716.0, 166.5}}
+                                                      Other, 0x1053e2940, {{20.0, 179.5}, {716.0, 166.5}}
+                                                        Other, 0x1053e17c0, {{20.0, 179.5}, {716.0, 166.5}}
+                                                          StaticText, 0x1053e1680, {{52.5, 194.5}, {403.5, 63.5}}, label: 'Default Weight'
+                                                          Image, 0x1053e1400, {{52.5, 204.5}, {42.5, 43.5}}, identifier: 'scalemass', label: 'Scale For Weighing Mass'
+                                                          TextField, 0x1053e1180, {{40.0, 266.0}, {676.0, 65.0}}, identifier: 'exercise-default-edit-weight', placeholderValue: 'kg', value: 72.5, Keyboard Focused
+                                                  Cell, 0x1053e2580, {{20.0, 346.0}, {716.0, 166.5}}
+                                                    Other, 0x1053e3c00, {{20.0, 346.0}, {716.0, 166.5}}
+                                                      Other, 0x1053e1040, {{20.0, 346.0}, {716.0, 166.5}}
+                                                    Other, 0x1053e26c0, {{20.0, 346.0}, {716.0, 166.5}}
+                                                      Other, 0x1053e3980, {{20.0, 346.0}, {716.0, 166.5}}
+                                                        Other, 0x1053e1e00, {{20.0, 346.0}, {716.0, 166.5}}
+                                                          StaticText, 0x1053e2f80, {{51.5, 361.0}, {358.5, 63.5}}, label: 'Default Reps'
+                                                          Image, 0x1053e1b80, {{51.5, 374.5}, {44.5, 37.0}}, identifier: 'repeat', label: 'Repeat 1'
+                                                          TextField, 0x1053e30c0, {{40.0, 432.5}, {676.0, 65.0}}, identifier: 'exercise-default-edit-reps', placeholderValue: 'reps', value: 8
+                                                  Other, 0x1053e12c0, {{123.5, 345.0}, {592.5, 1.0}}
+                                                  Cell, 0x1053e0b40, {{20.0, 512.5}, {716.0, 93.5}}
+                                                    Other, 0x1053e08c0, {{20.0, 512.5}, {716.0, 93.5}}
+                                                      Other, 0x1053e2440, {{20.0, 512.5}, {716.0, 93.5}}
+                                                    Other, 0x1053e2300, {{20.0, 512.5}, {716.0, 93.5}}
+                                                      Other, 0x1053e0f00, {{20.0, 512.5}, {716.0, 93.5}}
+                                                        Other, 0x1053e3480, {{20.0, 512.5}, {716.0, 93.5}}
+                                                          Switch, 0x1053e35c0, {{20.0, 512.5}, {716.0, 93.5}}, identifier: 'exercise-default-edit-manual-override', label: 'Manual Override', value: 0
+                                                            Image, 0x1053e2800, {{57.5, 535.5}, {32.5, 48.0}}, identifier: 'pin', label: 'Pin'
+                                                            StaticText, 0x1053e3700, {{123.5, 527.5}, {369.5, 63.5}}, label: 'Manual Override'
+                                                            Switch, 0x1053e0280, {{655.0, 545.5}, {63.0, 28.0}}, value: 0
+                                                  Other, 0x1053e2080, {{123.5, 511.5}, {592.5, 1.0}}
+                                                  Cell, 0x1053e0a00, {{20.0, 606.0}, {716.0, 93.5}}
+                                                    Other, 0x1053e3340, {{20.0, 606.0}, {716.0, 93.5}}
+                                                      Other, 0x1053e2e40, {{20.0, 606.0}, {716.0, 93.5}}
+                                                    Other, 0x1053e2d00, {{20.0, 606.0}, {716.0, 93.5}}
+                                                      Other, 0x1147bf5c0, {{20.0, 606.0}, {716.0, 93.5}}
+                                                        Other, 0x1147bcf00, {{20.0, 606.0}, {716.0, 93.5}}
+                                                          Switch, 0x1147bc140, {{20.0, 606.0}, {716.0, 93.5}}, identifier: 'exercise-default-edit-preferred', label: 'Preferred Exercise', value: 0
+                                                            Image, 0x1147bda40, {{50.5, 631.0}, {46.5, 44.0}}, identifier: 'star', label: 'Favorite'
+                                                            StaticText, 0x1147bc640, {{123.5, 621.0}, {403.0, 63.5}}, label: 'Preferred Exercise'
+                                                            Switch, 0x1147bcb40, {{655.0, 639.0}, {63.0, 28.0}}, value: 0
+                                                  Other, 0x1147bcc80, {{123.5, 605.0}, {592.5, 1.0}}
+                                                  Cell, 0x1147bca00, {{20.0, 699.5}, {716.0, 217.0}}
+                                                    Other, 0x1147bd400, {{20.0, 699.5}, {716.0, 217.0}}
+                                                    Other, 0x1147bd040, {{20.0, 699.5}, {716.0, 217.0}}
+                                                      Other, 0x1147bdf40, {{20.0, 699.5}, {716.0, 217.0}}
+                                                        Other, 0x1147bdb80, {{20.0, 699.5}, {716.0, 217.0}}
+                                                          StaticText, 0x1147bc8c0, {{20.0, 699.5}, {716.0, 217.0}}, label: 'Manual override keeps your saved defaults. Preferred exercises stay near the top of Quick Start on iPhone and Apple Watch.'
+                                                  Other, 0x1147bc3c0, {{-20.0, 916.5}, {796.0, 2383.0}}
+                                                  Cell, 0x1147bc000, {{20.0, 934.0}, {716.0, 93.5}}
+                                                    Other, 0x1147bd180, {{20.0, 934.0}, {716.0, 93.5}}
+                                                      Other, 0x1147bde00, {{20.0, 934.0}, {716.0, 93.5}}
+                                                    Other, 0x1147bd680, {{20.0, 934.0}, {716.0, 93.5}}
+                                                      Other, 0x1147bc780, {{20.0, 934.0}, {716.0, 93.5}}
+                                                        Other, 0x1147bcdc0, {{20.0, 934.0}, {716.0, 93.5}}
+                                                          Button, 0x1147bd7c0, {{20.0, 934.0}, {716.0, 93.5}}, identifier: 'exercise-default-edit-clear', label: 'Clear Exercise Settings'
+                                                  Other, 0x1147bc500, {{723.0, 96.0}, {30.0, 642.5}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                                    Other, 0x1147bc280, {{750.0, 99.0}, {3.0, 499.5}}
+                                                  Other, 0x1147bdcc0, {{723.0, 96.0}, {30.0, 642.5}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                                    Other, 0x1147bd2c0, {{750.0, 99.0}, {3.0, 499.5}}
+                                                Button, 0x1139d4000, {{614.0, 746.5}, {126.0, 63.5}}, identifier: 'exercise-default-keyboard-done', label: 'Done'
+                                        Toolbar, 0x1139d4140, {{0.0, 32.0}, {756.0, 1126.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x1139d4280, {{0.0, 32.0}, {756.0, 1126.0}}
+                                Toolbar, 0x1139d43c0, {{0.0, 32.0}, {756.0, 1126.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x1139d4500, {{0.0, 32.0}, {756.0, 1126.0}}
+                            Other, 0x1139d4640, {{0.0, 32.0}, {756.0, 1126.0}}
+                              Other, 0x1139d4780, {{0.0, 32.0}, {756.0, 1126.0}}
+                Other, 0x1139d48c0, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x1139d4a00, {{0.0, 32.0}, {756.0, 786.0}}
+              Other, 0x1139d4b40, {{378.0, 425.0}, {0.0, 0.0}}
+    Window, 0x1139d4c80, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1139d4dc0, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1139d4f00, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1139d5040, {{0.0, 818.0}, {756.0, 340.0}}
+          Other, 0x1139d5180, {{0.0, 818.0}, {756.0, 340.0}}, identifier: 'inputView'
+    Window (Main), 0x1139d52c0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1139d5400, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1139d5540, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1139d5680, {{0.0, 818.0}, {756.0, 340.0}}
+          Other, 0x1139d57c0, {{0.0, 818.0}, {756.0, 55.0}}, identifier: 'inputAssistantView'
+            Other, 0x1139d5900, {{0.0, 818.0}, {756.0, 55.0}}
+              Other, 0x1139d5a40, {{0.0, 818.0}, {378.0, 49.0}}, identifier: 'LeftButtonBar'
+                Other, 0x1139d5b80, {{28.0, 818.0}, {350.0, 49.0}}
+                  Other, 0x1139d5cc0, {{28.0, 819.0}, {114.0, 49.0}}
+                    Other, 0x1139d5e00, {{28.0, 819.0}, {22.0, 49.0}}
+                      Button, 0x1139d5f40, {{28.0, 819.0}, {22.0, 49.0}}, identifier: 'assistantUndo', label: 'undo'
+                    Other, 0x1139d6080, {{74.0, 819.0}, {22.0, 49.0}}
+                      Button, 0x1139d61c0, {{74.0, 819.0}, {22.0, 49.0}}, identifier: 'assistantRedo', label: 'Redo', Disabled
+                    Other, 0x1139d6300, {{120.0, 819.0}, {22.0, 49.0}}
+                      Button, 0x1139d6440, {{120.0, 819.0}, {22.0, 49.0}}, identifier: 'assistantPaste:forEvent:', label: 'Paste', Disabled
+              Other, 0x1139d6580, {{378.0, 818.0}, {378.0, 49.0}}, identifier: 'RightButtonBar'
+                Other, 0x1139d66c0, {{378.0, 818.0}, {350.0, 49.0}}
+          Other, 0x1139d6800, {{0.0, 818.0}, {756.0, 341.0}}
+            Other, 0x1139d6940, {{0.0, 818.0}, {756.0, 341.0}}
+              Other, 0x1139d6a80, {{0.0, 818.0}, {756.0, 341.0}}
+          Other, 0x1139d6bc0, {{0.0, 873.0}, {756.0, 282.0}}, identifier: 'inputView'
+            Keyboard, 0x1139d6d00, {{0.0, 873.0}, {756.0, 282.0}}
+              Other, 0x1139d6e40, {{0.0, 873.0}, {756.0, 282.0}}
+                Other, 0x1139d6f80, {{0.0, 873.0}, {756.0, 282.0}}, identifier: 'UIKeyboardLayoutStar Preview'
+                  Key, 0x1139d70c0, {{0.0, 873.0}, {0.0, 0.0}}, label: 'Padding-Left'
+                  Key, 0x1139d7200, {{0.0, 873.0}, {0.0, 0.0}}, label: 'Padding-Left'
+                  Button, 0x1139d7340, {{0.0, 873.0}, {0.0, 0.0}}, label: 'Redo', Disabled
+                  Key, 0x1139d7480, {{3.0, 880.0}, {67.5, 64.5}}, label: '1'
+                  Key, 0x1139d75c0, {{70.5, 880.0}, {67.5, 64.5}}, label: '2'
+                  Key, 0x1139d7700, {{138.0, 880.0}, {67.5, 64.5}}, label: '3'
+                  Key, 0x1139d7840, {{205.5, 880.0}, {67.5, 64.5}}, label: '4'
+                  Key, 0x1139d7980, {{273.0, 880.0}, {67.5, 64.5}}, label: '5'
+                  Key, 0x1139d7ac0, {{340.5, 880.0}, {67.5, 64.5}}, label: '6'
+                  Key, 0x1139d7c00, {{408.0, 880.0}, {67.5, 64.5}}, label: '7'
+                  Key, 0x1139d7d40, {{475.5, 880.0}, {67.5, 64.5}}, label: '8'
+                  Key, 0x1139d7e80, {{543.0, 880.0}, {67.5, 64.5}}, label: '9'
+                  Key, 0x108fcc000, {{610.5, 880.0}, {67.5, 64.5}}, label: '0'
+                  Key, 0x108fcc140, {{678.0, 880.0}, {81.0, 64.5}}, identifier: 'delete', label: 'delete'
+                  Key, 0x108fcc280, {{30.0, 944.5}, {67.5, 64.5}}, label: '@'
+                  Key, 0x108fcc3c0, {{97.5, 944.5}, {67.5, 64.5}}, label: '#'
+                  Key, 0x108fcc500, {{165.0, 944.5}, {67.5, 64.5}}, label: '$'
+                  Key, 0x108fcc640, {{232.5, 944.5}, {67.5, 64.5}}, label: 'ampersand'
+                  Key, 0x108fcc780, {{300.0, 944.5}, {67.5, 64.5}}, label: '*'
+                  Key, 0x108fcc8c0, {{367.5, 944.5}, {67.5, 64.5}}, label: '('
+                  Key, 0x108fcca00, {{435.0, 944.5}, {67.5, 64.5}}, label: ')'
+                  Key, 0x108fccb40, {{502.5, 944.5}, {67.5, 64.5}}, label: '''
+                  Key, 0x108fccc80, {{570.0, 944.5}, {67.5, 64.5}}, label: '"'
+                  Button, 0x108fccdc0, {{637.5, 944.5}, {121.5, 64.5}}, identifier: 'Return', label: 'return'
+                  Button, 0x108fccf00, {{3.0, 1009.0}, {67.5, 64.5}}, identifier: 'shift', label: 'symbols'
+                  Key, 0x108fcd040, {{70.5, 1009.0}, {67.5, 64.5}}, label: '%'
+                  Key, 0x108fcd180, {{138.0, 1009.0}, {67.5, 64.5}}, label: '-'
+                  Key, 0x108fcd2c0, {{205.5, 1009.0}, {67.5, 64.5}}, label: '+'
+                  Key, 0x108fcd400, {{273.0, 1009.0}, {67.5, 64.5}}, label: '='
+                  Key, 0x108fcd540, {{340.5, 1009.0}, {67.5, 64.5}}, label: '/'
+                  Key, 0x108fcd680, {{408.0, 1009.0}, {67.5, 64.5}}, label: ';'
+                  Key, 0x108fcd7c0, {{475.5, 1009.0}, {67.5, 64.5}}, label: ':'
+                  Key, 0x108fcd900, {{543.0, 1009.0}, {67.5, 64.5}}, label: ','
+                  Key, 0x108fcda40, {{610.5, 1009.0}, {67.5, 64.5}}, label: '.'
+                  Key, 0x108fcdb80, {{678.0, 1009.0}, {81.0, 64.5}}, label: 'symbols'
+                  Key, 0x108fcdcc0, {{3.0, 1073.5}, {138.0, 64.5}}, identifier: 'more', label: 'letters'
+                  Key, 0x108fcde00, {{141.0, 1073.5}, {411.0, 64.5}}, label: 'space'
+                  Key, 0x108fcdf40, {{141.0, 1073.5}, {411.0, 64.5}}, label: ' '
+                  Button, 0x108fce080, {{552.0, 1073.5}, {69.0, 64.5}}, label: 'Undo'
+                  Key, 0x108fce1c0, {{621.0, 1073.5}, {69.0, 64.5}}, identifier: 'more', label: 'letters'
+                  Button, 0x108fce300, {{690.0, 1073.5}, {69.0, 64.5}}, label: 'Hide keyboard'
+      Other, 0x108fce440, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x108fce580, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Popover, 0x108fce6c0, {{479.0, 331.0}, {267.0, 261.0}}
+          Other, 0x108fce800, {{479.0, 331.0}, {267.0, 261.0}}
+            Other, 0x108fce940, {{479.0, 331.0}, {267.0, 261.0}}
+              Other, 0x108fcea80, {{479.0, 331.0}, {267.0, 261.0}}
+                Other, 0x108fcebc0, {{479.0, 331.0}, {267.0, 248.0}}
+                  Other, 0x108fced00, {{479.0, 331.0}, {267.0, 248.0}}
+                    Other, 0x108fcee40, {{479.0, 331.0}, {0.0, 0.0}}
+                      Other, 0x108fcef80, {{479.0, 331.0}, {267.0, 248.0}}
+                        Other, 0x108fcf0c0, {{479.0, 331.0}, {267.0, 248.0}}
+                          Other, 0x108fcf200, {{479.0, 344.0}, {267.0, 248.0}}
+                            Other, 0x108fcf340, {{479.0, 344.0}, {267.0, 248.0}}
+                              Other, 0x108fcf480, {{479.0, 344.0}, {267.0, 248.0}}
+                                Other, 0x108fcf5c0, {{479.0, 344.0}, {267.0, 248.0}}
+                                  Other, 0x108fcf700, {{479.0, 344.0}, {267.0, 248.0}}, identifier: 'UIKeyboardLayoutStar Preview'
+                                    Key, 0x108fcf840, {{494.0, 359.0}, {81.0, 56.0}}, label: '1'
+                                    Key, 0x108fcf980, {{575.0, 359.0}, {81.0, 56.0}}, label: '2'
+                                    Key, 0x108fcfac0, {{656.0, 359.0}, {81.0, 56.0}}, label: '3'
+                                    Key, 0x108fcfc00, {{494.0, 415.0}, {81.0, 56.0}}, label: '4'
+                                    Key, 0x108fcfd40, {{575.0, 415.0}, {81.0, 56.0}}, label: '5'
+                                    Key, 0x108fcfe80, {{656.0, 415.0}, {81.0, 56.0}}, label: '6'
+                                    Key, 0x1139cc000, {{494.0, 471.0}, {81.0, 56.0}}, label: '7'
+                                    Key, 0x1139cc140, {{575.0, 471.0}, {81.0, 56.0}}, label: '8'
+                                    Key, 0x1139cc280, {{656.0, 471.0}, {81.0, 56.0}}, label: '9'
+                                    Key, 0x1139cc3c0, {{494.0, 527.0}, {81.0, 56.0}}, label: '.'
+                                    Key, 0x1139cc500, {{575.0, 527.0}, {81.0, 56.0}}, label: '0'
+                                    Key, 0x1139cc640, {{656.0, 527.0}, {81.0, 56.0}}, label: 'Delete'
+Path to element:
+ →Application, 0x1139c0500, pid: 28026, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1139cc780, pid: 28026, label: 'DUNE'
+  }
