@@ -1,0 +1,25 @@
+{
+  "review": "B06 P05/P07 app-quality and PR source gate",
+  "source_head": "7b9138b6dbcc7687f6df8393aaba1020abdff068",
+  "base": "94cfa789",
+  "scope": [
+    "DUNE/Presentation/Posture/PostureHistoryView.swift (P05)",
+    "DUNE/Presentation/Posture/PostureSymmetryView.swift (P07)",
+    "Shared/Resources/Localizable.xcstrings numeric score fraction",
+    "DUNEUITests/Full/WellnessRegressionTests.swift P05/P07 methods"
+  ],
+  "source_findings": [],
+  "source_verdict": "PASS: no introduced P1/P2/P3 finding in P05/P07 scope",
+  "quality_verdict": "PASS WITH NOTES for P05/P07 targeted iPhone+iPad core behavior; actual Duo map verification remains pending",
+  "evidence": {
+    "P05": "Phone normal and MAX selectors passed in .codex-checks/b06/phone-ui.log; iPad normal selector passed in ipad-ui.log. Later row-surface fix restored baseline lightweight material/context menu; data query, score, date, metric count, filter, detail/back, delete confirmation and empty state remain covered by source and focused tests.",
+    "P07": "Phone normal and MAX selectors passed in .codex-checks/b06/phone-ui-retry1.log; iPad normal selector passed in ipad-ui.log. Tests assert all three stored left/right pairs and units, MAX viewport fit and reachability. Light status-color change affects three icon/text foregrounds only; symmetry values, bar fill and calculation stay unchanged.",
+    "localization": "Single added manual %lld / 100 entry has en/ja/ko values matching Int interpolation; no P05/P07 string-key mismatch seen in diff.",
+    "source_only_limit": "This reviewer ran no SDK/build/test or native capture; runtime results are cited from existing receipts and do not certify all platforms or the entire mixed P03/P05/P07/P08 branch."
+  },
+  "pending": [
+    "P05 and P07 current Duo closed/open actual-map captures are missing after owned Duo simulator disappeared; historical PNGs cannot be marked current.",
+    "P08 has separate failed phone/iPad automation and is excluded from this verdict."
+  ],
+  "ship_gate": "Do not present B06 as fully native-verified or all-screen ready while required actual Duo captures and independent P08 gate are unresolved."
+}

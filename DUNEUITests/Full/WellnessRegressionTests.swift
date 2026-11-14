@@ -1047,8 +1047,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     func testPostureComparison() throws {
         openHistory()
-        XCTAssertTrue(app.waitAndTapToolbarAction("Compare"),
-                      "Compare must remain reachable directly or through native toolbar overflow")
+        openPostureHistoryComparisonMenuAction()
         let metrics = app.staticTexts.matching(NSPredicate(
             format: "identifier BEGINSWITH %@ AND label == %@",
             "posture-history-row-metric-count-", "8 metrics"
@@ -1543,6 +1542,145 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         return row.exists && row.isHittable && viewport.contains(row.frame)
     }
 
+    func testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom() throws {
+        openSeededComparison()
+        let photos = app.scrollViews["posture-comparison-photos-scroll"].firstMatch
+        let metrics = app.scrollViews["posture-comparison-metrics-scroll"].firstMatch
+        XCTAssertTrue(photos.waitForExistence(timeout: 5) && metrics.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["73"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["86"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["+13"].firstMatch.exists)
+        for offset in [14, 1] {
+            let date = try XCTUnwrap(Calendar.current.date(byAdding: .day, value: -offset, to: .now))
+                .formatted(Date.FormatStyle.dateTime.month(.abbreviated).day()
+                    .locale(Locale(identifier: "en_US")))
+            XCTAssertTrue(app.staticTexts[date].firstMatch.exists, "Keep both fixture dates")
+        }
+        VisualAudit.capture("P08 actual older and newer score delta")
+
+        let front = app.descendants(matching: .any)["posture-comparison-photo-front-older"].firstMatch
+        XCTAssertTrue(front.waitForExistence(timeout: 5))
+        let window = app.windows.firstMatch
+        for _ in 0..<12 {
+            let viewport = photos.frame.intersection(window.frame).insetBy(dx: 6, dy: 6)
+            let visible = front.frame.intersection(viewport)
+            if front.isHittable && !visible.isNull && visible.width >= 24 && visible.height >= 24 {
+                break
+            }
+            let startY: CGFloat = front.frame.midY > viewport.midY ? 0.65 : 0.35
+            let endY: CGFloat = front.frame.midY > viewport.midY ? 0.35 : 0.65
+            let start = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+            let end = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+            start.press(forDuration: 0.05, thenDragTo: end,
+                        withVelocity: XCUIGestureVelocity(rawValue: 80),
+                        thenHoldForDuration: 0.35)
+        }
+        let visible = front.frame.intersection(
+            photos.frame.intersection(window.frame).insetBy(dx: 6, dy: 6))
+        guard front.isHittable && !visible.isNull && visible.width >= 24 && visible.height >= 24 else {
+            XCTFail("Front photo must have a 24-point tappable area inside its own visible pane before opening zoom")
+            return
+        }
+        let frontFrame = front.frame
+        let tapPoint = front.coordinate(withNormalizedOffset: CGVector(
+            dx: (visible.midX - frontFrame.minX) / frontFrame.width,
+            dy: (visible.midY - frontFrame.minY) / frontFrame.height))
+        tapPoint.auditTap()
+        XCTAssertTrue(app.navigationBars["Front"].firstMatch.waitForExistence(timeout: 5))
+        // Duo places the zoom Close control in the native Toolbar beside the
+        // Front navigation bar; query its actual unique identity and viewport.
+        let closeMatches = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ AND label == %@", "xmark", "Close"
+        ))
+        let close = closeMatches.firstMatch
+        XCTAssertEqual(closeMatches.count, 1, "Front zoom must expose one Close control")
+        XCTAssertTrue(close.exists && close.isEnabled && close.isHittable && window.frame.contains(close.frame),
+                      "The whole Front zoom Close control must be visible")
+        close.auditTap()
+        XCTAssertFalse(app.navigationBars["Front"].firstMatch.exists, "Close dismisses the zoom route")
+        XCTAssertTrue(photos.waitForExistence(timeout: 5), "Closing zoom returns to comparison")
+        metrics.swipeUp(velocity: .slow)
+        VisualAudit.capture("P08 lower metric comparison pane")
+    }
+
+    func testP08ComparisonAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openSeededComparison(maxRevealAttempts: 36)
+        let photos = app.scrollViews["posture-comparison-photos-scroll"].firstMatch
+        let metrics = app.scrollViews["posture-comparison-metrics-scroll"].firstMatch
+        XCTAssertTrue(photos.waitForExistence(timeout: 5) && metrics.waitForExistence(timeout: 5))
+        let navigationBar = app.navigationBars["Comparison"].firstMatch
+        XCTAssertTrue(navigationBar.waitForExistence(timeout: 5))
+        func visiblePhotoViewport() -> CGRect {
+            let pane = photos.frame.intersection(app.windows.firstMatch.frame)
+            let top = max(pane.minY + 4, navigationBar.frame.maxY + 4)
+            return CGRect(x: pane.minX + 4, y: top,
+                          width: max(0, pane.width - 8),
+                          height: max(0, pane.maxY - top - 4))
+        }
+        for score in ["73", "86", "+13"] {
+            let value = app.staticTexts[score].firstMatch
+            XCTAssertTrue(value.waitForExistence(timeout: 5))
+            for _ in 0..<16 {
+                let viewport = visiblePhotoViewport()
+                if value.isHittable && viewport.contains(value.frame) { break }
+                let moveDown = value.frame.midY < viewport.midY
+                let overflow = moveDown ? viewport.minY - value.frame.minY
+                                        : value.frame.maxY - viewport.maxY
+                let fraction = min(0.14, max(0.04, (overflow + 12) / max(photos.frame.height, 1)))
+                let startY: CGFloat = moveDown ? 0.38 : 0.62
+                let start = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                let end = photos.coordinate(withNormalizedOffset: CGVector(
+                    dx: 0.5, dy: moveDown ? startY + fraction : startY - fraction))
+                start.press(forDuration: 0.05, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80),
+                            thenHoldForDuration: 0.35)
+            }
+            XCTAssertTrue(value.isHittable && visiblePhotoViewport().contains(value.frame),
+                          "The whole score text must fit below navigation inside its photo pane: \(score)")
+            VisualAudit.capture("P08 MAX visible comparison score \(score)")
+        }
+        metrics.swipeUp(velocity: .slow)
+        XCTAssertTrue(metrics.isHittable, "MAX metric pane remains independently scrollable")
+        VisualAudit.capture("P08 MAX score and two panes")
+    }
+
+    private func openPostureHistoryComparisonMenuAction() {
+        let menu = app.buttons["posture-history-actions-menu"].firstMatch
+        guard menu.waitForExistence(timeout: 5), menu.isHittable else {
+            XCTFail("The explicit posture actions menu must be reachable")
+            return
+        }
+        menu.auditTap()
+        let compare = app.buttons["posture-history-compare-button"].firstMatch
+        XCTAssertTrue(compare.waitForExistence(timeout: 5) && compare.isHittable)
+        XCTAssertEqual(compare.label, "Compare")
+        compare.auditTap()
+    }
+
+    private func openSeededComparison(maxRevealAttempts: Int = 18) {
+        openHistory(maxRevealAttempts: maxRevealAttempts)
+        openPostureHistoryComparisonMenuAction()
+        let metrics = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND label == %@",
+            "posture-history-row-metric-count-", "8 metrics"
+        ))
+        XCTAssertEqual(metrics.count, 2)
+        for index in 0..<2 {
+            let metric = metrics.element(boundBy: index)
+            reveal(metric)
+            metric.auditTap()
+        }
+        let selected = app.buttons["Compare Selected"].firstMatch
+        reveal(selected)
+        selected.auditTap()
+        XCTAssertTrue(app.navigationBars["Comparison"].firstMatch.waitForExistence(timeout: 5))
+    }
+
     private func openHistory(maxRevealAttempts: Int = 18) {
         let viewAll = app.buttons["wellness-link-posturehistory"].firstMatch
         reveal(viewAll, maxAttempts: maxRevealAttempts)
@@ -1554,11 +1692,26 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     private func reveal(_ element: XCUIElement, maxAttempts: Int = 18) {
         let scroll = app.scrollViews.firstMatch
+        // Duo History has a vertical tab rail in both folded and open poses.
+        // Keep the 90-point top protection; only shrink the bottom inset when
+        // the actual rail geometry proves this is the short History viewport.
+        let wellnessTab = app.buttons["tab-wellness"].firstMatch
+        let sideRailHistory = scroll.identifier == "posture-history-screen"
+            && scroll.frame.height <= 700 && wellnessTab.exists
+            && wellnessTab.frame.width <= 60
+            && wellnessTab.frame.minX >= scroll.frame.maxX - 80
+        func visibleViewport() -> CGRect {
+            let frame = scroll.frame.intersection(app.windows.firstMatch.frame)
+                .insetBy(dx: 12, dy: 0)
+            let top = frame.minY + 90
+            let bottom = frame.maxY - (sideRailHistory ? 12 : 90)
+            return CGRect(x: frame.minX, y: top, width: frame.width,
+                          height: max(0, bottom - top))
+        }
         for _ in 0..<maxAttempts {
             // Duo may report offscreen descendants as hittable. The target's
             // tap point must also lie inside the visible scroll viewport.
-            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
-                .insetBy(dx: 12, dy: 90)
+            let viewport = visibleViewport()
             if element.exists && element.isHittable
                 && viewport.contains(CGPoint(x: element.frame.midX, y: element.frame.midY)) {
                 break
@@ -1581,8 +1734,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
                 scroll.swipeUp(velocity: .slow)
             }
         }
-        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
-            .insetBy(dx: 12, dy: 90)
+        let viewport = visibleViewport()
         XCTAssertTrue(element.exists && element.isHittable
                       && viewport.contains(CGPoint(x: element.frame.midX, y: element.frame.midY)),
                       "Posture target must have a visible tap point")

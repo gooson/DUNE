@@ -30,3 +30,5 @@
 
 
 2026-11-14 [P03 Phone/iPad/Duo 일반/MAX 새 원본과 출처](../../full-redesign-map/review/posture-exercise-picker-p03-2026-11-14/index.html). 혼합 배치와 과거 실패는 해당 갤러리에 보존한다.
+
+2026-11-14 [P08 Phone/iPad/Duo 일반·MAX 새 실제 PNG·AX](../../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html). P05 History의 명시적 More 메뉴와 알림 Capture 소비자를 함께 검증했고, 최초 실패·조건부 재시도는 갤러리 이력에 보존한다.

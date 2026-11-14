@@ -122,16 +122,20 @@
     },
     "P05": {
       "row_id": "P05",
-      "evidence": "posture-history-screen",
-      "test": "PostureVisualAuditTests/testPostureComparison()",
-      "action": "tap wellness-link-posturehistory",
-      "timestamp": 1791830020.228,
-      "image": "7B515595-A102-4BE7-9E0F-AFBC73C4065A.png",
-      "screen": "screen-1-2006x2852-tap wellness-link-posturehistory_1_A5DA161E-999F-43F4-ACFF-45206A87BF49.png",
+      "evidence": "fresh Posture History More toolbar PNG/AX; P08 compare consumer in linked gallery",
+      "test": "PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom()",
+      "action": "Posture History top with explicit More action",
       "file": "P05.png",
-      "current_verification": "pending",
-      "current_verification_note": "현재 B06 화면 캡처 보류: 전용 Duo 실행 제공자가 테스트 시작 전에 사라졌습니다. 표시된 P05/P07 이미지는 이전 소스의 역사적 화면이며 이번 변경의 완료 증거가 아닙니다.",
-      "capture_scope": "Historical image retained; B06 current-source capture pending"
+      "image": "004-2007x2853.png",
+      "source_revision": "ce7be698308d27bacb8214b3c7f921cfb7be983a",
+      "source_file_sha256": "907972081378f8e3dbb8bf66836b2b87b990570a631a45e02909c2d5b36735fa",
+      "source_equivalence": "P05 toolbar source byte-identical across cited P08 normal runs",
+      "png_sha256": "bf13dfa9588b40af089c2ed2407e3bc4623ae2f64e8a2c87f36d2cdf0a0232b1",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "gallery": "../../../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html"
     },
     "S06": {
       "row_id": "S06",
@@ -715,13 +719,20 @@
     },
     "P08": {
       "row_id": "P08",
-      "evidence": "posture-comparison-photos-scroll",
-      "test": "PostureVisualAuditTests/testPostureComparison()",
-      "action": "tap Compare Selected",
-      "timestamp": 1791830041.029,
-      "image": "F7D87E2B-DABE-413A-9747-3C8C6305DAF5.png",
-      "screen": "screen-1-2006x2852-tap Compare Selected_1_2F53A914-BA60-49CE-93D8-EEDD589F3AB7.png",
-      "file": "P08.png"
+      "evidence": "fresh native PNG/AX; normal/MAX exact selectors passed; see gallery for scope",
+      "test": "PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom()",
+      "action": "P08 actual older and newer score delta [DUNEUITests/WellnessRegressionTests.swift:1779]",
+      "file": "P08.png",
+      "image": "013-2007x2853.png",
+      "source_revision": "ce7be698308d27bacb8214b3c7f921cfb7be983a",
+      "source_file_sha256": "7986295917d46376fa9ffa695a92e6333094765ef7d6a7368b14981e95a62d23",
+      "source_equivalence": "P08 app files byte-identical across listed capture revisions; test revisions in gallery source lineage",
+      "png_sha256": "285a3e8a10a240c93bad453c987a27bb1394a308dc9c3aac463f3932ccfd4f19",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "gallery": "../../../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html"
     },
     "P06": {
       "row_id": "P06",

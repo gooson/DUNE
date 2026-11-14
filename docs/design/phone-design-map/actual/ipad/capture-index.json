@@ -78,25 +78,20 @@
     },
     "P05": {
       "row_id": "P05",
+      "evidence": "fresh Posture History More toolbar PNG/AX; P08 compare consumer in linked gallery",
+      "test": "PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom()",
+      "action": "Posture History top with explicit More action",
       "file": "P05.png",
-      "test": "PostureVisualAuditTests/testP05HistoryLatestScoreFilterAndDetailReturn()",
-      "action": "iPad current normal latest score",
-      "timestamp": 1793973552.15,
-      "source_revision": "0d6a724bc6dae494fd867186b667aa0e3517c3af",
-      "source_worktree_dirty": false,
-      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
-      "capture_kind": "XCTest-native-PNG+AX",
-      "sha256": "7f7e8c28c23939c378f9b3b5a465096ce998f4b768701bfa375c8bc60ea37615",
-      "ax_sha256": "a01e55801e9614dc8adc1e5a457be280b596198d6e2870751814f02a88062d96",
+      "image": "6203244F-BF50-4320-AB6A-FBA0F8D2D3A8.png",
+      "source_revision": "4c27c4499526635c49822d44963fe4d67a11407f",
+      "source_file_sha256": "907972081378f8e3dbb8bf66836b2b87b990570a631a45e02909c2d5b36735fa",
+      "source_equivalence": "P05 toolbar source byte-identical across cited P08 normal runs",
+      "png_sha256": "2a0ef6213aa7c3b9d518c517836db6abab666f8800473d21d7cd4354a8cc87df",
       "native_dimensions": [
         1512,
         2316
       ],
-      "source_json": "../../../full-redesign-map/review/posture-history-p05-2026-11-06/manifest.json",
-      "source_record": "records: profile=ipad,kind=after,is_primary=true,normal",
-      "capture_scope": "B06 selected normal state; see gallery gates and limits",
-      "actual_angle": null,
-      "current_verification": "normal-captured"
+      "gallery": "../../../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html"
     },
     "S01": {
       "row_id": "S01",
@@ -851,13 +846,20 @@
     },
     "P08": {
       "row_id": "P08",
-      "evidence": "posture-comparison-photos-scroll",
-      "test": "PostureVisualAuditTests/testPostureComparison()",
-      "action": "tap Compare Selected",
-      "timestamp": 1791823635.762,
-      "image": "EE6B7A27-46AF-4038-B699-508A633EEDF6.png",
-      "screen": "screen-0-2064x2752-tap Compare Selected_0_C64964A1-049D-4DC6-B982-0BBE3E29A58B.png",
-      "file": "P08.png"
+      "evidence": "fresh native PNG/AX; normal/MAX exact selectors passed; see gallery for scope",
+      "test": "PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom()",
+      "action": "P08 actual older and newer score delta",
+      "file": "P08.png",
+      "image": "39fb3579662d8334.png",
+      "source_revision": "4c27c4499526635c49822d44963fe4d67a11407f",
+      "source_file_sha256": "7986295917d46376fa9ffa695a92e6333094765ef7d6a7368b14981e95a62d23",
+      "source_equivalence": "P08 app files byte-identical across listed capture revisions; test revisions in gallery source lineage",
+      "png_sha256": "39fb3579662d83345747f78cd0cb8ef8c863e1052730f6f85a9562e95011cb79",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "gallery": "../../../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html"
     },
     "P06": {
       "row_id": "P06",
