@@ -1,0 +1,15 @@
+{
+  "source": "c6708751213657f7a1624ac944d7660e8bbed19d",
+  "patch_sha256": "a826d6ab5efbfe2735c457cf0ccf3cbe646ca3a92be668b19c7c915b4dffea3f",
+  "introduced_P1_P2": [],
+  "cause_review": {
+    "authoring": "Native AX puts Builder at y2276 normal and y6702 MAX, far outside the Activity scroll viewport. Existing generic helper returns on AX existence. Candidate scopes button query to owned Activity root, reveals in bounded bidirectional scroll, and requires whole frame plus hittability before tap.",
+    "plan_MAX": "Native AX puts Remove at y923.3\u2013986.6 while active template pane ends at y956. Existing downward swipes move the below-viewport action farther away. Candidate chooses upward swipes when below and requires full frame in pane."
+  },
+  "scope": "Two local test callsites only; no app, fixture, global helper or passed PlanNormal test change. Same-ID retry of three failed selectors is cause-specific.",
+  "limits": [
+    "Native success remains pending; source and AX geometry cannot prove 24/8 swipes suffice.",
+    "This reviews test remediation only, not B13 app quality or full suite."
+  ],
+  "verdict": "reviewed_no_source_blocker"
+}

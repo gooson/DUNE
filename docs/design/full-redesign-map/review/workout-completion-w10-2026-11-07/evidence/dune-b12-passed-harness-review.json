@@ -1,0 +1,49 @@
+{
+  "batch": "B12",
+  "purpose": "Split frozen six-selector B12 test block into four accepted completion/import cases and two held records cases",
+  "base_revision": "770809e12b8f2b797be56ab2e8d401bb8f9ae8d8",
+  "frozen_source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+  "test_path": "DUNEUITests/Full/ActivityExerciseRegressionTests.swift",
+  "base_sha256": "32bbc6b3e5012582bfd910d497e0b0b3477ab3784e56012c53167490aafe898a",
+  "full_frozen_sha256": "eef3f25e22a30710ec341edbc8642d309fbb4b6ff3b17ce5a5455f6635f78cd2",
+  "accepted_projected_sha256": "0ac149038cd27f1ee4e95d9ca8cc78200f308a20887b9ba8d7d7d63d99ebae63",
+  "accepted_block_sha256": "a27f256a6b5de31e384b2060dd7a39f45b7b8e9c2f2d00b87eb227ef16796e20",
+  "held_records_block_sha256": "e6516455fbd514c885fa549bc33e1e7d89ddc28df403105e484b711556696d23",
+  "accepted_methods": [
+    "testVisualAuditWorkoutCompletionAtNormalText",
+    "testVisualAuditWorkoutCompletionAtMaximumText",
+    "testVisualAuditImportedWorkoutAtNormalText",
+    "testVisualAuditImportedWorkoutAtMaximumText"
+  ],
+  "accepted_helpers": [
+    "auditWorkoutCompletion",
+    "auditImportedWorkout"
+  ],
+  "held_methods": [
+    "testVisualAuditWorkoutRecordsAtNormalText",
+    "testVisualAuditWorkoutRecordsAtMaximumText"
+  ],
+  "held_helper": [
+    "auditWorkoutRecords"
+  ],
+  "proof": {
+    "exact_four_methods_two_helpers": true,
+    "source_block_byte_exact": true,
+    "fixture_and_setup_unchanged": true,
+    "accepted_has_no_W11_W26_W27_records_queries": true,
+    "accepted_helper_dependencies_present_in_base": true,
+    "records_inserted_later_reconstruct_full_frozen_file_byte_exact": true,
+    "app_runtime_source_modified_by_extraction": false
+  },
+  "native_reuse": "W10/W28 original Phone normal/MAX (W28 MAX same-ID retry1) and iPad normal/MAX passed against frozen app hashes; source-only split adds no production behavior. No extra SDK run requested.",
+  "placement": "W28 accepted branch adds accepted block only, after W10/W27 source merges; W11 held draft may add records block only when W26 candidate source is present, leaving accepted main free of failed records flow.",
+  "held_draft_gallery": "/private/tmp/dune-b12-held.py copies W11/W26 galleries and HELD.md while preserving all actual-map index/image hashes; not executed.",
+  "private_helper_sha256": {
+    "dune-b12-split.py": "5731f3606f5ad14b4105587a6d5cb8e03c63db279af69f0811cb952936ddc7bc",
+    "dune-b12-held.py": "8fffd0e5bd352c442408d08c5e1986137196a683dd77b941c0a0771361af01b7"
+  },
+  "remaining_limits": [
+    "Phone records selectors remain failed in both closed attempts; held block must not be described as passed.",
+    "Four accepted methods are opt-in VisualAudit and only represent targeted normal/MAX cases, not full regression."
+  ]
+}

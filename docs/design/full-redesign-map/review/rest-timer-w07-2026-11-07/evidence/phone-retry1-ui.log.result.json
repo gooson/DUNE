@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtMaximumText"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 1,
+  "failures": [
+    "1702: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:3411: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditSetAssistanceAtNormalText] : XCTAssertTrue failed - W07 Skip must be fully visible above the tab bar",
+    "1713: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditSetAssistanceAtNormalText]' failed (148.443 seconds).",
+    "1714: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-11-07 04:35:00.075.",
+    "1716: Test Suite 'DUNEUITests.xctest' failed at 2026-11-07 04:35:00.075.",
+    "1718: Test Suite 'Selected tests' failed at 2026-11-07 04:35:00.076.",
+    "1730: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtNormalText"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b11/phone-retry1-ui.log"
+}

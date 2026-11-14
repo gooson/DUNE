@@ -7,6 +7,7 @@ struct HealthKitWorkoutDetailView: View {
     let workout: WorkoutSummary
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var viewModel = HealthKitWorkoutDetailViewModel()
     @State private var isShowingTitleEditor = false
     @State private var editedTitle = ""
@@ -101,14 +102,17 @@ struct HealthKitWorkoutDetailView: View {
                 }
             }
         }
-        .presentationDetents([.fraction(0.25)])
+        .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.medium, .large] : [.fraction(0.25)])
     }
 
     // MARK: - Header
 
     private var workoutHeader: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack(spacing: DS.Spacing.md) {
+            let headerLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+            headerLayout {
                 Image(systemName: workout.activityType.iconName)
                     .font(.title)
                     .foregroundStyle(workout.activityType.color)
@@ -126,10 +130,13 @@ struct HealthKitWorkoutDetailView: View {
                         .foregroundStyle(.tertiary)
                 }
 
-                Spacer()
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
             }
 
-            HStack(spacing: DS.Spacing.xl) {
+            let summaryLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.xl))
+            summaryLayout {
                 statItem(
                     value: formattedDuration(workout.duration),
                     label: "Duration"
@@ -194,10 +201,10 @@ struct HealthKitWorkoutDetailView: View {
         let isWalkingWorkout = workout.activityType == .walking
 
         return VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            LazyVGrid(columns: [
-                GridItem(.flexible(), spacing: DS.Spacing.sm),
-                GridItem(.flexible(), spacing: DS.Spacing.sm),
-            ], spacing: DS.Spacing.sm) {
+            LazyVGrid(columns: dynamicTypeSize.isAccessibilitySize
+                ? [GridItem(.flexible())]
+                : [GridItem(.flexible(), spacing: DS.Spacing.sm),
+                   GridItem(.flexible(), spacing: DS.Spacing.sm)], spacing: DS.Spacing.sm) {
                 // Heart rate avg
                 if let hrAvg {
                     statCard(

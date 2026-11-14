@@ -1,0 +1,25 @@
+{
+  "scope": "Independent source-only security/data/navigation/performance review of private B12 W10/W11/W26/W27/W28 candidates against origin/main 7c7e21fa; no app or test execution",
+  "source_revision": "7c7e21fa5c11ef1585e493288f258bbe0eb082d8",
+  "candidate_hashes": {
+    "W10": "6f20370f45d5507e7e513b4c4fd66b8eb9cb02d1310268ab207ff10a5e3944f4",
+    "W11": "31462a97ad99863afa3b658b4f86802eeeb18195c53d26b6163063211ffc808c",
+    "W26": "4ffc0dde3feb202d42fb9fba58dd3e0c45b9a9e16cb1cf6204e09d3c6eec5a5c",
+    "W27": "5eabaa63c0cf98c25710a25058ae543e2d86f5f2224507ae0559ae616b8fbcfa",
+    "W28": "fc1655387a9e635121cd7e86577002d9b0eafa774fea595c6dc6ff67dec61e08"
+  },
+  "verification": [
+    "All five source patches pass git apply --check.",
+    "All five private candidate Swift files pass xcrun swiftc -frontend -parse.",
+    "Diffs touch presentation layout only; no service/model/query/record mutation, navigation destination, ShareLink item, correction-store call, localized key or action closure changed."
+  ],
+  "introduced_actionable_P1_P2": [],
+  "remaining_uncertainty": [
+    "W11 call site in ExerciseHistoryView remains medium detent; reduced MAX image height may still leave Share action cramped. Native iPad/MAX capture is required before acceptance.",
+    "W26 session metadata remains an HStack with several fragments at MAX; candidate only changes the stat grid. Long localized row values require native inspection.",
+    "W27 cardio metric pairs and W28 weather/detail lower sections are outside the narrow patch; selected seeded records may not expose all variants.",
+    "No runtime or compiler type-check was performed; swiftc -parse proves syntax only."
+  ],
+  "test_candidate": "/private/tmp/dune-b12-tests-prep/B12-tests.patch",
+  "finding_count": 0
+}
