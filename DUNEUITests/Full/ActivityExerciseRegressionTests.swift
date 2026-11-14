@@ -136,6 +136,97 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                        "Removing assignment must restore Rest Day")
     }
 
+    func testVisualAuditWorkoutRecordsAtNormalText() throws {
+        try auditWorkoutRecords(maximumText: false)
+    }
+
+    func testVisualAuditWorkoutRecordsAtMaximumText() throws {
+        try auditWorkoutRecords(maximumText: true)
+    }
+
+    private func auditWorkoutRecords(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B12 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        openExerciseViewFromRecentWorkouts()
+        let workoutID = AXID.exerciseRow(Fixture.benchPressID)
+        XCTAssertTrue(app.scrollToElementIfNeeded(workoutID, maxSwipes: 12))
+        let workout = app.descendants(matching: .any)[workoutID].firstMatch
+        XCTAssertTrue(workout.waitForExistence(timeout: 8) && workout.isHittable)
+        workout.auditTap()
+        let detail = app.scrollViews["exercise-session-detail-scroll"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 8))
+        VisualAudit.capture("W27 \(size) strength record header")
+        let setOne = app.staticTexts.matching(NSPredicate(format: "label == %@", "Set 1")).firstMatch
+        let reps = app.staticTexts.matching(NSPredicate(format: "label == %@", "10 reps")).firstMatch
+        for _ in 0..<12 where !(setOne.exists && setOne.isHittable && reps.exists && reps.isHittable) {
+            detail.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(setOne.exists && setOne.isHittable && reps.exists && reps.isHittable,
+                      "W27 seeded set number and repetitions should be readable")
+        VisualAudit.capture("W27 \(size) completed set values")
+
+        let historyLink = app.buttons[AXID.exerciseSessionViewHistory].firstMatch
+        for _ in 0..<12 where !(historyLink.exists && historyLink.isHittable) {
+            detail.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(historyLink.exists && historyLink.isHittable)
+        historyLink.auditTap()
+        let history = app.scrollViews[AXID.exerciseHistoryScreen].firstMatch
+        XCTAssertTrue(history.waitForExistence(timeout: 10) && history.isHittable,
+                      "History must be in front of the selected workout inspector")
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            let historyClose = app.buttons["exercise-history-close"].firstMatch
+            XCTAssertTrue(historyClose.waitForExistence(timeout: 5) && historyClose.isHittable,
+                          "Compact History must own a reachable Done action")
+            historyClose.auditTap()
+            XCTAssertTrue(detail.waitForExistence(timeout: 5) && detail.isHittable,
+                          "Closing compact History returns to the selected workout detail")
+            XCTAssertTrue(historyLink.waitForExistence(timeout: 5) && historyLink.isHittable)
+            historyLink.auditTap()
+            XCTAssertTrue(history.waitForExistence(timeout: 10) && history.isHittable,
+                          "Reopened History must remain in front of the inspector")
+        }
+        VisualAudit.capture("W26 \(size) history chart and selected metric")
+        let sessionsStat = app.staticTexts.matching(NSPredicate(format: "label == %@", "Sessions")).firstMatch
+        for _ in 0..<12 where !(sessionsStat.exists && sessionsStat.isHittable) {
+            history.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(sessionsStat.exists && sessionsStat.isHittable, "W26 Sessions stat should be readable")
+        VisualAudit.capture("W26 \(size) sessions stat card")
+        let repsStat = app.staticTexts.matching(NSPredicate(format: "label == %@", "Total Reps")).firstMatch
+        for _ in 0..<12 where !(repsStat.exists && repsStat.isHittable) {
+            history.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(repsStat.exists && repsStat.isHittable, "W26 Total Reps stat should be readable")
+        VisualAudit.capture("W26 \(size) total reps stat card")
+
+        // The seeded Bench Press record has three completed sets; its native row has no AXID.
+        let session = history.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "3 sets")).firstMatch
+        for _ in 0..<12 where !(session.exists && session.isHittable) {
+            history.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(session.exists && session.isHittable, "W26 session row should be reachable")
+        session.press(forDuration: 1.1)
+        let share = app.buttons["Share"].firstMatch
+        XCTAssertTrue(share.waitForExistence(timeout: 5) && share.isHittable,
+                      "W26 session context menu should retain Share")
+        share.auditTap()
+        let shareSheet = app.descendants(matching: .any)["share-image-sheet"].firstMatch
+        XCTAssertTrue(shareSheet.waitForExistence(timeout: 10), "W11 rendered image sheet should open")
+        let shareAction = app.buttons.matching(NSPredicate(format: "label == %@", "Share")).firstMatch
+        XCTAssertTrue(shareAction.waitForExistence(timeout: 5) && shareAction.isHittable,
+                      "W11 native Share action should remain reachable")
+        VisualAudit.capture("W11 \(size) rendered workout share action")
+    }
+
     func testVisualAuditEmbeddedAIBuilderAtNormalText() throws {
         try auditEmbeddedAIBuilder(maximumText: false)
     }
