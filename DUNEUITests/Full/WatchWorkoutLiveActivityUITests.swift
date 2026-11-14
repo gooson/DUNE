@@ -320,10 +320,15 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             start.press(forDuration: 0.05, thenDragTo: end)
         }
 
-        let icon = springboard.descendants(matching: .icon)
-            .matching(NSPredicate(format: "label == %@", "DUNE")).firstMatch
-        for _ in 0..<4 where !icon.isHittable { springboard.swipeLeft() }
-        guard icon.isHittable else { attachHierarchy("home-icon"); XCTFail("DUNE Home icon not reachable"); return }
+        let icons = springboard.descendants(matching: .icon)
+            .matching(NSPredicate(format: "label == %@", "DUNE"))
+        func visibleIcon() -> XCUIElement? {
+            // SpringBoard keeps zero-frame Home icons beside visible App
+            // Library duplicates. firstMatch can keep selecting the hidden one.
+            icons.allElementsBoundByIndex.first { $0.isHittable }
+        }
+        for _ in 0..<4 where visibleIcon() == nil { springboard.swipeLeft() }
+        guard let icon = visibleIcon() else { attachHierarchy("home-icon"); XCTFail("DUNE Home icon not reachable"); return }
         icon.press(forDuration: 1.2)
         guard let editHome = visible(["Edit Home Screen", "홈 화면 편집", "ホーム画面を編集"]) else {
             attachHierarchy("icon-context-menu")
