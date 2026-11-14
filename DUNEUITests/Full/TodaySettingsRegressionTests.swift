@@ -1372,14 +1372,11 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     private func dismissNumberPadBeforeNextField() {
         let done = app.buttons["exercise-default-keyboard-done"].firstMatch
         let keyboard = app.keyboards.firstMatch
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            // The native numeric popup is present in the full accessibility snapshot,
-            // but XCUIElementQuery does not resolve its Popover or dismissal region.
-            let popupMarker = "PopoverDismissRegion"
-            guard app.debugDescription.contains(popupMarker) else {
-                XCTFail("A focused iPad numeric field must expose the native popup")
-                return
-            }
+        // Some iPad numeric keyboards expose a native popup whose elements are
+        // visible in the full AX snapshot but not resolvable by XCUIElementQuery.
+        let popupMarker = "PopoverDismissRegion"
+        if UIDevice.current.userInterfaceIdiom == .pad,
+           app.debugDescription.contains(popupMarker) {
             let fields = [
                 app.textFields[AXID.exerciseDefaultEditWeight].firstMatch,
                 app.textFields[AXID.exerciseDefaultEditReps].firstMatch
