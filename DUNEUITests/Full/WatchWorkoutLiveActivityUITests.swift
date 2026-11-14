@@ -301,6 +301,16 @@ final class SystemWidgetDesignTests: UITestBaseCase {
 
         XCUIDevice.shared.press(.home)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        // Home can restore the previously open App Library page. Its app
+        // context menu has Delete but no Edit Home Screen action.
+        let librarySearch = springboard.searchFields["dewey-search-field"].firstMatch
+        if librarySearch.exists && librarySearch.isHittable {
+            XCUIDevice.shared.press(.home)
+            let home = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "exists == false"), object: librarySearch
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [home], timeout: 5), .completed)
+        }
         func attachHierarchy(_ stage: String) {
             let attachment = XCTAttachment(string: springboard.debugDescription)
             attachment.name = "DUNE widget system hierarchy - \(stage)"
