@@ -1,0 +1,11 @@
+--- a/DUNE/Presentation/Posture/Components/ExercisePickerSheet.swift
++++ b/DUNE/Presentation/Posture/Components/ExercisePickerSheet.swift
+@@ -47,7 +47,7 @@
+                 .font(.body)
+                 .buttonStyle(.bordered)
+                 .frame(minHeight: 44)
+-            Text(verbatim: "Exercise Mode")
++            Text("Exercise Mode")
+                 .font(.headline)
+                 .fixedSize(horizontal: false, vertical: true)
+                 .accessibilityAddTraits(.isHeader)

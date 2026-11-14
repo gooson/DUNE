@@ -185,6 +185,7 @@ struct TemplateFormView: View {
                     Image(systemName: "wand.and.stars")
                         .symbolRenderingMode(.monochrome)
                     Text("Generate Template")
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
                 .font(.subheadline.weight(.semibold))
@@ -199,10 +200,14 @@ struct TemplateFormView: View {
             } else if generator.isAvailable {
                 Text("Generating a template will replace the current exercise list.")
                     .font(.caption)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("template-form-ai-availability")
                     .foregroundStyle(DS.Color.textSecondary)
             } else {
                 Text("Workout generation is available on supported Apple Intelligence devices.")
                     .font(.caption)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("template-form-ai-availability")
                     .foregroundStyle(DS.Color.textSecondary)
             }
         }

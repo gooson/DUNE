@@ -6,7 +6,11 @@ struct PostureComparisonView: View {
     let viewModel: PostureHistoryViewModel
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric(relativeTo: .title3) private var scoreRingSize: CGFloat = 72
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+    @ScaledMetric(relativeTo: .title3) private var scoreRingSize: CGFloat = 88
+
+    private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     @State private var zoomImage: ZoomableImageItem?
 
@@ -17,13 +21,17 @@ struct PostureComparisonView: View {
                     scoreComparison
                     imageComparison
                 }
+                .frame(maxWidth: 680)
                 .padding(.horizontal, DS.Spacing.lg)
+                .frame(maxWidth: .infinity)
             }
             .accessibilityIdentifier("posture-comparison-photos-scroll")
         } secondary: {
             ScrollView {
                 metricDeltas
+                    .frame(maxWidth: 680)
                     .padding(.horizontal, DS.Spacing.lg)
+                    .frame(maxWidth: .infinity)
             }
             .accessibilityIdentifier("posture-comparison-metrics-scroll")
         }
@@ -49,12 +57,12 @@ struct PostureComparisonView: View {
             VStack(spacing: DS.Spacing.xs) {
                 let delta = newer.overallScore - older.overallScore
                 Image(systemName: delta >= 0 ? "arrow.up.right" : "arrow.down.right")
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(palette.muted)
 
                 Text(delta >= 0 ? "+\(delta)" : "\(delta)")
-                    .font(.headline.weight(.bold))
-                    .foregroundStyle(delta >= 0 ? .green : .red)
+                    .font(.title3.weight(.bold).monospacedDigit())
+                    .foregroundStyle(delta >= 0 ? palette.heroPositive : .red)
             }
 
             scoreColumn(
@@ -62,33 +70,41 @@ struct PostureComparisonView: View {
                 score: newer.overallScore
             )
         }
-        .padding(DS.Spacing.lg)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .frame(maxWidth: .infinity)
+        .foregroundStyle(palette.ink)
+        .padding(DS.Spacing.xl)
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xl))
+        .overlay {
+            RoundedRectangle(cornerRadius: DS.Radius.xl)
+                .strokeBorder(palette.border, lineWidth: 1)
+        }
+        .accessibilityIdentifier("posture-comparison-score")
     }
 
     private func scoreColumn(label: String, score: Int) -> some View {
         VStack(spacing: DS.Spacing.sm) {
             ZStack {
                 Circle()
-                    .stroke(.quaternary, lineWidth: 6)
-                    .frame(width: scoreRingSize, height: scoreRingSize)
+                    .stroke(palette.track, lineWidth: 7)
+                    .frame(width: min(scoreRingSize, 136), height: min(scoreRingSize, 136))
 
                 Circle()
                     .trim(from: 0, to: min(1, max(0, CGFloat(score) / 100.0)))
                     .stroke(
                         scoreColor(score),
-                        style: StrokeStyle(lineWidth: 6, lineCap: .round)
+                        style: StrokeStyle(lineWidth: 7, lineCap: .round)
                     )
-                    .frame(width: scoreRingSize, height: scoreRingSize)
+                    .frame(width: min(scoreRingSize, 136), height: min(scoreRingSize, 136))
                     .rotationEffect(.degrees(-90))
 
                 Text("\(score)")
-                    .font(.title3.weight(.bold))
+                    .font(.system(size: min(scoreRingSize * 0.34, 46), weight: .bold, design: .rounded))
+                    .monospacedDigit()
             }
 
             Text(label)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(palette.muted)
         }
     }
 
@@ -107,13 +123,15 @@ struct PostureComparisonView: View {
                         imageData: older.frontImageData,
                         joints: older.frontJointPositions,
                         metrics: older.frontMetrics,
-                        captureType: .front
+                        captureType: .front,
+                        identifier: "posture-comparison-photo-front-older"
                     )
                     comparisonImage(
                         imageData: newer.frontImageData,
                         joints: newer.frontJointPositions,
                         metrics: newer.frontMetrics,
-                        captureType: .front
+                        captureType: .front,
+                        identifier: "posture-comparison-photo-front-newer"
                     )
                 }
             }
@@ -126,13 +144,15 @@ struct PostureComparisonView: View {
                         imageData: older.sideImageData,
                         joints: older.sideJointPositions,
                         metrics: older.sideMetrics,
-                        captureType: .side
+                        captureType: .side,
+                        identifier: "posture-comparison-photo-side-older"
                     )
                     comparisonImage(
                         imageData: newer.sideImageData,
                         joints: newer.sideJointPositions,
                         metrics: newer.sideMetrics,
-                        captureType: .side
+                        captureType: .side,
+                        identifier: "posture-comparison-photo-side-newer"
                     )
                 }
             }
@@ -151,7 +171,8 @@ struct PostureComparisonView: View {
         imageData: Data?,
         joints: [JointPosition3D],
         metrics: [PostureMetricResult],
-        captureType: PostureCaptureType
+        captureType: PostureCaptureType,
+        identifier: String
     ) -> some View {
         Group {
             if let imageData,
@@ -182,6 +203,7 @@ struct PostureComparisonView: View {
                             captureType: captureType
                         )
                     }
+                    .accessibilityIdentifier(identifier)
             } else {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(.quaternary)

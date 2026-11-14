@@ -381,3 +381,23 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-07 W27: [B12 새 실제 PNG·AX](../full-redesign-map/review/exercise-session-detail-w27-2026-11-07/index.html)에 iPad 일반·MAX 통과, Phone 헤더·세트 진단만(실제 맵 미갱신), Duo 미갱신을 기록했다.
 
 2026-11-07 W28: [B12 새 실제 PNG·AX](../full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/index.html)에 Phone/iPad 일반·MAX 통과, Duo 미갱신을 기록했다.
+
+2026-11-07 W19: [B14+B15 새 실제 PNG·AX](../full-redesign-map/review/compound-workout-setup-w19-2026-11-07/index.html)에 Phone/iPad 일반·MAX 통과, Duo 미갱신을 기록했다.
+
+2026-11-07 W20: [B14+B15 새 실제 PNG·AX](../full-redesign-map/review/compound-exercise-picker-w20-2026-11-07/index.html)에 Phone/iPad 일반·MAX 통과, Duo 미갱신을 기록했다.
+
+2026-11-07 W21: [B14+B15 새 실제 PNG·AX](../full-redesign-map/review/compound-workout-w21-2026-11-07/index.html)에 Phone/iPad 일반·MAX 통과, Duo 미갱신을 기록했다.
+
+2026-11-07 W22: [B14+B15 새 실제 PNG·AX](../full-redesign-map/review/exercise-transition-w22-2026-11-07/index.html)에 Phone MAX와 iPad 일반/MAX 통과 캡처를 보존했다. Phone 일반·Duo는 미갱신이다.
+
+2026-11-07 W16: [B14+B15 새 실제 PNG·AX](../full-redesign-map/review/template-workout-container-w16-2026-11-07/index.html)에 Phone MAX와 iPad 일반/MAX 통과 캡처를 보존했다. Phone 일반·Duo는 미갱신이다.
+
+2026-11-07 W23: [B14+B15 새 실제 PNG·AX](../full-redesign-map/review/cardio-start-w23-2026-11-07/index.html)에 Phone/iPad 일반·MAX 통과, Duo 미갱신을 기록했다.
+
+2026-11-07 W24: [B14+B15 새 실제 PNG·AX](../full-redesign-map/review/cardio-session-w24-2026-11-07/index.html)에 Phone/iPad 일반·MAX 통과, Duo 미갱신을 기록했다.
+
+2026-11-07 W33: [새 실제 PNG/AX](../full-redesign-map/review/workout-name-editor-w33-2026-11-07/index.html)에 통과 범위와 미갱신 기기를 기록했다.
+
+2026-11-07 S07: [새 실제 PNG/AX](../full-redesign-map/review/workout-insights-window-s07-2026-11-07/index.html)에 통과 범위와 미갱신 기기를 기록했다.
+
+2026-11-07 W32: [새 실제 PNG/AX](../full-redesign-map/review/workout-insights-sheet-w32-2026-11-07/index.html)에 통과 범위와 미갱신 기기를 기록했다.

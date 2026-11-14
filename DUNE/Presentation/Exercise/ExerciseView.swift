@@ -14,6 +14,7 @@ struct ExerciseView: View {
     @State private var exerciseStartConfig: ExerciseStartConfig?
     @State private var pendingDraft: WorkoutSessionDraft?
     @State private var showingTemplates = false
+    @State private var showingCategories = false
     @State private var workoutSuggestion: WorkoutSuggestion?
     @State private var showingCompoundSetup = false
     @State private var compoundSetupDraft = CompoundWorkoutSetupDraft()
@@ -35,6 +36,17 @@ struct ExerciseView: View {
         let base = contentView
 
         return base
+            .navigationDestination(isPresented: $showingTemplates) {
+                WorkoutTemplateListView { template in
+                    startFromTemplate(template)
+                }
+                .fullScreenCover(item: $templateConfig) { config in
+                    TemplateWorkoutContainerView(config: config)
+                }
+            }
+            .navigationDestination(isPresented: $showingCategories) {
+                UserCategoryManagementView()
+            }
             .toolbar { toolbarContent }
             .sheet(isPresented: $showingExercisePicker) { exercisePickerSheet }
             .sheet(item: $exerciseStartConfig, onDismiss: {
@@ -125,25 +137,44 @@ struct ExerciseView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarLeading) {
-            NavigationLink {
-                WorkoutTemplateListView { template in
-                    startFromTemplate(template)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            ToolbarItem(placement: .topBarLeading) {
+                Menu {
+                    Button { showingTemplates = true } label: {
+                        Label("Templates", systemImage: "list.clipboard")
+                    }
+                    .accessibilityIdentifier("exercise-toolbar-templates")
+                    Button { showingCategories = true } label: {
+                        Label("Categories", systemImage: "tag")
+                    }
+                    .accessibilityIdentifier("exercise-toolbar-categories")
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .accessibilityLabel("More")
                 }
-                .fullScreenCover(item: $templateConfig) { config in
-                    TemplateWorkoutContainerView(config: config)
-                }
-            } label: {
-                Image(systemName: "list.clipboard")
+                .accessibilityIdentifier("exercise-toolbar-secondary")
             }
-            .accessibilityIdentifier("exercise-toolbar-templates")
+        } else {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                NavigationLink {
+                    WorkoutTemplateListView { template in
+                        startFromTemplate(template)
+                    }
+                    .fullScreenCover(item: $templateConfig) { config in
+                        TemplateWorkoutContainerView(config: config)
+                    }
+                } label: {
+                    Image(systemName: "list.clipboard")
+                }
+                .accessibilityIdentifier("exercise-toolbar-templates")
 
-            NavigationLink {
-                UserCategoryManagementView()
-            } label: {
-                Image(systemName: "tag")
+                NavigationLink {
+                    UserCategoryManagementView()
+                } label: {
+                    Image(systemName: "tag")
+                }
+                .accessibilityIdentifier("exercise-toolbar-categories")
             }
-            .accessibilityIdentifier("exercise-toolbar-categories")
         }
 
         ToolbarItem(placement: .primaryAction) {
@@ -288,7 +319,8 @@ struct ExerciseView: View {
                 record: record,
                 activityType: item.activityType,
                 displayName: item.displayName,
-                equipment: item.equipment
+                equipment: item.equipment,
+                presentsHistoryFromInspector: true
             )
         } else if let summary = item.workoutSummary {
             HealthKitWorkoutDetailView(workout: summary)

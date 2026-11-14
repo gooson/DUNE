@@ -1,0 +1,20 @@
+{
+  "review": "app-quality-gate-native-visual",
+  "scope": "B05 P01-P04 normal Duo closed LCD and open LCD-1; open P04 later metrics and memo/actions",
+  "source_scope": "closed captures source 6fe1f089; open captures source d6ac; repaired P03 MAX closed retry excluded",
+  "findings": [],
+  "inspected_pngs": [
+    ".codex-checks/b05/duo-closed-host/004-1398x2034.png",
+    ".codex-checks/b05/duo-open-host/004-2007x2853.png",
+    ".codex-checks/b05/duo-closed-host/010-1398x2034.png",
+    ".codex-checks/b05/duo-open-host/010-2007x2853.png",
+    ".codex-checks/b05/duo-closed-host/011-1398x2034.png",
+    ".codex-checks/b05/duo-open-host/011-2007x2853.png",
+    ".codex-checks/b05/duo-closed-host/034-1398x2034.png",
+    ".codex-checks/b05/duo-open-host/018-2007x2853.png",
+    ".codex-checks/b05/duo-open-host/019-2007x2853.png",
+    ".codex-checks/b05/duo-open-host/020-2007x2853.png"
+  ],
+  "observations": "No clipping, contrast failure, or content overlap in inspected main normal screens. P03 sheet is scrollable and its selected General Posture row/Close title remain visible. P04 metric and memo/action content remain legible when scrolled.",
+  "evidence_boundary": "Pairs JSON reports active closed LCD and open LCD-1 and before/after pose readback; numeric hinge angle is null. Captures show simulator camera unavailable fallback, not real camera inference. This review does not validate old failed P03 MAX closed 020 or repaired d6ac retry."
+}

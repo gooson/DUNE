@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DUNE P08 · 자세 전후 비교 표현 시안</title>
+<style>
+body{font:17px/1.6 system-ui;max-width:880px;margin:auto;padding:24px;background:#faf8f3;color:#302a24}
+a{color:inherit}.card{margin:18px 0;padding:22px;border:1px solid #d9cbb8;border-radius:20px;background:#fffdf8}
+.hero{background:#352e29;color:#fff5e8;border-color:#746147}.pair{display:flex;gap:14px;align-items:center;justify-content:space-around;text-align:center}
+.ring{width:112px;height:112px;border:9px solid #e4b73d;border-radius:50%;display:grid;place-items:center;font:750 42px system-ui}
+.ring.new{border-color:#3ccb70}.date{color:#d9c9b5;font-size:14px}.delta{color:#70df91;font-weight:750;font-size:28px}.value{font-weight:650}
+.metrics{display:grid;gap:10px}.row{display:flex;justify-content:space-between;border-top:1px solid #e8dfd2;padding-top:10px}
+@media(max-width:430px){.ring{width:76px;height:76px;font-size:27px}.pair{gap:6px}.delta{font-size:20px}}
+.max-preview .pair{flex-direction:column;align-items:center;gap:22px}.max-preview{font-size:28px}.max-preview .date{font-size:24px}.max-preview .score,.max-preview .ring{width:136px;height:136px;font-size:46px}.preview-control{display:block;margin:18px 0;font-size:17px}
+</style>
+<a href="../index.html">테마 맵</a> · <a href="../../layout-map/posture-comparison-p08.html">P08 배치 계약</a>
+<label class="preview-control"><input type="checkbox" onchange="document.body.classList.toggle('max-preview',this.checked)"> 최대 접근성 글씨 시안</label><h1>P08 · 자세 전후 비교</h1>
+<p>DUNE 정적 표현 시안. 기존 실제 P08 화면의 기록·사진·지표 흐름을 유지하고, 두 점수의 비교만 불투명 ScoreHeroPalette 면으로 강조한다. 수치는 합성 예시이며 앱 캡처가 아니다.</p>
+<div class="card hero"><div class="pair"><div><div class="ring">73</div><div class="date">Sep 29</div></div><div class="delta">↗ +13</div><div><div class="ring new">86</div><div class="date">Oct 12</div></div></div></div>
+<div class="card"><strong>Photo Comparison</strong><p>Front / Side · 두 원본 사진과 관절 오버레이 · 탭 확대</p></div>
+<div class="card"><strong>Metric Changes</strong><div class="metrics"><div class="row"><span>◉ Forward Head<br><small>14.0° → 1.0°</small></span><span class="value">+13</span></div><div class="row"><span>↕ Hip Asymmetry<br><small>19.0° → 6.0°</small></span><span class="value">+13</span></div></div></div>
+<p>기기 폭과 접근성 글씨에서는 실제 기록의 행·값을 생략하지 않고 기존 적응형 pane과 세로 배치로 확장한다. 이 HTML의 기호는 원래 SF Symbols를 대체하지 않는다.</p>
+</html>

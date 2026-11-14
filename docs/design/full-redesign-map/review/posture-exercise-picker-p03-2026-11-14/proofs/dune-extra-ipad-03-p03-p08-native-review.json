@@ -1,0 +1,36 @@
+{
+  "run": "extra-ipad-03",
+  "P03_MAX": {
+    "selector": "failed at WellnessRegressionTests.swift:1636",
+    "cause": "Close exists; AX full frame x104..277/y257..334 in window x0..756/y0..1158; screenshot visibly full. Test short-circuits before window lookup because isHittable false. List AX frame y249..909 overlaps header; safeAreaInset on List is the hit target issue.",
+    "app_candidate": "/private/tmp/dune-p03-ipad-max-close-hit-fix/app.patch",
+    "contract": "retain selected Lunge, header pinned, Close exists/hittable/full frame, tap dismisses, mode remains lunge"
+  },
+  "P08_MAX": {
+    "selector": "passed but native visual gate held",
+    "cause": "Score86 AX frame y80.5..135.5 under navigation frame y96..209; dedicated screenshot shows it obscured. Prior test uses photo viewport starting y0.",
+    "test_candidate": "/private/tmp/dune-p08-max-nav-viewport-fix/patch.diff"
+  },
+  "evidence": {
+    "p03_selected": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/C9E4D5EE-4A39-456D-A4FC-40C7DEC844D9.png",
+      "sha256": "56dff23f6fe455acf0823e29d4921ea744b425fa6bcaabd812f8743b72e9088c"
+    },
+    "p03_selected_ax": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/1D1A22F0-442F-4CC2-BF80-E84435069B5D.txt",
+      "sha256": "f9d5a7b7e8fd4608d39d90e27678f5484ab702eb060d0f574590a3d33afb14f3"
+    },
+    "p03_failure": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/0D5F277B-47DA-4342-A314-0313E9E4E0BF.png",
+      "sha256": "56dff23f6fe455acf0823e29d4921ea744b425fa6bcaabd812f8743b72e9088c"
+    },
+    "p08_max_score86": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/3BD942BC-5923-46B7-9A25-B2504C2D3FA0.png",
+      "sha256": "718e036a1a2f6ddb3ff109bc8b8f68df27f61fe4aa34b4c6a5b774e2fe7ed6af"
+    },
+    "p08_max_score86_ax": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/6CE4495B-BD22-418E-A50C-9461567BD418.txt",
+      "sha256": "8d32cf75a6e683cbd35bb9ef9fda5a7342be127394908cef3222710755379543"
+    }
+  }
+}

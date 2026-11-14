@@ -1,0 +1,69 @@
+{
+  "status": "UNVERIFIED/HELD",
+  "scope": "Private XCTest-only patch against 7b9138b6; no repository edit or SDK attempt",
+  "patch": "/private/tmp/dune-b06-p08-photo-test-fix.patch",
+  "test": "DUNEUITests/Full/WellnessRegressionTests.swift:testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom",
+  "failure": "The original one-way slow swipe loop requires the full front-image center inside the photos pane, so it can move the partially visible image from below the pane to above it and fail before exercising zoom.",
+  "evidence": [
+    {
+      "AX": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b06/phone-retry1-attachments/35D8EE2C-3872-435C-965A-9A0C4B8BE3A6.txt",
+      "photos_frame": [
+        0,
+        0,
+        440,
+        494.7
+      ],
+      "front_older_frame": [
+        28,
+        345,
+        188,
+        334
+      ],
+      "front_center": [
+        122,
+        512
+      ],
+      "front_visible_vertical_interval": [
+        345,
+        494.7
+      ],
+      "side_older_frame": [
+        28,
+        709.7,
+        188,
+        334
+      ]
+    },
+    {
+      "AX": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b06/phone-retry1-attachments/E0C42A9E-E68C-4005-917B-9AB9D2ED8233.txt",
+      "photos_frame": [
+        0,
+        0,
+        440,
+        494.7
+      ],
+      "front_older_frame": [
+        28,
+        -216,
+        188,
+        334
+      ],
+      "front_center": [
+        122,
+        -49
+      ],
+      "front_visible_vertical_interval": [
+        0,
+        118
+      ],
+      "side_older_frame": [
+        28,
+        148.7,
+        188,
+        334
+      ]
+    }
+  ],
+  "change": "Use at least a 24\u00d724 point intersection of the front image, photos pane, and window; require isHittable; make bounded directional drags inside the photos pane if needed; tap the intersection center using coordinates relative to the image. Keep Front navigation and Close dismissal assertions.",
+  "limitations": "No native build or XCTest rerun. P08 normal and iPad retry budgets are held after two failures each; this patch is an unverified candidate, not a zoom pass."
+}

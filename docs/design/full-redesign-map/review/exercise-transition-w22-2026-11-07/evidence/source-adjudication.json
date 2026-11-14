@@ -1,0 +1,121 @@
+{
+  "screen": "W22",
+  "frozen_integration_source": "324b0b30033583cc8a218805afb6e4b609e55137",
+  "original_app_source": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+  "owner_path": "DUNE/Presentation/Exercise/Components/ExerciseTransitionView.swift",
+  "owner_sha256": "8c16175a2538f7cf71533199cfd3586a7401d626f709689c659ef296e0022f3c",
+  "app_patch": true,
+  "source_owner_byte_identical": true,
+  "evidence_scope": "Phone MAX 통과와 iPad 일반·MAX 통과만 after다. Phone 일반은 5초 자동 전환 뒤 사라진 Start 탭의 검사 실패로 역사적 실제 맵/미갱신과 진단을 유지한다.",
+  "raw_runs": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+      "counts": {
+        "executed": 7,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 4
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "passed",
+        "testVisualAuditCompoundSessionAtMaximumText": "passed",
+        "testVisualAuditTemplateTransitionAtNormalText": "failed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "failed",
+        "testCardioFlowReachesSummary": "failed",
+        "testVisualAuditCardioAtDefaultTextSize": "failed",
+        "testStairClimberLevelChangesAppearInSummary": "passed"
+      },
+      "receipt": ".codex-checks/b14b15/phone-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "b62dc5b98c453810706928fb831b5c8c6d749fa8",
+      "counts": {
+        "executed": 4,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "not_executed",
+        "testVisualAuditCompoundSessionAtMaximumText": "not_executed",
+        "testVisualAuditTemplateTransitionAtNormalText": "failed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "passed",
+        "testCardioFlowReachesSummary": "passed",
+        "testVisualAuditCardioAtDefaultTextSize": "passed",
+        "testStairClimberLevelChangesAppearInSummary": "not_executed"
+      },
+      "receipt": ".codex-checks/b14b15/phone-retry1-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "counts": {
+        "executed": 7,
+        "passed": 6,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "passed",
+        "testVisualAuditCompoundSessionAtMaximumText": "passed",
+        "testVisualAuditTemplateTransitionAtNormalText": "passed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "passed",
+        "testCardioFlowReachesSummary": "passed",
+        "testVisualAuditCardioAtDefaultTextSize": "passed",
+        "testStairClimberLevelChangesAppearInSummary": "failed"
+      },
+      "receipt": ".codex-checks/b14b15/ipad-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/ipad-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad-retry1",
+      "profile": "ipad",
+      "source_revision": "324b0b30033583cc8a218805afb6e4b609e55137",
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "not_executed",
+        "testVisualAuditCompoundSessionAtMaximumText": "not_executed",
+        "testVisualAuditTemplateTransitionAtNormalText": "not_executed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "not_executed",
+        "testCardioFlowReachesSummary": "not_executed",
+        "testVisualAuditCardioAtDefaultTextSize": "not_executed",
+        "testStairClimberLevelChangesAppearInSummary": "passed"
+      },
+      "receipt": ".codex-checks/b14b15/ipad-retry1-ui.log.result.json",
+      "result_note": "all requested selectors passed",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/ipad-retry1-attachments/manifest.json"
+    }
+  ],
+  "reuse": "Frozen shared integration native artifacts are cited with original revisions; stale pipeline receipts are not rewritten as new successful runs. No PR-split-only rebuild.",
+  "limits": [
+    "Duo current-source capture pending; historical only",
+    "Stair Climber branch is default text, not machine MAX proof",
+    "Simulator motion tracking unavailable; units/layout/controls observed, no live measurement or GPS claim",
+    "Summary Save not tapped; no storage or HealthKit write validation",
+    "Transition displays2sets; first session Set1of3 observed. Unchanged session/default behavior; do not claim2sets applied",
+    "W19 selected frame and W21 tabs may be partly outside current scroll viewport; no simultaneous full visibility claim"
+  ]
+}
