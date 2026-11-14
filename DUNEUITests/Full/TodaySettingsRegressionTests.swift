@@ -1360,8 +1360,31 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     private func dismissNumberPadBeforeNextFieldOnIPad() {
         guard UIDevice.current.userInterfaceIdiom == .pad else { return }
+        // The native iPad number-pad popover covers the app with a dismissal
+        // region even when the app's Done button remains visibly unobstructed.
+        let numberPadPopover = app.popovers.containing(
+            .other, identifier: "UIKeyboardLayoutStar Preview"
+        ).firstMatch
+        if numberPadPopover.exists {
+            let dismissRegion = app.otherElements["PopoverDismissRegion"].firstMatch
+            guard dismissRegion.waitForExistence(timeout: 3), dismissRegion.isHittable else {
+                XCTFail("The native number-pad popup must expose its dismissal region")
+                return
+            }
+            let dismissalPoint = CGPoint(x: dismissRegion.frame.midX, y: dismissRegion.frame.midY)
+            guard !numberPadPopover.frame.contains(dismissalPoint) else {
+                XCTFail("The popup dismissal point must lie outside the numeric keypad")
+                return
+            }
+            dismissRegion.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).auditTap()
+            guard numberPadPopover.waitForNonExistence(timeout: 3) else {
+                XCTFail("The numeric popup must dismiss before interacting with the app's Done action")
+                return
+            }
+        }
         let done = app.buttons["exercise-default-keyboard-done"].firstMatch
-        XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable,
+        XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable
+                      && app.windows.firstMatch.frame.contains(done.frame),
                       "Numeric input must offer a reachable explicit Done action")
         done.auditTap()
         let keyboard = app.keyboards.firstMatch

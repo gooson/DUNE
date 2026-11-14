@@ -4053,10 +4053,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         }
         revealAndTapAddExercise()
 
+        let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         func typeInFullPickerSearch(_ value: String) {
-            // Full-mode .searchable exposes a native SearchField in this sheet's
-            // navigation bar; picker-search-field is quick-start-only.
-            let search = app.navigationBars["Select Exercise"].searchFields["Search exercises"].firstMatch
+            // Full-mode .searchable exposes a native SearchField inside the picker
+            // collection on Phone; picker-search-field is quick-start-only.
+            let search = picker.searchFields["Search exercises"].firstMatch
             XCTAssertTrue(search.waitForExistence(timeout: 5) && search.isHittable,
                           "The presented full picker should expose its native search field")
             search.auditTap()
@@ -4068,7 +4069,6 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                            "Full picker search must contain the requested exercise name")
         }
 
-        let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
         XCTAssertTrue(picker.waitForExistence(timeout: 8), "W14 full exercise picker should open")
         VisualAudit.capture("W14 \(size) template exercise picker initial")
         typeInFullPickerSearch("Bench Press")
