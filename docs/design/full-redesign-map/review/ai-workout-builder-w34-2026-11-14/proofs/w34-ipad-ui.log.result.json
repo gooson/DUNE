@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtMaximumText"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 1,
+  "failures": [
+    "521: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:3912: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditEmbeddedAIBuilderAtMaximumText] : XCTAssertTrue failed - W34 button and availability message must be fully v…",
+    "532: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditEmbeddedAIBuilderAtMaximumText]' failed (87.874 seconds).",
+    "729: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-11-14 02:57:37.485.",
+    "731: Test Suite 'DUNEUITests.xctest' failed at 2026-11-14 02:57:37.491.",
+    "733: Test Suite 'Selected tests' failed at 2026-11-14 02:57:37.491.",
+    "745: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtMaximumText"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-ui.log"
+}

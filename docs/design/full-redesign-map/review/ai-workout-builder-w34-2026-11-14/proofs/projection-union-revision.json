@@ -1,0 +1,35 @@
+{
+  "base": "26fc83c4c6e0f55a685effe91086c43b1823a6e3",
+  "old_compiled_phone_and_ipad_normal": "f7bc00cb251ecab826e5ec7663450cd821e7c5fb",
+  "new_compiled_ipad_MAX_retry": "6ad8445acaa3b58d4c8f1231c60faa60d1b01907",
+  "projection_manifest_sha256": "ecb73182eeb2802527de9f18d91c53424aba8204c15c6d553c5de21279088ad3",
+  "source_equivalence": {
+    "AI_section_projection_equal_6ad": true,
+    "AI_section_6ad_equal_f7": true,
+    "app_projection_main_plus_only_AI": true,
+    "test_W34_chunk_projection_equal_6ad": true,
+    "test_projection_main_plus_only_W34": true,
+    "old_Phone2_iPad_normal_branch_preserved_statements": true,
+    "f7_to_6ad_app_file_equal": true,
+    "f7_to_6ad_non_W34_test_content_equal": true,
+    "new_iPadMAX_only_conditional": true,
+    "old_chunk_has_no_conditional": true
+  },
+  "chunk_sha256": {
+    "old_W34": "28067c09cb0912d56fd415ae22fae1830f79c355383c07a2b457af0bb05da646",
+    "new_W34": "5db17e0ef3278099eff9e19f7c61e265d6e8e826305287cf33a3d53324e03140",
+    "projected_W34": "5db17e0ef3278099eff9e19f7c61e265d6e8e826305287cf33a3d53324e03140",
+    "AI_section": "65ed8c1e50e58f5527f6da3ca9485c941cda84d3f6000a59916868856688b347"
+  },
+  "native_evidence_status": {
+    "Phone_normal_MAX": "2/2 reported on f7 source; old receipt retained, not recast as 6ad native run",
+    "iPad_normal": "passed in first iPad run on f7 source; retained",
+    "iPad_MAX_first": "failed on f7 source; retained diagnostic",
+    "iPad_MAX_same_ID_conditional_retry": "running on 6ad source; outcome pending at review time"
+  },
+  "limits": [
+    "Source equivalence permits reuse of unaffected branch evidence, but does not create a global fresh native receipt for 6ad.",
+    "No AI Generate request is executed by W34 selectors.",
+    "No SDK, simulator, device, process, or repository action performed in this review."
+  ]
+}

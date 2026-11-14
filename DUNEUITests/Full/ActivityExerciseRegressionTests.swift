@@ -21,6 +21,131 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         static let notificationMissingRouteID = "ui-test-activity-workout-missing"
     }
 
+    func testVisualAuditEmbeddedAIBuilderAtNormalText() throws {
+        try auditEmbeddedAIBuilder(maximumText: false)
+    }
+
+    func testVisualAuditEmbeddedAIBuilderAtMaximumText() throws {
+        try auditEmbeddedAIBuilder(maximumText: true)
+    }
+
+    private func auditEmbeddedAIBuilder(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in W34 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+        ensureActivityRoot()
+        let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
+        let builder = app.buttons[AXID.activityAIWorkoutBuilder].firstMatch
+        for _ in 0..<24 {
+            let viewport = activityScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
+            if builder.exists && builder.isHittable && viewport.contains(builder.frame) { break }
+            if builder.exists && builder.frame.midY < viewport.midY {
+                activityScroll.swipeDown(velocity: .slow)
+            } else {
+                activityScroll.swipeUp(velocity: .slow)
+            }
+        }
+        let entryViewport = activityScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
+        XCTAssertTrue(builder.exists && builder.isHittable && entryViewport.contains(builder.frame))
+        builder.auditTap()
+        let form = app.collectionViews[AXID.templateFormScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let prompt = app.descendants(matching: .any)[AXID.templateFormAIPrompt].firstMatch
+        let generate = app.buttons[AXID.templateFormAIGenerate].firstMatch
+        let availability = app.staticTexts["template-form-ai-availability"].firstMatch
+        XCTAssertTrue(prompt.waitForExistence(timeout: 5))
+        func revealPromptAndCapture(_ caption: String) {
+            for _ in 0..<12 {
+                let frame = form.frame.intersection(app.windows.firstMatch.frame)
+                let keyboard = app.keyboards.firstMatch
+                let bottom = keyboard.exists ? min(frame.maxY, keyboard.frame.minY) : frame.maxY
+                let viewport = CGRect(x: frame.minX + 8, y: frame.minY + 12,
+                                      width: max(0, frame.width - 16),
+                                      height: max(0, bottom - frame.minY - 24))
+                if prompt.isHittable && viewport.contains(prompt.frame) {
+                    VisualAudit.capture(caption)
+                    return
+                }
+                let down = prompt.frame.midY < viewport.midY
+                form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: down ? 0.4 : 0.65))
+                    .press(forDuration: 0.05, thenDragTo: form.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: down ? 0.65 : 0.4)))
+            }
+            XCTFail("W34 prompt must fit wholly above the keyboard inside its own Form")
+        }
+        revealPromptAndCapture("W34 \(size) empty full prompt")
+        XCTAssertTrue(generate.waitForExistence(timeout: 5) && !generate.isEnabled,
+                      "An empty prompt keeps Generate Template disabled")
+        XCTAssertTrue(availability.waitForExistence(timeout: 5))
+        let supportsGeneration = availability.label ==
+            "Generating a template will replace the current exercise list."
+        XCTAssertTrue(supportsGeneration || availability.label ==
+            "Workout generation is available on supported Apple Intelligence devices.")
+        if maximumText && UIDevice.current.userInterfaceIdiom == .pad {
+            let navigationBar = app.navigationBars["New Template"].firstMatch
+            XCTAssertTrue(navigationBar.waitForExistence(timeout: 5))
+            func visibleFormViewport() -> CGRect {
+                let frame = form.frame.intersection(app.windows.firstMatch.frame)
+                let top = max(frame.minY + 12, navigationBar.frame.maxY + 12)
+                return CGRect(x: frame.minX + 8, y: top,
+                              width: max(0, frame.width - 16),
+                              height: max(0, frame.maxY - 12 - top))
+            }
+            for _ in 0..<12 {
+                let viewport = visibleFormViewport()
+                let combined = generate.frame.union(availability.frame)
+                if generate.isHittable && viewport.contains(combined) { break }
+                let moveUp = combined.maxY > viewport.maxY
+                let overflow = moveUp ? combined.maxY - viewport.maxY
+                                      : viewport.minY - combined.minY
+                let fraction = min(0.14, max(0.035, (overflow + 12) / max(form.frame.height, 1)))
+                let startY: CGFloat = moveUp ? 0.62 : 0.38
+                let endY: CGFloat = moveUp ? startY - fraction : startY + fraction
+                form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                    .press(forDuration: 0.05, thenDragTo: form.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: endY)),
+                        withVelocity: XCUIGestureVelocity(rawValue: 80),
+                        thenHoldForDuration: 0.35)
+            }
+            let viewport = visibleFormViewport()
+            XCTAssertTrue(generate.isHittable
+                          && viewport.contains(generate.frame.union(availability.frame)),
+                          "W34 button and availability message must be fully visible below navigation")
+        } else {
+            for _ in 0..<8 {
+                let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+                if generate.isHittable && viewport.contains(generate.frame)
+                    && viewport.contains(availability.frame) { break }
+                if generate.frame.midY < viewport.midY {
+                    form.swipeDown(velocity: .slow)
+                } else {
+                    form.swipeUp(velocity: .slow)
+                }
+            }
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            XCTAssertTrue(generate.isHittable && viewport.contains(generate.frame)
+                          && viewport.contains(availability.frame),
+                          "W34 button and availability message must be fully visible")
+        }
+        VisualAudit.capture("W34 \(size) empty AI prompt and availability")
+        XCTAssertTrue(app.fillTextInput(AXID.templateFormAIPrompt, with: "30 minute shoulder workout"))
+        XCTAssertEqual(generate.isEnabled, supportsGeneration,
+                       "Prompt enables generation only on supported devices")
+        revealPromptAndCapture("W34 \(size) filled full prompt and supported state")
+        let cancel = app.buttons[AXID.templateFormCancel].firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5))
+        cancel.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+            .waitForExistence(timeout: 10), "Cancel returns without generating a template")
+    }
+
     func testVisualAuditWorkoutCompletionAtNormalText() throws {
         try auditWorkoutCompletion(maximumText: false)
     }
