@@ -1,0 +1,53 @@
+{
+  "review": "B09 W01/W02 private Security, Data Integrity, Architecture and UI test API visibility review",
+  "status": "source-only; no repository edit, SDK, simulator or native capture",
+  "source_baseline": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+  "scope": [
+    "/private/tmp/dune-b09-w01-w02-prep/W01.patch",
+    "/private/tmp/dune-b09-w01-w02-prep/W02.patch",
+    "/private/tmp/dune-b09-tests-prep/ActivityExercisePickerRegressionTests.swift.patch"
+  ],
+  "source_hashes": {
+    "W01_baseline": "55ad61bbd8b9b74e82892e22f0881dd2751fdcf59ef4a66d480fc2495eb4f2d7",
+    "W01_candidate": "2438b811139301884ccfa32f331466bfa0e3feaeaeb78fa6478f0ac2b0e011ea",
+    "W02_baseline": "1b15459f0d459f1ebfd72048e49be92ef79e61c72da66ec413c36aa0f87ab2e7",
+    "W02_candidate": "d8072c96bad9771fc127d7326557c223142c6cdd34cad191059f31d062080066",
+    "test_baseline": "779b53dbc2a6d123ae8994a5d60b5c1e22be17986b8efcd669952cf6eb4eefdf",
+    "test_candidate": "94b0224889babbad2b0a1cf4437a9bcdcce4b553a09bfc779ddba606eb2746b6"
+  },
+  "patch_check": "All three private patches pass git apply --check against current untouched target files.",
+  "blocking_P1_P2_findings": [],
+  "source_observations": [
+    "W01 changes only titleRow lineLimit for .full at ordinary Dynamic Type from one line to two; .compact and accessibility-size behavior remain unchanged. Its .full consumer is ExerciseView, while Activity ExerciseListSection uses .compact.",
+    "W02 adds dynamicTypeSize only for visual AnyLayout choice. Existing @Query collections, filtering/search/sort, stable exercise identity, custom/template selection callbacks, and sheet/dismiss actions are unchanged.",
+    "W02 places the 44pt minimum frame and rectangular hit shape inside the info Button label, so the actual tappable region grows while the original detail callback and identifier remain. The info glyph is not a new data or navigation path.",
+    "W02 keeps the equipment SVG icon and strings; MAX layout stacks name/custom badge and muscles/equipment, hides only the decorative separator. No model write, HealthKit/network access, secret, or external action is introduced.",
+    "ExercisePickerView is reused by Activity Quick Start, ExerciseView, template, and compound setup; the layout change affects all four consumers, though selection logic is unchanged."
+  ],
+  "test_api_visibility": {
+    "result": "No known compile-time visibility blocker in the four proposed methods.",
+    "base_class": "ActivityExercisePickerRegressionTests inherits ActivityExerciseSeededUITestBaseCase → SeededUITestBaseCase → UITestBaseCase; launchConfiguration, launchApp(with:), app and VisualAudit are accessible.",
+    "local_helpers": [
+      "openExerciseViewFromRecentWorkouts",
+      "openTemplateFormPicker",
+      "dismissSearchKeyboardIfPresent",
+      "scrollPickerToHittableElementIfNeeded"
+    ],
+    "shared_helpers": [
+      "fillTextInput",
+      "dismissKeyboardIfPresent",
+      "scrollToHittableElementIfNeeded",
+      "auditTap"
+    ],
+    "existing_ids": "ExerciseView, picker, detail, start and custom form AX IDs referenced in the patch are declared in AXID and corresponding app views.",
+    "original_methods": "Patch adds methods before the existing Helpers section without altering original test method bodies."
+  },
+  "nonblocking_risks_to_verify_natively": [
+    "W01 two-line normal full title can increase row height and move metadata; verify actual ExerciseView normal/MAX and list virtualization/scrolling.",
+    "W02 MAX label, badge, muscles and equipment need native fit and reading-order proof; 44pt info target must not overlap the row selection target.",
+    "The proposed W01/W02 tests are opt-in VisualAudit selectors and currently have no native result. MAX route through toolbar/menu and exact picker detail hit target must be checked from AX before attributing a failure to app code.",
+    "The same test candidate also adds W04 custom-create cases; those depend on W04 separate candidate and should not be used to claim W01/W02 coverage or run unless W04 is applied.",
+    "B08 S06 fixed-height symbol hero ellipsis at MAX is preexisting and outside this B09 delta."
+  ],
+  "gate": "Source review is clear for the narrow W01/W02 candidate; runtime/UI and actual-map gates remain pending. No native or merge approval is inferred."
+}

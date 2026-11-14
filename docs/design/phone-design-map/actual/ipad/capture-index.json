@@ -503,13 +503,27 @@
     },
     "W04": {
       "row_id": "W04",
-      "evidence": "create-custom-exercise-screen",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditNewExerciseAtDefaultTextSize()",
-      "action": "tap picker-create-custom-button",
-      "timestamp": 1791854967.034,
-      "image": "B226CA7A-F06C-4471-BC28-4FF0B363D888.png",
-      "screen": "screen-0-2064x2752-tap picker-create-custom-button_0_08C27AD5-F896-4506-8BFA-1CF1EAE208BD.png",
-      "file": "W04.png"
+      "file": "W04.png",
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText()",
+      "action": "W04 MAX Cardio category readback",
+      "capture_date": "2026-11-14",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "source_worktree_dirty": false,
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "c33abb4640976d9dfe74672956d355ff43eb61f67e1f17c413d7758c8ca0cdbb",
+      "ax_sha256": "d448500d2fafc6450b4998624d3301f44daa73e6973e30642564d913b46d7252",
+      "source_json": "../../../full-redesign-map/review/create-custom-exercise-w04-2026-11-14/manifest.json",
+      "previous_record": {
+        "row_id": "W04",
+        "evidence": "create-custom-exercise-screen",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditNewExerciseAtDefaultTextSize()",
+        "action": "tap picker-create-custom-button",
+        "timestamp": 1791854967.034,
+        "image": "B226CA7A-F06C-4471-BC28-4FF0B363D888.png",
+        "screen": "screen-0-2064x2752-tap picker-create-custom-button_0_08C27AD5-F896-4506-8BFA-1CF1EAE208BD.png",
+        "file": "W04.png"
+      },
+      "capture_scope": "Named iPad MAX passed; see gallery for all affected states and explicit limits"
     },
     "W29": {
       "row_id": "W29",
