@@ -83,24 +83,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
             ]
             launchApp(with: configuration)
 
-            if VisualAudit.isEnabled,
-               ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1" {
-                let initialBounds = app.windows.firstMatch.frame
-                if abs(max(initialBounds.width, initialBounds.height) - 951) < 2 {
-                    // A fresh app launch can restore portrait. Let the host set
-                    // physical orientation, then require the actual inner viewport.
-                    XCUIDevice.shared.orientation = .landscapeLeft
-                    VisualAudit.capture("ORIENT:landscapeLeft Today navigation layout")
-                    let landscape = XCTNSPredicateExpectation(
-                        predicate: NSPredicate { _, _ in
-                            let bounds = self.app.windows.firstMatch.frame
-                            return bounds.width > bounds.height
-                        }, object: nil
-                    )
-                    XCTAssertEqual(XCTWaiter.wait(for: [landscape], timeout: 5), .completed,
-                                   "Expanded Duo must render its actual landscape viewport")
-                }
-            }
+            reassertDuoOpenLandscapeIfNeeded()
             let window = app.windows.firstMatch.frame
             let bell = app.buttons[AXID.dashboardToolbarNotifications].firstMatch
             let settings = app.buttons[AXID.dashboardToolbarSettings].firstMatch

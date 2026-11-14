@@ -184,8 +184,9 @@ class UITestBaseCase: XCTestCase {
               app.windows.firstMatch.waitForExistence(timeout: 10) else { return }
         let bounds = app.windows.firstMatch.frame
         guard abs(max(bounds.width, bounds.height) - 951) < 2 else { return }
-        XCUIDevice.shared.orientation = .landscapeLeft
-        VisualAudit.capture("ORIENT:landscapeLeft theme root")
+        // The inner display is counter-rotated: physical portrait produces
+        // the landscape app viewport. Avoid a conflicting legacy XCTest setter.
+        VisualAudit.capture("ORIENT:portrait theme expanded landscape")
         let landscape = XCTNSPredicateExpectation(
             predicate: NSPredicate { _, _ in
                 let window = self.app.windows.firstMatch.frame
