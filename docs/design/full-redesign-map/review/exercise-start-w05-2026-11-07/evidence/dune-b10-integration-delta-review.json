@@ -1,0 +1,23 @@
+{
+  "status": "source-only integrated delta; B10 SDK active, no native result inferred",
+  "revision": "4fd3b3aadfa39908948538587aea81856ad14c48",
+  "baseline": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+  "contract_hashes": {
+    "DUNE/Presentation/Exercise/ExerciseStartView.swift": "2dc232282663f7f917a9caf993bc6643858c8d4f221a2c52a237c05b33388b9d",
+    "DUNE/Presentation/Exercise/WorkoutSessionView.swift": "3121b6ca718869920e2c3c361a097993556bd142f60026542724eb12a9af8fe0",
+    "DUNEUITests/Full/ActivityExerciseRegressionTests.swift": "26e046a273f3926be5889c7281cd9bf58026947fdd8ee7adf8c047e414197a1e",
+    "Shared/Resources/Localizable.xcstrings": "d6218b3a9b20fcfca1d0ca848be86062a30ce6301cad021a9e6a6a6eba92acbf"
+  },
+  "all_integrated_files_match_contract": true,
+  "W05_matches_private_candidate": true,
+  "W06_W31_combined_source_sha256": "3121b6ca718869920e2c3c361a097993556bd142f60026542724eb12a9af8fe0",
+  "W06_W31_combined_matches_prior_private_patch_review": true,
+  "test_matches_corrected_private_candidate": true,
+  "action_tails_byte_identical_to_baseline": {
+    "ExerciseStartView_after_Start_Button_marker": true,
+    "WorkoutSessionView_after_Actions_marker": true
+  },
+  "source_review_reused": "/private/tmp/dune-b10-source-ui-review.json",
+  "test_review_reused": "/private/tmp/dune-b10-test-review.json",
+  "native_status": "pending completed runner receipts and paired named PNG+AX"
+}

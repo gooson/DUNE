@@ -1,0 +1,16 @@
+{
+  "frozen_source": "324b0b30033583cc8a218805afb6e4b609e55137",
+  "full_test_sha256": "b748ffebc14c4e7f93eb27db222ef0378ec5d51db9ecdd8fe05cb0b64f955b00",
+  "base_test_sha256": "0ac149038cd27f1ee4e95d9ca8cc78200f308a20887b9ba8d7d7d63d99ebae63",
+  "Compound2_chunk_sha256": "d0556bd1d7d2eeef70b79175ba5b0f02cd76197d31026f45124bc87025518c37",
+  "Template2_chunk_sha256": "b3f78f67415948df39c376cb55e2ef30d387d8ba34b7f4c62be0c9be96b46824",
+  "three_group_reconstruction_byte_exact": true,
+  "placement": {
+    "W21": "two Compound methods + helper after W19 source merged",
+    "W16": "two Template methods + helper after W22 source merged; wrapper no app patch",
+    "W25": "guarded existing Cardio3 changes only; preserves whichever B14 groups already accepted"
+  },
+  "held_B13_absent": true,
+  "native": "Source split algebra only; completed native artifacts retain their original revisions, final gate pending retry export",
+  "Cardio3_projection_sha256": "06dfa3338db08cbd0eba97e7528edc250163efb9b16af3dd7dd9b9268fa7c8e2"
+}

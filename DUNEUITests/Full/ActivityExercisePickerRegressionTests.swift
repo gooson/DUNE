@@ -254,9 +254,36 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
             cardio.auditTap()
             XCTAssertTrue(cardio.isSelected, "Cardio segment must be selected")
         }
-        XCTAssertTrue(app.descendants(matching: .any).matching(NSPredicate(
+        let durationDistance = app.descendants(matching: .any).matching(NSPredicate(
             format: "label CONTAINS[c] %@", "Duration + Distance"
-        )).firstMatch.waitForExistence(timeout: 5), "Cardio should reset the original input type")
+        )).firstMatch
+        if maximumText && UIDevice.current.userInterfaceIdiom == .pad {
+            func inputTypeViewport() -> CGRect {
+                let frame = form.frame.intersection(app.windows.firstMatch.frame)
+                let navigation = app.navigationBars["New Exercise"].firstMatch
+                let top = navigation.exists ? max(frame.minY, navigation.frame.maxY) : frame.minY
+                return CGRect(x: frame.minX + 8, y: top + 8,
+                              width: max(0, frame.width - 16),
+                              height: max(0, frame.maxY - top - 16))
+            }
+            for _ in 0..<12 {
+                let viewport = inputTypeViewport()
+                if durationDistance.exists && durationDistance.isHittable
+                    && viewport.contains(durationDistance.frame) { break }
+                let down = durationDistance.exists && durationDistance.frame.midY < viewport.midY
+                form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: down ? 0.45 : 0.68))
+                    .press(forDuration: 0.05, thenDragTo: form.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: down ? 0.63 : 0.50)),
+                        withVelocity: XCUIGestureVelocity(rawValue: 80),
+                        thenHoldForDuration: 0.35)
+            }
+            XCTAssertTrue(durationDistance.exists && durationDistance.isHittable
+                          && inputTypeViewport().contains(durationDistance.frame),
+                          "Cardio's original Duration + Distance input type must fit in the Form")
+        } else {
+            XCTAssertTrue(durationDistance.waitForExistence(timeout: 5),
+                          "Cardio should reset the original input type")
+        }
         XCTAssertFalse(create.isEnabled, "Changing category must not enable Create with an empty name")
         VisualAudit.capture("W04 \(size) Cardio category readback")
 
@@ -274,8 +301,8 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         if templatesButton.exists && templatesButton.isHittable {
             templatesButton.auditTap()
         } else {
-            XCTAssertTrue(app.waitAndTapToolbarAction("List On A Clipboard", timeout: 8),
-                          "Templates action should be reachable through the native More menu")
+            XCTAssertTrue(app.waitAndTapExerciseSecondaryAction(AXID.exerciseToolbarTemplates, timeout: 8),
+                          "Templates action should be reachable through the Exercise secondary menu")
         }
         let templateList = app.descendants(matching: .any)[AXID.workoutTemplateListScreen].firstMatch
         XCTAssertTrue(templateList.waitForExistence(timeout: 8))
@@ -328,9 +355,8 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
     private func openTemplateFormPicker(prefillName: String? = nil) {
         openExerciseViewFromRecentWorkouts()
 
-        let templatesButton = app.descendants(matching: .any)[AXID.exerciseToolbarTemplates].firstMatch
-        XCTAssertTrue(templatesButton.waitForExistence(timeout: 5), "Templates toolbar button should exist")
-        templatesButton.tap()
+        XCTAssertTrue(app.waitAndTapExerciseSecondaryAction(AXID.exerciseToolbarTemplates),
+                      "Templates route should open through its visible toolbar action")
 
         let templateList = app.descendants(matching: .any)[AXID.workoutTemplateListScreen].firstMatch
         XCTAssertTrue(templateList.waitForExistence(timeout: 8), "Template list should appear")

@@ -1,0 +1,3 @@
+# iPad Exercise More route · native evidence
+
+Captured 2026-11-14 from source `15450f83dcedc8628c44a9327aea5497031b375e`. The route starts from Activity → Recent Workouts → See All (`ExerciseView`), separate from the W01 exercise library. The Templates and Categories route selectors passed at normal and MAX text. Four menu states and four destination states are supplemental evidence for the existing Exercise surface, not new catalog screen IDs. The seven-selector batch had six passes and one W04 MAX failure after this common route; this gallery does not claim W04 MAX passed. iPhone direct toolbar links are source-preserved, with no new iPhone capture in this support PR. Raw PNG and AX hashes are in `manifest.json`.

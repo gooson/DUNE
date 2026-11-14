@@ -16,6 +16,7 @@ struct ExerciseSessionDetailView: View {
     }
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var heartRateSummary: HeartRateSummary?
     @State private var heartRateRecovery: HeartRateRecovery?
     @State private var isLoadingHR = false
@@ -75,7 +76,10 @@ struct ExerciseSessionDetailView: View {
 
     private var sessionHeader: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            HStack(spacing: DS.Spacing.md) {
+            let headerLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+            headerLayout {
                 Group {
                     if let equipment {
                         equipment.svgIcon(size: 28)
@@ -98,7 +102,7 @@ struct ExerciseSessionDetailView: View {
                         .foregroundStyle(.tertiary)
                 }
 
-                Spacer()
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
             }
 
             if record.duration > 0 || record.bestCalories != nil {
@@ -276,13 +280,19 @@ struct ExerciseSessionDetailView: View {
     }
 
     private func setRow(_ workoutSet: WorkoutSet) -> some View {
-        HStack {
+        let rowLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout())
+        let valuesLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return rowLayout {
             Text("Set \(workoutSet.setNumber)")
                 .font(.subheadline.weight(.medium))
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
 
-            HStack(spacing: DS.Spacing.md) {
+            valuesLayout {
                 if let weight = workoutSet.weight {
                     Text("\(formattedWeight(weight)) \(weightUnit.displayName)")
                         .font(.subheadline.monospacedDigit())

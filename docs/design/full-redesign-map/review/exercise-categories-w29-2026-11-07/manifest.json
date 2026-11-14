@@ -1,0 +1,268 @@
+{
+  "screen_id": "W29",
+  "original_source": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+  "final_integration_source": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+  "source_lineage_proof": {
+    "original_execution_source": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+    "final_integration_source": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+    "app_source_byte_equivalent": true,
+    "app_source_evidence": "git diff --name-status b81aad042d3ba35e0b6e70b559a00448704bf1c4 d731fd8cc162c7be5134e7100330fdff83bef64a shows only DUNEUITests/Full/ActivityExerciseRegressionTests.swift; all app source is byte-identical.",
+    "run_revisions": {
+      "phone": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "phone-retry1": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "ipad": "d731fd8cc162c7be5134e7100330fdff83bef64a"
+    },
+    "row_rules": {
+      "W29_MAX_full_row": "phone-retry1 d731 only; first phone b81 clipped row is diagnostic",
+      "W32_phone_normal": "phone-retry1 d731 passed; first phone b81 failed selector row is diagnostic",
+      "ipad": "first iPad run d731: five Passed, two intentionally Skipped Categories; no iPad retry",
+      "S07_W32_MAX_period": "named capture is closed Picker control before tap; passed selector subsequently checks three options and range change/restore"
+    }
+  },
+  "source_contract": ".codex-checks/b16b17/execution-contract.json",
+  "rows": [
+    {
+      "profile": "regular",
+      "kind": "historical",
+      "title": "W29 actual-map older-source context",
+      "image": "historical/regular-W29.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "sha256": "e6362f310436e7814942f9ec922cc224f62c6f60d83da60e5124b5d9402576c0",
+      "capture_index_entry": "historical/regular-W29-index.json",
+      "is_primary": false
+    },
+    {
+      "profile": "ipad",
+      "kind": "historical",
+      "title": "W29 actual-map older-source context",
+      "image": "historical/ipad-W29.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "sha256": "7d9f6a4b5bec8b80c40ffaea6d89acfd902d8fba55c23b24a5d6f0d33e80d016",
+      "capture_index_entry": "historical/ipad-W29-index.json",
+      "is_primary": false
+    },
+    {
+      "profile": "duo",
+      "kind": "historical",
+      "title": "W29 actual-map older-source context",
+      "image": "historical/duo-W29.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "sha256": "cb649ef4d771c8bf20b414fd48d8072c08118744b52dc58ade861920a353e197",
+      "capture_index_entry": "historical/duo-W29-index.json",
+      "is_primary": false
+    },
+    {
+      "profile": "duo-open",
+      "kind": "historical",
+      "title": "W29 actual-map older-source context",
+      "image": "historical/duo-open-W29.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "sha256": "275cd0888df0c662c9c868218aefaba517e6f676b267df67f90b941509cb0d04",
+      "capture_index_entry": "historical/duo-open-W29-index.json",
+      "is_primary": false
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "title": "W29 normal built-in name icon and Default",
+      "image": "assets/01-regular-phone-normal-after.png",
+      "ax": "assets/01-regular-phone-normal-after.txt",
+      "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "run_id": "phone",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtNormalText()",
+      "selector_state": "passed",
+      "capture_uuid": "257b2f6c-2e01-4132-aba4-dc76df7b294d",
+      "timestamp": 1794008359.922,
+      "sha256": "799c5334ed66e52ce7737952f2386375c3fabdbdee7f52e1a352c5fe5f86f035",
+      "ax_sha256": "cdc324f5caae90c2539ae3ae872a5bb8cba02eb36381add1f8089771ae1add52",
+      "source_image": ".codex-checks/b16b17/phone-attachments/BC7BA9F5-6294-458F-95E0-E03B62872727.png",
+      "source_ax": ".codex-checks/b16b17/phone-attachments/398F545D-FFDC-473D-A8A2-7D3FE53FE936.txt",
+      "pair_manifest": ".codex-checks/b16b17/phone-attachments/manifest.json",
+      "is_primary": true,
+      "actual_angle": null
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "title": "W29 normal long custom category row and input type",
+      "image": "assets/02-regular-phone-normal-after.png",
+      "ax": "assets/02-regular-phone-normal-after.txt",
+      "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "run_id": "phone",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtNormalText()",
+      "selector_state": "passed",
+      "capture_uuid": "eab8d810-3530-4bbe-9c82-cb417377d4e2",
+      "timestamp": 1794008414.561,
+      "sha256": "a75f9ac162396989c097a011d0449270b0280ad3015df96df3c0947bc0fbebe5",
+      "ax_sha256": "3241879df9eb7a0cc2b08427891fce317be22ed5afacf64232179b28cd12a02e",
+      "source_image": ".codex-checks/b16b17/phone-attachments/C373FFB3-49CF-4959-863D-6CE9B8C5B891.png",
+      "source_ax": ".codex-checks/b16b17/phone-attachments/CB910AF5-8B01-4AC4-862F-17D2481E7DD6.txt",
+      "pair_manifest": ".codex-checks/b16b17/phone-attachments/manifest.json",
+      "is_primary": true,
+      "actual_angle": null
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "title": "W29 MAX built-in name icon and Default",
+      "image": "assets/03-regular-phone-MAX-after.png",
+      "ax": "assets/03-regular-phone-MAX-after.txt",
+      "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "run_id": "phone",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtMaximumText()",
+      "selector_state": "passed",
+      "capture_uuid": "a06048e0-9684-4560-8b39-b6da5be70e92",
+      "timestamp": 1794008239.665,
+      "sha256": "b2c073870075e877e487af5b5808e0e2582f97211c0477d8393a7c4d27161765",
+      "ax_sha256": "42b0e1b6ae6275ad8c0359ab44a934af8f1127f4f1fad8a5eb3ca21700494156",
+      "source_image": ".codex-checks/b16b17/phone-attachments/AAA616D1-F626-42A5-B4F3-ABDC9F979AAE.png",
+      "source_ax": ".codex-checks/b16b17/phone-attachments/CA557DE5-76FD-492E-8181-50F82FC66B10.txt",
+      "pair_manifest": ".codex-checks/b16b17/phone-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null
+    },
+    {
+      "profile": "regular",
+      "kind": "diagnostic",
+      "title": "W29 MAX long custom category row and input type",
+      "image": "assets/04-regular-phone-MAX-diagnostic.png",
+      "ax": "assets/04-regular-phone-MAX-diagnostic.txt",
+      "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "run_id": "phone",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtMaximumText()",
+      "selector_state": "passed",
+      "capture_uuid": "6c7161b4-e2e1-42be-a3a2-a8be4fd64f75",
+      "timestamp": 1794008306.142,
+      "sha256": "3b40a168fd3006b1b932a40020697bdff363a8c9423be234750b3b582c301bb3",
+      "ax_sha256": "c8235692d11b048ecb6cf23b1d4c7da5fa589652b03ba02843deb9102ae31db5",
+      "source_image": ".codex-checks/b16b17/phone-attachments/644FA108-F2F1-4262-9442-FE4BD766665B.png",
+      "source_ax": ".codex-checks/b16b17/phone-attachments/66140D17-0A08-4865-8143-ECDDFD1EF5E2.txt",
+      "pair_manifest": ".codex-checks/b16b17/phone-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null,
+      "native_gate": "failed: custom row extends below tab bar"
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "title": "W29 MAX full custom category row and input type",
+      "image": "assets/05-regular-phone-retry1-MAX-after.png",
+      "ax": "assets/05-regular-phone-retry1-MAX-after.txt",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "run_id": "phone-retry1",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtMaximumText()",
+      "selector_state": "passed",
+      "capture_uuid": "61548fd2-1ad5-4ab3-83b7-17a225376a2d",
+      "timestamp": 1794009590.236,
+      "sha256": "c36cab597ade11bb946b334c92d3ef3dbb71fc32ead249fde2f1ab2aa4b2a2e9",
+      "ax_sha256": "e910ac4f29f57ab238ae0d00388dd3986398d102a598b95919f4f7adaa51ffc2",
+      "source_image": ".codex-checks/b16b17/phone-retry1-attachments/168877EE-3B84-4452-B6CF-57704A36658C.png",
+      "source_ax": ".codex-checks/b16b17/phone-retry1-attachments/86201019-E6C6-40F1-8F77-B22AC6416B1F.txt",
+      "pair_manifest": ".codex-checks/b16b17/phone-retry1-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null
+    }
+  ],
+  "gates": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "counts": {
+        "executed": 7,
+        "passed": 6,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditUserCategoriesAtNormalText": "passed",
+        "testVisualAuditUserCategoriesAtMaximumText": "passed",
+        "testVisualAuditWorkoutInsights": "failed",
+        "testVisualAuditWorkoutInsightsSheetFallback": "passed",
+        "testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize": "passed",
+        "testVisualAuditImportedWorkoutAtNormalText": "passed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "passed"
+      },
+      "result_note": "completed per-case xcresult statuses match runner and summary",
+      "contract_issue": null,
+      "receipt": ".codex-checks/b16b17/phone-ui.log.result.json",
+      "attachments": ".codex-checks/b16b17/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditUserCategoriesAtNormalText": "not_executed",
+        "testVisualAuditUserCategoriesAtMaximumText": "passed",
+        "testVisualAuditWorkoutInsights": "passed",
+        "testVisualAuditWorkoutInsightsSheetFallback": "not_executed",
+        "testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize": "not_executed",
+        "testVisualAuditImportedWorkoutAtNormalText": "not_executed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "not_executed"
+      },
+      "result_note": "completed per-case xcresult statuses match runner and summary",
+      "contract_issue": null,
+      "receipt": ".codex-checks/b16b17/phone-retry1-ui.log.result.json",
+      "attachments": ".codex-checks/b16b17/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "counts": {
+        "executed": 7,
+        "passed": 5,
+        "skipped": 2,
+        "failed": 0
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditUserCategoriesAtNormalText": "skipped",
+        "testVisualAuditUserCategoriesAtMaximumText": "skipped",
+        "testVisualAuditWorkoutInsights": "passed",
+        "testVisualAuditWorkoutInsightsSheetFallback": "passed",
+        "testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize": "passed",
+        "testVisualAuditImportedWorkoutAtNormalText": "passed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "passed"
+      },
+      "result_note": "completed per-case xcresult statuses match runner and summary",
+      "contract_issue": null,
+      "receipt": ".codex-checks/b16b17/ipad-ui.log.result.json",
+      "attachments": ".codex-checks/b16b17/ipad-attachments/manifest.json"
+    }
+  ],
+  "pending": [
+    "phone W29 MAX full custom category row and input type: passed selector; named PNG/AX absent",
+    "phone W29 MAX long custom category row and input type: native layout clipped despite passed selector; diagnostic only",
+    "ipad W29 normal built-in name icon and Default: skipped selector; named PNG/AX absent",
+    "ipad W29 normal long custom category row and input type: skipped selector; named PNG/AX absent",
+    "ipad W29 MAX built-in name icon and Default: skipped selector; named PNG/AX absent",
+    "ipad W29 MAX full custom category row and input type: skipped selector; named PNG/AX absent",
+    "ipad W29 MAX long custom category row and input type: skipped selector; named PNG/AX absent",
+    "iPad Categories normal and MAX were Skipped before known closed native More; no iPad pass is claimed.",
+    "Duo current-source capture pending; no hinge angle or four-profile pass inferred."
+  ],
+  "limits": [
+    "Only completed passed selector captures are after.",
+    "Skipped iPad Categories is not a pass.",
+    "W33 B12 proposal stays historical and cannot be relabeled as new W33 proof.",
+    "No actual-map writes occur in this private builder."
+  ]
+}
