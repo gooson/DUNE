@@ -1,0 +1,58 @@
+[
+  {
+    "device": "ipad",
+    "size": "normal",
+    "stage": "empty-prompt",
+    "label": "W34 normal empty full prompt",
+    "timestamp": 1794592632.829,
+    "test": "ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtNormalText()",
+    "png": "assets/ipad/normal-empty-prompt.png",
+    "ax": "assets/ipad/normal-empty-prompt.txt",
+    "original_png": "970E4A52-E684-4F89-ABD5-EEFEE86442AF.png",
+    "original_ax": "56D71BC7-6A4E-4EAD-8BF8-9F02F9D450C5.txt",
+    "png_sha256": "b66529d1b5a2dfe98c8ae4cf820d8cb8218401cd977fb0029246a2b6275e65c9",
+    "ax_sha256": "93830fb4cfa97d88175bb7cc2fa5080b4ae2a7511a940a9157f4ced6dc2ed3eb"
+  },
+  {
+    "device": "ipad",
+    "size": "normal",
+    "stage": "empty-controls",
+    "label": "W34 normal empty AI prompt and availability",
+    "timestamp": 1794592637.814,
+    "test": "ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtNormalText()",
+    "png": "assets/ipad/normal-empty-controls.png",
+    "ax": "assets/ipad/normal-empty-controls.txt",
+    "original_png": "96EEE932-FF29-47FA-A39C-75737DBEE6CC.png",
+    "original_ax": "34CFA411-A6D7-4C5B-8CE2-0B456354CCDA.txt",
+    "png_sha256": "b66529d1b5a2dfe98c8ae4cf820d8cb8218401cd977fb0029246a2b6275e65c9",
+    "ax_sha256": "338fb17f7522f92654686e355b98c69bda08a923f54acdbeea0b25aafe457b3d"
+  },
+  {
+    "device": "ipad",
+    "size": "normal",
+    "stage": "filled-prompt",
+    "label": "W34 normal filled full prompt and supported state",
+    "timestamp": 1794592649.619,
+    "test": "ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtNormalText()",
+    "png": "assets/ipad/normal-filled-prompt.png",
+    "ax": "assets/ipad/normal-filled-prompt.txt",
+    "original_png": "32A40154-DEF2-4A92-B3FF-B99FEAF4EFFD.png",
+    "original_ax": "3BF2C4FF-7F17-4A59-AAF9-018C287C2D1B.txt",
+    "png_sha256": "d86b54b6db1b37760261760f9cb2250fbf0e9cb678ea286ee494766799ddc4a9",
+    "ax_sha256": "43064f2d0bec1a9436a8451c5d052183c48d933bcf3ab8069d75092ffcc40699"
+  },
+  {
+    "device": "ipad",
+    "size": "normal",
+    "stage": "cancel-return",
+    "label": "tap template-form-cancel",
+    "timestamp": 1794592653.419,
+    "test": "ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtNormalText()",
+    "png": "assets/ipad/normal-cancel-return.png",
+    "ax": "assets/ipad/normal-cancel-return.txt",
+    "original_png": "C745A30B-75F6-4468-A808-A355A8E91E3D.png",
+    "original_ax": "18DB1FF5-5CEF-404F-947A-36F6551A806B.txt",
+    "png_sha256": "f85fcb47a1f2356fd2fa9f374a2fc3dcfee120d0d1f152277e2745b2697e2cdd",
+    "ax_sha256": "4b7c4fd2cd28e4894413e6b8a78c342ad2a362a28c9d494115991e401f8b607a"
+  }
+]

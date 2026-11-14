@@ -1,0 +1,8 @@
+# Notification reading source review
+
+Scope: `NotificationHubView.swift`, `NotificationMessageContent.swift`, `NotificationMessageContentTests.swift`, notification fixture in `TestDataSeeder.swift`, and new notification detail UI tests. Read only; no build, simulator, or screenshot verification.
+
+- **Resolved P2 — Blank lines were silently discarded.** The parser now normalizes CRLF/CR, retains every line, and falls back to the original body if a line is blank or invalid. The regression test covers internal and surrounding blank lines.
+- **Resolved P2 — Numeric-leading prose became a measurement.** A whole-value regular expression now rejects `Note: 2026 was unusual` while accepting the generated decimal, unit, and parenthetical change shapes. The mixed-content regression test covers the former.
+
+No remaining actionable notification source findings identified. A quick read-only glance at `DUNEWatch/Views/Cardio/CardioMainMetricsPage.swift` and its added UI tests found no clear SwiftUI safety issue. Actual notification and Watch layout, including dynamic type appearance, remain unverified until screenshots exist. No build or tests were run in this review.

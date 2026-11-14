@@ -1,0 +1,76 @@
+{
+  "screen_id": "W33",
+  "mapped_identity": "HealthKitWorkoutDetailView.titleEditorSheet",
+  "candidate": "no app patch",
+  "provenance": "B12 W28 native title-editor captures, same exact source bytes; reuse proposal only, parent approval pending",
+  "gallery_manifest": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/docs/design/full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/manifest.json",
+  "source_hashes": {
+    "80e12fcad184a6061a2e445ff8adfe60f0e8de83": {
+      "file_sha256": "fc1655387a9e635121cd7e86577002d9b0eafa774fea595c6dc6ff67dec61e08",
+      "title_editor_member_sha256": "31568b81898483ec40f652d76320dac66d4b8297532899d6ce603251e3fe0546"
+    },
+    "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2": {
+      "file_sha256": "fc1655387a9e635121cd7e86577002d9b0eafa774fea595c6dc6ff67dec61e08",
+      "title_editor_member_sha256": "31568b81898483ec40f652d76320dac66d4b8297532899d6ce603251e3fe0546"
+    },
+    "576cfdb98606baad724a69ced56bb9cb2db86780": {
+      "file_sha256": "fc1655387a9e635121cd7e86577002d9b0eafa774fea595c6dc6ff67dec61e08",
+      "title_editor_member_sha256": "31568b81898483ec40f652d76320dac66d4b8297532899d6ce603251e3fe0546"
+    }
+  },
+  "assets": [
+    {
+      "profile": "regular",
+      "title": "Normal title editor",
+      "source_revision": "80e12fcad184a6061a2e445ff8adfe60f0e8de83",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtNormalText()",
+      "image": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/docs/design/full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/assets/03-regular-phone-normal-after.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/docs/design/full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/assets/03-regular-phone-normal-after.txt",
+      "image_sha256": "1acbd47db7bad53b0331ab46c145b311dffa44e29b76503695e5c76eb96066a5",
+      "ax_sha256": "ce414cb96123439aeccb1efefe35cb5d1141e8560324817d8267339d09a4b7ec",
+      "manifest_image_hash_matches": true,
+      "manifest_ax_hash_matches": true
+    },
+    {
+      "profile": "regular",
+      "title": "MAX title editor",
+      "source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtMaximumText()",
+      "image": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/docs/design/full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/assets/06-regular-phone-retry1-max-after.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/docs/design/full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/assets/06-regular-phone-retry1-max-after.txt",
+      "image_sha256": "0723478bc356ae4e0e430c55591e2c716f365a274944ffe7ab314541c8cc2147",
+      "ax_sha256": "40090b26d32e18591f3e32109792bf2e3f9bca8befc765aec23f97e500886ebc",
+      "manifest_image_hash_matches": true,
+      "manifest_ax_hash_matches": true
+    },
+    {
+      "profile": "ipad",
+      "title": "Normal title editor",
+      "source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtNormalText()",
+      "image": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/docs/design/full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/assets/09-ipad-ipad-normal-after.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/docs/design/full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/assets/09-ipad-ipad-normal-after.txt",
+      "image_sha256": "a18d327b6b882f5cfb2e46f7edd98fc6dd3b9413bd046df9bd5bf9ebbf471a9a",
+      "ax_sha256": "178caa38d034a5bda13d82334290b9a9c598b5d42cba93e402718fc76e81dd88",
+      "manifest_image_hash_matches": true,
+      "manifest_ax_hash_matches": true
+    },
+    {
+      "profile": "ipad",
+      "title": "MAX title editor",
+      "source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtMaximumText()",
+      "image": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/docs/design/full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/assets/12-ipad-ipad-max-after.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/docs/design/full-redesign-map/review/healthkit-workout-detail-w28-2026-11-07/assets/12-ipad-ipad-max-after.txt",
+      "image_sha256": "63c892babf05d1fd289b4c738ee54be706175c810315313471a7c405dab24eaf",
+      "ax_sha256": "79b5b084ec80441706c0b2aba4e24af97c44bf5b7ce9b10d8ea36c7514695d6b",
+      "manifest_image_hash_matches": true,
+      "manifest_ax_hash_matches": true
+    }
+  ],
+  "limits": [
+    "These images are B12 W28 captures; do not relabel as new B16 SDK output.",
+    "Phone normal is source80e; MAX phone and both iPad are source3d5; all title editor member and entire file hashes match accepted main576.",
+    "Duo has no current-source W33 capture."
+  ]
+}
