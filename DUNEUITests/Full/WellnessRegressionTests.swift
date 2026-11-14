@@ -953,8 +953,13 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             return
         }
 
-        let injuryButton = app.descendants(matching: .any)[AXID.wellnessMenuInjury].firstMatch
-        XCTAssertTrue(injuryButton.waitForExistence(timeout: 5), "Injury menu action should exist")
+        let injuryButton = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ OR label == %@", AXID.wellnessMenuInjury, "Injury"
+        )).firstMatch
+        guard injuryButton.waitForExistence(timeout: 5), injuryButton.isHittable else {
+            XCTFail("The Injury menu action must be visible before opening its form")
+            return
+        }
         injuryButton.auditTap()
 
         let form = app.descendants(matching: .any)[AXID.injuryFormScreen].firstMatch
@@ -1332,8 +1337,26 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     private func openPostureRoute(_ menuIdentifier: String) {
         navigateToWellness()
-        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.wellnessToolbarAdd))
-        XCTAssertTrue(app.waitAndTap(menuIdentifier))
+        guard app.waitAndTapToolbarAction("Add record") else {
+            XCTFail("Wellness Add record must be reachable before opening the posture route")
+            return
+        }
+        let actionLabel: String
+        switch menuIdentifier {
+        case "wellness-menu-posture": actionLabel = "Posture Assessment"
+        case "wellness-menu-realtime-posture": actionLabel = "Realtime Analysis"
+        default:
+            XCTFail("Unexpected posture route: \(menuIdentifier)")
+            return
+        }
+        let action = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ OR label == %@", menuIdentifier, actionLabel
+        )).firstMatch
+        guard action.waitForExistence(timeout: 5), action.isHittable else {
+            XCTFail("The requested posture menu action must be visible: \(actionLabel)")
+            return
+        }
+        action.auditTap()
     }
 
     func testP04SeededResultScoreMetricsMemoSaveAndRetake() throws {
@@ -1662,7 +1685,9 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
             let endY: CGFloat = front.frame.midY > viewport.midY ? 0.35 : 0.65
             let start = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
             let end = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
-            start.press(forDuration: 0.05, thenDragTo: end)
+            start.press(forDuration: 0.05, thenDragTo: end,
+                        withVelocity: XCUIGestureVelocity(rawValue: 80),
+                        thenHoldForDuration: 0.35)
         }
         let visible = front.frame.intersection(
             photos.frame.intersection(window.frame).insetBy(dx: 6, dy: 6))
