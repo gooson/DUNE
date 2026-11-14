@@ -26,6 +26,15 @@
       "file": "ci-remediation-watch-integration-deferred-to-ci.json.gz",
       "uncompressed_sha256": "2a4c24334c62bd32ab1104f4a90d0cddf6c70b4297ee723baaf2d6ac6cf6b32a",
       "original_local_path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-integration-deferred-to-ci.json"
+    },
+    {
+      "file": "ci-remediation-device-compile.log.gz",
+      "uncompressed_sha256": "341ffa265ef78497120b28a5cc39cddaa2a71d3040357c885560e90f9fd3219e",
+      "original_local_path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.xcodebuild/ios-build.log",
+      "source_note": "Pre-commit hook built the staged source, which was then committed unchanged at source_equivalent_commit; later edits are CI environment/docs only.",
+      "source_equivalent_commit": "229d7bb24c8c2d62d13df264288fde1abc4de1e2",
+      "producer_head": "4b5648afe4a21955c022a6360bd888d1d024da8a",
+      "producer_worktree_dirty": true
     }
   ]
 }

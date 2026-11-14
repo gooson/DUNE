@@ -25,6 +25,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  # Keep xcrun and xcodebuild on the same installation without mutating the host.
+  DEVELOPER_DIR: /Applications/Xcode_27.app/Contents/Developer
   SIMULATOR_BOOT_TIMEOUT: '300'
   SIMULATOR_BOOT_RETRIES: '2'
 
@@ -44,8 +46,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_27.app/Contents/Developer
+      - name: Report selected Xcode
+        run: xcodebuild -version
 
       - name: Simulator diagnostics
         if: always()
