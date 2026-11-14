@@ -882,10 +882,14 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
     private func revealInjuryFormControl(_ identifier: String, maxMoves: Int = 12) -> Bool {
         let target = app.descendants(matching: .any)[identifier].firstMatch
-        return revealInjuryFormElement(target, maxMoves: maxMoves)
+        return revealInjuryFormElement(
+            target, maxMoves: maxMoves, prefersCompactGutter: identifier == AXID.injuryFormMemo
+        )
     }
 
-    private func revealInjuryFormElement(_ target: XCUIElement, maxMoves: Int = 12) -> Bool {
+    private func revealInjuryFormElement(
+        _ target: XCUIElement, maxMoves: Int = 12, prefersCompactGutter: Bool = false
+    ) -> Bool {
         let containers = app.collectionViews.allElementsBoundByIndex
             + app.tables.allElementsBoundByIndex
             + app.scrollViews.allElementsBoundByIndex
@@ -924,7 +928,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             let endY = startY + (delta < 0 ? fraction : -fraction)
             // Closed MAX Memo reveal can start over the native End Date picker.
             // Use the visible Form gutter and a short press for this target only.
-            let compactMemo = isCompactInjuryFormViewport && target.identifier == AXID.injuryFormMemo
+            let compactMemo = isCompactInjuryFormViewport && prefersCompactGutter
             let dragX: CGFloat = compactMemo ? 0.05 : 0.5
             let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: dragX, dy: startY))
             let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: dragX, dy: endY))
