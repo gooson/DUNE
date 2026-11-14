@@ -406,3 +406,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-14 W29: 정적 시안과 2026-11-14 iPad 실제 PNG/AX를 구분한다.
 
 2026-11-14 W30: 정적 시안과 2026-11-14 iPad 실제 PNG/AX를 구분한다.
+
+2026-11-14 W12: 정적 시안과 [실제 범위 한정 PNG/AX](../full-redesign-map/review/workout-template-list-w12-2026-11-14/index.html)를 구분한다. 이전 HELD 진단은 원본 보존.

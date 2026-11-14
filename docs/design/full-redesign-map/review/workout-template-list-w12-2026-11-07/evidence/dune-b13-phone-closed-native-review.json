@@ -1,0 +1,70 @@
+{
+  "batch": "B13 phone closed independent native review",
+  "source_app": "c6708751213657f7a1624ac944d7660e8bbed19d unchanged across phone attempts",
+  "attempts": [
+    {
+      "id": "phone",
+      "executed": 4,
+      "passed": 1,
+      "failed": 3,
+      "receipt": ".codex-checks/b13/phone-ui.log.result.json"
+    },
+    {
+      "id": "phone-retry1",
+      "executed": 3,
+      "passed": 0,
+      "failed": 3,
+      "receipt": ".codex-checks/b13/phone-retry1-ui.log.result.json"
+    }
+  ],
+  "retry_limit": "Same-ID cause-specific retry consumed; no third phone SDK or manual bypass.",
+  "screen_reviews": {
+    "W12": {
+      "phone_normal": "passed selector; fresh row PNG/AX show Codex Circuit Builder, 2 exercises, Squat and Bench Press fully readable, play icon retained.",
+      "phone_MAX": "diagnostic only because combined PlanMAX selector failed later. Fresh row PNG/AX show full wrapped title and details for both seeded templates; not a passed MAX case.",
+      "evidence": [
+        "/private/tmp/dune-b13-gallery-prep/W12/assets/01-regular-phone-normal-after.png",
+        "/private/tmp/dune-b13-gallery-prep/W12/assets/03-regular-phone-retry1-max-diagnostic.png"
+      ],
+      "preliminary_gate": "pending iPad normal/MAX and final native adjudication; no all-size phone pass claim"
+    },
+    "W13": {
+      "phone_normal": "retry reached blank New Template form and disabled Save; changed exercise-name/session-summary rows were never reached.",
+      "phone_MAX": "retry reached blank form; Add Exercise was tapped, but the following picker query failed before any selected exercise row or changed layout could be checked.",
+      "evidence": [
+        "/private/tmp/dune-b13-gallery-prep/W13/assets/01-regular-phone-retry1-normal-diagnostic.png",
+        "/private/tmp/dune-b13-gallery-prep/W13/assets/02-regular-phone-retry1-max-diagnostic.png"
+      ],
+      "preliminary_gate": "held; target changed rows not captured on phone"
+    },
+    "W14": {
+      "source": "No app patch to picker wrapper.",
+      "phone": "Native MAX AX shows picker-root-list as CollectionView after Add Exercise. Prior app.tables selector was a role mismatch; no selected exercise or close/return proof. Normal failure has same test assertion; native picker state needs own AX review.",
+      "evidence": [
+        ".codex-checks/b13/phone-retry1-attachments/2553F4E0-78AE-4E55-88BB-7E25D0651EF1.txt"
+      ],
+      "preliminary_gate": "route diagnostic only; no redesigned source or complete native selection pass"
+    },
+    "W15": {
+      "phone_normal": "passed full selector; fresh PNG/AX show seven day rows, week change and restoration (Sun 1\u2192Sun 8\u2192Sun 1), seeded selected template, visible Remove, and test completion.",
+      "phone_MAX": "failed both attempts. Fresh MAX PNG/AX show stacked day rows and large selected card; Remove at y923.3\u2013986.6 lies below active template pane y494.7\u2013956 and under floating tab bar. Bounded bidirectional pane scroll did not establish whole-frame reachability.",
+      "evidence": [
+        "/private/tmp/dune-b13-gallery-prep/W15/assets/01-regular-phone-normal-after.png",
+        "/private/tmp/dune-b13-gallery-prep/W15/assets/03-regular-phone-normal-after.png",
+        "/private/tmp/dune-b13-gallery-prep/W15/assets/09-regular-phone-retry1-max-diagnostic.png",
+        ".codex-checks/b13/phone-retry1-attachments/14975588-BED6-44BB-98A9-84BFD7E0510E.txt"
+      ],
+      "causality": "Candidate W15 patch changes calendar day rows/arrows at MAX; lower selected-template pane and Remove control source remain unchanged. This native usability failure is real, but introduction by the candidate is not established without equivalent old-source MAX evidence.",
+      "preliminary_gate": "held for MAX action reachability; iPad normal/MAX pending"
+    }
+  },
+  "introduced_P1_P2_verified": [],
+  "native_quality_issue": "W15 MAX Remove whole-frame reachability failed; report as unresolved native P2 usability limit, not a verified introduced diff finding.",
+  "pending": [
+    "iPad W12/W13/W14/W15 results from first planned family",
+    "Duo and Duo-open profiles; historical images are not after evidence",
+    "Final per-screen source/actual-map gate after iPad"
+  ],
+  "provenance": "Gallery after rows are counted only from passed selectors; diagnostic rows from failed cases are not promoted to pass. Original phone run 1/4 and retry 0/3 preserved.",
+  "visual_inspection": "Inspected all available new gallery PNGs: W12 3/3, W13 2/2, W15 9/9; W14 has no new named PNG. Paired AX and raw failure AX were checked for key geometry and labels."
+}

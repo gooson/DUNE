@@ -19,3 +19,5 @@
 - [H09 부상 이력 현재 실제 검토](../../full-redesign-map/review/h09-injury-history-native-2026-11-05/index.html): 611d70b1 네 프로필·다섯 SDK 사례·열 PNG/AX 쌍. 이전 네 PNG는 정체성 참고입니다.
 
 2026-11-14 W34 is the embedded W13 AI state, not a separate route. [Actual positive evidence and failed iPad MAX diagnostics](../../full-redesign-map/review/ai-workout-builder-w34-2026-11-14/index.html) now include approved extra iPad MAX 1/1 positive evidence; two earlier MAX failures remain preserved. Scoped Phone/iPad UI verified; no actual generation was requested.
+
+2026-11-14 W12: [실제 범위 한정 캡처](../../full-redesign-map/review/workout-template-list-w12-2026-11-14/index.html). Phone MAX와 iPad normal/MAX 표적 UI, Phone normal은 Nov 7 역사 기록; 이전 HELD 원본 보존.

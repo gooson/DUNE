@@ -311,3 +311,5 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-14 W29: 정적 배치와 새 iPad 일반/MAX 실제 PNG/AX를 구분한다. 기존 2026-11-07 Phone 기록은 날짜를 유지한다.
 
 2026-11-14 W30: 정적 배치와 새 iPad 일반/MAX 실제 PNG/AX를 구분한다. 기존 2026-11-07 Phone 기록은 날짜를 유지한다.
+
+2026-11-14 W12: [`workout-template-list-w12.html`](workout-template-list-w12.html)는 큰 글씨 정적 배치 계약이며 [실제 iPad/Phone 범위 증거](../full-redesign-map/review/workout-template-list-w12-2026-11-14/index.html)와 구분한다.
