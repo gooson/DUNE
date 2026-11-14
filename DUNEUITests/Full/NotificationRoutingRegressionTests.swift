@@ -153,6 +153,7 @@ final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
         XCTAssertTrue(app.descendants(matching: .any)["dashboard-daily-digest"].firstMatch.waitForExistence(timeout: 15))
         XCTAssertTrue(app.descendants(matching: .any)["notification-daily-digest-cover"].firstMatch.exists)
         XCTAssertTrue(app.descendants(matching: .any)["notification-daily-digest-activity"].firstMatch.exists)
+        VisualAudit.capture("T10 notification digest loaded")
         let todayTab = app.tabBars.buttons["Today"].firstMatch
         if todayTab.exists {
             XCTAssertTrue(todayTab.isSelected, "Notification response should select Today")
@@ -170,6 +171,10 @@ final class NotificationResponseRoutingUITests: SeededUITestBaseCase {
         backButton.tap()
 
         XCTAssertTrue(app.descendants(matching: .any)[AXID.dashboardToolbarNotifications].firstMatch.waitForExistence(timeout: 8))
+        let skeleton = app.descendants(matching: .any)["dashboard-loading-skeleton"].firstMatch
+        XCTAssertTrue(skeleton.waitForNonExistence(timeout: 15), "Returning from the digest should finish Today loading")
+        XCTAssertTrue(app.descendants(matching: .any)["dashboard-hero-condition"].firstMatch.waitForExistence(timeout: 8))
+        VisualAudit.capture("T03 Today loaded after notification digest Back")
     }
 }
 
