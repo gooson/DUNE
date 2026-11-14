@@ -36,6 +36,8 @@ DRY_RUN=0
 IOS_ONLY_TESTING=()
 WATCH_ONLY_TESTING=()
 ONLY_TESTING=()
+RESULT_BUNDLE_PATH=""
+WATCH_BUILD_BEFORE_BOOT=0
 
 if [[ "${CI:-}" == "true" ]]; then
     STREAM_LOGS=1
@@ -61,6 +63,26 @@ while [[ $# -gt 0 ]]; do
                 exit 2
             fi
             MODE="watch"
+            shift
+            ;;
+        --ios-scheme)
+            if [[ $# -lt 2 || ! "$2" =~ ^(DUNETests|DUNEAIEvaluations)$ ]]; then
+                echo "--ios-scheme requires DUNETests or DUNEAIEvaluations" >&2
+                exit 2
+            fi
+            IOS_SCHEME="$2"
+            shift 2
+            ;;
+        --result-bundle-path)
+            if [[ $# -lt 2 || -z "$2" || "$2" == --* ]]; then
+                echo "--result-bundle-path requires a path" >&2
+                exit 2
+            fi
+            RESULT_BUNDLE_PATH="$2"
+            shift 2
+            ;;
+        --build-before-boot)
+            WATCH_BUILD_BEFORE_BOOT=1
             shift
             ;;
         --stream-log)
@@ -97,11 +119,24 @@ while [[ $# -gt 0 ]]; do
             ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--no-regen] [--ios-only | --watch-only] [--stream-log | --no-stream-log] [--log-file <path>] [--only-testing <target/class[/method]> ...] [--dry-run] [--cleanup-simulators]"
+            echo "Usage: $0 [--no-regen] [--ios-only | --watch-only] [--ios-scheme <DUNETests|DUNEAIEvaluations>] [--result-bundle-path <path>] [--build-before-boot] [--stream-log | --no-stream-log] [--log-file <path>] [--only-testing <target/class[/method]> ...] [--dry-run] [--cleanup-simulators]"
             exit 2
             ;;
     esac
 done
+
+if [[ -n "$RESULT_BUNDLE_PATH" && "$MODE" == "all" ]]; then
+    echo "--result-bundle-path requires --ios-only or --watch-only" >&2
+    exit 2
+fi
+if [[ "$WATCH_BUILD_BEFORE_BOOT" -eq 1 && "$MODE" != "watch" ]]; then
+    echo "--build-before-boot requires --watch-only" >&2
+    exit 2
+fi
+if [[ "$IOS_SCHEME" != "DUNETests" && "$MODE" != "ios" ]]; then
+    echo "--ios-scheme DUNEAIEvaluations requires --ios-only" >&2
+    exit 2
+fi
 
 if [[ "${CLEANUP_MODE:-0}" -eq 1 && ( "$DRY_RUN" -eq 1 || ${#ONLY_TESTING[@]} -gt 0 ) ]]; then
     echo "--cleanup-simulators cannot be combined with --dry-run or --only-testing" >&2
@@ -275,14 +310,54 @@ run_suite() {
     shift 4
     local selectors=("$@")
     local test_cmd
+    local test_action="test"
+
+    if [[ "$WATCH_BUILD_BEFORE_BOOT" -eq 1 ]]; then
+        # Compiling can take minutes. Keep the Watch shut down during that work,
+        # then establish a live destination immediately before test execution.
+        local build_cmd=(xcodebuild build-for-testing -project "$PROJECT_FILE"
+            -scheme "$scheme" -destination "generic/platform=watchOS Simulator"
+            -derivedDataPath "$DERIVED_DATA_DIR"
+            ${XCODEBUILD_RESOURCE_ARGS[@]+"${XCODEBUILD_RESOURCE_ARGS[@]}"}
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO)
+        if [[ "$DRY_RUN" -eq 1 ]]; then
+            printf 'DRY_RUN_COMMAND='
+            printf '%q ' "${build_cmd[@]}"
+            printf '\n'
+        else
+            local build_log="${log_file%.log}-build.log"
+            mkdir -p "$(dirname "$build_log")"
+            echo "Compiling Watch unit tests before simulator boot; log: $build_log"
+            if "${build_cmd[@]}" >"$build_log" 2>&1; then
+                echo "Watch test build succeeded."
+            else
+                local build_exit=$?
+                tail -n 80 "$build_log"
+                exit "$build_exit"
+            fi
+            preboot_from_destination "$destination" "watchOS"
+            local ready_udid
+            ready_udid=$(echo "$destination" | grep -oE 'id=[0-9A-Fa-f-]+' | cut -d= -f2)
+            python3 "$ROOT_DIR/scripts/lib/verify-simulator-ready.py" \
+                --udid "$ready_udid" --platform watchOS \
+                --project "$PROJECT_FILE" --scheme "$scheme"
+        fi
+        test_action="test-without-building"
+    fi
 
     echo "Running ${suite_name} with scheme '$scheme' for destination '$destination'..."
 
-    test_cmd=(xcodebuild test -project "$PROJECT_FILE"
+    test_cmd=(xcodebuild "$test_action" -project "$PROJECT_FILE"
         -scheme "$scheme"
         -destination "$destination"
         -derivedDataPath "$DERIVED_DATA_DIR"
         ${XCODEBUILD_RESOURCE_ARGS[@]+"${XCODEBUILD_RESOURCE_ARGS[@]}"})
+    if [[ "$WATCH_BUILD_BEFORE_BOOT" -eq 1 && "${CI:-}" == "true" ]]; then
+        test_cmd+=(-parallel-testing-enabled NO)
+    fi
+    if [[ -n "$RESULT_BUNDLE_PATH" ]]; then
+        test_cmd+=(-resultBundlePath "$RESULT_BUNDLE_PATH")
+    fi
     for selector in "${selectors[@]}"; do
         test_cmd+=(-only-testing "$selector")
     done
@@ -318,8 +393,8 @@ run_suite() {
     if [[ "$test_exit" -ne 0 ]]; then
         exit "$test_exit"
     fi
-    if [[ ${#ONLY_TESTING[@]} -gt 0 ]] && ! grep -Eq 'Executed [1-9][0-9]* tests?, with|Test run with [1-9][0-9]* tests?( in [1-9][0-9]* suites?)? (passed|failed)' "$log_file"; then
-        echo "${suite_name}: selected tests have no positive execution count in $log_file" >&2
+    if ! grep -Eq 'Executed [1-9][0-9]* tests?, with|Test run with [1-9][0-9]* tests?( in [1-9][0-9]* suites?)? (passed|failed)' "$log_file"; then
+        echo "${suite_name}: requested tests have no positive execution count in $log_file" >&2
         exit 1
     fi
 }
@@ -344,7 +419,9 @@ if [[ "$RUN_WATCH" -eq 1 ]]; then
             WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "27")"
         fi
         WATCH_DESTINATION=$(apply_worktree_destination "$WATCH_DESTINATION" "$WATCH_SIM_NAME" "watchOS")
-        preboot_from_destination "$WATCH_DESTINATION" "watchOS"
+        if [[ "$WATCH_BUILD_BEFORE_BOOT" -eq 0 ]]; then
+            preboot_from_destination "$WATCH_DESTINATION" "watchOS"
+        fi
     fi
     if [[ ${#ONLY_TESTING[@]} -eq 0 ]]; then
         WATCH_ONLY_TESTING=(DUNEWatchTests)

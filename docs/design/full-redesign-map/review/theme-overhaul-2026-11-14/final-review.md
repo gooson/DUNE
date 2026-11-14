@@ -15,3 +15,7 @@ status: passed-with-documented-limits
 - Parent integrity 검사: native247 PNG/AX쌍, base맵12개 복사의 SHA-256 및 갤러리 로컬 참조 확인. 맵 두 생성기 check, Python 도구 계약13개, 문자열 카탈로그 format/manual 및 diff 공백 검사 통과.
 
 Duo 펼침64조합은 내부 패널 활성화 실패로 이번 소스에서 미캡처다. AGENTS의 캡처 불가 시 exact IDs·사유 명시 예외로 수용하며 완료로 계산하지 않는다. Widget native family 렌더링·Vision runtime 실행·실제 iPhone→Watch 전파는 미검증이고 생산 소비자는 변경하지 않았다. 초기 Phone flow/MAX의 확정되지 않은 dirty 상태를 false로 만들거나 새 공식 flow 인덱스로 승격하지 않았다. 이는 scoped merge 판정이며 모든 플랫폼·모든 상태의 완료 판정이 아니다.
+
+## 2026-11-15 CI 후속 변경
+
+위 판정은 11월14일 테마 작업 범위다. 이후 원격 CI 실패를 수정하기 위해 AI 평가의 unit/live 경계, 운동 생성 출처 메타데이터, Watch build→boot→runtime 확인→test 순서를 추가했다. [후속 실행 계획](../../../../plans/2026-11-15-theme-ci-remediation.md)과 PR993의 최신 CI·리뷰가 후속 변경의 판정 기준이다. 기존 테마 장면·배치·문구는 수정하지 않았다.

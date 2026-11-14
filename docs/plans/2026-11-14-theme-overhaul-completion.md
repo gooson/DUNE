@@ -79,7 +79,7 @@ related_brainstorms: []
 
 - Initialization: clean linked worktree, base `96d1a60e5`, 기존 main 로컬 변경 보호.
 - Plan: 이 문서와 기존 `2026-10-19-full-theme-redesign.md`를 함께 사용한다. 후속 실행 결과는 전용 review 갤러리에 기록한다.
-- Work: WATER LILIES 장면·motion 정리, Any/Dark 기본 lookup, Today 데이터 대비, 일본어 기간 배치를 구현했다. 생산 소스는 `a5749e105` 이후 동일하다.
+- Work: WATER LILIES 장면·motion 정리, Any/Dark 기본 lookup, Today 데이터 대비, 일본어 기간 배치를 구현했다. 테마 생산 소스는 `a5749e105` 이후 동일하다. AI 생성 출처와 CI 후속 수정은 11월15일 계획에서 별도로 추적한다.
 - UI: iPhone 루트8/8, iPad10/10, Duo 접힘4/4+4/4 및 extras2/2, Watch16/16. 실제 VoiceOver·고대비·Reduce Motion·복귀·저장·en/ko/ja 관련 selector 통과. 전체 회귀 또는 모든 상태 시각 검증을 뜻하지 않는다.
 - Evidence: 3기기 루트192 PNG/AX + Watch24 + MAX·흐름·접근성31을 실제 맵/검증 갤러리에 보존했다. 초기 Phone flow/MAX의 source dirty 상태가 확정되지 않아 새 공식 flow 인덱스로 승격하지 않았다.
 - Runtime limits: Duo 펼침64조합은 내부 패널 활성화 실패로 이번 소스 미캡처. Widget native·Vision runtime·Watch 실전파는 미검증이며 성공으로 계산하지 않는다. [정확한 범위·원본 실패·재개 조건](../design/full-redesign-map/review/theme-overhaul-2026-11-14/README.md)을 따른다.

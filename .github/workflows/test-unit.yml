@@ -16,6 +16,7 @@ on:
       - 'scripts/lib/xcodebuild-resources.sh'
       - 'scripts/lib/regen-project.sh'
       - 'scripts/lib/simulator-boot.sh'
+      - 'scripts/lib/verify-simulator-ready.py'
       - 'scripts/lib/simulator-worktree.sh'
       - 'scripts/lib/simulator-test-lock.py'
 
@@ -68,9 +69,16 @@ jobs:
       - name: Run Unit Tests
         shell: bash
         working-directory: ${{ runner.temp }}/dune-unit-tests
+        env:
+          DAILVE_XCODEBUILD_JOBS: ${{ matrix.platform == 'watch' && '2' || '' }}
+          DAILVE_COMPILER_INDEX_STORE_ENABLE: ${{ matrix.platform == 'watch' && 'NO' || '' }}
         run: |
           mkdir -p .xcodebuild
-          scripts/test-unit.sh --${{ matrix.platform }}-only --stream-log 2>&1 | tee .xcodebuild/unit-test-runner.log
+          args=(--${{ matrix.platform }}-only --stream-log)
+          if [[ '${{ matrix.platform }}' == 'watch' ]]; then
+            args+=(--build-before-boot)
+          fi
+          scripts/test-unit.sh "${args[@]}" 2>&1 | tee .xcodebuild/unit-test-runner.log
 
       - name: Collect simulator state
         if: always()

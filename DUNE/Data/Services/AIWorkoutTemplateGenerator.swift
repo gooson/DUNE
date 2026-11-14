@@ -2,6 +2,17 @@ import Foundation
 import FoundationModels
 
 struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
+    enum GenerationSource: Sendable, Equatable {
+        case model
+        case intentBuilder
+        case recoveryBuilder
+    }
+
+    struct GenerationResult: Sendable {
+        let template: GeneratedWorkoutTemplate
+        let source: GenerationSource
+    }
+
     static var isAvailable: Bool {
         SystemLanguageModel.default.isAvailable
     }
@@ -25,6 +36,14 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
         from request: WorkoutTemplateGenerationRequest,
         library: ExerciseLibraryQuerying
     ) async throws -> GeneratedWorkoutTemplate {
+        try await generateTemplateWithSource(from: request, library: library).template
+    }
+
+    /// Exposes the actual producer for evaluations without changing app recovery behavior.
+    func generateTemplateWithSource(
+        from request: WorkoutTemplateGenerationRequest,
+        library: ExerciseLibraryQuerying
+    ) async throws -> GenerationResult {
         let trimmedPrompt = request.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedPrompt.isEmpty else {
             throw WorkoutTemplateGenerationError.emptyPrompt
@@ -40,12 +59,13 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
             AppLogger.exercise.notice(
                 "AI workout template using deterministic builder promptHash=\(trimmedPrompt, privacy: .private(mask: .hash))"
             )
-            return try fallbackTemplate(
+            let template = try fallbackTemplate(
                 prompt: trimmedPrompt,
                 promptIntent: promptIntent,
                 library: library,
                 localeIdentifier: request.localeIdentifier
             )
+            return GenerationResult(template: template, source: .intentBuilder)
         }
 
         do {
@@ -68,19 +88,21 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
                 "AI workout template raw output promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) name=\(generated.name, privacy: .private) estimated=\(generated.estimatedMinutes, privacy: .public) slotCount=\(generated.exercises.count, privacy: .public) slots=\(debugSlotSummary(generated.exercises), privacy: .private)"
             )
             do {
-                return try resolveGeneratedTemplate(generated, library: library)
+                let template = try resolveGeneratedTemplate(generated, library: library)
+                return GenerationResult(template: template, source: .model)
             } catch let error as WorkoutTemplateGenerationError
                 where error == .noExercisesMatched || error == .invalidTemplate {
                 AppLogger.exercise.notice(
                     "AI workout template falling back to deterministic builder promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) error=\(String(describing: error), privacy: .private)"
                 )
-                return try fallbackTemplate(
+                let template = try fallbackTemplate(
                     prompt: trimmedPrompt,
                     promptIntent: promptIntent,
                     library: library,
                     localeIdentifier: request.localeIdentifier,
                     preferredName: generated.name
                 )
+                return GenerationResult(template: template, source: .recoveryBuilder)
             }
         } catch let error as WorkoutTemplateGenerationError {
             AppLogger.exercise.error(
@@ -111,7 +133,8 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
                     try await retrySession.respond(to: retryPrompt, generating: AIWorkoutTemplate.self)
                 }
                 let retryGenerated = retryResponse.content
-                return try resolveGeneratedTemplate(retryGenerated, library: library)
+                let template = try resolveGeneratedTemplate(retryGenerated, library: library)
+                return GenerationResult(template: template, source: .model)
             } catch {
                 AppLogger.ai.error(
                     "[AIWorkoutTemplate] inference failed after retry promptHash=\(trimmedPrompt, privacy: .private(mask: .hash)) error=\(String(describing: error), privacy: .private)"
@@ -126,7 +149,7 @@ struct AIWorkoutTemplateGenerator: NaturalLanguageWorkoutGenerating, Sendable {
                 AppLogger.exercise.notice(
                     "AI workout template recovered from model failure with deterministic builder promptHash=\(trimmedPrompt, privacy: .private(mask: .hash))"
                 )
-                return fallback
+                return GenerationResult(template: fallback, source: .recoveryBuilder)
             }
             throw WorkoutTemplateGenerationError.generationFailed
         }

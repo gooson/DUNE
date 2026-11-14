@@ -36,7 +36,7 @@ status: scoped-verification
 | 최종 UI test helper 컴파일 | `973dea058` iOS UI target build-for-testing 통과. 후속 Watch test target도 pre-commit compile 및 native16/16 통과 | 마지막 `973dea058`의 Duo 테스트 보조 코드에 한정한 후속 검사 |
 | 맵·카탈로그·도구 계약 | 최종 생성·포맷·계약 검사를 아래 최종 판정에 기록 | 앱 full 회귀를 의미하지 않음 |
 
-최종 앱 생산 코드는 `a5749e105` 이후 바뀌지 않았다. 후속 커밋은 UI 테스트·인벤토리·실제 맵·문서 변경이다. 재사용한 증거에는 촬영 당시 revision을 유지하며 최신 문서 커밋을 붙이지 않는다. PNG·AX는 동일 capture activity 또는 acknowledged sequence와 실제 viewport로 연결하고 SHA-256을 기록한다. 시각 리뷰는 첫 viewport와 대표 흐름·MAX 표본에 한정하며 전체 스크롤·모든 상태의 육안 승인을 주장하지 않는다.
+테마 렌더링 코드는 `a5749e105` 이후 바뀌지 않았다. 11월15일 CI 후속 수정에서는 AI 운동 생성 결과의 출처 메타데이터를 추가하며 기존 앱 API의 반환 template과 복구 동작을 유지한다. 후속 커밋은 UI 테스트·인벤토리·실제 맵·문서 변경이다. 재사용한 증거에는 촬영 당시 revision을 유지하며 최신 문서 커밋을 붙이지 않는다. PNG·AX는 동일 capture activity 또는 acknowledged sequence와 실제 viewport로 연결하고 SHA-256을 기록한다. 시각 리뷰는 첫 viewport와 대표 흐름·MAX 표본에 한정하며 전체 스크롤·모든 상태의 육안 승인을 주장하지 않는다.
 
 [추가 실제 화면31쌍](extras/gallery.html): iPad MAX4·흐름6(`2c8b55481`), Duo 접힘 MAX4·흐름6(`861865174`), Phone VoiceOver3·고대비8(`c50647199`). 모든 쌍의 원본 해시와 별도 provenance를 보존한다. 초기 Phone 흐름·MAX는 positive 실행 receipt와 이미지가 있으나 정확한 clean source 상태의 기계 증명이 충분하지 않아 새 공식 flow 인덱스로 승격하지 않았다. 후보 커밋 fingerprint 대조도 일치하지 않아 unknown을 false로 바꾸지 않았다.
 
