@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditCompoundSessionAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditCompoundSessionAtMaximumText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtMaximumText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testCardioFlowReachesSummary",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testStairClimberLevelChangesAppearInSummary"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 7,
+    "passed": 6,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 6,
+  "failures": [
+    "1089: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:4553: error: -[DUNEUITests.ActivityExerciseRegressionTests testStairClimberLevelChangesAppearInSummary] : XCTAssertTrue failed",
+    "1100: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testStairClimberLevelChangesAppearInSummary]' failed (80.866 seconds).",
+    "3522: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-11-07 07:58:05.905.",
+    "3524: Test Suite 'DUNEUITests.xctest' failed at 2026-11-07 07:58:05.905.",
+    "3526: Test Suite 'Selected tests' failed at 2026-11-07 07:58:05.906.",
+    "3538: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testStairClimberLevelChangesAppearInSummary"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b14b15/ipad-ui.log"
+}

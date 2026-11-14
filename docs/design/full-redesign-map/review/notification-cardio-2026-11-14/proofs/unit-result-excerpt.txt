@@ -1,0 +1,64 @@
+◇ Test run started.
+↳ Testing Library Version: 2403
+↳ Target Platform: arm64-apple-ios17.0-simulator
+◇ Suite "NotificationMessageContent" started.
+◇ Test "Keeps saved measurement order, precision and units" started.
+◇ Test case passing 1 argument type → .weightUpdate to "Keeps saved measurement order, precision and units" started.
+​◇ Test case passing 1 argument type → .bodyFatUpdate to "Keeps saved measurement order, precision and units" started.
+​◇ Test case passing 1 argument type → .bmiUpdate to "Keeps saved measurement order, precision and units" started.
+​✔ Test "Keeps saved measurement order, precision and units" with 3 test cases passed after 0.001 seconds.
+◇ Test "Preserves localized labels, decimal separators and weight change" started.
+◇ Test case passing 1 argument message → "BMI: 24.9
+체지방: 23.5%" to "Preserves localized labels, decimal separators and weight change" started.
+​◇ Test case passing 1 argument message → "BMI：24,9
+体脂肪率：23,5%" to "Preserves localized labels, decimal separators and weight change" started.
+​◇ Test case passing 1 argument message → "Weight: 75.0 kg (+0.5 kg)
+BMI: 24.9
+Body fat: 23.5%" to "Preserves localized labels, decimal separators and weight change" started.
+​✔ Test "Preserves localized labels, decimal separators and weight change" with 3 test cases passed after 0.001 seconds.
+◇ Test "Keeps the whole original body when any line cannot become a measurement" started.
+◇ Test case passing 1 argument message → "" to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "
+ " to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "BMI 24.9" to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "BMI:" to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → ": 24.9" to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "BMI: --" to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "BMI: NaN" to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "BMI: 24.9
+A note about this measurement." to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "BMI: 24.9
+Body fat: unavailable" to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "BMI: 24.9
+Note: 2026 was unusual" to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "BMI: 24.9
+
+Body fat: 23.5%" to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "
+BMI: 24.9
+" to "Keeps the whole original body when any line cannot become a measurement" started.
+​◇ Test case passing 1 argument message → "One: 1
+Two: 2
+Three: 3
+Four: 4" to "Keeps the whole original body when any line cannot become a measurement" started.
+​✔ Test "Keeps the whole original body when any line cannot become a measurement" with 13 test cases passed after 0.003 seconds.
+◇ Test "A non-body notification keeps its original prose" started.
+◇ Test case passing 1 argument type → .stepGoal to "A non-body notification keeps its original prose" started.
+​◇ Test case passing 1 argument type → .sleepComplete to "A non-body notification keeps its original prose" started.
+​◇ Test case passing 1 argument type → .hrvAnomaly to "A non-body notification keeps its original prose" started.
+​◇ Test case passing 1 argument type → .dailyDigest to "A non-body notification keeps its original prose" started.
+​✔ Test "A non-body notification keeps its original prose" with 4 test cases passed after 0.001 seconds.
+◇ Test "Single and repeated labels remain complete and retain their positions" started.
+✔ Test "Single and repeated labels remain complete and retain their positions" passed after 0.001 seconds.
+✔ Suite "NotificationMessageContent" passed after 0.007 seconds.
+✔ Test run with 5 tests in 1 suite passed after 0.010 seconds.
+2026-11-14 00:49:20.380 xcodebuild[24984:113665] [MT] IDETestOperationsObserverDebug: 4.923 elapsed -- Testing started completed.
+2026-11-14 00:49:20.381 xcodebuild[24984:113665] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-11-14 00:49:20.381 xcodebuild[24984:113665] [MT] IDETestOperationsObserverDebug: 4.923 sec, +4.923 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.deriveddata/unit-tests/Logs/Test/Test-DUNETests-2026.11.14_00-48-18-+0900.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started

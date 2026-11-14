@@ -30,13 +30,15 @@ struct CreateCustomExerciseView: View {
 
                 // Category — built-in + user-defined
                 Section("Category") {
-                    // Built-in categories
-                    Picker("Category", selection: $selectedCategory) {
-                        ForEach(ExerciseCategory.allCases, id: \.self) { cat in
-                            Text(cat.displayName).tag(cat)
+                    // Keep the native segmented control at regular sizes; a menu gives
+                    // every category its full label at accessibility text sizes.
+                    Group {
+                        if dynamicTypeSize.isAccessibilitySize {
+                            categoryPicker.pickerStyle(.menu)
+                        } else {
+                            categoryPicker.pickerStyle(.segmented)
                         }
                     }
-                    .pickerStyle(.segmented)
                     .onChange(of: selectedCategory) { _, newValue in
                         selectedUserCategory = nil
                         switch newValue {
@@ -80,6 +82,7 @@ struct CreateCustomExerciseView: View {
                                         )
                                     }
                                     .buttonStyle(.plain)
+                                    .accessibilityAddTraits(selectedUserCategory?.id == userCat.id ? .isSelected : [])
                                 }
                             }
                         }
@@ -157,6 +160,14 @@ struct CreateCustomExerciseView: View {
         }
     }
 
+    private var categoryPicker: some View {
+        Picker("Category", selection: $selectedCategory) {
+            ForEach(ExerciseCategory.allCases, id: \.self) { cat in
+                Text(cat.displayName).tag(cat)
+            }
+        }
+    }
+
     private func muscleChip(_ muscle: MuscleGroup) -> some View {
         Button {
             if selectedMuscles.contains(muscle) {
@@ -184,6 +195,7 @@ struct CreateCustomExerciseView: View {
                 )
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(selectedMuscles.contains(muscle) ? .isSelected : [])
         .accessibilityIdentifier("create-custom-exercise-muscle-\(muscle.rawValue)")
     }
 

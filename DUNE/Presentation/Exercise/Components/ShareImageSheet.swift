@@ -31,6 +31,7 @@ struct ShareImageSheet: View {
                 ) {
                     Label("Share", systemImage: "square.and.arrow.up")
                         .font(.body.weight(.semibold))
+                        .fixedSize(horizontal: false, vertical: true)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, DS.Spacing.md)
@@ -39,6 +40,8 @@ struct ShareImageSheet: View {
                 .padding(.horizontal, DS.Spacing.lg)
                 .padding(.bottom, DS.Spacing.lg)
             }
+            .frame(maxWidth: 600)
+            .frame(maxWidth: .infinity)
             .accessibilityIdentifier("share-image-sheet")
             .englishNavigationTitle("Share Workout")
             .navigationBarTitleDisplayMode(.inline)

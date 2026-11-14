@@ -5,6 +5,7 @@ import CoreLocation
 struct CardioStartSheet: View {
     let exercise: ExerciseDefinition
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var selectedOutdoor: Bool?
     @State private var locationAuthStatus: CLAuthorizationStatus = CLLocationManager().authorizationStatus
 
@@ -27,21 +28,19 @@ struct CardioStartSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: DS.Spacing.xl) {
-                Spacer()
-
-                activityHeader
-
-                modeButtons
-
-                if supportsOutdoorSelection,
-                   locationAuthStatus == .denied || locationAuthStatus == .restricted {
-                    locationWarning
-                } else if supportsOutdoorSelection, locationAuthStatus == .notDetermined {
-                    locationNotice
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    ScrollView {
+                        selectionContent
+                            .padding(.vertical, DS.Spacing.xl)
+                    }
+                } else {
+                    VStack(spacing: DS.Spacing.xl) {
+                        Spacer()
+                        selectionContent
+                        Spacer()
+                    }
                 }
-
-                Spacer()
             }
             .padding(.horizontal, DS.Spacing.lg)
             .background { SheetWaveBackground() }
@@ -59,6 +58,19 @@ struct CardioStartSheet: View {
                     isOutdoor: isOutdoor,
                     onComplete: { dismiss() }
                 )
+            }
+        }
+    }
+
+    private var selectionContent: some View {
+        VStack(spacing: DS.Spacing.xl) {
+            activityHeader
+            modeButtons
+            if supportsOutdoorSelection,
+               locationAuthStatus == .denied || locationAuthStatus == .restricted {
+                locationWarning
+            } else if supportsOutdoorSelection, locationAuthStatus == .notDetermined {
+                locationNotice
             }
         }
     }

@@ -1,0 +1,38 @@
+{
+  "original_id": "held-w34-ipad-first",
+  "original_counts": {
+    "passed": 1,
+    "failed": 1,
+    "skipped": 0
+  },
+  "cause": "large swipes chose direction from button only, overshooting combined button/message target in narrow sheet",
+  "remediation": "iPad MAX only: full union, nav-aware safe viewport and capped drags based on actual overflow; original full containment assertion retained",
+  "native_ax": "w34-ipad-attachments/631E21EF-923E-490E-AACF-05DC67CC7834.txt",
+  "native_png": "w34-ipad-attachments/F2C8F6B8-84F3-491F-A08B-D9409CADBF69.png",
+  "patch_sha256": "33507f3d020fc31d20cff2d9164a8755def7afe9cdfa7bb1588ca7af1f144e13",
+  "source": "6ad8445acaa3b58d4c8f1231c60faa60d1b01907",
+  "review": {
+    "finding": "The iPad MAX screenshot and AX tree show real viewport clipping of availability, not app layout loss.",
+    "geometry_points": {
+      "form": "y249..909",
+      "navigation_overlay": "y259..313",
+      "safe_body": "y325..897",
+      "generate": "y614..774.5",
+      "availability": "y774.5..958",
+      "combined_height": 344,
+      "safe_body_height": 572,
+      "required_upward_scroll_min": 61,
+      "first_drag_target_approx": 73
+    },
+    "candidate": "Conditional iPad MAX-only 12 bounded short drags. Each iteration computes union of Generate+availability, derives visible Form viewport below navigation, moves toward whichever edge overflows by a capped <=14% Form-height drag, then retains full union containment and hittability assertion.",
+    "other_branches_statement_equal_ignoring_whitespace": true,
+    "preserved_history": "iPad first 1 pass/1 fail; retry only the failed iPad MAX selector under same pipeline family. Phone 2 and iPad normal evidence reused; no result reset.",
+    "validation": [
+      "git apply --check passed on f7bc clean source",
+      "Swift frontend parse passed",
+      "no app source change",
+      "no SDK/simulator/process/device use"
+    ]
+  },
+  "retry_budget": "one conditional retry, failed iPad MAX selector only; same ID original failure remains"
+}

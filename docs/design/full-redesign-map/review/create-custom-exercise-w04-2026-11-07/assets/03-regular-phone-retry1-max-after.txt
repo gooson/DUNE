@@ -1,0 +1,470 @@
+Attributes: Application, 0x1089f2a80, pid: 19837, label: 'DUNE'
+Element subtree:
+ →Application, 0x1089f2a80, pid: 19837, label: 'DUNE'
+    Window (Main), 0x1089f30c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1089f3200, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1089f2f80, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1089f2d00, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1089f3700, {{-440.0, -956.0}, {1320.0, 2868.0}}
+          Other, 0x1089f2e40, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1089f2bc0, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1089f1540, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1089f0c80, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1089f3980, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x1089f1f40, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x1089f2300, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x1089f0640, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x1089f21c0, {{0.0, 0.0}, {440.0, 956.0}}
+                            NavigationBar, 0x1089f2440, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Templates'
+                              Button, 0x1089f26c0, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Exercise'
+                              StaticText, 0x1089f1040, {{170.3, 71.3}, {99.3, 25.3}}, label: 'Templates'
+                              Button, 0x1089f1400, {{309.7, 66.0}, {47.7, 36.0}}, identifier: 'workout-weekly-plan-open', label: 'Weekly Workout Plan'
+                              Other, 0x1089f0000, {{373.3, 66.0}, {42.7, 36.0}}
+                                Other, 0x1089f1680, {{373.3, 66.0}, {42.7, 36.0}}
+                                  Button, 0x1089f1900, {{373.3, 66.0}, {42.7, 36.0}}, identifier: 'workout-template-list-add', label: 'Add'
+                            Other, 0x1089f3d40, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x1089f2940, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x1089f1b80, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x1089f1a40, {{0.0, 0.0}, {440.0, 956.0}}
+                                    CollectionView, 0x1089f2800, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'workout-template-list-screen'
+                                      Other, 0x1089f1180, {{-20.0, -1796.0}, {480.0, 4636.3}}
+                                      Other, 0x1089f12c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x1089f1cc0, {{0.0, 0.0}, {440.0, 156.0}}
+                                        Other, 0x1089f2580, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x1089f0f00, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x1089f0dc0, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Cell, 0x1089f0140, {{20.0, 151.0}, {400.0, 378.7}}
+                                        Other, 0x1089f0780, {{20.0, 151.0}, {400.0, 378.7}}
+                                          Other, 0x1089f0b40, {{20.0, 151.0}, {400.0, 378.7}}
+                                        Other, 0x10568ae40, {{20.0, 151.0}, {400.0, 378.7}}
+                                          Other, 0x10568b840, {{20.0, 151.0}, {400.0, 378.7}}
+                                            Other, 0x10568b340, {{20.0, 151.0}, {400.0, 378.7}}
+                                              Button, 0x10568b480, {{20.0, 151.0}, {400.0, 378.7}}, identifier: 'workout-template-row-codex-circuit-builder', label: 'Codex Circuit Builder, 2 exercises, ·, Squat, Bench Press'
+                                                StaticText, 0x10568b5c0, {{40.0, 168.0}, {167.3, 187.3}}, label: 'Codex Circuit Builder'
+                                                Image, 0x10568b700, {{340.3, 234.3}, {55.0, 55.0}}, identifier: 'play.circle.fill', label: 'Play'
+                                                StaticText, 0x105688780, {{40.0, 359.3}, {147.3, 153.3}}, label: '2 exercises'
+                                                StaticText, 0x10568b980, {{191.3, 404.3}, {12.0, 63.3}}, label: '·'
+                                                StaticText, 0x10568b0c0, {{207.3, 410.3}, {177.0, 51.3}}, label: 'Squat, Bench Press'
+                                      Cell, 0x105688f00, {{20.0, 529.7}, {400.0, 378.7}}
+                                        Other, 0x10568ad00, {{20.0, 529.7}, {400.0, 378.7}}
+                                          Other, 0x10568af80, {{20.0, 529.7}, {400.0, 378.7}}
+                                        Other, 0x10840db80, {{20.0, 529.7}, {400.0, 378.7}}
+                                          Other, 0x10840f340, {{20.0, 529.7}, {400.0, 378.7}}
+                                            Other, 0x10840fac0, {{20.0, 529.7}, {400.0, 378.7}}
+                                              Button, 0x10840c500, {{20.0, 529.7}, {400.0, 378.7}}, identifier: 'workout-template-row-codex-strength-starter', label: 'Codex Strength Starter, 1 exercises, ·, Bench Press'
+                                                StaticText, 0x10840ef80, {{40.0, 546.7}, {217.7, 187.3}}, label: 'Codex Strength Starter'
+                                                Image, 0x10840d7c0, {{340.3, 613.0}, {55.0, 55.0}}, identifier: 'play.circle.fill', label: 'Play'
+                                                StaticText, 0x10840d400, {{40.0, 738.0}, {147.3, 153.3}}, label: '1 exercises'
+                                                StaticText, 0x10840e800, {{191.3, 783.0}, {12.0, 63.3}}, label: '·'
+                                                StaticText, 0x10840d040, {{207.3, 789.0}, {190.0, 51.3}}, label: 'Bench Press'
+                                      Other, 0x10840f200, {{40.0, 528.7}, {360.0, 1.0}}
+                                      Other, 0x10840d900, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                        Other, 0x10840ed00, {{434.0, 863.0}, {3.0, 7.0}}
+                                      Other, 0x10840e580, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                        Other, 0x10840f840, {{434.0, 863.0}, {3.0, 7.0}}
+                            Toolbar, 0x10840da40, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x10840dcc0, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x10840de00, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x10840f700, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x10840f5c0, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x10840fd40, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x10840ebc0, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x10840d180, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x10840ee40, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x10840f980, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today'
+                              Image, 0x10840fc00, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x10840fe80, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                              Image, 0x113224000, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x113224140, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x113224280, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x1132243c0, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x113224500, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x113224640, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x113224780, {{120.2, 877.0}, {104.5, 54.0}}
+                            Other, 0x1132248c0, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x113224a00, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x113224b40, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x113224c80, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x113224dc0, {{120.2, 877.0}, {104.3, 54.0}}
+                                    Other, 0x113224f00, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x113225040, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x113225180, {{120.2, 877.0}, {104.3, 54.0}}
+                    Other, 0x1132252c0, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x113225400, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x113225540, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x113225680, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x1132257c0, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x113225900, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x113225a40, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x113225b80, {{220.0, 492.0}, {0.0, 0.0}}
+      Other, 0x113225cc0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x113225e00, {{-440.0, -956.0}, {1320.0, 2868.0}}
+        Other, 0x113225f40, {{20.0, 72.0}, {400.0, 812.7}}
+          Other, 0x113226080, {{20.0, 72.0}, {400.0, 812.7}}
+            Other, 0x1132261c0, {{-380.0, -740.7}, {1200.0, 2438.2}}
+            Other, 0x113226300, {{20.0, 72.0}, {400.0, 812.7}}
+              Other, 0x113226440, {{20.0, 72.0}, {400.0, 812.7}}
+                Other, 0x113226580, {{20.0, 72.0}, {400.0, 812.7}}
+                  NavigationBar, 0x1132266c0, {{20.0, 90.2}, {400.0, 49.1}}, identifier: 'New Template'
+                    Other, 0x113226800, {{41.8, 93.8}, {81.2, 32.7}}
+                      Other, 0x113226940, {{41.8, 93.8}, {81.2, 32.7}}
+                        Button, 0x113226a80, {{41.8, 93.8}, {81.2, 32.7}}, identifier: 'template-form-cancel', label: 'Cancel'
+                    StaticText, 0x113226bc0, {{157.9, 98.7}, {123.9, 23.0}}, label: 'New Template'
+                    Other, 0x113226d00, {{333.9, 93.8}, {64.2, 32.7}}
+                      Other, 0x113226e40, {{333.9, 93.8}, {64.2, 32.7}}
+                        Button, 0x113226f80, {{333.9, 93.8}, {64.2, 32.7}}, identifier: 'template-form-save', label: 'Save', Disabled
+                  Other, 0x1132270c0, {{20.0, 72.0}, {400.0, 812.7}}
+                    Other, 0x113227200, {{20.0, 72.0}, {400.0, 812.7}}
+                      Other, 0x113227340, {{20.0, 72.0}, {400.0, 812.7}}
+                        Other, 0x113227480, {{20.0, 72.0}, {400.0, 812.7}}
+                          CollectionView, 0x1132275c0, {{20.0, 72.0}, {400.0, 812.7}}, identifier: 'template-form-screen'
+                            Other, 0x113227700, {{1.8, -1888.6}, {436.4, 2273.9}}
+                            Cell, 0x113227840, {{38.2, 10.2}, {363.6, 146.1}}
+                              Other, 0x113227980, {{38.2, 10.2}, {363.6, 146.1}}
+                                Other, 0x113227ac0, {{38.2, 10.2}, {363.6, 146.1}}
+                              Other, 0x113227c00, {{38.2, 10.2}, {363.6, 146.1}}
+                                Other, 0x113227d40, {{38.2, 10.2}, {363.6, 146.1}}
+                                  Other, 0x113227e80, {{38.2, 10.2}, {363.6, 146.1}}
+                                    Button, 0x113228000, {{38.2, 10.2}, {363.6, 146.1}}, identifier: 'template-form-ai-generate', label: 'Generate Template', Disabled
+                                      StaticText, 0x113228140, {{123.9, 30.2}, {193.6, 106.1}}, label: 'Generate Template', Disabled
+                                      Image, 0x113228280, {{79.7, 65.3}, {35.8, 35.8}}, identifier: 'wand.and.stars', label: 'Magic Wand With Stars', Disabled
+                            Other, 0x1132283c0, {{20.0, 72.0}, {400.0, 812.7}}
+                              Other, 0x113228500, {{20.0, 72.0}, {400.0, 103.6}}
+                            Other, 0x113228640, {{20.0, 72.0}, {400.0, 812.7}}
+                              Other, 0x113228780, {{20.0, 72.0}, {400.0, 103.6}}
+                            Cell, 0x1132288c0, {{38.2, 156.2}, {363.6, 213.0}}
+                              Other, 0x113228a00, {{38.2, 156.2}, {363.6, 213.0}}
+                                Other, 0x113228b40, {{38.2, 156.2}, {363.6, 213.0}}
+                              Other, 0x113228c80, {{38.2, 156.2}, {363.6, 213.0}}
+                                Other, 0x113228dc0, {{38.2, 156.2}, {363.6, 213.0}}
+                                  Other, 0x113228f00, {{38.2, 156.2}, {363.6, 213.0}}
+                                    StaticText, 0x113229040, {{38.2, 156.2}, {363.6, 213.0}}, label: 'Generating a template will replace the current exercise list.'
+                            Other, 0x113229180, {{123.9, 155.3}, {259.7, 0.9}}
+                            Other, 0x1132292c0, {{1.8, 385.3}, {436.4, 233.6}}
+                            Cell, 0x113229400, {{38.2, 385.3}, {363.6, 132.1}}
+                              Other, 0x113229540, {{38.2, 385.3}, {363.6, 132.1}}
+                              Other, 0x113229680, {{38.2, 385.3}, {363.6, 132.1}}
+                                Other, 0x1132297c0, {{38.2, 385.3}, {363.6, 132.1}}
+                                  Other, 0x113229900, {{38.2, 385.3}, {363.6, 132.1}}
+                                    StaticText, 0x113229a40, {{38.2, 385.3}, {363.6, 132.1}}, label: 'Template Name'
+                            Cell, 0x113229b80, {{38.2, 517.5}, {363.6, 85.5}}
+                              Other, 0x113229cc0, {{38.2, 517.5}, {363.6, 85.5}}
+                                Other, 0x113229e00, {{38.2, 517.5}, {363.6, 85.5}}
+                              Other, 0x113229f40, {{38.2, 517.5}, {363.6, 85.5}}
+                                Other, 0x11322a080, {{38.2, 517.5}, {363.6, 85.5}}
+                                  Other, 0x11322a1c0, {{38.2, 517.5}, {363.6, 85.5}}
+                                    TextField, 0x11322a300, {{56.4, 531.1}, {327.3, 58.2}}, identifier: 'template-form-name', placeholderValue: 'e.g. Push Day, Leg Day'
+                            Other, 0x11322a440, {{1.8, 618.7}, {436.4, 1860.6}}
+                            Cell, 0x11322a580, {{38.2, 618.7}, {363.6, 75.8}}
+                              Other, 0x11322a6c0, {{38.2, 618.7}, {363.6, 75.8}}
+                              Other, 0x11322a800, {{38.2, 618.7}, {363.6, 75.8}}
+                                Other, 0x11322a940, {{38.2, 618.7}, {363.6, 75.8}}
+                                  Other, 0x11322aa80, {{38.2, 618.7}, {363.6, 75.8}}
+                                    StaticText, 0x11322abc0, {{38.2, 618.7}, {363.6, 75.8}}, label: 'Exercises (0)'
+                            Cell, 0x11322ad00, {{38.2, 694.4}, {363.6, 141.2}}
+                              Other, 0x11322ae40, {{38.2, 694.4}, {363.6, 141.2}}
+                                Other, 0x11322af80, {{38.2, 694.4}, {363.6, 141.2}}
+                              Other, 0x11322b0c0, {{38.2, 694.4}, {363.6, 141.2}}
+                                Other, 0x11322b200, {{38.2, 694.4}, {363.6, 141.2}}
+                                  Other, 0x11322b340, {{38.2, 694.4}, {363.6, 141.2}}
+                                    Button, 0x11322b480, {{38.2, 694.4}, {363.6, 141.2}}, identifier: 'template-form-add-exercise', label: 'Add Exercise'
+                                      StaticText, 0x11322b5c0, {{68.2, 708.1}, {158.8, 113.9}}, label: 'Add Exercise'
+                                      Image, 0x11322b700, {{68.2, 717.8}, {38.2, 38.2}}, identifier: 'plus.circle', label: 'Add'
+                            Other, 0x11322b840, {{390.0, 139.3}, {27.3, 689.1}}, label: 'Vertical scroll bar, 2 pages', value: 100%
+                              Other, 0x11322b980, {{414.5, 368.4}, {2.7, 457.3}}
+                            Other, 0x11322bac0, {{390.0, 139.3}, {27.3, 689.1}}, label: 'Vertical scroll bar, 2 pages', value: 100%
+                              Other, 0x11322bc00, {{414.5, 368.4}, {2.7, 457.3}}
+                  Toolbar, 0x11322bd40, {{20.0, 72.0}, {400.0, 812.7}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x11322be80, {{20.0, 72.0}, {400.0, 812.7}}
+      Other, 0x113230000, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x113230140, {{-440.0, -956.0}, {1320.0, 2868.0}}
+        Other, 0x113230280, {{20.0, 62.0}, {400.0, 803.6}}
+          Other, 0x1132303c0, {{20.0, 62.0}, {400.0, 803.6}}
+            Other, 0x113230500, {{-380.0, -741.6}, {1200.0, 2410.9}}
+            Other, 0x113230640, {{20.0, 62.0}, {400.0, 803.6}}
+              Other, 0x113230780, {{20.0, 62.0}, {400.0, 803.6}}
+                Other, 0x1132308c0, {{20.0, 62.0}, {400.0, 803.6}}
+                  NavigationBar, 0x113230a00, {{20.0, 80.2}, {400.0, 49.1}}, identifier: 'Select Exercise'
+                    Other, 0x113230b40, {{41.8, 83.8}, {81.2, 32.7}}
+                      Other, 0x113230c80, {{41.8, 83.8}, {81.2, 32.7}}
+                        Button, 0x113230dc0, {{41.8, 83.8}, {81.2, 32.7}}, identifier: 'picker-cancel-button', label: 'Cancel'
+                    StaticText, 0x113230f00, {{153.6, 88.7}, {132.4, 23.0}}, label: 'Select Exercise'
+                    Other, 0x113231040, {{365.5, 83.8}, {32.7, 32.7}}
+                      Other, 0x113231180, {{365.5, 83.8}, {32.7, 32.7}}
+                        Button, 0x1132312c0, {{367.0, 83.8}, {29.7, 32.7}}, identifier: 'picker-create-custom-button', label: 'Add'
+                  Other, 0x113231400, {{20.0, 62.0}, {400.0, 803.6}}
+                    Other, 0x113231540, {{20.0, 62.0}, {400.0, 803.6}}
+                      Other, 0x113231680, {{20.0, 62.0}, {400.0, 803.6}}
+                        Other, 0x1132317c0, {{20.0, 62.0}, {400.0, 803.6}}
+                          CollectionView, 0x113231900, {{20.0, 62.0}, {400.0, 803.6}}, identifier: 'picker-root-list'
+                            Other, 0x113231a40, {{1.8, -1478.0}, {436.4, 1816.4}}
+                            Other, 0x113231b80, {{20.0, 62.0}, {400.0, 803.6}}
+                              Other, 0x113231cc0, {{20.0, 62.0}, {400.0, 103.6}}
+                              Other, 0x113231e00, {{20.0, 751.1}, {400.0, 114.5}}
+                            Other, 0x113231f40, {{20.0, 62.0}, {400.0, 803.6}}
+                              Other, 0x113232080, {{20.0, 751.1}, {400.0, 114.5}}
+                            Cell, 0x1132321c0, {{38.2, 161.1}, {363.6, 53.9}}
+                              Other, 0x113232300, {{38.2, 161.1}, {363.6, 53.9}}
+                                Other, 0x113232440, {{38.2, 161.1}, {363.6, 53.9}}
+                                  Other, 0x113232580, {{38.2, 161.1}, {363.6, 53.9}}
+                                    Other, 0x1132326c0, {{38.2, 161.1}, {363.6, 53.9}}
+                              Other, 0x113232800, {{38.2, 161.1}, {363.6, 53.9}}
+                                Other, 0x113232940, {{38.2, 161.1}, {363.6, 53.9}}
+                                  Other, 0x113232a80, {{38.2, 161.1}, {363.6, 53.9}}
+                                    ScrollView, 0x113232bc0, {{38.2, 161.1}, {363.6, 53.9}}, identifier: 'picker-filter-category-scroll'
+                                      Other, 0x113232d00, {{38.2, 161.1}, {1238.5, 53.9}}
+                                        Button, 0x113232e40, {{52.7, 161.1}, {65.8, 53.9}}, identifier: 'picker-filter-category-all', label: 'All'
+                                        Button, 0x113232f80, {{125.8, 161.1}, {171.2, 53.9}}, identifier: 'picker-filter-category-strength', label: 'Strength'
+                                        Button, 0x1132330c0, {{304.2, 161.1}, {135.5, 53.9}}, identifier: 'picker-filter-category-cardio', label: 'Cardio'
+                                        Button, 0x113233200, {{447.0, 161.1}, {92.7, 53.9}}, identifier: 'picker-filter-category-hiit', label: 'HIIT'
+                                        Button, 0x113233340, {{547.0, 161.1}, {183.3, 53.9}}, identifier: 'picker-filter-category-flexibility', label: 'Flexibility'
+                                        Button, 0x113233480, {{737.6, 161.1}, {227.3, 53.9}}, identifier: 'picker-filter-category-bodyweight', label: 'Bodyweight'
+                                        Button, 0x1132335c0, {{972.1, 161.1}, {290.0, 53.9}}, identifier: 'picker-filter-user-category-11111111-1111-4111-8111-111111111111', label: 'Codex Mobility'
+                                          StaticText, 0x113233700, {{993.9, 164.7}, {257.3, 46.7}}, label: 'Codex Mobility'
+                                          Image, 0x113233840, {{983.9, 183.2}, {7.3, 10.0}}, identifier: 'figure.cooldown', label: 'Figure Cooling Down After Exercise'
+                            Cell, 0x113233980, {{38.2, 215.0}, {363.6, 53.6}}
+                              Other, 0x113233ac0, {{38.2, 215.0}, {363.6, 53.6}}
+                                Other, 0x113233c00, {{38.2, 215.0}, {363.6, 53.6}}
+                                  Other, 0x113233d40, {{38.2, 215.0}, {363.6, 53.6}}
+                                    Other, 0x113233e80, {{38.2, 215.0}, {363.6, 53.6}}
+                              Other, 0x113218000, {{38.2, 215.0}, {363.6, 53.6}}
+                                Other, 0x113218140, {{38.2, 215.0}, {363.6, 53.6}}
+                                  Other, 0x113218280, {{38.2, 215.0}, {363.6, 53.6}}
+                                    ScrollView, 0x1132183c0, {{38.2, 217.2}, {363.6, 49.4}}, identifier: 'picker-filter-muscle-scroll'
+                                      Other, 0x113218500, {{38.2, 217.2}, {758.2, 49.4}}
+                                        Image, 0x113218640, {{57.3, 220.2}, {42.4, 43.3}}, identifier: 'figure.strengthtraining.traditional', label: 'Figure Doing Traditional Strength Training'
+                                        Button, 0x113218780, {{107.9, 234.1}, {43.3, 15.5}}, identifier: 'picker-filter-muscle-chest', label: 'Chest'
+                                        Button, 0x1132188c0, {{154.8, 234.1}, {38.5, 15.5}}, identifier: 'picker-filter-muscle-back', label: 'Back'
+                                        Button, 0x113218a00, {{197.0, 234.1}, {63.9, 15.5}}, identifier: 'picker-filter-muscle-shoulders', label: 'Shoulders'
+                                        Button, 0x113218b40, {{264.5, 234.1}, {47.6, 15.5}}, identifier: 'picker-filter-muscle-biceps', label: 'Biceps'
+                                        Button, 0x113218c80, {{315.8, 234.1}, {50.6, 15.5}}, identifier: 'picker-filter-muscle-triceps', label: 'Triceps'
+                                        Button, 0x113218dc0, {{370.0, 234.1}, {46.1, 15.5}}, identifier: 'picker-filter-muscle-quadriceps', label: 'Quads'
+                                        Button, 0x113218f00, {{419.7, 234.1}, {70.9, 15.5}}, identifier: 'picker-filter-muscle-hamstrings', label: 'Hamstrings'
+                                        Button, 0x113219040, {{494.2, 234.1}, {46.1, 15.5}}, identifier: 'picker-filter-muscle-glutes', label: 'Glutes'
+                                        Button, 0x113219180, {{543.9, 234.1}, {47.3, 15.5}}, identifier: 'picker-filter-muscle-calves', label: 'Calves'
+                                        Button, 0x1132192c0, {{594.8, 234.1}, {37.9, 15.5}}, identifier: 'picker-filter-muscle-core', label: 'Core'
+                                        Button, 0x113219400, {{636.4, 234.1}, {60.6, 15.5}}, identifier: 'picker-filter-muscle-forearms', label: 'Forearms'
+                                        Button, 0x113219540, {{700.6, 234.1}, {42.1, 15.5}}, identifier: 'picker-filter-muscle-traps', label: 'Traps'
+                                        Button, 0x113219680, {{746.4, 234.1}, {35.5, 15.5}}, identifier: 'picker-filter-muscle-lats', label: 'Lats'
+                            Other, 0x1132197c0, {{56.4, 214.1}, {327.3, 0.9}}
+                            Cell, 0x113219900, {{38.2, 268.7}, {363.6, 53.6}}
+                              Other, 0x113219a40, {{38.2, 268.7}, {363.6, 53.6}}
+                                Other, 0x113219b80, {{38.2, 268.7}, {363.6, 53.6}}
+                                  Other, 0x113219cc0, {{38.2, 268.7}, {363.6, 53.6}}
+                                    Other, 0x113219e00, {{38.2, 268.7}, {363.6, 53.6}}
+                              Other, 0x113219f40, {{38.2, 268.7}, {363.6, 53.6}}
+                                Other, 0x11321a080, {{38.2, 268.7}, {363.6, 53.6}}
+                                  Other, 0x11321a1c0, {{38.2, 268.7}, {363.6, 53.6}}
+                                    ScrollView, 0x11321a300, {{38.2, 279.3}, {363.6, 32.4}}, identifier: 'picker-filter-equipment-scroll'
+                                      Other, 0x11321a440, {{38.2, 279.3}, {2489.4, 32.4}}
+                                        Image, 0x11321a580, {{57.3, 282.3}, {45.2, 26.4}}, identifier: 'dumbbell', label: 'Dumbbell Weight'
+                                        Button, 0x11321a6c0, {{110.6, 287.5}, {63.6, 16.4}}, identifier: 'picker-filter-equipment-barbell', label: 'Barbell'
+                                          Image, 0x11321a800, {{117.9, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.barbell'
+                                          StaticText, 0x11321a940, {{132.4, 289.4}, {34.5, 12.1}}, label: 'Barbell'
+                                        Button, 0x11321aa80, {{177.9, 287.5}, {75.8, 16.4}}, identifier: 'picker-filter-equipment-dumbbell', label: 'Dumbbell'
+                                          Image, 0x11321abc0, {{185.2, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.dumbbell'
+                                          StaticText, 0x11321ad00, {{199.7, 289.4}, {46.7, 12.1}}, label: 'Dumbbell'
+                                        Button, 0x11321ae40, {{257.3, 287.5}, {75.8, 16.4}}, identifier: 'picker-filter-equipment-kettlebell', label: 'Kettlebell'
+                                          Image, 0x11321af80, {{264.5, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.kettlebell'
+                                          StaticText, 0x11321b0c0, {{279.1, 289.4}, {46.7, 12.1}}, label: 'Kettlebell'
+                                        Button, 0x11321b200, {{336.7, 287.5}, {61.5, 16.4}}, identifier: 'picker-filter-equipment-ezBar', label: 'EZ Bar'
+                                          Image, 0x11321b340, {{343.9, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.ez-bar'
+                                          StaticText, 0x11321b480, {{358.5, 289.4}, {32.4, 12.1}}, label: 'EZ Bar'
+                                        Button, 0x11321b5c0, {{401.8, 287.5}, {70.3, 16.4}}, identifier: 'picker-filter-equipment-trapBar', label: 'Trap Bar'
+                                          Image, 0x11321b700, {{409.1, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.trap-bar'
+                                          StaticText, 0x11321b840, {{423.6, 289.4}, {41.2, 12.1}}, label: 'Trap Bar'
+                                        Button, 0x11321b980, {{475.8, 287.5}, {101.2, 16.4}}, identifier: 'picker-filter-equipment-smithMachine', label: 'Smith Machine'
+                                          Image, 0x11321bac0, {{483.0, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.smith-machine'
+                                          StaticText, 0x11321bc00, {{497.6, 289.4}, {72.1, 12.1}}, label: 'Smith Machine'
+                                        Button, 0x11321bd40, {{580.6, 287.5}, {120.9, 16.4}}, identifier: 'picker-filter-equipment-legPressMachine', label: 'Leg Press Machine'
+                                          Image, 0x11321be80, {{587.9, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.leg-press'
+                                          StaticText, 0x11321c000, {{602.4, 289.4}, {91.8, 12.1}}, label: 'Leg Press Machine'
+                                        Button, 0x11321c140, {{705.2, 287.5}, {129.1, 16.4}}, identifier: 'picker-filter-equipment-hackSquatMachine', label: 'Hack Squat Machine'
+                                          Image, 0x11321c280, {{712.4, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.hack-squat'
+                                          StaticText, 0x11321c3c0, {{727.0, 289.4}, {100.0, 12.1}}, label: 'Hack Squat Machine'
+                                        Button, 0x11321c500, {{837.9, 287.5}, {131.5, 16.4}}, identifier: 'picker-filter-equipment-chestPressMachine', label: 'Chest Press Machine'
+                                          Image, 0x11321c640, {{845.2, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.chest-press'
+                                          StaticText, 0x11321c780, {{859.7, 289.4}, {102.4, 12.1}}, label: 'Chest Press Machine'
+                                        Button, 0x11321c8c0, {{973.0, 287.5}, {147.0, 16.4}}, identifier: 'picker-filter-equipment-shoulderPressMachine', label: 'Shoulder Press Machine'
+                                          Image, 0x11321ca00, {{980.3, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.shoulder-press'
+                                          StaticText, 0x11321cb40, {{994.8, 289.4}, {117.9, 12.1}}, label: 'Shoulder Press Machine'
+                                        Button, 0x11321cc80, {{1123.6, 287.5}, {135.8, 16.4}}, identifier: 'picker-filter-equipment-latPulldownMachine', label: 'Lat Pulldown Machine'
+                                          Image, 0x11321cdc0, {{1130.9, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.lat-pulldown'
+                                          StaticText, 0x11321cf00, {{1145.5, 289.4}, {106.7, 12.1}}, label: 'Lat Pulldown Machine'
+                                        Button, 0x11321d040, {{1263.0, 287.5}, {141.2, 16.4}}, identifier: 'picker-filter-equipment-legExtensionMachine', label: 'Leg Extension Machine'
+                                          Image, 0x11321d180, {{1270.3, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.leg-extension'
+                                          StaticText, 0x11321d2c0, {{1284.8, 289.4}, {112.1, 12.1}}, label: 'Leg Extension Machine'
+                                        Button, 0x11321d400, {{1407.9, 287.5}, {113.9, 16.4}}, identifier: 'picker-filter-equipment-legCurlMachine', label: 'Leg Curl Machine'
+                                          Image, 0x11321d540, {{1415.2, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.leg-curl'
+                                          StaticText, 0x11321d680, {{1429.7, 289.4}, {84.8, 12.1}}, label: 'Leg Curl Machine'
+                                        Button, 0x11321d7c0, {{1525.5, 287.5}, {118.8, 16.4}}, identifier: 'picker-filter-equipment-pecDeckMachine', label: 'Pec Deck Machine'
+                                          Image, 0x11321d900, {{1532.7, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.pec-deck'
+                                          StaticText, 0x11321da40, {{1547.3, 289.4}, {89.7, 12.1}}, label: 'Pec Deck Machine'
+                                        Button, 0x11321db80, {{1647.9, 287.5}, {101.2, 16.4}}, identifier: 'picker-filter-equipment-cableMachine', label: 'Cable Machine'
+                                          Image, 0x11321dcc0, {{1655.2, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.cable-machine'
+                                          StaticText, 0x11321de00, {{1669.7, 289.4}, {72.1, 12.1}}, label: 'Cable Machine'
+                                        Button, 0x11321df40, {{1752.7, 287.5}, {70.3, 16.4}}, identifier: 'picker-filter-equipment-machine', label: 'Machine'
+                                          Image, 0x11321e080, {{1760.0, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.machine'
+                                          StaticText, 0x11321e1c0, {{1774.5, 289.4}, {41.2, 12.1}}, label: 'Machine'
+                                        Button, 0x11321e300, {{1826.7, 287.5}, {57.3, 16.4}}, identifier: 'picker-filter-equipment-cable', label: 'Cable'
+                                          Image, 0x11321e440, {{1833.9, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.cable'
+                                          StaticText, 0x11321e580, {{1848.5, 289.4}, {28.2, 12.1}}, label: 'Cable'
+                                        Button, 0x11321e6c0, {{1887.6, 287.5}, {86.7, 16.4}}, identifier: 'picker-filter-equipment-bodyweight', label: 'Bodyweight'
+                                          Image, 0x11321e800, {{1894.8, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.bodyweight'
+                                          StaticText, 0x11321e940, {{1909.4, 289.4}, {57.6, 12.1}}, label: 'Bodyweight'
+                                        Button, 0x11321ea80, {{1977.9, 287.5}, {85.2, 16.4}}, identifier: 'picker-filter-equipment-pullUpBar', label: 'Pull-Up Bar'
+                                          Image, 0x11321ebc0, {{1985.2, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.pull-up-bar'
+                                          StaticText, 0x11321ed00, {{1999.7, 289.4}, {56.1, 12.1}}, label: 'Pull-Up Bar'
+                                        Button, 0x11321ee40, {{2066.7, 287.5}, {83.3, 16.4}}, identifier: 'picker-filter-equipment-dipStation', label: 'Dip Station'
+                                          Image, 0x11321ef80, {{2073.9, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.dip-station'
+                                          StaticText, 0x11321f0c0, {{2088.5, 289.4}, {54.2, 12.1}}, label: 'Dip Station'
+                                        Button, 0x11321f200, {{2153.6, 287.5}, {54.2, 16.4}}, identifier: 'picker-filter-equipment-band', label: 'Band'
+                                          Image, 0x11321f340, {{2160.9, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.band'
+                                          StaticText, 0x11321f480, {{2175.5, 289.4}, {25.2, 12.1}}, label: 'Band'
+                                        Button, 0x11321f5c0, {{2211.5, 287.5}, {49.4, 16.4}}, identifier: 'picker-filter-equipment-trx', label: 'TRX'
+                                          Image, 0x11321f700, {{2218.8, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.trx'
+                                          StaticText, 0x11321f840, {{2233.3, 289.4}, {20.3, 12.1}}, label: 'TRX'
+                                        Button, 0x11321f980, {{2264.5, 287.5}, {94.2, 16.4}}, identifier: 'picker-filter-equipment-medicineBall', label: 'Medicine Ball'
+                                          Image, 0x11321fac0, {{2271.8, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.medicine-ball'
+                                          StaticText, 0x11321fc00, {{2286.4, 289.4}, {65.2, 12.1}}, label: 'Medicine Ball'
+                                        Button, 0x11321fd40, {{2362.4, 287.5}, {90.0, 16.4}}, identifier: 'picker-filter-equipment-stabilityBall', label: 'Stability Ball'
+                                          Image, 0x11321fe80, {{2369.7, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.stability-ball'
+                                          StaticText, 0x113234000, {{2384.2, 289.4}, {60.9, 12.1}}, label: 'Stability Ball'
+                                        Button, 0x113234140, {{2456.1, 287.5}, {57.0, 16.4}}, identifier: 'picker-filter-equipment-other', label: 'Other'
+                                          Image, 0x113234280, {{2463.3, 289.3}, {12.7, 12.7}}, label: 'Equipment/equipment.other'
+                                          StaticText, 0x1132343c0, {{2477.9, 289.4}, {27.9, 12.1}}, label: 'Other'
+                            Other, 0x113234500, {{56.4, 267.8}, {327.3, 0.9}}
+                            Other, 0x113234640, {{1.8, 338.4}, {436.4, 9252.7}}
+                            Cell, 0x113234780, {{38.2, 354.1}, {363.6, 251.8}}
+                              Other, 0x1132348c0, {{38.2, 354.1}, {363.6, 251.8}}
+                                Other, 0x113234a00, {{38.2, 354.1}, {363.6, 251.8}}
+                              Other, 0x113234b40, {{38.2, 354.1}, {363.6, 251.8}}
+                                Other, 0x113234c80, {{38.2, 354.1}, {363.6, 251.8}}
+                                  Other, 0x113234dc0, {{38.2, 354.1}, {363.6, 251.8}}
+                                    Button, 0x113234f00, {{56.4, 367.8}, {241.2, 113.9}}, identifier: 'picker-row-custom-0E14BA22-5A39-4559-B880-D57E062850D4', label: 'Codex Cable Raise'
+                                    Button, 0x113235040, {{327.0, 451.7}, {56.7, 56.7}}, identifier: 'picker-detail-custom-0E14BA22-5A39-4559-B880-D57E062850D4', label: 'Info'
+                                    Button, 0x113235180, {{60.0, 484.4}, {31.5, 10.0}}, identifier: 'picker-row-custom-0E14BA22-5A39-4559-B880-D57E062850D4', label: 'Custom'
+                                    Button, 0x1132352c0, {{56.4, 497.2}, {168.5, 46.7}}, identifier: 'picker-row-custom-0E14BA22-5A39-4559-B880-D57E062850D4', label: 'Shoulders'
+                                    Button, 0x113235400, {{81.8, 545.6}, {148.5, 46.7}}, identifier: 'picker-row-custom-0E14BA22-5A39-4559-B880-D57E062850D4', label: 'Cable'
+                                    Button, 0x113235540, {{81.8, 563.8}, {10.9, 10.9}}, identifier: 'picker-row-custom-0E14BA22-5A39-4559-B880-D57E062850D4', label: 'Equipment/equipment.cable'
+                            Cell, 0x113235680, {{38.2, 605.9}, {363.6, 333.0}}
+                              Other, 0x1132357c0, {{38.2, 605.9}, {363.6, 333.0}}
+                                Other, 0x113235900, {{38.2, 605.9}, {363.6, 333.0}}
+                              Other, 0x113235a40, {{38.2, 605.9}, {363.6, 333.0}}
+                                Other, 0x113235b80, {{38.2, 605.9}, {363.6, 333.0}}
+                                  Other, 0x113235cc0, {{38.2, 605.9}, {363.6, 333.0}}
+                                    Button, 0x113235e00, {{56.4, 619.6}, {208.5, 113.9}}, identifier: 'picker-row-barbell-bench-press', label: '바벨 벤치프레스'
+                                    Button, 0x113235f40, {{56.4, 735.3}, {238.5, 93.0}}, identifier: 'picker-row-barbell-bench-press', label: 'Barbell Bench Press'
+                                    Button, 0x113236080, {{327.0, 744.1}, {56.7, 56.7}}, identifier: 'picker-detail-barbell-bench-press', label: 'Info'
+                                    Button, 0x1132361c0, {{56.4, 830.2}, {99.7, 46.7}}, identifier: 'picker-row-barbell-bench-press', label: 'Chest'
+                                    Button, 0x113236300, {{81.8, 878.7}, {166.1, 46.7}}, identifier: 'picker-row-barbell-bench-press', label: 'Barbell'
+                                    Button, 0x113236440, {{81.8, 896.8}, {10.9, 10.9}}, identifier: 'picker-row-barbell-bench-press', label: 'Equipment/equipment.barbell'
+                            Other, 0x113236580, {{56.4, 605.0}, {327.3, 0.9}}
+                            Other, 0x1132366c0, {{390.0, 129.3}, {27.3, 680.0}}, label: 'Vertical scroll bar, 12 pages', value: 0%
+                              Other, 0x113236800, {{414.5, 790.2}, {2.7, 16.4}}
+                            Other, 0x113236940, {{390.0, 129.3}, {27.3, 680.0}}, label: 'Vertical scroll bar, 12 pages', value: 0%
+                              Other, 0x113236a80, {{414.5, 790.2}, {2.7, 16.4}}
+                  Toolbar, 0x113236bc0, {{20.0, 62.0}, {400.0, 803.6}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x113236d00, {{20.0, 62.0}, {400.0, 803.6}}
+                      Other, 0x113236e40, {{20.0, 62.0}, {400.0, 803.6}}
+                        Other, 0x113236f80, {{20.0, 62.0}, {400.0, 803.6}}
+                          Other, 0x1132370c0, {{20.0, 62.0}, {0.0, 0.0}}
+                            Other, 0x113237200, {{45.5, 796.5}, {349.1, 43.6}}
+                              Other, 0x113237340, {{45.5, 796.5}, {349.1, 43.6}}
+                                Other, 0x113237480, {{45.5, 803.5}, {349.1, 30.0}}
+                                  SearchField, 0x1132375c0, {{45.5, 803.5}, {349.1, 30.0}}, label: 'Search exercises', placeholderValue: 'Search exercises'
+                                    Image, 0x113237700, {{56.4, 807.5}, {22.7, 21.8}}, identifier: 'magnifyingglass', label: 'Search'
+      Other, 0x113237840, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x113237980, {{-440.0, -956.0}, {1320.0, 2868.0}}
+        Other, 0x113237ac0, {{0.0, 72.0}, {440.0, 884.0}}
+          Other, 0x113237c00, {{0.0, 72.0}, {440.0, 884.0}}
+            Other, 0x113237d40, {{0.0, 72.0}, {440.0, 884.0}}
+              Other, 0x113237e80, {{0.0, 72.0}, {440.0, 884.0}}
+                Other, 0x113238000, {{0.0, 72.0}, {440.0, 884.0}}
+                  NavigationBar, 0x113238140, {{0.0, 92.0}, {440.0, 54.0}}, identifier: 'New Exercise'
+                    Other, 0x113238280, {{24.0, 96.0}, {89.3, 36.0}}
+                      Other, 0x1132383c0, {{24.0, 96.0}, {89.3, 36.0}}
+                        Button, 0x113238500, {{24.0, 96.0}, {89.3, 36.0}}, label: 'Cancel'
+                    StaticText, 0x113238640, {{155.7, 101.3}, {128.3, 25.3}}, label: 'New Exercise'
+                    Other, 0x113238780, {{327.7, 96.0}, {88.3, 36.0}}
+                      Other, 0x1132388c0, {{327.7, 96.0}, {88.3, 36.0}}
+                        Button, 0x113238a00, {{327.7, 96.0}, {88.3, 36.0}}, identifier: 'create-custom-exercise-create', label: 'Create', Disabled
+                  Other, 0x113238b40, {{0.0, 72.0}, {440.0, 884.0}}
+                    Other, 0x113238c80, {{0.0, 72.0}, {440.0, 884.0}}
+                      Other, 0x113238dc0, {{0.0, 72.0}, {440.0, 884.0}}
+                        Other, 0x113238f00, {{0.0, 72.0}, {440.0, 884.0}}
+                          CollectionView, 0x113239040, {{0.0, 72.0}, {440.0, 884.0}}, identifier: 'create-custom-exercise-screen'
+                            Other, 0x113239180, {{-20.0, -1622.0}, {480.0, 1963.0}}
+                            Other, 0x1132392c0, {{0.0, 72.0}, {440.0, 884.0}}
+                              Other, 0x113239400, {{0.0, 72.0}, {440.0, 114.0}}
+                            Other, 0x113239540, {{0.0, 72.0}, {440.0, 884.0}}
+                            Cell, 0x113239680, {{20.0, 146.0}, {400.0, 83.3}}
+                              Other, 0x1132397c0, {{20.0, 146.0}, {400.0, 83.3}}
+                              Other, 0x113239900, {{20.0, 146.0}, {400.0, 83.3}}
+                                Other, 0x113239a40, {{20.0, 146.0}, {400.0, 83.3}}
+                                  Other, 0x113239b80, {{20.0, 146.0}, {400.0, 83.3}}
+                                    StaticText, 0x113239cc0, {{20.0, 146.0}, {400.0, 83.3}}, label: 'Exercise Name'
+                            Cell, 0x113239e00, {{20.0, 229.3}, {400.0, 94.0}}
+                              Other, 0x113239f40, {{20.0, 229.3}, {400.0, 94.0}}
+                                Other, 0x11323a080, {{20.0, 229.3}, {400.0, 94.0}}
+                              Other, 0x11323a1c0, {{20.0, 229.3}, {400.0, 94.0}}
+                                Other, 0x11323a300, {{20.0, 229.3}, {400.0, 94.0}}
+                                  Other, 0x11323a440, {{20.0, 229.3}, {400.0, 94.0}}
+                                    TextField, 0x11323a580, {{40.0, 244.3}, {360.0, 64.0}}, identifier: 'create-custom-exercise-name', placeholderValue: 'e.g. Cable Lateral Raise'
+                            Other, 0x11323a6c0, {{-20.0, 341.0}, {480.0, 354.3}}
+                            Cell, 0x11323a800, {{20.0, 341.0}, {400.0, 83.3}}
+                              Other, 0x11323a940, {{20.0, 341.0}, {400.0, 83.3}}
+                              Other, 0x11323aa80, {{20.0, 341.0}, {400.0, 83.3}}
+                                Other, 0x11323abc0, {{20.0, 341.0}, {400.0, 83.3}}
+                                  Other, 0x11323ad00, {{20.0, 341.0}, {400.0, 83.3}}
+                                    StaticText, 0x11323ae40, {{20.0, 341.0}, {400.0, 83.3}}, label: 'Category'
+                            Cell, 0x11323af80, {{20.0, 424.0}, {400.0, 174.7}}
+                              Other, 0x11323b0c0, {{20.0, 424.0}, {400.0, 174.7}}
+                                Other, 0x11323b200, {{20.0, 424.0}, {400.0, 174.7}}
+                              Other, 0x11323b340, {{20.0, 424.0}, {400.0, 174.7}}
+                                Other, 0x11323b480, {{20.0, 424.0}, {400.0, 174.7}}
+                                  Other, 0x11323b5c0, {{20.0, 424.0}, {400.0, 174.7}}
+                                    StaticText, 0x11323b700, {{40.0, 439.0}, {208.0, 63.3}}, label: 'Category'
+                                    Button, 0x11323b840, {{40.0, 439.0}, {247.7, 144.7}}, label: 'Category, Strength'
+                                      StaticText, 0x11323b980, {{52.0, 513.3}, {193.7, 63.3}}, label: 'Strength'
+                            Cell, 0x11323bac0, {{20.0, 599.0}, {400.0, 78.7}}
+                              Other, 0x11323bc00, {{20.0, 599.0}, {400.0, 78.7}}
+                                Other, 0x11323bd40, {{20.0, 599.0}, {400.0, 78.7}}
+                              Other, 0x11323be80, {{20.0, 599.0}, {400.0, 78.7}}
+                                Other, 0x1141a8000, {{20.0, 599.0}, {400.0, 78.7}}
+                                  Other, 0x1141a8140, {{20.0, 599.0}, {400.0, 78.7}}
+                                    ScrollView, 0x1141a8280, {{36.0, 603.0}, {368.0, 70.7}}
+                                      Other, 0x1141a83c0, {{36.0, 603.0}, {355.3, 70.7}}
+                                        Button, 0x1141a8500, {{36.0, 603.0}, {355.3, 70.3}}, label: 'Codex Mobility'
+                                          Image, 0x1141a8640, {{53.0, 614.3}, {34.3, 47.7}}, identifier: 'figure.cooldown', label: 'Figure Cooling Down After Exercise'
+                                          StaticText, 0x1141a8780, {{96.3, 612.5}, {283.0, 51.3}}, label: 'Codex Mobility'
+                            Other, 0x1141a88c0, {{40.0, 598.0}, {360.0, 1.0}}
+                            Other, 0x1141a8a00, {{-20.0, 695.0}, {480.0, 275.7}}
+                            Cell, 0x1141a8b40, {{20.0, 695.0}, {400.0, 83.3}}
+                              Other, 0x1141a8c80, {{20.0, 695.0}, {400.0, 83.3}}
+                              Other, 0x1141a8dc0, {{20.0, 695.0}, {400.0, 83.3}}
+                                Other, 0x1141a8f00, {{20.0, 695.0}, {400.0, 83.3}}
+                                  Other, 0x1141a9040, {{20.0, 695.0}, {400.0, 83.3}}
+                                    StaticText, 0x1141a9180, {{20.0, 695.0}, {400.0, 83.3}}, label: 'Input Type'
+                            Cell, 0x1141a92c0, {{20.0, 778.3}, {400.0, 174.7}}
+                              Other, 0x1141a9400, {{20.0, 778.3}, {400.0, 174.7}}
+                                Other, 0x1141a9540, {{20.0, 778.3}, {400.0, 174.7}}
+                              Other, 0x1141a9680, {{20.0, 778.3}, {400.0, 174.7}}
+                                Other, 0x1141a97c0, {{20.0, 778.3}, {400.0, 174.7}}
+                                  Other, 0x1141a9900, {{20.0, 778.3}, {400.0, 174.7}}
+                                    Button, 0x1141a9a40, {{40.0, 793.3}, {360.0, 144.7}}, label: 'Input Type, Sets × Reps × Weight'
+                                      StaticText, 0x1141a9b80, {{52.0, 867.7}, {306.0, 63.3}}, label: 'Sets × Reps × Weight'
+                                    StaticText, 0x1141a9cc0, {{40.0, 793.3}, {233.7, 63.3}}, label: 'Input Type'
+                            Other, 0x1141a9e00, {{407.0, 146.0}, {30.0, 748.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                              Other, 0x1141a9f40, {{434.0, 884.0}, {3.0, 7.0}}
+                            Other, 0x1141aa080, {{407.0, 146.0}, {30.0, 748.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                              Other, 0x1141aa1c0, {{434.0, 884.0}, {3.0, 7.0}}
+                  Toolbar, 0x1141aa300, {{0.0, 72.0}, {440.0, 884.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x1141aa440, {{0.0, 72.0}, {440.0, 884.0}}
+Path to element:
+ →Application, 0x1089f2a80, pid: 19837, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1141aa580, pid: 19837, label: 'DUNE'
+  }

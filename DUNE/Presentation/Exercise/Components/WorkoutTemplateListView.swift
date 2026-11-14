@@ -3,6 +3,7 @@ import SwiftData
 
 struct WorkoutTemplateListView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
 
     @State private var showingCreateSheet = false
@@ -139,24 +140,31 @@ struct WorkoutTemplateListView: View {
             HStack {
                 Text(template.name)
                     .font(.headline)
+                    .fixedSize(horizontal: false, vertical: true)
                 Spacer()
                 Image(systemName: "play.circle.fill")
                     .font(.title3)
                     .foregroundStyle(DS.Color.activity)
             }
 
-            HStack(spacing: DS.Spacing.xs) {
+            let detailLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+            detailLayout {
                 Text("\(template.exerciseEntries.count) exercises")
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
 
                 if !template.exerciseEntries.isEmpty {
-                    Text("\u{00B7}")
-                        .foregroundStyle(.tertiary)
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Text("\u{00B7}")
+                            .foregroundStyle(.tertiary)
+                    }
                     Text(template.exerciseEntries.map(\.exerciseName).prefix(3).joined(separator: ", "))
                         .font(.caption)
                         .foregroundStyle(.tertiary)
-                        .lineLimit(1)
+                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                        .fixedSize(horizontal: false, vertical: dynamicTypeSize.isAccessibilitySize)
                 }
             }
         }

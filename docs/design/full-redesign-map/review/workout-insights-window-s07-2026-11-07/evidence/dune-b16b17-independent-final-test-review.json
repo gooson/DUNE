@@ -1,0 +1,23 @@
+{
+  "status": "read-only source/test preflight; native pending",
+  "patch": "/private/tmp/dune-b16b17-tests-prep/B16-B17-tests.patch",
+  "patch_sha256": "021793b2415efd2e40022dc4cd5e2ff538c489f36f122c6b2a73b16257772767",
+  "manifest_matches_patch": true,
+  "git_apply_check_current_reused_worktree": true,
+  "target_selector_count": 7,
+  "introduced_blocking_P1_P2": [],
+  "W33_policy": "AGENTS.md Actual Design Map Sync forbids reusing an old PNG as a new screen. B12 W28 title-editor images are historical context only for W33. The revised patch emits a fresh W33 normal/MAX named PNG+AX immediately after the existing W28 editor capture in the same live editor state, before the unchanged Cancel; only completed passed W28 selector receipts can promote W33 actual rows. No app patch or old PNG relabeling.",
+  "source_proof": [
+    "Existing W28 normal/MAX helper opens notification Running workout detail, reaches title editor by its AX ID, captures W28, now captures fresh W33, then performs original Cancel and detail return.",
+    "UserCategoryManagementView source has Built-in/Custom sections, New/Edit Category form, original icon/color button grids, Duration + Distance input type, and Cancel/Save toolbar. New W29/W30 tests remain opt-in and class-local.",
+    "S07/W32 patch adds route-specific named captures to existing Insights selectors; iPad fallback checks Done frame, dismissal, and restored workout."
+  ],
+  "conditional_limits": [
+    "iPad Categories deliberately skips if native More owns toolbar action; a skip cannot count as W29/W30 iPad pass.",
+    "Icon/color selection uses visible button position because individual AX IDs are absent; native PNG/AX must confirm intended original choices.",
+    "No fresh native pass yet for any of seven selectors; W33 actual rows remain historical until new captures pass.",
+    "Existing S07/W32 historical dirty captures cannot serve as new after evidence.",
+    "B13 held selectors and B09 closed More route are not replayed."
+  ],
+  "recommendation": "Eligible for one grouped targeted SDK compile/run under frozen app/test source and per-device receipts; gate each screen independently after actual captures, preserving skips/failures."
+}

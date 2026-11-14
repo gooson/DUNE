@@ -1,0 +1,28 @@
+{
+  "source": "dd080a56732c860d72471fa78060aee0c5e86f77",
+  "initial_iPad_receipt": ".codex-checks/b13/ipad-ui.log.result.json",
+  "initial_iPad_counts": {
+    "executed": 2,
+    "passed": 0,
+    "failed": 2
+  },
+  "cause_proof": {
+    "source": "ExercisePickerView FullModeSearchModifier uses .searchable(text:prompt:) for non-quick-start mode; picker-search-field is set only on quickStartSearchSection TextField. UITestHelpers.fillTextInput searches textFields/textViews by that identifier only.",
+    "native": "iPad AX 2A839189-6AD9-4AD5-883E-225E3E5BEB0C.txt exposes SearchField at {104,323,548,44}, label/placeholder Search exercises inside NavigationBar Select Exercise; picker-root-list is CollectionView. Failure occurs before any search text or selected exercise.",
+    "image": ".codex-checks/b13/ipad-attachments/DBEB5612-52F5-4D75-B059-9F839059C050.png"
+  },
+  "private_candidate": "/private/tmp/dune-b13-ipad-retry-prep/B13-ipad-retry-tests.patch",
+  "candidate_sha256": "320ff893c9335f53e78b012e8b4b77a4622641834266155d66b3b755cca239d2",
+  "patch_sha256": "27069889349f5cd70e3b8790fa9f17651cfa73dba97f160ad4432a2e4fbade30",
+  "change": "Inside the existing authoring test only, a local helper scopes the actual SearchField to navigationBars[Select Exercise], types Bench Press and Running at the two failed callsites, and waits for the exact field value. Existing picker role descendant query, seeded 3/10 strength defaults, Running Duration/Distance summary, Save-state and Cancel assertions remain unchanged.",
+  "verification": [
+    "Full candidate Swift frontend parse passed",
+    "Patch applies cleanly to frozen dd080 source; no tracked edit"
+  ],
+  "retry_scope": "First cause-specific same-ID retry of only the two failed iPad authoring selectors. Phone family remains closed; no native result inferred.",
+  "introduced_P1_P2": [],
+  "limits": [
+    "Native typing/focus and downstream W13 rows remain pending.",
+    "This does not rehabilitate W12/W15 iPad toolbar route or closed Phone target gaps."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "status": "source-only frozen integration preflight; SDK native pending",
+  "base": "4a9b342fc0159729bb71193466bfbe6b66946d6b",
+  "map_before_app_commit": "c69dffe4c5c6f3c4f38d656b2b26cc1bf443847f",
+  "frozen_source": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+  "clean_worktree": true,
+  "app_owner": "DUNE/Presentation/Exercise/Components/UserCategoryManagementView.swift",
+  "app_sha256": "70b1881473ac8d4413b2461e279aa81b96673d6c02f1ec882d16e926f262ddce",
+  "matches_private_combined_W29_W30_candidate": true,
+  "test_sha256": "388d924f15f1a592c6e10729de4582bd1a7b13739c3832d80cbaca156d4e50b1",
+  "test_patch_exact_edit_sequence": true,
+  "test_patch_sha256": "021793b2415efd2e40022dc4cd5e2ff538c489f36f122c6b2a73b16257772767",
+  "B17_app_consumers_and_catalog_unchanged": true,
+  "W33_owner_unchanged": true,
+  "held_W25_app_unchanged": true,
+  "map_precedes_app": true,
+  "introduced_blocking_P1_P2": [],
+  "native_limits": [
+    "Seven grouped targeted selectors still pending, no pass presumed.",
+    "W29/W30 iPad Categories may skip before closed native More route; skip is not pass.",
+    "W33 fresh capture must come from new passed normal/MAX W28 cases; B12 images historical only.",
+    "S07/W32 current-source native window/sheet proof pending."
+  ]
+}
