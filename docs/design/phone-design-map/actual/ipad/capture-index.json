@@ -537,13 +537,27 @@
     },
     "W30": {
       "row_id": "W30",
-      "evidence": "user-category-edit-screen",
-      "test": "ActivityExerciseRegressionTests/testUserCategoryManagementCreatesCategory()",
-      "action": "tap user-category-add",
-      "timestamp": 1791822733.181,
-      "image": "18888374-08B4-4A80-B917-E409560664EF.png",
-      "screen": "screen-0-2064x2752-tap user-category-add_0_629DE165-9A15-489B-96CF-06C3F039081B.png",
-      "file": "W30.png"
+      "file": "W30.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtNormalText()",
+      "action": "W30 normal empty name and original icon choices",
+      "source_revision": "15450f83dcedc8628c44a9327aea5497031b375e",
+      "source_worktree_dirty": false,
+      "capture_date": "2026-11-14",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "609731c40ea0f7d94c3099816122b96c73ebbeb36e6f4c96fa382202e9bf298c",
+      "ax_sha256": "d52dc0739e73a9fe1577a5063d80cc3b005c3272598a5a7ab8bdc9ab7c4f544a",
+      "source_json": "../../../full-redesign-map/review/exercise-category-editor-w30-2026-11-14/manifest.json",
+      "capture_scope": "iPad normal/MAX passed; Phone 2026-11-07 historical; Duo not recaptured",
+      "previous_record": {
+        "row_id": "W30",
+        "evidence": "user-category-edit-screen",
+        "test": "ActivityExerciseRegressionTests/testUserCategoryManagementCreatesCategory()",
+        "action": "tap user-category-add",
+        "timestamp": 1791822733.181,
+        "image": "18888374-08B4-4A80-B917-E409560664EF.png",
+        "screen": "screen-0-2064x2752-tap user-category-add_0_629DE165-9A15-489B-96CF-06C3F039081B.png",
+        "file": "W30.png"
+      }
     },
     "W15": {
       "row_id": "W15",
