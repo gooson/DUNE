@@ -6,7 +6,12 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
     private var motionSettings: XCUIApplication?
     private var originalMotionSetting: Bool?
 
-    override func tearDownWithError() throws {
+    nonisolated override func tearDown() async throws {
+        await restoreMotionSettings()
+        try await super.tearDown()
+    }
+
+    private func restoreMotionSettings() {
         if let settings = motionSettings, let original = originalMotionSetting {
             // XCTest can abort an assertion without unwinding a Swift defer.
             // Restore the observed switch in the framework's teardown instead.
@@ -24,7 +29,6 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         }
         motionSettings = nil
         originalMotionSetting = nil
-        try super.tearDownWithError()
     }
 
     override var additionalLaunchArguments: [String] {
