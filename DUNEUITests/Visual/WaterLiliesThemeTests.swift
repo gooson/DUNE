@@ -100,13 +100,14 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         }
     }
 
-    func testVoiceOverConditionDetailEntryAndReturn() {
+    func testVoiceOverConditionDetailEntryAndReturn() throws {
         // The host enables VoiceOver and verifies its device setting before
         // this selector. XCTest tap is a hit-point event, so this checks the
         // app route and AX labels in that real environment, not spoken output.
         attachVoiceOverReadback("Today root")
-        XCTAssertTrue(UIAccessibility.isVoiceOverRunning,
-                      "VoiceOver must be running on the simulator before this selector starts")
+        guard UIAccessibility.isVoiceOverRunning else {
+            throw XCTSkip("Requires VoiceOver enabled and verified by the host before this selector starts")
+        }
         dismissVoiceOverIntroductionIfPresent()
 
         let hero = app.buttons[AXID.dashboardHeroCondition].firstMatch

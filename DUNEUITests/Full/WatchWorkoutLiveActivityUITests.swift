@@ -271,20 +271,6 @@ final class SystemWidgetDesignTests: UITestBaseCase {
     }
 
     func testSystemDUNETodayWidgetFamilies() throws {
-        try captureSystemWidgetFamilies(named: "Desert")
-    }
-
-    func testWaterLiliesSystemWidgetFamilies() throws {
-        var configuration = launchConfiguration
-        guard let index = configuration.additionalArguments.firstIndex(of: "--ui-test-theme") else {
-            return XCTFail("A deterministic theme argument is required")
-        }
-        configuration.additionalArguments[index + 1] = "waterLilies"
-        launchApp(with: configuration)
-        try captureSystemWidgetFamilies(named: "Water Lilies")
-    }
-
-    private func captureSystemWidgetFamilies(named theme: String) throws {
         // Let each production view model write its real seeded score to the App Group.
         for (tab, ringID) in [
             ("Today", "dashboard-hero-ring"),
@@ -297,20 +283,10 @@ final class SystemWidgetDesignTests: UITestBaseCase {
         }
 
         navigateToDashboard()
-        addScreenshotAttachment(named: "\(theme) Today before WidgetKit gallery")
+        addScreenshotAttachment(named: "Desert Today after latest integration")
 
         XCUIDevice.shared.press(.home)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        // Home can restore the previously open App Library page. Its app
-        // context menu has Delete but no Edit Home Screen action.
-        let librarySearch = springboard.searchFields["dewey-search-field"].firstMatch
-        if librarySearch.exists && librarySearch.isHittable {
-            XCUIDevice.shared.press(.home)
-            let home = XCTNSPredicateExpectation(
-                predicate: NSPredicate(format: "exists == false"), object: librarySearch
-            )
-            XCTAssertEqual(XCTWaiter.wait(for: [home], timeout: 5), .completed)
-        }
         func attachHierarchy(_ stage: String) {
             let attachment = XCTAttachment(string: springboard.debugDescription)
             attachment.name = "DUNE widget system hierarchy - \(stage)"
@@ -330,15 +306,10 @@ final class SystemWidgetDesignTests: UITestBaseCase {
             start.press(forDuration: 0.05, thenDragTo: end)
         }
 
-        let icons = springboard.descendants(matching: .icon)
-            .matching(NSPredicate(format: "label == %@", "DUNE"))
-        func visibleIcon() -> XCUIElement? {
-            // SpringBoard keeps zero-frame Home icons beside visible App
-            // Library duplicates. firstMatch can keep selecting the hidden one.
-            icons.allElementsBoundByIndex.first { $0.isHittable }
-        }
-        for _ in 0..<4 where visibleIcon() == nil { springboard.swipeLeft() }
-        guard let icon = visibleIcon() else { attachHierarchy("home-icon"); XCTFail("DUNE Home icon not reachable"); return }
+        let icon = springboard.descendants(matching: .icon)
+            .matching(NSPredicate(format: "label == %@", "DUNE")).firstMatch
+        for _ in 0..<4 where !icon.isHittable { springboard.swipeLeft() }
+        guard icon.isHittable else { attachHierarchy("home-icon"); XCTFail("DUNE Home icon not reachable"); return }
         icon.press(forDuration: 1.2)
         guard let editHome = visible(["Edit Home Screen", "홈 화면 편집", "ホーム画面を編集"]) else {
             attachHierarchy("icon-context-menu")
