@@ -412,3 +412,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-14 W25: 정적 배치와 새 iPad/Phone 일반·MAX 실제 PNG/AX를 구분한다. 2026-11-07 보류 기록의 날짜를 보존한다.
 
 2026-11-14 W04: 정적 배치와 새 iPad 일반·MAX 실제 PNG/AX를 구분한다. Phone은 2026-11-07 기록을 보존한다.
+
+2026-11-14 W11: 정적 시안과 [Phone/iPad 실제 PNG/AX](../full-redesign-map/review/share-image-w11-2026-11-14/index.html)를 구분한다. Nov 7 HELD 원본은 보존한다.

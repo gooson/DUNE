@@ -317,3 +317,5 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-14 W25: 정적 배치와 새 iPad/Phone 일반·MAX 실제 PNG/AX를 구분한다. 2026-11-07 보류 기록의 날짜를 보존한다.
 
 2026-11-14 W04: 정적 배치와 새 iPad 일반·MAX 실제 PNG/AX를 구분한다. Phone은 2026-11-07 기록을 보존한다.
+
+2026-11-14 W11: [`share-image-w11.html`](share-image-w11.html)는 정적 배치 계약이며 [실제 Phone/iPad 범위 증거](../full-redesign-map/review/share-image-w11-2026-11-14/index.html)와 구분한다.

@@ -1,0 +1,101 @@
+{
+  "screen": "W11",
+  "identity": "ShareImageSheet for rendered workout image",
+  "status": "scoped Phone/iPad normal/MAX native UI verified",
+  "existing_pr": 969,
+  "publication_base_main": "98fbae713e4e1a4a2603d1d374c3dad31b4bf686",
+  "tested_app_source": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+  "app_sha256": "fb5426c44cfa32ffaf70e33182fed5f8aafb1b55c1efaace45e7a74135fafefc",
+  "historical_review": "../share-image-w11-2026-11-07/index.html",
+  "historical_review_policy": "Preserve Nov 7 HELD tree, failures and captures unchanged",
+  "selectors": {
+    "phone_normal": "passed 89.652s log line 2513",
+    "phone_MAX": "passed 122.923s log line 2085",
+    "ipad_normal": "passed 77.893s log line 2643",
+    "ipad_MAX": "passed 103.421s log line 2240"
+  },
+  "batch_truth": {
+    "phone": "5/5 pass",
+    "ipad": "5 pass, 2 failed S03, 0 skipped"
+  },
+  "captures": [
+    {
+      "device": "phone",
+      "size": "normal",
+      "stage": "rendered-workout-preview-and-Share",
+      "status": "positive",
+      "source_revision": "c95e246c71c4fa954d67b3ad956bb80e03939763",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutRecordsAtNormalText()",
+      "timestamp": 1794620838.5,
+      "capture_uuid": "1737E950-63B0-4B27-9EAD-BE272A82F700",
+      "png": "assets/phone/normal-share-preview.png",
+      "ax": "assets/phone/normal-share-preview.txt",
+      "original_png": "C68C1174-3398-438E-838C-54D5B9316DFA.png",
+      "original_ax": "0E351114-CD62-4B19-82DE-B427FDFAE39E.txt",
+      "png_sha256": "e3494f47569d01b3efa144b1d51a0c7054b94499b069c4e62b4f818a4f5b1aef",
+      "ax_sha256": "644b95b4eb60f482c60efd3da2697c00079b856a3e69ff4e505b1e59b486c688",
+      "preview_ax": "Image, 0x10a58f840, {{68.7, 551.0}, {302.6, 264.7}}, identifier: 'share-image-sheet'",
+      "share_button_ax": "Button, 0x10a58f980, {{23.4, 854.2}, {393.2, 45.6}}, identifier: 'share-image-sheet', label: 'Share'"
+    },
+    {
+      "device": "phone",
+      "size": "MAX",
+      "stage": "rendered-workout-preview-and-Share",
+      "status": "positive",
+      "source_revision": "c95e246c71c4fa954d67b3ad956bb80e03939763",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutRecordsAtMaximumText()",
+      "timestamp": 1794620748.785,
+      "capture_uuid": "DF524F4D-DD3D-4BCB-ADA0-C28874B99EBC",
+      "png": "assets/phone/MAX-share-preview.png",
+      "ax": "assets/phone/MAX-share-preview.txt",
+      "original_png": "91404911-BD86-4F3B-B150-297757E68544.png",
+      "original_ax": "52F269A3-6271-45E7-A909-B3F163E09FD6.txt",
+      "png_sha256": "aec1c3e6556fdb39b81a0c4ab85bdd22b3e92dbade8ed56bb283704accef2caf",
+      "ax_sha256": "42d356a3b3bb441a5c68bf9a283dfffab114ef3ec69edd00e9cc6581bb4cb8d9",
+      "preview_ax": "Image, 0x10a5adf40, {{121.0, 319.3}, {198.0, 300.0}}, identifier: 'share-image-sheet'",
+      "share_button_ax": "Button, 0x10a5ae080, {{16.0, 808.3}, {408.0, 97.7}}, identifier: 'share-image-sheet', label: 'Share'"
+    },
+    {
+      "device": "ipad",
+      "size": "normal",
+      "stage": "rendered-workout-preview-and-Share",
+      "status": "positive",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutRecordsAtNormalText()",
+      "timestamp": 1794622500.829,
+      "capture_uuid": "66B30CCC-0B13-4525-B70F-36B130210BFF",
+      "png": "assets/ipad/normal-share-preview.png",
+      "ax": "assets/ipad/normal-share-preview.txt",
+      "original_png": "245535D3-804E-44D9-B473-199A8EE542F8.png",
+      "original_ax": "5B0D74EB-DB2D-4DB9-BABF-34B6A0B640B1.txt",
+      "png_sha256": "6c66e5b63b53d0a04af7c7ad9b97a735db239883a868b6b1d2bb6d41d5cbfef5",
+      "ax_sha256": "4126dd3c4d5c9e63f7de3e48b3028389a5aa5c68cd98fc944c496714fd6595bc",
+      "preview_ax": "Image, 0x1126a0f00, {{283.0, 628.5}, {190.0, 166.5}}, identifier: 'share-image-sheet'",
+      "share_button_ax": "Button, 0x1126a1040, {{104.0, 835.0}, {548.0, 48.0}}, identifier: 'share-image-sheet', label: 'Share'"
+    },
+    {
+      "device": "ipad",
+      "size": "MAX",
+      "stage": "rendered-workout-preview-and-Share",
+      "status": "positive",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutRecordsAtMaximumText()",
+      "timestamp": 1794622423.023,
+      "capture_uuid": "A8D7A631-C1A7-4DFD-811F-0BC2DC228B47",
+      "png": "assets/ipad/MAX-share-preview.png",
+      "ax": "assets/ipad/MAX-share-preview.txt",
+      "original_png": "C234FBE8-7CF2-497C-B939-72E5AC4B6E6D.png",
+      "original_ax": "8DBEA0AB-D635-4A40-B9CB-F7A8774E8966.txt",
+      "png_sha256": "aee855f7b894900351f46c0b3a099c12e8f3c6392a80363b589229c0e8f84a2a",
+      "ax_sha256": "cdcacf4a1404115f06e040fc9c3f9f726f748208c06cd7643941362d114bd162",
+      "preview_ax": "Image, 0x106dbf200, {{279.0, 396.5}, {198.0, 300.0}}, identifier: 'share-image-sheet'",
+      "share_button_ax": "Button, 0x106dbf340, {{104.0, 785.5}, {548.0, 97.5}}, identifier: 'share-image-sheet', label: 'Share'"
+    }
+  ],
+  "limits": [
+    "The native Share control is present and hittable; OS share sheet was not opened.",
+    "iPad preview is a thumbnail of the rendered card; small details may require sharing/opening the full image.",
+    "Duo, dark mode and other locale captures not fresh.",
+    "No overall iPad batch pass: two S03 cases failed and remain outside W11 scope."
+  ]
+}
