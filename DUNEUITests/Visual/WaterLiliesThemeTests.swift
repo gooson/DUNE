@@ -3,6 +3,30 @@ import UIKit
 
 @MainActor
 final class WaterLiliesThemeTests: SeededUITestBaseCase {
+    private var motionSettings: XCUIApplication?
+    private var originalMotionSetting: Bool?
+
+    override func tearDownWithError() throws {
+        if let settings = motionSettings, let original = originalMotionSetting {
+            // XCTest can abort an assertion without unwinding a Swift defer.
+            // Restore the observed switch in the framework's teardown instead.
+            let previous = continueAfterFailure
+            continueAfterFailure = true
+            settings.activate()
+            let toggle = settings.switches["REDUCE_MOTION"].firstMatch
+            if toggle.waitForExistence(timeout: 5), reduceMotionSwitchIsOn(toggle) != original {
+                tapMotionControl(toggle)
+            }
+            XCTAssertEqual(reduceMotionSwitchIsOn(toggle), Optional(original))
+            attachReduceMotionReadback("restored", settingsSwitch: toggle)
+            app?.activate()
+            continueAfterFailure = previous
+        }
+        motionSettings = nil
+        originalMotionSetting = nil
+        try super.tearDownWithError()
+    }
+
     override var additionalLaunchArguments: [String] {
         ["--ui-test-theme", "waterLilies", "--ui-test-style", "light", "-morningBriefingDisabled", "YES"]
     }
@@ -112,25 +136,17 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         }
 
         let original = UIAccessibility.isReduceMotionEnabled
+        motionSettings = settings
+        originalMotionSetting = original
         attachReduceMotionReadback("original", settingsSwitch: reduceMotionSwitch)
         XCTAssertEqual(reduceMotionSwitchIsOn(reduceMotionSwitch), Optional(original),
                        "Settings and UIKit should agree before changing the preference")
-        defer {
-            // Restore the system preference even when an assertion below fails.
-            settings.activate()
-            if UIAccessibility.isReduceMotionEnabled != original {
-                reduceMotionSwitch.tap()
-                XCTAssertTrue(waitForReduceMotion(original),
-                              "Original system Reduce Motion state should be restored")
-            }
-            XCTAssertEqual(reduceMotionSwitchIsOn(reduceMotionSwitch), Optional(original),
-                           "Settings switch should return to its original state")
-            attachReduceMotionReadback("restored", settingsSwitch: reduceMotionSwitch)
-            app.activate()
-        }
-
         if !original {
-            reduceMotionSwitch.tap()
+            // This OS exposes the whole Settings row as the Switch. Its center
+            // tap left the thumb off in the original native failure capture.
+            tapMotionControl(reduceMotionSwitch)
+            attachReduceMotionReadback("after native control tap", settingsSwitch: reduceMotionSwitch)
+            XCTAssertEqual(reduceMotionSwitchIsOn(reduceMotionSwitch), Optional(true))
             XCTAssertTrue(waitForReduceMotion(true),
                           "UIKit must report the actual system Reduce Motion preference")
         }
@@ -182,6 +198,10 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
             "condition-period-picker", maxSwipes: 6, timeoutPerCheck: 0.2
         ))
         captureRootEvidence("Water Lilies condition detail resumed")
+    }
+
+    private func tapMotionControl(_ toggle: XCUIElement) {
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
     }
 
     private func openReduceMotionSwitch(in settings: XCUIApplication) -> XCUIElement? {

@@ -52,12 +52,24 @@ struct HourlySparklineView: View {
             .frame(height: height)
             .clipped()
             if showsTimeRange, let first = data.points.first?.date, let last = data.points.last?.date {
-                HStack(spacing: 4) {
-                    Spacer(minLength: 0)
-                    Text(first, format: .dateTime.month(.abbreviated).day().hour().minute())
-                    Text("–")
-                    Text(last, format: .dateTime.month(.abbreviated).day().hour().minute())
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 4) {
+                        Text(first, format: .dateTime.month(.abbreviated).day().hour().minute())
+                        Text("–")
+                        Text(last, format: .dateTime.month(.abbreviated).day().hour().minute())
+                    }
+                    .fixedSize(horizontal: true, vertical: false)
+
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(first, format: .dateTime.month(.abbreviated).day().hour().minute())
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text("–")
+                            Text(last, format: .dateTime.month(.abbreviated).day().hour().minute())
+                        }
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
+                .frame(maxWidth: .infinity, alignment: .trailing)
                 .font(.caption2)
                 .foregroundStyle(tintColor.opacity(0.9))
             }

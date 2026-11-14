@@ -271,6 +271,20 @@ final class SystemWidgetDesignTests: UITestBaseCase {
     }
 
     func testSystemDUNETodayWidgetFamilies() throws {
+        try captureSystemWidgetFamilies(named: "Desert")
+    }
+
+    func testWaterLiliesSystemWidgetFamilies() throws {
+        var configuration = launchConfiguration
+        guard let index = configuration.additionalArguments.firstIndex(of: "--ui-test-theme") else {
+            return XCTFail("A deterministic theme argument is required")
+        }
+        configuration.additionalArguments[index + 1] = "waterLilies"
+        launchApp(with: configuration)
+        try captureSystemWidgetFamilies(named: "Water Lilies")
+    }
+
+    private func captureSystemWidgetFamilies(named theme: String) throws {
         // Let each production view model write its real seeded score to the App Group.
         for (tab, ringID) in [
             ("Today", "dashboard-hero-ring"),
@@ -283,7 +297,7 @@ final class SystemWidgetDesignTests: UITestBaseCase {
         }
 
         navigateToDashboard()
-        addScreenshotAttachment(named: "Desert Today after latest integration")
+        addScreenshotAttachment(named: "\(theme) Today before WidgetKit gallery")
 
         XCUIDevice.shared.press(.home)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
