@@ -3816,9 +3816,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             let moveUp = !remove.exists || remove.frame.midY >= viewport.midY
             let startY: CGFloat = moveUp ? 0.68 : 0.42
             let endY: CGFloat = moveUp ? 0.46 : 0.64
-            templateList.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
-                .press(forDuration: 0.05, thenDragTo: templateList.coordinate(
-                    withNormalizedOffset: CGVector(dx: 0.5, dy: endY)))
+            let start = templateList.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+            let end = templateList.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+            if maximumText && UIDevice.current.userInterfaceIdiom == .phone {
+                start.press(forDuration: 0.05, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80),
+                            thenHoldForDuration: 0.35)
+            } else {
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
         }
         let removeViewport = removeViewport()
         XCTAssertTrue(remove.exists && remove.isHittable && removeViewport.contains(remove.frame),
