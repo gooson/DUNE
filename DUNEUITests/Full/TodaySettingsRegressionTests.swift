@@ -1370,70 +1370,67 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     private func dismissNumberPadBeforeNextField() {
-        // The native iPad number-pad popover covers the app with a dismissal
-        // region even when the app's Done button remains visibly unobstructed.
-        let dismissRegion = app.otherElements["PopoverDismissRegion"].firstMatch
-        if UIDevice.current.userInterfaceIdiom == .pad && dismissRegion.exists {
-            let numberPadPopover = app.popovers.firstMatch
-            let keyboard = app.keyboards.firstMatch
-            let done = app.buttons["exercise-default-keyboard-done"].firstMatch
-            let numericFields = [
+        let done = app.buttons["exercise-default-keyboard-done"].firstMatch
+        let keyboard = app.keyboards.firstMatch
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            // The native numeric popup is present in the full accessibility snapshot,
+            // but XCUIElementQuery does not resolve its Popover or dismissal region.
+            let popupMarker = "PopoverDismissRegion"
+            guard app.debugDescription.contains(popupMarker) else {
+                XCTFail("A focused iPad numeric field must expose the native popup")
+                return
+            }
+            let fields = [
                 app.textFields[AXID.exerciseDefaultEditWeight].firstMatch,
                 app.textFields[AXID.exerciseDefaultEditReps].firstMatch
             ]
-            let hasNumericFocus = NSPredicate(format: "hasKeyboardFocus == true")
+            let focus = NSPredicate(format: "hasKeyboardFocus == true")
             guard keyboard.waitForExistence(timeout: 3),
                   keyboard.frame.width > 0, keyboard.frame.height > 0,
-                  numericFields.allSatisfy({ $0.exists }),
-                  numericFields.filter({ hasNumericFocus.evaluate(with: $0) }).count == 1 else {
-                XCTFail("The numeric popup must start with a visible keyboard and one focused input")
+                  fields.allSatisfy({ $0.exists }),
+                  fields.filter({ focus.evaluate(with: $0) }).count == 1 else {
+                XCTFail("The popup starts with a visible keyboard and exactly one focused input")
                 return
             }
             guard done.waitForExistence(timeout: 3), done.isEnabled,
                   app.windows.firstMatch.frame.contains(done.frame) else {
-                XCTFail("The app's Done action must be fully visible before dismissing the native popup")
+                XCTFail("The app's Done action remains fully visible behind the popup")
                 return
             }
-            guard numberPadPopover.waitForExistence(timeout: 3),
-                  dismissRegion.waitForExistence(timeout: 3), dismissRegion.isHittable else {
-                XCTFail("The native number-pad popup must expose its dismissal region")
+            // Default Reps is an inert app label to the left of the keypad in both
+            // tested iPad sizes. A coordinate tap reaches the native dismissal layer.
+            let outsideLabel = app.staticTexts["Default Reps"].firstMatch
+            guard outsideLabel.waitForExistence(timeout: 3),
+                  app.windows.firstMatch.frame.contains(outsideLabel.frame),
+                  !keyboard.frame.intersects(outsideLabel.frame) else {
+                XCTFail("The dismissal anchor is a visible app label outside the keyboard")
                 return
             }
-            let dismissalPoint = CGPoint(x: dismissRegion.frame.midX, y: dismissRegion.frame.midY)
-            guard !numberPadPopover.frame.contains(dismissalPoint) else {
-                XCTFail("The popup dismissal point must lie outside the numeric keypad")
-                return
-            }
-            dismissRegion.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).auditTap()
-            guard numberPadPopover.waitForNonExistence(timeout: 3) else {
-                XCTFail("The numeric popup must dismiss before continuing numeric input")
+            outsideLabel.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).auditTap()
+            guard !app.debugDescription.contains(popupMarker) else {
+                XCTFail("The native popup must disappear after the outside tap")
                 return
             }
             if keyboard.waitForNonExistence(timeout: 3) {
-                guard numericFields.allSatisfy({ $0.exists }) else {
-                    XCTFail("Both numeric fields must remain present after popup dismissal")
-                    return
-                }
-                let focusCleared = numericFields.map { field in
+                let cleared = fields.map { field in
                     XCTNSPredicateExpectation(
                         predicate: NSPredicate(format: "hasKeyboardFocus == false"), object: field
                     )
                 }
-                guard XCTWaiter.wait(for: focusCleared, timeout: 3) == .completed,
+                guard fields.allSatisfy({ $0.exists }),
+                      XCTWaiter.wait(for: cleared, timeout: 3) == .completed,
                       done.waitForNonExistence(timeout: 3) else {
-                    XCTFail("Popup dismissal must clear numeric focus and its Done action when the keyboard closes")
+                    XCTFail("Popup dismissal clears focus and Done when the keyboard closes")
                     return
                 }
                 VisualAudit.capture("S03 iPad popup dismissal cleared numeric focus and keyboard")
                 return
             }
         }
-        let done = app.buttons["exercise-default-keyboard-done"].firstMatch
         XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable
                       && app.windows.firstMatch.frame.contains(done.frame),
                       "Numeric input must offer a reachable explicit Done action")
         done.auditTap()
-        let keyboard = app.keyboards.firstMatch
         let dismissed = XCTNSPredicateExpectation(
             predicate: NSPredicate(format: "exists == false"), object: keyboard
         )
