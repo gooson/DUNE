@@ -1375,8 +1375,26 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         // Some iPad numeric keyboards expose a native popup whose elements are
         // visible in the full AX snapshot but not resolvable by XCUIElementQuery.
         let popupMarker = "PopoverDismissRegion"
-        if UIDevice.current.userInterfaceIdiom == .pad,
-           app.debugDescription.contains(popupMarker) {
+        var hasIPadPopup = false
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            // Keyboard transitions can outlive XCTest idle. Match VisualAudit's
+            // fresh application snapshot without assuming a cache or timing cause.
+            let ready = XCTNSPredicateExpectation(
+                predicate: NSPredicate { _, _ in
+                    XCUIApplication().debugDescription.contains(popupMarker)
+                        || (done.exists && done.isHittable)
+                },
+                object: nil
+            )
+            guard XCTWaiter.wait(for: [ready], timeout: 3) == .completed else {
+                VisualAudit.capture("S03 iPad numeric dismissal readiness failed")
+                XCTFail("Numeric input must settle to a native popup or reachable Done")
+                return
+            }
+            VisualAudit.capture("S03 iPad numeric dismissal before decision")
+            hasIPadPopup = XCUIApplication().debugDescription.contains(popupMarker)
+        }
+        if hasIPadPopup {
             let fields = [
                 app.textFields[AXID.exerciseDefaultEditWeight].firstMatch,
                 app.textFields[AXID.exerciseDefaultEditReps].firstMatch
@@ -1404,10 +1422,18 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
                 return
             }
             outsideLabel.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).auditTap()
-            guard !app.debugDescription.contains(popupMarker) else {
+            let popupDismissed = XCTNSPredicateExpectation(
+                predicate: NSPredicate { _, _ in
+                    !XCUIApplication().debugDescription.contains(popupMarker)
+                },
+                object: nil
+            )
+            guard XCTWaiter.wait(for: [popupDismissed], timeout: 3) == .completed else {
+                VisualAudit.capture("S03 iPad popup dismissal did not settle")
                 XCTFail("The native popup must disappear after the outside tap")
                 return
             }
+            VisualAudit.capture("S03 iPad numeric dismissal after outside tap")
             if keyboard.waitForNonExistence(timeout: 3) {
                 let cleared = fields.map { field in
                     XCTNSPredicateExpectation(
