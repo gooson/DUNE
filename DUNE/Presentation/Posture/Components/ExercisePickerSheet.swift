@@ -47,7 +47,7 @@ struct ExercisePickerSheet: View {
                 .font(.body)
                 .buttonStyle(.bordered)
                 .frame(minHeight: 44)
-            Text(verbatim: "Exercise Mode")
+            Text("Exercise Mode")
                 .font(.headline)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)

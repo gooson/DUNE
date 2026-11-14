@@ -819,39 +819,35 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         save.auditTap()
         XCTAssertTrue(form.waitForNonExistence(timeout: 10), "Save must dismiss the MAX form")
         openInjuryHistory()
-        let rows = app.descendants(matching: .any)
-            .matching(NSPredicate(format: "identifier BEGINSWITH %@", "injury-history-row-"))
         let historyWindow = app.windows.firstMatch.frame
         let shortDuoHistory = ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1"
             && historyWindow.height < 700
-        if shortDuoHistory && rows.count < 2 {
-            // A recovered row follows the tall active row in the lazy landscape List.
-            // Reveal their overlap rather than treating AX materialization as model count.
-            let historyList = app.collectionViews.firstMatch
-            XCTAssertTrue(historyList.exists && historyList.isHittable)
-            for _ in 0..<4 {
-                let start = historyList.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65))
-                let end = historyList.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45))
-                start.press(forDuration: 0.35, thenDragTo: end,
-                            withVelocity: XCUIGestureVelocity(rawValue: 80), thenHoldForDuration: 0.35)
-                if rows.count >= 2 { break }
-            }
-        }
-        XCTAssertGreaterThanOrEqual(rows.count, 2, "MAX Save must create a history row")
         if shortDuoHistory {
-            let newRecoveredRow = app.buttons["injury-history-row-0"].firstMatch
+            // The 586 pt landscape List cannot expose both tall rows at one scroll offset.
+            // Observe the seeded active row, then reveal the newly saved recovered row.
             let originalActiveRow = app.buttons["injury-history-row-1"].firstMatch
-            XCTAssertTrue(newRecoveredRow.exists && originalActiveRow.exists,
-                          "Both saved and original injury records must materialize")
+            XCTAssertTrue(originalActiveRow.exists && originalActiveRow.label.contains("Knee")
+                          && originalActiveRow.label.contains("Active"),
+                          "Original active Knee must remain after MAX save")
+            let originalRowID = originalActiveRow.identifier
+            XCTAssertTrue(app.staticTexts["Recovered"].firstMatch.exists,
+                          "A recovered section must appear after MAX save")
+            XCTAssertTrue(revealInjuryHistoryRow(0),
+                          "New recovered Knee row must fit and be reachable in History")
+            let newRecoveredRow = app.buttons["injury-history-row-0"].firstMatch
+            XCTAssertTrue(newRecoveredRow.exists && newRecoveredRow.isHittable,
+                          "New recovered row must be visible after MAX save")
             XCTAssertTrue(newRecoveredRow.label.contains("Knee")
                           && newRecoveredRow.label.contains("Moderate")
-                          && newRecoveredRow.label.contains("Recovered"),
-                          "New MAX record must retain Knee, Moderate and recovered state")
-            XCTAssertTrue(originalActiveRow.label.contains("Active"),
-                          "Original active injury must remain after MAX save")
-            XCTAssertTrue(app.staticTexts["Recovered"].firstMatch.exists,
-                          "Saved record must appear in Recovered section")
-            VisualAudit.capture("H08 MAX saved Active and Recovered history rows")
+                          && !newRecoveredRow.label.contains("Active"),
+                          "New MAX record must retain Knee, Moderate and ended status")
+            XCTAssertNotEqual(newRecoveredRow.identifier, originalRowID,
+                              "MAX save must create a second distinct record")
+            VisualAudit.capture("H08 MAX new recovered Knee row after save")
+        } else {
+            let rows = app.descendants(matching: .any)
+                .matching(NSPredicate(format: "identifier BEGINSWITH %@", "injury-history-row-"))
+            XCTAssertGreaterThanOrEqual(rows.count, 2, "MAX Save must create a history row")
         }
     }
 
@@ -1807,8 +1803,15 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
             dy: (visible.midY - frontFrame.minY) / frontFrame.height))
         tapPoint.auditTap()
         XCTAssertTrue(app.navigationBars["Front"].firstMatch.waitForExistence(timeout: 5))
-        let close = app.navigationBars["Front"].buttons.firstMatch
-        XCTAssertTrue(close.exists && close.isHittable)
+        // Duo places the zoom Close control in the native Toolbar beside the
+        // Front navigation bar; query its actual unique identity and viewport.
+        let closeMatches = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ AND label == %@", "xmark", "Close"
+        ))
+        let close = closeMatches.firstMatch
+        XCTAssertEqual(closeMatches.count, 1, "Front zoom must expose one Close control")
+        XCTAssertTrue(close.exists && close.isEnabled && close.isHittable && window.frame.contains(close.frame),
+                      "The whole Front zoom Close control must be visible")
         close.auditTap()
         XCTAssertFalse(app.navigationBars["Front"].firstMatch.exists, "Close dismisses the zoom route")
         XCTAssertTrue(photos.waitForExistence(timeout: 5), "Closing zoom returns to comparison")
