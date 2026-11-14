@@ -1720,18 +1720,35 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         let photos = app.scrollViews["posture-comparison-photos-scroll"].firstMatch
         let metrics = app.scrollViews["posture-comparison-metrics-scroll"].firstMatch
         XCTAssertTrue(photos.waitForExistence(timeout: 5) && metrics.waitForExistence(timeout: 5))
+        let navigationBar = app.navigationBars["Comparison"].firstMatch
+        XCTAssertTrue(navigationBar.waitForExistence(timeout: 5))
+        func visiblePhotoViewport() -> CGRect {
+            let pane = photos.frame.intersection(app.windows.firstMatch.frame)
+            let top = max(pane.minY + 4, navigationBar.frame.maxY + 4)
+            return CGRect(x: pane.minX + 4, y: top,
+                          width: max(0, pane.width - 8),
+                          height: max(0, pane.maxY - top - 4))
+        }
         for score in ["73", "86", "+13"] {
             let value = app.staticTexts[score].firstMatch
             XCTAssertTrue(value.waitForExistence(timeout: 5))
             for _ in 0..<16 {
-                let viewport = photos.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                let viewport = visiblePhotoViewport()
                 if value.isHittable && viewport.contains(value.frame) { break }
-                if value.frame.midY < viewport.midY { photos.swipeDown(velocity: .slow) }
-                else { photos.swipeUp(velocity: .slow) }
+                let moveDown = value.frame.midY < viewport.midY
+                let overflow = moveDown ? viewport.minY - value.frame.minY
+                                        : value.frame.maxY - viewport.maxY
+                let fraction = min(0.14, max(0.04, (overflow + 12) / max(photos.frame.height, 1)))
+                let startY: CGFloat = moveDown ? 0.38 : 0.62
+                let start = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                let end = photos.coordinate(withNormalizedOffset: CGVector(
+                    dx: 0.5, dy: moveDown ? startY + fraction : startY - fraction))
+                start.press(forDuration: 0.05, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80),
+                            thenHoldForDuration: 0.35)
             }
-            XCTAssertTrue(value.isHittable && photos.frame.intersection(app.windows.firstMatch.frame)
-                .insetBy(dx: 4, dy: 4).contains(value.frame),
-                          "The whole score text must fit in its own pane: \(score)")
+            XCTAssertTrue(value.isHittable && visiblePhotoViewport().contains(value.frame),
+                          "The whole score text must fit below navigation inside its photo pane: \(score)")
             VisualAudit.capture("P08 MAX visible comparison score \(score)")
         }
         metrics.swipeUp(velocity: .slow)

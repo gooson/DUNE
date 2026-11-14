@@ -1305,10 +1305,14 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             VisualAudit.capture("S03 MAX \(labelText) and full input")
         }
 
-        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
-        dismissNumberPadBeforeNextFieldOnIPad()
-        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
-        dismissNumberPadBeforeNextFieldOnIPad()
+        XCTAssertTrue(replaceDefaultNumericInput(
+            AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight, requireKeyboardFocus: true
+        ))
+        dismissNumberPadBeforeNextField()
+        XCTAssertTrue(replaceDefaultNumericInput(
+            AXID.exerciseDefaultEditReps, with: Fixture.savedReps, requireKeyboardFocus: true
+        ))
+        dismissNumberPadBeforeNextField()
         let save = app.buttons[AXID.exerciseDefaultEditSave].firstMatch
         XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isHittable,
                       "Save stays reachable above the MAX Form")
@@ -1324,7 +1328,9 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("S03 MAX saved values on reopen")
     }
 
-    private func replaceDefaultNumericInput(_ identifier: String, with replacement: String) -> Bool {
+    private func replaceDefaultNumericInput(
+        _ identifier: String, with replacement: String, requireKeyboardFocus: Bool = false
+    ) -> Bool {
         let field = app.textFields[identifier].firstMatch
         guard field.waitForExistence(timeout: 5) else { return false }
 
@@ -1341,7 +1347,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             }
         }
         field.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.5)).auditTap()
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if UIDevice.current.userInterfaceIdiom == .pad || requireKeyboardFocus {
             let focused = XCTNSPredicateExpectation(
                 predicate: NSPredicate(format: "hasKeyboardFocus == true"), object: field
             )
@@ -1360,12 +1366,16 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     private func dismissNumberPadBeforeNextFieldOnIPad() {
         guard UIDevice.current.userInterfaceIdiom == .pad else { return }
+        dismissNumberPadBeforeNextField()
+    }
+
+    private func dismissNumberPadBeforeNextField() {
         // The native iPad number-pad popover covers the app with a dismissal
         // region even when the app's Done button remains visibly unobstructed.
         let numberPadPopover = app.popovers.containing(
             .other, identifier: "UIKeyboardLayoutStar Preview"
         ).firstMatch
-        if numberPadPopover.exists {
+        if UIDevice.current.userInterfaceIdiom == .pad && numberPadPopover.exists {
             let dismissRegion = app.otherElements["PopoverDismissRegion"].firstMatch
             guard dismissRegion.waitForExistence(timeout: 3), dismissRegion.isHittable else {
                 XCTFail("The native number-pad popup must expose its dismissal region")

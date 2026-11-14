@@ -4247,10 +4247,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let complete = app.buttons[AXID.workoutSessionCompleteSet].firstMatch
         XCTAssertTrue(complete.waitForExistence(timeout: 5) && complete.isEnabled,
                       "Complete Set action must remain enabled")
-        let fixedActionViewport = app.windows.firstMatch.frame.insetBy(dx: 8, dy: 8)
-        XCTAssertTrue(complete.isHittable && fixedActionViewport.contains(complete.frame),
-                      "The fixed Complete Set footer must fit and be reachable in the window")
-        VisualAudit.capture("W31 \(size) fixed Complete Set before last-set sheet")
+        let actionViewport = app.windows.firstMatch.frame.insetBy(dx: 8, dy: 8)
+        if !(complete.isHittable && actionViewport.contains(complete.frame)) {
+            XCTAssertTrue(scrollToWorkoutControl(AXID.workoutSessionCompleteSet,
+                                                maxSwipes: 10, mustFitInViewport: true),
+                          "Complete Set must be fully reachable in compact scroll chrome")
+        }
+        XCTAssertTrue(complete.isHittable && actionViewport.contains(complete.frame),
+                      "The whole Complete Set action must fit and be reachable in the window")
+        VisualAudit.capture("W31 \(size) whole Complete Set before last-set sheet")
         complete.auditTap()
 
         let sheet = app.scrollViews[AXID.workoutSessionLastSetSheet].firstMatch

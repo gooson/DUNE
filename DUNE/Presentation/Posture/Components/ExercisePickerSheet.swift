@@ -18,11 +18,11 @@ struct ExercisePickerSheet: View {
     var body: some View {
         Group {
             if dynamicTypeSize == .accessibility5 {
-                // Keep dismissal outside the scrolling navigation toolbar at MAX.
-                exerciseList
-                    .safeAreaInset(edge: .top, spacing: 0) {
-                        maximumSizeHeader
-                    }
+                // Keep dismissal as a fixed sibling above the scrolling list at MAX.
+                VStack(spacing: 0) {
+                    maximumSizeHeader
+                    exerciseList
+                }
             } else {
                 NavigationStack {
                     exerciseList
