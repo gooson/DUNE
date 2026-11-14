@@ -147,6 +147,7 @@ struct ExerciseHistoryView: View {
                 .foregroundStyle(.tertiary)
             Text("Record more sessions to see trends")
                 .font(.subheadline)
+                .fixedSize(horizontal: false, vertical: true)
                 .foregroundStyle(DS.Color.textSecondary)
             if let point = viewModel.chartData.first {
                 Text(formattedValue(point.value))
@@ -155,7 +156,7 @@ struct ExerciseHistoryView: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 200)
+        .frame(minHeight: 200)
     }
 
     private var emptyChartView: some View {
