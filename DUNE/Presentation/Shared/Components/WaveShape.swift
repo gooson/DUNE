@@ -188,6 +188,7 @@ struct TabWaveBackground: View {
             }
         }
         .id(theme)
+        .modifier(AmbientScenePlayback())
         .modifier(HingeBrandBackground())
     }
 }
@@ -212,6 +213,7 @@ struct DetailWaveBackground: View {
             }
         }
         .id(theme)
+        .modifier(AmbientScenePlayback())
         .modifier(HingeBrandBackground())
     }
 }
@@ -241,6 +243,22 @@ private struct HingeBrandBackground: ViewModifier {
     }
 }
 
+/// Recreate only the decoration when playback changes. This cancels legacy
+/// repeatForever layers and starts a complete static scene without touching
+/// the surrounding screen's navigation, data, or input state.
+private struct AmbientScenePlayback: ViewModifier {
+    @Environment(\.waveReducedMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
+
+    private var isPaused: Bool { reduceMotion || scenePhase != .active }
+
+    func body(content: Content) -> some View {
+        content
+            .environment(\.waveAnimationEnabled, !isPaused)
+            .id(isPaused)
+    }
+}
+
 // MARK: - Sheet Background
 
 /// Theme-aware sheet wave background.
@@ -261,5 +279,6 @@ struct SheetWaveBackground: View {
             }
         }
         .id(theme)
+        .modifier(AmbientScenePlayback())
     }
 }

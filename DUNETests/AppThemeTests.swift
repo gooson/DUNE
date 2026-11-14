@@ -100,9 +100,13 @@ struct AppThemeTests {
             "MetricHRV", "MetricRHR", "MetricHeartRate", "MetricSleep", "MetricActivity", "MetricSteps", "MetricBody",
             "WeatherRain", "WeatherSnow", "WeatherCloudy", "WeatherNight"
         ]
+        let defaultNames = [
+            "Accent": "AccentColor", "Bronze": "DesertBronze",
+            "Dusk": "DesertDusk", "Sand": "SandMuted"
+        ]
         for theme in AppTheme.allCases {
             for suffix in suffixes {
-                let name = theme.themedAssetName(defaultAsset: "unused", variantSuffix: suffix)
+                let name = theme.themedAssetName(defaultAsset: defaultNames[suffix] ?? suffix, variantSuffix: suffix)
                 #expect(UIColor(named: name) != nil, "Missing asset for \(theme.rawValue): \(name)")
             }
         }
