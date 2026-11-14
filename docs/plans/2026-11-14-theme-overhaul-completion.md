@@ -1,7 +1,7 @@
 ---
 topic: theme-overhaul-completion
 date: 2026-11-14
-status: approved
+status: scoped-verification
 confidence: medium
 related_solutions: [docs/solutions/design/2026-03-04-adding-new-theme.md, docs/solutions/testing/2026-10-28-wellness-flow-accessibility-and-native-evidence.md]
 related_brainstorms: []
@@ -79,4 +79,11 @@ related_brainstorms: []
 
 - Initialization: clean linked worktree, base `96d1a60e5`, 기존 main 로컬 변경 보호.
 - Plan: 이 문서와 기존 `2026-10-19-full-theme-redesign.md`를 함께 사용한다. 후속 실행 결과는 전용 review 갤러리에 기록한다.
-- Work/UI/Review/Resolve/Compound/Pre-Ship/Ship: pending.
+- Work: WATER LILIES 장면·motion 정리, Any/Dark 기본 lookup, Today 데이터 대비, 일본어 기간 배치를 구현했다. 생산 소스는 `a5749e105` 이후 동일하다.
+- UI: iPhone 루트8/8, iPad10/10, Duo 접힘4/4+4/4 및 extras2/2, Watch16/16. 실제 VoiceOver·고대비·Reduce Motion·복귀·저장·en/ko/ja 관련 selector 통과. 전체 회귀 또는 모든 상태 시각 검증을 뜻하지 않는다.
+- Evidence: 3기기 루트192 PNG/AX + Watch24 + MAX·흐름·접근성31을 실제 맵/검증 갤러리에 보존했다. 초기 Phone flow/MAX의 source dirty 상태가 확정되지 않아 새 공식 flow 인덱스로 승격하지 않았다.
+- Runtime limits: Duo 펼침64조합은 내부 패널 활성화 실패로 이번 소스 미캡처. Widget native·Vision runtime·Watch 실전파는 미검증이며 성공으로 계산하지 않는다. [정확한 범위·원본 실패·재개 조건](../design/full-redesign-map/review/theme-overhaul-2026-11-14/README.md)을 따른다.
+- Review/Resolve: 5관점 소스 리뷰 및 Phone/iPad/Duo 실제 표본 리뷰. 대비 P1/P2와 inventory P2 해소; scenePhase 방어 P3 유지. 최종 품질 게이트와 PR 리뷰 통과(P1/P2 없음); 인벤토리 문구 P3 수정.
+- Compound: `docs/solutions/testing/2026-11-14-theme-native-evidence-and-contrast.md` 생성. `.claude/**` 원본은 수정하지 않았다.
+- Pre-Ship: 두 맵 check·도구 계약13개·xcstrings format/manual·native247쌍 SHA/참조 검사 통과.
+- Ship: 검증된 범위와 공개한 runtime 한계로 PR·머지 진행. 원격 결과는 해당 PR에서 확인한다.

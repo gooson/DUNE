@@ -1,0 +1,1612 @@
+{
+  "schema_version": 1,
+  "stage_kind": "native-theme-extras",
+  "capture_count": 31,
+  "groups": {
+    "ipad": {
+      "capture_count": 10,
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "evidence": {
+        "ipad-native-provenance.json": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+          "sha256": "9a440fa6b93febe80361772a0c6f77bda7f117aab4d30e9cae44da1023b4352a"
+        },
+        "ipad-native.log.result.json": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+          "sha256": "fdea61f54606b405f263bbee4337fa407363cf46777985a28ef4c3ac5e3856bd"
+        },
+        "manifest.json": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+          "sha256": "c4f346f13bdffa6cda638d285986bad86c092be41bcf8fe483411ac06305e2b3"
+        }
+      }
+    },
+    "duo-closed": {
+      "capture_count": 10,
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "evidence": {
+        "preflight.json": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/preflight.json",
+          "sha256": "832fb2934911573a77a8b0f3cf75a744a6eff93040fa4497ecc5e7913638e7c8"
+        },
+        "ui.log.result.json": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/ui.log.result.json",
+          "sha256": "0dd6fa88de65870879354544d625db04b15b48f1c384ac60c652575c6e25c78e"
+        },
+        "runner-result.json": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/runner-result.json",
+          "sha256": "3d9fdc97c5a7e3fd98e8573c43df267b23adcf43783c2b4fbf23908644c6a12b"
+        },
+        "pairs.json": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/pairs.json",
+          "sha256": "7180b447cc5af471b8431d95444c3dbb2e034e29be1ed673fd9ec86898f088df"
+        },
+        "pose-post-test.json": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/pose-post-test.json",
+          "sha256": "97a6bb8bfb7461a3ff346aec27a803475928e9d44931b9f3068081e9da556fe6"
+        },
+        "orientation-post-test.json": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/orientation-post-test.json",
+          "sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3"
+        },
+        "displays-post-test.json": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/displays-post-test.json",
+          "sha256": "c7b9c2ba1dfce737559afbcc8dc2d07c782e6e6205fe0fdd3206fb54f2f88a62"
+        }
+      }
+    },
+    "phone-voiceover-fixed": {
+      "capture_count": 3,
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "setting": "voiceover",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-before.json",
+          "sha256": "debb1717d1a882c4441945369303d5ab38f603a5ed89b3a48cf2d57ec9ba55eb"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-enabled.json",
+          "sha256": "63620b306c5080803ab763f91f675014415e1f58a242099eb95b525c391d819b"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-restored.json",
+          "sha256": "fc965dbe04f02f928c427c40b1c370020ed8c22bd3fb90eccc1ecaff90683821"
+        }
+      },
+      "source_proof": {
+        "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-provenance.json",
+        "sha256": "d2cb97c5a058f80775eb4070bcdf0746d3e31af6aa768ab353d0a46bdb4cf3e6"
+      },
+      "source_receipt": {
+        "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed.log.result.json",
+        "sha256": "bc2df75bc4ee4e7d9002d431436ded3ca237bfcb2c049d27b0be2836bb23d38a"
+      },
+      "source_manifest": {
+        "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-voiceover-fixed/manifest.json",
+        "sha256": "c7bcdb9ad67e0868dcc92651cd0ca2cb1c1a0c7565c7937949666019434879b3"
+      }
+    },
+    "phone-high-contrast": {
+      "capture_count": 8,
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "setting": "contrast",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-before.json",
+          "sha256": "f5ade4f2277cca042532597f5bfb07ab96da9261b36dba32449acc338c88924e"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-enabled.json",
+          "sha256": "f9754c91a29ffbc75d7209346d6d397a4e620407b467002d9a1e13148e5f7251"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-restored.json",
+          "sha256": "d82ee17f83108a2b9b527ad526beca73cd1f11ebd570d3badbcb35f7718c1c24"
+        }
+      },
+      "source_proof": {
+        "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-provenance.json",
+        "sha256": "bb2383f13e2dc0b632b7adbdf0c8740c365cc19e484e7310229c00bf81d53a32"
+      },
+      "source_receipt": {
+        "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast.log.result.json",
+        "sha256": "80fc3e85015e5315a26ffdd2a2dee49a0a3b0b480306c24db4d9099260e3718c"
+      },
+      "source_manifest": {
+        "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/manifest.json",
+        "sha256": "2eedc4aa12f733636d7b2abe9ea138df6eb5bc99a774775eb66d1a178caba62f"
+      }
+    }
+  },
+  "captures": {
+    "ipad/flow/water-lilies/dark/workout": {
+      "key": "ipad/flow/water-lilies/dark/workout",
+      "kind": "ipad",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "screen-0-1512x2316-Water Lilies Dark Workout_0_07B376C3-836D-47A8-8C60-A1C015F17200.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Dark Workout-DUNEUITestsThemeFlowMatrixUITests_1_07B376C3-836D-47A8-8C60-A1C015F17200.swift-58",
+      "timestamp": 1794656066.117,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "viewport_pixels": "1512x2316 px",
+      "logical_viewport_points": "756.0x1158.0 pt",
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/CB8E19A3-5AAE-4700-8CDD-0C66B4E76B7E.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/E87B30AD-BC12-4F48-933C-A1B8320904CE.txt",
+      "sha256_png": "dc90be16bf211f2ae4d1889b37121b5764301f880d6d6060caf904635e313954",
+      "sha256_ax": "5b96f9c670d0adb754fb545c8941303c29f42f56df21c3d785f89c31cfca00f4",
+      "native_size": [
+        1512,
+        2316
+      ],
+      "window_size_pt": [
+        756.0,
+        1158.0
+      ],
+      "actual_angle": null,
+      "file": "images/ipad/flow/water-lilies/dark/workout.png",
+      "ax_file": "ax/ipad/flow/water-lilies/dark/workout.txt"
+    },
+    "ipad/flow/water-lilies/dark/sheet": {
+      "key": "ipad/flow/water-lilies/dark/sheet",
+      "kind": "ipad",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "screen-0-1512x2316-Water Lilies Dark Sheet_0_1EC49468-CDC1-42D6-918F-9977975B0BDA.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Dark Sheet-DUNEUITestsThemeFlowMatrixUITests_1_1EC49468-CDC1-42D6-918F-9977975B0BDA.swift-58",
+      "timestamp": 1794656044.275,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "viewport_pixels": "1512x2316 px",
+      "logical_viewport_points": "756.0x1158.0 pt",
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/43C27B8A-96B4-4E51-8FD3-F87BA01A80E4.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/5F3D437B-BE14-41D2-A45A-FF46E1E9F07E.txt",
+      "sha256_png": "0285fdc8e2d024eb20e848ad8b7f9f607958dce26bb3f866d2982baf6a045f42",
+      "sha256_ax": "4768c3b05db6de73b66e700acbe44ce3da8679f362147a0bd879172e5485c50f",
+      "native_size": [
+        1512,
+        2316
+      ],
+      "window_size_pt": [
+        756.0,
+        1158.0
+      ],
+      "actual_angle": null,
+      "file": "images/ipad/flow/water-lilies/dark/sheet.png",
+      "ax_file": "ax/ipad/flow/water-lilies/dark/sheet.txt"
+    },
+    "ipad/flow/water-lilies/dark/detail": {
+      "key": "ipad/flow/water-lilies/dark/detail",
+      "kind": "ipad",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "screen-0-1512x2316-Water Lilies Dark Detail_0_C253C283-69E7-427E-8BCA-FF46DAF6AE07.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Dark Detail-DUNEUITestsThemeFlowMatrixUITests_1_C253C283-69E7-427E-8BCA-FF46DAF6AE07.swift-58",
+      "timestamp": 1794656024.29,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "viewport_pixels": "1512x2316 px",
+      "logical_viewport_points": "756.0x1158.0 pt",
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/6B5966A9-2D04-4809-AEE0-43E0CFC21C1B.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/6979B904-959B-4A32-BAAB-D6C26AD8FC47.txt",
+      "sha256_png": "448f109f37856336669a1a7f6e00f1bdd7903969106afa312c371d8bd1b072e1",
+      "sha256_ax": "114b3cc916bf72be126209b9671d147928d4a9aed53253248b2ca02d61a3ee3f",
+      "native_size": [
+        1512,
+        2316
+      ],
+      "window_size_pt": [
+        756.0,
+        1158.0
+      ],
+      "actual_angle": null,
+      "file": "images/ipad/flow/water-lilies/dark/detail.png",
+      "ax_file": "ax/ipad/flow/water-lilies/dark/detail.txt"
+    },
+    "ipad/flow/water-lilies/light/workout": {
+      "key": "ipad/flow/water-lilies/light/workout",
+      "kind": "ipad",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "screen-0-1512x2316-Water Lilies Light Workout_0_7DA8425B-215D-4B95-8453-CA912534C618.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Light Workout-DUNEUITestsThemeFlowMatrixUITests_1_7DA8425B-215D-4B95-8453-CA912534C618.swift-58",
+      "timestamp": 1794656012.551,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "viewport_pixels": "1512x2316 px",
+      "logical_viewport_points": "756.0x1158.0 pt",
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/542A806C-38BD-4E8E-86E7-4920B72E7C49.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/68D69A01-2D13-4675-B04B-284282473B28.txt",
+      "sha256_png": "a51b35ec1deb5f910f17a60995570254e3694bb37a51d620fa0fc6dfb28e26ab",
+      "sha256_ax": "cb296a7ca33589f76b3192d02a45d864493582f0cb5a3a20aefb6d1f447864f3",
+      "native_size": [
+        1512,
+        2316
+      ],
+      "window_size_pt": [
+        756.0,
+        1158.0
+      ],
+      "actual_angle": null,
+      "file": "images/ipad/flow/water-lilies/light/workout.png",
+      "ax_file": "ax/ipad/flow/water-lilies/light/workout.txt"
+    },
+    "ipad/flow/water-lilies/light/sheet": {
+      "key": "ipad/flow/water-lilies/light/sheet",
+      "kind": "ipad",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "screen-0-1512x2316-Water Lilies Light Sheet_0_C5E9152E-F466-49DD-B160-044B7EFF5746.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Light Sheet-DUNEUITestsThemeFlowMatrixUITests_1_C5E9152E-F466-49DD-B160-044B7EFF5746.swift-58",
+      "timestamp": 1794655989.31,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "viewport_pixels": "1512x2316 px",
+      "logical_viewport_points": "756.0x1158.0 pt",
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/ED750A73-7552-420D-A682-43F54A9B95F4.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/052DABBC-6B5E-479B-BE89-793A7398CC13.txt",
+      "sha256_png": "0f7df636663104a30f25f660a239b8a9008153dee9f15f422123c91ca286b74c",
+      "sha256_ax": "63fa36918078e5b9611c289e7e995a42f9d8df6563e4aa8b8c8b91cede71afdc",
+      "native_size": [
+        1512,
+        2316
+      ],
+      "window_size_pt": [
+        756.0,
+        1158.0
+      ],
+      "actual_angle": null,
+      "file": "images/ipad/flow/water-lilies/light/sheet.png",
+      "ax_file": "ax/ipad/flow/water-lilies/light/sheet.txt"
+    },
+    "ipad/flow/water-lilies/light/detail": {
+      "key": "ipad/flow/water-lilies/light/detail",
+      "kind": "ipad",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "screen-0-1512x2316-Water Lilies Light Detail_0_6FC560FE-18EC-4025-9507-4FF95CF0EBBD.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Light Detail-DUNEUITestsThemeFlowMatrixUITests_1_6FC560FE-18EC-4025-9507-4FF95CF0EBBD.swift-58",
+      "timestamp": 1794655966.339,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "viewport_pixels": "1512x2316 px",
+      "logical_viewport_points": "756.0x1158.0 pt",
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/725FC438-72AA-4967-BCB1-2B06B0FB59BA.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/CF9546F6-F29F-4027-AD0C-C15FD0BDDEE0.txt",
+      "sha256_png": "79bc6ad0725213a6c0d405578c2740a94ddf0376a59da75e51eddc5768b834e5",
+      "sha256_ax": "b77a5ce39896b40fbcf508a50fc30c3725a2fa0f626b940683782c9b0f1ee467",
+      "native_size": [
+        1512,
+        2316
+      ],
+      "window_size_pt": [
+        756.0,
+        1158.0
+      ],
+      "actual_angle": null,
+      "file": "images/ipad/flow/water-lilies/light/detail.png",
+      "ax_file": "ax/ipad/flow/water-lilies/light/detail.txt"
+    },
+    "ipad/max/water-lilies/L01": {
+      "key": "ipad/max/water-lilies/L01",
+      "kind": "ipad",
+      "category": "max",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMaximumAXRoots",
+      "attachment_name": "screen-0-1512x2316-Water Lilies MAX Life_0_A2D57DCD-4675-4520-B1A4-7EFDF28352C8.png",
+      "ax_attachment_name": "hierarchy-Water Lilies MAX Life-DUNEUITestsThemeMatrixUITests_1_A2D57DCD-4675-4520-B1A4-7EFDF28352C8.swift-321",
+      "timestamp": 1794656989.385,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "viewport_pixels": "1512x2316 px",
+      "logical_viewport_points": "756.0x1158.0 pt",
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/DA971CBF-BED3-4430-82C7-BC1894B27FD3.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/F5A00129-9280-4BF6-BEE5-4B9BEB8D3F19.txt",
+      "sha256_png": "2f5e84a863a0ad0dad9707ca826d835ef4cebcb1b50733aba2952b54a4867860",
+      "sha256_ax": "696b8a1414321f382156eba97623bbed12bdff7fd829ba55a9402ea79e87eabe",
+      "native_size": [
+        1512,
+        2316
+      ],
+      "window_size_pt": [
+        756.0,
+        1158.0
+      ],
+      "actual_angle": null,
+      "file": "images/ipad/max/water-lilies/L01.png",
+      "ax_file": "ax/ipad/max/water-lilies/L01.txt"
+    },
+    "ipad/max/water-lilies/H01": {
+      "key": "ipad/max/water-lilies/H01",
+      "kind": "ipad",
+      "category": "max",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMaximumAXRoots",
+      "attachment_name": "screen-0-1512x2316-Water Lilies MAX Wellness_0_092EDACF-0053-44A9-A9BD-A15ED9239987.png",
+      "ax_attachment_name": "hierarchy-Water Lilies MAX Wellness-DUNEUITestsThemeMatrixUITests_1_092EDACF-0053-44A9-A9BD-A15ED9239987.swift-321",
+      "timestamp": 1794656978.798,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "viewport_pixels": "1512x2316 px",
+      "logical_viewport_points": "756.0x1158.0 pt",
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/63DB4C54-3564-4CDE-8BEF-A8B8EBA46BB4.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/E84EDC8A-5FFC-4315-9966-CD3B0E28C682.txt",
+      "sha256_png": "5174e0db534504337631ea39b699f908fc9256a5b1876eb26df6291d5e584752",
+      "sha256_ax": "3322c50dca765529eddade308580526f11f77d1b6e41c9dccfc382d2d3110752",
+      "native_size": [
+        1512,
+        2316
+      ],
+      "window_size_pt": [
+        756.0,
+        1158.0
+      ],
+      "actual_angle": null,
+      "file": "images/ipad/max/water-lilies/H01.png",
+      "ax_file": "ax/ipad/max/water-lilies/H01.txt"
+    },
+    "ipad/max/water-lilies/A01": {
+      "key": "ipad/max/water-lilies/A01",
+      "kind": "ipad",
+      "category": "max",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMaximumAXRoots",
+      "attachment_name": "screen-0-1512x2316-Water Lilies MAX Activity_0_B6C732F1-193B-4003-8F14-E3F6270DD78C.png",
+      "ax_attachment_name": "hierarchy-Water Lilies MAX Activity-DUNEUITestsThemeMatrixUITests_1_B6C732F1-193B-4003-8F14-E3F6270DD78C.swift-321",
+      "timestamp": 1794656967.326,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "viewport_pixels": "1512x2316 px",
+      "logical_viewport_points": "756.0x1158.0 pt",
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/96C5F56B-9C31-4069-87C2-368D140B2780.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/6FBFBCDC-10F1-4F5E-8543-804D37B0D807.txt",
+      "sha256_png": "b37e5fcada6ca6ae06f9902ffbe7a9bb19629005a2e7b6dd16d5cd8ce0c5d9c3",
+      "sha256_ax": "7c51e54e6487d99b5308a1031785383eb8a25928ada2f0ecab388d1bfc190892",
+      "native_size": [
+        1512,
+        2316
+      ],
+      "window_size_pt": [
+        756.0,
+        1158.0
+      ],
+      "actual_angle": null,
+      "file": "images/ipad/max/water-lilies/A01.png",
+      "ax_file": "ax/ipad/max/water-lilies/A01.txt"
+    },
+    "ipad/max/water-lilies/T03": {
+      "key": "ipad/max/water-lilies/T03",
+      "kind": "ipad",
+      "category": "max",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMaximumAXRoots",
+      "attachment_name": "screen-0-1512x2316-Water Lilies MAX Today_0_20A85E26-1765-4273-AFBA-27A9D15E29E2.png",
+      "ax_attachment_name": "hierarchy-Water Lilies MAX Today-DUNEUITestsThemeMatrixUITests_1_20A85E26-1765-4273-AFBA-27A9D15E29E2.swift-321",
+      "timestamp": 1794656955.419,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "viewport_pixels": "1512x2316 px",
+      "logical_viewport_points": "756.0x1158.0 pt",
+      "device": {
+        "kind": "ipad",
+        "platform": "iOS Simulator",
+        "model_name": "iPad mini (A20 Pro)",
+        "identifier": "FA097340-7CDF-424F-A55C-42FF5C337B33"
+      },
+      "source_revision": "2c8b55481214c5eda0375815d930cb84b1c2db35",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/35FE0B70-4D38-4B12-9E3C-275EC711DCDD.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/ipad-native/2727E68E-5546-4B66-9EF6-105C4EEABBBA.txt",
+      "sha256_png": "960de9a173ca53afef5281ff51a8561fbcf497a57148fb1cd18ce89650327379",
+      "sha256_ax": "884dc74974bc8af0cf01e4eb754bf148252a8503987a52a7c18ab224634922f2",
+      "native_size": [
+        1512,
+        2316
+      ],
+      "window_size_pt": [
+        756.0,
+        1158.0
+      ],
+      "actual_angle": null,
+      "file": "images/ipad/max/water-lilies/T03.png",
+      "ax_file": "ax/ipad/max/water-lilies/T03.txt"
+    },
+    "duo-closed/flow/water-lilies/light/detail": {
+      "key": "duo-closed/flow/water-lilies/light/detail",
+      "kind": "duo-closed",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Light Detail [DUNEUITests/ThemeFlowMatrixUITests.swift:58] DEADLINE=1794660469.970509",
+      "ax_attachment_name": "002-hierarchy.txt",
+      "timestamp": 1794660442.1952345,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466x678 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466,
+        678
+      ],
+      "pair_sequence": 2,
+      "source_batch": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/002-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/002-hierarchy.txt",
+      "recorded_source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/002-1398x2034.png",
+      "recorded_source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/002-hierarchy.txt",
+      "sha256_png": "c9ce3aed0eb19b127b94535bfccb9eedeae31d0ee3b5af757589b5761c9e6d5c",
+      "sha256_ax": "47b47dd79c68a7531692f1f8650ac37ef4b19b4d208215f862795cc723dc2c70",
+      "file": "images/duo-closed/flow/water-lilies/light/detail.png",
+      "ax_file": "ax/duo-closed/flow/water-lilies/light/detail.txt"
+    },
+    "duo-closed/flow/water-lilies/light/sheet": {
+      "key": "duo-closed/flow/water-lilies/light/sheet",
+      "kind": "duo-closed",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Light Sheet [DUNEUITests/ThemeFlowMatrixUITests.swift:58] DEADLINE=1794660508.8675919",
+      "ax_attachment_name": "005-hierarchy.txt",
+      "timestamp": 1794660481.0343757,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466x678 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466,
+        678
+      ],
+      "pair_sequence": 5,
+      "source_batch": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/005-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/005-hierarchy.txt",
+      "recorded_source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/005-1398x2034.png",
+      "recorded_source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/005-hierarchy.txt",
+      "sha256_png": "c153a5925115204db4bdb102e24c66d38318ac6c3030891074e97753dfbdf022",
+      "sha256_ax": "6cae2408f320a0da42379cb695796637b66dfa0c5579d1e1b4385d786d351d27",
+      "file": "images/duo-closed/flow/water-lilies/light/sheet.png",
+      "ax_file": "ax/duo-closed/flow/water-lilies/light/sheet.txt"
+    },
+    "duo-closed/flow/water-lilies/light/workout": {
+      "key": "duo-closed/flow/water-lilies/light/workout",
+      "kind": "duo-closed",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Light Workout [DUNEUITests/ThemeFlowMatrixUITests.swift:58] DEADLINE=1794660549.0174952",
+      "ax_attachment_name": "008-hierarchy.txt",
+      "timestamp": 1794660521.1292632,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466x678 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466,
+        678
+      ],
+      "pair_sequence": 8,
+      "source_batch": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/008-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/008-hierarchy.txt",
+      "recorded_source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/008-1398x2034.png",
+      "recorded_source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/008-hierarchy.txt",
+      "sha256_png": "5605264f933e9721984d01283a21f38ca9b7920a7fb070f868c87649d5a27394",
+      "sha256_ax": "67124a02678e6c6e80e525ec6141b0465d3d90c1cc5fc93f2d187419565c7268",
+      "file": "images/duo-closed/flow/water-lilies/light/workout.png",
+      "ax_file": "ax/duo-closed/flow/water-lilies/light/workout.txt"
+    },
+    "duo-closed/flow/water-lilies/dark/detail": {
+      "key": "duo-closed/flow/water-lilies/dark/detail",
+      "kind": "duo-closed",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Dark Detail [DUNEUITests/ThemeFlowMatrixUITests.swift:58] DEADLINE=1794660565.052857",
+      "ax_attachment_name": "009-hierarchy.txt",
+      "timestamp": 1794660537.2532487,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466x678 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466,
+        678
+      ],
+      "pair_sequence": 9,
+      "source_batch": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/009-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/009-hierarchy.txt",
+      "recorded_source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/009-1398x2034.png",
+      "recorded_source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/009-hierarchy.txt",
+      "sha256_png": "fd7fdaf1d7494eff559706de5b396b80271d9ef8f5ecf976b4e05b4c514e4352",
+      "sha256_ax": "4f92fef4aaf8fe3aced7eafc2b53e86eb19b59f3124aefd39ff585349636a07c",
+      "file": "images/duo-closed/flow/water-lilies/dark/detail.png",
+      "ax_file": "ax/duo-closed/flow/water-lilies/dark/detail.txt"
+    },
+    "duo-closed/flow/water-lilies/dark/sheet": {
+      "key": "duo-closed/flow/water-lilies/dark/sheet",
+      "kind": "duo-closed",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Dark Sheet [DUNEUITests/ThemeFlowMatrixUITests.swift:58] DEADLINE=1794660603.3972511",
+      "ax_attachment_name": "012-hierarchy.txt",
+      "timestamp": 1794660575.5508802,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466x678 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466,
+        678
+      ],
+      "pair_sequence": 12,
+      "source_batch": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/012-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/012-hierarchy.txt",
+      "recorded_source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/012-1398x2034.png",
+      "recorded_source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/012-hierarchy.txt",
+      "sha256_png": "cc0fa1d61115d7b2b7a81e2ae5caa26283113ba94bcd8cdcd9ce72995fc07094",
+      "sha256_ax": "32e7c1028b786139278839e9a9abf99f18741b62db68dd8906e484d215067649",
+      "file": "images/duo-closed/flow/water-lilies/dark/sheet.png",
+      "ax_file": "ax/duo-closed/flow/water-lilies/dark/sheet.txt"
+    },
+    "duo-closed/flow/water-lilies/dark/workout": {
+      "key": "duo-closed/flow/water-lilies/dark/workout",
+      "kind": "duo-closed",
+      "category": "flow",
+      "test_identifier": "DUNEUITests/ThemeFlowMatrixUITests/testWaterLiliesFlows",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Dark Workout [DUNEUITests/ThemeFlowMatrixUITests.swift:58] DEADLINE=1794660643.136869",
+      "ax_attachment_name": "015-hierarchy.txt",
+      "timestamp": 1794660615.305973,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466x678 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466,
+        678
+      ],
+      "pair_sequence": 15,
+      "source_batch": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/015-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/015-hierarchy.txt",
+      "recorded_source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/015-1398x2034.png",
+      "recorded_source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/015-hierarchy.txt",
+      "sha256_png": "dd4c6b2b78ebe6262c3136021d60dbfd70291bace92d3e2871468ae1a2ced456",
+      "sha256_ax": "78d8af588cbb2d7494cf8ce18998dc213377c2f84e8678ce60e0c23080aca660",
+      "file": "images/duo-closed/flow/water-lilies/dark/workout.png",
+      "ax_file": "ax/duo-closed/flow/water-lilies/dark/workout.txt"
+    },
+    "duo-closed/max/water-lilies/T03": {
+      "key": "duo-closed/max/water-lilies/T03",
+      "kind": "duo-closed",
+      "category": "max",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMaximumAXRoots",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies MAX Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660673.535665",
+      "ax_attachment_name": "018-hierarchy.txt",
+      "timestamp": 1794660645.692508,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466x678 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466,
+        678
+      ],
+      "pair_sequence": 18,
+      "source_batch": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/018-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/018-hierarchy.txt",
+      "recorded_source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/018-1398x2034.png",
+      "recorded_source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/018-hierarchy.txt",
+      "sha256_png": "65e20aa8dc56132a4a1cfef4d9feebe7ce2ca94c9437e7b165147ce3bb6e7366",
+      "sha256_ax": "96334b292947b7120a9762f0737da5dc0ba80e47fd89522889ce0d4a34b749e2",
+      "file": "images/duo-closed/max/water-lilies/T03.png",
+      "ax_file": "ax/duo-closed/max/water-lilies/T03.txt"
+    },
+    "duo-closed/max/water-lilies/A01": {
+      "key": "duo-closed/max/water-lilies/A01",
+      "kind": "duo-closed",
+      "category": "max",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMaximumAXRoots",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies MAX Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660689.9309092",
+      "ax_attachment_name": "020-hierarchy.txt",
+      "timestamp": 1794660662.0759833,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466x678 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466,
+        678
+      ],
+      "pair_sequence": 20,
+      "source_batch": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/020-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/020-hierarchy.txt",
+      "recorded_source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/020-1398x2034.png",
+      "recorded_source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/020-hierarchy.txt",
+      "sha256_png": "41db39cdeb4ad29b16eaad65ff406e8e73a7cb410f6d0779f890f43a3ea2058d",
+      "sha256_ax": "ba70de3729ec5437d9df4c2036984b8723a4161275cbecfac00810763519aa8b",
+      "file": "images/duo-closed/max/water-lilies/A01.png",
+      "ax_file": "ax/duo-closed/max/water-lilies/A01.txt"
+    },
+    "duo-closed/max/water-lilies/H01": {
+      "key": "duo-closed/max/water-lilies/H01",
+      "kind": "duo-closed",
+      "category": "max",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMaximumAXRoots",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies MAX Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660707.076273",
+      "ax_attachment_name": "022-hierarchy.txt",
+      "timestamp": 1794660679.2397444,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466x678 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466,
+        678
+      ],
+      "pair_sequence": 22,
+      "source_batch": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/022-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/022-hierarchy.txt",
+      "recorded_source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/022-1398x2034.png",
+      "recorded_source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/022-hierarchy.txt",
+      "sha256_png": "f5229466b956f2914ca64bb23b2886a06c9f563c74c20310b2ff738fce02dc29",
+      "sha256_ax": "3de37be22f4bcdfe8a5d248966b64ff8795eff5aeaeb97b9a40483f789aa3c58",
+      "file": "images/duo-closed/max/water-lilies/H01.png",
+      "ax_file": "ax/duo-closed/max/water-lilies/H01.txt"
+    },
+    "duo-closed/max/water-lilies/L01": {
+      "key": "duo-closed/max/water-lilies/L01",
+      "kind": "duo-closed",
+      "category": "max",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMaximumAXRoots",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies MAX Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660723.1622028",
+      "ax_attachment_name": "024-hierarchy.txt",
+      "timestamp": 1794660695.2623,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466x678 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466,
+        678
+      ],
+      "pair_sequence": 24,
+      "source_batch": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/024-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/024-hierarchy.txt",
+      "recorded_source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/024-1398x2034.png",
+      "recorded_source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/024-hierarchy.txt",
+      "sha256_png": "603648e9d499ebb097a2a9563ce5a9da173e5d59f05efe1e1cc0b0db93270f88",
+      "sha256_ax": "de17a6e5b91d218b26d041f32b6b3894de7ba4c90915694b7826bfebad58186f",
+      "file": "images/duo-closed/max/water-lilies/L01.png",
+      "ax_file": "ax/duo-closed/max/water-lilies/L01.txt"
+    },
+    "phone/voiceover/water-lilies/today-returned": {
+      "key": "phone/voiceover/water-lilies/today-returned",
+      "kind": "phone",
+      "category": "voiceover",
+      "screen_id": "T03_RETURNED",
+      "test_identifier": "DUNEUITests/WaterLiliesThemeTests/testVoiceOverConditionDetailEntryAndReturn",
+      "attachment_name": "screen-0-1206x2622-Water Lilies VoiceOver Today returned_0_552E6D4A-C8E8-4E61-814C-8E0F24252112.png",
+      "ax_attachment_name": "hierarchy-Water Lilies VoiceOver Today returned-DUNEUITestsWaterLiliesThemeTests_1_552E6D4A-C8E8-4E61-814C-8E0F24252112.swift-376",
+      "timestamp": 1794654723.172,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-voiceover-fixed/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-before.json",
+          "sha256": "debb1717d1a882c4441945369303d5ab38f603a5ed89b3a48cf2d57ec9ba55eb"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-enabled.json",
+          "sha256": "63620b306c5080803ab763f91f675014415e1f58a242099eb95b525c391d819b"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-restored.json",
+          "sha256": "fc965dbe04f02f928c427c40b1c370020ed8c22bd3fb90eccc1ecaff90683821"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies VoiceOver Today returned_0_552E6D4A-C8E8-4E61-814C-8E0F24252112.png",
+      "original_source_ax": "hierarchy-Water Lilies VoiceOver Today returned-DUNEUITestsWaterLiliesThemeTests_1_552E6D4A-C8E8-4E61-814C-8E0F24252112.swift-376",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-voiceover-fixed/145C5C02-DCB1-4AF0-BC6C-9268CFC3BD93.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-voiceover-fixed/DD25E45B-3E61-4578-913A-4C96DD971D76.txt",
+      "sha256_png": "cd1f7726a1a46f680fe54d2e2c05af552eb903081b858ffb3921ba0ee6105f10",
+      "sha256_ax": "eb2aa0f5f732f495a72f5e19a49ac79430561e09da3a0b514e35224a6a37a5e4",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/voiceover/water-lilies/today-returned.png",
+      "ax_file": "ax/phone/voiceover/water-lilies/today-returned.txt"
+    },
+    "phone/voiceover/water-lilies/condition-detail": {
+      "key": "phone/voiceover/water-lilies/condition-detail",
+      "kind": "phone",
+      "category": "voiceover",
+      "screen_id": "CONDITION_DETAIL",
+      "test_identifier": "DUNEUITests/WaterLiliesThemeTests/testVoiceOverConditionDetailEntryAndReturn",
+      "attachment_name": "screen-0-1206x2622-Water Lilies VoiceOver Condition detail_0_B6333BEF-997A-46F6-BD9C-A2F12A81D6A8.png",
+      "ax_attachment_name": "hierarchy-Water Lilies VoiceOver Condition detail-DUNEUITestsWaterLiliesThemeTests_1_B6333BEF-997A-46F6-BD9C-A2F12A81D6A8.swift-376",
+      "timestamp": 1794654710.159,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-voiceover-fixed/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-before.json",
+          "sha256": "debb1717d1a882c4441945369303d5ab38f603a5ed89b3a48cf2d57ec9ba55eb"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-enabled.json",
+          "sha256": "63620b306c5080803ab763f91f675014415e1f58a242099eb95b525c391d819b"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-restored.json",
+          "sha256": "fc965dbe04f02f928c427c40b1c370020ed8c22bd3fb90eccc1ecaff90683821"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies VoiceOver Condition detail_0_B6333BEF-997A-46F6-BD9C-A2F12A81D6A8.png",
+      "original_source_ax": "hierarchy-Water Lilies VoiceOver Condition detail-DUNEUITestsWaterLiliesThemeTests_1_B6333BEF-997A-46F6-BD9C-A2F12A81D6A8.swift-376",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-voiceover-fixed/CC581580-8CFE-4B06-8B79-9B7EFECBC6CB.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-voiceover-fixed/4713FDA4-9B83-4B96-93EB-C609820B34F2.txt",
+      "sha256_png": "5a39d0c3899edbfe8934505d2fd5b25de1548265f42216cf5e0b98408c57c048",
+      "sha256_ax": "b54b986dbe80ae96744ebc9738f84361b57807db838e68e61ad57a81e09e56c5",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/voiceover/water-lilies/condition-detail.png",
+      "ax_file": "ax/phone/voiceover/water-lilies/condition-detail.txt"
+    },
+    "phone/voiceover/water-lilies/today-root": {
+      "key": "phone/voiceover/water-lilies/today-root",
+      "kind": "phone",
+      "category": "voiceover",
+      "screen_id": "T03",
+      "test_identifier": "DUNEUITests/WaterLiliesThemeTests/testVoiceOverConditionDetailEntryAndReturn",
+      "attachment_name": "screen-0-1206x2622-Water Lilies VoiceOver Today root_0_863DE2B7-CB41-42D1-8775-BE042D9A113D.png",
+      "ax_attachment_name": "hierarchy-Water Lilies VoiceOver Today root-DUNEUITestsWaterLiliesThemeTests_1_863DE2B7-CB41-42D1-8775-BE042D9A113D.swift-376",
+      "timestamp": 1794654698.439,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-voiceover-fixed/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-before.json",
+          "sha256": "debb1717d1a882c4441945369303d5ab38f603a5ed89b3a48cf2d57ec9ba55eb"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-enabled.json",
+          "sha256": "63620b306c5080803ab763f91f675014415e1f58a242099eb95b525c391d819b"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-voiceover-fixed-restored.json",
+          "sha256": "fc965dbe04f02f928c427c40b1c370020ed8c22bd3fb90eccc1ecaff90683821"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies VoiceOver Today root_0_863DE2B7-CB41-42D1-8775-BE042D9A113D.png",
+      "original_source_ax": "hierarchy-Water Lilies VoiceOver Today root-DUNEUITestsWaterLiliesThemeTests_1_863DE2B7-CB41-42D1-8775-BE042D9A113D.swift-376",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-voiceover-fixed/AF78AD4A-7F03-448B-AC41-B5D6B628F4B2.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-voiceover-fixed/4826E325-773E-42F5-B1E7-1B4CFB5A2C39.txt",
+      "sha256_png": "a0b958bc98672dd29cc2ba9aa800fec9d929b4a89ff7a42da6e39190df297d5f",
+      "sha256_ax": "dbb3e6d6cbfe29089e31d30069790ecfbc8bc9f0c2fb5ffa1ddf27aec713b7d2",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/voiceover/water-lilies/today-root.png",
+      "ax_file": "ax/phone/voiceover/water-lilies/today-root.txt"
+    },
+    "phone/high-contrast/water-lilies/dark/L01": {
+      "key": "phone/high-contrast/water-lilies/dark/L01",
+      "kind": "phone",
+      "category": "high-contrast",
+      "screen_id": "L01",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "attachment_name": "screen-0-1206x2622-Water Lilies Dark Life_0_D6ACB7E5-3C66-4B0B-86EA-21C9B7911870.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Dark Life-DUNEUITestsThemeMatrixUITests_1_D6ACB7E5-3C66-4B0B-86EA-21C9B7911870.swift-319",
+      "timestamp": 1794654868.103,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-before.json",
+          "sha256": "f5ade4f2277cca042532597f5bfb07ab96da9261b36dba32449acc338c88924e"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-enabled.json",
+          "sha256": "f9754c91a29ffbc75d7209346d6d397a4e620407b467002d9a1e13148e5f7251"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-restored.json",
+          "sha256": "d82ee17f83108a2b9b527ad526beca73cd1f11ebd570d3badbcb35f7718c1c24"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies Dark Life_0_D6ACB7E5-3C66-4B0B-86EA-21C9B7911870.png",
+      "original_source_ax": "hierarchy-Water Lilies Dark Life-DUNEUITestsThemeMatrixUITests_1_D6ACB7E5-3C66-4B0B-86EA-21C9B7911870.swift-319",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/B67A8B71-1479-4DC8-BB63-1DA270D83FA2.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/432443DF-B5BD-4C66-A004-6F7A5A1546A4.txt",
+      "sha256_png": "facdf1f92333870564478e8b2fbe3b3f72335810aae6a2f27bf0a0070a12284a",
+      "sha256_ax": "9632c3080b7f94600e16481dc00716b13731be8b8e7321097ab33fcd1edeb7ad",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/high-contrast/water-lilies/dark/L01.png",
+      "ax_file": "ax/phone/high-contrast/water-lilies/dark/L01.txt"
+    },
+    "phone/high-contrast/water-lilies/dark/H01": {
+      "key": "phone/high-contrast/water-lilies/dark/H01",
+      "kind": "phone",
+      "category": "high-contrast",
+      "screen_id": "H01",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "attachment_name": "screen-0-1206x2622-Water Lilies Dark Wellness_0_85E43204-AAA9-4B04-B229-E58BF4C5F5F4.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Dark Wellness-DUNEUITestsThemeMatrixUITests_1_85E43204-AAA9-4B04-B229-E58BF4C5F5F4.swift-319",
+      "timestamp": 1794654860.108,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-before.json",
+          "sha256": "f5ade4f2277cca042532597f5bfb07ab96da9261b36dba32449acc338c88924e"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-enabled.json",
+          "sha256": "f9754c91a29ffbc75d7209346d6d397a4e620407b467002d9a1e13148e5f7251"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-restored.json",
+          "sha256": "d82ee17f83108a2b9b527ad526beca73cd1f11ebd570d3badbcb35f7718c1c24"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies Dark Wellness_0_85E43204-AAA9-4B04-B229-E58BF4C5F5F4.png",
+      "original_source_ax": "hierarchy-Water Lilies Dark Wellness-DUNEUITestsThemeMatrixUITests_1_85E43204-AAA9-4B04-B229-E58BF4C5F5F4.swift-319",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/B7B209F7-D408-4C80-A2C5-327F067B8BE5.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/A1F17AB0-96B5-46A6-82A9-C3B0DCEC4172.txt",
+      "sha256_png": "80ce8804d972e211cfb0aaf6ce9f953b5ba32c0c4e981a16f531591ee589700b",
+      "sha256_ax": "70bafa146dbcd2c13968e1c10be18260ff32f8c92582c65e545b9e2d8b52a933",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/high-contrast/water-lilies/dark/H01.png",
+      "ax_file": "ax/phone/high-contrast/water-lilies/dark/H01.txt"
+    },
+    "phone/high-contrast/water-lilies/dark/A01": {
+      "key": "phone/high-contrast/water-lilies/dark/A01",
+      "kind": "phone",
+      "category": "high-contrast",
+      "screen_id": "A01",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "attachment_name": "screen-0-1206x2622-Water Lilies Dark Activity_0_99D436CB-6866-408C-977E-1725F1F334DC.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Dark Activity-DUNEUITestsThemeMatrixUITests_1_99D436CB-6866-408C-977E-1725F1F334DC.swift-319",
+      "timestamp": 1794654850.537,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-before.json",
+          "sha256": "f5ade4f2277cca042532597f5bfb07ab96da9261b36dba32449acc338c88924e"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-enabled.json",
+          "sha256": "f9754c91a29ffbc75d7209346d6d397a4e620407b467002d9a1e13148e5f7251"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-restored.json",
+          "sha256": "d82ee17f83108a2b9b527ad526beca73cd1f11ebd570d3badbcb35f7718c1c24"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies Dark Activity_0_99D436CB-6866-408C-977E-1725F1F334DC.png",
+      "original_source_ax": "hierarchy-Water Lilies Dark Activity-DUNEUITestsThemeMatrixUITests_1_99D436CB-6866-408C-977E-1725F1F334DC.swift-319",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/4FB7AB3D-0603-4B69-9C43-55BB23EEDF8C.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/D470BD93-580A-4F34-9BDE-46C35590C07D.txt",
+      "sha256_png": "a71a4c8cb1cfb1f2ad86cfc1852374f506c4cde18dcd44d575b6c3972140720a",
+      "sha256_ax": "3f63b6a77acd0a187a6ee2273867f40f40d37f6014cfc368e50a5903552dd108",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/high-contrast/water-lilies/dark/A01.png",
+      "ax_file": "ax/phone/high-contrast/water-lilies/dark/A01.txt"
+    },
+    "phone/high-contrast/water-lilies/dark/T03": {
+      "key": "phone/high-contrast/water-lilies/dark/T03",
+      "kind": "phone",
+      "category": "high-contrast",
+      "screen_id": "T03",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "attachment_name": "screen-0-1206x2622-Water Lilies Dark Today_0_3DEB2569-1304-45BC-A495-00176870227D.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Dark Today-DUNEUITestsThemeMatrixUITests_1_3DEB2569-1304-45BC-A495-00176870227D.swift-319",
+      "timestamp": 1794654841.006,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-before.json",
+          "sha256": "f5ade4f2277cca042532597f5bfb07ab96da9261b36dba32449acc338c88924e"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-enabled.json",
+          "sha256": "f9754c91a29ffbc75d7209346d6d397a4e620407b467002d9a1e13148e5f7251"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-restored.json",
+          "sha256": "d82ee17f83108a2b9b527ad526beca73cd1f11ebd570d3badbcb35f7718c1c24"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies Dark Today_0_3DEB2569-1304-45BC-A495-00176870227D.png",
+      "original_source_ax": "hierarchy-Water Lilies Dark Today-DUNEUITestsThemeMatrixUITests_1_3DEB2569-1304-45BC-A495-00176870227D.swift-319",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/4A7FA201-8E8F-4AE1-8C7F-151ECCEA853C.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/269275DF-CC15-45B0-806D-EDA4C6568FCC.txt",
+      "sha256_png": "7d9d11fd5616bcc054342f9036b68ae02d80c1ef114658815e04732eb843b3ee",
+      "sha256_ax": "c6243ad3489b2027f858ca4b44d9eea861058b7f4b733913fe7aa35b3453d2ae",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/high-contrast/water-lilies/dark/T03.png",
+      "ax_file": "ax/phone/high-contrast/water-lilies/dark/T03.txt"
+    },
+    "phone/high-contrast/water-lilies/light/L01": {
+      "key": "phone/high-contrast/water-lilies/light/L01",
+      "kind": "phone",
+      "category": "high-contrast",
+      "screen_id": "L01",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "attachment_name": "screen-0-1206x2622-Water Lilies Light Life_0_027A2EE2-90CA-40E6-BFAF-690CC51551F7.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Light Life-DUNEUITestsThemeMatrixUITests_1_027A2EE2-90CA-40E6-BFAF-690CC51551F7.swift-319",
+      "timestamp": 1794654827.431,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-before.json",
+          "sha256": "f5ade4f2277cca042532597f5bfb07ab96da9261b36dba32449acc338c88924e"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-enabled.json",
+          "sha256": "f9754c91a29ffbc75d7209346d6d397a4e620407b467002d9a1e13148e5f7251"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-restored.json",
+          "sha256": "d82ee17f83108a2b9b527ad526beca73cd1f11ebd570d3badbcb35f7718c1c24"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies Light Life_0_027A2EE2-90CA-40E6-BFAF-690CC51551F7.png",
+      "original_source_ax": "hierarchy-Water Lilies Light Life-DUNEUITestsThemeMatrixUITests_1_027A2EE2-90CA-40E6-BFAF-690CC51551F7.swift-319",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/05249467-C0C0-4F09-A658-5CE9D23082D0.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/39FE84D3-7E5D-4C2C-B1AE-553790707563.txt",
+      "sha256_png": "608ad48a29a9e91cfbb7d25b2f11c28735daaeac3f1ada1da98975ab81af00c1",
+      "sha256_ax": "f3a36dc99c741bc8345d68e8e577268cec5fc8f42d30429081c220535e4a07b0",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/high-contrast/water-lilies/light/L01.png",
+      "ax_file": "ax/phone/high-contrast/water-lilies/light/L01.txt"
+    },
+    "phone/high-contrast/water-lilies/light/H01": {
+      "key": "phone/high-contrast/water-lilies/light/H01",
+      "kind": "phone",
+      "category": "high-contrast",
+      "screen_id": "H01",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "attachment_name": "screen-0-1206x2622-Water Lilies Light Wellness_0_6ECF0943-FC57-4875-A97F-731593609621.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Light Wellness-DUNEUITestsThemeMatrixUITests_1_6ECF0943-FC57-4875-A97F-731593609621.swift-319",
+      "timestamp": 1794654819.253,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-before.json",
+          "sha256": "f5ade4f2277cca042532597f5bfb07ab96da9261b36dba32449acc338c88924e"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-enabled.json",
+          "sha256": "f9754c91a29ffbc75d7209346d6d397a4e620407b467002d9a1e13148e5f7251"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-restored.json",
+          "sha256": "d82ee17f83108a2b9b527ad526beca73cd1f11ebd570d3badbcb35f7718c1c24"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies Light Wellness_0_6ECF0943-FC57-4875-A97F-731593609621.png",
+      "original_source_ax": "hierarchy-Water Lilies Light Wellness-DUNEUITestsThemeMatrixUITests_1_6ECF0943-FC57-4875-A97F-731593609621.swift-319",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/5BC71D0A-8A91-4523-8C7D-88771BBE696C.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/C0E53C3E-0AB6-4171-97CE-52874142C175.txt",
+      "sha256_png": "e6b5800654111be7313843e667f7fdd4b2eb196c6bc00185dff481303d4e4d61",
+      "sha256_ax": "1708f41484ce6468dbc76e759cf6145fe1def328916612e595a4cf7aba6d60fb",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/high-contrast/water-lilies/light/H01.png",
+      "ax_file": "ax/phone/high-contrast/water-lilies/light/H01.txt"
+    },
+    "phone/high-contrast/water-lilies/light/A01": {
+      "key": "phone/high-contrast/water-lilies/light/A01",
+      "kind": "phone",
+      "category": "high-contrast",
+      "screen_id": "A01",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "attachment_name": "screen-0-1206x2622-Water Lilies Light Activity_0_302EF969-43FD-4013-985E-C2E11348E34E.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Light Activity-DUNEUITestsThemeMatrixUITests_1_302EF969-43FD-4013-985E-C2E11348E34E.swift-319",
+      "timestamp": 1794654809.738,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-before.json",
+          "sha256": "f5ade4f2277cca042532597f5bfb07ab96da9261b36dba32449acc338c88924e"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-enabled.json",
+          "sha256": "f9754c91a29ffbc75d7209346d6d397a4e620407b467002d9a1e13148e5f7251"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-restored.json",
+          "sha256": "d82ee17f83108a2b9b527ad526beca73cd1f11ebd570d3badbcb35f7718c1c24"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies Light Activity_0_302EF969-43FD-4013-985E-C2E11348E34E.png",
+      "original_source_ax": "hierarchy-Water Lilies Light Activity-DUNEUITestsThemeMatrixUITests_1_302EF969-43FD-4013-985E-C2E11348E34E.swift-319",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/8AD21E12-E1D8-48DB-8A00-5CAEB1757FBE.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/6F0125D6-C709-4988-8A6B-8D1733666238.txt",
+      "sha256_png": "dea3984e8cea1f1eba402fb4c03ae233c1f47997c91bacd8bb740c0f1c3be3e8",
+      "sha256_ax": "d960f7c0f19db1c4dd63040ab637f7a38526901f7addec03cbe300e838f6f116",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/high-contrast/water-lilies/light/A01.png",
+      "ax_file": "ax/phone/high-contrast/water-lilies/light/A01.txt"
+    },
+    "phone/high-contrast/water-lilies/light/T03": {
+      "key": "phone/high-contrast/water-lilies/light/T03",
+      "kind": "phone",
+      "category": "high-contrast",
+      "screen_id": "T03",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "attachment_name": "screen-0-1206x2622-Water Lilies Light Today_0_7ACAF31F-44DB-4760-BE45-96ED388431C8.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Light Today-DUNEUITestsThemeMatrixUITests_1_7ACAF31F-44DB-4760-BE45-96ED388431C8.swift-319",
+      "timestamp": 1794654799.913,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "device": {
+        "kind": "iphone",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone 17 Pro",
+        "identifier": "9D0602F1-9D0B-4AB0-B144-666748CCDC19"
+      },
+      "device_id": "9D0602F1-9D0B-4AB0-B144-666748CCDC19",
+      "source_revision": "c506471991790259dc46b3033bd1a3e589ea71f7",
+      "source_worktree_dirty": false,
+      "source_worktree": null,
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast.log.result.json",
+      "setting_evidence": {
+        "before": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-before.json",
+          "sha256": "f5ade4f2277cca042532597f5bfb07ab96da9261b36dba32449acc338c88924e"
+        },
+        "enabled": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-enabled.json",
+          "sha256": "f9754c91a29ffbc75d7209346d6d397a4e620407b467002d9a1e13148e5f7251"
+        },
+        "restored": {
+          "path": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/phone-high-contrast-restored.json",
+          "sha256": "d82ee17f83108a2b9b527ad526beca73cd1f11ebd570d3badbcb35f7718c1c24"
+        }
+      },
+      "original_source_png": "screen-0-1206x2622-Water Lilies Light Today_0_7ACAF31F-44DB-4760-BE45-96ED388431C8.png",
+      "original_source_ax": "hierarchy-Water Lilies Light Today-DUNEUITestsThemeMatrixUITests_1_7ACAF31F-44DB-4760-BE45-96ED388431C8.swift-319",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/78A073C7-6E22-48EC-89F5-7276846FF84D.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/phone-high-contrast/9D4BA89A-097D-47F8-A98A-500ECC327263.txt",
+      "sha256_png": "4f710fca6e625f4779115e2c82a4b194990dff767552be8cd237b3881b561870",
+      "sha256_ax": "04e70f29f42fcdb7022afb90f2745e0c41537297126bd1fc550606713144064d",
+      "viewport_pixels": "1206x2622 px",
+      "logical_viewport_points": "402.0x874.0 pt",
+      "native_size": [
+        1206,
+        2622
+      ],
+      "window_size_pt": [
+        402.0,
+        874.0
+      ],
+      "actual_angle": null,
+      "file": "images/phone/high-contrast/water-lilies/light/T03.png",
+      "ax_file": "ax/phone/high-contrast/water-lilies/light/T03.txt"
+    }
+  }
+}

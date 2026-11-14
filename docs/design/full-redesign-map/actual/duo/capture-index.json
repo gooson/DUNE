@@ -4,21 +4,53 @@
     "kind": "duo",
     "platform": "iOS Simulator",
     "model_name": "iPhone Duo",
-    "identifier": "AB14C82A-C28A-4F9F-96A4-87CA8044518B"
+    "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+  },
+  "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+  "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+  "source_worktree_dirty": false,
+  "viewport_pixels": "1398x2034 px",
+  "logical_viewport_points": "466.0x678.0 pt",
+  "promotion": {
+    "prior_index_path": "docs/design/full-redesign-map/actual/duo/capture-index.json",
+    "prior_index_sha256": "7918e818b76f816a6ab5dce2960255d10d800cf82eae7ca2f70e84443fe637c8",
+    "base_git_revision": "96d1a60e5",
+    "prior_device": {
+      "kind": "duo",
+      "platform": "iOS Simulator",
+      "model_name": "iPhone Duo",
+      "identifier": "AB14C82A-C28A-4F9F-96A4-87CA8044518B"
+    },
+    "device_replacement_allowed": true
   },
   "captures": {
-    "dune/light/L01": {
-      "file": "dune/light/L01.png",
-      "screen_id": "L01",
+    "arctic/dark/A01": {
+      "theme": "arctic",
+      "appearance": "dark",
+      "screen_id": "A01",
+      "file": "arctic/dark/A01.png",
+      "ax_file": "ax/arctic/dark/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Arctic Dark Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659723.723363",
+      "ax_attachment_name": "011-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testArcticDawnMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659695.9760587,
+      "timestamp_source": "host-original-file-mtime",
       "device": {
         "kind": "duo",
         "platform": "iOS Simulator",
         "model_name": "iPhone Duo",
-        "identifier": "AB14C82A-C28A-4F9F-96A4-87CA8044518B"
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
       },
-      "device_id": "AB14C82A-C28A-4F9F-96A4-87CA8044518B",
-      "state": "light",
-      "theme": "dune",
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
       "native_size": [
         1398,
         2034
@@ -27,32 +59,898 @@
         466.0,
         678.0
       ],
-      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
-      "source_worktree_dirty": true,
-      "life_view_sha256": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
-      "timestamp": 1792602768.499017,
-      "test": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
-      "checkpoint": 2,
-      "capture_method": "host viewport hold; simctl explicit display",
-      "source_file": ".xcodebuild/life-narrative-duo-closed-fixed-20261022/002-1398x2034.png",
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 11,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/011-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/011-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "5bc2b5b11069513ef0d65ce136ae4dfe0c4e731b0aaf01dcad8b007c9e014a55",
+      "sha256_ax": "b4591290f10bb5269ab04e667861746fbe529a52f48007b9a3d564f47be1c98f",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "arctic",
+      "state": "dark"
+    },
+    "arctic/dark/H01": {
+      "theme": "arctic",
+      "appearance": "dark",
+      "screen_id": "H01",
+      "file": "arctic/dark/H01.png",
+      "ax_file": "ax/arctic/dark/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Arctic Dark Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659751.641755",
+      "ax_attachment_name": "013-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testArcticDawnMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659723.8902035,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 13,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/013-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/013-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "59fb9e48d085975e15aea5d22e0fdf18441ffa7cd419a129e9a73f918bc976e5",
+      "sha256_ax": "0343ce293436752f53488cf9d868f1954ed350de09fbdc4b28baf733b646cb8d",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "arctic",
+      "state": "dark"
+    },
+    "arctic/dark/L01": {
+      "theme": "arctic",
+      "appearance": "dark",
+      "screen_id": "L01",
+      "file": "arctic/dark/L01.png",
+      "ax_file": "ax/arctic/dark/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Arctic Dark Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659777.580323",
+      "ax_attachment_name": "015-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testArcticDawnMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659749.7902083,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 15,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/015-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/015-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "327f9cfaadd9ec9419870fd9c18fb203353fdad79700aa13637f2c2d2ac6591a",
+      "sha256_ax": "ec94226c30c88f9129f91d123d9d9c26049ba61b71ed2d1e879e27edac41dce6",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "arctic",
+      "state": "dark"
+    },
+    "arctic/dark/T03": {
+      "theme": "arctic",
+      "appearance": "dark",
+      "screen_id": "T03",
+      "file": "arctic/dark/T03.png",
+      "ax_file": "ax/arctic/dark/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Arctic Dark Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659697.015751",
+      "ax_attachment_name": "009-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testArcticDawnMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659669.1791902,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 9,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/009-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/009-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "f05fa1d955a307b5f7a30ac4ea08b568b98aae5aed33299cb835f4bad912bcd1",
+      "sha256_ax": "420c8b0f868b204c65615156d2b90321e52d0d691d6a223dd5cc7d8cfa2e8a74",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "arctic",
+      "state": "dark"
+    },
+    "arctic/light/A01": {
+      "theme": "arctic",
       "appearance": "light",
-      "attachment_name": "002-1398x2034.png",
-      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
-      "evidence_gallery": "../../review/life-hero-narrative-2026-10-22/duo-closed/L01-light.png",
-      "validation_receipt": "../../review/life-hero-narrative-2026-10-22/test-results.json"
+      "screen_id": "A01",
+      "file": "arctic/light/A01.png",
+      "ax_file": "ax/arctic/light/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Arctic Light Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659624.672674",
+      "ax_attachment_name": "004-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testArcticDawnMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659596.9583302,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 4,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/004-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/004-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "279ba5e7aa3279a67c15c6b0b0bcde358bec75d3cf270d2f092c2efeed0ef87e",
+      "sha256_ax": "38ce3f87c1813d5881a19c7113857bff8089e6e7248a01cd68f35b66c4332e66",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "arctic",
+      "state": "light"
+    },
+    "arctic/light/H01": {
+      "theme": "arctic",
+      "appearance": "light",
+      "screen_id": "H01",
+      "file": "arctic/light/H01.png",
+      "ax_file": "ax/arctic/light/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Arctic Light Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659652.655734",
+      "ax_attachment_name": "006-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testArcticDawnMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659624.8955865,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 6,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/006-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/006-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "62e1a85893b8b618a2e455a3432da1a2d72d7a5a08b16cea256208a5686e7c00",
+      "sha256_ax": "27e80f3e7d41f42035dbead6664b90273b6ce24c01d8d8667fad8ea7929c6319",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "arctic",
+      "state": "light"
+    },
+    "arctic/light/L01": {
+      "theme": "arctic",
+      "appearance": "light",
+      "screen_id": "L01",
+      "file": "arctic/light/L01.png",
+      "ax_file": "ax/arctic/light/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Arctic Light Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659678.9835892",
+      "ax_attachment_name": "008-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testArcticDawnMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659651.1267176,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 8,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/008-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/008-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "4e5ad81c598d6376fd024df2130b145a767354441e9f11ffb9af2445c84b9dec",
+      "sha256_ax": "0bb4bf3216c4cea84ffb3c2dbadbf3162372b8624ea4e1e6737e16ccc70ccc75",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "arctic",
+      "state": "light"
+    },
+    "arctic/light/T03": {
+      "theme": "arctic",
+      "appearance": "light",
+      "screen_id": "T03",
+      "file": "arctic/light/T03.png",
+      "ax_file": "ax/arctic/light/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Arctic Light Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659597.196642",
+      "ax_attachment_name": "002-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testArcticDawnMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659569.4091697,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 2,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/002-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/002-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "ece4dc0ea3ff13d7529fe8950e7a18ee8c545e39b5934981db73c8060a0e0134",
+      "sha256_ax": "54fea9e3ecd591649c0f9d7cee8f377ba4553eb8a0f59a510adf4eecc894c178",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "arctic",
+      "state": "light"
+    },
+    "contour/dark/A01": {
+      "theme": "contour",
+      "appearance": "dark",
+      "screen_id": "A01",
+      "file": "contour/dark/A01.png",
+      "ax_file": "ax/contour/dark/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Contour Dark Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659935.4666681",
+      "ax_attachment_name": "027-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testContourAtlasMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659907.6420116,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 27,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/027-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/027-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "d29690bc4bdd4780e0bb229ddc3be7ed7fdbe642d1e87afaa5ac5eb78a609978",
+      "sha256_ax": "38ac26713ae13ba691454f1a2c6915520404c2618c705f92dd936197c3408278",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "contour",
+      "state": "dark"
+    },
+    "contour/dark/H01": {
+      "theme": "contour",
+      "appearance": "dark",
+      "screen_id": "H01",
+      "file": "contour/dark/H01.png",
+      "ax_file": "ax/contour/dark/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Contour Dark Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659963.239407",
+      "ax_attachment_name": "029-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testContourAtlasMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659935.405574,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 29,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/029-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/029-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "9593317ce3e04d90d88be8a3229c877c94aa117559156d423bb41fa13577f770",
+      "sha256_ax": "43d3117aae9ca3c6b803f137a3f1cc3388924b8c14b70299f9b251a1d7fa0be7",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "contour",
+      "state": "dark"
+    },
+    "contour/dark/L01": {
+      "theme": "contour",
+      "appearance": "dark",
+      "screen_id": "L01",
+      "file": "contour/dark/L01.png",
+      "ax_file": "ax/contour/dark/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Contour Dark Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659989.005206",
+      "ax_attachment_name": "031-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testContourAtlasMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659961.1725845,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 31,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/031-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/031-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "55133b2e9a0a11b5c898fad9f48cb513a74121ae11edce0d73b79ad023585ec2",
+      "sha256_ax": "d83a935496df070b5dcd15eda5c3b352e654ebd93630802221069c4a78417617",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "contour",
+      "state": "dark"
+    },
+    "contour/dark/T03": {
+      "theme": "contour",
+      "appearance": "dark",
+      "screen_id": "T03",
+      "file": "contour/dark/T03.png",
+      "ax_file": "ax/contour/dark/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Contour Dark Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659908.76062",
+      "ax_attachment_name": "025-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testContourAtlasMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659881.0723343,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 25,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/025-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/025-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "f91ec3ad55430abf3af4d9ae61b0a8e9019cb377c4600518ad5997aa3287a271",
+      "sha256_ax": "953a0b7d943e77aac100fc33345c93661b097e3cd6063fab141d6ded05e0712a",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "contour",
+      "state": "dark"
+    },
+    "contour/light/A01": {
+      "theme": "contour",
+      "appearance": "light",
+      "screen_id": "A01",
+      "file": "contour/light/A01.png",
+      "ax_file": "ax/contour/light/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Contour Light Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659837.544632",
+      "ax_attachment_name": "020-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testContourAtlasMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659809.6970694,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 20,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/020-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/020-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "f3ad2b758d85fd2d720b25101d7fec76d60290b21b08e9379493998328837035",
+      "sha256_ax": "f3432aa3d05dae846b647c3a7da7a186d1ada69e1a2346b1ed3648c3b23d7efc",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "contour",
+      "state": "light"
+    },
+    "contour/light/H01": {
+      "theme": "contour",
+      "appearance": "light",
+      "screen_id": "H01",
+      "file": "contour/light/H01.png",
+      "ax_file": "ax/contour/light/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Contour Light Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659865.119656",
+      "ax_attachment_name": "022-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testContourAtlasMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659837.3144815,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 22,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/022-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/022-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "9315645c44304fb145de3da899a2af335e0d9f5862847475875b14d5ba8606ce",
+      "sha256_ax": "b18684a9bf759cf7cf450a1b575eeec0cf0dc78e3268cbd2648b23e89edb755c",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "contour",
+      "state": "light"
+    },
+    "contour/light/L01": {
+      "theme": "contour",
+      "appearance": "light",
+      "screen_id": "L01",
+      "file": "contour/light/L01.png",
+      "ax_file": "ax/contour/light/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Contour Light Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659890.9736571",
+      "ax_attachment_name": "024-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testContourAtlasMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659863.1223547,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 24,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/024-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/024-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "6fa8def6c4c18553f0580e02c2bf1807c6fd56908f734dadef6415795e8fcae5",
+      "sha256_ax": "fe37e4e6650c4178780c9addb50513f2852fbe250fdecf84400d28206bb31536",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "contour",
+      "state": "light"
+    },
+    "contour/light/T03": {
+      "theme": "contour",
+      "appearance": "light",
+      "screen_id": "T03",
+      "file": "contour/light/T03.png",
+      "ax_file": "ax/contour/light/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Contour Light Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794659810.773279",
+      "ax_attachment_name": "018-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testContourAtlasMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659782.8459265,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 18,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/018-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/018-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "3b5c16154159f0e3bfa80e4cea206d36da5517c9cda3bedb28dde0985d4d5ed8",
+      "sha256_ax": "10531549f5bff136fa4531547f648d5ba5f24e49e906773d6fa26df90e153ba9",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "contour",
+      "state": "light"
+    },
+    "dune/dark/A01": {
+      "theme": "dune",
+      "appearance": "dark",
+      "screen_id": "A01",
+      "file": "dune/dark/A01.png",
+      "ax_file": "ax/dune/dark/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Desert Dark Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658025.509136",
+      "ax_attachment_name": "011-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testDesertWarmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794657997.6925256,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 11,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/011-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/011-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "80d439919d14c7ae3352ded3b43c12d60f82dbd1fc3b9793706eb00f912f16f8",
+      "sha256_ax": "4641731bafa3caf7681938d867b1c1087f4ca58ec5ba1f9c7940bceacdeaa26f",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "dune",
+      "state": "dark"
+    },
+    "dune/dark/H01": {
+      "theme": "dune",
+      "appearance": "dark",
+      "screen_id": "H01",
+      "file": "dune/dark/H01.png",
+      "ax_file": "ax/dune/dark/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Desert Dark Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658053.038066",
+      "ax_attachment_name": "013-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testDesertWarmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658025.1991112,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 13,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/013-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/013-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "60643e4d31965bedd308e148b0da0ee0af359f00f967d6ae141f0673c603555d",
+      "sha256_ax": "a88fc254202ac83f8ff17ceeb6dd6f0bebf8cab48d6205b77be006b2efa7698d",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "dune",
+      "state": "dark"
     },
     "dune/dark/L01": {
-      "file": "dune/dark/L01.png",
+      "theme": "dune",
+      "appearance": "dark",
       "screen_id": "L01",
+      "file": "dune/dark/L01.png",
+      "ax_file": "ax/dune/dark/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Desert Dark Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658078.6965098",
+      "ax_attachment_name": "015-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testDesertWarmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658050.8841133,
+      "timestamp_source": "host-original-file-mtime",
       "device": {
         "kind": "duo",
         "platform": "iOS Simulator",
         "model_name": "iPhone Duo",
-        "identifier": "AB14C82A-C28A-4F9F-96A4-87CA8044518B"
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
       },
-      "device_id": "AB14C82A-C28A-4F9F-96A4-87CA8044518B",
-      "state": "dark",
-      "theme": "dune",
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
       "native_size": [
         1398,
         2034
@@ -61,19 +959,2270 @@
         466.0,
         678.0
       ],
-      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
-      "source_worktree_dirty": true,
-      "life_view_sha256": "8281d19a6d115b015c021c326111e96694e0ba170df1c1b6a5f93bc040460d2e",
-      "timestamp": 1792602784.8323793,
-      "test": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
-      "checkpoint": 3,
-      "capture_method": "host viewport hold; simctl explicit display",
-      "source_file": ".xcodebuild/life-narrative-duo-closed-fixed-20261022/003-1398x2034.png",
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 15,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/015-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/015-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "31699309e9debff481623127140d5545334256504de90e41011526c757b4f6c8",
+      "sha256_ax": "41beef3cbfc6f9c1641e52d72929407024e1eab9c20004def134d0d47fc6aeb7",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "dune",
+      "state": "dark"
+    },
+    "dune/dark/T03": {
+      "theme": "dune",
       "appearance": "dark",
-      "attachment_name": "003-1398x2034.png",
-      "test_identifier": "LifeSeededSmokeTests/testHeroNarrativeLayout()",
-      "evidence_gallery": "../../review/life-hero-narrative-2026-10-22/duo-closed/L01-dark.png",
-      "validation_receipt": "../../review/life-hero-narrative-2026-10-22/test-results.json"
+      "screen_id": "T03",
+      "file": "dune/dark/T03.png",
+      "ax_file": "ax/dune/dark/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Desert Dark Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794657998.96226",
+      "ax_attachment_name": "009-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testDesertWarmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794657971.0962596,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 9,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/009-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/009-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "9e05abfcb124f5d1175dcce058531e919d66081f344d013dd8b78ce1500c7876",
+      "sha256_ax": "82cc1369de69d39949988537133b4dc4e624a88644fc97ec806c7b4121282044",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "dune",
+      "state": "dark"
+    },
+    "dune/light/A01": {
+      "theme": "dune",
+      "appearance": "light",
+      "screen_id": "A01",
+      "file": "dune/light/A01.png",
+      "ax_file": "ax/dune/light/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Desert Light Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794657927.411172",
+      "ax_attachment_name": "004-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testDesertWarmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794657899.5206459,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 4,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/004-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/004-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "ef11765fec035cf60bf190cc2273d34b7951003306e086960423ccaf42b97df7",
+      "sha256_ax": "3e061056cc7e4919db9a4c04231f75deb83df3218d0261b329e08bd48c1470e3",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "dune",
+      "state": "light"
+    },
+    "dune/light/H01": {
+      "theme": "dune",
+      "appearance": "light",
+      "screen_id": "H01",
+      "file": "dune/light/H01.png",
+      "ax_file": "ax/dune/light/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Desert Light Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794657955.30197",
+      "ax_attachment_name": "006-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testDesertWarmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794657927.4479282,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 6,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/006-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/006-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "5744350303b7d9a1a2e9de13c32cb45e6478339f5047a840c96f40aa0ac3c4d9",
+      "sha256_ax": "0cd7084905f9f98aa5c7adc3d39cb103ab1bb0f3c6b937a5a23ebc38c75c7820",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "dune",
+      "state": "light"
+    },
+    "dune/light/L01": {
+      "theme": "dune",
+      "appearance": "light",
+      "screen_id": "L01",
+      "file": "dune/light/L01.png",
+      "ax_file": "ax/dune/light/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Desert Light Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794657981.268544",
+      "ax_attachment_name": "008-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testDesertWarmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794657953.451218,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 8,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/008-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/008-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "18466870d5efa5a625625d2331a577c7eee340bd41f302abcd2d860c854b536a",
+      "sha256_ax": "c3e1fc6a641f4756be4fdf367bad9ab51a9f782e2ff208843da9d9aca3844ee8",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "dune",
+      "state": "light"
+    },
+    "dune/light/T03": {
+      "theme": "dune",
+      "appearance": "light",
+      "screen_id": "T03",
+      "file": "dune/light/T03.png",
+      "ax_file": "ax/dune/light/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Desert Light Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794657900.143343",
+      "ax_attachment_name": "002-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testDesertWarmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794657872.2796965,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 2,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/002-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/002-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "f75bedb60888a3a381c4cf10e0381004a3bea4d3aea4014581a121852562e315",
+      "sha256_ax": "2fd86399540dfef0480d50684dc604eca74c6e4fa53b351211f80958061604f8",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "dune",
+      "state": "light"
+    },
+    "forest/dark/A01": {
+      "theme": "forest",
+      "appearance": "dark",
+      "screen_id": "A01",
+      "file": "forest/dark/A01.png",
+      "ax_file": "ax/forest/dark/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Forest Dark Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658258.001632",
+      "ax_attachment_name": "028-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658230.0946445,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 28,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/028-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/028-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "994bb0b5c37a7cec521923559cd73ed38c2017a6c8fe52264f39cac48dd35370",
+      "sha256_ax": "03044128dfdc1ad0e652a50e4023ec8343b849d17d97bd68d24d2ac17408ea6d",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "forest",
+      "state": "dark"
+    },
+    "forest/dark/H01": {
+      "theme": "forest",
+      "appearance": "dark",
+      "screen_id": "H01",
+      "file": "forest/dark/H01.png",
+      "ax_file": "ax/forest/dark/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Forest Dark Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658285.895072",
+      "ax_attachment_name": "030-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658258.047647,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 30,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/030-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/030-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "49247ffb0aa5347db4b15089b98f987c72885b3a0c43afd96732e18f77138bd2",
+      "sha256_ax": "a74a9e42faed59b1406981b84a5370a514fb7685be1be5e3f6eea08342155bb2",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "forest",
+      "state": "dark"
+    },
+    "forest/dark/L01": {
+      "theme": "forest",
+      "appearance": "dark",
+      "screen_id": "L01",
+      "file": "forest/dark/L01.png",
+      "ax_file": "ax/forest/dark/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Forest Dark Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658311.5861769",
+      "ax_attachment_name": "032-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658283.6995263,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 32,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/032-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/032-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "d164fe02e9520091058f60d3859430ee6c121f28bcb0670b6442fcae32ae7629",
+      "sha256_ax": "73e4a9a151454e5acf973afd57a6e8c1c05aa7f10d90d89939951858f6d2cfcb",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "forest",
+      "state": "dark"
+    },
+    "forest/dark/T03": {
+      "theme": "forest",
+      "appearance": "dark",
+      "screen_id": "T03",
+      "file": "forest/dark/T03.png",
+      "ax_file": "ax/forest/dark/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Forest Dark Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658230.578423",
+      "ax_attachment_name": "026-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658202.9051385,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 26,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/026-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/026-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "6430e5fa00b1dd68e71577021b1d9d24c2156733c35abe778776abc1dbc2915b",
+      "sha256_ax": "bd5cc6f7dc1ff1bf4b1702fae53688534ff7a2a9d45c431c66c6384f0b3a5407",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "forest",
+      "state": "dark"
+    },
+    "forest/light/A01": {
+      "theme": "forest",
+      "appearance": "light",
+      "screen_id": "A01",
+      "file": "forest/light/A01.png",
+      "ax_file": "ax/forest/light/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Forest Light Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658159.184427",
+      "ax_attachment_name": "021-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658131.3855295,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 21,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/021-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/021-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "130d8369cc41fd0568bd140c4c62d57a879d9bb1189e1f13be886b70103873e3",
+      "sha256_ax": "6bd5269a8c69c4af4b5a39f2a20942ea94fadfeb90b0e7040b38a0e6da2741a8",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "forest",
+      "state": "light"
+    },
+    "forest/light/H01": {
+      "theme": "forest",
+      "appearance": "light",
+      "screen_id": "H01",
+      "file": "forest/light/H01.png",
+      "ax_file": "ax/forest/light/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Forest Light Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658186.88511",
+      "ax_attachment_name": "023-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658159.0647967,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 23,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/023-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/023-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "cfc885e15a75c3e041d7a244e5d9329693859960be2e8ec83c7a2695f0757284",
+      "sha256_ax": "f2c2f60b22d4728f101269d3e07d46476a7379a44773419d30839bd9c63cd25d",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "forest",
+      "state": "light"
+    },
+    "forest/light/L01": {
+      "theme": "forest",
+      "appearance": "light",
+      "screen_id": "L01",
+      "file": "forest/light/L01.png",
+      "ax_file": "ax/forest/light/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Forest Light Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658212.623091",
+      "ax_attachment_name": "025-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658184.8156142,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 25,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/025-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/025-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "af306536ef0373d149cecc8eeeb6a19db4b9d470410929b13b3fe5113a1cd481",
+      "sha256_ax": "56fe95ea5e6d879b2ab7556b2ca932a087a4cebbfecd421f918ca8cb555fedb1",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "forest",
+      "state": "light"
+    },
+    "forest/light/T03": {
+      "theme": "forest",
+      "appearance": "light",
+      "screen_id": "T03",
+      "file": "forest/light/T03.png",
+      "ax_file": "ax/forest/light/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Forest Light Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658132.414194",
+      "ax_attachment_name": "019-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658104.550563,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 19,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/019-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/019-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "b9ee46d74eee9f10e7a4d45a70a885bd9f17a3b1f4d7c69e1655c163eea3893e",
+      "sha256_ax": "cf852bbe26f1523203c7d672daa0659d671b5149007200795563a1fb7cf34c2c",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "forest",
+      "state": "light"
+    },
+    "ocean/dark/A01": {
+      "theme": "ocean",
+      "appearance": "dark",
+      "screen_id": "A01",
+      "file": "ocean/dark/A01.png",
+      "ax_file": "ax/ocean/dark/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Ocean Dark Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658469.39579",
+      "ax_attachment_name": "044-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658441.538595,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 44,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/044-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/044-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "07a5c4dbba2d5e26021cc6ba56e7d10d18175d09395b80b3c6aec491c855aa92",
+      "sha256_ax": "7bab9a4f59fa063efab1a11085495848986d98b94b2ae710d7446846b0bf21e3",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "ocean",
+      "state": "dark"
+    },
+    "ocean/dark/H01": {
+      "theme": "ocean",
+      "appearance": "dark",
+      "screen_id": "H01",
+      "file": "ocean/dark/H01.png",
+      "ax_file": "ax/ocean/dark/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Ocean Dark Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658496.786293",
+      "ax_attachment_name": "046-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658468.941168,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 46,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/046-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/046-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "bc46ac3a4ca23cd33201ccd4b0b9a50441b739023e12b3dfbed41ab88f3557ab",
+      "sha256_ax": "ae85940e4f40b92bfdda7c6b2d209dc06d24242da80fec0be41eb49d4f858260",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "ocean",
+      "state": "dark"
+    },
+    "ocean/dark/L01": {
+      "theme": "ocean",
+      "appearance": "dark",
+      "screen_id": "L01",
+      "file": "ocean/dark/L01.png",
+      "ax_file": "ax/ocean/dark/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Ocean Dark Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658522.370533",
+      "ax_attachment_name": "048-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658494.541147,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 48,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/048-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/048-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "b254503928d1fc0fbde9f1f690b8b3250e0553d060f2d00e0f14409fdf6e12d9",
+      "sha256_ax": "b5b8f62d1dc9be71ae51ed00a724a8c3ef0d8415b1acb6f8c1b433136b7ab4a6",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "ocean",
+      "state": "dark"
+    },
+    "ocean/dark/T03": {
+      "theme": "ocean",
+      "appearance": "dark",
+      "screen_id": "T03",
+      "file": "ocean/dark/T03.png",
+      "ax_file": "ax/ocean/dark/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Ocean Dark Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658442.637981",
+      "ax_attachment_name": "042-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658414.7972302,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 42,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/042-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/042-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "cab247b4a7f6636d18141c4f4bb91440e287ab015af1c948ec7d49960bc1cac5",
+      "sha256_ax": "57b6462213fdb243216da6464854c9adfad4d42bf49efdb3a53d88dec3de381b",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "ocean",
+      "state": "dark"
+    },
+    "ocean/light/A01": {
+      "theme": "ocean",
+      "appearance": "light",
+      "screen_id": "A01",
+      "file": "ocean/light/A01.png",
+      "ax_file": "ax/ocean/light/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Ocean Light Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658371.279743",
+      "ax_attachment_name": "037-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658343.5027277,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 37,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/037-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/037-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "ba144e4f8b51967064a15d9cf41023e175cb42bec9453681c9f903fb4ed36fe6",
+      "sha256_ax": "d5b8226c763517fff59d8db3eae5f53ff3d9db553a84e7e4ce0ddbd7fd6d1858",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "ocean",
+      "state": "light"
+    },
+    "ocean/light/H01": {
+      "theme": "ocean",
+      "appearance": "light",
+      "screen_id": "H01",
+      "file": "ocean/light/H01.png",
+      "ax_file": "ax/ocean/light/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Ocean Light Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658398.977824",
+      "ax_attachment_name": "039-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658371.1698375,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 39,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/039-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/039-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "ce3614d9f522131331e32676087a5e5222005d156aac1c1f179a1e5059d61ea7",
+      "sha256_ax": "dbcb6b6393a72d5cf11416ea0c52d68d28ca0d9f15d6c58680896038c211ad19",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "ocean",
+      "state": "light"
+    },
+    "ocean/light/L01": {
+      "theme": "ocean",
+      "appearance": "light",
+      "screen_id": "L01",
+      "file": "ocean/light/L01.png",
+      "ax_file": "ax/ocean/light/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Ocean Light Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658424.9488292",
+      "ax_attachment_name": "041-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658397.112674,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 41,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/041-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/041-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "b8b051e6e44bbcf560e936c776efdf6914867d04b48c91b63893f4105ab47da0",
+      "sha256_ax": "c824fd2c42d82a0bcbc41745a505dbbe12776052989c7435d807d4fefbae006e",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "ocean",
+      "state": "light"
+    },
+    "ocean/light/T03": {
+      "theme": "ocean",
+      "appearance": "light",
+      "screen_id": "T03",
+      "file": "ocean/light/T03.png",
+      "ax_file": "ax/ocean/light/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Ocean Light Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658344.0515409",
+      "ax_attachment_name": "035-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658316.2205386,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 35,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/035-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/035-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "22ffa3cd81152eef0d946901d8b92fc809479443fbf0f5ba6af23b1fe0c95147",
+      "sha256_ax": "35ec246bbc3085f33818ee4d90d3f9889d67e6c398e93e528749abf49df844d4",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "ocean",
+      "state": "light"
+    },
+    "sakura/dark/A01": {
+      "theme": "sakura",
+      "appearance": "dark",
+      "screen_id": "A01",
+      "file": "sakura/dark/A01.png",
+      "ax_file": "ax/sakura/dark/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Sakura Dark Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658681.571488",
+      "ax_attachment_name": "060-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSakuraCalmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658653.6760967,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 60,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/060-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/060-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "1a9a15883706322147c4dbb516a28e5b63ec818e42b8ca0a267077ce0b1574ee",
+      "sha256_ax": "66c03a77cbf08fd8129ee55f1f288b4cfde3f66f8f41d90e63fcd54a2dd88dc1",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "sakura",
+      "state": "dark"
+    },
+    "sakura/dark/H01": {
+      "theme": "sakura",
+      "appearance": "dark",
+      "screen_id": "H01",
+      "file": "sakura/dark/H01.png",
+      "ax_file": "ax/sakura/dark/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Sakura Dark Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658709.14346",
+      "ax_attachment_name": "062-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSakuraCalmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658681.3354177,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 62,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/062-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/062-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "1f4119d0d608dad4372a30368a10450fcb0c9d679640335fc785355e7f75ff1f",
+      "sha256_ax": "018487437672bd928f505570b39427858f1e6189746b0e943945b006a984f1c0",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "sakura",
+      "state": "dark"
+    },
+    "sakura/dark/L01": {
+      "theme": "sakura",
+      "appearance": "dark",
+      "screen_id": "L01",
+      "file": "sakura/dark/L01.png",
+      "ax_file": "ax/sakura/dark/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Sakura Dark Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658735.076061",
+      "ax_attachment_name": "064-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSakuraCalmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658707.298987,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 64,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/064-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/064-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "6072500c5f91477d19fd33af51437b5a203eb19591e7b7f8ba6451d687c14950",
+      "sha256_ax": "60f4ab28e67ba9fb454b9c2bb8a63cf93a8dcae2e4271a886478c789fa95f856",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "sakura",
+      "state": "dark"
+    },
+    "sakura/dark/T03": {
+      "theme": "sakura",
+      "appearance": "dark",
+      "screen_id": "T03",
+      "file": "sakura/dark/T03.png",
+      "ax_file": "ax/sakura/dark/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Sakura Dark Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658654.4577742",
+      "ax_attachment_name": "058-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSakuraCalmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658626.9604952,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 58,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/058-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/058-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "d2d7d41c81a65708590ba33a08c4c129f42bf6403cb35bdb1b21365e7a90b1cc",
+      "sha256_ax": "ebee411fb165ac97ab82dfcf0b2ee329ab862bdbff30264c0e67bfaa0a9a69b3",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "sakura",
+      "state": "dark"
+    },
+    "sakura/light/A01": {
+      "theme": "sakura",
+      "appearance": "light",
+      "screen_id": "A01",
+      "file": "sakura/light/A01.png",
+      "ax_file": "ax/sakura/light/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Sakura Light Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658582.5031219",
+      "ax_attachment_name": "053-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSakuraCalmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658554.695144,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 53,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/053-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/053-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "8cdd7036c3eaab76a6904098241231c2a5614f7b628b74f04d9b06e2c207b2de",
+      "sha256_ax": "9ed9112eb809ceec48ca8d0be13e144ef2de74f4eef41a89f4d5b14c4c83623c",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "sakura",
+      "state": "light"
+    },
+    "sakura/light/H01": {
+      "theme": "sakura",
+      "appearance": "light",
+      "screen_id": "H01",
+      "file": "sakura/light/H01.png",
+      "ax_file": "ax/sakura/light/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Sakura Light Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658610.516552",
+      "ax_attachment_name": "055-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSakuraCalmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658582.6802638,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 55,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/055-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/055-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "a9712157515350c3bb66db6612531443cc5a50a9e71e8f1fad4271cd31a891a9",
+      "sha256_ax": "87b81909cae02ab1761741ccabd4b2d3b602ab0275643461859b84cfa9fa486c",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "sakura",
+      "state": "light"
+    },
+    "sakura/light/L01": {
+      "theme": "sakura",
+      "appearance": "light",
+      "screen_id": "L01",
+      "file": "sakura/light/L01.png",
+      "ax_file": "ax/sakura/light/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Sakura Light Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658636.4484448",
+      "ax_attachment_name": "057-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSakuraCalmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658608.6518729,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 57,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/057-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/057-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "147f6666a5b0db66c2f66a85c968e875cf0b31913eb699f59a51dace215c58d2",
+      "sha256_ax": "fb1f2317489733d12093dd36b6ab405f5abb9225c9c3a8556df168c8d4a70b5b",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "sakura",
+      "state": "light"
+    },
+    "sakura/light/T03": {
+      "theme": "sakura",
+      "appearance": "light",
+      "screen_id": "T03",
+      "file": "sakura/light/T03.png",
+      "ax_file": "ax/sakura/light/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Sakura Light Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794658555.544771",
+      "ax_attachment_name": "051-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSakuraCalmMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794658527.736338,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 51,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/051-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/051-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z",
+      "sha256_png": "efe6581d5d6adfaba68e23cf612e2d90eaf54747ea71e1ad5b8e29fe4de3501b",
+      "sha256_ax": "8e5ab5fe71d1e5b87932d75741fe68ea5896ada2d169f6714a5be8839df481b7",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "sakura",
+      "state": "light"
+    },
+    "solar/dark/A01": {
+      "theme": "solar",
+      "appearance": "dark",
+      "screen_id": "A01",
+      "file": "solar/dark/A01.png",
+      "ax_file": "ax/solar/dark/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Solar Dark Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660146.0991921",
+      "ax_attachment_name": "043-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSolarPopMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660118.2873008,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 43,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/043-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/043-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "f11fd49c0901ebafe6b3d2712186b5970d4d228f69467377aa062dd9b53643c5",
+      "sha256_ax": "9ee338eb1e217fe5c07ab0ae10edb8d682a80a2990b3bb340ba805866528a717",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "solar",
+      "state": "dark"
+    },
+    "solar/dark/H01": {
+      "theme": "solar",
+      "appearance": "dark",
+      "screen_id": "H01",
+      "file": "solar/dark/H01.png",
+      "ax_file": "ax/solar/dark/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Solar Dark Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660173.913845",
+      "ax_attachment_name": "045-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSolarPopMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660146.1633217,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 45,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/045-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/045-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "c4d2f982799edfb3a582d3c51c0e9574b3df8fb74adef84354645dd9effdfbbe",
+      "sha256_ax": "84466ccc17a8a08e8996ef7e071b3933561d4a4e7334d296c443bd4ee58c4f30",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "solar",
+      "state": "dark"
+    },
+    "solar/dark/L01": {
+      "theme": "solar",
+      "appearance": "dark",
+      "screen_id": "L01",
+      "file": "solar/dark/L01.png",
+      "ax_file": "ax/solar/dark/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Solar Dark Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660199.69151",
+      "ax_attachment_name": "047-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSolarPopMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660171.8572218,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 47,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/047-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/047-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "5bb117a2ecb20a9386a83f577caa0df335d1762e8e28cf253807e58ae9bc3feb",
+      "sha256_ax": "80a3c605fc90dc0db924c2725c5d4eb30e2982212a93c2ef765f85e395f47fcb",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "solar",
+      "state": "dark"
+    },
+    "solar/dark/T03": {
+      "theme": "solar",
+      "appearance": "dark",
+      "screen_id": "T03",
+      "file": "solar/dark/T03.png",
+      "ax_file": "ax/solar/dark/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Solar Dark Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660119.4801779",
+      "ax_attachment_name": "041-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSolarPopMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660091.5743072,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 41,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/041-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/041-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "f9154e63efe7497f1d10da97277a98f2fa7d5b2ee44112522513fba009d8b771",
+      "sha256_ax": "68764b83e340b247731fe59d74ab97d27be90af0fa0f3a65f7bf2c7a818d9e35",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "solar",
+      "state": "dark"
+    },
+    "solar/light/A01": {
+      "theme": "solar",
+      "appearance": "light",
+      "screen_id": "A01",
+      "file": "solar/light/A01.png",
+      "ax_file": "ax/solar/light/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Solar Light Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660048.093797",
+      "ax_attachment_name": "036-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSolarPopMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660020.2479792,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 36,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/036-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/036-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "af8ab7ad5155fcc71c4c75d8b3f515249cd2ad44799f4ed8a2dcb1586e876ebd",
+      "sha256_ax": "621f6f3062e22cbf0d35c5f51d69b093e6f3198d0500a3fb40ccdc0dff258c17",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "solar",
+      "state": "light"
+    },
+    "solar/light/H01": {
+      "theme": "solar",
+      "appearance": "light",
+      "screen_id": "H01",
+      "file": "solar/light/H01.png",
+      "ax_file": "ax/solar/light/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Solar Light Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660075.791388",
+      "ax_attachment_name": "038-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSolarPopMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660048.0323367,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 38,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/038-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/038-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "52e2932901650f6879d39d892ff5ec746260785687b5a115f1835d420eef0640",
+      "sha256_ax": "8111eb1c8eb9823b2f7d025920bc285ef77bde295b7bfc345641ea8c2bd0d578",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "solar",
+      "state": "light"
+    },
+    "solar/light/L01": {
+      "theme": "solar",
+      "appearance": "light",
+      "screen_id": "L01",
+      "file": "solar/light/L01.png",
+      "ax_file": "ax/solar/light/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Solar Light Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660101.7287111",
+      "ax_attachment_name": "040-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSolarPopMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660073.9048529,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 40,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/040-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/040-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "799b55e733daa134c5a8e470f61240c1e0e4fc393dbc57c8c95956d7f18798f4",
+      "sha256_ax": "87f31137e37c5e262295ad486cdf283a376145ac247c57d828fb40b84a4ad6a0",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "solar",
+      "state": "light"
+    },
+    "solar/light/T03": {
+      "theme": "solar",
+      "appearance": "light",
+      "screen_id": "T03",
+      "file": "solar/light/T03.png",
+      "ax_file": "ax/solar/light/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Solar Light Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660021.460408",
+      "ax_attachment_name": "034-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testSolarPopMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794659993.6653678,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 34,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/034-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/034-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "452f992ce1aa528f5664801ff8b954a4ae3b77063798ec834f52cfdb38f17c1f",
+      "sha256_ax": "18f4c48bda0696f871b62df1b5da2d3df1494ed79ae80652d7747134706d80bc",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "solar",
+      "state": "light"
+    },
+    "water-lilies/dark/A01": {
+      "theme": "water-lilies",
+      "appearance": "dark",
+      "screen_id": "A01",
+      "file": "water-lilies/dark/A01.png",
+      "ax_file": "ax/water-lilies/dark/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Dark Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660357.696445",
+      "ax_attachment_name": "059-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660329.8539019,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 59,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/059-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/059-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "2a02e7eda9f2065dd6db3bde3b5da3d7884c907349a938471116165c83c6dadf",
+      "sha256_ax": "7605f844e79e32ba7c7f312ce1feae8b5dc179630d2a084decea1cb1aeafcfe6",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "water-lilies",
+      "state": "dark"
+    },
+    "water-lilies/dark/H01": {
+      "theme": "water-lilies",
+      "appearance": "dark",
+      "screen_id": "H01",
+      "file": "water-lilies/dark/H01.png",
+      "ax_file": "ax/water-lilies/dark/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Dark Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660386.3670511",
+      "ax_attachment_name": "061-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660358.4518776,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 61,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/061-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/061-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "965da94f4615145b3acb4165673bdc541f952a46a9dd5295d2c07bc8b51b2186",
+      "sha256_ax": "48c95a072cd536d9385de28ff4ec926c7b34f86bf71122f3949f135b8ff0bf8d",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "water-lilies",
+      "state": "dark"
+    },
+    "water-lilies/dark/L01": {
+      "theme": "water-lilies",
+      "appearance": "dark",
+      "screen_id": "L01",
+      "file": "water-lilies/dark/L01.png",
+      "ax_file": "ax/water-lilies/dark/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Dark Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660412.137155",
+      "ax_attachment_name": "063-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660384.2976127,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 63,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/063-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/063-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "40928c9bf14795813f84614bdf51a233c20e08fcd3e623ec35087aacd2ad93f9",
+      "sha256_ax": "6e1c556b58fc76abe67879aac0a5a6ed5ad32324723e8c75bc60ad3db53e562c",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "water-lilies",
+      "state": "dark"
+    },
+    "water-lilies/dark/T03": {
+      "theme": "water-lilies",
+      "appearance": "dark",
+      "screen_id": "T03",
+      "file": "water-lilies/dark/T03.png",
+      "ax_file": "ax/water-lilies/dark/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Dark Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660330.871166",
+      "ax_attachment_name": "057-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660303.1997888,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 57,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/057-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/057-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "37561fb6be0255bcb38a02ad22ff0e128ceeb19cf8c4d2ed32a93f0fcd93c0a8",
+      "sha256_ax": "5e6f3d01a0d383625a3cc01a19cda26a9055b30ccb598b5de92989b59afdb3ea",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "water-lilies",
+      "state": "dark"
+    },
+    "water-lilies/light/A01": {
+      "theme": "water-lilies",
+      "appearance": "light",
+      "screen_id": "A01",
+      "file": "water-lilies/light/A01.png",
+      "ax_file": "ax/water-lilies/light/A01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Light Activity [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660259.428442",
+      "ax_attachment_name": "052-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660231.58964,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 52,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/052-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/052-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "7537252503169fc743ee8c5aa9bdddb657abcc2c8759e32829120abde5941e47",
+      "sha256_ax": "48e831b8073b69fef60d05198eaadcb4e62715743d4a932a716bd474fbdd33d9",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "water-lilies",
+      "state": "light"
+    },
+    "water-lilies/light/H01": {
+      "theme": "water-lilies",
+      "appearance": "light",
+      "screen_id": "H01",
+      "file": "water-lilies/light/H01.png",
+      "ax_file": "ax/water-lilies/light/H01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Light Wellness [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660287.07844",
+      "ax_attachment_name": "054-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660259.2479517,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 54,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/054-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/054-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "531c62f2784d359c2bcf77a3ea91f8d8655e12109f424728abeff141f3f7c8be",
+      "sha256_ax": "04a526eda9c7e3d73ce144ab9be12d43552616ebf5cd91f4f4b725c917c482bf",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "water-lilies",
+      "state": "light"
+    },
+    "water-lilies/light/L01": {
+      "theme": "water-lilies",
+      "appearance": "light",
+      "screen_id": "L01",
+      "file": "water-lilies/light/L01.png",
+      "ax_file": "ax/water-lilies/light/L01.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Light Life [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660312.809288",
+      "ax_attachment_name": "056-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660284.9896932,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 56,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/056-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/056-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "cb874b5df5b47f8d92e3105af6c490399cc5cbad20fd41a60ce19166b1f4f9c5",
+      "sha256_ax": "a0a6df9b60015270022330c0a6d7f1f4c24b22e1eacf652bf07405e4f9fa114c",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "water-lilies",
+      "state": "light"
+    },
+    "water-lilies/light/T03": {
+      "theme": "water-lilies",
+      "appearance": "light",
+      "screen_id": "T03",
+      "file": "water-lilies/light/T03.png",
+      "ax_file": "ax/water-lilies/light/T03.txt",
+      "attachment_name": "DUNE_VISUAL_AUDIT_READY Water Lilies Light Today [DUNEUITests/ThemeMatrixUITests.swift:321] DEADLINE=1794660232.768265",
+      "ax_attachment_name": "050-hierarchy.txt",
+      "test_identifier": "DUNEUITests/ThemeMatrixUITests/testWaterLiliesMatrix",
+      "test_source_location": "DUNEUITests/ThemeMatrixUITests.swift:321",
+      "timestamp": 1794660204.9261482,
+      "timestamp_source": "host-original-file-mtime",
+      "device": {
+        "kind": "duo",
+        "platform": "iOS Simulator",
+        "model_name": "iPhone Duo",
+        "identifier": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D"
+      },
+      "device_id": "D1E42917-AF53-4D67-A382-CB6B87FC5A1D",
+      "source_revision": "861865174f7b5dad36a5492e7ac5b8334111285e",
+      "source_worktree_dirty": false,
+      "pose": "closed",
+      "active_display": "LCD",
+      "orientation": "portrait",
+      "actual_angle": null,
+      "viewport_pixels": "1398x2034 px",
+      "logical_viewport_points": "466.0x678.0 pt",
+      "native_size": [
+        1398,
+        2034
+      ],
+      "window_size_pt": [
+        466.0,
+        678.0
+      ],
+      "pixel_scales": [
+        3.0,
+        3.0
+      ],
+      "pair_sequence": 50,
+      "checkpoint": null,
+      "source_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/050-1398x2034.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/050-hierarchy.txt",
+      "source_batch": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z",
+      "sha256_png": "b7b8d01d9c932ea9c9d9e7f030822fbf8bc0798a5318720794216c0bb1c6b03c",
+      "sha256_ax": "2d1ae3706f21b4f80c42658cb7f6106650c6e9b6fd7377338d9fc3fdf9d84bf6",
+      "source_worktree": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health",
+      "theme_id": "water-lilies",
+      "state": "light"
     }
   }
 }

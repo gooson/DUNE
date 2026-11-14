@@ -3,417 +3,1000 @@
   "device": {
     "kind": "watch",
     "platform": "watchOS Simulator",
-    "model_name": "Apple Watch",
-    "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+    "model_name": "Apple Watch Series 12 (46mm)",
+    "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
+  },
+  "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+  "source_worktree_dirty": false,
+  "replacement": {
+    "previous_index_sha256": "a3dc1495504b4893fe276586bdb5d86230aeadfca5d19026e363c98d7a035f85",
+    "previous_device_identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A",
+    "base_revision": "96d1a60e5"
   },
   "captures": {
-    "arctic/home": {
-      "theme": "arctic",
-      "scene": "home",
-      "file": "arctic/home.png",
-      "attachment_name": "Arctic Watch Home_0_1FCF5BC0-E0C3-4E60-B498-A5D97DC89202.png",
-      "test_identifier": "WatchThemeMatrixUITests/testArcticHomeAndExerciseList()",
-      "timestamp": 1792376250.477,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
-      "device": {
-        "kind": "watch",
-        "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
-      },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
-    },
     "arctic/all-exercises": {
       "theme": "arctic",
       "scene": "all-exercises",
       "file": "arctic/all-exercises.png",
-      "attachment_name": "Arctic Watch All Exercises_0_5D8CBE15-4B5D-4ADE-A2B3-CBBEBA4F1954.png",
-      "test_identifier": "WatchThemeMatrixUITests/testArcticHomeAndExerciseList()",
-      "timestamp": 1792376266.523,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/arctic/all-exercises.txt",
+      "attachment_name": "Arctic Watch All Exercises_0_6A6B393E-4C29-4EAD-A321-D657608435A4.png",
+      "ax_attachment_name": "hierarchy-Arctic Watch All Exercises_0_0455DCA8-6255-4BAD-987A-FDCE516966BD.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testArcticHomeAndExerciseList",
+      "timestamp": 1794666680.563,
+      "ax_timestamp": 1794666680.656,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "6A6B393E-4C29-4EAD-A321-D657608435A4",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/7D84D91A-112C-4F9A-85CF-84998037A071.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/641FCE85-2216-4C06-8310-220B932F0D41.txt",
+      "sha256": "5588a9aac488e8c464289a6de74a84716b9cf4b9d859cbc08b0046b0e976d254",
+      "sha256_ax": "fd4cdee7ac23787d916e946136a9cd745a47cbee564fa2e920daa2f66c3f0f2f",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
+    },
+    "arctic/home": {
+      "theme": "arctic",
+      "scene": "home",
+      "file": "arctic/home.png",
+      "ax_file": "ax/arctic/home.txt",
+      "attachment_name": "Arctic Watch Home_0_4694E13A-A40F-4466-8412-0774A695FB50.png",
+      "ax_attachment_name": "hierarchy-Arctic Watch Home_0_9C1893FB-0C3E-4961-920D-C32F4BDECACB.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testArcticHomeAndExerciseList",
+      "timestamp": 1794666667.463,
+      "ax_timestamp": 1794666667.566,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "4694E13A-A40F-4466-8412-0774A695FB50",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
+      },
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/14205EFB-0D4D-4ED3-B74D-18BB6E5014B8.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/94667B57-82A9-4E33-85BB-9FA23348A4FD.txt",
+      "sha256": "80144d57ddb45c5a66f8328ff07753e06b81cbd23bec23350b3f73163d778e3e",
+      "sha256_ax": "b9c83b78607694af5bdde17c0067dcd18a5a946d3d04962cd88e9dfdd09699dc",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "arctic/workout": {
       "theme": "arctic",
       "scene": "workout",
       "file": "arctic/workout.png",
-      "attachment_name": "Arctic Watch Workout_0_99D27980-2ACF-43CE-9CE1-EABA41BD8C0C.png",
-      "test_identifier": "WatchThemeMatrixUITests/testArcticWorkoutTheme()",
-      "timestamp": 1792376302.557,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/arctic/workout.txt",
+      "attachment_name": "Arctic Watch Workout_0_F232CFFF-3CC9-4D63-A93E-9188056F7FF4.png",
+      "ax_attachment_name": "hierarchy-Arctic Watch Workout_0_D4DDCDE4-3570-447F-B3E2-6A3F186583BF.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testArcticWorkoutTheme",
+      "timestamp": 1794666710.71,
+      "ax_timestamp": 1794666710.784,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "F232CFFF-3CC9-4D63-A93E-9188056F7FF4",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
-    },
-    "contour/home": {
-      "theme": "contour",
-      "scene": "home",
-      "file": "contour/home.png",
-      "attachment_name": "Contour Watch Home_0_D3E9B3D6-6A28-4282-BBB4-AD3573146705.png",
-      "test_identifier": "WatchThemeMatrixUITests/testContourHomeAndExerciseList()",
-      "timestamp": 1792376315.436,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
-      "device": {
-        "kind": "watch",
-        "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
-      },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/DE3107A6-F64C-4CEF-B941-E8BA3452CD43.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/27CFDE2F-6A10-4BF7-85CD-42E1179B0374.txt",
+      "sha256": "c1708d3db3c9dd4dd8ef727a449d7ce777eff1b260683382ba37ca51102797f9",
+      "sha256_ax": "c441d3faf7a6b8a268a1bf22a70bac9277d7042421a41e041d7edf477c775136",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "contour/all-exercises": {
       "theme": "contour",
       "scene": "all-exercises",
       "file": "contour/all-exercises.png",
-      "attachment_name": "Contour Watch All Exercises_0_D57B9311-6D1B-49D4-9356-74AED83846F1.png",
-      "test_identifier": "WatchThemeMatrixUITests/testContourHomeAndExerciseList()",
-      "timestamp": 1792376331.499,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/contour/all-exercises.txt",
+      "attachment_name": "Contour Watch All Exercises_0_245510F8-9BD6-410B-85E0-A5DA614B8C88.png",
+      "ax_attachment_name": "hierarchy-Contour Watch All Exercises_0_2E7AF6AE-24FE-4CFF-9604-4C411C37F580.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testContourHomeAndExerciseList",
+      "timestamp": 1794666733.605,
+      "ax_timestamp": 1794666733.697,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "245510F8-9BD6-410B-85E0-A5DA614B8C88",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/114AB5DC-4005-47E2-9F90-CDDA77A6E22B.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/EEFCC8CD-7174-47FE-8D4F-C305B8E218C4.txt",
+      "sha256": "30fb70c721af750c3bd266c054ae5c4bde00097c9e3996ffd980bb99609f5538",
+      "sha256_ax": "f7fce7b8400809f200f1b6822049fbabcdedab57fa4559eb7d4769d8db829ae5",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
+    },
+    "contour/home": {
+      "theme": "contour",
+      "scene": "home",
+      "file": "contour/home.png",
+      "ax_file": "ax/contour/home.txt",
+      "attachment_name": "Contour Watch Home_0_B6F94CB4-B3C2-44DF-870A-ED54A0E35020.png",
+      "ax_attachment_name": "hierarchy-Contour Watch Home_0_FF4FE219-864C-4F8D-9FE1-061B5F8D36AA.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testContourHomeAndExerciseList",
+      "timestamp": 1794666720.606,
+      "ax_timestamp": 1794666720.704,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "B6F94CB4-B3C2-44DF-870A-ED54A0E35020",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
+      },
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/6F1AAC26-F893-4BE3-8A86-A8C8CA5679C8.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/7988A486-2A4D-419D-8F92-94099DD53128.txt",
+      "sha256": "7e26d4bc348a98aa8aa2437b59f3680c4810dc52fd14fd0230bc1ac38f808ffd",
+      "sha256_ax": "2a1565c0d1f758fa5856174ea6a97a62f31b4f644f9657dd56ec76fb1d861a27",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "contour/workout": {
       "theme": "contour",
       "scene": "workout",
       "file": "contour/workout.png",
-      "attachment_name": "Contour Watch Workout_0_0307AA91-6F2B-4998-A9C2-0BE0B3DA52E7.png",
-      "test_identifier": "WatchThemeMatrixUITests/testContourWorkoutTheme()",
-      "timestamp": 1792376369.414,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/contour/workout.txt",
+      "attachment_name": "Contour Watch Workout_0_7E6B3C6B-218F-4B6A-BE45-A6943D8D7188.png",
+      "ax_attachment_name": "hierarchy-Contour Watch Workout_0_968E9DC7-7657-46A9-A2E9-F3EB566AFEAF.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testContourWorkoutTheme",
+      "timestamp": 1794666764.143,
+      "ax_timestamp": 1794666764.212,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "7E6B3C6B-218F-4B6A-BE45-A6943D8D7188",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
-    },
-    "dune/home": {
-      "theme": "dune",
-      "scene": "home",
-      "file": "dune/home.png",
-      "attachment_name": "Desert Watch Home_0_ED647CBD-ACF4-440D-AA50-1B0BD6DEC28E.png",
-      "test_identifier": "WatchThemeMatrixUITests/testDesertHomeAndExerciseList()",
-      "timestamp": 1792376382.731,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
-      "device": {
-        "kind": "watch",
-        "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
-      },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/C1443A47-353D-48CB-A908-3C7C9DC92DF8.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/D9C4194F-2F01-4E8E-8924-D4DF84C593FF.txt",
+      "sha256": "a90ab7a2ae9158b8a5989efba753a5de143dea4468b55c90d8d92a9bb568e663",
+      "sha256_ax": "bedd300b704f21409943e61692e8c2d7d0c22b0cb06452104df14234339850b7",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "dune/all-exercises": {
       "theme": "dune",
       "scene": "all-exercises",
       "file": "dune/all-exercises.png",
-      "attachment_name": "Desert Watch All Exercises_0_EA8F8E62-8505-4C16-88A4-3A33028437D6.png",
-      "test_identifier": "WatchThemeMatrixUITests/testDesertHomeAndExerciseList()",
-      "timestamp": 1792376399.202,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/dune/all-exercises.txt",
+      "attachment_name": "Desert Watch All Exercises_0_01837E0B-545C-45B6-BC60-5649EADB12F2.png",
+      "ax_attachment_name": "hierarchy-Desert Watch All Exercises_0_838985C1-D754-442D-B89E-EEAA287B30C2.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testDesertHomeAndExerciseList",
+      "timestamp": 1794666787.193,
+      "ax_timestamp": 1794666787.285,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "01837E0B-545C-45B6-BC60-5649EADB12F2",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/0A785A99-02C6-45DE-886C-91BE0A3C55FB.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/92B29DED-1DBA-4F9B-B974-B0DA57CF5809.txt",
+      "sha256": "8e5f026cc4cd1fc52ad46cc825afe0d5d1be4ffe2f1cecfcce15980424e851ad",
+      "sha256_ax": "90c82647aafc83e84cfccf1445aa0c28256cb500194cfbda7eb7a091662a2152",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
+    },
+    "dune/home": {
+      "theme": "dune",
+      "scene": "home",
+      "file": "dune/home.png",
+      "ax_file": "ax/dune/home.txt",
+      "attachment_name": "Desert Watch Home_0_9A11B21A-D258-485B-A450-981B6E003737.png",
+      "ax_attachment_name": "hierarchy-Desert Watch Home_0_AA29FB96-D1F1-46DD-89ED-168A2EEA7A29.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testDesertHomeAndExerciseList",
+      "timestamp": 1794666773.991,
+      "ax_timestamp": 1794666774.099,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "9A11B21A-D258-485B-A450-981B6E003737",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
+      },
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/0CC1E632-17EA-4517-B023-36353E05A576.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/155DF194-D0F1-4126-8442-1214387AFFDA.txt",
+      "sha256": "880f9ce9ed6d9628b6d6d26bf498fd042b236d80ff102182b2f73a1f091f6e40",
+      "sha256_ax": "d50ae6e41ea43d0dd1f0e7b4eeb5b6a5702c88c3cbf2bf16dd3eeead9e79e5c8",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "dune/workout": {
       "theme": "dune",
       "scene": "workout",
       "file": "dune/workout.png",
-      "attachment_name": "Desert Watch Workout_0_A99208F0-74F7-4C6C-B59C-77D54EC4A81E.png",
-      "test_identifier": "WatchThemeMatrixUITests/testDesertWorkoutTheme()",
-      "timestamp": 1792376438.782,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/dune/workout.txt",
+      "attachment_name": "Desert Watch Workout_0_B203085E-A5C4-47DC-957E-196C54B89090.png",
+      "ax_attachment_name": "hierarchy-Desert Watch Workout_0_5C9A0094-3D91-4AD7-8400-F129A93748F9.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testDesertWorkoutTheme",
+      "timestamp": 1794666817.513,
+      "ax_timestamp": 1794666817.581,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "B203085E-A5C4-47DC-957E-196C54B89090",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
-    },
-    "forest/home": {
-      "theme": "forest",
-      "scene": "home",
-      "file": "forest/home.png",
-      "attachment_name": "Forest Watch Home_0_42257024-654F-4C21-915A-4713ED7FF5F6.png",
-      "test_identifier": "WatchThemeMatrixUITests/testForestHomeAndExerciseList()",
-      "timestamp": 1792376451.524,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
-      "device": {
-        "kind": "watch",
-        "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
-      },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/FE0734CC-63F2-4681-86A7-232FEB5B24A3.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/00C6A4E9-5E09-4D7E-9112-1900B460874A.txt",
+      "sha256": "d4e89132ba744fe88f7b6d9d256198665d3c8d2c0bca29f6e6b5f10b8618f95a",
+      "sha256_ax": "96a679a71d87d172f68fd029b518249178c40f22910118278fa7db016aaaaaa8",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "forest/all-exercises": {
       "theme": "forest",
       "scene": "all-exercises",
       "file": "forest/all-exercises.png",
-      "attachment_name": "Forest Watch All Exercises_0_62CD62C1-3115-45E4-9DE6-E5A3E827E23D.png",
-      "test_identifier": "WatchThemeMatrixUITests/testForestHomeAndExerciseList()",
-      "timestamp": 1792376467.802,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/forest/all-exercises.txt",
+      "attachment_name": "Forest Watch All Exercises_0_8C93F0FB-5100-47C6-A025-6770A10C8B14.png",
+      "ax_attachment_name": "hierarchy-Forest Watch All Exercises_0_9B1FD820-8E21-4A44-929B-18778AB6570F.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testForestHomeAndExerciseList",
+      "timestamp": 1794666840.099,
+      "ax_timestamp": 1794666840.191,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "8C93F0FB-5100-47C6-A025-6770A10C8B14",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/FB3B0C89-9396-4CDE-909C-D783F396177A.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/4B63C898-BF13-4B7E-A6C6-4707369CE21C.txt",
+      "sha256": "bd85149f3b305de2e29c2d022208c7e874205b2bb8c3a41f2cc84ba0f1f1e77c",
+      "sha256_ax": "534c4b2703f0c8da49470c1d14140ca8048ac3d55875857f5b57e61070ef30a5",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
+    },
+    "forest/home": {
+      "theme": "forest",
+      "scene": "home",
+      "file": "forest/home.png",
+      "ax_file": "ax/forest/home.txt",
+      "attachment_name": "Forest Watch Home_0_8886BBE5-FDD1-41CA-9B00-6CCCDD923D30.png",
+      "ax_attachment_name": "hierarchy-Forest Watch Home_0_EFA062DE-5895-4402-AD9C-EE31B742DE44.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testForestHomeAndExerciseList",
+      "timestamp": 1794666827.352,
+      "ax_timestamp": 1794666827.451,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "8886BBE5-FDD1-41CA-9B00-6CCCDD923D30",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
+      },
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/CDB19E34-AB19-4D4A-870F-3EFE8CF0C325.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/ABA61AC4-9F69-48CE-955F-413C596E6BB9.txt",
+      "sha256": "efda252dbe0c477bc0a5075b61d7feaa21887962d0d7f5c85e7552013f5298b4",
+      "sha256_ax": "e582400110e71c1636c30bd2e89dd0cf4679cb4a788478d1b1811db9f0e7c548",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "forest/workout": {
       "theme": "forest",
       "scene": "workout",
       "file": "forest/workout.png",
-      "attachment_name": "Forest Watch Workout_0_1D483593-9F64-4943-BEF3-57A3744E8B29.png",
-      "test_identifier": "WatchThemeMatrixUITests/testForestWorkoutTheme()",
-      "timestamp": 1792376503.614,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/forest/workout.txt",
+      "attachment_name": "Forest Watch Workout_0_8896CD91-6FEE-4982-810E-816954CBE3E2.png",
+      "ax_attachment_name": "hierarchy-Forest Watch Workout_0_A739E4CB-96EA-4BB6-BB4A-E89417B9AFC5.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testForestWorkoutTheme",
+      "timestamp": 1794666869.834,
+      "ax_timestamp": 1794666869.907,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "8896CD91-6FEE-4982-810E-816954CBE3E2",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
-    },
-    "ocean/home": {
-      "theme": "ocean",
-      "scene": "home",
-      "file": "ocean/home.png",
-      "attachment_name": "Ocean Watch Home_0_661DC0DB-09A2-4152-A814-2F15F50A1BE2.png",
-      "test_identifier": "WatchThemeMatrixUITests/testOceanHomeAndExerciseList()",
-      "timestamp": 1792376516.528,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
-      "device": {
-        "kind": "watch",
-        "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
-      },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/B865E0C3-151C-44BB-93FE-A8D1D458153A.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/A9C0F9B4-848D-4E07-B288-6EE756EF235C.txt",
+      "sha256": "1a00d8b4774a5b9a5513d241dd8019bee8729c83fda098f4e2d46ec43277abc5",
+      "sha256_ax": "29c6f3cdfcbd16d17264c96abe27c3216d98b2cfcb83a93cc48d3f99371513fc",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "ocean/all-exercises": {
       "theme": "ocean",
       "scene": "all-exercises",
       "file": "ocean/all-exercises.png",
-      "attachment_name": "Ocean Watch All Exercises_0_1C1921E0-02F5-4229-98EB-A93949AAB6F6.png",
-      "test_identifier": "WatchThemeMatrixUITests/testOceanHomeAndExerciseList()",
-      "timestamp": 1792376532.705,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/ocean/all-exercises.txt",
+      "attachment_name": "Ocean Watch All Exercises_0_012523A5-3A16-4DF8-8F18-9E437FA00FCC.png",
+      "ax_attachment_name": "hierarchy-Ocean Watch All Exercises_0_F206FCF3-EC84-4403-97BB-61B2A11C43BC.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testOceanHomeAndExerciseList",
+      "timestamp": 1794666892.477,
+      "ax_timestamp": 1794666892.57,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "012523A5-3A16-4DF8-8F18-9E437FA00FCC",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/B35816FB-9B73-48C5-8B95-1BE43BEF0E25.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/EE40BDEB-5194-46A4-954D-854A7107F11E.txt",
+      "sha256": "2cb8e1ba984c76a9af1d31889832f6ce17dad666b3a8e5755eba6b06933b5a55",
+      "sha256_ax": "584ef608d1188b3716dab1eebc379dff23cc79f668ac4a6db7600d6040462330",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
+    },
+    "ocean/home": {
+      "theme": "ocean",
+      "scene": "home",
+      "file": "ocean/home.png",
+      "ax_file": "ax/ocean/home.txt",
+      "attachment_name": "Ocean Watch Home_0_00E8AAFE-5A3B-4A8E-81C6-C9D1FF5DF00E.png",
+      "ax_attachment_name": "hierarchy-Ocean Watch Home_0_6D0A2101-C2E2-429B-A993-6E1C92215D03.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testOceanHomeAndExerciseList",
+      "timestamp": 1794666879.663,
+      "ax_timestamp": 1794666879.767,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "00E8AAFE-5A3B-4A8E-81C6-C9D1FF5DF00E",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
+      },
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/4C46D4F5-2546-4D7E-AECC-A712CA60EC2B.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/952E27A7-8E29-40B2-87C7-6C4AD97AEE74.txt",
+      "sha256": "7d06714493bda76f7d0650f46552b8178b307bc98ec0485a973917beb7e910f1",
+      "sha256_ax": "a41e9380ef01885220ba83fd76f48f277f1233e253655a367f1c09cc7ce07d62",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "ocean/workout": {
       "theme": "ocean",
       "scene": "workout",
       "file": "ocean/workout.png",
-      "attachment_name": "Ocean Watch Workout_0_E07E9A26-782E-43E6-8D96-00EF3F60C9A1.png",
-      "test_identifier": "WatchThemeMatrixUITests/testOceanWorkoutTheme()",
-      "timestamp": 1792376569.414,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/ocean/workout.txt",
+      "attachment_name": "Ocean Watch Workout_0_D32B7450-67B0-4120-BFDD-51F4319417E9.png",
+      "ax_attachment_name": "hierarchy-Ocean Watch Workout_0_A1AA7A0C-1A82-4228-AE4D-3F143F4E5BA4.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testOceanWorkoutTheme",
+      "timestamp": 1794666922.805,
+      "ax_timestamp": 1794666922.875,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "D32B7450-67B0-4120-BFDD-51F4319417E9",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
-    },
-    "sakura/home": {
-      "theme": "sakura",
-      "scene": "home",
-      "file": "sakura/home.png",
-      "attachment_name": "Sakura Watch Home_0_DC6E326B-5303-4DC2-A2BC-5F3A3AD25D90.png",
-      "test_identifier": "WatchThemeMatrixUITests/testSakuraHomeAndExerciseList()",
-      "timestamp": 1792376582.846,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
-      "device": {
-        "kind": "watch",
-        "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
-      },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/D23674AA-6DA7-4E02-8311-63943B1D5176.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/193AFA9C-4638-440F-A515-F01AF6D3730C.txt",
+      "sha256": "7118c9e43e33ae106893423d5c5c7664187c6e52d2b1e59c92dc68232149c110",
+      "sha256_ax": "4962a908b7f11b5664d42e10023a8b706310c73ff3d43887eb2ad4c51057c0de",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "sakura/all-exercises": {
       "theme": "sakura",
       "scene": "all-exercises",
       "file": "sakura/all-exercises.png",
-      "attachment_name": "Sakura Watch All Exercises_0_C10CE104-2AFD-4E62-A46D-0148A1CA3DD5.png",
-      "test_identifier": "WatchThemeMatrixUITests/testSakuraHomeAndExerciseList()",
-      "timestamp": 1792376599.74,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/sakura/all-exercises.txt",
+      "attachment_name": "Sakura Watch All Exercises_0_9E753FC1-469D-4AD7-8988-BEC407A2D5BC.png",
+      "ax_attachment_name": "hierarchy-Sakura Watch All Exercises_0_BC1B2230-6050-44DE-B714-42B5C1842C93.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testSakuraHomeAndExerciseList",
+      "timestamp": 1794666945.479,
+      "ax_timestamp": 1794666945.572,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "9E753FC1-469D-4AD7-8988-BEC407A2D5BC",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/378EC128-3F8E-46A0-AEC6-34F48AF7E64E.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/F3FA0F0C-A071-43C3-930D-6CEFA6FB6AA4.txt",
+      "sha256": "c750f85c6c5c0cfde2746281108ab105aff2b1ca5b4af923dd2b0e90545c9e24",
+      "sha256_ax": "751280c380c362a48bbfe8554f9ad771815c23f6d609445a613b7c30f94158b8",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
+    },
+    "sakura/home": {
+      "theme": "sakura",
+      "scene": "home",
+      "file": "sakura/home.png",
+      "ax_file": "ax/sakura/home.txt",
+      "attachment_name": "Sakura Watch Home_0_D489D36E-D2A1-4F32-B7EF-663E87CD28C7.png",
+      "ax_attachment_name": "hierarchy-Sakura Watch Home_0_36DD839F-CD74-4CE3-9322-AE160443367B.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testSakuraHomeAndExerciseList",
+      "timestamp": 1794666932.668,
+      "ax_timestamp": 1794666932.767,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "D489D36E-D2A1-4F32-B7EF-663E87CD28C7",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
+      },
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/81FE1215-110E-487C-BB60-D27E73A4B3D8.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/E3B8290D-FFBE-4FC7-93B7-31A4806600E2.txt",
+      "sha256": "72aa710a2177a6d44e68189fb33e5030072210231a2956a28fee3f0a81a5837d",
+      "sha256_ax": "0305561b113bd8d150aed44cb54a70e578dda6e0cdd82e7436ea6cf828f51d18",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "sakura/workout": {
       "theme": "sakura",
       "scene": "workout",
       "file": "sakura/workout.png",
-      "attachment_name": "Sakura Watch Workout_0_AC032548-59E4-4103-9D45-C983B14813FA.png",
-      "test_identifier": "WatchThemeMatrixUITests/testSakuraWorkoutTheme()",
-      "timestamp": 1792376636.763,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/sakura/workout.txt",
+      "attachment_name": "Sakura Watch Workout_0_34C8E65B-1DF3-4699-BC85-8C0E0C4B22EB.png",
+      "ax_attachment_name": "hierarchy-Sakura Watch Workout_0_2A932528-1320-4B00-A5C3-AB91F0D883A0.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testSakuraWorkoutTheme",
+      "timestamp": 1794666975.424,
+      "ax_timestamp": 1794666975.498,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "34C8E65B-1DF3-4699-BC85-8C0E0C4B22EB",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
-    },
-    "solar/home": {
-      "theme": "solar",
-      "scene": "home",
-      "file": "solar/home.png",
-      "attachment_name": "Solar Watch Home_0_23CD8FAE-5AD6-42C0-93DD-A2541895D060.png",
-      "test_identifier": "WatchThemeMatrixUITests/testSolarHomeAndExerciseList()",
-      "timestamp": 1792376651.331,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
-      "device": {
-        "kind": "watch",
-        "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
-      },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/1EA916B8-44C4-4D07-96B5-CE9C56F6B7C0.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/9812963E-5289-4701-9901-0CD7A8B544CF.txt",
+      "sha256": "92338279d08eed5a08952b14950d09178c018662f8075dbecc5245e0e901759c",
+      "sha256_ax": "fbf3ca8dacb894a80513a84aef5df10c5e40d731af02a156e7ca40bc0bd2d517",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "solar/all-exercises": {
       "theme": "solar",
       "scene": "all-exercises",
       "file": "solar/all-exercises.png",
-      "attachment_name": "Solar Watch All Exercises_0_5759A505-0371-46BF-A28B-BBD8AC35AF52.png",
-      "test_identifier": "WatchThemeMatrixUITests/testSolarHomeAndExerciseList()",
-      "timestamp": 1792376667.13,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/solar/all-exercises.txt",
+      "attachment_name": "Solar Watch All Exercises_0_E518FCF7-89C5-476E-AA87-5BC58820EDEF.png",
+      "ax_attachment_name": "hierarchy-Solar Watch All Exercises_0_B5437D06-D0A5-45CC-82A2-F95101A02DB4.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testSolarHomeAndExerciseList",
+      "timestamp": 1794666998.159,
+      "ax_timestamp": 1794666998.251,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "E518FCF7-89C5-476E-AA87-5BC58820EDEF",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/EB81B0B3-7449-4DBD-BE0A-282687F4FC5B.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/A3EA0B7C-F183-4C22-A343-D952DBB3B6C8.txt",
+      "sha256": "de561f9fda20c39c555e766e7bb431d495f6f18c527c4e535829063219508758",
+      "sha256_ax": "bccf306c8aa9b6c834442ee64fa41d4c544632b49bdc811505bb03af022803ee",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
+    },
+    "solar/home": {
+      "theme": "solar",
+      "scene": "home",
+      "file": "solar/home.png",
+      "ax_file": "ax/solar/home.txt",
+      "attachment_name": "Solar Watch Home_0_C2381871-60EF-4009-82F7-C0B565A91B67.png",
+      "ax_attachment_name": "hierarchy-Solar Watch Home_0_2E786E55-1147-4FC4-ADEE-80B6FB490A63.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testSolarHomeAndExerciseList",
+      "timestamp": 1794666985.369,
+      "ax_timestamp": 1794666985.472,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "C2381871-60EF-4009-82F7-C0B565A91B67",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
+      },
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/82380DA9-2294-478D-9624-BA2F880FC639.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/F70E2A32-173D-4384-A42B-BD9BF7AE0AE1.txt",
+      "sha256": "7905e2ceca55d96edf28d79ab428b725094628253770406fea3c8cbdb2a73069",
+      "sha256_ax": "05e4ada886cdfd8f03b58808d5db1f7acd7da52124b0e1f4369063b42195975a",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "solar/workout": {
       "theme": "solar",
       "scene": "workout",
       "file": "solar/workout.png",
-      "attachment_name": "Solar Watch Workout_0_0401E17E-5EF6-4E69-8460-1099E7141768.png",
-      "test_identifier": "WatchThemeMatrixUITests/testSolarWorkoutTheme()",
-      "timestamp": 1792376704.409,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/solar/workout.txt",
+      "attachment_name": "Solar Watch Workout_0_BAD06530-CBCA-4D00-B8FE-B4F0BB4EC2B0.png",
+      "ax_attachment_name": "hierarchy-Solar Watch Workout_0_5ECE3869-C700-45D1-A7C5-9D44911AE584.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testSolarWorkoutTheme",
+      "timestamp": 1794667027.747,
+      "ax_timestamp": 1794667027.824,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "BAD06530-CBCA-4D00-B8FE-B4F0BB4EC2B0",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
-    },
-    "water-lilies/home": {
-      "theme": "water-lilies",
-      "scene": "home",
-      "file": "water-lilies/home.png",
-      "attachment_name": "Water Lilies Watch Home_0_07FF4852-3A57-4B97-B98C-C0B6B2230B53.png",
-      "test_identifier": "WatchThemeMatrixUITests/testWaterLiliesHomeAndExerciseList()",
-      "timestamp": 1792376718.246,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
-      "device": {
-        "kind": "watch",
-        "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
-      },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/D9B6F96C-09FB-45A8-95D2-9A016C832667.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/96009BA6-F9EB-4161-9983-CDC3A6B0D796.txt",
+      "sha256": "1c3f14b985ec5f27bb511aa3c2386ba42014b13427d751bc34ab46eeed177e25",
+      "sha256_ax": "5e5abb942524824e3ba77f3e8d9a6be7991c8805989b0f7e3d83c53a13cacb72",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "water-lilies/all-exercises": {
       "theme": "water-lilies",
       "scene": "all-exercises",
       "file": "water-lilies/all-exercises.png",
-      "attachment_name": "Water Lilies Watch All Exercises_0_F8C6492E-0F86-4ABB-BBBF-605B9DFF8773.png",
-      "test_identifier": "WatchThemeMatrixUITests/testWaterLiliesHomeAndExerciseList()",
-      "timestamp": 1792376733.992,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/water-lilies/all-exercises.txt",
+      "attachment_name": "Water Lilies Watch All Exercises_0_5AC68109-872E-4B23-82C1-9D8949112F08.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Watch All Exercises_0_C86BFD36-6898-43E0-9E95-E75981F12E3A.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testWaterLiliesHomeAndExerciseList",
+      "timestamp": 1794667050.824,
+      "ax_timestamp": 1794667050.917,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "5AC68109-872E-4B23-82C1-9D8949112F08",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/627732A5-349A-4B69-91CD-9549C3E7B4A1.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/AADE10C9-2A8D-43EF-B564-177EEEBDB498.txt",
+      "sha256": "39237d5c25968b717cd224284a0642b6e2d2ac7dd1b2b0875f6f5cecdd109420",
+      "sha256_ax": "fd6da7a35660e0bcf4f2bb696bdb7bb101262130ab2d647b99ed1dcc9c54fdc4",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
+    },
+    "water-lilies/home": {
+      "theme": "water-lilies",
+      "scene": "home",
+      "file": "water-lilies/home.png",
+      "ax_file": "ax/water-lilies/home.txt",
+      "attachment_name": "Water Lilies Watch Home_0_27F52074-915A-47D2-83F7-188CD20E6415.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Watch Home_0_DBEB5AF3-CE20-4DF5-A131-CA3D34AA73C1.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testWaterLiliesHomeAndExerciseList",
+      "timestamp": 1794667037.757,
+      "ax_timestamp": 1794667037.856,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "27F52074-915A-47D2-83F7-188CD20E6415",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
+      "device": {
+        "kind": "watch",
+        "platform": "watchOS Simulator",
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
+      },
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/F4981D9F-108C-4324-A9C6-0C60DE630AED.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/68C3C96C-FD79-4BE5-BFD7-3F2BB3AECC77.txt",
+      "sha256": "156c6a30983f760453813776e176b609947b7fa8d2f4f9332a40b6c01a936d34",
+      "sha256_ax": "46c9e04bdc096fffdfaf6588b2f4a9d516f84a4016e36eaa221fc959f2f9a356",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     },
     "water-lilies/workout": {
       "theme": "water-lilies",
       "scene": "workout",
       "file": "water-lilies/workout.png",
-      "attachment_name": "Water Lilies Watch Workout_0_577AEA9F-789F-47AC-8360-FB7B337B08D1.png",
-      "test_identifier": "WatchThemeMatrixUITests/testWaterLiliesWorkoutTheme()",
-      "timestamp": 1792376770.7,
-      "result_bundle": "/Users/shanks/.codex/worktrees/e0f8/Health/.deriveddata/watch-ui-tests/Logs/Test/Test-DUNEWatchUITests-2026.10.19_11-17-04-+0900.xcresult",
+      "ax_file": "ax/water-lilies/workout.txt",
+      "attachment_name": "Water Lilies Watch Workout_0_6B08E821-8515-423B-A6A1-491552FFFF55.png",
+      "ax_attachment_name": "hierarchy-Water Lilies Watch Workout_0_81FB5343-B06A-4D06-BCA8-5A9F91CB6803.txt",
+      "test_identifier": "WatchThemeMatrixUITests/testWaterLiliesWorkoutTheme",
+      "timestamp": 1794667080.548,
+      "ax_timestamp": 1794667080.616,
+      "timestamp_source": "xcresult-attachment-timestamp",
+      "pairing_method": "same-test-scene-within-5s; XCTest attachments are sequential, UUIDs need not match",
+      "png_activity_uuid": "6B08E821-8515-423B-A6A1-491552FFFF55",
+      "ax_activity_uuid": null,
+      "viewport_pixels": "416x496 px",
+      "logical_viewport_points": "208.0x248.0 pt",
       "device": {
         "kind": "watch",
         "platform": "watchOS Simulator",
-        "model_name": "Apple Watch",
-        "identifier": "C5AB789F-6DEA-406D-B77B-6BEE865FD07A"
+        "model_name": "Apple Watch Series 12 (46mm)",
+        "identifier": "617515ED-0F55-4FC4-95AF-B1493C37B3F0"
       },
-      "source_revision": "b9a7a7333cd3a3a9bdbad2569086aeb43277e150",
-      "source_worktree_dirty": true
+      "source_revision": "ddbae060e244c2927426d974e67609d099c68ed7",
+      "source_worktree_dirty": false,
+      "source_worktree": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health",
+      "source_manifest": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "source_proof": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "source_receipt": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/watch-native.log.result.json",
+      "source_png": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/357531F0-9A51-4FC1-879B-F55BCC56EDE5.png",
+      "source_ax": "/Users/shanks/.codex/worktrees/theme-overhaul-final/Health/.codex-checks/theme-overhaul/exports/watch-native/8C647D3C-C7A7-4584-AFDB-37CCAB7564BA.txt",
+      "sha256": "5d6db5cff80be18510cf1b49d3a2336b34bece9c2d900af50c8d5a079ccedba1",
+      "sha256_ax": "2ebbc117c7a173c03c01a36bb92e97f1239bb379adac6c46375ca4e867cd0c00",
+      "native_size": [
+        416,
+        496
+      ],
+      "window_size_pt": [
+        208.0,
+        248.0
+      ]
     }
   }
 }

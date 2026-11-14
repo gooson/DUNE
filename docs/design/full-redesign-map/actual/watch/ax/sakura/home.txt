@@ -1,0 +1,56 @@
+Optional(Attributes: Application, 0x10ab9a440, pid: 66232, label: 'DUNE'
+Element subtree:
+ →Application, 0x10ab9a440, pid: 66232, label: 'DUNE'
+    Window, 0x10ab992c0, {{0.0, 0.0}, {208.0, 248.0}}
+      Other, 0x10ab9b700, {{0.0, 0.0}, {208.0, 248.0}}
+        Other, 0x10ab9a080, {{0.0, 0.0}, {208.0, 248.0}}
+          Other, 0x10ab9a300, {{0.0, 0.0}, {208.0, 248.0}}
+            Other, 0x10ab9b340, {{0.0, 0.0}, {208.0, 248.0}}
+              NavigationBar, 0x10ab98780, {{0.0, 0.0}, {208.0, 62.0}}, identifier: 'DUNE'
+                StaticText, 0x10ab99040, {{15.0, 35.5}, {44.5, 20.5}}, label: 'DUNE'
+                Button, 0x10ab99540, {{149.0, 18.0}, {44.0, 35.0}}, identifier: 'watch-home-posture-settings', label: '톱니바퀴 모양'
+                  Button, 0x10ab9b5c0, {{149.0, 18.0}, {44.0, 35.0}}, identifier: 'watch-home-posture-settings', label: '톱니바퀴 모양'
+              Other, 0x10ab99cc0, {{0.0, 0.0}, {208.0, 248.0}}
+                Other, 0x10ab9b980, {{0.0, 0.0}, {208.0, 248.0}}
+                  Other, 0x10ab9a580, {{0.0, 0.0}, {208.0, 248.0}}
+                    Other, 0x10ab9af80, {{0.0, 0.0}, {208.0, 248.0}}
+                      ScrollView, 0x10ab9bc00, {{0.0, 0.0}, {208.0, 248.0}}, identifier: 'watch-home-root'
+                        Other, 0x10ab98140, {{0.0, 0.0}, {208.0, 248.0}}
+                          Other, 0x10ab98000, {{0.0, 0.0}, {208.0, 87.5}}
+                        Other, 0x10ab99900, {{0.0, 0.0}, {208.0, 248.0}}
+                        Other, 0x10ab9b200, {{0.0, 62.0}, {206.0, 654.0}}
+                          Other, 0x10ab99680, {{14.1, 66.1}, {179.9, 478.6}}
+                            Button, 0x10ab98a00, {{14.1, 66.1}, {179.9, 155.4}}, identifier: 'watch-home-card-popular-plank', label: 'Popular, Plank, 소요 시간, 시작'
+                              StaticText, 0x10ab9be80, {{14.1, 66.1}, {54.5, 18.0}}, label: 'Popular'
+                              Image, 0x10ab98f00, {{26.1, 102.0}, {32.0, 32.0}}, label: 'equipment.bodyweight'
+                              StaticText, 0x10ab9bac0, {{70.0, 107.8}, {44.5, 20.5}}, label: 'Plank'
+                              StaticText, 0x10ab9a800, {{22.1, 144.0}, {53.5, 19.5}}, label: '소요 시간'
+                              StaticText, 0x10ab9abc0, {{84.0, 189.7}, {42.0, 19.5}}, label: '시작'
+                              Image, 0x10ab98dc0, {{84.0, 192.5}, {11.5, 13.0}}, identifier: 'play.fill', label: '재생'
+                            Button, 0x10ab99180, {{18.5, 233.4}, {171.0, 147.7}}, identifier: 'watch-home-card-popular-crunch', label: 'Popular, Crunch, 3세트 · 10회, 시작'
+                              StaticText, 0x10ab9a1c0, {{18.5, 233.4}, {51.8, 17.1}}, label: 'Popular'
+                              Image, 0x10ab9b480, {{29.9, 267.6}, {30.4, 30.4}}, label: 'equipment.bodyweight'
+                              StaticText, 0x10ab91cc0, {{71.7, 273.1}, {55.6, 19.5}}, label: 'Crunch'
+                              StaticText, 0x10ab93340, {{26.1, 307.5}, {72.7, 18.5}}, label: '3세트 · 10회'
+                              StaticText, 0x10ab91040, {{85.0, 351.0}, {39.9, 18.5}}, label: '시작'
+                              Image, 0x10ab92d00, {{85.0, 353.6}, {10.9, 12.4}}, identifier: 'play.fill', label: '재생'
+                            Button, 0x10ab93480, {{18.5, 396.9}, {171.0, 147.7}}, identifier: 'watch-home-card-popular-ui-test-squat', label: 'Popular, UI Test Squat, 3세트 · 8회 · 40.0kg, 시작'
+                              StaticText, 0x10ab92580, {{18.5, 396.9}, {51.8, 17.1}}, label: 'Popular'
+                              Image, 0x10ab93c00, {{29.9, 431.1}, {30.4, 30.4}}, label: 'equipment.barbell'
+                              StaticText, 0x10ab92300, {{71.7, 436.6}, {99.7, 19.5}}, label: 'UI Test Squat'
+                              StaticText, 0x10ab92940, {{26.1, 471.0}, {125.9, 18.5}}, label: '3세트 · 8회 · 40.0kg'
+                              StaticText, 0x10ab93980, {{85.0, 514.5}, {39.9, 18.5}}, label: '시작'
+                              Image, 0x10ab93d40, {{85.0, 517.1}, {10.9, 12.4}}, identifier: 'play.fill', label: '재생'
+    Window (Main), 0x10ab926c0, {{200.0, 45.0}, {6.0, 46.0}}
+    Window, 0x10ab93ac0, {{0.0, 0.0}, {208.0, 248.0}}
+      StatusBar, 0x10ab92bc0, {{0.0, 0.0}, {208.0, 38.0}}
+        Other, 0x10ab935c0, {{0.0, 0.0}, {208.0, 38.0}}
+        Other, 0x10ab92f80, {{0.0, 0.0}, {208.0, 38.0}}
+Path to element:
+ →Application, 0x10ab9a440, pid: 66232, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve.watchkitapp'
+  Output: {
+    Application, 0x10ab94a00, pid: 66232, label: 'DUNE'
+  }
+)
