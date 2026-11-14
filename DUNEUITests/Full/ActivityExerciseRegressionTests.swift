@@ -3829,6 +3829,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let removeViewport = removeViewport()
         XCTAssertTrue(remove.exists && remove.isHittable && removeViewport.contains(remove.frame),
                       "The whole Remove action must be visible in the active template pane")
+        if maximumText && UIDevice.current.userInterfaceIdiom == .phone {
+            VisualAudit.capture("W15 MAX full Remove after settled scroll")
+        }
         remove.auditTap()
         let assignmentRemoved = XCTNSPredicateExpectation(
             predicate: NSPredicate(format: "exists == false"), object: selected
