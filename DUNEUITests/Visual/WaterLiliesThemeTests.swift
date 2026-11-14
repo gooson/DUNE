@@ -6,11 +6,6 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
     private var motionSettings: XCUIApplication?
     private var originalMotionSetting: Bool?
 
-    nonisolated override func tearDown() async throws {
-        await restoreMotionSettings()
-        try await super.tearDown()
-    }
-
     private func restoreMotionSettings() {
         if let settings = motionSettings, let original = originalMotionSetting {
             // XCTest can abort an assertion without unwinding a Swift defer.
@@ -142,6 +137,11 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         let original = UIAccessibility.isReduceMotionEnabled
         motionSettings = settings
         originalMotionSetting = original
+        // XCTest runs registered cleanup even when a failed assertion aborts
+        // the test, before the base teardown terminates the app.
+        addTeardownBlock { @MainActor [self] () async throws in
+            restoreMotionSettings()
+        }
         attachReduceMotionReadback("original", settingsSwitch: reduceMotionSwitch)
         XCTAssertEqual(reduceMotionSwitchIsOn(reduceMotionSwitch), Optional(original),
                        "Settings and UIKit should agree before changing the preference")
