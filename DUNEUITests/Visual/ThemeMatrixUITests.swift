@@ -213,6 +213,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
             "-morningBriefingDisabled", "YES"
         ]
         launchApp(with: configuration)
+        reassertDuoOpenLandscapeIfNeeded()
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "\(themeName) MAX: primary navigation")
 
         let roots: [(tab: String, navigate: () -> Void, hero: String, score: String, ring: String)] = [
@@ -273,6 +274,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                 "-morningBriefingDisabled", "YES"
             ]
             app.launch()
+            reassertDuoOpenLandscapeIfNeeded()
 
             let combination = "\(themeName) \(style)"
             XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "\(combination): primary navigation should load")

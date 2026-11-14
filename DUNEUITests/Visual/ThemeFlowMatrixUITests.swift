@@ -50,6 +50,7 @@ final class ThemeFlowMatrixUITests: SeededUITestBaseCase {
             "-morningBriefingDisabled", "YES"
         ]
         app.launch()
+        reassertDuoOpenLandscapeIfNeeded()
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "\(rawValue) \(style): primary navigation")
     }
 

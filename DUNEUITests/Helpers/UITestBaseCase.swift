@@ -175,6 +175,28 @@ class UITestBaseCase: XCTestCase {
         }
     }
 
+    /// Reassert the inner landscape only for a host-audited 951pt open Duo.
+    /// The ORIENT checkpoint lets the host set physical orientation and
+    /// refresh AX before any viewport assertion.
+    func reassertDuoOpenLandscapeIfNeeded() {
+        guard VisualAudit.isEnabled,
+              ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1",
+              app.windows.firstMatch.waitForExistence(timeout: 10) else { return }
+        let bounds = app.windows.firstMatch.frame
+        guard abs(max(bounds.width, bounds.height) - 951) < 2 else { return }
+        XCUIDevice.shared.orientation = .landscapeLeft
+        VisualAudit.capture("ORIENT:landscapeLeft theme root")
+        let landscape = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                let window = self.app.windows.firstMatch.frame
+                return window.width > window.height
+            },
+            object: nil
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [landscape], timeout: 5), .completed,
+                       "Open Duo must render its inner landscape viewport")
+    }
+
     // MARK: - Navigation Helpers
 
     func navigateToDashboard() {
