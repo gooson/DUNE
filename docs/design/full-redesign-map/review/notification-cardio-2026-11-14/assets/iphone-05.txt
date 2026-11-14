@@ -1,0 +1,90 @@
+Attributes: Application, 0x112d321c0, pid: 38540, label: 'DUNE'
+Element subtree:
+ →Application, 0x112d321c0, pid: 38540, label: 'DUNE'
+    Window (Main), 0x112d32300, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112d32440, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x112d30780, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x112d308c0, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x112d30a00, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x112d30b40, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x112d312c0, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x112d31400, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x112d31540, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x112d31180, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x112d303c0, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x112d30640, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x112d30280, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x112d30c80, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x112d30dc0, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x112d30f00, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x112d31040, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x1053f8280, {{0.0, 0.0}, {440.0, 956.0}}
+                                      Other, 0x1053fabc0, {{0.0, 0.0}, {440.0, 956.0}}
+                                        NavigationBar, 0x1053f88c0, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Notification'
+                                          Button, 0x1053f9180, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Notifications'
+                                          StaticText, 0x1053f9a40, {{164.0, 71.3}, {111.7, 25.3}}, label: 'Notification'
+                                        Other, 0x1053fb980, {{0.0, 0.0}, {440.0, 956.0}}
+                                          Other, 0x1053f8f00, {{0.0, 0.0}, {440.0, 956.0}}
+                                            Other, 0x1053fa440, {{0.0, 0.0}, {440.0, 956.0}}
+                                              Other, 0x1053faf80, {{0.0, 0.0}, {440.0, 956.0}}
+                                                ScrollView, 0x1053fb480, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'notification-message-detail-screen'
+                                                  Other, 0x1053f9900, {{0.0, 0.0}, {440.0, 956.0}}
+                                                    Other, 0x1053f92c0, {{0.0, 0.0}, {440.0, 156.0}}
+                                                    Other, 0x1053f9e00, {{0.0, 823.0}, {440.0, 133.0}}
+                                                  Other, 0x1053fb840, {{0.0, 0.0}, {440.0, 956.0}}
+                                                  Other, 0x1053fa080, {{0.0, 116.0}, {440.0, 627.7}}
+                                                    StaticText, 0x1053f9680, {{36.0, 152.0}, {342.0, 133.0}}, identifier: 'notification-message-title', label: 'Message Route Fixture'
+                                                    StaticText, 0x1053fb5c0, {{36.0, 293.0}, {301.7, 102.3}}, identifier: 'notification-message-date', label: 'Nov 14, 2026 at 01:12'
+                                                    StaticText, 0x1053f9040, {{16.0, 431.3}, {405.0, 296.3}}, identifier: 'notification-message-body', label: 'A notification message that opens its in-app detail.'
+                                                  Other, 0x1053faa80, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x1053fbac0, {{434.0, 248.3}, {3.0, 621.7}}
+                                                  Other, 0x10895a580, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x10895a800, {{434.0, 248.3}, {3.0, 621.7}}
+                                        Toolbar, 0x10895a940, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x10895aa80, {{0.0, 0.0}, {440.0, 956.0}}
+                                Toolbar, 0x10895abc0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x10895ad00, {{0.0, 0.0}, {440.0, 956.0}}
+                            Other, 0x10895bc00, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x10895bd40, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x108959b80, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x108958640, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x108958780, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x1089588c0, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x108958a00, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x108958b40, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x108958c80, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x108958dc0, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today', Selected
+                              Image, 0x108958f00, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x108959040, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity'
+                              Image, 0x108959180, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x1089592c0, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x108959400, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x108959540, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x108959680, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x1089597c0, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x108959900, {{25.0, 877.0}, {104.5, 54.0}}
+                            Other, 0x108959a40, {{25.0, 877.0}, {104.3, 54.0}}
+                              Other, 0x10895a6c0, {{25.0, 877.0}, {104.3, 54.0}}
+                              Other, 0x1052775c0, {{25.0, 877.0}, {104.3, 54.0}}
+                                Other, 0x105277340, {{25.0, 877.0}, {104.3, 54.0}}
+                                  Other, 0x105274640, {{25.0, 877.0}, {104.3, 54.0}}
+                                    Other, 0x105277840, {{25.0, 877.0}, {104.3, 54.0}}
+                                  Other, 0x112d3c000, {{25.0, 877.0}, {104.3, 54.0}}
+                                Other, 0x112d3c140, {{25.0, 877.0}, {104.3, 54.0}}
+                    Other, 0x112d3c280, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x112d3c3c0, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x112d3c500, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x112d3c640, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x112d3c780, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x112d3c8c0, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x112d3ca00, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x112d3cb40, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x112d3cc80, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x112d3cdc0, {{220.0, 492.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x112d321c0, pid: 38540, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x112d3cf00, pid: 38540, label: 'DUNE'
+  }
