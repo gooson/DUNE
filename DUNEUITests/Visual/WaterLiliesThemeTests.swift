@@ -107,6 +107,7 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         attachVoiceOverReadback("Today root")
         XCTAssertTrue(UIAccessibility.isVoiceOverRunning,
                       "VoiceOver must be running on the simulator before this selector starts")
+        dismissVoiceOverIntroductionIfPresent()
 
         let hero = app.buttons[AXID.dashboardHeroCondition].firstMatch
         XCTAssertTrue(hero.waitForExistence(timeout: 15), "Seeded Today hero must load")
@@ -114,8 +115,11 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         XCTAssertFalse(hero.label.isEmpty, "Condition hero needs an accessible name")
         captureRootEvidence("Water Lilies VoiceOver Today root")
 
-        hero.tap()
         let detail = app.scrollViews[AXID.conditionScoreDetailScreen].firstMatch
+        hero.tap()
+        if !detail.waitForExistence(timeout: 2) {
+            hero.doubleTap()
+        }
         XCTAssertTrue(detail.waitForExistence(timeout: 10),
                       "Condition hero should open the detail route with VoiceOver enabled")
         XCTAssertTrue(detail.isHittable, "Condition detail should be visible")
@@ -129,6 +133,9 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         XCTAssertTrue(back.isHittable, "Back action should be reachable")
         XCTAssertFalse(back.label.isEmpty, "Back action needs an accessible name")
         back.tap()
+        if detail.waitForNonExistence(timeout: 2) == false {
+            back.doubleTap()
+        }
         XCTAssertTrue(hero.waitForExistence(timeout: 10),
                       "Back should return to Today with VoiceOver enabled")
         XCTAssertTrue(hero.isHittable, "Today hero should be visible after returning")
@@ -144,6 +151,27 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         attachment.name = "Water Lilies VoiceOver \(stage) readback"
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    private func dismissVoiceOverIntroductionIfPresent() {
+        // The simulator's first-use system alert otherwise intercepts the
+        // first app interaction. Its title starts with VoiceOver in all locales.
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let introduction = springboard.alerts.matching(
+            NSPredicate(format: "label BEGINSWITH %@", "VoiceOver")
+        ).firstMatch
+        guard introduction.waitForExistence(timeout: 3) else { return }
+        let hierarchy = XCTAttachment(string: springboard.debugDescription)
+        hierarchy.name = "VoiceOver first-use system introduction"
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
+        XCTAssertEqual(introduction.buttons.count, 1, "Only dismiss the observed single-action introduction")
+        let confirm = introduction.buttons.firstMatch
+        confirm.tap()
+        if !introduction.waitForNonExistence(timeout: 2) {
+            confirm.doubleTap()
+        }
+        XCTAssertTrue(introduction.waitForNonExistence(timeout: 5))
     }
 
     func testSystemReduceMotionPreservesConditionDetailState() throws {
