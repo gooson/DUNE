@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutRecordsAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditWorkoutRecordsAtMaximumText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testCardioFlowReachesSummary",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 7,
+    "passed": 5,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 5,
+  "failures": [
+    "2881: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:1364: error: -[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultFieldsFitAtMaximumAccessibilitySize] : XCTAssertTrue failed - Numeric input must offer a reachable explicit Do…",
+    "2892: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultFieldsFitAtMaximumAccessibilitySize]' failed (55.680 seconds).",
+    "3043: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:1364: error: -[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultSaveReopensWithStoredValues] : XCTAssertTrue failed - Numeric input must offer a reachable explicit Done actio…",
+    "3054: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultSaveReopensWithStoredValues]' failed (36.350 seconds).",
+    "3055: Test Suite 'TodaySettingsRegressionTests' failed at 2026-11-14 11:16:35.807.",
+    "3057: Test Suite 'DUNEUITests.xctest' failed at 2026-11-14 11:16:35.808.",
+    "3059: Test Suite 'Selected tests' failed at 2026-11-14 11:16:35.808.",
+    "3072: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultFieldsFitAtMaximumAccessibilitySize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-02-ui.log"
+}

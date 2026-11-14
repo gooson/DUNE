@@ -10,7 +10,6 @@ struct ShareableImage: Identifiable {
 struct ShareImageSheet: View {
     let image: UIImage
     let title: String
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         NavigationStack {
@@ -20,7 +19,7 @@ struct ShareImageSheet: View {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(maxHeight: dynamicTypeSize.isAccessibilitySize ? 220 : 300)
+                    .frame(maxHeight: 300)
                     .clipShape(RoundedRectangle(cornerRadius: DS.Radius.md))
                     .shadow(color: .black.opacity(0.2), radius: 8, y: 4)
 

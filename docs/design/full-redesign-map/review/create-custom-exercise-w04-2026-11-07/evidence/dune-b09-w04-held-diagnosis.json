@@ -1,0 +1,60 @@
+{
+  "screen": "W04 Create Custom Exercise",
+  "status": "held_draft",
+  "run": "b09-ipad-retry1",
+  "source_revision": "dc2a6d18b0798931bd90fe04bf3d63654e4fdd70",
+  "test_source_sha256": "6c66dab40e1b137b00314e7ee79fed3b245558212661867d5706716d06944c56",
+  "result": {
+    "executed": 2,
+    "passed": 0,
+    "failed": 2,
+    "skipped": 0,
+    "selectors": [
+      "ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText",
+      "ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText"
+    ],
+    "failure": "ActivityExercisePickerRegressionTests.swift:307, Templates action should be reachable through the native More menu"
+  },
+  "observations": [
+    "Both cases reached ExerciseView, then tapped XCUI Button identifier TopOverflowBarButtonItem label More; the normal test log records the tap at 27.81s and an eight-second wait for List On A Clipboard that never succeeded.",
+    "Both exported immediately-after-tap PNGs show the Exercise navigation bar with plus and ellipsis, no open overflow menu.",
+    "Both immediately-after-tap AX trees contain TopOverflowBarButtonItem label More and no Template, Clipboard, menu, popover, or exercise-toolbar-templates entry.",
+    "The failure screenshots likewise show the Exercise screen without a menu or template destination.",
+    "Source toolbar contains a topBarLeading NavigationLink with SF symbol list.clipboard and accessibilityIdentifier exercise-toolbar-templates; this view source was unchanged by W04 layout work."
+  ],
+  "causal_judgment": "The fallback located and tapped the native More button, but no templates action was exposed in the captured UI. This evidence does not identify whether the overflow failed to open, dismissed during audit capture, or omits the leading toolbar item; therefore a target-label substitution is ungrounded.",
+  "unexecuted_patch": "none; no decisive selector or route visible in finished evidence",
+  "limits": [
+    "No third iPad SDK attempt authorized.",
+    "Phone W04 normal and maximum runs passed independently; this failed iPad retry does not erase them.",
+    "W04 iPad normal and maximum Create Custom Exercise remain unverified; do not mark current iPad actual captures as passed."
+  ],
+  "evidence": {
+    "maximum_after_more_png": {
+      "path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-retry1-attachments/38A5F07B-43ED-4FF6-B80F-FAB20C36F13E.png",
+      "sha256": "8dd8bf0c8e70a173ecb3b77d86aed883e3ca9af61f6cc0aafbd79b4dd2826f61"
+    },
+    "maximum_after_more_ax": {
+      "path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-retry1-attachments/1B68A69B-ECA4-4500-AFD2-24D003309487.txt",
+      "sha256": "2ee9d8d7be60093950cef238a9065af977d2d292460f50d234cdde85eee99c86"
+    },
+    "normal_after_more_png": {
+      "path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-retry1-attachments/53A73AA7-AA5C-4754-9666-039D20827CE6.png",
+      "sha256": "a0f1a661825eaf317d3c460b7f840f4ba1114231537556a1dea870f643c4d9dc"
+    },
+    "normal_after_more_ax": {
+      "path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-retry1-attachments/B08528E1-DBA2-476C-AFC3-F9B5D4A4218E.txt",
+      "sha256": "98197896c021f24fcb5f94a541796486d44c09d3da6a25c527977a19df0418c5"
+    },
+    "maximum_failure_png": {
+      "path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-retry1-attachments/4BB1A872-C2D6-44B1-A47E-9FB0B3274AC3.png",
+      "sha256": "8dd8bf0c8e70a173ecb3b77d86aed883e3ca9af61f6cc0aafbd79b4dd2826f61"
+    },
+    "normal_failure_png": {
+      "path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-retry1-attachments/919D76F7-9886-43BC-A7CF-0DE242B69662.png",
+      "sha256": "a0f1a661825eaf317d3c460b7f840f4ba1114231537556a1dea870f643c4d9dc"
+    }
+  },
+  "log": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-retry1-ui.log",
+  "contract": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-retry1-contract.json"
+}

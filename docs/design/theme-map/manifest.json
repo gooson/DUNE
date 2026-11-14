@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-07",
+  "updated": "2026-11-14",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -170,6 +170,30 @@
     }
   ],
   "studies": [
+    {
+      "id": "notification-message-reading",
+      "name": "T12 · 알림 수치 강조",
+      "title": "작은 제목·저장 시각과 체성분 값 카드",
+      "file": "dune-notification-message-reading.html",
+      "detail": "2026-11-14 후속 시안. 저장된 이름·값·단위를 강조하며 일반·혼합 메시지는 원문으로 읽는다. 실제 앱 캡처는 별도 검증한다.",
+      "implementation": {
+        "layout": "../layout-map/notification-message-detail-proposal.md",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/notification-cardio-2026-11-14/index.html"
+      }
+    },
+    {
+      "id": "watch-cardio-time-zone",
+      "name": "Watch 유산소 · 현재 존",
+      "title": "시간·레벨·심박과 현재 존 통합",
+      "file": "dune-watch-cardio-time-zone.html",
+      "detail": "러닝과 같은 현재 존 번호·가변 구간 막대를 시간 우선 유산소 화면에 표시한다. 정적 예시이며 실제 Watch 캡처는 별도 검증한다.",
+      "implementation": {
+        "layout": "../layout-map/watch-cardio-time-zone-proposal.md",
+        "status": "native-captured-targeted-3",
+        "actual": "../full-redesign-map/review/notification-cardio-2026-11-14/index.html"
+      }
+    },
     {
       "id": "training-volume-detail-a06",
       "name": "A06 · Training Volume 상세",
@@ -1215,27 +1239,207 @@
       }
     },
     {
-      "id": "exercise-history-w26",
-      "name": "W26 · 운동 이력",
-      "title": "원래 값·아이콘·단위·기간·동작을 보존한 큰 글씨 배치",
-      "file": "dune-exercise-history-w26.html",
-      "detail": "iPad 일반·MAX 새 캡처는 보류 갤러리에만 보존한다. Phone 목표 미진입·2회 실패를 유지하며 실제 맵은 갱신하지 않았다.",
+      "id": "compound-workout-setup-w19",
+      "name": "W19 · 복합 운동 설정",
+      "title": "원래 기능·값·아이콘·기간과 강조를 보존한 큰 글씨 배치",
+      "file": "dune-compound-workout-setup-w19.html",
+      "detail": "Phone/iPad의 통과한 일반·MAX named PNG/AX만 after로 보존한다. 실패 prefix와 역사적 PNG를 구분한다. 시안은 실제 앱 캡처가 아니다.",
       "implementation": {
-        "layout": "../layout-map/exercise-history-w26.html",
-        "status": "held-phone-required-core-incomplete",
-        "actual": "../full-redesign-map/review/exercise-history-w26-2026-11-07/index.html"
+        "layout": "../layout-map/compound-workout-setup-w19.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/compound-workout-setup-w19-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "compound-exercise-picker-w20",
+      "name": "W20 · 복합 운동 선택",
+      "title": "원래 기능·값·아이콘·기간과 강조를 보존한 큰 글씨 배치",
+      "file": "dune-compound-exercise-picker-w20.html",
+      "detail": "Phone/iPad의 통과한 일반·MAX named PNG/AX만 after로 보존한다. 실패 prefix와 역사적 PNG를 구분한다. 시안은 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/compound-exercise-picker-w20.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/compound-exercise-picker-w20-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "compound-workout-w21",
+      "name": "W21 · 복합 운동 세션",
+      "title": "원래 기능·값·아이콘·기간과 강조를 보존한 큰 글씨 배치",
+      "file": "dune-compound-workout-w21.html",
+      "detail": "Phone/iPad의 통과한 일반·MAX named PNG/AX만 after로 보존한다. 실패 prefix와 역사적 PNG를 구분한다. 시안은 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/compound-workout-w21.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/compound-workout-w21-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "exercise-transition-w22",
+      "name": "W22 · 운동 전환",
+      "title": "원래 기능·값·아이콘·기간과 강조를 보존한 큰 글씨 배치",
+      "file": "dune-exercise-transition-w22.html",
+      "detail": "Phone MAX 통과와 iPad 일반·MAX 통과만 after다. Phone 일반은 5초 자동 전환 뒤 사라진 Start 탭의 검사 실패로 역사적 실제 맵/미갱신과 진단을 유지한다. 시안은 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/exercise-transition-w22.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/exercise-transition-w22-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "template-workout-container-w16",
+      "name": "W16 · 템플릿 운동 흐름",
+      "title": "원래 기능·값·아이콘·기간과 강조를 보존한 큰 글씨 배치",
+      "file": "dune-template-workout-container-w16.html",
+      "detail": "Phone MAX 통과와 iPad 일반·MAX 통과만 after다. Phone 일반은 5초 자동 전환 뒤 사라진 Start 탭의 검사 실패로 역사적 실제 맵/미갱신과 진단을 유지한다. 시안은 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/template-workout-container-w16.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/template-workout-container-w16-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "cardio-start-w23",
+      "name": "W23 · 유산소 시작",
+      "title": "원래 기능·값·아이콘·기간과 강조를 보존한 큰 글씨 배치",
+      "file": "dune-cardio-start-w23.html",
+      "detail": "Phone/iPad의 통과한 일반·MAX named PNG/AX만 after로 보존한다. 실패 prefix와 역사적 PNG를 구분한다. 시안은 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/cardio-start-w23.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/cardio-start-w23-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "cardio-session-w24",
+      "name": "W24 · 유산소 세션",
+      "title": "원래 기능·값·아이콘·기간과 강조를 보존한 큰 글씨 배치",
+      "file": "dune-cardio-session-w24.html",
+      "detail": "Phone/iPad의 통과한 일반·MAX named PNG/AX만 after로 보존한다. 실패 prefix와 역사적 PNG를 구분한다. 시안은 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/cardio-session-w24.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/cardio-session-w24-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "workout-name-editor-w33",
+      "name": "W33 · source layout",
+      "title": "기존 기능과 데이터 보존 · 큰 글씨 배치",
+      "file": "dune-workout-name-editor-w33.html",
+      "detail": "Duo current-source capture pending. No full regression or Watch parity result is inferred. No manual Save/HealthKit write is inferred from visual captures. B12 W28 same-source captures remain historical provenance only; new W33 proof requires the fresh named B16+B17 capture. 시안은 실제 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/workout-name-editor-w33.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/workout-name-editor-w33-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "workout-insights-window-s07",
+      "name": "S07 · source layout",
+      "title": "기존 기능과 데이터 보존 · 큰 글씨 배치",
+      "file": "dune-workout-insights-window-s07.html",
+      "detail": "Duo current-source capture pending. No full regression or Watch parity result is inferred. No manual Save/HealthKit write is inferred from visual captures. 시안은 실제 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/workout-insights-window-s07.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/workout-insights-window-s07-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "workout-insights-sheet-w32",
+      "name": "W32 · source layout",
+      "title": "기존 기능과 데이터 보존 · 큰 글씨 배치",
+      "file": "dune-workout-insights-sheet-w32.html",
+      "detail": "Duo current-source capture pending. No full regression or Watch parity result is inferred. No manual Save/HealthKit write is inferred from visual captures. iPad forced sheet fallback has fresh normal only; iPad MAX visits S07 separate window and remains W32-pending. 시안은 실제 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/workout-insights-sheet-w32.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/workout-insights-sheet-w32-2026-11-07/index.html"
+      }
+    },
+    {
+      "id": "ai-workout-builder-w34",
+      "name": "W34 · W13 내장 AI 운동 빌더 상태",
+      "title": "원래 프롬프트·Generate 동작·지원 기기 안내를 보존하는 큰 글씨 배치",
+      "file": "dune-ai-workout-builder-w34.html",
+      "detail": "정적 시안이며 실제 앱 캡처가 아니다. W13 생성 Form의 내장 상태이고 별도 route가 없다.",
+      "implementation": {
+        "layout": "../layout-map/ai-workout-builder-w34.html",
+        "status": "scoped-verified-phone-ipad-ui-only",
+        "actual": "../full-redesign-map/review/ai-workout-builder-w34-2026-11-14/index.html"
+      }
+    },
+    {
+      "id": "exercise-categories-w29",
+      "name": "W29 · source layout",
+      "title": "기존 기능과 데이터 보존 · 큰 글씨 배치",
+      "file": "dune-exercise-categories-w29.html",
+      "detail": "2026-11-14 iPad normal/MAX route and W29 native PNG/AX passed at compiled source 15450f83dc. Historical 2026-11-07 Phone records and prior held/skip evidence remain dated; Duo is not recaptured. Static proposal is not an app screenshot.",
+      "implementation": {
+        "layout": "../layout-map/exercise-categories-w29.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/exercise-categories-w29-2026-11-14/index.html"
+      }
+    },
+    {
+      "id": "exercise-category-editor-w30",
+      "name": "W30 · source layout",
+      "title": "기존 기능과 데이터 보존 · 큰 글씨 배치",
+      "file": "dune-exercise-category-editor-w30.html",
+      "detail": "2026-11-14 iPad normal/MAX route and W30 native PNG/AX passed at compiled source 15450f83dc. Historical 2026-11-07 Phone records and prior held/skip evidence remain dated; Duo is not recaptured. Static proposal is not an app screenshot.",
+      "implementation": {
+        "layout": "../layout-map/exercise-category-editor-w30.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/exercise-category-editor-w30-2026-11-14/index.html"
+      }
+    },
+    {
+      "id": "workout-template-list-w12",
+      "name": "W12 · 운동 템플릿 목록",
+      "title": "원래 값·아이콘·기간·동작을 보존한 큰 글씨 배치",
+      "file": "dune-workout-template-list-w12.html",
+      "detail": "정적 시안이며 실제 앱 캡처가 아니다.",
+      "implementation": {
+        "layout": "../layout-map/workout-template-list-w12.html",
+        "status": "scoped-targeted-native-verified-with-limits",
+        "actual": "../full-redesign-map/review/workout-template-list-w12-2026-11-14/index.html"
+      }
+    },
+    {
+      "id": "cardio-summary-w25",
+      "name": "W25 · 유산소 요약",
+      "title": "원래 기능·값·아이콘·기간과 강조를 보존한 큰 글씨 배치",
+      "file": "dune-cardio-summary-w25.html",
+      "detail": "2026-11-14 Phone/iPad normal/MAX named native PNG/AX passed at source 93cabfc15f or byte-equivalent app source; original 2026-11-07 held/diagnostic tree remains historical. Duo is not recaptured. Static proposal is not app evidence.",
+      "implementation": {
+        "layout": "../layout-map/cardio-summary-w25.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/cardio-summary-w25-2026-11-14/index.html"
+      }
+    },
+    {
+      "id": "create-custom-exercise-w04",
+      "name": "W04 · Exercise",
+      "title": "기존 native 컨트롤·원래 아이콘·실제 데이터 보존과 읽기/접근성 배치",
+      "file": "dune-create-custom-exercise-w04.html",
+      "detail": "2026-11-14 iPad normal/MAX named native PNG/AX passed at byte-equivalent app source; Phone normal/MAX records remain dated 2026-11-07. Original held/diagnostic tree remains historical. Duo is not recaptured. Static proposal is not app evidence.",
+      "implementation": {
+        "layout": "../layout-map/create-custom-exercise-w04.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/create-custom-exercise-w04-2026-11-14/index.html"
       }
     },
     {
       "id": "share-image-w11",
-      "name": "W11 · 공유 이미지",
-      "title": "원래 값·아이콘·단위·기간·동작을 보존한 큰 글씨 배치",
+      "name": "W11 · 운동 이미지 공유",
+      "title": "원래 렌더링 카드와 Share 동작을 보존한 큰 글씨 배치",
       "file": "dune-share-image-w11.html",
-      "detail": "iPad 일반·MAX 새 캡처는 보류 갤러리에만 보존한다. Phone 목표 미진입·2회 실패를 유지하며 실제 맵은 갱신하지 않았다.",
+      "detail": "정적 시안이며 실제 앱 캡처가 아니다.",
       "implementation": {
         "layout": "../layout-map/share-image-w11.html",
-        "status": "held-phone-required-core-incomplete",
-        "actual": "../full-redesign-map/review/share-image-w11-2026-11-07/index.html"
+        "status": "scoped-phone-ipad-normal-MAX-ui-verified",
+        "actual": "../full-redesign-map/review/share-image-w11-2026-11-14/index.html"
       }
     }
   ]

@@ -5,6 +5,7 @@ import SwiftData
 struct CardioSessionView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var viewModel: CardioSessionViewModel
     @State private var showEndConfirmation = false
@@ -35,10 +36,20 @@ struct CardioSessionView: View {
                     distanceSection
                 }
                 secondaryMetrics
-                controlButtons
+                if !dynamicTypeSize.isAccessibilitySize {
+                    controlButtons
+                }
             }
             .padding(.horizontal, DS.Spacing.lg)
             .padding(.bottom, DS.Spacing.lg)
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if dynamicTypeSize.isAccessibilitySize {
+                controlButtons
+                    .padding(.horizontal, DS.Spacing.lg)
+                    .padding(.vertical, DS.Spacing.sm)
+                    .background(.regularMaterial)
+            }
         }
         .background { DetailWaveBackground() }
         .englishNavigationTitle(exercise.name)
@@ -132,7 +143,9 @@ struct CardioSessionView: View {
     private var primaryMetric: some View {
         VStack(spacing: DS.Spacing.xxs) {
             Text(viewModel.formattedElapsed)
-                .font(.system(size: 64, weight: .bold, design: .rounded).monospacedDigit())
+                .font(dynamicTypeSize.isAccessibilitySize
+                    ? .system(.largeTitle, design: .rounded).bold().monospacedDigit()
+                    : .system(size: 64, weight: .bold, design: .rounded).monospacedDigit())
                 .contentTransition(.numericText())
                 .animation(.default, value: viewModel.formattedElapsed)
 
@@ -145,7 +158,10 @@ struct CardioSessionView: View {
     // MARK: - Distance Section
 
     private var distanceSection: some View {
-        HStack(spacing: DS.Spacing.xl) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.xl))
+        return layout {
             VStack(spacing: DS.Spacing.xxs) {
                 Text(viewModel.formattedDistance)
                     .font(.system(.title, design: .rounded).monospacedDigit().bold())
@@ -181,8 +197,14 @@ struct CardioSessionView: View {
         }
     }
 
+    private var metricLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+    }
+
     private var defaultSecondaryMetrics: some View {
-        HStack(spacing: DS.Spacing.md) {
+        metricLayout {
             metricTile(
                 icon: "figure.walk",
                 iconColor: DS.Color.steps,
@@ -259,7 +281,7 @@ struct CardioSessionView: View {
     }
 
     private var machineSecondaryMetrics: some View {
-        HStack(spacing: DS.Spacing.md) {
+        metricLayout {
             metricTile(
                 icon: "slider.horizontal.3",
                 iconColor: DS.Color.activity,
@@ -306,10 +328,14 @@ struct CardioSessionView: View {
                 .foregroundStyle(iconColor)
             Text(value)
                 .font(.title3.monospacedDigit().bold())
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
                 .contentTransition(.numericText())
                 .animation(.default, value: value)
             Text(unit)
                 .font(.caption2)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
                 .foregroundStyle(DS.Color.textTertiary)
         }
         .frame(maxWidth: .infinity)

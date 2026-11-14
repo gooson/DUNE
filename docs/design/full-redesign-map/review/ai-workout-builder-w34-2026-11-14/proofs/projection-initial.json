@@ -1,0 +1,46 @@
+{
+  "base": "26fc83c4c6e0f55a685effe91086c43b1823a6e3",
+  "compiled": "f7bc00cb251ecab826e5ec7663450cd821e7c5fb",
+  "projection_manifest": {
+    "base": "26fc83c4c6e0f55a685effe91086c43b1823a6e3",
+    "compiled_source": "f7bc00cb251ecab826e5ec7663450cd821e7c5fb",
+    "W34_AI_section_byte_equal": true,
+    "W34_exact_test_method_bytes_equal": true,
+    "other_held_features_excluded": true,
+    "testcount": 2,
+    "app_sha256": "8699f85f826bdc10e71dffd3b472993c760084379ba628bb39c93ac413a90602",
+    "test_sha256": "59eebd416b9f242756bad8c9bfbb4979d69c3921997025b72fa87360c49bdac6",
+    "status": "private publication projection; gates unverified, no PR created"
+  },
+  "proof": {
+    "AI_section_projection_equals_compiled": true,
+    "AI_section_sha256": "65ed8c1e50e58f5527f6da3ca9485c941cda84d3f6000a59916868856688b347",
+    "W34_test_chunk_projection_equals_compiled": true,
+    "W34_test_chunk_sha256": "28067c09cb0912d56fd415ae22fae1830f79c355383c07a2b457af0bb05da646",
+    "projection_app_equals_main_after_reverting_only_AI_section": true,
+    "projection_test_equals_main_after_removing_only_W34_chunk": true,
+    "fixture_block_equals_main": true,
+    "route_and_test_base_full_file_equal": {
+      "DUNE/Presentation/Activity/ActivityView.swift": true,
+      "DUNE/Presentation/Activity/Components/SuggestedWorkoutSection.swift": true,
+      "DUNEUITests/Helpers/UITestBaseCase.swift": true,
+      "Shared/Resources/Localizable.xcstrings": true
+    },
+    "required_AXID_constants_equal": {
+      "activityHeroReadiness": true,
+      "activityRootScroll": true,
+      "activityAIWorkoutBuilder": true,
+      "templateFormScreen": true,
+      "templateFormAIPrompt": true,
+      "templateFormAIGenerate": true,
+      "templateFormCancel": true
+    },
+    "fillTextInput_method_equal": true,
+    "UITestHelpers_diff_only_unrelated_More_picker_queries": true
+  },
+  "assessment": "Independent W34 source/test projection can branch directly from accepted main; it does not depend on unmerged W13 layout or W14 picker. Runtime/visual pass remains pending.",
+  "limitations": [
+    "W34 tests prove UI availability state and prompt behavior; they do not invoke AI generation.",
+    "No native outcome is asserted in this source proof."
+  ]
+}

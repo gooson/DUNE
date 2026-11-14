@@ -1,0 +1,204 @@
+{
+  "native_decision": "HELD_iPad_MAX",
+  "source_scope": "W34 embedded AI builder; no generation requested",
+  "counts": {
+    "phone_first": "2 passed / 0 failed / 0 skipped",
+    "ipad_first": "1 passed (normal), 1 failed (MAX), 0 skipped",
+    "ipad_same_id_retry": "0 passed, 1 failed (MAX), 0 skipped"
+  },
+  "retry_ceiling": "Same-ID MAX retry has failed after a source-level scroll adjustment; no third SDK run in this review.",
+  "findings": [
+    {
+      "priority": "P2",
+      "title": "iPad MAX combined control viewport not proven",
+      "evidence": "First run AX Generate [104,614,548,160.5], availability [104,774.5,548,183.5]; native PNG shows the availability sentence clipped at sheet bottom. Same-ID retry AX Generate [104,301.5,548,160.5], availability [104,462,548,183.5]; retry PNG shows all text, but Generate begins 11.5pt above navigation-safe top y313, so whole-frame assertion fails. Neither run reaches MAX typing, enabled-state, or Cancel assertions.",
+      "cause_assessment": "The combined 344pt of content fits the 594pt viewport in principle. The two screenshots show overscroll/underscroll after drag actions, consistent with kinetic movement during the test. This is a test positioning diagnosis, not native proof that the whole pair can be settled fully in view. Current source uses 0.05s press-then-drag with proportional distance; an 80pt/s settled drag proposal is unexecuted."
+    },
+    {
+      "priority": "positive",
+      "title": "iPad normal complete W34 flow",
+      "evidence": "Normal screenshot shows full example prompt, disabled Generate and supported availability. Filled screenshot shows full typed 30 minute shoulder workout, enabled Generate, and full availability above keyboard. Cancel screenshot returns to Activity. Selector passed 1/1."
+    },
+    {
+      "priority": "scope_limit",
+      "title": "No MAX completion",
+      "evidence": "MAX only captured empty full prompt and failed before empty full-control capture or typed state; do not promote iPad MAX from partial PNG/AX to a pass. Phone 2/2 and iPad normal 1/1 remain independent positive evidence."
+    }
+  ],
+  "frames_pt": {
+    "window": [
+      0,
+      0,
+      756,
+      1158
+    ],
+    "first_max": {
+      "prompt": [
+        124,
+        473.5,
+        508,
+        125.5
+      ],
+      "generate": [
+        104,
+        614,
+        548,
+        160.5
+      ],
+      "availability": [
+        104,
+        774.5,
+        548,
+        183.5
+      ]
+    },
+    "retry_max": {
+      "prompt": [
+        124,
+        161,
+        508,
+        125.5
+      ],
+      "generate": [
+        104,
+        301.5,
+        548,
+        160.5
+      ],
+      "availability": [
+        104,
+        462,
+        548,
+        183.5
+      ],
+      "safe_top_min_y": 313
+    },
+    "combined_content_height": 344,
+    "nominal_available_viewport_height": 594
+  },
+  "receipts": {
+    "ipad_first_max": {
+      "W34 MAX empty full prompt": [
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/37EE888F-4738-4310-90B8-EF19E1AD6522.png",
+          "sha256": "b67df774dec00d637678329e08c4ed35c30a1f111d69bc8ccc9124c08e5a1ff8",
+          "timestamp": 1794592577.345,
+          "kind": "PNG"
+        },
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/B3D321BD-BCFA-4532-AF8E-E5B3610A8428.txt",
+          "sha256": "dc610d56eeb84fc84cbd72f58902ce9f5b44d14bba86a92ff74ee9749c18fe75",
+          "timestamp": 1794592577.345,
+          "kind": "AX"
+        }
+      ],
+      "before teardown": [
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/F2C8F6B8-84F3-491F-A08B-D9409CADBF69.png",
+          "sha256": "b67df774dec00d637678329e08c4ed35c30a1f111d69bc8ccc9124c08e5a1ff8",
+          "timestamp": 1794592599.178,
+          "kind": "PNG"
+        },
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/631E21EF-923E-490E-AACF-05DC67CC7834.txt",
+          "sha256": "bb0d8a4cc5798cd91619745701772049bdee2b3ead273cbcaac1e624e278448e",
+          "timestamp": 1794592599.178,
+          "kind": "AX"
+        }
+      ]
+    },
+    "ipad_first_normal": {
+      "W34 normal empty full prompt": [
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/970E4A52-E684-4F89-ABD5-EEFEE86442AF.png",
+          "sha256": "b66529d1b5a2dfe98c8ae4cf820d8cb8218401cd977fb0029246a2b6275e65c9",
+          "timestamp": 1794592632.829,
+          "kind": "PNG"
+        },
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/56D71BC7-6A4E-4EAD-8BF8-9F02F9D450C5.txt",
+          "sha256": "93830fb4cfa97d88175bb7cc2fa5080b4ae2a7511a940a9157f4ced6dc2ed3eb",
+          "timestamp": 1794592632.829,
+          "kind": "AX"
+        }
+      ],
+      "W34 normal empty AI prompt and availability": [
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/96EEE932-FF29-47FA-A39C-75737DBEE6CC.png",
+          "sha256": "b66529d1b5a2dfe98c8ae4cf820d8cb8218401cd977fb0029246a2b6275e65c9",
+          "timestamp": 1794592637.814,
+          "kind": "PNG"
+        },
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/34CFA411-A6D7-4C5B-8CE2-0B456354CCDA.txt",
+          "sha256": "338fb17f7522f92654686e355b98c69bda08a923f54acdbeea0b25aafe457b3d",
+          "timestamp": 1794592637.814,
+          "kind": "AX"
+        }
+      ],
+      "W34 normal filled full prompt and supported state": [
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/32A40154-DEF2-4A92-B3FF-B99FEAF4EFFD.png",
+          "sha256": "d86b54b6db1b37760261760f9cb2250fbf0e9cb678ea286ee494766799ddc4a9",
+          "timestamp": 1794592649.619,
+          "kind": "PNG"
+        },
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/3BF2C4FF-7F17-4A59-AAF9-018C287C2D1B.txt",
+          "sha256": "43064f2d0bec1a9436a8451c5d052183c48d933bcf3ab8069d75092ffcc40699",
+          "timestamp": 1794592649.619,
+          "kind": "AX"
+        }
+      ],
+      "tap template-form-cancel": [
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/C745A30B-75F6-4468-A808-A355A8E91E3D.png",
+          "sha256": "f85fcb47a1f2356fd2fa9f374a2fc3dcfee120d0d1f152277e2745b2697e2cdd",
+          "timestamp": 1794592653.419,
+          "kind": "PNG"
+        },
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-attachments/18DB1FF5-5CEF-404F-947A-36F6551A806B.txt",
+          "sha256": "4b7c4fd2cd28e4894413e6b8a78c342ad2a362a28c9d494115991e401f8b607a",
+          "timestamp": 1794592653.419,
+          "kind": "AX"
+        }
+      ]
+    },
+    "ipad_retry_max": {
+      "W34 MAX empty full prompt": [
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-retry1-attachments/7D21E017-3884-4821-8143-139350661648.png",
+          "sha256": "fbca9322b1566400ede22b7e9a90a62c5af4ffea8bb8350487cbccb754a8febf",
+          "timestamp": 1794593045.812,
+          "kind": "PNG"
+        },
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-retry1-attachments/CD684B1D-8FF7-437B-9D99-86B6178B3121.txt",
+          "sha256": "3c2483fda7ca7ec8680b8ec7f41808c7e960052ac9f10a04016b32c1b809a7d1",
+          "timestamp": 1794593045.812,
+          "kind": "AX"
+        }
+      ],
+      "before teardown": [
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-retry1-attachments/D94600AC-427C-4954-95D0-33BAF69070ED.png",
+          "sha256": "1bc5c24fb0f862a0017a2a1bbd7f27e89a74dc67277c2d1ae289277f93fb6b73",
+          "timestamp": 1794593084.411,
+          "kind": "PNG"
+        },
+        {
+          "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-ipad-retry1-attachments/5569194B-7B0B-4FCF-9342-BC389A9CFD5E.txt",
+          "sha256": "2af32517e636791bc913c54bc0f07f753c1aa1646e3e0d8ecd076bbf7d00c6d7",
+          "timestamp": 1794593084.411,
+          "kind": "AX"
+        }
+      ]
+    }
+  },
+  "root_manifest_files": [
+    ".codex-checks/held-completion/w34-ipad-attachments/manifest.json",
+    ".codex-checks/held-completion/w34-ipad-retry1-attachments/manifest.json"
+  ],
+  "reviewer_actions": "read-only PNG/AX/source; no SDK, simulator, process, or repository edits"
+}

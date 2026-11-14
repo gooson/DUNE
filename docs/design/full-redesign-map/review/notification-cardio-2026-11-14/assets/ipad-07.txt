@@ -1,0 +1,74 @@
+Attributes: Application, 0x112c14280, pid: 40578, label: 'DUNE'
+Element subtree:
+ →Application, 0x112c14280, pid: 40578, label: 'DUNE'
+    Window (Main), 0x112c143c0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x112c14500, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x112c14140, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x112c14640, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x112c14000, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x10528f840, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x10528f700, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x10528fac0, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x10528f980, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x10895da40, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x10895df40, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x10895e440, {{0.0, 96.0}, {756.0, 1062.0}}
+                          Other, 0x10895c500, {{0.0, 96.0}, {756.0, 1062.0}}
+                            Other, 0x10895c640, {{0.0, 96.0}, {756.0, 1062.0}}
+                              Other, 0x10895c780, {{0.0, 96.0}, {756.0, 1062.0}}
+                                Other, 0x10895c8c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                  Other, 0x10895ca00, {{0.0, 96.0}, {756.0, 1062.0}}
+                                    Other, 0x10895cb40, {{0.0, 96.0}, {756.0, 1062.0}}
+                                      Other, 0x10895cc80, {{0.0, 96.0}, {756.0, 1062.0}}
+                                        NavigationBar, 0x10895cdc0, {{0.0, 150.0}, {756.0, 54.0}}, identifier: 'Notification'
+                                          Button, 0x10895cf00, {{10.0, 150.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Notifications'
+                                          StaticText, 0x10895d040, {{331.5, 161.5}, {92.5, 21.0}}, label: 'Notification'
+                                        Other, 0x10895d180, {{0.0, 96.0}, {756.0, 1062.0}}
+                                          Other, 0x10895d2c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                            Other, 0x10895d400, {{0.0, 96.0}, {756.0, 1062.0}}
+                                              Other, 0x10895d540, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                ScrollView, 0x10895d680, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'notification-message-detail-screen'
+                                                  Other, 0x10895d7c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                    Other, 0x10895d900, {{0.0, 96.0}, {756.0, 148.0}}
+                                                  Other, 0x1053f5900, {{0.0, 96.0}, {756.0, 1062.0}}
+                                                  Other, 0x1053f5a40, {{0.0, 204.0}, {756.0, 248.0}}
+                                                    StaticText, 0x1053f5e00, {{122.5, 240.0}, {268.5, 26.5}}, identifier: 'notification-message-title', label: 'Body Composition Update'
+                                                    StaticText, 0x1053f5b80, {{122.5, 274.5}, {124.0, 14.5}}, identifier: 'notification-message-date', label: 'Nov 14, 2026 at 17:43'
+                                                    Other, 0x1053f5f40, {{38.0, 325.0}, {680.0, 111.0}}, identifier: 'notification-message-measurements'
+                                                      StaticText, 0x1053f6300, {{58.0, 345.0}, {26.5, 18.0}}, label: 'BMI'
+                                                      StaticText, 0x1053f6800, {{402.0, 345.0}, {57.5, 18.0}}, label: 'Body fat'
+                                                      StaticText, 0x1053f6580, {{42.0, 359.0}, {105.5, 73.0}}, identifier: 'notification-measurement-value-0', label: '24.9'
+                                                      StaticText, 0x1053f70c0, {{386.0, 359.0}, {133.5, 73.0}}, identifier: 'notification-measurement-value-1', label: '23.5%'
+                                                  Other, 0x1053f7700, {{723.0, 204.0}, {30.0, 922.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x1053f7d40, {{750.0, 893.0}, {3.0, 234.5}}
+                                                  Other, 0x1053f7980, {{723.0, 204.0}, {30.0, 922.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x1053f7480, {{750.0, 893.0}, {3.0, 234.5}}
+                                        Toolbar, 0x1053f4500, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x1053f4640, {{0.0, 96.0}, {756.0, 1062.0}}
+                                Toolbar, 0x1053f7840, {{0.0, 96.0}, {756.0, 1062.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x1053f75c0, {{0.0, 96.0}, {756.0, 1062.0}}
+                            Other, 0x1053f7c00, {{0.0, 96.0}, {756.0, 1062.0}}
+                              Other, 0x1053f6080, {{0.0, 96.0}, {756.0, 1062.0}}
+                Other, 0x1053f66c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x1053f7ac0, {{0.0, 32.0}, {756.0, 44.0}}
+                    Button, 0x1053f7e80, {{183.5, 36.0}, {56.0, 36.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x1053f6440, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today', Selected
+                      Button, 0x1053f7340, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today', Selected
+                    Button, 0x1053f6a80, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                      Button, 0x1053f6d00, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                    Button, 0x1053f7200, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                      Button, 0x1053f6e40, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                    Button, 0x1053f6f80, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x1053f6bc0, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x1053f4dc0, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x1053f4b40, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x1053f61c0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1053f5180, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1053f5040, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x112c14280, pid: 40578, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1053f52c0, pid: 40578, label: 'DUNE'
+  }

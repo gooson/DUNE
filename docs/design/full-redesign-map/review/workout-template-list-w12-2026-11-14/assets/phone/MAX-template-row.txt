@@ -1,0 +1,104 @@
+Attributes: Application, 0x1149ff980, pid: 57658, label: 'DUNE'
+Element subtree:
+ →Application, 0x1149ff980, pid: 57658, label: 'DUNE'
+    Window (Main), 0x1149fca00, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1149fef80, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1149ff480, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1149fe800, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x1149fee40, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x1149fea80, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x1149ff700, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1149fe080, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1149fdcc0, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x1149fe440, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x1149ff0c0, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x1149fe580, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x1149fd540, {{0.0, 0.0}, {440.0, 956.0}}
+                            NavigationBar, 0x1149fda40, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Templates'
+                              Button, 0x1149fd040, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Exercise'
+                              StaticText, 0x1149fd400, {{170.3, 71.3}, {99.3, 25.3}}, label: 'Templates'
+                              Button, 0x1149fde00, {{309.7, 66.0}, {47.7, 36.0}}, identifier: 'workout-weekly-plan-open', label: 'Weekly Workout Plan'
+                              Other, 0x1149fd900, {{373.3, 66.0}, {42.7, 36.0}}
+                                Other, 0x1149fc8c0, {{373.3, 66.0}, {42.7, 36.0}}
+                                  Button, 0x1149ff340, {{373.3, 66.0}, {42.7, 36.0}}, identifier: 'workout-template-list-add', label: 'Add'
+                            Other, 0x1149fc000, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x1149ff200, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x1149fcf00, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x1149fc500, {{0.0, 0.0}, {440.0, 956.0}}
+                                    CollectionView, 0x1149ffac0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'workout-template-list-screen'
+                                      Other, 0x106fe0dc0, {{-20.0, -1796.0}, {480.0, 4543.0}}
+                                      Other, 0x106fe30c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x106fe3980, {{0.0, 0.0}, {440.0, 156.0}}
+                                        Other, 0x106fe3480, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x106fe0f00, {{0.0, 0.0}, {440.0, 956.0}}
+                                      Cell, 0x106fe1a40, {{20.0, 151.0}, {400.0, 332.0}}
+                                        Other, 0x106fe0780, {{20.0, 151.0}, {400.0, 332.0}}
+                                          Other, 0x106fe3d40, {{20.0, 151.0}, {400.0, 332.0}}
+                                        Other, 0x106fe35c0, {{20.0, 151.0}, {400.0, 332.0}}
+                                          Other, 0x106fe2bc0, {{20.0, 151.0}, {400.0, 332.0}}
+                                            Other, 0x106fe2800, {{20.0, 151.0}, {400.0, 332.0}}
+                                              Button, 0x106fe3840, {{20.0, 151.0}, {400.0, 332.0}}, identifier: 'workout-template-row-codex-circuit-builder', label: 'Codex Circuit Builder, 2 exercises, Squat, Bench Press'
+                                                StaticText, 0x106fe2300, {{40.0, 168.0}, {167.3, 187.3}}, label: 'Codex Circuit Builder'
+                                                Image, 0x106fe1040, {{340.3, 234.3}, {55.0, 55.0}}, identifier: 'play.circle.fill', label: 'Play'
+                                                StaticText, 0x106fe2f80, {{40.0, 359.3}, {205.3, 51.3}}, label: '2 exercises'
+                                                StaticText, 0x106fe2440, {{40.0, 414.7}, {352.0, 51.3}}, label: 'Squat, Bench Press'
+                                      Cell, 0x106fe3e80, {{20.0, 483.0}, {400.0, 332.0}}
+                                        Other, 0x106fe3ac0, {{20.0, 483.0}, {400.0, 332.0}}
+                                          Other, 0x106fe26c0, {{20.0, 483.0}, {400.0, 332.0}}
+                                        Other, 0x106fe1900, {{20.0, 483.0}, {400.0, 332.0}}
+                                          Other, 0x106fe2a80, {{20.0, 483.0}, {400.0, 332.0}}
+                                            Other, 0x106fe08c0, {{20.0, 483.0}, {400.0, 332.0}}
+                                              Button, 0x106fe1f40, {{20.0, 483.0}, {400.0, 332.0}}, identifier: 'workout-template-row-codex-strength-starter', label: 'Codex Strength Starter, 1 exercises, Bench Press'
+                                                StaticText, 0x1157b0000, {{40.0, 500.0}, {217.7, 187.3}}, label: 'Codex Strength Starter'
+                                                Image, 0x1157b0140, {{340.3, 566.3}, {55.0, 55.0}}, identifier: 'play.circle.fill', label: 'Play'
+                                                StaticText, 0x1157b0280, {{40.0, 691.3}, {200.0, 51.3}}, label: '1 exercises'
+                                                StaticText, 0x1157b03c0, {{40.0, 746.7}, {227.3, 51.3}}, label: 'Bench Press'
+                                      Other, 0x1157b0500, {{40.0, 482.0}, {360.0, 1.0}}
+                                      Other, 0x1157b0640, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x1157b0780, {{434.0, 863.0}, {3.0, 7.0}}
+                                      Other, 0x1157b08c0, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x1157b0a00, {{434.0, 863.0}, {3.0, 7.0}}
+                            Toolbar, 0x1157b0b40, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x1157b0c80, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1157b0dc0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x1157b0f00, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x1157b1040, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x1157b1180, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x1157b12c0, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x1157b1400, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x1157b1540, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x1157b1680, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today'
+                              Image, 0x1157b17c0, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x1157b1900, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                              Image, 0x1157b1a40, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x1157b1b80, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x1157b1cc0, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x1157b1e00, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x1157b1f40, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x1157b2080, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x1157b21c0, {{120.2, 877.0}, {104.5, 54.0}}
+                            Other, 0x1157b2300, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x1157b2440, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x1157b2580, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x1157b26c0, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x1157b2800, {{120.2, 877.0}, {104.3, 54.0}}
+                                    Other, 0x1157b2940, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x1157b2a80, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x1157b2bc0, {{120.2, 877.0}, {104.3, 54.0}}
+                    Other, 0x1157b2d00, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x1157b2e40, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x1157b2f80, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x1157b30c0, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x1157b3200, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x1157b3340, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x1157b3480, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x1157b35c0, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x1157b3700, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x1157b3840, {{220.0, 492.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x1149ff980, pid: 57658, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1157b3980, pid: 57658, label: 'DUNE'
+  }
