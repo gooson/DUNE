@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtMaximumText"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 0,
+  "failures": [
+    "515: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:3647: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditTemplateAuthoringAtMaximumText] : XCTAssertTrue failed",
+    "526: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditTemplateAuthoringAtMaximumText]' failed (82.693 seconds).",
+    "693: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:3647: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditTemplateAuthoringAtNormalText] : XCTAssertTrue failed",
+    "704: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditTemplateAuthoringAtNormalText]' failed (53.922 seconds).",
+    "705: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-11-07 06:33:37.477.",
+    "707: Test Suite 'DUNEUITests.xctest' failed at 2026-11-07 06:33:37.478.",
+    "709: Test Suite 'Selected tests' failed at 2026-11-07 06:33:37.478.",
+    "722: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtMaximumText"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b13/ipad-ui.log"
+}

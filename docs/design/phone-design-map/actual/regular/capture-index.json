@@ -1015,13 +1015,16 @@
     },
     "W14": {
       "row_id": "W14",
-      "evidence": "test-and-action:Template exercise picker",
-      "test": "ActivityExercisePickerRegressionTests/testFullPickerSupportsFilterSelectorsAndSelectionFromTemplateForm()",
-      "action": "Template exercise picker",
-      "timestamp": 1791835634.337,
-      "image": "DC2322DD-798A-4957-82CA-D00F53A43410.png",
-      "screen": "screen-0-1320x2868-Template exercise picker_0_84A3652E-BDC8-4248-BA1F-F50CE1F0AA63.png",
-      "file": "W14.png"
+      "evidence": "fresh-2026-11-14-authoring-normal",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText()",
+      "action": "W14 normal template exercise picker initial",
+      "timestamp": 1794635171.023,
+      "image": "6D414E12-3F84-4479-A704-B7DE491FB7E1.png",
+      "screen": "screen-0-1320x2868-W14 normal template exercise picker initial_0_DC5C811E-F6CF-4BAF-A804-DD696AF31B7E.png",
+      "file": "W14.png",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "ax": "evidence/W14-normal.ax.txt",
+      "capture_gallery": "../../../full-redesign-map/review/template-exercise-picker-w14-2026-11-14/index.html"
     },
     "A09": {
       "row_id": "A09",
@@ -1904,7 +1907,8 @@
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
   "last_refresh_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
   "last_refresh_screens": [
-    "W13"
+    "W13",
+    "W14"
   ],
   "last_refresh_note": "2026-11-14 fresh iPhone template authoring normal/MAX review; representative normal image only, all paired states in per-screen gallery. Other entries retain prior source and image."
 }

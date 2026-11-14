@@ -427,3 +427,5 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-14 P08: 정적 시안과 [Phone/iPad/Duo 일반·MAX 실제 PNG/AX](../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html)를 구분한다. P05 More 메뉴 소비자와 2026-11-06 리뷰를 보존한다.
 
 2026-11-14 W13: 정적 시안과 새 Phone/iPad 일반·MAX 실제 검증을 구분한다. 2026-11-07 보류 원본을 보존한다.
+
+2026-11-14 W14: 정적 시안과 새 Phone/iPad 일반·MAX 실제 검증을 구분한다. 2026-11-07 보류 원본을 보존한다.

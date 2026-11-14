@@ -995,13 +995,16 @@
     },
     "W14": {
       "row_id": "W14",
-      "evidence": "test-and-action:Template exercise picker",
-      "test": "ActivityExercisePickerRegressionTests/testFullPickerSupportsFilterSelectorsAndSelectionFromTemplateForm()",
-      "action": "Template exercise picker",
-      "timestamp": 1791837784.987,
-      "image": "F00E3BE5-2CDA-4601-BE34-C696795B62DE.png",
-      "screen": "screen-0-2064x2752-Template exercise picker_0_2C1F9160-0035-4E58-9F66-BD0D6E3BD7C1.png",
-      "file": "W14.png"
+      "evidence": "fresh-2026-11-14-authoring-normal",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText()",
+      "action": "W14 normal template exercise picker initial",
+      "timestamp": 1794635618.935,
+      "image": "BB1E151E-69A6-4869-9D46-E8ACF8BF0187.png",
+      "screen": "screen-0-1512x2316-W14 normal template exercise picker initial_0_27D78C93-71EF-4107-A337-4F9795D75C3E.png",
+      "file": "W14.png",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "ax": "evidence/W14-normal.ax.txt",
+      "capture_gallery": "../../../full-redesign-map/review/template-exercise-picker-w14-2026-11-14/index.html"
     },
     "A05": {
       "row_id": "A05",
@@ -1988,7 +1991,8 @@
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
   "last_refresh_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
   "last_refresh_screens": [
-    "W13"
+    "W13",
+    "W14"
   ],
   "last_refresh_note": "2026-11-14 fresh iPad template authoring normal/MAX review; representative normal image only, all paired states in per-screen gallery. Other entries retain prior source and image."
 }

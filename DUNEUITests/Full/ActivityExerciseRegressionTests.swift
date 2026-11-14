@@ -3965,6 +3965,196 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(scroll.waitForExistence(timeout: 5))
     }
 
+    func testVisualAuditTemplateAuthoringAtNormalText() throws {
+        try auditTemplateAuthoring(maximumText: false)
+    }
+
+    func testVisualAuditTemplateAuthoringAtMaximumText() throws {
+        try auditTemplateAuthoring(maximumText: true)
+    }
+
+    private func auditTemplateAuthoring(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B13 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        ensureActivityRoot()
+        let activityScroll = app.scrollViews[AXID.activityRootScroll].firstMatch
+        XCTAssertTrue(activityScroll.waitForExistence(timeout: 5))
+        let builder = app.buttons[AXID.activityAIWorkoutBuilder].firstMatch
+        for _ in 0..<24 {
+            let viewport = activityScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
+            if builder.exists && builder.isHittable && viewport.contains(builder.frame) { break }
+            if builder.exists && builder.frame.midY < viewport.midY {
+                activityScroll.swipeDown(velocity: .slow)
+            } else {
+                activityScroll.swipeUp(velocity: .slow)
+            }
+        }
+        let builderViewport = activityScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 80)
+        XCTAssertTrue(builder.exists && builder.isHittable && builderViewport.contains(builder.frame),
+                      "The whole Activity AI Builder action must be visible before opening W13")
+        builder.auditTap()
+        let form = app.collectionViews[AXID.templateFormScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let save = app.buttons[AXID.templateFormSave].firstMatch
+        XCTAssertTrue(save.waitForExistence(timeout: 5) && !save.isEnabled)
+        VisualAudit.capture("W13 \(size) blank template form and disabled Save")
+
+        // W34 is the AI section embedded in W13 create mode, not another route.
+        let aiPrompt = app.descendants(matching: .any)[AXID.templateFormAIPrompt].firstMatch
+        let aiGenerate = app.buttons[AXID.templateFormAIGenerate].firstMatch
+        XCTAssertTrue(aiPrompt.waitForExistence(timeout: 5), "W34 prompt must exist in create mode")
+        XCTAssertTrue(aiGenerate.waitForExistence(timeout: 5) && !aiGenerate.isEnabled,
+                      "Empty AI prompt must keep Generate Template disabled")
+        let availableHint = app.staticTexts[
+            "Generating a template will replace the current exercise list."
+        ].firstMatch
+        let unavailableHint = app.staticTexts[
+            "Workout generation is available on supported Apple Intelligence devices."
+        ].firstMatch
+        XCTAssertTrue(availableHint.exists || unavailableHint.exists,
+                      "W34 must explain the current AI availability state")
+        for _ in 0..<8 {
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            if aiGenerate.exists && aiGenerate.isHittable && viewport.contains(aiGenerate.frame) { break }
+            if aiGenerate.exists && aiGenerate.frame.midY < viewport.midY {
+                form.swipeDown(velocity: .slow)
+            } else {
+                form.swipeUp(velocity: .slow)
+            }
+        }
+        let aiViewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+        XCTAssertTrue(aiGenerate.isHittable && aiViewport.contains(aiGenerate.frame),
+                      "W34 Generate Template control must fit in the W13 create Form viewport")
+        VisualAudit.capture("W13 W34 \(size) embedded AI generator availability")
+
+        let addExercise = app.buttons[AXID.templateFormAddExercise].firstMatch
+        func revealAndTapAddExercise() {
+            for _ in 0..<12 {
+                let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+                if addExercise.exists && viewport.contains(addExercise.frame) && addExercise.isHittable { break }
+                if addExercise.exists && addExercise.frame.midY < viewport.midY {
+                    form.swipeDown(velocity: .slow)
+                } else {
+                    form.swipeUp(velocity: .slow)
+                }
+            }
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            XCTAssertTrue(addExercise.exists && addExercise.isHittable && viewport.contains(addExercise.frame),
+                          "W13 Add Exercise must be wholly visible in the active Form")
+            if addExercise.exists && addExercise.isHittable { addExercise.auditTap() }
+        }
+        revealAndTapAddExercise()
+
+        let picker = app.descendants(matching: .any)[AXID.pickerRootList].firstMatch
+        func typeInFullPickerSearch(_ value: String) {
+            // SwiftUI places .searchable in a picker Toolbar on Phone and in
+            // the picker navigation bar on iPad. The exact native label is unique.
+            let matches = app.searchFields.matching(NSPredicate(format: "label == %@", "Search exercises"))
+            let search = matches.firstMatch
+            XCTAssertTrue(search.waitForExistence(timeout: 5) && search.isHittable,
+                          "The presented full picker should expose its native search field")
+            XCTAssertEqual(matches.count, 1, "The presented picker should own one Search exercises field")
+            XCTAssertTrue(picker.frame.contains(search.frame),
+                          "The Search exercises field must be inside the visible full picker")
+            search.auditTap()
+            search.typeText(value)
+            let filled = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "value == %@", value), object: search
+            )
+            XCTAssertEqual(XCTWaiter.wait(for: [filled], timeout: 3), .completed,
+                           "Full picker search must contain the requested exercise name")
+        }
+
+        XCTAssertTrue(picker.waitForExistence(timeout: 8), "W14 full exercise picker should open")
+        VisualAudit.capture("W14 \(size) template exercise picker initial")
+        typeInFullPickerSearch("Bench Press")
+        dismissSearchKeyboardIfPresent()
+        let rowID = AXID.pickerExerciseRow(Fixture.benchPressID)
+        XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(rowID, maxSwipes: 10))
+        let row = app.buttons[rowID].firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 8) && row.isHittable)
+        VisualAudit.capture("W14 \(size) seeded Bench Press selection")
+        row.auditTap()
+
+        XCTAssertTrue(form.waitForExistence(timeout: 8), "Selection should return to W13 form")
+        let benchName = app.staticTexts[Fixture.benchPressLocalizedName].firstMatch
+        for _ in 0..<12 {
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            if benchName.exists && viewport.contains(benchName.frame) { break }
+            if benchName.exists && benchName.frame.midY < viewport.midY {
+                form.swipeDown(velocity: .slow)
+            } else {
+                form.swipeUp(velocity: .slow)
+            }
+        }
+        let nameViewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+        XCTAssertTrue(benchName.waitForExistence(timeout: 5) && nameViewport.contains(benchName.frame),
+                      "W13 selected strength exercise name must fit in the Form viewport")
+        VisualAudit.capture("W13 \(size) strength exercise name")
+        let sets = app.steppers.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND identifier ENDSWITH %@", "template-entry-", "-sets"
+        )).firstMatch
+        for _ in 0..<12 where !(sets.exists && sets.isHittable) { form.swipeUp(velocity: .slow) }
+        XCTAssertTrue(sets.waitForExistence(timeout: 5) && sets.isHittable)
+        let entryID = String(sets.identifier.dropFirst("template-entry-".count).dropLast("-sets".count))
+        XCTAssertNotNil(UUID(uuidString: entryID))
+        let reps = app.steppers["template-entry-\(entryID)-reps"].firstMatch
+        XCTAssertTrue(reps.waitForExistence(timeout: 5))
+        XCTAssertTrue(sets.label.contains("3") || (sets.value as? String)?.contains("3") == true,
+                      "New strength entry retains three default sets")
+        XCTAssertTrue(reps.label.contains("10") || (reps.value as? String)?.contains("10") == true,
+                      "New strength entry retains ten default reps")
+        XCTAssertFalse(save.isEnabled, "An unnamed selected exercise must not enable Save")
+        VisualAudit.capture("W13 \(size) strength defaults 3 sets and 10 reps")
+
+        revealAndTapAddExercise()
+        XCTAssertTrue(picker.waitForExistence(timeout: 8), "W14 full picker should reopen for session exercise")
+        typeInFullPickerSearch("Running")
+        dismissSearchKeyboardIfPresent()
+        let runningID = AXID.pickerExerciseRow(Fixture.runningID)
+        XCTAssertTrue(app.scrollToHittablePickerElementIfNeeded(runningID, maxSwipes: 10))
+        let running = app.buttons[runningID].firstMatch
+        XCTAssertTrue(running.waitForExistence(timeout: 8) && running.isHittable)
+        running.auditTap()
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let duration = app.staticTexts["Duration"].firstMatch
+        let distance = app.staticTexts["Distance"].firstMatch
+        let runningName = app.staticTexts["달리기"].firstMatch
+        for _ in 0..<12 {
+            let viewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+            if runningName.exists && duration.exists && distance.exists
+                && viewport.contains(runningName.frame)
+                && viewport.contains(duration.frame) && viewport.contains(distance.frame) { break }
+            form.swipeUp(velocity: .slow)
+        }
+        let summaryViewport = form.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 12)
+        XCTAssertTrue(runningName.waitForExistence(timeout: 5)
+                      && duration.waitForExistence(timeout: 5) && distance.waitForExistence(timeout: 5)
+                      && summaryViewport.contains(runningName.frame)
+                      && summaryViewport.contains(duration.frame) && summaryViewport.contains(distance.frame),
+                      "W13 Running must show the session-driven Duration · Distance summary")
+        VisualAudit.capture("W13 \(size) session exercise Duration and Distance summary")
+        let name = app.textFields[AXID.templateFormName].firstMatch
+        for _ in 0..<12 where !(name.exists && name.isHittable) { form.swipeDown(velocity: .slow) }
+        XCTAssertTrue(name.exists && name.isHittable)
+        XCTAssertTrue(app.fillTextInput(AXID.templateFormName, with: "B13 Audit Template"))
+        XCTAssertTrue(save.isEnabled, "Name plus selected exercises should enable Save")
+        VisualAudit.capture("W13 \(size) filled name and enabled Save before Cancel")
+        let cancel = app.buttons[AXID.templateFormCancel].firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
+        cancel.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.activityHeroReadiness].firstMatch
+            .waitForExistence(timeout: 10), "Cancel should return without saving a template")
+    }
+
     func testVisualAuditTemplateWorkoutFirstSession() throws {
         openTemplateList()
         let rowID = AXID.workoutTemplateRow(Fixture.circuitTemplate)
