@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText",
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 0,
+  "failures": [
+    "359: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExercisePickerRegressionTests.swift:307: error: -[DUNEUITests.ActivityExercisePickerRegressionTests testVisualAuditCustomCreateAtMaximumText] : XCTAssertTrue failed - Templates action should be reachable through the na…",
+    "370: Test Case '-[DUNEUITests.ActivityExercisePickerRegressionTests testVisualAuditCustomCreateAtMaximumText]' failed (61.275 seconds).",
+    "491: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExercisePickerRegressionTests.swift:307: error: -[DUNEUITests.ActivityExercisePickerRegressionTests testVisualAuditCustomCreateAtNormalText] : XCTAssertTrue failed - Templates action should be reachable through the nat…",
+    "502: Test Case '-[DUNEUITests.ActivityExercisePickerRegressionTests testVisualAuditCustomCreateAtNormalText]' failed (41.625 seconds).",
+    "503: Test Suite 'ActivityExercisePickerRegressionTests' failed at 2026-11-07 03:01:26.131.",
+    "505: Test Suite 'DUNEUITests.xctest' failed at 2026-11-07 03:01:26.131.",
+    "507: Test Suite 'Selected tests' failed at 2026-11-07 03:01:26.132.",
+    "520: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText",
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-retry1-ui.log"
+}

@@ -1,0 +1,164 @@
+Attributes: Application, 0x105dc7340, pid: 85873, label: 'DUNE'
+Element subtree:
+ →Application, 0x105dc7340, pid: 85873, label: 'DUNE'
+    Window, 0x105dc5cc0, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x105dc5400, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x105dc6d00, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x105dc52c0, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x105dc57c0, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x105dc4640, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x105dc6300, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x105dc6580, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x105dc4a00, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x105dc5040, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x105dc5680, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x105dc5a40, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x1027e5f40, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x1027e5e00, {{0.0, -0.0}, {951.0, 669.0}}
+                            NavigationBar, 0x105d74000, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Comparison'
+                              StaticText, 0x105d74140, {{20.0, 37.7}, {96.3, 20.7}}, label: 'Comparison'
+                            Toolbar, 0x105d74280, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x105d743c0, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x105d74500, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x105d74640, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x105d74780, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x105d748c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                    Other, 0x105d74a00, {{0.0, -0.0}, {867.0, 669.0}}
+                                      ScrollView, 0x105d74b40, {{0.0, -0.0}, {433.7, 669.0}}, identifier: 'posture-comparison-photos-scroll'
+                                        Other, 0x105d74c80, {{0.0, -0.0}, {433.7, 669.0}}
+                                          Other, 0x105d74dc0, {{0.0, -0.0}, {433.7, 122.0}}
+                                        Other, 0x105d74f00, {{0.0, -0.0}, {433.7, 669.0}}
+                                        Other, 0x105d75040, {{0.0, 82.0}, {433.7, 928.7}}
+                                          StaticText, 0x105d75180, {{117.7, 128.1}, {39.7, 36.0}}, identifier: 'posture-comparison-score', label: '73'
+                                          Image, 0x105d752c0, {{209.3, 135.7}, {15.3, 15.3}}, identifier: 'posture-comparison-score', label: 'Up-Right Diagonal Arrow'
+                                          StaticText, 0x105d75400, {{276.3, 128.1}, {39.7, 36.0}}, identifier: 'posture-comparison-score', label: '86'
+                                          StaticText, 0x105d75540, {{197.5, 156.6}, {38.7, 24.0}}, identifier: 'posture-comparison-score', label: '+13'
+                                          StaticText, 0x105d75680, {{118.7, 198.1}, {37.7, 14.3}}, identifier: 'posture-comparison-score', label: 'Oct 31'
+                                          StaticText, 0x105d757c0, {{276.3, 198.1}, {39.7, 14.3}}, identifier: 'posture-comparison-score', label: 'Nov 13'
+                                          StaticText, 0x105d75900, {{28.0, 260.4}, {147.3, 20.3}}, label: 'Photo Comparison'
+                                          StaticText, 0x105d75a40, {{28.0, 288.7}, {30.7, 14.3}}, label: 'Front'
+                                          Image, 0x105d75b80, {{28.0, 311.0}, {185.0, 328.7}}, identifier: 'posture-comparison-photo-front-older'
+                                          Image, 0x105d75cc0, {{221.0, 311.0}, {184.7, 328.7}}, identifier: 'posture-comparison-photo-front-newer'
+                                          StaticText, 0x105d75e00, {{28.0, 647.7}, {25.7, 14.3}}, label: 'Side'
+                                          Image, 0x105d75f40, {{28.0, 670.0}, {185.0, 328.7}}, identifier: 'posture-comparison-photo-side-older'
+                                          Image, 0x105d76080, {{221.0, 670.0}, {184.7, 328.7}}, identifier: 'posture-comparison-photo-side-newer'
+                                        Other, 0x105d761c0, {{400.7, 82.0}, {30.0, 587.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                          Other, 0x105d76300, {{427.7, 85.0}, {3.0, 372.0}}
+                                        Other, 0x105d76440, {{400.7, 82.0}, {30.0, 587.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                          Other, 0x105d76580, {{427.7, 85.0}, {3.0, 372.0}}
+                                      ScrollView, 0x105d766c0, {{433.7, -0.0}, {517.3, 669.0}}, identifier: 'posture-comparison-metrics-scroll'
+                                        Other, 0x105d76800, {{433.7, -0.0}, {517.3, 669.0}}
+                                          Other, 0x105d76940, {{433.7, -0.0}, {517.3, 122.0}}
+                                        Other, 0x105d76a80, {{433.7, -0.0}, {517.3, 669.0}}
+                                        Other, 0x105d76bc0, {{433.7, 82.0}, {433.3, 447.0}}
+                                          StaticText, 0x105d76d00, {{461.7, 94.0}, {125.3, 20.3}}, label: 'Metric Changes'
+                                          Image, 0x105d76e40, {{466.3, 136.0}, {15.0, 15.0}}, identifier: 'person.crop.circle', label: 'Account'
+                                          StaticText, 0x105d76f80, {{497.7, 126.3}, {98.7, 18.0}}, label: 'Forward Head'
+                                          StaticText, 0x105d770c0, {{810.0, 134.5}, {29.0, 18.0}}, label: '+13'
+                                          StaticText, 0x105d77200, {{497.7, 146.3}, {29.3, 14.3}}, label: '14.0°'
+                                          Image, 0x105d77340, {{532.3, 149.3}, {10.0, 8.3}}, identifier: 'arrow.right', label: 'Right'
+                                          StaticText, 0x105d77480, {{547.7, 146.3}, {21.7, 14.3}}, label: '1.0°'
+                                          Image, 0x105d775c0, {{465.0, 186.7}, {17.3, 14.3}}, identifier: 'arrow.up.arrow.down', label: 'Sort'
+                                          StaticText, 0x105d77700, {{497.7, 176.7}, {108.3, 18.0}}, label: 'Hip Asymmetry'
+                                          StaticText, 0x105d77840, {{810.0, 184.8}, {29.0, 18.0}}, label: '+13'
+                                          StaticText, 0x105d77980, {{497.7, 196.7}, {29.0, 14.3}}, label: '19.0°'
+                                          Image, 0x105d77ac0, {{532.0, 199.7}, {10.0, 8.3}}, identifier: 'arrow.right', label: 'Right'
+                                          StaticText, 0x105d77c00, {{547.3, 196.7}, {23.7, 14.3}}, label: '6.0°'
+                                          Image, 0x105d77d40, {{466.7, 237.3}, {14.0, 14.0}}, identifier: 'arrow.triangle.branch', label: 'Divide'
+                                          StaticText, 0x105d77e80, {{497.7, 227.0}, {111.0, 18.0}}, label: 'Knee Alignment'
+                                          StaticText, 0x105da0000, {{810.0, 235.2}, {29.0, 18.0}}, label: '+13'
+                                          StaticText, 0x105da0140, {{497.7, 247.0}, {30.7, 14.3}}, label: '20.0°'
+                                          Image, 0x105da0280, {{533.7, 250.0}, {10.0, 8.3}}, identifier: 'arrow.right', label: 'Right'
+                                          StaticText, 0x105da03c0, {{549.0, 247.0}, {22.0, 14.3}}, label: '7.0°'
+                                          Image, 0x105da0500, {{468.0, 286.0}, {11.0, 17.3}}, identifier: 'figure.walk', label: 'Walk'
+                                          StaticText, 0x105da0640, {{497.7, 277.3}, {150.0, 18.0}}, label: 'Knee Hyperextension'
+                                          StaticText, 0x105da0780, {{810.0, 285.5}, {29.0, 18.0}}, label: '+13'
+                                          StaticText, 0x105da08c0, {{497.7, 297.3}, {27.3, 14.3}}, label: '17.0°'
+                                          Image, 0x105da0a00, {{530.3, 300.3}, {10.0, 8.3}}, identifier: 'arrow.right', label: 'Right'
+                                          StaticText, 0x105da0b40, {{545.7, 297.3}, {23.7, 14.3}}, label: '4.0°'
+                                          Image, 0x105da0c80, {{466.3, 340.3}, {14.7, 9.3}}, identifier: 'arrow.left.and.right', label: 'Left And Right Arrows'
+                                          StaticText, 0x105da0dc0, {{497.7, 327.7}, {85.3, 18.0}}, label: 'Lateral Shift'
+                                          StaticText, 0x105da0f00, {{810.0, 335.8}, {29.0, 18.0}}, label: '+13'
+                                          StaticText, 0x105da1040, {{497.7, 347.7}, {29.0, 14.3}}, label: '21.0°'
+                                          Image, 0x105da1180, {{532.0, 350.7}, {10.0, 8.3}}, identifier: 'arrow.right', label: 'Right'
+                                          StaticText, 0x105da12c0, {{547.3, 347.7}, {23.7, 14.3}}, label: '8.0°'
+                                          Image, 0x105da1400, {{468.3, 387.0}, {10.3, 16.3}}, identifier: 'figure.arms.open', label: 'Figure With Arms Open'
+                                          StaticText, 0x105da1540, {{497.7, 378.0}, {137.7, 18.0}}, label: 'Rounded Shoulders'
+                                          StaticText, 0x105da1680, {{810.0, 386.2}, {29.0, 18.0}}, label: '+13'
+                                          StaticText, 0x105da17c0, {{497.7, 398.0}, {29.0, 14.3}}, label: '15.0°'
+                                          Image, 0x105da1900, {{532.0, 401.0}, {10.0, 8.3}}, identifier: 'arrow.right', label: 'Right'
+                                          StaticText, 0x105da1a40, {{547.3, 398.0}, {23.3, 14.3}}, label: '2.0°'
+                                          Image, 0x105da1b80, {{466.7, 437.0}, {14.3, 17.3}}, identifier: 'arrow.left.arrow.right', label: 'Left And Right Arrows'
+                                          StaticText, 0x105da1cc0, {{497.7, 428.3}, {147.3, 18.0}}, label: 'Shoulder Asymmetry'
+                                          StaticText, 0x105da1e00, {{810.0, 436.5}, {29.0, 18.0}}, label: '+13'
+                                          StaticText, 0x105da1f40, {{497.7, 448.3}, {29.3, 14.3}}, label: '18.0°'
+                                          Image, 0x105da2080, {{532.3, 451.3}, {10.0, 8.3}}, identifier: 'arrow.right', label: 'Right'
+                                          StaticText, 0x105da21c0, {{547.7, 448.3}, {23.3, 14.3}}, label: '5.0°'
+                                          Image, 0x105da2300, {{470.3, 487.7}, {7.0, 16.3}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x105da2440, {{497.7, 478.7}, {128.7, 18.0}}, label: 'Thoracic Kyphosis'
+                                          StaticText, 0x105da2580, {{810.0, 486.8}, {29.0, 18.0}}, label: '+13'
+                                          StaticText, 0x105da26c0, {{497.7, 498.7}, {29.0, 14.3}}, label: '16.0°'
+                                          Image, 0x105da2800, {{532.0, 501.7}, {10.0, 8.3}}, identifier: 'arrow.right', label: 'Right'
+                                          StaticText, 0x105da2940, {{547.3, 498.7}, {23.3, 14.3}}, label: '3.0°'
+                                        Other, 0x105da2a80, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                          Other, 0x105da2bc0, {{945.0, 191.0}, {3.0, 420.0}}
+                                        Other, 0x105da2d00, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                          Other, 0x105da2e40, {{945.0, 191.0}, {3.0, 420.0}}
+                Other, 0x105da2f80, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x105da30c0, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x105da3200, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x105da3340, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x105da3480, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x105da35c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x105da3700, {{879.0, 124.0}, {48.0, 48.0}}
+                              Other, 0x105da3840, {{879.0, 124.0}, {48.0, 48.0}}
+                                Other, 0x105da3980, {{884.0, 129.0}, {38.0, 38.0}}
+                                  Other, 0x105da3ac0, {{884.0, 129.0}, {38.0, 38.0}}
+                                    Button, 0x105da3c00, {{884.0, 129.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                        Other, 0x105da3d40, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x105da3e80, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x11066c000, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x11066c140, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x11066c280, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x11066c3c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x11066c500, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x11066c640, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x11066c780, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x11066c8c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x11066ca00, {{881.0, 435.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x11066cb40, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x11066cc80, {{881.0, 485.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x11066cdc0, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x11066cf00, {{881.0, 535.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                                            Image, 0x11066d040, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x11066d180, {{881.0, 585.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life'
+                                            Image, 0x11066d2c0, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x11066d400, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x11066d540, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x11066d680, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x11066d7c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x11066d900, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x11066da40, {{879.0, 433.0}, {48.0, 212.0}}
+                                                  Other, 0x11066db80, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x11066dcc0, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x11066de00, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x11066df40, {{881.0, 535.0}, {44.0, 58.0}}
+                                          Other, 0x11066e080, {{881.0, 535.0}, {44.0, 58.0}}
+                                            Other, 0x11066e1c0, {{881.0, 535.0}, {44.0, 58.0}}
+                                            Other, 0x11066e300, {{881.0, 535.0}, {44.0, 58.0}}
+                                              Other, 0x11066e440, {{881.0, 535.0}, {44.0, 58.0}}
+                                                Other, 0x11066e580, {{881.0, 535.0}, {44.0, 58.0}}
+                                                  Other, 0x11066e6c0, {{881.0, 535.0}, {44.0, 58.0}}
+                                                Other, 0x11066e800, {{881.0, 535.0}, {44.0, 58.0}}
+                                              Other, 0x11066e940, {{881.0, 535.0}, {44.0, 58.0}}
+              Other, 0x11066ea80, {{433.5, 317.5}, {0.0, 0.0}}
+    Window, 0x11066ebc0, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x11066ed00, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x11066ee40, {{0.0, -0.0}, {951.0, 669.0}}
+Path to element:
+ →Application, 0x105dc7340, pid: 85873, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x11066ef80, pid: 85873, label: 'DUNE'
+  }

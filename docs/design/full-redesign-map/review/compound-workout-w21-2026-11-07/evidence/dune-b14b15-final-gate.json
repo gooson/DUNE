@@ -1,0 +1,139 @@
+{
+  "status": "final_scoped_native_gate",
+  "decision": "W19/W20/W21/W23/W24 eligible under exact frozen integration proof; W16/W22 conditional with Phone regular historical/pending; W25 HELD for iPad MAX cadence legibility proof gap.",
+  "source": {
+    "frozen_integration": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+    "initial_contract": ".codex-checks/b14b15/execution-contract.json",
+    "app_and_catalog_bytes_match_initial_frozen_contract": true,
+    "checked_paths": 8,
+    "test_only_revisions_since_initial_source": true,
+    "iPad_test_hash": "c62f10c6 (parent-provided; current run)",
+    "final_retry_revision": "324b0b30033583cc8a218805afb6e4b609e55137",
+    "final_retry_test_hash": "b748ffebc14c4e7f93eb27db222ef0378ec5d51db9ecdd8fe05cb0b64f955b00"
+  },
+  "phone": {
+    "first": {
+      "executed": 7,
+      "passed": 3,
+      "failed": 4
+    },
+    "same_id_failed_subset_retry": {
+      "executed": 4,
+      "passed": 3,
+      "failed": 1
+    },
+    "unique_positive_selectors": 6,
+    "unique_total_selectors": 7,
+    "family_closed_no_third_run": true,
+    "native_review": "/private/tmp/dune-b14b15-phone-closed-native-review.json",
+    "gallery": "/private/tmp/dune-b14b15-gallery-prep",
+    "normal_W16_W22": "diagnostic only; preserve historical regular actual rows with pending note"
+  },
+  "ipad": {
+    "first": {
+      "executed": 7,
+      "passed": 6,
+      "failed": 1,
+      "failed_selector": "testStairClimberLevelChangesAppearInSummary"
+    },
+    "same_id_failed_case_retry": {
+      "executed": 1,
+      "passed": 1,
+      "failed": 0
+    },
+    "unique_positive_selectors": 7,
+    "unique_total_selectors": 7,
+    "native_review": "/private/tmp/dune-b14b15-ipad-native-review.json",
+    "no_more_family_retries": true
+  },
+  "screens": {
+    "W16": {
+      "phone": "MAX passed, normal failed after late optional Start snapshot race; normal diagnostic cannot become after",
+      "ipad": "normal and MAX passed, named current-source pairs reviewed",
+      "provisional_gate": "conditional only if iPad normal and MAX pass and source-equivalent; regular Phone actual row historical/pending",
+      "decision": "conditional_scoped_eligible",
+      "conditions": [
+        "Keep Phone regular actual row historical/pending; normal diagnostic never after.",
+        "Use passed Phone MAX plus iPad normal/MAX native pairs and exact unchanged app bytes for scoped quality proof.",
+        "Do not state Phone normal selector passed."
+      ]
+    },
+    "W19": {
+      "phone": "normal and MAX passed Compound setup flow",
+      "ipad": "normal and MAX passed; named current-source PNG/AX pairs reviewed",
+      "provisional_gate": "requires iPad normal and MAX passed native captures",
+      "decision": "eligible_scoped"
+    },
+    "W20": {
+      "phone": "normal and MAX passed full picker route; wrapper app source byte-identical",
+      "ipad": "normal and MAX passed; named current-source PNG/AX pairs reviewed",
+      "provisional_gate": "requires iPad normal and MAX passed native captures",
+      "decision": "eligible_scoped"
+    },
+    "W21": {
+      "phone": "normal and MAX passed round, tabs, timer and transition flow",
+      "ipad": "normal and MAX passed; named current-source PNG/AX pairs reviewed",
+      "provisional_gate": "requires iPad normal and MAX passed native captures",
+      "decision": "eligible_scoped"
+    },
+    "W22": {
+      "phone": "MAX passed; normal defaults visible in diagnostic but selector failed late optional Start tap",
+      "ipad": "normal and MAX passed, named current-source pairs reviewed",
+      "provisional_gate": "conditional only if iPad normal and MAX pass and source-equivalent; regular Phone actual row historical/pending",
+      "decision": "conditional_scoped_eligible",
+      "conditions": [
+        "Keep Phone regular actual row historical/pending; normal diagnostic never after.",
+        "Use passed Phone MAX plus iPad normal/MAX native pairs and exact unchanged app bytes for scoped quality proof.",
+        "Do not state Phone normal selector passed."
+      ]
+    },
+    "W23": {
+      "phone": "normal and MAX Running start choices passed",
+      "ipad": "normal and MAX passed; named current-source PNG/AX pairs reviewed",
+      "provisional_gate": "requires iPad normal and MAX passed native captures",
+      "decision": "eligible_scoped"
+    },
+    "W24": {
+      "phone": "normal and MAX Running session passed; Stair Climber default branch passed",
+      "ipad": "normal and MAX passed; named current-source PNG/AX pairs reviewed",
+      "provisional_gate": "requires iPad normal and MAX passed native captures",
+      "decision": "eligible_scoped",
+      "machine_branch": "default text Stair Climber: first iPad selector failed before history; same-ID retry passed; do not label default as MAX"
+    },
+    "W25": {
+      "phone": "normal and MAX Running summary passed; Stair Climber default branch passed",
+      "ipad": "normal/MAX Running and default Stair selector passed, but iPad MAX cadence label/value occluded by pinned Save in named and later teardown frames",
+      "provisional_gate": "requires iPad normal and MAX passed native captures",
+      "decision": "held_native_legibility_gap",
+      "reason": "Strict lower Steps/Cadence MAX readability was requested. Test checks Cadence midpoint inside ScrollView but ignores pinned Save overlap (Cadence AX y858–909, Save y815.5–893). No existing passed unobscured MAX cadence frame.",
+      "machine_branch": "default text Stair Climber: first iPad selector failed before history; same-ID retry passed; do not label default as MAX"
+    }
+  },
+  "native_limits": [
+    "Machine branch was observed only at default text size; it cannot substitute for Running normal or MAX.",
+    "Simulator motion was unavailable: steps, cadence and pace showed --; no live GPS or sensor measurement proof.",
+    "Summary Save remained visible and reachable but was not tapped; no persistence, sync, or external share proof.",
+    "Template transition displayed 2 sets while first session displayed Set 1 of 3; original behavior unchanged and 2-set application unverified.",
+    "Some scrolled snapshots partly clip the first selected exercise name or tab; do not claim all values are simultaneously visible.",
+    "Phone W16/W22 normal diagnostic PNG/AX are not passed captures and cannot replace fresh after map rows.",
+    "Duo closed/open current-source capture remains pending.",
+    "W25 iPad MAX cadence label/value is under pinned Save in named and later teardown frames; AX center-in-ScrollView assertion misses this overlay. Hold W25; no verified introduced app defect inferred."
+  ],
+  "scope": "Grouped targeted compilation and exact selector proof may be reused across byte-equivalent split app hunks. Stale pipeline receipts remain historical and are not new successes.",
+  "introduced_app_P1_P2_phone_review": [],
+  "pending_actions": [
+    "Parent may isolate and publish only eligible source hunks with exact byte-equivalence checks and per-screen map conditions.",
+    "W25 remains draft with historical actual rows; capture/legibility proof is incomplete.",
+    "Duo closed/open current-source actual-map captures remain pending; retain historical images and explicit pending status."
+  ],
+  "gallery": {
+    "path": "/private/tmp/dune-b14b15-gallery-prep",
+    "sealed_historical_pairs": 32,
+    "current_source_after_png_ax_pairs": 74,
+    "diagnostic_png_ax_pairs": 6,
+    "after_attribution": "only named captures from passed selector receipts; W22 Phone normal and W24 iPad first Stair diagnostics remain diagnostic",
+    "W25_publication": "draft only; do not promote current actual design map as approved"
+  },
+  "introduced_app_P1_P2_ipad_review": [],
+  "gate_counts_summary": "Phone first 3/7 + same-ID retry 3/4 = 6 distinct positive selectors, 1 closed failed normal Template; iPad first 6/7 + same-ID failed-case retry 1/1 = 7 distinct positive selectors. Neither first receipt nor stale pipeline result is rewritten as success."
+}

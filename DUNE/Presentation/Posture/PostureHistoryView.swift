@@ -42,14 +42,7 @@ struct PostureHistoryView: View {
         .englishNavigationTitle("Posture History")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            #if !os(visionOS)
-            ToolbarItem(placement: .primaryAction) {
-                Button("Capture") {
-                    isShowingPostureCapture = true
-                }
-                .accessibilityIdentifier("posture-history-capture-button")
-            }
-            #endif
+            #if os(visionOS)
             if records.count >= 2 {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -68,6 +61,37 @@ struct PostureHistoryView: View {
                     .accessibilityIdentifier("posture-history-compare-button")
                 }
             }
+            #else
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    #if !os(visionOS)
+                    Button("Capture") {
+                        isShowingPostureCapture = true
+                    }
+                    .accessibilityIdentifier("posture-history-capture-button")
+                    #endif
+                    if records.count >= 2 {
+                        Button {
+                            withAnimation {
+                                isCompareMode.toggle()
+                                if !isCompareMode {
+                                    viewModel.comparisonSelection.removeAll()
+                                }
+                            }
+                        } label: {
+                            Text(isCompareMode
+                                ? String(localized: "Cancel")
+                                : String(localized: "Compare"))
+                        }
+                        .accessibilityIdentifier("posture-history-compare-button")
+                        .accessibilityAddTraits(isCompareMode ? .isSelected : [])
+                    }
+                } label: {
+                    Label("More", systemImage: "ellipsis")
+                }
+                .accessibilityIdentifier("posture-history-actions-menu")
+            }
+            #endif
         }
         .background { DetailWaveBackground() }
         .accessibilityIdentifier("posture-history-screen")

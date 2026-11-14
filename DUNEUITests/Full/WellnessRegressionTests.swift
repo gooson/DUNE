@@ -1047,8 +1047,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     func testPostureComparison() throws {
         openHistory()
-        XCTAssertTrue(app.waitAndTapToolbarAction("Compare"),
-                      "Compare must remain reachable directly or through native toolbar overflow")
+        openPostureHistoryComparisonMenuAction()
         let metrics = app.staticTexts.matching(NSPredicate(
             format: "identifier BEGINSWITH %@ AND label == %@",
             "posture-history-row-metric-count-", "8 metrics"
@@ -1196,8 +1195,54 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     private func openPostureRoute(_ menuIdentifier: String) {
         navigateToWellness()
-        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.wellnessToolbarAdd))
-        XCTAssertTrue(app.waitAndTap(menuIdentifier))
+        guard app.waitAndTapToolbarAction("Add record") else {
+            XCTFail("Wellness Add record must be reachable before opening the posture route")
+            return
+        }
+        let actionLabel: String
+        switch menuIdentifier {
+        case "wellness-menu-posture": actionLabel = "Posture Assessment"
+        case "wellness-menu-realtime-posture": actionLabel = "Realtime Analysis"
+        default:
+            XCTFail("Unexpected posture route: \(menuIdentifier)")
+            return
+        }
+        let action = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ OR label == %@", menuIdentifier, actionLabel
+        )).firstMatch
+        guard action.waitForExistence(timeout: 5) else {
+            XCTFail("The requested posture menu action must exist: \(actionLabel)")
+            return
+        }
+        if !action.isHittable {
+            // At MAX on the closed Duo, the fourth item sits below the native menu viewport.
+            let menu = app.collectionViews.containing(.button, identifier: menuIdentifier).firstMatch
+            for _ in 0..<4 {
+                if action.isHittable { break }
+                guard menu.exists, menu.isHittable else { break }
+                let window = app.windows.firstMatch
+                let viewport = menu.frame.intersection(window.frame).insetBy(dx: 8, dy: 8)
+                guard !viewport.isNull, viewport.width > 0, viewport.height > 0 else { break }
+                let towardLaterItems = action.frame.midY > viewport.midY
+                let origin = window.coordinate(withNormalizedOffset: .zero)
+                let start = origin.withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX,
+                    dy: viewport.minY + viewport.height * (towardLaterItems ? 0.65 : 0.35) - window.frame.minY
+                ))
+                let end = origin.withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX,
+                    dy: viewport.minY + viewport.height * (towardLaterItems ? 0.35 : 0.65) - window.frame.minY
+                ))
+                start.press(forDuration: 0.05, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80),
+                            thenHoldForDuration: 0.35)
+            }
+        }
+        guard action.isHittable else {
+            XCTFail("The requested posture menu action must be visible: \(actionLabel)")
+            return
+        }
+        action.auditTap()
     }
 
     func testP04SeededResultScoreMetricsMemoSaveAndRetake() throws {
@@ -1409,6 +1454,94 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         XCTAssertTrue(app.scrollViews["posture-symmetry-screen"].firstMatch.waitForExistence(timeout: 5))
     }
 
+    func testP02RealtimeFallbackAndP03ExerciseSelection() throws {
+        openPostureRoute("wellness-menu-realtime-posture")
+        let fallback = app.descendants(matching: .any)["realtime-camera-unavailable"].firstMatch
+        XCTAssertTrue(fallback.waitForExistence(timeout: 10), "Simulator camera fallback should be visible")
+        let retry = app.buttons["realtime-camera-retry"].firstMatch
+        XCTAssertTrue(retry.exists && retry.isHittable)
+        VisualAudit.capture("P02 camera unavailable and exercise entry")
+
+        retry.tap()
+        XCTAssertTrue(fallback.waitForExistence(timeout: 5), "Camera retry remains unavailable on simulator")
+        let mode = app.buttons["realtime-exercise-picker-button"].firstMatch
+        XCTAssertTrue(mode.exists && mode.isHittable, "Picker remains available without camera")
+        mode.tap()
+        let list = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        let general = app.buttons["posture-exercise-general"].firstMatch
+        XCTAssertTrue(general.isSelected, "General mode starts selected")
+        VisualAudit.capture("P03 General Posture selected")
+
+        let squat = app.buttons["posture-exercise-barbell-squat"].firstMatch
+        XCTAssertTrue(squat.exists && squat.isHittable)
+        squat.tap()
+        XCTAssertTrue(mode.waitForExistence(timeout: 5))
+        XCTAssertEqual(mode.value as? String, "barbell-squat")
+        mode.tap()
+        XCTAssertTrue(squat.waitForExistence(timeout: 5) && squat.isSelected)
+        XCTAssertFalse(general.isSelected)
+        VisualAudit.capture("P03 barbell squat selection retained on reopen")
+
+        general.tap()
+        XCTAssertEqual(mode.value as? String, "general")
+        mode.tap()
+        XCTAssertTrue(general.waitForExistence(timeout: 5) && general.isSelected)
+        VisualAudit.capture("P03 General Posture restored")
+        app.buttons["posture-exercise-close"].tap()
+        XCTAssertTrue(mode.waitForExistence(timeout: 5))
+        app.buttons["realtime-posture-close"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.wellnessHeroScore].firstMatch
+            .waitForExistence(timeout: 5))
+    }
+
+    func testP03ExerciseListAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments.append(contentsOf: [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        launchApp(with: configuration)
+        openPostureRoute("wellness-menu-realtime-posture")
+        app.buttons["realtime-exercise-picker-button"].tap()
+        let list = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        VisualAudit.capture("P03 MAX General Posture and first exercise")
+        let last = app.buttons["posture-exercise-lunge"].firstMatch
+        XCTAssertTrue(revealExerciseRow(last, in: list), "Last exercise must fit in the visible list at MAX")
+        VisualAudit.capture("P03 MAX final exercise reachable by scrolling")
+        last.tap()
+        let mode = app.buttons["realtime-exercise-picker-button"].firstMatch
+        XCTAssertEqual(mode.value as? String, "lunge")
+        mode.tap()
+        let reopenedList = app.descendants(matching: .any)["posture-exercise-list"].firstMatch
+        XCTAssertTrue(reopenedList.waitForExistence(timeout: 5))
+        XCTAssertTrue(revealExerciseRow(last, in: reopenedList), "Selected final row must remain reachable")
+        XCTAssertTrue(last.isSelected)
+        VisualAudit.capture("P03 MAX final exercise selected on reopen")
+        let close = app.buttons["posture-exercise-close"].firstMatch
+        XCTAssertTrue(close.exists && close.isHittable
+                      && app.windows.firstMatch.frame.contains(close.frame),
+                      "MAX Close must fit outside the scrolling list")
+        close.tap()
+        XCTAssertTrue(reopenedList.waitForNonExistence(timeout: 5), "Close must dismiss the exercise list")
+        XCTAssertTrue(mode.waitForExistence(timeout: 5) && mode.isHittable)
+        XCTAssertEqual(mode.value as? String, "lunge", "Close must preserve the selected exercise")
+    }
+
+    private func revealExerciseRow(_ row: XCUIElement, in list: XCUIElement) -> Bool {
+        for _ in 0..<12 {
+            let viewport = list.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+            if row.exists && row.isHittable && viewport.contains(row.frame) { return true }
+            if row.exists && row.frame.midY < viewport.midY {
+                list.swipeDown(velocity: .slow)
+            } else {
+                list.swipeUp(velocity: .slow)
+            }
+        }
+        let viewport = list.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+        return row.exists && row.isHittable && viewport.contains(row.frame)
+    }
+
     func testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom() throws {
         openSeededComparison()
         let photos = app.scrollViews["posture-comparison-photos-scroll"].firstMatch
@@ -1438,7 +1571,9 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
             let endY: CGFloat = front.frame.midY > viewport.midY ? 0.35 : 0.65
             let start = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
             let end = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
-            start.press(forDuration: 0.05, thenDragTo: end)
+            start.press(forDuration: 0.05, thenDragTo: end,
+                        withVelocity: XCUIGestureVelocity(rawValue: 80),
+                        thenHoldForDuration: 0.35)
         }
         let visible = front.frame.intersection(
             photos.frame.intersection(window.frame).insetBy(dx: 6, dy: 6))
@@ -1452,8 +1587,15 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
             dy: (visible.midY - frontFrame.minY) / frontFrame.height))
         tapPoint.auditTap()
         XCTAssertTrue(app.navigationBars["Front"].firstMatch.waitForExistence(timeout: 5))
-        let close = app.navigationBars["Front"].buttons.firstMatch
-        XCTAssertTrue(close.exists && close.isHittable)
+        // Duo places the zoom Close control in the native Toolbar beside the
+        // Front navigation bar; query its actual unique identity and viewport.
+        let closeMatches = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ AND label == %@", "xmark", "Close"
+        ))
+        let close = closeMatches.firstMatch
+        XCTAssertEqual(closeMatches.count, 1, "Front zoom must expose one Close control")
+        XCTAssertTrue(close.exists && close.isEnabled && close.isHittable && window.frame.contains(close.frame),
+                      "The whole Front zoom Close control must be visible")
         close.auditTap()
         XCTAssertFalse(app.navigationBars["Front"].firstMatch.exists, "Close dismisses the zoom route")
         XCTAssertTrue(photos.waitForExistence(timeout: 5), "Closing zoom returns to comparison")
@@ -1467,22 +1609,39 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
         ]
         launchApp(with: configuration)
-        openSeededComparison()
+        openSeededComparison(maxRevealAttempts: 36)
         let photos = app.scrollViews["posture-comparison-photos-scroll"].firstMatch
         let metrics = app.scrollViews["posture-comparison-metrics-scroll"].firstMatch
         XCTAssertTrue(photos.waitForExistence(timeout: 5) && metrics.waitForExistence(timeout: 5))
+        let navigationBar = app.navigationBars["Comparison"].firstMatch
+        XCTAssertTrue(navigationBar.waitForExistence(timeout: 5))
+        func visiblePhotoViewport() -> CGRect {
+            let pane = photos.frame.intersection(app.windows.firstMatch.frame)
+            let top = max(pane.minY + 4, navigationBar.frame.maxY + 4)
+            return CGRect(x: pane.minX + 4, y: top,
+                          width: max(0, pane.width - 8),
+                          height: max(0, pane.maxY - top - 4))
+        }
         for score in ["73", "86", "+13"] {
             let value = app.staticTexts[score].firstMatch
             XCTAssertTrue(value.waitForExistence(timeout: 5))
             for _ in 0..<16 {
-                let viewport = photos.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+                let viewport = visiblePhotoViewport()
                 if value.isHittable && viewport.contains(value.frame) { break }
-                if value.frame.midY < viewport.midY { photos.swipeDown(velocity: .slow) }
-                else { photos.swipeUp(velocity: .slow) }
+                let moveDown = value.frame.midY < viewport.midY
+                let overflow = moveDown ? viewport.minY - value.frame.minY
+                                        : value.frame.maxY - viewport.maxY
+                let fraction = min(0.14, max(0.04, (overflow + 12) / max(photos.frame.height, 1)))
+                let startY: CGFloat = moveDown ? 0.38 : 0.62
+                let start = photos.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+                let end = photos.coordinate(withNormalizedOffset: CGVector(
+                    dx: 0.5, dy: moveDown ? startY + fraction : startY - fraction))
+                start.press(forDuration: 0.05, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80),
+                            thenHoldForDuration: 0.35)
             }
-            XCTAssertTrue(value.isHittable && photos.frame.intersection(app.windows.firstMatch.frame)
-                .insetBy(dx: 4, dy: 4).contains(value.frame),
-                          "The whole score text must fit in its own pane: \(score)")
+            XCTAssertTrue(value.isHittable && visiblePhotoViewport().contains(value.frame),
+                          "The whole score text must fit below navigation inside its photo pane: \(score)")
             VisualAudit.capture("P08 MAX visible comparison score \(score)")
         }
         metrics.swipeUp(velocity: .slow)
@@ -1490,10 +1649,22 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         VisualAudit.capture("P08 MAX score and two panes")
     }
 
-    private func openSeededComparison() {
-        openHistory()
-        XCTAssertTrue(app.waitAndTapToolbarAction("Compare"),
-                      "Compare must remain reachable directly or through native toolbar overflow")
+    private func openPostureHistoryComparisonMenuAction() {
+        let menu = app.buttons["posture-history-actions-menu"].firstMatch
+        guard menu.waitForExistence(timeout: 5), menu.isHittable else {
+            XCTFail("The explicit posture actions menu must be reachable")
+            return
+        }
+        menu.auditTap()
+        let compare = app.buttons["posture-history-compare-button"].firstMatch
+        XCTAssertTrue(compare.waitForExistence(timeout: 5) && compare.isHittable)
+        XCTAssertEqual(compare.label, "Compare")
+        compare.auditTap()
+    }
+
+    private func openSeededComparison(maxRevealAttempts: Int = 18) {
+        openHistory(maxRevealAttempts: maxRevealAttempts)
+        openPostureHistoryComparisonMenuAction()
         let metrics = app.staticTexts.matching(NSPredicate(
             format: "identifier BEGINSWITH %@ AND label == %@",
             "posture-history-row-metric-count-", "8 metrics"
@@ -1521,11 +1692,26 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     private func reveal(_ element: XCUIElement, maxAttempts: Int = 18) {
         let scroll = app.scrollViews.firstMatch
+        // Duo History has a vertical tab rail in both folded and open poses.
+        // Keep the 90-point top protection; only shrink the bottom inset when
+        // the actual rail geometry proves this is the short History viewport.
+        let wellnessTab = app.buttons["tab-wellness"].firstMatch
+        let sideRailHistory = scroll.identifier == "posture-history-screen"
+            && scroll.frame.height <= 700 && wellnessTab.exists
+            && wellnessTab.frame.width <= 60
+            && wellnessTab.frame.minX >= scroll.frame.maxX - 80
+        func visibleViewport() -> CGRect {
+            let frame = scroll.frame.intersection(app.windows.firstMatch.frame)
+                .insetBy(dx: 12, dy: 0)
+            let top = frame.minY + 90
+            let bottom = frame.maxY - (sideRailHistory ? 12 : 90)
+            return CGRect(x: frame.minX, y: top, width: frame.width,
+                          height: max(0, bottom - top))
+        }
         for _ in 0..<maxAttempts {
             // Duo may report offscreen descendants as hittable. The target's
             // tap point must also lie inside the visible scroll viewport.
-            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
-                .insetBy(dx: 12, dy: 90)
+            let viewport = visibleViewport()
             if element.exists && element.isHittable
                 && viewport.contains(CGPoint(x: element.frame.midX, y: element.frame.midY)) {
                 break
@@ -1548,8 +1734,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
                 scroll.swipeUp(velocity: .slow)
             }
         }
-        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
-            .insetBy(dx: 12, dy: 90)
+        let viewport = visibleViewport()
         XCTAssertTrue(element.exists && element.isHittable
                       && viewport.contains(CGPoint(x: element.frame.midX, y: element.frame.midY)),
                       "Posture target must have a visible tap point")

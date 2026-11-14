@@ -1,0 +1,61 @@
+{
+  "scope": "Private B12 test patch refinement and source/selector proof only",
+  "source_revision": "7c7e21fa5c11ef1585e493288f258bbe0eb082d8",
+  "patch": "/private/tmp/dune-b12-tests-prep/B12-tests.patch",
+  "manifest": "/private/tmp/dune-b12-tests-prep/manifest.json",
+  "source_proof": [
+    {
+      "file": "DUNE/Presentation/Exercise/ExerciseView.swift",
+      "lines": "108-120, 284-294",
+      "fact": "First Exercise row tap opens inspector containing exerciseDetail, whose manual branch renders ExerciseSessionDetailView; no close/reopen is needed. Existing testVisualAuditExerciseHistoryFromSelectedWorkout follows this one-tap route."
+    },
+    {
+      "file": "DUNE/App/TestDataSeeder.swift",
+      "lines": "653-699",
+      "fact": "Seeded Bench Press has three completed sets, first set weight 60 and reps 10. W26 session row source labels setCount as `3 sets`."
+    },
+    {
+      "file": "DUNE/Presentation/Exercise/ExerciseSessionDetailView.swift",
+      "lines": "260-306",
+      "fact": "W27 lower section includes `Sets`, `Set 1`, and `10 reps` static text for seeded record."
+    },
+    {
+      "file": "DUNE/Presentation/Exercise/ExerciseHistoryView.swift",
+      "lines": "180-240,245-310",
+      "fact": "W26 stats include Sessions and Total Reps; session row has native context Share, which calls shareSession and presents ShareImageSheet."
+    },
+    {
+      "file": "DUNE/Presentation/Exercise/Components/ShareImageSheet.swift",
+      "lines": "14-47",
+      "fact": "W11 is a non-scrollable VStack and has a ShareLink labeled Share; test uses exact label predicate and bounded existence/hit test, no swipe."
+    },
+    {
+      "file": "DUNE/Presentation/Exercise/Components/WorkoutCompletionSheet.swift",
+      "lines": "70-126",
+      "fact": "W10 embeds EffortSliderView and Done; source has effort selection status AXID in EffortSliderView.swift:119."
+    },
+    {
+      "file": "DUNE/Presentation/Exercise/HealthKitWorkoutDetailView.swift",
+      "lines": "77-101,191-220",
+      "fact": "W28 title editor exposes Cancel and distance-based running workout shows Avg Heart Rate card or placeholder."
+    }
+  ],
+  "changes": [
+    "W27 lower seeded set row assert/capture",
+    "W26 Sessions and Total Reps stat asserts/captures",
+    "W11 bounded native Share button assert/capture",
+    "W10 scoped Complete Set scroll fallback and separate summary/effort/Done captures",
+    "W28 Avg Heart Rate stat assert/capture and bounded toolbar reveal"
+  ],
+  "verification": [
+    "Patch applies cleanly with git apply --check.",
+    "Temporary patch-applied Swift file parses with xcrun swiftc -frontend -parse.",
+    "Existing test methods, app fixture, global helpers and app source unchanged."
+  ],
+  "introduced_actionable_findings": [],
+  "remaining_risks": [
+    "W26 native NavigationLink label and context menu require runtime observation.",
+    "W11 medium detent Share reachability is unproven; non-scrollable view cannot be made reachable by test swipe.",
+    "No SDK/UI run completed for this candidate."
+  ]
+}

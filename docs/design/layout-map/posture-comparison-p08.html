@@ -22,4 +22,4 @@ p{margin:.5em 0}small{color:#68615a}
 <section><h2>동작·데이터 계약</h2><p>PostureHistoryView의 두 record ID 선택과 날짜 정렬을 그대로 사용한다. 새 점수·변화량·개선 판정을 계산하거나 보정하지 않는다. 사진은 각 record의 원본 imageData, jointPositions, metrics와 captureType을 유지하고 탭 확대를 보존한다. 한쪽 사진이 없는 경우 기존 자리 표시를 유지한다. Metric Changes의 원래 이름·단위·전후 값·점수 차·색·아이콘을 유지한다.</p></section>
 <section><h2>기기·큰 글씨·검증</h2><p>iPhone에서는 연속된 사진 pane/지표 pane, iPad와 Duo에서는 AdaptivePaneView의 기존 분할·접힘 규칙을 따른다. 각 pane의 기존 accessibility ID를 보존하고, 점수 히어로의 새 ID를 추가한다. MAX에서는 점수·화살표를 세로로 배치하며 각 pane을 따로 스크롤한다. 실제 iPhone·iPad·Duo 접힘/펼침의 PNG/AX와 사진 확대·두 pane 도달 검증 전에는 적용 완료로 표시하지 않는다.</p></section>
 <small>기존 실제 기준: docs/design/phone-design-map/actual/{regular,ipad,duo,duo-open}/images/P08.png.</small>
-</html>
+<p>2026-11-14 source-only 재개 준비: 기존 실패 횟수와 보류 상태를 유지한다. 새 SDK 실행·실제 PNG/AX는 없으며 현재 화면 캡처는 미갱신이다.</p><p>진입 이력 화면은 단일 More 메뉴에서 Capture와 Compare/Cancel을 제공한다. 원래 촬영 callback, 비교 선택 및 Cancel 시 선택 초기화를 보존한다. 시스템 자동 overflow에 기대지 않고 명시적 메뉴와 각 행동의 AX ID로 검증한다.</p></html>

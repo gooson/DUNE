@@ -1,0 +1,29 @@
+{
+  "reason": "Publication git diff --check rejected trailing whitespace in two curated log prefixes; explicit frozen-package exception requested by owner",
+  "scope": "Two excerpt files and referencing metadata only; no app/test/source/PNG/AX changes",
+  "entries": [
+    {
+      "file": "closed-MAX-completed-case-log-prefix.txt",
+      "classification": "normalized curated log excerpt; trailing horizontal whitespace removed only",
+      "original_byte_exact_prefix_backup": "/private/tmp/dune-p03-ready-publication/raw-prefix-backups/closed-MAX-completed-case-log-prefix.txt",
+      "original_sha256": "9c526bf7525100cc619026b6bd9df6156994064ff87aa769a631dd1ecc85c5f3",
+      "normalized_sha256": "4e7d13db3845f1bcf66d19de509678d676dd1bfd0b3ce94646b9696e9bd1f83b",
+      "changed_lines": [
+        179
+      ],
+      "raw_sdk_evidence": "Owner archived original raw SDK; this normalization does not modify original root logs or archives"
+    },
+    {
+      "file": "localized-title-compile-log-prefix.txt",
+      "classification": "normalized curated log excerpt; trailing horizontal whitespace removed only",
+      "original_byte_exact_prefix_backup": "/private/tmp/dune-p03-ready-publication/raw-prefix-backups/localized-title-compile-log-prefix.txt",
+      "original_sha256": "f740af95c3755d936d5ab3cb3edfa47c5b761104b52b9f4ca2dcb5f40f92a084",
+      "normalized_sha256": "d1b5f0e4b286373efbdb8b494f14547c8bf9b8f0cd097de4bc0d45191851d417",
+      "changed_lines": [
+        98,
+        167
+      ],
+      "raw_sdk_evidence": "Owner archived original raw SDK; this normalization does not modify original root logs or archives"
+    }
+  ]
+}

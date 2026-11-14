@@ -169,7 +169,7 @@ struct UnifiedWorkoutRow: View {
         HStack(spacing: DS.Spacing.xs) {
             Text(item.displayName)
                 .font(style == .compact ? .subheadline.weight(.medium) : .headline)
-                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : (style == .full ? 2 : 1))
                 .fixedSize(horizontal: false, vertical: true)
                 .layoutPriority(1)
 

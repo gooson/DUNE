@@ -1,0 +1,85 @@
+{
+  "screen": "W09",
+  "frozen_integration_source": "4e2c408d72da82e7e65114942aa4b37bc7cfe193",
+  "app_path": "DUNE/Presentation/Exercise/Components/RPEHelpSheet.swift",
+  "app_sha256": "fb4f6c4ac238c131e8e91dd30f5e16d7fb0227a998cc42e7bfd0d4333d9c30db",
+  "source_scope_byte_identical": true,
+  "combined_test_harness": "deferred until W09 final PR after W07/W08 app source merged",
+  "raw_runs": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "670c46d695a30b485528e799e92afbacaa91bd41",
+      "counts": {
+        "executed": 2,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 2
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditSetAssistanceAtNormalText": "failed",
+        "testVisualAuditSetAssistanceAtMaximumText": "failed"
+      },
+      "receipt": ".codex-checks/b11/phone-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b11/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "5179e21e0b2fd95fe68e368a8a22c9b1aafbdd40",
+      "counts": {
+        "executed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditSetAssistanceAtNormalText": "failed",
+        "testVisualAuditSetAssistanceAtMaximumText": "passed"
+      },
+      "receipt": ".codex-checks/b11/phone-retry1-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b11/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "4e2c408d72da82e7e65114942aa4b37bc7cfe193",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditSetAssistanceAtNormalText": "passed",
+        "testVisualAuditSetAssistanceAtMaximumText": "passed"
+      },
+      "receipt": ".codex-checks/b11/ipad-ui.log.result.json",
+      "result_note": "all requested selectors passed",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b11/ipad-attachments/manifest.json"
+    }
+  ],
+  "gallery": "docs/design/full-redesign-map/review/rpe-help-w09-2026-11-07",
+  "review_files": [
+    "dune-b11-parent-source-ui-review.json",
+    "dune-b11-test-review.json",
+    "dune-b11-integration-review.json",
+    "dune-b11-phone-native-review.json",
+    "dune-b11-ipad-native-review.json",
+    "dune-b11-final-gate.json",
+    "dune-b11-phone-retry-review.json",
+    "dune-b11-phone-closed-adjudication.json",
+    "dune-b11-phone-native-independent-review.json"
+  ],
+  "phone_iPad": "Phone MAX passed and iPad normal/MAX required; Phone normal failed Skip AX lookup before W08/W09. Historical Phone normal image remains pending; failed captures are diagnostic only. Raw phone attempts were 0/2 then 1/2; iPad counts come from gallery gates.",
+  "duo": "Current closed/open native capture pending; historical images remain distinct from B11 after evidence.",
+  "other_limits": "No Finish/save, HealthKit, other exercise length, Watch, or full local regression claim."
+}

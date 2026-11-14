@@ -1,0 +1,38 @@
+{
+  "batch": "B12",
+  "source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+  "gallery": "/private/tmp/dune-b12-gallery-prep",
+  "observed_passed_cases": {
+    "W10": [
+      "normal",
+      "MAX"
+    ],
+    "W28": [
+      "imported normal",
+      "imported MAX retry1"
+    ]
+  },
+  "W10": {
+    "result": "Captured summary, effort, rendered share card, Share Workout and Done are readable/reachable normal/MAX; Korean one-set summary remains complete in AX. No introduced P1/P2 seen.",
+    "captures": "W10/assets/01..06 regular-phone after PNG+AX",
+    "limits": [
+      "Seed has no PR achievement row; new PR row layout not natively covered.",
+      "MAX Suggested effort badge visually ellipsizes although AX exposes full label; badge is in unchanged EffortSliderView."
+    ]
+  },
+  "W28": {
+    "result": "Running values, lower Avg and Max Heart Rate rows, and native title editor with Cancel, Save, Running input are captured normal/MAX. No introduced P1/P2 seen.",
+    "captures": "W28/assets/01..03 normal after and 04..06 retry1 MAX after PNG+AX",
+    "limits": [
+      "MAX header uses narrow left column but content is readable.",
+      "MAX title editor navigation title visually shortens while AX gives full name; original title/control unchanged by W28."
+    ]
+  },
+  "records": {
+    "W27": "Header, date, duration, calories, sets shown in diagnostic normal/MAX images; not passed after captures.",
+    "W26": "Only diagnostic, target stats not reached.",
+    "W11": "No Phone target capture."
+  },
+  "introduced_native_P1_P2": [],
+  "gate": "Phone original 3/6, retry 1/3. Diagnostics are not case passes; iPad pending."
+}

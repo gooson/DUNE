@@ -63,6 +63,9 @@ final class NotificationRoutingRegressionTests: SeededUITestBaseCase {
             app.descendants(matching: .any)["posture-history-screen"].firstMatch.waitForExistence(timeout: 10),
             "Posture reminder should open posture assessment history"
         )
+        let actions = app.buttons["posture-history-actions-menu"].firstMatch
+        XCTAssertTrue(actions.waitForExistence(timeout: 5) && actions.isHittable)
+        actions.tap()
         XCTAssertTrue(
             app.buttons["posture-history-capture-button"].firstMatch.waitForExistence(timeout: 5),
             "Assessment should offer a capture action"

@@ -1,0 +1,25 @@
+{
+  "status": "private source-only cross-review; no repository edit, SDK, simulator or native capture",
+  "candidates": [
+    "/private/tmp/dune-b09-w03-w04-prep/W03/ExerciseDetailSheet.swift.patch",
+    "/private/tmp/dune-b09-w03-w04-prep/W04/CreateCustomExerciseView.swift.patch"
+  ],
+  "introduced_P1_P2_findings": [],
+  "W03": {
+    "scope": "Header stacks at accessibility sizes; cue number minimum 24pt; Input/MET stack. Existing SVG icons, data, Start/Close actions, sheet route and scroll remain.",
+    "native_checks_needed": [
+      "MAX localized name/category/equipment fit and VoiceOver order",
+      "MAX form cues and Input/MET readability on small sheet",
+      "Normal header equivalence and Start/Close interaction"
+    ]
+  },
+  "W04": {
+    "scope": "Category Picker uses menu only at accessibility sizes; selected traits added to user category and muscle buttons. Existing state binding, onChange input reset, validation and persistence remain.",
+    "native_checks_needed": [
+      "MAX native menu contains five categories and selection updates selectedCategory/input type",
+      "Selected user-category and muscle chip VoiceOver traits and tap target",
+      "Normal segmented picker and Create/Cancel path"
+    ]
+  },
+  "limits": "Zero source findings does not establish SDK compilation or native UX/AX behavior. Existing W03 equipment-description HStack and W04 user-category horizontal scroller were not introduced by these patches."
+}

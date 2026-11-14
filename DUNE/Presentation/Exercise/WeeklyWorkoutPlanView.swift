@@ -4,6 +4,7 @@ import SwiftUI
 struct WeeklyWorkoutPlanView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \WorkoutTemplate.name) private var templates: [WorkoutTemplate]
     @AppStorage("workout.weeklyPlan.v1") private var planData = Data()
     @State private var selectedDate = Date()
@@ -24,21 +25,25 @@ struct WeeklyWorkoutPlanView: View {
             ScrollView {
                 VStack(spacing: DS.Spacing.md) {
                     HStack {
-                        Button { shiftWeek(-1) } label: { Image(systemName: "chevron.left") }
+                        Button { shiftWeek(-1) } label: { Image(systemName: "chevron.left").frame(minWidth: 44, minHeight: 44) }
                             .accessibilityLabel("Previous Week")
                         Spacer()
                         Text(selectedDate.formatted(.dateTime.year().month())).font(.headline)
                         Spacer()
-                        Button { shiftWeek(1) } label: { Image(systemName: "chevron.right") }
+                        Button { shiftWeek(1) } label: { Image(systemName: "chevron.right").frame(minWidth: 44, minHeight: 44) }
                             .accessibilityLabel("Next Week")
                     }
                     ForEach(days, id: \.self) { day in
                         Button { selectedDate = day } label: {
-                            HStack {
+                            let dayLayout = dynamicTypeSize.isAccessibilitySize
+                                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                                : AnyLayout(HStackLayout())
+                            dayLayout {
                                 Text(day.formatted(.dateTime.weekday().day()))
-                                Spacer()
+                                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                                 Text(templateName(on: day))
                                     .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: dynamicTypeSize.isAccessibilitySize)
                             }
                             .padding(DS.Spacing.md)
                             .frame(maxWidth: .infinity, minHeight: 44)

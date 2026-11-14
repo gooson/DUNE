@@ -1,0 +1,168 @@
+{
+  "screen": "W02",
+  "compiled_source": "dc2a6d18b0798931bd90fe04bf3d63654e4fdd70",
+  "view_sha256": "d8072c96bad9771fc127d7326557c223142c6cdd34cad191059f31d062080066",
+  "view_byte_identical_to_validated_source": true,
+  "per_capture_equivalence": [
+    {
+      "image": "assets/01-regular-phone-normal-after.png",
+      "source": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+      "kind": "after",
+      "component_byte_identical": true,
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText()"
+    },
+    {
+      "image": "assets/02-regular-phone-normal-after.png",
+      "source": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+      "kind": "after",
+      "component_byte_identical": true,
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText()"
+    },
+    {
+      "image": "assets/03-regular-phone-max-after.png",
+      "source": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+      "kind": "after",
+      "component_byte_identical": true,
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtMaximumText()"
+    },
+    {
+      "image": "assets/04-regular-phone-max-after.png",
+      "source": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+      "kind": "after",
+      "component_byte_identical": true,
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtMaximumText()"
+    },
+    {
+      "image": "assets/05-ipad-ipad-normal-after.png",
+      "source": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+      "kind": "after",
+      "component_byte_identical": true,
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText()"
+    },
+    {
+      "image": "assets/06-ipad-ipad-normal-after.png",
+      "source": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+      "kind": "after",
+      "component_byte_identical": true,
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText()"
+    },
+    {
+      "image": "assets/07-ipad-ipad-max-after.png",
+      "source": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+      "kind": "after",
+      "component_byte_identical": true,
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtMaximumText()"
+    },
+    {
+      "image": "assets/08-ipad-ipad-max-after.png",
+      "source": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+      "kind": "after",
+      "component_byte_identical": true,
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtMaximumText()"
+    }
+  ],
+  "shared_runs": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+      "counts": {
+        "executed": 4,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditLibraryPickerDetailAtNormalText": "passed",
+        "testVisualAuditLibraryPickerDetailAtMaximumText": "passed",
+        "testVisualAuditCustomCreateAtNormalText": "passed",
+        "testVisualAuditCustomCreateAtMaximumText": "failed"
+      },
+      "receipt": ".codex-checks/b09/phone-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b09/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditLibraryPickerDetailAtNormalText": "not_executed",
+        "testVisualAuditLibraryPickerDetailAtMaximumText": "not_executed",
+        "testVisualAuditCustomCreateAtNormalText": "not_executed",
+        "testVisualAuditCustomCreateAtMaximumText": "passed"
+      },
+      "receipt": ".codex-checks/b09/phone-retry1-ui.log.result.json",
+      "result_note": "all requested selectors passed",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b09/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+      "counts": {
+        "executed": 4,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 2
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditLibraryPickerDetailAtNormalText": "passed",
+        "testVisualAuditLibraryPickerDetailAtMaximumText": "passed",
+        "testVisualAuditCustomCreateAtNormalText": "failed",
+        "testVisualAuditCustomCreateAtMaximumText": "failed"
+      },
+      "receipt": ".codex-checks/b09/ipad-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b09/ipad-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad-retry1",
+      "profile": "ipad",
+      "source_revision": "dc2a6d18b0798931bd90fe04bf3d63654e4fdd70",
+      "counts": {
+        "executed": 2,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 2
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditLibraryPickerDetailAtNormalText": "not_executed",
+        "testVisualAuditLibraryPickerDetailAtMaximumText": "not_executed",
+        "testVisualAuditCustomCreateAtNormalText": "failed",
+        "testVisualAuditCustomCreateAtMaximumText": "failed"
+      },
+      "receipt": ".codex-checks/b09/ipad-retry1-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b09/ipad-retry1-attachments/manifest.json"
+    }
+  ],
+  "test_reuse": "exact per-screen members from compiled source; original methods retained; first3phonepasses atf049 reused unchangedapp and ordinaryhelper branch; failedMAX audit only fixed at e986",
+  "local_build": "actualUI compile reused, no phase repeat/full local regression",
+  "Duo": "current absent after owned freshdevice migration failure; priorPNG not promoted",
+  "original_failure_limits": "P03extra spent, P08/S03 phone+iPad2fails retained, H08 unchanged",
+  "phase_ledger": {
+    "0 Initialization": "sameownedworktree, device/processcheck and singleSDKdeadline",
+    "1 Plan": "layout/theme beforeapp d704897a0 and exactscopecontract",
+    "2 Work": "4views + targetedmethods f049; MAXFormreachabilitytest-only e986",
+    "2.5 UI": "phone4tests3pass1fail; onlyfailedMAXretry1/1; iPad exact4 normal/MAX; rawreceipts authoritative",
+    "3 Review": "independent security/data/architecture/performance/simplicity/SwiftUI/AppleUX source+PNGAX; AgentNative N/A (no agent interface)",
+    "4 Resolve": "offscreenlazytemplateAddExercise reached bynewMAXauditboundedscroll; original3passes not rerun; nointroducedP1/P2",
+    "5 Compound": "this solution/sourceproof + nativegallery + actualmap",
+    "6 Ship": "separatePR and ordinaryexpectedheadmerge; actualmerge trackedhandoffafterGitHubsuccess"
+  }
+}

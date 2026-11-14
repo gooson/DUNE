@@ -1,0 +1,25 @@
+{
+  "review": "B10 W05/W06/W31 independent SwiftUI, Apple UX, Performance, Simplicity source review",
+  "status": "private source-only; no repository edit, SDK, simulator, or native pass",
+  "baseline_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+  "candidate_sha256": {
+    "W05": "2dc232282663f7f917a9caf993bc6643858c8d4f221a2c52a237c05b33388b9d",
+    "W06": "2f9b9a27c4ff31c8bd25144c9777a4d74c43d1bab142c1db2ac05a747eafb655",
+    "W31": "e30f998c930ca0b480adfbe9529c01dd77a9fddcbf1c3cc7007dc39ab800c5b8"
+  },
+  "patch_application": "W05 then W06 then W31 patches applied cleanly and sequentially to copied frozen baseline files in private temporary review directory; W06/W31 hunks do not conflict. Combined WorkoutSessionView SHA-256 3121b6ca718869920e2c3c361a097993556bd142f60026542724eb12a9af8fe0.",
+  "introduced_P1_P2_findings": [],
+  "source_findings": [],
+  "observations": {
+    "W05": "Only Dynamic Type layout for the existing SVG icon, localized exercise name/category and equipment/default-set labels changes. Normal HStack remains horizontal and expanded leading; MAX stacks content. Existing ScrollView, FlowLayout muscles, pinned Start Workout CTA, Cancel, cardio routing and navigationDestination remain.",
+    "W06": "MAX branch now uses the same existing activity SF Symbol Label as ordinary text, with multiline vertical fit. No new query, state, timer, set math, input, unit, draft, save, or template callback; removing the branch simplifies the overview.",
+    "W31": "Existing last-set VStack is wrapped in a single ScrollView with size-based bounce and bottom spacing. Original check icon, optional level-up, +1 Set and Finish/Next actions, accessibility identifier, sheet detents and interactive-dismiss setting remain. Scroll is confined to the sheet and does not alter workout commit code.",
+    "performance": "AnyLayout selects between two constant layouts; one ScrollView wraps only the small last-set sheet. No new per-row StandardCard, collection scan, formatter, service call, or model work is introduced."
+  },
+  "native_core_recommendations": [
+    "W05 normal and MAX on iPhone/iPad: verify long localized name/category, equipment/default-set row, muscle chips, scrolling and fixed Start Workout/Cancel reachability; existing testRecommendedRoutineCardOpensExerciseStart can supply route, but named visual capture is still needed.",
+    "W06 MAX on narrow iPhone and iPad: inspect restored icon/name plus previous-workout and current set inputs without overlap; target existing testWorkoutDraftAndRestTimerAtMaximumAccessibilityTextSize and one focused capture. Ordinary size route can reuse testCrunchCanAddAndRemoveWeightDuringSession.",
+    "W31 medium and large detents at normal/MAX: verify +1 Set and Finish Workout/Next Exercise can scroll into the viewport and activate, with optional level-up content. Existing testVisualAuditLastSetOptions observes initial sheet only; add one focused MAX reachability/activation assertion rather than full regression."
+  ],
+  "limits": "Source analysis and clean patch application do not establish SDK compilation, native layout, AX order, sheet detent scrolling, or actual-map completion. Historical regular/iPad PNGs are before context, not candidate proof."
+}

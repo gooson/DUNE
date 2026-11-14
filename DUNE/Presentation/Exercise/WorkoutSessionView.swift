@@ -376,15 +376,10 @@ struct WorkoutSessionView: View {
 
     private var sessionOverview: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-            if dynamicTypeSize.isAccessibilitySize {
-                Text(exercise.localizedName)
-                    .font(.title2.bold())
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                Label(exercise.localizedName, systemImage: exercise.resolvedActivityType.iconName)
-                    .font(.title2.bold())
-            }
+            Label(exercise.localizedName, systemImage: exercise.resolvedActivityType.iconName)
+                .font(.title2.bold())
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
             Text("Previous Workout")
                 .font(DS.Typography.sectionTitle)
             if viewModel.previousSets.isEmpty {
@@ -958,6 +953,14 @@ struct WorkoutSessionView: View {
     // MARK: - All Sets Done Sheet
 
     private var allSetsDoneSheet: some View {
+        ScrollView {
+            allSetsDoneContent
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .accessibilityIdentifier("workout-session-last-set-sheet")
+    }
+
+    private var allSetsDoneContent: some View {
         VStack(spacing: DS.Spacing.lg) {
             VStack(spacing: DS.Spacing.xs) {
                 Image(systemName: "checkmark.circle.fill")
@@ -1039,7 +1042,8 @@ struct WorkoutSessionView: View {
             }
             .padding(.horizontal, DS.Spacing.lg)
         }
-        .accessibilityIdentifier("workout-session-last-set-sheet")
+        .frame(maxWidth: .infinity)
+        .padding(.bottom, DS.Spacing.lg)
     }
 
     // MARK: - Actions

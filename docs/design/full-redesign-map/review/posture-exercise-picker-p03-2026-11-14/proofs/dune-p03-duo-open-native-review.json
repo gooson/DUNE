@@ -1,0 +1,329 @@
+{
+  "screen": "P03",
+  "profile": "Duo Open",
+  "decision": "scoped normal/MAX native PASS for completed P03 cases; full batch closure remains parent responsibility",
+  "findings": [],
+  "source_revision": "6323abf888742056928e758fbe984abab231e988",
+  "device_udid": "58939D48-3C9C-430B-B5CA-C45ECE6E43D5",
+  "source_hashes": {
+    "DUNE/Presentation/Posture/Components/ExercisePickerSheet.swift": "f3528f2f1926b81049366748f21b414b04fc89c5be0b22634397afdb626a385b",
+    "DUNEUITests/Full/WellnessRegressionTests.swift": "24764c15f8e7c9bc8f3ffc28a435ad17730f227e408dadc173e8594120bed88e"
+  },
+  "renderer_equivalence": "ExercisePickerSheet byte-identical to ad9a sibling-header implementation; current bounded menu reveal is test-only.",
+  "case_receipts": [
+    {
+      "selector": "DUNEUITests/PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection",
+      "status": "passed",
+      "duration_seconds": 62.862,
+      "log_line": 337
+    },
+    {
+      "selector": "DUNEUITests/PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize",
+      "status": "passed",
+      "duration_seconds": 65.886,
+      "log_line": 529
+    }
+  ],
+  "log_provenance": {
+    "root_log": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-duo-open-01-ui.log",
+    "stable_completed_prefix": "/private/tmp/dune-p03-duo-open-native-qa/completed-P03-testcases-log-prefix.txt",
+    "through_line": 529,
+    "sha256": "7d6e2f7c9bfc3c4e165c2f62974b5315725921e3f5771acda4bc558a076b7966",
+    "whole_live_log_not_hashed": true
+  },
+  "pose": {
+    "active_display": "LCD-1",
+    "inactive_display": "LCD",
+    "app_window_points": [
+      951,
+      669
+    ],
+    "actual_png_dimensions": [
+      2853,
+      2007
+    ],
+    "physical_orientation_readback": {
+      "deviceIdentifier": "58939D48-3C9C-430B-B5CA-C45ECE6E43D5",
+      "deviceIsOrientationLocked": false,
+      "deviceOrientation": "portrait",
+      "deviceOrientationNonFlat": "portrait"
+    },
+    "numeric_hinge_angle": null,
+    "display_before": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-pose/displays-before-sdk.json",
+      "sha256": "267bfc426b8c189ade5cfe8f64f070fd8054d467a681659f18b3c1b3fe928570"
+    },
+    "orientation_before": {
+      "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-pose/orientation-before-sdk.json",
+      "sha256": "7dc6078317b10fba50d6e559d8c6d9f752ba47418a5246df83b65323e7557dbb"
+    },
+    "filename_warning": "*-2007x2853.png files actually contain2853x2007pixels. Use decoded dimensions; preserve filename and source. Do not infer numericangle or replace physical readback with appwindow orientation."
+  },
+  "observations": [
+    "Normal General selected, Squat selected on reopen, General restored, then pickerClose and RealtimeClose return to Wellness.",
+    "MAX Close x165y16w173h77.3 and ExerciseMode x165y101.3w345.7h63.3 stay fixed across initial/last/reopen. List y172.7..669 is independent.",
+    "Lunge fully fits before selection y461.7..615, then selected on reopen y400.3..615.3 with label/icon/checkmark visible.",
+    "Actual MAXClose dismisses list. Post-close native/AX shows Lunge mode value lunge and expected simulator camera-unavailable screen."
+  ],
+  "pairs": [
+    {
+      "sequence": 5,
+      "checkpoint": {
+        "sequence": 5,
+        "action": "DUNE_VISUAL_AUDIT_READY P03 General Posture selected [DUNEUITests/WellnessRegressionTests.swift:1663] DEADLINE=1794630952.514458",
+        "elapsed_seconds": 2.213,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "active_display": "LCD-1",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/005-2007x2853.png",
+      "png_sha256": "aea722782a7db81bcb22d7f2b3a31dc8691efc81b77d6db224aac4ec2a4cb950",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/005-hierarchy.txt",
+      "ax_sha256": "b0993c57d11ca2bb3204333dd2f7c45a7cc3399f0f2426484890ed41ee76bbfc",
+      "inactive_companion": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/005-1398x2034.png",
+        "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+        "classification": "inactive companion, not current app proof"
+      },
+      "key_ax_lines": [
+        "Button, 0x1069bd540, {{702.7, 90.0}, {148.3, 44.0}}, identifier: 'realtime-exercise-picker-button', label: 'Select Exercise', value: general",
+        "Button, 0x1069be6c0, {{169.0, 298.0}, {68.3, 36.0}}, identifier: 'posture-exercise-close', label: 'Close'",
+        "StaticText, 0x1069be800, {{417.7, 305.7}, {115.7, 20.7}}, label: 'Exercise Mode'",
+        "CollectionView, 0x1069bee40, {{149.0, 276.0}, {653.0, 385.0}}, identifier: 'posture-exercise-list'",
+        "Button, 0x1069bfe80, {{165.0, 385.0}, {621.0, 74.0}}, identifier: 'posture-exercise-general', label: 'General Posture', Selected",
+        "Button, 0x110e5d540, {{165.0, 517.0}, {621.0, 74.0}}, identifier: 'posture-exercise-barbell-squat', label: 'Barbell Squat'"
+      ]
+    },
+    {
+      "sequence": 6,
+      "checkpoint": {
+        "sequence": 6,
+        "action": "DUNE_VISUAL_AUDIT_READY P03 barbell squat selection retained on reopen [DUNEUITests/WellnessRegressionTests.swift:1673] DEADLINE=1794630961.0109491",
+        "elapsed_seconds": 2.195,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "active_display": "LCD-1",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/006-2007x2853.png",
+      "png_sha256": "242dd8592bf8a038ef7d7066f6dde6db01af2e4e48043857ed1bc32dc0f96a01",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/006-hierarchy.txt",
+      "ax_sha256": "5a406929c477975e682e62904cf66bd5d4c7f7349a591bbb6477769608693f5d",
+      "inactive_companion": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/006-1398x2034.png",
+        "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+        "classification": "inactive companion, not current app proof"
+      },
+      "key_ax_lines": [
+        "Button, 0x111b52bc0, {{703.3, 90.0}, {147.7, 44.0}}, identifier: 'realtime-exercise-picker-button', label: 'Barbell Squat', value: barbell-squat",
+        "Button, 0x111b53d40, {{169.0, 298.0}, {68.3, 36.0}}, identifier: 'posture-exercise-close', label: 'Close'",
+        "StaticText, 0x111b53e80, {{417.7, 305.7}, {115.7, 20.7}}, label: 'Exercise Mode'",
+        "CollectionView, 0x111b5c500, {{149.0, 276.0}, {653.0, 385.0}}, identifier: 'posture-exercise-list'",
+        "Button, 0x111b5d540, {{165.0, 385.0}, {621.0, 74.0}}, identifier: 'posture-exercise-general', label: 'General Posture'",
+        "Button, 0x111b5ea80, {{165.0, 517.0}, {621.0, 74.0}}, identifier: 'posture-exercise-barbell-squat', label: 'Barbell Squat', Selected"
+      ]
+    },
+    {
+      "sequence": 7,
+      "checkpoint": {
+        "sequence": 7,
+        "action": "DUNE_VISUAL_AUDIT_READY P03 General Posture restored [DUNEUITests/WellnessRegressionTests.swift:1679] DEADLINE=1794630968.1456351",
+        "elapsed_seconds": 2.224,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "active_display": "LCD-1",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/007-2007x2853.png",
+      "png_sha256": "333e3a5dc9b5e17612093fc0be1a6a8c591df58ba9e3f43faa8f35f204c86935",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/007-hierarchy.txt",
+      "ax_sha256": "df9c9497f3246aace99c1a50bf03b48627bd64c1580bfe75de4af0b2319bff2a",
+      "inactive_companion": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/007-1398x2034.png",
+        "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+        "classification": "inactive companion, not current app proof"
+      },
+      "key_ax_lines": [
+        "Button, 0x1069a6bc0, {{702.7, 90.0}, {148.3, 44.0}}, identifier: 'realtime-exercise-picker-button', label: 'Select Exercise', value: general",
+        "Button, 0x1069a7d40, {{169.0, 298.0}, {68.3, 36.0}}, identifier: 'posture-exercise-close', label: 'Close'",
+        "StaticText, 0x1069a7e80, {{417.7, 305.7}, {115.7, 20.7}}, label: 'Exercise Mode'",
+        "CollectionView, 0x1069b0500, {{149.0, 276.0}, {653.0, 385.0}}, identifier: 'posture-exercise-list'",
+        "Button, 0x1069b1540, {{165.0, 385.0}, {621.0, 74.0}}, identifier: 'posture-exercise-general', label: 'General Posture', Selected",
+        "Button, 0x1069b2bc0, {{165.0, 517.0}, {621.0, 74.0}}, identifier: 'posture-exercise-barbell-squat', label: 'Barbell Squat'"
+      ]
+    },
+    {
+      "sequence": 8,
+      "checkpoint": {
+        "sequence": 8,
+        "action": "DUNE_VISUAL_AUDIT_READY before teardown -[PostureVisualAuditTests testP02RealtimeFallbackAndP03ExerciseSelection] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1794630975.748633",
+        "elapsed_seconds": 2.238,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "active_display": "LCD-1",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/008-2007x2853.png",
+      "png_sha256": "f64df3228e6694a54b992eeacde996711e1e6111f4da5ef46e1d497d2485d059",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/008-hierarchy.txt",
+      "ax_sha256": "e2c6bdda4697b27e270bb9f19e4434f1d11907131863d4eb0b97b1ab546be3e3",
+      "inactive_companion": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/008-1398x2034.png",
+        "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+        "classification": "inactive companion, not current app proof"
+      },
+      "key_ax_lines": []
+    },
+    {
+      "sequence": 12,
+      "checkpoint": {
+        "sequence": 12,
+        "action": "DUNE_VISUAL_AUDIT_READY P03 MAX General Posture and first exercise [DUNEUITests/WellnessRegressionTests.swift:1697] DEADLINE=1794631012.839206",
+        "elapsed_seconds": 2.236,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "active_display": "LCD-1",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/012-2007x2853.png",
+      "png_sha256": "135f3ced659df9d13f7f0bbc8447235e1ff45fde7072dbd2ef26dc4732306078",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/012-hierarchy.txt",
+      "ax_sha256": "0744365d654b9b72f5e357923c0772c39d21542b65db17053e9d4fd5376e90a4",
+      "inactive_companion": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/012-1398x2034.png",
+        "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+        "classification": "inactive companion, not current app proof"
+      },
+      "key_ax_lines": [
+        "Button, 0x110e44140, {{466.0, 90.0}, {385.0, 67.0}}, identifier: 'realtime-exercise-picker-button', label: 'Select Exercise', value: general",
+        "Button, 0x110e44f00, {{165.0, 16.0}, {173.0, 77.3}}, identifier: 'posture-exercise-close', label: 'Close'",
+        "StaticText, 0x110e45040, {{165.0, 101.3}, {345.7, 63.3}}, label: 'Exercise Mode'",
+        "CollectionView, 0x110e45180, {{149.0, 172.7}, {653.0, 496.3}}, identifier: 'posture-exercise-list'",
+        "Button, 0x110e45e00, {{165.0, 207.7}, {621.0, 215.0}}, identifier: 'posture-exercise-general', label: 'General Posture', Selected",
+        "Button, 0x110e47340, {{165.0, 523.7}, {621.0, 153.3}}, identifier: 'posture-exercise-barbell-squat', label: 'Barbell Squat'"
+      ]
+    },
+    {
+      "sequence": 13,
+      "checkpoint": {
+        "sequence": 13,
+        "action": "DUNE_VISUAL_AUDIT_READY P03 MAX final exercise reachable by scrolling [DUNEUITests/WellnessRegressionTests.swift:1700] DEADLINE=1794631022.0341148",
+        "elapsed_seconds": 2.223,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "active_display": "LCD-1",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/013-2007x2853.png",
+      "png_sha256": "4eaf4cfb9ac8175126aeb287ae6d7b27c2d423232e0bc8d24ccb930361bd8cfe",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/013-hierarchy.txt",
+      "ax_sha256": "169102f3f4dde47aaf234d46c44d082175602edfc828b0373a3c1f98a41b3c00",
+      "inactive_companion": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/013-1398x2034.png",
+        "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+        "classification": "inactive companion, not current app proof"
+      },
+      "key_ax_lines": [
+        "Button, 0x10697d180, {{466.0, 90.0}, {385.0, 67.0}}, identifier: 'realtime-exercise-picker-button', label: 'Select Exercise', value: general",
+        "Button, 0x10697df40, {{165.0, 16.0}, {173.0, 77.3}}, identifier: 'posture-exercise-close', label: 'Close'",
+        "StaticText, 0x10697e080, {{165.0, 101.3}, {345.7, 63.3}}, label: 'Exercise Mode'",
+        "CollectionView, 0x10697e1c0, {{149.0, 172.7}, {653.0, 496.3}}, identifier: 'posture-exercise-list'",
+        "Button, 0x1069843c0, {{165.0, 461.7}, {621.0, 153.3}}, identifier: 'posture-exercise-lunge', label: 'Lunge'"
+      ]
+    },
+    {
+      "sequence": 14,
+      "checkpoint": {
+        "sequence": 14,
+        "action": "DUNE_VISUAL_AUDIT_READY P03 MAX final exercise selected on reopen [DUNEUITests/WellnessRegressionTests.swift:1709] DEADLINE=1794631034.3116121",
+        "elapsed_seconds": 2.159,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "active_display": "LCD-1",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/014-2007x2853.png",
+      "png_sha256": "54f44f1f6fbdfcded78c415a06e1965533361d01bc124a93eeeb5ff8f4d191ad",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/014-hierarchy.txt",
+      "ax_sha256": "bb6b1f51f2f812bf2333e436cf4acbd42186972ad3ca8b0c6ad78496bb26ac4c",
+      "inactive_companion": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/014-1398x2034.png",
+        "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+        "classification": "inactive companion, not current app proof"
+      },
+      "key_ax_lines": [
+        "Button, 0x110e42940, {{612.7, 90.0}, {238.3, 72.3}}, identifier: 'realtime-exercise-picker-button', label: 'Lunge', value: lunge",
+        "Button, 0x110e43700, {{165.0, 16.0}, {173.0, 77.3}}, identifier: 'posture-exercise-close', label: 'Close'",
+        "StaticText, 0x110e43840, {{165.0, 101.3}, {345.7, 63.3}}, label: 'Exercise Mode'",
+        "CollectionView, 0x110e43980, {{149.0, 172.7}, {653.0, 496.3}}, identifier: 'posture-exercise-list'",
+        "Button, 0x110e45b80, {{165.0, 400.3}, {621.0, 215.0}}, identifier: 'posture-exercise-lunge', label: 'Lunge', Selected"
+      ]
+    },
+    {
+      "sequence": 15,
+      "checkpoint": {
+        "sequence": 15,
+        "action": "DUNE_VISUAL_AUDIT_READY before teardown -[PostureVisualAuditTests testP03ExerciseListAtMaximumAccessibilitySize] [DUNEUITests/UITestBaseCase.swift:120] DEADLINE=1794631041.656079",
+        "elapsed_seconds": 2.215,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "active_display": "LCD-1",
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/015-2007x2853.png",
+      "png_sha256": "1c4380034e12dc48efb99cdf8cd516c430a2d1f1018566d0a5ae791c8db4a708",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/015-hierarchy.txt",
+      "ax_sha256": "d07650fcf3c844867cc96f880b7f866f23123e34089b17ebe54d02e6c7aa3e4a",
+      "inactive_companion": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-capture/015-1398x2034.png",
+        "sha256": "14654fd19c41b2f9e00f2168d783c7e031b76812119269aff7b9b02baaf7c958",
+        "classification": "inactive companion, not current app proof"
+      },
+      "key_ax_lines": [
+        "Button, 0x111b5f840, {{612.7, 90.0}, {238.3, 72.3}}, identifier: 'realtime-exercise-picker-button', label: 'Lunge', value: lunge"
+      ]
+    }
+  ],
+  "limitations": [
+    "Current ownedDuoOpen pass is not ClosedMAX proof. ClosedMAX failed upstream menu; oldClosedClose remains unverified by Closed runtime.",
+    "No overall running-batch pass or final after-readback claimed; parent attaches closure receipts.",
+    "Simulator fallback is expected, not camera/inference evidence.",
+    "Normal lower rows require scrolling beyond initial sheet; required General/Squat are visible.",
+    "No numeric contrast measurement; visible typography, selection, frames and behavior reviewed."
+  ],
+  "history": "OriginalP03two non-success checks plus separately approved migration extra and latestClosed menu failure preserved; no counters reset.",
+  "agent_actions": "Read stable captures/source/logprefix; write private report only. NoSDK/device/root operations."
+}

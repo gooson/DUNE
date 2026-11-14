@@ -807,6 +807,13 @@ enum TestDataSeeder {
             if ProcessInfo.processInfo.arguments.contains("--ui-design-map-notification-details") {
                 insights.insert(contentsOf: [
                     HealthInsight(
+                        type: .bmiUpdate,
+                        title: String(localized: "Body Composition Update"),
+                        body: "BMI: 24.9\nBody fat: 23.5%",
+                        severity: .informational,
+                        date: Date(timeIntervalSince1970: 1_794_645_780)
+                    ),
+                    HealthInsight(
                         type: .stepGoal,
                         title: "Message Route Fixture",
                         body: "A notification message that opens its in-app detail.",
