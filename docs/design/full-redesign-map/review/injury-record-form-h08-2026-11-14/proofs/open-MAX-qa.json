@@ -1,0 +1,26 @@
+{
+  "screen": "H08",
+  "device_state": "Duo Open, active LCD-1 guest PNG 2853x2007 pixels, XCTest window 951x669 points",
+  "profile": "MAX AccessibilityXXXL",
+  "date": "2026-11-14",
+  "source_revision": "db1475239c259243d7bc061b269abdb71a672b7e",
+  "selected_test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+  "selected_result": "PASS 149.472 seconds",
+  "native_qa": "positive for the selected H08 Open MAX contract",
+  "observations": [
+    "Checkpoint 004 active LCD-1 PNG shows Add Injury with Cancel and Save in the sheet navigation region. AX frames Cancel x169..258.3 y30..66 and Save x711.3..782 y30..66 fit within the 951x669 window.",
+    "Checkpoint 014 AX has the Memo field x185..766 y337..407 focused with a software Keyboard x75..876 y449..668. The active LCD-1 PNG shows the keyboard. This selector does not type or persist memo text.",
+    "Checkpoint 015 has no Keyboard AX node; Save and Cancel remain enabled and fully inside the window. The source asserts both whole frames before tapping Save. Checkpoint 016 confirms the form dismisses.",
+    "Checkpoint 017 shows original injury-history-row-1 label Knee, (L), Minor, 5d, 11/9~, Active. Checkpoint 018 shows new injury-history-row-0 label Knee, (LR), Moderate, 0d, 11/14 ~ 11/14 in the Recovered section. New row frame x20..867 y242.3..615 is wholly inside the 951x669 window and visible in the active PNG.",
+    "At checkpoint 018 the original row is offscreen at AX y-295..141. Original and new rows were verified sequentially; no simultaneous whole-row claim is made.",
+    "Open pose evidence records LCD inactive and LCD-1 active at rot90, with display service currentDeviceOrientation landscapeRight. A separate devicectl orientation-before readback says portrait. These observations are retained separately; the guest PNG and AX prove the landscape active screen."
+  ],
+  "limits": [
+    "No memo-content persistence claim; only memo focus, keyboard presentation/dismissal, Save and the new recovered Knee record were verified.",
+    "No physical hinge angle was measured; the pose record labels actual_angle null.",
+    "The inactive 1398x2034 LCD PNGs are black and not used as native UI evidence."
+  ],
+  "gallery_fragment": "/private/tmp/dune-h08-openmax-native-review",
+  "original_capture": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/renewed-h08-duo-open-capture",
+  "pose_evidence": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/renewed-duo-open-pose/displays-before.json"
+}

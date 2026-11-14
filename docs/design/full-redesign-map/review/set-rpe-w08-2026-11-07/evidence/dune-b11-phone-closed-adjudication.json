@@ -1,0 +1,30 @@
+{
+  "scope": "B11 phone same-ID retry review; no SDK or repository edits",
+  "phone_retry_1": {
+    "total": 2,
+    "passed": 1,
+    "failed": 1,
+    "MAX": "full W07/W08/W09 pass",
+    "normal": "failed at W07 Skip AX lookup before W08/W09"
+  },
+  "native_evidence": {
+    "ax": ".codex-checks/b11/phone-retry1-attachments/5B1EF782-DECE-45A6-BC7E-C1D8B59D38E2.txt",
+    "png": ".codex-checks/b11/phone-retry1-attachments/A044E59C-C6DC-442F-9BE0-763696764F6D.png",
+    "skip": {
+      "role": "Button",
+      "label": "Skip",
+      "identifier": "compound-workout-screen",
+      "frame": [
+        230.3,
+        820.7,
+        49.3,
+        28.3
+      ]
+    },
+    "tab_bar_min_y": 873,
+    "finding": "Normal Skip is fully visible above tab bar and actionable in native AX; child rest-timer-skip ID is masked by Compound root ScrollView ID in the safeAreaInset normal branch."
+  },
+  "recommendation": "Test-only exact native button label Skip in the local B11 audit for both sizes, retaining the full viewport and hittability assertions. Use the one planned iPad family run; no third phone execution.",
+  "introduced_app_P1_P2": [],
+  "gate": "Conditional only after iPad normal/MAX native core and source/map equivalence are confirmed. Phone MAX 1 pass; phone normal remains one failed query with W07 diagnostic visibility only. W08/W09 phone-normal and Duo are pending. Do not report 2/2 phone passes or fresh normal maps."
+}

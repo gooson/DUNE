@@ -1,0 +1,188 @@
+Attributes: Application, 0x104fa5a40, pid: 22822, label: 'DUNE'
+Element subtree:
+ →Application, 0x104fa5a40, pid: 22822, label: 'DUNE'
+    Window (Main), 0x104fa7340, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x104fa6a80, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x104fa5040, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x104fa7840, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x104fa7700, {{-756.0, -1158.0}, {2268.0, 3474.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+          Other, 0x104fa7480, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x104e6e440, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x104e6f5c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x104e6f840, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x104e6cf00, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x112b66080, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x112b67d40, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x112b65b80, {{0.0, 0.0}, {756.0, 1158.0}}
+                          Other, 0x112b67980, {{0.0, 0.0}, {756.0, 1158.0}}
+                            NavigationBar, 0x112b670c0, {{0.0, 96.0}, {756.0, 186.0}}, identifier: 'Exercise'
+                              Button, 0x112b66d00, {{10.0, 96.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Activity'
+                              Other, 0x112b666c0, {{639.5, 100.0}, {43.0, 36.0}}
+                                Other, 0x112b67c00, {{639.5, 100.0}, {43.0, 36.0}}
+                                  Button, 0x112b65400, {{639.5, 100.0}, {43.0, 36.0}}, identifier: 'exercise-toolbar-add', label: 'Add'
+                                    Button, 0x112b65900, {{639.5, 100.0}, {43.0, 36.0}}
+                                      Image, 0x112b67700, {{650.0, 107.0}, {22.0, 22.0}}, identifier: 'plus', label: 'Add'
+                              Button, 0x112b65a40, {{698.5, 100.0}, {43.5, 36.0}}, identifier: 'TopOverflowBarButtonItem', label: 'More'
+                              StaticText, 0x112b67480, {{20.0, 209.0}, {233.0, 72.0}}, label: 'Exercise'
+                            Other, 0x112b67340, {{0.0, 0.0}, {756.0, 1158.0}}
+                              Other, 0x112b64000, {{0.0, 0.0}, {756.0, 1158.0}}
+                                Other, 0x112b64780, {{0.0, 0.0}, {756.0, 1158.0}}
+                                  Other, 0x112b64a00, {{0.0, 0.0}, {756.0, 1158.0}}
+                                    Other, 0x112b64140, {{0.0, 282.0}, {756.0, 876.0}}
+                                      Other, 0x112b66a80, {{0.0, 282.0}, {756.0, 876.0}}
+                                        Other, 0x112b65f40, {{0.0, 282.0}, {756.0, 876.0}}
+                                          Other, 0x112b64b40, {{0.0, 282.0}, {756.0, 876.0}}
+                                            Other, 0x112b67ac0, {{0.0, 282.0}, {756.0, 876.0}}
+                                              Other, 0x112b65cc0, {{0.0, 282.0}, {756.0, 876.0}}
+                                                CollectionView, 0x112b643c0, {{0.0, 282.0}, {756.0, 876.0}}, identifier: 'exercise-view-screen'
+                                                  Other, 0x112b657c0, {{-20.0, -1470.0}, {796.0, 2456.5}}
+                                                  Cell, 0x112b64c80, {{20.0, 317.0}, {716.0, 652.0}}
+                                                    Other, 0x112b65680, {{20.0, 317.0}, {716.0, 652.0}}
+                                                      Other, 0x112b66940, {{20.0, 317.0}, {716.0, 652.0}}
+                                                    Other, 0x112b66440, {{20.0, 317.0}, {716.0, 652.0}}
+                                                      Other, 0x112b64500, {{20.0, 317.0}, {716.0, 652.0}}
+                                                        Other, 0x112b66f80, {{20.0, 317.0}, {716.0, 652.0}}
+                                                          Image, 0x112b65540, {{37.0, 333.5}, {44.5, 55.0}}, identifier: 'sparkles', label: 'Sparkle'
+                                                          StaticText, 0x112b66e40, {{94.5, 331.8}, {434.5, 58.5}}, label: 'Suggested Workout'
+                                                          StaticText, 0x112b66bc0, {{40.0, 403.0}, {179.0, 48.0}}, label: 'Shoulders'
+                                                          StaticText, 0x112b67200, {{239.0, 403.0}, {119.5, 48.0}}, label: 'Biceps'
+                                                          StaticText, 0x112b65e00, {{378.5, 403.0}, {119.5, 48.0}}, label: 'Calves'
+                                                          Button, 0x112b64640, {{32.0, 463.0}, {487.5, 114.0}}, label: '인클라인 바벨 벤치프레스, 5 sets'
+                                                            StaticText, 0x112b66300, {{32.0, 463.0}, {487.5, 58.5}}, label: '인클라인 바벨 벤치프레스'
+                                                            StaticText, 0x112b65040, {{32.0, 525.5}, {111.5, 51.5}}, label: '5 sets'
+                                                            Image, 0x112b67840, {{159.0, 534.5}, {19.5, 34.0}}, identifier: 'chevron.right', label: 'Forward'
+                                                          Button, 0x112b66800, {{32.0, 589.0}, {180.0, 114.0}}, label: '바벨 로우, 5 sets'
+                                                            StaticText, 0x112b67e80, {{32.0, 589.0}, {180.0, 58.5}}, label: '바벨 로우'
+                                                            StaticText, 0x108645900, {{32.0, 651.5}, {111.5, 51.5}}, label: '5 sets'
+                                                            Image, 0x108644a00, {{159.0, 660.5}, {19.5, 34.0}}, identifier: 'chevron.right', label: 'Forward'
+                                                          Button, 0x108646440, {{32.0, 715.0}, {222.5, 114.0}}, label: '카프 레이즈, 5 sets'
+                                                            StaticText, 0x108644c80, {{32.0, 715.0}, {222.5, 58.5}}, label: '카프 레이즈'
+                                                            StaticText, 0x108647d40, {{32.0, 777.5}, {111.5, 51.5}}, label: '5 sets'
+                                                            Image, 0x108647480, {{159.0, 786.5}, {19.5, 34.0}}, identifier: 'chevron.right', label: 'Forward'
+                                                          Button, 0x108646a80, {{32.0, 841.0}, {487.5, 114.0}}, label: '디클라인 바벨 벤치프레스, 3 sets'
+                                                            StaticText, 0x108644140, {{32.0, 841.0}, {487.5, 58.5}}, label: '디클라인 바벨 벤치프레스'
+                                                            StaticText, 0x108647840, {{32.0, 903.5}, {111.5, 51.5}}, label: '3 sets'
+                                                            Image, 0x108646800, {{159.0, 912.5}, {19.5, 34.0}}, identifier: 'chevron.right', label: 'Forward'
+                                                  Other, 0x108645cc0, {{-20.0, 986.5}, {796.0, 2879.0}}
+                                                  Cell, 0x108644640, {{20.0, 1004.0}, {716.0, 381.5}}
+                                                    Other, 0x1086461c0, {{20.0, 1004.0}, {716.0, 381.5}}
+                                                      Other, 0x108646580, {{20.0, 1004.0}, {716.0, 381.5}}
+                                                    Other, 0x1086443c0, {{20.0, 1004.0}, {716.0, 381.5}}
+                                                      Other, 0x108644b40, {{20.0, 1004.0}, {716.0, 381.5}}
+                                                        Other, 0x108645540, {{20.0, 1004.0}, {716.0, 381.5}}
+                                                          Button, 0x108647c00, {{20.0, 1004.0}, {716.0, 381.5}}, identifier: 'exercise-row-barbell-bench-press', label: '바벨 벤치프레스, 30 min, 3 sets · 60kg · 30 reps, 200 kcal, November 7, 2026'
+                                                            Image, 0x108646080, {{40.0, 1019.0}, {32.0, 32.0}}, label: 'Equipment/equipment.barbell'
+                                                            StaticText, 0x108646e40, {{40.0, 1063.0}, {332.0, 63.5}}, label: '바벨 벤치프레스'
+                                                            StaticText, 0x108645a40, {{40.0, 1130.5}, {146.5, 58.5}}, label: '30 min'
+                                                            StaticText, 0x108645400, {{40.0, 1193.0}, {405.5, 51.5}}, label: '3 sets · 60kg · 30 reps'
+                                                            StaticText, 0x108644500, {{40.0, 1256.5}, {182.0, 58.5}}, label: '200 kcal'
+                                                            StaticText, 0x108645680, {{40.0, 1319.0}, {339.0, 51.5}}, label: 'November 7, 2026'
+                                                  Other, 0x1086475c0, {{723.0, 282.0}, {30.0, 829.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                                    Other, 0x1086452c0, {{750.0, 285.0}, {3.0, 389.5}}
+                                                  Other, 0x108645180, {{723.0, 282.0}, {30.0, 829.0}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                                    Other, 0x108647980, {{750.0, 285.0}, {3.0, 389.5}}
+                                                Button, 0x108645f40, {{348.0, 398.0}, {60.0, 24.0}}, identifier: 'wave-refresh-test-trigger', label: 'Trigger Refresh', value: 0
+                                                Other, 0x1086457c0, {{378.0, 710.0}, {0.0, 0.0}}
+                                          Toolbar, 0x108647700, {{0.0, 282.0}, {756.0, 876.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                            Other, 0x108647340, {{0.0, 282.0}, {756.0, 876.0}}
+                                        Other, 0x108646d00, {{0.0, 282.0}, {756.0, 876.0}}
+                                          Toolbar, 0x108647e80, {{0.0, 282.0}, {756.0, 876.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                            Other, 0x1086448c0, {{0.0, 282.0}, {756.0, 876.0}}
+                                      Other, 0x108646300, {{0.0, 282.0}, {756.0, 876.0}}
+                                        Other, 0x108646940, {{0.0, 282.0}, {756.0, 876.0}}
+                            Toolbar, 0x1086470c0, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x108644dc0, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x108645b80, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x108645040, {{0.0, 28.0}, {756.0, 49.0}}
+                    Button, 0x1086466c0, {{159.8, 32.0}, {61.5, 41.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x108644280, {{221.2, 32.0}, {89.0, 41.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x108647200, {{221.2, 32.0}, {89.0, 41.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x108646f80, {{310.2, 32.0}, {103.0, 41.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                      Button, 0x108645e00, {{310.2, 32.0}, {103.0, 41.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                    Button, 0x108644780, {{413.2, 32.0}, {116.5, 41.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                      Button, 0x112b87200, {{413.2, 32.0}, {116.5, 41.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                    Button, 0x112b87840, {{529.8, 32.0}, {66.5, 41.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x112b86d00, {{529.8, 32.0}, {66.5, 41.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x112b84640, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x112b84780, {{378.0, 585.0}, {0.0, 0.0}}
+      Other, 0x112b85680, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x112b843c0, {{-756.0, -1158.0}, {2268.0, 3474.0}}, identifier: 'PopoverDismissRegion', label: 'dismiss popup'
+        Other, 0x112b866c0, {{88.0, 249.0}, {580.0, 660.0}}
+          Image, 0x112b86800, {{-62.0, 99.0}, {880.0, 960.0}}
+          Other, 0x112b86a80, {{88.0, 249.0}, {580.0, 660.0}}
+            Other, 0x112b86440, {{88.0, 249.0}, {580.0, 660.0}}
+              Other, 0x112b87700, {{88.0, 249.0}, {580.0, 660.0}}
+                Other, 0x112b87480, {{88.0, 249.0}, {580.0, 660.0}}
+                  NavigationBar, 0x112b87c00, {{88.0, 259.0}, {580.0, 54.0}}, identifier: 'Quick Start'
+                    Other, 0x112b87e80, {{102.0, 263.0}, {89.5, 36.0}}
+                      Other, 0x112b861c0, {{102.0, 263.0}, {89.5, 36.0}}
+                        Button, 0x112b84f00, {{102.0, 263.0}, {89.5, 36.0}}, identifier: 'picker-cancel-button', label: 'Cancel'
+                    StaticText, 0x112b84c80, {{324.0, 268.0}, {108.0, 26.0}}, label: 'Quick Start'
+                  Other, 0x112b86bc0, {{88.0, 249.0}, {580.0, 660.0}}
+                    Other, 0x112b86f80, {{88.0, 249.0}, {580.0, 660.0}}
+                      Other, 0x112b85040, {{88.0, 249.0}, {580.0, 660.0}}
+                        Other, 0x112b85180, {{88.0, 249.0}, {580.0, 660.0}}
+                          CollectionView, 0x112b870c0, {{88.0, 249.0}, {580.0, 660.0}}, identifier: 'picker-root-list'
+                            Other, 0x112b84a00, {{72.0, -1007.0}, {612.0, 1462.5}}
+                            Other, 0x112b87d40, {{88.0, 249.0}, {580.0, 660.0}}
+                              Other, 0x112b84500, {{88.0, 249.0}, {580.0, 104.0}}
+                            Other, 0x112b85a40, {{88.0, 249.0}, {580.0, 660.0}}
+                            Cell, 0x112b852c0, {{104.0, 348.0}, {548.0, 90.0}}
+                              Other, 0x112b87ac0, {{104.0, 348.0}, {548.0, 90.0}}
+                                Other, 0x112b86940, {{104.0, 348.0}, {548.0, 90.0}}
+                              Other, 0x112b84b40, {{104.0, 348.0}, {548.0, 90.0}}
+                                Other, 0x112b857c0, {{104.0, 348.0}, {548.0, 90.0}}
+                                  Other, 0x112b86300, {{104.0, 348.0}, {548.0, 90.0}}
+                                    Image, 0x112b85f40, {{129.5, 369.5}, {47.0, 47.5}}, identifier: 'magnifyingglass', label: 'Search'
+                                    TextField, 0x112b86e40, {{190.0, 363.0}, {376.0, 60.0}}, identifier: 'picker-search-field', placeholderValue: 'Search exercises', value: Bench Press
+                                    Button, 0x112b85400, {{578.5, 368.5}, {49.0, 49.0}}, identifier: 'xmark.circle.fill', label: 'Close'
+                            Other, 0x112b85b80, {{72.0, 455.5}, {612.0, 2108.5}}
+                            Cell, 0x112b87980, {{104.0, 455.5}, {548.0, 83.5}}
+                              Other, 0x112b84280, {{104.0, 455.5}, {548.0, 83.5}}
+                              Other, 0x1085fc000, {{104.0, 455.5}, {548.0, 83.5}}
+                                Other, 0x1085fc140, {{104.0, 455.5}, {548.0, 83.5}}
+                                  Other, 0x1085fc280, {{104.0, 455.5}, {548.0, 83.5}}
+                                    StaticText, 0x1085fc3c0, {{104.0, 455.5}, {548.0, 83.5}}, identifier: 'picker-section-all', label: 'Results'
+                            Cell, 0x1085fc500, {{104.0, 539.0}, {548.0, 254.0}}
+                              Other, 0x1085fc640, {{104.0, 539.0}, {548.0, 254.0}}
+                                Other, 0x1085fc780, {{104.0, 539.0}, {548.0, 254.0}}
+                              Other, 0x1085fc8c0, {{104.0, 539.0}, {548.0, 254.0}}
+                                Other, 0x1085fca00, {{104.0, 539.0}, {548.0, 254.0}}
+                                  Other, 0x1085fcb40, {{104.0, 539.0}, {548.0, 254.0}}
+                                    Button, 0x1085fcc80, {{124.0, 554.0}, {438.0, 224.0}}, identifier: 'picker-row-barbell-bench-press', label: '바벨 벤치프레스, Barbell Bench Press, Chest, Barbell'
+                                      StaticText, 0x1085fcdc0, {{124.0, 554.0}, {332.5, 63.5}}, label: '바벨 벤치프레스'
+                                      StaticText, 0x1085fcf00, {{124.0, 619.5}, {363.5, 51.5}}, label: 'Barbell Bench Press'
+                                      StaticText, 0x1085fd040, {{124.0, 673.0}, {109.5, 51.5}}, label: 'Chest'
+                                      StaticText, 0x1085fd180, {{152.0, 726.5}, {182.5, 51.5}}, label: 'Barbell'
+                                      Image, 0x1085fd2c0, {{152.0, 746.5}, {12.0, 12.0}}, label: 'Equipment/equipment.barbell'
+                                    Button, 0x1085fd400, {{570.0, 635.0}, {62.0, 62.0}}, identifier: 'picker-detail-barbell-bench-press', label: 'Info'
+                            Cell, 0x1085fd540, {{104.0, 793.0}, {548.0, 254.0}}
+                              Other, 0x1085fd680, {{104.0, 793.0}, {548.0, 254.0}}
+                                Other, 0x1085fd7c0, {{104.0, 793.0}, {548.0, 254.0}}
+                              Other, 0x1085fd900, {{104.0, 793.0}, {548.0, 254.0}}
+                                Other, 0x1085fda40, {{104.0, 793.0}, {548.0, 254.0}}
+                                  Other, 0x1085fdb80, {{104.0, 793.0}, {548.0, 254.0}}
+                                    Button, 0x1085fdcc0, {{124.0, 808.0}, {438.0, 224.0}}, identifier: 'picker-row-dumbbell-bench-press', label: '덤벨 벤치프레스, Dumbbell Bench Press, Chest, Dumbbell'
+                                      StaticText, 0x1085fde00, {{124.0, 808.0}, {332.5, 63.5}}, label: '덤벨 벤치프레스'
+                                      StaticText, 0x1085fdf40, {{124.0, 873.5}, {413.0, 51.5}}, label: 'Dumbbell Bench Press'
+                                      StaticText, 0x1085fe080, {{124.0, 927.0}, {109.5, 51.5}}, label: 'Chest'
+                                      StaticText, 0x1085fe1c0, {{152.0, 980.5}, {232.0, 51.5}}, label: 'Dumbbell'
+                                      Image, 0x1085fe300, {{152.0, 1000.5}, {12.0, 12.0}}, label: 'Equipment/equipment.dumbbell'
+                                    Button, 0x1085fe440, {{570.0, 889.0}, {62.0, 62.0}}, identifier: 'picker-detail-dumbbell-bench-press', label: 'Info'
+                            Other, 0x1085fe580, {{124.0, 792.0}, {508.0, 1.0}}
+                            Other, 0x1085fe6c0, {{635.0, 313.0}, {30.0, 564.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                              Other, 0x1085fe800, {{662.0, 316.0}, {3.0, 366.5}}
+                            Other, 0x1085fe940, {{635.0, 313.0}, {30.0, 564.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                              Other, 0x1085fea80, {{662.0, 316.0}, {3.0, 366.5}}
+                  Toolbar, 0x1085febc0, {{88.0, 249.0}, {580.0, 660.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x1085fed00, {{88.0, 249.0}, {580.0, 660.0}}
+    Window, 0x1085fee40, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1085fef80, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x1085ff0c0, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x104fa5a40, pid: 22822, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1085ff200, pid: 22822, label: 'DUNE'
+  }

@@ -1,0 +1,283 @@
+{
+  "screen": "H08",
+  "source_revision": "4c27c4499526635c49822d44963fe4d67a11407f",
+  "app_owner": "DUNE/Presentation/Injury/InjuryFormSheet.swift",
+  "app_sha256": "c4cc74a7dbb50e0e46f1456ea04d42cfc734cef7869b958a6d8012f96be4be3e",
+  "device": "iPhone 18 Pro Max",
+  "decision": "scoped Phone native PASS; iPad and Duo pending",
+  "case_receipts": {
+    "Add recovered + history": "passed 50.152s, log line 2755",
+    "MAX form": "passed 102.693s, log line 3265",
+    "History/detail/edit": "passed 78.063s, log line 3704"
+  },
+  "batch_truth": "9 executed, 8 passed, 1 failed S03 MAX; H08 selectors 3/3 passed",
+  "observations": [
+    "Normal Add form shows location, side, severity, Start Date, Recovered, Notes, Cancel and Save; enabling Recovered reveals full End Date row.",
+    "MAX capture series shows title/actions, body part, side, all severity choices, Start Date, Recovered End Date, memo with software keyboard, then Save/Cancel after keyboard dismissal.",
+    "Saving Add produces a second visible history row; edit opens an Edit Injury form with original Knee/Left and memo; test asserts save returns to detail and Mark Recovered updates status/history.",
+    "At MAX, Moderate wraps into Moder-/ate, but the complete word and explanatory text remain reachable in the scrollable form.",
+    "No blank form or obscured required control observed in selected PNG/AX pairs."
+  ],
+  "limitations": [
+    "iPad and Duo fresh H08 native checks pending; this is Phone-only.",
+    "History/detail/edit selector also covers H09/H10; only its H08 edit-form state and route assertions are attributed here.",
+    "MAX moderate split-word wrap is a visual readability limitation, not an observed functional failure."
+  ],
+  "selected_pairs": [
+    {
+      "test": "WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow()",
+      "stage": "H08 add initial form",
+      "uuid": "8815220B-2502-4C9E-8F97-59DF1194BC3E",
+      "timestamp": 1794624618.369,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/27C6EE42-F290-45B1-85D3-39CE0F6233CD.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/5E3F0002-5969-41CD-B8E0-62A6E580FA90.txt",
+      "png_sha256": "e0bb58ae21cb373ee7b996001953c48ae9fea5dcb5be0d5d583de6b763fa9cf4",
+      "ax_sha256": "cb95ceb0e54810fe061fde9485844a1600cd4066b9c7dcf42441585b6c412548",
+      "key_ax_lines": [
+        "Button, 0x1129d0140, {{24.0, 86.0}, {78.0, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x10819c000, {{353.7, 86.0}, {62.3, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x113f3a800, {{20.0, 349.7}, {400.0, 64.3}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x1129d6080, {{20.0, 414.0}, {400.0, 64.3}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x1129d4b40, {{20.0, 478.0}, {400.0, 64.3}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "Button, 0x113f33e80, {{20.0, 665.0}, {400.0, 52.0}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: Off",
+        "TextField, 0x113f33480, {{40.0, 790.0}, {360.0, 64.3}}, identifier: 'injury-form-memo', placeholderValue: 'Memo (optional)'"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow()",
+      "stage": "H08 add recovered end date",
+      "uuid": "161278D9-9E8D-4379-9060-6EFA0C32C845",
+      "timestamp": 1794624635.957,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/0C036B86-DA12-4307-8F0A-9B73CC3DA37C.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/120EF54F-3144-4A60-A0AC-D5422B5464F4.txt",
+      "png_sha256": "e9aa929947564668159fc3ed3df48cc6118660264df902d2f49cfd44575f67a5",
+      "ax_sha256": "d56a331a718b38b50daa13b85ce5e6cd4d02139e52bc33ed2c76427319560f08",
+      "key_ax_lines": [
+        "Button, 0x113f32e40, {{24.0, 86.0}, {78.0, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x113f308c0, {{353.7, 86.0}, {62.3, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x115f73200, {{20.0, 349.7}, {400.0, 64.3}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x115f712c0, {{20.0, 414.0}, {400.0, 64.3}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x115f72580, {{20.0, 478.0}, {400.0, 64.3}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "Button, 0x1129d5900, {{20.0, 665.0}, {400.0, 52.0}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: On, Selected",
+        "StaticText, 0x115fb43c0, {{40.0, 739.2}, {69.3, 20.3}}, identifier: 'injury-form-enddate', label: 'End Date'",
+        "TextField, 0x115fb5a40, {{40.0, 854.7}, {360.0, 64.3}}, identifier: 'injury-form-memo', placeholderValue: 'Memo (optional)'"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow()",
+      "stage": "before teardown -[WellnessRegressionTests testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow]",
+      "uuid": "08E6869F-4DEF-43D4-9C48-69B61FB75A5B",
+      "timestamp": 1794624648.329,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/DE22255E-4F5F-4F8E-826D-D4DE2CC1E966.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/1E6C29B8-A895-4E1A-A0E7-B5D8D8E75E35.txt",
+      "png_sha256": "0a95abcebb2e6a0ebd0a9a56238c3d8942ad962f40633e7050ead8bbd760028e",
+      "ax_sha256": "81ebac7e4c7daed35eda71b87d86eba1524e33fcb6bd155eae581b4727c90cde",
+      "key_ax_lines": [
+        "Button, 0x113f33840, {{20.0, 158.3}, {400.0, 88.0}}, identifier: 'injury-history-row-1', label: 'Knee, (L), Minor, ·, 5d, 11/9~, Active'",
+        "Button, 0x10817c500, {{20.0, 304.7}, {400.0, 88.0}}, identifier: 'injury-history-row-0', label: 'Knee, (LR), Moderate, ·, 0d, 11/14 ~ 11/14'"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX add title and actions",
+      "uuid": "24E3275B-ED98-455C-AAAB-F56BC853126D",
+      "timestamp": 1794624677.97,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/C2E3D5F7-236E-4E41-9668-AA6E83D998D3.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/16F1BE4B-49CE-44DA-89C9-A65E6A9D9B53.txt",
+      "png_sha256": "b3a37679a46936a441b7ae37d17c06a4734c46b097a066ea44c3415da9adf1d7",
+      "ax_sha256": "562f1c9319bf5157a0e36ae4fea9b16ecefe6df76ce3c876661a6b288cbd1212",
+      "key_ax_lines": [
+        "Button, 0x1129d5540, {{24.0, 86.0}, {89.3, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x1129d5b80, {{345.3, 86.0}, {70.7, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x10819f5c0, {{20.0, 561.0}, {400.0, 193.0}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x10819ca00, {{20.0, 753.7}, {400.0, 404.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX body part",
+      "uuid": "12C532F5-BC53-4E86-B0EF-36C29F1DA174",
+      "timestamp": 1794624681.09,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/A15B09E2-2BF0-4C47-BA33-E55E9DA7B0A5.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/476A3724-3AF8-4D8A-A944-9FA7D3FFB7A1.txt",
+      "png_sha256": "b3a37679a46936a441b7ae37d17c06a4734c46b097a066ea44c3415da9adf1d7",
+      "ax_sha256": "8ac5f5d0b0d041a50956ffb9559f3e3d9abd3aa4aca3a767bd70deda0009e5d5",
+      "key_ax_lines": [
+        "Button, 0x1129d3700, {{24.0, 86.0}, {89.3, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x1129d1540, {{345.3, 86.0}, {70.7, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x10819ea80, {{20.0, 561.0}, {400.0, 193.0}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x115fb4a00, {{20.0, 753.7}, {400.0, 404.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX side",
+      "uuid": "B4F3FD22-1075-407F-8AFA-F7CC52568075",
+      "timestamp": 1794624684.215,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/122BE9ED-24F7-4EE6-988E-6DD00805B341.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/A56AF6DD-F35B-44B9-80DB-678A9AF27F19.txt",
+      "png_sha256": "b3a37679a46936a441b7ae37d17c06a4734c46b097a066ea44c3415da9adf1d7",
+      "ax_sha256": "d7619d5f73b40cc4130919825b3fbe4b7c96cb6e9164d4e32d3c28da9e3304e3",
+      "key_ax_lines": [
+        "Button, 0x1129c9900, {{24.0, 86.0}, {89.3, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x1129cb200, {{345.3, 86.0}, {70.7, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x115fb7480, {{20.0, 561.0}, {400.0, 193.0}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x115fb8140, {{20.0, 753.7}, {400.0, 404.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX severity minor",
+      "uuid": "BD3F42DC-7CD4-45CA-862C-82F6CF38BEA2",
+      "timestamp": 1794624687.39,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/C613F299-968F-4AA1-8E42-B6983431C547.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/642BE092-0B90-459D-9356-5A2526EB3630.txt",
+      "png_sha256": "b3a37679a46936a441b7ae37d17c06a4734c46b097a066ea44c3415da9adf1d7",
+      "ax_sha256": "80f7690c2c71dcd78341a806640c808f3f3afe967885ede06a94d4cf691a045f",
+      "key_ax_lines": [
+        "Button, 0x115fba940, {{24.0, 86.0}, {89.3, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x115fbae40, {{345.3, 86.0}, {70.7, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x115fbebc0, {{20.0, 561.0}, {400.0, 193.0}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x115fbf840, {{20.0, 753.7}, {400.0, 404.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX severity moderate",
+      "uuid": "B7DB29B6-08B0-4025-B8D2-EA3CE5B5348E",
+      "timestamp": 1794624693.557,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/932626D2-414D-4708-BA75-E82C7D4B3AF2.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/44B1AD78-A73F-4B03-AA08-B9324388C5B2.txt",
+      "png_sha256": "f293b4196db3a013935c8c8aa16ef4bd05fec9c5ac1330efeb20a91a3e216361",
+      "ax_sha256": "ab853e57da2f928e32810c6183822fa2298b5cb2406b4ba4a0ad7fc38ec235a4",
+      "key_ax_lines": [
+        "Button, 0x115f72080, {{24.0, 86.0}, {89.3, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x115f72580, {{345.3, 86.0}, {70.7, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x115f44000, {{20.0, 161.7}, {400.0, 193.0}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x115f44c80, {{20.0, 354.3}, {400.0, 404.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x115f45b80, {{20.0, 758.7}, {400.0, 244.0}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX severity severe",
+      "uuid": "C1E61739-2BAE-4761-A384-F71128559787",
+      "timestamp": 1794624699.568,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/2CA3688D-A0B0-465A-8C7A-2FE36490B7B6.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/99624DB3-50F1-4883-BB9F-0E2F0EB177F7.txt",
+      "png_sha256": "ceae21fcc542a4bbc5c74980bf33735621e9c1e3752f60821bf8a563881b0fd8",
+      "ax_sha256": "284eb696b016f84442a0d45172953fd279601213196cd5cf8ba0ab037d43a8f6",
+      "key_ax_lines": [
+        "Button, 0x115f397c0, {{24.0, 86.0}, {89.3, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x115f39cc0, {{345.3, 86.0}, {70.7, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x115f3ae40, {{20.0, 30.0}, {400.0, 404.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x115f3bc00, {{20.0, 434.3}, {400.0, 244.0}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "Button, 0x115f41f40, {{20.0, 953.7}, {400.0, 93.3}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: Off"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX start date",
+      "uuid": "72C68D13-B077-432A-9F91-8FDA8C2477E2",
+      "timestamp": 1794624702.527,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/C46B96B2-4D16-430F-8347-5BF8C8E4B962.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/01EB4D69-354F-4BC4-9AE2-E7E4A3DA8EC8.txt",
+      "png_sha256": "ceae21fcc542a4bbc5c74980bf33735621e9c1e3752f60821bf8a563881b0fd8",
+      "ax_sha256": "3c2bba60ae5cc328cb9d487695fce4bf96aa0e391e1dfdff64d45be96b1b3248",
+      "key_ax_lines": [
+        "Button, 0x115fb8f00, {{24.0, 86.0}, {89.3, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x115fb9400, {{345.3, 86.0}, {70.7, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x115fba580, {{20.0, 30.0}, {400.0, 404.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x115fbb340, {{20.0, 434.3}, {400.0, 244.0}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "Button, 0x115fbd680, {{20.0, 953.7}, {400.0, 93.3}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: Off"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX recovered end date",
+      "uuid": "1210841E-7D9E-4CF8-8814-417F751F4D35",
+      "timestamp": 1794624722.449,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/A5B367A5-9730-4005-922C-96BD2742D0CE.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/BC018DFA-89CE-4BB9-AD12-52559864292C.txt",
+      "png_sha256": "9c50c3b53c1196c4fab26c9186f216285206d803d5b548eb4cd7d88c5bda6a4f",
+      "ax_sha256": "989de813707563af4453ff8558330e380b5bbeebf1ed5582eb1cdaea1a6f5068",
+      "key_ax_lines": [
+        "Button, 0x115fd9400, {{24.0, 86.0}, {89.3, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x115fd9900, {{345.3, 86.0}, {70.7, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x115fdaa80, {{20.0, -9.7}, {400.0, 244.0}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "Button, 0x115fdcc80, {{20.0, 509.7}, {400.0, 93.3}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: On, Selected",
+        "StaticText, 0x115fdd900, {{40.0, 618.0}, {205.0, 63.3}}, identifier: 'injury-form-enddate', label: 'End Date'",
+        "TextField, 0x115fdef80, {{40.0, 893.7}, {360.0, 187.3}}, identifier: 'injury-form-memo', placeholderValue: 'Memo (optional)'"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX memo software keyboard",
+      "uuid": "422C3936-82B0-4E9A-B172-A928D2D30931",
+      "timestamp": 1794624733.5,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/AA1AF93B-1039-4CA9-BD48-553639C3746C.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/ACB07D92-A099-4C54-B584-14BA2F7C0CCE.txt",
+      "png_sha256": "1ca3020f924d9743ee73aa3406c6350bdfb636d4e4e46d311eb89b8e3068198a",
+      "ax_sha256": "bc020dac05aa12feb892d9b27cc8d742990242ee0cdd48b4d3b9a245200f8be1",
+      "key_ax_lines": [
+        "Button, 0x115fda1c0, {{24.0, 86.0}, {89.3, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x115fda6c0, {{345.3, 86.0}, {70.7, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x1175503c0, {{20.0, 157.0}, {400.0, 93.3}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: On, Selected",
+        "StaticText, 0x117551040, {{40.0, 265.3}, {205.0, 63.3}}, identifier: 'injury-form-enddate', label: 'End Date'",
+        "TextField, 0x1175526c0, {{40.0, 541.0}, {360.0, 68.0}}, identifier: 'injury-form-memo', placeholderValue: 'Memo (optional)', Keyboard Focused",
+        "Keyboard, 0x1175b9a40, {{0.0, 653.0}, {440.0, 245.0}}"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX Save and Cancel after keyboard dismissal",
+      "uuid": "87DFAA04-2941-49DD-BCAB-31885383552C",
+      "timestamp": 1794624740.051,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/D62935F8-111D-46BF-B6C6-7057B58C7FDD.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/7C41FF95-FCF5-425F-BA82-54928F3EA7DD.txt",
+      "png_sha256": "5fc2df4862de56086021f5e20fb6c8618b42da6f089d604a5f6b343a1f937fab",
+      "ax_sha256": "309da18078c1ba0657e79eace80db698811241db27cc6ffd01e390314286e5b3",
+      "key_ax_lines": [
+        "Button, 0x115f73480, {{24.0, 86.0}, {89.3, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x115f73980, {{345.3, 86.0}, {70.7, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x115f48b40, {{20.0, -245.7}, {400.0, 404.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x115f49900, {{20.0, 158.7}, {400.0, 244.0}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "Button, 0x115f4bc00, {{20.0, 678.0}, {400.0, 93.3}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: On, Selected",
+        "StaticText, 0x115f448c0, {{40.0, 786.3}, {205.0, 63.3}}, identifier: 'injury-form-enddate', label: 'End Date'"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm()",
+      "stage": "Injury history names and metadata",
+      "uuid": "86F8DA3E-81F6-44A1-BF3A-09A2EC9E5BCB",
+      "timestamp": 1794624775.151,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/2CAB0F9F-ED0A-4EB4-A296-FA6EF9DCC919.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/974AF1AF-E292-4A04-8993-88ED31B52B63.txt",
+      "png_sha256": "4f3a09a1906ff6f63a649cd742f258572bb4278be994e104c9c20d5b667cab54",
+      "ax_sha256": "95d9d2e6e366302eb5c109ca1a6fec60dc37db21a3bb14e56fa8a9856f8f9adc",
+      "key_ax_lines": [
+        "Button, 0x10819df40, {{20.0, 158.3}, {400.0, 88.0}}, identifier: 'injury-history-row-0', label: 'Knee, (L), Minor, ·, 5d, 11/9~, Active'",
+        "Button, 0x1129d5cc0, {{20.0, 304.7}, {400.0, 88.0}}, identifier: 'injury-history-row-1', label: 'Shoulder, (R), Moderate, ·, 10d, 10/25 ~ 11/4'"
+      ]
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm()",
+      "stage": "tap injury-detail-edit",
+      "uuid": "AE975FA8-CB64-4E3F-AA32-AEB4B8773988",
+      "timestamp": 1794624804.95,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/FC8025D0-565A-4397-9E47-D08B6D0F4DB4.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-phone-03-attachments/92DDF28C-301A-4CE8-A059-BDBB48EE17BC.txt",
+      "png_sha256": "9d60adfecb5065ed368880ac7fc133062673ae19a04ccf2145c571825c106101",
+      "ax_sha256": "45717eb7976a7c35b3f6d7f85da66bd1bad222a2a0c47417f95f450917e4d167",
+      "key_ax_lines": [
+        "Button, 0x1129d70c0, {{24.0, 86.0}, {78.0, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x1129d75c0, {{353.7, 86.0}, {62.3, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x1129c5180, {{20.0, 349.7}, {400.0, 64.3}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution', Selected",
+        "Button, 0x10819cb40, {{20.0, 414.0}, {400.0, 64.3}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area'",
+        "Button, 0x10817c3c0, {{20.0, 478.0}, {400.0, 64.3}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "Button, 0x113f32e40, {{20.0, 665.0}, {400.0, 52.0}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: Off",
+        "TextField, 0x113f303c0, {{40.0, 790.0}, {360.0, 64.3}}, identifier: 'injury-form-memo', value: Mild pain during s..."
+      ]
+    }
+  ]
+}

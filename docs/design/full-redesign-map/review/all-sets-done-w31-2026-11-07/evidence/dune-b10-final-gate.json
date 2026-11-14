@@ -1,0 +1,91 @@
+{
+  "scope": "B10 W05/W06/W31 final per-screen source and native quality gate before PR split",
+  "status": "W05/W06 conditional acceptance for isolated source hunks; W31 held",
+  "source_revision": "5a18f60911d3fd92801371993ebf112d4afcf8fa",
+  "source_hashes": {
+    "DUNE/Presentation/Exercise/ExerciseStartView.swift": "2dc232282663f7f917a9caf993bc6643858c8d4f221a2c52a237c05b33388b9d",
+    "DUNE/Presentation/Exercise/WorkoutSessionView.swift": "3121b6ca718869920e2c3c361a097993556bd142f60026542724eb12a9af8fe0",
+    "Shared/Resources/Localizable.xcstrings": "d6218b3a9b20fcfca1d0ca848be86062a30ce6301cad021a9e6a6a6eba92acbf"
+  },
+  "source_review": "/private/tmp/dune-b10-source-ui-review.json",
+  "integration_review": "/private/tmp/dune-b10-integration-delta-review.json",
+  "phone_native_review": "/private/tmp/dune-b10-phone-native-review.json",
+  "ipad_native_review": "/private/tmp/dune-b10-ipad-native-review.json",
+  "runs": [
+    {
+      "id": "phone",
+      "executed": 2,
+      "passed": 0,
+      "failed": 2,
+      "source": "4fd3b3aadfa39908948538587aea81856ad14c48"
+    },
+    {
+      "id": "phone-retry1",
+      "executed": 2,
+      "passed": 0,
+      "failed": 2,
+      "source": "26a7f821ea433c1542c957575617e31d670c263d"
+    },
+    {
+      "id": "ipad",
+      "executed": 2,
+      "passed": 1,
+      "failed": 1,
+      "source": "0e1de4237331328f7c64db341cde5de5559181d5"
+    },
+    {
+      "id": "ipad-retry1",
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "source": "5a18f60911d3fd92801371993ebf112d4afcf8fa"
+    }
+  ],
+  "introduced_p1_p2_verified": [],
+  "screens": {
+    "W05": {
+      "decision": "conditionally accepted for ExerciseStartView-only PR after exact source hunk and layout/theme/actual-map sync",
+      "native_evidence": "Phone normal/MAX four paired prefix diagnostics show full changed layout and fixed Start, with retry action advancing to W06; iPad normal and MAX passed full route with paired after captures.",
+      "conditions": [
+        "Isolate exact W05 source file reviewed here; no W06/W31 test harness placed on W05 PR before W31 exists.",
+        "Publish current-source normal/MAX iPhone/iPad actual-map captures, clearly distinguishing failed phone diagnostic evidence from passing iPad case; retain Duo absence."
+      ],
+      "limits": [
+        "Phone selectors failed later, so no phone full-case pass is claimed.",
+        "Duo current-source native proof absent."
+      ]
+    },
+    "W06": {
+      "decision": "conditionally accepted for overview-only WorkoutSessionView hunk after exact source hunk and map sync",
+      "native_evidence": "Phone retry normal/MAX paired diagnostics show name/icon and kg/reps controls; iPad normal and MAX passed full input and last-set route.",
+      "conditions": [
+        "Isolate only W06 overview hunk from combined WorkoutSessionView, preserving W31 last-set sheet baseline until W31 PR.",
+        "Publish current-source normal/MAX iPhone/iPad actual-map captures and label phone failed-selector screenshots diagnostic."
+      ],
+      "limits": [
+        "Phone selectors failed later; no full phone case pass claimed.",
+        "At MAX, one phone input screenshot places +1 near fixed footer, and iPad input screenshot is a scrolled state; full simultaneous viewport is not established.",
+        "Duo current-source native proof absent."
+      ]
+    },
+    "W31": {
+      "decision": "HELD; draft only, no merge",
+      "native_evidence": "iPad normal and MAX initial sheet paired after captures and +1 Set flow passed; phone normal/MAX never reached last-set sheet in either failed run.",
+      "blockers": [
+        "Required phone medium and large detent visual/action proof at normal and MAX is absent.",
+        "Phone W31 actual-map captures cannot be refreshed from current runs.",
+        "No third phone retry under current scope/retry budget."
+      ],
+      "limits": [
+        "iPad initial sheet is not proof of iPhone detent behavior.",
+        "Duo current-source native proof absent."
+      ]
+    }
+  },
+  "global_limits": [
+    "Aggregate 2 passed of 7 executed across four runs does not mean a green suite.",
+    "Original failed receipts and diagnostic captures remain preserved.",
+    "Conditional W05/W06 judgment uses source hunk isolation and observed core layouts/actions, not a passing phone selector.",
+    "No current-source Duo closed/open capture due device migration failure."
+  ]
+}

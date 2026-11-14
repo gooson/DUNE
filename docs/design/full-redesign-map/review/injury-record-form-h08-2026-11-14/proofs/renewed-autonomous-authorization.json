@@ -1,0 +1,26 @@
+{
+  "approved_at": "2026-11-14T05:40:46.367739+00:00",
+  "user_instruction": "계속해 추가필요하면 맘대로해",
+  "scope": "Remaining H08 S03 W13 W14; necessary additional cause-responsive targeted validation now authorized autonomously; no repeated permission question for routine required reruns",
+  "old_history": "all original and extra failed attempts preserved, H08 originalcountUNKNOWN closedrecord retained; no counterreset/no failuredeletion",
+  "execution_policy": "oneowneddevice andoneheavyrun; correctconcretefailurebeforetargetedrerun, no blindreplay, sameexistingincrementalcache, ordinaryper-screenPRmerge",
+  "source": "e965597a6a982a2f267df77ec84f506a350b7555",
+  "batches": [
+    {
+      "device": "Phone720F",
+      "checks": "W13W14authoringnormalMAX2"
+    },
+    {
+      "device": "Pad5703",
+      "checks": "S03save-reopennormalMAX2"
+    },
+    {
+      "device": "Duo5893Closed",
+      "checks": "H08MAXMemoKeyboardSaveHistory1"
+    },
+    {
+      "device": "Duo5893Open",
+      "checks": "H08MAXsequentialSavedRows1"
+    }
+  ]
+}

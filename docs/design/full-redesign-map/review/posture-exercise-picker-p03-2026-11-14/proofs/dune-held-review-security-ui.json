@@ -1,0 +1,30 @@
+{
+  "scope": "Independent read-only Security, Agent-Native, and W34/S03 UI-test design review of current root source. No SDK/build/simulator run.",
+  "source_sha256": {
+    "DUNE/Presentation/Exercise/Components/CreateTemplateView.swift": "8e7c953e87a094b6392b8bdcf57c29167af09f9b92e2f57aca2ca15f25bcb2d7",
+    "DUNE/Presentation/Settings/Components/ExerciseDefaultEditView.swift": "67fdef780f33c967d8c7e331d92bb53ed6adf4bc9dcf74ad67882761e7bb8118",
+    "DUNEUITests/Full/ActivityExerciseRegressionTests.swift": "bda5870c380d27fdb49fa0de04e5b271fe898b14b7b75e3a20bbc8fb7ed98fa5",
+    "DUNEUITests/Full/TodaySettingsRegressionTests.swift": "83b4be39fc3d6a41bea37bbba4b9218a9f989afbee5250234a4040e51d9e509e"
+  },
+  "security": {
+    "verdict": "No security issues found in reviewed changes.",
+    "basis": "W34 app diff only changes wrapping and AX identifiers for existing copy. Generate callback, prompt handling, availability gating and storage paths are unchanged. S03 distinct FocusState keys and Done nil do not alter validation, saved values, CloudKit write, or Watch sync. No secrets, new network calls or dynamic code paths introduced."
+  },
+  "agent_native": {
+    "verdict": "No agent-native issues found.",
+    "basis": "No agent prompt, tool routing, context or retry logic changed. AI generator callback and request construction were not modified."
+  },
+  "ui_test_design": {
+    "W34_entry": "Direct Activity AI Builder entry uses same proven bounded root-scroll reveal pattern as W13; 80pt vertical inset is a conservative visibility condition, not an arbitrary success bypass. It may cause a false negative if the full action is visible only near an edge; inspect native AX before changing it.",
+    "W34_core": "Normal/MAX tests per device open the real W13 create Form, assert empty Generate disabled, identify one availability message, require full button/message in Form viewport, fill prompt, check enabled exactly when device reports available, and Cancel back to Activity. No AI generation request is made.",
+    "finding": {
+      "priority": "P2 test-evidence",
+      "file": "DUNEUITests/Full/ActivityExerciseRegressionTests.swift",
+      "line": 3893,
+      "issue": "First W34 capture is named empty AI prompt and availability, but viewport assertion covers only Generate and availability; prompt may be outside visible viewport after scrolling. The filled-prompt capture can include the keyboard and has no post-input visibility assertion.",
+      "recommendation": "During native review, verify prompt is fully visible in at least one W34 PNG/AX state. If absent, add a prompt-viewport assertion or an extra prompt-focused capture without weakening the full Generate/message assertion. Do not mark the visual state complete from AX existence alone."
+    },
+    "S03_focus": "NumericField enum assigns separate focus identities to weight and reps. Done clears the active identity; this fixes the prior shared Boolean ambiguity. Existing 72.5/8 Save and reopen assertions remain. Fresh iPad keyboard/Save capture is still required."
+  },
+  "native_recommendation": "W34 has no old failed selector family. The two new selectors may be run once at normal/MAX on each affected Phone/iPad device without resetting any historical W13/W14 counts. Keep W34 availability-state result distinct from unsupported actual generation."
+}

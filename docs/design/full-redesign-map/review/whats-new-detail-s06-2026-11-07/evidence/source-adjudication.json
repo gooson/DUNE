@@ -1,0 +1,106 @@
+{
+  "screen": "S06",
+  "compiled_source": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+  "app_source_file": "DUNE/Presentation/WhatsNew/WhatsNewView.swift",
+  "equivalence": "S05 top-level release list and FeatureRow before Feature Detail marker; S06 detail/style section after marker",
+  "section_sha256": "ec4e6fc6d2c91391eae96531f8c97dc6780fafe9cd99cb0cb4c1c768bf2ec1a5",
+  "section_byte_identical_to_compiled_source": true,
+  "test_body_reuse": "same selected method/helper bytes; existing smoke class byte prefix preserved; S05 ships normal+automatic, S06 adds combined MAX",
+  "validation_runs": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "2e17b2e3f0769980d340e308f41dd2f7f1d25e66",
+      "counts": {
+        "executed": null,
+        "passed": null,
+        "skipped": null,
+        "failed": null
+      },
+      "status": "failed",
+      "selector_states": {
+        "testManualReleaseListOpensFeatureAndReturns": "not_executed",
+        "testManualReleaseListAndDetailAtMaximumAccessibilitySize": "not_executed",
+        "testAutomaticReleaseDoneAtMaximumAccessibilitySize": "not_executed"
+      },
+      "receipt": ".codex-checks/b08/phone-ui.log.result.json",
+      "result_note": "no completed execution counts (possibly compile failure)",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b08/phone-attachments/manifest.json",
+      "sdk_counts": {
+        "totalTestCount": 0,
+        "passedTests": 0,
+        "failedTests": 0,
+        "skippedTests": 0
+      }
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+      "counts": {
+        "executed": 3,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testManualReleaseListOpensFeatureAndReturns": "passed",
+        "testManualReleaseListAndDetailAtMaximumAccessibilitySize": "passed",
+        "testAutomaticReleaseDoneAtMaximumAccessibilitySize": "passed"
+      },
+      "receipt": ".codex-checks/b08/phone-retry1-ui.log.result.json",
+      "result_note": "all requested selectors passed",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b08/phone-retry1-attachments/manifest.json",
+      "sdk_counts": {
+        "totalTestCount": 3,
+        "passedTests": 3,
+        "failedTests": 0,
+        "skippedTests": 0
+      }
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testManualReleaseListOpensFeatureAndReturns": "passed",
+        "testManualReleaseListAndDetailAtMaximumAccessibilitySize": "passed",
+        "testAutomaticReleaseDoneAtMaximumAccessibilitySize": "not_executed"
+      },
+      "receipt": ".codex-checks/b08/ipad-ui.log.result.json",
+      "result_note": "all requested selectors passed",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b08/ipad-attachments/manifest.json",
+      "sdk_counts": {
+        "totalTestCount": 2,
+        "passedTests": 2,
+        "failedTests": 0,
+        "skippedTests": 0
+      }
+    }
+  ],
+  "local_build": "same target XCTest compile reused, no phase based repeat",
+  "unmodified_consumers": "release catalogue, mode filtering, onPresented/dismiss, original icon, artwork and data",
+  "Duo": "current capture absent after fresh owned device migration failure; no repeat",
+  "original_failure_limits": "P03 extra spent, P08/S03 two failedphone/ipad checks retained, H08 unchanged",
+  "phase_ledger": {
+    "0 Initialization": "ownership Git/process checked; reused one worktree and two owned devices, one SDK at a time",
+    "1 Plan": "dedicated layout/theme maps committed aec8 beforeapp; sourcebaseline and exactselectors frozen",
+    "2 Work": "app and isolated new class committed2e17; unsupported seeded-only helper removed e487, app unchanged",
+    "2.5 UI": "initialphone compilation failed0tests; phone corrected3/3; iPad exact2manual normal/MAX; receipts in gallery",
+    "3 Review": "Security/Data/Architecture/Performance/Simplicity/SwiftUI/AppleUX independent source+native review; AgentNative not applicable (no agent interface)",
+    "4 Resolve": "new-test compilefailure fixed; no introduced visualP1/P2; preexisting symbolHeroMAX repeatedtitleellipsis retained and explicitlylimited",
+    "5 Compound": "this solution + actualmap PNGAX/sourceproof",
+    "6 Ship": "per-screen PR, expected-SHA ordinary merge; pending until actualGitHub merge recorded"
+  }
+}

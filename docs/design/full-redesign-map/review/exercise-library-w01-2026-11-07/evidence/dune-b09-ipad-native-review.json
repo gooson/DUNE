@@ -1,0 +1,89 @@
+{
+  "review": "B09 iPad native W01/W02/W03 visual and AX review",
+  "frozen_source": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+  "receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-ui.log.result.json",
+  "receipt_counts": {
+    "executed": 4,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 2
+  },
+  "viewed_passed_png_ax": {
+    "W01": [
+      {
+        "title": "Exercise library",
+        "png": "/private/tmp/dune-b09-gallery-prep/W01/assets/03-ipad-ipad-normal-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W01/assets/03-ipad-ipad-normal-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "f3e20ddd-067d-42e7-8a37-a0c2eed577fc"
+      },
+      {
+        "title": "MAX exercise library",
+        "png": "/private/tmp/dune-b09-gallery-prep/W01/assets/04-ipad-ipad-max-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W01/assets/04-ipad-ipad-max-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "b4ef884f-89db-4aa8-9a08-80a63c143adf"
+      }
+    ],
+    "W02": [
+      {
+        "title": "Exercise picker",
+        "png": "/private/tmp/dune-b09-gallery-prep/W02/assets/05-ipad-ipad-normal-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W02/assets/05-ipad-ipad-normal-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "30605aff-eff3-4c10-bc7b-37afe0431c5e"
+      },
+      {
+        "title": "Filtered Bench Press info",
+        "png": "/private/tmp/dune-b09-gallery-prep/W02/assets/06-ipad-ipad-normal-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W02/assets/06-ipad-ipad-normal-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "72fc6595-4941-4844-aebb-0e21d36e23cb"
+      },
+      {
+        "title": "MAX exercise picker",
+        "png": "/private/tmp/dune-b09-gallery-prep/W02/assets/07-ipad-ipad-max-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W02/assets/07-ipad-ipad-max-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "59552000-f2c9-4993-aeb4-2639d3854d02"
+      },
+      {
+        "title": "MAX filtered Bench Press info",
+        "png": "/private/tmp/dune-b09-gallery-prep/W02/assets/08-ipad-ipad-max-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W02/assets/08-ipad-ipad-max-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "a9c95e1f-6a09-4f09-804c-5eecbac173a0"
+      }
+    ],
+    "W03": [
+      {
+        "title": "Exercise detail",
+        "png": "/private/tmp/dune-b09-gallery-prep/W03/assets/03-ipad-ipad-normal-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W03/assets/03-ipad-ipad-normal-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "c3d66183-9d75-4f3d-8824-735b3c0cb06e"
+      },
+      {
+        "title": "MAX exercise detail",
+        "png": "/private/tmp/dune-b09-gallery-prep/W03/assets/04-ipad-ipad-max-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W03/assets/04-ipad-ipad-max-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "ccc10292-c6d2-42e5-9fa6-af6137f94974"
+      }
+    ]
+  },
+  "W04_current_iPad_captures": 0,
+  "introduced_P1_P2_findings": [],
+  "observations": {
+    "W01": "Normal/MAX exercise library shows suggested workout and actual history labels in iPad two-column-width surface. The changed full-row name remains visible in shown rows; no introduced overlap in captured viewport.",
+    "W02": "Normal/MAX Quick Start picker in a centered iPad sheet preserves search, recent/results rows, localized/English names, equipment and info action. Filtered Bench Press MAX row stacks values; Info button AX frame is 62×62 pt and tapping it reached W03.",
+    "W03": "Normal/MAX iPad detail sheet retains Close/Start, original SVG equipment icon, full localized/English title, category and equipment. MAX AX has Input, Weight + Reps, MET and 5.0 in a vertical same-x sequence below the captured viewport; lower-row visual/scroll proof is absent."
+  },
+  "failed_W04_precondition": "Both W04 iPad selectors failed before opening W04: the Templates toolbar identifier is hidden in native More overflow. No W04 iPad screen capture or UI pass is inferred. Parent is preparing a test-only native More fallback from observed AX; app source remains unchanged.",
+  "limits": [
+    "Original iPad run is exactly 2/4 passed, 2/4 failed. The two passed selectors cover W01/W02/W03, not W04.",
+    "Only one iPad light-mode fixture and named normal/MAX top-view states were inspected. No dark/other-language or current Duo proof.",
+    "W01 screenshot does not establish every history row; W03 lower Input/MET is AX-only, without lower-viewport PNG.",
+    "No source edit, SDK run or export was performed by this reviewer."
+  ]
+}

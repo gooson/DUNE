@@ -9,6 +9,7 @@ struct ExerciseTransitionView: View {
     let totalExercises: Int
     let onStart: () -> Void
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var countdown = 5
     @State private var didStart = false
 
@@ -93,7 +94,10 @@ struct ExerciseTransitionView: View {
     private var templateDefaultsRow: some View {
         let profile = TemplateExerciseProfile(exercise: exercise)
 
-        return HStack(spacing: DS.Spacing.lg) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.lg))
+        return layout {
             if profile.showsStrengthDefaultsEditor {
                 Label("\(entry.defaultSets) sets", systemImage: "list.number")
                 Label("\(entry.defaultReps) reps", systemImage: "repeat")
@@ -109,5 +113,7 @@ struct ExerciseTransitionView: View {
         }
         .font(.subheadline)
         .foregroundStyle(DS.Color.textSecondary)
+        .frame(maxWidth: .infinity, alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .center)
+        .padding(.horizontal, dynamicTypeSize.isAccessibilitySize ? DS.Spacing.lg : 0)
     }
 }

@@ -1,0 +1,107 @@
+{
+  "scope": "Independent B11 iPad native PNG+AX review of completed first planned iPad family; no SDK or repository edits",
+  "frozen_source": "4e2c408d72da82e7e65114942aa4b37bc7cfe193",
+  "iPad_receipt": {
+    "executed": 2,
+    "passed": 2,
+    "failed": 0,
+    "selectors": [
+      "testVisualAuditSetAssistanceAtNormalText",
+      "testVisualAuditSetAssistanceAtMaximumText"
+    ]
+  },
+  "observations": {
+    "W07": {
+      "normal": "Timer card and +30s/Skip visible in bottom safe area inset; screenshots 1:21→1:48 across approximately 3 seconds, consistent with +30 action. Native AX normal Skip label is present; inherited compound-workout-screen ID explains prior phone test query.",
+      "MAX": "Stacked +30s and Skip are fully visible with timer 1:08→1:35; AX child Skip ID exists. Both actions and title fit."
+    },
+    "W08": {
+      "normal": "Activated RPE 8 / Hard / 2 reps left, 6–10 slider and all category labels readable in one row.",
+      "MAX": "RPE 8 / Hard / 2 reps left and slider are readable; scrollable category strip exposes Max fully within its AX viewport. On this iPad width all labels already fit, so identical before/after pan images do not prove displacement, but the last-label visibility and interaction selector passed."
+    },
+    "W09": {
+      "normal": "RPE Guide modal shows all four original range and reps-left rows plus Done in the initial medium sheet; last-range capture remains visible.",
+      "MAX": "Initial sheet shows heading/explanation and Done; scrolled larger detent shows all four vertically stacked 6–7 through 9–10 rows, 0–1 reps left, and Done. No row overlap observed."
+    }
+  },
+  "introduced_P1_P2": [],
+  "limits": [
+    "Phone normal prior selector failed on Skip ID before W08/W09; iPad normal pass does not rewrite that raw phone result.",
+    "Duo closed/open current-source capture absent.",
+    "MAX captures are targeted scroll positions, not simultaneous proof of every item in the compound screen."
+  ],
+  "evidence": {
+    "W07": [
+      {
+        "title": "Normal rest timer and actions",
+        "png": "/private/tmp/dune-b11-gallery-prep/W07/assets/05-ipad-ipad-normal-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W07/assets/05-ipad-ipad-normal-after.txt",
+        "selector_state": "passed"
+      },
+      {
+        "title": "Normal rest timer after +30s",
+        "png": "/private/tmp/dune-b11-gallery-prep/W07/assets/06-ipad-ipad-normal-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W07/assets/06-ipad-ipad-normal-after.txt",
+        "selector_state": "passed"
+      },
+      {
+        "title": "MAX rest timer and actions",
+        "png": "/private/tmp/dune-b11-gallery-prep/W07/assets/07-ipad-ipad-max-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W07/assets/07-ipad-ipad-max-after.txt",
+        "selector_state": "passed"
+      },
+      {
+        "title": "MAX rest timer after +30s",
+        "png": "/private/tmp/dune-b11-gallery-prep/W07/assets/08-ipad-ipad-max-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W07/assets/08-ipad-ipad-max-after.txt",
+        "selector_state": "passed"
+      }
+    ],
+    "W08": [
+      {
+        "title": "Normal active RPE and category labels",
+        "png": "/private/tmp/dune-b11-gallery-prep/W08/assets/04-ipad-ipad-normal-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W08/assets/04-ipad-ipad-normal-after.txt",
+        "selector_state": "passed"
+      },
+      {
+        "title": "MAX active RPE and category labels",
+        "png": "/private/tmp/dune-b11-gallery-prep/W08/assets/05-ipad-ipad-max-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W08/assets/05-ipad-ipad-max-after.txt",
+        "selector_state": "passed"
+      },
+      {
+        "title": "MAX category legend after horizontal pan",
+        "png": "/private/tmp/dune-b11-gallery-prep/W08/assets/06-ipad-ipad-max-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W08/assets/06-ipad-ipad-max-after.txt",
+        "selector_state": "passed"
+      }
+    ],
+    "W09": [
+      {
+        "title": "Normal RPE help sheet initial",
+        "png": "/private/tmp/dune-b11-gallery-prep/W09/assets/03-ipad-ipad-normal-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W09/assets/03-ipad-ipad-normal-after.txt",
+        "selector_state": "passed"
+      },
+      {
+        "title": "Normal RPE help last range",
+        "png": "/private/tmp/dune-b11-gallery-prep/W09/assets/04-ipad-ipad-normal-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W09/assets/04-ipad-ipad-normal-after.txt",
+        "selector_state": "passed"
+      },
+      {
+        "title": "MAX RPE help sheet initial",
+        "png": "/private/tmp/dune-b11-gallery-prep/W09/assets/05-ipad-ipad-max-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W09/assets/05-ipad-ipad-max-after.txt",
+        "selector_state": "passed"
+      },
+      {
+        "title": "MAX RPE help last range",
+        "png": "/private/tmp/dune-b11-gallery-prep/W09/assets/06-ipad-ipad-max-after.png",
+        "ax": "/private/tmp/dune-b11-gallery-prep/W09/assets/06-ipad-ipad-max-after.txt",
+        "selector_state": "passed"
+      }
+    ]
+  }
+}

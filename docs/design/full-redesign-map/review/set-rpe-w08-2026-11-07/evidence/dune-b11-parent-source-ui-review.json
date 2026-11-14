@@ -1,0 +1,22 @@
+{
+  "review": "B11 parent source-only SwiftUI/Simplicity/AppleUX review",
+  "actual_model": "parent unchanged (Astra); no claimed model switch",
+  "source": "4fd3b3aadfa39908948538587aea81856ad14c48",
+  "introduced_P1_P2": [],
+  "pre_sdk_P3_resolution": "W09newMAXVStackcards hadintrinsicwidthandouterVStackcenteralignment; addedfullwidthleadingframe beforepadding toalignrows. NormalSpacerlayout unchanged.",
+  "verified": [
+    "W07onlyDynamicType actions layout/font/hitframe; +30s/Skip andtimer model unchanged",
+    "W08RPEbinding,6-10halfstep,colorlevels,activate/clear/help unchanged; onlyMAXvalue/legendplacement",
+    "W09staticranges/RIR/title/Done/presentation owner unchanged; MAXstack/large detent, leadingalignment"
+  ],
+  "native_pending": [
+    "Compound rest timer actualconsumer normal/MAX +30/Skip",
+    "RPE fivecategorylabels horizontalpan+slider andhelpDone",
+    "W09 allrows/Done atMAX, currentaffecteddevices PNGAX"
+  ],
+  "candidate_hashes": {
+    "W07": "4d00caf138b16dbf1dcc2f48aa2a9f2b6593eb03516b8aa1afdf5f51e46317df",
+    "W08": "3670e3302d6f57a77c071bac6f22b94a513a2348fd6cb7bddcdef119abf73e64",
+    "W09": "fb4f6c4ac238c131e8e91dd30f5e16d7fb0227a998cc42e7bfd0d4333d9c30db"
+  }
+}

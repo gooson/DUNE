@@ -1,0 +1,45 @@
+{
+  "scope": "B11 first phone 0/2 failure cause and one same-ID test-only retry review",
+  "first_run": {
+    "executed": 2,
+    "passed": 0,
+    "failed": 2,
+    "receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b11/phone-ui.log.result.json",
+    "summary": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b11/phone-summary.json"
+  },
+  "app_source_status": "unchanged from frozen B11 integration; no product defect concluded from these test failures",
+  "findings": [
+    {
+      "selector": "MAX",
+      "failed_line": 3421,
+      "actual_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b11/phone-attachments/81197F54-FCAE-42EC-BF74-BC524D912389.png",
+      "actual_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b11/phone-attachments/A87FEC0E-B972-4BD8-8362-9446A11BDD5C.txt",
+      "cause": "W08 horizontal legend frame (24,763.4,392,51.3), final Max label (334,763.4,78,51.3). The label is visually fully visible and horizontally inside the legend. A dy=2 inset makes any equal-height label impossible to contain vertically.",
+      "proposed_fix": "Use legend frame ∩ window insetBy(dx:2,dy:0), retaining horizontal full-frame containment. This is a test geometry correction; keep MAX pan and end capture."
+    },
+    {
+      "selector": "normal",
+      "failed_line": 3381,
+      "actual_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b11/phone-attachments/A7660E68-EBC5-48FD-B261-B8157C11E48F.png",
+      "actual_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b11/phone-attachments/CFBC14C9-183E-446B-8A18-094CCE527A1A.txt",
+      "cause": "Generic numeric clear-and-type changed seeded first-set weight from 60 to 6 and returned false before the changed W07/W08/W09 surfaces. Reps remained 10. Seeder inserts bench-press default weight 60; actual previous and remaining set rows show 60×10.",
+      "proposed_fix": "In this B11 audit only, assert exact first-set weight 60 and reps 10, then complete that valid seeded set. Numeric replacement is unchanged behavior outside this target gate; this preserves first-set completion and all W07/W08/W09 checks."
+    },
+    {
+      "selector": "MAX capture quality",
+      "actual_png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b11/phone-attachments/BFC20AC3-7144-456E-AE89-AEF5A059207E.png",
+      "actual_ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b11/phone-attachments/1A691633-1CF4-4F76-A182-5BCBC747E6C1.txt",
+      "cause": "W07 after +30 capture has Skip behind floating TabBar. AX: scroll frame y0..956; TabBar y873..956; Skip y844.5..921.8, while vertical scrollbar is at 97% and leaves scroll room. Countdown 1:13 before +30 and 1:40 after proves addTime acted.",
+      "proposed_fix": "Before both W07 captures, require +30s and Skip full frames in a viewport clipped at visible TabBar minY−4; bounded scroll upward. Then tap +30s, capture, and Skip immediately. Do not use scroll.frame ∩ window inset(4,4) alone: that extends to y952 and falsely accepts obscured Skip."
+    }
+  ],
+  "remediation_script_review": {
+    "path": "/private/tmp/dune-b11-remediate.py",
+    "sha256": "f944d1a1a8fe3d2b3c1c226d8fc878f9f6c86472cd3834d7f6fcfb0960495efc",
+    "status": "source-reviewed ready for one cause-specific test-only retry",
+    "proof": "Viewport clips the bottom at TabBar minY when it lies in the lower half of the window, then insets four points. For actual AX TabBar y873, usable bottom is y869; old Skip bottom y921.8 fails until bounded scroll reveals it. The timer title y598.5, +30s y759.1, and Skip y844.5 move together, so one remaining scroll step can expose all three without losing the title.",
+    "scope": "Only B11 helper chunk changes: assert existing valid seeded 60/10 fields, require Rest Timer title/+30s/Skip full visible frames, and remove dy2 on W08 legend viewport. No app/global helper/fixture changes."
+  },
+  "retry_gate": "Approved source-level cause-specific retry only after parent applies this exact helper and freezes its new test SHA. First phone 0/2 remains archived. Native success, available scroll extent, and true Skip tap still require the one retry.",
+  "introduced_app_P1_P2_verified": []
+}

@@ -1,0 +1,34 @@
+{
+  "scope": "Independent B12 private source, SwiftUI, data, simplicity and targeted UI test review; no SDK or repository edit",
+  "source_revision": "7c7e21fa5c11ef1585e493288f258bbe0eb082d8",
+  "app_candidates": {
+    "W10": "6f20370f45d5507e7e513b4c4fd66b8eb9cb02d1310268ab207ff10a5e3944f4",
+    "W11": "31462a97ad99863afa3b658b4f86802eeeb18195c53d26b6163063211ffc808c",
+    "W26": "4ffc0dde3feb202d42fb9fba58dd3e0c45b9a9e16cb1cf6204e09d3c6eec5a5c",
+    "W27": "5eabaa63c0cf98c25710a25058ae543e2d86f5f2224507ae0559ae616b8fbcfa",
+    "W28": "fc1655387a9e635121cd7e86577002d9b0eafa774fea595c6dc6ff67dec61e08"
+  },
+  "test_patch_sha256": "30884cd2c1281c62e027cc17377b1120bc8bbfcf4f86bec62d409b26358ebf14",
+  "introduced_app_P1_P2": [],
+  "test_findings": [],
+  "test_capture_gaps": [
+    "W27 changed set-row vertical layout is lower than initial header capture; require a scrolled set-row capture.",
+    "W26 changed stats grid and session rows need a lower capture within history.",
+    "W28 changed one-column stats need a lower capture after scrolling.",
+    "W10 summary capture alone does not prove effort slider and Done fit; capture after revealing those controls."
+  ],
+  "verified_consumer_routes": [
+    "W11 comes from ExerciseHistoryView session context-menu Share into ShareImageSheet; it is not W10 system ShareLink.",
+    "W10 Done remains onDismiss(effort), retaining effort value path.",
+    "W28 title edit uses existing edit/cancel IDs and unchanged save closure.",
+    "W26 history query, W27 set values/units, W28 HealthKit stat values remain unchanged.",
+    "First tap of the seeded ExerciseView row opens inspector containing exerciseDetail(item), which creates ExerciseSessionDetailView for manual record; existing testVisualAuditExerciseHistoryFromSelectedWorkout taps once and reaches detailScroll. The separate close/reopen test exercises dismissal, not a required route."
+  ],
+  "native_status": "Unexecuted candidate; iPhone/iPad/MAX visual fit and interaction pending.",
+  "quality_risks": [
+    "W11 medium sheet detent at MAX may constrain image and Share action.",
+    "W26 row metadata HStack is outside changed one-column stats grid.",
+    "W27 cardio metric layout and W28 lower weather variants are not covered by selected seeded records."
+  ],
+  "review_correction": "Withdrew prior P2 route claim after reading inspector content and the direct existing visual audit. No source or test P1/P2 identified in this static review."
+}

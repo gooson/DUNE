@@ -7,6 +7,7 @@ struct ExerciseStartView: View {
     let exercise: ExerciseDefinition
     let templateEntry: TemplateEntry?
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var showSession = false
 
     init(exercise: ExerciseDefinition, templateEntry: TemplateEntry? = nil) {
@@ -69,7 +70,11 @@ struct ExerciseStartView: View {
     // MARK: - Exercise Info Card
 
     private var exerciseInfoCard: some View {
-        HStack(spacing: DS.Spacing.md) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.md))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+
+        return layout {
             exercise.equipment.svgIcon(size: 36)
                 .foregroundStyle(exercise.resolvedActivityType.color)
                 .frame(width: 60, height: 60)
@@ -78,14 +83,14 @@ struct ExerciseStartView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                 Text(exercise.localizedName)
                     .font(.title2.weight(.bold))
+                    .fixedSize(horizontal: false, vertical: true)
 
                 Text(exercise.categoryDisplayName)
                     .font(.subheadline)
                     .foregroundStyle(DS.Color.textSecondary)
             }
-
-            Spacer()
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Muscles
@@ -134,7 +139,11 @@ struct ExerciseStartView: View {
     private var detailRow: some View {
         let profile = TemplateExerciseProfile(exercise: exercise)
 
-        return HStack(spacing: DS.Spacing.lg) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.lg))
+
+        return layout {
             Label {
                 Text(exercise.equipment.displayName)
             } icon: {

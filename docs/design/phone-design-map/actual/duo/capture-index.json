@@ -127,16 +127,20 @@
     },
     "P05": {
       "row_id": "P05",
-      "evidence": "posture-history-screen",
-      "test": "PostureVisualAuditTests/testPostureComparison()",
-      "action": "tap wellness-link-posturehistory",
-      "timestamp": 1791826712.021,
-      "image": "81C1DF5A-F7E6-465A-B942-A4D1EAD563D3.png",
-      "screen": "screen-0-1398x2034-tap wellness-link-posturehistory_0_D895492E-6F1E-41B2-9EDB-948BECDF2B6F.png",
+      "evidence": "fresh Posture History More toolbar PNG/AX; P08 compare consumer in linked gallery",
+      "test": "PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom()",
+      "action": "Posture History top with explicit More action",
       "file": "P05.png",
-      "current_verification": "pending",
-      "current_verification_note": "현재 B06 화면 캡처 보류: 전용 Duo 실행 제공자가 테스트 시작 전에 사라졌습니다. 표시된 P05/P07 이미지는 이전 소스의 역사적 화면이며 이번 변경의 완료 증거가 아닙니다.",
-      "capture_scope": "Historical image retained; B06 current-source capture pending"
+      "image": "004-1398x2034.png",
+      "source_revision": "73d705e1b79121b260de7910679d0338d209a82d",
+      "source_file_sha256": "907972081378f8e3dbb8bf66836b2b87b990570a631a45e02909c2d5b36735fa",
+      "source_equivalence": "P05 toolbar source byte-identical across cited P08 normal runs",
+      "png_sha256": "be7bac6a5c1eeb89c634889a08f2051627e3c30fc0aa12117da69230348eaac1",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "gallery": "../../../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html"
     },
     "S01": {
       "row_id": "S01",
@@ -211,7 +215,10 @@
       "timestamp": 1791824979.901,
       "image": "FE1C8CBE-A1A0-43FD-BA95-F574036C1E3A.png",
       "screen": "screen-0-1398x2034-tap dashboard-toolbar-whatsnew_0_C754D59D-D4DA-4E0E-A4CA-2EE694A4B409.png",
-      "file": "S05.png"
+      "file": "S05.png",
+      "current_verification": "pending",
+      "current_verification_note": "현재 Duo 캡처 미갱신: 빈 소유 기기도 Data Migration Failed로 SDK 시작 전 실패했습니다. 이전 PNG는 역사적 자료이며 이번 변경 완료 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B08 current-source Duo absent"
     },
     "T02": {
       "row_id": "T02",
@@ -237,7 +244,10 @@
       "timestamp": 1791824380.602,
       "image": "E3B33B8B-82F0-410E-B970-19F524120448.png",
       "screen": "screen-0-1398x2034-before teardown -[SettingsSmokeTests testWhatsNewMuscleMapDetailExists]_0_5ABEB236-A9A1-4097-AE24-0BA0E7959ACD.png",
-      "file": "S06.png"
+      "file": "S06.png",
+      "current_verification": "pending",
+      "current_verification_note": "현재 Duo 캡처 미갱신: 빈 소유 기기도 Data Migration Failed로 SDK 시작 전 실패했습니다. 이전 PNG는 역사적 자료이며 이번 변경 완료 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B08 current-source Duo absent"
     },
     "A07": {
       "row_id": "A07",
@@ -285,7 +295,10 @@
       "timestamp": 1791825360.53,
       "image": "FEA73123-354C-419C-AF62-3615B4080E7D.png",
       "screen": "screen-0-1398x2034-tap exercise-detail-start_0_4BF282E1-C31B-41CB-95D0-5188D3E4B7E0.png",
-      "file": "W05.png"
+      "file": "W05.png",
+      "current_verification": "pending",
+      "current_verification_note": "현재 Duo 캡처 미갱신: 빈 소유 기기도 Data Migration Failed로 SDK 시작 전 실패했습니다. 이전 PNG는 역사적 자료이며 이번 변경 완료 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B10 current-source Duo absent"
     },
     "W10": {
       "row_id": "W10",
@@ -295,7 +308,10 @@
       "timestamp": 1791825402.33,
       "image": "C48F02A9-5461-4BE2-B766-F520E9B6F49C.png",
       "screen": "screen-0-1398x2034-tap workout-session-done_0_7ACEDE5C-81B0-4B50-89B8-24F6F02C2DFF.png",
-      "file": "W10.png"
+      "file": "W10.png",
+      "current_verification": "pending",
+      "current_verification_note": "B12 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B12 current-source passed capture absent"
     },
     "W06": {
       "row_id": "W06",
@@ -305,7 +321,10 @@
       "timestamp": 1791825365.579,
       "image": "6E6A8217-20E3-494A-91B2-B2871D4E6333.png",
       "screen": "screen-0-1398x2034-tap exercise-start-button_0_5ABE0069-D2CA-4527-9DAA-44A6CABFE397.png",
-      "file": "W06.png"
+      "file": "W06.png",
+      "current_verification": "pending",
+      "current_verification_note": "현재 Duo 캡처 미갱신: 빈 소유 기기도 Data Migration Failed로 SDK 시작 전 실패했습니다. 이전 PNG는 역사적 자료이며 이번 변경 완료 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B10 current-source Duo absent"
     },
     "W03": {
       "row_id": "W03",
@@ -315,7 +334,10 @@
       "timestamp": 1791825355.088,
       "image": "BD14FED3-AAEB-409D-BA34-0A18FBEFF8B3.png",
       "screen": "screen-0-1398x2034-tap picker-detail-barbell-bench-press_0_9BEB6E40-B7DF-4E50-8D21-53131444F863.png",
-      "file": "W03.png"
+      "file": "W03.png",
+      "current_verification": "pending",
+      "current_verification_note": "현재 Duo 캡처 미갱신: 빈 소유 기기도 Data Migration Failed로 SDK 시작 전 실패했습니다. 이전 PNG는 역사적 자료이며 이번 변경 완료 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B09 current-source Duo absent"
     },
     "W01": {
       "row_id": "W01",
@@ -325,7 +347,10 @@
       "timestamp": 1791825316.95,
       "image": "1BFC9D07-8656-4BDC-913B-25E53F9E314D.png",
       "screen": "screen-0-1398x2034-tap activity-recent-seeall_0_9A80BABE-413C-4509-90E2-095D46E77854.png",
-      "file": "W01.png"
+      "file": "W01.png",
+      "current_verification": "pending",
+      "current_verification_note": "현재 Duo 캡처 미갱신: 빈 소유 기기도 Data Migration Failed로 SDK 시작 전 실패했습니다. 이전 PNG는 역사적 자료이며 이번 변경 완료 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B09 current-source Duo absent"
     },
     "T14": {
       "row_id": "T14",
@@ -360,7 +385,10 @@
       "timestamp": 1791825469.876,
       "image": "C4AE7B47-DB8B-4B34-BB1C-128230223DD8.png",
       "screen": "screen-0-1398x2034-tap notification-row-workout-ui-test-activity-workout-running_0_D2EB7E69-A957-45B0-ADD5-7ED6076294B8.png",
-      "file": "W28.png"
+      "file": "W28.png",
+      "current_verification": "pending",
+      "current_verification_note": "B12 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B12 current-source passed capture absent"
     },
     "W02": {
       "row_id": "W02",
@@ -370,7 +398,10 @@
       "timestamp": 1791825505.894,
       "image": "8F92DE8F-0AC8-49EC-BEBB-D79D18AB9F01.png",
       "screen": "screen-0-1398x2034-tap activity-toolbar-add_0_C987FCD9-E7BA-4DC9-A359-CD63BE0AA48A.png",
-      "file": "W02.png"
+      "file": "W02.png",
+      "current_verification": "pending",
+      "current_verification_note": "현재 Duo 캡처 미갱신: 빈 소유 기기도 Data Migration Failed로 SDK 시작 전 실패했습니다. 이전 PNG는 역사적 자료이며 이번 변경 완료 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B09 current-source Duo absent"
     },
     "W26": {
       "row_id": "W26",
@@ -390,7 +421,10 @@
       "timestamp": 1791825648.525,
       "image": "3DE37C1E-C3BA-4CAF-A68F-D0B38F180E58.png",
       "screen": "screen-0-1398x2034-tap activity-recommended-routine-card_0_4816CEEB-517A-445A-A849-17DC63259F55.png",
-      "file": "W23.png"
+      "file": "W23.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source passed capture absent"
     },
     "W22": {
       "row_id": "W22",
@@ -400,7 +434,10 @@
       "timestamp": 1791825765.008,
       "image": "6775898E-2A86-493A-AF5D-5FB39A787363.png",
       "screen": "screen-0-1398x2034-tap workout-template-row-codex-circuit-builder_0_B40EACB6-1DB9-452D-843F-D2CA7FD5F8C3.png",
-      "file": "W22.png"
+      "file": "W22.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source Duo absent"
     },
     "W12": {
       "row_id": "W12",
@@ -584,13 +621,20 @@
     },
     "P03": {
       "row_id": "P03",
-      "evidence": "title:Exercise Mode",
-      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
-      "action": "tap Select Exercise",
-      "timestamp": 1791826675.808,
-      "image": "DFAD28FD-3D57-43D1-B420-9E5BC6DFD3DC.png",
-      "screen": "screen-0-1398x2034-tap Select Exercise_0_A18D25A9-7BCC-4067-AC3F-D06C9294C8F0.png",
-      "file": "P03.png"
+      "evidence": "fresh native PNG/AX; normal/MAX exact selectors passed; see gallery for scope",
+      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
+      "action": "P03 General Posture selected",
+      "file": "P03.png",
+      "image": "005-1398x2034.png",
+      "source_revision": "4758aa004e60d95e541a8953f811e2f4f74d68e1",
+      "source_file_sha256": "f3528f2f1926b81049366748f21b414b04fc89c5be0b22634397afdb626a385b",
+      "source_equivalence": "normal path unchanged; details in gallery manifest",
+      "png_sha256": "31529ac9bd2e278274b041caa6efe6ca5065c709d352266ff5f399577b7beafc",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "gallery": "../../../full-redesign-map/review/posture-exercise-picker-p03-2026-11-14/index.html"
     },
     "P01": {
       "row_id": "P01",
@@ -616,13 +660,20 @@
     },
     "P08": {
       "row_id": "P08",
-      "evidence": "posture-comparison-photos-scroll",
-      "test": "PostureVisualAuditTests/testPostureComparison()",
-      "action": "tap Compare Selected",
-      "timestamp": 1791826731.791,
-      "image": "E932291F-A6A9-417C-91B9-241234F19A2D.png",
-      "screen": "screen-0-1398x2034-tap Compare Selected_0_26EBA878-B4CC-4B47-A9E5-16DE619874DB.png",
-      "file": "P08.png"
+      "evidence": "fresh native PNG/AX; normal/MAX exact selectors passed; see gallery for scope",
+      "test": "PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom()",
+      "action": "P08 actual older and newer score delta [DUNEUITests/WellnessRegressionTests.swift:1775]",
+      "file": "P08.png",
+      "image": "013-1398x2034.png",
+      "source_revision": "73d705e1b79121b260de7910679d0338d209a82d",
+      "source_file_sha256": "7986295917d46376fa9ffa695a92e6333094765ef7d6a7368b14981e95a62d23",
+      "source_equivalence": "P08 app files byte-identical across listed capture revisions; test revisions in gallery source lineage",
+      "png_sha256": "1e8e6b77e16684b477d4fe17de5f33370477bf455b9f99ea098e273b60eab488",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "gallery": "../../../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html"
     },
     "P06": {
       "row_id": "P06",
@@ -744,13 +795,18 @@
     },
     "H08": {
       "row_id": "H08",
-      "evidence": "injury-form-screen",
+      "evidence": "fresh exact Add/Edit evidence; Add/MAX/Edit all four profiles verified; seegallery",
       "test": "WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow()",
-      "action": "tap wellness-menu-injury",
-      "timestamp": 1791827091.898,
-      "image": "BDBA87AF-B3E2-41D2-9EC4-619727E76A74.png",
-      "screen": "screen-0-1398x2034-tap wellness-menu-injury_0_648A1AC4-8F78-4006-9F65-F293F50E01A3.png",
-      "file": "H08.png"
+      "action": "H08 add initial form",
+      "file": "H08.png",
+      "source_revision": "ce7be698308d27bacb8214b3c7f921cfb7be983a",
+      "source_file_sha256": "c4cc74a7dbb50e0e46f1456ea04d42cfc734cef7869b958a6d8012f96be4be3e",
+      "png_sha256": "7acef4ca9c8120b03a08abccf339a254c5d545e7754e3bb3a138c3dbfee82caa",
+      "native_dimensions": [
+        1398,
+        2034
+      ],
+      "gallery": "../../../full-redesign-map/review/injury-record-form-h08-2026-11-14/index.html"
     },
     "H10": {
       "row_id": "H10",
@@ -974,7 +1030,10 @@
       "timestamp": 1791855244.009,
       "image": "01662F91-4AED-4DE7-9B9A-52A1AD5A0563.png",
       "screen": "screen-0-1398x2034-tap cardio-start-indoor_0_B0360321-30A0-436F-93B5-1AFA116FEC0F.png",
-      "file": "W24.png"
+      "file": "W24.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source passed capture absent"
     },
     "W21": {
       "row_id": "W21",
@@ -984,7 +1043,10 @@
       "timestamp": 1791840185.175,
       "image": "67B16B1B-8884-4AD6-9A65-7A0A9380627A.png",
       "screen": "screen-0-1398x2034-tap compound-workout-setup-start_0_2BFCD2E2-DF6E-41F4-9A47-E2AD0E1DDD35.png",
-      "file": "W21.png"
+      "file": "W21.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source passed capture absent"
     },
     "W19": {
       "row_id": "W19",
@@ -994,7 +1056,10 @@
       "timestamp": 1791840118.203,
       "image": "F6F173F8-C54D-4FC0-A199-4CD00BCB0323.png",
       "screen": "screen-0-1398x2034-tap exercise-menu-compound_0_FA47666A-9510-4FDF-8FE4-53809C3C6831.png",
-      "file": "W19.png"
+      "file": "W19.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source passed capture absent"
     },
     "W20": {
       "row_id": "W20",
@@ -1004,7 +1069,10 @@
       "timestamp": 1791840129.048,
       "image": "E1BEA149-8270-411A-B149-905616117F4F.png",
       "screen": "screen-0-1398x2034-Compound exercise picker_0_8CE8B09C-899A-46DA-AD56-384B0A4C5B22.png",
-      "file": "W20.png"
+      "file": "W20.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source passed capture absent"
     },
     "W33": {
       "row_id": "W33",
@@ -1014,7 +1082,10 @@
       "timestamp": 1791840225.538,
       "image": "DC1B2892-5A5A-4D5C-86C7-449994E33B01.png",
       "screen": "screen-0-1398x2034-tap healthkit-workout-edit-title_0_55A8AFE1-179A-4EA6-96B1-563393ECCFDC.png",
-      "file": "W33.png"
+      "file": "W33.png",
+      "current_verification": "pending",
+      "current_verification_note": "B16+B17 current-source native capture absent; historical PNG retained.",
+      "capture_scope": "historical only"
     },
     "L06": {
       "row_id": "L06",
@@ -1103,7 +1174,10 @@
       "timestamp": 1791840768.739,
       "image": "C128C97D-9E57-4A25-A45C-FE6685742BFF.png",
       "screen": "screen-0-1398x2034-tap exercise-row-barbell-bench-press_0_899AB571-0EEC-44B1-872C-93CCCF7553CC.png",
-      "file": "W27.png"
+      "file": "W27.png",
+      "current_verification": "pending",
+      "current_verification_note": "B12 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B12 current-source passed capture absent"
     },
     "A19": {
       "row_id": "A19",
@@ -1171,27 +1245,23 @@
     "T12": {
       "row_id": "T12",
       "evidence": "notification-message-detail-screen",
-      "test": "DUNEUITests/DesignMapNotificationDetailTests/testNotificationMessageDetail",
-      "action": "DUNE_VISUAL_AUDIT_READY T12 notification message detail verified [DUNEUITests/DesignMapAdditionalRoutesTests.swift:180] DEADLINE=1793615913.5702848",
-      "timestamp": 1793615889.736731,
-      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
-      "image": "005-1398x2034.png",
-      "screen": "DUNE_VISUAL_AUDIT_READY T12 notification message detail verified [DUNEUITests/DesignMapAdditionalRoutesTests.swift:180] DEADLINE=1793615913.5702848",
+      "test": "DUNEUITests/DesignMapNotificationDetailTests/testBodyCompositionNotificationDetail",
+      "action": "T12 body composition header and two cards",
+      "timestamp": 1794586820.0424287,
+      "timestamp_kind": "host-file-mtime-native-paired-capture",
+      "image": "assets/duo-closed.png",
+      "screen": "T12 body composition header and two cards",
       "file": "T12.png",
-      "source_revision": "3fac15d4",
-      "source_worktree_dirty": false,
-      "device_udid": "C34568F0-90E0-4FBB-9D7A-14B3B81CEE3D",
-      "sha256": "21f8d672cf661a5f9d087b7bdd37407f98337e7c7bf842ef429cfa2d57324009",
-      "source_json": "../../../full-redesign-map/review/t12-notification-message-native-2026-11-02/evidence.json",
-      "source_record": "pairs.duo.after",
-      "capture_scope": "T12 exact stored title/body and native back; historical Phone normal+MAX separate from new normal cases",
+      "source_revision": "63022ff33",
+      "source_worktree_dirty": true,
+      "source_closure": "T12 iOS app and selected test source exact to63022ff33; whole worktree differs in Watch/docs",
+      "device_udid": "BE823107-8D8A-4D4B-BC09-A1CD1367F62C",
+      "sha256": "6c2b9ac39ff264c2fb88161d7078311dbb2352bb5930ed00464f6ed631e0996f",
+      "source_json": "../../../full-redesign-map/review/notification-cardio-2026-11-14/manifest.json",
+      "source_record": "captures.7",
+      "capture_scope": "Body composition title/date/two exact values, native Back and hub return; English normal",
       "pose_readback_verified": true,
-      "ack_count": 7,
-      "angle_before": 0,
-      "angle_after": 0,
-      "active_display": "LCD",
-      "raw_pose_sha256": "ee06effaa949470911c1991f9dbbea8821d44ddd6617b33fac1ba52493816f76",
-      "raw_checkpoints_sha256": "90552648439d02a7e145ca7cbb8e4d310fae839aede4344b2891184e3016fdaa"
+      "current_verification": "passed"
     },
     "P04": {
       "row_id": "P04",
@@ -1284,7 +1354,10 @@
       "timestamp": 1791853526.102,
       "image": "E3EC737B-ABFE-4EC4-A9FB-FA7FDBCF2338.png",
       "screen": "screen-0-1398x2034-Template workout first session_0_54451488-A129-486E-ADF8-1E11EF6D414F.png",
-      "file": "W16.png"
+      "file": "W16.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source Duo absent"
     },
     "A16": {
       "row_id": "A16",
@@ -1310,7 +1383,10 @@
       "timestamp": 1791853638.598,
       "image": "DD93B70C-E5BB-4498-A10A-338FFEC6F5C5.png",
       "screen": "screen-0-1398x2034-Workout Insights presentation_0_2A3D816C-01FD-4F54-8357-B4DD35236CC0.png",
-      "file": "W32.png"
+      "file": "W32.png",
+      "current_verification": "pending",
+      "current_verification_note": "B16+B17 current-source native capture absent; historical PNG retained.",
+      "capture_scope": "historical only"
     },
     "H03": {
       "row_id": "H03",
@@ -1501,7 +1577,10 @@
       "timestamp": 1791855603.531,
       "image": "B97ED069-355E-41D7-805C-EFD14691CC67.png",
       "screen": "screen-0-1398x2034-Rest timer after first completed set_0_E74EB096-FDB4-4B12-B3F5-40F25B93ABE4.png",
-      "file": "W07.png"
+      "file": "W07.png",
+      "current_verification": "pending",
+      "current_verification_note": "B11 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B11 current-source Duo absent"
     },
     "W09": {
       "row_id": "W09",
@@ -1511,7 +1590,10 @@
       "timestamp": 1791855687.056,
       "image": "0AF578BB-91BF-4E1D-831C-B53101519897.png",
       "screen": "screen-0-1398x2034-tap set-rpe-help_0_6CDB2036-3543-4BAC-8387-49F14CAB4CE5.png",
-      "file": "W09.png"
+      "file": "W09.png",
+      "current_verification": "pending",
+      "current_verification_note": "B11 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B11 current-source Duo absent"
     },
     "W08": {
       "row_id": "W08",
@@ -1521,7 +1603,10 @@
       "timestamp": 1791855681.948,
       "image": "647CB6C8-387C-4FDF-AC2B-0FCFAD62DB0A.png",
       "screen": "screen-0-1398x2034-RPE active picker_0_F031D8D5-D29C-40F4-94F1-DC1F1B10B84E.png",
-      "file": "W08.png"
+      "file": "W08.png",
+      "current_verification": "pending",
+      "current_verification_note": "B11 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B11 current-source Duo absent"
     },
     "H13": {
       "row_id": "H13",
@@ -1708,10 +1793,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+  "last_refresh_revision": "63022ff33",
   "last_refresh_screens": [
-    "H07",
-    "P06"
+    "T12"
   ],
-  "last_refresh_note": "Reviewed current native H07/P06; historical images in review gallery."
+  "last_refresh_note": "2026-11-14 T12 body composition native update; other rows preserve their original sources."
 }

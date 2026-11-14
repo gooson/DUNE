@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText",
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplatePlanAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplatePlanAtMaximumText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtMaximumText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtMaximumText"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 7,
+    "passed": 6,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 6,
+  "failures": [
+    "550: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/ActivityExercisePickerRegressionTests.swift:257: error: -[DUNEUITests.ActivityExercisePickerRegressionTests testVisualAuditCustomCreateAtMaximumText] : XCTAssertTrue failed - Cardio should reset the original input type",
+    "561: Test Case '-[DUNEUITests.ActivityExercisePickerRegressionTests testVisualAuditCustomCreateAtMaximumText]' failed (108.018 seconds).",
+    "865: Test Suite 'ActivityExercisePickerRegressionTests' failed at 2026-11-14 10:20:27.115.",
+    "3474: Test Suite 'DUNEUITests.xctest' failed at 2026-11-14 10:28:40.979.",
+    "3476: Test Suite 'Selected tests' failed at 2026-11-14 10:28:40.979.",
+    "3488: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-01-ui.log"
+}

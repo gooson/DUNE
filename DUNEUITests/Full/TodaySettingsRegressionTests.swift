@@ -777,7 +777,6 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
         let confirmClear = app.sheets.buttons["Clear Exercise Settings"].firstMatch
         XCTAssertTrue(confirmClear.waitForExistence(timeout: 5), "Clear Exercise Settings confirmation should appear")
-        VisualAudit.capture("S03 clear saved exercise settings confirmation")
         confirmClear.auditTap()
 
         XCTAssertTrue(
@@ -788,7 +787,6 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             app.descendants(matching: .any)[AXID.exerciseDefaultsConfiguredSection].firstMatch.waitForNonExistence(timeout: 8),
             "Configured section should disappear after clearing the only saved default"
         )
-        VisualAudit.capture("S02 configured section removed after S03 clear")
     }
 
     func testPreferredExercisesSearchShowsToggle() throws {
@@ -1228,6 +1226,273 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("S04 preferred selection after reentry")
     }
 
+    private func openExerciseDefaults() {
+        openSettings()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowExerciseDefaults, maxSwipes: 12),
+                      "Exercise Defaults row should be reachable in Settings")
+        let row = app.descendants(matching: .any)[AXID.settingsRowExerciseDefaults].firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Exercise Defaults row should exist in Settings")
+        row.auditTap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.exerciseDefaultsScreen].firstMatch.waitForExistence(timeout: 8),
+            "Exercise Defaults screen should open from Settings"
+        )
+    }
+
+    private func openPreferredExercises() {
+        openSettings()
+        let row = app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Preferred Exercises row should exist in Settings")
+        row.auditTap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)[AXID.preferredExercisesScreen].firstMatch.waitForExistence(timeout: 8),
+            "Preferred Exercises screen should open from Settings"
+        )
+    }
+
+    private func searchPreferredExercises(_ query: String) {
+        let list = app.collectionViews[AXID.preferredExercisesScreen].firstMatch.exists
+            ? app.collectionViews[AXID.preferredExercisesScreen].firstMatch
+            : app.collectionViews.firstMatch
+
+        var searchField = app.searchFields.firstMatch
+        if !searchField.waitForExistence(timeout: 2), list.exists {
+            list.swipeDown()
+            searchField = app.searchFields.firstMatch
+        }
+
+        XCTAssertTrue(searchField.waitForExistence(timeout: 5), "Preferred Exercises search field should exist")
+        searchField.auditTap()
+        searchField.typeText(query)
+        _ = app.dismissKeyboardIfPresent()
+    }
+
+    private func exerciseDefaultsBenchPressRow() -> XCUIElement {
+        let identifiedRow = app.descendants(matching: .any)[AXID.exerciseDefaultsRow(Fixture.benchPressID)].firstMatch
+        let button = app.buttons["Bench Press"].firstMatch
+        let text = app.staticTexts["Bench Press"].firstMatch
+        let container = app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch.exists
+            ? app.collectionViews[AXID.exerciseDefaultsScreen].firstMatch
+            : app.collectionViews.firstMatch
+
+        for _ in 0..<8 {
+            if identifiedRow.exists {
+                return identifiedRow
+            }
+            if button.exists {
+                return button
+            }
+            if text.exists {
+                return text
+            }
+            if container.exists {
+                container.swipeUp()
+            }
+        }
+
+        if identifiedRow.exists {
+            return identifiedRow
+        }
+        if button.exists {
+            return button
+        }
+        return text
+    }
+
+    private func waitForHittable(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
+        let predicate = NSPredicate(format: "exists == true AND hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    private func dismissMorningBriefingIfNeeded(timeout: TimeInterval = 5) {
+        let briefingScreen = app.descendants(matching: .any)[AXID.dashboardMorningBriefingScreen].firstMatch
+        let dismissButton = app.descendants(matching: .any)[AXID.dashboardMorningBriefingDismiss].firstMatch
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while Date() < deadline {
+            if dismissButton.waitForExistence(timeout: 0.25) {
+                dismissButton.auditTap()
+
+                let predicate = NSPredicate(format: "exists == false")
+                let expectation = XCTNSPredicateExpectation(predicate: predicate, object: briefingScreen)
+                XCTAssertEqual(
+                    XCTWaiter.wait(for: [expectation], timeout: 5),
+                    .completed,
+                    "Morning Briefing should dismiss before opening Today settings regression routes"
+                )
+                return
+            }
+
+            if !briefingScreen.exists {
+                return
+            }
+
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        }
+
+        guard !briefingScreen.exists else {
+            XCTFail("Morning Briefing remained visible without exposing a dismiss button")
+            return
+        }
+    }
+}
+
+@MainActor
+final class TodaySettingsEmptyStateRegressionTests: UITestBaseCase {
+    func testNotificationHubShowsEmptyStateWithoutSeed() throws {
+        navigateToDashboard()
+
+        let notificationsButton = app.descendants(matching: .any)[AXID.dashboardToolbarNotifications].firstMatch
+        XCTAssertTrue(notificationsButton.waitForExistence(timeout: 5), "Notifications toolbar button should exist")
+        notificationsButton.auditTap()
+
+        let filter = app.segmentedControls[AXID.notificationsFilter].firstMatch
+        XCTAssertTrue(filter.waitForExistence(timeout: 5))
+        XCTAssertEqual(filter.buttons.count, 3, "All, Health, and News should remain available")
+        let health = filter.buttons.element(boundBy: 1)
+        XCTAssertTrue(health.waitForExistence(timeout: 5) && health.isHittable,
+                      "The Health segment should be tappable in the empty hub")
+        health.tap()
+        XCTAssertTrue(health.isSelected, "Health should become the selected filter")
+        let emptyState = app.descendants(matching: .any)[AXID.notificationsEmptyState].firstMatch
+        XCTAssertTrue(emptyState.waitForExistence(timeout: 5), "Health filter should show empty state without seeded notifications")
+    }
+}
+
+@MainActor
+final class CloudSyncConsentRegressionTests: UITestBaseCase {
+    override var shouldSeedMockData: Bool { true }
+    override var uiScenario: LaunchScenario? { .empty }
+
+    override var additionalLaunchArguments: [String] {
+        [
+            "--ui-force-cloud-sync-consent",
+            "-AppleLanguages",
+            "(en)",
+            "-AppleLocale",
+            "en_US"
+        ]
+    }
+
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+        launchApp()
+    }
+
+    func testCloudSyncConsentHookPresentsAndDismissesSheet() throws {
+        let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
+        XCTAssertTrue(consentView.waitForExistence(timeout: 5), "Consent hook should present cloud sync consent sheet")
+        XCTAssertTrue(app.staticTexts["iCloud Sync"].exists, "Consent title should identify the decision")
+        XCTAssertTrue(app.staticTexts["Private storage"].exists, "Privacy explanation should be visible")
+        XCTAssertTrue(app.staticTexts["Across devices"].exists, "Sync explanation should be visible")
+        XCTAssertTrue(app.staticTexts["Use without iCloud"].exists, "Local option should be visible")
+        for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
+            let choice = app.buttons[identifier].firstMatch
+            XCTAssertTrue(choice.waitForExistence(timeout: 5))
+            XCTAssertGreaterThanOrEqual(choice.frame.height, 44,
+                                        "Each choice needs a 44-point minimum touch target")
+            XCTAssertTrue(choice.isHittable)
+        }
+        VisualAudit.capture("Cloud sync consent before dismissal")
+
+        let button = app.buttons[AXID.cloudSyncConsentLocalOnly].firstMatch
+        XCTAssertTrue(button.waitForExistence(timeout: 5), "Keep Local Only button should exist")
+        XCTAssertTrue(button.isHittable, "Local-only consent action must remain usable")
+        button.auditTap()
+
+        let dismissed = NSPredicate(format: "exists == false")
+        expectation(for: dismissed, evaluatedWith: consentView)
+        waitForExpectations(timeout: 5)
+    }
+
+    func testCloudSyncConsentEnableChoiceDismissesSheet() throws {
+        let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
+        XCTAssertTrue(consentView.waitForExistence(timeout: 5), "Consent hook should present cloud sync consent sheet")
+
+        let button = app.buttons[AXID.cloudSyncConsentEnable].firstMatch
+        XCTAssertTrue(button.waitForExistence(timeout: 5), "Enable iCloud Sync action should exist")
+        XCTAssertTrue(button.isHittable, "Enable iCloud Sync action must remain usable")
+        button.auditTap()
+
+        let dismissed = NSPredicate(format: "exists == false")
+        expectation(for: dismissed, evaluatedWith: consentView)
+        waitForExpectations(timeout: 5)
+    }
+
+    func testCloudSyncConsentDarkAppearanceKeepsChoicesReadable() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-test-style", "dark"]
+        launchApp(with: configuration)
+
+        let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
+        XCTAssertTrue(consentView.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["iCloud Sync"].exists)
+        for title in ["Private storage", "Across devices", "Use without iCloud"] {
+            XCTAssertTrue(app.staticTexts[title].exists, "\(title) should remain readable in dark appearance")
+        }
+        for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
+            let button = app.buttons[identifier].firstMatch
+            XCTAssertTrue(button.waitForExistence(timeout: 5))
+            XCTAssertTrue(button.isHittable, "\(identifier) should remain available in dark appearance")
+        }
+        VisualAudit.capture("T02 dark consent hero and choices")
+    }
+
+    func testCloudSyncConsentMaximumTextKeepsBothChoicesReachable() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+
+        let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
+        XCTAssertTrue(consentView.waitForExistence(timeout: 5))
+        let heroTitle = app.staticTexts["iCloud Sync"].firstMatch
+        XCTAssertTrue(heroTitle.exists && heroTitle.isHittable, "Hero title should be visible at the top")
+        VisualAudit.capture("T02 maximum text hero")
+
+        let window = app.windows.firstMatch
+        let enableButton = app.buttons[AXID.cloudSyncConsentEnable].firstMatch
+        XCTAssertTrue(window.exists && enableButton.waitForExistence(timeout: 5))
+        let scrollFrame = consentView.frame
+        let contentTop = max(scrollFrame.minY, window.frame.minY) + 24
+        let contentBottom = min(scrollFrame.maxY, enableButton.frame.minY) - 24
+        XCTAssertGreaterThan(contentBottom - contentTop, 100, "Scrollable content needs room above the pinned choices")
+        let visibleContent = CGRect(
+            x: scrollFrame.minX, y: contentTop,
+            width: scrollFrame.width, height: contentBottom - contentTop
+        )
+        let start = consentView.coordinate(withNormalizedOffset: CGVector(
+            dx: 0.5, dy: (contentBottom - scrollFrame.minY) / scrollFrame.height
+        ))
+        let end = consentView.coordinate(withNormalizedOffset: CGVector(
+            dx: 0.5, dy: (contentTop - scrollFrame.minY) / scrollFrame.height
+        ))
+        for title in ["Private storage", "Across devices", "Use without iCloud"] {
+            let rowTitle = app.staticTexts[title].firstMatch
+            XCTAssertTrue(rowTitle.exists, "\(title) should remain in the scrollable content")
+            for _ in 0..<8 {
+                if visibleContent.contains(rowTitle.frame) && rowTitle.isHittable { break }
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+            XCTAssertTrue(visibleContent.contains(rowTitle.frame) && rowTitle.isHittable,
+                          "\(title) should fit and be reachable above the pinned choices")
+        }
+        VisualAudit.capture("T02 maximum text information")
+
+        let visibleWindow = window.frame.insetBy(dx: -1, dy: -1)
+        for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
+            let button = app.buttons[identifier].firstMatch
+            XCTAssertTrue(button.waitForExistence(timeout: 5))
+            XCTAssertGreaterThanOrEqual(button.frame.height, 44, "\(identifier) needs a 44-point hit target")
+            XCTAssertTrue(visibleWindow.contains(button.frame), "\(identifier) must fit entirely inside the window")
+            XCTAssertTrue(button.isHittable, "\(identifier) must remain tappable at maximum text size")
+        }
+        VisualAudit.capture("T02 maximum text choice footer")
+    }
     func testExerciseDefaultSaveReopensWithStoredValues() throws {
         openExerciseDefaults()
         let row = exerciseDefaultsBenchPressRow()
@@ -1237,7 +1502,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
         dismissNumberPadBeforeNextFieldOnIPad()
         XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
-        _ = app.dismissKeyboardIfPresent()
+        dismissNumberPadBeforeNextFieldOnIPad()
         app.buttons[AXID.exerciseDefaultEditSave].firstMatch.auditTap()
 
         XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDefaultsScreen]
@@ -1307,10 +1572,14 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             VisualAudit.capture("S03 MAX \(labelText) and full input")
         }
 
-        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight))
-        dismissNumberPadBeforeNextFieldOnIPad()
-        XCTAssertTrue(replaceDefaultNumericInput(AXID.exerciseDefaultEditReps, with: Fixture.savedReps))
-        _ = app.dismissKeyboardIfPresent()
+        XCTAssertTrue(replaceDefaultNumericInput(
+            AXID.exerciseDefaultEditWeight, with: Fixture.savedWeight, requireKeyboardFocus: true
+        ))
+        dismissNumberPadBeforeNextField()
+        XCTAssertTrue(replaceDefaultNumericInput(
+            AXID.exerciseDefaultEditReps, with: Fixture.savedReps, requireKeyboardFocus: true
+        ))
+        dismissNumberPadBeforeNextField()
         let save = app.buttons[AXID.exerciseDefaultEditSave].firstMatch
         XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isHittable,
                       "Save stays reachable above the MAX Form")
@@ -1326,7 +1595,9 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("S03 MAX saved values on reopen")
     }
 
-    private func replaceDefaultNumericInput(_ identifier: String, with replacement: String) -> Bool {
+    private func replaceDefaultNumericInput(
+        _ identifier: String, with replacement: String, requireKeyboardFocus: Bool = false
+    ) -> Bool {
         let field = app.textFields[identifier].firstMatch
         guard field.waitForExistence(timeout: 5) else { return false }
 
@@ -1343,7 +1614,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             }
         }
         field.coordinate(withNormalizedOffset: CGVector(dx: 0.98, dy: 0.5)).auditTap()
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if UIDevice.current.userInterfaceIdiom == .pad || requireKeyboardFocus {
             let focused = XCTNSPredicateExpectation(
                 predicate: NSPredicate(format: "hasKeyboardFocus == true"), object: field
             )
@@ -1362,27 +1633,99 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     private func dismissNumberPadBeforeNextFieldOnIPad() {
         guard UIDevice.current.userInterfaceIdiom == .pad else { return }
-        // The floating number pad covers the reps field; its 3 key overlaps the
-        // trailing tap point. AX exposes Hide keyboard on the docked keyboard.
-        let hideKeyboard = app.keyboards.buttons["Hide keyboard"].firstMatch
-        if hideKeyboard.waitForExistence(timeout: 2) && hideKeyboard.isHittable {
-            hideKeyboard.auditTap()
-        } else {
-            let navigationBar = app.navigationBars["Exercise Default"].firstMatch
-            XCTAssertTrue(navigationBar.exists, "Editor header is available outside the number pad")
-            let headerPoint = CGPoint(x: navigationBar.frame.midX, y: navigationBar.frame.midY)
-            let keyboardLayouts = app.descendants(matching: .any)
-                .matching(identifier: "UIKeyboardLayoutStar Preview").allElementsBoundByIndex
-            XCTAssertFalse(keyboardLayouts.contains(where: { $0.frame.contains(headerPoint) }),
-                           "Keyboard dismissal tap stays outside the floating number pad")
-            navigationBar.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).auditTap()
-        }
+        dismissNumberPadBeforeNextField()
+    }
+
+    private func dismissNumberPadBeforeNextField() {
+        let done = app.buttons["exercise-default-keyboard-done"].firstMatch
         let keyboard = app.keyboards.firstMatch
+        // Some iPad numeric keyboards expose a native popup whose elements are
+        // visible in the full AX snapshot but not resolvable by XCUIElementQuery.
+        let popupMarker = "PopoverDismissRegion"
+        var hasIPadPopup = false
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            // Keyboard transitions can outlive XCTest idle. Match VisualAudit's
+            // fresh application snapshot without assuming a cache or timing cause.
+            let ready = XCTNSPredicateExpectation(
+                predicate: NSPredicate { _, _ in
+                    XCUIApplication().debugDescription.contains(popupMarker)
+                        || (done.exists && done.isHittable)
+                },
+                object: nil
+            )
+            guard XCTWaiter.wait(for: [ready], timeout: 3) == .completed else {
+                VisualAudit.capture("S03 iPad numeric dismissal readiness failed")
+                XCTFail("Numeric input must settle to a native popup or reachable Done")
+                return
+            }
+            VisualAudit.capture("S03 iPad numeric dismissal before decision")
+            hasIPadPopup = XCUIApplication().debugDescription.contains(popupMarker)
+        }
+        if hasIPadPopup {
+            let fields = [
+                app.textFields[AXID.exerciseDefaultEditWeight].firstMatch,
+                app.textFields[AXID.exerciseDefaultEditReps].firstMatch
+            ]
+            let focus = NSPredicate(format: "hasKeyboardFocus == true")
+            guard keyboard.waitForExistence(timeout: 3),
+                  keyboard.frame.width > 0, keyboard.frame.height > 0,
+                  fields.allSatisfy({ $0.exists }),
+                  fields.filter({ focus.evaluate(with: $0) }).count == 1 else {
+                XCTFail("The popup starts with a visible keyboard and exactly one focused input")
+                return
+            }
+            guard done.waitForExistence(timeout: 3), done.isEnabled,
+                  app.windows.firstMatch.frame.contains(done.frame) else {
+                XCTFail("The app's Done action remains fully visible behind the popup")
+                return
+            }
+            // Default Reps is an inert app label to the left of the keypad in both
+            // tested iPad sizes. A coordinate tap reaches the native dismissal layer.
+            let outsideLabel = app.staticTexts["Default Reps"].firstMatch
+            guard outsideLabel.waitForExistence(timeout: 3),
+                  app.windows.firstMatch.frame.contains(outsideLabel.frame),
+                  !keyboard.frame.intersects(outsideLabel.frame) else {
+                XCTFail("The dismissal anchor is a visible app label outside the keyboard")
+                return
+            }
+            outsideLabel.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).auditTap()
+            let popupDismissed = XCTNSPredicateExpectation(
+                predicate: NSPredicate { _, _ in
+                    !XCUIApplication().debugDescription.contains(popupMarker)
+                },
+                object: nil
+            )
+            guard XCTWaiter.wait(for: [popupDismissed], timeout: 3) == .completed else {
+                VisualAudit.capture("S03 iPad popup dismissal did not settle")
+                XCTFail("The native popup must disappear after the outside tap")
+                return
+            }
+            VisualAudit.capture("S03 iPad numeric dismissal after outside tap")
+            if keyboard.waitForNonExistence(timeout: 3) {
+                let cleared = fields.map { field in
+                    XCTNSPredicateExpectation(
+                        predicate: NSPredicate(format: "hasKeyboardFocus == false"), object: field
+                    )
+                }
+                guard fields.allSatisfy({ $0.exists }),
+                      XCTWaiter.wait(for: cleared, timeout: 3) == .completed,
+                      done.waitForNonExistence(timeout: 3) else {
+                    XCTFail("Popup dismissal clears focus and Done when the keyboard closes")
+                    return
+                }
+                VisualAudit.capture("S03 iPad popup dismissal cleared numeric focus and keyboard")
+                return
+            }
+        }
+        XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable
+                      && app.windows.firstMatch.frame.contains(done.frame),
+                      "Numeric input must offer a reachable explicit Done action")
+        done.auditTap()
         let dismissed = XCTNSPredicateExpectation(
             predicate: NSPredicate(format: "exists == false"), object: keyboard
         )
-        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 3), .completed,
-                       "Weight keyboard dismisses before focusing reps")
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 5), .completed,
+                       "Done clears numeric focus before the next action")
     }
 
     private func openExerciseDefaults() {

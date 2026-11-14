@@ -1,0 +1,53 @@
+{
+  "batch": "B13",
+  "review": "independent private source and UI-test preflight",
+  "base": "770809e12b8f2b797be56ab2e8d401bb8f9ae8d8",
+  "accepted_main_W10": "bdb369282119d9c16d15628c90642d01348748a7",
+  "native_status": "not executed for B13; source-only",
+  "candidate_source_sha256": {
+    "W12": "288273876687fc640e9221f17ccef11402bfff2af6c94667d6d67688f8cee7ca",
+    "W13": "40cf9ce3a3f6253bd65beaa35b0801a75d0ac767a2da80b126c0194dba227585",
+    "W15": "b60f47ca0d97e9e007f9b0588d49493c6b8f1f674f1df237ea8a589ea9627c0e"
+  },
+  "candidate_test_sha256": "54627959051055efb3248554c93137fba118f389fecfba222a4c904141fd8b54",
+  "candidate_patch_sha256": "423f8e48cd8c34223dee2148c12a87eb61c5527a1c406370ce8f8d07f5ebf813",
+  "source_proof": {
+    "W12": "WorkoutTemplateListView remains a native List with @Query updatedAt descending, unchanged row button/Start/swipe Edit/Delete and Watch sync. Candidate changes templateRow text wrapping and accessibility-size detail stack only. Existing seeded circuit row is two exercises, Squat and Bench Press.",
+    "W13": "Activity AI Workout Builder route is already exercised in testActivityAIWorkoutBuilderOpensTemplateForm. TemplateFormView is Form identified template-form-screen, Add Exercise button and Save/Cancel toolbar IDs unchanged. Strength selected Bench Press resolves to default 3 sets/10 reps; added test now captures Korean selected name and checks those steppers. Running catalog id has localizedName 달리기 and durationDistance profile, so sessionDrivenSummary emits Duration and Distance. Candidate edits only entry name wrapping and summary layout, preserving binding/save/validation.",
+    "W14": "TemplateExercisePickerSheet is a wrapper calling ExercisePickerView(mode:.full), appends TemplateExerciseResolver.defaultEntry and dismisses. No W14-specific app patch; W13 test visits full picker normal/MAX.",
+    "W15": "WeeklyWorkoutPlanView primary and secondary are separate ScrollViews via AdaptivePaneView; source has seven ForEach(days) Button rows, Previous Week/Next Week labels, secondary weekly-plan-template-list, selected-template and remove IDs. Candidate changes day label stack and arrow frame only; @AppStorage, assignment, week calculation and actions unchanged.",
+    "W34": "No screen identity in full-redesign inventory, screen inventory or current actual capture indices; no source/test selector invented.",
+    "baseline_compatibility": "bdb3692 accepted main still has byte-exact B13 W12/W13/W15 baseline source hashes. B13 patch applied byte-exact in private copy of base770 and applied cleanly to base770 plus accepted B12 W10/W28 test block. Swift frontend parse passed for corrected candidate and combined future copy."
+  },
+  "resolved_private_test_finding": {
+    "priority": "P2 if old test used",
+    "cause": "Old W15 test asserted seven Rest Day labels and conditionally removed only selected-day assignment, but workout.weeklyPlan.v1 persists in AppStorage and TestDataSeeder.resetUserDefaults does not clear it. Other week/day assignments can invalidate seven Rest Day assumption or make conditional Remove offscreen.",
+    "correction": "Count seven Button rows within the primary calendar ScrollView regardless of assignment; compare their labels before/after Next/Previous Week; assign and remove the selected seeded template without pre-clearing persisted assignment.",
+    "scope": "Private B13 test candidate only; no app or repo source changed.",
+    "new_candidate_sha256": "54627959051055efb3248554c93137fba118f389fecfba222a4c904141fd8b54",
+    "new_patch_sha256": "423f8e48cd8c34223dee2148c12a87eb61c5527a1c406370ce8f8d07f5ebf813"
+  },
+  "coverage": {
+    "new_selectors": [
+      "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText",
+      "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtMaximumText",
+      "ActivityExerciseRegressionTests/testVisualAuditTemplatePlanAtNormalText",
+      "ActivityExerciseRegressionTests/testVisualAuditTemplatePlanAtMaximumText"
+    ],
+    "W13_W14": "Phone and iPad normal/MAX planned, includes blank Save disabled, picker, strength name/defaults, session summary, name Save enabled, Cancel without save.",
+    "W12_W15": "Phone normal/MAX planned; known B09 iPad native More route skipped, not a pass.",
+    "W14_source": "No patch; wrapper route test only.",
+    "W34": "Held unmapped."
+  },
+  "unresolved_native_limits": [
+    "All B13 selectors and captures remain unexecuted; AX roles/labels, Form virtualization, MAX viewport and iPad sheet presentation require native proof.",
+    "W15 calendar-pane query assumes the first ScrollView inside WeeklyWorkoutPlanView is the primary calendar ScrollView, matching source order; native AX must confirm.",
+    "Phone MAX Templates toolbar action may overflow; test uses existing waitAndTapToolbarAction but needs native result. iPad W12/W15 remains held from B09 native More failure.",
+    "W13 static label queries for Korean catalog name and Duration/Distance are source-grounded but exact AX roles/visibility await native run.",
+    "No W34 route/source can be reviewed until identity is documented."
+  ],
+  "introduced_source_P1_P2": [],
+  "repo_edits": false,
+  "sdk_runs": 0,
+  "security_agent_coordination": "Security reviewer notified of AppStorage issue and deferred overlapping B13 test edits."
+}

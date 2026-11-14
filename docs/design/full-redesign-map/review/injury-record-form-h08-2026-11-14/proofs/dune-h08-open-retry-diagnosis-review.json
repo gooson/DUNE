@@ -1,0 +1,19 @@
+{
+  "screen": "H08",
+  "profile": "Duo Open MAX",
+  "status": "HELD_AFTER_EXTRA_DUO_OPEN_02",
+  "source_revision": "ce7be698",
+  "result": "MAX failed again at WellnessRegressionTests.swift:840: rows.count 1 < 2 after four 80px/s drags; no positive MAX save/history claim",
+  "cause": "The four long-press drags did not change the Injury History List scroll offset. Host AX035 after the gestures has the same CollectionView y83-669, Active Knee row-1 y170-606, Recovered section header y623.7-707.4 and scrollbar value 0% as the initial History state. The gestures started at the center of the large Button row and used 0.35s press; the log records the gestures but no native movement. This is a failed reveal method, not evidence that Save failed.",
+  "data_evidence": "The MAX test tapped Save, verified form dismissal, then opened Injury History. In source, WellnessView inserts a record and dismisses only when createValidatedRecord succeeds. TestDataSeeder supplies exactly one Active Knee without --ui-injury-history-fixture; the MAX test passes no such argument. InjuryHistoryView renders a Recovered section only when cachedEndedRecords is nonempty. Its presence in AX035 therefore proves a second recovered record is in the app model, but the row itself remains unverified below fold.",
+  "native_evidence": {
+    "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-retry-capture/035-2007x2853.png",
+    "png_sha256": "e574fbbebf50c92588097b37945ed23a1f77edb87cb2a4160387b7021d3a82c4",
+    "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-open-retry-capture/035-hierarchy.txt",
+    "ax_sha256": "7f7595d6e41a5d9ba2498ed9042c84ef3686d0b581b25422a539d3337895a00b"
+  },
+  "previous_candidate_error": "ce7be assertion newRecoveredRow.label.contains(\"Recovered\") contradicts InjuryHistoryView: Recovered is a section header and ended row labels omit that word; existing recovered Shoulder AX confirms this.",
+  "corrected_private_patch": "/private/tmp/dune-h08-open-retry-diagnosis/h08-open-max-sequential-rows.patch",
+  "patch_scope": "Only MAX post-save test code for short Duo Open. Verify seeded Active Knee row-1, Recovered section, then invoke existing bounded revealInjuryHistoryRow(0) using its short 0.05s/default500 drag to demand the new row fully visible. Assert row-0 Knee/Moderate/no Active and distinct ID; capture. Other profiles retain original rows.count>=2. App source and root repository untouched.",
+  "limitations": ["The corrected patch is unexecuted.", "Sequential distinct-ID proof is necessary because two tall rows may not be simultaneously AX-materialized in a 586pt List viewport.", "No third SDK run or counter reset is claimed."]
+}

@@ -1,0 +1,12 @@
+{
+  "normalization": "Curated bootstatus excerpt removes only blank line at EOF; diagnostic lines unchanged. This copy is normalized, not byte-exact raw SDK evidence.",
+  "file": "proofs/renewed-duo-closed-pose-bootstatus.log",
+  "original_sha256": "947d334a8705d809250c3e1c2e499e157fef5e657358d616e95cfb3c5fb23c75",
+  "normalized_sha256": "a3bab2b2e97428188de6226af612124695287832e244193249ae5718f5b4c6a5",
+  "original_backup_outside_projection": "/private/tmp/dune-h08-ready-publication/raw-prefix-backups/renewed-duo-closed-pose-bootstatus.log",
+  "original_source": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/renewed-duo-closed-pose/bootstatus.log",
+  "root_original_unchanged": true,
+  "removed_bytes": 1,
+  "cause": "git diff --cached --check: new blank line at EOF line12",
+  "scope": "No source, test, PNG, AX or diagnostic-content changes."
+}

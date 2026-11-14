@@ -1,0 +1,31 @@
+{
+  "review": "B08 S05/S06 What's New private candidate read-only Security/Data Integrity/Architecture",
+  "candidate_scope": "DUNE/Presentation/WhatsNew/WhatsNewView.swift only",
+  "source_sha256": "2c797c4e30038e39c0b98d8f67e7f3b28d79d471f02f7614a8df9eb2ea9de340",
+  "candidate_sha256": "57ae2373f7025192e8e5dfa5c62e34cb95097bf1060fcaa7d34cba12b9f27d68",
+  "patch_sha256": "9873c97447df7e769f1e26b1cc81ef536fac80022b7c57dfe06680c429e23ba6",
+  "findings": [],
+  "role_results": {
+    "security": "no introduced actionable P1/P2/P3 findings",
+    "data_integrity": "no introduced actionable P1/P2/P3 findings",
+    "architecture": "no introduced actionable P1/P2/P3 findings"
+  },
+  "verified_static_scope": [
+    "visibleReleases still shows only releases.first in automatic mode and all ordered releases in manual mode; source release order and feature iteration are unchanged.",
+    "Version text remains verbatim and version badge uses the original release.version; area badge title, tint, symbol, feature title/summary, artwork selection, and row/detail navigation remain unchanged.",
+    "The candidate adds only Dynamic Type layout changes, capped content width, scroll bounce behavior, and untruncated summary at accessibility sizes.",
+    "onPresented remains attached to view onAppear. Automatic Done button and dismiss action remain unchanged; manual mode still has no Done toolbar action.",
+    "Unread badge persistence and automatic dismissal marking are owned by WhatsNewStore, WhatsNewManager, DUNEApp, and NotificationHubView; none are changed by this candidate.",
+    "No new user-facing string keys, model writes, network/HealthKit access, secret material, or external state are introduced."
+  ],
+  "phase_gates": {
+    "private_source_review": "passed for three named perspectives",
+    "repository_application": "not performed",
+    "runtime_ui": "not performed",
+    "actual_capture": "not performed"
+  },
+  "remaining_uncertainty": [
+    "The maximum Dynamic Type version header, feature row and detail header require native layout and accessibility verification after application.",
+    "The 680-point width cap on iPad/Duo needs actual capture confirmation."
+  ]
+}

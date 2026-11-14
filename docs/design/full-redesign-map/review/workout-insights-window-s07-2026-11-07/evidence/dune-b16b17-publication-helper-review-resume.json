@@ -1,0 +1,81 @@
+{
+  "status": "source-only publication helpers verified against final native gate; parent may execute per-screen flow",
+  "frozen_source": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+  "accepted_main": "4a9b342fc0159729bb71193466bfbe6b66946d6b",
+  "workspace_clean": true,
+  "helper_sha256": {
+    "/private/tmp/dune-b16b17-split.py": "3832744fc0eff8b564d62037d96ed960ac2ce0080655bca4fb1dd072c76b1736",
+    "/private/tmp/dune-b16b17-publish.py": "dfec731306716e53da4e58298c2b8830d02b2019cae67277446bb2b4da1d0e7e",
+    "/private/tmp/dune-b16b17-docs.py": "9b6c63258fb96cf9df263fe85fcb66fbdba591e9a52fa6e02a52720625dc1962",
+    "/private/tmp/dune-b16b17-commit.py": "b43b3dbdc0ceb4de44858c37b2a0c146ebea10b99f82b5255146ae1a7e54056d"
+  },
+  "test_projection": {
+    "accepted_sha256": "dcdc8ea5b8984d68323a3066c11731124de398905d2ea3513dd1ee76c52be0ad",
+    "frozen_sha256": "57c75a6a8cae68b7c915ae442e13aa313f21220722713c4dc27c41d042138eca",
+    "screens_with_test_delta": [
+      "W30",
+      "W33",
+      "W32"
+    ],
+    "no_test_delta": [
+      "W29",
+      "S07"
+    ],
+    "merge_orders_checked": 3,
+    "partial_w32_rejected": true,
+    "foreign_test_edit_rejected": true
+  },
+  "publisher": {
+    "required_action_slots": {
+      "W29": 8,
+      "W30": 24,
+      "W33": 4,
+      "S07": 3,
+      "W32": 5
+    },
+    "all_44_single_action_omissions_rejected": true,
+    "W29_MAX_fresh_full_row_required": true,
+    "W29_MAX_old_clipped_diagnostic_not_required": true,
+    "W32_iPad_MAX_conditional_only": true,
+    "held_actual_map_byte_unchanged_guard": true,
+    "source_lineage": "original_source=b81 validated against immutable execution-contract; final_integration_source=d731; git diff b81..d731 only frozen UI test file; after rows source_revision exactly run revision (phone b81, retry d731, iPad d731); W29 MAX full-row and W32 Phone normal require d731"
+  },
+  "ownership": {
+    "b81_to_d731_app_owner_members_equal": [
+      "W29",
+      "W30",
+      "W33",
+      "S07",
+      "W32"
+    ],
+    "W29_W30_prepared_hashes_checked_from_manifest": true
+  },
+  "documentation": {
+    "new_solution_date": "2026-11-14",
+    "legacy_capture_plan_gallery_paths": "2026-11-07"
+  },
+  "blocking_before_publication": [
+    "W29/W30 remain held drafts; iPad category selectors skipped and actual-map bytes must remain unchanged.",
+    "W32 iPad MAX remains explicit conditional pending; require --allow-ipad-max-pending for W32 publication."
+  ],
+  "existing_gallery_diagnostic": "Refreshed gallery now has 44 required slots for eligible W33/S07/W32 and intentionally lacks iPad W29/W30 slots. S07/W32 MAX period title means closed Picker control fully visible before tap, with subsequent functional option/range assertions; it does not claim popup visibility.",
+  "sdk_build_test_sim_runs": "none",
+  "gallery_refreshed_validation": {
+    "W29": "lineage valid; held, iPad normal/MAX intentionally skipped",
+    "W30": "lineage valid; held, iPad normal/MAX intentionally skipped",
+    "W33": "lineage valid; all 4 required action slots present",
+    "S07": "lineage valid; all 3 required action slots present; MAX period capture is closed Picker control before tap",
+    "W32": "lineage valid; all 5 required action slots present; iPad normal fallback only, MAX pending conditional"
+  },
+  "final_native_gate": {
+    "path": "/private/tmp/dune-b16b17-final-gate.json",
+    "sha256": "c5d96171f7b069c9e0652dc784b1c307806da74e0b1542cd1b9eb262022023e3",
+    "statuses": {
+      "W29": "held",
+      "W30": "held",
+      "W33": "eligible",
+      "S07": "eligible",
+      "W32": "conditional"
+    }
+  }
+}

@@ -52,9 +52,11 @@ struct CardioSessionSummaryView: View {
 
             Text("Workout Complete!")
                 .font(.title2.weight(.bold))
+                .multilineTextAlignment(.center)
 
             Text(exercise.localizedName)
                 .font(.subheadline)
+                .multilineTextAlignment(.center)
                 .foregroundStyle(DS.Color.textSecondary)
         }
     }
@@ -162,7 +164,7 @@ struct CardioSessionSummaryView: View {
                         )
                     }
 
-                    if !(hasElevation && hasVO2Max) {
+                    if !(hasElevation && hasVO2Max) && !dynamicTypeSize.isAccessibilitySize {
                         Color.clear.frame(maxWidth: .infinity)
                     }
                 }
@@ -185,9 +187,12 @@ struct CardioSessionSummaryView: View {
 
             Text(value)
                 .font(.title3.weight(.bold).monospacedDigit())
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
 
             Text(title)
                 .font(.caption)
+                .multilineTextAlignment(.center)
                 .foregroundStyle(DS.Color.textSecondary)
         }
         .frame(maxWidth: .infinity)

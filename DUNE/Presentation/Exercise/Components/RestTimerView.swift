@@ -4,6 +4,7 @@ struct RestTimerView: View {
     @Bindable var timer: RestTimerViewModel
 
     @Environment(\.appTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         VStack(spacing: DS.Spacing.md) {
@@ -20,12 +21,16 @@ struct RestTimerView: View {
             ProgressView(value: timer.progress)
                 .tint(DS.Color.activity)
 
-            HStack(spacing: DS.Spacing.lg) {
+            let actionsLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(spacing: DS.Spacing.sm))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.lg))
+            actionsLayout {
                 Button {
                     timer.addTime(30)
                 } label: {
                     Text("+30s")
-                        .font(.caption.weight(.medium))
+                        .font(dynamicTypeSize.isAccessibilitySize ? .body.weight(.medium) : .caption.weight(.medium))
+                        .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, minHeight: dynamicTypeSize.isAccessibilitySize ? 44 : nil)
                 }
                 .buttonStyle(.bordered)
                 .tint(.secondary)
@@ -34,7 +39,8 @@ struct RestTimerView: View {
                     timer.stop()
                 } label: {
                     Text("Skip")
-                        .font(.caption.weight(.medium))
+                        .font(dynamicTypeSize.isAccessibilitySize ? .body.weight(.medium) : .caption.weight(.medium))
+                        .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, minHeight: dynamicTypeSize.isAccessibilitySize ? 44 : nil)
                 }
                 .buttonStyle(.borderedProminent)
                 .foregroundStyle(DS.Color.onActivity)

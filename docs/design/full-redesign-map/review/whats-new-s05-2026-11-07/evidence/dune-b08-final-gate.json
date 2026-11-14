@@ -1,0 +1,75 @@
+{
+  "review": "B08 final source and native quality gate, screen-scoped",
+  "frozen_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+  "frozen_app_sha256": "57ae2373f7025192e8e5dfa5c62e34cb95097bf1060fcaa7d34cba12b9f27d68",
+  "source_reviews": [
+    "/private/tmp/dune-b08-source-ui-review.json",
+    "/private/tmp/dune-b08-source-security-review.json",
+    "/private/tmp/dune-b08-test-review.json"
+  ],
+  "native_reviews": [
+    "/private/tmp/dune-b08-phone-native-review.json",
+    "/private/tmp/dune-b08-ipad-native-review.json"
+  ],
+  "receipts": {
+    "phone": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-ui.log.result.json",
+    "phone-retry1": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-ui.log.result.json",
+    "ipad": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/ipad-ui.log.result.json"
+  },
+  "receipt_counts": {
+    "phone": {
+      "executed": null,
+      "passed": null,
+      "skipped": null,
+      "failed": null
+    },
+    "phone-retry1": {
+      "executed": 3,
+      "passed": 3,
+      "skipped": 0,
+      "failed": 0
+    },
+    "ipad": {
+      "executed": 2,
+      "passed": 2,
+      "skipped": 0,
+      "failed": 0
+    }
+  },
+  "initial_phone_compile_failure": "The first source 2e17 attempt compiled zero tests because an unseeded test subclass called a seeded-only helper. e487 removed that call; phone retry1 executed and passed all three exact selectors. The zero-test receipt remains a failed attempt, never counted as a pass.",
+  "introduced_P1_P2_P3_findings": [],
+  "agent_native": "N/A: only existing human-facing SwiftUI release views and focused XCTest selectors change; no agent-facing action, API, tool, state contract, or delegated workflow is introduced.",
+  "S05": {
+    "gate": "source and targeted native UI accepted, conditional on preserving exact reviewed source section and map evidence when isolating PR",
+    "source_section_sha256": "bd2d56fc7e872828704581be6b404bd44144c4d3288a3e09f91e1474f5ea1ed7",
+    "current_split_section_sha256": "bd2d56fc7e872828704581be6b404bd44144c4d3288a3e09f91e1474f5ea1ed7",
+    "current_split_section_identical": true,
+    "native_proof": "phone manual normal, MAX version/row, automatic MAX Done; iPad manual normal and MAX list/detail/Back. All exact selectors passed on frozen e487 app.",
+    "actual_map_proof": {
+      "regular": {
+        "capture_sha256": "49a49a7db538d70a6f0ca18eb4c8c1252efc56e488b4fb5ea8998eeec699a080",
+        "actual_map_sha256": "49a49a7db538d70a6f0ca18eb4c8c1252efc56e488b4fb5ea8998eeec699a080",
+        "byte_match": true,
+        "index_source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+        "index_capture_kind": "XCTest-native-PNG+AX"
+      },
+      "ipad": {
+        "capture_sha256": "80e956b77f826d245e1588fdbe9b1bab7f4ce37fc984de8315db0975de71bcaa",
+        "actual_map_sha256": "80e956b77f826d245e1588fdbe9b1bab7f4ce37fc984de8315db0975de71bcaa",
+        "byte_match": true,
+        "index_source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+        "index_capture_kind": "XCTest-native-PNG+AX"
+      }
+    },
+    "limits": "Duo folded/open not current-source verified because owned empty device failed Data Migration before SDK launch; historical PNGs are explicitly pending, not passes. No dark-mode/other-language proof."
+  },
+  "S06": {
+    "gate": "frozen combined-source quality accepted for inspected phone/iPad states; isolated S06 PR remains conditional on exact detail-hunk equivalence and fresh S06 actual-map PNG+AX/index wiring or explicit uncaptured status",
+    "frozen_detail_section_sha256": "4ed06126cda799115a65ae88baff89f1f63129037769f0c415d44cd247369a90",
+    "native_proof": "phone and iPad manual normal and MAX detail title, category, version, artwork, full summary, and Back passed/observed on frozen e487; current branch has reverted S06 detail hunk for split.",
+    "actual_map_status": "regular and iPad S06 actual-map PNGs are historical, not the B08 captured PNGs; no S06 map pass is claimed.",
+    "preexisting_limit": "At iPhone MAX the fixed-height symbol hero artwork truncates its duplicate title visually; unchanged symbolHero source, full primary title and AX remain. iPad MAX hero title is visible.",
+    "limits": "No current Duo, dark-mode, alternate-language, or automatic detail path proof."
+  },
+  "decision": "No introduced blocking P1/P2 from reviewed source or captured phone/iPad states. S05 has current map proof and can proceed under exact-hunk preservation. S06 native evidence is reusable for exact detail hunk, but actual-map sync and split verification remain pending. No whole-suite/all-device pass is asserted."
+}

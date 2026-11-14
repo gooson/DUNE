@@ -1,0 +1,77 @@
+{
+  "batch": "B13",
+  "status": "final",
+  "source_app": "c6708751213657f7a1624ac944d7660e8bbed19d",
+  "current_test_revision": "680652688b217c25dc1ded177af0b486f687100f (iPad native SearchField correction)",
+  "phone_attempts": [
+    {
+      "id": "phone",
+      "executed": 4,
+      "passed": 1,
+      "failed": 3,
+      "receipt": ".codex-checks/b13/phone-ui.log.result.json"
+    },
+    {
+      "id": "phone-retry1",
+      "executed": 3,
+      "passed": 0,
+      "failed": 3,
+      "receipt": ".codex-checks/b13/phone-retry1-ui.log.result.json"
+    }
+  ],
+  "phone_closed": true,
+  "phone_native_review": "/private/tmp/dune-b13-phone-closed-native-review.json",
+  "decisions": {
+    "W12": {
+      "status": "HELD",
+      "phone": "Normal passed, MAX row readable only in failed PlanMAX diagnostic.",
+      "ipad": "Not entered by this B13 iPad authoring family; prior Templates toolbar More route remains closed.",
+      "gate": "Required normal/MAX target route and actual map not complete across impacted devices."
+    },
+    "W13": {
+      "status": "HELD",
+      "phone": "Changed strength and session-driven rows never reached in closed two-attempt phone family.",
+      "ipad": "Authoring normal and MAX both passed on first cause-specific retry; 10 W13 after PNG/AX pairs hash-match. MAX asset 12 only partly shows Sets and AX Reps 10 offscreen; later asset 13 shows Reps 10 plus full Running Duration/Distance. Filled name/Save and actual Cancel sheet closure verified.",
+      "gate": "iPad proof cannot substitute for absent Phone core changed-row proof."
+    },
+    "W14": {
+      "status": "HELD",
+      "phone": "Full picker opened as CollectionView in diagnostic only; selection never reached after Table-role query failure.",
+      "ipad": "Normal and MAX full picker search/Bench Press selection and return to form passed; 4 W14 after PNG/AX pairs hash-match.",
+      "source": "No app patch to wrapper; W02 historical/native capture is not relabeled as W14 after.",
+      "gate": "Phone target selection missing; no independent W14 redesigned app source."
+    },
+    "W15": {
+      "status": "HELD",
+      "phone": "Normal complete flow passed. MAX Remove remained y923.3\u2013986.6 while pane ended y956 in both attempts; visual control reachability unresolved.",
+      "ipad": "Not entered by this B13 iPad authoring family; prior Templates toolbar More route remains closed.",
+      "causality": "Lower template pane/Remove source unchanged by W15 patch; native MAX problem real, but introduction by day-row diff not established.",
+      "gate": "MAX core action and iPad route incomplete."
+    }
+  },
+  "pending_duo": "Duo and Duo-open fresh captures absent; historical only.",
+  "source_findings": "No verified introduced P1/P2 from phone evidence; unresolved W15 MAX native Remove reachability cannot be attributed to changed day-row diff without old-source MAX proof.",
+  "approval": "None; W12/W13/W14/W15 all held. No third Phone or iPad attempt is authorized by the retry budget. No actual-map row is promoted from diagnostic or historical evidence.",
+  "provenance": "Phone 1/4 then 0/3 and iPad 0/2 then 2/2 are all retained. New iPad after rows only from passed retry selectors; 14 PNG/AX pairs hash-checked. Failed cases remain diagnostic; W02 old captures are not W14 after.",
+  "iPad_attempts": [
+    {
+      "id": "ipad",
+      "executed": 2,
+      "passed": 0,
+      "failed": 2,
+      "receipt": ".codex-checks/b13/ipad-ui.log.result.json"
+    },
+    {
+      "id": "ipad-retry1",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "receipt": ".codex-checks/b13/ipad-retry1-ui.log.result.json"
+    }
+  ],
+  "iPad_native_review": "/private/tmp/dune-b13-ipad-native-review.json",
+  "W34": {
+    "status": "SEPARATE_PENDING_IDENTITY",
+    "reason": "No mapped screen/source identity in B13; not counted among W12\u2013W15."
+  }
+}

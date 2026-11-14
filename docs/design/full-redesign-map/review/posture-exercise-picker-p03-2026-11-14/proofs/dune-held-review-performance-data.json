@@ -1,0 +1,33 @@
+{
+  "scope": "read-only performance and data-integrity source review of current integrated 16-screen app/test diff against origin/main",
+  "reviewed_at_client_date": "2026-11-14",
+  "workspace": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health",
+  "sdk_build_simulator": "not run",
+  "repo_mutations": "none",
+  "performance_findings": [],
+  "data_integrity_findings": [],
+  "review_notes": [
+    "Changed DUNE app code is chiefly adaptive SwiftUI presentation/layout and accessibility identifiers. W26 compact local History sheet preserves ExerciseHistoryView data and leaves other callers on their original NavigationLink path.",
+    "S03 changes focus and layout; existing Save and validation path is unchanged. W15, W25, W29/30, P02/P03/P08 changes do not add a model mutation or new database query path in the reviewed diff.",
+    "Existing ExerciseView schedulePickerAction has a Task.yield loop, but its only current caller synchronously sets showingExercisePicker=false immediately before scheduling; no concrete hot loop occurs in that path. This is not a finding.",
+    "No original test method was removed from the five affected UI test files. Added W34 selectors are distinct from old W13 authoring selectors."
+  ],
+  "w34": {
+    "source_contract": "Activity SuggestedWorkoutSection AI Workout Builder button -> ActivityView showingAIWorkoutBuilder sheet -> default TemplateFormView() create mode -> aiGenerationSection. This never traverses WorkoutTemplateListView or TemplateExercisePickerSheet.",
+    "selectors": [
+      "ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtNormalText",
+      "ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtMaximumText"
+    ],
+    "old_closed_family": "W13 authoring enters the same Activity builder and subsequently opens Add Exercise picker; W34 test stops before that picker. It has no old W34 failure/retry history in reviewed records.",
+    "assertions": "Empty prompt disables Generate; availability text and Generate button whole frames fit Form viewport; typing prompt changes enabled state only if generator reports available; Cancel returns to Activity. The selector never taps Generate and does not request actual AI generation or persist a template.",
+    "gate": "Eligible as first fresh dedicated W34 Phone/iPad normal/MAX validation, if execution budget and ownership allow; not proof that old W13/W14 picker failures are resolved.",
+    "limits": "A passing W34 capture validates this embedded AI section and cancel path only. It does not certify generated output, persistence, or the old Add Exercise picker route."
+  },
+  "test_method_preservation": "Across ActivityExerciseRegressionTests, TodaySettingsRegressionTests, WellnessRegressionTests, NotificationRoutingRegressionTests, ActivityExercisePickerRegressionTests: zero old test method names removed from origin/main; new selectors are additive.",
+  "source_files": [
+    "DUNE/Presentation/Activity/ActivityView.swift",
+    "DUNE/Presentation/Activity/Components/SuggestedWorkoutSection.swift",
+    "DUNE/Presentation/Exercise/Components/CreateTemplateView.swift",
+    "DUNEUITests/Full/ActivityExerciseRegressionTests.swift"
+  ]
+}

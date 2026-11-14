@@ -1,0 +1,37 @@
+{
+  "source_commit": "d7812cf204693d51211916131dd7d63ac50985fe",
+  "path": "DUNEUITests/Full/WellnessRegressionTests.swift",
+  "before_sha256": "8036ccbd05642eb6fff045b13bc46e67be53cdd5b15732dcfc447a8388736646",
+  "after_sha256": "3b1c0a7296f47ab61a52ae144d9b7102878530691dcdca9f47c948dd440e5c01",
+  "apply_check": "pass",
+  "cause": "The compact Memo classifier reads target.identifier before a lazy target exists. Existing target.exists guards do not protect this separate property read. The selector identifier is already known in the caller.",
+  "remedy": "Pass a value-only Boolean from revealInjuryFormControl; direct End Date row calls default false. No target snapshot is needed for classification.",
+  "preserved": [
+    "maxMoves default 12 and loop bound",
+    "all full-frame, exists, hittable checks",
+    "compact Memo x0.05 and press0.05",
+    "other compact controls x0.5 and press0.35",
+    "velocity80 and hold0.35",
+    "All unrelated app and test behavior untouched"
+  ],
+  "runtime_status": "unverified; source-only private patch",
+  "retry_contract": {
+    "id": "renewed-h08-duo-closed",
+    "selector": "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize",
+    "profile": "Duo Closed MAX",
+    "allowed": "One conditional under existing renewed autonomous authorization, after this concrete defect fix and parent confirms finalized current execution. Keep same ID and every previous attempt.",
+    "scope": "The missing-snapshot defect is demonstrably removed in source. Earlier Memo/Save/history behavior remains unproven and must execute with unchanged assertions; no old-cause resolution claim from this failure."
+  },
+  "failure_evidence": {
+    "log": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/renewed-h08-duo-closed-ui.log",
+    "sha256": "17e1b19a1ec8f13bdc7a7098e922f7976ca6e117cd344a47fb3ea71c94210933",
+    "lines": [
+      649,
+      650,
+      651,
+      662,
+      675
+    ],
+    "actual": "Start Date absent; unguarded identifier property snapshot fails at source line927, before Memo. One test failed112.568s."
+  }
+}

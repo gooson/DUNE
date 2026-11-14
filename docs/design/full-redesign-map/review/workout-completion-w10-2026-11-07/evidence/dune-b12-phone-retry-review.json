@@ -1,0 +1,49 @@
+{
+  "scope": "Independent B12 first phone 6-selector failure cause review; no SDK or repository edit",
+  "frozen_source": "80e12fcad184a6061a2e445ff8adfe60f0e8de83",
+  "first_phone_raw": {
+    "executed": 6,
+    "passed": 3,
+    "failed": 3,
+    "passed_cases": [
+      "testVisualAuditWorkoutCompletionAtNormalText",
+      "testVisualAuditWorkoutCompletionAtMaximumText",
+      "testVisualAuditImportedWorkoutAtNormalText"
+    ],
+    "failed_cases": [
+      "testVisualAuditWorkoutRecordsAtNormalText",
+      "testVisualAuditWorkoutRecordsAtMaximumText",
+      "testVisualAuditImportedWorkoutAtMaximumText"
+    ]
+  },
+  "causes": [
+    {
+      "cases": "WorkoutRecords normal and MAX",
+      "failure": "W26 Sessions stat is present but not hittable after history link",
+      "native_proof": "4E0ED03E AX has exercise-history-screen behind exercise-inspector-close and front exercise-session-detail-scroll; E1F7E AX has Sessions at (254.7,799.7) while inspector still overlays. MAX PNG 1833B429 shows front W27 Done and set rows, not History.",
+      "source_proof": "ExerciseView inspector holds ExerciseSessionDetailView; its NavigationLink constructs ExerciseHistoryView. The destination materializes behind still-present inspector on tested phone.",
+      "minimal_test_change": "After history screen exists, tap existing exercise-inspector-close if visible/hittable, wait it disappears, require History hittable, then retain original stats/capture assertions. No app navigation change."
+    },
+    {
+      "cases": "ImportedWorkout MAX",
+      "failure": "Seeded notification workout row not materialized at top of long notification List",
+      "native_proof": "B4FA6084 AX has CollectionView notification-hub-screen with vertical scroll bar 3 pages at 0%, news release row only; PNG 86E469B6 shows huge header/news and target below.",
+      "source_proof": "NotificationHubView uses List with ID notification-hub-screen; existing DesignMapAdditionalRoutesTests reveals notification rows by scrolling that identified list.",
+      "minimal_test_change": "Use app.collectionViews[AXID.notificationHubScreen] and bounded slow swipeUp until exact seeded workout row exists and is hittable, then retain navigation/stat/editor assertions."
+    }
+  ],
+  "private_test_only_patch": "/private/tmp/dune-b12-phone-retry-prep/B12-phone-retry-tests.patch",
+  "patch_sha256": "bf191064ebcb59a25f594eec5e0f3145263d134b7cb923dc5863e16e8133c610",
+  "candidate_test_sha256": "eef3f25e22a30710ec341edbc8642d309fbb4b6ff3b17ce5a5455f6635f78cd2",
+  "verification": [
+    "git apply --check on frozen source",
+    "xcrun swiftc -frontend -parse on private patched file"
+  ],
+  "introduced_app_P1_P2": [],
+  "limits": [
+    "No retry/native pass yet; only one same-ID retry of the three failed selectors is justified.",
+    "W10 normal/MAX and W28 normal were passed and should be reused, not rerun.",
+    "W10 PR-achievement row is absent in seeded completion; its dynamic-type variant is not covered by this pass.",
+    "iPad normal/MAX targeted behavior remains pending first planned family."
+  ]
+}

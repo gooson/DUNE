@@ -1,0 +1,236 @@
+{
+  "screen_id": "W12",
+  "scope": "B13 W12/W13/W14/W15 private native review staging",
+  "original_source": "c6708751213657f7a1624ac944d7660e8bbed19d",
+  "source_contract": ".codex-checks/b13/execution-contract.json",
+  "rows": [
+    {
+      "profile": "regular",
+      "kind": "historical",
+      "title": "W12 historical baseline",
+      "image": "historical/regular-W12.png",
+      "ax": null,
+      "capture_index_entry": "historical/regular-W12-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
+      "sha256": "5be8843ab428315b62dfd3b76de5d7ca1d8d1bb3ed13020a4bf4a6c4d516d315",
+      "source_image": "/private/tmp/dune-b13-gallery-prep/_baseline/regular/W12.png",
+      "is_primary": false
+    },
+    {
+      "profile": "ipad",
+      "kind": "historical",
+      "title": "W12 historical baseline",
+      "image": "historical/ipad-W12.png",
+      "ax": null,
+      "capture_index_entry": "historical/ipad-W12-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
+      "sha256": "aadafdad16c7f50a2b3dbbcd56e885a48cb5ad098636a517056f25e9934191b0",
+      "source_image": "/private/tmp/dune-b13-gallery-prep/_baseline/ipad/W12.png",
+      "is_primary": false
+    },
+    {
+      "profile": "duo",
+      "kind": "historical",
+      "title": "W12 historical baseline",
+      "image": "historical/duo-W12.png",
+      "ax": null,
+      "capture_index_entry": "historical/duo-W12-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
+      "sha256": "b062748e1c879b42c9cd97a000125785515005f40cd7b39650f2182085f6c59b",
+      "source_image": "/private/tmp/dune-b13-gallery-prep/_baseline/duo/W12.png",
+      "is_primary": false
+    },
+    {
+      "profile": "duo-open",
+      "kind": "historical",
+      "title": "W12 historical baseline",
+      "image": "historical/duo-open-W12.png",
+      "ax": null,
+      "capture_index_entry": "historical/duo-open-W12-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
+      "sha256": "819d55aed55c8c997fcc24baf8730490d422728a7612873946711d73764e38e7",
+      "source_image": "/private/tmp/dune-b13-gallery-prep/_baseline/duo-open/W12.png",
+      "is_primary": false
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "title": "Normal seeded template row and exercise names",
+      "image": "assets/01-regular-phone-normal-after.png",
+      "ax": "assets/01-regular-phone-normal-after.txt",
+      "source_revision": "c6708751213657f7a1624ac944d7660e8bbed19d",
+      "run_id": "phone",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplatePlanAtNormalText()",
+      "selector_state": "passed",
+      "capture_uuid": "0fc18bd1-9506-48df-b48b-32896d4b4845",
+      "timestamp": 1793999953.586,
+      "sha256": "28afe335bb76d9c9dac714459db48368146fe4cec0591660b160eede8f1d7b23",
+      "ax_sha256": "22a89400ffc496dc73a1cd8a43fe4dcc86ddfe7483e9c5dbe9ddecb1286c9120",
+      "source_image": ".codex-checks/b13/phone-attachments/CDC6F6F7-7E1C-403E-BDC5-4FF1BC7CFAFB.png",
+      "source_ax": ".codex-checks/b13/phone-attachments/5F0DC418-7663-47BB-B37B-8CA5987F7F1D.txt",
+      "pair_manifest": ".codex-checks/b13/phone-attachments/manifest.json",
+      "is_primary": true,
+      "actual_angle": null
+    },
+    {
+      "profile": "regular",
+      "kind": "diagnostic",
+      "title": "MAX seeded template row and exercise names",
+      "image": "assets/02-regular-phone-max-diagnostic.png",
+      "ax": "assets/02-regular-phone-max-diagnostic.txt",
+      "source_revision": "c6708751213657f7a1624ac944d7660e8bbed19d",
+      "run_id": "phone",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplatePlanAtMaximumText()",
+      "selector_state": "failed",
+      "capture_uuid": "6cf4686f-092c-4979-adbc-7c5cafd1770c",
+      "timestamp": 1793999868.116,
+      "sha256": "eea4383143d4ac54d90735f2a6224b9b2ba11d34f084b53d0a185ab6b3492939",
+      "ax_sha256": "ee083e421cce3aa97525e61e4b8333e44f6c7cf05e722aefa6309fa39e696d18",
+      "source_image": ".codex-checks/b13/phone-attachments/BC25E74F-66F0-410C-95EA-28D94D203FF1.png",
+      "source_ax": ".codex-checks/b13/phone-attachments/7A3FF23D-AA9B-460B-B3B5-85879203CFF3.txt",
+      "pair_manifest": ".codex-checks/b13/phone-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null
+    },
+    {
+      "profile": "regular",
+      "kind": "diagnostic",
+      "title": "MAX seeded template row and exercise names",
+      "image": "assets/03-regular-phone-retry1-max-diagnostic.png",
+      "ax": "assets/03-regular-phone-retry1-max-diagnostic.txt",
+      "source_revision": "e95ee97795f2f70c020db67964942dedc10d6eeb",
+      "run_id": "phone-retry1",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplatePlanAtMaximumText()",
+      "selector_state": "failed",
+      "capture_uuid": "5022ae66-ff99-425f-97c0-478f862ffb24",
+      "timestamp": 1794000436.618,
+      "sha256": "834ce14c2f1ba6bf52c29ad7d4633aac0691754402fcb1138e4d51d137ad345d",
+      "ax_sha256": "e19b88524ba50820a719294da524cd7de012aea382ed368410166882656bd484",
+      "source_image": ".codex-checks/b13/phone-retry1-attachments/9B0714B5-492D-4744-888D-C2C34F2AE4A7.png",
+      "source_ax": ".codex-checks/b13/phone-retry1-attachments/BA101EFE-FAEC-4472-B680-5F53B7E62E44.txt",
+      "pair_manifest": ".codex-checks/b13/phone-retry1-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null
+    }
+  ],
+  "gates": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "c6708751213657f7a1624ac944d7660e8bbed19d",
+      "counts": {
+        "executed": 4,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 3
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditTemplateAuthoringAtNormalText": "failed",
+        "testVisualAuditTemplateAuthoringAtMaximumText": "failed",
+        "testVisualAuditTemplatePlanAtNormalText": "passed",
+        "testVisualAuditTemplatePlanAtMaximumText": "failed"
+      },
+      "receipt": ".codex-checks/b13/phone-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b13/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "e95ee97795f2f70c020db67964942dedc10d6eeb",
+      "counts": {
+        "executed": 3,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 3
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditTemplateAuthoringAtNormalText": "failed",
+        "testVisualAuditTemplateAuthoringAtMaximumText": "failed",
+        "testVisualAuditTemplatePlanAtNormalText": "not_executed",
+        "testVisualAuditTemplatePlanAtMaximumText": "failed"
+      },
+      "receipt": ".codex-checks/b13/phone-retry1-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b13/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "dd080a56732c860d72471fa78060aee0c5e86f77",
+      "counts": {
+        "executed": 2,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 2
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditTemplateAuthoringAtNormalText": "failed",
+        "testVisualAuditTemplateAuthoringAtMaximumText": "failed",
+        "testVisualAuditTemplatePlanAtNormalText": "not_executed",
+        "testVisualAuditTemplatePlanAtMaximumText": "not_executed"
+      },
+      "receipt": ".codex-checks/b13/ipad-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b13/ipad-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad-retry1",
+      "profile": "ipad",
+      "source_revision": "680652688b217c25dc1ded177af0b486f687100f",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditTemplateAuthoringAtNormalText": "passed",
+        "testVisualAuditTemplateAuthoringAtMaximumText": "passed",
+        "testVisualAuditTemplatePlanAtNormalText": "not_executed",
+        "testVisualAuditTemplatePlanAtMaximumText": "not_executed"
+      },
+      "receipt": ".codex-checks/b13/ipad-retry1-ui.log.result.json",
+      "result_note": "all requested selectors passed",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b13/ipad-retry1-attachments/manifest.json"
+    }
+  ],
+  "evidence": [
+    "evidence/ipad-retry1-summary.json",
+    "evidence/ipad-retry1-ui.log.result.json",
+    "evidence/ipad-summary.json",
+    "evidence/ipad-ui.log.result.json",
+    "evidence/phone-retry1-summary.json",
+    "evidence/phone-retry1-ui.log.result.json",
+    "evidence/phone-summary.json",
+    "evidence/phone-ui.log.result.json"
+  ],
+  "pending": [
+    "phone-retry1 W12 normal seeded template row and exercise names: named PNG/AX pair absent",
+    "ipad W12 normal seeded template row and exercise names: named PNG/AX pair absent",
+    "ipad W12 MAX seeded template row and exercise names: named PNG/AX pair absent",
+    "ipad-retry1 W12 normal seeded template row and exercise names: named PNG/AX pair absent",
+    "ipad-retry1 W12 MAX seeded template row and exercise names: named PNG/AX pair absent",
+    "Duo closed/open current-source capture pending; historical baselines only",
+    "Before-teardown failure attachments never count as passed W12/W13/W14/W15 evidence"
+  ],
+  "limits": [
+    "Historical before images are older-source context, never current B13 proof.",
+    "Only completed passed selector captures are classified after.",
+    "Named captures from failed or unattributable selectors are diagnostic.",
+    "No Duo current-source result or hinge angle is claimed.",
+    "This private gallery is not the repository actual-map update."
+  ]
+}

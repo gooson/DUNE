@@ -1,0 +1,45 @@
+{
+  "decision": "HOLD_AUTOMATIC_NEW_CAUSE_BUDGET; SOURCE_CANDIDATE_ONLY",
+  "scope": "H08 Duo Closed MAX only; sourcece7be current conditional5 result",
+  "actual_outcome": "Failed204.349s at WellnessRegressionTests.swift:783 Memo must fit; did not reach Memo tap, keyboard, Save or lazy history. Batch5executed3passed2failed.",
+  "previous_point_resolution": "Moderate and Severe whole-row guards pass at checkpoints57/58. StartDate59 and wholeEndDate61 pass. This resolves the previous specific Moderate severity assertion in this execution.",
+  "strict_cause_judgment": "A later control alone does not prove a new underlying cause. Both old and new failures arise in the same bounded generic Form reveal helper. Prior overshoot and present low-progress behavior differ, but native gesture interception is not positively instrumented. Do not create a new H08 check ID or reset count on that inference.",
+  "observations": {
+    "before": "AX061 Form scrollbar80%; EndDate DatePicker y556.3..633.6; Memo not yet materialized",
+    "after": "AX062 scrollbar86%; EndDate picker x39..367 y449..526.3; Memo x44 y657.3 w318 h187.3, outside678pt window; native PNG confirms Notes at bottom and Memo clipped",
+    "movement": "Net107.3pt from61 to62 despite12 bounded memo drags. Not exact per-drag position proof, as there is no snapshot after each gesture.",
+    "gesture": "Repeated start normalized(.5,.7) in Form x8 y25 w450 h653 = (233,482.1); end(.5,.52);80px/s,0.35spress/hold. At final geometry this starts inside EndDate native DatePicker.",
+    "hypothesis": "Native picker or interactive control may intercept long press/drag, causing stalled scrolling. This is plausible and source-grounded, not demonstrated framework cause."
+  },
+  "private_candidate": {
+    "path": "/private/tmp/dune-h08-closed-memo-audit/h08-closed-memo-gutter-candidate.patch",
+    "change": "Only compact Memo uses visible left Form gutter normalizedx.05 (x30.5, outside datepicker39..367) and established0.05s press; retains80 velocity/.35 hold, same12 bound, same distance and strict full-frame checks. All other control/profile gestures unchanged.",
+    "app_change": false,
+    "assertions": "No full-field/hittable/enabled/keyboard/Save/history checks removed; sequential history patch separate and does not remediate this Memo failure.",
+    "validation": "git apply --check privatece7be baseline PASS; runtime/compile unexecuted; source candidate is not proof of remedy."
+  },
+  "history": {
+    "Closed_current": "First failed Moderate + conditional failed Memo =2non-success attempts under original group; original H08 missing counter remainsUNKNOWN and closed. No claimed new grant.",
+    "Open_current": "Two failed post-save lazy row reveals remain closed; separate pending additional authorization. No transplant of Open budget into Closed or vice versa."
+  },
+  "resume_condition": "Explicit additional authorization covering Closed H08 MAX, or materially stronger independent evidence establishing a genuinely distinct new cause under canonical84. Do not spend runtime solely to prove entitlement.",
+  "evidence": [
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-duo-closed-02-ui.log.result.json",
+      "sha256": "2cca8f1628d8ca706fb9a75e2bcf7502a58026b4941ebc7b451dc04212fd81d5"
+    },
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-closed-retry-capture/061-hierarchy.txt",
+      "sha256": "a7eacef191bf20a3831a14b8a0f6ec475d92f05b069487a7c36c937a6ec6544b"
+    },
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-closed-retry-capture/062-hierarchy.txt",
+      "sha256": "6c0708fbdb05551c9feda237fba894f6aecc10b5fad2391641f49a5e22e66884"
+    },
+    {
+      "file": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/duo-closed-retry-capture/062-1398x2034.png",
+      "sha256": "328e75d902232f0e602f3d881bc0c67dd461713846ead768480a6725eee513a3"
+    }
+  ],
+  "actions": "Private files and read-only source/native evidence only; no SDK/device/root mutation."
+}

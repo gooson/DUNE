@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtMaximumText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplatePlanAtMaximumText"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 3,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 3
+  },
+  "passed_cases": 0,
+  "failures": [
+    "441: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:3645: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditTemplateAuthoringAtMaximumText] : XCTAssertTrue failed - W14 full exercise picker should open",
+    "452: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditTemplateAuthoringAtMaximumText]' failed (83.247 seconds).",
+    "615: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:3645: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditTemplateAuthoringAtNormalText] : XCTAssertTrue failed - W14 full exercise picker should open",
+    "626: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditTemplateAuthoringAtNormalText]' failed (52.952 seconds).",
+    "1113: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:3815: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditTemplatePlanAtMaximumText] : XCTAssertTrue failed - The whole Remove action must be visible in the active template…",
+    "1124: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditTemplatePlanAtMaximumText]' failed (117.472 seconds).",
+    "1125: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-11-07 06:28:07.130.",
+    "1127: Test Suite 'DUNEUITests.xctest' failed at 2026-11-07 06:28:07.134.",
+    "1129: Test Suite 'Selected tests' failed at 2026-11-07 06:28:07.134.",
+    "1143: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtMaximumText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditTemplatePlanAtMaximumText"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b13/phone-retry1-ui.log"
+}

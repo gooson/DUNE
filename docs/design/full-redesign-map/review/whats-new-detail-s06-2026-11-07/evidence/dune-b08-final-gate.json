@@ -1,0 +1,130 @@
+{
+  "review": "B08 final source and native quality gate, screen-scoped",
+  "frozen_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+  "frozen_app_sha256": "57ae2373f7025192e8e5dfa5c62e34cb95097bf1060fcaa7d34cba12b9f27d68",
+  "source_reviews": [
+    "/private/tmp/dune-b08-source-ui-review.json",
+    "/private/tmp/dune-b08-source-security-review.json",
+    "/private/tmp/dune-b08-test-review.json"
+  ],
+  "native_reviews": [
+    "/private/tmp/dune-b08-phone-native-review.json",
+    "/private/tmp/dune-b08-ipad-native-review.json"
+  ],
+  "receipts": {
+    "phone": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-ui.log.result.json",
+    "phone-retry1": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/phone-retry1-ui.log.result.json",
+    "ipad": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/ipad-ui.log.result.json"
+  },
+  "receipt_counts": {
+    "phone": {
+      "executed": null,
+      "passed": null,
+      "skipped": null,
+      "failed": null
+    },
+    "phone-retry1": {
+      "executed": 3,
+      "passed": 3,
+      "skipped": 0,
+      "failed": 0
+    },
+    "ipad": {
+      "executed": 2,
+      "passed": 2,
+      "skipped": 0,
+      "failed": 0
+    }
+  },
+  "initial_phone_compile_failure": "The first source 2e17 attempt compiled zero tests because an unseeded test subclass called a seeded-only helper. e487 removed that call; phone retry1 executed and passed all three exact selectors. The zero-test receipt remains a failed attempt, never counted as a pass.",
+  "introduced_P1_P2_P3_findings": [],
+  "agent_native": "N/A: only existing human-facing SwiftUI release views and focused XCTest selectors change; no agent-facing action, API, tool, state contract, or delegated workflow is introduced.",
+  "S05": {
+    "gate": "source and targeted native UI accepted, conditional on preserving exact reviewed source section and map evidence when isolating PR",
+    "source_section_sha256": "bd2d56fc7e872828704581be6b404bd44144c4d3288a3e09f91e1474f5ea1ed7",
+    "current_split_section_sha256": "bd2d56fc7e872828704581be6b404bd44144c4d3288a3e09f91e1474f5ea1ed7",
+    "current_split_section_identical": true,
+    "native_proof": "phone manual normal, MAX version/row, automatic MAX Done; iPad manual normal and MAX list/detail/Back. All exact selectors passed on frozen e487 app.",
+    "actual_map_proof": {
+      "regular": {
+        "capture_sha256": "49a49a7db538d70a6f0ca18eb4c8c1252efc56e488b4fb5ea8998eeec699a080",
+        "actual_map_sha256": "49a49a7db538d70a6f0ca18eb4c8c1252efc56e488b4fb5ea8998eeec699a080",
+        "byte_match": true,
+        "index_source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+        "index_capture_kind": "XCTest-native-PNG+AX"
+      },
+      "ipad": {
+        "capture_sha256": "80e956b77f826d245e1588fdbe9b1bab7f4ce37fc984de8315db0975de71bcaa",
+        "actual_map_sha256": "80e956b77f826d245e1588fdbe9b1bab7f4ce37fc984de8315db0975de71bcaa",
+        "byte_match": true,
+        "index_source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+        "index_capture_kind": "XCTest-native-PNG+AX"
+      }
+    },
+    "limits": "Duo folded/open not current-source verified because owned empty device failed Data Migration before SDK launch; historical PNGs are explicitly pending, not passes. No dark-mode/other-language proof."
+  },
+  "S06": {
+    "gate": "source, targeted native UI, and actual-map evidence accepted for current S06 split, subject to preserving the verified files through commit/PR",
+    "frozen_detail_section_sha256": "4ed06126cda799115a65ae88baff89f1f63129037769f0c415d44cd247369a90",
+    "native_proof": "phone and iPad manual normal and MAX detail title, category, version, artwork, full summary, and Back passed/observed on frozen e487; current branch has reverted S06 detail hunk for split.",
+    "actual_map_status": "regular and iPad current S06 PNG and AX files byte-match frozen e487 native gallery captures; capture indexes match both SHA-256 values and cite e487.",
+    "preexisting_limit": "At iPhone MAX the fixed-height symbol hero artwork truncates its duplicate title visually; unchanged symbolHero source, full primary title and AX remain. iPad MAX hero title is visible.",
+    "limits": "No current Duo, dark-mode, alternate-language, or automatic detail path proof.",
+    "source_split_status": "current full WhatsNewView.swift bytes equal frozen compiled e487 candidate; three test methods and three local helpers are individually byte-identical to compiled source."
+  },
+  "decision": "No introduced blocking P1/P2 from reviewed source or captured phone/iPad states. S05 source and map proof remain valid. S06 split source, exact test methods/helpers, and regular/iPad actual-map PNG+AX/index proof now match frozen e487; screen-scoped S06 gate is closed, contingent on no changes before commit. Duo current native remains absent and historical Duo captures remain pending; no all-device or full-suite pass is asserted.",
+  "split_delta_verification": {
+    "branch": "codex/whats-new-detail-s06-redesign",
+    "base_revision": "6f96d3a9953582561402f1c01986b3c5d33c0db6",
+    "full_app_byte_equal_to_frozen_e487": true,
+    "full_app_sha256": "57ae2373f7025192e8e5dfa5c62e34cb95097bf1060fcaa7d34cba12b9f27d68",
+    "compiled_test_method_and_helper_equivalence": {
+      "testManualReleaseListOpensFeatureAndReturns": {
+        "byte_equal_to_compiled_e487": true,
+        "sha256": "2d099dd159c0d0cd5262dd6321b0c08b99fbc73737877171816ecff64c76594e"
+      },
+      "testAutomaticReleaseDoneAtMaximumAccessibilitySize": {
+        "byte_equal_to_compiled_e487": true,
+        "sha256": "6136850c59c5f7620c4690a1c8201f08d83dabae48bf7da9205848a9b6bf74b2"
+      },
+      "testManualReleaseListAndDetailAtMaximumAccessibilitySize": {
+        "byte_equal_to_compiled_e487": true,
+        "sha256": "cf68dd3675d88c15f8c2a48bbccad3b209beb87ecbe344a1d8eec216c1b5ee27"
+      },
+      "relaunchAtMaximumTextSize": {
+        "byte_equal_to_compiled_e487": true,
+        "sha256": "7815d4ab38d4eec0b32be488f73ecaba8f0ec5416255d9e747fae7ff8268e814"
+      },
+      "openSettingsForAudit": {
+        "byte_equal_to_compiled_e487": true,
+        "sha256": "ece36afdb4aaba3b382d7b9160dce9c40f807fa764d0231f3360e836f8616109"
+      },
+      "openManualReleaseFromSettings": {
+        "byte_equal_to_compiled_e487": true,
+        "sha256": "6b14bf47d890b5aff2fc5238e31e71effdf2f9cd17bc662a85210b052a0cf506"
+      }
+    },
+    "S06_actual_maps": {
+      "regular": {
+        "png_sha256": "a2e5c12fb40e85c8b132a51f17dfae7cd0cd986b5d98f2fca23dfb016144f66e",
+        "png_byte_match": true,
+        "ax_sha256": "c6c34bae8c79a0a8f94b1663d4c6aedc58a3f1f3514807a31928800b13aef05e",
+        "ax_byte_match": true,
+        "index_source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+        "index_sha_match": true,
+        "current_verification": "normal-captured"
+      },
+      "ipad": {
+        "png_sha256": "26a1f7177347243a880d0de2254c52e249e4027f08ffbbb01ddee0e9a0bd6f96",
+        "png_byte_match": true,
+        "ax_sha256": "67e3e0d79c461fe643a03a7f0088f721f15ae595cd9ddb88c9e90278d854f592",
+        "ax_byte_match": true,
+        "index_source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+        "index_sha_match": true,
+        "current_verification": "normal-captured"
+      }
+    },
+    "repo_mutation_by_reviewer": false,
+    "sdk_rebuild_by_reviewer": false
+  }
+}

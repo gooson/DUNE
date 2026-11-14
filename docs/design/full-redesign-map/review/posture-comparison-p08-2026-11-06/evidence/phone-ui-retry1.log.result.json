@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/PostureVisualAuditTests/testP07SymmetryKeepsSeededValuesAndUnits",
+    "DUNEUITests/PostureVisualAuditTests/testP07SymmetryValuesFitAtMaximumAccessibilitySize",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 3,
+  "failures": [
+    "2729: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/WellnessRegressionTests.swift:1407: error: -[DUNEUITests.PostureVisualAuditTests testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom] : XCTAssertTrue failed - Photo center must be inside its own visible pane before opening zoom",
+    "2740: Test Case '-[DUNEUITests.PostureVisualAuditTests testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom]' failed (84.360 seconds).",
+    "2741: Test Suite 'PostureVisualAuditTests' failed at 2026-11-06 23:40:48.392.",
+    "2743: Test Suite 'DUNEUITests.xctest' failed at 2026-11-06 23:40:48.393.",
+    "2745: Test Suite 'Selected tests' failed at 2026-11-06 23:40:48.393.",
+    "2757: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b06/phone-ui-retry1.log"
+}

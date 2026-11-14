@@ -1,0 +1,164 @@
+{
+  "screen": "W14",
+  "capture_date": "2026-11-14",
+  "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+  "selected_results": {
+    "phone": "2/2 passed",
+    "ipad": "2/2 authoring passed; S03 separate selectors failed"
+  },
+  "states": [
+    {
+      "profile": "phone-max",
+      "state": "template exercise picker initial",
+      "test_identifier": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtMaximumText()",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "run": "renewed-authoring-phone",
+      "files": [
+        {
+          "file": "assets/phone-max-01.png",
+          "sha256": "217b7438aa0bb85c242e89322eca95ae60ffd86c9d3977eb54dd76dc20fd13d4",
+          "source_file": "C99B74C9-EF61-49BC-9D12-923CCC3EEA62.png"
+        },
+        {
+          "file": "assets/phone-max-01.txt",
+          "sha256": "7d6c9fdf71d23ced685c098c07f332f53dc1f8ef18bc1440cded414a965ed808",
+          "source_file": "116A9516-960D-4850-8193-B596162124F4.txt"
+        }
+      ]
+    },
+    {
+      "profile": "phone-max",
+      "state": "seeded Bench Press selection",
+      "test_identifier": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtMaximumText()",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "run": "renewed-authoring-phone",
+      "files": [
+        {
+          "file": "assets/phone-max-02.png",
+          "sha256": "7aa1e6a4521de799d122ad3aec7611fc1329bc3ddf11e6f8328fb31812ab95e2",
+          "source_file": "224FD515-1A30-435D-A299-0A72EFA2BAFB.png"
+        },
+        {
+          "file": "assets/phone-max-02.txt",
+          "sha256": "af9e4b017a59089f4af7096a16d4f9cced7a64cba92eabc7a6eb6f360b304492",
+          "source_file": "EDACC0F7-5EF9-48FE-978E-EFD833E8F752.txt"
+        }
+      ]
+    },
+    {
+      "profile": "phone-normal",
+      "state": "template exercise picker initial",
+      "test_identifier": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText()",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "run": "renewed-authoring-phone",
+      "files": [
+        {
+          "file": "assets/phone-normal-01.png",
+          "sha256": "eb1c5850215637267234d502a716030b3d7d3855969817679139a7f7cb957342",
+          "source_file": "6D414E12-3F84-4479-A704-B7DE491FB7E1.png"
+        },
+        {
+          "file": "assets/phone-normal-01.txt",
+          "sha256": "ad332d463c308aba4d6daf01e68ef8c311c54531ca32662e261eedffa0c9e909",
+          "source_file": "4E82433C-00C0-4A5F-9557-275B650E1D8D.txt"
+        }
+      ]
+    },
+    {
+      "profile": "phone-normal",
+      "state": "seeded Bench Press selection",
+      "test_identifier": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText()",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "run": "renewed-authoring-phone",
+      "files": [
+        {
+          "file": "assets/phone-normal-02.png",
+          "sha256": "3e00d4e8fd5d5df27028564271848aaee222416b3d7f5c8a194b25cab299d720",
+          "source_file": "425B7760-0BB6-4D0D-8DC7-2AD046B7EDA0.png"
+        },
+        {
+          "file": "assets/phone-normal-02.txt",
+          "sha256": "7e3a6938fc631566fd3164fe9ce7bd6cc71f926ce648c9bc635b36baa4218f81",
+          "source_file": "9172EEE6-AD92-4D51-973D-6FA850BC60AF.txt"
+        }
+      ]
+    },
+    {
+      "profile": "ipad-max",
+      "state": "template exercise picker initial",
+      "test_identifier": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtMaximumText()",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "run": "renewed-pad-four",
+      "files": [
+        {
+          "file": "assets/ipad-max-01.png",
+          "sha256": "c257e8327a21038249f5888ee88ee4da3d624b2b1b311adef16b026fe833db4c",
+          "source_file": "C3EA0163-D44C-4D16-B8D5-3BA4C2156987.png"
+        },
+        {
+          "file": "assets/ipad-max-01.txt",
+          "sha256": "af37f2db61fdd5e9c5e4f8137bcf8e186ff7a293c404d10f44e0f37361752330",
+          "source_file": "928105BB-CBEC-40C6-A724-933D125C08D2.txt"
+        }
+      ]
+    },
+    {
+      "profile": "ipad-max",
+      "state": "seeded Bench Press selection",
+      "test_identifier": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtMaximumText()",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "run": "renewed-pad-four",
+      "files": [
+        {
+          "file": "assets/ipad-max-02.png",
+          "sha256": "ea979a42b2c2fa2b67396b64cd1c142485f28a4384fffded417cef68d1c10dd9",
+          "source_file": "CBEB26C3-9EA9-4F4B-86B1-189D15083F3D.png"
+        },
+        {
+          "file": "assets/ipad-max-02.txt",
+          "sha256": "ad4d56e0ec8681f92e1d8e4c4e88ff71592e304c41430b90020a60dad5eb9685",
+          "source_file": "26C4160F-1B6D-4EF2-B1A4-757267804DE3.txt"
+        }
+      ]
+    },
+    {
+      "profile": "ipad-normal",
+      "state": "template exercise picker initial",
+      "test_identifier": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText()",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "run": "renewed-pad-four",
+      "files": [
+        {
+          "file": "assets/ipad-normal-01.png",
+          "sha256": "be745453b7f8e22db58732af45622ba88867c7261c8938d9ba3983dc73d8f0fb",
+          "source_file": "BB1E151E-69A6-4869-9D46-E8ACF8BF0187.png"
+        },
+        {
+          "file": "assets/ipad-normal-01.txt",
+          "sha256": "7996c1651b17159b5f03a3f35e5f2020851369c750c80c4ef09c6eaa29867c03",
+          "source_file": "85912396-48E3-461D-880D-4ACA8A1DB121.txt"
+        }
+      ]
+    },
+    {
+      "profile": "ipad-normal",
+      "state": "seeded Bench Press selection",
+      "test_identifier": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText()",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "run": "renewed-pad-four",
+      "files": [
+        {
+          "file": "assets/ipad-normal-02.png",
+          "sha256": "46ef2c55a7f75c94e93424f4199f5502cacc7303a10f74ed47b153a9141c3244",
+          "source_file": "D4520474-F2BF-430D-AC26-ECD2F428BDF0.png"
+        },
+        {
+          "file": "assets/ipad-normal-02.txt",
+          "sha256": "21ecacfa0ce118e1ab6507cf58b253e2d0d527bac02c4a268a6bb74474f5425f",
+          "source_file": "57F07B70-6CB6-481A-885F-8E2DFCE0EEA7.txt"
+        }
+      ]
+    }
+  ],
+  "historical_nov7_review": "../template-exercise-picker-w14-2026-11-07/"
+}
