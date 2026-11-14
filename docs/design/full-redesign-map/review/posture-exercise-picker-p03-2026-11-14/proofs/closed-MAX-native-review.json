@@ -1,0 +1,32 @@
+{
+  "decision": "P03 Closed MAX native scoped PASS",
+  "source": "ce7be698308d27bacb8214b3c7f921cfb7be983a",
+  "selector": "PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize",
+  "duration_seconds": 78.492,
+  "native_inspected_sequences": [
+    4,
+    5,
+    6,
+    7
+  ],
+  "window": [
+    466,
+    678
+  ],
+  "native_png": [
+    1398,
+    2034
+  ],
+  "observations": [
+    "Close frame24,16,173,77.3 and title y101.3..226.6 stay fixed above List y234.7..678",
+    "Complete unselected Lunge y471..624.3; selected Lunge after reopen y409..624",
+    "Actual Close tap logged70.04s; picker nonexistence waited then mode lunge confirmed",
+    "Final PNG/AX shows Realtime Analysis and Lunge, no picker list or picker Close"
+  ],
+  "historical_resolution": "Current owned Closed MAX now directly passes the previously unverified Close behavior; old failed records remain historical. Internal framework cause of old blank toolbar not claimed.",
+  "limits": [
+    "Only P03 completed case; enclosing Closed batch not claimed passed",
+    "Realtime simulator camera stays unavailable; no live-camera form analysis claim"
+  ],
+  "source_equivalence": "renderer identical ad9a→4758→6323→ce7be; normal branch unchanged4c→ce7be; route helper changed only bounded menu reveal"
+}

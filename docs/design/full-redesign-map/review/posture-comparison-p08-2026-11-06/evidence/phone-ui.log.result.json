@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/PostureVisualAuditTests/testP05HistoryLatestScoreFilterAndDetailReturn",
+    "DUNEUITests/PostureVisualAuditTests/testP07SymmetryKeepsSeededValuesAndUnits",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom",
+    "DUNEUITests/PostureVisualAuditTests/testP05HistoryLatestScoreAtMaximumAccessibilitySize",
+    "DUNEUITests/PostureVisualAuditTests/testP07SymmetryValuesFitAtMaximumAccessibilitySize",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 6,
+    "passed": 4,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 4,
+  "failures": [
+    "2917: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/WellnessRegressionTests.swift:1467: error: -[DUNEUITests.PostureVisualAuditTests testP08ComparisonAtMaximumAccessibilitySize] : XCTAssertEqual failed: (\"3\") is not equal to (\"2\")",
+    "2928: Test Case '-[DUNEUITests.PostureVisualAuditTests testP08ComparisonAtMaximumAccessibilitySize]' failed (98.306 seconds).",
+    "3103: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/WellnessRegressionTests.swift:1467: error: -[DUNEUITests.PostureVisualAuditTests testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom] : XCTAssertEqual failed: (\"3\") is not equal to (\"2\")",
+    "3114: Test Case '-[DUNEUITests.PostureVisualAuditTests testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom]' failed (39.807 seconds).",
+    "3115: Test Suite 'PostureVisualAuditTests' failed at 2026-11-06 22:12:50.389.",
+    "3117: Test Suite 'DUNEUITests.xctest' failed at 2026-11-06 22:12:50.393.",
+    "3119: Test Suite 'Selected tests' failed at 2026-11-06 22:12:50.394.",
+    "3132: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonAtMaximumAccessibilitySize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b06/phone-ui.log"
+}

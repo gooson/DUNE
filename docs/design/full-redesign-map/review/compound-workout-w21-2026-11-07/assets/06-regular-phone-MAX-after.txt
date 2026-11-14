@@ -1,0 +1,162 @@
+Attributes: Application, 0x114e32300, pid: 87887, label: 'DUNE'
+Element subtree:
+ →Application, 0x114e32300, pid: 87887, label: 'DUNE'
+    Window (Main), 0x114e32080, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x114e30140, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x114e33e80, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x114e30280, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x114e321c0, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x114e14f00, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x114e19cc0, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x114e1b0c0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x114e1b200, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x114e1b340, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x114e1b480, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x114e1b5c0, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x114e1b700, {{0.0, 0.0}, {440.0, 956.0}}
+                            NavigationBar, 0x114e1b840, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Superset'
+                              Button, 0x114e1b980, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Exercise'
+                              StaticText, 0x114e1bac0, {{176.3, 71.3}, {87.0, 25.3}}, label: 'Superset'
+                              Other, 0x114e1bc00, {{293.0, 66.0}, {36.3, 36.0}}
+                                Other, 0x114e1af80, {{293.0, 66.0}, {36.3, 36.0}}
+                                  Button, 0x114e1a1c0, {{293.0, 66.0}, {36.3, 36.0}}, identifier: 'workout-weight-unit-button', label: 'KG'
+                              Other, 0x114e19f40, {{345.3, 66.0}, {70.7, 36.0}}
+                                Other, 0x114e2db80, {{345.3, 66.0}, {70.7, 36.0}}
+                                  Button, 0x114e2d7c0, {{345.3, 66.0}, {70.7, 36.0}}, identifier: 'compound-workout-finish', label: 'Finish', Disabled
+                            Other, 0x114e2d680, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x114e2d040, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x114e2d400, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x114e2e300, {{0.0, 0.0}, {440.0, 956.0}}
+                                    ScrollView, 0x114e2d2c0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'compound-workout-screen'
+                                      Other, 0x114e2d540, {{0.0, -2663.0}, {440.0, 3536.0}}
+                                        Image, 0x114e2d180, {{27.0, -2646.3}, {64.3, 53.0}}, identifier: 'arrow.triangle.2.circlepath', label: 'Syncing'
+                                        StaticText, 0x114e2e080, {{28.0, -2580.7}, {241.7, 58.7}}, label: 'Round 1 / 3'
+                                        StaticText, 0x114e2cb40, {{28.0, -2514.0}, {91.3, 51.3}}, label: '0:41'
+                                        ScrollView, 0x114e2da40, {{16.0, -2434.7}, {408.0, 67.3}}
+                                          Other, 0x114e2cf00, {{16.0, -2434.7}, {520.7, 67.3}}
+                                            Button, 0x114e2ee40, {{16.0, -2434.7}, {293.7, 67.3}}, label: '바벨 벤치프레스'
+                                            Button, 0x114e2de00, {{317.7, -2434.7}, {219.0, 67.3}}, label: '바벨 스쿼트'
+                                        Image, 0x114e2e6c0, {{23.0, -2346.3}, {69.3, 40.7}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                        StaticText, 0x114e2cdc0, {{16.0, -2292.7}, {249.3, 65.7}}, label: '바벨 스쿼트'
+                                        StaticText, 0x114e2e1c0, {{24.0, -2223.0}, {116.3, 48.0}}, label: 'Quads'
+                                        StaticText, 0x114e2df40, {{24.0, -2167.0}, {114.3, 48.0}}, label: 'Glutes'
+                                        StaticText, 0x114e28000, {{24.0, -2101.0}, {75.3, 51.3}}, label: 'SET'
+                                        StaticText, 0x114e28140, {{51.2, -2049.7}, {21.0, 51.3}}, label: '1'
+                                        Button, 0x114e28280, {{24.0, -1990.3}, {106.0, 104.7}}, label: 'PREV, 80×9'
+                                          StaticText, 0x114e283c0, {{24.0, -1990.3}, {103.0, 51.3}}, label: 'PREV'
+                                          StaticText, 0x114e28500, {{24.0, -1937.0}, {106.0, 51.3}}, label: '80×9'
+                                        StaticText, 0x114e28640, {{24.0, -1877.7}, {44.3, 51.3}}, label: 'kg'
+                                        TextField, 0x114e28780, {{24.0, -1824.3}, {392.0, 73.0}}, identifier: 'set-row-field-1-weight', placeholderValue: 'kg', value: 80
+                                        StaticText, 0x114e288c0, {{24.0, -1747.3}, {79.3, 51.3}}, label: 'reps'
+                                        TextField, 0x114e28a00, {{24.0, -1694.0}, {392.0, 73.0}}, identifier: 'set-row-field-1-reps', placeholderValue: 'reps', value: 9
+                                        Button, 0x114e28b40, {{24.0, -1608.3}, {249.3, 113.0}}, identifier: 'set-row-complete-1', label: 'Complete Set'
+                                          Image, 0x114e28c80, {{28.7, -1608.3}, {55.0, 55.0}}, identifier: 'circle', label: 'Circle'
+                                          StaticText, 0x114e28dc0, {{24.0, -1546.7}, {249.3, 51.3}}, label: 'Complete Set'
+                                        Stepper, 0x114e28f00, {{16.0, -1491.3}, {408.0, 51.3}}, label: 'Planned reps: 9', value: 9
+                                          Button, 0x114e29040, {{330.0, -1481.7}, {47.0, 32.0}}, identifier: 'Decrement', label: 'Planned reps: 9, Decrement', value: 9
+                                          Button, 0x114e29180, {{377.0, -1481.7}, {47.0, 32.0}}, identifier: 'Increment', label: 'Planned reps: 9, Increment', value: 9
+                                        StaticText, 0x114e292c0, {{24.0, -1436.0}, {75.3, 51.3}}, label: 'SET'
+                                        StaticText, 0x114e29400, {{48.5, -1384.7}, {26.3, 51.3}}, label: '2'
+                                        Button, 0x114e29540, {{24.0, -1325.3}, {106.0, 104.7}}, label: 'PREV, 80×9'
+                                          StaticText, 0x114e29680, {{24.0, -1325.3}, {103.0, 51.3}}, label: 'PREV'
+                                          StaticText, 0x114e297c0, {{24.0, -1272.0}, {106.0, 51.3}}, label: '80×9'
+                                        StaticText, 0x114e29900, {{24.0, -1212.7}, {44.3, 51.3}}, label: 'kg'
+                                        TextField, 0x114e29a40, {{24.0, -1159.3}, {392.0, 73.0}}, identifier: 'set-row-field-2-weight', placeholderValue: 'kg', value: 80
+                                        StaticText, 0x114e29b80, {{24.0, -1082.3}, {79.3, 51.3}}, label: 'reps'
+                                        TextField, 0x114e29cc0, {{24.0, -1029.0}, {392.0, 73.0}}, identifier: 'set-row-field-2-reps', placeholderValue: 'reps', value: 9
+                                        Button, 0x114e29e00, {{24.0, -943.3}, {249.3, 113.0}}, identifier: 'set-row-complete-2', label: 'Complete Set'
+                                          Image, 0x114e29f40, {{28.7, -943.3}, {55.0, 55.0}}, identifier: 'circle', label: 'Circle'
+                                          StaticText, 0x114e2a080, {{24.0, -881.7}, {249.3, 51.3}}, label: 'Complete Set'
+                                        Stepper, 0x114e2a1c0, {{16.0, -826.3}, {408.0, 51.3}}, label: 'Planned reps: 9', value: 9
+                                          Button, 0x114e2a300, {{330.0, -816.7}, {47.0, 32.0}}, identifier: 'Decrement', label: 'Planned reps: 9, Decrement', value: 9
+                                          Button, 0x114e2a440, {{377.0, -816.7}, {47.0, 32.0}}, identifier: 'Increment', label: 'Planned reps: 9, Increment', value: 9
+                                        StaticText, 0x114e2a580, {{24.0, -771.0}, {75.3, 51.3}}, label: 'SET'
+                                        StaticText, 0x114e2a6c0, {{47.8, -719.7}, {27.7, 51.3}}, label: '3'
+                                        Button, 0x114e2a800, {{24.0, -660.3}, {106.0, 104.7}}, label: 'PREV, 80×9'
+                                          StaticText, 0x114e2a940, {{24.0, -660.3}, {103.0, 51.3}}, label: 'PREV'
+                                          StaticText, 0x114e2aa80, {{24.0, -607.0}, {106.0, 51.3}}, label: '80×9'
+                                        StaticText, 0x114e2abc0, {{24.0, -547.7}, {44.3, 51.3}}, label: 'kg'
+                                        TextField, 0x114e2ad00, {{24.0, -494.3}, {392.0, 73.0}}, identifier: 'set-row-field-3-weight', placeholderValue: 'kg', value: 80
+                                        StaticText, 0x114e2ae40, {{24.0, -417.3}, {79.3, 51.3}}, label: 'reps'
+                                        TextField, 0x114e2af80, {{24.0, -364.0}, {392.0, 73.0}}, identifier: 'set-row-field-3-reps', placeholderValue: 'reps', value: 9
+                                        Button, 0x114e2b0c0, {{24.0, -278.3}, {249.3, 113.0}}, identifier: 'set-row-complete-3', label: 'Complete Set'
+                                          Image, 0x114e2b200, {{28.7, -278.3}, {55.0, 55.0}}, identifier: 'circle', label: 'Circle'
+                                          StaticText, 0x114e2b340, {{24.0, -216.7}, {249.3, 51.3}}, label: 'Complete Set'
+                                        Stepper, 0x114e2b480, {{16.0, -161.3}, {408.0, 51.3}}, label: 'Planned reps: 9', value: 9
+                                          Button, 0x114e2b5c0, {{330.0, -151.7}, {47.0, 32.0}}, identifier: 'Decrement', label: 'Planned reps: 9, Decrement', value: 9
+                                          Button, 0x114e2b700, {{377.0, -151.7}, {47.0, 32.0}}, identifier: 'Increment', label: 'Planned reps: 9, Increment', value: 9
+                                        Button, 0x114e2b840, {{16.0, -94.0}, {408.0, 87.3}}, label: 'Add Set'
+                                          StaticText, 0x114e2b980, {{97.0, -82.0}, {250.8, 63.3}}, label: 'Add Set'
+                                          Image, 0x114e2bac0, {{97.0, -77.3}, {53.7, 53.7}}, identifier: 'plus.circle.fill', label: 'Add'
+                                        Button, 0x114e2bc00, {{16.0, 1.3}, {408.0, 87.3}}, label: 'Next Round →'
+                                          StaticText, 0x114e2bd40, {{23.7, 13.3}, {397.5, 63.3}}, label: 'Next Round →'
+                                          Image, 0x114e2be80, {{23.7, 18.0}, {53.7, 53.7}}, identifier: 'arrow.right.circle.fill', label: 'Arrow Right Circle'
+                                        StaticText, 0x114e24000, {{28.0, 116.7}, {182.0, 51.3}}, label: 'Summary'
+                                        StaticText, 0x114e24140, {{28.0, 176.0}, {307.3, 58.7}}, label: '바벨 벤치프레스'
+                                        StaticText, 0x114e24280, {{28.0, 238.7}, {112.3, 51.3}}, label: '0 sets'
+                                        StaticText, 0x114e243c0, {{28.0, 298.0}, {222.3, 58.7}}, label: '바벨 스쿼트'
+                                        StaticText, 0x114e24500, {{28.0, 360.7}, {112.3, 51.3}}, label: '0 sets'
+                                        StaticText, 0x114e24640, {{145.2, 456.0}, {149.7, 51.3}}, label: 'Up Next'
+                                        StaticText, 0x114e24780, {{95.3, 519.3}, {249.3, 65.7}}, label: '바벨 스쿼트'
+                                        StaticText, 0x114e248c0, {{155.0, 597.0}, {130.0, 69.3}}, label: '0:20'
+                                        ProgressIndicator, 0x114e24a00, {{48.0, 678.3}, {344.0, 4.0}}, value: 33%
+                                          ProgressIndicator, 0x114e24b40, {{48.0, 668.3}, {344.0, 24.0}}, value: 33%
+                                        Button, 0x114e24c80, {{147.0, 694.3}, {146.0, 65.3}}, label: '+30s'
+                                        Button, 0x114e24dc0, {{147.0, 767.7}, {136.7, 65.3}}, label: 'Start'
+                                      Other, 0x114e24f00, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x114e25040, {{0.0, 0.0}, {440.0, 156.0}}
+                                        Other, 0x114e25180, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x114e252c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x114e25400, {{0.0, 0.0}, {440.0, 156.0}}
+                                        Other, 0x114e25540, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x114e25680, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 5 pages', value: 100%
+                                        Other, 0x114e257c0, {{434.0, 677.7}, {3.0, 192.3}}
+                                      Other, 0x114e25900, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 5 pages', value: 100%
+                                        Other, 0x114e25a40, {{434.0, 677.7}, {3.0, 192.3}}
+                            Toolbar, 0x114e25b80, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x114e25cc0, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x114e25e00, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x114e25f40, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x114e26080, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x114e261c0, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x114e26300, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x114e26440, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x114e26580, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x114e266c0, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today'
+                              Image, 0x114e26800, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x114e26940, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                              Image, 0x114e26a80, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x114e26bc0, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x114e26d00, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x114e26e40, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x114e26f80, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x114e270c0, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x114e27200, {{120.2, 877.0}, {104.5, 54.0}}
+                            Other, 0x114e27340, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x114e27480, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x114e275c0, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x114e27700, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x114e27840, {{120.2, 877.0}, {104.3, 54.0}}
+                                    Other, 0x114e27980, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x114e27ac0, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x114e27c00, {{120.2, 877.0}, {104.3, 54.0}}
+                    Other, 0x114e27d40, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x114e27e80, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x1165e8000, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x1165e8140, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x1165e8280, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x1165e83c0, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x1165e8500, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x1165e8640, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x1165e8780, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x1165e88c0, {{220.0, 492.0}, {0.0, 0.0}}
+    Window, 0x1165e8a00, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1165e8b40, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x1165e8c80, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x114e32300, pid: 87887, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1165e8dc0, pid: 87887, label: 'DUNE'
+  }

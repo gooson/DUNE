@@ -1,0 +1,48 @@
+{
+  "screen": "P08",
+  "old_pr": 952,
+  "old_review_tree": "docs/design/full-redesign-map/review/posture-comparison-p08-2026-11-06",
+  "history": [
+    {
+      "run": "extra-duo-closed-01",
+      "source": "4758",
+      "normal": "FAIL before comparison target",
+      "MAX": "FAIL before comparison target",
+      "preserved": true
+    },
+    {
+      "run": "extra-duo-open-01",
+      "source": "6323abf888742056928e758fbe984abab231e988",
+      "normal": "FAIL History second metric false-negative viewport",
+      "MAX": "PASS 148.858s",
+      "preserved": true
+    },
+    {
+      "run": "extra-duo-open-02",
+      "source": "ce7be698308d27bacb8214b3c7f921cfb7be983a",
+      "normal": "PASS 99.571s",
+      "MAX": "not rerun",
+      "preserved": true
+    },
+    {
+      "run": "extra-duo-closed-02",
+      "source": "ce7be698308d27bacb8214b3c7f921cfb7be983a",
+      "normal": "FAIL 97.368s at Front Close NavBar ancestor assumption after scores/dates/photo tap",
+      "MAX": "PASS 219.511s",
+      "preserved": true
+    },
+    {
+      "run": "p08-closed-front-close",
+      "source": "73d705e1b79121b260de7910679d0338d209a82d",
+      "normal": "PASS 112.362s after exact unique Close/Toolbar query",
+      "MAX": "not rerun, method byte unchanged",
+      "preserved": true
+    }
+  ],
+  "diagnostics": [
+    "diagnostics/duo-closed-normal-first/037-1398x2034.png",
+    "diagnostics/duo-closed-normal-first/038-1398x2034.png",
+    "diagnostics/duo-closed-normal-first/039-1398x2034.png"
+  ],
+  "final_gate": "all targeted device/size cases have positive evidence; final rebase and publication review pending"
+}

@@ -606,6 +606,21 @@ extension XCUIApplication {
         return textFields[AXID.habitFormName].firstMatch.waitForExistence(timeout: timeout)
     }
 
+    @discardableResult
+    func waitAndTapExerciseSecondaryAction(_ identifier: String, timeout: TimeInterval = 8) -> Bool {
+        let action = descendants(matching: .any)[identifier].firstMatch
+        if action.exists && action.isHittable {
+            action.auditTap()
+            return true
+        }
+        let menu = buttons["exercise-toolbar-secondary"].firstMatch
+        guard menu.waitForExistence(timeout: timeout) && menu.isHittable else { return false }
+        menu.auditTap()
+        guard action.waitForExistence(timeout: timeout) && action.isHittable else { return false }
+        action.auditTap()
+        return true
+    }
+
     /// Reveals secondary toolbar actions moved into the system overflow menu.
     @discardableResult
     func waitAndTapToolbarAction(_ identifier: String, timeout: TimeInterval = 5) -> Bool {
@@ -815,7 +830,7 @@ extension XCUIApplication {
         timeoutPerCheck: TimeInterval = 0.25
     ) -> Bool {
         let element = descendants(matching: .any)[identifier].firstMatch
-        let pickerList = tables[AXID.pickerRootList].firstMatch
+        let pickerList = descendants(matching: .any)[AXID.pickerRootList].firstMatch
 
         guard pickerList.waitForExistence(timeout: 5) else {
             return element.exists
@@ -855,7 +870,7 @@ extension XCUIApplication {
             return false
         }
 
-        let pickerList = tables[AXID.pickerRootList].firstMatch
+        let pickerList = descendants(matching: .any)[AXID.pickerRootList].firstMatch
         guard pickerList.waitForExistence(timeout: 5) else {
             return element.exists && element.isHittable
         }
@@ -1243,7 +1258,7 @@ extension XCUIApplication {
 
     private func preferredScrollContainer() -> XCUIElement {
         let prioritizedContainers = [
-            tables[AXID.pickerRootList].firstMatch,
+            descendants(matching: .any)[AXID.pickerRootList].firstMatch,
             descendants(matching: .any)[AXID.activityRootScroll].firstMatch
         ]
 

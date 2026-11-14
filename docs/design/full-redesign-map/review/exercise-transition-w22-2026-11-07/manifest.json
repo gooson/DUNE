@@ -1,0 +1,267 @@
+{
+  "screen_id": "W22",
+  "scope": "B14+B15 W16/W19/W20/W21/W22/W23/W24/W25 private native review staging",
+  "original_source": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+  "source_contract": ".codex-checks/b14b15/execution-contract.json",
+  "rows": [
+    {
+      "profile": "regular",
+      "kind": "historical",
+      "title": "W22 historical baseline",
+      "image": "historical/regular-W22.png",
+      "ax": null,
+      "capture_index_entry": "historical/regular-W22-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
+      "sha256": "312c2a83338f0650b3ea658c1be06899b15301f199baae20ecb91436e40dca3d",
+      "source_image": "/private/tmp/dune-b14b15-gallery-prep/_baseline/regular/W22.png",
+      "is_primary": false
+    },
+    {
+      "profile": "ipad",
+      "kind": "historical",
+      "title": "W22 historical baseline",
+      "image": "historical/ipad-W22.png",
+      "ax": null,
+      "capture_index_entry": "historical/ipad-W22-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
+      "sha256": "9ce3e4ab3d74e83de59297b3eb869c93a4c668349c55278c5d9afe94b1476237",
+      "source_image": "/private/tmp/dune-b14b15-gallery-prep/_baseline/ipad/W22.png",
+      "is_primary": false
+    },
+    {
+      "profile": "duo",
+      "kind": "historical",
+      "title": "W22 historical baseline",
+      "image": "historical/duo-W22.png",
+      "ax": null,
+      "capture_index_entry": "historical/duo-W22-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
+      "sha256": "4b140eec146e0dc630d6ff9024cf1b5d9fec5c82cc98e11eed1cad7da003cbf1",
+      "source_image": "/private/tmp/dune-b14b15-gallery-prep/_baseline/duo/W22.png",
+      "is_primary": false
+    },
+    {
+      "profile": "duo-open",
+      "kind": "historical",
+      "title": "W22 historical baseline",
+      "image": "historical/duo-open-W22.png",
+      "ax": null,
+      "capture_index_entry": "historical/duo-open-W22-index.json",
+      "source_revision": null,
+      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
+      "sha256": "189d08faaddf199f21018ba6301b0a399790811b4a3798daa9adfaf544dcbc9a",
+      "source_image": "/private/tmp/dune-b14b15-gallery-prep/_baseline/duo-open/W22.png",
+      "is_primary": false
+    },
+    {
+      "profile": "regular",
+      "kind": "diagnostic",
+      "title": "W22 normal template defaults transition",
+      "image": "assets/01-regular-phone-retry1-normal-diagnostic.png",
+      "ax": "assets/01-regular-phone-retry1-normal-diagnostic.txt",
+      "source_revision": "b62dc5b98c453810706928fb831b5c8c6d749fa8",
+      "run_id": "phone-retry1",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtNormalText()",
+      "selector_state": "failed",
+      "capture_uuid": "181012b7-3ce2-4033-a80e-ca28221f36ec",
+      "timestamp": 1794004607.416,
+      "sha256": "e1c956a085a8da64bcfaa94e240ca5b05591ebc541db3c231a22b5900eac4b2e",
+      "ax_sha256": "59c121d4f6c4d0a5e9cc1cefd53b1c10eb875b46a85262a023fa361afc51d452",
+      "source_image": ".codex-checks/b14b15/phone-retry1-attachments/11236F5C-6173-4177-824C-C73028360551.png",
+      "source_ax": ".codex-checks/b14b15/phone-retry1-attachments/60496A99-3BEE-4D92-A5F2-C92D2D67E654.txt",
+      "pair_manifest": ".codex-checks/b14b15/phone-retry1-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "title": "W22 MAX template defaults transition",
+      "image": "assets/02-regular-phone-retry1-MAX-after.png",
+      "ax": "assets/02-regular-phone-retry1-MAX-after.txt",
+      "source_revision": "b62dc5b98c453810706928fb831b5c8c6d749fa8",
+      "run_id": "phone-retry1",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtMaximumText()",
+      "selector_state": "passed",
+      "capture_uuid": "ba1ab791-9cf4-4ee1-8930-6ca6286b1fce",
+      "timestamp": 1794004560.289,
+      "sha256": "0728405ae61bca1102d661a9e65db6d4000a7d8f5ec8a6b9efbea480402ac061",
+      "ax_sha256": "b5740e536b1e294fcaf8df588e2264cf4dc45965f0706a01d5bd1de255b42066",
+      "source_image": ".codex-checks/b14b15/phone-retry1-attachments/0B3274CC-7D87-4E75-AFFA-E80D770E42A6.png",
+      "source_ax": ".codex-checks/b14b15/phone-retry1-attachments/2CD3876E-0003-420A-A976-2DC390ABA9B0.txt",
+      "pair_manifest": ".codex-checks/b14b15/phone-retry1-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null
+    },
+    {
+      "profile": "ipad",
+      "kind": "after",
+      "title": "W22 normal template defaults transition",
+      "image": "assets/03-ipad-ipad-normal-after.png",
+      "ax": "assets/03-ipad-ipad-normal-after.txt",
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "run_id": "ipad",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtNormalText()",
+      "selector_state": "passed",
+      "capture_uuid": "482b5fea-3dda-458e-9126-1b6e6215f70e",
+      "timestamp": 1794005879.866,
+      "sha256": "ea5c2bffdaa6f385599627f0d53bb3f0d46177cca6b47731043ad4e8d2d709f7",
+      "ax_sha256": "ca0968a5ab862e25068aa868a0e867a8247315aad3d26c797215396411b58a27",
+      "source_image": ".codex-checks/b14b15/ipad-attachments/3EF920DE-BD96-444F-90B7-F8F73B44CCD7.png",
+      "source_ax": ".codex-checks/b14b15/ipad-attachments/82AC3D36-D7A8-4B52-B348-A78EC15CA6F7.txt",
+      "pair_manifest": ".codex-checks/b14b15/ipad-attachments/manifest.json",
+      "is_primary": true,
+      "actual_angle": null
+    },
+    {
+      "profile": "ipad",
+      "kind": "after",
+      "title": "W22 MAX template defaults transition",
+      "image": "assets/04-ipad-ipad-MAX-after.png",
+      "ax": "assets/04-ipad-ipad-MAX-after.txt",
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "run_id": "ipad",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtMaximumText()",
+      "selector_state": "passed",
+      "capture_uuid": "49dfc0e6-3ce0-4efa-823c-4e3f49225662",
+      "timestamp": 1794005842.509,
+      "sha256": "c267f8626d81663d00a65648e0fb7fc1dccdbf723e9e35f1077f7bf36af02030",
+      "ax_sha256": "fac3a5d293ec63bca94773220780b901db43c0ba8399c19011fb83e97ae28cf9",
+      "source_image": ".codex-checks/b14b15/ipad-attachments/C9AB384A-189E-445C-8F02-42BF1A0D32DA.png",
+      "source_ax": ".codex-checks/b14b15/ipad-attachments/0EE69250-C205-4687-B9B3-F05480BFD2D0.txt",
+      "pair_manifest": ".codex-checks/b14b15/ipad-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null
+    }
+  ],
+  "gates": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+      "counts": {
+        "executed": 7,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 4
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "passed",
+        "testVisualAuditCompoundSessionAtMaximumText": "passed",
+        "testVisualAuditTemplateTransitionAtNormalText": "failed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "failed",
+        "testCardioFlowReachesSummary": "failed",
+        "testVisualAuditCardioAtDefaultTextSize": "failed",
+        "testStairClimberLevelChangesAppearInSummary": "passed"
+      },
+      "receipt": ".codex-checks/b14b15/phone-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "b62dc5b98c453810706928fb831b5c8c6d749fa8",
+      "counts": {
+        "executed": 4,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "not_executed",
+        "testVisualAuditCompoundSessionAtMaximumText": "not_executed",
+        "testVisualAuditTemplateTransitionAtNormalText": "failed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "passed",
+        "testCardioFlowReachesSummary": "passed",
+        "testVisualAuditCardioAtDefaultTextSize": "passed",
+        "testStairClimberLevelChangesAppearInSummary": "not_executed"
+      },
+      "receipt": ".codex-checks/b14b15/phone-retry1-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "counts": {
+        "executed": 7,
+        "passed": 6,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "passed",
+        "testVisualAuditCompoundSessionAtMaximumText": "passed",
+        "testVisualAuditTemplateTransitionAtNormalText": "passed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "passed",
+        "testCardioFlowReachesSummary": "passed",
+        "testVisualAuditCardioAtDefaultTextSize": "passed",
+        "testStairClimberLevelChangesAppearInSummary": "failed"
+      },
+      "receipt": ".codex-checks/b14b15/ipad-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/ipad-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad-retry1",
+      "profile": "ipad",
+      "source_revision": "324b0b30033583cc8a218805afb6e4b609e55137",
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditCompoundSessionAtNormalText": "not_executed",
+        "testVisualAuditCompoundSessionAtMaximumText": "not_executed",
+        "testVisualAuditTemplateTransitionAtNormalText": "not_executed",
+        "testVisualAuditTemplateTransitionAtMaximumText": "not_executed",
+        "testCardioFlowReachesSummary": "not_executed",
+        "testVisualAuditCardioAtDefaultTextSize": "not_executed",
+        "testStairClimberLevelChangesAppearInSummary": "passed"
+      },
+      "receipt": ".codex-checks/b14b15/ipad-retry1-ui.log.result.json",
+      "result_note": "all requested selectors passed",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b14b15/ipad-retry1-attachments/manifest.json"
+    }
+  ],
+  "evidence": [
+    "evidence/ipad-retry1-summary.json",
+    "evidence/ipad-retry1-ui.log.result.json",
+    "evidence/ipad-summary.json",
+    "evidence/ipad-ui.log.result.json",
+    "evidence/phone-retry1-summary.json",
+    "evidence/phone-retry1-ui.log.result.json",
+    "evidence/phone-summary.json",
+    "evidence/phone-ui.log.result.json"
+  ],
+  "pending": [
+    "phone W22 normal template defaults transition: named PNG/AX pair absent",
+    "phone W22 MAX template defaults transition: named PNG/AX pair absent",
+    "ipad-retry1 W22 normal template defaults transition: named PNG/AX pair absent",
+    "ipad-retry1 W22 MAX template defaults transition: named PNG/AX pair absent",
+    "Duo closed/open current-source capture pending; historical baselines only",
+    "Before-teardown failure attachments never count as passed B14+B15 evidence"
+  ],
+  "limits": [
+    "Historical before images are older-source context, never current B14+B15 proof.",
+    "Only completed passed selector captures are classified after.",
+    "Named captures from failed or unattributable selectors are diagnostic.",
+    "No Duo current-source result or hinge angle is claimed.",
+    "This private gallery is not the repository actual-map update."
+  ]
+}

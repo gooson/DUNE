@@ -1,0 +1,30 @@
+{
+  "status": "read-only source review complete after all-action publisher fix; native pending",
+  "files_sha256": {
+    "/private/tmp/dune-b16b17-split.py": "e9f22ef32a515037eb6ac63ba54df74e92caf6bf61a00d2852e8fc2246478e88",
+    "/private/tmp/dune-b16b17-publish.py": "188df072f6afd3b07526251271f59ab443be15949947e69c12f63d7950446416",
+    "/private/tmp/dune-b16b17-docs.py": "a1bf9a12d13a443ec7450d5699ce48fe6c98dc6715dfe6ed3223fac8b9d1718d",
+    "/private/tmp/dune-b16b17-commit.py": "2b70d889fea77e5fbf660656ca979459ed755ac1d785cc4e2f1a24f1f6e96788",
+    "/private/tmp/dune-b16b17-gallery-prep/build.py": "7f05591ff233558fe2347eb72f90232aea536d63ae4a4df7e0b84471e3c61440"
+  },
+  "blocking_introduced_source_findings": [],
+  "proof": [
+    "W29 standalone management member and W30 later editor member have separate private patch hashes; combined frozen app SHA 70b188... verified. Split requires W29 base before W30 and rejects foreign or partial test source.",
+    "Test projection from accepted 4a9 main to frozen b81 source equals reviewed 136 edit-line patch; three different screen orderings reconstructed exact full test bytes and foreign source was rejected.",
+    "Publisher now requires all 44 named action slots across W29/W30/W33/S07/W32 profiles and sizes. Synthetic removal of each individual required title was rejected. It chooses a primary actual-map image only after every companion passed PNG/AX and gate receipt exists.",
+    "W29/W30 iPad Skipped cannot satisfy required action; W33 B12 historical editor images cannot satisfy fresh W33 title; S07 only iPad normal/MAX; W32 phone normal/MAX plus iPad forced fallback normal top and returned workout. iPad W32 MAX stays conditional/pending.",
+    "Publisher allows dirty split source but rejects staged/unmerged changes, validates owner member bytes, passed gallery source hashes and final per-screen gate before actual-map writes. Held mode compares all actual-map file hashes before/after.",
+    "Commit checks exact branch/base, per-screen owner hash/projection, path allowlist, one-row inventory diff, Swift parse, catalog/theme sync; it does not merge or run SDK."
+  ],
+  "limits": [
+    "All native seven-selector results are still pending; this review approves helper source structure only.",
+    "Duo current-source captures remain pending.",
+    "Scoped publication receipts must cite original completed runs without changing failed/skipped receipts."
+  ],
+  "updated_review": {
+    "publisher_sha256": "3400c5074da90d934ddb48b91a66e3ed55c946a994a6709994cee6b748c4c564",
+    "split_sha256": "ce83cd78c321d1034d1fbf23ceed36b3b2c809042b9195e88d1720fb241970c8",
+    "finding": "No blocker in private source projection: W29 MAX requires fresh full-row title, and W32 sheet+Insights helper are an all-or-none test owner. Partial W32 branch rejected by helper. Publication remains pending actual native gates.",
+    "native_status": "Not approved from helper review alone."
+  }
+}

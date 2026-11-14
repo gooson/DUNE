@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow",
+    "DUNEUITests/WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm",
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize",
+    "DUNEUITests/PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection",
+    "DUNEUITests/PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 7,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 5
+  },
+  "passed_cases": 2,
+  "failures": [
+    "452: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:1356: error: -[DUNEUITests.PostureVisualAuditTests testP03ExerciseListAtMaximumAccessibilitySize] : failed - The requested posture menu action must be visible: Realtime Analysis",
+    "1581: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:1831: error: -[DUNEUITests.PostureVisualAuditTests testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom] : XCTAssertTrue failed - Posture target must have a visible tap point",
+    "1594: Test Case '-[DUNEUITests.PostureVisualAuditTests testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom]' failed (100.512 seconds).",
+    "1595: Test Suite 'PostureVisualAuditTests' failed at 2026-11-14 12:58:52.624.",
+    "1770: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:571: error: -[DUNEUITests.WellnessRegressionTests testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow] : XCTAssertTrue failed - Injury save button should exist",
+    "1783: Test Case '-[DUNEUITests.WellnessRegressionTests testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow]' failed (64.906 seconds).",
+    "2309: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:764: error: -[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize] : XCTAssertTrue failed - Each severity must fit and be reachable",
+    "2322: Test Case '-[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize]' failed (118.967 seconds).",
+    "2756: Test Suite 'WellnessRegressionTests' failed at 2026-11-14 13:03:47.663.",
+    "2758: Test Suite 'DUNEUITests.xctest' failed at 2026-11-14 13:03:47.663.",
+    "2760: Test Suite 'Selected tests' failed at 2026-11-14 13:03:47.663.",
+    "2779: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 5 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow",
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize",
+    "DUNEUITests/PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonAtMaximumAccessibilitySize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-duo-closed-01-ui.log"
+}

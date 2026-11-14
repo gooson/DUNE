@@ -1,0 +1,88 @@
+{
+  "batch": "B12",
+  "source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+  "app_sha256": {
+    "W10": "6f20370f45d5507e7e513b4c4fd66b8eb9cb02d1310268ab207ff10a5e3944f4",
+    "W11": "31462a97ad99863afa3b658b4f86802eeeb18195c53d26b6163063211ffc808c",
+    "W26": "4ffc0dde3feb202d42fb9fba58dd3e0c45b9a9e16cb1cf6204e09d3c6eec5a5c",
+    "W27": "5eabaa63c0cf98c25710a25058ae543e2d86f5f2224507ae0559ae616b8fbcfa",
+    "W28": "fc1655387a9e635121cd7e86577002d9b0eafa774fea595c6dc6ff67dec61e08"
+  },
+  "test_sha256": "eef3f25e22a30710ec341edbc8642d309fbb4b6ff3b17ce5a5455f6635f78cd2",
+  "scope": "Five changed screens at normal and MAX text; targeted UI, not full regression",
+  "receipts": [
+    {
+      "run": "phone",
+      "executed": 6,
+      "passed": 3,
+      "failed": 3,
+      "path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b12/phone-ui.log.result.json"
+    },
+    {
+      "run": "phone-retry1",
+      "executed": 3,
+      "passed": 1,
+      "failed": 2,
+      "path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b12/phone-retry1-ui.log.result.json"
+    },
+    {
+      "run": "ipad",
+      "executed": 6,
+      "passed": 6,
+      "failed": 0,
+      "path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b12/ipad-ui.log.result.json"
+    }
+  ],
+  "gate_basis": ".codex/skill-compat.md core checks 45-57 and changed UI gate 112-142: failed or unexecuted required core remains incomplete; passed targeted evidence is not full pass. Design-map after images must be source-matched; no old image recast as current.",
+  "per_screen": {
+    "W10": {
+      "decision": "eligible conditional",
+      "basis": "Phone normal/MAX and iPad normal/MAX completion selectors passed and named current-source captures exist. Core title/summary/effort/share/Done visible and reachable.",
+      "limits": [
+        "PR achievement conditional row absent from one-set fixture; source-only review.",
+        "Duo current-source capture pending; historical baseline only."
+      ]
+    },
+    "W11": {
+      "decision": "held draft",
+      "basis": "iPad normal/MAX ShareImageSheet passed, but Phone normal/MAX W11 target was never reached after records flow failure. Required Phone native core and current after captures absent.",
+      "limits": [
+        "iPad MAX preview only 84×128 pt in AX; native quality concern.",
+        "Duo pending."
+      ]
+    },
+    "W26": {
+      "decision": "held draft",
+      "basis": "iPad normal/MAX new stats passed, but Phone changed stats target was not reached; Phone background AX nodes under persistent inspector shell do not prove visible or operable history.",
+      "limits": [
+        "Phone fresh diagnostic chart is not passed target capture.",
+        "Duo pending."
+      ]
+    },
+    "W27": {
+      "decision": "conditional scoped layout only",
+      "basis": "iPad normal/MAX full records flow passed. Phone normal/MAX diagnostics directly show changed header and set row layout before the failure; source diff is limited to adaptive header/set layout. The unchanged ExerciseView inspector ownership produces a still-visible blank shell after Done in both closed Phone attempts.",
+      "limits": [
+        "Phone records normal/MAX selectors failed and no passed Phone after capture exists.",
+        "Phone History navigation/dismissal remains unverified; no claim of full record flow pass.",
+        "Phone current actual map must retain historical regular normal or explicit pending, with fresh MAX diagnostic linked as diagnostic only; Duo pending."
+      ],
+      "ship_condition": "Only if PR isolates W27 layout source and review/actual map explicitly records Phone closed failure, diagnostic provenance, and pending regular after capture. Do not ship any navigation fix or call W26/W11 covered."
+    },
+    "W28": {
+      "decision": "eligible conditional",
+      "basis": "Phone imported normal/MAX and iPad imported normal/MAX passed, with named current-source captures of header/lower metrics/title editor.",
+      "limits": [
+        "No title save or real HealthKit write in visual selector; original actions/source retained.",
+        "Duo pending."
+      ]
+    }
+  },
+  "overall": "Three source scopes conditionally eligible (W10, W27 scoped layout, W28); W11 and W26 held. Combined six-selector harness stays with held final draft; do not copy it into accepted screen PRs. Do not report 6/6 overall because Phone original/retry failures remain. No third Phone SDK or manual bypass.",
+  "introduced_blocking_P1_P2": [],
+  "evidence": [
+    "/private/tmp/dune-b12-phone-closed-adjudication.json",
+    "/private/tmp/dune-b12-phone-native-review.json",
+    "/private/tmp/dune-b12-ipad-native-review.json"
+  ]
+}

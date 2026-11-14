@@ -1,0 +1,115 @@
+Attributes: Application, 0x103683340, pid: 56710, label: 'DUNE'
+Element subtree:
+ →Application, 0x103683340, pid: 56710, label: 'DUNE'
+    Window (Main), 0x103680780, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x1036835c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x103682d00, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x103683480, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x103682f80, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x103680f00, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x103683840, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1036830c0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x103683980, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x103683700, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x1124ec500, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x1124ec640, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x1124eea80, {{0.0, 0.0}, {440.0, 956.0}}
+                            NavigationBar, 0x1124efac0, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Categories'
+                              Button, 0x1124eca00, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Exercise'
+                              StaticText, 0x1124ec000, {{167.3, 71.3}, {105.0, 25.3}}, label: 'Categories'
+                              Other, 0x1124ec140, {{380.0, 66.0}, {36.0, 36.0}}
+                                Other, 0x1124ec280, {{380.0, 66.0}, {36.0, 36.0}}
+                                  Button, 0x1124ec3c0, {{381.7, 66.0}, {32.7, 36.0}}, identifier: 'user-category-add', label: 'Add'
+                            Other, 0x1124ec8c0, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x1124ee940, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x1124ef980, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x1124ef0c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                    CollectionView, 0x1124ef200, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'user-category-management-screen'
+                                      Other, 0x1124ef340, {{-20.0, -2744.0}, {480.0, 2746.3}}
+                                      Other, 0x1124ef480, {{-20.0, 2.3}, {480.0, 2782.7}}
+                                      Other, 0x1124ef5c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x1124ef700, {{0.0, 0.0}, {440.0, 156.0}}
+                                        Other, 0x1124ef840, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x1124efd40, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x1124efe80, {{0.0, 0.0}, {440.0, 156.0}}
+                                        Other, 0x1124ee580, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Cell, 0x1124eebc0, {{20.0, 2.3}, {400.0, 83.3}}
+                                        Other, 0x1124eed00, {{20.0, 2.3}, {400.0, 83.3}}
+                                        Other, 0x1124eee40, {{20.0, 2.3}, {400.0, 83.3}}
+                                          Other, 0x1124eef80, {{20.0, 2.3}, {400.0, 83.3}}
+                                            Other, 0x1124ec780, {{20.0, 2.3}, {400.0, 83.3}}
+                                              StaticText, 0x110e0d7c0, {{20.0, 2.3}, {400.0, 83.3}}, label: 'Custom'
+                                      Cell, 0x110e0f340, {{20.0, 85.7}, {400.0, 259.7}}
+                                        Other, 0x110e0c780, {{20.0, 85.7}, {400.0, 259.7}}
+                                          Other, 0x110e0c640, {{20.0, 85.7}, {400.0, 259.7}}
+                                        Other, 0x110e0f200, {{20.0, 85.7}, {400.0, 259.7}}
+                                          Other, 0x1037fb480, {{20.0, 85.7}, {400.0, 259.7}}
+                                            Other, 0x1037faa80, {{20.0, 85.7}, {400.0, 259.7}}
+                                              Button, 0x1037fb840, {{20.0, 85.7}, {400.0, 259.7}}, label: 'Codex Mobility, Duration + Intensity'
+                                                StaticText, 0x1037fb980, {{72.0, 100.7}, {178.7, 125.3}}, label: 'Codex Mobility'
+                                                Image, 0x1037f97c0, {{33.3, 190.0}, {37.0, 51.3}}, identifier: 'figure.cooldown', label: 'Figure Cooling Down After Exercise'
+                                                Image, 0x1037f9e00, {{376.7, 197.3}, {20.7, 36.7}}, identifier: 'chevron.right', label: 'Forward'
+                                                StaticText, 0x1037fa580, {{72.0, 228.0}, {191.0, 102.3}}, label: 'Duration + Intensity'
+                                      Cell, 0x1037f8500, {{20.0, 345.0}, {400.0, 507.7}}
+                                        Other, 0x1037f9cc0, {{20.0, 345.0}, {400.0, 507.7}}
+                                          Other, 0x1037f92c0, {{20.0, 345.0}, {400.0, 507.7}}
+                                        Other, 0x1037fbd40, {{20.0, 345.0}, {400.0, 507.7}}
+                                          Other, 0x1037fa6c0, {{20.0, 345.0}, {400.0, 507.7}}
+                                            Other, 0x1037f8640, {{20.0, 345.0}, {400.0, 507.7}}
+                                              Button, 0x1124a0f00, {{20.0, 345.0}, {400.0, 507.7}}, label: 'Codex Recovery Readability Category For Long Rows, Duration + Distance'
+                                                StaticText, 0x110e08280, {{72.0, 360.0}, {260.0, 373.3}}, label: 'Codex Recovery Readability Category For Long Rows'
+                                                Image, 0x110e083c0, {{28.3, 576.3}, {47.3, 45.0}}, identifier: 'star.fill', label: 'Favorite'
+                                                Image, 0x110e08500, {{376.7, 580.7}, {20.7, 36.7}}, identifier: 'chevron.right', label: 'Forward'
+                                                StaticText, 0x110e08140, {{72.0, 735.3}, {197.0, 102.3}}, label: 'Duration + Distance'
+                                      Other, 0x110e08000, {{72.0, 344.0}, {328.0, 1.0}}
+                                      Other, 0x110e08640, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 3 pages', value: 100%
+                                        Other, 0x110e08780, {{434.0, 493.0}, {3.0, 377.0}}
+                                      Other, 0x110e088c0, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 3 pages', value: 100%
+                                        Other, 0x110e08a00, {{434.0, 493.0}, {3.0, 377.0}}
+                            Toolbar, 0x11250c000, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x11250c140, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x11250c280, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x11250c3c0, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x11250c500, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x11250c640, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x11250c780, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x11250c8c0, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x11250ca00, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x11250cb40, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today'
+                              Image, 0x11250cc80, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x11250cdc0, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                              Image, 0x11250cf00, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x11250d040, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x11250d180, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x11250d2c0, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x11250d400, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x11250d540, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x11250d680, {{120.2, 877.0}, {104.5, 54.0}}
+                            Other, 0x11250d7c0, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x11250d900, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x11250da40, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x11250db80, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x11250dcc0, {{120.2, 877.0}, {104.3, 54.0}}
+                                    Other, 0x11250de00, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x11250df40, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x11250e080, {{120.2, 877.0}, {104.3, 54.0}}
+                    Other, 0x11250e1c0, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x11250e300, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x11250e440, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x11250e580, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x11250e6c0, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x11250e800, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x11250e940, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x11250ea80, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x11250ebc0, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x11250ed00, {{220.0, 492.0}, {0.0, 0.0}}
+    Window, 0x11250ee40, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x11250ef80, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x11250f0c0, {{0.0, 0.0}, {440.0, 956.0}}
+Path to element:
+ →Application, 0x103683340, pid: 56710, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x11250f200, pid: 56710, label: 'DUNE'
+  }

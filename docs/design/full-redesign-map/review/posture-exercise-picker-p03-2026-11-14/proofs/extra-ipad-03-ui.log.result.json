@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow",
+    "DUNEUITests/WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm",
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize",
+    "DUNEUITests/PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection",
+    "DUNEUITests/PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonAtMaximumAccessibilitySize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 9,
+    "passed": 7,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 7,
+  "failures": [
+    "654: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/ActivityExerciseRegressionTests.swift:4251: error: -[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditStrengthStartSessionLastSetAtMaximumText] : XCTAssertTrue failed - The fixed Complete Set footer must fit an…",
+    "665: Test Case '-[DUNEUITests.ActivityExerciseRegressionTests testVisualAuditStrengthStartSessionLastSetAtMaximumText]' failed (98.746 seconds).",
+    "1128: Test Suite 'ActivityExerciseRegressionTests' failed at 2026-11-14 12:00:30.935.",
+    "1509: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:1636: error: -[DUNEUITests.PostureVisualAuditTests testP03ExerciseListAtMaximumAccessibilitySize] : XCTAssertTrue failed - MAX Close must fit outside the scrolling list",
+    "1520: Test Case '-[DUNEUITests.PostureVisualAuditTests testP03ExerciseListAtMaximumAccessibilitySize]' failed (45.747 seconds).",
+    "2648: Test Suite 'PostureVisualAuditTests' failed at 2026-11-14 12:04:37.098.",
+    "3851: Test Suite 'DUNEUITests.xctest' failed at 2026-11-14 12:08:29.195.",
+    "3853: Test Suite 'Selected tests' failed at 2026-11-14 12:08:29.195.",
+    "3866: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-ui.log"
+}

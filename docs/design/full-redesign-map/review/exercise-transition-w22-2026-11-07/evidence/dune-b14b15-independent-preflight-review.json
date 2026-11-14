@@ -1,0 +1,36 @@
+{
+  "scope": "Independent six-perspective source/test preflight of B15 W23/W24/W25 and B14+B15 composition; no repo or SDK mutations",
+  "source_base": "576cfdb98606baad724a69ced56bb9cb2db86780",
+  "test_base": "c6708751213657f7a1624ac944d7660e8bbed19d; both patches also compose over current B13 e95 test source",
+  "B14_source_review": "/private/tmp/dune-b14-independent-source-review.json",
+  "B15_app_source": {
+    "security": "No new input, entitlement, network, storage or permission logic. Location branch and HealthKit write remain unchanged.",
+    "data_integrity": "Mode selection, cardio timer and measurement state, machine level changes, End confirmation, summary record creation and save remain byte-identical in changed files.",
+    "architecture": "W23 selection owns sheet, W24 session owns timer and controls, W25 owns summary save. Navigation and consumer route remain ExerciseStartView \u2192 W23 \u2192 W24 \u2192 W25.",
+    "performance": "One conditional ScrollView at MAX in W23; W24 keeps one existing ScrollView and moves controls to safeAreaInset at MAX. W25 removes an invisible balancing filler at MAX. No new query or per-row expensive view.",
+    "simplicity": "Three bounded layout/typography diffs with no functional branching aside from dynamic type layout.",
+    "agent_native": "No agent-facing surface; N/A."
+  },
+  "introduced_source_P1_P2": [],
+  "test_review": {
+    "selectors": [
+      "testCardioFlowReachesSummary",
+      "testVisualAuditCardioAtDefaultTextSize",
+      "testStairClimberLevelChangesAppearInSummary"
+    ],
+    "scope": "Three existing selectors, guarded named captures only; no new fixture or shared helper.",
+    "W23": "Normal and MAX header/mode choice; MAX full Outdoor frame and conditional source-backed location notice/warning frame/capture. Indoor selection remains original.",
+    "W24": "Running session elapsed, distance/pace units, lower steps/spm and MAX pinned End whole-window frame; Stair Climber Level 3 machine branch and End captured. Pause icon/action source unchanged; screenshot must be reviewed.",
+    "W25": "Existing title/Save and lower Steps/Cadence assertions retained with named captures; Stair Climber history Level 3 captured.",
+    "AX_risk": "cardio-session-screen ID is on headerBar descendant of session ScrollView; cardio-start-screen is on activityHeader descendant of MAX ScrollView, supporting containing(.any, identifier:) queries. Native AX roles remain pending.",
+    "B14_picker_role": "B14 uses descendants(.any) for pickerRootList, so it does not rely on a Table role.",
+    "composition": "B14 and refined B15 patches apply sequentially with zero fuzz to B13 e95 test source; composed Swift parse passed. Separate baseline c670 also passed."
+  },
+  "native_pending": [
+    "W23 location state may be authorized, so message branch is conditional.",
+    "W24 MAX control safe-area and lower metric frames need actual Phone and iPad PNG/AX.",
+    "W25 summary and machine history need actual Phone and iPad PNG/AX.",
+    "W22 five-second auto-advance remains B14 capture timing risk."
+  ],
+  "decision": "0 introduced source P1/P2; private test candidate ready for parent integration/native gate, no native success claimed."
+}
