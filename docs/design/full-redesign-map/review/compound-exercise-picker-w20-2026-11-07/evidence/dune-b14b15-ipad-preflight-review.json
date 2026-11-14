@@ -1,0 +1,22 @@
+{
+  "status": "source-only eligible for first planned iPad seven-selector run; native pending",
+  "baseline_revision": "b62dc5b98c453810706928fb831b5c8c6d749fa8",
+  "patch_sha256": "323f935cbb20b92f1844638a74e80da83a989fe7e9315f2e9f99dbb8d6e00571",
+  "scope": "One test-only hunk in auditB14TemplateTransition removes optional manual Start tap after named W22 capture. Exact 2 sets/6 reps/80 kg leaf assertions, W22 capture, automatic advance wait for Exercise 1 of 2, and W16 capture remain. App/fixture/shared helpers unchanged.",
+  "cause_proof": [
+    "Phone retry normal W22 capture and AX show defaults and Start (1), while log records attempted Start snapshot miss after capture.",
+    "Phone retry teardown AX shows workout-session-screen Exercise 1 of 2, proving original five-second auto advance occurred while stale Start query/tap raced.",
+    "ExerciseTransitionView.swift owns countdown=5 and five one-second Task.sleep ticks, then onStart; manual tap is optional original behavior."
+  ],
+  "verification": [
+    "Patch and candidate SHA match private manifest.",
+    "git apply --check against frozen b62 source succeeds.",
+    "swiftc frontend parse succeeds."
+  ],
+  "limits": [
+    "Phone normal selector remains failed after closed two attempts; diagnostic W22 normal is not after.",
+    "First-session Set 1 of 3 is existing behavior despite transition showing 2 sets; no claim that 2 sets was applied.",
+    "Only iPad first planned family is eligible; no Phone replay or native pass claimed."
+  ],
+  "introduced_app_P1_P2_verified": []
+}

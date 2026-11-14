@@ -5,6 +5,7 @@ import SwiftData
 struct UserCategoryManagementView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \UserCategory.sortOrder) private var categories: [UserCategory]
     @State private var showingAddSheet = false
     @State private var editingCategory: UserCategory?
@@ -19,11 +20,20 @@ struct UserCategoryManagementView: View {
                             .font(.caption)
                             .foregroundStyle(DS.Color.activity)
                             .frame(width: 24)
-                        Text(cat.displayName)
-                        Spacer()
-                        Text("Default")
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
+                        if dynamicTypeSize.isAccessibilitySize {
+                            VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                                Text(cat.displayName)
+                                Text("Default")
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                        } else {
+                            Text(cat.displayName)
+                            Spacer()
+                            Text("Default")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
                     }
                 }
             }
@@ -47,6 +57,7 @@ struct UserCategoryManagementView: View {
                                 VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
                                     Text(category.name)
                                         .foregroundStyle(theme.sandColor)
+                                        .fixedSize(horizontal: false, vertical: true)
                                     Text(category.defaultInputType.displayLabel)
                                         .font(.caption)
                                         .foregroundStyle(DS.Color.textSecondary)
@@ -127,6 +138,7 @@ struct UserCategoryEditView: View {
     let onSave: (String, String, String, ExerciseInputType) -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var name: String
     @State private var selectedIcon: String
     @State private var selectedColor: String
@@ -182,14 +194,16 @@ struct UserCategoryEditView: View {
                 }
 
                 Section("Icon") {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 44))], spacing: DS.Spacing.sm) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: dynamicTypeSize.isAccessibilitySize ? 56 : 44))],
+                              spacing: DS.Spacing.sm) {
                         ForEach(Self.availableIcons, id: \.self) { icon in
                             Button {
                                 selectedIcon = icon
                             } label: {
                                 Image(systemName: icon)
                                     .font(.title3)
-                                    .frame(width: 40, height: 40)
+                                    .frame(width: dynamicTypeSize.isAccessibilitySize ? 52 : 40,
+                                           height: dynamicTypeSize.isAccessibilitySize ? 52 : 40)
                                     .background(
                                         selectedIcon == icon
                                             ? (Color(hex: selectedColor) ?? DS.Color.activity).opacity(0.2)
@@ -208,7 +222,8 @@ struct UserCategoryEditView: View {
                 }
 
                 Section("Color") {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 44))], spacing: DS.Spacing.sm) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: dynamicTypeSize.isAccessibilitySize ? 56 : 44))],
+                              spacing: DS.Spacing.sm) {
                         ForEach(Self.availableColors, id: \.self) { hex in
                             Button {
                                 selectedColor = hex
@@ -223,6 +238,9 @@ struct UserCategoryEditView: View {
                                                 .foregroundStyle(.white)
                                         }
                                     }
+                                    .frame(width: dynamicTypeSize.isAccessibilitySize ? 52 : 36,
+                                           height: dynamicTypeSize.isAccessibilitySize ? 52 : 36)
+                                    .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
                         }

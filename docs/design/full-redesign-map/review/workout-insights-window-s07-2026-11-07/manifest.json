@@ -1,0 +1,190 @@
+{
+  "screen_id": "S07",
+  "original_source": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+  "final_integration_source": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+  "source_lineage_proof": {
+    "original_execution_source": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+    "final_integration_source": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+    "app_source_byte_equivalent": true,
+    "app_source_evidence": "git diff --name-status b81aad042d3ba35e0b6e70b559a00448704bf1c4 d731fd8cc162c7be5134e7100330fdff83bef64a shows only DUNEUITests/Full/ActivityExerciseRegressionTests.swift; all app source is byte-identical.",
+    "run_revisions": {
+      "phone": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "phone-retry1": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "ipad": "d731fd8cc162c7be5134e7100330fdff83bef64a"
+    },
+    "row_rules": {
+      "W29_MAX_full_row": "phone-retry1 d731 only; first phone b81 clipped row is diagnostic",
+      "W32_phone_normal": "phone-retry1 d731 passed; first phone b81 failed selector row is diagnostic",
+      "ipad": "first iPad run d731: five Passed, two intentionally Skipped Categories; no iPad retry",
+      "S07_W32_MAX_period": "named capture is closed Picker control before tap; passed selector subsequently checks three options and range change/restore"
+    }
+  },
+  "source_contract": ".codex-checks/b16b17/execution-contract.json",
+  "rows": [
+    {
+      "profile": "ipad",
+      "kind": "historical",
+      "title": "S07 actual-map older-source context",
+      "image": "historical/ipad-S07.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "sha256": "086a163d4ac7608bc19f8b646c0fb755bd4cca323e6071a014b09475ed28ecee",
+      "capture_index_entry": "historical/ipad-S07-index.json",
+      "is_primary": false
+    },
+    {
+      "profile": "ipad",
+      "kind": "after",
+      "title": "S07 iPad separate window normal loaded statistics and close",
+      "image": "assets/01-ipad-ipad-normal-after.png",
+      "ax": "assets/01-ipad-ipad-normal-after.txt",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "run_id": "ipad",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutInsights()",
+      "selector_state": "passed",
+      "capture_uuid": "d206355d-b048-4e7b-a5c2-a475c04d608c",
+      "timestamp": 1794010163.22,
+      "sha256": "88f9a5a82559d5bfa82c125aac02e2322d5e2985139a82f3dd41c162acd97ef9",
+      "ax_sha256": "e46b5ad0990721070538507a2cd8918646eeedaa8a0fe5f0d56d6f1658b8f0a0",
+      "source_image": ".codex-checks/b16b17/ipad-attachments/0D54C5AB-043D-4360-8B39-644A1975A049.png",
+      "source_ax": ".codex-checks/b16b17/ipad-attachments/60F51409-7B21-4D73-BEA9-37B8B260917B.txt",
+      "pair_manifest": ".codex-checks/b16b17/ipad-attachments/manifest.json",
+      "is_primary": true,
+      "actual_angle": null
+    },
+    {
+      "profile": "ipad",
+      "kind": "after",
+      "title": "S07 iPad separate window MAX loaded statistics and close",
+      "image": "assets/02-ipad-ipad-MAX-after.png",
+      "ax": "assets/02-ipad-ipad-MAX-after.txt",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "run_id": "ipad",
+      "test": "ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize()",
+      "selector_state": "passed",
+      "capture_uuid": "e644357e-aefa-451c-8b43-c46a8e587c6b",
+      "timestamp": 1794010398.732,
+      "sha256": "a93e75d9c807dc9ec7f4c14b07432d7b8598caa08aec9501f9e3fec8cd34693d",
+      "ax_sha256": "5efcaed1fe2241f3841a2fe2050b7df9fe3a17b445465ca8f3a610490c97fbdb",
+      "source_image": ".codex-checks/b16b17/ipad-attachments/23A0797F-8383-499F-8006-4D6E9E447BC8.png",
+      "source_ax": ".codex-checks/b16b17/ipad-attachments/0A9D22F6-0B64-49D6-9620-16FEC598EA42.txt",
+      "pair_manifest": ".codex-checks/b16b17/ipad-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null
+    },
+    {
+      "profile": "ipad",
+      "kind": "after",
+      "title": "S07 MAX period menu fully visible",
+      "image": "assets/03-ipad-ipad-MAX-after.png",
+      "ax": "assets/03-ipad-ipad-MAX-after.txt",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "run_id": "ipad",
+      "test": "ActivityExerciseRegressionTests/testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize()",
+      "selector_state": "passed",
+      "capture_uuid": "6f2388fa-31af-47a8-8574-4c87442de678",
+      "timestamp": 1794010416.028,
+      "sha256": "a93e75d9c807dc9ec7f4c14b07432d7b8598caa08aec9501f9e3fec8cd34693d",
+      "ax_sha256": "d562bd351675f3d174eff6c3a414a15f7c34cecc9a4930fe46982ae22bf1acf3",
+      "source_image": ".codex-checks/b16b17/ipad-attachments/6CD4B1BF-F14E-4D83-9C81-E6E2AE2AC0BE.png",
+      "source_ax": ".codex-checks/b16b17/ipad-attachments/22C85079-8490-4CDE-93C9-6E2267C1BA88.txt",
+      "pair_manifest": ".codex-checks/b16b17/ipad-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null,
+      "capture_subject": "Closed period Picker control fully visible before auditTap; no opened popup is claimed.",
+      "interaction_assertions": "Passed selector subsequently taps Last Week, This Month, This Week options; checks localized label, hittability, changed range, and restored initial range."
+    }
+  ],
+  "gates": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "counts": {
+        "executed": 7,
+        "passed": 6,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditUserCategoriesAtNormalText": "passed",
+        "testVisualAuditUserCategoriesAtMaximumText": "passed",
+        "testVisualAuditWorkoutInsights": "failed",
+        "testVisualAuditWorkoutInsightsSheetFallback": "passed",
+        "testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize": "passed",
+        "testVisualAuditImportedWorkoutAtNormalText": "passed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "passed"
+      },
+      "result_note": "completed per-case xcresult statuses match runner and summary",
+      "contract_issue": null,
+      "receipt": ".codex-checks/b16b17/phone-ui.log.result.json",
+      "attachments": ".codex-checks/b16b17/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditUserCategoriesAtNormalText": "not_executed",
+        "testVisualAuditUserCategoriesAtMaximumText": "passed",
+        "testVisualAuditWorkoutInsights": "passed",
+        "testVisualAuditWorkoutInsightsSheetFallback": "not_executed",
+        "testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize": "not_executed",
+        "testVisualAuditImportedWorkoutAtNormalText": "not_executed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "not_executed"
+      },
+      "result_note": "completed per-case xcresult statuses match runner and summary",
+      "contract_issue": null,
+      "receipt": ".codex-checks/b16b17/phone-retry1-ui.log.result.json",
+      "attachments": ".codex-checks/b16b17/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "counts": {
+        "executed": 7,
+        "passed": 5,
+        "skipped": 2,
+        "failed": 0
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditUserCategoriesAtNormalText": "skipped",
+        "testVisualAuditUserCategoriesAtMaximumText": "skipped",
+        "testVisualAuditWorkoutInsights": "passed",
+        "testVisualAuditWorkoutInsightsSheetFallback": "passed",
+        "testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize": "passed",
+        "testVisualAuditImportedWorkoutAtNormalText": "passed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "passed"
+      },
+      "result_note": "completed per-case xcresult statuses match runner and summary",
+      "contract_issue": null,
+      "receipt": ".codex-checks/b16b17/ipad-ui.log.result.json",
+      "attachments": ".codex-checks/b16b17/ipad-attachments/manifest.json"
+    }
+  ],
+  "pending": [
+    "regular historical baseline absent",
+    "duo historical baseline absent",
+    "duo-open historical baseline absent",
+    "Historical dirty-source captures cannot count as new B17 native proof.",
+    "MAX period capture intentionally shows the closed Picker control before tap; the same-view PNG is expected. Passed selector checks subsequent option selection and range changes.",
+    "Duo current-source capture pending; no hinge angle or four-profile pass inferred."
+  ],
+  "limits": [
+    "Only completed passed selector captures are after.",
+    "Skipped iPad Categories is not a pass.",
+    "W33 B12 proposal stays historical and cannot be relabeled as new W33 proof.",
+    "No actual-map writes occur in this private builder."
+  ]
+}

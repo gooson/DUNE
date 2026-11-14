@@ -417,7 +417,10 @@
       "timestamp": 1791825648.525,
       "image": "3DE37C1E-C3BA-4CAF-A68F-D0B38F180E58.png",
       "screen": "screen-0-1398x2034-tap activity-recommended-routine-card_0_4816CEEB-517A-445A-A849-17DC63259F55.png",
-      "file": "W23.png"
+      "file": "W23.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source passed capture absent"
     },
     "W22": {
       "row_id": "W22",
@@ -427,7 +430,10 @@
       "timestamp": 1791825765.008,
       "image": "6775898E-2A86-493A-AF5D-5FB39A787363.png",
       "screen": "screen-0-1398x2034-tap workout-template-row-codex-circuit-builder_0_B40EACB6-1DB9-452D-843F-D2CA7FD5F8C3.png",
-      "file": "W22.png"
+      "file": "W22.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source Duo absent"
     },
     "W12": {
       "row_id": "W12",
@@ -1001,7 +1007,10 @@
       "timestamp": 1791855244.009,
       "image": "01662F91-4AED-4DE7-9B9A-52A1AD5A0563.png",
       "screen": "screen-0-1398x2034-tap cardio-start-indoor_0_B0360321-30A0-436F-93B5-1AFA116FEC0F.png",
-      "file": "W24.png"
+      "file": "W24.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source passed capture absent"
     },
     "W21": {
       "row_id": "W21",
@@ -1011,7 +1020,10 @@
       "timestamp": 1791840185.175,
       "image": "67B16B1B-8884-4AD6-9A65-7A0A9380627A.png",
       "screen": "screen-0-1398x2034-tap compound-workout-setup-start_0_2BFCD2E2-DF6E-41F4-9A47-E2AD0E1DDD35.png",
-      "file": "W21.png"
+      "file": "W21.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source passed capture absent"
     },
     "W19": {
       "row_id": "W19",
@@ -1021,7 +1033,10 @@
       "timestamp": 1791840118.203,
       "image": "F6F173F8-C54D-4FC0-A199-4CD00BCB0323.png",
       "screen": "screen-0-1398x2034-tap exercise-menu-compound_0_FA47666A-9510-4FDF-8FE4-53809C3C6831.png",
-      "file": "W19.png"
+      "file": "W19.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source passed capture absent"
     },
     "W20": {
       "row_id": "W20",
@@ -1031,7 +1046,10 @@
       "timestamp": 1791840129.048,
       "image": "E1BEA149-8270-411A-B149-905616117F4F.png",
       "screen": "screen-0-1398x2034-Compound exercise picker_0_8CE8B09C-899A-46DA-AD56-384B0A4C5B22.png",
-      "file": "W20.png"
+      "file": "W20.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source passed capture absent"
     },
     "W33": {
       "row_id": "W33",
@@ -1041,7 +1059,10 @@
       "timestamp": 1791840225.538,
       "image": "DC1B2892-5A5A-4D5C-86C7-449994E33B01.png",
       "screen": "screen-0-1398x2034-tap healthkit-workout-edit-title_0_55A8AFE1-179A-4EA6-96B1-563393ECCFDC.png",
-      "file": "W33.png"
+      "file": "W33.png",
+      "current_verification": "pending",
+      "current_verification_note": "B16+B17 current-source native capture absent; historical PNG retained.",
+      "capture_scope": "historical only"
     },
     "L06": {
       "row_id": "L06",
@@ -1201,27 +1222,23 @@
     "T12": {
       "row_id": "T12",
       "evidence": "notification-message-detail-screen",
-      "test": "DUNEUITests/DesignMapNotificationDetailTests/testNotificationMessageDetail",
-      "action": "DUNE_VISUAL_AUDIT_READY T12 notification message detail verified [DUNEUITests/DesignMapAdditionalRoutesTests.swift:180] DEADLINE=1793615913.5702848",
-      "timestamp": 1793615889.736731,
-      "timestamp_kind": "host-file-mtime of native paired PNG; not attachment time or checkpoint deadline",
-      "image": "005-1398x2034.png",
-      "screen": "DUNE_VISUAL_AUDIT_READY T12 notification message detail verified [DUNEUITests/DesignMapAdditionalRoutesTests.swift:180] DEADLINE=1793615913.5702848",
+      "test": "DUNEUITests/DesignMapNotificationDetailTests/testBodyCompositionNotificationDetail",
+      "action": "T12 body composition header and two cards",
+      "timestamp": 1794586820.0424287,
+      "timestamp_kind": "host-file-mtime-native-paired-capture",
+      "image": "assets/duo-closed.png",
+      "screen": "T12 body composition header and two cards",
       "file": "T12.png",
-      "source_revision": "3fac15d4",
-      "source_worktree_dirty": false,
-      "device_udid": "C34568F0-90E0-4FBB-9D7A-14B3B81CEE3D",
-      "sha256": "21f8d672cf661a5f9d087b7bdd37407f98337e7c7bf842ef429cfa2d57324009",
-      "source_json": "../../../full-redesign-map/review/t12-notification-message-native-2026-11-02/evidence.json",
-      "source_record": "pairs.duo.after",
-      "capture_scope": "T12 exact stored title/body and native back; historical Phone normal+MAX separate from new normal cases",
+      "source_revision": "63022ff33",
+      "source_worktree_dirty": true,
+      "source_closure": "T12 iOS app and selected test source exact to63022ff33; whole worktree differs in Watch/docs",
+      "device_udid": "BE823107-8D8A-4D4B-BC09-A1CD1367F62C",
+      "sha256": "6c2b9ac39ff264c2fb88161d7078311dbb2352bb5930ed00464f6ed631e0996f",
+      "source_json": "../../../full-redesign-map/review/notification-cardio-2026-11-14/manifest.json",
+      "source_record": "captures.7",
+      "capture_scope": "Body composition title/date/two exact values, native Back and hub return; English normal",
       "pose_readback_verified": true,
-      "ack_count": 7,
-      "angle_before": 0,
-      "angle_after": 0,
-      "active_display": "LCD",
-      "raw_pose_sha256": "ee06effaa949470911c1991f9dbbea8821d44ddd6617b33fac1ba52493816f76",
-      "raw_checkpoints_sha256": "90552648439d02a7e145ca7cbb8e4d310fae839aede4344b2891184e3016fdaa"
+      "current_verification": "passed"
     },
     "P04": {
       "row_id": "P04",
@@ -1314,7 +1331,10 @@
       "timestamp": 1791853526.102,
       "image": "E3EC737B-ABFE-4EC4-A9FB-FA7FDBCF2338.png",
       "screen": "screen-0-1398x2034-Template workout first session_0_54451488-A129-486E-ADF8-1E11EF6D414F.png",
-      "file": "W16.png"
+      "file": "W16.png",
+      "current_verification": "pending",
+      "current_verification_note": "B14+B15 현재 Duo 접힘/펼침 캡처 미갱신. 이전 PNG는 역사적 자료이며 새 화면 검증 증거가 아닙니다.",
+      "capture_scope": "Historical image retained; B14+B15 current-source Duo absent"
     },
     "A16": {
       "row_id": "A16",
@@ -1340,7 +1360,10 @@
       "timestamp": 1791853638.598,
       "image": "DD93B70C-E5BB-4498-A10A-338FFEC6F5C5.png",
       "screen": "screen-0-1398x2034-Workout Insights presentation_0_2A3D816C-01FD-4F54-8357-B4DD35236CC0.png",
-      "file": "W32.png"
+      "file": "W32.png",
+      "current_verification": "pending",
+      "current_verification_note": "B16+B17 current-source native capture absent; historical PNG retained.",
+      "capture_scope": "historical only"
     },
     "H03": {
       "row_id": "H03",
@@ -1747,10 +1770,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+  "last_refresh_revision": "63022ff33",
   "last_refresh_screens": [
-    "H07",
-    "P06"
+    "T12"
   ],
-  "last_refresh_note": "Reviewed current native H07/P06; historical images in review gallery."
+  "last_refresh_note": "2026-11-14 T12 body composition native update; other rows preserve their original sources."
 }

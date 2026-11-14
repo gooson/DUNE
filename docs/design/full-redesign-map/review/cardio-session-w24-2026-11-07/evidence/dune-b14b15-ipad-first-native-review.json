@@ -1,0 +1,39 @@
+{
+  "status": "iPad first planned seven-selector native review complete; same-ID Stair Climber retry active; final gate pending",
+  "frozen_source": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+  "first_run": {
+    "executed": 7,
+    "passed": 6,
+    "failed": 1,
+    "failed_selector": "testStairClimberLevelChangesAppearInSummary"
+  },
+  "provenance": {
+    "passed_named_png_ax_pairs": 35,
+    "failed_selector_diagnostic_pairs": 2,
+    "all_37_gallery_png_and_ax_sha256_equal_source_attachments_and_manifest": true,
+    "contact_sheets": "/private/tmp/dune-b14b15-gallery-prep/ipad-contact",
+    "gallery": "/private/tmp/dune-b14b15-gallery-prep",
+    "raw": ".codex-checks/b14b15/ipad-attachments"
+  },
+  "per_screen": {
+    "W16": "Normal/MAX first template session after auto transition: Exercise 1 of 2, Set 1 of 3, planned reps 6, 80 kg, full Complete Set. Original transition 2 sets is not proved applied to session.",
+    "W19": "Normal/MAX Circuit mode, original explanation/settings, two seeded selected exercises and Start route passed. MAX selected-exercises capture is scrolled so Start is below its frame; selector subsequently starts session.",
+    "W20": "Normal/MAX full picker route passed; native picker names, search, recent rows visible. MAX lower rows and filter chips outside initial frame; picker wrapper unchanged.",
+    "W21": "Normal/MAX round/time/tabs, two names in summary, transition +30/Start passed. MAX captures span scrolled states; 0-set summary is original seeded state, not set-completion claim.",
+    "W22": "Normal/MAX transition visibly shows original 2 sets, 6 reps, 80 kg and Start (1); normal/MAX selector passed after auto 5 seconds.",
+    "W23": "Normal/MAX Running Indoor and Outdoor choices, native icons and location guidance. MAX first view clips guidance, later passed location frame shows full message. Outdoor GPS start/permission remains untested.",
+    "W24": "Running normal/MAX elapsed, 0.00 km, --:--/km, lower steps/spm and full pinned Pause/End passed. Stair Climber default Level 3 and End have two diagnostic captures from the one failed selector; cannot promote those to after until retry passes. Sensor metrics -- unavailable.",
+    "W25": "Running normal/MAX summary route and full pinned Save passed; normal summary exposes lower Steps/Cadence. MAX lower Steps is visible, but cadence named frame and later teardown leave cadence label/value under pinned Save. AX Cadence y858–909 intersects Save y815.5–893. Scroll bar 73% suggests further scroll, but no passed screenshot proves full cadence legibility. Stair Climber Level 3 history not captured because lazy rows below unscrolled viewport in failed selector."
+  },
+  "introduced_app_P1_P2_verified": [],
+  "capture_or_gate_limits": [
+    "W25 iPad MAX lower cadence is a material proof gap for the requested lower Steps/Cadence gate; hold that claim without an existing unobscured current-source frame.",
+    "W24/W25 Stair Climber default selector failed before history; diagnostic session frames are not passed after rows.",
+    "Some W19/W20/W21 MAX images are scrolled checkpoints; no claim all selected names, bottom controls, and settings are simultaneously visible.",
+    "No live motion/GPS numerical measurement, summary Save action/persistence, or Duo current-source proof."
+  ],
+  "pending": [
+    "One same-ID Stair Climber iPad retry runs only the failed selector; its result is not presumed.",
+    "Final per-screen gate must retain Phone first3/7, retry3/4, iPad first6/7 and any retry separately."
+  ]
+}

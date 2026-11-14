@@ -417,13 +417,25 @@
     },
     "W23": {
       "row_id": "W23",
-      "evidence": "cardio-start-screen",
-      "test": "ActivityExerciseRegressionTests/testRecommendedRoutineCardOpensExerciseStart()",
-      "action": "tap activity-recommended-routine-card",
-      "timestamp": 1791822454.896,
-      "image": "95045916-6598-45E9-A35B-6C1CBC5BC196.png",
-      "screen": "screen-0-2064x2752-tap activity-recommended-routine-card_0_35CB3846-5ECC-4DB9-AE12-8F768232A1D7.png",
-      "file": "W23.png"
+      "file": "W23.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
+      "action": "W23 cardio normal header and Indoor",
+      "timestamp": 1794005407.79,
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "791234b579e8fd9d95b835fbc1ddbb770f0824620fff4e0396ec85752628b4d1",
+      "ax_sha256": "0eb4f9eb3c1af4177550800454ab299396c366ef5f6c99189d9ed23ac900b820",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/cardio-start-w23-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W06": {
       "row_id": "W06",
@@ -449,13 +461,25 @@
     },
     "W22": {
       "row_id": "W22",
-      "evidence": "template-workout-transition-screen",
-      "test": "ActivityExerciseRegressionTests/testTemplateWorkoutContainerCloseDismissesFullScreenFlow()",
-      "action": "tap workout-template-row-codex-circuit-builder",
-      "timestamp": 1791854775.552,
-      "image": "E9C7DDCD-3516-4FB5-AF45-6264B9C05256.png",
-      "screen": "screen-0-2064x2752-tap workout-template-row-codex-circuit-builder_0_4E012550-CC78-4930-BAF8-0300A00EA71F.png",
-      "file": "W22.png"
+      "file": "W22.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtNormalText()",
+      "action": "W22 normal template defaults transition",
+      "timestamp": 1794005879.866,
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "ea5c2bffdaa6f385599627f0d53bb3f0d46177cca6b47731043ad4e8d2d709f7",
+      "ax_sha256": "ca0968a5ab862e25068aa868a0e867a8247315aad3d26c797215396411b58a27",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/exercise-transition-w22-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed interaction in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W12": {
       "row_id": "W12",
@@ -489,23 +513,51 @@
     },
     "W29": {
       "row_id": "W29",
-      "evidence": "user-category-management-screen",
-      "test": "ActivityExerciseRegressionTests/testUserCategoryManagementCreatesCategory()",
-      "action": "tap exercise-toolbar-categories",
-      "timestamp": 1791822729.335,
-      "image": "CABE117E-B59D-43D9-8567-198F8E514577.png",
-      "screen": "screen-0-2064x2752-tap exercise-toolbar-categories_0_6BF09FC2-05DA-41FB-98C7-809A14ED27D6.png",
-      "file": "W29.png"
+      "file": "W29.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtMaximumText()",
+      "action": "W29 MAX full custom category row and input type",
+      "source_revision": "15450f83dcedc8628c44a9327aea5497031b375e",
+      "source_worktree_dirty": false,
+      "capture_date": "2026-11-14",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "f9def9c7d44d7c53162ed03a6d8108bba81ae084c4195e98dc3a8507c4443ca6",
+      "ax_sha256": "3c1100c01091cd9cfbd1c93f1b2b7a32542ee73daff32dde0396ad04a776e1c4",
+      "source_json": "../../../full-redesign-map/review/exercise-categories-w29-2026-11-14/manifest.json",
+      "capture_scope": "iPad normal/MAX passed; Phone 2026-11-07 historical; Duo not recaptured",
+      "previous_record": {
+        "row_id": "W29",
+        "evidence": "user-category-management-screen",
+        "test": "ActivityExerciseRegressionTests/testUserCategoryManagementCreatesCategory()",
+        "action": "tap exercise-toolbar-categories",
+        "timestamp": 1791822729.335,
+        "image": "CABE117E-B59D-43D9-8567-198F8E514577.png",
+        "screen": "screen-0-2064x2752-tap exercise-toolbar-categories_0_6BF09FC2-05DA-41FB-98C7-809A14ED27D6.png",
+        "file": "W29.png"
+      }
     },
     "W30": {
       "row_id": "W30",
-      "evidence": "user-category-edit-screen",
-      "test": "ActivityExerciseRegressionTests/testUserCategoryManagementCreatesCategory()",
-      "action": "tap user-category-add",
-      "timestamp": 1791822733.181,
-      "image": "18888374-08B4-4A80-B917-E409560664EF.png",
-      "screen": "screen-0-2064x2752-tap user-category-add_0_629DE165-9A15-489B-96CF-06C3F039081B.png",
-      "file": "W30.png"
+      "file": "W30.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtNormalText()",
+      "action": "W30 normal empty name and original icon choices",
+      "source_revision": "15450f83dcedc8628c44a9327aea5497031b375e",
+      "source_worktree_dirty": false,
+      "capture_date": "2026-11-14",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "609731c40ea0f7d94c3099816122b96c73ebbeb36e6f4c96fa382202e9bf298c",
+      "ax_sha256": "d52dc0739e73a9fe1577a5063d80cc3b005c3272598a5a7ab8bdc9ab7c4f544a",
+      "source_json": "../../../full-redesign-map/review/exercise-category-editor-w30-2026-11-14/manifest.json",
+      "capture_scope": "iPad normal/MAX passed; Phone 2026-11-07 historical; Duo not recaptured",
+      "previous_record": {
+        "row_id": "W30",
+        "evidence": "user-category-edit-screen",
+        "test": "ActivityExerciseRegressionTests/testUserCategoryManagementCreatesCategory()",
+        "action": "tap user-category-add",
+        "timestamp": 1791822733.181,
+        "image": "18888374-08B4-4A80-B917-E409560664EF.png",
+        "screen": "screen-0-2064x2752-tap user-category-add_0_629DE165-9A15-489B-96CF-06C3F039081B.png",
+        "file": "W30.png"
+      }
     },
     "W15": {
       "row_id": "W15",
@@ -1138,53 +1190,112 @@
     },
     "W24": {
       "row_id": "W24",
-      "evidence": "cardio-session-screen",
+      "file": "W24.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
-      "action": "tap cardio-start-indoor",
-      "timestamp": 1791854862.289,
-      "image": "88FFEF23-7553-4CF2-B9E5-DDC571439220.png",
-      "screen": "screen-0-2064x2752-tap cardio-start-indoor_0_FE433014-5007-46D4-9D29-5A345A3415F5.png",
-      "file": "W24.png"
+      "action": "W24 cardio normal elapsed and status",
+      "timestamp": 1794005424.732,
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "fb789cfa50fb2882b66162f663d9810cfe81e98f761f82d41f33707ab6fe5a57",
+      "ax_sha256": "88bd1ab802169e81a2f70f4153699ab244ad9e5d39c2cd367f19c41ec13400c0",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/cardio-session-w24-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W21": {
       "row_id": "W21",
-      "evidence": "compound-workout-screen",
-      "test": "ActivityExerciseRegressionTests/testCompoundWorkoutSetupStartsWorkoutAndFinishesFlow()",
-      "action": "tap compound-workout-setup-start",
-      "timestamp": 1791838179.17,
-      "image": "C72631C4-42D8-49B8-A1CA-35D254B62F62.png",
-      "screen": "screen-0-2064x2752-tap compound-workout-setup-start_0_A3227285-F923-4B68-8AA1-0514E4B5D7C8.png",
-      "file": "W21.png"
+      "file": "W21.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditCompoundSessionAtNormalText()",
+      "action": "W21 normal round time and exercise tabs",
+      "timestamp": 1794005766.338,
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "d00db8232c4e8d6b573693876ee4107d497f996fe6bb54f203c02a5f2ccb7a28",
+      "ax_sha256": "ab7791ea36762b0255b611bcd04e86899887d6071ca476e3584f522e8af8117c",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/compound-workout-w21-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W19": {
       "row_id": "W19",
-      "evidence": "compound-workout-setup-screen",
-      "test": "ActivityExerciseRegressionTests/testCompoundWorkoutSetupStartsWorkoutAndFinishesFlow()",
-      "action": "tap exercise-menu-compound",
-      "timestamp": 1791838112.661,
-      "image": "98885A44-1DEA-4CB8-89A5-578F71FBDD29.png",
-      "screen": "screen-0-2064x2752-tap exercise-menu-compound_0_E33DFC6B-3F11-4510-86B0-8257C03E9F79.png",
-      "file": "W19.png"
+      "file": "W19.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditCompoundSessionAtNormalText()",
+      "action": "W19 normal Circuit mode and full label",
+      "timestamp": 1794005693.045,
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "6225c1beaf44ab13e4b1b7e6373dbf080448cc8b0a90f2ed87b4a54ca1773c3f",
+      "ax_sha256": "4157e2286a24c197569abbb9bf836a63812f26b65b13273d99f828fc2c38df66",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/compound-workout-setup-w19-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W20": {
       "row_id": "W20",
-      "evidence": "test-and-action:Compound exercise picker",
-      "test": "ActivityExerciseRegressionTests/testCompoundWorkoutSetupStartsWorkoutAndFinishesFlow()",
-      "action": "Compound exercise picker",
-      "timestamp": 1791838122.971,
-      "image": "F4BDCC25-786B-4B70-BAB4-A0A136051A17.png",
-      "screen": "screen-0-2064x2752-Compound exercise picker_0_7C0DD96B-33B6-4F0C-B57F-BAE21EF697E9.png",
-      "file": "W20.png"
+      "file": "W20.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditCompoundSessionAtNormalText()",
+      "action": "W20 normal full compound exercise picker",
+      "timestamp": 1794005706.357,
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "433fe749faf4895b5f2cd4d40619673f51e011b03fb14e43b6791ef891b8e422",
+      "ax_sha256": "cd49d9335c17b4b6d0c92f74679da2b4b78db6faeabee45c3f944005ed58255e",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/compound-exercise-picker-w20-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed lower content in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W33": {
       "row_id": "W33",
-      "evidence": "healthkit-workout-title-editor-screen",
-      "test": "ActivityExerciseRegressionTests/testNotificationWorkoutRouteOpensHealthKitDetailAndTitleEditor()",
-      "action": "tap healthkit-workout-edit-title",
-      "timestamp": 1791838222.833,
-      "image": "74EC87C0-CAF2-4961-B10E-47FA3DE32E12.png",
-      "screen": "screen-0-2064x2752-tap healthkit-workout-edit-title_0_4E80AD24-3A4E-4D83-BE2D-3190CD3FE2DB.png",
-      "file": "W33.png"
+      "file": "W33.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtNormalText()",
+      "action": "W33 normal workout name editor fresh",
+      "timestamp": 1794009985.511,
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "1e9f570c09e56a923678b4eafe5653f1148441c495626f2a51dac0a1ee5d0ca4",
+      "ax_sha256": "f1ff145bc7a28926914a146de68ed86dd2121e6defe436eb2c2d570c9ec3072e",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/workout-name-editor-w33-2026-11-07/manifest.json",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "W26": {
       "row_id": "W26",
@@ -1388,21 +1499,23 @@
     "T12": {
       "row_id": "T12",
       "evidence": "notification-message-detail-screen",
-      "test": "DUNEUITests/DesignMapNotificationDetailTests/testNotificationMessageDetail",
-      "action": "screen-0-2064x2752-T12 notification message detail verified_0_247E26DD-F80D-460C-8237-6A8DA1C3C242.png",
-      "timestamp": 1793615578.739,
+      "test": "DUNEUITests/DesignMapNotificationDetailTests/testBodyCompositionNotificationDetail",
+      "action": "T12 body composition header and two cards",
+      "timestamp": 1794586589.967,
       "timestamp_kind": "native-XCTest-attachment",
-      "image": "BE443645-160D-4D20-AA5F-EFDBAEDE9FE1.png",
-      "screen": "screen-0-2064x2752-T12 notification message detail verified_0_247E26DD-F80D-460C-8237-6A8DA1C3C242.png",
+      "image": "assets/ipad-07.png",
+      "screen": "T12 body composition header and two cards",
       "file": "T12.png",
-      "source_revision": "3fac15d4",
-      "source_worktree_dirty": false,
-      "device_udid": "268C5A6D-C056-4EDD-A3BA-CFC7F147C8E6",
-      "sha256": "8933f5e8fb02b82a76c808f950fc94169fcbf1e8ac13d7d062160ed20658563f",
-      "source_json": "../../../full-redesign-map/review/t12-notification-message-native-2026-11-02/evidence.json",
-      "source_record": "pairs.ipad.after",
-      "capture_scope": "T12 exact stored title/body and native back; historical Phone normal+MAX separate from new normal cases",
-      "pose_readback_verified": false
+      "source_revision": "63022ff33",
+      "source_worktree_dirty": true,
+      "source_closure": "T12 iOS app and selected test source exact to63022ff33; whole worktree differs in Watch/docs",
+      "device_udid": "A00239BC-41A5-46CF-9067-824504556A7B",
+      "sha256": "13ce02a5745bc11886c91ec04cd988ea2740a0ce18b5ba2074d52e069840330c",
+      "source_json": "../../../full-redesign-map/review/notification-cardio-2026-11-14/manifest.json",
+      "source_record": "captures.6",
+      "capture_scope": "Body composition title/date/two exact values, native Back and hub return; English normal",
+      "pose_readback_verified": false,
+      "current_verification": "passed"
     },
     "T10": {
       "row_id": "T10",
@@ -1524,13 +1637,25 @@
     },
     "W16": {
       "row_id": "W16",
-      "evidence": "test-and-action:Template workout first session",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateWorkoutFirstSession()",
-      "action": "Template workout first session",
-      "timestamp": 1791838984.661,
-      "image": "F2F6FD88-C68F-4171-AAA5-D4447AB98797.png",
-      "screen": "screen-0-2064x2752-Template workout first session_0_96B5D0D8-DB67-4EFC-8D28-C56763CE6986.png",
-      "file": "W16.png"
+      "file": "W16.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateTransitionAtNormalText()",
+      "action": "W16 normal first template session after transition",
+      "timestamp": 1794005882.86,
+      "source_revision": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "33eae357017550f17c67220fa6c12877d510d352c679440116950ea2a3e2caf9",
+      "ax_sha256": "9abf7792407cdb633135048ca4477adc45886feb2e40202bbb19c2bd2aea381e",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/template-workout-container-w16-2026-11-07/manifest.json",
+      "capture_scope": "B14+B15 normal actual; MAX and changed interaction in paired passed gallery captures",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "A16": {
       "row_id": "A16",
@@ -1550,13 +1675,24 @@
     },
     "S07": {
       "row_id": "S07",
-      "evidence": "test-and-action:Workout Insights presentation",
+      "file": "S07.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutInsights()",
-      "action": "Workout Insights presentation",
-      "timestamp": 1791839089.352,
-      "image": "2ECAC814-F4B3-4FB4-B863-E8A2E731E69D.png",
-      "screen": "screen-0-2064x2752-Workout Insights presentation_0_C385510D-6F79-499F-BF14-968BEC252672.png",
-      "file": "S07.png"
+      "action": "S07 iPad separate window normal loaded statistics and close",
+      "timestamp": 1794010163.22,
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "88f9a5a82559d5bfa82c125aac02e2322d5e2985139a82f3dd41c162acd97ef9",
+      "ax_sha256": "e46b5ad0990721070538507a2cd8918646eeedaa8a0fe5f0d56d6f1658b8f0a0",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/workout-insights-window-s07-2026-11-07/manifest.json",
+      "current_verification": "normal-and-MAX-captured",
+      "current_verification_note": "",
+      "actual_angle": null
     },
     "T13": {
       "row_id": "T13",
@@ -1667,13 +1803,24 @@
     },
     "W32": {
       "row_id": "W32",
-      "evidence": "test-and-action:Workout Insights iPad sheet fallback",
+      "file": "W32.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutInsightsSheetFallback()",
-      "action": "Workout Insights iPad sheet fallback",
-      "timestamp": 1791839500.757,
-      "image": "D324F5A3-37D4-4D40-912E-63598303DAD4.png",
-      "screen": "screen-0-2064x2752-Workout Insights iPad sheet fallback_0_79895E7D-3084-4254-9033-63C2F7BB8E81.png",
-      "file": "W32.png"
+      "action": "W32 iPad sheet fallback normal top",
+      "timestamp": 1794010298.706,
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "source_worktree_dirty": false,
+      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "5aa89c00907f007c3834f8bd0543fe78bd9da8e7b27578505b80f64ca6a48f2a",
+      "ax_sha256": "1261067525d0ced300c2084bb62308c6e67135100b0dd7863bc2b247bc00852b",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "source_json": "../../../full-redesign-map/review/workout-insights-sheet-w32-2026-11-07/manifest.json",
+      "current_verification": "normal-captured-MAX-pending",
+      "current_verification_note": "W32 iPad forced sheet fallback is normal only; iPad MAX uses S07 separate window.",
+      "actual_angle": null
     },
     "H03": {
       "row_id": "H03",
@@ -1864,10 +2011,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+  "last_refresh_revision": "63022ff33",
   "last_refresh_screens": [
-    "H07",
-    "P06"
+    "T12"
   ],
-  "last_refresh_note": "Reviewed current native H07/P06; historical images in review gallery."
+  "last_refresh_note": "2026-11-14 T12 body composition native update; other rows preserve their original sources."
 }
