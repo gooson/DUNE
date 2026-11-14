@@ -7,6 +7,16 @@ status: in-progress
 
 # DUNE 전체 디자인 개편 맵
 
+## 2026-11-14 마무리 기준
+
+현재 기준은 [최신 8테마 마무리 계획](../../plans/2026-11-14-theme-overhaul-completion.md)이다. 8개 테마의 영속 값·배경·표면과 WATER LILIES의 선택 경로는 이미 구현됐다. 아래 10월의 미구현 설명과 124pt 공통 링 기록은 당시 이력이며 현재 화면을 되돌릴 지시가 아니다. Today Compact·Activity Flow·Wellness Flow·현재 Life의 104pt 링과 최대 글씨의 외부 점수/진행률을 우선한다. 테마 accent에서 실제 상태색으로 이어지는 승인된 Compact 링도 유지한다.
+
+이번 작업은 최신 4탭·대표 흐름의 새 PNG/AX, 저장/asset 계약, 영향 기기·접근성 및 플랫폼 전파를 확인한다. [현재 실행과 원본 실패/미검증 범위](review/theme-overhaul-2026-11-14/README.md)를 별도로 추적한다. 아래 10월 캡처 수는 이번 실행의 완료 수가 아니다.
+
+WATER LILIES는 원본 시안의 21개 Today 수련 군집과 수면 붓질·앞뒤 깊이를 공유 Canvas에 반영한다. 상세·시트는 더 낮은 밀도/강도를 사용하고 정지 화면도 완전한 장면을 유지한다. 비활성 또는 Reduce Motion에서는 반복 이동을 제거한다. 승인 시안과 새 실제 앱 검토는 별개다.
+
+## 2026-10-19~24 설계·검증 이력
+
 [인터랙티브 구현 맵](index.html) · [8개 테마 방향 시안](../theme-map/index.html) · [4탭 레이아웃 맵](../layout-map/index.html) · [현재 실제 화면](../phone-design-map/actual/index.html)
 
 [T03·A01·H01 첫 화면 UX 개편 실제 캡처](review/first-fold-ux-2026-10-22/index.html): DESERT HORIZON의 iPhone·iPad 밝음·어두움 12장과 테스트 출처. T03 히어로의 다른 탭 전환 행동을 상세 진입으로 정리하고, A01의 로딩 중 주요 행동을 유지하며, H01에서 최근 수면과 7일 평균의 의미를 구분했다. 다른 테마·기기의 전체 개편 게이트는 계속 열려 있다.

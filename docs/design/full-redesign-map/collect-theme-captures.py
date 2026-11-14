@@ -31,6 +31,7 @@ THEMES = {
 }
 SCREENS = {"Today": "T03", "Activity": "A01", "Wellness": "H01", "Life": "L01"}
 EXPORT_SUFFIX = re.compile(r"_\d+_[0-9a-fA-F-]{36}$")
+SCREEN_PREFIX = re.compile(r"^screen-\d+-\d+x\d+-")
 THEME_MATRIX_NAME = re.compile(r"^(Desert|Ocean|Forest|Sakura|Arctic|Solar|Contour|Water Lilies) (Light|Dark) (Today|Activity|Wellness|Life)$")
 WATER_LILIES_NAME = re.compile(r"^Water Lilies (Today|Activity|Wellness|Life) (Light|Dark)$")
 
@@ -43,7 +44,8 @@ def normalized_attachment_name(value: str) -> str:
     name = Path(value).name
     if name.lower().endswith(".png"):
         name = name[:-4]
-    return EXPORT_SUFFIX.sub("", name).strip()
+    name = EXPORT_SUFFIX.sub("", name).strip()
+    return SCREEN_PREFIX.sub("", name, count=1)
 
 
 def classify_attachment(value: str) -> tuple[str, str, str] | None:

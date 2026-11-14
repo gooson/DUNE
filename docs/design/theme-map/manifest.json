@@ -126,8 +126,14 @@
         "#457cab",
         "#8abf75",
         "#c47cc5"
-      ]
-    },
+      ],
+      "implementation": {
+        "status": "implemented-validation-in-progress",
+        "verification": "../full-redesign-map/review/theme-overhaul-2026-11-14/README.md"
+      }
+    }
+  ],
+  "studies": [
     {
       "id": "condition-detail-redesign",
       "name": "컨디션 상세 개편",
@@ -167,9 +173,7 @@
       ],
       "motif": "기존 DUNE 링·능선·원래 요인 심볼",
       "motion": "정적 장식·시스템 펼침/기간 선택; Reduce Motion 존중"
-    }
-  ],
-  "studies": [
+    },
     {
       "id": "notification-message-reading",
       "name": "T12 · 알림 수치 강조",

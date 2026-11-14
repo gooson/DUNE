@@ -4,6 +4,7 @@
 import argparse
 import html
 import json
+import math
 from datetime import datetime
 from pathlib import Path
 
@@ -27,9 +28,19 @@ def embedded_json(value: object) -> str:
     return json.dumps(value, ensure_ascii=False).replace("<", "\\u003c")
 
 
-def read_inventory() -> list[dict[str, str]]:
+def capture_freshness(record: dict, threshold: float) -> str:
+    try:
+        timestamp = float(record.get("timestamp"))
+    except (TypeError, ValueError):
+        return "시각 미확인"
+    if not math.isfinite(timestamp):
+        return "시각 미확인"
+    return "이번 개편 촬영" if timestamp >= threshold else "기존 캡처"
+
+
+def read_inventory(path: Path = INVENTORY) -> list[dict[str, str]]:
     screens = []
-    for line in INVENTORY.read_text(encoding="utf-8").splitlines():
+    for line in path.read_text(encoding="utf-8").splitlines():
         columns = [value.strip() for value in line.split("|")[1:-1]]
         if len(columns) == 8 and len(columns[0]) == 3 and columns[0][0] in "TAWHPLS" and columns[0][1:].isdigit():
             screen_id, name, entry, presentation, iphone, ipad, duo, code = columns
@@ -45,8 +56,8 @@ def read_inventory() -> list[dict[str, str]]:
                 "reachable": screen_id not in {"W17", "W18"},
             })
     ids = [screen["id"] for screen in screens]
-    if len(screens) != 108 or len(ids) != len(set(ids)):
-        raise ValueError(f"Expected 108 unique screen IDs, found {len(screens)}")
+    if not screens or len(ids) != len(set(ids)):
+        raise ValueError(f"Screen inventory must contain non-empty, unique IDs; found {len(screens)} screens")
     return screens
 
 
@@ -173,7 +184,7 @@ def main() -> None:
             path = DESIGN / "phone-design-map" / "actual" / device / "images" / record["file"]
             if not path.is_file():
                 raise ValueError(f"Missing primary actual capture: {path}")
-            freshness = "이번 개편 촬영" if float(record.get("timestamp", 0)) >= verification_capture_after else "기존 캡처"
+            freshness = capture_freshness(record, verification_capture_after)
             url = f'../phone-design-map/actual/{device}/images/{record["file"]}'
             actual_links.append(f'<a href="{escape(url)}">{escape(label)} · {freshness} ↗</a>')
         screen_rows.append(
@@ -261,6 +272,7 @@ def main() -> None:
         "__TAB_CARDS__": "\n".join(tab_cards),
         "__FAMILY_CARDS__": "\n".join(family_cards),
         "__SCREEN_ROWS__": "\n".join(screen_rows),
+        "__REACHABLE_COUNT__": str(sum(screen["reachable"] for screen in screens)),
         "__MATRIX_ROWS__": "\n".join(matrix_rows),
         "__EVIDENCE_SECTIONS__": "\n".join(evidence_sections),
         "__WATCH_EVIDENCE_SECTIONS__": "\n".join(watch_evidence_sections),
@@ -272,7 +284,6 @@ def main() -> None:
         ),
         "__THEMES_JSON__": embedded_json(themes),
         "__SCREEN_COUNT__": str(len(screens)),
-        "__REACHABLE_COUNT__": str(sum(screen["reachable"] for screen in screens)),
     }
     result = TEMPLATE.read_text(encoding="utf-8")
     for placeholder, value in replacements.items():
@@ -282,7 +293,7 @@ def main() -> None:
     if args.check:
         if not OUTPUT.exists() or OUTPUT.read_text(encoding="utf-8") != result:
             raise SystemExit("Full redesign map is outdated; run build-full-redesign-map.py")
-        print("Full redesign map is current: 8 themes, 4 tabs, 108 inventoried screens")
+        print(f"Full redesign map is current: 8 themes, 4 tabs, {len(screens)} inventoried screens")
     else:
         OUTPUT.write_text(result, encoding="utf-8")
         print(f"Built {OUTPUT.relative_to(ROOT)}: 8 themes, 4 tabs, {len(screens)} screens")

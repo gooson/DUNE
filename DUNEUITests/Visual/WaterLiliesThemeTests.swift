@@ -50,8 +50,8 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         XCTAssertTrue(themeButton("waterLilies").isSelected)
     }
 
-    func testEnglishAndKoreanRootNavigation() {
-        for (language, locale) in [("en", "en_US"), ("ko", "ko_KR")] {
+    func testSupportedLanguageRootNavigation() {
+        for (language, locale) in [("en", "en_US"), ("ko", "ko_KR"), ("ja", "ja_JP")] {
             var configuration = launchConfiguration
             configuration.additionalArguments += [
                 "-AppleLanguages", "(\(language))", "-AppleLocale", locale
