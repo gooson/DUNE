@@ -1,0 +1,440 @@
+{
+  "devices": [
+    {
+      "architecture": "arm64",
+      "deviceId": "554225AA-2634-4D2B-9FE6-8B110D1B756E",
+      "deviceName": "iPhone 17-wt-Health-today-weather-loading-dfe43329764a",
+      "modelName": "iPhone",
+      "osBuildNumber": "24B91016s",
+      "osVersion": "27.2",
+      "platform": "iOS Simulator"
+    }
+  ],
+  "testNodes": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "duration": "0.038s",
+                  "durationInSeconds": 0.03802990913391113,
+                  "name": "Notification can generate the current digest outside the evening time band",
+                  "nodeIdentifier": "DashboardViewModelTests/forcedDailyDigest()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/forcedDailyDigest()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0024s",
+                  "durationInSeconds": 0.0024340152740478516,
+                  "name": "First empty dashboard load shows skeleton only until its response completes",
+                  "nodeIdentifier": "DashboardViewModelTests/skeletonDuringFirstEmptyLoad()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/skeletonDuringFirstEmptyLoad()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0015s",
+                  "durationInSeconds": 0.0015099048614501953,
+                  "name": "First populated dashboard load shows skeleton until metrics are applied",
+                  "nodeIdentifier": "DashboardViewModelTests/skeletonDuringFirstPopulatedLoad()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/skeletonDuringFirstPopulatedLoad()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0011s",
+                  "durationInSeconds": 0.001065969467163086,
+                  "name": "Pending HealthKit authorization keeps skeleton after a deferred load, unless authorization fails",
+                  "nodeIdentifier": "DashboardViewModelTests/skeletonWhileAuthorizationPending()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/skeletonWhileAuthorizationPending()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.00029s",
+                  "durationInSeconds": 0.0002892017364501953,
+                  "name": "Cancelled first load remains uncompleted after its response returns",
+                  "nodeIdentifier": "DashboardViewModelTests/cancelledFirstLoadKeepsSkeleton()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/cancelledFirstLoadKeepsSkeleton()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0014s",
+                  "durationInSeconds": 0.0014090538024902344,
+                  "name": "An obsolete first response cannot end the first-load skeleton",
+                  "nodeIdentifier": "DashboardViewModelTests/skeletonUntilCurrentLoadCompletes()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/skeletonUntilCurrentLoadCompletes()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0022s",
+                  "durationInSeconds": 0.002156972885131836,
+                  "name": "Refresh retains existing metrics without returning to skeleton",
+                  "nodeIdentifier": "DashboardViewModelTests/refreshRetainsMetricsWithoutSkeleton()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/refreshRetainsMetricsWithoutSkeleton()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0053s",
+                  "durationInSeconds": 0.005264997482299805,
+                  "name": "An eight-day HRV read limit remains visible with a ready condition score",
+                  "nodeIdentifier": "DashboardViewModelTests/limitedHRVBaselineWithReadyScore()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/limitedHRVBaselineWithReadyScore()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0035s",
+                  "durationInSeconds": 0.0035178661346435547,
+                  "name": "A resting-heart-rate-only read limit is visible with an incomplete baseline",
+                  "nodeIdentifier": "DashboardViewModelTests/limitedRHRBaselineWithoutScore()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/limitedRHRBaselineWithoutScore()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.018s",
+                  "durationInSeconds": 0.0178220272064209,
+                  "name": "HRV shows latest sample even if not today",
+                  "nodeIdentifier": "DashboardViewModelTests/hrvFallback()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/hrvFallback()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0061s",
+                  "durationInSeconds": 0.006064176559448242,
+                  "name": "RHR falls back to latest when today is nil",
+                  "nodeIdentifier": "DashboardViewModelTests/rhrFallback()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/rhrFallback()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0049s",
+                  "durationInSeconds": 0.004897117614746094,
+                  "name": "RHR uses today when available",
+                  "nodeIdentifier": "DashboardViewModelTests/rhrToday()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/rhrToday()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0032s",
+                  "durationInSeconds": 0.0032379627227783203,
+                  "name": "Deferred HealthKit gate skips protected queries until launch authorization completes",
+                  "nodeIdentifier": "DashboardViewModelTests/deferredHealthKitGateSkipsProtectedQueriesUntilEnabled()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/deferredHealthKitGateSkipsProtectedQueriesUntilEnabled()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.002s",
+                  "durationInSeconds": 0.0020036697387695312,
+                  "name": "Shared snapshot source failure does not show partial error when fallback metric is available",
+                  "nodeIdentifier": "DashboardViewModelTests/sharedSnapshotFailureWithFallbackDoesNotShowError()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/sharedSnapshotFailureWithFallbackDoesNotShowError()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0007s",
+                  "durationInSeconds": 0.0006999969482421875,
+                  "name": "Shared snapshot source failure shows partial error when category card cannot be built",
+                  "nodeIdentifier": "DashboardViewModelTests/sharedSnapshotFailureWithoutFallbackShowsError()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/sharedSnapshotFailureWithoutFallbackShowsError()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.013s",
+                  "durationInSeconds": 0.012835025787353516,
+                  "name": "Failed shared refresh preserves condition, sleep, and yesterday workouts while other sources update",
+                  "nodeIdentifier": "DashboardViewModelTests/failedSharedRefreshPreservesLoadedHealthData()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/failedSharedRefreshPreservesLoadedHealthData()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0057s",
+                  "durationInSeconds": 0.005738973617553711,
+                  "name": "Today's partial health success survives a later failure when overall refresh time is yesterday",
+                  "nodeIdentifier": "DashboardViewModelTests/partialHealthSuccessRetainedWithStaleOverallRefreshTime()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/partialHealthSuccessRetainedWithStaleOverallRefreshTime()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.003s",
+                  "durationInSeconds": 0.0029718875885009766,
+                  "name": "Failed refresh does not retain a prior day's condition or sleep as today's data",
+                  "nodeIdentifier": "DashboardViewModelTests/failedRefreshDoesNotRetainPreviousDay()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/failedRefreshDoesNotRetainPreviousDay()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.011s",
+                  "durationInSeconds": 0.011175870895385742,
+                  "name": "Sleep and stages survive a transient duration history failure on refresh",
+                  "nodeIdentifier": "DashboardViewModelTests/sleepStagesSurviveHistoryFailure()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/sleepStagesSurviveHistoryFailure()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0063s",
+                  "durationInSeconds": 0.0063190460205078125,
+                  "name": "Sleep stages clear with the sleep metric when a shared snapshot becomes empty",
+                  "nodeIdentifier": "DashboardViewModelTests/sleepStagesClearAfterEmptySnapshot()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/sleepStagesClearAfterEmptySnapshot()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0048s",
+                  "durationInSeconds": 0.00479578971862793,
+                  "name": "Sleep falls back to latest when today is empty",
+                  "nodeIdentifier": "DashboardViewModelTests/sleepFallback()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/sleepFallback()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0046s",
+                  "durationInSeconds": 0.004565000534057617,
+                  "name": "Steps falls back to latest when today is nil",
+                  "nodeIdentifier": "DashboardViewModelTests/stepsFallback()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/stepsFallback()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.005s",
+                  "durationInSeconds": 0.005004167556762695,
+                  "name": "Exercise falls back to most recent workout when today is empty",
+                  "nodeIdentifier": "DashboardViewModelTests/exerciseFallback()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/exerciseFallback()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0079s",
+                  "durationInSeconds": 0.007899999618530273,
+                  "name": "Weight falls back to latest when today is empty",
+                  "nodeIdentifier": "DashboardViewModelTests/weightFallback()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/weightFallback()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0048s",
+                  "durationInSeconds": 0.004801034927368164,
+                  "name": "BMI falls back to latest when today is nil",
+                  "nodeIdentifier": "DashboardViewModelTests/bmiFallback()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/bmiFallback()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0057s",
+                  "durationInSeconds": 0.0056841373443603516,
+                  "name": "Empty state when all services return no data",
+                  "nodeIdentifier": "DashboardViewModelTests/emptyState()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/emptyState()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.033s",
+                  "durationInSeconds": 0.03345513343811035,
+                  "name": "Pinned metrics honor saved category order",
+                  "nodeIdentifier": "DashboardViewModelTests/pinnedMetricsOrder()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/pinnedMetricsOrder()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0057s",
+                  "durationInSeconds": 0.0056879520416259766,
+                  "name": "Coaching insight and message are generated even when score is unavailable",
+                  "nodeIdentifier": "DashboardViewModelTests/coachingWithoutScore()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/coachingWithoutScore()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.014s",
+                  "durationInSeconds": 0.013563156127929688,
+                  "name": "HRV baseline delta is computed when enough samples exist",
+                  "nodeIdentifier": "DashboardViewModelTests/hrvBaselineDelta()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/hrvBaselineDelta()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "4초",
+                  "durationInSeconds": 4.011206865310669,
+                  "name": "Condition score is preserved when HRV refresh fails without shared snapshot",
+                  "nodeIdentifier": "DashboardViewModelTests/conditionScoreIsPreservedAfterHRVFailure()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/conditionScoreIsPreservedAfterHRVFailure()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.007s",
+                  "durationInSeconds": 0.007027864456176758,
+                  "name": "Weekly goal counts only workouts in current calendar week",
+                  "nodeIdentifier": "DashboardViewModelTests/weeklyGoalUsesCalendarWeek()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/weeklyGoalUsesCalendarWeek()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0076s",
+                  "durationInSeconds": 0.007591962814331055,
+                  "name": "RHR baseline excludes current comparison day",
+                  "nodeIdentifier": "DashboardViewModelTests/rhrBaselineExcludesCurrentDay()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/rhrBaselineExcludesCurrentDay()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0074s",
+                  "durationInSeconds": 0.007425785064697266,
+                  "name": "Hero baseline details include baseline-relative RHR badge",
+                  "nodeIdentifier": "DashboardViewModelTests/heroBaselineDetailsIncludeRHR()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/heroBaselineDetailsIncludeRHR()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.2s",
+                  "durationInSeconds": 0.204484224319458,
+                  "name": "Location permission waits for resolution before weather fetch",
+                  "nodeIdentifier": "DashboardViewModelTests/locationPermissionWaitsBeforeWeatherFetch()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/locationPermissionWaitsBeforeWeatherFetch()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.00018s",
+                  "durationInSeconds": 0.00017881393432617188,
+                  "name": "Location permission refresh works when already determined",
+                  "nodeIdentifier": "DashboardViewModelTests/locationPermissionRefreshWhenAlreadyDetermined()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/locationPermissionRefreshWhenAlreadyDetermined()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.024s",
+                  "durationInSeconds": 0.023624897003173828,
+                  "name": "Weather fetch starts before shared snapshot resolves",
+                  "nodeIdentifier": "DashboardViewModelTests/weatherStartsBeforeSharedSnapshotCompletes()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/weatherStartsBeforeSharedSnapshotCompletes()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.013s",
+                  "durationInSeconds": 0.01253509521484375,
+                  "name": "Today and notification digest finish while weather has no response",
+                  "nodeIdentifier": "DashboardViewModelTests/healthDataAndDigestDoNotWaitForWeather()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/healthDataAndDigestDoNotWaitForWeather()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0027s",
+                  "durationInSeconds": 0.002681255340576172,
+                  "name": "Late weather from an obsolete load cannot replace current weather",
+                  "nodeIdentifier": "DashboardViewModelTests/obsoleteWeatherDoesNotReplaceCurrentWeather()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/obsoleteWeatherDoesNotReplaceCurrentWeather()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0017s",
+                  "durationInSeconds": 0.0016951560974121094,
+                  "name": "Weather refreshes published health context before loading tail completes",
+                  "nodeIdentifier": "DashboardViewModelTests/weatherDuringLoadingTailRefreshesContext()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/weatherDuringLoadingTailRefreshesContext()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0013s",
+                  "durationInSeconds": 0.0013210773468017578,
+                  "name": "Permission refresh supersedes the pending background weather response",
+                  "nodeIdentifier": "DashboardViewModelTests/permissionWeatherSupersedesBackgroundWeather()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/permissionWeatherSupersedesBackgroundWeather()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0016s",
+                  "durationInSeconds": 0.0015807151794433594,
+                  "name": "A new dashboard load supersedes an older permission weather refresh",
+                  "nodeIdentifier": "DashboardViewModelTests/dashboardWeatherSupersedesPermissionWeather()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/dashboardWeatherSupersedesPermissionWeather()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0016s",
+                  "durationInSeconds": 0.0016231536865234375,
+                  "name": "Late weather preserves enhanced coaching without repeating inference",
+                  "nodeIdentifier": "DashboardViewModelTests/lateWeatherPreservesEnhancedCoaching()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/lateWeatherPreservesEnhancedCoaching()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0011s",
+                  "durationInSeconds": 0.0010988712310791016,
+                  "name": "A stalled weather request does not retain the dashboard",
+                  "nodeIdentifier": "DashboardViewModelTests/stalledWeatherDoesNotRetainDashboard()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/stalledWeatherDoesNotRetainDashboard()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                },
+                {
+                  "duration": "0.0013s",
+                  "durationInSeconds": 0.0012862682342529297,
+                  "name": "Latest dashboard load wins over older response",
+                  "nodeIdentifier": "DashboardViewModelTests/latestDashboardLoadWinsOverOlderResponse()",
+                  "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests/latestDashboardLoadWinsOverOlderResponse()",
+                  "nodeType": "Test Case",
+                  "result": "Passed"
+                }
+              ],
+              "name": "DashboardViewModel Fallback",
+              "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests/DashboardViewModelTests",
+              "nodeType": "Test Suite",
+              "result": "Passed"
+            }
+          ],
+          "name": "DUNETests",
+          "nodeIdentifierURL": "test://com.apple.xcode/DUNE/DUNETests",
+          "nodeType": "Unit test bundle",
+          "result": "Passed"
+        }
+      ],
+      "name": "DUNETests",
+      "nodeType": "Test Plan",
+      "result": "Passed"
+    }
+  ],
+  "testPlanConfigurations": [
+    {
+      "configurationId": "1",
+      "configurationName": "Test Scheme Action"
+    }
+  ]
+}

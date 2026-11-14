@@ -266,6 +266,48 @@ private actor MockWeatherProvider: WeatherProviding {
     }
 }
 
+private actor SuspendingDashboardWeatherProvider: WeatherProviding {
+    private var nextIndex = 0
+    private var started: Set<Int> = []
+    private var startWaiters: [Int: CheckedContinuation<Void, Never>] = [:]
+    private var requests: [Int: CheckedContinuation<WeatherSnapshot, any Error>] = [:]
+
+    func fetchCurrentWeather() async throws -> WeatherSnapshot {
+        let index = nextIndex
+        nextIndex += 1
+        return try await withCheckedThrowingContinuation { continuation in
+            requests[index] = continuation
+            started.insert(index)
+            startWaiters.removeValue(forKey: index)?.resume()
+        }
+    }
+
+    func waitUntilStarted(_ index: Int = 0) async {
+        guard !started.contains(index) else { return }
+        await withCheckedContinuation { startWaiters[index] = $0 }
+    }
+
+    func resume(_ index: Int = 0, with snapshot: WeatherSnapshot) {
+        requests.removeValue(forKey: index)?.resume(returning: snapshot)
+    }
+
+    func requestLocationPermission() async {}
+    var isLocationPermissionDetermined: Bool { get async { true } }
+}
+
+private actor CountingDashboardCoachingEnhancer: CoachingMessageEnhancing {
+    private(set) var callCount = 0
+
+    func enhance(insight: CoachingInsight, context: CoachingInput) async -> CoachingInsight {
+        callCount += 1
+        return CoachingInsight(
+            id: insight.id, priority: insight.priority, category: insight.category,
+            title: insight.title, message: "Enhanced coaching", iconName: insight.iconName,
+            actionHint: insight.actionHint
+        )
+    }
+}
+
 private actor SuspendingDashboardSharedHealthDataService: SharedHealthDataService {
     private let snapshot: SharedHealthSnapshot
     private var didStartFetch = false
@@ -424,11 +466,12 @@ private func makeDashboardSharedSnapshot(hrvValue: Double) -> SharedHealthSnapsh
 }
 
 private func makeTestWeatherSnapshot(
-    condition: WeatherConditionType = .rain
+    condition: WeatherConditionType = .rain,
+    feelsLike: Double = 22
 ) -> WeatherSnapshot {
     WeatherSnapshot(
         temperature: 21,
-        feelsLike: 22,
+        feelsLike: feelsLike,
         condition: condition,
         humidity: 0.6,
         uvIndex: 4,
@@ -1500,6 +1543,169 @@ struct DashboardViewModelTests {
 
         await sharedService.resumeFetch()
         _ = await loadTask.result
+    }
+
+    @Test("Today and notification digest finish while weather has no response")
+    func healthDataAndDigestDoNotWaitForWeather() async {
+        let weather = SuspendingDashboardWeatherProvider()
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(todaySteps: 3_200),
+            bodyService: MockBodyService(),
+            weatherProvider: weather,
+            coachingMessageEnhancer: nil
+        )
+        let load = Task { await vm.loadData(forceDailyDigest: true) }
+        await weather.waitUntilStarted()
+
+        let deadline = ContinuousClock.now.advanced(by: .seconds(2))
+        while vm.isLoading && ContinuousClock.now < deadline {
+            try? await Task.sleep(for: .milliseconds(10))
+        }
+        #expect(!vm.isLoading)
+        #expect(!vm.shouldShowSkeleton(canLoadHealthKitData: true, hasFailedHealthKitAuthorization: false))
+        #expect(vm.sortedMetrics.contains { $0.category == .steps && $0.value == 3_200 })
+        #expect(vm.dailyDigest?.metrics.stepsCount == 3_200)
+        #expect(vm.weatherSnapshot == nil)
+
+        await weather.resume(with: makeTestWeatherSnapshot(condition: .rain))
+        await load.value
+        await vm.weatherRefreshTask?.value
+        #expect(vm.weatherSnapshot?.condition == .rain)
+        #expect(vm.weatherAtmosphere == WeatherAtmosphere.from(makeTestWeatherSnapshot(condition: .rain)))
+        #expect(vm.dailyDigest?.metrics.stepsCount == 3_200)
+    }
+
+    @Test("Late weather from an obsolete load cannot replace current weather")
+    func obsoleteWeatherDoesNotReplaceCurrentWeather() async {
+        let weather = SuspendingDashboardWeatherProvider()
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            weatherProvider: weather,
+            coachingMessageEnhancer: nil
+        )
+        await vm.loadData()
+        await weather.waitUntilStarted()
+        let obsoleteRefresh = vm.weatherRefreshTask
+        #expect(obsoleteRefresh != nil)
+        await vm.loadData()
+        await weather.waitUntilStarted(1)
+        await weather.resume(1, with: makeTestWeatherSnapshot(condition: .rain))
+        await vm.weatherRefreshTask?.value
+        #expect(vm.weatherSnapshot?.condition == .rain)
+
+        await weather.resume(with: makeTestWeatherSnapshot(condition: .clear))
+        await obsoleteRefresh?.value
+        #expect(vm.weatherSnapshot?.condition == .rain)
+    }
+
+    private func makeWeatherViewModel(
+        weather: any WeatherProviding,
+        enhancer: (any CoachingMessageEnhancing)? = nil
+    ) -> DashboardViewModel {
+        DashboardViewModel(
+            hrvService: MockHRVService(), sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(), stepsService: MockStepsService(),
+            bodyService: MockBodyService(), weatherProvider: weather,
+            coachingMessageEnhancer: enhancer
+        )
+    }
+
+    @Test("Weather refreshes published health context before loading tail completes")
+    func weatherDuringLoadingTailRefreshesContext() async {
+        let weather = SuspendingDashboardWeatherProvider()
+        let vm = makeWeatherViewModel(weather: weather)
+        await vm.loadData()
+        await weather.waitUntilStarted()
+        // Model the valid state after core publication, while sparkline work is pending.
+        vm.conditionScore = ConditionScore(score: 84)
+        vm.isLoading = true
+        await weather.resume(with: makeTestWeatherSnapshot(feelsLike: 40))
+        await vm.weatherRefreshTask?.value
+
+        #expect(vm.isLoading)
+        #expect(vm.focusInsight?.id == "weather-extreme-heat")
+        #expect(vm.weatherCardInsight != nil)
+        #expect(vm.briefingData?.temperature == 21)
+        vm.isLoading = false
+    }
+
+    @Test("Permission refresh supersedes the pending background weather response")
+    func permissionWeatherSupersedesBackgroundWeather() async {
+        let weather = SuspendingDashboardWeatherProvider()
+        let vm = makeWeatherViewModel(weather: weather)
+        await vm.loadData()
+        await weather.waitUntilStarted()
+        let obsoleteRefresh = vm.weatherRefreshTask
+        let permissionRefresh = Task { await vm.requestLocationPermission() }
+        await weather.waitUntilStarted(1)
+        await weather.resume(1, with: makeTestWeatherSnapshot(condition: .rain))
+        await permissionRefresh.value
+        await weather.resume(with: makeTestWeatherSnapshot(condition: .clear))
+        await obsoleteRefresh?.value
+
+        #expect(vm.weatherSnapshot?.condition == .rain)
+    }
+
+    @Test("A new dashboard load supersedes an older permission weather refresh")
+    func dashboardWeatherSupersedesPermissionWeather() async {
+        let weather = SuspendingDashboardWeatherProvider()
+        let vm = makeWeatherViewModel(weather: weather)
+        let permissionRefresh = Task { await vm.requestLocationPermission() }
+        await weather.waitUntilStarted()
+        await vm.loadData()
+        await weather.waitUntilStarted(1)
+        await weather.resume(1, with: makeTestWeatherSnapshot(condition: .rain))
+        await vm.weatherRefreshTask?.value
+        await weather.resume(with: makeTestWeatherSnapshot(condition: .clear))
+        await permissionRefresh.value
+
+        #expect(vm.weatherSnapshot?.condition == .rain)
+    }
+
+    @Test("Late weather preserves enhanced coaching without repeating inference")
+    func lateWeatherPreservesEnhancedCoaching() async {
+        let weather = SuspendingDashboardWeatherProvider()
+        let enhancer = CountingDashboardCoachingEnhancer()
+        let vm = makeWeatherViewModel(weather: weather, enhancer: enhancer)
+        vm.recentHighRPEStreak = 5 // Keep a critical recovery focus at every local hour.
+        await vm.loadData()
+        await weather.waitUntilStarted()
+        await vm.enhanceCoachingTask?.value
+        #expect(vm.coachingMessage == "Enhanced coaching")
+        #expect(await enhancer.callCount == 1)
+        await weather.resume(with: makeTestWeatherSnapshot(condition: .clear))
+        await vm.weatherRefreshTask?.value
+        await vm.enhanceCoachingTask?.value
+
+        #expect(vm.coachingMessage == "Enhanced coaching")
+        #expect(await enhancer.callCount == 1)
+    }
+
+    @Test("A stalled weather request does not retain the dashboard")
+    func stalledWeatherDoesNotRetainDashboard() async {
+        let weather = SuspendingDashboardWeatherProvider()
+        var vm: DashboardViewModel? = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            bodyService: MockBodyService(),
+            weatherProvider: weather,
+            coachingMessageEnhancer: nil
+        )
+        await vm?.loadData()
+        await weather.waitUntilStarted()
+        weak var releasedViewModel = vm
+        vm = nil
+        #expect(releasedViewModel == nil)
+        await weather.resume(with: makeTestWeatherSnapshot())
     }
 
     @Test("Latest dashboard load wins over older response")

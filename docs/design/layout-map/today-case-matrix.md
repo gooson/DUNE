@@ -9,6 +9,8 @@ status: implemented-with-coverage-limits
 
 # Today 전체 상태·배치 계약
 
+2026-11-14 Today(T03)와 알림 일간 요약(T10)의 건강 데이터 표시 완료는 날씨·위치·reverse geocoding 응답을 기다리지 않는다. 날씨는 별도로 도착할 때 기존 날씨·코칭 문맥에 반영하고, 이전 로드의 늦은 응답은 폐기한다. HealthKit 권한 준비 중 상태와 실제 건강 조회 완료의 구분은 유지한다. [검증 기록](../../reviews/2026-11-14-today-loading/README.md)과 [새 실제 화면](../phone-design-map/actual/today-loading-2026-11-14/index.html)에서 범위를 확인한다.
+
 [방향 시안](../theme-map/themes/dune-today-restart.html) · [재설계 근거](today-restart-proposal.md). 실제 앱 캡처나 네이티브 검증 결과가 아닌, 현재 코드의 표시 조건을 확인해 만든 디자인 계약이다. 테마는 기존 **DUNE / Desert Warm**을 공통으로 유지한다. Compact·Metrics·Editorial은 배치 대안이며 새 테마가 아니다.
 
 ## 기존 전체 흐름과 제안

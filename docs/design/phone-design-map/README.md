@@ -68,6 +68,8 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-11-14 Today(T03)와 알림 요약(T10)의 날씨 응답 대기 의존을 분리했다. [최종 실제 화면 4장](actual/today-loading-2026-11-14/index.html)은 `origin/main` 기반 P2 보완 후 일반 iPhone·iPad의 요약 진입·Today 복귀이며, 이전 소스의 6장은 역사 기록이다. 최종 단위 44건·선택 UI 1/1씩의 결과와 목표 Duo 접힘·펼침 가로의 미갱신 범위는 [리뷰·Ship 기록](../../reviews/2026-11-14-today-loading/review-ship.md)을 따른다. 기존 화면 ID 개수는 바뀌지 않았다.
+
 2026-11-04 Watch 운동 요약의 스크롤 내용과 고정 완료/재시도 버튼 사이를 12pt로 띄웠다. 전용 40mm Watch·watchOS 27.2에서 관련 UI 4개가 통과했고, [실제 Watch 맵](actual/watch/index.html)의 F01·F02·F03·F06·F07 원본과 출처를 갱신했다. F03의 맨 아래 운동 내역과 버튼 사이 여백을 직접 확인했다. F05 저장 중 상태는 이번에 재캡처하지 않았으며 이전 이미지는 이번 변경의 완료 증거가 아니다. 요약 진입 상태의 기존 지표 가림 표시는 별개 관찰로 유지한다. iPhone·iPad·Duo는 영향이 없다. [배치 기준](../layout-map/watch-summary-spacing.md)과 [해결책·검증 제한](../../solutions/general/2026-11-04-watch-summary-bottom-spacing.md)을 따른다.
 
 2026-10-31 로컬 시간 인사·야간 인사이트를 수정하고 [새 T03·T04·T09 실제 화면 17장](actual/local-time-2026-10-31/index.html)을 통합 포털에 연결했다. 단위 40개와 iPhone 2·iPad 1·Duo 접힘 1·펼침 1의 관련 UI가 통과했다. 펼침의 검은 XCTest PNG는 완료 증거에서 제외하고 활성 내부 LCD-1 native 캡처용 같은 경로를 추가 1건 실행해 통과했다. 기기·시간 fixture·앱 소스 해시·실행별 receipt와 native 원본은 새 갤러리에 보존한다. 기존 다른 worktree의 갤러리 이미지는 이번 수정의 증거로 덮어쓰지 않았다.
