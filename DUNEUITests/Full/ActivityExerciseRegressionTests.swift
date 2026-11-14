@@ -4797,24 +4797,30 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(waitForHittable(save, timeout: 5), "Summary Save must be reachable\n\(app.debugDescription)")
         XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
                       "The whole summary Save action should fit above the window edge")
-        VisualAudit.capture("Cardio summary top title and full Save after permission dismissal")
+        VisualAudit.capture("W25 cardio \(accessibilityText ? "MAX" : "normal") summary top and full Save")
         if VisualAudit.isEnabled {
             let summaryScroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
             XCTAssertTrue(summaryScroll.waitForExistence(timeout: 5), "Cardio summary should own a metric scroll view")
             for (metric, checkpoint) in [("Steps", "steps"), ("Cadence", "cadence")] {
                 let label = app.staticTexts[metric].firstMatch
                 for _ in 0..<8 {
-                    let viewport = summaryScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
-                    if label.exists && viewport.contains(CGPoint(x: label.frame.midX, y: label.frame.midY)) { break }
+                    let scrollFrame = summaryScroll.frame.intersection(app.windows.firstMatch.frame)
+                    let viewport = CGRect(x: scrollFrame.minX + 8, y: scrollFrame.minY + 8,
+                                          width: max(0, scrollFrame.width - 16),
+                                          height: max(0, min(scrollFrame.maxY, save.frame.minY) - scrollFrame.minY - 16))
+                    if label.exists && viewport.contains(label.frame) { break }
                     summaryScroll.swipeUp(velocity: .slow)
                 }
-                let viewport = summaryScroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 8)
-                XCTAssertTrue(label.exists && viewport.contains(CGPoint(x: label.frame.midX, y: label.frame.midY)),
+                let scrollFrame = summaryScroll.frame.intersection(app.windows.firstMatch.frame)
+                    let viewport = CGRect(x: scrollFrame.minX + 8, y: scrollFrame.minY + 8,
+                                          width: max(0, scrollFrame.width - 16),
+                                          height: max(0, min(scrollFrame.maxY, save.frame.minY) - scrollFrame.minY - 16))
+                XCTAssertTrue(label.exists && viewport.contains(label.frame),
                               "Cardio summary \(checkpoint) should reach the visible scroll viewport")
                 XCTAssertTrue(save.isHittable, "Save should remain reachable while reviewing summary metrics")
                 XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
                               "Summary Save should remain wholly visible while metrics scroll")
-                VisualAudit.capture("Cardio summary lower \(checkpoint) and full Save")
+                VisualAudit.capture("W25 cardio \(accessibilityText ? "MAX" : "normal") lower \(checkpoint) and full Save")
             }
         }
     }

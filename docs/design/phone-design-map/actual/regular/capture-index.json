@@ -1436,13 +1436,27 @@
     },
     "W25": {
       "row_id": "W25",
-      "evidence": "cardio-session-summary-screen",
+      "file": "W25.png",
       "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
-      "action": "tap cardio-session-confirm-end",
-      "timestamp": 1791854183.278,
-      "image": "2538293C-5CE9-40A0-B86F-ADF35CDD1BB9.png",
-      "screen": "screen-0-1320x2868-tap cardio-session-confirm-end_0_37F952E5-ED31-4C45-950C-BD698CF8E4DD.png",
-      "file": "W25.png"
+      "action": "W25 cardio normal summary top and full Save",
+      "capture_date": "2026-11-14",
+      "source_revision": "c95e246c71c4fa954d67b3ad956bb80e03939763",
+      "source_worktree_dirty": false,
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "ab9dbfe532f67c043caca2ebf8b2d109ed19b5aa9a59a33342a1be939e6e96cf",
+      "ax_sha256": "5a8dbffbc3019521ece5899dd461bc8a0e106be34a816f9953089b2260712b27",
+      "source_json": "../../../full-redesign-map/review/cardio-summary-w25-2026-11-14/manifest.json",
+      "previous_record": {
+        "row_id": "W25",
+        "evidence": "cardio-session-summary-screen",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
+        "action": "tap cardio-session-confirm-end",
+        "timestamp": 1791854183.278,
+        "image": "2538293C-5CE9-40A0-B86F-ADF35CDD1BB9.png",
+        "screen": "screen-0-1320x2868-tap cardio-session-confirm-end_0_37F952E5-ED31-4C45-950C-BD698CF8E4DD.png",
+        "file": "W25.png"
+      },
+      "capture_scope": "Named Phone normal passed; see gallery for all affected states and explicit limits"
     },
     "W24": {
       "row_id": "W24",

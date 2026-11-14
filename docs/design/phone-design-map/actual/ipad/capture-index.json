@@ -1180,13 +1180,27 @@
     },
     "W25": {
       "row_id": "W25",
-      "evidence": "cardio-session-summary-screen",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
-      "action": "tap cardio-session-confirm-end",
-      "timestamp": 1791854877.934,
-      "image": "07474DBB-8A6F-415D-AB61-19C66A1A8AA8.png",
-      "screen": "screen-0-2064x2752-tap cardio-session-confirm-end_0_C2D98FB8-EC83-478A-848A-92C04AF1A596.png",
-      "file": "W25.png"
+      "file": "W25.png",
+      "test": "ActivityExerciseRegressionTests/testCardioFlowReachesSummary()",
+      "action": "W25 cardio MAX summary top and full Save",
+      "capture_date": "2026-11-14",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "source_worktree_dirty": false,
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "ecf5f082a1447d541c7d1c60c41d299bfe3e9a3a806bab9ec9f4418d3c4d4ccf",
+      "ax_sha256": "47ed182beb8b58feeaa68b910987447d18c0c8a2ca8f0079c9a4684507a227c0",
+      "source_json": "../../../full-redesign-map/review/cardio-summary-w25-2026-11-14/manifest.json",
+      "previous_record": {
+        "row_id": "W25",
+        "evidence": "cardio-session-summary-screen",
+        "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
+        "action": "tap cardio-session-confirm-end",
+        "timestamp": 1791854877.934,
+        "image": "07474DBB-8A6F-415D-AB61-19C66A1A8AA8.png",
+        "screen": "screen-0-2064x2752-tap cardio-session-confirm-end_0_C2D98FB8-EC83-478A-848A-92C04AF1A596.png",
+        "file": "W25.png"
+      },
+      "capture_scope": "Named iPad MAX passed; see gallery for all affected states and explicit limits"
     },
     "W24": {
       "row_id": "W24",
