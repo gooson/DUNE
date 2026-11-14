@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-07",
+  "updated": "2026-11-14",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -1368,6 +1368,18 @@
         "layout": "../layout-map/ai-workout-builder-w34.html",
         "status": "scoped-verified-phone-ipad-ui-only",
         "actual": "../full-redesign-map/review/ai-workout-builder-w34-2026-11-14/index.html"
+      }
+    },
+    {
+      "id": "exercise-categories-w29",
+      "name": "W29 · source layout",
+      "title": "기존 기능과 데이터 보존 · 큰 글씨 배치",
+      "file": "dune-exercise-categories-w29.html",
+      "detail": "2026-11-14 iPad normal/MAX route and W29 native PNG/AX passed at compiled source 15450f83dc. Historical 2026-11-07 Phone records and prior held/skip evidence remain dated; Duo is not recaptured. Static proposal is not an app screenshot.",
+      "implementation": {
+        "layout": "../layout-map/exercise-categories-w29.html",
+        "status": "native-captured-with-explicit-limits",
+        "actual": "../full-redesign-map/review/exercise-categories-w29-2026-11-14/index.html"
       }
     }
   ]

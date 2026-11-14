@@ -307,3 +307,5 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-07 W32: 정적 배치 계약과 실제 PNG/AX를 구분한다.
 
 2026-11-14 W34 is the embedded W13 AI state, not a separate route. [Actual positive evidence and failed iPad MAX diagnostics](../full-redesign-map/review/ai-workout-builder-w34-2026-11-14/index.html) remain HELD; two MAX failures are preserved.
+
+2026-11-14 W29: 정적 배치와 새 iPad 일반/MAX 실제 PNG/AX를 구분한다. 기존 2026-11-07 Phone 기록은 날짜를 유지한다.
