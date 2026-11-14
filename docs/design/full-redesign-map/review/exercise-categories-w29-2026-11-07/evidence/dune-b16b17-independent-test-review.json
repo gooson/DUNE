@@ -1,0 +1,40 @@
+{
+  "status": "source-only final private test preflight; native pending",
+  "base_main": "576cfdb98606baad724a69ced56bb9cb2db86780",
+  "integrated_frozen_source": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+  "test_source_sha256": "aecae826d8e98bc558868f1f06f04f8eec39328958a155c762abe385a47fecb9",
+  "patch_sha256": "7cda395521518b40ffad738f714b3be4f9f5b4a3ce693fbad7e36ebb2debe86e",
+  "introduced_blocking_findings": [],
+  "fixed_private_test_gap": [
+    {
+      "screen": "W32",
+      "issue": "iPad forced-sheet test previously accepted background workout existence after Done while sheet could remain foreground.",
+      "fix": "Wait for WeeklyStats detail sheet to disappear, then require workout controls hittable before existing interactive control assertion.",
+      "source_proof": "WorkoutSessionView.swift has workout-insights-close in sheet toolbar; WeeklyStatsDetailView.swift assigns activity-weeklystats-detail-screen."
+    },
+    {
+      "screen": "W30",
+      "issue": "Cancel after reopening editor previously used global firstMatch and only checked background list existence.",
+      "fix": "Scope Cancel to Edit Category navigation bar and wait for editor form to disappear.",
+      "source_proof": "UserCategoryEditView has englishNavigationTitle Edit Category and cancellationAction Cancel; Form has user-category-edit-screen identifier."
+    }
+  ],
+  "source_and_selector_checks": {
+    "W29_W30": "List and Form IDs, TextField name, disabled Save validation, original icon/color LazyVGrid buttons with no per-choice IDs, Input Type Picker Duration + Distance, created-row label and edit route verified against UserCategoryManagementView.swift. Category name is 49 characters, under 50-character source limit.",
+    "direct_categories": "exerciseToolbarCategories direct ID only; iPad overflow branch explicitly skips rather than claiming navigation via old More. A skipped case is incomplete native evidence.",
+    "W33": "No app/test patch. Prior B12 W28 title-editor source-byte reuse proposal remains separate; no fresh B16 capture claimed.",
+    "S07_W32": "Existing three Insights selectors retain loaded stats, period-choice/value, lower scroll, native close and resumed-workout checks. Added route-named captures; forced iPad sheet now verifies Done geometry, actual dismissal and interactive return.",
+    "typed_roles": "Category Name uses app.textFields and fillTextInput; Picker choice uses descendants(any) for native Form picker presentation. No SearchField call.",
+    "test_scope": "Two new category selectors and class-local helper; existing Insights selectors only gain captures and W32 forced-sheet assertions. No fixture or global helper edits; no B13 held methods added."
+  },
+  "native_limits": [
+    "Icon and color choice are positional due absent individual accessibility IDs; selected-state PNG/AX must be reviewed before quality gate.",
+    "iPad Categories native overflow is skipped, so W29/W30 iPad route remains pending if button hidden.",
+    "Actual source validation, successful SDK, and fresh current-source maps still pending. Historical dirty S07/W32 captures are not after evidence."
+  ],
+  "verification": [
+    "git apply --check succeeds over baseMain0ac14903 and frozen B14+B15 test6c8 source.",
+    "swiftc -frontend -parse succeeds on private candidate.",
+    "No SDK execution or repository mutation."
+  ]
+}

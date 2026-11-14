@@ -1,0 +1,67 @@
+{
+  "status": "Phone family closed after first run and one cause-specific same-ID retry; iPad pending",
+  "app_source": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+  "retry_source": "b62dc5b98c453810706928fb831b5c8c6d749fa8",
+  "first_counts": {
+    "executed": 7,
+    "passed": 3,
+    "failed": 4,
+    "skipped": 0
+  },
+  "retry_counts": {
+    "executed": 4,
+    "passed": 3,
+    "failed": 1,
+    "skipped": 0
+  },
+  "unique_selector_outcome": {
+    "passed": 6,
+    "failed": 1,
+    "not_7_of_7": true
+  },
+  "provenance": {
+    "new_retry_pairs_checked": 22,
+    "new_retry_after_pairs": 21,
+    "new_retry_diagnostic_pairs": 1,
+    "all_new_png_ax_sha256_match_gallery_manifest_and_raw_attachment": true,
+    "first_passed_pairs_review": "/private/tmp/dune-b14b15-phone-first-native-review.json"
+  },
+  "per_screen": {
+    "W16": {
+      "phone_after": "MAX only, 1 named pair",
+      "proof": "MAX first template session shows Exercise 1 of 2, Set 1 of 3, planned reps 6, weight 80 and full Complete Set. Retry MAX selector passed.",
+      "limit": "Normal selector failed at late optional Start snapshot race; teardown proves normal advanced but is diagnostic, no normal after map. Transition 2 sets vs first session Set 1 of 3 is existing behavior; no claim 2 sets honored."
+    },
+    "W22": {
+      "phone_after": "MAX only, 1 named pair; normal 1 diagnostic pair",
+      "proof": "MAX transition shows original 2 sets, 6 reps, 80 kg and full Start (1), then MAX first session. Normal diagnostic shows same defaults and Start (1), teardown shows auto-advanced first session.",
+      "limit": "Normal test still failed on stale optional Start tap, so normal gallery stays diagnostic; no fresh normal after. Five-second transition limits capture timing."
+    },
+    "W23": {
+      "phone_after": "normal 2 + MAX 3 named pairs",
+      "proof": "Normal Indoor/Outdoor cards, original icons, title and location notice readable. MAX Indoor/Outdoor full width and vertical extent within scroll, location notice text complete; normal/MAX Running selectors passed.",
+      "limit": "Outdoor GPS mode itself not started; no permission flow or location tracking claim. MAX captures repeated similar viewport for separate checkpoints."
+    },
+    "W24": {
+      "phone_after": "default Stair Climber 2 + Running normal 4 + Running MAX 4 named pairs",
+      "proof": "Running normal/MAX elapsed status, distance 0.00 km and pace --:--/km, lower steps/spm units, pinned Pause/End complete and reachable. Original motion-start Notice was explicitly acknowledged before normal capture. Stair Climber Level 3 machine branch separately passed default text.",
+      "limit": "Steps/cadence and pace are unavailable -- in simulator, so metric layout/units and controls proved, not live sensor numerical accuracy. MAX lower metric screenshots show one section per scrolled viewport; not all metrics simultaneously visible."
+    },
+    "W25": {
+      "phone_after": "default Stair Climber 1 + Running normal 3 + Running MAX 3 named pairs",
+      "proof": "Running summary normal/MAX title, duration, distance, pace/calories, lower Steps/Cadence cards, and full pinned Save reachable after scrolling. Stair Climber level history 2→3 and full Save independently proved at default text.",
+      "limit": "Save was deliberately not tapped; no persisted workout or external sync claim. Running Steps/Cadence show -- because simulator motion tracking unavailable, no numeric measurement claim."
+    },
+    "W19_W20_W21": {
+      "phone_after": "12 pairs from first passed Compound normal/MAX selectors",
+      "proof": "See first-native-review; no retry rerun or source app change."
+    }
+  },
+  "verified_introduced_app_P1_P2": [],
+  "pending": [
+    "iPad first planned 7 selector run after test-only optional Start removal; no iPad success presumed.",
+    "Phone normal W16/W22 remains incomplete after closed two attempts; keep historical regular map/diagnostic with pending note, not after.",
+    "Duo closed/open current-source captures pending."
+  ],
+  "no_more_phone_retry": true
+}

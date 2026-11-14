@@ -1,0 +1,152 @@
+{
+  "review": "B09 iPhone native visual review and W03/W04 static Security/Data Integrity/Architecture cross-check",
+  "frozen_source": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+  "scope": "phone exact four new visual audit selectors; no SDK or repository edit by reviewer",
+  "receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/phone-ui.log.result.json",
+  "receipt_counts": {
+    "executed": 4,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 1
+  },
+  "xctest_summary": {
+    "total": 4,
+    "passed": 3,
+    "failed": 1
+  },
+  "viewed_passed_png_ax": {
+    "W01": [
+      {
+        "title": "Exercise library",
+        "png": "/private/tmp/dune-b09-gallery-prep/W01/assets/01-regular-phone-normal-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W01/assets/01-regular-phone-normal-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "d2a10b99-ca92-4554-ae75-6ac55107070b"
+      },
+      {
+        "title": "MAX exercise library",
+        "png": "/private/tmp/dune-b09-gallery-prep/W01/assets/02-regular-phone-max-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W01/assets/02-regular-phone-max-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "69af5d09-36ab-4c39-876b-82421de7cb73"
+      }
+    ],
+    "W02": [
+      {
+        "title": "Exercise picker",
+        "png": "/private/tmp/dune-b09-gallery-prep/W02/assets/01-regular-phone-normal-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W02/assets/01-regular-phone-normal-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "9a635203-6c9c-48d0-831c-c2bc8b83d4e2"
+      },
+      {
+        "title": "Filtered Bench Press info",
+        "png": "/private/tmp/dune-b09-gallery-prep/W02/assets/02-regular-phone-normal-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W02/assets/02-regular-phone-normal-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "d844421c-44f5-4a8d-8b72-5e05dfd4a178"
+      },
+      {
+        "title": "MAX exercise picker",
+        "png": "/private/tmp/dune-b09-gallery-prep/W02/assets/03-regular-phone-max-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W02/assets/03-regular-phone-max-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "6cfd623f-6ce7-466b-b342-ae71d47cb824"
+      },
+      {
+        "title": "MAX filtered Bench Press info",
+        "png": "/private/tmp/dune-b09-gallery-prep/W02/assets/04-regular-phone-max-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W02/assets/04-regular-phone-max-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "e7b69803-48b7-4166-9de3-92205bb2e210"
+      }
+    ],
+    "W03": [
+      {
+        "title": "Exercise detail",
+        "png": "/private/tmp/dune-b09-gallery-prep/W03/assets/01-regular-phone-normal-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W03/assets/01-regular-phone-normal-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "b6f43810-55cc-4fb0-800e-bb2f20b257f3"
+      },
+      {
+        "title": "MAX exercise detail",
+        "png": "/private/tmp/dune-b09-gallery-prep/W03/assets/02-regular-phone-max-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W03/assets/02-regular-phone-max-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "30641cf5-e738-4df0-8612-2ebdb9d24970"
+      }
+    ],
+    "W04": [
+      {
+        "title": "Custom exercise form",
+        "png": "/private/tmp/dune-b09-gallery-prep/W04/assets/01-regular-phone-normal-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W04/assets/01-regular-phone-normal-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "c3a9babd-982a-47bc-aaa6-345a86f7aa39"
+      },
+      {
+        "title": "Cardio category readback",
+        "png": "/private/tmp/dune-b09-gallery-prep/W04/assets/02-regular-phone-normal-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W04/assets/02-regular-phone-normal-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "970d97bd-45b3-4ca5-aeb5-a370e23b6009"
+      },
+      {
+        "title": "MAX custom exercise form",
+        "png": "/private/tmp/dune-b09-gallery-prep/W04/assets/03-regular-phone-retry1-max-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W04/assets/03-regular-phone-retry1-max-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "4222326e-4fbe-4e3b-91be-28f1e34a557c",
+        "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d"
+      },
+      {
+        "title": "MAX Cardio category readback",
+        "png": "/private/tmp/dune-b09-gallery-prep/W04/assets/04-regular-phone-retry1-max-after.png",
+        "ax": "/private/tmp/dune-b09-gallery-prep/W04/assets/04-regular-phone-retry1-max-after.txt",
+        "selector_state": "passed",
+        "capture_uuid": "03853931-f106-4637-8980-c65e7c526c70",
+        "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d"
+      }
+    ]
+  },
+  "introduced_source_or_phone_P1_P2_findings": [],
+  "native_observations": {
+    "W01": "Normal/MAX exercise library screenshots show the existing recommendations and history with names; MAX rows scroll and no new clipping from the two-line full-row title change was established in the captured viewport. Only named captures from passed selectors count.",
+    "W02": "Normal/MAX picker and filtered Bench Press screenshots show localized/English names, equipment, muscles and preserved info buttons. MAX info button remains visible and the passed selector opens detail and returns. Native MAX search field ellipsizes its query, outside the W02 row-layout patch.",
+    "W03": "Normal/MAX detail sheet keeps Close/Start, original equipment SVG, localized and English names, category/equipment, About and form cues. MAX header stacks and full name fits. AX also materializes Input (x23.4,y2968.4), Weight + Reps (y3019.8), MET (y3084.1), and 5.0 (y3135.5) in a vertical, nonoverlapping same-x stack; a lower-viewport PNG/scroll interaction was not captured.",
+    "W04": "Normal empty New Exercise form and Cardio readback show native segmented category, Create disabled, changed Duration + Distance input, and Cancel route. Corrected MAX audit shows native Category menu, original user category, disabled Create, and Cardio selected with Duration + Distance readback in AX; the passed retry also returns via Cancel. The unchanged Input Type value is visually ellipsized at MAX although AX reports the complete value. Normal fifth segmented label truncation is preexisting."
+  },
+  "W03_W04_static_crosscheck": {
+    "security": "No new external request, permission, secret handling or input path. W03 Close and Start closures, W04 Create/Cancel closures and model insert are unchanged.",
+    "data_integrity": "W03 uses the same exercise identity, localized name, category/equipment, MET and cue data. W04 selectedCategory binding, onChange input reset, selectedUserCategory toggle, validation guard and createExercise insertion remain; MAX menu changes only Picker presentation.",
+    "architecture": "All changes stay inside presentation views; no new model/service dependency or state owner. Selected traits report existing chip state rather than creating alternate selection state."
+  },
+  "failed_selector": {
+    "selector": "testVisualAuditCustomCreateAtMaximumText",
+    "failure": "Before W04 screen: Add Exercise button in template form was offscreen at MAX; existing helper expected immediate existence. Parent confirmed native pre-tap image and AX show AI generator and Template Name but not Add Exercise.",
+    "app_bug_inference": "none from this failure; W04 MAX UI itself was not reached",
+    "retry_condition": "A bounded MAX-only Form scroll in the new audit helper can address the observed offscreen precondition; normal helper and three passed selectors should remain unchanged.",
+    "retry_status": "Resolved by test-only MAX helper in e986f3ad94fd5f009090a2f6c90013c485ebd48d. It scrolls the template Form at most 12 slow swipes to the existing Add Exercise button; normal branch retains original helper. App and catalog hashes remain f049. Retry requested only W04 MAX and passed 1/1. Initial 4-test receipt remains 3/4 with one failure; the failed attempt is not relabeled."
+  },
+  "limits": [
+    "Only one phone light-mode fixture and named captures were reviewed. iPad and current Duo evidence pending.",
+    "W01 MAX chips wrap within capsules and W02 MAX native search query ellipsizes in the captured viewport; neither is introduced by the reviewed narrow changes.",
+    "The four focused phone behaviors now have passed selector evidence across two attempts (initial 3/4 plus W04 MAX retry 1/1); this is not a single all-four-green run.",
+    "W03 lower Input/MET arrangement is supported by AX frames only, without lower-viewport PNG or scroll interaction.",
+    "W04 MAX Input Type is visually ellipsized in the unchanged control; AX has full selected value. No save/validation/persistence claim."
+  ],
+  "phone_retry1": {
+    "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+    "receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/phone-retry1-ui.log.result.json",
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    "test_delta": "MAX-only bounded template Form scrolling helper; original three passed methods and normal W04 helper unchanged",
+    "app_source_identical_to_initial": true,
+    "new_W04_MAX_capture_count": 2
+  }
+}

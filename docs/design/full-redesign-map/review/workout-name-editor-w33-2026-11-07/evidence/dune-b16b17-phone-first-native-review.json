@@ -1,0 +1,47 @@
+{
+  "status": "first-phone-native-review; retry pending",
+  "frozen_source": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+  "first_run": {
+    "executed": 7,
+    "passed": 6,
+    "failed": 1,
+    "failed_selector": "testVisualAuditWorkoutInsights normal"
+  },
+  "gallery": "/private/tmp/dune-b16b17-gallery-prep",
+  "integrity": "All 21 exported Phone PNG/AX pairs byte-match raw SDK attachments and SHA-256 manifest entries. Gallery classifies 19 as passed after, one passed-XCTest W29 MAX native-gate-failed diagnostic, and one failed-XCTest W32 normal diagnostic. Four historical profiles remain historical.",
+  "screens": {
+    "W29": {
+      "pairs_after": 3,
+      "case_status": "normal/MAX selector passed",
+      "native": "Normal built-in and custom rows readable; MAX built-in icon/name/Default visible.",
+      "limit": "MAX long custom row capture y777.7–1285.4 exceeds tab-bar boundary y873; child name y792.7–1166 and input type y1168–1270.3 are not fully visible. Hittable/exists test does not prove changed row layout. Native visual gate pending a bounded scroll/full-row capture in same permitted retry. First-run clipped pair is now diagnostic with selector_state passed and native_gate failed; required fresh full-row title remains pending.",
+      "pairs_diagnostic": 1
+    },
+    "W30": {
+      "pairs_after": 12,
+      "case_status": "normal/MAX selector passed",
+      "native": "Original icon and color choices, selected states, valid long name Save and reopened editor captured in both sizes.",
+      "limit": "MAX selected input-type Picker visually ellipsizes Duration + Distance although AX has full value; changed source is icon/color grid, not Picker layout. Do not claim the whole Picker string visible."
+    },
+    "W33": {
+      "pairs_after": 2,
+      "case_status": "normal/MAX imported W28 selector passed",
+      "native": "Fresh normal/MAX workout-name editor PNG/AX; title field and Cancel/Save accessible.",
+      "limit": "MAX sheet title visually ellipsized; W33 app source unchanged. Editor capture is fresh, not recycled from B12."
+    },
+    "W32": {
+      "pairs_after": 2,
+      "pairs_diagnostic": 1,
+      "case_status": "MAX passed; normal failed chart metric role before completion",
+      "native": "MAX loaded stats/Close and period-selected state captured. Normal loaded-stats frame is diagnostic only.",
+      "limit": "Normal chart uses SegmentedControl, while failed test queried Button; normal must not be promoted to after until cause-specific retry passes."
+    },
+    "S07": {
+      "pairs_after": 0,
+      "native": "No Phone S07 capture; iPad separate-window route planned.",
+      "limit": "Phone cannot substantiate S07 redesign."
+    }
+  },
+  "introduced_app_p1_p2_verified": [],
+  "gate": "Pending same-ID Phone retry for normal W32 and MAX W29 native layout, then planned iPad. Do not treat six passed methods as full screen-level approval."
+}

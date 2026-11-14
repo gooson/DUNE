@@ -606,6 +606,21 @@ extension XCUIApplication {
         return textFields[AXID.habitFormName].firstMatch.waitForExistence(timeout: timeout)
     }
 
+    @discardableResult
+    func waitAndTapExerciseSecondaryAction(_ identifier: String, timeout: TimeInterval = 8) -> Bool {
+        let action = descendants(matching: .any)[identifier].firstMatch
+        if action.exists && action.isHittable {
+            action.auditTap()
+            return true
+        }
+        let menu = buttons["exercise-toolbar-secondary"].firstMatch
+        guard menu.waitForExistence(timeout: timeout) && menu.isHittable else { return false }
+        menu.auditTap()
+        guard action.waitForExistence(timeout: timeout) && action.isHittable else { return false }
+        action.auditTap()
+        return true
+    }
+
     /// Reveals secondary toolbar actions moved into the system overflow menu.
     @discardableResult
     func waitAndTapToolbarAction(_ identifier: String, timeout: TimeInterval = 5) -> Bool {

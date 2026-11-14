@@ -209,7 +209,7 @@ struct NotificationHubView: View {
         case sleepDetail(itemID: String)
         case postureAssessment(itemID: String)
         case dailyDigest(itemID: String)
-        case message(itemID: String, title: String, body: String)
+        case message(itemID: String, title: String, body: String, createdAt: Date, insightType: HealthInsight.InsightType)
         case whatsNew(version: String)
 
         var id: String {
@@ -229,7 +229,7 @@ struct NotificationHubView: View {
                 return "posture-assessment-\(itemID)"
             case .dailyDigest(let itemID):
                 return "daily-digest-\(itemID)"
-            case .message(let itemID, _, _):
+            case .message(let itemID, _, _, _, _):
                 return "message-\(itemID)"
             case .whatsNew(let version):
                 return "whats-new-\(version)"
@@ -290,8 +290,10 @@ struct NotificationHubView: View {
                     canLoadHealthKitData: canLoadHealthKitData,
                     hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization
                 )
-            case .message(_, let title, let body):
-                NotificationMessageDetailView(title: title, message: body)
+            case .message(_, let title, let body, let createdAt, let insightType):
+                NotificationMessageDetailView(
+                    title: title, message: body, createdAt: createdAt, insightType: insightType
+                )
             case .whatsNew(let version):
                 WhatsNewView(
                     releases: WhatsNewManager.shared.orderedReleases(preferredVersion: version),
@@ -595,16 +597,23 @@ struct NotificationHubView: View {
         case .dailyDigest:
             destination = .dailyDigest(itemID: opened.id)
         case .notificationHub:
-            destination = .message(itemID: opened.id, title: opened.title, body: opened.body)
+            destination = messageDestination(for: opened)
         case .workoutDetail, .lifeChecklist:
             break
         case nil:
             if let metric = NotificationHubMetricResolver.metric(for: opened) {
                 destination = .metric(metric, itemID: opened.id)
             } else {
-                destination = .message(itemID: opened.id, title: opened.title, body: opened.body)
+                destination = messageDestination(for: opened)
             }
         }
+    }
+
+    private func messageDestination(for item: NotificationInboxItem) -> HubDestination {
+        .message(
+            itemID: item.id, title: item.title, body: item.body,
+            createdAt: item.createdAt, insightType: item.insightType
+        )
     }
 
     private func notificationRow(for item: NotificationInboxItem, index: Int) -> some View {
@@ -755,47 +764,73 @@ struct NotificationHubView: View {
 private struct NotificationMessageDetailView: View {
     let title: String
     let message: String
+    let createdAt: Date
+    let insightType: HealthInsight.InsightType
 
     @Environment(\.appTheme) private var theme
     @Environment(\.colorScheme) private var colorScheme
-    @ScaledMetric(relativeTo: .largeTitle) private var heroSymbolSize: CGFloat = 48
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private let content: NotificationMessageContent
+
+    init(title: String, message: String, createdAt: Date, insightType: HealthInsight.InsightType) {
+        self.title = title
+        self.message = message
+        self.createdAt = createdAt
+        self.insightType = insightType
+        content = NotificationMessageContent(message: message, insightType: insightType)
+    }
 
     private var palette: ScoreHeroPalette { ScoreHeroPalette(theme: theme, colorScheme: colorScheme) }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: DS.Spacing.md) {
-                VStack(alignment: .leading, spacing: DS.Spacing.xxl) {
-                    Image(systemName: "bell")
-                        .font(.system(size: min(heroSymbolSize, 64), weight: .medium))
-                        .foregroundStyle(palette.heroAccent)
-                        .padding(DS.Spacing.md)
-                        .background(
-                            palette.muted.opacity(DS.Opacity.overlay),
-                            in: RoundedRectangle(cornerRadius: DS.Radius.lg)
-                        )
-                        .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                HStack(alignment: .top, spacing: DS.Spacing.lg) {
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Image(systemName: insightType.settingsIcon)
+                            .font(.title2)
+                            .foregroundStyle(palette.heroAccent)
+                            .padding(DS.Spacing.md)
+                            .background(
+                                palette.muted.opacity(DS.Opacity.overlay),
+                                in: RoundedRectangle(cornerRadius: DS.Radius.lg)
+                            )
+                            .accessibilityHidden(true)
+                    }
 
-                    Text(title)
-                        .font(.largeTitle.bold())
-                        .foregroundStyle(palette.ink)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityIdentifier("notification-message-title")
-                        .accessibilityAddTraits(.isHeader)
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        Text(title)
+                            .font(.title2.bold())
+                            .foregroundStyle(palette.ink)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityIdentifier("notification-message-title")
+                            .accessibilityAddTraits(.isHeader)
+
+                        Text(createdAt, format: .dateTime.year().month(.abbreviated).day().hour().minute())
+                            .font(.caption)
+                            .foregroundStyle(palette.muted)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("notification-message-date")
+                    }
                 }
-                .padding(DS.Spacing.xxl)
+                .padding(DS.Spacing.xl)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(palette.surface, in: RoundedRectangle(cornerRadius: DS.Radius.xxl))
 
-                StandardCard {
-                    Text(message)
-                        .font(.body)
-                        .foregroundStyle(.primary)
-                        .lineSpacing(5)
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityIdentifier("notification-message-body")
+                if content.measurements.isEmpty {
+                    StandardCard {
+                        Text(message)
+                            .font(.body)
+                            .foregroundStyle(.primary)
+                            .lineSpacing(5)
+                            .textSelection(.enabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityIdentifier("notification-message-body")
+                    }
+                } else {
+                    measurementCards
                 }
             }
             .frame(maxWidth: 680)
@@ -806,6 +841,33 @@ private struct NotificationMessageDetailView: View {
         .background { DetailWaveBackground() }
         .navigationBarTitleDisplayMode(.inline)
         .englishNavigationTitle("Notification")
+    }
+
+    private var measurementCards: some View {
+        LazyVGrid(
+            columns: Array(repeating: GridItem(.flexible(), alignment: .top),
+                           count: dynamicTypeSize.isAccessibilitySize ? 1 : 2),
+            alignment: .leading, spacing: DS.Spacing.md
+        ) {
+            ForEach(Array(content.measurements.enumerated()), id: \.offset) { index, measurement in
+                StandardCard {
+                    VStack(alignment: .leading, spacing: DS.Spacing.md) {
+                        Text(measurement.label)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Text(measurement.value)
+                            .font(.system(.largeTitle, design: .rounded, weight: .semibold))
+                            .foregroundStyle(.primary)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("notification-measurement-value-\(index)")
+                    }
+                    .textSelection(.enabled)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+        }
+        .accessibilityIdentifier("notification-message-measurements")
     }
 }
 

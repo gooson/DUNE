@@ -1,0 +1,64 @@
+{
+  "screen": "W04",
+  "capture_date": "2026-11-14",
+  "compiled_source": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+  "states": [
+    {
+      "state": "W04 normal custom exercise form",
+      "device": "iPad",
+      "batch": "extra-ipad-01",
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText()",
+      "source_revision": "15450f83dcedc8628c44a9327aea5497031b375e",
+      "asset": "01-extra-ipad-01",
+      "png_sha256": "74770b2ca02b4408041c5e205ba419bfb23381cf2c7d1159273cf4fb6ca9bdfa",
+      "ax_sha256": "dbe629b5b8816f0f097f2cae14fb56c88921cbb9bb170d18dda401ee07e8b12e",
+      "original_png": "48F6EF4F-1987-4D87-8D7E-93F70A3011C6.png",
+      "original_ax": "606B7575-7A5B-44A5-BF0C-7AD09F5E6C31.txt",
+      "result": "passed"
+    },
+    {
+      "state": "W04 normal Cardio category readback",
+      "device": "iPad",
+      "batch": "extra-ipad-01",
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText()",
+      "source_revision": "15450f83dcedc8628c44a9327aea5497031b375e",
+      "asset": "02-extra-ipad-01",
+      "png_sha256": "8ca3a106e707dd6e7379dab1bba75f41f332dd55f363a7c017babeb1432794f0",
+      "ax_sha256": "a564ebb4576d9434ee83635d526ba6b5e6f3dc20d28195fe8bdd1f3164c78554",
+      "original_png": "CE85B90A-0A38-49D9-A29A-665A4027FB2D.png",
+      "original_ax": "20138EBD-1C23-48B8-B6FA-81564BCF132B.txt",
+      "result": "passed"
+    },
+    {
+      "state": "W04 MAX custom exercise form",
+      "device": "iPad",
+      "batch": "extra-ipad-02",
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText()",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "asset": "03-extra-ipad-02",
+      "png_sha256": "d2bb27dd064dd0fbd84bb34d2ca0f2bee115272a65f5f8e416731a6742f5aad4",
+      "ax_sha256": "1ca4d622a015b06cae99493c94c70086e2f460e597f22806daa05a69f023c201",
+      "original_png": "0295161F-6427-49D8-91F8-0AA910FCE8A1.png",
+      "original_ax": "9D80486B-F0CA-4A9E-8B8C-61FCA1F791E6.txt",
+      "result": "passed"
+    },
+    {
+      "state": "W04 MAX Cardio category readback",
+      "device": "iPad",
+      "batch": "extra-ipad-02",
+      "test": "ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText()",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "asset": "04-extra-ipad-02",
+      "png_sha256": "c33abb4640976d9dfe74672956d355ff43eb61f67e1f17c413d7758c8ca0cdbb",
+      "ax_sha256": "d448500d2fafc6450b4998624d3301f44daa73e6973e30642564d913b46d7252",
+      "original_png": "46EFCD5A-51CD-4B2C-992D-C963F4199086.png",
+      "original_ax": "45BE300F-945F-42A9-9FC2-46BFCDE52C89.txt",
+      "result": "passed"
+    }
+  ],
+  "historical": "Original 2026-11-07 review tree remains on the existing PR branch, with all failed/skip/diagnostic evidence unchanged.",
+  "limits": [
+    "Duo not recaptured",
+    "W04 Create and W25 Save are verified visible and enabled/disabled as appropriate; neither is tapped for persistence in these visual selectors."
+  ]
+}

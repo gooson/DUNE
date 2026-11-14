@@ -1,0 +1,244 @@
+{
+  "screen_id": "W33",
+  "original_source": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+  "final_integration_source": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+  "source_lineage_proof": {
+    "original_execution_source": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+    "final_integration_source": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+    "app_source_byte_equivalent": true,
+    "app_source_evidence": "git diff --name-status b81aad042d3ba35e0b6e70b559a00448704bf1c4 d731fd8cc162c7be5134e7100330fdff83bef64a shows only DUNEUITests/Full/ActivityExerciseRegressionTests.swift; all app source is byte-identical.",
+    "run_revisions": {
+      "phone": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "phone-retry1": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "ipad": "d731fd8cc162c7be5134e7100330fdff83bef64a"
+    },
+    "row_rules": {
+      "W29_MAX_full_row": "phone-retry1 d731 only; first phone b81 clipped row is diagnostic",
+      "W32_phone_normal": "phone-retry1 d731 passed; first phone b81 failed selector row is diagnostic",
+      "ipad": "first iPad run d731: five Passed, two intentionally Skipped Categories; no iPad retry",
+      "S07_W32_MAX_period": "named capture is closed Picker control before tap; passed selector subsequently checks three options and range change/restore"
+    }
+  },
+  "source_contract": ".codex-checks/b16b17/execution-contract.json",
+  "rows": [
+    {
+      "profile": "regular",
+      "kind": "historical",
+      "title": "W33 actual-map older-source context",
+      "image": "historical/regular-W33.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "sha256": "9ba381e6f133fc3735c4a80355d8ba3800cadffc65fe5d7431684779240cc38f",
+      "capture_index_entry": "historical/regular-W33-index.json",
+      "is_primary": false
+    },
+    {
+      "profile": "ipad",
+      "kind": "historical",
+      "title": "W33 actual-map older-source context",
+      "image": "historical/ipad-W33.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "sha256": "f1ad90ab4d7a5379634856315cd90e0c6d8a6e0815558763b1c73944dfa81c58",
+      "capture_index_entry": "historical/ipad-W33-index.json",
+      "is_primary": false
+    },
+    {
+      "profile": "duo",
+      "kind": "historical",
+      "title": "W33 actual-map older-source context",
+      "image": "historical/duo-W33.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "sha256": "b25cb723b7e9e368715244f4e1280f0cfc28e33ef2e67fff0ecaad6f90a20c1d",
+      "capture_index_entry": "historical/duo-W33-index.json",
+      "is_primary": false
+    },
+    {
+      "profile": "duo-open",
+      "kind": "historical",
+      "title": "W33 actual-map older-source context",
+      "image": "historical/duo-open-W33.png",
+      "ax": null,
+      "source_revision": "443a32ca4fe8b79d644b36853eaa7662e7a57606",
+      "source_worktree_dirty": true,
+      "sha256": "5b6f1976eb71cb620a042d8a9e3d13a56d6608491252f8e03bcedd7c24dd3c55",
+      "capture_index_entry": "historical/duo-open-W33-index.json",
+      "is_primary": false
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "title": "W33 normal workout name editor fresh",
+      "image": "assets/01-regular-phone-normal-after.png",
+      "ax": "assets/01-regular-phone-normal-after.txt",
+      "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "run_id": "phone",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtNormalText()",
+      "selector_state": "passed",
+      "capture_uuid": "0f45f6c5-5c2d-4abd-9d55-cf211d2c3f25",
+      "timestamp": 1794008166.466,
+      "sha256": "aab7267f2031dd9984650538c987f6197aeaa0bb4298f421c1ff90b30967bf52",
+      "ax_sha256": "b3d7adcac4ac7ef7e615cc13984b2af20ae2d6ff8046a04b309699ac1944214f",
+      "source_image": ".codex-checks/b16b17/phone-attachments/8857E795-5F95-42C9-8CC4-762EA9477816.png",
+      "source_ax": ".codex-checks/b16b17/phone-attachments/DEF5AA94-1074-498C-9F67-C90315400E0A.txt",
+      "pair_manifest": ".codex-checks/b16b17/phone-attachments/manifest.json",
+      "is_primary": true,
+      "actual_angle": null,
+      "fresh_W33_capture": true
+    },
+    {
+      "profile": "regular",
+      "kind": "after",
+      "title": "W33 MAX workout name editor fresh",
+      "image": "assets/02-regular-phone-MAX-after.png",
+      "ax": "assets/02-regular-phone-MAX-after.txt",
+      "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "run_id": "phone",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtMaximumText()",
+      "selector_state": "passed",
+      "capture_uuid": "8c176a6d-0887-4230-a6fd-48fe071547fb",
+      "timestamp": 1794008113.643,
+      "sha256": "7be959bae12b347d836c3d3e4172d68bc4a3b44864dc731e77c38d3ae2be311b",
+      "ax_sha256": "4ee1d21ed01a55eaf89d453afef05cc75e516b0763f5b84a0c5a0059d4a287c8",
+      "source_image": ".codex-checks/b16b17/phone-attachments/CD32AB20-2256-4092-8768-8B196BA64A1B.png",
+      "source_ax": ".codex-checks/b16b17/phone-attachments/D7CA49D1-666F-41AD-AC9A-740B04E33EFE.txt",
+      "pair_manifest": ".codex-checks/b16b17/phone-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null,
+      "fresh_W33_capture": true
+    },
+    {
+      "profile": "ipad",
+      "kind": "after",
+      "title": "W33 normal workout name editor fresh",
+      "image": "assets/03-ipad-ipad-normal-after.png",
+      "ax": "assets/03-ipad-ipad-normal-after.txt",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "run_id": "ipad",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtNormalText()",
+      "selector_state": "passed",
+      "capture_uuid": "a17bccaa-016a-41cc-814c-4d4a8e0d2662",
+      "timestamp": 1794009985.511,
+      "sha256": "1e9f570c09e56a923678b4eafe5653f1148441c495626f2a51dac0a1ee5d0ca4",
+      "ax_sha256": "f1ff145bc7a28926914a146de68ed86dd2121e6defe436eb2c2d570c9ec3072e",
+      "source_image": ".codex-checks/b16b17/ipad-attachments/B3D5FFF8-1662-432C-9123-148CBFC98F71.png",
+      "source_ax": ".codex-checks/b16b17/ipad-attachments/1F6CE5D2-478A-44A4-B455-E892352BC3B3.txt",
+      "pair_manifest": ".codex-checks/b16b17/ipad-attachments/manifest.json",
+      "is_primary": true,
+      "actual_angle": null,
+      "fresh_W33_capture": true
+    },
+    {
+      "profile": "ipad",
+      "kind": "after",
+      "title": "W33 MAX workout name editor fresh",
+      "image": "assets/04-ipad-ipad-MAX-after.png",
+      "ax": "assets/04-ipad-ipad-MAX-after.txt",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "run_id": "ipad",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditImportedWorkoutAtMaximumText()",
+      "selector_state": "passed",
+      "capture_uuid": "b9ada058-5578-4f6c-a202-d2e4c20f0284",
+      "timestamp": 1794009929.731,
+      "sha256": "f9bc2addc9673f9800561ba9e77a342f2397e90f0d3786138d2fd9e019307c54",
+      "ax_sha256": "634236f47546e5fa4c956c87389fedc6b8400d884abb41c0d8bc8a79c467f048",
+      "source_image": ".codex-checks/b16b17/ipad-attachments/5D7DCF10-CDBB-4157-AA1F-D5F493F1BA79.png",
+      "source_ax": ".codex-checks/b16b17/ipad-attachments/A49DF1D2-5BCD-4499-B770-3A95AB4DD8C5.txt",
+      "pair_manifest": ".codex-checks/b16b17/ipad-attachments/manifest.json",
+      "is_primary": false,
+      "actual_angle": null,
+      "fresh_W33_capture": true
+    }
+  ],
+  "gates": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "b81aad042d3ba35e0b6e70b559a00448704bf1c4",
+      "counts": {
+        "executed": 7,
+        "passed": 6,
+        "skipped": 0,
+        "failed": 1
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditUserCategoriesAtNormalText": "passed",
+        "testVisualAuditUserCategoriesAtMaximumText": "passed",
+        "testVisualAuditWorkoutInsights": "failed",
+        "testVisualAuditWorkoutInsightsSheetFallback": "passed",
+        "testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize": "passed",
+        "testVisualAuditImportedWorkoutAtNormalText": "passed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "passed"
+      },
+      "result_note": "completed per-case xcresult statuses match runner and summary",
+      "contract_issue": null,
+      "receipt": ".codex-checks/b16b17/phone-ui.log.result.json",
+      "attachments": ".codex-checks/b16b17/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditUserCategoriesAtNormalText": "not_executed",
+        "testVisualAuditUserCategoriesAtMaximumText": "passed",
+        "testVisualAuditWorkoutInsights": "passed",
+        "testVisualAuditWorkoutInsightsSheetFallback": "not_executed",
+        "testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize": "not_executed",
+        "testVisualAuditImportedWorkoutAtNormalText": "not_executed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "not_executed"
+      },
+      "result_note": "completed per-case xcresult statuses match runner and summary",
+      "contract_issue": null,
+      "receipt": ".codex-checks/b16b17/phone-retry1-ui.log.result.json",
+      "attachments": ".codex-checks/b16b17/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "d731fd8cc162c7be5134e7100330fdff83bef64a",
+      "counts": {
+        "executed": 7,
+        "passed": 5,
+        "skipped": 2,
+        "failed": 0
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditUserCategoriesAtNormalText": "skipped",
+        "testVisualAuditUserCategoriesAtMaximumText": "skipped",
+        "testVisualAuditWorkoutInsights": "passed",
+        "testVisualAuditWorkoutInsightsSheetFallback": "passed",
+        "testWorkoutInsightsReturnsToInteractiveWorkoutAtMaximumAccessibilityTextSize": "passed",
+        "testVisualAuditImportedWorkoutAtNormalText": "passed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "passed"
+      },
+      "result_note": "completed per-case xcresult statuses match runner and summary",
+      "contract_issue": null,
+      "receipt": ".codex-checks/b16b17/ipad-ui.log.result.json",
+      "attachments": ".codex-checks/b16b17/ipad-attachments/manifest.json"
+    }
+  ],
+  "pending": [
+    "B12 W28 title-editor images are source-identical historical context only; fresh W33 normal/MAX requires new passed B16+B17 selectors.",
+    "Duo current-source capture pending; no hinge angle or four-profile pass inferred."
+  ],
+  "limits": [
+    "Only completed passed selector captures are after.",
+    "Skipped iPad Categories is not a pass.",
+    "W33 B12 proposal stays historical and cannot be relabeled as new W33 proof.",
+    "No actual-map writes occur in this private builder."
+  ]
+}

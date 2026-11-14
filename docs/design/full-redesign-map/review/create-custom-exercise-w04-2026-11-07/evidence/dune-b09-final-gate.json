@@ -1,0 +1,293 @@
+{
+  "review": "B09 final per-screen quality gate from four frozen SDK runs",
+  "source_revision_initial": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+  "current_revision_at_review": "dc2a6d18b0798931bd90fe04bf3d63654e4fdd70",
+  "frozen_app_and_catalog_equivalence": {
+    "DUNE/Presentation/Shared/Components/UnifiedWorkoutRow.swift": {
+      "contract_sha256": "2438b811139301884ccfa32f331466bfa0e3feaeaeb78fa6478f0ac2b0e011ea",
+      "current_same_as_frozen_app": true
+    },
+    "DUNE/Presentation/Exercise/Components/ExercisePickerView.swift": {
+      "contract_sha256": "d8072c96bad9771fc127d7326557c223142c6cdd34cad191059f31d062080066",
+      "current_same_as_frozen_app": true
+    },
+    "DUNE/Presentation/Exercise/Components/ExerciseDetailSheet.swift": {
+      "contract_sha256": "9637eac2dbf5d52b978cc4590d5327cfb4e26a15b8794d5e8cef14c022570e8d",
+      "current_same_as_frozen_app": true
+    },
+    "DUNE/Presentation/Exercise/Components/CreateCustomExerciseView.swift": {
+      "contract_sha256": "addd52da14aab7f5b50b0894e3587455ab4e7b51cc9b6a7aaaa29d99786f1ad0",
+      "current_same_as_frozen_app": true
+    },
+    "Shared/Resources/Localizable.xcstrings": {
+      "contract_sha256": "d6218b3a9b20fcfca1d0ca848be86062a30ce6301cad021a9e6a6a6eba92acbf",
+      "current_same_as_frozen_app": true
+    }
+  },
+  "test_delta_after_initial": "Only new W04 audit route/helper changed for phone and iPad retries; original W01/W02/W03 selectors and app files unchanged. No full-regression or all-four-green run claimed.",
+  "runs": {
+    "phone": {
+      "status": "failed",
+      "counts": {
+        "executed": 4,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 1
+      },
+      "requested_selectors": [
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText",
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtMaximumText",
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText",
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText"
+      ],
+      "receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/phone-ui.log.result.json"
+    },
+    "phone-retry1": {
+      "status": "passed",
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "requested_selectors": [
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText"
+      ],
+      "receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/phone-retry1-ui.log.result.json"
+    },
+    "ipad": {
+      "status": "failed",
+      "counts": {
+        "executed": 4,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 2
+      },
+      "requested_selectors": [
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText",
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtMaximumText",
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText",
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText"
+      ],
+      "receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-ui.log.result.json"
+    },
+    "ipad-retry1": {
+      "status": "failed",
+      "counts": {
+        "executed": 2,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 2
+      },
+      "requested_selectors": [
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText",
+        "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText"
+      ],
+      "receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/ipad-retry1-ui.log.result.json"
+    }
+  },
+  "native_review_files": [
+    "/private/tmp/dune-b09-phone-native-review.json",
+    "/private/tmp/dune-b09-ipad-native-review.json"
+  ],
+  "source_review_files": [
+    "/private/tmp/dune-b09-w01-w02-test-review.json",
+    "/private/tmp/dune-b09-w03-w04-source-review.json",
+    "/private/tmp/dune-b09-integration-delta-review.json"
+  ],
+  "introduced_P1_P2_findings_in_accepted_screens": [],
+  "screens": {
+    "W01": {
+      "scope": "Exercise library normal/MAX",
+      "native_after": {
+        "regular": [
+          {
+            "title": "Exercise library",
+            "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+            "run_id": "phone",
+            "sha256": "abf05a4caeecf85241ae0e9982d9de762c432628f4ae04ecbdf6ecf9dacde3d6",
+            "ax_sha256": "21f806431bc2e6955dd9421afaaa608afcb1938d4d2febff67ac1d9766b6b120"
+          },
+          {
+            "title": "MAX exercise library",
+            "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+            "run_id": "phone",
+            "sha256": "075b0628c19d8eece2b173595cd861289a7420f46799af891df812ffa4d3de9b",
+            "ax_sha256": "6e440b26171d49894ba4d87f10845ca691ff9e804a454a441a33f8a34195101e"
+          }
+        ],
+        "ipad": [
+          {
+            "title": "Exercise library",
+            "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+            "run_id": "ipad",
+            "sha256": "2bceaf6eeb5ed0a9b8fd8e5ec721a122add4814b5884d3414d20cc760467ad61",
+            "ax_sha256": "90bbd6ad40118ab40ddc8262e0e8ce696623f81116629f0d0a47ca20d61e2a5e"
+          },
+          {
+            "title": "MAX exercise library",
+            "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+            "run_id": "ipad",
+            "sha256": "f468c2f94dc6de42375aea43edc25a21583923db10d15208e2ae1a8bf73b9c82",
+            "ax_sha256": "581b13edca3e4f4c716bc884b7c6b07a4bd3a23c434dea2beeb463054570bcf2"
+          }
+        ]
+      },
+      "gate": "targeted phone+iPad normal/MAX accepted for the exact frozen app source, conditional on isolating unchanged source hunk and copying fresh PNG+AX/index to actual map before merge",
+      "remaining": "Current Duo folded/open absent due owned-device migration failure; historical images remain historical. Other languages/dark mode and offscreen content beyond named captures are not implied."
+    },
+    "W02": {
+      "scope": "Quick Start picker normal/MAX including filtered Bench Press info",
+      "native_after": {
+        "regular": [
+          {
+            "title": "Exercise picker",
+            "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+            "run_id": "phone",
+            "sha256": "839b17bed517c21488a0de667263767f03e2dce567919e2a426153d6fbf94f40",
+            "ax_sha256": "1bca7691b8a0e9b0792b0f78df6fba6ddf7aca4ea6f999fefedaacde41fdaa04"
+          },
+          {
+            "title": "Filtered Bench Press info",
+            "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+            "run_id": "phone",
+            "sha256": "33eb37250cfbff63b6b7c92432e368f3d18f25cd3951ec7b6a098482f4310bbf",
+            "ax_sha256": "aab1d8cee7252d5f19db9355218ae6a0aa349e46ea0f85bcc99757c8f2d73934"
+          },
+          {
+            "title": "MAX exercise picker",
+            "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+            "run_id": "phone",
+            "sha256": "cadc49a4ec89f2788dbcd033afe2feb626dcd30b9cc86313938ad1d4098a4e83",
+            "ax_sha256": "973c8ee17dab85d5554e11e0775bdadc8bfca4b89e95d5c70b93299ba58fb961"
+          },
+          {
+            "title": "MAX filtered Bench Press info",
+            "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+            "run_id": "phone",
+            "sha256": "368b6383d40c93fd8487ba5c40a82ae43d16a0bb167cd8850de6e7559b10133e",
+            "ax_sha256": "18b4aa7cae9f512618684137cbea785a693ddf267f7df7b8268e22ecfddb4a3c"
+          }
+        ],
+        "ipad": [
+          {
+            "title": "Exercise picker",
+            "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+            "run_id": "ipad",
+            "sha256": "2be364da8b08e8a6de7e8bcedca5df3b37d88c2dd3d05e3ef1e37874919855ed",
+            "ax_sha256": "4313c1184dccdacde86de08c3d855c434082e91a4ebae316f16cdf3c44d20974"
+          },
+          {
+            "title": "Filtered Bench Press info",
+            "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+            "run_id": "ipad",
+            "sha256": "551731fcfa0cd02c8f2ef29b98dec6aab0db9a7e3b8670f4cf42948a8ac4a2d2",
+            "ax_sha256": "6edaccf27410efecac1cb369fdc8eb0d2516fe20e05eedcff6e416b45e98245a"
+          },
+          {
+            "title": "MAX exercise picker",
+            "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+            "run_id": "ipad",
+            "sha256": "2816040897cf6890eed184ad0ef710e417a5e07a51a74b08dfc7b170bf82f5ce",
+            "ax_sha256": "271e512ed56279603ea94b267e3ac11a7f57dd27e056ffb5f1eb19aadf029c24"
+          },
+          {
+            "title": "MAX filtered Bench Press info",
+            "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+            "run_id": "ipad",
+            "sha256": "517eebd5cae854a05e20138b3241e0238770879f615d5f439e64ba22e31e7c81",
+            "ax_sha256": "85b90d743e8236d53966c150dbc6bc2e055db0ad88d33bf7c68004c880a71f74"
+          }
+        ]
+      },
+      "gate": "targeted phone+iPad normal/MAX accepted for the exact frozen app source, conditional on isolating unchanged source hunk and copying fresh PNG+AX/index to actual map before merge",
+      "remaining": "Current Duo folded/open absent due owned-device migration failure; historical images remain historical. Other languages/dark mode and offscreen content beyond named captures are not implied."
+    },
+    "W03": {
+      "scope": "Exercise detail normal/MAX",
+      "native_after": {
+        "regular": [
+          {
+            "title": "Exercise detail",
+            "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+            "run_id": "phone",
+            "sha256": "bc6b8eab563b9c5a3d9b7bf6f5e3d585819b2629ead8d390082165cc79ee84e3",
+            "ax_sha256": "04e2d8088c3878fd34981ccce896b4339c57d44f37aa90458979975ed72e421a"
+          },
+          {
+            "title": "MAX exercise detail",
+            "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+            "run_id": "phone",
+            "sha256": "e7dace54689b77464eb2fdbaa48344e39365e4446a8c1ee252ed3cdfbc439da1",
+            "ax_sha256": "aac4ac87a8825918a444649252c7ff7d34369888fdde0fe644741273b3288317"
+          }
+        ],
+        "ipad": [
+          {
+            "title": "Exercise detail",
+            "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+            "run_id": "ipad",
+            "sha256": "dfb240caac0fb255532ceb58110eddde2b6f14d727a21689345c5354c245434c",
+            "ax_sha256": "3440b0ccf44fbdb230b59eee048ff7a98a321f804af07563c136942e9848882b"
+          },
+          {
+            "title": "MAX exercise detail",
+            "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+            "run_id": "ipad",
+            "sha256": "7fbaaafae46688e489290b5eb0d570b9aa3c9c9f045f912b0c6f7d9a4203623e",
+            "ax_sha256": "dfa3aa2330ca502b17b78b6c833b7b95527caf908c71da95f3f9f8ef1a6597c1"
+          }
+        ]
+      },
+      "gate": "targeted phone+iPad normal/MAX accepted for the exact frozen app source, conditional on isolating unchanged source hunk and copying fresh PNG+AX/index to actual map before merge",
+      "remaining": "Current Duo folded/open absent due owned-device migration failure; historical images remain historical. Other languages/dark mode and offscreen content beyond named captures are not implied."
+    },
+    "W04": {
+      "scope": "Custom exercise form normal/MAX",
+      "native_after": {
+        "regular": [
+          {
+            "title": "Custom exercise form",
+            "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+            "run_id": "phone",
+            "sha256": "7a2e4540df4e35846d87be1ddc351ae193c3552dc9eae9a81d5df9b67b42a5de",
+            "ax_sha256": "8751de77b94813003df5205140150310bca28fc3641e795331e73999836fbd01"
+          },
+          {
+            "title": "Cardio category readback",
+            "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+            "run_id": "phone",
+            "sha256": "42c00dc7f31801d45d4d6ed8886cf8c448db695ba01d4c484d79d3bde3bae075",
+            "ax_sha256": "17c7d4ddc906078f0c4a0c98678da6bdebfeb99e2e84df2b149fb0f07a359e82"
+          },
+          {
+            "title": "MAX custom exercise form",
+            "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+            "run_id": "phone-retry1",
+            "sha256": "f116d81065965d5528b76836e205cc8442431eba3ee7dcdb0a5626236dd39496",
+            "ax_sha256": "83926492d899fb49a9eb897865f4a3a2d66ae4a0db6f3a99f66c26069b720b06"
+          },
+          {
+            "title": "MAX Cardio category readback",
+            "source_revision": "e986f3ad94fd5f009090a2f6c90013c485ebd48d",
+            "run_id": "phone-retry1",
+            "sha256": "9f59e95ffc0722cc1ff370fd2b48281d57693aff54929299b5fd135f35e86e12",
+            "ax_sha256": "94d99a6bc3f6fe0de8458f6664f165f17f3d7383e7237ce1bdfcd1fc17a1209b"
+          }
+        ],
+        "ipad": []
+      },
+      "gate": "HELD for iPad: do not merge as an all-device verified screen; phone normal/MAX accepted across initial and one cause-specific retry, but both iPad W04 selectors failed before the custom form on original and retry.",
+      "failure_boundary": "iPad native More overflow hid Templates action; attempted label fallback did not resolve it in the permitted retry. No iPad W04 screen capture, menu/readback, or Cancel evidence. Preserve raw 2/4 and 0/2 receipts; no third SDK run.",
+      "remaining": "Draft or explicitly pending until a future independently authorized native route/capture; do not relabel phone success as iPad success."
+    }
+  },
+  "agent_native": "N/A: B09 changes human-facing workout views and focused XCTest navigation only; no agent-facing tool, data contract, action or autonomous workflow changes.",
+  "global_limits": [
+    "Historical actual-map PNGs are not current B09 evidence. W01/W02/W03 maps must be populated from named passed PNG+AX with source/receipt provenance before merge.",
+    "Current Duo closed/open native checks absent after migration failure; no hinge state or all-device pass claimed.",
+    "Initial phone W04 MAX failure and both iPad W04 failures plus failed iPad retry remain failures in archived SDK receipts.",
+    "No SDK/repository edits were performed in this gate review."
+  ],
+  "decision": "Proceed with isolated W01, W02 and W03 source/map work under exact-app-hunk and fresh-map conditions. Hold W04 as draft with honest iPad gap. No broad B09 approval."
+}

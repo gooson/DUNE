@@ -1,0 +1,56 @@
+{
+  "status": "source-only retry eligible; native retry unexecuted",
+  "frozen_source": "412e40e24cd5b0c28efb8f209558594fc07accc6",
+  "first_phone_counts": {
+    "executed": 7,
+    "passed": 3,
+    "failed": 4,
+    "skipped": 0
+  },
+  "first_phone_receipt": ".codex-checks/b14b15/phone-ui.log.result.json",
+  "first_phone_summary": ".codex-checks/b14b15/phone-summary.json",
+  "retry_patch": "/private/tmp/dune-b14b15-phone-retry-prep/retry-tests.patch",
+  "retry_patch_sha256": "6bc8138d6160f2cf8ba665b6ea24a2bf68014054fd5d8771da8447bdfc86b616",
+  "retry_scope": "Only the four failed selectors in manifest; passed Compound normal/MAX and Stair Climber machine are reused, not rerun.",
+  "cause_review": [
+    {
+      "selectors": [
+        "testCardioFlowReachesSummary"
+      ],
+      "failure": "MAX Outdoor whole-card assertion false",
+      "native_proof": "AX 465DFE74... ScrollView x16 width408 and Outdoor button x16 width408 y462..653.7, fully inside native horizontal viewport; screenshot C6F3354D... shows complete card. dx4 shrink makes horizontal containment mathematically impossible.",
+      "local_correction": "Both bounded reveal and final containment use dx0, dy4; button hittability and full vertical extent remain asserted."
+    },
+    {
+      "selectors": [
+        "testVisualAuditCardioAtDefaultTextSize"
+      ],
+      "failure": "Elapsed Time is not hittable behind alert",
+      "native_proof": "PNG 52AAD8D8... and AX 66C0EB84... show Notice with exact Could not start motion tracking. Steps may be incomplete. and OK over elapsed label. CardioSessionView alert owns Notice/OK; CardioSessionViewModel produces exact message on mock motion-start failure.",
+      "local_correction": "Only when exact observed Notice appears, assert exact message, capture, tap OK and wait for disappearance before existing metrics assertions; no VM or app behavior change."
+    },
+    {
+      "selectors": [
+        "testVisualAuditTemplateTransitionAtNormalText",
+        "testVisualAuditTemplateTransitionAtMaximumText"
+      ],
+      "failure": "W22 subtree staticText firstMatch resolves header, not defaults",
+      "native_proof": "PNG E80E112E... visibly shows 2 sets, 6 reps, 80 kg. AX 9FF5302A... exposes each as StaticText with inherited identifier template-workout-transition-screen; Start (5) Button inherits same ID.",
+      "local_correction": "Find leaf StaticText by identifier+exact label globally; identify original Start button by inherited identifier+label prefix, preserving existing optional tap and auto-advance assertion."
+    }
+  ],
+  "verification": [
+    "Private patch SHA and candidate SHA match manifest.",
+    "git apply --check against frozen 412e source passed.",
+    "swiftc -frontend -parse private candidate passed.",
+    "No app, fixture, shared helper, runner or repository changes.",
+    "Phone-only gallery staged from completed first-run receipt: W19 after4, W20 after2, W21 after6, W24 after2 machine, W25 after1 machine; W23 diagnostic3; W16/W22 no after."
+  ],
+  "remaining_limits": [
+    "This approves one cause-specific same-ID retry, not a native pass or app-quality approval.",
+    "W22 five-second auto-transition may still race later assertions; preserve any actual result rather than rerun blindly.",
+    "Normal Running Notice is an observed simulator state; acknowledgment is restricted to the exact alert text.",
+    "iPad and Duo current-source native evidence remain pending."
+  ],
+  "introduced_app_P1_P2_verified": []
+}
