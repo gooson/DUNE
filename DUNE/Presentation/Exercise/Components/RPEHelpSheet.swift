@@ -3,6 +3,7 @@ import SwiftUI
 /// Help sheet explaining RPE (Rate of Perceived Exertion) scale.
 struct RPEHelpSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private static let rows: [(range: String, label: String, rir: String, color: Color)] = [
         ("6–7", String(localized: "Light"), String(localized: "3–4 reps left"), DS.Color.positive),
@@ -31,7 +32,7 @@ struct RPEHelpSheet: View {
                 }
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.medium, .large] : [.medium])
     }
 
     // MARK: - Sections
@@ -50,22 +51,28 @@ struct RPEHelpSheet: View {
     private var scaleSection: some View {
         VStack(spacing: DS.Spacing.sm) {
             ForEach(Self.rows, id: \.range) { row in
-                HStack {
+                let rowLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+                    : AnyLayout(HStackLayout(spacing: DS.Spacing.sm))
+                rowLayout {
                     Text(row.range)
                         .font(.subheadline.weight(.bold).monospacedDigit())
                         .foregroundStyle(row.color)
-                        .frame(width: 40, alignment: .leading)
+                        .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 40, alignment: .leading)
 
                     Text(row.label)
                         .font(.subheadline.weight(.medium))
-                        .frame(width: 80, alignment: .leading)
+                        .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 80, alignment: .leading)
 
                     Text(row.rir)
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
 
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Spacer()
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, DS.Spacing.xs)
                 .padding(.horizontal, DS.Spacing.md)
                 .background(

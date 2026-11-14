@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultsSearchResultOpensOriginalEditor",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues",
+    "DUNEUITests/TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 3,
+  "failures": [
+    "403: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:1359: error: -[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultSaveReopensWithStoredValues] : XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not equal to (\"XCTWaiterRe…",
+    "414: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultSaveReopensWithStoredValues]' failed (45.414 seconds).",
+    "1256: Test Suite 'TodaySettingsRegressionTests' failed at 2026-11-07 01:03:17.918.",
+    "1258: Test Suite 'DUNEUITests.xctest' failed at 2026-11-07 01:03:17.924.",
+    "1260: Test Suite 'Selected tests' failed at 2026-11-07 01:03:17.926.",
+    "1272: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b07/ipad-retry1-ui.log"
+}

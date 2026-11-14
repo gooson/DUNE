@@ -1,0 +1,62 @@
+{
+  "scope": "B11 integration source and focused test review before SDK",
+  "revision": "670c46d695a30b485528e799e92afbacaa91bd41",
+  "worktree_status": [],
+  "source_hashes": {
+    "W07": "4d00caf138b16dbf1dcc2f48aa2a9f2b6593eb03516b8aa1afdf5f51e46317df",
+    "W08": "0c438d0b6858f781386d906ba928612a2ce6aa9b9831ac8683cad640f264bff0",
+    "W09": "fb4f6c4ac238c131e8e91dd30f5e16d7fb0227a998cc42e7bfd0d4333d9c30db"
+  },
+  "test_sha256": "effeda426de844a9f926850cdc9f940677c029497cb9af281e0ecbe79a21544a",
+  "candidate_match": true,
+  "required_perspectives": {
+    "security": {
+      "introduced_P1_P2": [],
+      "evidence": "No new network, permission, persistence, user-input parser, or sensitive-data path. UI actions continue to call existing timer and dismiss handlers."
+    },
+    "performance": {
+      "introduced_P1_P2": [],
+      "evidence": "AnyLayout chooses between two constant layouts. W08 horizontal ScrollView contains five static labels; W09 help contains four static rows. No query, formatter, loop over records, or eager card allocation added to app runtime."
+    },
+    "architecture": {
+      "introduced_P1_P2": [],
+      "evidence": "Changes remain in Presentation components. CompoundWorkoutView is the reachable RestTimerView and SetRPEPickerView consumer; SetRPEPickerView owns RPEHelpSheet presentation. Existing sheet NavigationStack, dismissal owner, Compound route and session hierarchy are unchanged."
+    },
+    "data_integrity": {
+      "introduced_P1_P2": [],
+      "evidence": "RestTimerViewModel.addTime/stop, WorkoutSettingsStore rest duration, SetRowView completion validation, RPE 6–10 half-step binding and rpeSourceRaw assignment, help ranges/RIR mapping are unchanged."
+    },
+    "simplicity": {
+      "introduced_P1_P2": [],
+      "evidence": "Accessibility-size branches use existing AnyLayout/ScrollView patterns and one MAX-only AX identifier. No duplicated state or new abstraction beyond category-label rendering helper."
+    },
+    "agent_native": {
+      "applicability": "N/A",
+      "evidence": "No agent, prompt, tool, .claude or .codex instructions changed."
+    }
+  },
+  "localization": "No new user-facing app text or string catalog change; W08 AX identifier is not displayed. Existing localized category labels and help copy remain.",
+  "test_review": {
+    "selectors": [
+      "ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtNormalText",
+      "ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtMaximumText"
+    ],
+    "route": "Existing Activity → Compound setup → first set completion reaches W07 timer and W08 completed-row RPE; W08 help opens W09. Template quick route does not instantiate W07.",
+    "source_check": "Only two B11 selectors and class-local helper added relative to main; no B10 W31 harness. Current W09 reveal loop checks BOTH 9–10 and 0–1 reps left before capture.",
+    "coverage": "Normal/MAX W07 before/after +30; W08 normal/MAX active and MAX horizontal final category; W09 normal/MAX initial and final row.",
+    "native_pending": [
+      "iPad Exercise toolbar native More may move custom Add ID.",
+      "MAX compound setup, keyboard, timer reveal, RPE horizontal pan and W09 sheet frames require real AX/PNG.",
+      "Rest duration is persisted and may be as short as 15 seconds; if +30 disappears during bounded scrolling, inspect actual countdown/AX before classifying a product defect."
+    ]
+  },
+  "app_findings_introduced_P1_P2": [],
+  "gate": "Source-only review; no SDK/native pass or actual-map after update claimed. Run exact selectors, classify captures from completed receipts, and refresh affected current-source actual maps.",
+  "gallery": {
+    "builder": "/private/tmp/dune-b11-gallery-prep/build.py",
+    "sealed_baseline_manifest": "/private/tmp/dune-b11-gallery-prep/_baseline/manifest.json",
+    "historical_png_count": 12,
+    "current_after_png_count": 0,
+    "duo_current": "pending"
+  }
+}

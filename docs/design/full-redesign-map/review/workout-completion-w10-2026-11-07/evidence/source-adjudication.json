@@ -1,0 +1,97 @@
+{
+  "screen": "W10",
+  "frozen_integration_source": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+  "app_path": "DUNE/Presentation/Exercise/Components/WorkoutCompletionSheet.swift",
+  "app_sha256": "6f20370f45d5507e7e513b4c4fd66b8eb9cb02d1310268ab207ff10a5e3944f4",
+  "source_scope_byte_identical": true,
+  "combined_test_harness": "W10/W27 accepted PRs carry no B12 harness; W28 carries four previously passed cases and W11/W26 draft retains records cases",
+  "raw_runs": [
+    {
+      "run_id": "phone",
+      "profile": "regular",
+      "source_revision": "80e12fcad184a6061a2e445ff8adfe60f0e8de83",
+      "counts": {
+        "executed": 6,
+        "passed": 3,
+        "skipped": 0,
+        "failed": 3
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditWorkoutRecordsAtNormalText": "failed",
+        "testVisualAuditWorkoutRecordsAtMaximumText": "failed",
+        "testVisualAuditWorkoutCompletionAtNormalText": "passed",
+        "testVisualAuditWorkoutCompletionAtMaximumText": "passed",
+        "testVisualAuditImportedWorkoutAtNormalText": "passed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "failed"
+      },
+      "receipt": ".codex-checks/b12/phone-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b12/phone-attachments/manifest.json"
+    },
+    {
+      "run_id": "phone-retry1",
+      "profile": "regular",
+      "source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+      "counts": {
+        "executed": 3,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 2
+      },
+      "status": "failed",
+      "selector_states": {
+        "testVisualAuditWorkoutRecordsAtNormalText": "failed",
+        "testVisualAuditWorkoutRecordsAtMaximumText": "failed",
+        "testVisualAuditWorkoutCompletionAtNormalText": "not_executed",
+        "testVisualAuditWorkoutCompletionAtMaximumText": "not_executed",
+        "testVisualAuditImportedWorkoutAtNormalText": "not_executed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "passed"
+      },
+      "receipt": ".codex-checks/b12/phone-retry1-ui.log.result.json",
+      "result_note": "completed mixed result attributed by XCTest summary",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b12/phone-retry1-attachments/manifest.json"
+    },
+    {
+      "run_id": "ipad",
+      "profile": "ipad",
+      "source_revision": "3d5d685efe2b92ed63d60ef87392a328ca7a1fb2",
+      "counts": {
+        "executed": 6,
+        "passed": 6,
+        "skipped": 0,
+        "failed": 0
+      },
+      "status": "passed",
+      "selector_states": {
+        "testVisualAuditWorkoutRecordsAtNormalText": "passed",
+        "testVisualAuditWorkoutRecordsAtMaximumText": "passed",
+        "testVisualAuditWorkoutCompletionAtNormalText": "passed",
+        "testVisualAuditWorkoutCompletionAtMaximumText": "passed",
+        "testVisualAuditImportedWorkoutAtNormalText": "passed",
+        "testVisualAuditImportedWorkoutAtMaximumText": "passed"
+      },
+      "receipt": ".codex-checks/b12/ipad-ui.log.result.json",
+      "result_note": "all requested selectors passed",
+      "contract_issue": null,
+      "attachments": ".codex-checks/b12/ipad-attachments/manifest.json"
+    }
+  ],
+  "gallery": "docs/design/full-redesign-map/review/workout-completion-w10-2026-11-07",
+  "review_files": [
+    "dune-b12-final-gate.json",
+    "dune-b12-independent-review.json",
+    "dune-b12-ipad-native-review.json",
+    "dune-b12-passed-harness-review.json",
+    "dune-b12-phone-native-review.json",
+    "dune-b12-phone-retry-review.json",
+    "dune-b12-source-review.json",
+    "dune-b12-test-refinement-review.json",
+    "dune-b12-tests-final-review.json"
+  ],
+  "phone_iPad": "Only completed passed normal/MAX selector PNG+AX pairs are after; failed or absent captures remain diagnostic/pending. Raw receipt counts remain in gallery gates.",
+  "duo": "Closed/open current-source capture pending; historical PNGs are not B12 after evidence.",
+  "other_limits": "No external Share, title Save, delete, live HealthKit write, Watch or full local regression claim."
+}

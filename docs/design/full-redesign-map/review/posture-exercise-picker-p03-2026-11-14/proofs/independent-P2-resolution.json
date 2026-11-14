@@ -1,0 +1,11 @@
+{
+  "independent_review": "dune-h08-p03-p08-independent-source-review.json",
+  "finding": "P2 MAX title bypassed existing localized Exercise Mode key",
+  "resolution_revision": "73d705e1b79121b260de7910679d0338d209a82d",
+  "expected_sha256": "c44141b841650aa46e774057a9ab4539f533173c5db2e2f054a3f35ccd1551e1",
+  "actual_sha256": "c44141b841650aa46e774057a9ab4539f533173c5db2e2f054a3f35ccd1551e1",
+  "source_resolution": "Exact requested Text(\"Exercise Mode\") replaces Text(verbatim:) with no catalog edit",
+  "compile_proof": "localized-title-compile-proof.json",
+  "status": "RESOLVED_SOURCE_AND_COMPILE",
+  "native_evidence": "English catalog value unchanged; prior English native evidence applies semantically, not as newcapture. Otherlocales not runtime-verified."
+}

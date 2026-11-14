@@ -137,6 +137,191 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
         XCTAssertTrue(saveButton.isEnabled, "Template save should enable after one picked exercise and a name")
     }
 
+    func testVisualAuditLibraryPickerDetailAtNormalText() throws {
+        try auditLibraryPickerDetail(maximumText: false)
+    }
+
+    private func auditLibraryPickerDetail(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B09 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        openExerciseViewFromRecentWorkouts()
+        let size = maximumText ? "MAX" : "normal"
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.exists)
+        VisualAudit.capture("W01 \(size) exercise library")
+
+        let add = app.descendants(matching: .any)[AXID.exerciseToolbarAdd].firstMatch
+        XCTAssertTrue(add.waitForExistence(timeout: 8) && add.isHittable)
+        add.auditTap()
+        let single = app.descendants(matching: .any)[AXID.exerciseMenuSingle].firstMatch
+        XCTAssertTrue(single.waitForExistence(timeout: 5))
+        single.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pickerRootList].firstMatch.waitForExistence(timeout: 8))
+        VisualAudit.capture("W02 \(size) exercise picker")
+
+        XCTAssertTrue(app.fillTextInput(AXID.pickerSearchField, with: "Bench Press"))
+        dismissSearchKeyboardIfPresent()
+        XCTAssertTrue(scrollPickerToHittableElementIfNeeded(
+            AXID.pickerExerciseDetailButton(Fixture.benchPressID), maxSwipes: 10
+        ))
+        let info = app.descendants(matching: .any)[AXID.pickerExerciseDetailButton(Fixture.benchPressID)].firstMatch
+        XCTAssertTrue(info.isHittable)
+        VisualAudit.capture("W02 \(size) filtered Bench Press info")
+        info.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseDetailScreen].firstMatch.waitForExistence(timeout: 8))
+        let close = app.descendants(matching: .any)[AXID.exerciseDetailClose].firstMatch
+        XCTAssertTrue(close.waitForExistence(timeout: 5) && close.isHittable)
+        VisualAudit.capture("W03 \(size) exercise detail")
+        close.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pickerRootList].firstMatch.waitForExistence(timeout: 8))
+        if maximumText {
+            let rowID = AXID.pickerExerciseRow(Fixture.benchPressID)
+            XCTAssertTrue(scrollPickerToHittableElementIfNeeded(rowID, maxSwipes: 10))
+            let row = app.descendants(matching: .any)[rowID].firstMatch
+            XCTAssertTrue(row.isHittable)
+            row.auditTap()
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseStartScreen].firstMatch.waitForExistence(timeout: 10),
+                          "Selecting the original exercise row should open Exercise Start")
+        } else {
+            let cancel = app.descendants(matching: .any)[AXID.pickerCancelButton].firstMatch
+            XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
+            cancel.auditTap()
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.exerciseViewScreen].firstMatch.waitForExistence(timeout: 8))
+        }
+    }
+
+    func testVisualAuditLibraryPickerDetailAtMaximumText() throws {
+        try auditLibraryPickerDetail(maximumText: true)
+    }
+
+    func testVisualAuditCustomCreateAtNormalText() throws {
+        try auditCustomCreate(maximumText: false)
+    }
+
+    func testVisualAuditCustomCreateAtMaximumText() throws {
+        try auditCustomCreate(maximumText: true)
+    }
+
+    private func auditCustomCreate(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B09 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        if maximumText || app.windows.firstMatch.frame.width >= 600 {
+            openAuditFullPicker()
+        } else {
+            openTemplateFormPicker()
+        }
+        let createCustom = app.descendants(matching: .any)[AXID.pickerCreateCustomButton].firstMatch
+        XCTAssertTrue(scrollPickerToHittableElementIfNeeded(AXID.pickerCreateCustomButton, maxSwipes: 10))
+        XCTAssertTrue(createCustom.waitForExistence(timeout: 5) && createCustom.isHittable)
+        createCustom.auditTap()
+        let form = app.descendants(matching: .any)[AXID.createCustomExerciseScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let size = maximumText ? "MAX" : "normal"
+        VisualAudit.capture("W04 \(size) custom exercise form")
+
+        let create = app.descendants(matching: .any)[AXID.createCustomExerciseCreate].firstMatch
+        XCTAssertTrue(create.waitForExistence(timeout: 5))
+        XCTAssertFalse(create.isEnabled, "Empty exercise name must keep Create disabled")
+        if maximumText {
+            let labeledMenu = app.buttons.matching(NSPredicate(
+                format: "label CONTAINS[c] %@", "Category"
+            )).firstMatch
+            let categoryMenu = labeledMenu.exists ? labeledMenu : app.buttons["Strength"].firstMatch
+            XCTAssertTrue(categoryMenu.waitForExistence(timeout: 5), "Category menu must be reachable at MAX")
+            categoryMenu.auditTap()
+            let cardio = app.buttons["Cardio"].firstMatch
+            XCTAssertTrue(cardio.waitForExistence(timeout: 5))
+            cardio.auditTap()
+            XCTAssertTrue(app.buttons.matching(NSPredicate(
+                format: "label CONTAINS[c] %@", "Cardio"
+            )).firstMatch.exists, "Collapsed menu must show Cardio selection")
+        } else {
+            let categorySegments = app.segmentedControls.firstMatch
+            XCTAssertTrue(categorySegments.waitForExistence(timeout: 5))
+            let cardio = categorySegments.buttons["Cardio"].firstMatch
+            XCTAssertTrue(cardio.waitForExistence(timeout: 5))
+            cardio.auditTap()
+            XCTAssertTrue(cardio.isSelected, "Cardio segment must be selected")
+        }
+        let durationDistance = app.descendants(matching: .any).matching(NSPredicate(
+            format: "label CONTAINS[c] %@", "Duration + Distance"
+        )).firstMatch
+        if maximumText && UIDevice.current.userInterfaceIdiom == .pad {
+            func inputTypeViewport() -> CGRect {
+                let frame = form.frame.intersection(app.windows.firstMatch.frame)
+                let navigation = app.navigationBars["New Exercise"].firstMatch
+                let top = navigation.exists ? max(frame.minY, navigation.frame.maxY) : frame.minY
+                return CGRect(x: frame.minX + 8, y: top + 8,
+                              width: max(0, frame.width - 16),
+                              height: max(0, frame.maxY - top - 16))
+            }
+            for _ in 0..<12 {
+                let viewport = inputTypeViewport()
+                if durationDistance.exists && durationDistance.isHittable
+                    && viewport.contains(durationDistance.frame) { break }
+                let down = durationDistance.exists && durationDistance.frame.midY < viewport.midY
+                form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: down ? 0.45 : 0.68))
+                    .press(forDuration: 0.05, thenDragTo: form.coordinate(
+                        withNormalizedOffset: CGVector(dx: 0.5, dy: down ? 0.63 : 0.50)),
+                        withVelocity: XCUIGestureVelocity(rawValue: 80),
+                        thenHoldForDuration: 0.35)
+            }
+            XCTAssertTrue(durationDistance.exists && durationDistance.isHittable
+                          && inputTypeViewport().contains(durationDistance.frame),
+                          "Cardio's original Duration + Distance input type must fit in the Form")
+        } else {
+            XCTAssertTrue(durationDistance.waitForExistence(timeout: 5),
+                          "Cardio should reset the original input type")
+        }
+        XCTAssertFalse(create.isEnabled, "Changing category must not enable Create with an empty name")
+        VisualAudit.capture("W04 \(size) Cardio category readback")
+
+        let cancel = app.navigationBars["New Exercise"].buttons["Cancel"].firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isHittable)
+        cancel.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pickerRootList].firstMatch.waitForExistence(timeout: 8),
+                      "Cancel must return to the picker without creating an exercise")
+    }
+
+    private func openAuditFullPicker() {
+        openExerciseViewFromRecentWorkouts()
+
+        let templatesButton = app.descendants(matching: .any)[AXID.exerciseToolbarTemplates].firstMatch
+        if templatesButton.exists && templatesButton.isHittable {
+            templatesButton.auditTap()
+        } else {
+            XCTAssertTrue(app.waitAndTapExerciseSecondaryAction(AXID.exerciseToolbarTemplates, timeout: 8),
+                          "Templates action should be reachable through the Exercise secondary menu")
+        }
+        let templateList = app.descendants(matching: .any)[AXID.workoutTemplateListScreen].firstMatch
+        XCTAssertTrue(templateList.waitForExistence(timeout: 8))
+        let addTemplate = app.descendants(matching: .any)[AXID.workoutTemplateListAdd].firstMatch
+        XCTAssertTrue(addTemplate.waitForExistence(timeout: 5))
+        addTemplate.auditTap()
+
+        let form = app.collectionViews[AXID.templateFormScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let addExercise = app.descendants(matching: .any)[AXID.templateFormAddExercise].firstMatch
+        for _ in 0..<12 where !(addExercise.exists && addExercise.isHittable) {
+            form.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(addExercise.exists && addExercise.isHittable,
+                      "Add Exercise should be reachable after scrolling the template Form")
+        addExercise.auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.pickerRootList].firstMatch.waitForExistence(timeout: 8))
+    }
+
     // MARK: - Helpers
 
     private func ensureActivityRoot() {
@@ -170,9 +355,8 @@ final class ActivityExercisePickerRegressionTests: ActivityExerciseSeededUITestB
     private func openTemplateFormPicker(prefillName: String? = nil) {
         openExerciseViewFromRecentWorkouts()
 
-        let templatesButton = app.descendants(matching: .any)[AXID.exerciseToolbarTemplates].firstMatch
-        XCTAssertTrue(templatesButton.waitForExistence(timeout: 5), "Templates toolbar button should exist")
-        templatesButton.tap()
+        XCTAssertTrue(app.waitAndTapExerciseSecondaryAction(AXID.exerciseToolbarTemplates),
+                      "Templates route should open through its visible toolbar action")
 
         let templateList = app.descendants(matching: .any)[AXID.workoutTemplateListScreen].firstMatch
         XCTAssertTrue(templateList.waitForExistence(timeout: 8), "Template list should appear")

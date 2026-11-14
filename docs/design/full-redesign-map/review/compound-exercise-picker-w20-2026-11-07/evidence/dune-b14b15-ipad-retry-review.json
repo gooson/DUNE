@@ -1,0 +1,37 @@
+{
+  "status": "source-only eligible for one same-ID iPad retry; native retry pending",
+  "frozen_source": "b98c7a963798e699a4fa67b3a09dbbcb44dbeab3",
+  "test_baseline_sha256": "c62f10c62f732e9e0aa180613ca1ccaacbf7751b7cd54ee189c4b725ddde6d90",
+  "patch_sha256": "7b8f71e7a4c5108119ef07570e67cebd64d11fc089275d93ff32b2b644eda55f",
+  "candidate_sha256": "b748ffebc14c4e7f93eb27db222ef0378ec5d51db9ecdd8fe05cb0b64f955b00",
+  "first_ipad": {
+    "executed": 7,
+    "passed": 6,
+    "failed": 1
+  },
+  "retry_selector": "testStairClimberLevelChangesAppearInSummary",
+  "cause_evidence": {
+    "ax": ".codex-checks/b14b15/ipad-attachments/EE32BD04-3E05-454D-9307-0034017797C1.txt",
+    "png": ".codex-checks/b14b15/ipad-attachments/7B00A1B6-551A-4495-B6A8-6E82FC1D9126.png",
+    "geometry": "Summary ScrollView (88,249,580,660) ends y909; history parent begins y942. Lazy history rows absent before scrolling; original first row assertion fails before capture. Average level 2.8 and maximum 3 already visible."
+  },
+  "review": {
+    "git_apply_check": true,
+    "patch_scope": "Only 10-line VisualAudit guard before existing row0/row1 assertions in Stair Climber method.",
+    "preserved_assertions": [
+      "row0 exists",
+      "row1 exists",
+      "Level 3 before end",
+      "history row hittable and named W25 capture"
+    ],
+    "bounded_action": "At most 10 slow upward swipes on the summary-screen descendant ScrollView until both row IDs materialize.",
+    "source_anchor": "CardioMachineLevelHistoryView.swift creates row IDs inside LazyVStack.",
+    "app_fixture_or_shared_helper_changes": false,
+    "introduced_blocking_P1_P2": []
+  },
+  "limits": [
+    "This validates retry eligibility, not iPad pass.",
+    "If the active summary scroll is not materialized or rows remain absent, original assertions still fail.",
+    "Six already passed iPad selectors must not be replayed; Phone family remains closed."
+  ]
+}

@@ -15,6 +15,7 @@ struct CompoundWorkoutSetupView: View {
     let onStart: (CompoundWorkoutConfig) -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Binding var draft: CompoundWorkoutSetupDraft
     @State private var showingPicker = false
 
@@ -55,17 +56,24 @@ struct CompoundWorkoutSetupView: View {
 
     private var modeSection: some View {
         Section {
-            Picker("Mode", selection: $draft.mode) {
-                Text("Superset").tag(CompoundWorkoutMode.superset)
-                Text("Circuit").tag(CompoundWorkoutMode.circuit)
+            if dynamicTypeSize.isAccessibilitySize {
+                modePicker.pickerStyle(.menu)
+            } else {
+                modePicker.pickerStyle(.segmented)
             }
-            .pickerStyle(.segmented)
         } footer: {
             if draft.mode == .superset {
                 Text("Alternate between 2 exercises with minimal rest.")
             } else {
                 Text("Cycle through 3+ exercises in rounds.")
             }
+        }
+    }
+
+    private var modePicker: some View {
+        Picker("Mode", selection: $draft.mode) {
+            Text("Superset").tag(CompoundWorkoutMode.superset)
+            Text("Circuit").tag(CompoundWorkoutMode.circuit)
         }
     }
 

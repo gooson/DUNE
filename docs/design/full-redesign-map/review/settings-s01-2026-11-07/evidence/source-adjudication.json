@@ -1,0 +1,41 @@
+{
+  "screen": "S01",
+  "reference_compiled_source": "1c1b4bf26f6c1f681561aac825f78b750b93eb1a",
+  "view_sha256": "565cb84ed3fb057b6e08ca0fad9ba60dfbb2a1611b4e1a8aaf46d976a01390ce",
+  "view_byte_identical": true,
+  "per_capture_component_equivalence": [
+    {
+      "image": "assets/05-regular-after.png",
+      "capture_source": "2930ba45dd419634932ef3e4ced117ae13b7556e",
+      "kind": "after",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testSettingsShowsPhaseTwoRows()"
+    },
+    {
+      "image": "assets/06-regular-after.png",
+      "capture_source": "2930ba45dd419634932ef3e4ced117ae13b7556e",
+      "kind": "after",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testSettingsMaxTextKeepsFirstControlAndLastRowReachable()"
+    },
+    {
+      "image": "assets/07-regular-after.png",
+      "capture_source": "2930ba45dd419634932ef3e4ced117ae13b7556e",
+      "kind": "after",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testSettingsMaxTextKeepsFirstControlAndLastRowReachable()"
+    },
+    {
+      "image": "assets/08-ipad-after.png",
+      "capture_source": "23c6d0948808b76e2e1233d70bf5a1d9faa68c36",
+      "kind": "after",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testSettingsShowsPhaseTwoRows()"
+    }
+  ],
+  "local_build": "actual UI builds reused; no phase-based repeat",
+  "test_scope": "exact selected methods from compiled source; whole mixed suite not green",
+  "failed_limits": "phone2 and iPad2 failed check records remain; no third run; P03/P08/H08 unchanged",
+  "Duo": "fresh C76 boot Data Migration Failed before SDK; logs archived, owned failed device removed; no Duo test/capture pass",
+  "platforms": "no changed Watch/Vision/widget consumer; local full regression not requested"
+}

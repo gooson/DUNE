@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText",
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtMaximumText",
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText",
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 4,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 3,
+  "failures": [
+    "1020: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/ActivityExercisePickerRegressionTests.swift:321: error: -[DUNEUITests.ActivityExercisePickerRegressionTests testVisualAuditCustomCreateAtMaximumText] : XCTAssertTrue failed - Add Exercise button should exist in template form",
+    "1031: Test Case '-[DUNEUITests.ActivityExercisePickerRegressionTests testVisualAuditCustomCreateAtMaximumText]' failed (73.443 seconds).",
+    "1908: Test Suite 'ActivityExercisePickerRegressionTests' failed at 2026-11-07 02:44:35.238.",
+    "1910: Test Suite 'DUNEUITests.xctest' failed at 2026-11-07 02:44:35.240.",
+    "1912: Test Suite 'Selected tests' failed at 2026-11-07 02:44:35.241.",
+    "1924: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b09/phone-ui.log"
+}

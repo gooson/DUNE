@@ -1,0 +1,57 @@
+{
+  "scope": "B11 W07/W08/W09 private source-consumer and two-selector UI-test review, no SDK/native pass",
+  "status": "source/test candidate reviewed; native pending",
+  "source_revision": "4fd3b3aadfa39908948538587aea81856ad14c48",
+  "candidate_source_hashes": {
+    "W07": "4d00caf138b16dbf1dcc2f48aa2a9f2b6593eb03516b8aa1afdf5f51e46317df",
+    "W08": "0c438d0b6858f781386d906ba928612a2ce6aa9b9831ac8683cad640f264bff0",
+    "W09": "fb4f6c4ac238c131e8e91dd30f5e16d7fb0227a998cc42e7bfd0d4333d9c30db"
+  },
+  "test_patch": "/private/tmp/dune-b11-tests-prep/B11-tests.patch",
+  "test_patch_sha256": "c346efe84562a967050b2e22226c6933c9ce97712fe3193ce655562cb56e0ddb",
+  "test_candidate_sha256": "9af18f45683f341502ecc49ba608e572680cd6f2155b3a8d9c0caf4591e97578",
+  "test_patch_generation_baseline": {
+    "revision": "0e1de4237331328f7c64db341cde5de5559181d5",
+    "sha256": "6435e2d70cb3f0b8d870e316aa9ec6e6ac3d2b170926afbe64b197bb319ea340"
+  },
+  "current_main_application": {
+    "revision": "7c7e21fa5c11ef1585e493288f258bbe0eb082d8",
+    "baseline_sha256": "6f1e1e9770080924fc77b338641f49c59b006d2789d2ca80e2d3c5bb3a439e01",
+    "apply_only_patch": true,
+    "never_copy_full_private_candidate": true,
+    "patch_dry_run": "passed against a private copy of origin/main test source",
+    "projection": "114 added lines, zero removed; exactly two B11 methods, no B10 W31 selector"
+  },
+  "selectors": [
+    "ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtNormalText",
+    "ActivityExerciseRegressionTests/testVisualAuditSetAssistanceAtMaximumText"
+  ],
+  "introduced_P1_P2_static": [],
+  "source_consumer_proof": {
+    "W07": "CompoundWorkoutView body instantiates RestTimerView(timer: setTimer), starts setTimer only when SetRowView completes a valid first set, and renders timer in safeAreaInset at ordinary size or session ScrollView at accessibility size. Activity template picker enters TemplateWorkoutContainerView/WorkoutSessionView and does not exercise this component. No TemplateWorkoutView() app instantiation found.",
+    "W08": "CompoundWorkoutView.setListFor renders SetRPEPickerView only when vm.sets[index].isCompleted; first-set completion in the candidate reaches this state. Binding writes rpe and rpeSourceRaw. Candidate source leaves values, half-step slider, help/clear actions intact.",
+    "W09": "SetRPEPickerView presents RPEHelpSheet via sheet; help source retains RPE Guide navigation title and Done, four original 6\u20137 through 9\u201310 ranges/RIR labels. Corrected private W09 source hash matches its manifest."
+  },
+  "selector_proof": {
+    "exercise_ids": "Fixture.barbell-bench-press and barbell-squat are stable ExerciseDefinition IDs used by existing Compound setup regression; picker IDs use exercise definition id. Runtime SetRowView AX identifiers use editableSet.setNumber, so set-row-field-1-weight/reps and set-row-complete-1 match the first displayed current exercise rather than a generated UUID.",
+    "api_visibility": "New methods are in ActivityExerciseRegressionTests; class-local addCompoundExercise, openExerciseViewFromRecentWorkouts, waitForEnabled and base launchApp/launchConfiguration/VisualAudit/fillTextInput are available. Compound setup List ID and session ScrollView ID match source and existing test usage.",
+    "corrections": [
+      "Select setup Start after bounded List scrolling; use descendant query like existing Compound test.",
+      "Use descendant queries for Exercise toolbar/menu IDs rather than assuming XCUI Button type.",
+      "Tap +30s, capture, and Skip immediately before RPE/help so timer expiration during long MAX scrolling cannot remove Skip.",
+      "Scroll W09 help to 9\u201310 and 0\u20131 reps left within help viewport; scope Done to RPE Guide navigation bar.",
+      "W08 MAX-only horizontal category ScrollView receives stable AX identifier set-rpe-category-labels; the MAX test reveals the legend in the Compound viewport, pans to the original final Max label, verifies its full visible frame, and captures the end state."
+    ]
+  },
+  "native_risks_pending": [
+    "iPad native More may relocate Exercise toolbar Add and strip a custom identifier; exact AX/PNG needed before changing fallback.",
+    "At MAX, compound setup, set-row fields, keyboard and complete action may require scroll or keyboard dismissal; the bounded test loops and existing fillTextInput have no native pass yet.",
+    "Rest duration is persisted user settings (default 90 seconds, allowed 15\u2013600); timer might expire during 16 slow reveal swipes before +30s on a short configured value. Do not infer a product defect from such a test failure without AX/time evidence.",
+    "W09 last-row frame test uses forced English text, while exercise names may remain Korean fixture data; verify native labels.",
+    "W08 MAX pan and last-label frame assertions are source-checked but require native AX/PNG; the initial and end captures will distinguish the changed horizontal state."
+  ],
+  "gate": "Apply W08 candidate patch plus B11 test patch only after current hash check. Never copy full private test candidate because its 0e1 baseline contains B10 W31 draft harness absent from main. Run only two B11 selectors; native/actual-map pending.",
+  "parent_bounded_scroll_refinement": "Existing finalRIR visibility assertion is unchanged; boundedhelp scroll now stops onlywhenbothrange andRIRframes fit, avoids stoppingonrangewhilelowermeaningstillbelowviewport. Parentactualmodelunchanged; noSDKpassclaim.",
+  "final_candidate_sha256": "1035d42d38afcea16b544dbdc5d92a9f88fdf141e9ebcb9a8e55da8e956d32fd",
+  "final_patch_sha256": "605b239cd1bb12b3df60e91463a81e5e87ce580f472a3524a0c61bfd275e608e"
+}

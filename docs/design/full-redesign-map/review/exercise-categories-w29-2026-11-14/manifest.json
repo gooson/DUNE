@@ -1,0 +1,60 @@
+{
+  "screen_id": "W29",
+  "capture_date": "2026-11-14",
+  "compiled_source": "15450f83dcedc8628c44a9327aea5497031b375e",
+  "device": "iPad",
+  "native_capture_kind": "XCTest PNG+AX",
+  "states": [
+    {
+      "state": "W29 normal built-in name icon and Default",
+      "asset": "normal-01",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtNormalText()",
+      "source_png": "00632E68-7473-4917-968F-525B410D8BDC.png",
+      "source_ax": "6FE93458-F6D1-4EF1-BE5F-185A06152958.txt",
+      "png_sha256": "a585d4de480b95963de2e9f3672b8f1528fe550190c4e8074a0cc30b2e108340",
+      "ax_sha256": "bc74e0adfc1a3f7f4e66aab5fcb51d140dd1867ab51da5038a9487122ed598a6",
+      "result": "passed",
+      "source_revision": "15450f83dcedc8628c44a9327aea5497031b375e"
+    },
+    {
+      "state": "W29 normal long custom category row and input type",
+      "asset": "normal-02",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtNormalText()",
+      "source_png": "9537082E-B9D4-4A36-8BA4-12EA17A0F4FD.png",
+      "source_ax": "A9B41AE8-6B2A-4883-9C4F-F3C031F2A40C.txt",
+      "png_sha256": "8ca284d9c3730f46710cdcda4a8bb447539bd1acb6eab9cdf7f14dfab92ef5ba",
+      "ax_sha256": "a341c53bf18bcae29ed4d6f8779b6e236b5f26b92099de0e0cdb1518ddf410b5",
+      "result": "passed",
+      "source_revision": "15450f83dcedc8628c44a9327aea5497031b375e"
+    },
+    {
+      "state": "W29 MAX built-in name icon and Default",
+      "asset": "MAX-01",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtMaximumText()",
+      "source_png": "ACD67CC8-9EBB-4408-933D-D3E08CF1399B.png",
+      "source_ax": "803ADA8A-6B1A-4790-A023-79E403F991E4.txt",
+      "png_sha256": "342e447e81371ba08201e49ea62fe14d15fc449df1708c23c580eeac63b9fc4f",
+      "ax_sha256": "4f23e79a38e9d61469a836f6ec722d497f0058a31cde174be1300ee1a7961ec4",
+      "result": "passed",
+      "source_revision": "15450f83dcedc8628c44a9327aea5497031b375e"
+    },
+    {
+      "state": "W29 MAX full custom category row and input type",
+      "asset": "MAX-02",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtMaximumText()",
+      "source_png": "F3AEBAB4-B949-494A-A3B9-905EBB282660.png",
+      "source_ax": "BB0AEF89-0964-4376-A1FE-FBBD55AF4C6F.txt",
+      "png_sha256": "f9def9c7d44d7c53162ed03a6d8108bba81ae084c4195e98dc3a8507c4443ca6",
+      "ax_sha256": "3c1100c01091cd9cfbd1c93f1b2b7a32542ee73daff32dde0396ad04a776e1c4",
+      "result": "passed",
+      "source_revision": "15450f83dcedc8628c44a9327aea5497031b375e"
+    }
+  ],
+  "source_history": {
+    "2026-11-07": "Preserved without redating on the existing PR branch; old held/skip/failure history remains."
+  },
+  "limits": [
+    "Duo not recaptured",
+    "No new Phone runtime check; prior 2026-11-07 Phone evidence remains historical."
+  ]
+}

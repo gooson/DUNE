@@ -1,0 +1,62 @@
+Attributes: Application, 0x106fa7980, pid: 73136, label: 'DUNE'
+Element subtree:
+ →Application, 0x106fa7980, pid: 73136, label: 'DUNE'
+    Window (Main), 0x10a55c3c0, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x10a55c000, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x10a55d400, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x10a55c140, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x10a55c280, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x10a55d900, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x10a55d680, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x10a55c640, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x10a55d2c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x10a55c500, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x10a55d180, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x10a55cb40, {{0.0, 0.0}, {756.0, 1158.0}}
+                          Other, 0x10a55d540, {{0.0, 0.0}, {756.0, 1158.0}}
+                            NavigationBar, 0x10a55cdc0, {{0.0, 96.0}, {756.0, 108.0}}, identifier: 'Posture History'
+                              Button, 0x10a55cc80, {{10.0, 96.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Wellness'
+                              Other, 0x10a55d040, {{655.0, 100.0}, {87.0, 36.0}}
+                                Other, 0x10a55d7c0, {{655.0, 100.0}, {87.0, 36.0}}
+                                  Button, 0x10a534000, {{655.0, 100.0}, {87.0, 36.0}}, identifier: 'posture-history-capture-button', label: 'Capture'
+                              StaticText, 0x10a534140, {{316.0, 161.5}, {124.0, 21.0}}, label: 'Posture History'
+                            Other, 0x10a537700, {{0.0, 0.0}, {756.0, 1158.0}}
+                              Other, 0x10a537ac0, {{0.0, 0.0}, {756.0, 1158.0}}
+                                Other, 0x10a534f00, {{0.0, 0.0}, {756.0, 1158.0}}
+                                  Other, 0x10a534640, {{0.0, 0.0}, {756.0, 1158.0}}
+                                    ScrollView, 0x10a535900, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'posture-history-screen'
+                                      Other, 0x10a537840, {{0.0, 0.0}, {756.0, 1158.0}}
+                                        Other, 0x10a535540, {{0.0, 0.0}, {756.0, 244.0}}
+                                      Other, 0x10a535a40, {{0.0, 0.0}, {756.0, 1158.0}}
+                                      Other, 0x10a535b80, {{0.0, 204.0}, {756.0, 247.5}}
+                                        StaticText, 0x10a5357c0, {{260.5, 271.5}, {235.0, 91.0}}, label: 'No Posture Assessments'
+                                        StaticText, 0x10a537980, {{74.8, 365.5}, {606.5, 24.0}}, label: 'Capture your first posture assessment to start tracking your progress.'
+                                      Other, 0x10a5375c0, {{723.0, 204.0}, {30.0, 907.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x10a537e80, {{750.0, 263.0}, {3.0, 845.0}}
+                                      Other, 0x10a5343c0, {{723.0, 204.0}, {30.0, 907.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x10a534500, {{750.0, 263.0}, {3.0, 845.0}}
+                            Toolbar, 0x10a535680, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x10a534c80, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x10a537d40, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x10a535180, {{0.0, 32.0}, {756.0, 44.0}}
+                    Button, 0x10a535040, {{183.5, 36.0}, {56.0, 36.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x10a535400, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x10a534dc0, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x10a5352c0, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                      Button, 0x10a537c00, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                    Button, 0x10a56c000, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                      Button, 0x10a56c140, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                    Button, 0x10a56c280, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x10a56c3c0, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x10a56c500, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x10a56c640, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x10a56c780, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x10a56c8c0, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x10a56ca00, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x106fa7980, pid: 73136, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10a56cb40, pid: 73136, label: 'DUNE'
+  }

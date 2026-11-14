@@ -1,0 +1,10 @@
+{
+  "finding": "MAX title used Text(verbatim:) and bypassed existing Exercise Mode translations",
+  "fix": "Text(\"Exercise Mode\") uses existing localized catalog key; no new catalog item",
+  "tested_app_sha256": "f3528f2f1926b81049366748f21b414b04fc89c5be0b22634397afdb626a385b",
+  "publication_app_sha256": "c44141b841650aa46e774057a9ab4539f533173c5db2e2f054a3f35ccd1551e1",
+  "current_source_parent": "ce7be698308d27bacb8214b3c7f921cfb7be983a",
+  "publication_commit": "73d705e1b79121b260de7910679d0338d209a82d",
+  "english_native_reuse": "Forced-English fixture renders the same existing Exercise Mode string; no layout/callback/detent change. Existing English native captures remain valid by bounded semantic equivalence, not whole-file byte equivalence.",
+  "validation": "Incremental compile proven by localized-title-compile-proof.json. English native evidence reused by semantic equivalence; no new ko/ja native runtime claim."
+}

@@ -1,0 +1,26 @@
+{
+  "scope": "Independent refined B12 private UI test review; six normal/MAX selectors across W27→W26→W11, W10, W28; no SDK or repository edits",
+  "patch": "/private/tmp/dune-b12-tests-prep/B12-tests.patch",
+  "patch_sha256": "a7213705065b63c9de659a77761e46085d2631e635206172dc1ca4e2522a71e4",
+  "current_main_test_sha256": "32bbc6b3e5012582bfd910d497e0b0b3477ab3784e56012c53167490aafe898a",
+  "patch_result_current_main_sha256": "26ef8ef5290ce1c9c8c12607e0565db72f5e76e783005977a428171199a9ec73",
+  "compatibility": "git apply --check succeeds against current main test source containing B11 methods; temporary patch applies. Existing class methods/helpers unchanged.",
+  "verified_routes_and_assertions": [
+    "One Exercise row tap opens inspector containing ExerciseSessionDetailView; W27 detail ScrollView and View History route align existing testVisualAuditExerciseHistoryFromSelectedWorkout.",
+    "Seeded Bench Press record has three completed sets at 60 kg / 10 reps; Set 1, 10 reps, and native history row 3 sets match source.",
+    "W26 Sessions and Total Reps are stat titles; bounded history scrolling captures changed lower single-column cards.",
+    "History session context-menu Share calls shareSession and presents ShareImageSheet, distinct from W10 system ShareLink. W11 native Share button label matches source.",
+    "Quick Start +2.5/+1 and Complete Set route produces W10 WorkoutCompletionSheet with Korean localized exercise name and 1 set. Local Complete Set fallback scrolls only when not hittable/window-contained, covering inline iPad MAX while preserving fixed-footer direct path.",
+    "EffortSliderView selectionStatus is a StaticText with ID workout-effort-selection-status; W10 captures effort and Done separately after bounded reveal.",
+    "Seeded workout notification routes to running HealthKitWorkoutDetailView; running is distance-based so Avg Heart Rate card or no-data placeholder is rendered. W28 title editor Cancel ID matches source."
+  ],
+  "introduced_P1_P2": [],
+  "provenance_note": "Private manifest still carries pre-B11 main baseline 6f1e… and candidate dc9a…; actual patch application to current main yields 26ef…. Execution contract should use the actual integrated test source hash, not the stale private candidate hash.",
+  "native_pending": [
+    "W26 history row AX aggregation and context-menu Share visibility",
+    "W11 medium sheet Share action reachability at MAX",
+    "W10 effort/Done scroll containment",
+    "W28 stats/toolbar at MAX on phone and iPad"
+  ],
+  "decision": "Source review allows app candidate integration and one scoped SDK run; no native pass claimed."
+}

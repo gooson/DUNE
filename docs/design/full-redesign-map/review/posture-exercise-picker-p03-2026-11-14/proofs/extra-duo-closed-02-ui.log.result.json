@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow",
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize",
+    "DUNEUITests/PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 5,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 2
+  },
+  "passed_cases": 3,
+  "failures": [
+    "2098: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:1811: error: -[DUNEUITests.PostureVisualAuditTests testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom] : XCTAssertTrue failed",
+    "2111: Test Case '-[DUNEUITests.PostureVisualAuditTests testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom]' failed (97.368 seconds).",
+    "2112: Test Suite 'PostureVisualAuditTests' failed at 2026-11-14 14:11:03.767.",
+    "3366: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:783: error: -[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize] : XCTAssertTrue failed - Memo must fit",
+    "3379: Test Case '-[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize]' failed (204.349 seconds).",
+    "3380: Test Suite 'WellnessRegressionTests' failed at 2026-11-14 14:15:52.837.",
+    "3382: Test Suite 'DUNEUITests.xctest' failed at 2026-11-14 14:15:52.837.",
+    "3384: Test Suite 'Selected tests' failed at 2026-11-14 14:15:52.838.",
+    "3400: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 2 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-duo-closed-02-ui.log"
+}

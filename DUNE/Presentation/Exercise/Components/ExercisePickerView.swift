@@ -16,6 +16,7 @@ struct ExercisePickerView: View {
     let onSelect: (ExerciseDefinition) -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
     @Query(sort: \UserCategory.sortOrder) private var userCategories: [UserCategory]
@@ -534,6 +535,8 @@ struct ExercisePickerView: View {
             } label: {
                 Image(systemName: "info.circle")
                     .foregroundStyle(DS.Color.textSecondary)
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("picker-detail-\(exercise.id)")
@@ -568,10 +571,14 @@ struct ExercisePickerView: View {
 
     private func exerciseRowContent(_ exercise: ExerciseDefinition) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-            HStack(spacing: DS.Spacing.xs) {
+            let nameLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xxs))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+            nameLayout {
                 Text(exercise.localizedName)
                     .font(.body)
                     .foregroundStyle(.primary)
+                    .fixedSize(horizontal: false, vertical: true)
                 if exercise.id.hasPrefix("custom-") {
                     Text("Custom")
                         .font(.system(size: 9, weight: .medium))
@@ -586,12 +593,18 @@ struct ExercisePickerView: View {
                     .font(.caption)
                     .foregroundStyle(Color.primary.opacity(0.72))
             }
-            HStack(spacing: DS.Spacing.xs) {
+            let detailsLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xxs))
+                : AnyLayout(HStackLayout(spacing: DS.Spacing.xs))
+            detailsLayout {
                 Text(exercise.primaryMuscles.map(\.displayName).joined(separator: ", "))
                     .font(.caption)
                     .foregroundStyle(Color.primary.opacity(0.72))
-                Text("\u{00B7}")
-                    .foregroundStyle(.tertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+                if !dynamicTypeSize.isAccessibilitySize {
+                    Text("\u{00B7}")
+                        .foregroundStyle(.tertiary)
+                }
                 Label {
                     Text(exercise.equipment.displayName)
                 } icon: {

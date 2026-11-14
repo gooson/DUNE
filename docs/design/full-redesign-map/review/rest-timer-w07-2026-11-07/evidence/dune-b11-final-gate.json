@@ -1,0 +1,81 @@
+{
+  "scope": "B11 W07/W08/W09 conditional source/native gate, before split PR merge and actual-map publication",
+  "frozen_integration_source": "4e2c408d72da82e7e65114942aa4b37bc7cfe193",
+  "app_sha256": {
+    "W07": "4d00caf138b16dbf1dcc2f48aa2a9f2b6593eb03516b8aa1afdf5f51e46317df",
+    "W08": "0c438d0b6858f781386d906ba928612a2ce6aa9b9831ac8683cad640f264bff0",
+    "W09": "fb4f6c4ac238c131e8e91dd30f5e16d7fb0227a998cc42e7bfd0d4333d9c30db"
+  },
+  "raw_runs": [
+    {
+      "run_id": "phone",
+      "source_revision": "670c46d695a30b485528e799e92afbacaa91bd41",
+      "counts": {
+        "executed": 2,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 2
+      }
+    },
+    {
+      "run_id": "phone-retry1",
+      "source_revision": "5179e21e0b2fd95fe68e368a8a22c9b1aafbdd40",
+      "counts": {
+        "executed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 1
+      }
+    },
+    {
+      "run_id": "ipad",
+      "source_revision": "4e2c408d72da82e7e65114942aa4b37bc7cfe193",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      }
+    }
+  ],
+  "per_screen": {
+    "W07": {
+      "decision": "conditionally accepted for scoped MAX redesign",
+      "phone_MAX": "passed in same-ID retry, full changed action path",
+      "iPad_normal": "passed in first iPad run",
+      "iPad_MAX": "passed in first iPad run",
+      "phone_normal": "pending current-source actual-map capture; test failed AX ID lookup after W07 visual diagnostic, W08/W09 not reached",
+      "Duo": "pending current-source native capture",
+      "introduced_P1_P2": []
+    },
+    "W08": {
+      "decision": "conditionally accepted for scoped MAX redesign",
+      "phone_MAX": "passed in same-ID retry, full changed action path",
+      "iPad_normal": "passed in first iPad run",
+      "iPad_MAX": "passed in first iPad run",
+      "phone_normal": "pending current-source actual-map capture; test failed AX ID lookup after W07 visual diagnostic, W08/W09 not reached",
+      "Duo": "pending current-source native capture",
+      "introduced_P1_P2": []
+    },
+    "W09": {
+      "decision": "conditionally accepted for scoped MAX redesign",
+      "phone_MAX": "passed in same-ID retry, full changed action path",
+      "iPad_normal": "passed in first iPad run",
+      "iPad_MAX": "passed in first iPad run",
+      "phone_normal": "pending current-source actual-map capture; test failed AX ID lookup after W07 visual diagnostic, W08/W09 not reached",
+      "Duo": "pending current-source native capture",
+      "introduced_P1_P2": []
+    }
+  },
+  "conditions": [
+    "Split PR app file must match the frozen SHA for its screen.",
+    "Publish only passed phone MAX and iPad normal/MAX PNG/AX pairs as new after evidence. Keep phone normal actual image historical with pending state and gallery link; keep Duo closed/open historical/pending.",
+    "Preserve original failed receipts (phone 0/2 then 1/2) and iPad 2/2, with no all-phone-pass claim."
+  ],
+  "not_claimed": [
+    "Phone normal selector pass",
+    "Duo current-source capture",
+    "full regression",
+    "uncovered Finish/save variants"
+  ]
+}

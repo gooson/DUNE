@@ -1,0 +1,120 @@
+Attributes: Application, 0x110e17ac0, pid: 49630, label: 'DUNE'
+Element subtree:
+ →Application, 0x110e17ac0, pid: 49630, label: 'DUNE'
+    Window (Main), 0x110e17c00, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x110e17d40, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x110e17e80, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x110e18000, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x110e18140, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x110e18280, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x110e183c0, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x110e18500, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x110e18640, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x110e18780, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x110e188c0, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x110e18a00, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x110e18b40, {{0.0, 0.0}, {440.0, 956.0}}
+                            NavigationBar, 0x110e18c80, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Weekly Workout Plan'
+                              Button, 0x110e18dc0, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Templates'
+                              StaticText, 0x110e18f00, {{118.7, 71.3}, {202.3, 25.3}}, label: 'Weekly Workout Plan'
+                            Other, 0x110e19040, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x110e19180, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x110e192c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x110e19400, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x110e19540, {{-1.6, 0.0}, {443.1, 956.0}}, identifier: 'weekly-workout-plan'
+                                      ScrollView, 0x110e19680, {{0.0, 0.0}, {440.0, 494.7}}
+                                        Other, 0x110e197c0, {{0.0, 0.0}, {440.0, 494.7}}
+                                          Other, 0x110e19900, {{0.0, 0.0}, {440.0, 156.0}}
+                                        Other, 0x110e19a40, {{0.0, 0.0}, {440.0, 494.7}}
+                                        Other, 0x110e19b80, {{0.0, 116.0}, {440.0, 1262.0}}
+                                          Button, 0x110e19cc0, {{16.0, 136.7}, {44.0, 54.3}}, identifier: 'chevron.left', label: 'Previous Week'
+                                          StaticText, 0x110e19e00, {{102.0, 132.0}, {236.0, 63.3}}, label: 'Nov 2026'
+                                          Button, 0x110e19f40, {{380.0, 136.7}, {44.0, 54.3}}, identifier: 'chevron.right', label: 'Next Week'
+                                          Button, 0x110e1a080, {{119.3, 219.3}, {201.3, 130.7}}, label: 'Sun 1, Rest Day'
+                                            StaticText, 0x110e1a1c0, {{119.3, 219.3}, {123.3, 63.3}}, label: 'Sun 1'
+                                            StaticText, 0x110e1a300, {{119.3, 286.7}, {201.3, 63.3}}, label: 'Rest Day'
+                                          Button, 0x110e1a440, {{119.3, 386.0}, {201.3, 130.7}}, label: 'Mon 2, Rest Day'
+                                            StaticText, 0x110e1a580, {{119.3, 386.0}, {142.7, 63.3}}, label: 'Mon 2'
+                                            StaticText, 0x110e1a6c0, {{119.3, 453.3}, {201.3, 63.3}}, label: 'Rest Day'
+                                          Button, 0x110e1a800, {{119.3, 552.7}, {201.3, 130.7}}, label: 'Tue 3, Rest Day'
+                                            StaticText, 0x110e1a940, {{119.3, 552.7}, {124.0, 63.3}}, label: 'Tue 3'
+                                            StaticText, 0x110e1aa80, {{119.3, 620.0}, {201.3, 63.3}}, label: 'Rest Day'
+                                          Button, 0x110e1abc0, {{119.3, 719.3}, {201.3, 130.7}}, label: 'Wed 4, Rest Day'
+                                            StaticText, 0x110e1ad00, {{119.3, 719.3}, {147.3, 63.3}}, label: 'Wed 4'
+                                            StaticText, 0x110e1ae40, {{119.3, 786.7}, {201.3, 63.3}}, label: 'Rest Day'
+                                          Button, 0x110e1af80, {{119.3, 886.0}, {201.3, 130.7}}, label: 'Thu 5, Rest Day'
+                                            StaticText, 0x110e1b0c0, {{119.3, 886.0}, {131.0, 63.3}}, label: 'Thu 5'
+                                            StaticText, 0x110e1b200, {{119.3, 953.3}, {201.3, 63.3}}, label: 'Rest Day'
+                                          Button, 0x110e1b340, {{119.3, 1052.7}, {201.3, 130.7}}, label: 'Fri 6, Rest Day'
+                                            StaticText, 0x110e1b480, {{119.3, 1052.7}, {100.7, 63.3}}, label: 'Fri 6'
+                                            StaticText, 0x110e1b5c0, {{119.3, 1120.0}, {201.3, 63.3}}, label: 'Rest Day'
+                                          Button, 0x110e1b700, {{16.0, 1207.3}, {408.0, 154.7}}, label: 'Sat 7, Rest Day', Selected
+                                            StaticText, 0x110e1b840, {{119.3, 1219.3}, {115.7, 63.3}}, label: 'Sat 7'
+                                            StaticText, 0x110e1b980, {{119.3, 1286.7}, {201.3, 63.3}}, label: 'Rest Day'
+                                        Other, 0x110e1bac0, {{407.0, 116.0}, {30.0, 378.7}}, label: 'Vertical scroll bar, 4 pages', value: 0%
+                                          Other, 0x110e1bc00, {{434.0, 119.0}, {3.0, 123.3}}
+                                        Other, 0x110e1bd40, {{407.0, 116.0}, {30.0, 378.7}}, label: 'Vertical scroll bar, 4 pages', value: 0%
+                                          Other, 0x110e1be80, {{434.0, 119.0}, {3.0, 123.3}}
+                                      ScrollView, 0x110e1c000, {{0.0, 494.7}, {440.0, 461.3}}, identifier: 'weekly-plan-template-list'
+                                        Other, 0x110e1c140, {{0.0, 494.7}, {440.0, 461.3}}
+                                          Other, 0x110e1c280, {{0.0, 823.0}, {440.0, 133.0}}
+                                        Other, 0x110e1c3c0, {{0.0, 494.7}, {440.0, 461.3}}
+                                          Other, 0x110e1c500, {{0.0, 823.0}, {440.0, 133.0}}
+                                        Other, 0x110e1c640, {{0.0, 494.7}, {440.0, 857.0}}
+                                          StaticText, 0x110e1c780, {{16.0, 510.7}, {302.3, 187.3}}, label: 'Saturday, November 7, 2026'
+                                          StaticText, 0x110e1c8c0, {{16.0, 710.0}, {348.7, 102.3}}, label: 'Plans are saved on this device.'
+                                          StaticText, 0x110e1ca00, {{16.0, 824.3}, {400.0, 174.7}}, label: 'Choose a template or drag it onto a day.'
+                                          Button, 0x110e1cb40, {{16.0, 1011.0}, {408.0, 125.3}}, identifier: 'weekly-plan-template-33333333-3333-4333-8333-333333333333', label: 'Codex Circuit Builder'
+                                            StaticText, 0x110e1cc80, {{16.0, 1011.0}, {408.0, 125.3}}, label: 'Codex Circuit Builder'
+                                            Image, 0x110e1cdc0, {{20.7, 1016.0}, {53.0, 53.0}}, identifier: 'plus.circle', label: 'Add'
+                                          Button, 0x110e1cf00, {{16.0, 1148.3}, {408.0, 187.3}}, identifier: 'weekly-plan-template-22222222-2222-4222-8222-222222222222', label: 'Codex Strength Starter'
+                                            StaticText, 0x110e1d040, {{16.0, 1148.3}, {408.0, 187.3}}, label: 'Codex Strength Starter'
+                                            Image, 0x110e1d180, {{20.7, 1153.3}, {53.0, 53.0}}, identifier: 'plus.circle', label: 'Add'
+                                        Other, 0x110e1d2c0, {{407.0, 494.7}, {30.0, 378.3}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                          Other, 0x110e1d400, {{434.0, 497.7}, {3.0, 197.7}}
+                                        Other, 0x110e1d540, {{407.0, 494.7}, {30.0, 378.3}}, label: 'Vertical scroll bar, 3 pages', value: 0%
+                                          Other, 0x110e1d680, {{434.0, 497.7}, {3.0, 197.7}}
+                            Toolbar, 0x110e1d7c0, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x110e1d900, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x110e1da40, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x110e1db80, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x110e1dcc0, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x110e1de00, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x110e1df40, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x110e1e080, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x110e1e1c0, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x110e1e300, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today'
+                              Image, 0x110e1e440, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x110e1e580, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                              Image, 0x110e1e6c0, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x110e1e800, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x110e1e940, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x110e1ea80, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x110e1ebc0, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x110e1ed00, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x110e1ee40, {{120.2, 877.0}, {104.5, 54.0}}
+                            Other, 0x110e1ef80, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x110e1f0c0, {{120.2, 877.0}, {104.3, 54.0}}
+                              Other, 0x110e1f200, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x110e1f340, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x110e1f480, {{120.2, 877.0}, {104.3, 54.0}}
+                                    Other, 0x110e1f5c0, {{120.2, 877.0}, {104.3, 54.0}}
+                                  Other, 0x110e1f700, {{120.2, 877.0}, {104.3, 54.0}}
+                                Other, 0x110e1f840, {{120.2, 877.0}, {104.3, 54.0}}
+                    Other, 0x110e1f980, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x110e1fac0, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x110e1fc00, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x110e1fd40, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x110e1fe80, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x1065a4000, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x1065a4140, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x1065a4280, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x1065a43c0, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x1065a4500, {{220.0, 492.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x110e17ac0, pid: 49630, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1065a4640, pid: 49630, label: 'DUNE'
+  }

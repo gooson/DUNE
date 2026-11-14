@@ -1,0 +1,137 @@
+{
+  "scope": "B10 iPad completed normal and MAX native review; original MAX failure retained with corrected test-only retry",
+  "source_revision": "0e1de4237331328f7c64db341cde5de5559181d5",
+  "app_source_unchanged_from_initial": "4fd3b3aadfa39908948538587aea81856ad14c48",
+  "first_run": {
+    "executed": 2,
+    "passed": 1,
+    "failed": 1,
+    "skipped": 0,
+    "result_receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-ui.log.result.json",
+    "summary": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-summary.json",
+    "normal": "passed full W05/W06/W31 and +1 Set flow",
+    "max": "failed at Complete Set reachability check before W31 capture; inline button AX y989 to1098.5 below modal controls viewport bottom y909, so this is test scroll/reveal issue; adaptive test-only retry active"
+  },
+  "captures": [
+    {
+      "screen": "W06",
+      "test": "testVisualAuditStrengthStartSessionLastSetAtMaximumText()",
+      "name": "screen-0-1512x2316-W06 MAX strength input and exercise icon_0_C0CFC832-1BD8-47F4-924C-77B80BC335EF.png",
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/F727ACFA-9AFD-43B0-8B78-D08683CF12E6.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/E46AF743-3212-479C-B3F3-C971B8E46C80.txt",
+      "result": "diagnostic_failed_case"
+    },
+    {
+      "screen": "W06",
+      "test": "testVisualAuditStrengthStartSessionLastSetAtMaximumText()",
+      "name": "screen-0-1512x2316-W06 MAX overview icon and exercise name_0_5A57AE51-E211-4306-8AC2-33BE4C951BD1.png",
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/2C8EE9E0-415B-4A71-A9EE-93EB36E037F2.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/EBAF24B6-AF24-4B23-AF34-0C1CE6CEE2BB.txt",
+      "result": "diagnostic_failed_case"
+    },
+    {
+      "screen": "W05",
+      "test": "testVisualAuditStrengthStartSessionLastSetAtMaximumText()",
+      "name": "screen-0-1512x2316-W05 MAX strength start and pinned action_0_149525F8-98A3-4215-8B2A-B244AE01C26F.png",
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/9F057060-A363-4B03-85E6-B215249F4351.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/9B882970-6B63-4192-9E6B-D9C3E47B9464.txt",
+      "result": "diagnostic_failed_case"
+    },
+    {
+      "screen": "W31",
+      "test": "testVisualAuditStrengthStartSessionLastSetAtNormalText()",
+      "name": "screen-0-1512x2316-W31 normal initial last-set choices_0_B65C4DD8-9B8F-4317-BDEE-9F20D9C17152.png",
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/F578D87F-C943-4C4A-A95B-2B240F7F43A0.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/EC8A199A-F560-4598-BA99-26E4399CD271.txt",
+      "result": "passed"
+    },
+    {
+      "screen": "W06",
+      "test": "testVisualAuditStrengthStartSessionLastSetAtNormalText()",
+      "name": "screen-0-1512x2316-W06 normal strength input and exercise icon_0_A6D94A21-2D13-4784-B613-DBC203DA9530.png",
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/92BBEC35-1DF2-4F52-ADD8-16F99103DBCB.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/F567FF59-BBD6-4BB2-8CD8-DA48A2D3C737.txt",
+      "result": "passed"
+    },
+    {
+      "screen": "W06",
+      "test": "testVisualAuditStrengthStartSessionLastSetAtNormalText()",
+      "name": "screen-0-1512x2316-W06 normal overview icon and exercise name_0_53716CC6-B0EB-4E1C-BF1E-C7A722572CF9.png",
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/8FEC6FA4-2624-45B1-BF36-BB73CAD39131.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/49F28703-6B82-4299-A3AC-A5D45D6D75F9.txt",
+      "result": "passed"
+    },
+    {
+      "screen": "W05",
+      "test": "testVisualAuditStrengthStartSessionLastSetAtNormalText()",
+      "name": "screen-0-1512x2316-W05 normal strength start and pinned action_0_01CEDC4D-F8E7-447A-AE9B-E08D60758867.png",
+      "png": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/CA6505F8-3E22-4F49-AFE9-3B7C9750CFC3.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-attachments/3D8BC81F-97F9-451B-B9E0-7C7D08E8B33A.txt",
+      "result": "passed"
+    },
+    {
+      "screen": "W05",
+      "name": "07-ipad-ipad-retry1-max-after",
+      "png": "/private/tmp/dune-b10-gallery-prep/W05/assets/07-ipad-ipad-retry1-max-after.png",
+      "ax": "/private/tmp/dune-b10-gallery-prep/W05/assets/07-ipad-ipad-retry1-max-after.txt",
+      "result": "passed_retry1"
+    },
+    {
+      "screen": "W06",
+      "name": "09-ipad-ipad-retry1-max-after",
+      "png": "/private/tmp/dune-b10-gallery-prep/W06/assets/09-ipad-ipad-retry1-max-after.png",
+      "ax": "/private/tmp/dune-b10-gallery-prep/W06/assets/09-ipad-ipad-retry1-max-after.txt",
+      "result": "passed_retry1"
+    },
+    {
+      "screen": "W06",
+      "name": "10-ipad-ipad-retry1-max-after",
+      "png": "/private/tmp/dune-b10-gallery-prep/W06/assets/10-ipad-ipad-retry1-max-after.png",
+      "ax": "/private/tmp/dune-b10-gallery-prep/W06/assets/10-ipad-ipad-retry1-max-after.txt",
+      "result": "passed_retry1"
+    },
+    {
+      "screen": "W31",
+      "name": "02-ipad-ipad-retry1-max-after",
+      "png": "/private/tmp/dune-b10-gallery-prep/W31/assets/02-ipad-ipad-retry1-max-after.png",
+      "ax": "/private/tmp/dune-b10-gallery-prep/W31/assets/02-ipad-ipad-retry1-max-after.txt",
+      "result": "passed_retry1"
+    }
+  ],
+  "observations": {
+    "W05": [
+      "Passed normal capture shows iPad modal, full exercise title, original icon/details, and visible pinned Start Workout action. AX button frame (104,833,548,64) within modal.",
+      "MAX capture belongs to failed selector; inspect as prefix diagnostic only.",
+      "Passed MAX retry capture shows full Korean body name, original icon/muscle information, and Start Workout action inside the modal; AX button frame (104,819.5,548,77.5)."
+    ],
+    "W06": [
+      "Passed normal overview capture shows full Korean exercise name and icon; normal input capture shows 60 KG, 10 REPS controls and Complete Set fixed at modal bottom.",
+      "Normal test proceeded through 62.5 KG/11 reps to the last-set sheet; screenshot of W31 shows 62.5 behind sheet.",
+      "MAX overview/input captures belong to failed selector; no MAX completion claim.",
+      "Passed MAX retry overview shows the full Korean body name and icon after bounded scrolling; input capture shows 60 KG/10 REPS with full increment/decrement controls. Complete Set is inline on iPad at MAX and is brought into view by the reviewed test-only reveal before activation."
+    ],
+    "W31": [
+      "Passed normal initial sheet capture shows All Sets Done, +1 Set, and Finish Workout actions; AX includes button identifiers workout-session-add-set and workout-session-finish. Normal test asserts +1 Set flow.",
+      "No iPad MAX W31 capture in first run. Phone W31 remains never reached.",
+      "Passed MAX retry initial sheet shows All Sets Done, +1 Set, and Finish Workout together; AX frames for +1 Set (104,682,548,77.5) and Finish (104,767.5,548,77.5). The MAX selector continued through +1 Set."
+    ]
+  },
+  "introduced_p1_p2_verified": [],
+  "limits": [
+    "The first iPad MAX failed at Complete Set visibility; its failure receipt is retained and a single test-only retry passed.",
+    "Phone original and retry selectors both failed 0/2, with W31 never reached; iPad normal/MAX success does not substitute for phone W31 medium/large or action proof.",
+    "Duo closed/open current-source capture absent; historical baselines are not after evidence.",
+    "Actual-map updates are not claimed by this review."
+  ],
+  "final_revision": "5a18f60911d3fd92801371993ebf112d4afcf8fa",
+  "retry1": {
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "selector": "testVisualAuditStrengthStartSessionLastSetAtMaximumText",
+    "result_receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-retry1-ui.log.result.json",
+    "summary": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b10/ipad-retry1-summary.json",
+    "remediation": "Test-only adaptive Complete Set reveal for iPad inline layout; app W05/W06/W31 source bytes unchanged."
+  }
+}

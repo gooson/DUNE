@@ -1047,10 +1047,12 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     func testPostureComparison() throws {
         openHistory()
-        let compare = app.buttons["Compare"].firstMatch
-        XCTAssertTrue(compare.waitForExistence(timeout: 5))
-        compare.auditTap()
-        let metrics = app.staticTexts.matching(NSPredicate(format: "label == %@", "8 metrics"))
+        XCTAssertTrue(app.waitAndTapToolbarAction("Compare"),
+                      "Compare must remain reachable directly or through native toolbar overflow")
+        let metrics = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND label == %@",
+            "posture-history-row-metric-count-", "8 metrics"
+        ))
         XCTAssertEqual(metrics.count, 2, "Both synthetic records should be selectable")
         for index in 0..<2 {
             let metric = metrics.element(boundBy: index)
@@ -1194,8 +1196,54 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     private func openPostureRoute(_ menuIdentifier: String) {
         navigateToWellness()
-        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.wellnessToolbarAdd))
-        XCTAssertTrue(app.waitAndTap(menuIdentifier))
+        guard app.waitAndTapToolbarAction("Add record") else {
+            XCTFail("Wellness Add record must be reachable before opening the posture route")
+            return
+        }
+        let actionLabel: String
+        switch menuIdentifier {
+        case "wellness-menu-posture": actionLabel = "Posture Assessment"
+        case "wellness-menu-realtime-posture": actionLabel = "Realtime Analysis"
+        default:
+            XCTFail("Unexpected posture route: \(menuIdentifier)")
+            return
+        }
+        let action = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ OR label == %@", menuIdentifier, actionLabel
+        )).firstMatch
+        guard action.waitForExistence(timeout: 5) else {
+            XCTFail("The requested posture menu action must exist: \(actionLabel)")
+            return
+        }
+        if !action.isHittable {
+            // At MAX on the closed Duo, the fourth item sits below the native menu viewport.
+            let menu = app.collectionViews.containing(.button, identifier: menuIdentifier).firstMatch
+            for _ in 0..<4 {
+                if action.isHittable { break }
+                guard menu.exists, menu.isHittable else { break }
+                let window = app.windows.firstMatch
+                let viewport = menu.frame.intersection(window.frame).insetBy(dx: 8, dy: 8)
+                guard !viewport.isNull, viewport.width > 0, viewport.height > 0 else { break }
+                let towardLaterItems = action.frame.midY > viewport.midY
+                let origin = window.coordinate(withNormalizedOffset: .zero)
+                let start = origin.withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX,
+                    dy: viewport.minY + viewport.height * (towardLaterItems ? 0.65 : 0.35) - window.frame.minY
+                ))
+                let end = origin.withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX,
+                    dy: viewport.minY + viewport.height * (towardLaterItems ? 0.35 : 0.65) - window.frame.minY
+                ))
+                start.press(forDuration: 0.05, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80),
+                            thenHoldForDuration: 0.35)
+            }
+        }
+        guard action.isHittable else {
+            XCTFail("The requested posture menu action must be visible: \(actionLabel)")
+            return
+        }
+        action.auditTap()
     }
 
     func testP04SeededResultScoreMetricsMemoSaveAndRetake() throws {
@@ -1271,6 +1319,142 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
                       "Synthetic complete result should open")
     }
 
+    func testP05HistoryLatestScoreFilterAndDetailReturn() throws {
+        openHistory()
+        let hero = app.descendants(matching: .any)["posture-history-latest-score"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 5))
+        XCTAssertTrue(hero.label.contains("Posture Score")
+                      && hero.label.contains("86 / 100")
+                      && hero.label.contains("8 metrics"),
+                      "Combined hero must expose the stored score and metric count")
+        XCTAssertFalse(app.staticTexts["Time for a new assessment"].exists,
+                       "The newest fixture is one day old, so the seven-day reminder stays hidden")
+        VisualAudit.capture("P05 latest recorded score and trend")
+
+        let filter = app.buttons["Forward Head"].firstMatch
+        reveal(filter)
+        filter.auditTap()
+        XCTAssertTrue(filter.isSelected, "The selected metric filter should be exposed to accessibility")
+        let rows = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "8 metrics"))
+        XCTAssertEqual(rows.count, 2, "Both seeded records remain in descending history")
+        let row = rows.firstMatch
+        reveal(row)
+        row.auditTap()
+        XCTAssertTrue(app.navigationBars["Assessment Detail"].waitForExistence(timeout: 5))
+        let back = app.navigationBars["Assessment Detail"].buttons.firstMatch
+        XCTAssertTrue(back.exists && back.isHittable)
+        back.auditTap()
+        XCTAssertTrue(hero.waitForExistence(timeout: 5), "Back returns to the same history")
+
+        let latest = rows.firstMatch
+        let cancelAlert = requestPostureHistoryDeletion(latest)
+        cancelAlert.buttons["Cancel"].auditTap()
+        XCTAssertEqual(rows.count, 2, "Cancel keeps both seeded assessments")
+
+        let deleteLatestAlert = requestPostureHistoryDeletion(rows.firstMatch)
+        deleteLatestAlert.buttons["Delete"].auditTap()
+        let remainingScore = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "label CONTAINS %@", "73 / 100"), object: hero
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [remainingScore], timeout: 5), .completed,
+                       "Deleting the newest record reveals the original older score")
+        let reminder = app.staticTexts["Time for a new assessment"].firstMatch
+        XCTAssertTrue(reminder.waitForExistence(timeout: 5), "The remaining record is fourteen days old")
+        XCTAssertEqual(rows.count, 1)
+        reveal(reminder)
+        VisualAudit.capture("P05 real remaining score and seven-day reminder")
+
+        let deleteRemainingAlert = requestPostureHistoryDeletion(rows.firstMatch)
+        deleteRemainingAlert.buttons["Delete"].auditTap()
+        let empty = app.staticTexts["No Posture Assessments"].firstMatch
+        XCTAssertTrue(empty.waitForExistence(timeout: 5), "Deleting the last fixture shows the empty state")
+        XCTAssertFalse(hero.exists)
+        VisualAudit.capture("P05 empty history after isolated fixture deletion")
+    }
+
+    func testP05HistoryLatestScoreAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openHistory(maxRevealAttempts: 36)
+        let hero = app.descendants(matching: .any)["posture-history-latest-score"].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 5))
+        XCTAssertTrue(hero.label.contains("Posture Score")
+                      && hero.label.contains("86 / 100")
+                      && hero.label.contains("8 metrics"),
+                      "Combined hero must expose the stored score and metric count")
+        let scroll = app.scrollViews["posture-history-screen"].firstMatch
+        XCTAssertTrue(scroll.exists)
+        XCTAssertTrue(scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 4, dy: 4)
+            .contains(hero.frame), "The complete latest-score hero must fit at maximum text size")
+        VisualAudit.capture("P05 MAX latest recorded score")
+    }
+
+    private func requestPostureHistoryDeletion(_ row: XCUIElement) -> XCUIElement {
+        reveal(row)
+        row.press(forDuration: 1.1)
+        let delete = app.buttons["Delete"].firstMatch
+        XCTAssertTrue(delete.waitForExistence(timeout: 5), "History context menu must offer Delete")
+        delete.auditTap()
+        let alert = app.alerts["Delete Assessment"].firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 5), "Delete must require confirmation")
+        return alert
+    }
+
+    func testP07SymmetryKeepsSeededValuesAndUnits() throws {
+        openSeededSymmetry()
+        let scroll = app.scrollViews["posture-symmetry-screen"].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        for (metric, side, expected) in seededSymmetryValues {
+            let id = "posture-symmetry-value-\(metric)-\(side)"
+            let value = app.staticTexts[id].firstMatch
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(id, maxSwipes: 16),
+                          "Seeded symmetry value must remain reachable: \(id)")
+            XCTAssertEqual(value.label, expected, "Keep the recorded value and unit")
+        }
+        VisualAudit.capture("P07 three stored left-right metric pairs")
+    }
+
+    func testP07SymmetryValuesFitAtMaximumAccessibilitySize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        openSeededSymmetry()
+        let scroll = app.scrollViews["posture-symmetry-screen"].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        for (metric, side, expected) in seededSymmetryValues {
+            let id = "posture-symmetry-value-\(metric)-\(side)"
+            let value = app.staticTexts[id].firstMatch
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(id, maxSwipes: 16),
+                          "MAX symmetry value must remain reachable: \(id)")
+            XCTAssertEqual(value.label, expected)
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 6, dy: 6)
+            XCTAssertTrue(viewport.contains(value.frame), "The whole value and unit must fit: \(id)")
+            VisualAudit.capture("P07 MAX \(metric) \(side) full value")
+        }
+    }
+
+    private var seededSymmetryValues: [(String, String, String)] {
+        [("shoulderAsymmetry", "left", "50.0 cm"), ("shoulderAsymmetry", "right", "48.0 cm"),
+         ("hipAsymmetry", "left", "0.0 cm"), ("hipAsymmetry", "right", "-1.0 cm"),
+         ("kneeAlignment", "left", "8.1°"), ("kneeAlignment", "right", "2.7°")]
+    }
+
+    private func openSeededSymmetry() {
+        openHistory()
+        let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "8 metrics")).firstMatch
+        reveal(row)
+        row.auditTap()
+        let link = app.buttons["posture-symmetry-link"].firstMatch
+        reveal(link)
+        link.auditTap()
+        XCTAssertTrue(app.scrollViews["posture-symmetry-screen"].firstMatch.waitForExistence(timeout: 5))
+    }
+
     func testP02RealtimeFallbackAndP03ExerciseSelection() throws {
         openPostureRoute("wellness-menu-realtime-posture")
         let fallback = app.descendants(matching: .any)["realtime-camera-unavailable"].firstMatch
@@ -1335,7 +1519,14 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         XCTAssertTrue(revealExerciseRow(last, in: reopenedList), "Selected final row must remain reachable")
         XCTAssertTrue(last.isSelected)
         VisualAudit.capture("P03 MAX final exercise selected on reopen")
-        app.buttons["posture-exercise-close"].tap()
+        let close = app.buttons["posture-exercise-close"].firstMatch
+        XCTAssertTrue(close.exists && close.isHittable
+                      && app.windows.firstMatch.frame.contains(close.frame),
+                      "MAX Close must fit outside the scrolling list")
+        close.tap()
+        XCTAssertTrue(reopenedList.waitForNonExistence(timeout: 5), "Close must dismiss the exercise list")
+        XCTAssertTrue(mode.waitForExistence(timeout: 5) && mode.isHittable)
+        XCTAssertEqual(mode.value as? String, "lunge", "Close must preserve the selected exercise")
     }
 
     private func revealExerciseRow(_ row: XCUIElement, in list: XCUIElement) -> Bool {

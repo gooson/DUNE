@@ -1,0 +1,135 @@
+Attributes: Application, 0x102bbb480, pid: 95710, label: 'DUNE'
+Element subtree:
+ →Application, 0x102bbb480, pid: 95710, label: 'DUNE'
+    Window (Main), 0x102bba800, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x102bbb840, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x102bb9cc0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x102bbbd40, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x102bbbc00, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x102bb9680, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x102bbb980, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x102bba580, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x102bbb340, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x102bbb700, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x102bba1c0, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x102bbaa80, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x102bba300, {{0.0, 0.0}, {440.0, 956.0}}
+                            NavigationBar, 0x102bbaf80, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Posture History'
+                              Button, 0x102bb9e00, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Wellness'
+                              StaticText, 0x102bba940, {{76.0, 73.7}, {123.7, 20.7}}, label: 'Posture History'
+                              Other, 0x102bbabc0, {{246.3, 66.0}, {77.0, 36.0}}
+                                Other, 0x102bbae40, {{246.3, 66.0}, {77.0, 36.0}}
+                                  Button, 0x102bb8b40, {{246.3, 66.0}, {77.0, 36.0}}, identifier: 'posture-history-capture-button', label: 'Capture'
+                              Other, 0x102a68dc0, {{339.3, 66.0}, {76.7, 36.0}}
+                                Other, 0x102a6b840, {{339.3, 66.0}, {76.7, 36.0}}
+                                  Button, 0x102a6b5c0, {{339.3, 66.0}, {76.7, 36.0}}, identifier: 'posture-history-compare-button', label: 'Compare'
+                            Other, 0x102a68640, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x102a6b700, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x106138000, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x106138140, {{0.0, 0.0}, {440.0, 956.0}}
+                                    ScrollView, 0x106138280, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'posture-history-screen'
+                                      Other, 0x1061383c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x106138500, {{0.0, 0.0}, {440.0, 156.0}}
+                                        Other, 0x106138640, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x106138780, {{0.0, 0.0}, {440.0, 956.0}}
+                                        Other, 0x1061388c0, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x106138a00, {{0.0, 116.0}, {440.0, 870.7}}
+                                        StaticText, 0x106138b40, {{16.0, 132.0}, {408.0, 157.3}}, identifier: 'posture-history-latest-score', label: 'Posture Score, 86 / 100, November 5, 2026, 8 metrics'
+                                          Image, 0x106138c80, {{31.5, 158.2}, {105.0, 105.0}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                          StaticText, 0x106138dc0, {{152.0, 152.0}, {112.0, 20.3}}, label: 'Posture Score'
+                                          StaticText, 0x106138f00, {{152.0, 180.3}, {134.3, 40.7}}, label: '86 / 100'
+                                          StaticText, 0x106139040, {{152.0, 229.0}, {127.7, 18.0}}, label: 'November 5, 2026'
+                                          StaticText, 0x106139180, {{152.0, 255.0}, {53.3, 14.3}}, label: '8 metrics'
+                                        Other, 0x1061392c0, {{32.0, 321.3}, {376.0, 220.0}}, identifier: 'chart-trend-probe', label: 'trend-endpoints:none'
+                                        Other, 0x106139400, {{32.0, 321.3}, {376.0, 220.0}}, identifier: 'chart-selection-probe', label: 'none'
+                                        Other, 0x106139540, {{32.0, 321.3}, {376.0, 220.0}}
+                                        Other, 0x106139680, {{32.0, 321.3}, {376.0, 220.0}}
+                                          Other, 0x1061397c0, {{24.1, 329.3}, {54.9, 186.0}}, label: 'Oct 23, 2026 at 00 to Oct 25, 2026 at 00', value: 73 to 73, 2 values
+                                          Other, 0x106139900, {{353.6, 329.3}, {54.9, 186.0}}, label: 'Nov 4, 2026 at 00 to Nov 6, 2026 at 00', value: 86 to 86, 2 values
+                                        ScrollView, 0x106139a40, {{16.0, 573.3}, {408.0, 38.3}}
+                                          Other, 0x106139b80, {{16.0, 573.3}, {1118.3, 38.3}}
+                                            Button, 0x106139cc0, {{16.0, 581.3}, {65.0, 30.3}}, label: 'Overall', Selected
+                                            Button, 0x106139e00, {{89.0, 581.3}, {105.3, 30.3}}, label: 'Forward Head'
+                                            Button, 0x106139f40, {{202.3, 581.3}, {137.3, 30.3}}, label: 'Rounded Shoulders'
+                                            Button, 0x10613a080, {{347.7, 581.3}, {130.3, 30.3}}, label: 'Thoracic Kyphosis'
+                                            Button, 0x10613a1c0, {{486.0, 581.3}, {147.7, 30.3}}, label: 'Knee Hyperextension'
+                                            Button, 0x10613a300, {{641.7, 581.3}, {145.3, 30.3}}, label: 'Shoulder Asymmetry'
+                                            Button, 0x10613a440, {{795.0, 581.3}, {113.0, 30.3}}, label: 'Hip Asymmetry'
+                                            Button, 0x10613a580, {{916.0, 581.3}, {115.7, 30.3}}, label: 'Knee Alignment'
+                                            Button, 0x10613a6c0, {{1039.7, 581.3}, {94.7, 30.3}}, label: 'Lateral Shift'
+                                        Other, 0x10613a800, {{32.0, 643.7}, {301.3, 129.3}}
+                                          Image, 0x10613a940, {{33.3, 645.3}, {15.0, 11.0}}, identifier: 'chart.bar.fill', label: 'Chart Column'
+                                          StaticText, 0x10613aa80, {{53.7, 643.7}, {46.0, 14.3}}, label: 'Average'
+                                          Image, 0x10613abc0, {{241.3, 645.3}, {12.0, 11.0}}, identifier: 'calendar', label: 'Calendar'
+                                          StaticText, 0x10613ad00, {{258.7, 643.7}, {74.7, 14.3}}, label: 'Assessments'
+                                          StaticText, 0x10613ae40, {{32.0, 662.0}, {25.7, 24.0}}, label: '80'
+                                          StaticText, 0x10613af80, {{240.0, 662.0}, {12.0, 24.0}}, label: '2'
+                                          Image, 0x10613b0c0, {{33.3, 731.0}, {11.7, 13.0}}, identifier: 'trophy.fill', label: 'Trophy Cup, Filled'
+                                          StaticText, 0x10613b200, {{50.3, 730.3}, {25.3, 14.3}}, label: 'Best'
+                                          Image, 0x10613b340, {{241.3, 733.0}, {9.0, 9.0}}, identifier: 'arrow.up.right', label: 'Up-Right Diagonal Arrow'
+                                          StaticText, 0x10613b480, {{255.7, 730.3}, {50.3, 14.3}}, label: 'Progress'
+                                          StaticText, 0x10613b5c0, {{32.0, 749.0}, {25.7, 24.0}}, label: '86'
+                                          StaticText, 0x10613b700, {{240.0, 748.7}, {67.7, 24.0}}, label: '+17.8%'
+                                        StaticText, 0x10613b840, {{16.0, 805.7}, {58.0, 20.3}}, label: 'History'
+                                        Button, 0x10613b980, {{16.0, 834.0}, {408.0, 64.3}}, identifier: 'posture-history-row-metric-count-E6415155-4690-4BDF-913E-07CB44A1D9A0', label: '86, November 5, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. '
+                                          StaticText, 0x10613bac0, {{80.0, 846.0}, {130.7, 18.0}}, label: 'November 5, 2026'
+                                          StaticText, 0x10613bc00, {{40.5, 859.5}, {15.0, 13.3}}, label: '86'
+                                          StaticText, 0x10613bd40, {{80.0, 869.0}, {53.3, 14.3}}, identifier: 'posture-history-row-metric-count-E6415155-4690-4BDF-913E-07CB44A1D9A0', label: '8 metrics'
+                                          StaticText, 0x10613be80, {{137.3, 866.0}, {4.7, 20.3}}, label: '·'
+                                          Image, 0x106150000, {{405.3, 861.0}, {6.0, 10.3}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x106150140, {{146.0, 869.0}, {225.0, 14.3}}, label: 'Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. '
+                                        Button, 0x106150280, {{16.0, 906.3}, {408.0, 64.3}}, identifier: 'posture-history-row-metric-count-1CCC3FEE-6E3A-48B2-8672-844211F95EB3', label: '73, October 23, 2026, 8 metrics, ·, Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. '
+                                          StaticText, 0x1061503c0, {{80.0, 918.3}, {125.0, 18.0}}, label: 'October 23, 2026'
+                                          StaticText, 0x106150500, {{41.0, 931.8}, {14.0, 13.3}}, label: '73'
+                                          StaticText, 0x106150640, {{80.0, 941.3}, {53.3, 14.3}}, identifier: 'posture-history-row-metric-count-1CCC3FEE-6E3A-48B2-8672-844211F95EB3', label: '8 metrics'
+                                          StaticText, 0x106150780, {{137.3, 938.3}, {4.7, 20.3}}, label: '·'
+                                          Image, 0x1061508c0, {{405.3, 933.3}, {6.0, 10.3}}, identifier: 'chevron.right', label: 'Forward'
+                                          StaticText, 0x106150a00, {{146.0, 941.3}, {225.0, 14.3}}, label: 'Visual audit fixture — synthetic measurements for layout verification. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. Long memo wrapping and scrolling. '
+                                      Other, 0x106150b40, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                        Other, 0x106150c80, {{434.0, 119.0}, {3.0, 671.3}}
+                                      Other, 0x106150dc0, {{407.0, 116.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                        Other, 0x106150f00, {{434.0, 119.0}, {3.0, 671.3}}
+                            Toolbar, 0x106151040, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x106151180, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x1061512c0, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x106151400, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x106151540, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x106151680, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x1061517c0, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x106151900, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x106151a40, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x106151b80, {{25.0, 877.0}, {104.5, 54.0}}, label: 'Today'
+                              Image, 0x106151cc0, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x106151e00, {{120.2, 877.0}, {104.5, 54.0}}, label: 'Activity'
+                              Image, 0x106151f40, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x106152080, {{215.3, 877.0}, {104.5, 54.0}}, label: 'Wellness', Selected
+                              Image, 0x1061521c0, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x106152300, {{310.5, 877.0}, {104.5, 54.0}}, label: 'Life'
+                              Image, 0x106152440, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x106152580, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x1061526c0, {{215.3, 877.0}, {104.5, 54.0}}
+                            Other, 0x106152800, {{215.3, 877.0}, {104.3, 54.0}}
+                              Other, 0x106152940, {{215.3, 877.0}, {104.3, 54.0}}
+                              Other, 0x106152a80, {{215.3, 877.0}, {104.3, 54.0}}
+                                Other, 0x106152bc0, {{215.3, 877.0}, {104.3, 54.0}}
+                                  Other, 0x106152d00, {{215.3, 877.0}, {104.3, 54.0}}
+                                    Other, 0x106152e40, {{215.3, 877.0}, {104.3, 54.0}}
+                                  Other, 0x106152f80, {{215.3, 877.0}, {104.3, 54.0}}
+                                Other, 0x1061530c0, {{215.3, 877.0}, {104.3, 54.0}}
+                    Other, 0x106153200, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x106153340, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x106153480, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x1061535c0, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x106153700, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x106153840, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x106153980, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x106153ac0, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x106153c00, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x106153d40, {{220.0, 492.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x102bbb480, pid: 95710, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x106153e80, pid: 95710, label: 'DUNE'
+  }

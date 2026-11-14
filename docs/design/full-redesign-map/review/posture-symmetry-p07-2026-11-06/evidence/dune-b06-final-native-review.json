@@ -1,0 +1,39 @@
+{
+  "scope": "B06 final native visual review: P05/P07 regular iPhone light only",
+  "sources": {
+    "P05": "/private/tmp/dune-b06-gallery-prep/P05/manifest.json",
+    "P07": "/private/tmp/dune-b06-gallery-prep/P07/manifest.json"
+  },
+  "viewed_pngs": [
+    "/private/tmp/dune-b06-gallery-prep/P05/assets/21-regular-after.png",
+    "/private/tmp/dune-b06-gallery-prep/P05/assets/22-regular-after.png",
+    "/private/tmp/dune-b06-gallery-prep/P07/assets/21-regular-after.png",
+    "/private/tmp/dune-b06-gallery-prep/P07/assets/22-regular-after.png",
+    "/private/tmp/dune-b06-gallery-prep/P07/assets/24-regular-after.png",
+    "/private/tmp/dune-b06-gallery-prep/P07/assets/26-regular-after.png"
+  ],
+  "inspected_ax": [
+    "/private/tmp/dune-b06-gallery-prep/P05/assets/22-regular-after.txt",
+    "/private/tmp/dune-b06-gallery-prep/P07/assets/22-regular-after.txt",
+    "/private/tmp/dune-b06-gallery-prep/P07/assets/23-regular-after.txt",
+    "/private/tmp/dune-b06-gallery-prep/P07/assets/24-regular-after.txt",
+    "/private/tmp/dune-b06-gallery-prep/P07/assets/25-regular-after.txt",
+    "/private/tmp/dune-b06-gallery-prep/P07/assets/26-regular-after.txt",
+    "/private/tmp/dune-b06-gallery-prep/P07/assets/27-regular-after.txt"
+  ],
+  "findings": [],
+  "observations": [
+    "P05 current normal: 86/100 hero, date, metric count, chart, filters, stats, and lightweight rows remain readable. Lower rows enter the normal translucent tab-bar region and remain scroll content; no fixed-content collision observed.",
+    "P05 current MAX source 7b9138b6d: hero score/date/count fit and remain readable; navigation title truncates in native toolbar while Capture/Compare remain visible. AX confirms hero frame {{16,132},{408,543}} and combined label with 86 / 100 and 8 metrics.",
+    "P07 current normal: Caution and Normal label/icon foregrounds are dark and legible on the pale card; semantic yellow/green bars remain. All three metric pairs and units are visible.",
+    "P07 MAX current: six labeled values are present in AX and three distinct scroll-position PNGs cover shoulder, hip, knee pairs. Values/units fit on one line and card content wraps vertically; no value clipping found."
+  ],
+  "limits": [
+    "Visual verdict only for inspected regular iPhone light captures; no universal theme/dark/other device claim.",
+    "P05 current normal gallery route capture is from P07 test path; prior dedicated P05 behavior selectors and current iPad normal are separate evidence.",
+    "P07 MAX has six capture records but only three unique PNG frames; AX records distinguish left/right labels and frames.",
+    "P08 normal photo zoom held after native photo-center failure; no zoom pass claim.",
+    "Duo current-source captures unavailable, and iPad MAX was not captured on current source.",
+    "P05 current MAX route capture came from the P07 MAX test path; dedicated P05 MAX selector passed on previous source and is separate evidence."
+  ]
+}

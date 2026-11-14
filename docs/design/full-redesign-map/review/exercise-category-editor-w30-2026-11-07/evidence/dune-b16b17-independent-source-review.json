@@ -1,0 +1,21 @@
+{
+  "scope": "Read-only independent source/provenance preflight for B16 W29/W30/W33 and B17 S07/W32",
+  "base": "576cfdb98606baad724a69ced56bb9cb2db86780",
+  "B16": {
+    "W29": "Source changes only built-in row name/Default stack at accessibility sizes and allows custom name vertical growth; List, query order, read-only built-ins and custom edit/delete remain unchanged. Native MAX row readability pending.",
+    "W30": "Source changes only adaptive icon/color cell hit areas to 52pt in 56pt grid at accessibility sizes; selection, 36pt visible color circle, validation, Input Type and save callback unchanged. Native hit and selection proof pending.",
+    "W33": "No app patch. HealthKitWorkoutDetailView.swift SHA-256 fc1655387a9e635121cd7e86577002d9b0eafa774fea595c6dc6ff67dec61e08 matches B12 W28 phone/iPad normal/MAX capture sources and accepted main. Four paired PNG/AX hashes match B12 manifest. They may be cited as B12 evidence for the same titleEditorSheet, not relabeled as fresh B16 captures. Duo remains pending.",
+    "introduced_P1_P2": [],
+    "source_review": "/private/tmp/dune-b16-prep/source-review.json",
+    "reuse_proposal": "/private/tmp/dune-b16-prep/W33/source-byte-reuse-proposal.json"
+  },
+  "B17": {
+    "S07": "No patch. iPad separate WindowGroup uses WeeklyStatsDetailView and Close safeAreaInset.",
+    "W32": "No patch. WorkoutSessionView sheet fallback uses same detail and Done, retaining workout scene state.",
+    "evidence": "Historical actual map captures report dirty older 443a32ca source and no per-capture exact source proof; they cannot be promoted to new after/native pass.",
+    "introduced_P1_P2": [],
+    "source_review": "/private/tmp/dune-b17-prep/source-review.json"
+  },
+  "native_status": "No B16/B17 SDK, simulator or actual-map update by this review. B16 W29/W30 and B17 wrapper routes remain native pending if shipped as new scope.",
+  "repo_edits": false
+}

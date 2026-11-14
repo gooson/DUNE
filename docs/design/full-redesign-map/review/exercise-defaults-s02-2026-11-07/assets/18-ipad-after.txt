@@ -1,0 +1,128 @@
+Attributes: Application, 0x112cb66c0, pid: 56386, label: 'DUNE'
+Element subtree:
+ →Application, 0x112cb66c0, pid: 56386, label: 'DUNE'
+    Window (Main), 0x112cb6e40, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x112cb5e00, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x112cb6f80, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x112cb7d40, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x112cb7200, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x112cb5f40, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x112cb6a80, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x112cb6300, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x112cb57c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x112cb7980, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x112cb70c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x112cb7840, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x112cb5b80, {{0.0, 32.0}, {756.0, 1126.0}}
+                          Other, 0x112cb7ac0, {{0.0, 32.0}, {756.0, 1126.0}}
+                            Other, 0x112cb43c0, {{0.0, 32.0}, {756.0, 1126.0}}
+                              Other, 0x112cb6940, {{0.0, 32.0}, {756.0, 1126.0}}
+                                Other, 0x112cb4b40, {{0.0, 32.0}, {756.0, 1126.0}}
+                                  Other, 0x112cb4a00, {{0.0, 32.0}, {756.0, 1126.0}}
+                                    Other, 0x112cb4000, {{0.0, 32.0}, {756.0, 1126.0}}
+                                      Other, 0x112cb5680, {{0.0, 32.0}, {756.0, 1126.0}}
+                                        NavigationBar, 0x112cb4500, {{0.0, 42.0}, {756.0, 54.0}}, identifier: 'Exercise Defaults'
+                                          StaticText, 0x112cb4640, {{66.0, 51.0}, {165.5, 26.0}}, label: 'Exercise Defaults'
+                                          SearchField, 0x112cb5540, {{466.0, 42.0}, {280.0, 44.0}}, label: 'Search exercises', placeholderValue: 'Search exercises', value: Deadlift
+                                            Image, 0x112cb4280, {{478.0, 51.5}, {25.5, 24.5}}, identifier: 'magnifyingglass', label: 'Search'
+                                            Button, 0x112cb5180, {{706.5, 50.5}, {25.5, 25.5}}, label: 'Clear text'
+                                        Other, 0x112cb4c80, {{0.0, 32.0}, {756.0, 1126.0}}
+                                          Other, 0x112cb52c0, {{0.0, 32.0}, {756.0, 1126.0}}
+                                            Other, 0x112cb5040, {{0.0, 32.0}, {756.0, 1126.0}}
+                                              Other, 0x112cb6440, {{0.0, 32.0}, {756.0, 1126.0}}
+                                                CollectionView, 0x112cb75c0, {{0.0, 32.0}, {756.0, 1126.0}}, identifier: 'exercise-defaults-screen'
+                                                  Other, 0x112cb6580, {{-20.0, -2156.0}, {796.0, 5075.0}}
+                                                  Other, 0x112cb5a40, {{0.0, 32.0}, {756.0, 1126.0}}
+                                                    Other, 0x112cb7c00, {{0.0, 32.0}, {756.0, 104.0}}
+                                                  Other, 0x112cb7e80, {{0.0, 32.0}, {756.0, 1126.0}}
+                                                  Cell, 0x112cb7480, {{20.0, 96.0}, {716.0, 83.5}}
+                                                    Other, 0x112cb5400, {{20.0, 96.0}, {716.0, 83.5}}
+                                                    Other, 0x112cb7340, {{20.0, 96.0}, {716.0, 83.5}}
+                                                      Other, 0x112cb5900, {{20.0, 96.0}, {716.0, 83.5}}
+                                                        Other, 0x112cb7700, {{20.0, 96.0}, {716.0, 83.5}}
+                                                          StaticText, 0x112cba6c0, {{20.0, 96.0}, {716.0, 83.5}}, identifier: 'exercise-defaults-all-section', label: 'Results'
+                                                  Cell, 0x112cba1c0, {{20.0, 179.5}, {716.0, 93.5}}
+                                                    Other, 0x112cb9cc0, {{20.0, 179.5}, {716.0, 93.5}}
+                                                      Other, 0x112cb9e00, {{20.0, 179.5}, {716.0, 93.5}}
+                                                    Other, 0x112cb8a00, {{20.0, 179.5}, {716.0, 93.5}}
+                                                      Other, 0x112cbaa80, {{20.0, 179.5}, {716.0, 93.5}}
+                                                        Other, 0x112cbb700, {{20.0, 179.5}, {716.0, 93.5}}
+                                                          Button, 0x112cba940, {{20.0, 179.5}, {716.0, 93.5}}, identifier: 'exercise-defaults-all-section', label: '컨벤셔널 데드리프트'
+                                                            StaticText, 0x112cbb340, {{40.0, 194.5}, {464.0, 63.5}}, identifier: 'exercise-defaults-row-conventional-deadlift', label: '컨벤셔널 데드리프트'
+                                                              StaticText, 0x112cba300, {{80.0, 194.5}, {424.0, 63.5}}, label: '컨벤셔널 데드리프트'
+                                                              Image, 0x112cb8640, {{40.0, 212.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                            Image, 0x112cb83c0, {{685.5, 207.5}, {22.0, 37.5}}, identifier: 'chevron.forward'
+                                                  Cell, 0x112cba580, {{20.0, 273.0}, {716.0, 93.5}}
+                                                    Other, 0x112cb8000, {{20.0, 273.0}, {716.0, 93.5}}
+                                                      Other, 0x112cb8500, {{20.0, 273.0}, {716.0, 93.5}}
+                                                    Other, 0x11615e440, {{20.0, 273.0}, {716.0, 93.5}}
+                                                      Other, 0x11615d2c0, {{20.0, 273.0}, {716.0, 93.5}}
+                                                        Other, 0x11615d400, {{20.0, 273.0}, {716.0, 93.5}}
+                                                          Button, 0x11615d540, {{20.0, 273.0}, {716.0, 93.5}}, identifier: 'exercise-defaults-all-section', label: '스모 데드리프트'
+                                                            StaticText, 0x11615d680, {{40.0, 288.0}, {372.5, 63.5}}, identifier: 'exercise-defaults-row-sumo-deadlift', label: '스모 데드리프트'
+                                                              StaticText, 0x11615d7c0, {{80.0, 288.0}, {332.5, 63.5}}, label: '스모 데드리프트'
+                                                              Image, 0x11615d900, {{40.0, 306.0}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                            Image, 0x11615da40, {{685.5, 301.0}, {22.0, 37.5}}, identifier: 'chevron.forward'
+                                                  Other, 0x11615db80, {{80.0, 272.0}, {636.0, 1.0}}
+                                                  Cell, 0x11615dcc0, {{20.0, 366.5}, {716.0, 93.5}}
+                                                    Other, 0x11615de00, {{20.0, 366.5}, {716.0, 93.5}}
+                                                      Other, 0x11615df40, {{20.0, 366.5}, {716.0, 93.5}}
+                                                    Other, 0x11615e080, {{20.0, 366.5}, {716.0, 93.5}}
+                                                      Other, 0x11615e1c0, {{20.0, 366.5}, {716.0, 93.5}}
+                                                        Other, 0x11615e300, {{20.0, 366.5}, {716.0, 93.5}}
+                                                          Button, 0x112cca440, {{20.0, 366.5}, {716.0, 93.5}}, identifier: 'exercise-defaults-all-section', label: '루마니안 데드리프트'
+                                                            StaticText, 0x112cca580, {{40.0, 381.5}, {464.0, 63.5}}, identifier: 'exercise-defaults-row-romanian-deadlift', label: '루마니안 데드리프트'
+                                                              StaticText, 0x112cca6c0, {{80.0, 381.5}, {424.0, 63.5}}, label: '루마니안 데드리프트'
+                                                              Image, 0x112cca300, {{40.0, 399.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                            Image, 0x112cca1c0, {{685.5, 394.5}, {22.0, 37.5}}, identifier: 'chevron.forward'
+                                                  Other, 0x112cc9400, {{80.0, 365.5}, {636.0, 1.0}}
+                                                  Cell, 0x112cc9540, {{20.0, 460.0}, {716.0, 93.5}}
+                                                    Other, 0x112cc9f40, {{20.0, 460.0}, {716.0, 93.5}}
+                                                      Other, 0x112cca080, {{20.0, 460.0}, {716.0, 93.5}}
+                                                    Other, 0x112cc9cc0, {{20.0, 460.0}, {716.0, 93.5}}
+                                                      Other, 0x112cc9e00, {{20.0, 460.0}, {716.0, 93.5}}
+                                                        Other, 0x112cc9a40, {{20.0, 460.0}, {716.0, 93.5}}
+                                                          Button, 0x112cc9b80, {{20.0, 460.0}, {716.0, 93.5}}, identifier: 'exercise-defaults-all-section', label: '싱글레그 데드리프트'
+                                                            StaticText, 0x112cc97c0, {{40.0, 475.0}, {464.0, 63.5}}, identifier: 'exercise-defaults-row-single-leg-deadlift', label: '싱글레그 데드리프트'
+                                                              StaticText, 0x112cc92c0, {{80.0, 475.0}, {424.0, 63.5}}, label: '싱글레그 데드리프트'
+                                                              Image, 0x112cc8f00, {{40.0, 493.0}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                            Image, 0x112cc9040, {{685.5, 488.0}, {22.0, 37.5}}, identifier: 'chevron.forward'
+                                                  Other, 0x112cc8c80, {{80.0, 459.0}, {636.0, 1.0}}
+                                                  Cell, 0x112cc8dc0, {{20.0, 553.5}, {716.0, 93.5}}
+                                                    Other, 0x112cc8500, {{20.0, 553.5}, {716.0, 93.5}}
+                                                      Other, 0x112cc83c0, {{20.0, 553.5}, {716.0, 93.5}}
+                                                    Other, 0x112cc8280, {{20.0, 553.5}, {716.0, 93.5}}
+                                                      Other, 0x112cc8140, {{20.0, 553.5}, {716.0, 93.5}}
+                                                        Other, 0x112cc8000, {{20.0, 553.5}, {716.0, 93.5}}
+                                                          Button, 0x112cc8640, {{20.0, 553.5}, {716.0, 93.5}}, identifier: 'exercise-defaults-all-section', label: '트랩바 데드리프트'
+                                                            StaticText, 0x112cc88c0, {{40.0, 568.5}, {418.0, 63.5}}, identifier: 'exercise-defaults-row-trap-bar-deadlift', label: '트랩바 데드리프트'
+                                                              StaticText, 0x112cc8a00, {{80.0, 568.5}, {378.0, 63.5}}, label: '트랩바 데드리프트'
+                                                              Image, 0x112cc8780, {{40.0, 586.5}, {28.0, 28.0}}, identifier: 'dumbbell.fill', label: 'Dumbbell Weight, Filled'
+                                                            Image, 0x112cc8b40, {{685.5, 581.5}, {22.0, 37.5}}, identifier: 'chevron.forward'
+                                                  Other, 0x112cc9900, {{80.0, 552.5}, {636.0, 1.0}}
+                                                  Other, 0x112cc9180, {{723.0, 96.0}, {30.0, 1015.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x112cc9680, {{750.0, 570.0}, {3.0, 538.0}}
+                                                  Other, 0x108987700, {{723.0, 96.0}, {30.0, 1015.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x108987980, {{750.0, 570.0}, {3.0, 538.0}}
+                                            Other, 0x108987c00, {{0.0, 32.0}, {756.0, 1126.0}}
+                                              Other, 0x108987d40, {{0.0, 32.0}, {756.0, 1126.0}}
+                                                Other, 0x108987e80, {{0.0, 32.0}, {756.0, 1126.0}}
+                                        Toolbar, 0x108987ac0, {{0.0, 32.0}, {756.0, 1126.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x112dac000, {{0.0, 32.0}, {756.0, 1126.0}}
+                                Toolbar, 0x112dac140, {{0.0, 32.0}, {756.0, 1126.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x112dac280, {{0.0, 32.0}, {756.0, 1126.0}}
+                            Other, 0x112dac3c0, {{0.0, 32.0}, {756.0, 1126.0}}
+                              Other, 0x112dac500, {{0.0, 32.0}, {756.0, 1126.0}}
+                Other, 0x112dac640, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x112dac780, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x112dac8c0, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x112daca00, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x112dacb40, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x112dacc80, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x112cb66c0, pid: 56386, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x112dacdc0, pid: 56386, label: 'DUNE'
+  }

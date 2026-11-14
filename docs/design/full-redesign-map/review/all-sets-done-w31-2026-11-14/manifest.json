@@ -1,0 +1,249 @@
+{
+  "screen": "W31",
+  "existing_pr": 961,
+  "status": "scoped-verified-phone-ipad-normal-MAX-with-historical-failure-diagnostics",
+  "publication_base_main": "332d6379347b666082a173bfee919c9fa3ac479f",
+  "app_source": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+  "historical_review": "../all-sets-done-w31-2026-11-07/index.html",
+  "historical_review_policy": "Nov 7 HELD bytes preserved; earlier iPad captures remain historical only",
+  "phone_case_receipts": {
+    "MAX": "line 710, passed 120.477s",
+    "normal": "line 1096, passed 98.554s"
+  },
+  "phone_batch_truth": "6 executed, 4 passed, 2 failed in separate W13/W14 authoring selectors",
+  "captures": [
+    {
+      "device": "phone",
+      "size": "MAX",
+      "stage": "fixed Complete Set before last-set sheet",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "timestamp": 1794623231.506,
+      "capture_uuid": "0A0A7D1E-9857-48E9-80F7-FD857067506C",
+      "png": "assets/phone/MAX-fixed-Complete-Set-before-last-set-sheet.png",
+      "ax": "assets/phone/MAX-fixed-Complete-Set-before-last-set-sheet.txt",
+      "original_png": "C1CD8EBF-A7BD-472F-8978-228533546CD7.png",
+      "original_ax": "B0CAAB6C-6312-4803-8B28-EC7C2C2A440A.txt",
+      "png_sha256": "1849e3412bcbc04a9f480e2427ef3b41b619f761b7393c26d06844dd9f575738",
+      "ax_sha256": "b3c6c44081aba50b9c97426a5353809b34bbfc1060d09a7c8570dae4c57df215",
+      "key_ax_lines": [
+        "Button, 0x11120c8c0, {{16.0, 738.7}, {408.0, 171.3}}, identifier: 'workout-session-complete-set', label: 'Complete Set', Selected"
+      ],
+      "kind": "positive-phone-only"
+    },
+    {
+      "device": "phone",
+      "size": "MAX",
+      "stage": "large last-set choices",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "timestamp": 1794623244.386,
+      "capture_uuid": "EA83BF19-795B-4201-82B8-D266B587E140",
+      "png": "assets/phone/MAX-large-last-set-choices.png",
+      "ax": "assets/phone/MAX-large-last-set-choices.txt",
+      "original_png": "015B2F21-1A22-4506-BD0C-AF11C5343F81.png",
+      "original_ax": "C2E4C729-527C-4811-8A2F-78E547FB434F.txt",
+      "png_sha256": "92851fb63a70654c589003f5079b38fc370813fa523de35fc5e5988f24c4b48f",
+      "ax_sha256": "c93e3acd2459d10d1322c5d658dfe671f1f864d207da95c1050e3dd672fa2b84",
+      "key_ax_lines": [
+        "ScrollView, 0x11223fc00, {{0.0, 72.0}, {440.0, 884.0}}, identifier: 'workout-session-last-set-sheet'",
+        "StaticText, 0x112234000, {{62.5, 156.0}, {315.0, 63.3}}, label: 'All Sets Done'",
+        "Button, 0x112234140, {{16.0, 235.3}, {408.0, 77.3}}, identifier: 'workout-session-add-set', label: '+1 Set'",
+        "Button, 0x112234500, {{16.0, 320.7}, {408.0, 77.3}}, identifier: 'workout-session-finish', label: 'Finish Workout'"
+      ],
+      "kind": "positive-phone-only"
+    },
+    {
+      "device": "phone",
+      "size": "MAX",
+      "stage": "medium last-set choices",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "timestamp": 1794623239.873,
+      "capture_uuid": "E7A88AE2-75A1-4FE2-9753-F17FD3F55877",
+      "png": "assets/phone/MAX-medium-last-set-choices.png",
+      "ax": "assets/phone/MAX-medium-last-set-choices.txt",
+      "original_png": "B7E90D36-5FBA-4570-B74D-48F1C033F744.png",
+      "original_ax": "534D015D-3E2B-47B5-976D-C26338A49518.txt",
+      "png_sha256": "3d9302d8b081152344b32aa434c133f90cc54982eb902dce8acf5fd47c04ad0c",
+      "ax_sha256": "0cdd8152910190963a3ba329bae2f357dbe14ad77fdd74f4430d3e26ecb128bc",
+      "key_ax_lines": [
+        "ScrollView, 0x106dcf980, {{8.0, 456.5}, {424.0, 491.5}}, identifier: 'workout-session-last-set-sheet'",
+        "StaticText, 0x106dcfd40, {{68.2, 537.5}, {303.5, 61.0}}, label: 'All Sets Done'",
+        "Button, 0x106dcfe80, {{23.4, 613.9}, {393.2, 74.5}}, identifier: 'workout-session-add-set', label: '+1 Set'",
+        "Button, 0x106dd4280, {{23.4, 696.2}, {393.2, 74.5}}, identifier: 'workout-session-finish', label: 'Finish Workout'"
+      ],
+      "kind": "positive-phone-only"
+    },
+    {
+      "device": "phone",
+      "size": "normal",
+      "stage": "fixed Complete Set before last-set sheet",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "timestamp": 1794623330.474,
+      "capture_uuid": "E6BC59EA-CF17-4F70-B74D-2C0C2DC76FBC",
+      "png": "assets/phone/normal-fixed-Complete-Set-before-last-set-sheet.png",
+      "ax": "assets/phone/normal-fixed-Complete-Set-before-last-set-sheet.txt",
+      "original_png": "EA252785-DB98-4FB2-B200-CBF30D3C5389.png",
+      "original_ax": "36E600A4-619A-48FA-9ECE-F46DAFA983A4.txt",
+      "png_sha256": "0a8106ed6c1c2bb187ab80104b70c1103c00c61640df2cc9521f7076b00288c3",
+      "ax_sha256": "b7a77b5c00d26d3be01ac0e56b9440aaf45ad83779a524853387605491f04558",
+      "key_ax_lines": [
+        "Button, 0x106dbaa80, {{16.0, 843.7}, {408.0, 66.3}}, identifier: 'workout-session-complete-set', label: 'Complete Set', Selected"
+      ],
+      "kind": "positive-phone-only"
+    },
+    {
+      "device": "phone",
+      "size": "normal",
+      "stage": "large last-set choices",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "timestamp": 1794623342.754,
+      "capture_uuid": "4F3BA474-1296-43E3-9410-26C5660300F9",
+      "png": "assets/phone/normal-large-last-set-choices.png",
+      "ax": "assets/phone/normal-large-last-set-choices.txt",
+      "original_png": "5BF10773-EE77-4186-80A1-3C7BD8978179.png",
+      "original_ax": "DBCC10EC-711C-4CF3-A8FB-6A75C9DECA6E.txt",
+      "png_sha256": "f04d253e9954e634242236834e88dc55a59c805b0c1c8a793963c9fdea33f009",
+      "ax_sha256": "aee872bde5ec2566868e191a15edd30f0ad8c85b0a3804f6c531e748f1709942",
+      "key_ax_lines": [
+        "ScrollView, 0x106dcde00, {{0.0, 72.0}, {440.0, 884.0}}, identifier: 'workout-session-last-set-sheet'",
+        "StaticText, 0x106dce1c0, {{167.2, 120.7}, {105.7, 20.3}}, label: 'All Sets Done'",
+        "Button, 0x106dce300, {{16.0, 157.0}, {408.0, 58.0}}, identifier: 'workout-session-add-set', label: '+1 Set'",
+        "Button, 0x106dce6c0, {{16.0, 223.0}, {408.0, 58.0}}, identifier: 'workout-session-finish', label: 'Finish Workout'"
+      ],
+      "kind": "positive-phone-only"
+    },
+    {
+      "device": "phone",
+      "size": "normal",
+      "stage": "medium last-set choices",
+      "source_revision": "93cabfc15f87d03367d4a17f11f5f6d5957d301e",
+      "timestamp": 1794623338.461,
+      "capture_uuid": "F0A61C4C-9562-4FF6-82C1-2AD8947F7DED",
+      "png": "assets/phone/normal-medium-last-set-choices.png",
+      "ax": "assets/phone/normal-medium-last-set-choices.txt",
+      "original_png": "BACEAF2E-475B-405A-A10C-BBB322CCB3EE.png",
+      "original_ax": "33D601F8-E1CD-479F-82E4-3BAC2E637DFF.txt",
+      "png_sha256": "d8c434d46a2d3868f0b4e3fbe79f6b60e76c3a10510a51fb973b943856a6df3d",
+      "ax_sha256": "c77ab176c738cadb8956f095481fee6e9fdbd604cc2135401f4d9ba02eef085a",
+      "key_ax_lines": [
+        "ScrollView, 0x1111f9b80, {{8.0, 456.5}, {424.0, 491.5}}, identifier: 'workout-session-last-set-sheet'",
+        "StaticText, 0x1111f9f40, {{169.1, 503.4}, {101.8, 19.6}}, label: 'All Sets Done'",
+        "Button, 0x1111fa080, {{23.4, 538.5}, {393.2, 55.9}}, identifier: 'workout-session-add-set', label: '+1 Set'",
+        "Button, 0x1111fa440, {{23.4, 602.1}, {393.2, 55.9}}, identifier: 'workout-session-finish', label: 'Finish Workout'"
+      ],
+      "kind": "positive-phone-only"
+    },
+    {
+      "device": "ipad",
+      "size": "MAX",
+      "stage": "before teardown -[ActivityExerciseRegressionTests testVisualAuditStrengthStartSessionLastSetAtMaximumText]",
+      "source_revision": "45a756b98999435059bb54d23c792c61bfafb9a9",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText()",
+      "timestamp": 1794625126.589,
+      "capture_uuid": "4617B63A-8D96-4DF8-8789-51D46C6B6014",
+      "kind": "diagnostic",
+      "png": "assets/ipad/MAX-failed-viewport-diagnostic.png",
+      "ax": "assets/ipad/MAX-failed-viewport-diagnostic.txt",
+      "original_png": "23F5AD79-7C48-48A3-8EAD-CECE47F61FD2.png",
+      "original_ax": "6D72371E-9F53-4AF6-87D8-F45E6D260DB1.txt",
+      "png_sha256": "29a9ed6b8006b6ed16056268ab6d151241f34dda0deaf11cb8d46dad8954029a",
+      "ax_sha256": "2c3c1916069d3684ac2fb463b138bc78a705de9f1fc02409c168e8abfa4153e4"
+    },
+    {
+      "device": "ipad",
+      "size": "MAX",
+      "stage": "tap +1",
+      "source_revision": "45a756b98999435059bb54d23c792c61bfafb9a9",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText()",
+      "timestamp": 1794625122.868,
+      "capture_uuid": "8B99D643-7A3D-4BC9-805D-3BB0B80E721D",
+      "kind": "diagnostic",
+      "png": "assets/ipad/MAX-after-plus1-diagnostic.png",
+      "ax": "assets/ipad/MAX-after-plus1-diagnostic.txt",
+      "original_png": "7C286F4F-9F31-4867-8ACE-1A7F4A489656.png",
+      "original_ax": "B12DAAA1-3908-4CC1-8530-36CFF756AC45.txt",
+      "png_sha256": "29a9ed6b8006b6ed16056268ab6d151241f34dda0deaf11cb8d46dad8954029a",
+      "ax_sha256": "9b2425b231f077f2f7bd5009618bec5aec7d65c84929a11fcc9ef5bfa27bfcbd"
+    },
+    {
+      "device": "ipad",
+      "size": "normal",
+      "stage": "W31 normal initial last-set choices",
+      "source_revision": "45a756b98999435059bb54d23c792c61bfafb9a9",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtNormalText()",
+      "timestamp": 1794625221.869,
+      "capture_uuid": "C3CBBB41-2A22-4C50-826B-581072BEB4E1",
+      "kind": "positive",
+      "png": "assets/ipad/normal-last-set-choices.png",
+      "ax": "assets/ipad/normal-last-set-choices.txt",
+      "original_png": "FB8F367F-0FD9-4AF3-B57B-68DBE037AD12.png",
+      "original_ax": "758896AB-2A49-4B3F-8326-ED2B219B8EC4.txt",
+      "png_sha256": "34d0a177131d28a9ef149c0e2936456349c0a5d83f03690402ed79923578f732",
+      "ax_sha256": "504d4a1529c345ed4b64605f27b3dbf8e1fff09c4553af6a74781d37baecb3ec"
+    },
+    {
+      "device": "ipad",
+      "size": "normal",
+      "stage": "W31 normal fixed Complete Set before last-set sheet",
+      "source_revision": "45a756b98999435059bb54d23c792c61bfafb9a9",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtNormalText()",
+      "timestamp": 1794625213.639,
+      "capture_uuid": "AD055E80-3F5E-407B-B790-D97A7B037264",
+      "kind": "positive",
+      "png": "assets/ipad/normal-complete-set.png",
+      "ax": "assets/ipad/normal-complete-set.txt",
+      "original_png": "AD84D8D0-F3C5-4A0A-9B7A-11281C88FF49.png",
+      "original_ax": "239D916A-9BF8-4E34-8B51-AC686A6893C5.txt",
+      "png_sha256": "8fc4c3e8a0b2ae95353cd145a6574dac4948755f471a0e2f62dea619cf6209b6",
+      "ax_sha256": "356a49fe1acb24a53fe0c7f7682ca15ba5a8944e13feb3463cfb08e11d2691a3"
+    },
+    {
+      "device": "ipad",
+      "size": "MAX",
+      "stage": "W31 MAX whole Complete Set before last-set sheet",
+      "source_revision": "ad9a21bea",
+      "timestamp": 1794626209.606,
+      "capture_uuid": "757B0FA4-0DE9-4967-8879-DBDE43B2F977",
+      "png": "assets/ipad/MAX-whole-Complete-Set-before-last-set-sheet.png",
+      "ax": "assets/ipad/MAX-whole-Complete-Set-before-last-set-sheet.txt",
+      "original_png": "F625016B-5EF6-4D93-ADD0-6E49DE96A5B6.png",
+      "original_ax": "49BF14F2-5313-44CE-B219-5766D7B9DB18.txt",
+      "png_sha256": "40b74d0d9cc569f50ae1a4e0ad8a260407a84fa831d1c30b9d3dfb35f64b5d53",
+      "ax_sha256": "419d13d6ce4845c74e5b648acb49b31915a78f6360b7a7711455c33ad7f9b7db",
+      "kind": "positive-retry",
+      "key_ax_lines": [
+        "owned controls scroll y249..909; Complete Set y682.5..792, fully inside"
+      ]
+    },
+    {
+      "device": "ipad",
+      "size": "MAX",
+      "stage": "W31 MAX initial last-set choices",
+      "source_revision": "ad9a21bea",
+      "timestamp": 1794626218.024,
+      "capture_uuid": "B3B654F9-B59B-49B5-8A37-E7CCB5A7A486",
+      "png": "assets/ipad/MAX-initial-last-set-choices.png",
+      "ax": "assets/ipad/MAX-initial-last-set-choices.txt",
+      "original_png": "0CC1ED3D-5A39-4B67-8AE0-A432FE7E4163.png",
+      "original_ax": "75916A32-7CC9-4B32-886A-FC713E881E10.txt",
+      "png_sha256": "98885b8ac04a4a3af2c67d245d09f6f0fe0c38e778af5f0c155f8bf084a80b29",
+      "ax_sha256": "911b01967352ca35f6a9013cbb0f739b49504e71cdb071303634138c7d96440a",
+      "kind": "positive-retry",
+      "key_ax_lines": [
+        "All Sets Done and +1 Set / Finish Workout fully visible"
+      ]
+    }
+  ],
+  "limits": [
+    "Original extra-ipad-03 W31 MAX failed before sheet because Complete Set was below the intentionally scrollable compact controls; preserved diagnostic pairs and 7/9 batch truth. Source-responsive conditional reveal passed in extra-ipad-04.",
+    "No Finish Workout tap or completed-workout state claimed.",
+    "Duo fresh capture absent."
+  ],
+  "ipad_case_receipts": {
+    "normal": "passed 102.897s, log line 1127",
+    "MAX": "failed 98.746s at full Complete Set viewport assertion, log lines 654–665"
+  },
+  "ipad_batch_truth": "9 executed, 7 passed, 2 failed W31 MAX and P03 MAX",
+  "ipad_retry_source": "ad9a21bea",
+  "ipad_retry_case_receipt": "extra-ipad-04: W31 MAX passed 117.725s; 3/3 global batch passed",
+  "ipad_retry_proof": "proofs/extra-ipad-04-ui.log.result.json"
+}

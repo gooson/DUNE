@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/TodaySettingsRegressionTests/testSettingsShowsPhaseTwoRows",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultsSearchResultOpensOriginalEditor",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues",
+    "DUNEUITests/TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 5,
+    "passed": 2,
+    "skipped": 0,
+    "failed": 3
+  },
+  "passed_cases": 2,
+  "failures": [
+    "628: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:1337: error: -[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultSaveReopensWithStoredValues] : Failed to synthesize event: Neither element nor any descendant has keyboard focus. Ev…",
+    "692: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testExerciseDefaultSaveReopensWithStoredValues]' failed (48.635 seconds).",
+    "1085: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:1316: error: -[DUNEUITests.TodaySettingsRegressionTests testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize] : XCTAssertTrue failed - Back to Settings should be available a…",
+    "1096: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize]' failed (53.241 seconds).",
+    "1278: /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNEUITests/Full/TodaySettingsRegressionTests.swift:1316: error: -[DUNEUITests.TodaySettingsRegressionTests testPreferredExerciseToggleSurvivesScreenReentry] : XCTAssertTrue failed - Back to Settings should be available after closing search",
+    "1289: Test Case '-[DUNEUITests.TodaySettingsRegressionTests testPreferredExerciseToggleSurvivesScreenReentry]' failed (44.204 seconds).",
+    "1858: Test Suite 'TodaySettingsRegressionTests' failed at 2026-11-07 00:49:07.198.",
+    "1860: Test Suite 'DUNEUITests.xctest' failed at 2026-11-07 00:49:07.199.",
+    "1862: Test Suite 'Selected tests' failed at 2026-11-07 00:49:07.199.",
+    "1876: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 3 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseDefaultSaveReopensWithStoredValues",
+    "DUNEUITests/TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry",
+    "DUNEUITests/TodaySettingsRegressionTests/testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b07/ipad-ui.log"
+}

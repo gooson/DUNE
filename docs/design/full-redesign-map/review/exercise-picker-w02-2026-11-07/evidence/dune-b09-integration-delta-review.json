@@ -1,0 +1,49 @@
+{
+  "status": "source-only integrated delta; SDK and native results pending; no repository edits",
+  "source_revision": "f049504adacaf170e7e7b41eb54fd781eef5fb04",
+  "reused_reviews": [
+    "/private/tmp/dune-b09-w01-w02-test-review.json",
+    "/private/tmp/dune-b09-w03-w04-source-review.json"
+  ],
+  "source_checks": {
+    "W01": {
+      "integrated_sha256": "2438b811139301884ccfa32f331466bfa0e3feaeaeb78fa6478f0ac2b0e011ea",
+      "private_candidate_sha256": "2438b811139301884ccfa32f331466bfa0e3feaeaeb78fa6478f0ac2b0e011ea",
+      "byte_match": true,
+      "contract_match": true
+    },
+    "W02": {
+      "integrated_sha256": "d8072c96bad9771fc127d7326557c223142c6cdd34cad191059f31d062080066",
+      "private_candidate_sha256": "d8072c96bad9771fc127d7326557c223142c6cdd34cad191059f31d062080066",
+      "byte_match": true,
+      "contract_match": true
+    },
+    "W03": {
+      "integrated_sha256": "9637eac2dbf5d52b978cc4590d5327cfb4e26a15b8794d5e8cef14c022570e8d",
+      "private_candidate_sha256": "9637eac2dbf5d52b978cc4590d5327cfb4e26a15b8794d5e8cef14c022570e8d",
+      "byte_match": true,
+      "contract_match": true
+    },
+    "W04": {
+      "integrated_sha256": "addd52da14aab7f5b50b0894e3587455ab4e7b51cc9b6a7aaaa29d99786f1ad0",
+      "private_candidate_sha256": "addd52da14aab7f5b50b0894e3587455ab4e7b51cc9b6a7aaaa29d99786f1ad0",
+      "byte_match": true,
+      "contract_match": true
+    },
+    "Test": {
+      "integrated_sha256": "bae3e773a18c4cfab9d6b817525d6d4e3e6f755886aa74d784c37f649a686c11",
+      "private_candidate_sha256": "bae3e773a18c4cfab9d6b817525d6d4e3e6f755886aa74d784c37f649a686c11",
+      "byte_match": true,
+      "contract_match": true
+    }
+  },
+  "new_visual_selectors": [
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtNormalText",
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditLibraryPickerDetailAtMaximumText",
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtNormalText",
+    "DUNEUITests/ActivityExercisePickerRegressionTests/testVisualAuditCustomCreateAtMaximumText"
+  ],
+  "narrowed_W04_audit": "The new W04 normal/MAX audit captures empty form and Cardio category readback, asserts empty Create disabled, input type reset and Cancel back to picker. It does not create a custom exercise, save, or assert persistence. Existing unrelated regression methods may still contain name/save coverage but are outside the four-selector B09 contract.",
+  "introduced_source_blockers": [],
+  "native_gate": "Pending current phone/iPad receipts and paired PNG/AX; no runtime claim from hash equality."
+}

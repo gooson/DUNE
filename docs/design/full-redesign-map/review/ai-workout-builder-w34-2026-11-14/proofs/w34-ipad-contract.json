@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-14",
+  "source": "f7bc00cb251ecab826e5ec7663450cd821e7c5fb",
+  "worktree": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health",
+  "device": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+  "runtime": "iOS 27.2",
+  "scope": "W34 first fresh independent direct AI-state family iPad normal/MAX; no old Add Exercise picker",
+  "selectors": [
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtNormalText",
+    "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditEmbeddedAIBuilderAtMaximumText"
+  ],
+  "budget": {
+    "jobs": 2,
+    "index": "NO",
+    "parallel": "NO",
+    "UI_seconds": 1200,
+    "pipeline_seconds": 1260
+  },
+  "old_closed_families": "unchanged, not replayed; first5 extra attempt question pending",
+  "files": {
+    "DUNE/Presentation/Exercise/CardioSession/CardioSessionSummaryView.swift": "8afcb78a89369edf168baa21694450aeae0917883ba2f760a45870ee2cc7f0a5",
+    "DUNE/Presentation/Exercise/Components/CreateCustomExerciseView.swift": "addd52da14aab7f5b50b0894e3587455ab4e7b51cc9b6a7aaaa29d99786f1ad0",
+    "DUNE/Presentation/Exercise/Components/CreateTemplateView.swift": "8e7c953e87a094b6392b8bdcf57c29167af09f9b92e2f57aca2ca15f25bcb2d7",
+    "DUNE/Presentation/Exercise/Components/ShareImageSheet.swift": "fb5426c44cfa32ffaf70e33182fed5f8aafb1b55c1efaace45e7a74135fafefc",
+    "DUNE/Presentation/Exercise/Components/UserCategoryManagementView.swift": "70b1881473ac8d4413b2461e279aa81b96673d6c02f1ec882d16e926f262ddce",
+    "DUNE/Presentation/Exercise/Components/WorkoutTemplateListView.swift": "288273876687fc640e9221f17ccef11402bfff2af6c94667d6d67688f8cee7ca",
+    "DUNE/Presentation/Exercise/ExerciseHistoryView.swift": "60316c0c1a23178c09aff1eff5877b98ee4b3addcd67d9b81d08c43a7b75fc49",
+    "DUNE/Presentation/Exercise/ExerciseSessionDetailView.swift": "4ccb5e7e08e7e21041652a33abe5801edd949396debe691949c058c99553afe9",
+    "DUNE/Presentation/Exercise/ExerciseView.swift": "410cf5f6599439ef720758c6ba12ae62e016a67331b9e8435c852305d67d58b6",
+    "DUNE/Presentation/Exercise/WeeklyWorkoutPlanView.swift": "b60f47ca0d97e9e007f9b0588d49493c6b8f1f674f1df237ea8a589ea9627c0e",
+    "DUNE/Presentation/Exercise/WorkoutSessionView.swift": "3121b6ca718869920e2c3c361a097993556bd142f60026542724eb12a9af8fe0",
+    "DUNE/Presentation/Injury/InjuryFormSheet.swift": "c4cc74a7dbb50e0e46f1456ea04d42cfc734cef7869b958a6d8012f96be4be3e",
+    "DUNE/Presentation/Posture/Components/ExercisePickerSheet.swift": "bc244517f206e93808c7ffeab61390e40ca6606df3bde221fda8e760403bb7fc",
+    "DUNE/Presentation/Posture/PostureComparisonView.swift": "7986295917d46376fa9ffa695a92e6333094765ef7d6a7368b14981e95a62d23",
+    "DUNE/Presentation/Posture/PostureHistoryView.swift": "907972081378f8e3dbb8bf66836b2b87b990570a631a45e02909c2d5b36735fa",
+    "DUNE/Presentation/Settings/Components/ExerciseDefaultEditView.swift": "67fdef780f33c967d8c7e331d92bb53ed6adf4bc9dcf74ad67882761e7bb8118",
+    "DUNEUITests/Full/ActivityExercisePickerRegressionTests.swift": "bfd7ff09f1ac7b3a7bb28bbd61213b60f19e24e10a91677ebecae2569613f7a8",
+    "DUNEUITests/Full/ActivityExerciseRegressionTests.swift": "02b077496a490136880df8fb46694b3e995625a3b297d8da73f763d7c2d41d0d",
+    "DUNEUITests/Full/NotificationRoutingRegressionTests.swift": "7ab02040737e9b9c84decdd5aa0bf5c6e136c13dc691a1a0405ae38c481be804",
+    "DUNEUITests/Full/TodaySettingsRegressionTests.swift": "83b4be39fc3d6a41bea37bbba4b9218a9f989afbee5250234a4040e51d9e509e",
+    "DUNEUITests/Full/WellnessRegressionTests.swift": "83e67b8ecde03d291b5e6794bccf88eb56701391a276b666cf0a7b6e2c3c69c8",
+    "DUNEUITests/Helpers/UITestHelpers.swift": "166a19b3611bc2f83823ab06ab0817bd28f12586409fb15aeec518cbb07b227d"
+  }
+}

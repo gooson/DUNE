@@ -1,0 +1,76 @@
+{
+  "screen": "S04",
+  "reference_compiled_source": "1c1b4bf26f6c1f681561aac825f78b750b93eb1a",
+  "view_sha256": "8288aea1259cd006afedcf04a592c0566b2753b217a05f4b607c68eabf67a6b9",
+  "view_byte_identical": true,
+  "per_capture_component_equivalence": [
+    {
+      "image": "assets/05-regular-diagnostic.png",
+      "capture_source": "2930ba45dd419634932ef3e4ced117ae13b7556e",
+      "kind": "diagnostic",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry()"
+    },
+    {
+      "image": "assets/06-regular-diagnostic.png",
+      "capture_source": "47feceb7b4d68d248717457a369d5e337d848c56",
+      "kind": "diagnostic",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry()"
+    },
+    {
+      "image": "assets/07-regular-diagnostic.png",
+      "capture_source": "47feceb7b4d68d248717457a369d5e337d848c56",
+      "kind": "diagnostic",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry()"
+    },
+    {
+      "image": "assets/08-ipad-diagnostic.png",
+      "capture_source": "23c6d0948808b76e2e1233d70bf5a1d9faa68c36",
+      "kind": "diagnostic",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry()"
+    },
+    {
+      "image": "assets/09-ipad-diagnostic.png",
+      "capture_source": "23c6d0948808b76e2e1233d70bf5a1d9faa68c36",
+      "kind": "diagnostic",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry()"
+    },
+    {
+      "image": "assets/10-ipad-after.png",
+      "capture_source": "1c1b4bf26f6c1f681561aac825f78b750b93eb1a",
+      "kind": "after",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry()"
+    },
+    {
+      "image": "assets/11-ipad-after.png",
+      "capture_source": "1c1b4bf26f6c1f681561aac825f78b750b93eb1a",
+      "kind": "after",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry()"
+    },
+    {
+      "image": "assets/12-ipad-after.png",
+      "capture_source": "1c1b4bf26f6c1f681561aac825f78b750b93eb1a",
+      "kind": "after",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testPreferredExerciseToggleSurvivesScreenReentry()"
+    },
+    {
+      "image": "assets/13-ipad-after.png",
+      "capture_source": "1c1b4bf26f6c1f681561aac825f78b750b93eb1a",
+      "kind": "after",
+      "component_byte_identical_to_pr_view": true,
+      "native_test": "TodaySettingsRegressionTests/testExerciseListsKeepNamesAndSwitchReachableAtMaximumAccessibilitySize()"
+    }
+  ],
+  "local_build": "actual UI builds reused; no phase-based repeat",
+  "test_scope": "exact selected methods from compiled source; whole mixed suite not green",
+  "failed_limits": "phone2 and iPad2 failed check records remain; no third run; P03/P08/H08 unchanged",
+  "Duo": "fresh C76 boot Data Migration Failed before SDK; logs archived, owned failed device removed; no Duo test/capture pass",
+  "platforms": "no changed Watch/Vision/widget consumer; local full regression not requested"
+}

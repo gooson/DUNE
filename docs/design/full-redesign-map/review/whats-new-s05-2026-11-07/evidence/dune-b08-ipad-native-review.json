@@ -1,0 +1,45 @@
+{
+  "review": "B08 S05/S06 iPad native visual and AX review",
+  "frozen_source_revision": "e48783e1ddc3d276a75e687c5b603ebbcd208c82",
+  "test_receipt": "/Users/shanks/.codex/worktrees/detail-posture-b05/Health/.codex-checks/b08/ipad-ui.log.result.json",
+  "test_result": "2 requested, 2 executed, 2 passed, 0 failed, 0 skipped",
+  "viewed_assets": {
+    "S05_normal": {
+      "png": "/private/tmp/dune-b08-gallery-prep/S05/assets/05-ipad-ipad-normal-after.png",
+      "ax": "/private/tmp/dune-b08-gallery-prep/S05/assets/05-ipad-ipad-normal-after.txt"
+    },
+    "S05_MAX_version": {
+      "png": "/private/tmp/dune-b08-gallery-prep/S05/assets/06-ipad-ipad-max-after.png",
+      "ax": "/private/tmp/dune-b08-gallery-prep/S05/assets/06-ipad-ipad-max-after.txt"
+    },
+    "S05_MAX_row": {
+      "png": "/private/tmp/dune-b08-gallery-prep/S05/assets/07-ipad-ipad-max-after.png",
+      "ax": "/private/tmp/dune-b08-gallery-prep/S05/assets/07-ipad-ipad-max-after.txt"
+    },
+    "S06_normal": {
+      "png": "/private/tmp/dune-b08-gallery-prep/S06/assets/04-ipad-ipad-normal-after.png",
+      "ax": "/private/tmp/dune-b08-gallery-prep/S06/assets/04-ipad-ipad-normal-after.txt"
+    },
+    "S06_MAX_header": {
+      "png": "/private/tmp/dune-b08-gallery-prep/S06/assets/05-ipad-ipad-max-after.png",
+      "ax": "/private/tmp/dune-b08-gallery-prep/S06/assets/05-ipad-ipad-max-after.txt"
+    },
+    "S06_MAX_summary": {
+      "png": "/private/tmp/dune-b08-gallery-prep/S06/assets/06-ipad-ipad-max-after.png",
+      "ax": "/private/tmp/dune-b08-gallery-prep/S06/assets/06-ipad-ipad-max-after.txt"
+    }
+  },
+  "introduced_findings": [],
+  "observations": [
+    "S05 normal: version 0.8.0, intro, current feature rows and preserved icons occupy a centered readable column; no overlap or newly clipped visible text.",
+    "S05 MAX: Version and 0.8.0 stack, intro wraps completely, and iOS 27 Support row title/summary remain full in AX and scrollable; the first row extends below the initial viewport as expected.",
+    "S06 normal/MAX: navigation title, category, full feature title, version badge, symbol hero and complete summary are visible within the centered 680-point column; BackButton remains identified on both.",
+    "The S06 iPad MAX hero title is fully visible. The iPhone MAX hero ellipsis previously observed is in unchanged fixed-height symbolHero artwork; main title and AX are complete, so it is an explicit preexisting quality limit, not an introduced finding."
+  ],
+  "limits": [
+    "Only the named English, light, normal/MAX states and top/scroll capture points were reviewed; no dark mode or other language inference.",
+    "No current Duo native result: the owned empty device failed Data Migration before SDK tests; historical Duo images do not count.",
+    "iPad selectors cover manual list→detail→Back; automatic Done is proven by phone selector, not iPad.",
+    "MAX row screenshot begins above the fold and AX contains offscreen row content; it does not prove every release row visually."
+  ]
+}

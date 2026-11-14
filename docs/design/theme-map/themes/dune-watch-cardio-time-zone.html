@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DUNE Watch · 시간 우선 유산소 존 정적 시안</title>
+<style>
+  body { margin: 0; padding: 28px; background: #302b2a; color: #f6eee3; font: 14px -apple-system, BlinkMacSystemFont, sans-serif; }
+  h1 { font-size: 20px; margin: 0 0 8px; }
+  p { max-width: 680px; line-height: 1.5; color: #d5c5b5; }
+  .gallery { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 22px; }
+  .watch { box-sizing: border-box; width: 210px; min-height: 255px; padding: 17px 15px; border: 7px solid #625a54; border-radius: 36px; background: #050505; }
+  .top, .heart { display: flex; align-items: baseline; justify-content: space-between; }
+  .kind { color: #c0a67d; font-size: 12px; }
+  .calories { color: #c49d62; font-size: 12px; }
+  .time { color: #e1b453; font-size: 45px; font-weight: 650; margin: 4px 0 8px; }
+  .level { background: #252321; border-radius: 10px; display: flex; align-items: baseline; justify-content: center; gap: 6px; min-height: 32px; }
+  .level strong { font-size: 25px; }
+  .level small, .metric small { color: #aaa19a; }
+  .heart { margin-top: 9px; }
+  .pulse { color: #e1b453; font-size: 20px; font-weight: 600; }
+  .unit { color: #aaa19a; font-size: 11px; }
+  .zone { color: #e1b453; font-size: 12px; font-weight: 600; }
+  .unavailable .pulse, .unavailable .zone { color: #aaa19a; }
+  .bars { display: flex; gap: 2px; align-items: center; height: 10px; }
+  .bars i { flex: 1; height: 4px; border-radius: 2px; background: #675949; }
+  .bars i.on { height: 6px; background: #e1b453; }
+</style>
+<h1>시간 우선 유산소 · 현재 심박 존</h1>
+<p>설명용 정적 시안. 5:38, 레벨 8, 142 bpm, 39 kcal은 예시 값이며 실제 센서 수치나 앱 캡처가 아니다. 존 번호와 막대 개수는 실행 중 HealthKit 설정 또는 추정 결과를 따른다.</p>
+<div class="gallery">
+  <section><div class="watch"><div class="top"><span class="kind">↗ Stair Climber</span><span class="calories">♨ 39 kcal</span></div><div class="time">5:38</div><div class="level"><strong>8</strong><small>Level</small></div><div class="heart"><span><span class="pulse">♥ 142</span> <span class="unit">bpm</span></span><span class="zone">Zone 3</span></div><div class="bars"><i></i><i></i><i class="on"></i><i></i><i></i></div></div><p>5개 존 예시</p></section>
+  <section><div class="watch"><div class="top"><span class="kind">↗ Stair Climber</span><span class="calories">♨ 39 kcal</span></div><div class="time">5:38</div><div class="level"><strong>8</strong><small>Level</small></div><div class="heart"><span><span class="pulse">♥ 142</span> <span class="unit">bpm</span></span><span class="zone">Zone 1</span></div><div class="bars"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div></div><p>6개 존 예시</p></section>
+  <section><div class="watch unavailable"><div class="top"><span class="kind">↗ Stair Climber</span><span class="calories">♨ 39 kcal</span></div><div class="time">5:38</div><div class="level"><strong>8</strong><small>Level</small></div><div class="heart"><span><span class="pulse">♥ --</span> <span class="unit">bpm</span></span><span class="zone">Zone --</span></div><div class="bars"><i></i><i></i><i></i><i></i><i></i></div></div><p>심박 미수신 예시</p></section>
+</div>
+</html>
