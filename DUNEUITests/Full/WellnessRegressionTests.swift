@@ -922,10 +922,14 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             let fraction = distance / scroll.frame.height
             let startY: CGFloat = delta < 0 ? 0.3 : 0.7
             let endY = startY + (delta < 0 ? fraction : -fraction)
-            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
-            let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+            // Closed MAX Memo reveal can start over the native End Date picker.
+            // Use the visible Form gutter and a short press for this target only.
+            let compactMemo = isCompactInjuryFormViewport && target.identifier == AXID.injuryFormMemo
+            let dragX: CGFloat = compactMemo ? 0.05 : 0.5
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: dragX, dy: startY))
+            let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: dragX, dy: endY))
             if isCompactInjuryFormViewport {
-                start.press(forDuration: 0.35, thenDragTo: end,
+                start.press(forDuration: compactMemo ? 0.05 : 0.35, thenDragTo: end,
                             withVelocity: XCUIGestureVelocity(rawValue: 80), thenHoldForDuration: 0.35)
             } else {
                 start.press(forDuration: 0.05, thenDragTo: end)
