@@ -1,4 +1,5 @@
-import XCTest
+@preconcurrency import XCTest
+import UIKit
 
 @MainActor
 final class WaterLiliesThemeTests: SeededUITestBaseCase {
@@ -74,6 +75,171 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
                 captureRootEvidence("Water Lilies \(language) \(tab)")
             }
         }
+    }
+
+    func testSystemReduceMotionPreservesConditionDetailState() throws {
+        // The design capture plan may disable app animations. This selector
+        // needs the real system preference, so relaunch without that argument.
+        app.terminate()
+        app.launchArguments = launchConfiguration.launchArguments.filter {
+            $0 != "--ui-disable-animations"
+        } + ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
+        navigateToDashboard()
+
+        let hero = app.buttons[AXID.dashboardHeroCondition].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 10))
+        hero.tap()
+        let detail = app.scrollViews[AXID.conditionScoreDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10))
+
+        // A selected chart period exercises state owned by the detail route.
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(
+            "condition-period-picker", maxSwipes: 6, timeoutPerCheck: 0.2
+        ))
+        let week = app.segmentedControls["condition-period-picker"].buttons["W"].firstMatch
+        XCTAssertTrue(week.waitForExistence(timeout: 5))
+        week.tap()
+        XCTAssertTrue(waitForSelected(week), "Week should be selected before backgrounding")
+        captureRootEvidence("Water Lilies condition detail before system Reduce Motion")
+
+        let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+        settings.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        settings.launch()
+        guard let reduceMotionSwitch = openReduceMotionSwitch(in: settings) else {
+            throw XCTSkip("English Settings > Accessibility > Motion controls unavailable")
+        }
+
+        let original = UIAccessibility.isReduceMotionEnabled
+        attachReduceMotionReadback("original", settingsSwitch: reduceMotionSwitch)
+        XCTAssertEqual(reduceMotionSwitchIsOn(reduceMotionSwitch), Optional(original),
+                       "Settings and UIKit should agree before changing the preference")
+        defer {
+            // Restore the system preference even when an assertion below fails.
+            settings.activate()
+            if UIAccessibility.isReduceMotionEnabled != original {
+                reduceMotionSwitch.tap()
+                XCTAssertTrue(waitForReduceMotion(original),
+                              "Original system Reduce Motion state should be restored")
+            }
+            XCTAssertEqual(reduceMotionSwitchIsOn(reduceMotionSwitch), Optional(original),
+                           "Settings switch should return to its original state")
+            attachReduceMotionReadback("restored", settingsSwitch: reduceMotionSwitch)
+            app.activate()
+        }
+
+        if !original {
+            reduceMotionSwitch.tap()
+            XCTAssertTrue(waitForReduceMotion(true),
+                          "UIKit must report the actual system Reduce Motion preference")
+        }
+        XCTAssertTrue(UIAccessibility.isReduceMotionEnabled)
+        XCTAssertEqual(reduceMotionSwitchIsOn(reduceMotionSwitch), Optional(true),
+                       "Settings switch value must read back as 1 when Reduce Motion is enabled")
+        attachReduceMotionReadback("enabled", settingsSwitch: reduceMotionSwitch)
+        let settingsScreenshot = XCTAttachment(screenshot: settings.screenshot())
+        settingsScreenshot.name = "Water Lilies system Reduce Motion Settings enabled"
+        settingsScreenshot.lifetime = .keepAlways
+        add(settingsScreenshot)
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+        XCTAssertTrue(detail.waitForExistence(timeout: 10),
+                      "The detail route must survive the Settings round trip")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(
+            "condition-period-picker", maxSwipes: 6, timeoutPerCheck: 0.2
+        ))
+        XCTAssertTrue(week.isSelected, "The selected chart period must survive scene inactivity")
+        captureRootEvidence("Water Lilies condition detail with system Reduce Motion")
+    }
+
+    func testWaterLiliesRemainsOnDetailAfterBackgroundResume() {
+        navigateToDashboard()
+        let hero = app.buttons[AXID.dashboardHeroCondition].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 10))
+        hero.tap()
+        let detail = app.scrollViews[AXID.conditionScoreDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10))
+        captureRootEvidence("Water Lilies condition detail before background")
+
+        XCUIDevice.shared.press(.home)
+        let backgrounded = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                MainActor.assumeIsolated {
+                    self.app.state == .runningBackground
+                        || self.app.state == .runningBackgroundSuspended
+                }
+            },
+            object: nil
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [backgrounded], timeout: 10), .completed)
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+        XCTAssertTrue(detail.waitForExistence(timeout: 10),
+                      "The same condition detail route should remain open")
+        XCTAssertTrue(detail.isHittable, "The resumed detail should accept input")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(
+            "condition-period-picker", maxSwipes: 6, timeoutPerCheck: 0.2
+        ))
+        captureRootEvidence("Water Lilies condition detail resumed")
+    }
+
+    private func openReduceMotionSwitch(in settings: XCUIApplication) -> XCUIElement? {
+        for title in ["Accessibility", "Motion"] {
+            guard settings.scrollToHittableElementIfNeeded(
+                title, maxSwipes: 6, timeoutPerCheck: 0.2
+            ) else { return nil }
+            let row = settings.staticTexts[title].firstMatch
+            guard row.waitForExistence(timeout: 5) else { return nil }
+            row.tap()
+        }
+        let toggle = settings.switches["Reduce Motion"].firstMatch
+        return toggle.waitForExistence(timeout: 5) && toggle.isHittable ? toggle : nil
+    }
+
+    private func reduceMotionSwitchIsOn(_ toggle: XCUIElement) -> Bool? {
+        if let value = toggle.value as? String {
+            if value == "1" { return true }
+            if value == "0" { return false }
+        }
+        if let value = toggle.value as? NSNumber {
+            return value.intValue == 1
+        }
+        return nil
+    }
+
+    private func attachReduceMotionReadback(
+        _ stage: String,
+        settingsSwitch: XCUIElement
+    ) {
+        let attachment = XCTAttachment(string: """
+            Stage: \(stage)
+            UIKit UIAccessibility.isReduceMotionEnabled: \(UIAccessibility.isReduceMotionEnabled)
+            Settings switch.value: \(String(describing: settingsSwitch.value))
+            Settings switch isOn: \(String(describing: reduceMotionSwitchIsOn(settingsSwitch)))
+            """)
+        attachment.name = "Water Lilies system Reduce Motion \(stage) readback"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
+    private func waitForReduceMotion(_ enabled: Bool) -> Bool {
+        let changed = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                MainActor.assumeIsolated {
+                    UIAccessibility.isReduceMotionEnabled == enabled
+                }
+            },
+            object: nil
+        )
+        return XCTWaiter.wait(for: [changed], timeout: 5) == .completed
+    }
+
+    private func waitForSelected(_ element: XCUIElement) -> Bool {
+        let selected = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "selected == true"), object: element
+        )
+        return XCTWaiter.wait(for: [selected], timeout: 5) == .completed
     }
 
     private func assertAndCaptureTabRoots(style: String) {
