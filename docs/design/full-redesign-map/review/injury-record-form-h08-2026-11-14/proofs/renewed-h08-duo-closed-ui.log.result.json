@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 1,
+    "passed": 0,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 0,
+  "failures": [
+    "662: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:927: error: -[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize] : Failed to get matching snapshot: No matches found for first query match sequence: `Descendan…",
+    "675: Test Case '-[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize]' failed (112.568 seconds).",
+    "676: Test Suite 'WellnessRegressionTests' failed at 2026-11-14 15:16:10.698.",
+    "678: Test Suite 'DUNEUITests.xctest' failed at 2026-11-14 15:16:10.698.",
+    "680: Test Suite 'Selected tests' failed at 2026-11-14 15:16:10.699.",
+    "695: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log has no positive passed-test count",
+    "UI test log has no identifiable passed UI test cases",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/renewed-h08-duo-closed-ui.log"
+}

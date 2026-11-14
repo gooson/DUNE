@@ -1,0 +1,25 @@
+{
+  "screen": "H08",
+  "device_state": "Duo Closed active LCD 1398x2034 pixels; XCTest window 466x678 points",
+  "profile": "MAX AccessibilityXXXL",
+  "date": "2026-11-14",
+  "source_revision": "db1475239c259243d7bc061b269abdb71a672b7e",
+  "selected_test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+  "selected_result": "PASS 203.609 seconds",
+  "native_qa": "positive for the selected H08 Closed MAX contract",
+  "observations": [
+    "Checkpoint 004 active LCD PNG shows Add Injury, Cancel and Save fully in the sheet navigation region. AX frames Cancel x28..117.3 y30..66 and Save x307.3..378 y30..66 are within the 466x678 window.",
+    "Checkpoints 005-012 exercise the real form controls in separate scroll positions: Knee, Side Both, Minor/Moderate/Severe, Start Date, Recovered On and End Date. The selector uses full-frame, hittable guards, with a compact viewport gesture only for the closed Duo form.",
+    "Checkpoint 014 AX has injury-form-memo x44..362 y306..374 focused and Keyboard y418..663. The active LCD PNG shows the software keyboard; checkpoint 013 PNG is byte-identical. This selector does not type or persist memo text.",
+    "Checkpoint 015 after keyboard dismissal has no Keyboard AX node; Save and Cancel are both enabled and hittable within the window. The source asserts both whole frames before Save. Checkpoint 016 Save dismisses the form.",
+    "Checkpoint 017 AX shows original injury-history-row-1 label Knee, (L), Minor, 5d, 11/9~, Active. Checkpoint 018 AX shows new injury-history-row-0 label Knee, (LR), Moderate, 0d, 11/14 ~ 11/14 in the Recovered section. Its frame x20..382 y251.3..624 is wholly inside the 466x678 window and it is visibly rendered in the PNG.",
+    "The old Active row is offscreen at checkpoint 018 (AX y-348..88); original and new rows were asserted and captured sequentially. They are not claimed to be simultaneously visible."
+  ],
+  "limits": [
+    "A preexisting P3 visual observation remains: Moderate wraps in the recovered row at MAX. The entire row and semantic value remain visible; this review does not infer an app fix.",
+    "No claim that memo content was saved; only memo focus, keyboard presentation/dismissal, Save, and the new recovered Knee record were verified.",
+    "The 2007x2853 companion display screenshots are archived but not used as the active Closed viewport evidence."
+  ],
+  "gallery_fragment": "/private/tmp/dune-h08-closedmax-native-review",
+  "original_capture": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/renewed-h08-duo-closed-retry-capture"
+}

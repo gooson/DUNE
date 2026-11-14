@@ -1,0 +1,27 @@
+{
+  "source_revision": "db1475239c259243d7bc061b269abdb71a672b7e",
+  "app_sha256": "c4cc74a7dbb50e0e46f1456ea04d42cfc734cef7869b958a6d8012f96be4be3e",
+  "decision": "All scoped native gates passed; ready for publication",
+  "findings": [],
+  "source_contract": [
+    "Compact Memo gesture only changes xposition/press; full field rectangle, enabled/hittable and software keyboard checks remain",
+    "Software keyboard must appear; actual dismissal must remove keyboard; completeSave/Cancel guards retained; Save tapped and form disappearance required",
+    "ShortDuo history observes seededrow1 ActiveKnee, requiresRecoveredsection then reveals row0 fully; requiresKnee/Moderate/noActive and distinctID. No false Recovered token in row label.",
+    "All otherprofiles retain>=2rowcount; existing helper uses bounded12reveals and fullrowviewport check",
+    "Current MAX seed containsoneActiveKnee; recovered fixture flag is absent. Newly savedrow0 has todaydate, originalrow1 -5days, supporting distinctidentity contract"
+  ],
+  "native_normal_review": [
+    "Closed Add43 shows wholeCancel/Save and originalBoth/Moderate;46 demonstrates restoredtoolbar beforeSave;49showsnewRecoveredKnee row0 andoriginalActiveKnee row1",
+    "Closed Edit46showsLeft/Minor;47returnsdetail withsamevalues andoriginalmemo afterSave",
+    "Open Add45/47 retainwholetoolbar,50showsnewrow+original;Edit77/78 show originalvalues thenreturn detail"
+  ],
+  "limits": [
+    "Edit flow saves unchangedfields; subsequentMarkRecovered is a separate detailaction, not changed-field Edit persistence",
+    "PhoneMAXModerate wordwrap remainsreadabilitylimit; currentcompactnative toolbar may require scrolling back to top",
+    "Originalframeworkcause ofhistoricalAdd failure not invented; MemoDatePicker gesture interception remains hypothesis untilnewexecution",
+    "Closed and Open MAX now have independent native proof. Memo is focused but no text is typed or persisted. Original/new history rows appear at separate scroll positions."
+  ],
+  "independence": "Fresh five-perspective report covers current unchangedapp; this agent source-authored someH08tests so currenttestreview is disclosed selfcheck",
+  "closed_max_evidence": "closed-MAX-qa.json",
+  "open_max_evidence": "open-MAX-qa.json"
+}

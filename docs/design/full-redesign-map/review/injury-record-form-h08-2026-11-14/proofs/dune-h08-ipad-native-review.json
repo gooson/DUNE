@@ -1,0 +1,466 @@
+{
+  "screen": "H08",
+  "decision": "scoped iPad native PASS; 15 requested states reviewed plus Edit-save return support; Duo pending",
+  "findings": [],
+  "source_revision": "45a756b98999435059bb54d23c792c61bfafb9a9",
+  "app_owner": "DUNE/Presentation/Injury/InjuryFormSheet.swift",
+  "app_sha256": "c4cc74a7dbb50e0e46f1456ea04d42cfc734cef7869b958a6d8012f96be4be3e",
+  "test_file_sha256": "f9e24077ead75fb20ca2907ab0f65fdd74ba0369a018e188dc54d3f8a1c306b9",
+  "same_app_as_phone": true,
+  "phone_review": "/private/tmp/dune-h08-phone-native-review.json",
+  "device": {
+    "udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+    "profile": "iPad portrait",
+    "native_dimensions": [
+      1512,
+      2316
+    ],
+    "point_window": [
+      756,
+      1158
+    ]
+  },
+  "batch_truth": {
+    "counts": {
+      "executed": 9,
+      "passed": 7,
+      "skipped": 0,
+      "failed": 2
+    },
+    "H08": "3of3 passed",
+    "unrelated_failed_selectors": [
+      "DUNEUITests/PostureVisualAuditTests/testP03ExerciseListAtMaximumAccessibilitySize",
+      "DUNEUITests/ActivityExerciseRegressionTests/testVisualAuditStrengthStartSessionLastSetAtMaximumText"
+    ],
+    "not_a_full_batch_pass": true
+  },
+  "case_receipts": [
+    {
+      "selector": "DUNEUITests/WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow",
+      "line": 2882,
+      "text": "Test Case '-[DUNEUITests.WellnessRegressionTests testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow]' passed (52.687 seconds)."
+    },
+    {
+      "selector": "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize",
+      "line": 3426,
+      "text": "Test Case '-[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize]' passed (102.683 seconds)."
+    },
+    {
+      "selector": "DUNEUITests/WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm",
+      "line": 3848,
+      "text": "Test Case '-[DUNEUITests.WellnessRegressionTests testInjuryHistoryRowOpensDetailAndEditForm]' passed (76.722 seconds)."
+    }
+  ],
+  "receipt": {
+    "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-ui.log.result.json",
+    "sha256": "dc2d7a27c6831b38643d0519735bc7f8c44823526fd0415109cbd544c81a791d"
+  },
+  "log": {
+    "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-ui.log",
+    "sha256": "67ba8db264ff6f40ea4b2d56742939d6f79a025df7372a92121191f0f943c051"
+  },
+  "attachment_manifest": {
+    "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/manifest.json",
+    "sha256": "55082a80e65c81aafaaf8a9f14bf8eded9c27ed313a39a91be0ddd334952e46f"
+  },
+  "selected_pairs": [
+    {
+      "test": "WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow()",
+      "stage": "H08 add initial form",
+      "uuid": "12DF6DC2-FC50-41EA-8026-11BC34CE9547",
+      "timestamp": 1794625496.171,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/7FA21941-BB15-4C43-9A15-07DD5F7BB0B8.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/2A29D9AE-42C6-49BD-8AAD-3C49A6ED40F1.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "099bc4693190a41b5ed41ab6661be5078967eb39fc1a85daa749f10ce2fb9379",
+      "ax_sha256": "82b3d09d1fbac897471c5bb010a999069ecbab2e089841dded4fa5f282759ab5",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x114f23c00, {{102.0, 263.0}, {78.0, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x114f28140, {{591.5, 263.0}, {62.5, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x114f29b80, {{124.0, 364.0}, {508.0, 34.5}}, identifier: 'injury-form-bodypart', label: 'Location, Knee'",
+        "SegmentedControl, 0x114f2a6c0, {{124.0, 422.0}, {508.0, 31.0}}, identifier: 'injury-form-side'",
+        "Button, 0x114f2be80, {{104.0, 527.0}, {548.0, 64.5}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x10a5b0b40, {{104.0, 591.5}, {548.0, 64.5}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x10a5b1a40, {{104.0, 656.0}, {548.0, 64.5}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "DatePicker, 0x10a5b3340, {{506.5, 793.5}, {125.5, 34.5}}, identifier: 'injury-form-startdate'",
+        "Button, 0x10a5b3d40, {{104.0, 843.0}, {548.0, 52.0}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: Off"
+      ],
+      "observation": "Normal Add title/actions, Knee/Both and Moderate selected; system section labels/icons are clear. Notes below initial viewport is expected scroll content."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow()",
+      "stage": "H08 add recovered end date",
+      "uuid": "D9580116-399B-47A1-9BA9-4B6794F71B41",
+      "timestamp": 1794625516.488,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/EE96C01A-2C37-4180-836C-0AA140296520.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/4ADC6E3B-C7FD-45E4-BB7C-BC2E860919CB.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "f9d75fb19d97a174ffbeff7569e88803ff8b4eaae0982b4a2208a25457212d9a",
+      "ax_sha256": "b537c1f4f121121767315dcb378005183e84056818c6be3b7c7b8a72a7acfbb2",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x118868000, {{102.0, 263.0}, {78.0, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x118868500, {{591.5, 263.0}, {62.5, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x118869680, {{104.0, 304.0}, {548.0, 64.5}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x11886a300, {{104.0, 368.5}, {548.0, 64.5}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x11886b200, {{104.0, 433.0}, {548.0, 64.5}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "DatePicker, 0x11a294b40, {{506.5, 570.5}, {125.5, 34.5}}, identifier: 'injury-form-startdate'",
+        "Button, 0x11a295540, {{104.0, 620.0}, {548.0, 52.0}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: On, Selected",
+        "StaticText, 0x11a2961c0, {{124.0, 694.0}, {69.5, 20.5}}, identifier: 'injury-form-enddate', label: 'End Date'",
+        "TextField, 0x11a297840, {{124.0, 809.5}, {508.0, 64.5}}, identifier: 'injury-form-memo', placeholderValue: 'Memo (optional)'"
+      ],
+      "observation": "Recovered On and complete End Date label/date control are visible together; Notes and both actions also visible."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow()",
+      "stage": "before teardown -[WellnessRegressionTests testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow]",
+      "uuid": "E1791E2B-8CFB-484C-AD57-29A26E6F5772",
+      "timestamp": 1794625528.684,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/011F41DA-5978-4E2D-B7E0-F67032D83777.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/0F636B1B-8C99-4F8B-ACF4-18359BEA046C.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "3759d0104b3ec1f490b15d0bc5487f1c92d460e8ab87bb27e3be81ef460fc9a1",
+      "ax_sha256": "6b2d06df7e29fa66a5e40847c1b9215a8bf92a25843ceda8d5bc8bf69c32370e",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x114f2d540, {{20.0, 246.5}, {716.0, 88.5}}, identifier: 'injury-history-row-1', label: 'Knee, (L), Minor, ·, 5d, 11/9~, Active'",
+        "Button, 0x10a5bd540, {{20.0, 393.5}, {716.0, 88.5}}, identifier: 'injury-history-row-0', label: 'Knee, (LR), Moderate, ·, 0d, 11/14 ~ 11/14'"
+      ],
+      "observation": "After Save, sheet absent; history exposes original active Knee and newly created recovered Knee/Both/Moderate with current-day range."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX add title and actions",
+      "uuid": "C0BE6AAF-C290-476C-9171-37300DE64186",
+      "timestamp": 1794625558.548,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/774ABFD4-37B5-4971-900A-7072A58D37E2.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/7D181EC1-BC01-48F2-8CB2-14A5BD70A752.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "e2cef42f522984714f3b4eafa045576a003964753f4846ed4d53e5b98824ae68",
+      "ax_sha256": "b7b9fb18cffc0dbe25006ba755f4dcede1447ce544f30ce9fcfdf042bbbd34d4",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x115dae6c0, {{102.0, 263.0}, {89.5, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x115daebc0, {{583.0, 263.0}, {71.0, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x10a5dc780, {{124.0, 413.0}, {194.0, 145.0}}, identifier: 'injury-form-bodypart', label: 'Location, Knee'",
+        "SegmentedControl, 0x10a5dd180, {{124.0, 588.0}, {508.0, 31.0}}, identifier: 'injury-form-side'",
+        "Button, 0x10a5de940, {{104.0, 738.0}, {548.0, 193.0}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'"
+      ],
+      "observation": "MAX title and both actions fit; content grows vertically and remains scrollable."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX body part",
+      "uuid": "F48C66C6-AC94-456E-8240-A60CF0ECADF8",
+      "timestamp": 1794625561.558,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/DDF9EF96-7969-48AD-A455-0F8D68D0B3F8.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/AE283B25-36C3-4686-8C77-12C626C70B96.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "06cb34297cdc58564e6c04e07d76a937c05210f020983cd5167bea74298c33ef",
+      "ax_sha256": "684430ebcb5ae047ee78e80d79a0d60a46488b6caac1974d80d9f61955a0ce07",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x114f1b480, {{102.0, 263.0}, {89.5, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x114f1b980, {{583.0, 263.0}, {71.0, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x10a5d5540, {{124.0, 413.0}, {194.0, 145.0}}, identifier: 'injury-form-bodypart', label: 'Location, Knee'",
+        "SegmentedControl, 0x10a5d5f40, {{124.0, 588.0}, {508.0, 31.0}}, identifier: 'injury-form-side'",
+        "Button, 0x10a5d7700, {{104.0, 738.0}, {548.0, 193.0}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'"
+      ],
+      "observation": "MAX Location and Knee are complete with stacked content."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX side",
+      "uuid": "07B50290-B671-4397-A9C6-84799487DDA2",
+      "timestamp": 1794625564.606,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/80C3A134-5F4A-4085-8400-0F8EFB56DB0C.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/3B78EC6C-CBEC-45B3-9B0D-5D1008B45C92.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "06cb34297cdc58564e6c04e07d76a937c05210f020983cd5167bea74298c33ef",
+      "ax_sha256": "581a35b86cf423244cb42bd033c7a89a48b9820db6d62f197d14b0416121c983",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x114f16bc0, {{102.0, 263.0}, {89.5, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x114f170c0, {{583.0, 263.0}, {71.0, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x114f2cc80, {{124.0, 413.0}, {194.0, 145.0}}, identifier: 'injury-form-bodypart', label: 'Location, Knee'",
+        "SegmentedControl, 0x114f2d680, {{124.0, 588.0}, {508.0, 31.0}}, identifier: 'injury-form-side'",
+        "Button, 0x114f2ee40, {{104.0, 738.0}, {548.0, 193.0}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'"
+      ],
+      "observation": "Side segmented control is complete and enabled by test; its system text remains small rather than matching MAX body typography."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX severity minor",
+      "uuid": "2BBA33D7-B387-45C9-97B9-945638DF2847",
+      "timestamp": 1794625571.82,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/FE99E811-9540-44F8-A0C4-D0414F3A0356.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/F4106ACB-24D2-4B1A-8ECF-F619CDD16CA2.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "e96505bc561cd9ad32a80105b5ba4678e6b913c24d5bda56bb1dfbed78b05b7f",
+      "ax_sha256": "efacd5eeb7b0ca6ee3cb1d9d36fd33da3448237801eabcb3991d6fc4f5002104",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x118866300, {{102.0, 263.0}, {89.5, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x118866800, {{583.0, 263.0}, {71.0, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x114f2c280, {{104.0, 362.5}, {548.0, 193.0}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x114f2cf00, {{104.0, 555.5}, {548.0, 193.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x114f2de00, {{104.0, 748.5}, {548.0, 193.0}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'"
+      ],
+      "observation": "Minor label and complete caution description fit in scroll viewport."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX severity moderate",
+      "uuid": "4C07B222-D0E5-4D58-820B-779F9ABAF593",
+      "timestamp": 1794625574.778,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/5EF57B80-E431-4CB6-B379-949CFBA5B010.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/B1FD61D3-E0B5-4ABD-AB37-438CD83142AE.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "e96505bc561cd9ad32a80105b5ba4678e6b913c24d5bda56bb1dfbed78b05b7f",
+      "ax_sha256": "115beff11c8f048ccdc748a0a6435e5062985ae7e23addd38f099342c25ffdda",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x115dada40, {{102.0, 263.0}, {89.5, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x115dadf40, {{583.0, 263.0}, {71.0, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x115daf980, {{104.0, 362.5}, {548.0, 193.0}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution'",
+        "Button, 0x114f14640, {{104.0, 555.5}, {548.0, 193.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x114f15540, {{104.0, 748.5}, {548.0, 193.0}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'"
+      ],
+      "observation": "Moderate label and complete description fit; selected checkmark visible, no split word on this iPad capture."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX severity severe",
+      "uuid": "6AC8C1F0-0CDD-42CC-A209-96127810F6CC",
+      "timestamp": 1794625581.985,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/39879DE2-9C1D-4A56-A16E-12432F900A31.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/069999E7-F52E-4117-923D-10A7AC78FC53.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "6806dbe52d439f541c5054c0d6759923e94aeaf05a1749802bc08c694388033d",
+      "ax_sha256": "30429b8ae03419e2846cce5258d7453dd5647cabefc57a762315ecb705ce8dd0",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x118865180, {{102.0, 263.0}, {89.5, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x118865680, {{583.0, 263.0}, {71.0, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x118866800, {{104.0, 161.0}, {548.0, 193.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x1188675c0, {{104.0, 354.0}, {548.0, 193.0}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "DatePicker, 0x114f2cf00, {{124.0, 730.5}, {328.0, 77.5}}, identifier: 'injury-form-startdate'",
+        "Button, 0x114f2d900, {{104.0, 823.0}, {548.0, 93.5}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: Off"
+      ],
+      "observation": "Severe label and complete description fit after scroll."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX start date",
+      "uuid": "B12C2EA8-3D43-4C43-BF6E-B57FC2DDB5AE",
+      "timestamp": 1794625584.888,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/73C3B810-F0D7-4691-BEC3-8B2C4A791C90.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/F2417502-3886-4CF2-AABC-95AFAC1F370A.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "6806dbe52d439f541c5054c0d6759923e94aeaf05a1749802bc08c694388033d",
+      "ax_sha256": "c8d52178f181421c9226f46094338fbb4faa10d21fb611f800c9151c0df694e1",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x11a29c8c0, {{102.0, 263.0}, {89.5, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x11a29cdc0, {{583.0, 263.0}, {71.0, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x11a29df40, {{104.0, 161.0}, {548.0, 193.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x11a29ed00, {{104.0, 354.0}, {548.0, 193.0}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "DatePicker, 0x10a5c8640, {{124.0, 730.5}, {328.0, 77.5}}, identifier: 'injury-form-startdate'",
+        "Button, 0x10a5c9040, {{104.0, 823.0}, {548.0, 93.5}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: Off"
+      ],
+      "observation": "Start Date whole native control fits; Recovered control follows beneath."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX recovered end date",
+      "uuid": "7D493228-C43B-4B36-B614-2793851B628B",
+      "timestamp": 1794625604.497,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/07CCA1B8-63D3-4106-AC3D-1593EF13FCAA.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/226816D3-EE02-4B87-A3C8-737A798BF0AA.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "c8e411c7f340bf1547e5a51a4a61bf4696c1fd882747f653fb94619e30a1e2dd",
+      "ax_sha256": "c5539c712c9792daf22a95af450e2ce3e8ac52d8fca5163b2d2c01b0a1ef827e",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x11a2a1cc0, {{102.0, 263.0}, {89.5, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x11a2a21c0, {{583.0, 263.0}, {71.0, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "DatePicker, 0x11a2a3480, {{124.0, 384.5}, {328.0, 77.5}}, identifier: 'injury-form-startdate'",
+        "Button, 0x11a2a3e80, {{104.0, 477.0}, {548.0, 93.5}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: On, Selected",
+        "StaticText, 0x11a2b4b40, {{124.0, 585.5}, {205.0, 63.5}}, identifier: 'injury-form-enddate', label: 'End Date'",
+        "TextField, 0x11a2b61c0, {{124.0, 861.5}, {508.0, 187.5}}, identifier: 'injury-form-memo', placeholderValue: 'Memo (optional)'"
+      ],
+      "observation": "Recovered On and complete End Date row fit; Memo starts below, as expected scroll content."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX memo software keyboard",
+      "uuid": "5695B257-50B4-44EA-A252-352D2D7E0CAA",
+      "timestamp": 1794625615.271,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/74BA3016-78BC-40E5-9811-91FE2F0D8286.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/57236904-FFFD-41AE-91F4-C0CB5081D6D7.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "cc4d65d6ef95fcb42c01c83c509de195cd64bd333dee5ec755accba29f83f636",
+      "ax_sha256": "ad9e101d1342e0570683cf596dfb0cbc75140d018307c5d95243a9f0e113aa40",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x11a2d2a80, {{102.0, 93.0}, {89.5, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x11a2d2f80, {{583.0, 93.0}, {71.0, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x11a310140, {{104.0, 132.0}, {548.0, 93.5}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: On, Selected",
+        "StaticText, 0x11a310c80, {{124.0, 240.5}, {205.0, 63.5}}, identifier: 'injury-form-enddate', label: 'End Date'",
+        "TextField, 0x11a312300, {{124.0, 516.5}, {508.0, 187.5}}, identifier: 'injury-form-memo', placeholderValue: 'Memo (optional)', Keyboard Focused",
+        "Keyboard, 0x11a316440, {{0.0, 873.0}, {756.0, 282.0}}"
+      ],
+      "observation": "Memo is focused with visible software keyboard; sheet shifts above keyboard while title/actions remain visible."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "H08 MAX Save and Cancel after keyboard dismissal",
+      "uuid": "43B3F458-ACF5-41A6-9918-1BB7D6522313",
+      "timestamp": 1794625620.717,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/1ACE3CEE-A90A-480D-B7CB-85E0A3E927C0.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/C29408C5-F493-4E31-8A6D-1F05F200D0E2.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "3b221c5f680a2e66d49e1feaf1cf701e2160191ca6f1c8afad39425861fa2b8a",
+      "ax_sha256": "9144810c3ce96a79393694adbcbec313d31b19c47b5cc3dad71841a1f77af478",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x114f1bd40, {{102.0, 263.0}, {89.5, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x10a5d4280, {{583.0, 263.0}, {71.0, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x10a5d5400, {{104.0, 126.5}, {548.0, 193.0}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area', Selected",
+        "Button, 0x10a5d61c0, {{104.0, 319.5}, {548.0, 193.0}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "DatePicker, 0x10a5d7ac0, {{124.0, 696.0}, {328.0, 77.5}}, identifier: 'injury-form-startdate'",
+        "Button, 0x11a2bc500, {{104.0, 788.5}, {548.0, 93.5}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: On, Selected",
+        "StaticText, 0x11a2bd180, {{124.0, 897.0}, {205.0, 63.5}}, identifier: 'injury-form-enddate', label: 'End Date'",
+        "TextField, 0x11a2bde00, {{124.0, 1173.0}, {508.0, 187.5}}, identifier: 'injury-form-memo', placeholderValue: 'Memo (optional)'"
+      ],
+      "observation": "Software keyboard absent; whole Save/Cancel remain in sheet toolbar and are enabled/hittable per passing assertions. Memo need not remain in this post-dismiss viewport."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize()",
+      "stage": "before teardown -[WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize]",
+      "uuid": "4B00A922-2454-42FF-A862-15BD52C3F0EC",
+      "timestamp": 1794625631.333,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/843EDF10-3708-4383-AD37-67DDC0987744.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/B2E5571E-2B75-463D-AFCD-65B6A9F0095F.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "e43a04a2c5fa570ab421a4d2a7041b77df97d09c1c3da69764585947bb66cb1f",
+      "ax_sha256": "2fd49d0ab658358bf9a53b504621b031ec73423d2c902ff1b5321f6ee7ca1b36",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x10a5ca1c0, {{20.0, 296.5}, {716.0, 437.5}}, identifier: 'injury-history-row-1', label: 'Knee, (L), Minor, 5d, 11/9~, Active'",
+        "Button, 0x114f33700, {{20.0, 835.5}, {716.0, 374.0}}, identifier: 'injury-history-row-0', label: 'Knee, (LR), Moderate, 0d, 11/14 ~ 11/14'"
+      ],
+      "observation": "Save dismisses form; history has original active and new recovered row. Recovered row extends below screenshot edge at MAX; this proves creation/presence, not full H09 row-viewport compliance."
+    },
+    {
+      "test": "WellnessRegressionTests/testInjuryHistoryRowOpensDetailAndEditForm()",
+      "stage": "tap injury-detail-edit",
+      "uuid": "3E552F5F-DE8A-4711-B725-72B76A30E463",
+      "timestamp": 1794625684.296,
+      "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/7AE818F4-C5A5-4837-ABB3-98BB7C94F9CF.png",
+      "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/39BB1760-79EA-419F-82EC-BD354BCC87C7.txt",
+      "device_udid": "57034405-40B8-4F29-B64B-DE01F6DBE92C",
+      "png_sha256": "effa3dc54711e049b05fb607fafa74d09454670ba639a97cad7295d04e9ada6e",
+      "ax_sha256": "7f536c5da05ee930b6625d29b7f47c90cc8d8cd7f695bca78508753d091ff6fd",
+      "native_dimensions": [
+        1512,
+        2316
+      ],
+      "classification": "fresh native source-pinned iPad evidence; reviewed",
+      "key_ax_lines": [
+        "Button, 0x11a294140, {{102.0, 263.0}, {78.0, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'",
+        "Button, 0x11a294640, {{591.5, 263.0}, {62.5, 36.0}}, identifier: 'injury-form-save', label: 'Save'",
+        "Button, 0x11a296080, {{124.0, 364.0}, {508.0, 34.5}}, identifier: 'injury-form-bodypart', label: 'Location, Knee'",
+        "SegmentedControl, 0x11a296bc0, {{124.0, 422.0}, {508.0, 31.0}}, identifier: 'injury-form-side'",
+        "Button, 0x1188683c0, {{104.0, 527.0}, {548.0, 64.5}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution', Selected",
+        "Button, 0x118869180, {{104.0, 591.5}, {548.0, 64.5}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area'",
+        "Button, 0x118869f40, {{104.0, 656.0}, {548.0, 64.5}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'",
+        "DatePicker, 0x11886b840, {{514.0, 793.5}, {118.0, 34.5}}, identifier: 'injury-form-startdate'",
+        "Button, 0x10a5c8280, {{104.0, 843.0}, {548.0, 52.0}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: Off"
+      ],
+      "observation": "Edit Injury shows existing Knee/Left/Minor and original start date, with Save/Cancel clear."
+    }
+  ],
+  "supplemental_edit_save_pair": {
+    "stage": "Edit Save returns to detail (no field changed)",
+    "png": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/CEFD4953-264F-4667-9AC5-A9F906629565.png",
+    "ax": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-ipad-03-attachments/EE60C83B-0465-4EDB-A30D-5D031DAEF046.txt",
+    "png_sha256": "138336bf44465fc4a25e7a37a908db37be8aa0c4578673d1be8dfe6c2f4fa088",
+    "ax_sha256": "70b3f58fcf616edbaf8c0c621f96e870ce4964091edab36ed902a29cb7fc13eb",
+    "observation": "Native detail screen visible, form absent, original Knee/Left/Minor and memo retained; Active and Mark Recovered remain before next detail action."
+  },
+  "save_history_provenance": {
+    "normal_Add": "After Recovered/EndDate capture, source asserts complete/hittable Save+Cancel, taps Save, waits form absent, opens history and asserts >=2 rows. Fresh before-teardown AX identifies new Knee(LR)/Moderate/currentday range alongside original active Knee.",
+    "MAX_Add": "After Memo keyboard focus then interactive dismissal, source asserts keyboard absent and whole enabled/hittable Save/Cancel, saves, waits form absent, returns to history and asserts >=2 rows. Fresh AX names new recovered row.",
+    "Edit": "Source opens seeded active Knee detail, verifies original metadata/memo, opens Edit, then saves WITHOUT changing an input. Passing test and fresh return-to-detail pair prove form dismissal and preservation. Later Mark Recovered changes status and history from detail, not from an edited form field.",
+    "avoid_overclaim": "This run does not establish changed-field edit persistence, typed Memo persistence, Cancel dismissal, every Side selection, every invalid date, or all locales/appearances."
+  },
+  "limitations": [
+    "Native system Side segmented labels remain small at MAX; they are complete and reachable, not evidence of all text scaling to AX5.",
+    "Scroll captures intentionally clip non-target rows at top/bottom; each target row has a separate full-frame check.",
+    "MAX new history row is partially below the screen; H08 save/creation is proven, but this is not full H09 MAX-row visual certification.",
+    "No numerical contrast measurement was performed; visible foreground/readability reviewed.",
+    "Current Phone and iPad H08 evidence do not cover Duo Closed/Open; no Duo device or SDK action performed by this reviewer.",
+    "Original H08 missing counter remains UNKNOWN/closed; these new passes do not erase its failure/retry provenance."
+  ],
+  "review_method": "All15 native pairs read through labeled diagnostic contact sheets plus AX; normal recovered/Edit and Edit-save return PNGs inspected at native resolution. Contact sheets are derived review aids only, not fresh app captures.",
+  "repository_edits": false,
+  "SDK_or_device_actions": false
+}

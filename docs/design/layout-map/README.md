@@ -334,3 +334,6 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-14 W13: [템플릿 편집·W34 내장 AI 정적 배치](template-form-w13.html)와 새 실제 캡처를 구분한다. 2026-11-07 보류 리뷰 원본을 보존하며 현재 Phone/iPad 일반·MAX 검증은 진행 중이다.
 
 2026-11-14 W14: [템플릿 운동 선택 정적 배치](template-exercise-picker-w14.html)와 새 실제 캡처를 구분한다. 2026-11-07 보류 리뷰 원본을 보존하며 현재 Phone/iPad 일반·MAX 검증은 진행 중이다.
+
+
+2026-11-14 [H08 실제 증거와 남은DuoMAX](../full-redesign-map/review/injury-record-form-h08-2026-11-14/index.html). 과거실패는 보존하며 대기범위를 통과로 표시하지 않는다.

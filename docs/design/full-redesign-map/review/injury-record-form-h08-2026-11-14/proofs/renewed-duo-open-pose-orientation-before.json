@@ -1,0 +1,30 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "orientation",
+      "get",
+      "--device",
+      "58939D48-3C9C-430B-B5CA-C45ECE6E43D5",
+      "--timeout",
+      "10",
+      "--quiet",
+      "--json-output",
+      "-"
+    ],
+    "commandType" : "devicectl.device.orientation.get",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 5,
+    "outcome" : "success",
+    "version" : "651.32"
+  },
+  "result" : {
+    "deviceIdentifier" : "58939D48-3C9C-430B-B5CA-C45ECE6E43D5",
+    "deviceIsOrientationLocked" : false,
+    "deviceOrientation" : "portrait",
+    "deviceOrientationNonFlat" : "portrait"
+  }
+}

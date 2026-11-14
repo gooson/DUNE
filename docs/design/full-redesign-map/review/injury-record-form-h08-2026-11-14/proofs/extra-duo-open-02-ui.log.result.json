@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize",
+    "DUNEUITests/PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 1,
+  "failures": [
+    "1148: /Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/DUNEUITests/Full/WellnessRegressionTests.swift:840: error: -[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize] : XCTAssertGreaterThanOrEqual failed: (\"1\") is less than (\"2\") - MAX Save must create a histor…",
+    "1161: Test Case '-[DUNEUITests.WellnessRegressionTests testInjuryFormAtMaximumAccessibilityTextSize]' failed (154.703 seconds).",
+    "1162: Test Suite 'WellnessRegressionTests' failed at 2026-11-14 14:00:31.576.",
+    "1164: Test Suite 'DUNEUITests.xctest' failed at 2026-11-14 14:00:31.576.",
+    "1166: Test Suite 'Selected tests' failed at 2026-11-14 14:00:31.577.",
+    "1181: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/WellnessRegressionTests/testInjuryFormAtMaximumAccessibilityTextSize"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/extra-duo-open-02-ui.log"
+}

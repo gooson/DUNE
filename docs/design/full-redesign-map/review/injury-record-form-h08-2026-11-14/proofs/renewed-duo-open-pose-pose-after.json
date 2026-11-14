@@ -1,0 +1,85 @@
+{
+  "target_pose": "open",
+  "target_angle": 180,
+  "actual_angle": null,
+  "angle_readback": "Unmeasured: archived Xcode27.2 lacks device motion hinge-angle command",
+  "active_display": "LCD-1",
+  "orientation": {
+    "deviceIdentifier": "58939D48-3C9C-430B-B5CA-C45ECE6E43D5",
+    "deviceIsOrientationLocked": false,
+    "deviceOrientation": "portrait",
+    "deviceOrientationNonFlat": "portrait"
+  },
+  "displays": [
+    {
+      "active": false,
+      "backlightState": "off",
+      "bounds": [
+        [
+          0,
+          0
+        ],
+        [
+          1398,
+          2034
+        ]
+      ],
+      "chromeIdentifier": "com.apple.dt.devicekit.chrome.phone15",
+      "currentOrientation": "rot0",
+      "displayId": 1,
+      "framebufferMaskIdentifier": "1C896A2B-F0D7-405C-8D0F-66E4B80AD044",
+      "name": "LCD",
+      "nativeOrientation": "rot0",
+      "nativeSize": [
+        1398,
+        2034
+      ],
+      "physicalSize": [
+        3.039130449295044,
+        4.421739101409912
+      ],
+      "pointScale": 3,
+      "primary": true,
+      "type": {
+        "integrated": {}
+      },
+      "uniqueId": "5BDD00F2-EBD7-4659-BD44-01E1CF0CCF61"
+    },
+    {
+      "active": true,
+      "backlightState": "activeOn",
+      "bounds": [
+        [
+          0,
+          0
+        ],
+        [
+          2007,
+          2853
+        ]
+      ],
+      "chromeIdentifier": "com.apple.dt.devicekit.chrome.phone14",
+      "currentOrientation": "rot90",
+      "displayId": 3,
+      "framebufferMaskIdentifier": "BF0DC480-5EE2-4EC1-B02B-C75E94759832",
+      "name": "LCD-1",
+      "nativeOrientation": "rot0",
+      "nativeSize": [
+        2007,
+        2853
+      ],
+      "physicalSize": [
+        4.363043308258057,
+        6.202173709869385
+      ],
+      "pointScale": 3,
+      "primary": false,
+      "type": {
+        "integrated": {}
+      },
+      "uniqueId": "4AA48460-6C9F-427D-98A0-08DA00A3B8F0"
+    }
+  ],
+  "native_ax_required": true,
+  "runtime_ui_pass": false
+}

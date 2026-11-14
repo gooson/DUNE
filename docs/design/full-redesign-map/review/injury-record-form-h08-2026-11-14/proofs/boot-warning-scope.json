@@ -1,0 +1,14 @@
+{
+  "bootstatus_exit_original": "renewed-duo-closed-pose-bootstatus.exit",
+  "original_text": "Monitoring boot status for iPhone Duo-wt-Health-detail-redesign-finalize-f6b10889105b (58939D48-3C9C-430B-B5CA-C45ECE6E43D5).\n[2026-11-14 06:08:47 +0000] Status=1, isTerminal=NO, Elapsed=00:03.\n\tWaiting on BackBoard\n\n[2026-11-14 06:08:48 +0000] Status=2, isTerminal=NO, Elapsed=00:04.\n\tWaiting on Data Migration\n\t\tReason:(null)\n\t\tMigration Elapsed:00:00 seconds\n\n[2026-11-14 06:08:48 +0000] Status=3, isTerminal=YES, Elapsed=00:04.\n\tData Migration Failed\n\n",
+  "interpretation": "Boot status warning retained. Current owned device subsequently served real UI/AX/PNG and selected Closed/Open MAX passed. This is current provider success, not proof of the cause or recovery of any historical migration failure.",
+  "selected_results": {
+    "ClosedMAX": "203.609s PASS",
+    "OpenMAX": "149.472s PASS"
+  },
+  "source": "db1475239c259243d7bc061b269abdb71a672b7e",
+  "bootstatus_excerpt": "renewed-duo-closed-pose-bootstatus.log",
+  "excerpt_normalization": "curated-log-normalization.json",
+  "original_sha256": "947d334a8705d809250c3e1c2e499e157fef5e657358d616e95cfb3c5fb23c75",
+  "normalized_excerpt_sha256": "a3bab2b2e97428188de6226af612124695287832e244193249ae5718f5b4c6a5"
+}

@@ -550,6 +550,7 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
     func testInjuryAddFlowShowsRecoveredFieldsAndCreatesHistoryRow() throws {
         openInjuryFormFromToolbar()
+        VisualAudit.capture("H08 add initial form")
 
         let recoveredToggle = app.descendants(matching: .any)[AXID.injuryFormRecoveredToggle].firstMatch
         XCTAssertTrue(recoveredToggle.waitForExistence(timeout: 5), "Recovered toggle should exist")
@@ -562,9 +563,22 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             app.scrollToInjuryEndDateIfNeeded(maxSwipes: 4, timeoutPerCheck: 1.5),
             "End date should appear after enabling recovered"
         )
+        let endDateRow = app.cells.containing(.staticText, identifier: AXID.injuryFormEndDate).firstMatch
+        XCTAssertTrue(revealInjuryFormElement(endDateRow), "The complete End Date row must be visible")
+        VisualAudit.capture("H08 add recovered end date")
 
+        // The compact native navigation toolbar can collapse while the Form is scrolled.
+        // Return the Form to its top before requiring the original full Save/Cancel checks.
+        if isCompactInjuryFormViewport {
+            XCTAssertTrue(revealCompactInjuryFormActions(), "Save and Cancel must be reachable after End Date")
+            VisualAudit.capture("H08 compact restored Save and Cancel before save")
+        }
         let saveButton = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Injury save button should exist")
+        let cancelButton = app.descendants(matching: .any)[AXID.injuryFormCancel].firstMatch
+        let windowFrame = app.windows.firstMatch.frame
+        XCTAssertTrue(saveButton.isEnabled && saveButton.isHittable && windowFrame.contains(saveButton.frame))
+        XCTAssertTrue(cancelButton.exists && cancelButton.isHittable && windowFrame.contains(cancelButton.frame))
         saveButton.auditTap()
 
         let form = app.descendants(matching: .any)[AXID.injuryFormScreen].firstMatch
@@ -726,6 +740,209 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("H09 MAX recovered Shoulder whole row")
     }
 
+    func testInjuryFormAtMaximumAccessibilityTextSize() throws {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-UIPreferredContentSizeCategoryName",
+            "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        launchApp(with: configuration)
+        navigateToWellness()
+        openInjuryFormFromToolbar()
+
+        let form = app.descendants(matching: .any)[AXID.injuryFormScreen].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 8))
+        let cancel = app.descendants(matching: .any)[AXID.injuryFormCancel].firstMatch
+        let save = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5) && cancel.isEnabled && cancel.isHittable)
+        XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isEnabled && save.isHittable)
+        VisualAudit.capture("H08 MAX add title and actions")
+
+        let location = app.descendants(matching: .any)[AXID.injuryFormBodyPart].firstMatch
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormBodyPart), "Location must fit and be reachable")
+        XCTAssertTrue(location.isEnabled)
+        VisualAudit.capture("H08 MAX body part")
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormSide), "Default Knee Side must fit")
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.injuryFormSide].firstMatch.isEnabled)
+        VisualAudit.capture("H08 MAX side")
+        for severity in ["minor", "moderate", "severe"] {
+            let identifier = "injury-form-severity-\(severity)"
+            XCTAssertTrue(revealInjuryFormControl(identifier), "Each severity must fit and be reachable")
+            XCTAssertTrue(app.descendants(matching: .any)[identifier].firstMatch.isEnabled)
+            VisualAudit.capture("H08 MAX severity \(severity)")
+        }
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormStartDate), "Start Date must fit")
+        VisualAudit.capture("H08 MAX start date")
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormRecoveredToggle), "Recovered must fit")
+        XCTAssertTrue(app.setSwitch(AXID.injuryFormRecoveredToggle, to: true, fallbackLabel: "Recovered"))
+        XCTAssertTrue(app.scrollToInjuryEndDateIfNeeded(maxSwipes: 8, timeoutPerCheck: 1))
+        let endDateRow = app.cells.containing(.staticText, identifier: AXID.injuryFormEndDate).firstMatch
+        XCTAssertTrue(revealInjuryFormElement(endDateRow), "The complete MAX End Date row must be visible")
+        VisualAudit.capture("H08 MAX recovered end date")
+
+        XCTAssertTrue(revealInjuryFormControl(AXID.injuryFormMemo), "Memo must fit")
+        let memo = app.descendants(matching: .any)[AXID.injuryFormMemo].firstMatch
+        XCTAssertTrue(memo.isEnabled && memo.isHittable)
+        memo.auditTap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5), "Software keyboard must appear")
+        VisualAudit.capture("H08 MAX memo software keyboard")
+        let keyboard = app.keyboards.firstMatch
+        let formScroll = app.collectionViews.firstMatch
+        XCTAssertTrue(formScroll.exists && formScroll.isHittable)
+        for _ in 0..<2 {
+            if !keyboard.exists { break }
+            let window = app.windows.firstMatch
+            let viewport = formScroll.frame.intersection(window.frame)
+            let keyboardFrame = keyboard.frame.intersection(window.frame)
+            XCTAssertGreaterThan(keyboardFrame.minY, viewport.minY, "A visible Form region must remain above the keyboard")
+            let startY = (viewport.minY + keyboardFrame.minY) / 2
+            XCTAssertGreaterThan(keyboardFrame.midY, startY, "Keyboard dismissal must drag downward inside the window")
+            let origin = window.coordinate(withNormalizedOffset: .zero)
+            let start = origin.withOffset(CGVector(
+                dx: viewport.midX - window.frame.minX,
+                dy: startY - window.frame.minY
+            ))
+            let end = origin.withOffset(CGVector(
+                dx: viewport.midX - window.frame.minX,
+                dy: keyboardFrame.midY - window.frame.minY
+            ))
+            start.press(forDuration: 0.05, thenDragTo: end)
+            if keyboard.waitForNonExistence(timeout: 2) { break }
+        }
+        XCTAssertFalse(app.keyboards.firstMatch.exists)
+        if isCompactInjuryFormViewport {
+            XCTAssertTrue(revealCompactInjuryFormActions(), "Save and Cancel must be reachable after keyboard dismissal")
+        }
+        XCTAssertTrue(save.isEnabled && save.isHittable && app.windows.firstMatch.frame.contains(save.frame))
+        XCTAssertTrue(cancel.isEnabled && cancel.isHittable && app.windows.firstMatch.frame.contains(cancel.frame))
+        VisualAudit.capture("H08 MAX Save and Cancel after keyboard dismissal")
+        save.auditTap()
+        XCTAssertTrue(form.waitForNonExistence(timeout: 10), "Save must dismiss the MAX form")
+        openInjuryHistory()
+        let historyWindow = app.windows.firstMatch.frame
+        let shortDuoHistory = ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1"
+            && historyWindow.height < 700
+        if shortDuoHistory {
+            // The 586 pt landscape List cannot expose both tall rows at one scroll offset.
+            // Observe the seeded active row, then reveal the newly saved recovered row.
+            let originalActiveRow = app.buttons["injury-history-row-1"].firstMatch
+            XCTAssertTrue(originalActiveRow.exists && originalActiveRow.label.contains("Knee")
+                          && originalActiveRow.label.contains("Active"),
+                          "Original active Knee must remain after MAX save")
+            let originalRowID = originalActiveRow.identifier
+            XCTAssertTrue(app.staticTexts["Recovered"].firstMatch.exists,
+                          "A recovered section must appear after MAX save")
+            XCTAssertTrue(revealInjuryHistoryRow(0),
+                          "New recovered Knee row must fit and be reachable in History")
+            let newRecoveredRow = app.buttons["injury-history-row-0"].firstMatch
+            XCTAssertTrue(newRecoveredRow.exists && newRecoveredRow.isHittable,
+                          "New recovered row must be visible after MAX save")
+            XCTAssertTrue(newRecoveredRow.label.contains("Knee")
+                          && newRecoveredRow.label.contains("Moderate")
+                          && !newRecoveredRow.label.contains("Active"),
+                          "New MAX record must retain Knee, Moderate and ended status")
+            XCTAssertNotEqual(newRecoveredRow.identifier, originalRowID,
+                              "MAX save must create a second distinct record")
+            VisualAudit.capture("H08 MAX new recovered Knee row after save")
+        } else {
+            let rows = app.descendants(matching: .any)
+                .matching(NSPredicate(format: "identifier BEGINSWITH %@", "injury-history-row-"))
+            XCTAssertGreaterThanOrEqual(rows.count, 2, "MAX Save must create a history row")
+        }
+    }
+
+    private var isCompactInjuryFormViewport: Bool {
+        let window = app.windows.firstMatch.frame
+        return window.width < 500 && window.height < 700
+    }
+
+    private func revealCompactInjuryFormActions(maxMoves: Int = 6) -> Bool {
+        let save = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
+        let cancel = app.descendants(matching: .any)[AXID.injuryFormCancel].firstMatch
+        let window = app.windows.firstMatch.frame
+        func actionsFit() -> Bool {
+            return save.exists && cancel.exists && save.isEnabled && cancel.isEnabled
+                && save.isHittable && cancel.isHittable
+                && window.contains(save.frame) && window.contains(cancel.frame)
+        }
+        if actionsFit() { return true }
+        // In the closed Duo AX tree, the presented Form is the only CollectionView;
+        // the background Wellness container is a ScrollView.
+        let form = app.collectionViews.firstMatch
+        guard form.exists && form.isHittable else { return false }
+        for _ in 0..<maxMoves {
+            let from = form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.30))
+            let to = form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.70))
+            from.press(forDuration: 0.35, thenDragTo: to,
+                       withVelocity: XCUIGestureVelocity(rawValue: 80), thenHoldForDuration: 0.35)
+            if actionsFit() { return true }
+        }
+        return actionsFit()
+    }
+
+    private func revealInjuryFormControl(_ identifier: String, maxMoves: Int = 12) -> Bool {
+        let target = app.descendants(matching: .any)[identifier].firstMatch
+        return revealInjuryFormElement(
+            target, maxMoves: maxMoves, prefersCompactGutter: identifier == AXID.injuryFormMemo
+        )
+    }
+
+    private func revealInjuryFormElement(
+        _ target: XCUIElement, maxMoves: Int = 12, prefersCompactGutter: Bool = false
+    ) -> Bool {
+        let containers = app.collectionViews.allElementsBoundByIndex
+            + app.tables.allElementsBoundByIndex
+            + app.scrollViews.allElementsBoundByIndex
+        guard let scroll = containers.first(where: { $0.exists && $0.isHittable }) else { return false }
+        func visibleViewport() -> CGRect {
+            let frame = scroll.frame.intersection(app.windows.firstMatch.frame)
+            guard frame.width > 0 && frame.height > 0 else { return .null }
+            var top = frame.minY
+            var bottom = frame.maxY
+            let navigationBar = app.navigationBars.firstMatch
+            if navigationBar.exists && navigationBar.isHittable && navigationBar.frame.intersects(frame)
+                && navigationBar.frame.minY < frame.midY {
+                top = max(top, navigationBar.frame.maxY)
+            }
+            let keyboard = app.keyboards.firstMatch
+            if keyboard.exists && keyboard.isHittable && keyboard.frame.intersects(frame)
+                && keyboard.frame.minY > frame.midY {
+                bottom = min(bottom, keyboard.frame.minY)
+            }
+            return CGRect(x: frame.minX, y: top, width: frame.width, height: max(0, bottom - top))
+        }
+        for _ in 0..<maxMoves {
+            let viewport = visibleViewport()
+            guard viewport.width > 0 && viewport.height > 0 else { return false }
+            if target.exists && target.isHittable && viewport.contains(target.frame) { return true }
+            let delta = target.exists ? target.frame.midY - viewport.midY : viewport.height
+            if target.exists && abs(delta) < 1 { return false }
+            let distance: CGFloat
+            if isCompactInjuryFormViewport {
+                distance = min(max(abs(delta) * 0.45, viewport.height * 0.04), viewport.height * 0.18)
+            } else {
+                distance = min(max(abs(delta), viewport.height * 0.2), viewport.height * 0.65)
+            }
+            let fraction = distance / scroll.frame.height
+            let startY: CGFloat = delta < 0 ? 0.3 : 0.7
+            let endY = startY + (delta < 0 ? fraction : -fraction)
+            // Closed MAX Memo reveal can start over the native End Date picker.
+            // Use the visible Form gutter and a short press for this target only.
+            let compactMemo = isCompactInjuryFormViewport && prefersCompactGutter
+            let dragX: CGFloat = compactMemo ? 0.05 : 0.5
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: dragX, dy: startY))
+            let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: dragX, dy: endY))
+            if isCompactInjuryFormViewport {
+                start.press(forDuration: compactMemo ? 0.05 : 0.35, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80), thenHoldForDuration: 0.35)
+            } else {
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+        }
+        let viewport = visibleViewport()
+        return target.exists && target.isHittable && viewport.contains(target.frame)
+    }
+
     func testInjuryStatisticsRouteOpensFromHistory() throws {
         var configuration = launchConfiguration
         configuration.additionalArguments += ["--ui-injury-history-fixture"]
@@ -812,12 +1029,19 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
 
     private func openInjuryFormFromToolbar() {
         ensureWellnessRoot()
-        let addMenu = app.descendants(matching: .any)[AXID.wellnessToolbarAdd].firstMatch
-        XCTAssertTrue(addMenu.waitForExistence(timeout: 5), "Wellness add menu should exist")
-        addMenu.auditTap()
+        guard app.waitAndTapToolbarAction("Add record") else {
+            VisualAudit.capture("H08 Add record route unavailable")
+            XCTFail("Wellness Add record must be reachable before choosing Injury")
+            return
+        }
 
-        let injuryButton = app.descendants(matching: .any)[AXID.wellnessMenuInjury].firstMatch
-        XCTAssertTrue(injuryButton.waitForExistence(timeout: 5), "Injury menu action should exist")
+        let injuryButton = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ OR label == %@", AXID.wellnessMenuInjury, "Injury"
+        )).firstMatch
+        guard injuryButton.waitForExistence(timeout: 5), injuryButton.isHittable else {
+            XCTFail("The Injury menu action must be visible before opening its form")
+            return
+        }
         injuryButton.auditTap()
 
         let form = app.descendants(matching: .any)[AXID.injuryFormScreen].firstMatch

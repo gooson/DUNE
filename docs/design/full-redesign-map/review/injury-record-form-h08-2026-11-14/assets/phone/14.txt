@@ -1,0 +1,245 @@
+Attributes: Application, 0x107c22080, pid: 1155, label: 'DUNE'
+Element subtree:
+ →Application, 0x107c22080, pid: 1155, label: 'DUNE'
+    Window (Main), 0x107c217c0, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x107c20b40, {{0.0, 0.0}, {440.0, 956.0}}
+      Other, 0x107c22a80, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x107c20f00, {{0.0, 0.0}, {440.0, 956.0}}
+          Other, 0x107c20a00, {{-440.0, -956.0}, {1320.0, 2868.0}}
+          Other, 0x107c21e00, {{0.0, 0.0}, {440.0, 956.0}}
+            Other, 0x107c23d40, {{0.0, 0.0}, {440.0, 956.0}}
+              Other, 0x107c22300, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x107c22800, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x107c212c0, {{0.0, 0.0}, {440.0, 956.0}}
+                    Other, 0x107c22e40, {{0.0, 0.0}, {440.0, 956.0}}
+                      Other, 0x113f3c500, {{0.0, 0.0}, {440.0, 956.0}}
+                        Other, 0x113f3d7c0, {{0.0, 0.0}, {440.0, 956.0}}
+                          Other, 0x113f3e080, {{0.0, 0.0}, {440.0, 956.0}}
+                            NavigationBar, 0x113f3d040, {{0.0, 62.0}, {440.0, 54.0}}, identifier: 'Injury Detail'
+                              Button, 0x113f3c640, {{20.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Injury History'
+                              StaticText, 0x113f3ef80, {{172.3, 73.7}, {95.0, 20.7}}, label: 'Injury Detail'
+                              Button, 0x113f3de00, {{323.3, 66.0}, {40.0, 36.0}}, identifier: 'injury-detail-mark-recovered', label: 'Mark Recovered'
+                              Button, 0x113f3ed00, {{379.3, 66.0}, {36.7, 36.0}}, identifier: 'injury-detail-edit', label: 'Edit'
+                            Other, 0x113f3ca00, {{0.0, 0.0}, {440.0, 956.0}}
+                              Other, 0x10815db80, {{0.0, 0.0}, {440.0, 956.0}}
+                                Other, 0x10815c8c0, {{0.0, 0.0}, {440.0, 956.0}}
+                                  Other, 0x10815fac0, {{0.0, 0.0}, {440.0, 956.0}}
+                                    Other, 0x10815f980, {{0.0, 116.0}, {440.0, 1.0}}, identifier: 'injury-detail-screen'
+                                    ScrollView, 0x1129d1e00, {{0.0, 117.0}, {440.0, 839.0}}, identifier: 'injury-detail-scroll'
+                                      Other, 0x1129d0c80, {{0.0, 117.0}, {440.0, 653.0}}
+                                        Other, 0x1129d3c00, {{16.0, 133.0}, {408.0, 369.0}}, identifier: 'injury-detail-summary'
+                                          Image, 0x1129d0a00, {{40.0, 157.0}, {76.7, 76.7}}, identifier: 'exclamationmark.circle', label: 'Error'
+                                          StaticText, 0x1129d1180, {{40.0, 249.7}, {52.7, 26.3}}, identifier: 'injury-detail-body-part', label: 'Knee'
+                                          StaticText, 0x1129d03c0, {{40.0, 280.0}, {37.7, 18.0}}, identifier: 'injury-detail-side', label: '(Left)'
+                                          StaticText, 0x1129d0140, {{40.0, 302.0}, {45.7, 20.3}}, identifier: 'injury-detail-severity', label: 'Minor'
+                                          StaticText, 0x1129d0dc0, {{40.0, 338.3}, {95.7, 27.0}}, identifier: 'injury-detail-status', label: 'Active'
+                                          Image, 0x1129d3700, {{53.3, 343.7}, {16.3, 16.3}}, identifier: 'injury-detail-status', label: 'Adhesive Bandage Strip, Filled'
+                                          StaticText, 0x1129d1a40, {{41.3, 381.3}, {83.0, 18.0}}, label: 'Duration'
+                                          Image, 0x1129d12c0, {{41.3, 383.0}, {15.0, 15.0}}, identifier: 'clock', label: 'Clock'
+                                          StaticText, 0x1129d0b40, {{40.0, 403.4}, {105.0, 40.7}}, identifier: 'injury-detail-duration', label: '5 days'
+                                          StaticText, 0x1129d1680, {{40.0, 460.0}, {175.0, 18.0}}, identifier: 'injury-detail-description', label: 'Can exercise with caution'
+                                        Other, 0x1129d35c0, {{16.0, 518.0}, {408.0, 135.7}}, identifier: 'injury-detail-timeline'
+                                          StaticText, 0x1129d3840, {{34.3, 534.0}, {108.7, 24.0}}, label: 'Timeline'
+                                          Image, 0x1129d0280, {{34.3, 536.7}, {20.3, 18.7}}, identifier: 'calendar', label: 'Calendar'
+                                          StaticText, 0x1129d0500, {{34.0, 566.0}, {58.3, 18.0}}, label: 'Start'
+                                          Image, 0x1129e0f00, {{34.0, 568.0}, {14.7, 13.7}}, identifier: 'calendar', label: 'Calendar'
+                                          StaticText, 0x1129e3480, {{322.0, 566.0}, {86.0, 18.0}}, identifier: 'injury-detail-start-value', label: 'Nov 9, 2026'
+                                          StaticText, 0x1129e2440, {{34.0, 592.0}, {51.0, 18.3}}, label: 'End'
+                                          Image, 0x1129e3e80, {{34.0, 594.3}, {19.0, 16.0}}, identifier: 'calendar.badge.checkmark', label: 'Calendar With A Checkmark Badge'
+                                          StaticText, 0x1129e1f40, {{348.3, 592.0}, {59.7, 18.0}}, identifier: 'injury-detail-end-value', label: 'Ongoing'
+                                          StaticText, 0x1129e08c0, {{33.3, 619.8}, {90.7, 18.0}}, label: 'Recorded'
+                                          Image, 0x1129e3980, {{33.3, 621.3}, {15.0, 15.0}}, identifier: 'clock', label: 'Clock'
+                                          StaticText, 0x1129e3700, {{256.0, 619.8}, {152.0, 18.0}}, identifier: 'injury-detail-recorded-value', label: 'Nov 14, 2026 at 11:52'
+                                        Other, 0x1129e2300, {{16.0, 669.7}, {408.0, 84.3}}, identifier: 'injury-detail-memo'
+                                          StaticText, 0x1129e1040, {{34.3, 685.8}, {88.0, 24.0}}, label: 'Memo'
+                                          Image, 0x1129e0c80, {{34.3, 688.3}, {20.3, 18.7}}, identifier: 'note.text', label: 'Notes'
+                                          StaticText, 0x1129e0000, {{32.0, 717.8}, {177.0, 20.3}}, identifier: 'injury-detail-memo-value', label: 'Mild pain during squats'
+                                      Other, 0x1129e3840, {{0.0, 117.0}, {440.0, 839.0}}
+                                        Other, 0x1129e2bc0, {{0.0, 823.0}, {440.0, 133.0}}
+                                      Other, 0x1129e1540, {{0.0, 117.0}, {440.0, 839.0}}
+                                      Other, 0x1129e12c0, {{407.0, 117.0}, {30.0, 756.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x1129e35c0, {{434.0, 339.0}, {3.0, 556.3}}
+                                      Other, 0x1129e2940, {{407.0, 117.0}, {30.0, 756.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                        Other, 0x108165040, {{434.0, 339.0}, {3.0, 556.3}}
+                            Toolbar, 0x108165400, {{0.0, 0.0}, {440.0, 956.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x108165900, {{0.0, 0.0}, {440.0, 956.0}}
+                Other, 0x108164140, {{0.0, 0.0}, {440.0, 956.0}}
+                  Other, 0x108164640, {{0.0, 873.0}, {440.0, 83.0}}
+                    Other, 0x108167480, {{0.0, 0.0}, {440.0, 956.0}}
+                      TabBar, 0x108166d00, {{0.0, 873.0}, {440.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x108165680, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x108166800, {{21.0, 873.0}, {104.5, 54.0}}
+                          Other, 0x108167200, {{21.0, 873.0}, {398.0, 62.0}}
+                            Button, 0x108166e40, {{25.0, 877.0}, {104.5, 54.0}}, identifier: 'tab-today', label: 'Today'
+                              Image, 0x108167340, {{64.7, 880.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x1081643c0, {{120.2, 877.0}, {104.5, 54.0}}, identifier: 'tab-activity', label: 'Activity'
+                              Image, 0x108166f80, {{160.8, 881.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x108164780, {{215.3, 877.0}, {104.5, 54.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                              Image, 0x108167840, {{253.3, 884.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x108166a80, {{310.5, 877.0}, {104.5, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x108167980, {{346.8, 883.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x108165180, {{21.0, 873.0}, {398.0, 62.0}}
+                          Other, 0x1081661c0, {{215.3, 877.0}, {104.5, 54.0}}
+                            Other, 0x1081652c0, {{215.3, 877.0}, {104.3, 54.0}}
+                              Other, 0x108166300, {{215.3, 877.0}, {104.3, 54.0}}
+                              Other, 0x108164a00, {{215.3, 877.0}, {104.3, 54.0}}
+                                Other, 0x108164000, {{215.3, 877.0}, {104.3, 54.0}}
+                                  Other, 0x108165cc0, {{215.3, 877.0}, {104.3, 54.0}}
+                                    Other, 0x108164dc0, {{215.3, 877.0}, {104.3, 54.0}}
+                                  Other, 0x108165a40, {{215.3, 877.0}, {104.3, 54.0}}
+                                Other, 0x108167700, {{215.3, 877.0}, {104.3, 54.0}}
+                    Other, 0x1081675c0, {{0.0, 873.0}, {440.0, 83.0}}
+                      Other, 0x108167c00, {{0.0, 873.0}, {440.0, 83.0}}
+                        Other, 0x1081666c0, {{0.0, 873.0}, {440.0, 83.0}}
+                          Other, 0x108166bc0, {{0.0, 873.0}, {440.0, 83.0}}
+                            Other, 0x108194640, {{0.0, 873.0}, {440.0, 83.0}}
+                              Other, 0x1081948c0, {{0.0, 873.0}, {440.0, 83.0}}
+              Other, 0x108194140, {{0.0, 62.0}, {440.0, 860.0}}
+              Other, 0x108194500, {{220.0, 492.0}, {0.0, 0.0}}
+      Other, 0x108194dc0, {{0.0, 0.0}, {440.0, 956.0}}
+        Other, 0x108194a00, {{-440.0, -956.0}, {1320.0, 2868.0}}
+        Other, 0x108194f00, {{0.0, 62.0}, {440.0, 894.0}}
+          Other, 0x108194000, {{0.0, 62.0}, {440.0, 894.0}}
+            Other, 0x108194280, {{0.0, 62.0}, {440.0, 894.0}}
+              Other, 0x108194b40, {{0.0, 62.0}, {440.0, 894.0}}
+                Other, 0x1081943c0, {{0.0, 62.0}, {440.0, 894.0}}
+                  NavigationBar, 0x108194c80, {{0.0, 82.0}, {440.0, 54.0}}, identifier: 'Edit Injury'
+                    Other, 0x108194780, {{24.0, 86.0}, {78.0, 36.0}}
+                      Other, 0x1129d6940, {{24.0, 86.0}, {78.0, 36.0}}
+                        Button, 0x1129d70c0, {{24.0, 86.0}, {78.0, 36.0}}, identifier: 'injury-form-cancel', label: 'Cancel'
+                    StaticText, 0x1129d6800, {{180.0, 93.7}, {80.0, 20.7}}, label: 'Edit Injury'
+                    Other, 0x1129d7e80, {{353.7, 86.0}, {62.3, 36.0}}
+                      Other, 0x1129d7840, {{353.7, 86.0}, {62.3, 36.0}}
+                        Button, 0x1129d75c0, {{353.7, 86.0}, {62.3, 36.0}}, identifier: 'injury-form-save', label: 'Save'
+                  Other, 0x1129d5a40, {{0.0, 62.0}, {440.0, 894.0}}
+                    Other, 0x1129d5540, {{0.0, 62.0}, {440.0, 894.0}}
+                      Other, 0x1129d7980, {{0.0, 62.0}, {440.0, 894.0}}
+                        Other, 0x1129d5e00, {{0.0, 62.0}, {440.0, 894.0}}
+                          Other, 0x1129d6080, {{0.0, 136.0}, {440.0, 1.0}}, identifier: 'injury-form-screen'
+                          CollectionView, 0x1129d57c0, {{0.0, 137.0}, {440.0, 819.0}}
+                            Other, 0x1129d4c80, {{-20.0, -1501.0}, {480.0, 1809.3}}
+                            Cell, 0x1129d4140, {{20.0, 137.0}, {400.0, 40.7}}
+                              Other, 0x1129d7340, {{20.0, 137.0}, {400.0, 40.7}}
+                              Other, 0x1129d6440, {{20.0, 137.0}, {400.0, 40.7}}
+                                Other, 0x1129d66c0, {{20.0, 137.0}, {400.0, 40.7}}
+                                  Other, 0x1129d5b80, {{20.0, 137.0}, {400.0, 40.7}}
+                                    StaticText, 0x1129d61c0, {{20.0, 137.0}, {400.0, 40.7}}, label: 'Body Part'
+                                    Image, 0x1129d5cc0, {{41.3, 149.0}, {17.3, 17.3}}, identifier: 'circle.circle.fill', label: 'Circle Inside A Filled Circle'
+                            Cell, 0x1129d7d40, {{20.0, 177.7}, {400.0, 52.0}}
+                              Other, 0x1129d5900, {{20.0, 177.7}, {400.0, 52.0}}
+                                Other, 0x1129d6300, {{20.0, 177.7}, {400.0, 52.0}}
+                              Other, 0x1129d6d00, {{20.0, 177.7}, {400.0, 52.0}}
+                                Other, 0x1129d4780, {{20.0, 177.7}, {400.0, 52.0}}
+                                  Other, 0x1129d4280, {{20.0, 177.7}, {400.0, 52.0}}
+                                    Button, 0x1129d5180, {{40.0, 186.7}, {360.0, 34.3}}, identifier: 'injury-form-bodypart', label: 'Location, Knee'
+                                      StaticText, 0x1129d6580, {{344.7, 193.7}, {39.0, 20.3}}, label: 'Knee'
+                                    StaticText, 0x1129d6a80, {{40.0, 193.5}, {65.3, 20.3}}, label: 'Location'
+                            Cell, 0x1129d5f40, {{20.0, 229.7}, {400.0, 61.0}}
+                              Other, 0x1129d4500, {{20.0, 229.7}, {400.0, 61.0}}
+                                Other, 0x1129c5f40, {{20.0, 229.7}, {400.0, 61.0}}
+                              Other, 0x1129c4f00, {{20.0, 229.7}, {400.0, 61.0}}
+                                Other, 0x1129c57c0, {{20.0, 229.7}, {400.0, 61.0}}
+                                  Other, 0x1129c5e00, {{20.0, 229.7}, {400.0, 61.0}}
+                                    SegmentedControl, 0x1129c5540, {{40.0, 244.7}, {360.0, 31.0}}, identifier: 'injury-form-side'
+                                      Button, 0x1129c7340, {{40.0, 244.7}, {120.0, 32.0}}, label: 'Left', Selected
+                                      Button, 0x1129c7480, {{160.0, 244.7}, {120.0, 32.0}}, label: 'Right'
+                                      Button, 0x1129c43c0, {{280.0, 244.7}, {120.0, 32.0}}, label: 'Both'
+                            Other, 0x1129c4500, {{40.0, 228.7}, {360.0, 1.0}}
+                            Other, 0x1129c5cc0, {{-20.0, 308.3}, {480.0, 252.0}}
+                            Cell, 0x1129c4000, {{20.0, 308.3}, {400.0, 41.3}}
+                              Other, 0x1129c4780, {{20.0, 308.3}, {400.0, 41.3}}
+                              Other, 0x1129c5a40, {{20.0, 308.3}, {400.0, 41.3}}
+                                Other, 0x1129c5400, {{20.0, 308.3}, {400.0, 41.3}}
+                                  Other, 0x1129c75c0, {{20.0, 308.3}, {400.0, 41.3}}
+                                    StaticText, 0x1129c5900, {{20.0, 308.3}, {400.0, 41.3}}, label: 'Severity'
+                                    Image, 0x1129c4dc0, {{41.3, 319.7}, {18.7, 18.7}}, identifier: 'bandage.fill', label: 'Adhesive Bandage Strip, Filled'
+                            Cell, 0x1129c4140, {{20.0, 349.7}, {400.0, 64.3}}
+                              Other, 0x1129c5680, {{20.0, 349.7}, {400.0, 64.3}}
+                                Other, 0x1129c4280, {{20.0, 349.7}, {400.0, 64.3}}
+                              Other, 0x1129c4c80, {{20.0, 349.7}, {400.0, 64.3}}
+                                Other, 0x1129c5040, {{20.0, 349.7}, {400.0, 64.3}}
+                                  Other, 0x1129c5b80, {{20.0, 349.7}, {400.0, 64.3}}
+                                    Button, 0x1129c5180, {{20.0, 349.7}, {400.0, 64.3}}, identifier: 'injury-form-severity-minor', label: 'Minor, Can exercise with caution', Selected
+                                      Image, 0x1129c6080, {{44.0, 371.7}, {20.0, 20.0}}, identifier: 'exclamationmark.circle', label: 'Error'
+                                      StaticText, 0x1129c7c00, {{76.0, 364.7}, {40.3, 18.0}}, label: 'Minor'
+                                      Image, 0x1129c52c0, {{384.7, 375.3}, {13.3, 13.0}}, identifier: 'checkmark', label: 'Selected', Selected
+                                      StaticText, 0x1129c4640, {{76.0, 384.7}, {144.7, 14.3}}, label: 'Can exercise with caution'
+                            Cell, 0x1129c48c0, {{20.0, 414.0}, {400.0, 64.3}}
+                              Other, 0x1129c4a00, {{20.0, 414.0}, {400.0, 64.3}}
+                                Other, 0x1129c4b40, {{20.0, 414.0}, {400.0, 64.3}}
+                              Other, 0x1129c6580, {{20.0, 414.0}, {400.0, 64.3}}
+                                Other, 0x10819db80, {{20.0, 414.0}, {400.0, 64.3}}
+                                  Other, 0x10819cc80, {{20.0, 414.0}, {400.0, 64.3}}
+                                    Button, 0x10819cb40, {{20.0, 414.0}, {400.0, 64.3}}, identifier: 'injury-form-severity-moderate', label: 'Moderate, Avoid exercising the affected area'
+                                      StaticText, 0x10819f840, {{76.0, 429.0}, {67.7, 18.0}}, label: 'Moderate'
+                                      Image, 0x10819f340, {{43.7, 437.0}, {20.7, 18.7}}, identifier: 'exclamationmark.triangle', label: 'Warning'
+                                      StaticText, 0x10819cdc0, {{76.0, 449.0}, {191.7, 14.3}}, label: 'Avoid exercising the affected area'
+                            Other, 0x10819f200, {{76.0, 413.0}, {324.0, 1.0}}
+                            Cell, 0x10819d680, {{20.0, 478.0}, {400.0, 64.3}}
+                              Other, 0x10819d900, {{20.0, 478.0}, {400.0, 64.3}}
+                                Other, 0x10819df40, {{20.0, 478.0}, {400.0, 64.3}}
+                              Other, 0x10819ebc0, {{20.0, 478.0}, {400.0, 64.3}}
+                                Other, 0x10819c640, {{20.0, 478.0}, {400.0, 64.3}}
+                                  Other, 0x10817cb40, {{20.0, 478.0}, {400.0, 64.3}}
+                                    Button, 0x10817c3c0, {{20.0, 478.0}, {400.0, 64.3}}, identifier: 'injury-form-severity-severe', label: 'Severe, Do not exercise the affected area'
+                                      Image, 0x10817db80, {{44.0, 500.3}, {20.3, 19.3}}, identifier: 'xmark.octagon.fill', label: 'Error'
+                                      StaticText, 0x10817c780, {{76.0, 493.0}, {48.3, 18.0}}, label: 'Severe'
+                                      StaticText, 0x10817c000, {{76.0, 513.0}, {188.0, 14.3}}, label: 'Do not exercise the affected area'
+                            Other, 0x10817c8c0, {{76.0, 477.0}, {324.0, 1.0}}
+                            Other, 0x10817d7c0, {{-20.0, 560.0}, {480.0, 174.7}}
+                            Cell, 0x10817c500, {{20.0, 560.0}, {400.0, 40.3}}
+                              Other, 0x10817dcc0, {{20.0, 560.0}, {400.0, 40.3}}
+                              Other, 0x10817d680, {{20.0, 560.0}, {400.0, 40.3}}
+                                Other, 0x10817da40, {{20.0, 560.0}, {400.0, 40.3}}
+                                  Other, 0x10817d540, {{20.0, 560.0}, {400.0, 40.3}}
+                                    StaticText, 0x10817d900, {{20.0, 560.0}, {400.0, 40.3}}, label: 'Duration'
+                                    Image, 0x10817d400, {{42.0, 572.7}, {17.3, 15.7}}, identifier: 'calendar', label: 'Calendar'
+                            Cell, 0x10817c140, {{20.0, 600.3}, {400.0, 64.7}}
+                              Other, 0x10817c640, {{20.0, 600.3}, {400.0, 64.7}}
+                                Other, 0x10817ca00, {{20.0, 600.3}, {400.0, 64.7}}
+                              Other, 0x10817cc80, {{20.0, 600.3}, {400.0, 64.7}}
+                                Other, 0x10817c280, {{20.0, 600.3}, {400.0, 64.7}}
+                                  Other, 0x113f32d00, {{20.0, 600.3}, {400.0, 64.7}}
+                                    StaticText, 0x113f330c0, {{40.0, 622.5}, {77.3, 20.3}}, label: 'Start Date'
+                                    DatePicker, 0x113f30780, {{282.3, 615.3}, {117.7, 34.3}}, identifier: 'injury-form-startdate'
+                                      Button, 0x113f30500, {{282.3, 615.3}, {117.7, 34.3}}, label: 'Date Picker', value: Nov 9, 2026
+                            Cell, 0x113f30140, {{20.0, 665.0}, {400.0, 52.0}}
+                              Other, 0x113f31cc0, {{20.0, 665.0}, {400.0, 52.0}}
+                                Other, 0x113f31e00, {{20.0, 665.0}, {400.0, 52.0}}
+                              Other, 0x113f31a40, {{20.0, 665.0}, {400.0, 52.0}}
+                                Other, 0x113f33480, {{20.0, 665.0}, {400.0, 52.0}}
+                                  Other, 0x113f321c0, {{20.0, 665.0}, {400.0, 52.0}}
+                                    Button, 0x113f32e40, {{20.0, 665.0}, {400.0, 52.0}}, identifier: 'injury-form-recovered-toggle', label: 'Recovered', value: Off
+                                      StaticText, 0x113f312c0, {{40.0, 680.8}, {81.0, 20.3}}, label: 'Recovered'
+                                      Image, 0x113f308c0, {{381.7, 682.7}, {17.0, 17.0}}, identifier: 'circle', label: 'Circle'
+                            Other, 0x113f31680, {{40.0, 664.0}, {360.0, 1.0}}
+                            Other, 0x113f32080, {{-20.0, 734.7}, {480.0, 1792.7}}
+                            Cell, 0x113f30000, {{20.0, 734.7}, {400.0, 40.3}}
+                              Other, 0x113f30640, {{20.0, 734.7}, {400.0, 40.3}}
+                              Other, 0x113f33d40, {{20.0, 734.7}, {400.0, 40.3}}
+                                Other, 0x113f31040, {{20.0, 734.7}, {400.0, 40.3}}
+                                  Other, 0x113f31900, {{20.0, 734.7}, {400.0, 40.3}}
+                                    StaticText, 0x113f33700, {{20.0, 734.7}, {400.0, 40.3}}, label: 'Notes'
+                                    Image, 0x113f335c0, {{42.0, 747.3}, {17.3, 15.7}}, identifier: 'note.text', label: 'Notes'
+                            Cell, 0x113f33340, {{20.0, 775.0}, {400.0, 94.3}}
+                              Other, 0x113f33840, {{20.0, 775.0}, {400.0, 94.3}}
+                                Other, 0x113f33e80, {{20.0, 775.0}, {400.0, 94.3}}
+                              Other, 0x113f32440, {{20.0, 775.0}, {400.0, 94.3}}
+                                Other, 0x113f30280, {{20.0, 775.0}, {400.0, 94.3}}
+                                  Other, 0x113f32a80, {{20.0, 775.0}, {400.0, 94.3}}
+                                    TextField, 0x113f303c0, {{40.0, 790.0}, {360.0, 64.3}}, identifier: 'injury-form-memo', value: Mild pain during s...
+                                      Other, 0x113f30a00, {{46.0, 821.3}, {348.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                                        Other, 0x113f32300, {{49.0, 848.3}, {342.0, 3.0}}
+                            Other, 0x113f30f00, {{407.0, 137.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                              Other, 0x113f30dc0, {{434.0, 860.0}, {3.0, 7.0}}
+                            Other, 0x113f326c0, {{407.0, 137.0}, {30.0, 757.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                              Other, 0x113f33ac0, {{434.0, 860.0}, {3.0, 7.0}}
+                  Toolbar, 0x113f31180, {{0.0, 62.0}, {440.0, 894.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x113f33200, {{0.0, 62.0}, {440.0, 894.0}}
+Path to element:
+ →Application, 0x107c22080, pid: 1155, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x113f32940, pid: 1155, label: 'DUNE'
+  }
