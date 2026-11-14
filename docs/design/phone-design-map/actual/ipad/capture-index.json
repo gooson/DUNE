@@ -513,13 +513,27 @@
     },
     "W29": {
       "row_id": "W29",
-      "evidence": "user-category-management-screen",
-      "test": "ActivityExerciseRegressionTests/testUserCategoryManagementCreatesCategory()",
-      "action": "tap exercise-toolbar-categories",
-      "timestamp": 1791822729.335,
-      "image": "CABE117E-B59D-43D9-8567-198F8E514577.png",
-      "screen": "screen-0-2064x2752-tap exercise-toolbar-categories_0_6BF09FC2-05DA-41FB-98C7-809A14ED27D6.png",
-      "file": "W29.png"
+      "file": "W29.png",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditUserCategoriesAtMaximumText()",
+      "action": "W29 MAX full custom category row and input type",
+      "source_revision": "15450f83dcedc8628c44a9327aea5497031b375e",
+      "source_worktree_dirty": false,
+      "capture_date": "2026-11-14",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "f9def9c7d44d7c53162ed03a6d8108bba81ae084c4195e98dc3a8507c4443ca6",
+      "ax_sha256": "3c1100c01091cd9cfbd1c93f1b2b7a32542ee73daff32dde0396ad04a776e1c4",
+      "source_json": "../../../full-redesign-map/review/exercise-categories-w29-2026-11-14/manifest.json",
+      "capture_scope": "iPad normal/MAX passed; Phone 2026-11-07 historical; Duo not recaptured",
+      "previous_record": {
+        "row_id": "W29",
+        "evidence": "user-category-management-screen",
+        "test": "ActivityExerciseRegressionTests/testUserCategoryManagementCreatesCategory()",
+        "action": "tap exercise-toolbar-categories",
+        "timestamp": 1791822729.335,
+        "image": "CABE117E-B59D-43D9-8567-198F8E514577.png",
+        "screen": "screen-0-2064x2752-tap exercise-toolbar-categories_0_6BF09FC2-05DA-41FB-98C7-809A14ED27D6.png",
+        "file": "W29.png"
+      }
     },
     "W30": {
       "row_id": "W30",
@@ -1471,21 +1485,23 @@
     "T12": {
       "row_id": "T12",
       "evidence": "notification-message-detail-screen",
-      "test": "DUNEUITests/DesignMapNotificationDetailTests/testNotificationMessageDetail",
-      "action": "screen-0-2064x2752-T12 notification message detail verified_0_247E26DD-F80D-460C-8237-6A8DA1C3C242.png",
-      "timestamp": 1793615578.739,
+      "test": "DUNEUITests/DesignMapNotificationDetailTests/testBodyCompositionNotificationDetail",
+      "action": "T12 body composition header and two cards",
+      "timestamp": 1794586589.967,
       "timestamp_kind": "native-XCTest-attachment",
-      "image": "BE443645-160D-4D20-AA5F-EFDBAEDE9FE1.png",
-      "screen": "screen-0-2064x2752-T12 notification message detail verified_0_247E26DD-F80D-460C-8237-6A8DA1C3C242.png",
+      "image": "assets/ipad-07.png",
+      "screen": "T12 body composition header and two cards",
       "file": "T12.png",
-      "source_revision": "3fac15d4",
-      "source_worktree_dirty": false,
-      "device_udid": "268C5A6D-C056-4EDD-A3BA-CFC7F147C8E6",
-      "sha256": "8933f5e8fb02b82a76c808f950fc94169fcbf1e8ac13d7d062160ed20658563f",
-      "source_json": "../../../full-redesign-map/review/t12-notification-message-native-2026-11-02/evidence.json",
-      "source_record": "pairs.ipad.after",
-      "capture_scope": "T12 exact stored title/body and native back; historical Phone normal+MAX separate from new normal cases",
-      "pose_readback_verified": false
+      "source_revision": "63022ff33",
+      "source_worktree_dirty": true,
+      "source_closure": "T12 iOS app and selected test source exact to63022ff33; whole worktree differs in Watch/docs",
+      "device_udid": "A00239BC-41A5-46CF-9067-824504556A7B",
+      "sha256": "13ce02a5745bc11886c91ec04cd988ea2740a0ce18b5ba2074d52e069840330c",
+      "source_json": "../../../full-redesign-map/review/notification-cardio-2026-11-14/manifest.json",
+      "source_record": "captures.6",
+      "capture_scope": "Body composition title/date/two exact values, native Back and hub return; English normal",
+      "pose_readback_verified": false,
+      "current_verification": "passed"
     },
     "T10": {
       "row_id": "T10",
@@ -1981,10 +1997,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "1514deb76c33aee630c7bc44173716190af6aff2",
+  "last_refresh_revision": "63022ff33",
   "last_refresh_screens": [
-    "H07",
-    "P06"
+    "T12"
   ],
-  "last_refresh_note": "Reviewed current native H07/P06; historical images in review gallery."
+  "last_refresh_note": "2026-11-14 T12 body composition native update; other rows preserve their original sources."
 }

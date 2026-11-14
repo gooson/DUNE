@@ -1,0 +1,229 @@
+{
+  "source_revision": "f7bc (parent-reported run source; full commit ID not independently recorded here)",
+  "result": "Phone 2 executed, 2 passed, 0 skipped, 0 failed; selector result at .codex-checks/held-completion/w34-phone-ui.log.result.json",
+  "native_decision": "accepted_with_observation_limits",
+  "introduced_p1_p2_findings": [],
+  "observations": [
+    {
+      "priority": "P3_existing_polish",
+      "state": "MAX empty",
+      "observation": "The example placeholder visually truncates after \"30 minute sho…\" in the 4-line vertical TextField, though AX placeholderValue contains the full example. The source TextField .lineLimit(2...4) and placeholder predate this integrated change. The prompt field itself is whole and the typed 30 minute shoulder workout is fully visible in the MAX filled PNG. This does not block the W34 empty/filled control contract."
+    },
+    {
+      "priority": "scope_limit",
+      "state": "MAX filled with keyboard",
+      "observation": "Keyboard begins at y653pt; Generate frame y499.3–660pt overlaps it by ~7pt and availability y660–894.3pt is covered. The keyboard Done pill is visible, allowing dismissal; this capture proves enabled state and full typed prompt, not simultaneous visibility of availability after typing. Empty state separately proves full Generate and availability."
+    },
+    {
+      "priority": "scope_limit",
+      "state": "normal filled with keyboard",
+      "observation": "Generate is fully above keyboard (y248.7–310.7pt; keyboard begins y653pt), while availability is above keyboard (y310.7–362.7pt). AX debugDescription abbreviates TextField value with ellipsis in both sizes, so only the PNG establishes full visual typed text; this does not establish VoiceOver speech."
+    },
+    {
+      "priority": "positive",
+      "state": "cancel",
+      "observation": "MAX and normal Cancel screenshots visibly return to Activity; tests assert Activity hero exists. No Generate or Save action was tapped, and no AI generation or persistence is claimed."
+    }
+  ],
+  "full_frames_pt": {
+    "window": {
+      "x": 0,
+      "y": 0,
+      "width": 440,
+      "height": 956
+    },
+    "max_empty": {
+      "prompt": [
+        40,
+        296.3,
+        360,
+        125.3
+      ],
+      "generate": [
+        20,
+        436.7,
+        400,
+        160.7
+      ],
+      "availability": [
+        20,
+        597.3,
+        400,
+        234.3
+      ]
+    },
+    "normal_empty": {
+      "prompt": [
+        40,
+        191.3,
+        360,
+        42.3
+      ],
+      "generate": [
+        20,
+        248.7,
+        400,
+        62
+      ],
+      "availability": [
+        20,
+        310.7,
+        400,
+        52
+      ]
+    },
+    "max_filled": {
+      "prompt": [
+        40,
+        296.3,
+        360,
+        188
+      ],
+      "generate": [
+        20,
+        499.3,
+        400,
+        160.7
+      ],
+      "availability": [
+        20,
+        660,
+        400,
+        234.3
+      ],
+      "keyboard": [
+        0,
+        653,
+        440,
+        245
+      ]
+    },
+    "normal_filled": {
+      "prompt": [
+        40,
+        191.3,
+        360,
+        42.3
+      ],
+      "generate": [
+        20,
+        248.7,
+        400,
+        62
+      ],
+      "availability": [
+        20,
+        310.7,
+        400,
+        52
+      ],
+      "keyboard": [
+        0,
+        653,
+        440,
+        245
+      ]
+    }
+  },
+  "controls": "MAX and normal empty Generate disabled, availability label says generation replaces current exercise list (AI supported); filled Generate enabled. Button and availability are whole within the window/Form viewport in empty state. The generated workout action itself was not invoked.",
+  "receipts": {
+    "max_empty_prompt": {
+      "png": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/D39BD0F3-323C-4FEA-A588-5E0D50937551.png",
+        "sha256": "4b94a75fdd86a909481a169050515a379f4e0368009593bfc46d44375dd32c90",
+        "timestamp": 1794592232.752
+      },
+      "ax": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/E80FE074-98BA-4C1F-B58D-257788E0F308.txt",
+        "sha256": "0009cb1be049d3c9b2a62476d2f12cfebcf28583720420124e99aeedf6554d64",
+        "timestamp": 1794592232.752
+      }
+    },
+    "max_empty_controls": {
+      "png": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/40CD798D-DF46-4550-8D86-12E7DDBB9D28.png",
+        "sha256": "4b94a75fdd86a909481a169050515a379f4e0368009593bfc46d44375dd32c90",
+        "timestamp": 1794592237.498
+      },
+      "ax": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/95275A47-1D9E-42A5-AE9C-E511AF3AF7E7.txt",
+        "sha256": "a6b7ca613421c060b69ff181d4a946f170ea6afb12d270a1e280801269c771fc",
+        "timestamp": 1794592237.498
+      }
+    },
+    "max_filled": {
+      "png": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/9655ED78-9E4D-436F-A182-F55AF6C1F5FD.png",
+        "sha256": "061450734b068a2760884abfcd86872e3144f6ddf2b37c9f98882bc48053a56f",
+        "timestamp": 1794592248.69
+      },
+      "ax": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/B89FFB9D-19F7-4EAB-93D4-9487D6E00DA4.txt",
+        "sha256": "cb8d6c8aa578a856f69801574302fe9720f38386a27f2c6aff489dd61c1f1996",
+        "timestamp": 1794592248.69
+      }
+    },
+    "normal_empty_prompt": {
+      "png": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/A58C49F2-17FB-4A81-8DA3-B5FDE0384ABF.png",
+        "sha256": "acab06ecf303a7c7344d2b1ec6cbde91aea203fd61ca5d2176f83aec2e7dddb3",
+        "timestamp": 1794592293.088
+      },
+      "ax": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/5CE13143-BC37-4492-8DC1-4704D2917125.txt",
+        "sha256": "b0978c471eaeaaa18f198c26a3cc3df7c46fefeb57587f3ef6188eae707d18ad",
+        "timestamp": 1794592293.088
+      }
+    },
+    "normal_empty_controls": {
+      "png": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/C60A348B-7F15-4FC9-B084-BCB9FBEF2448.png",
+        "sha256": "acab06ecf303a7c7344d2b1ec6cbde91aea203fd61ca5d2176f83aec2e7dddb3",
+        "timestamp": 1794592298.403
+      },
+      "ax": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/3A964EC4-C960-482C-A93D-6AB6D6CD3743.txt",
+        "sha256": "9a76e04d641d3b8d6da1463c6f3845f0a72ad398b3e495946090c709ef45feb5",
+        "timestamp": 1794592298.403
+      }
+    },
+    "normal_filled": {
+      "png": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/BEC4B84B-8D0E-4D61-9DC0-5D382D61972E.png",
+        "sha256": "a243b4f4d98db480f30ec2e3fff68a4e61d95777a49dfff293dcef510258fee2",
+        "timestamp": 1794592309.431
+      },
+      "ax": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/AAFE64A2-5DA5-489A-B7F9-D017E149EFA4.txt",
+        "sha256": "6fcfe341140bae53a8a942303a26cf26fb28c11d0618835b8e07b973bca2e6e6",
+        "timestamp": 1794592309.431
+      }
+    },
+    "max_cancel_return": {
+      "png": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/7EE25B4F-A847-4043-97FE-44AC180AB3F4.png",
+        "sha256": "63f1570c6bf9479d9cf7f447ed1953a1e63d3427ba5ec459a652eded4ee4c797",
+        "timestamp": 1794592252.277
+      },
+      "ax": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/5C4A208E-9A32-4AC8-934D-87CF70C8C3AE.txt",
+        "sha256": "9aa22d7d2cdaa6ab0e95fa14a409358a8791b25f936bfcbc4c6ded1c32a0e834",
+        "timestamp": 1794592252.277
+      }
+    },
+    "normal_cancel_return": {
+      "png": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/3766941D-A6A0-4DBB-B887-65416FC34A9C.png",
+        "sha256": "731c26d66a550b7dd7311f4c2e83b212dae6d8002dfb9aed75c82ed920326b46",
+        "timestamp": 1794592313.055
+      },
+      "ax": {
+        "path": "/Users/shanks/.codex/worktrees/detail-redesign-finalize/Health/.codex-checks/held-completion/w34-phone-attachments/C1981D90-9C5C-4D2E-9F0A-F832CFE5C9BA.txt",
+        "sha256": "c9cd55ec42a0ad0a1b4e186bbc9f64c919984a9f0eaaa9852c9702e4a7ccd266",
+        "timestamp": 1794592313.055
+      }
+    }
+  },
+  "provenance": "Fresh W34 Phone first-run attachments have distinct case/step UUIDs and timestamps. Empty prompt and empty controls PNG bytes match within each size because no UI action intervened; they are separate captures, not relabeled images.",
+  "sdk_or_repo_actions": "none by reviewer"
+}

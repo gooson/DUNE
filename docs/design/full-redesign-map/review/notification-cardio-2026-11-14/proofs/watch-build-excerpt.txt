@@ -1,0 +1,15 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild build-for-testing -project DUNE/DUNE.xcodeproj -scheme DUNEWatchUITests -destination "generic/platform=watchOS Simulator" -derivedDataPath .deriveddata -jobs 2 COMPILER_INDEX_STORE_ENABLE=NO CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=YES COMPILER_INDEX_STORE_ENABLE=NO
+
+Touch /Users/shanks/.codex/worktrees/detail-posture-b05/Health/.deriveddata/Build/Products/Debug-watchsimulator/DUNEWatchUITests-Runner.app/PlugIns/DUNEWatchUITests.xctest (in target 'DUNEWatchUITests' from project 'DUNE')
+    cd /Users/shanks/.codex/worktrees/detail-posture-b05/Health/DUNE
+    /usr/bin/touch -c /Users/shanks/.codex/worktrees/detail-posture-b05/Health/.deriveddata/Build/Products/Debug-watchsimulator/DUNEWatchUITests-Runner.app/PlugIns/DUNEWatchUITests.xctest
+
+PruneExplicitPrecompiledModules /Users/shanks/.codex/worktrees/detail-posture-b05/Health/.deriveddata/SDKExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/shanks/.codex/worktrees/detail-posture-b05/Health/.deriveddata/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/shanks/.codex/worktrees/detail-posture-b05/Health/.deriveddata/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+** TEST BUILD SUCCEEDED **
+

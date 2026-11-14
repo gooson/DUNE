@@ -1,0 +1,52 @@
+{
+  "branch": "codex/notification-detail-cardio-zones",
+  "base": "61018331342fbf0aecfb820fe8b92186fdbdb1b3",
+  "timestamp": "2026-11-14T02:09:25.274017+09:00",
+  "initial_status": "clean",
+  "scope": "Notification detail and Watch cardio zones only; 3 inherited exercise commits excluded, preserved in codex/workout-metadata-b16b17-integration",
+  "diff_lines": 3064,
+  "reviewers_run": [
+    "security",
+    "performance",
+    "architecture",
+    "data-integrity",
+    "simplicity",
+    "localization"
+  ],
+  "review_mode": "parent direct, diff >2000 lines per review skill; previous source/UX review reused where identical",
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": "No agent/prompt/config changes"
+    }
+  ],
+  "findings": [
+    {
+      "id": "ux-002",
+      "reviewer": "Apple UX",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Watch 40mm zone bar overlaps page indicators on pre-final captures",
+      "file": "DUNEWatch/Views/Cardio/CardioMainMetricsPage.swift",
+      "line": 178,
+      "issue": "Final inline row fix lacks native validation; earlier two runs confirmed overlap.",
+      "suggestion": "User approved one additional targeted execution; verify C01/C02 final PNGs and frame assertions.",
+      "resolution": "Final 40mm UI3/3 passed; parent and final reviewer inspected C01/C02 gap above page dots. Native map/images refreshed."
+    }
+  ],
+  "summary": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0
+  },
+  "source_equivalence": "All7 app/seed/test files unchanged from 2c9ce1798; .codex-checks/notification-cardio/review-source-equivalence.json",
+  "localization": "Existing en source + ko/ja keys verified (Body Composition Update, Calories, Heart Rate, Level, Zone %@/%lld); saved body strings retained verbatim; formatter check passed",
+  "artifact_limit": "Duo-open T12 unavailable after actual display readback; old capture explicitly pending, separate from UI gate",
+  "watch_retry_exception": {
+    "user": "review-ship 1회추가 논스톱",
+    "execution_count": 1,
+    "selectors": 3,
+    "status": "passed3/3"
+  },
+  "final_review": "ship_review: source and targeted UX/test-contract PASS; no actionable new findings"
+}

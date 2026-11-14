@@ -1,0 +1,140 @@
+Attributes: Application, 0x106e81cc0, pid: 41556, label: 'DUNE'
+Element subtree:
+ →Application, 0x106e81cc0, pid: 41556, label: 'DUNE'
+    Window (Main), 0x1142c3840, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x115562800, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1155617c0, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x115561cc0, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x115560f00, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x115560c80, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x115560dc0, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x115563c00, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x115563700, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x115563e80, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x1155630c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x115562f80, {{0.0, 0.0}, {756.0, 1158.0}}
+                          Other, 0x115561b80, {{0.0, 0.0}, {756.0, 1158.0}}
+                            NavigationBar, 0x115561a40, {{0.0, 96.0}, {756.0, 113.0}}, identifier: 'Categories'
+                              Button, 0x115562580, {{10.0, 96.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Exercise'
+                              Other, 0x1155626c0, {{706.0, 100.0}, {36.0, 36.0}}
+                                Other, 0x115560280, {{706.0, 100.0}, {36.0, 36.0}}
+                                  Button, 0x115562940, {{707.5, 100.0}, {33.0, 36.0}}, identifier: 'user-category-add', label: 'Add'
+                              StaticText, 0x115561400, {{325.5, 164.0}, {105.0, 26.0}}, label: 'Categories'
+                            Other, 0x115561540, {{0.0, 0.0}, {756.0, 1158.0}}
+                              Other, 0x115561900, {{0.0, 0.0}, {756.0, 1158.0}}
+                                Other, 0x115561680, {{0.0, 0.0}, {756.0, 1158.0}}
+                                  Other, 0x115560500, {{0.0, 0.0}, {756.0, 1158.0}}
+                                    CollectionView, 0x115561040, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'user-category-management-screen'
+                                      Other, 0x115562bc0, {{-20.0, -2535.5}, {796.0, 3152.0}}
+                                      Cell, 0x115562d00, {{20.0, -136.0}, {716.0, 147.0}}
+                                        Other, 0x115560780, {{20.0, -136.0}, {716.0, 147.0}}
+                                          Other, 0x115560a00, {{20.0, -136.0}, {716.0, 147.0}}
+                                        Other, 0x115560140, {{20.0, -136.0}, {716.0, 147.0}}
+                                          Other, 0x115560640, {{20.0, -136.0}, {716.0, 147.0}}
+                                            Other, 0x115561180, {{20.0, -136.0}, {716.0, 147.0}}
+                                              StaticText, 0x115000280, {{72.0, -121.0}, {194.0, 63.5}}, label: 'Strength'
+                                              Image, 0x1150003c0, {{27.5, -86.5}, {48.0, 48.0}}, identifier: 'tag.fill', label: 'Tag'
+                                              StaticText, 0x115000000, {{72.0, -55.5}, {131.5, 51.5}}, label: 'Default'
+                                      Other, 0x115000140, {{0.0, 0.0}, {756.0, 1158.0}}
+                                        Other, 0x115000b40, {{0.0, 0.0}, {756.0, 249.0}}
+                                      Other, 0x114b70c80, {{0.0, 0.0}, {756.0, 1158.0}}
+                                        Other, 0x114b71900, {{0.0, 0.0}, {756.0, 249.0}}
+                                      Cell, 0x114b71040, {{20.0, 11.0}, {716.0, 147.0}}
+                                        Other, 0x114b70a00, {{20.0, 11.0}, {716.0, 147.0}}
+                                          Other, 0x114b71a40, {{20.0, 11.0}, {716.0, 147.0}}
+                                        Other, 0x114b6c8c0, {{20.0, 11.0}, {716.0, 147.0}}
+                                          Other, 0x114b6c780, {{20.0, 11.0}, {716.0, 147.0}}
+                                            Other, 0x114b6d540, {{20.0, 11.0}, {716.0, 147.0}}
+                                              StaticText, 0x114b6f840, {{72.0, 26.0}, {148.5, 63.5}}, label: 'Cardio'
+                                              Image, 0x114b6f200, {{27.5, 60.5}, {48.0, 48.0}}, identifier: 'tag.fill', label: 'Tag'
+                                              StaticText, 0x11502c000, {{72.0, 91.5}, {131.5, 51.5}}, label: 'Default'
+                                      Other, 0x11502c140, {{72.0, 10.0}, {644.0, 1.0}}
+                                      Cell, 0x11502c280, {{20.0, 158.0}, {716.0, 147.0}}
+                                        Other, 0x11502c3c0, {{20.0, 158.0}, {716.0, 147.0}}
+                                          Other, 0x11502c500, {{20.0, 158.0}, {716.0, 147.0}}
+                                        Other, 0x11502c640, {{20.0, 158.0}, {716.0, 147.0}}
+                                          Other, 0x11502c780, {{20.0, 158.0}, {716.0, 147.0}}
+                                            Other, 0x11502c8c0, {{20.0, 158.0}, {716.0, 147.0}}
+                                              StaticText, 0x11502ca00, {{72.0, 173.0}, {93.0, 63.5}}, label: 'HIIT'
+                                              Image, 0x11502cb40, {{27.5, 207.5}, {48.0, 48.0}}, identifier: 'tag.fill', label: 'Tag'
+                                              StaticText, 0x11502cc80, {{72.0, 238.5}, {131.5, 51.5}}, label: 'Default'
+                                      Other, 0x11502cdc0, {{72.0, 157.0}, {644.0, 1.0}}
+                                      Cell, 0x11502cf00, {{20.0, 305.0}, {716.0, 147.0}}
+                                        Other, 0x11502d040, {{20.0, 305.0}, {716.0, 147.0}}
+                                          Other, 0x11502d180, {{20.0, 305.0}, {716.0, 147.0}}
+                                        Other, 0x11502d2c0, {{20.0, 305.0}, {716.0, 147.0}}
+                                          Other, 0x11502d400, {{20.0, 305.0}, {716.0, 147.0}}
+                                            Other, 0x11502d540, {{20.0, 305.0}, {716.0, 147.0}}
+                                              StaticText, 0x11502d680, {{72.0, 320.0}, {208.5, 63.5}}, label: 'Flexibility'
+                                              Image, 0x11502d7c0, {{27.5, 354.5}, {48.0, 48.0}}, identifier: 'tag.fill', label: 'Tag'
+                                              StaticText, 0x11502d900, {{72.0, 385.5}, {131.5, 51.5}}, label: 'Default'
+                                      Other, 0x11502da40, {{72.0, 304.0}, {644.0, 1.0}}
+                                      Cell, 0x11502db80, {{20.0, 452.0}, {716.0, 147.0}}
+                                        Other, 0x11502dcc0, {{20.0, 452.0}, {716.0, 147.0}}
+                                          Other, 0x11502de00, {{20.0, 452.0}, {716.0, 147.0}}
+                                        Other, 0x11502df40, {{20.0, 452.0}, {716.0, 147.0}}
+                                          Other, 0x11502e080, {{20.0, 452.0}, {716.0, 147.0}}
+                                            Other, 0x11502e1c0, {{20.0, 452.0}, {716.0, 147.0}}
+                                              StaticText, 0x11502e300, {{72.0, 467.0}, {268.5, 63.5}}, label: 'Bodyweight'
+                                              Image, 0x11502e440, {{27.5, 501.5}, {48.0, 48.0}}, identifier: 'tag.fill', label: 'Tag'
+                                              StaticText, 0x11502e580, {{72.0, 532.5}, {131.5, 51.5}}, label: 'Default'
+                                      Other, 0x11502e6c0, {{72.0, 451.0}, {644.0, 1.0}}
+                                      Other, 0x11502e800, {{-20.0, 616.5}, {796.0, 2837.5}}
+                                      Cell, 0x11502e940, {{20.0, 616.5}, {716.0, 83.5}}
+                                        Other, 0x11502ea80, {{20.0, 616.5}, {716.0, 83.5}}
+                                        Other, 0x11502ebc0, {{20.0, 616.5}, {716.0, 83.5}}
+                                          Other, 0x11502ed00, {{20.0, 616.5}, {716.0, 83.5}}
+                                            Other, 0x11502ee40, {{20.0, 616.5}, {716.0, 83.5}}
+                                              StaticText, 0x11502ef80, {{20.0, 616.5}, {716.0, 83.5}}, label: 'Custom'
+                                      Cell, 0x11502f0c0, {{20.0, 700.0}, {716.0, 147.0}}
+                                        Other, 0x11502f200, {{20.0, 700.0}, {716.0, 147.0}}
+                                          Other, 0x11502f340, {{20.0, 700.0}, {716.0, 147.0}}
+                                        Other, 0x11502f480, {{20.0, 700.0}, {716.0, 147.0}}
+                                          Other, 0x11502f5c0, {{20.0, 700.0}, {716.0, 147.0}}
+                                            Other, 0x11502f700, {{20.0, 700.0}, {716.0, 147.0}}
+                                              Button, 0x11502f840, {{20.0, 700.0}, {716.0, 147.0}}, label: 'Codex Mobility, Duration + Intensity'
+                                                StaticText, 0x11502f980, {{72.0, 715.0}, {336.5, 63.5}}, label: 'Codex Mobility'
+                                                Image, 0x11502fac0, {{33.5, 748.0}, {37.0, 51.5}}, identifier: 'figure.cooldown', label: 'Figure Cooling Down After Exercise'
+                                                Image, 0x11502fc00, {{692.5, 755.5}, {21.0, 36.5}}, identifier: 'chevron.right', label: 'Forward'
+                                                StaticText, 0x11502fd40, {{72.0, 780.5}, {356.5, 51.5}}, label: 'Duration + Intensity'
+                                      Cell, 0x11502fe80, {{20.0, 847.0}, {716.0, 271.0}}
+                                        Other, 0x115030000, {{20.0, 847.0}, {716.0, 271.0}}
+                                          Other, 0x115030140, {{20.0, 847.0}, {716.0, 271.0}}
+                                        Other, 0x115030280, {{20.0, 847.0}, {716.0, 271.0}}
+                                          Other, 0x1150303c0, {{20.0, 847.0}, {716.0, 271.0}}
+                                            Other, 0x115030500, {{20.0, 847.0}, {716.0, 271.0}}
+                                              Button, 0x115030640, {{20.0, 847.0}, {716.0, 271.0}}, label: 'Codex Recovery Readability Category For Long Rows, Duration + Distance'
+                                                StaticText, 0x115030780, {{72.0, 862.0}, {562.5, 187.5}}, label: 'Codex Recovery Readability Category For Long Rows'
+                                                Image, 0x1150308c0, {{28.5, 960.0}, {47.5, 45.0}}, identifier: 'star.fill', label: 'Favorite'
+                                                Image, 0x115030a00, {{692.5, 964.5}, {21.0, 36.5}}, identifier: 'chevron.right', label: 'Forward'
+                                                StaticText, 0x115030b40, {{72.0, 1051.5}, {362.5, 51.5}}, label: 'Duration + Distance'
+                                      Other, 0x115030c80, {{72.0, 846.0}, {644.0, 1.0}}
+                                      Other, 0x115030dc0, {{723.0, 209.0}, {30.0, 902.0}}, label: 'Vertical scroll bar, 2 pages', value: 100%
+                                        Other, 0x115030f00, {{750.0, 454.0}, {3.0, 654.0}}
+                                      Other, 0x115031040, {{723.0, 209.0}, {30.0, 902.0}}, label: 'Vertical scroll bar, 2 pages', value: 100%
+                                        Other, 0x115031180, {{750.0, 454.0}, {3.0, 654.0}}
+                            Toolbar, 0x1150312c0, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                              Other, 0x115031400, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x115031540, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x115031680, {{0.0, 28.0}, {756.0, 49.0}}
+                    Button, 0x1150317c0, {{159.8, 32.0}, {61.5, 41.0}}, identifier: 'ToggleSideBar', label: 'Toggle sidebar'
+                    Button, 0x115031900, {{221.2, 32.0}, {89.0, 41.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x115031a40, {{221.2, 32.0}, {89.0, 41.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x115031b80, {{310.2, 32.0}, {103.0, 41.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                      Button, 0x115031cc0, {{310.2, 32.0}, {103.0, 41.0}}, identifier: 'tab-activity', label: 'Activity', Selected
+                    Button, 0x115031e00, {{413.2, 32.0}, {116.5, 41.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                      Button, 0x115031f40, {{413.2, 32.0}, {116.5, 41.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                    Button, 0x115032080, {{529.8, 32.0}, {66.5, 41.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x1150321c0, {{529.8, 32.0}, {66.5, 41.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x115032300, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x115032440, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x115032580, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x1150326c0, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x115032800, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x106e81cc0, pid: 41556, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x115032940, pid: 41556, label: 'DUNE'
+  }
