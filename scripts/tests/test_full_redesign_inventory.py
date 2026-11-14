@@ -38,6 +38,22 @@ class FullRedesignInventoryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "unique IDs"):
                 BUILDER.read_inventory(inventory)
 
+    def test_missing_row_is_rejected_against_declared_count(self):
+        contents = BUILDER.INVENTORY.read_text()
+        removed = next(line for line in contents.splitlines() if line.startswith("| T04 |"))
+        with tempfile.TemporaryDirectory() as directory:
+            inventory = Path(directory) / "inventory.md"
+            inventory.write_text(contents.replace(removed, ""))
+            with self.assertRaisesRegex(ValueError, "Declared screen count"):
+                BUILDER.read_inventory(inventory)
+
+    def test_inventory_can_grow_with_its_declared_count(self):
+        rows = [f"| T0{n} | Screen | Entry | push | Phone | iPad | Duo | `DUNE/Screen.swift:1` |" for n in (1, 2)]
+        with tempfile.TemporaryDirectory() as directory:
+            inventory = Path(directory) / "inventory.md"
+            inventory.write_text("Screens **2개**\n" + "\n".join(rows))
+            self.assertEqual(len(BUILDER.read_inventory(inventory)), 2)
+
     def test_empty_screen_inventory_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             inventory = Path(directory) / "inventory.md"

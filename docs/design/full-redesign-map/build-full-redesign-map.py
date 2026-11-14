@@ -5,6 +5,7 @@ import argparse
 import html
 import json
 import math
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -40,7 +41,8 @@ def capture_freshness(record: dict, threshold: float) -> str:
 
 def read_inventory(path: Path = INVENTORY) -> list[dict[str, str]]:
     screens = []
-    for line in path.read_text(encoding="utf-8").splitlines():
+    contents = path.read_text(encoding="utf-8")
+    for line in contents.splitlines():
         columns = [value.strip() for value in line.split("|")[1:-1]]
         if len(columns) == 8 and len(columns[0]) == 3 and columns[0][0] in "TAWHPLS" and columns[0][1:].isdigit():
             screen_id, name, entry, presentation, iphone, ipad, duo, code = columns
@@ -58,6 +60,9 @@ def read_inventory(path: Path = INVENTORY) -> list[dict[str, str]]:
     ids = [screen["id"] for screen in screens]
     if not screens or len(ids) != len(set(ids)):
         raise ValueError(f"Screen inventory must contain non-empty, unique IDs; found {len(screens)} screens")
+    declared = re.search(r"\*\*(\d+)개\*\*", contents)
+    if declared is None or int(declared[1]) != len(screens):
+        raise ValueError(f"Declared screen count must match parsed inventory; found {len(screens)} screens")
     return screens
 
 
