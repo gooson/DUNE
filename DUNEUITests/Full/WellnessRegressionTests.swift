@@ -567,6 +567,12 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         XCTAssertTrue(revealInjuryFormElement(endDateRow), "The complete End Date row must be visible")
         VisualAudit.capture("H08 add recovered end date")
 
+        // The compact native navigation toolbar can collapse while the Form is scrolled.
+        // Return the Form to its top before requiring the original full Save/Cancel checks.
+        if isCompactInjuryFormViewport {
+            XCTAssertTrue(revealCompactInjuryFormActions(), "Save and Cancel must be reachable after End Date")
+            VisualAudit.capture("H08 compact restored Save and Cancel before save")
+        }
         let saveButton = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
         XCTAssertTrue(saveButton.waitForExistence(timeout: 5), "Injury save button should exist")
         let cancelButton = app.descendants(matching: .any)[AXID.injuryFormCancel].firstMatch
@@ -804,6 +810,9 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             if keyboard.waitForNonExistence(timeout: 2) { break }
         }
         XCTAssertFalse(app.keyboards.firstMatch.exists)
+        if isCompactInjuryFormViewport {
+            XCTAssertTrue(revealCompactInjuryFormActions(), "Save and Cancel must be reachable after keyboard dismissal")
+        }
         XCTAssertTrue(save.isEnabled && save.isHittable && app.windows.firstMatch.frame.contains(save.frame))
         XCTAssertTrue(cancel.isEnabled && cancel.isHittable && app.windows.firstMatch.frame.contains(cancel.frame))
         VisualAudit.capture("H08 MAX Save and Cancel after keyboard dismissal")
@@ -813,6 +822,35 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         let rows = app.descendants(matching: .any)
             .matching(NSPredicate(format: "identifier BEGINSWITH %@", "injury-history-row-"))
         XCTAssertGreaterThanOrEqual(rows.count, 2, "MAX Save must create a history row")
+    }
+
+    private var isCompactInjuryFormViewport: Bool {
+        let window = app.windows.firstMatch.frame
+        return window.width < 500 && window.height < 700
+    }
+
+    private func revealCompactInjuryFormActions(maxMoves: Int = 6) -> Bool {
+        let save = app.descendants(matching: .any)[AXID.injuryFormSave].firstMatch
+        let cancel = app.descendants(matching: .any)[AXID.injuryFormCancel].firstMatch
+        let window = app.windows.firstMatch.frame
+        func actionsFit() -> Bool {
+            return save.exists && cancel.exists && save.isEnabled && cancel.isEnabled
+                && save.isHittable && cancel.isHittable
+                && window.contains(save.frame) && window.contains(cancel.frame)
+        }
+        if actionsFit() { return true }
+        // In the closed Duo AX tree, the presented Form is the only CollectionView;
+        // the background Wellness container is a ScrollView.
+        let form = app.collectionViews.firstMatch
+        guard form.exists && form.isHittable else { return false }
+        for _ in 0..<maxMoves {
+            let from = form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.30))
+            let to = form.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.70))
+            from.press(forDuration: 0.35, thenDragTo: to,
+                       withVelocity: XCUIGestureVelocity(rawValue: 80), thenHoldForDuration: 0.35)
+            if actionsFit() { return true }
+        }
+        return actionsFit()
     }
 
     private func revealInjuryFormControl(_ identifier: String, maxMoves: Int = 12) -> Bool {
@@ -848,14 +886,23 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
             if target.exists && target.isHittable && viewport.contains(target.frame) { return true }
             let delta = target.exists ? target.frame.midY - viewport.midY : viewport.height
             if target.exists && abs(delta) < 1 { return false }
-            let distance = min(max(abs(delta), viewport.height * 0.2), viewport.height * 0.65)
+            let distance: CGFloat
+            if isCompactInjuryFormViewport {
+                distance = min(max(abs(delta) * 0.45, viewport.height * 0.04), viewport.height * 0.18)
+            } else {
+                distance = min(max(abs(delta), viewport.height * 0.2), viewport.height * 0.65)
+            }
             let fraction = distance / scroll.frame.height
             let startY: CGFloat = delta < 0 ? 0.3 : 0.7
             let endY = startY + (delta < 0 ? fraction : -fraction)
-            scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
-                .press(forDuration: 0.05, thenDragTo: scroll.coordinate(
-                    withNormalizedOffset: CGVector(dx: 0.5, dy: endY)
-                ))
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+            let end = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+            if isCompactInjuryFormViewport {
+                start.press(forDuration: 0.35, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80), thenHoldForDuration: 0.35)
+            } else {
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
         }
         let viewport = visibleViewport()
         return target.exists && target.isHittable && viewport.contains(target.frame)
@@ -1352,7 +1399,35 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         let action = app.buttons.matching(NSPredicate(
             format: "identifier == %@ OR label == %@", menuIdentifier, actionLabel
         )).firstMatch
-        guard action.waitForExistence(timeout: 5), action.isHittable else {
+        guard action.waitForExistence(timeout: 5) else {
+            XCTFail("The requested posture menu action must exist: \(actionLabel)")
+            return
+        }
+        if !action.isHittable {
+            // At MAX on the closed Duo, the fourth item sits below the native menu viewport.
+            let menu = app.collectionViews.containing(.button, identifier: menuIdentifier).firstMatch
+            for _ in 0..<4 {
+                if action.isHittable { break }
+                guard menu.exists, menu.isHittable else { break }
+                let window = app.windows.firstMatch
+                let viewport = menu.frame.intersection(window.frame).insetBy(dx: 8, dy: 8)
+                guard !viewport.isNull, viewport.width > 0, viewport.height > 0 else { break }
+                let towardLaterItems = action.frame.midY > viewport.midY
+                let origin = window.coordinate(withNormalizedOffset: .zero)
+                let start = origin.withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX,
+                    dy: viewport.minY + viewport.height * (towardLaterItems ? 0.65 : 0.35) - window.frame.minY
+                ))
+                let end = origin.withOffset(CGVector(
+                    dx: viewport.midX - window.frame.minX,
+                    dy: viewport.minY + viewport.height * (towardLaterItems ? 0.35 : 0.65) - window.frame.minY
+                ))
+                start.press(forDuration: 0.05, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80),
+                            thenHoldForDuration: 0.35)
+            }
+        }
+        guard action.isHittable else {
             XCTFail("The requested posture menu action must be visible: \(actionLabel)")
             return
         }
@@ -1716,7 +1791,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
         ]
         launchApp(with: configuration)
-        openSeededComparison()
+        openSeededComparison(maxRevealAttempts: 36)
         let photos = app.scrollViews["posture-comparison-photos-scroll"].firstMatch
         let metrics = app.scrollViews["posture-comparison-metrics-scroll"].firstMatch
         XCTAssertTrue(photos.waitForExistence(timeout: 5) && metrics.waitForExistence(timeout: 5))
@@ -1769,8 +1844,8 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
         compare.auditTap()
     }
 
-    private func openSeededComparison() {
-        openHistory()
+    private func openSeededComparison(maxRevealAttempts: Int = 18) {
+        openHistory(maxRevealAttempts: maxRevealAttempts)
         openPostureHistoryComparisonMenuAction()
         let metrics = app.staticTexts.matching(NSPredicate(
             format: "identifier BEGINSWITH %@ AND label == %@",
@@ -1799,11 +1874,22 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     private func reveal(_ element: XCUIElement, maxAttempts: Int = 18) {
         let scroll = app.scrollViews.firstMatch
+        // The folded Duo's History is beside a side rail; only its bottom
+        // inset shrinks. Keep the 90-point top protection on every route.
+        let sideRailHistory = scroll.identifier == "posture-history-screen"
+            && scroll.frame.width <= 500 && scroll.frame.height <= 700
+        func visibleViewport() -> CGRect {
+            let frame = scroll.frame.intersection(app.windows.firstMatch.frame)
+                .insetBy(dx: 12, dy: 0)
+            let top = frame.minY + 90
+            let bottom = frame.maxY - (sideRailHistory ? 12 : 90)
+            return CGRect(x: frame.minX, y: top, width: frame.width,
+                          height: max(0, bottom - top))
+        }
         for _ in 0..<maxAttempts {
             // Duo may report offscreen descendants as hittable. The target's
             // tap point must also lie inside the visible scroll viewport.
-            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
-                .insetBy(dx: 12, dy: 90)
+            let viewport = visibleViewport()
             if element.exists && element.isHittable
                 && viewport.contains(CGPoint(x: element.frame.midX, y: element.frame.midY)) {
                 break
@@ -1826,8 +1912,7 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
                 scroll.swipeUp(velocity: .slow)
             }
         }
-        let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
-            .insetBy(dx: 12, dy: 90)
+        let viewport = visibleViewport()
         XCTAssertTrue(element.exists && element.isHittable
                       && viewport.contains(CGPoint(x: element.frame.midX, y: element.frame.midY)),
                       "Posture target must have a visible tap point")
