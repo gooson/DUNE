@@ -16,13 +16,16 @@
   "captured": {
     "W13": {
       "row_id": "W13",
-      "evidence": "template-form-screen",
-      "test": "ActivityExercisePickerRegressionTests/testFullPickerSupportsFilterSelectorsAndSelectionFromTemplateForm()",
-      "action": "tap template-form-name",
-      "timestamp": 1791816224.298,
-      "image": "731212C8-7C10-48F7-93F2-C7D2B9744E04.png",
-      "screen": "screen-0-1320x2868-tap template-form-name_0_BC73D4AE-FE23-4616-90F6-012C6D72736E.png",
-      "file": "W13.png"
+      "evidence": "fresh-2026-11-14-authoring-normal",
+      "test": "ActivityExerciseRegressionTests/testVisualAuditTemplateAuthoringAtNormalText()",
+      "action": "W13 normal session exercise Duration and Distance summary",
+      "timestamp": 1794635246.434,
+      "image": "6F169CA6-B653-4038-8C3F-B3A994A2CC82.png",
+      "screen": "screen-0-1320x2868-W13 normal session exercise Duration and Distance summary_0_BFA98B40-F53B-4130-B2FD-523B02FE6603.png",
+      "file": "W13.png",
+      "source_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
+      "ax": "evidence/W13-normal.ax.txt",
+      "capture_gallery": "../../../full-redesign-map/review/template-form-w13-2026-11-14/index.html"
     },
     "W05": {
       "row_id": "W05",
@@ -556,27 +559,13 @@
     },
     "W26": {
       "row_id": "W26",
-      "file": "W26.png",
-      "test": "ActivityExerciseRegressionTests/testVisualAuditWorkoutRecordsAtNormalText()",
-      "action": "W26 normal history chart and selected metric",
-      "capture_date": "2026-11-14",
-      "source_revision": "c95e246c71c4fa954d67b3ad956bb80e03939763",
-      "source_worktree_dirty": false,
-      "capture_kind": "XCTest-native-PNG+AX",
-      "sha256": "91ff0fcc8be3b212cff56863ea6e58980948e8a7a3e1087a905c042a9757ec83",
-      "ax_sha256": "9fe362e66c5b3536333958becc9c7565d42513e221dfde918f2b7340e47088f8",
-      "source_json": "../../../full-redesign-map/review/exercise-history-w26-2026-11-14/manifest.json",
-      "previous_record": {
-        "row_id": "W26",
-        "evidence": "exercise-history-screen",
-        "test": "ActivityExerciseRegressionTests/testRecentWorkoutsSeeAllOpensExerciseHistory()",
-        "action": "tap exercise-session-view-history",
-        "timestamp": 1791818513.091,
-        "image": "B2DCE4BC-ECF5-45F7-BF28-DE8B7A2706EA.png",
-        "screen": "screen-0-1320x2868-tap exercise-session-view-history_0_3B109AC5-BD5C-4107-ADBA-8D26FC68A614.png",
-        "file": "W26.png"
-      },
-      "capture_scope": "Named Phone/iPad normal captured; MAX and full route are in the gallery. Phone normal source c95e; final hint adjustment at 93c is MAX-verified."
+      "evidence": "exercise-history-screen",
+      "test": "ActivityExerciseRegressionTests/testRecentWorkoutsSeeAllOpensExerciseHistory()",
+      "action": "tap exercise-session-view-history",
+      "timestamp": 1791818513.091,
+      "image": "B2DCE4BC-ECF5-45F7-BF28-DE8B7A2706EA.png",
+      "screen": "screen-0-1320x2868-tap exercise-session-view-history_0_3B109AC5-BD5C-4107-ADBA-8D26FC68A614.png",
+      "file": "W26.png"
     },
     "W23": {
       "row_id": "W23",
@@ -958,20 +947,25 @@
     },
     "P05": {
       "row_id": "P05",
-      "evidence": "fresh Posture History More toolbar PNG/AX; P08 compare consumer in linked gallery",
-      "test": "PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom()",
-      "action": "Posture History top with explicit More action",
       "file": "P05.png",
-      "image": "46D8031F-0971-40A6-A920-5E50A9C9B3B2.png",
-      "source_revision": "4c27c4499526635c49822d44963fe4d67a11407f",
-      "source_file_sha256": "907972081378f8e3dbb8bf66836b2b87b990570a631a45e02909c2d5b36735fa",
-      "source_equivalence": "P05 toolbar source byte-identical across cited P08 normal runs",
-      "png_sha256": "a3c67248d0a4b197d8238eb24145dca5f7f3397ece63400a3c5c1eeedba5ac3f",
+      "test": "PostureVisualAuditTests/testP07SymmetryKeepsSeededValuesAndUnits()",
+      "action": "Current normal history entry",
+      "timestamp": 1793975602.193,
+      "source_revision": "7b9138b6dbcc7687f6df8393aaba1020abdff068",
+      "source_worktree_dirty": false,
+      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
+      "capture_kind": "XCTest-native-PNG+AX",
+      "sha256": "4116f5aab9cf342b38eb75cdf0b50f8436789b9770a15d4df699af94fdbc8e20",
+      "ax_sha256": "70ab95572a763b3398f3a1a07e44ebcdbe0648135f71fa57f74f993f7bf10a79",
       "native_dimensions": [
         1320,
         2868
       ],
-      "gallery": "../../../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html"
+      "source_json": "../../../full-redesign-map/review/posture-history-p05-2026-11-06/manifest.json",
+      "source_record": "records: profile=regular,kind=after,is_primary=true,normal",
+      "capture_scope": "B06 selected normal state; see gallery gates and limits",
+      "actual_angle": null,
+      "current_verification": "normal-captured"
     },
     "P07": {
       "row_id": "P07",
@@ -997,20 +991,13 @@
     },
     "P08": {
       "row_id": "P08",
-      "evidence": "fresh native PNG/AX; normal/MAX exact selectors passed; see gallery for scope",
-      "test": "PostureVisualAuditTests/testP08ComparisonKeepsScoresDatesPanesAndPhotoZoom()",
-      "action": "P08 actual older and newer score delta",
-      "file": "P08.png",
-      "image": "16720755f753f209.png",
-      "source_revision": "4c27c4499526635c49822d44963fe4d67a11407f",
-      "source_file_sha256": "7986295917d46376fa9ffa695a92e6333094765ef7d6a7368b14981e95a62d23",
-      "source_equivalence": "P08 app files byte-identical across listed capture revisions; test revisions in gallery source lineage",
-      "png_sha256": "16720755f753f2097036481721f3709751135b4e156bd3f354cf9587aa89d9ef",
-      "native_dimensions": [
-        1320,
-        2868
-      ],
-      "gallery": "../../../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html"
+      "evidence": "posture-comparison-photos-scroll",
+      "test": "PostureVisualAuditTests/testPostureComparison()",
+      "action": "tap Compare Selected",
+      "timestamp": 1791820144.163,
+      "image": "AFB090A6-413C-4EBD-9F33-5285CB06B344.png",
+      "screen": "screen-0-1320x2868-tap Compare Selected_0_2877B0A5-CF62-426F-8EC6-05D6D5A89913.png",
+      "file": "P08.png"
     },
     "P06": {
       "row_id": "P06",
@@ -1452,27 +1439,13 @@
     },
     "W25": {
       "row_id": "W25",
-      "file": "W25.png",
+      "evidence": "cardio-session-summary-screen",
       "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
-      "action": "W25 cardio normal summary top and full Save",
-      "capture_date": "2026-11-14",
-      "source_revision": "c95e246c71c4fa954d67b3ad956bb80e03939763",
-      "source_worktree_dirty": false,
-      "capture_kind": "XCTest-native-PNG+AX",
-      "sha256": "ab9dbfe532f67c043caca2ebf8b2d109ed19b5aa9a59a33342a1be939e6e96cf",
-      "ax_sha256": "5a8dbffbc3019521ece5899dd461bc8a0e106be34a816f9953089b2260712b27",
-      "source_json": "../../../full-redesign-map/review/cardio-summary-w25-2026-11-14/manifest.json",
-      "previous_record": {
-        "row_id": "W25",
-        "evidence": "cardio-session-summary-screen",
-        "test": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize()",
-        "action": "tap cardio-session-confirm-end",
-        "timestamp": 1791854183.278,
-        "image": "2538293C-5CE9-40A0-B86F-ADF35CDD1BB9.png",
-        "screen": "screen-0-1320x2868-tap cardio-session-confirm-end_0_37F952E5-ED31-4C45-950C-BD698CF8E4DD.png",
-        "file": "W25.png"
-      },
-      "capture_scope": "Named Phone normal passed; see gallery for all affected states and explicit limits"
+      "action": "tap cardio-session-confirm-end",
+      "timestamp": 1791854183.278,
+      "image": "2538293C-5CE9-40A0-B86F-ADF35CDD1BB9.png",
+      "screen": "screen-0-1320x2868-tap cardio-session-confirm-end_0_37F952E5-ED31-4C45-950C-BD698CF8E4DD.png",
+      "file": "W25.png"
     },
     "W24": {
       "row_id": "W24",
@@ -1757,20 +1730,13 @@
     },
     "P03": {
       "row_id": "P03",
-      "evidence": "fresh native PNG/AX; normal/MAX exact selectors passed; see gallery for scope",
-      "test": "PostureVisualAuditTests/testP02RealtimeFallbackAndP03ExerciseSelection()",
-      "action": "P03 General Posture selected",
-      "file": "P03.png",
-      "image": "854AFAC2-90B0-4AE7-91CC-3A90A797D4EA.png",
-      "source_revision": "4c27c4499526635c49822d44963fe4d67a11407f",
-      "source_file_sha256": "bc244517f206e93808c7ffeab61390e40ca6606df3bde221fda8e760403bb7fc",
-      "source_equivalence": "normal path unchanged; details in gallery manifest",
-      "png_sha256": "ab96b737e3a96dc1dac199c34cff783e0eb88cc1472139afd693e55470e30bd0",
-      "native_dimensions": [
-        1320,
-        2868
-      ],
-      "gallery": "../../../full-redesign-map/review/posture-exercise-picker-p03-2026-11-14/index.html"
+      "evidence": "test-and-action:Realtime exercise picker",
+      "test": "PostureVisualAuditTests/testCameraAndRealtimeAvailability()",
+      "action": "Realtime exercise picker",
+      "timestamp": 1792375327.081,
+      "image": "EEB5B959-659A-4D90-BDAB-8DFF1C88E649.png",
+      "screen": "screen-0-1206x2622-Realtime exercise picker_0_5DC6B954-02D6-4233-8A87-458FCC7E99D9.png",
+      "file": "P03.png"
     },
     "H04": {
       "row_id": "H04",
@@ -1936,9 +1902,9 @@
   },
   "unmatched": [],
   "collection_note": "기존 인덱스의 기준 커밋은 역사적 묶음이다. 갱신한 개별 화면에는 source_revision/device_id/test를 별도로 기록한다. 다른 PNG를 이번 디자인 변경의 최신 검증으로 표시하지 않는다.",
-  "last_refresh_revision": "63022ff33",
+  "last_refresh_revision": "e965597a6a982a2f267df77ec84f506a350b7555",
   "last_refresh_screens": [
-    "T12"
+    "W13"
   ],
-  "last_refresh_note": "2026-11-14 T12 body composition native update; other rows preserve their original sources."
+  "last_refresh_note": "2026-11-14 fresh iPhone template authoring normal/MAX review; representative normal image only, all paired states in per-screen gallery. Other entries retain prior source and image."
 }

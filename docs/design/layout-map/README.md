@@ -330,3 +330,5 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-14 [P03 일반/MAX 4개 기기 실제 검증](../full-redesign-map/review/posture-exercise-picker-p03-2026-11-14/index.html). 혼합 배치와 과거 실패는 해당 갤러리에 보존한다.
 
 2026-11-14 P08: [자세 비교 배치 계약](posture-comparison-p08.html)과 [Phone/iPad/Duo 실제 PNG·AX](../full-redesign-map/review/posture-comparison-p08-2026-11-14/index.html)를 연결한다. P05 More 메뉴의 영향을 함께 기록하고 기존 11월 6일 리뷰를 보존한다.
+
+2026-11-14 W13: [템플릿 편집·W34 내장 AI 정적 배치](template-form-w13.html)와 새 실제 캡처를 구분한다. 2026-11-07 보류 리뷰 원본을 보존하며 현재 Phone/iPad 일반·MAX 검증은 진행 중이다.

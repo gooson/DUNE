@@ -1,0 +1,45 @@
+{
+  "batch": "B13 iPad independent native review",
+  "source_app": "c6708751213657f7a1624ac944d7660e8bbed19d unchanged in both iPad attempts",
+  "attempts": [
+    {
+      "id": "ipad",
+      "executed": 2,
+      "passed": 0,
+      "failed": 2,
+      "failure": "full-mode SearchField was queried as quick-start TextField"
+    },
+    {
+      "id": "ipad-retry1",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "test_source": "680652688b217c25dc1ded177af0b486f687100f"
+    }
+  ],
+  "verification": {
+    "gallery": "/private/tmp/dune-b13-gallery-prep",
+    "passed_pairs_hash_matched": {
+      "W13": 10,
+      "W14": 4
+    },
+    "visual_review": "Inspected all 14 new passed iPad PNGs and paired AX. First-attempt captures remain diagnostic, not after."
+  },
+  "W13": {
+    "normal": "Blank form Save disabled; selected barbell bench press name fully visible; original Sets 3/Reps 10 visible in same normal card; Running Duration and Distance visible; filled name and Save enabled.",
+    "MAX": "Selected barbell bench press name fully visible. Asset 12 named 3/10 shows only the beginning of Sets at the lower edge; AX has Sets value 3 at y885 and Reps value 10 at y944.5, but these are not simultaneously visible in that PNG. Asset 13 separately shows Reps 10 and Running Duration/Distance fully visible. Filled name and Save enabled are visible in asset 14. Do not claim asset 12 proves full stepper layout.",
+    "cancel": "Both selectors tap original template-form-cancel; raw log shows auditTap. Final before-teardown AX 8693490C... (MAX) and BBC47285... (normal) contain Activity and no template-form-screen/New Template, confirming the sheet actually closed. No saved-template assertion beyond existing test."
+  },
+  "W14": {
+    "normal": "Full picker initial and search-filtered Bench Press selection captured. SearchField contains Bench Press; seeded barbell bench row and other variants are readable. Selection tap returns to W13 form.",
+    "MAX": "Full picker initial and search-filtered Bench Press selection captured. The barbell bench row shows Korean and English names, Chest/Barbell, and detail action; tap returns to W13 form. The picker uses native CollectionView, not Table.",
+    "source": "W14 wrapper has no app patch; these are route/selection evidence for existing full ExercisePickerView, not a new W14 visual source redesign."
+  },
+  "limits": [
+    "W13 changed layout is proven on iPad normal/MAX; Phone changed exercise rows were not reached in closed family.",
+    "W14 Phone picker-open was only diagnostic; Phone selected row unverified.",
+    "W12/W15 iPad Templates toolbar path was not in these two selectors, and their status remains pending/held.",
+    "Duo/Duo-open fresh native evidence is absent."
+  ],
+  "introduced_P1_P2_verified": []
+}
