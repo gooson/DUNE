@@ -1,5 +1,7 @@
 # 통합 실제 화면 포털
 
+2026-11-14 [T03·T10 날씨와 독립된 로딩의 최종 실제 화면 4장](today-loading-2026-11-14/index.html)을 보존했다. `origin/main` 기반 P2 보완 후 일반 iPhone 18 Pro와 iPad mini의 알림 요약 진입·Today 복귀 UI가 각각 1/1 통과했다. 이전 소스의 6장과 custom dual-display screen 1 세로는 역사 기록이며 목표 Duo 접힘·펼침 가로를 인증하지 않는다. 최종 단위 44건·소스 해시·선택 UI 및 미갱신 범위는 [리뷰·Ship 기록](../../../reviews/2026-11-14-today-loading/review-ship.md)을 따른다. 기존 기기별 인덱스 PNG는 이번 증거로 재사용하거나 덮어쓰지 않았다.
+
 2026-11-14 [알림 상세 수치 강조의 새 실제 화면](../../full-redesign-map/review/notification-cardio-2026-11-14/index.html)을 보존했다. iPhone 기본·다크 최대 글씨, iPad 기본, Duo 접힘의 T12를 확인하고 해당 세 기기 기본 PNG와 Today 보드를 갱신했다. Duo 펼침은 setter 이후에도 LCD active/LCD-1 inactive로 남아 미갱신이다. Watch C01·C02는 마지막 한 줄 지표 보정을 새40mm PNG2장으로 갱신했고 관련 UI3/3이 통과했다. 큰 글씨·AOD·VoiceOver는 별도 미검증이다.
 
 [포털 열기](index.html)

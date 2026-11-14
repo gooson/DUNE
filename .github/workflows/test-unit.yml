@@ -34,13 +34,18 @@ jobs:
   unit-tests:
     name: unit-tests (${{ matrix.platform }})
     runs-on: xcode-27
-    timeout-minutes: 30
+    timeout-minutes: ${{ matrix.timeout_minutes }}
     # Boot each runtime on its own runner. A Watch startup failure must not
     # prevent iOS tests from starting, or leave both runtimes competing for RAM.
     strategy:
       fail-fast: false
       matrix:
-        platform: [ios, watch]
+        include:
+          # Cold iOS compilation can consume 21 minutes before the full suite starts.
+          - platform: ios
+            timeout_minutes: 60
+          - platform: watch
+            timeout_minutes: 30
 
     steps:
       - name: Checkout

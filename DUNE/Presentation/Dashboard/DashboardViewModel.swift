@@ -153,11 +153,14 @@ final class DashboardViewModel {
     private let pinnedMetricsStore: TodayPinnedMetricsStore
     private let sharedHealthDataService: SharedHealthDataService?
     private let weatherProvider: WeatherProviding?
+    private(set) var weatherRefreshTask: Task<Void, Never>?
+    private var weatherRequestID = 0
     private let scoreUseCase = CalculateConditionScoreUseCase()
     private let coachingEngine = CoachingEngine()
     private let coachingMessageEnhancer: (any CoachingMessageEnhancing)?
-    private var enhanceCoachingTask: Task<Void, Never>?
+    private(set) var enhanceCoachingTask: Task<Void, Never>?
     private var lastCoachingInput: CoachingInput?
+    private var lastCoachingTemplate: CoachingInsight?
     private let trendService = TrendAnalysisService()
     private let dismissStore = InsightCardDismissStore.shared
     private let scoreRefreshService: ScoreRefreshService?
@@ -205,6 +208,10 @@ final class DashboardViewModel {
         self.nudgeDismissStore = nudgeDismissStore
         self.nowProvider = nowProvider
         self.pinnedCategories = pinnedMetricsStore.load()
+    }
+
+    isolated deinit {
+        weatherRefreshTask?.cancel()
     }
 
     func shouldShowSkeleton(
@@ -270,7 +277,9 @@ final class DashboardViewModel {
             AppLogger.ui.info("HealthKit authorization is deferred; skip protected dashboard queries until app-level orchestration completes")
         }
 
-        async let weatherTask = safeWeatherFetch()
+        // Location, geocoding and network requests must not gate health data or
+        // notification reports. Apply weather independently when it arrives.
+        startWeatherRefresh(requestID: requestID)
         let sharedSnapshot: SharedHealthSnapshot?
 #if DEBUG
         if Self.shouldUseSeededUITestFixtures {
@@ -294,8 +303,8 @@ final class DashboardViewModel {
         async let weightTask = safeWeightFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
         async let bmiTask = safeBMIFetch(snapshot: sharedSnapshot, canQueryHealthKit: canQueryHealthKit)
 
-        let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult, weatherResult) = await (
-            hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask, weatherTask
+        let (hrvResult, sleepResult, exerciseResult, stepsResult, weightResult, bmiResult) = await (
+            hrvTask, sleepTask, exerciseTask, stepsTask, weightTask, bmiTask
         )
 
         guard isCurrentLoadRequest(requestID) else { return }
@@ -360,9 +369,6 @@ final class DashboardViewModel {
             // show CloudSyncWaitingView instead of an error.
             errorMessage = String(localized: "Failed to load health data")
         }
-
-        weatherSnapshot = weatherResult
-        weatherAtmosphere = weatherResult.map { WeatherAtmosphere.from($0) } ?? .default
 
         // Optimistic retention: on Mac mirrored mode, if reload yields empty metrics
         // but we already have data, keep existing metrics to prevent infinite spinner.
@@ -539,6 +545,9 @@ final class DashboardViewModel {
     private func finishLoadRequest(_ requestID: Int) {
         if requestID == loadRequestID {
             isLoading = false
+            if Task.isCancelled {
+                weatherRefreshTask?.cancel()
+            }
         }
     }
 
@@ -748,22 +757,61 @@ final class DashboardViewModel {
     /// Request location permission from user action (e.g. tapping weather placeholder).
     func requestLocationPermission() async {
         guard let weatherProvider else { return }
+        let requestID = beginWeatherRequest()
         await weatherProvider.requestLocationPermission()
+        guard isCurrentWeatherRequest(requestID) else { return }
         await waitForLocationPermissionResolution(using: weatherProvider)
+        guard isCurrentWeatherRequest(requestID) else { return }
 
         // Re-fetch weather after permission state resolves.
-        let refreshedWeather = await safeWeatherFetch()
-        weatherSnapshot = refreshedWeather
-        weatherAtmosphere = refreshedWeather.map { WeatherAtmosphere.from($0) } ?? .default
-
-        // Recompute coaching with refreshed weather context.
-        buildCoachingInsights()
-        syncWeatherCardInsight()
-        coachingMessage = focusInsight?.message ?? buildCoachingMessage()
-        enhanceCoachingMessageIfAvailable()
+        let refreshedWeather = await Self.safeWeatherFetch(using: weatherProvider)
+        guard isCurrentWeatherRequest(requestID) else { return }
+        applyWeatherSnapshot(refreshedWeather)
     }
 
-    private func safeWeatherFetch() async -> WeatherSnapshot? {
+    private func beginWeatherRequest() -> Int {
+        weatherRefreshTask?.cancel()
+        weatherRequestID += 1
+        return weatherRequestID
+    }
+
+    private func isCurrentWeatherRequest(_ requestID: Int) -> Bool {
+        requestID == weatherRequestID && !Task.isCancelled
+    }
+
+    private func startWeatherRefresh(requestID: Int) {
+        let weatherID = beginWeatherRequest()
+        weatherRefreshTask = Task { [weak self, weatherProvider] in
+            let weather = await Self.safeWeatherFetch(using: weatherProvider)
+            guard let self, self.isCurrentLoadRequest(requestID),
+                  self.isCurrentWeatherRequest(weatherID) else { return }
+            self.applyWeatherSnapshot(weather)
+        }
+    }
+
+    private func applyWeatherSnapshot(_ weather: WeatherSnapshot?) {
+        weatherSnapshot = weather
+        weatherAtmosphere = weather.map { WeatherAtmosphere.from($0) } ?? .default
+
+        // Health context is ready before loadData finishes its sparkline awaits.
+        // During a refresh, the currently displayed health data can use new weather.
+        guard hasLoadedOnce else { return }
+        let previousTemplate = lastCoachingTemplate
+        let previousFocus = focusInsight
+        buildCoachingInsights()
+        if lastCoachingTemplate == previousTemplate {
+            // Weather alone must not discard enhanced text or repeat the same inference.
+            focusInsight = previousFocus
+        } else {
+            enhanceCoachingMessageIfAvailable()
+        }
+        syncWeatherCardInsight()
+        coachingMessage = focusInsight?.message ?? buildCoachingMessage()
+        briefingData = buildBriefingData()
+        buildAdaptiveHeroMessage()
+    }
+
+    private static func safeWeatherFetch(using weatherProvider: (any WeatherProviding)?) async -> WeatherSnapshot? {
 #if DEBUG
         if Self.shouldUseSeededUITestFixtures {
             return TestDataSeeder.weatherSnapshot(for: UITestSeedScenario.current())
@@ -786,7 +834,7 @@ final class DashboardViewModel {
         let pollIntervalNanoseconds: UInt64 = 200_000_000
         let deadline = Date().addingTimeInterval(timeoutSeconds)
 
-        while Date() < deadline {
+        while !Task.isCancelled && Date() < deadline {
             if await weatherProvider.isLocationPermissionDetermined {
                 return
             }
@@ -1519,6 +1567,7 @@ final class DashboardViewModel {
         lastCoachingInput = input
         let localHour = Self.dashboardHour()
         let output = coachingEngine.generate(from: input, localHour: localHour)
+        lastCoachingTemplate = output.focusInsight
         focusInsight = output.focusInsight
 
         // Batch load dismissed IDs (single UserDefaults read) then filter

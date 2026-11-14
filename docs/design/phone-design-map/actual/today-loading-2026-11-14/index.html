@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>T03·T10 로딩 검증 · 2026-11-14</title>
+<style>body{margin:0;background:#171b1c;color:#f6f0e8;font:16px/1.6 -apple-system,BlinkMacSystemFont,sans-serif}main{max-width:1200px;margin:auto;padding:28px}a{color:#e9bb89}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}figure{margin:0;background:#263032;padding:16px;border-radius:16px}img{width:100%;max-height:740px;object-fit:contain}figcaption{padding:12px 0}p{max-width:100ch}</style></head><body><main>
+<h1>T03·T10 로딩 검증 · 2026-11-14</h1>
+<p>review-ship P2 보완 후 origin/main 기반 최종 소스의 iPhone·iPad 실제 XCTest 캡처 4장을 먼저 표시한다. 보완 전 캡처 6장은 역사 기록으로 별도 보존한다. 날씨 응답과 건강 데이터 완료 경계를 분리한 소스의 실제 XCTest 캡처다. 화면 값은 notification-routing 시드이며 실제 건강 기록이 아니다. 날씨 응답 보류는 단위 테스트에서 확인했고, 이 캡처는 정상 시드의 요약 진입·Today 복귀 완료 상태다.</p>
+<p><a href="../../../../reviews/2026-11-14-today-loading/README.md">실행 결과·실패 이력·검증 제한</a> · <a href="capture-index.json">원본 첨부 출처·시각·SHA-256</a> · <a href="../index.html">통합 실제 화면 포털</a></p>
+<p>English·Light·기본 글씨·세로만 확인한다. Duo의 목표 접힘·펼침 가로 상태는 인증하지 않았다. 커스텀 dual-display runtime의 screen 0은 비활성 검은 PNG이므로 완료 증거에서 제외했다. screen 1의 실제 세로 PNG는 기기 이름만으로 일반 iPhone 또는 특정 접힘 자세로 분류하지 않고 별도 보존했다.</p>
+<div class="grid">
+<figure><img src="images/isolated-phone-T10.png" alt="일반 iPhone 요약 로드 완료"><figcaption>일반 iPhone 18 Pro · T10 요약 로드 완료 · <a href="ax/isolated-phone-T10.txt">AX</a></figcaption></figure>
+<figure><img src="images/isolated-phone-T03.png" alt="일반 iPhone Today 복귀 로드 완료"><figcaption>일반 iPhone 18 Pro · T03 Back 후 실제 지표 · <a href="ax/isolated-phone-T03.txt">AX</a></figcaption></figure>
+<figure><img src="images/isolated-ipad-T10.png" alt="iPad 요약 로드 완료"><figcaption>iPad mini (A20 Pro) · T10 요약 로드 완료 · <a href="ax/isolated-ipad-T10.txt">AX</a></figcaption></figure>
+<figure><img src="images/isolated-ipad-T03.png" alt="iPad Today 복귀 로드 완료"><figcaption>iPad mini (A20 Pro) · T03 Back 후 실제 지표 · <a href="ax/isolated-ipad-T03.txt">AX</a></figcaption></figure>
+</div><h2>보완 전 역사 기록 · 최종 소스의 증거 아님</h2><p><a href="images/phone-T03.png">이전 일반 폰 T03</a> · <a href="images/phone-T10.png">이전 일반 폰 T10</a> · <a href="images/ipad-T03.png">이전 iPad T03</a> · <a href="images/ipad-T10.png">이전 iPad T10</a></p><div class="grid"><figure><img src="images/dual-display-screen1-T10.png" alt="dual-display screen 1 요약 로드 완료"><figcaption>커스텀 dual-display screen 1 · T10 · 자세 미인증 · <a href="ax/dual-display-screen1-T10.txt">AX</a></figcaption></figure>
+<figure><img src="images/dual-display-screen1-T03.png" alt="dual-display screen 1 Today 복귀 로드 완료"><figcaption>커스텀 dual-display screen 1 · T03 · 자세 미인증 · <a href="ax/dual-display-screen1-T03.txt">AX</a></figcaption></figure>
+</div></main></body></html>

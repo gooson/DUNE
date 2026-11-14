@@ -1,0 +1,81 @@
+{
+  "branch": "fix/today-weather-loading",
+  "base": "origin/main",
+  "timestamp": "2026-11-14T22:59:35.806545+09:00",
+  "diff_lines": 306,
+  "reviewers_run": [
+    "security",
+    "performance",
+    "architecture",
+    "data-integrity",
+    "simplicity"
+  ],
+  "reviewers_skipped": [
+    {
+      "name": "agent-native",
+      "reason": "No .claude/.codex/prompt changes"
+    }
+  ],
+  "localization": "Checked Presentation delta: no new user-facing strings; no catalog changes",
+  "findings": [
+    {
+      "id": "arch-001",
+      "reviewer": "Architecture / Data Integrity",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Late weather skips derived context during load tail",
+      "file": "DUNE/Presentation/Dashboard/DashboardViewModel.swift",
+      "line": 787,
+      "issue": "Health context is already published but isLoading remains true during sparkline awaits. Weather changes without updating coaching/briefing.",
+      "suggestion": "Use health publication readiness rather than loading completion.",
+      "resolution": "applyWeatherSnapshot uses hasLoadedOnce rather than !isLoading; weatherDuringLoadingTailRefreshesContext covers the published-health/loading-tail branch."
+    },
+    {
+      "id": "arch-002",
+      "reviewer": "Architecture / Data Integrity",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Explicit permission refresh races background weather",
+      "file": "DUNE/Presentation/Dashboard/DashboardViewModel.swift",
+      "line": 781,
+      "issue": "Older background request can overwrite newer explicit weather because only load request ID is checked.",
+      "suggestion": "Coordinate both weather paths with a weather generation and cancellation.",
+      "resolution": "Shared weatherRequestID invalidates both directions; permissionWeatherSupersedesBackgroundWeather and dashboardWeatherSupersedesPermissionWeather cover reverse completion orders."
+    },
+    {
+      "id": "perf-001",
+      "reviewer": "Performance",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Late weather restarts identical coaching inference",
+      "file": "DUNE/Presentation/Dashboard/DashboardViewModel.swift",
+      "line": 791,
+      "issue": "Late weather unconditionally cancels and repeats identical on-device AI prompt.",
+      "suggestion": "Preserve enhanced focus and active inference when the generated template is unchanged.",
+      "resolution": "Full generated template equality preserves the enhanced focus and existing inference; lateWeatherPreservesEnhancedCoaching awaits the actual AI task and proves one call."
+    },
+    {
+      "id": "simp-001",
+      "reviewer": "Simplicity",
+      "priority": "P2",
+      "status": "Resolved",
+      "title": "Obsolete response test relies on fixed sleep",
+      "file": "DUNETests/DashboardViewModelTests.swift",
+      "line": 1595,
+      "issue": "20ms sleep does not prove stale task processed its continuation before assertion.",
+      "suggestion": "Await the actual old task completion before asserting.",
+      "resolution": "Old and current weather task handles are awaited to completion; the fixed 20ms sleep was removed."
+    }
+  ],
+  "summary": {
+    "p1": 0,
+    "p2": 4,
+    "p3": 0
+  },
+  "open_summary": {
+    "p1": 0,
+    "p2": 0,
+    "p3": 0
+  },
+  "recheck": "Final pr-reviewer + app-quality-gate confirmed all four fixes. Final-source isolated unit 44/44 and iPhone/iPad selected UI 1/1 each passed."
+}

@@ -1,0 +1,122 @@
+Attributes: Application, 0x1073ee300, pid: 43200, label: 'DUNE'
+Element subtree:
+ →Application, 0x1073ee300, pid: 43200, label: 'DUNE'
+    Window (Main), 0x1073ee080, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x1073ee440, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x1073ee6c0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x1073ee800, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x1073eed00, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x1073eea80, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x1073eee40, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x1073ef0c0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x1073ef200, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x1073ef840, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x1073efac0, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x1073ec500, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x1073ec3c0, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x1073efc00, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x1073efe80, {{0.0, 0.0}, {402.0, 874.0}}
+                                Other, 0x1073efd40, {{0.0, 0.0}, {402.0, 874.0}}
+                                  Other, 0x1073ef980, {{0.0, 0.0}, {402.0, 874.0}}
+                                    Other, 0x1073ef700, {{0.0, 0.0}, {402.0, 874.0}}
+                                      Other, 0x1073ef480, {{0.0, 0.0}, {402.0, 874.0}}
+                                        NavigationBar, 0x1073eef80, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Today's Report'
+                                          Button, 0x1073ef5c0, {{16.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Today'
+                                          StaticText, 0x1073ef340, {{141.0, 73.7}, {120.0, 20.7}}, label: 'Today's Report'
+                                        Other, 0x1073ee580, {{0.0, 0.0}, {402.0, 874.0}}
+                                          Other, 0x1073eebc0, {{0.0, 0.0}, {402.0, 874.0}}
+                                            Other, 0x1073ee940, {{0.0, 0.0}, {402.0, 874.0}}
+                                              Other, 0x1073ecc80, {{0.0, 0.0}, {402.0, 874.0}}
+                                                ScrollView, 0x10a5a4000, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'notification-daily-digest-screen'
+                                                  Other, 0x10a5a4140, {{0.0, 0.0}, {402.0, 874.0}}
+                                                    Other, 0x10a5a4280, {{0.0, 0.0}, {402.0, 156.0}}
+                                                    Other, 0x10a5a43c0, {{0.0, 741.0}, {402.0, 133.0}}
+                                                  Other, 0x10a5a4500, {{0.0, 0.0}, {402.0, 874.0}}
+                                                    Other, 0x10a5a4640, {{0.0, 741.0}, {402.0, 133.0}}
+                                                  Other, 0x10a5a4780, {{0.0, 116.0}, {402.0, 978.7}}
+                                                    Other, 0x10a5a48c0, {{16.0, 132.0}, {370.0, 946.7}}, identifier: 'dashboard-daily-digest'
+                                                      Other, 0x10a5a4a00, {{16.0, 132.0}, {370.0, 168.7}}, identifier: 'notification-daily-digest-cover'
+                                                        StaticText, 0x10a5a4b40, {{40.0, 156.0}, {49.0, 18.0}}, identifier: 'dashboard-digest-date', label: 'Nov 14'
+                                                        Image, 0x10a5a4c80, {{294.0, 156.0}, {68.0, 68.0}}, identifier: 'doc.text', label: 'Plain Text Document'
+                                                        StaticText, 0x10a5a4dc0, {{40.0, 236.0}, {237.3, 40.7}}, identifier: 'dashboard-digest-header', label: 'Today's Report'
+                                                      Other, 0x10a5a4f00, {{16.0, 312.7}, {370.0, 186.0}}, identifier: 'notification-daily-digest-condition'
+                                                        StaticText, 0x10a5a5040, {{38.3, 334.3}, {116.3, 25.0}}, label: 'Condition'
+                                                        Image, 0x10a5a5180, {{38.3, 334.3}, {17.0, 24.3}}, identifier: 'heart.text.clipboard', label: 'Heart On A Text Clipboard'
+                                                        Image, 0x10a5a52c0, {{322.3, 337.0}, {37.7, 54.7}}, identifier: 'heart.text.clipboard', label: 'Heart On A Text Clipboard'
+                                                        StaticText, 0x10a5a5400, {{36.0, 408.0}, {45.0, 40.7}}, identifier: 'dashboard-digest-condition', label: '84'
+                                                        StaticText, 0x10a5a5540, {{36.0, 460.7}, {132.7, 18.0}}, label: 'From yesterday: +3'
+                                                      Other, 0x10a5a5680, {{16.0, 510.7}, {370.0, 200.0}}, identifier: 'notification-daily-digest-activity'
+                                                        Image, 0x10a5a57c0, {{37.7, 532.3}, {15.0, 23.7}}, identifier: 'figure.walk', label: 'Walk'
+                                                        StaticText, 0x10a5a5900, {{37.7, 532.0}, {95.0, 24.0}}, label: 'Activity'
+                                                        Image, 0x10a5a5a40, {{328.0, 535.0}, {32.0, 51.0}}, identifier: 'figure.walk', label: 'Walk'
+                                                        StaticText, 0x10a5a5b80, {{36.0, 602.3}, {32.7, 14.3}}, label: 'Steps'
+                                                        StaticText, 0x10a5a5cc0, {{36.0, 618.7}, {99.7, 40.7}}, identifier: 'dashboard-digest-steps', label: '8,200'
+                                                        Other, 0x10a5a5e00, {{37.7, 672.0}, {146.3, 18.0}}, identifier: 'notification-daily-digest-workout'
+                                                          Image, 0x10a5a5f40, {{37.7, 672.7}, {13.0, 16.7}}, identifier: 'figure.run', label: 'Running'
+                                                          StaticText, 0x10a5a6080, {{37.7, 672.0}, {83.0, 18.0}}, label: 'Workout'
+                                                          StaticText, 0x10a5a61c0, {{128.7, 672.0}, {55.3, 18.0}}, label: 'workout'
+                                                      Other, 0x10a5a6300, {{16.0, 722.7}, {370.0, 147.0}}, identifier: 'notification-daily-digest-sleep'
+                                                        Image, 0x10a5a6440, {{37.7, 744.3}, {20.3, 20.3}}, identifier: 'moon.fill', label: 'Do Not Disturb'
+                                                        StaticText, 0x10a5a6580, {{37.7, 742.7}, {81.3, 24.0}}, label: 'Sleep'
+                                                        Image, 0x10a5a66c0, {{316.3, 747.0}, {45.7, 45.7}}, identifier: 'moon.fill', label: 'Do Not Disturb'
+                                                        StaticText, 0x10a5a6800, {{36.0, 809.0}, {145.0, 40.7}}, label: '7h 10min'
+                                                      Other, 0x10a5a6940, {{16.0, 881.7}, {370.0, 197.0}}, identifier: 'notification-daily-digest-narrative'
+                                                        StaticText, 0x10a5a6a80, {{38.3, 901.7}, {157.7, 24.0}}, label: 'Day in Review'
+                                                        Image, 0x10a5a6bc0, {{38.3, 904.7}, {20.7, 17.7}}, identifier: 'text.alignleft', label: 'Align Left'
+                                                        Image, 0x10a5a6d00, {{315.0, 906.0}, {45.0, 38.0}}, identifier: 'text.alignleft', label: 'Align Left'
+                                                        StaticText, 0x10a5a6e40, {{36.0, 960.3}, {315.0, 42.3}}, identifier: 'dashboard-digest-preview', label: 'Today's condition score was 84 (+3 from yesterday).'
+                                                        Button, 0x10a5a6f80, {{36.0, 1014.7}, {330.0, 44.0}}, identifier: 'dashboard-digest-summary-toggle', label: 'Expand summary', value: Collapsed
+                                                          StaticText, 0x10a5a70c0, {{36.0, 1014.7}, {330.0, 44.0}}, label: 'Expand summary'
+                                                          Image, 0x10a5a7200, {{162.7, 1033.7}, {10.7, 6.3}}, identifier: 'chevron.down', label: 'Go Down'
+                                                  Other, 0x10a5a7340, {{369.0, 116.0}, {30.0, 675.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                                    Other, 0x10a5a7480, {{396.0, 710.0}, {3.0, 78.0}}
+                                                  Other, 0x10a5a75c0, {{369.0, 116.0}, {30.0, 675.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                                    Other, 0x10a5a7700, {{396.0, 710.0}, {3.0, 78.0}}
+                                        Toolbar, 0x10a5a7840, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x10a5a7980, {{0.0, 0.0}, {402.0, 874.0}}
+                                Toolbar, 0x10a5a7ac0, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x10a5a7c00, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x10a5a7d40, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x10a5a7e80, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x10aed0000, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10aed0140, {{0.0, 791.0}, {402.0, 83.0}}
+                    Other, 0x10aed0280, {{0.0, 0.0}, {402.0, 874.0}}
+                      TabBar, 0x10aed03c0, {{0.0, 791.0}, {402.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x10aed0500, {{21.0, 791.0}, {360.0, 62.0}}
+                          Other, 0x10aed0640, {{21.0, 791.0}, {95.0, 54.0}}
+                          Other, 0x10aed0780, {{21.0, 791.0}, {360.0, 62.0}}
+                            Button, 0x10aed08c0, {{25.0, 795.0}, {95.0, 54.0}}, identifier: 'tab-today', label: 'Today', Selected
+                              Image, 0x10aed0a00, {{60.0, 798.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x10aed0b40, {{110.7, 795.0}, {95.0, 54.0}}, identifier: 'tab-activity', label: 'Activity'
+                              Image, 0x10aed0c80, {{146.7, 799.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x10aed0dc0, {{196.3, 795.0}, {95.0, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x10aed0f00, {{229.7, 802.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x10aed1040, {{282.0, 795.0}, {95.0, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x10aed1180, {{313.7, 801.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x10aed12c0, {{21.0, 791.0}, {360.0, 62.0}}
+                          Other, 0x10aed1400, {{25.0, 795.0}, {95.0, 54.0}}
+                            Other, 0x10aed1540, {{25.0, 795.0}, {95.0, 54.0}}
+                              Other, 0x10aed1680, {{25.0, 795.0}, {95.0, 54.0}}
+                              Other, 0x10aed17c0, {{25.0, 795.0}, {95.0, 54.0}}
+                                Other, 0x10aed1900, {{25.0, 795.0}, {95.0, 54.0}}
+                                  Other, 0x10aed1a40, {{25.0, 795.0}, {95.0, 54.0}}
+                                    Other, 0x10aed1b80, {{25.0, 795.0}, {95.0, 54.0}}
+                                  Other, 0x10aed1cc0, {{25.0, 795.0}, {95.0, 54.0}}
+                                Other, 0x10aed1e00, {{25.0, 795.0}, {95.0, 54.0}}
+                    Other, 0x10aed1f40, {{0.0, 791.0}, {402.0, 83.0}}
+                      Other, 0x10aed2080, {{0.0, 791.0}, {402.0, 83.0}}
+                        Other, 0x10aed21c0, {{0.0, 791.0}, {402.0, 83.0}}
+                          Other, 0x10aed2300, {{0.0, 791.0}, {402.0, 83.0}}
+                            Other, 0x10aed2440, {{0.0, 791.0}, {402.0, 83.0}}
+                              Other, 0x10aed2580, {{0.0, 791.0}, {402.0, 83.0}}
+                          Other, 0x10aed26c0, {{0.0, 791.0}, {402.0, 83.0}}
+                            Other, 0x10aed2800, {{0.0, 791.0}, {402.0, 83.0}}
+              Other, 0x10aed2940, {{0.0, 62.0}, {402.0, 778.0}}
+              Other, 0x10aed2a80, {{201.0, 451.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x1073ee300, pid: 43200, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10aed2bc0, pid: 43200, label: 'DUNE'
+  }

@@ -41,10 +41,98 @@ struct EvaluationMedicalSafetyJudgment {
     let containsDiagnosisOrTreatmentAdvice: Bool
 }
 
+/// Availability can be true before the runtime's safety assets are usable.
+/// Only missing assets disable live evaluations; other probe failures stay failures.
+private actor LiveAIEvaluationReadiness {
+    static let shared = LiveAIEvaluationReadiness()
+
+    private let availability: @Sendable () -> Bool
+    private let probe: @Sendable () async throws -> Void
+    private var readinessTask: Task<Bool, any Error>?
+
+    init(
+        availability: @escaping @Sendable () -> Bool = { SystemLanguageModel.default.isAvailable },
+        probe: @escaping @Sendable () async throws -> Void = {
+            _ = try await LanguageModelSession().respond(to: "Reply with OK.")
+        }
+    ) {
+        self.availability = availability
+        self.probe = probe
+    }
+
+    func isReady() async throws -> Bool {
+        guard availability() else { return false }
+        if let readinessTask { return try await readinessTask.value }
+        let task = Task { [probe] in
+            do {
+                try await probe()
+                return true
+            } catch let error as SystemLanguageModel.Error {
+                if case .assetsUnavailable = error { return false }
+                throw error
+            }
+        }
+        readinessTask = task
+        return try await task.value
+    }
+}
+
+private actor EvaluationProbeCounter {
+    private(set) var count = 0
+    func record() { count += 1 }
+}
+
+private enum EvaluationProbeError: Error {
+    case unexpectedFailure
+}
+
 @Suite("AI feature evaluations")
 struct AIFeatureEvaluationTests {
     private static let liveEvaluationsEnabled =
         ProcessInfo.processInfo.environment["DUNE_RUN_LIVE_AI_EVALUATIONS"] == "1"
+
+    @Test("Unavailable models do not run the live evaluation probe")
+    func unavailableModelDoesNotProbe() async throws {
+        let counter = EvaluationProbeCounter()
+        let readiness = LiveAIEvaluationReadiness(
+            availability: { false }, probe: { await counter.record() }
+        )
+        #expect(try await !readiness.isReady())
+        #expect(await counter.count == 0)
+    }
+
+    @Test("Missing safety assets make live evaluations ineligible")
+    func missingModelAssetsAreIneligible() async throws {
+        let readiness = LiveAIEvaluationReadiness(availability: { true }, probe: {
+            throw SystemLanguageModel.Error.assetsUnavailable(
+                .init(debugDescription: "Required safety asset is absent")
+            )
+        })
+        #expect(try await !readiness.isReady())
+    }
+
+    @Test("Concurrent live evaluations share one successful readiness probe")
+    func liveEvaluationsShareProbe() async throws {
+        let counter = EvaluationProbeCounter()
+        let readiness = LiveAIEvaluationReadiness(
+            availability: { true }, probe: { await counter.record() }
+        )
+        async let first = readiness.isReady()
+        async let second = readiness.isReady()
+        let results = try await (first, second)
+        #expect(results.0 && results.1)
+        #expect(await counter.count == 1)
+    }
+
+    @Test("Unexpected model probe errors remain test failures")
+    func unexpectedProbeErrorsPropagate() async {
+        let readiness = LiveAIEvaluationReadiness(availability: { true }, probe: {
+            throw EvaluationProbeError.unexpectedFailure
+        })
+        await #expect(throws: EvaluationProbeError.self) {
+            _ = try await readiness.isReady()
+        }
+    }
 
     @Test("Seed dataset covers three locales and required risk scenarios")
     func datasetCoverage() {
@@ -326,10 +414,8 @@ struct AIFeatureEvaluationTests {
     }
 
     private func requireLiveModel() async throws {
-        try #require(SystemLanguageModel.default.isAvailable,
-                     "Live evaluation requested but Foundation Models reports unavailable")
-        let session = LanguageModelSession(instructions: "Reply briefly to this availability probe.")
-        _ = try await session.respond(to: "Reply OK.")
+        try #require(try await LiveAIEvaluationReadiness.shared.isReady(),
+                     "Live evaluation requested but Foundation Models or its safety assets are unavailable")
     }
 
     private func record(
