@@ -1,7 +1,31 @@
-import XCTest
+@preconcurrency import XCTest
+import UIKit
 
 @MainActor
 final class WaterLiliesThemeTests: SeededUITestBaseCase {
+    private var motionSettings: XCUIApplication?
+    private var originalMotionSetting: Bool?
+
+    private func restoreMotionSettings() {
+        if let settings = motionSettings, let original = originalMotionSetting {
+            // XCTest can abort an assertion without unwinding a Swift defer.
+            // Restore the observed switch in the framework's teardown instead.
+            let previous = continueAfterFailure
+            continueAfterFailure = true
+            settings.activate()
+            let toggle = settings.switches["REDUCE_MOTION"].firstMatch
+            if toggle.waitForExistence(timeout: 5), reduceMotionSwitchIsOn(toggle) != original {
+                tapMotionControl(toggle)
+            }
+            XCTAssertEqual(reduceMotionSwitchIsOn(toggle), Optional(original))
+            attachReduceMotionReadback("restored", settingsSwitch: toggle)
+            app?.activate()
+            continueAfterFailure = previous
+        }
+        motionSettings = nil
+        originalMotionSetting = nil
+    }
+
     override var additionalLaunchArguments: [String] {
         ["--ui-test-theme", "waterLilies", "--ui-test-style", "light", "-morningBriefingDisabled", "YES"]
     }
@@ -50,6 +74,273 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         XCTAssertTrue(themeButton("waterLilies").isSelected)
     }
 
+    func testSupportedLanguageRootNavigation() {
+        for (language, locale) in [("en", "en_US"), ("ko", "ko_KR"), ("ja", "ja_JP")] {
+            var configuration = launchConfiguration
+            configuration.additionalArguments += [
+                "-AppleLanguages", "(\(language))", "-AppleLocale", locale
+            ]
+            launchApp(with: configuration)
+            XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "\(language): primary navigation")
+
+            let roots: [(String, () -> Void, String)] = [
+                ("Today", navigateToDashboard, AXID.dashboardHeroCondition),
+                ("Activity", navigateToActivity, AXID.activityHeroReadiness),
+                ("Wellness", navigateToWellness, AXID.wellnessHeroScore),
+                ("Life", navigateToLife, AXID.lifeHeroProgress)
+            ]
+            for (tab, navigate, identifier) in roots {
+                navigate()
+                let hero = app.descendants(matching: .any)[identifier].firstMatch
+                XCTAssertTrue(hero.waitForExistence(timeout: 10), "\(language) \(tab): root should load")
+                XCTAssertTrue(hero.frame.intersects(app.windows.firstMatch.frame),
+                              "\(language) \(tab): root should be on screen")
+                captureRootEvidence("Water Lilies \(language) \(tab)")
+            }
+        }
+    }
+
+    func testVoiceOverConditionDetailEntryAndReturn() throws {
+        // The host enables VoiceOver and verifies its device setting before
+        // this selector. XCTest tap is a hit-point event, so this checks the
+        // app route and AX labels in that real environment, not spoken output.
+        attachVoiceOverReadback("Today root")
+        guard UIAccessibility.isVoiceOverRunning else {
+            throw XCTSkip("Requires VoiceOver enabled and verified by the host before this selector starts")
+        }
+        dismissVoiceOverIntroductionIfPresent()
+
+        let hero = app.buttons[AXID.dashboardHeroCondition].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 15), "Seeded Today hero must load")
+        XCTAssertTrue(hero.isHittable, "Condition hero should be reachable")
+        XCTAssertFalse(hero.label.isEmpty, "Condition hero needs an accessible name")
+        captureRootEvidence("Water Lilies VoiceOver Today root")
+
+        let detail = app.scrollViews[AXID.conditionScoreDetailScreen].firstMatch
+        hero.tap()
+        if !detail.waitForExistence(timeout: 2) {
+            hero.doubleTap()
+        }
+        XCTAssertTrue(detail.waitForExistence(timeout: 10),
+                      "Condition hero should open the detail route with VoiceOver enabled")
+        XCTAssertTrue(detail.isHittable, "Condition detail should be visible")
+        attachVoiceOverReadback("Condition detail")
+        captureRootEvidence("Water Lilies VoiceOver Condition detail")
+
+        let railBack = app.buttons["BackButton"].firstMatch
+        let navigationBack = app.navigationBars.buttons.element(boundBy: 0)
+        let back = railBack.exists && railBack.isHittable ? railBack : navigationBack
+        XCTAssertTrue(back.waitForExistence(timeout: 5), "A native Back action should be available")
+        XCTAssertTrue(back.isHittable, "Back action should be reachable")
+        XCTAssertFalse(back.label.isEmpty, "Back action needs an accessible name")
+        back.tap()
+        if detail.waitForNonExistence(timeout: 2) == false {
+            back.doubleTap()
+        }
+        XCTAssertTrue(hero.waitForExistence(timeout: 10),
+                      "Back should return to Today with VoiceOver enabled")
+        XCTAssertTrue(hero.isHittable, "Today hero should be visible after returning")
+        attachVoiceOverReadback("returned to Today")
+        captureRootEvidence("Water Lilies VoiceOver Today returned")
+    }
+
+    private func attachVoiceOverReadback(_ stage: String) {
+        let attachment = XCTAttachment(string: """
+            Stage: \(stage)
+            UIKit UIAccessibility.isVoiceOverRunning: \(UIAccessibility.isVoiceOverRunning)
+            """)
+        attachment.name = "Water Lilies VoiceOver \(stage) readback"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
+    private func dismissVoiceOverIntroductionIfPresent() {
+        // The simulator's first-use system alert otherwise intercepts the
+        // first app interaction. Its title starts with VoiceOver in all locales.
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let introduction = springboard.alerts.matching(
+            NSPredicate(format: "label BEGINSWITH %@", "VoiceOver")
+        ).firstMatch
+        guard introduction.waitForExistence(timeout: 3) else { return }
+        let hierarchy = XCTAttachment(string: springboard.debugDescription)
+        hierarchy.name = "VoiceOver first-use system introduction"
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
+        XCTAssertEqual(introduction.buttons.count, 1, "Only dismiss the observed single-action introduction")
+        let confirm = introduction.buttons.firstMatch
+        confirm.tap()
+        if !introduction.waitForNonExistence(timeout: 2) {
+            confirm.doubleTap()
+        }
+        XCTAssertTrue(introduction.waitForNonExistence(timeout: 5))
+    }
+
+    func testSystemReduceMotionPreservesConditionDetailState() throws {
+        // The design capture plan may disable app animations. This selector
+        // needs the real system preference, so relaunch without that argument.
+        app.terminate()
+        app.launchArguments = launchConfiguration.launchArguments.filter {
+            $0 != "--ui-disable-animations"
+        } + ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
+        navigateToDashboard()
+
+        let hero = app.buttons[AXID.dashboardHeroCondition].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 10))
+        hero.tap()
+        let detail = app.scrollViews[AXID.conditionScoreDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10))
+
+        // A selected chart period exercises state owned by the detail route.
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(
+            "condition-period-picker", maxSwipes: 6, timeoutPerCheck: 0.2
+        ))
+        let week = app.segmentedControls["condition-period-picker"].buttons["W"].firstMatch
+        XCTAssertTrue(week.waitForExistence(timeout: 5))
+        week.tap()
+        XCTAssertTrue(waitForSelected(week), "Week should be selected before backgrounding")
+        captureRootEvidence("Water Lilies condition detail before system Reduce Motion")
+
+        let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+        settings.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        settings.launch()
+        guard let reduceMotionSwitch = openReduceMotionSwitch(in: settings) else {
+            throw XCTSkip("English Settings > Accessibility > Motion controls unavailable")
+        }
+
+        let original = UIAccessibility.isReduceMotionEnabled
+        motionSettings = settings
+        originalMotionSetting = original
+        // XCTest runs registered cleanup even when a failed assertion aborts
+        // the test, before the base teardown terminates the app.
+        addTeardownBlock { @MainActor [self] () async throws in
+            restoreMotionSettings()
+        }
+        attachReduceMotionReadback("original", settingsSwitch: reduceMotionSwitch)
+        XCTAssertEqual(reduceMotionSwitchIsOn(reduceMotionSwitch), Optional(original),
+                       "Settings and UIKit should agree before changing the preference")
+        if !original {
+            // This OS exposes the whole Settings row as the Switch. Its center
+            // tap left the thumb off in the original native failure capture.
+            tapMotionControl(reduceMotionSwitch)
+            attachReduceMotionReadback("after native control tap", settingsSwitch: reduceMotionSwitch)
+            XCTAssertEqual(reduceMotionSwitchIsOn(reduceMotionSwitch), Optional(true))
+            XCTAssertTrue(waitForReduceMotion(true),
+                          "UIKit must report the actual system Reduce Motion preference")
+        }
+        XCTAssertTrue(UIAccessibility.isReduceMotionEnabled)
+        XCTAssertEqual(reduceMotionSwitchIsOn(reduceMotionSwitch), Optional(true),
+                       "Settings switch value must read back as 1 when Reduce Motion is enabled")
+        attachReduceMotionReadback("enabled", settingsSwitch: reduceMotionSwitch)
+        let settingsScreenshot = XCTAttachment(screenshot: settings.screenshot())
+        settingsScreenshot.name = "Water Lilies system Reduce Motion Settings enabled"
+        settingsScreenshot.lifetime = .keepAlways
+        add(settingsScreenshot)
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+        XCTAssertTrue(detail.waitForExistence(timeout: 10),
+                      "The detail route must survive the Settings round trip")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(
+            "condition-period-picker", maxSwipes: 6, timeoutPerCheck: 0.2
+        ))
+        XCTAssertTrue(week.isSelected, "The selected chart period must survive scene inactivity")
+        captureRootEvidence("Water Lilies condition detail with system Reduce Motion")
+    }
+
+    func testWaterLiliesRemainsOnDetailAfterBackgroundResume() {
+        navigateToDashboard()
+        let hero = app.buttons[AXID.dashboardHeroCondition].firstMatch
+        XCTAssertTrue(hero.waitForExistence(timeout: 10))
+        hero.tap()
+        let detail = app.scrollViews[AXID.conditionScoreDetailScreen].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10))
+        captureRootEvidence("Water Lilies condition detail before background")
+
+        XCUIDevice.shared.press(.home)
+        let backgrounded = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                MainActor.assumeIsolated {
+                    self.app.state == .runningBackground
+                        || self.app.state == .runningBackgroundSuspended
+                }
+            },
+            object: nil
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [backgrounded], timeout: 10), .completed)
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+        XCTAssertTrue(detail.waitForExistence(timeout: 10),
+                      "The same condition detail route should remain open")
+        XCTAssertTrue(detail.isHittable, "The resumed detail should accept input")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(
+            "condition-period-picker", maxSwipes: 6, timeoutPerCheck: 0.2
+        ))
+        captureRootEvidence("Water Lilies condition detail resumed")
+    }
+
+    private func tapMotionControl(_ toggle: XCUIElement) {
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
+    }
+
+    private func openReduceMotionSwitch(in settings: XCUIApplication) -> XCUIElement? {
+        for title in ["Accessibility", "Motion"] {
+            guard settings.scrollToHittableElementIfNeeded(
+                title, maxSwipes: 6, timeoutPerCheck: 0.2
+            ) else { return nil }
+            let row = settings.staticTexts[title].firstMatch
+            guard row.waitForExistence(timeout: 5) else { return nil }
+            row.tap()
+        }
+        let toggle = settings.switches["Reduce Motion"].firstMatch
+        return toggle.waitForExistence(timeout: 5) && toggle.isHittable ? toggle : nil
+    }
+
+    private func reduceMotionSwitchIsOn(_ toggle: XCUIElement) -> Bool? {
+        if let value = toggle.value as? String {
+            if value == "1" { return true }
+            if value == "0" { return false }
+        }
+        if let value = toggle.value as? NSNumber {
+            return value.intValue == 1
+        }
+        return nil
+    }
+
+    private func attachReduceMotionReadback(
+        _ stage: String,
+        settingsSwitch: XCUIElement
+    ) {
+        let attachment = XCTAttachment(string: """
+            Stage: \(stage)
+            UIKit UIAccessibility.isReduceMotionEnabled: \(UIAccessibility.isReduceMotionEnabled)
+            Settings switch.value: \(String(describing: settingsSwitch.value))
+            Settings switch isOn: \(String(describing: reduceMotionSwitchIsOn(settingsSwitch)))
+            """)
+        attachment.name = "Water Lilies system Reduce Motion \(stage) readback"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
+    private func waitForReduceMotion(_ enabled: Bool) -> Bool {
+        let changed = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                MainActor.assumeIsolated {
+                    UIAccessibility.isReduceMotionEnabled == enabled
+                }
+            },
+            object: nil
+        )
+        return XCTWaiter.wait(for: [changed], timeout: 5) == .completed
+    }
+
+    private func waitForSelected(_ element: XCUIElement) -> Bool {
+        let selected = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "selected == true"), object: element
+        )
+        return XCTWaiter.wait(for: [selected], timeout: 5) == .completed
+    }
+
     private func assertAndCaptureTabRoots(style: String) {
         navigateToDashboard()
         XCTAssertTrue(waitForElement(AXID.dashboardHeroCondition, timeout: 10).exists)
@@ -57,29 +348,34 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         XCTAssertTrue(app.buttons[AXID.dashboardHeroCondition].firstMatch.exists)
         XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
                        "Today hero should not expose a cross-tab Activity action")
-        addScreenshotAttachment(named: "Water Lilies Today \(style)")
+        captureRootEvidence("Water Lilies Today \(style)")
 
         navigateToActivity()
         XCTAssertTrue(waitForElement(AXID.activityHeroReadiness, timeout: 10).exists)
         XCTAssertTrue(waitForElement("activity-hero-ring", timeout: 10).exists)
         XCTAssertTrue(waitForElement(AXID.activityToolbarAdd, timeout: 10).exists)
-        addScreenshotAttachment(named: "Water Lilies Activity \(style)")
+        captureRootEvidence("Water Lilies Activity \(style)")
 
         navigateToWellness()
         XCTAssertTrue(waitForElement(AXID.wellnessHeroScore, timeout: 10).exists)
         XCTAssertTrue(waitForElement("wellness-hero-ring", timeout: 10).exists)
         XCTAssertTrue(waitForElement("wellness-hero-sleep", timeout: 10).exists)
-        addScreenshotAttachment(named: "Water Lilies Wellness \(style)")
+        captureRootEvidence("Water Lilies Wellness \(style)")
 
         navigateToLife()
         XCTAssertTrue(waitForElement(AXID.lifeHeroProgress, timeout: 10).exists)
         XCTAssertTrue(waitForElement("life-hero-ring", timeout: 10).exists)
         XCTAssertFalse(app.buttons["life-hero-checklist-button"].exists)
+        captureRootEvidence("Water Lilies Life \(style)")
         XCTAssertTrue(app.scrollToElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 6))
-        addScreenshotAttachment(named: "Water Lilies Life \(style)")
 
         navigateToDashboard()
         XCTAssertTrue(waitForElement(AXID.dashboardHeroCondition, timeout: 10).exists)
+    }
+
+    private func captureRootEvidence(_ name: String) {
+        VisualAudit.capture(name)
+        if !VisualAudit.isEnabled { addScreenshotAttachment(named: name) }
     }
 
     private func themeButton(

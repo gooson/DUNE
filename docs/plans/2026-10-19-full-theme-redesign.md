@@ -9,6 +9,8 @@ related_brainstorms: []
 
 # Implementation Plan: 8개 테마 전체 디자인 개편
 
+> 2026-11-14: 아래 Context와 재개 단위는 당시 기록이다. WATER LILIES는 이미 구현됐고 현재 4탭은 후속 Compact·Flow 배치를 사용한다. 남은 구현·새 검증·완료 판정은 [최신 마무리 계획](2026-11-14-theme-overhaul-completion.md)을 따른다.
+
 ## Context
 
 `docs/design/full-redesign-map/`은 8개 테마의 목표를 정의하지만 앱에는 기존 7개 테마의 부분 표현만 있다. WATER LILIES는 선택 값조차 없다. 사용자가 기대한 결과는 맵 자체가 아니라 실제 앱 화면의 개편이다.

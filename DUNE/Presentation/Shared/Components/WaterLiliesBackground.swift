@@ -42,7 +42,7 @@ private struct WaterLiliesScene: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.waveReducedMotion) private var reduceMotion
     @Environment(\.colorScheme) private var colorScheme
-    @State private var isDrifting = false
+    @Environment(\.scenePhase) private var scenePhase
 
     private var clusterCount: Int {
         switch kind {
@@ -50,24 +50,24 @@ private struct WaterLiliesScene: View {
         case .sheet: 3
         case .tab:
             switch preset {
-            case .today: 15
-            case .train: 12
-            case .wellness: 10
-            case .life: 8
+            case .today: 21
+            case .train: 17
+            case .wellness: 14
+            case .life: 11
             }
         }
     }
 
     private var markCount: Int {
         switch kind {
-        case .detail: 36
-        case .sheet: 20
+        case .detail: 100
+        case .sheet: 60
         case .tab:
             switch preset {
-            case .today: 96
-            case .train: 76
-            case .wellness: 64
-            case .life: 52
+            case .today: 560
+            case .train: 400
+            case .wellness: 320
+            case .life: 240
             }
         }
     }
@@ -90,38 +90,40 @@ private struct WaterLiliesScene: View {
             )
             .frame(height: kind.height)
 
-            Canvas(opaque: false, rendersAsynchronously: true) { context, size in
-                var drawing = context
-                drawing.scaleBy(x: size.width / 400, y: size.height / 220)
-                WaterLiliesPainting.draw(
-                    in: &drawing,
-                    clusters: clusterCount,
-                    marks: markCount,
-                    strength: kind.strength * (colorScheme == .dark ? 1.10 : 1)
-                )
-            }
-            .frame(height: kind.height)
-            .offset(x: isDrifting ? 5 : -5)
-            .mask {
-                LinearGradient(
-                    colors: [.white, .white, .clear],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
+            if !reduceMotion && scenePhase == .active && kind == .tab {
+                painting
+                    .phaseAnimator([false, true]) { content, drifting in
+                        content.offset(x: drifting ? 5 : -5)
+                    } animation: { _ in
+                        .easeInOut(duration: 20)
+                    }
+            } else {
+                painting
             }
         }
         .allowsHitTesting(false)
         .accessibilityHidden(true)
         .ignoresSafeArea()
-        .task(id: reduceMotion) {
-            if reduceMotion || kind != .tab {
-                isDrifting = false
-            } else {
-                isDrifting = false
-                withAnimation(.easeInOut(duration: 20).repeatForever(autoreverses: true)) {
-                    isDrifting = true
-                }
-            }
+    }
+
+    private var painting: some View {
+        Canvas(opaque: false, rendersAsynchronously: true) { context, size in
+            var drawing = context
+            drawing.scaleBy(x: size.width / 400, y: size.height / 220)
+            WaterLiliesPainting.draw(
+                in: &drawing,
+                clusters: clusterCount,
+                marks: markCount,
+                strength: kind.strength * (colorScheme == .dark ? 1.10 : 1)
+            )
+        }
+        .frame(height: kind.height)
+        .mask {
+            LinearGradient(
+                colors: [.white, .white, .clear],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         }
     }
 }
@@ -129,21 +131,25 @@ private struct WaterLiliesScene: View {
 private enum WaterLiliesPainting {
     // Ordered to spread the first few clusters over the width for quieter presets.
     private static let placements: [(CGFloat, CGFloat, CGFloat, Bool)] = [
-        (300, 82, 28, true), (105, 58, 25, false), (215, 138, 33, true),
-        (367, 154, 29, false), (64, 139, 30, false), (246, 45, 24, false),
-        (149, 107, 29, true), (340, 37, 22, false), (30, 80, 24, false),
-        (270, 161, 30, false), (181, 39, 23, true), (383, 97, 25, true),
-        (92, 190, 31, true), (326, 192, 30, false), (201, 91, 26, false)
+        (158, 43, 25, true), (275, 94, 33, false), (319, 146, 36, true),
+        (91, 36, 23, false), (107, 86, 30, true), (281, 151, 34, false),
+        (306, 41, 24, true), (178, 82, 26, false), (153, 149, 34, true),
+        (339, 43, 20, false), (346, 98, 27, true), (116, 143, 33, false),
+        (243, 30, 21, false), (73, 82, 28, false), (361, 153, 32, false),
+        (124, 35, 27, false), (240, 97, 29, true), (192, 143, 31, false),
+        (271, 36, 27, false), (141, 91, 29, false), (311, 102, 30, false)
     ]
 
     static func draw(in context: inout GraphicsContext, clusters: Int, marks: Int, strength: Double) {
         drawWater(in: &context, marks: marks, strength: strength)
 
-        for index in 0..<min(clusters, placements.count) {
-            let (x, y, size, hasFlower) = placements[index]
-            drawLeaves(in: &context, x: x, y: y, size: size, strength: strength)
+        // Paint the distant islands first so nearby strokes overlap them.
+        let visible = placements.prefix(clusters).sorted { $0.1 < $1.1 }
+        for (x, y, size, hasFlower) in visible {
+            let depth = y < 60 ? 0.56 : (y < 120 ? 0.78 : 1.0)
+            drawLeaves(in: &context, x: x, y: y, size: size, strength: strength * depth)
             if hasFlower {
-                drawFlower(in: &context, x: x + size * 0.15, y: y - size * 0.29, strength: strength)
+                drawFlower(in: &context, x: x + size * 0.15, y: y - size * 0.29, strength: strength * depth)
             }
         }
     }
@@ -153,19 +159,30 @@ private enum WaterLiliesPainting {
             let seed = CGFloat(index)
             let x = (seed * 73.7).truncatingRemainder(dividingBy: 418) - 9
             let y = (seed * 43.3).truncatingRemainder(dividingBy: 195) + 8
-            let length = 3 + (seed * 11.7).truncatingRemainder(dividingBy: 22)
+            let radius = 0.7 + (seed * 1.37).truncatingRemainder(dividingBy: 2.1)
+            let dab = Path(ellipseIn: CGRect(
+                x: x, y: y, width: radius * (index.isMultiple(of: 5) ? 5 : 2), height: radius * 1.2
+            ))
+            let color = index.isMultiple(of: 4)
+                ? WaterLiliesPalette.reflection
+                : (index.isMultiple(of: 3) ? WaterLiliesPalette.waterDeep : WaterLiliesPalette.waterLight)
+            context.fill(dab, with: .color(color.opacity((0.24 + Double(index % 5) * 0.08) * strength)))
+        }
+
+        for index in 0..<max(8, marks / 11) {
+            let seed = CGFloat(index)
+            let x = (seed * 67.3).truncatingRemainder(dividingBy: 400)
+            let y = (seed * 29.7).truncatingRemainder(dividingBy: 175) + 8
+            let length = 12 + (seed * 11.7).truncatingRemainder(dividingBy: 47)
             var stroke = Path()
             stroke.move(to: CGPoint(x: x, y: y))
             stroke.addQuadCurve(
                 to: CGPoint(x: x + length, y: y - 0.7),
                 control: CGPoint(x: x + length * 0.54, y: y - 2.3)
             )
-            let color = index.isMultiple(of: 4)
-                ? WaterLiliesPalette.reflection
-                : (index.isMultiple(of: 3) ? WaterLiliesPalette.waterDeep : WaterLiliesPalette.waterLight)
             context.stroke(
                 stroke,
-                with: .color(color.opacity((index.isMultiple(of: 4) ? 0.43 : 0.27) * strength)),
+                with: .color(WaterLiliesPalette.reflection.opacity(0.36 * strength)),
                 style: StrokeStyle(lineWidth: index.isMultiple(of: 7) ? 2.1 : 1.1, lineCap: .round)
             )
         }
@@ -179,17 +196,18 @@ private enum WaterLiliesPainting {
         strength: Double
     ) {
         // Uneven overlapping strokes form a leaf island, rather than a circular pad.
-        for strokeIndex in 0..<11 {
-            let offset = CGFloat(strokeIndex - 5)
-            let jitter = sin(CGFloat(strokeIndex) * 2.7 + x * 0.11) * size * 0.035
+        for strokeIndex in 0..<15 {
+            let offset = CGFloat(strokeIndex / 2 - 3)
+            let jitter = sin(CGFloat(strokeIndex) * 2.7 + x * 0.11 + y * 0.07) * size * 0.035
             let row = y + offset * size * 0.105 + jitter
-            let left = x - size * (0.65 + 0.16 * abs(sin(CGFloat(strokeIndex) * 1.9)))
-            let right = x + size * (0.43 + 0.28 * abs(cos(CGFloat(strokeIndex) * 1.4)))
+            let left = x - size * (0.65 + 0.29 * abs(sin(CGFloat(strokeIndex) * 1.9 + y * 0.03)))
+            let right = x + size * (0.37 + 0.55 * abs(cos(CGFloat(strokeIndex) * 1.4 + x * 0.04)))
+            let bend = CGFloat(strokeIndex % 3 - 1) * size * 0.065
             var leaf = Path()
             leaf.move(to: CGPoint(x: left, y: row))
             leaf.addQuadCurve(
-                to: CGPoint(x: right, y: row + offset * 0.42),
-                control: CGPoint(x: x + offset * 0.6, y: row - 3.1)
+                to: CGPoint(x: right, y: row + bend * 0.35),
+                control: CGPoint(x: x + bend, y: row - 2.5 + jitter)
             )
             let color: Color
             switch strokeIndex % 3 {
@@ -199,9 +217,21 @@ private enum WaterLiliesPainting {
             }
             context.stroke(
                 leaf,
-                with: .color(color.opacity((0.48 + Double(strokeIndex % 4) * 0.10) * strength)),
+                with: .color(color.opacity((0.28 + Double(strokeIndex % 4) * 0.10) * strength)),
                 style: StrokeStyle(lineWidth: strokeIndex.isMultiple(of: 4) ? 5.2 : 2.9, lineCap: .round)
             )
+        }
+        for index in 0..<9 {
+            let seed = CGFloat(index)
+            let point = CGPoint(
+                x: x + sin(seed * 2.32 + y) * size * 0.79,
+                y: y + cos(seed * 3.17 + x) * size * 0.24
+            )
+            var fleck = Path()
+            fleck.move(to: point)
+            fleck.addLine(to: CGPoint(x: point.x + 2 + CGFloat(index % 4) * 1.5, y: point.y + CGFloat(index % 3 - 1)))
+            context.stroke(fleck, with: .color(WaterLiliesPalette.reflection.opacity(0.5 * strength)),
+                           style: StrokeStyle(lineWidth: 1 + CGFloat(index % 3) * 0.6, lineCap: .round))
         }
     }
 

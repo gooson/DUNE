@@ -38,13 +38,12 @@ final class WatchThemeMatrixUITests: WatchUITestBaseCase {
             scenario: .defaultSeeded,
             additionalArguments: ["--ui-theme", rawValue]
         ))
-        ensureHomeVisible()
-        XCTAssertTrue(elementExists(WatchAXID.homeAllExercisesCard, timeout: 5))
-        addScreenshotAttachment(named: "\(name) Watch Home")
+        ensureThemeHomeVisible()
+        captureThemeScene("\(name) Watch Home")
 
-        openAllExercises()
+        openThemeExerciseList()
         XCTAssertNotNil(findQuickStartExercise(identifier: WatchAXID.quickStartExerciseSquat))
-        addScreenshotAttachment(named: "\(name) Watch All Exercises")
+        captureThemeScene("\(name) Watch All Exercises")
     }
 
     private func captureWorkoutTheme(_ rawValue: String, named name: String) {
@@ -52,8 +51,8 @@ final class WatchThemeMatrixUITests: WatchUITestBaseCase {
             scenario: .defaultSeeded,
             additionalArguments: ["--ui-theme", rawValue]
         ))
-        ensureHomeVisible()
-        openAllExercises()
+        ensureThemeHomeVisible()
+        openThemeExerciseList()
         guard let squat = findQuickStartExercise(identifier: WatchAXID.quickStartExerciseSquat) else {
             XCTFail("\(name): fixture squat must be reachable")
             return
@@ -63,7 +62,48 @@ final class WatchThemeMatrixUITests: WatchUITestBaseCase {
         XCTAssertTrue(tapElement(WatchAXID.workoutPreviewStartButton))
         dismissSetInputSheetIfNeeded()
         XCTAssertTrue(elementExists(WatchAXID.sessionMetricsScreen, timeout: 8))
-        addScreenshotAttachment(named: "\(name) Watch Workout")
+        captureThemeScene("\(name) Watch Workout")
+    }
+
+    private func ensureThemeHomeVisible() {
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+        XCTAssertTrue(elementExists(WatchAXID.homeRoot, timeout: 10))
+        // The lazy carousel initially exposes Popular cards. The outer root
+        // identifier replaces the carousel identifier, and All Exercises is below.
+        let card = app.buttons.matching(
+            NSPredicate(format: "identifier BEGINSWITH %@", "watch-home-card-")
+        ).firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 5), "Seeded Home must render an exercise card")
+        XCTAssertTrue(card.isHittable, "The first Home exercise card must be visible")
+    }
+
+    private func openThemeExerciseList() {
+        let home = app.scrollViews[WatchAXID.homeRoot].firstMatch
+        let allExercises = app.buttons[WatchAXID.homeAllExercisesCard].firstMatch
+        XCTAssertTrue(home.waitForExistence(timeout: 5))
+        for swipe in 0...10 {
+            if allExercises.exists && allExercises.isHittable {
+                allExercises.tap()
+                ensureQuickStartVisible()
+                return
+            }
+            if swipe < 10 {
+                home.swipeUp(velocity: .slow)
+            }
+        }
+        let hierarchy = XCTAttachment(string: app.debugDescription)
+        hierarchy.name = "Theme-Home-unreachable-All-Exercises"
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
+        XCTFail("All Exercises must be reachable by scrolling the seeded Home")
+    }
+
+    private func captureThemeScene(_ name: String) {
+        addScreenshotAttachment(named: name)
+        let hierarchy = XCTAttachment(string: app.debugDescription)
+        hierarchy.name = "hierarchy-\(name)"
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
     }
 
     private func captureDesignMapMetrics(_ exerciseIdentifier: String, state: String) {

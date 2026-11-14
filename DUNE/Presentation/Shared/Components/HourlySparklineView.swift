@@ -6,6 +6,7 @@ import Charts
 struct HourlySparklineView: View {
     let data: HourlySparklineData
     let tintColor: Color
+    var timeRangeColor: Color? = nil
     var height: CGFloat = 32
     var showsReferenceLabels = false
     var showsArea = true
@@ -52,14 +53,26 @@ struct HourlySparklineView: View {
             .frame(height: height)
             .clipped()
             if showsTimeRange, let first = data.points.first?.date, let last = data.points.last?.date {
-                HStack(spacing: 4) {
-                    Spacer(minLength: 0)
-                    Text(first, format: .dateTime.month(.abbreviated).day().hour().minute())
-                    Text("–")
-                    Text(last, format: .dateTime.month(.abbreviated).day().hour().minute())
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 4) {
+                        Text(first, format: .dateTime.month(.abbreviated).day().hour().minute())
+                        Text("–")
+                        Text(last, format: .dateTime.month(.abbreviated).day().hour().minute())
+                    }
+                    .fixedSize(horizontal: true, vertical: false)
+
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(first, format: .dateTime.month(.abbreviated).day().hour().minute())
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text("–")
+                            Text(last, format: .dateTime.month(.abbreviated).day().hour().minute())
+                        }
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
+                .frame(maxWidth: .infinity, alignment: .trailing)
                 .font(.caption2)
-                .foregroundStyle(tintColor.opacity(0.9))
+                .foregroundStyle(timeRangeColor ?? tintColor.opacity(0.9))
             }
             if showsReferenceLabels {
                 HStack {

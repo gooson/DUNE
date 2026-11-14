@@ -50,6 +50,17 @@ schemes:
       targets:
         - DUNETests
 
+  DUNEAIEvaluations:
+    build:
+      targets:
+        DUNE: all
+        DUNETests: [test]
+    test:
+      environmentVariables:
+        DUNE_RUN_LIVE_AI_EVALUATIONS: "1"
+      targets:
+        - DUNETests
+
   DUNEWatch:
     build:
       targets:

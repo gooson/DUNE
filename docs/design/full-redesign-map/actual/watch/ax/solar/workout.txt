@@ -1,0 +1,59 @@
+Optional(Attributes: Application, 0x10ab99f40, pid: 66721, label: 'DUNE'
+Element subtree:
+ →Application, 0x10ab99f40, pid: 66721, label: 'DUNE'
+    Window, 0x10ab9a800, {{0.0, 0.0}, {208.0, 248.0}}
+      Other, 0x10ab9be80, {{0.0, 0.0}, {208.0, 248.0}}
+        Other, 0x10ab99900, {{0.0, 0.0}, {208.0, 248.0}}
+          Other, 0x10ab98640, {{0.0, 0.0}, {208.0, 248.0}}
+            Other, 0x10ab997c0, {{0.0, 0.0}, {208.0, 248.0}}
+              NavigationBar, 0x10ab98c80, {{0.0, 0.0}, {208.0, 44.5}}, identifier: 'DUNE'
+                StaticText, 0x10ab9a300, {{-10.0, 35.5}, {44.5, 20.5}}
+              Other, 0x10ab99680, {{0.0, 0.0}, {208.0, 248.0}}
+                Other, 0x10ab98780, {{0.0, 0.0}, {208.0, 248.0}}
+                  Other, 0x10ab9bc00, {{0.0, 0.0}, {208.0, 248.0}}
+                    Other, 0x10ab98a00, {{0.0, 0.0}, {208.0, 248.0}}
+                      Other, 0x10ab99cc0, {{0.0, 0.0}, {208.0, 248.0}}, identifier: 'watch-session-paging-root'
+                        Other, 0x10ab98140, {{0.0, 0.0}, {208.0, 248.0}}
+                        CollectionView, 0x10ab99180, {{0.0, 0.0}, {208.0, 248.0}}, identifier: 'PUICPageViewController_collectionView'
+                          Cell, 0x10ab9a440, {{0.0, 0.0}, {208.0, 248.0}}
+                            Other, 0x10ab9b340, {{0.0, 0.0}, {208.0, 248.0}}
+                              Other, 0x10ab99540, {{0.0, 0.0}, {208.0, 248.0}}
+                                Other, 0x10ab9bac0, {{0.0, 0.0}, {208.0, 248.0}}
+                                  ScrollView, 0x10ab9ad00, {{10.0, 0.0}, {188.0, 248.0}}, identifier: 'watch-session-metrics-screen'
+                                    Other, 0x10ab9abc0, {{10.0, 0.0}, {188.0, 248.0}}
+                                      Other, 0x10ab9b840, {{10.0, 0.0}, {188.0, 65.5}}
+                                    Other, 0x10ab9b200, {{10.0, 0.0}, {188.0, 248.0}}
+                                    Other, 0x10ab99a40, {{10.0, 44.5}, {188.0, 192.5}}
+                                      StaticText, 0x10ab9a580, {{10.0, 44.5}, {132.0, 39.5}}, label: 'UI Test Squat, 세트 1 / 3'
+                                        StaticText, 0x10ab9b480, {{44.0, 44.5}, {98.0, 19.5}}, label: 'UI Test Squat'
+                                        Image, 0x10ab98f00, {{10.0, 50.5}, {28.0, 28.0}}, label: 'equipment.barbell'
+                                        StaticText, 0x10ab4a6c0, {{44.0, 66.0}, {55.0, 18.0}}, label: '세트 1 / 3'
+                                      Button, 0x10ab96f80, {{10.0, 88.0}, {188.0, 75.5}}, identifier: 'watch-session-input-card', label: '40.0, kg, ×, 8, 회'
+                                        StaticText, 0x10ab95540, {{18.6, 94.0}, {74.0, 45.5}}, label: '40.0'
+                                        StaticText, 0x10ab96d00, {{141.4, 94.0}, {22.0, 45.5}}, label: '8'
+                                        Image, 0x10ab96080, {{186.0, 92.5}, {7.0, 7.0}}, identifier: 'pencil', label: '편집'
+                                        StaticText, 0x10ab95400, {{99.2, 116.0}, {9.5, 19.5}}, label: '×'
+                                        StaticText, 0x10ab97d40, {{47.1, 139.5}, {17.0, 18.0}}, label: 'kg'
+                                        StaticText, 0x10ab94b40, {{146.4, 139.5}, {12.0, 18.0}}, label: '회'
+                                      Button, 0x10ab97ac0, {{10.0, 167.5}, {188.0, 44.0}}, identifier: 'watch-session-complete-set-button', label: '세트 완료', Selected
+                                        Image, 0x10ab95180, {{66.5, 183.0}, {14.0, 13.5}}, identifier: 'checkmark', label: '선택됨', Selected
+                                        StaticText, 0x10ab96800, {{87.2, 179.2}, {56.5, 20.5}}, label: '세트 완료'
+                                      Image, 0x10ab96940, {{88.5, 221.0}, {14.0, 13.0}}, identifier: 'heart.fill', label: '좋아요'
+                                      StaticText, 0x10ab94f00, {{108.2, 217.5}, {13.5, 19.5}}, label: '--'
+              Other, 0x10ab96bc0, {{0.0, 0.0}, {208.0, 248.0}}
+                Other, 0x10ab96580, {{0.0, 0.0}, {208.0, 248.0}}
+                  Other, 0x10ab95f40, {{0.0, 0.0}, {208.0, 248.0}}
+    Window (Main), 0x10ab95cc0, {{200.0, 45.0}, {6.0, 46.0}}
+      Other, 0x10ab961c0, {{200.0, 45.0}, {6.0, 46.0}}, value: 2페이지(총 3페이지)
+    Window, 0x10ab97200, {{0.0, 0.0}, {208.0, 248.0}}
+      StatusBar, 0x10ab957c0, {{0.0, 0.0}, {208.0, 38.0}}
+        Other, 0x10ab97340, {{0.0, 0.0}, {208.0, 38.0}}
+        Other, 0x10ab96e40, {{0.0, 0.0}, {208.0, 38.0}}
+Path to element:
+ →Application, 0x10ab99f40, pid: 66721, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve.watchkitapp'
+  Output: {
+    Application, 0x10ab9fac0, pid: 66721, label: 'DUNE'
+  }
+)

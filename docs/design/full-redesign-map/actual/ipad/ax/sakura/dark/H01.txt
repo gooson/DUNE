@@ -1,0 +1,318 @@
+Attributes: Application, 0x114e6bac0, pid: 45749, label: 'DUNE'
+Element subtree:
+ →Application, 0x114e6bac0, pid: 45749, label: 'DUNE'
+    Window (Main), 0x114e6b700, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x114e6be80, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x114e6b840, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x114e69040, {{0.0, 0.0}, {756.0, 1158.0}}
+          Other, 0x114e6bc00, {{0.0, 0.0}, {756.0, 1158.0}}
+            Other, 0x114e69b80, {{0.0, 0.0}, {756.0, 1158.0}}
+              Other, 0x114e6a800, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x114e68f00, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x114e69a40, {{0.0, 0.0}, {756.0, 1158.0}}
+                    Other, 0x114e6a6c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                      Other, 0x114e6b0c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                        Other, 0x114e69180, {{0.0, 0.0}, {756.0, 1158.0}}
+                          Other, 0x114e6a940, {{0.0, 0.0}, {756.0, 1158.0}}
+                            NavigationBar, 0x114e6b200, {{0.0, 32.0}, {756.0, 106.0}}, identifier: 'Wellness'
+                              Button, 0x114e6ad00, {{646.5, 36.0}, {42.5, 36.0}}, identifier: 'wellness-compare-metrics', label: '지표 비교'
+                              Other, 0x114e6b340, {{705.0, 36.0}, {37.0, 36.0}}
+                                Other, 0x114e69e00, {{705.0, 36.0}, {37.0, 36.0}}
+                                  Button, 0x114e6abc0, {{705.0, 36.0}, {37.0, 36.0}}, identifier: 'wellness-toolbar-add', label: '기록 추가'
+                                    Button, 0x114e6ae40, {{705.0, 36.0}, {37.0, 36.0}}
+                                      Image, 0x114e6af80, {{714.5, 45.0}, {18.0, 18.0}}, identifier: 'plus', label: '추가'
+                              StaticText, 0x114e69f40, {{20.0, 89.5}, {143.0, 41.0}}, label: 'Wellness'
+                            Other, 0x114e6b980, {{0.0, 0.0}, {756.0, 1158.0}}
+                              Other, 0x114e6b5c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                                Other, 0x114e68640, {{0.0, 0.0}, {756.0, 1158.0}}
+                                  Other, 0x114e6bd40, {{0.0, 0.0}, {756.0, 1158.0}}
+                                    Image, 0x114e68dc0, {{0.0, 0.0}, {756.0, 185.0}}
+                                    ScrollView, 0x114e6a080, {{0.0, 0.0}, {756.0, 1158.0}}
+                                      Other, 0x114e6a1c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                                        Other, 0x114e69680, {{0.0, 0.0}, {756.0, 126.0}}
+                                      Other, 0x114e6a440, {{0.0, 0.0}, {756.0, 1158.0}}
+                                      Other, 0x114e6a580, {{0.0, 138.0}, {756.0, 2026.0}}
+                                        Button, 0x114e6a300, {{44.0, 190.0}, {322.0, 187.0}}, identifier: 'wellness-hero-score', label: '웰니스 점수 87, 최상', value: 수면이(가) 좋음 — 신체에 주의...
+                                          StaticText, 0x114e69400, {{44.0, 190.0}, {322.0, 14.5}}, identifier: 'card-navigation-header', label: 'WELLNESS'
+                                            StaticText, 0x114e68c80, {{44.0, 190.0}, {322.0, 14.5}}, identifier: 'wellness-hero-heading', label: 'WELLNESS'
+                                            Image, 0x114e6b480, {{128.5, 191.5}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          Other, 0x114e6aa80, {{44.0, 216.5}, {104.0, 104.0}}, identifier: 'wellness-hero-ring', label: '웰니스 점수 87, 최상'
+                                            StaticText, 0x114e68b40, {{72.8, 247.0}, {46.5, 43.0}}, label: '87'
+                                          StaticText, 0x114e68a00, {{164.0, 258.2}, {29.5, 20.5}}, label: '최상'
+                                          StaticText, 0x114e688c0, {{44.0, 332.5}, {225.5, 18.0}}, identifier: 'wellness-hero-narrative', label: '수면이(가) 좋음 — 신체에 주의가 필요'
+                                          StaticText, 0x114e697c0, {{44.0, 362.5}, {86.0, 14.5}}, label: '11월 14일 20:44'
+                                        StaticText, 0x114e68780, {{390.0, 190.0}, {69.0, 18.0}}, identifier: 'wellness-hero-evidence', label: '웰니스 근거'
+                                        StaticText, 0x114e69900, {{648.0, 194.0}, {64.0, 13.5}}, label: '각 100점 기준'
+                                        StaticText, 0x114e69540, {{393.0, 222.8}, {319.0, 14.5}}, identifier: 'wellness-hero-component-sleep', label: '수면, 99'
+                                          Image, 0x114e692c0, {{393.0, 224.0}, {12.0, 12.0}}, identifier: 'moon.fill', label: '방해금지 모드'
+                                          StaticText, 0x114e61a40, {{416.0, 222.8}, {21.0, 14.5}}, label: '수면'
+                                          StaticText, 0x114e63980, {{696.5, 222.8}, {15.5, 14.5}}, label: '99'
+                                        StaticText, 0x10a242e40, {{393.0, 258.8}, {319.0, 14.5}}, identifier: 'wellness-hero-component-condition', label: '컨디션, 90'
+                                          Image, 0x10a240140, {{393.0, 260.5}, {12.0, 11.0}}, identifier: 'heart.fill', label: '좋아요'
+                                          StaticText, 0x10a241a40, {{416.0, 258.8}, {31.5, 14.5}}, label: '컨디션'
+                                          StaticText, 0x10a224b40, {{696.5, 258.8}, {15.5, 14.5}}, label: '90'
+                                        StaticText, 0x10a224140, {{396.0, 294.8}, {316.0, 14.5}}, identifier: 'wellness-hero-component-body', label: '신체, 75'
+                                          Image, 0x10a224000, {{396.0, 295.5}, {6.0, 13.5}}, identifier: 'figure.stand', label: '똑바로 서 있는 사람'
+                                          StaticText, 0x10a224280, {{416.0, 294.8}, {21.0, 14.5}}, label: '신체'
+                                          StaticText, 0x10a2243c0, {{696.5, 294.8}, {15.5, 14.5}}, label: '75'
+                                        StaticText, 0x10a224640, {{396.0, 330.8}, {316.0, 14.5}}, identifier: 'wellness-hero-component-posture', label: '자세, —'
+                                          Image, 0x10a224a00, {{396.0, 331.5}, {6.0, 13.5}}, identifier: 'figure.stand', label: '똑바로 서 있는 사람'
+                                          StaticText, 0x10a224780, {{416.0, 330.8}, {21.0, 14.5}}, label: '자세'
+                                          StaticText, 0x10a2248c0, {{701.5, 330.8}, {10.5, 14.5}}, label: '—'
+                                        Button, 0x10a226300, {{390.0, 360.0}, {322.0, 44.0}}, identifier: 'wellness-hero-evidence-disclosure', label: '점수에 반영한 기록'
+                                          StaticText, 0x10a224c80, {{390.0, 374.8}, {89.5, 14.5}}, label: '점수에 반영한 기록'
+                                          Image, 0x10a224500, {{699.5, 379.0}, {11.0, 6.5}}, identifier: 'chevron.down', label: '아래로 이동'
+                                        Button, 0x10a224f00, {{44.0, 468.0}, {306.0, 217.0}}, identifier: 'wellness-hero-sleep', label: '최근 수면, 7시간 54분, 11월 14일, 7일 평균 · 7시간 26분, 11월 8일, 7시간 21분, 11월 9일, 7시간 9분, 11월 10일, 7시간 6분, 11월 11일, 7시간 18분, 11월 12일, 7시간 30분, 11월 13일, 7시간 42분, 11월 14일, 7시간 54분, 8일, 9일, 10일, 11일, 12일, 13일, 14일'
+                                          StaticText, 0x10a225040, {{44.0, 468.0}, {306.0, 44.0}}, identifier: 'card-navigation-header', label: '최근 수면'
+                                            StaticText, 0x10a225180, {{44.0, 468.0}, {306.0, 44.0}}, identifier: 'wellness-sleep-summary-card', label: '최근 수면'
+                                            Image, 0x10a2252c0, {{113.5, 486.0}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x10a225400, {{44.0, 524.0}, {104.5, 26.5}}, identifier: 'wellness-sleep-latest', label: '7시간 54분'
+                                          StaticText, 0x10a224dc0, {{44.0, 554.5}, {49.0, 14.5}}, label: '11월 14일'
+                                          StaticText, 0x10a225680, {{44.0, 573.0}, {109.0, 14.5}}, identifier: 'wellness-sleep-average', label: '7일 평균 · 7시간 26분'
+                                          Other, 0x10a2257c0, {{56.0, 616.5}, {16.0, 47.0}}, identifier: 'wellness-sleep-bar-0', label: '11월 8일, 7시간 21분'
+                                          Other, 0x10a225900, {{100.5, 617.5}, {16.0, 46.0}}, identifier: 'wellness-sleep-bar-1', label: '11월 9일, 7시간 9분'
+                                          Other, 0x10a225a40, {{144.5, 618.0}, {16.0, 45.5}}, identifier: 'wellness-sleep-bar-2', label: '11월 10일, 7시간 6분'
+                                          Other, 0x10a225540, {{189.0, 617.0}, {16.0, 46.5}}, identifier: 'wellness-sleep-bar-3', label: '11월 11일, 7시간 18분'
+                                          Other, 0x10a225cc0, {{233.5, 615.5}, {16.0, 48.0}}, identifier: 'wellness-sleep-bar-4', label: '11월 12일, 7시간 30분'
+                                          Other, 0x10a225b80, {{277.5, 614.0}, {16.0, 49.5}}, identifier: 'wellness-sleep-bar-5', label: '11월 13일, 7시간 42분'
+                                          Other, 0x10a225f40, {{322.0, 613.0}, {16.0, 50.5}}, identifier: 'wellness-sleep-bar-6', label: '11월 14일, 7시간 54분'
+                                          StaticText, 0x10a225e00, {{55.6, 671.5}, {17.0, 13.5}}, identifier: 'wellness-sleep-date-0', label: '8일'
+                                          StaticText, 0x10a226440, {{99.9, 671.5}, {17.0, 13.5}}, identifier: 'wellness-sleep-date-1', label: '9일'
+                                          StaticText, 0x10a226080, {{141.7, 671.5}, {22.0, 13.5}}, identifier: 'wellness-sleep-date-2', label: '10일'
+                                          StaticText, 0x10a2261c0, {{187.0, 671.5}, {20.0, 13.5}}, identifier: 'wellness-sleep-date-3', label: '11일'
+                                          StaticText, 0x10a226940, {{230.5, 671.5}, {21.5, 13.5}}, identifier: 'wellness-sleep-date-4', label: '12일'
+                                          StaticText, 0x10a2266c0, {{274.6, 671.5}, {22.0, 13.5}}, identifier: 'wellness-sleep-date-5', label: '13일'
+                                          StaticText, 0x10a226580, {{318.9, 671.5}, {22.0, 13.5}}, identifier: 'wellness-sleep-date-6', label: '14일'
+                                        Button, 0x10a226e40, {{406.0, 468.0}, {306.0, 283.5}}, identifier: 'wellness-sleep-prediction-detail-link', label: '오늘 밤 수면, 예측 점수, 72, 예측 점수, 좋음, 보통 신뢰도, 오늘 밤 좋은 수면 조건이에요, 낮 시간의 가벼운 활동이 수면을 개선해요', value: 72 / 100
+                                          StaticText, 0x10a226800, {{406.0, 468.0}, {306.0, 44.0}}, identifier: 'card-navigation-header', label: '오늘 밤 수면'
+                                            StaticText, 0x10a226d00, {{406.0, 468.0}, {306.0, 44.0}}, identifier: 'wellness-sleep-prediction-card', label: '오늘 밤 수면'
+                                            Image, 0x10a226f80, {{494.5, 486.0}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x10a227340, {{406.0, 530.2}, {45.0, 14.5}}, label: '예측 점수'
+                                          Image, 0x10a227200, {{640.0, 524.0}, {72.0, 72.0}}, identifier: 'moon.stars', label: '청명한 밤'
+                                          StaticText, 0x10a2270c0, {{406.0, 548.8}, {45.0, 41.0}}, identifier: 'wellness-prediction-score-value', label: '72'
+                                          Other, 0x10a227480, {{406.0, 608.0}, {306.0, 27.5}}, identifier: 'wellness-prediction-score-meter', label: '예측 점수', value: 72 / 100
+                                            StaticText, 0x10a226a80, {{406.0, 622.0}, {7.0, 13.5}}, label: '0'
+                                            StaticText, 0x10a227700, {{692.5, 622.0}, {19.5, 13.5}}, label: '100'
+                                          StaticText, 0x10a2275c0, {{406.0, 649.8}, {26.0, 18.0}}, label: '좋음'
+                                          StaticText, 0x10a226bc0, {{616.5, 647.5}, {95.5, 22.5}}, identifier: 'wellness-prediction-confidence', label: '보통 신뢰도'
+                                            Other, 0x10a227c00, {{624.5, 653.0}, {16.0, 12.0}}
+                                            StaticText, 0x10a227840, {{648.5, 651.5}, {55.5, 14.5}}, label: '보통 신뢰도'
+                                          StaticText, 0x10a227980, {{406.0, 682.0}, {172.0, 18.0}}, label: '오늘 밤 좋은 수면 조건이에요'
+                                          Image, 0x10a227d40, {{419.0, 725.0}, {11.0, 13.5}}, identifier: 'sparkles', label: '반짝반짝'
+                                          StaticText, 0x10a227ac0, {{439.0, 724.0}, {193.5, 14.5}}, label: '낮 시간의 가벼운 활동이 수면을 개선해요'
+                                        Button, 0x114384b40, {{406.0, 763.5}, {306.0, 44.0}}, identifier: 'wellness-prediction-factors-disclosure', label: '예측에 사용한 기록'
+                                          Image, 0x114384a00, {{407.5, 780.5}, {12.5, 10.5}}, identifier: 'slider.horizontal.3', label: '편집'
+                                          StaticText, 0x114384000, {{429.5, 778.2}, {89.5, 14.5}}, label: '예측에 사용한 기록'
+                                          Image, 0x114384140, {{699.5, 782.5}, {11.0, 6.5}}, identifier: 'chevron.down', label: '아래로 이동'
+                                        Button, 0x114384c80, {{44.0, 871.5}, {668.0, 44.0}}, identifier: 'wellness-link-injuryhistory', label: '부상'
+                                          StaticText, 0x114384780, {{44.0, 871.5}, {668.0, 44.0}}, label: '부상'
+                                          Image, 0x1143843c0, {{45.5, 885.5}, {16.5, 16.5}}, identifier: 'bandage.fill', label: '접착 밴드 스트립, 채워짐'
+                                          Image, 0x114384500, {{104.0, 889.0}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                        Button, 0x114384280, {{44.0, 923.5}, {668.0, 93.5}}, label: '무릎, (L), 경미, 5d, 11/9~, Mild pain during squats'
+                                          StaticText, 0x1143848c0, {{104.0, 935.5}, {26.0, 18.0}}, label: '무릎'
+                                          StaticText, 0x114384640, {{134.0, 937.2}, {16.0, 14.5}}, label: '(L)'
+                                          Image, 0x1143866c0, {{68.0, 964.5}, {12.0, 12.0}}, identifier: 'exclamationmark.circle', label: '오류'
+                                          StaticText, 0x1143852c0, {{112.0, 957.5}, {19.5, 13.5}}, label: '경미'
+                                          StaticText, 0x10a22e6c0, {{143.5, 957.0}, {15.0, 14.5}}, label: '5d'
+                                          StaticText, 0x10a22db80, {{104.0, 975.0}, {28.0, 13.5}}, label: '11/9~'
+                                          StaticText, 0x10a22dcc0, {{104.0, 990.5}, {132.0, 14.5}}, label: 'Mild pain during squats'
+                                        Image, 0x10a22de00, {{56.0, 1083.5}, {13.5, 13.5}}, identifier: 'heart.text.square', label: '사각형 안에 텍스트가 있는 하트'
+                                        StaticText, 0x10a22df40, {{75.5, 1081.0}, {56.0, 18.0}}, identifier: 'wellness-section-health-indicators', label: '건강 지표'
+                                        Button, 0x10a22e080, {{406.0, 1081.0}, {306.0, 44.0}}, identifier: 'wellness-link-bodyhistory', label: '신체 변화'
+                                          StaticText, 0x10a22e1c0, {{406.0, 1081.0}, {306.0, 44.0}}, label: '신체 변화'
+                                          Image, 0x10a22e300, {{408.5, 1092.0}, {10.0, 22.5}}, identifier: 'figure.stand', label: '똑바로 서 있는 사람'
+                                          Image, 0x10a22e440, {{509.5, 1100.5}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                        Button, 0x10a22e580, {{44.0, 1111.0}, {149.0, 210.0}}, identifier: 'wellness-card-hrv', label: 'HRV, 75, ms, 최근 기록 · 항목별 척도, 오늘, 11월 14일 00:00', value: 73.3 → 75.2 ms
+                                          StaticText, 0x10a22da40, {{60.0, 1127.0}, {117.0, 44.0}}, identifier: 'card-navigation-header', label: 'HRV'
+                                            StaticText, 0x10a22cf00, {{60.0, 1127.0}, {117.0, 44.0}}, label: 'HRV'
+                                            Image, 0x10a22e940, {{61.5, 1141.0}, {15.0, 16.0}}, identifier: 'waveform.path.ecg', label: '심전도 파형 경로'
+                                            Image, 0x10a22ea80, {{124.0, 1144.0}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x10a22ebc0, {{60.0, 1179.0}, {62.5, 41.0}}, label: '75, ms'
+                                            StaticText, 0x10a22ee40, {{60.0, 1179.0}, {41.5, 41.0}}, label: '75'
+                                            StaticText, 0x10a22ed00, {{105.5, 1200.0}, {17.0, 14.5}}, label: 'ms'
+                                          Other, 0x10a22d540, {{59.1, 1230.4}, {120.4, 31.6}}
+                                          StaticText, 0x10a22d680, {{60.0, 1270.0}, {102.0, 13.5}}, label: '최근 기록 · 항목별 척도', value: 73.3 → 75.2 ms
+                                          StaticText, 0x10a22d7c0, {{60.0, 1291.5}, {19.5, 13.5}}, label: '오늘'
+                                          StaticText, 0x10a22d900, {{83.5, 1291.5}, {79.5, 13.5}}, label: '11월 14일 00:00'
+                                        Button, 0x10a22d040, {{201.0, 1111.0}, {149.0, 210.0}}, identifier: 'wellness-card-rhr', label: '안정시 심박수, 50, bpm, 최근 기록 · 항목별 척도, 오늘, 11월 14일 00:00', value: 53.6 → 50.0 bpm
+                                          StaticText, 0x10a22d180, {{217.0, 1127.0}, {117.0, 44.0}}, identifier: 'card-navigation-header', label: '안정시 심박수'
+                                            StaticText, 0x10a22f700, {{217.0, 1127.0}, {117.0, 44.0}}, label: '안정시 심박수'
+                                            Image, 0x10a22f840, {{219.0, 1132.5}, {15.0, 14.0}}, identifier: 'heart.fill', label: '좋아요'
+                                            Image, 0x10a22f980, {{293.5, 1134.5}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x10a22fac0, {{217.0, 1179.0}, {74.0, 41.0}}, label: '50, bpm'
+                                            StaticText, 0x10a22fd40, {{217.0, 1179.0}, {44.5, 41.0}}, label: '50'
+                                            StaticText, 0x10a22fe80, {{265.5, 1200.0}, {25.5, 14.5}}, label: 'bpm'
+                                          Other, 0x10a22fc00, {{216.1, 1230.4}, {120.4, 31.6}}
+                                          StaticText, 0x10a22d2c0, {{217.0, 1270.0}, {102.0, 13.5}}, label: '최근 기록 · 항목별 척도', value: 53.6 → 50.0 bpm
+                                          StaticText, 0x10a22f5c0, {{217.0, 1291.5}, {19.5, 13.5}}, label: '오늘'
+                                          StaticText, 0x10a22ef80, {{240.5, 1291.5}, {79.5, 13.5}}, label: '11월 14일 00:00'
+                                        Button, 0x10a22f0c0, {{406.0, 1141.0}, {147.0, 269.5}}, identifier: 'wellness-card-weight', label: '체중, 78.3, kg, +0.4, kg, 이전 측정, 77.9, kg, 11월 6일, 최근 기록 · 항목별 척도, 오늘, 11월 14일 00:00', value: 77.6 → 78.3 kg
+                                          StaticText, 0x10a22f200, {{422.0, 1157.0}, {115.0, 44.0}}, identifier: 'card-navigation-header', label: '체중'
+                                            StaticText, 0x10a22f340, {{422.0, 1157.0}, {115.0, 44.0}}, label: '체중'
+                                            Image, 0x10a22f480, {{423.5, 1171.0}, {16.0, 16.5}}, identifier: 'scalemass.fill', label: '질량을 재는 저울, 채워짐'
+                                            Image, 0x10a22d400, {{481.5, 1175.0}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x10a22e800, {{422.0, 1209.0}, {91.5, 41.0}}, label: '78.3, kg'
+                                            StaticText, 0x115ab0000, {{422.0, 1209.0}, {73.5, 41.0}}, label: '78.3'
+                                            StaticText, 0x115ab0140, {{499.5, 1230.0}, {14.0, 14.5}}, label: 'kg'
+                                          Image, 0x115ab0280, {{423.5, 1260.5}, {9.0, 9.0}}, identifier: 'arrow.up.right', label: '오른쪽 위를 향한 대각선 화살표'
+                                          StaticText, 0x115ab03c0, {{438.0, 1258.0}, {27.5, 14.5}}, label: '+0.4'
+                                          StaticText, 0x115ab0500, {{469.5, 1258.0}, {14.0, 14.5}}, label: 'kg'
+                                          StaticText, 0x115ab0640, {{422.0, 1280.5}, {41.5, 13.5}}, label: '이전 측정'
+                                          StaticText, 0x115ab0780, {{422.0, 1296.0}, {22.0, 13.5}}, label: '77.9'
+                                          StaticText, 0x115ab08c0, {{448.0, 1296.0}, {13.0, 13.5}}, label: 'kg'
+                                          StaticText, 0x115ab0a00, {{465.0, 1296.0}, {40.0, 13.5}}, label: '11월 6일'
+                                          Other, 0x115ab0b40, {{421.1, 1318.5}, {118.4, 33.0}}
+                                          StaticText, 0x115ab0c80, {{422.0, 1359.5}, {102.0, 13.5}}, label: '최근 기록 · 항목별 척도', value: 77.6 → 78.3 kg
+                                          StaticText, 0x115ab0dc0, {{422.0, 1381.0}, {19.5, 13.5}}, label: '오늘'
+                                          StaticText, 0x115ab0f00, {{445.5, 1381.0}, {79.5, 13.5}}, label: '11월 14일 00:00'
+                                        Button, 0x115ab1040, {{565.0, 1141.0}, {147.0, 269.5}}, identifier: 'wellness-card-bodyFat', label: '체지방률, 17.8, %, +0.3, %p, 이전 측정, 17.5, %, 11월 6일, 최근 기록 · 항목별 척도, 오늘, 11월 14일 00:00', value: 16.7 → 17.8 %
+                                          StaticText, 0x115ab1180, {{581.0, 1157.0}, {115.0, 44.0}}, identifier: 'card-navigation-header', label: '체지방률'
+                                            StaticText, 0x115ab12c0, {{581.0, 1157.0}, {115.0, 44.0}}, label: '체지방률'
+                                            Image, 0x115ab1400, {{583.0, 1172.0}, {15.0, 14.5}}, identifier: 'percent', label: '퍼센트 기호'
+                                            Image, 0x115ab1540, {{666.5, 1174.5}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x115ab1680, {{581.0, 1209.0}, {81.0, 41.0}}, label: '17.8, %'
+                                            StaticText, 0x115ab17c0, {{581.0, 1209.0}, {65.5, 41.0}}, label: '17.8'
+                                            StaticText, 0x115ab1900, {{650.5, 1230.0}, {11.5, 14.5}}, label: '%'
+                                          Image, 0x115ab1a40, {{582.5, 1260.5}, {9.0, 9.0}}, identifier: 'arrow.up.right', label: '오른쪽 위를 향한 대각선 화살표'
+                                          StaticText, 0x115ab1b80, {{597.0, 1258.0}, {27.0, 14.5}}, label: '+0.3'
+                                          StaticText, 0x115ab1cc0, {{628.0, 1258.0}, {18.5, 14.5}}, label: '%p'
+                                          StaticText, 0x115ab1e00, {{581.0, 1280.5}, {41.5, 13.5}}, label: '이전 측정'
+                                          StaticText, 0x115ab1f40, {{581.0, 1296.0}, {20.5, 13.5}}, label: '17.5'
+                                          StaticText, 0x115ab2080, {{605.5, 1296.0}, {10.5, 13.5}}, label: '%'
+                                          StaticText, 0x115ab21c0, {{620.0, 1296.0}, {40.0, 13.5}}, label: '11월 6일'
+                                          Other, 0x115ab2300, {{580.1, 1318.5}, {118.4, 33.0}}
+                                          StaticText, 0x115ab2440, {{581.0, 1359.5}, {102.0, 13.5}}, label: '최근 기록 · 항목별 척도', value: 16.7 → 17.8 %
+                                          StaticText, 0x115ab2580, {{581.0, 1381.0}, {19.5, 13.5}}, label: '오늘'
+                                          StaticText, 0x115ab26c0, {{604.5, 1381.0}, {79.5, 13.5}}, label: '11월 14일 00:00'
+                                        Button, 0x115ab2800, {{44.0, 1329.0}, {149.0, 210.0}}, identifier: 'wellness-card-heartRate', label: '심박수, 67, bpm, 최근 기록 · 항목별 척도, 오늘, 11월 14일 00:00', value: 67.5 → 66.8 bpm
+                                          StaticText, 0x115ab2940, {{60.0, 1345.0}, {117.0, 44.0}}, identifier: 'card-navigation-header', label: '심박수'
+                                            StaticText, 0x115ab2a80, {{60.0, 1345.0}, {117.0, 44.0}}, label: '심박수'
+                                            Image, 0x115ab2bc0, {{62.0, 1360.5}, {15.0, 14.0}}, identifier: 'bolt.heart.fill', label: '채워진 하트에 있는 번개'
+                                            Image, 0x115ab2d00, {{132.5, 1362.5}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x115ab2e40, {{60.0, 1397.0}, {72.0, 41.0}}, label: '67, bpm'
+                                            StaticText, 0x115ab2f80, {{60.0, 1397.0}, {42.5, 41.0}}, label: '67'
+                                            StaticText, 0x115ab30c0, {{106.5, 1418.0}, {25.5, 14.5}}, label: 'bpm'
+                                          Other, 0x115ab3200, {{59.1, 1448.4}, {120.4, 31.6}}
+                                          StaticText, 0x115ab3340, {{60.0, 1488.0}, {102.0, 13.5}}, label: '최근 기록 · 항목별 척도', value: 67.5 → 66.8 bpm
+                                          StaticText, 0x115ab3480, {{60.0, 1509.5}, {19.5, 13.5}}, label: '오늘'
+                                          StaticText, 0x115ab35c0, {{83.5, 1509.5}, {79.5, 13.5}}, label: '11월 14일 00:00'
+                                        Button, 0x115ab3700, {{201.0, 1329.0}, {149.0, 210.0}}, identifier: 'wellness-card-spo2', label: '혈중 산소, 98, %, 최근 기록 · 항목별 척도, 오늘, 11월 14일 00:00', value: 97.9 → 98.0 %
+                                          StaticText, 0x115ab3840, {{217.0, 1345.0}, {117.0, 44.0}}, identifier: 'card-navigation-header', label: '혈중 산소'
+                                            StaticText, 0x115ab3980, {{217.0, 1345.0}, {117.0, 44.0}}, label: '혈중 산소'
+                                            Image, 0x115ab3ac0, {{218.5, 1360.0}, {21.0, 14.5}}, identifier: 'lungs.fill', label: '폐, 채워짐'
+                                            Image, 0x115ab3c00, {{311.5, 1362.5}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x115ab3d40, {{217.0, 1397.0}, {60.5, 41.0}}, label: '98, %'
+                                            StaticText, 0x115ab3e80, {{217.0, 1397.0}, {45.0, 41.0}}, label: '98'
+                                            StaticText, 0x10a20c000, {{266.0, 1418.0}, {11.5, 14.5}}, label: '%'
+                                          Other, 0x10a20c140, {{216.1, 1447.0}, {120.4, 33.0}}
+                                          StaticText, 0x10a20c280, {{217.0, 1488.0}, {102.0, 13.5}}, label: '최근 기록 · 항목별 척도', value: 97.9 → 98.0 %
+                                          StaticText, 0x10a20c3c0, {{217.0, 1509.5}, {19.5, 13.5}}, label: '오늘'
+                                          StaticText, 0x10a20c500, {{240.5, 1509.5}, {79.5, 13.5}}, label: '11월 14일 00:00'
+                                        Button, 0x10a20c640, {{406.0, 1422.5}, {147.0, 206.0}}, identifier: 'wellness-card-leanBodyMass', label: '제지방량, 63.1, kg, -0.4, kg, 이전 측정, 63.5, kg, 11월 6일, 오늘, 11월 14일 00:00'
+                                          StaticText, 0x10a20c780, {{422.0, 1438.5}, {115.0, 44.0}}, identifier: 'card-navigation-header', label: '제지방량'
+                                            StaticText, 0x10a20c8c0, {{422.0, 1438.5}, {115.0, 44.0}}, label: '제지방량'
+                                            Image, 0x10a20ca00, {{424.0, 1451.5}, {18.0, 18.5}}, identifier: 'figure.strengthtraining.traditional', label: '전통 근력 운동을 하는 사람'
+                                            Image, 0x10a20cb40, {{510.5, 1456.0}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x10a20cc80, {{422.0, 1490.5}, {87.0, 41.0}}, label: '63.1, kg'
+                                            StaticText, 0x10a20cdc0, {{422.0, 1490.5}, {69.0, 41.0}}, label: '63.1'
+                                            StaticText, 0x10a20cf00, {{495.0, 1511.5}, {14.0, 14.5}}, label: 'kg'
+                                          Image, 0x10a20d040, {{423.5, 1542.0}, {9.0, 9.0}}, identifier: 'arrow.down.right', label: '오른쪽 아래 대각선 화살표'
+                                          StaticText, 0x10a20d180, {{438.0, 1539.5}, {25.0, 14.5}}, label: '-0.4'
+                                          StaticText, 0x10a20d2c0, {{467.0, 1539.5}, {14.0, 14.5}}, label: 'kg'
+                                          StaticText, 0x10a20d400, {{422.0, 1562.0}, {41.5, 13.5}}, label: '이전 측정'
+                                          StaticText, 0x10a20d540, {{422.0, 1577.5}, {23.5, 13.5}}, label: '63.5'
+                                          StaticText, 0x10a20d680, {{449.5, 1577.5}, {13.0, 13.5}}, label: 'kg'
+                                          StaticText, 0x10a20d7c0, {{466.5, 1577.5}, {40.0, 13.5}}, label: '11월 6일'
+                                          StaticText, 0x10a20d900, {{422.0, 1599.0}, {19.5, 13.5}}, label: '오늘'
+                                          StaticText, 0x10a20da40, {{445.5, 1599.0}, {79.5, 13.5}}, label: '11월 14일 00:00'
+                                        Button, 0x10a20db80, {{565.0, 1422.5}, {147.0, 206.0}}, identifier: 'wellness-card-bmi', label: 'BMI, 24.7, +0.1, 이전 측정, 24.6, 11월 6일, 오늘, 11월 14일 00:00'
+                                          StaticText, 0x10a20dcc0, {{581.0, 1438.5}, {115.0, 44.0}}, identifier: 'card-navigation-header', label: 'BMI'
+                                            StaticText, 0x10a20de00, {{581.0, 1438.5}, {115.0, 44.0}}, label: 'BMI'
+                                            Image, 0x10a20df40, {{583.0, 1452.0}, {7.5, 17.0}}, identifier: 'figure.stand', label: '똑바로 서 있는 사람'
+                                            Image, 0x10a20e080, {{634.5, 1456.0}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x10a20e1c0, {{581.0, 1490.5}, {72.0, 41.0}}, label: '24.7'
+                                          Image, 0x10a20e300, {{582.5, 1542.0}, {9.0, 9.0}}, identifier: 'arrow.up.right', label: '오른쪽 위를 향한 대각선 화살표'
+                                          StaticText, 0x10a20e440, {{597.0, 1539.5}, {25.0, 14.5}}, label: '+0.1'
+                                          StaticText, 0x10a20e580, {{581.0, 1562.0}, {41.5, 13.5}}, label: '이전 측정'
+                                          StaticText, 0x10a20e6c0, {{581.0, 1577.5}, {23.5, 13.5}}, label: '24.6'
+                                          StaticText, 0x10a20e800, {{608.5, 1577.5}, {40.0, 13.5}}, label: '11월 6일'
+                                          StaticText, 0x10a20e940, {{581.0, 1599.0}, {19.5, 13.5}}, label: '오늘'
+                                          StaticText, 0x10a20ea80, {{604.5, 1599.0}, {79.5, 13.5}}, label: '11월 14일 00:00'
+                                          StaticText, 0x10a20ebc0, {{0.0, 0.0}, {0.0, 0.0}}
+                                        Button, 0x10a20ed00, {{44.0, 1547.0}, {149.0, 210.0}}, identifier: 'wellness-card-respiratoryRate', label: '호흡수, 14, breaths/min, 최근 기록 · 항목별 척도, 오늘, 11월 14일 00:00', value: 14.6 → 14.1 breath...
+                                          StaticText, 0x10a20ee40, {{60.0, 1563.0}, {117.0, 44.0}}, identifier: 'card-navigation-header', label: '호흡수'
+                                            StaticText, 0x10a20ef80, {{60.0, 1563.0}, {117.0, 44.0}}, label: '호흡수'
+                                            Image, 0x10a20f0c0, {{62.0, 1578.5}, {15.5, 13.5}}, identifier: 'wind', label: '미풍'
+                                            Image, 0x10a20f200, {{132.5, 1580.5}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x10a20f340, {{60.0, 1615.0}, {111.0, 41.0}}, label: '14, breaths/min'
+                                            StaticText, 0x10a20f480, {{60.0, 1615.0}, {39.5, 41.0}}, label: '14'
+                                            StaticText, 0x10a20f5c0, {{103.5, 1636.0}, {67.5, 14.5}}, label: 'breaths/min'
+                                          Other, 0x10a20f700, {{59.1, 1666.4}, {120.4, 31.6}}
+                                          StaticText, 0x10a20f840, {{60.0, 1706.0}, {102.0, 13.5}}, label: '최근 기록 · 항목별 척도', value: 14.6 → 14.1 breath...
+                                          StaticText, 0x10a20f980, {{60.0, 1727.5}, {19.5, 13.5}}, label: '오늘'
+                                          StaticText, 0x10a20fac0, {{83.5, 1727.5}, {79.5, 13.5}}, label: '11월 14일 00:00'
+                                        Button, 0x10a20fc00, {{201.0, 1547.0}, {149.0, 232.5}}, identifier: 'wellness-card-wristTemperature', label: '손목 온도, +0.0, °C, 개인 기준선 대비 변화, 최근 기록 · 항목별 척도, 오늘, 11월 14일 00:00', value: 0.0 → 0.0 °C
+                                          StaticText, 0x10a20fd40, {{217.0, 1563.0}, {117.0, 44.0}}, identifier: 'card-navigation-header', label: '손목 온도'
+                                            StaticText, 0x10a20fe80, {{217.0, 1563.0}, {117.0, 44.0}}, label: '손목 온도'
+                                            Image, 0x114e5c000, {{219.0, 1576.5}, {10.5, 17.0}}, identifier: 'thermometer.medium', label: '중간 온도의 온도계'
+                                            Image, 0x114e5c140, {{300.0, 1580.5}, {6.5, 11.0}}, identifier: 'chevron.right', label: '앞으로'
+                                          StaticText, 0x114e5c280, {{217.0, 1615.0}, {95.0, 41.0}}, label: '+0.0, °C'
+                                            StaticText, 0x114e5c3c0, {{217.0, 1615.0}, {76.5, 41.0}}, label: '+0.0'
+                                            StaticText, 0x114e5c500, {{297.5, 1636.0}, {14.5, 14.5}}, label: '°C'
+                                          StaticText, 0x114e5c640, {{217.0, 1664.0}, {104.0, 14.5}}, label: '개인 기준선 대비 변화'
+                                          Other, 0x114e5c780, {{216.1, 1694.5}, {120.4, 26.0}}
+                                          StaticText, 0x114e5c8c0, {{217.0, 1728.5}, {102.0, 13.5}}, label: '최근 기록 · 항목별 척도', value: 0.0 → 0.0 °C
+                                          StaticText, 0x114e5ca00, {{217.0, 1750.0}, {19.5, 13.5}}, label: '오늘'
+                                          StaticText, 0x114e5cb40, {{240.5, 1750.0}, {79.5, 13.5}}, label: '11월 14일 00:00'
+                                        Button, 0x114e5cc80, {{408.0, 1656.2}, {121.0, 20.5}}, identifier: 'wellness-add-body-record', label: '신체 기록 추가'
+                                          StaticText, 0x114e5cdc0, {{408.0, 1656.2}, {121.0, 20.5}}, label: '신체 기록 추가'
+                                          Image, 0x114e5cf00, {{408.0, 1659.5}, {14.0, 14.0}}, identifier: 'plus', label: '추가'
+                                        Button, 0x114e5d040, {{44.0, 1791.5}, {306.0, 22.5}}, identifier: 'wellness-fitness-disclosure', label: '심폐 체력 · 심박 회복'
+                                          StaticText, 0x114e5d180, {{44.0, 1791.5}, {306.0, 22.5}}, label: '심폐 체력 · 심박 회복'
+                                          Image, 0x114e5d2c0, {{342.0, 1797.0}, {7.0, 12.0}}, identifier: 'collapsed'
+                                        Image, 0x114e5d400, {{46.0, 1879.0}, {8.5, 13.0}}, identifier: 'applewatch', label: 'Apple Watch'
+                                        StaticText, 0x114e5d540, {{60.0, 1878.2}, {105.5, 14.5}}, label: 'Watch 자세 모니터링'
+                                        StaticText, 0x114e5d680, {{408.0, 1878.0}, {81.0, 18.0}}, label: '자세 평가'
+                                        StaticText, 0x114e5d7c0, {{72.5, 1905.0}, {181.5, 19.5}}, label: 'Apple Watch가 필요합니다'
+                                        Image, 0x114e5d900, {{44.5, 1920.5}, {19.5, 21.0}}, identifier: 'applewatch.slash', label: '슬래시가 있는 Apple Watch'
+                                        StaticText, 0x114e5da40, {{72.5, 1926.5}, {255.0, 30.5}}, label: 'Apple Watch를 연결하여 하루 종일 자세를 모니터링하세요.'
+                                        StaticText, 0x114e5db80, {{534.0, 1943.3}, {141.0, 20.5}}, label: '자세를 기록해 볼까요'
+                                        StaticText, 0x114e5dcc0, {{534.0, 1971.8}, {173.0, 30.5}}, label: '사진 촬영이나 실시간 자세 확인으로 시작해요.'
+                                        StaticText, 0x114e5de00, {{407.5, 2049.5}, {236.5, 14.5}}, label: '사진 평가와 Watch의 일상 기록을 따로 봐요.'
+                                        Button, 0x114e5df40, {{406.0, 2076.0}, {149.0, 44.0}}, identifier: 'wellness-button-posture-capture', label: '촬영'
+                                          Image, 0x114e5e080, {{461.0, 2092.5}, {14.5, 11.5}}, identifier: 'camera.fill', label: '카메라'
+                                          StaticText, 0x114e5e1c0, {{480.8, 2090.8}, {21.0, 14.5}}, label: '촬영'
+                                        Button, 0x114e5e300, {{563.0, 2076.0}, {149.0, 44.0}}, identifier: 'wellness-button-posture-realtime', label: '실시간'
+                                          Image, 0x114e5e440, {{612.5, 2091.0}, {14.5, 14.0}}, identifier: 'figure.walk.motion', label: '속도선이 있는 걷는 사람'
+                                          StaticText, 0x114e5e580, {{632.5, 2090.8}, {31.5, 14.5}}, label: '실시간'
+                                      Other, 0x114e5e6c0, {{723.0, 86.0}, {30.0, 1025.0}}, label: '수직 스크롤 막대, 3페이지', value: 0%
+                                        Other, 0x114e5e800, {{750.0, 98.0}, {3.0, 1010.0}}
+                                      Other, 0x114e5e940, {{723.0, 86.0}, {30.0, 1025.0}}, label: '수직 스크롤 막대, 3페이지', value: 0%
+                                        Other, 0x114e5ea80, {{750.0, 98.0}, {3.0, 1010.0}}
+                                    Button, 0x114e5ebc0, {{348.0, 254.0}, {60.0, 24.0}}, identifier: 'wave-refresh-test-trigger', label: 'Trigger Refresh', value: 0
+                                    Other, 0x114e5ed00, {{378.0, 638.0}, {0.0, 0.0}}
+                            Toolbar, 0x114e5ee40, {{0.0, 0.0}, {756.0, 1158.0}}, identifier: 'Toolbar', label: '도구 막대'
+                              Other, 0x114e5ef80, {{0.0, 0.0}, {756.0, 1158.0}}
+                Other, 0x114e5f0c0, {{0.0, 0.0}, {756.0, 1158.0}}
+                  Other, 0x114e5f200, {{0.0, 32.0}, {756.0, 44.0}}
+                    Button, 0x114e5f340, {{183.5, 36.0}, {56.0, 36.0}}, identifier: 'ToggleSideBar', label: '사이드바 토글'
+                    Button, 0x114e5f480, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                      Button, 0x114e5f5c0, {{239.5, 36.0}, {79.0, 36.0}}, identifier: 'tab-today', label: 'Today'
+                    Button, 0x114e5f700, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                      Button, 0x114e5f840, {{318.5, 36.0}, {91.0, 36.0}}, identifier: 'tab-activity', label: 'Activity'
+                    Button, 0x114e5f980, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                      Button, 0x114e5fac0, {{409.5, 36.0}, {102.0, 36.0}}, identifier: 'tab-wellness', label: 'Wellness', Selected
+                    Button, 0x114e5fc00, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+                      Button, 0x114e5fd40, {{511.5, 36.0}, {61.0, 36.0}}, identifier: 'tab-life', label: 'Life'
+              Other, 0x114e5fe80, {{0.0, 32.0}, {756.0, 1106.0}}
+              Other, 0x114e64000, {{378.0, 585.0}, {0.0, 0.0}}
+    Window, 0x114e64140, {{0.0, 0.0}, {756.0, 1158.0}}
+      Other, 0x114e64280, {{0.0, 0.0}, {756.0, 1158.0}}
+        Other, 0x114e643c0, {{0.0, 0.0}, {756.0, 1158.0}}
+Path to element:
+ →Application, 0x114e6bac0, pid: 45749, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x114e64500, pid: 45749, label: 'DUNE'
+  }

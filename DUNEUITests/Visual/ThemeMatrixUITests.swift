@@ -45,9 +45,8 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                 }
 
                 let ring = app.descendants(matching: .any)[root.ring].firstMatch
-                // Shared 124pt rings include their outer 11pt stroke in AX bounds.
-                let expectedDiameter: CGFloat =
-                    root.argument == "wellness" ? 135 : 104
+                // CompactConditionRing and the Life habit ring both use a 104pt frame.
+                let expectedDiameter: CGFloat = 104
                 XCTAssertEqual(ring.frame.width, expectedDiameter, accuracy: 1,
                                "\(combination): hero ring should use its tab's established diameter")
                 XCTAssertEqual(ring.frame.height, ring.frame.width, accuracy: 1,
@@ -84,24 +83,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
             ]
             launchApp(with: configuration)
 
-            if VisualAudit.isEnabled,
-               ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1" {
-                let initialBounds = app.windows.firstMatch.frame
-                if abs(max(initialBounds.width, initialBounds.height) - 951) < 2 {
-                    // A fresh app launch can restore portrait. Let the host set
-                    // physical orientation, then require the actual inner viewport.
-                    XCUIDevice.shared.orientation = .landscapeLeft
-                    VisualAudit.capture("ORIENT:landscapeLeft Today navigation layout")
-                    let landscape = XCTNSPredicateExpectation(
-                        predicate: NSPredicate { _, _ in
-                            let bounds = self.app.windows.firstMatch.frame
-                            return bounds.width > bounds.height
-                        }, object: nil
-                    )
-                    XCTAssertEqual(XCTWaiter.wait(for: [landscape], timeout: 5), .completed,
-                                   "Expanded Duo must render its actual landscape viewport")
-                }
-            }
+            reassertDuoOpenLandscapeIfNeeded()
             let window = app.windows.firstMatch.frame
             let bell = app.buttons[AXID.dashboardToolbarNotifications].firstMatch
             let settings = app.buttons[AXID.dashboardToolbarSettings].firstMatch
@@ -194,29 +176,47 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
     }
 
     func testDesertFourTabHeroesAtMaximumAccessibilityTextSize() {
-        app.terminate()
-        app.launchArguments = launchConfiguration.launchArguments + [
-            "--ui-test-theme", "desertWarm",
+        captureMaximumAXRoots("desertWarm", named: "Desert")
+    }
+
+    func testOceanCoolMaximumAXRoots() { captureMaximumAXRoots("oceanCool", named: "Ocean") }
+    func testForestGreenMaximumAXRoots() { captureMaximumAXRoots("forestGreen", named: "Forest") }
+    func testSakuraCalmMaximumAXRoots() { captureMaximumAXRoots("sakuraCalm", named: "Sakura") }
+    func testArcticDawnMaximumAXRoots() { captureMaximumAXRoots("arcticDawn", named: "Arctic") }
+    func testSolarPopMaximumAXRoots() { captureMaximumAXRoots("solarPop", named: "Solar") }
+    func testContourAtlasMaximumAXRoots() { captureMaximumAXRoots("contourAtlas", named: "Contour") }
+    func testWaterLiliesMaximumAXRoots() { captureMaximumAXRoots("waterLilies", named: "Water Lilies") }
+
+    private func captureMaximumAXRoots(_ rawValue: String, named themeName: String) {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "--ui-test-theme", rawValue,
             "--ui-test-style", "dark",
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
             "-morningBriefingDisabled", "YES"
         ]
-        app.launch()
+        launchApp(with: configuration)
+        reassertDuoOpenLandscapeIfNeeded()
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "\(themeName) MAX: primary navigation")
 
-        let roots: [(tab: String, navigate: () -> Void, ring: String)] = [
-            ("Today", navigateToDashboard, "dashboard-hero-ring"),
-            ("Activity", navigateToActivity, "activity-hero-ring"),
-            ("Wellness", navigateToWellness, "wellness-hero-ring"),
-            ("Life", navigateToLife, "life-hero-ring")
+        let roots: [(tab: String, navigate: () -> Void, hero: String, score: String, ring: String)] = [
+            ("Today", navigateToDashboard, AXID.dashboardHeroCondition, "dashboard-hero-score", "dashboard-hero-ring"),
+            ("Activity", navigateToActivity, AXID.activityHeroReadiness, "activity-hero-score-external", "activity-hero-ring"),
+            ("Wellness", navigateToWellness, AXID.wellnessHeroScore, "wellness-hero-external-score", "wellness-hero-ring"),
+            ("Life", navigateToLife, AXID.lifeHeroProgress, "life-hero-external-progress", "life-hero-ring")
         ]
-
         for root in roots {
             root.navigate()
-            let ring = app.descendants(matching: .any)[root.ring].firstMatch
-            XCTAssertTrue(ring.waitForExistence(timeout: 10), "\(root.tab) ring should remain visible at the largest text size")
-            XCTAssertTrue(app.windows.firstMatch.frame.contains(ring.frame),
-                          "\(root.tab) ring should fit the window at the largest text size")
-            addScreenshotAttachment(named: "Desert Accessibility XXXL \(root.tab)")
+            let hero = app.descendants(matching: .any)[root.hero].firstMatch
+            let score = app.descendants(matching: .any)[root.score].firstMatch
+            XCTAssertTrue(hero.waitForExistence(timeout: 10), "\(themeName) MAX \(root.tab): hero")
+            XCTAssertTrue(score.waitForExistence(timeout: 10), "\(themeName) MAX \(root.tab): external score")
+            XCTAssertFalse(app.descendants(matching: .any)[root.ring].firstMatch.exists,
+                           "\(themeName) MAX \(root.tab): decorative ring should be hidden")
+            XCTAssertFalse(score.label.isEmpty, "\(themeName) MAX \(root.tab): score needs spoken text")
+            XCTAssertTrue(app.windows.firstMatch.frame.intersects(score.frame),
+                          "\(themeName) MAX \(root.tab): score should be on screen")
+            captureRootEvidence("\(themeName) MAX \(root.tab)")
         }
     }
 
@@ -244,6 +244,10 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         captureTheme("contourAtlas", named: "Contour")
     }
 
+    func testWaterLiliesMatrix() {
+        captureTheme("waterLilies", named: "Water Lilies")
+    }
+
     private func captureTheme(_ rawValue: String, named themeName: String) {
         for style in ["Light", "Dark"] {
             app.terminate()
@@ -253,6 +257,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
                 "-morningBriefingDisabled", "YES"
             ]
             app.launch()
+            reassertDuoOpenLandscapeIfNeeded()
 
             let combination = "\(themeName) \(style)"
             XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "\(combination): primary navigation should load")
@@ -262,33 +267,42 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
 
     private func captureRoots(for combination: String) {
         navigateToDashboard()
-        captureRoot(AXID.dashboardHeroCondition, tab: "Today", combination: combination)
+        assertRoot(AXID.dashboardHeroCondition, tab: "Today", combination: combination)
         assertRing("dashboard-hero-ring", combination: combination)
         assertAction(AXID.dashboardHeroCondition, combination: combination)
         XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
                        "\(combination): Today hero should have no cross-tab action")
+        captureRootEvidence("\(combination) Today")
 
         navigateToActivity()
-        captureRoot(AXID.activityHeroReadiness, tab: "Activity", combination: combination)
+        assertRoot(AXID.activityHeroReadiness, tab: "Activity", combination: combination)
         assertRing("activity-hero-ring", combination: combination)
         assertAction(AXID.activityToolbarAdd, combination: combination)
+        captureRootEvidence("\(combination) Activity")
 
         navigateToWellness()
-        captureRoot(AXID.wellnessHeroScore, tab: "Wellness", combination: combination)
+        assertRoot(AXID.wellnessHeroScore, tab: "Wellness", combination: combination)
         assertRing("wellness-hero-ring", combination: combination)
         assertAction("wellness-hero-sleep", combination: combination)
+        captureRootEvidence("\(combination) Wellness")
 
         navigateToLife()
-        captureRoot(AXID.lifeHeroProgress, tab: "Life", combination: combination)
+        assertRoot(AXID.lifeHeroProgress, tab: "Life", combination: combination)
         assertRing("life-hero-ring", combination: combination)
         XCTAssertFalse(app.buttons["life-hero-checklist-button"].exists)
+        captureRootEvidence("\(combination) Life")
         XCTAssertTrue(app.scrollToElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 6))
     }
 
-    private func captureRoot(_ identifier: String, tab: String, combination: String) {
+    private func assertRoot(_ identifier: String, tab: String, combination: String) {
         let root = app.descendants(matching: .any)[identifier].firstMatch
         XCTAssertTrue(root.waitForExistence(timeout: 10), "\(combination) \(tab): \(identifier) should load")
-        addScreenshotAttachment(named: "\(combination) \(tab)")
+    }
+
+    /// The map runner collects PNG and AX hierarchy from the same settled root.
+    private func captureRootEvidence(_ name: String) {
+        VisualAudit.capture(name)
+        if !VisualAudit.isEnabled { addScreenshotAttachment(named: name) }
     }
 
     private func assertAction(_ identifier: String, combination: String) {

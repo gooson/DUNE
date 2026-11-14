@@ -9,6 +9,10 @@ status: implemented-with-coverage-limits
 
 # Today 전체 상태·배치 계약
 
+2026-11-14 어두운 Today 히어로의 실제 데이터 선은 장식용 dusk 대신 밝은 테마 accent를 사용한다(기존 DUNE의 밝은 금색 선은 유지). 시간 범위는 읽을 수 있는 보조 본문색을 사용한다. Light/Dark 모두 선과 표면 대비 3:1, 작은 시간 레이블과 표면 대비 4.5:1 이상을 확인한다. 링의 색·상태 끝점과 카드 배치는 이 보정의 대상이 아니다.
+
+2026-11-14 테마 검증에서 일본어 시간 범위 끝점이 잘리는 실제 화면을 확인했다. Today의 실제 intraday 차트는 첫/마지막 관측 날짜·시각을 보존하고, 한 줄에 온전히 맞지 않으면 두 줄로 배치한다. 날짜를 생략하거나 글자를 축소해 숨기지 않는다. [현재 검증 기록](../full-redesign-map/review/theme-overhaul-2026-11-14/README.md)을 따른다. Life 최대 글씨의 지난 기록은 원본 PNG·AX 경계 대조에서 두 줄 모두 표시돼 기존 배치를 유지한다.
+
 2026-11-14 Today(T03)와 알림 일간 요약(T10)의 건강 데이터 표시 완료는 날씨·위치·reverse geocoding 응답을 기다리지 않는다. 날씨는 별도로 도착할 때 기존 날씨·코칭 문맥에 반영하고, 이전 로드의 늦은 응답은 폐기한다. HealthKit 권한 준비 중 상태와 실제 건강 조회 완료의 구분은 유지한다. [검증 기록](../../reviews/2026-11-14-today-loading/README.md)과 [새 실제 화면](../phone-design-map/actual/today-loading-2026-11-14/index.html)에서 범위를 확인한다.
 
 [방향 시안](../theme-map/themes/dune-today-restart.html) · [재설계 근거](today-restart-proposal.md). 실제 앱 캡처나 네이티브 검증 결과가 아닌, 현재 코드의 표시 조건을 확인해 만든 디자인 계약이다. 테마는 기존 **DUNE / Desert Warm**을 공통으로 유지한다. Compact·Metrics·Editorial은 배치 대안이며 새 테마가 아니다.

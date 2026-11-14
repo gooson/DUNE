@@ -1,0 +1,76 @@
+Optional(Attributes: Application, 0x10ab95400, pid: 66232, label: 'DUNE'
+Element subtree:
+ →Application, 0x10ab95400, pid: 66232, label: 'DUNE'
+    Window, 0x10ab97e80, {{0.0, 0.0}, {208.0, 248.0}}
+      Other, 0x10ab96800, {{0.0, 0.0}, {208.0, 248.0}}
+        Other, 0x10ab96f80, {{0.0, 0.0}, {208.0, 248.0}}
+          Other, 0x10ab96a80, {{0.0, 0.0}, {208.0, 248.0}}
+            Other, 0x10ab95f40, {{0.0, 0.0}, {208.0, 248.0}}
+              NavigationBar, 0x10ab970c0, {{0.0, 0.0}, {208.0, 62.0}}, identifier: '전체 운동'
+                Button, 0x10ab952c0, {{15.0, 18.0}, {35.0, 35.0}}, identifier: 'BackButton', label: '뒤로'
+                StaticText, 0x10ab96580, {{136.5, 35.5}, {56.5, 20.5}}, label: '전체 운동'
+              Other, 0x10ab96080, {{0.0, 0.0}, {208.0, 248.0}}
+                Other, 0x10ab95540, {{0.0, 0.0}, {208.0, 248.0}}
+                  Other, 0x10ab97980, {{0.0, 0.0}, {208.0, 248.0}}
+                    Other, 0x10ab96bc0, {{0.0, 0.0}, {208.0, 248.0}}
+                      CollectionView, 0x10ab97200, {{0.0, 0.0}, {208.0, 248.0}}, identifier: 'watch-quickstart-screen'
+                        Other, 0x10ab975c0, {{0.0, 0.0}, {208.0, 248.0}}
+                          Other, 0x10ab97c00, {{0.0, 0.0}, {208.0, 86.0}}
+                        Other, 0x10ab96e40, {{0.0, 0.0}, {208.0, 248.0}}
+                          Other, 0x10ab966c0, {{0.0, 0.0}, {208.0, 86.0}}
+                        Cell, 0x10ab95a40, {{2.0, 5.0}, {204.0, 56.0}}, label: '전체 운동, 전체 운동'
+                          Other, 0x10ab95cc0, {{2.0, 5.0}, {204.0, 56.0}}
+                            Other, 0x10ab961c0, {{2.0, 5.0}, {204.0, 56.0}}
+                          Other, 0x10ab95040, {{2.0, 5.0}, {204.0, 56.0}}
+                            Other, 0x10ab97340, {{2.0, 5.0}, {204.0, 56.0}}
+                              Other, 0x10ab97ac0, {{2.0, 5.0}, {204.0, 56.0}}
+                                Button, 0x10ab94000, {{2.0, 5.0}, {204.0, 56.0}}, identifier: 'watch-quickstart-category-picker', label: '전체 운동, 전체 운동'
+                                  StaticText, 0x10ab96d00, {{15.0, 14.2}, {56.5, 20.5}}, label: '전체 운동'
+                                  StaticText, 0x10ab93340, {{15.0, 34.8}, {47.0, 17.0}}, label: '전체 운동'
+                        Other, 0x10ab92bc0, {{0.0, 83.0}, {208.0, 18.5}}
+                          Other, 0x10ab93480, {{0.0, 83.0}, {208.0, 18.5}}
+                            Other, 0x10ab92580, {{0.0, 83.0}, {208.0, 18.5}}
+                              StaticText, 0x10ab93d40, {{15.0, 83.0}, {52.0, 17.0}}, identifier: 'watch-quickstart-section-popular', label: 'Popular'
+                        Cell, 0x10ab926c0, {{2.0, 101.5}, {204.0, 56.0}}, label: 'Plank, 소요 시간'
+                          Other, 0x10ab91cc0, {{2.0, 101.5}, {204.0, 56.0}}
+                            Other, 0x10ab92d00, {{2.0, 101.5}, {204.0, 56.0}}
+                          Other, 0x10ab91040, {{2.0, 101.5}, {204.0, 56.0}}
+                            Other, 0x10ab92940, {{2.0, 101.5}, {204.0, 56.0}}
+                              Other, 0x10ab98140, {{2.0, 101.5}, {204.0, 56.0}}
+                                Button, 0x10ab98000, {{2.0, 101.5}, {204.0, 56.0}}, identifier: 'watch-quickstart-exercise-plank', label: 'Plank, 소요 시간'
+                                  StaticText, 0x10ab99540, {{59.0, 109.2}, {42.5, 20.5}}, label: 'Plank'
+                                  Image, 0x10ab98780, {{19.0, 115.5}, {28.0, 28.0}}, label: 'equipment.bodyweight'
+                                  StaticText, 0x10ab98c80, {{59.0, 131.8}, {50.0, 18.0}}, label: '소요 시간'
+                        Cell, 0x10ab99900, {{2.0, 162.5}, {204.0, 56.0}}, label: 'Crunch, 3세트 · 10회'
+                          Other, 0x10ab9abc0, {{2.0, 162.5}, {204.0, 56.0}}
+                            Other, 0x10ab9be80, {{2.0, 162.5}, {204.0, 56.0}}
+                          Other, 0x10ab9bac0, {{2.0, 162.5}, {204.0, 56.0}}
+                            Other, 0x10ab9a800, {{2.0, 162.5}, {204.0, 56.0}}
+                              Other, 0x10ab9b340, {{2.0, 162.5}, {204.0, 56.0}}
+                                Button, 0x10ab9a300, {{2.0, 162.5}, {204.0, 56.0}}, identifier: 'watch-quickstart-exercise-crunch', label: 'Crunch, 3세트 · 10회'
+                                  StaticText, 0x10ab9b980, {{59.0, 170.2}, {56.0, 20.5}}, label: 'Crunch'
+                                  Image, 0x10ab99cc0, {{19.0, 176.5}, {28.0, 28.0}}, label: 'equipment.bodyweight'
+                                  StaticText, 0x10ab9a440, {{59.0, 192.8}, {72.0, 18.0}}, label: '3세트 · 10회'
+                        Cell, 0x10ab9a080, {{2.0, 223.5}, {204.0, 56.0}}, label: 'UI Test Squat, 3세트 · 8회 · 40.0kg'
+                          Other, 0x10ab98a00, {{14.3, 223.5}, {179.4, 49.2}}
+                            Other, 0x10ab9a1c0, {{14.3, 223.5}, {179.4, 49.2}}
+                          Other, 0x10ab9af80, {{14.3, 223.5}, {179.4, 49.2}}
+                            Other, 0x10ab9bc00, {{14.3, 223.5}, {179.4, 49.2}}
+                              Other, 0x10ab9b200, {{14.3, 223.5}, {179.4, 49.2}}
+                                Button, 0x10ab99680, {{2.0, 223.5}, {204.0, 56.0}}, identifier: 'watch-quickstart-exercise-ui-test-squat', label: 'UI Test Squat, 3세트 · 8회 · 40.0kg'
+                                  StaticText, 0x10ab99180, {{64.4, 230.3}, {87.9, 18.0}}, label: 'UI Test Squat'
+                                  Image, 0x10ab9b480, {{29.2, 235.8}, {24.6, 24.6}}, label: 'equipment.barbell'
+                                  StaticText, 0x10ab9a580, {{64.4, 250.1}, {109.9, 15.8}}, label: '3세트 · 8회 · 40.0kg'
+    Window (Main), 0x10ab98dc0, {{200.0, 45.0}, {6.0, 46.0}}
+    Window, 0x10ab9b700, {{0.0, 0.0}, {208.0, 248.0}}
+      StatusBar, 0x10ab992c0, {{0.0, 0.0}, {208.0, 38.0}}
+        Other, 0x10ab9b5c0, {{0.0, 0.0}, {208.0, 38.0}}
+        Other, 0x10ab99040, {{0.0, 0.0}, {208.0, 38.0}}
+Path to element:
+ →Application, 0x10ab95400, pid: 66232, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve.watchkitapp'
+  Output: {
+    Application, 0x10ab9c000, pid: 66232, label: 'DUNE'
+  }
+)

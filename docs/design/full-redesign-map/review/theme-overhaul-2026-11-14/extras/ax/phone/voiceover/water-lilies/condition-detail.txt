@@ -1,0 +1,190 @@
+Attributes: Application, 0x10a59c3c0, pid: 23274, label: 'DUNE'
+Element subtree:
+ →Application, 0x10a59c3c0, pid: 23274, label: 'DUNE'
+    Window (Main), 0x10a59c500, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10a59c640, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10a59c780, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x10a59c8c0, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x10a59ca00, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x10a59cb40, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x10a59cc80, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x10a59cdc0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10a59cf00, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x10a59d040, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x10a59d180, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x10a59d2c0, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x10a59d400, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x10a59d540, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x10a59d680, {{0.0, 0.0}, {402.0, 874.0}}
+                                Other, 0x10a59d7c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                  Other, 0x10a59d900, {{0.0, 0.0}, {402.0, 874.0}}
+                                    Other, 0x10a59da40, {{0.0, 0.0}, {402.0, 874.0}}
+                                      Other, 0x10a59db80, {{0.0, 0.0}, {402.0, 874.0}}
+                                        NavigationBar, 0x10a59dcc0, {{0.0, 62.0}, {402.0, 106.0}}, identifier: 'Condition Score'
+                                          Button, 0x10a59de00, {{16.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Today'
+                                          StaticText, 0x10a59df40, {{16.0, 119.7}, {253.7, 40.7}}, label: 'Condition Score'
+                                        Other, 0x10a59e080, {{0.0, 0.0}, {402.0, 874.0}}
+                                          Other, 0x10a59e1c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                            Other, 0x10a59e300, {{0.0, 0.0}, {402.0, 874.0}}
+                                              Other, 0x10a59e440, {{0.0, 0.0}, {402.0, 874.0}}
+                                                Other, 0x10a59e580, {{0.0, 0.0}, {402.0, 874.0}}
+                                                ScrollView, 0x10a59e6c0, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'condition-score-detail-screen'
+                                                  Other, 0x10a59e800, {{0.0, 0.0}, {402.0, 874.0}}
+                                                    Other, 0x10a59e940, {{0.0, 0.0}, {402.0, 156.0}}
+                                                    Other, 0x10a59ea80, {{0.0, 741.0}, {402.0, 133.0}}
+                                                  Other, 0x10a59ebc0, {{0.0, 0.0}, {402.0, 874.0}}
+                                                    Other, 0x10a59ed00, {{0.0, 741.0}, {402.0, 133.0}}
+                                                  Other, 0x10a59ee40, {{0.0, 168.0}, {402.0, 1890.7}}
+                                                    StaticText, 0x10a59ef80, {{37.3, 204.0}, {63.7, 18.0}}, label: '컨디션'
+                                                    Other, 0x10a59f0c0, {{36.0, 238.0}, {104.0, 104.0}}, identifier: 'condition-detail-hero-ring', label: 'Condition score 84, 최상'
+                                                      StaticText, 0x10a59f200, {{64.8, 268.5}, {46.3, 43.0}}, label: '84'
+                                                    StaticText, 0x10a59f340, {{156.0, 265.0}, {34.7, 24.0}}, identifier: 'condition-detail-hero-status', label: '최상'
+                                                    StaticText, 0x10a59f480, {{156.0, 297.0}, {121.0, 18.0}}, label: '최상의 컨디션입니다'
+                                                    StaticText, 0x10a59f5c0, {{36.0, 358.0}, {86.0, 14.3}}, label: '11월 14일 00:00'
+                                                    StaticText, 0x10a59f700, {{16.0, 412.4}, {370.0, 106.3}}, label: '최상, 최상의 컨디션입니다, 고강도 운동이나 도전적인 목표에 적합한 날입니다. 몸이 충분히 회복되었으니 평소보다 조금 더 도전해보세요.', Selected
+                                                      StaticText, 0x10a59f840, {{16.0, 412.4}, {94.7, 18.0}}, label: '오늘의 인사이트'
+                                                      Image, 0x10a59f980, {{33.0, 452.3}, {22.0, 22.0}}, identifier: 'checkmark.circle.fill', label: '선택됨', Selected
+                                                      StaticText, 0x10a59fac0, {{72.0, 450.4}, {120.7, 18.0}}, label: '최상의 컨디션입니다'
+                                                      StaticText, 0x10a59fc00, {{72.0, 476.4}, {266.0, 30.3}}, label: '고강도 운동이나 도전적인 목표에 적합한 날입니다. 몸이 충분히 회복되었으니 평소보다 조금 더 도전해보세요.'
+                                                    Other, 0x10a59fd40, {{16.0, 538.7}, {370.0, 514.3}}, identifier: 'condition-trend-card'
+                                                      Button, 0x10a59fe80, {{309.3, 554.7}, {60.7, 44.0}}, identifier: 'score-chart-trend-toggle', label: '추세', value: 끔
+                                                        StaticText, 0x10a58e940, {{309.3, 554.7}, {60.7, 44.0}}, label: '추세'
+                                                        Image, 0x10a58ea80, {{318.7, 570.7}, {13.0, 11.3}}, identifier: 'chart.line.uptrend.xyaxis', label: '차트 선'
+                                                      StaticText, 0x10a58ebc0, {{34.0, 567.7}, {95.0, 18.0}}, label: '컨디션 추세'
+                                                      Image, 0x10a58ed00, {{34.0, 569.3}, {16.3, 14.3}}, identifier: 'chart.xyaxis.line', label: '추세선이 있는 Xy 축'
+                                                      SegmentedControl, 0x10a58ee40, {{32.0, 610.7}, {338.0, 31.0}}, identifier: 'condition-period-picker'
+                                                        Button, 0x10a58ef80, {{32.0, 610.7}, {67.6, 32.0}}, label: '일'
+                                                        Button, 0x10a58f0c0, {{99.6, 610.7}, {67.6, 32.0}}, label: '주', Selected
+                                                        Button, 0x10a58f200, {{167.2, 610.7}, {67.6, 32.0}}, label: '월'
+                                                        Button, 0x10a58f340, {{234.8, 610.7}, {67.6, 32.0}}, label: '6개월'
+                                                        Button, 0x10a58f480, {{302.4, 610.7}, {67.6, 32.0}}, label: '년'
+                                                      Button, 0x10a58f5c0, {{32.0, 653.7}, {44.0, 44.0}}, identifier: 'condition-period-previous', label: '이전 기간'
+                                                      Button, 0x10a58f700, {{326.0, 653.7}, {44.0, 44.0}}, identifier: 'condition-period-next', label: '다음 기간', Disabled
+                                                      StaticText, 0x10a58f840, {{127.7, 666.7}, {146.7, 18.0}}, identifier: 'score-detail-chart-visible-range', label: '2026년 11월 8일~14일'
+                                                      Other, 0x10a58f980, {{32.0, 709.7}, {338.0, 220.0}}
+                                                      Other, 0x10a58fac0, {{32.0, 709.7}, {338.0, 220.0}}, identifier: 'chart-selection-probe', label: 'none'
+                                                      Other, 0x10a58fc00, {{32.0, 709.7}, {338.0, 220.0}}, identifier: 'chart-trend-probe', label: 'trend-endpoints:none'
+                                                      Other, 0x10a58fd40, {{32.0, 709.7}, {338.0, 220.0}}, identifier: 'detail-chart-surface', label: 'Condition Detail Chart', value: 2026년 11월 8일~14일
+                                                      Other, 0x10a58fe80, {{32.0, 709.7}, {338.0, 220.0}}, identifier: 'condition-history-probe', label: 'visible-points:7'
+                                                      ScrollView, 0x10a2e2a80, {{51.0, 709.7}, {319.0, 202.0}}
+                                                        Other, 0x10a2e1540, {{-1225.0, 709.7}, {1595.0, 202.0}}
+                                                          Other, 0x10a2e3d40, {{-1594.0, 659.7}, {2333.0, 302.0}}
+                                                            Other, 0x10a2e2d00, {{-906.0, 717.7}, {319.0, 186.0}}, label: '2026년 10월 18일 0시에서 2026년 10월 25일 0시 사이', value: 49에서 50 사이, 규칙적으로 ...
+                                                            Other, 0x10a2e3480, {{-587.0, 717.7}, {319.0, 186.0}}, label: '2026년 10월 25일 0시에서 2026년 11월 1일 0시 사이', value: 시작 값 45, 변동 범위 45에...
+                                                            Other, 0x10a2e30c0, {{-268.0, 717.7}, {319.0, 186.0}}, label: '2026년 11월 1일 0시에서 2026년 11월 8일 0시 사이', value: 시작 값 51, 변동 범위 47에...
+                                                            Other, 0x114adc000, {{51.0, 717.7}, {319.0, 186.0}}, label: '2026년 11월 8일 0시에서 2026년 11월 15일 0시 사이', value: 시작 값 53, 변동 범위 49에...
+                                                            Other, 0x114adc140, {{-1225.0, 871.4}, {1595.0, 1.0}}, value: 50
+                                                      Other, 0x114adc280, {{32.0, 954.0}, {258.7, 83.0}}, identifier: 'condition-visible-summary'
+                                                        StaticText, 0x114adc3c0, {{32.0, 954.0}, {45.0, 14.3}}, label: '기간 요약'
+                                                        StaticText, 0x114adc500, {{32.0, 976.4}, {19.3, 13.3}}, label: '평균'
+                                                        StaticText, 0x114adc640, {{148.7, 976.4}, {19.3, 13.3}}, label: '최소'
+                                                        StaticText, 0x114adc780, {{265.3, 976.4}, {19.3, 13.3}}, label: '최대'
+                                                        StaticText, 0x114adc8c0, {{32.0, 991.7}, {25.3, 24.0}}, identifier: 'condition-summary-average', label: '59'
+                                                        StaticText, 0x114adca00, {{148.7, 991.7}, {25.3, 24.0}}, identifier: 'condition-summary-min', label: '49'
+                                                        StaticText, 0x114adcb40, {{265.3, 991.7}, {25.3, 24.0}}, identifier: 'condition-summary-max', label: '84'
+                                                        Image, 0x114adcc80, {{33.3, 1026.3}, {8.0, 8.0}}, identifier: 'condition-summary-change', label: '오른쪽 위를 향한 대각선 화살표'
+                                                        StaticText, 0x114adcdc0, {{44.7, 1023.7}, {25.3, 13.3}}, identifier: 'condition-summary-change', label: '16%'
+                                                    StaticText, 0x114adcf00, {{16.0, 1073.0}, {65.0, 18.0}}, label: '하이라이트'
+                                                    StaticText, 0x114add040, {{64.0, 1111.0}, {45.0, 14.3}}, label: '최고의 날'
+                                                    Image, 0x114add180, {{31.3, 1119.7}, {17.0, 17.0}}, identifier: 'arrow.up.circle.fill', label: '원형 위쪽 화살표'
+                                                    StaticText, 0x114add2c0, {{64.0, 1127.4}, {19.3, 18.0}}, label: '84'
+                                                    StaticText, 0x114add400, {{325.3, 1121.0}, {48.7, 14.3}}, label: '11월 14일'
+                                                    StaticText, 0x114add540, {{64.0, 1177.4}, {45.0, 14.3}}, label: '최저의 날'
+                                                    Image, 0x114add680, {{31.3, 1186.0}, {17.0, 17.0}}, identifier: 'arrow.down.circle.fill', label: '원형 아래쪽 화살표'
+                                                    StaticText, 0x114add7c0, {{64.0, 1193.7}, {19.3, 18.0}}, label: '49'
+                                                    StaticText, 0x114add900, {{331.0, 1187.4}, {43.0, 14.3}}, label: '11월 9일'
+                                                    StaticText, 0x114adda40, {{64.0, 1243.7}, {45.0, 14.3}}, label: '상승 추세'
+                                                    Image, 0x114addb80, {{31.0, 1253.0}, {18.0, 15.7}}, identifier: 'chart.line.uptrend.xyaxis', label: '차트 선'
+                                                    StaticText, 0x114addcc0, {{64.0, 1260.0}, {16.7, 18.0}}, label: '18'
+                                                    StaticText, 0x114adde00, {{325.3, 1253.7}, {48.7, 14.3}}, label: '11월 14일'
+                                                    Other, 0x114addf40, {{16.0, 1310.0}, {370.0, 170.0}}, identifier: 'condition-subscore-hrv'
+                                                      StaticText, 0x114ade080, {{28.0, 1322.0}, {31.3, 18.0}}, label: 'HRV'
+                                                      StaticText, 0x114ade1c0, {{305.0, 1323.9}, {69.0, 14.3}}, label: '평균 75.8 ms'
+                                                      Other, 0x114ade300, {{28.0, 1348.0}, {346.0, 120.0}}, identifier: 'subscore-trend-plot'
+                                                        Other, 0x114ade440, {{28.0, 1348.0}, {46.9, 102.0}}, label: '2026년 11월 8일 0시에서 2026년 11월 9일 0시 사이', value: 73.3에서 73.3 사이, 2개...
+                                                        Other, 0x114ade580, {{74.9, 1348.0}, {46.9, 102.0}}, label: '2026년 11월 9일 0시에서 2026년 11월 10일 0시 사이', value: 72.45에서 72.45 사이, ...
+                                                        Other, 0x114ade6c0, {{121.7, 1348.0}, {46.9, 102.0}}, label: '2026년 11월 10일 0시에서 2026년 11월 11일 0시 사이', value: 78.6에서 78.6 사이, 2개...
+                                                        Other, 0x114ade800, {{168.6, 1348.0}, {46.9, 102.0}}, label: '2026년 11월 11일 0시에서 2026년 11월 12일 0시 사이', value: 77.75에서 77.75 사이, ...
+                                                        Other, 0x114ade940, {{215.4, 1348.0}, {46.9, 102.0}}, label: '2026년 11월 12일 0시에서 2026년 11월 13일 0시 사이', value: 76.9에서 76.9 사이, 2개...
+                                                        Other, 0x114adea80, {{262.3, 1348.0}, {46.9, 102.0}}, label: '2026년 11월 13일 0시에서 2026년 11월 14일 0시 사이', value: 76.05에서 76.05 사이, ...
+                                                        Other, 0x114adebc0, {{309.1, 1348.0}, {46.9, 102.0}}, label: '2026년 11월 14일 0시에서 2026년 11월 15일 0시 사이', value: 75.2에서 75.2 사이, 2개...
+                                                      Other, 0x114aded00, {{28.0, 1348.0}, {346.0, 120.0}}, identifier: 'subscore-trend-plot'
+                                                    Other, 0x114adee40, {{16.0, 1500.0}, {370.0, 170.0}}, identifier: 'condition-subscore-rhr'
+                                                      StaticText, 0x114adef80, {{28.0, 1512.0}, {81.7, 18.0}}, label: '안정시 심박수'
+                                                      StaticText, 0x114adf0c0, {{306.7, 1513.9}, {67.3, 14.3}}, label: '평균 52 bpm'
+                                                      Other, 0x114adf200, {{28.0, 1538.0}, {346.0, 120.0}}, identifier: 'subscore-trend-plot'
+                                                        Other, 0x114adf340, {{28.0, 1538.0}, {46.7, 102.0}}, label: '2026년 11월 8일 0시에서 2026년 11월 9일 0시 사이', value: 53.6에서 53.6 사이, 2개...
+                                                        Other, 0x114adf480, {{74.7, 1538.0}, {46.7, 102.0}}, label: '2026년 11월 9일 0시에서 2026년 11월 10일 0시 사이', value: 55에서 55 사이, 2개의 값
+                                                        Other, 0x114adf5c0, {{121.4, 1538.0}, {46.7, 102.0}}, label: '2026년 11월 10일 0시에서 2026년 11월 11일 0시 사이', value: 53.4에서 53.4 사이, 2개...
+                                                        Other, 0x114adf700, {{168.1, 1538.0}, {46.7, 102.0}}, label: '2026년 11월 11일 0시에서 2026년 11월 12일 0시 사이', value: 51.8에서 51.8 사이, 2개...
+                                                        Other, 0x114adf840, {{214.9, 1538.0}, {46.7, 102.0}}, label: '2026년 11월 12일 0시에서 2026년 11월 13일 0시 사이', value: 53.2에서 53.2 사이, 2개...
+                                                        Other, 0x114adf980, {{261.6, 1538.0}, {46.7, 102.0}}, label: '2026년 11월 13일 0시에서 2026년 11월 14일 0시 사이', value: 51.6에서 51.6 사이, 2개...
+                                                        Other, 0x114adfac0, {{308.3, 1538.0}, {46.7, 102.0}}, label: '2026년 11월 14일 0시에서 2026년 11월 15일 0시 사이', value: 50에서 50 사이, 2개의 값
+                                                      Other, 0x114adfc00, {{28.0, 1538.0}, {346.0, 120.0}}, identifier: 'subscore-trend-plot'
+                                                    Other, 0x114adfd40, {{16.0, 1690.0}, {370.0, 248.7}}, identifier: 'score-composition-card'
+                                                      StaticText, 0x114adfe80, {{32.0, 1706.0}, {55.7, 18.0}}, label: '점수 구성'
+                                                      Image, 0x10a554000, {{32.0, 1736.0}, {39.7, 40.0}}, identifier: 'waveform.path.ecg', label: '심전도 파형 경로'
+                                                      StaticText, 0x10a554140, {{83.7, 1736.0}, {103.3, 18.0}}, label: 'HRV (Z-Score)'
+                                                      StaticText, 0x10a554280, {{83.7, 1758.0}, {17.3, 24.0}}, identifier: 'condition-component-value-hrv', label: '—'
+                                                      Image, 0x10a5543c0, {{32.0, 1806.3}, {40.3, 37.3}}, identifier: 'heart.fill', label: '좋아요'
+                                                      StaticText, 0x10a554500, {{84.3, 1806.4}, {60.7, 18.0}}, label: 'RHR 보정'
+                                                      StaticText, 0x10a554640, {{84.3, 1828.4}, {17.3, 24.0}}, identifier: 'condition-component-value-rhr', label: '—'
+                                                      Image, 0x10a554780, {{32.0, 1876.7}, {39.3, 39.3}}, identifier: 'clock', label: '시계'
+                                                      StaticText, 0x10a5548c0, {{83.3, 1876.7}, {133.7, 18.0}}, label: 'Time-of-day Effect'
+                                                      StaticText, 0x10a554a00, {{83.3, 1898.7}, {17.3, 24.0}}, identifier: 'condition-component-value-time', label: '—'
+                                                    Button, 0x10a554b40, {{32.0, 1974.7}, {338.0, 52.0}}, identifier: 'condition-score-explainer', label: '점수 산출 방식'
+                                                      StaticText, 0x10a554c80, {{32.0, 1974.7}, {338.0, 52.0}}, identifier: 'condition-score-explainer', label: '점수 산출 방식'
+                                                      Image, 0x10a554dc0, {{33.3, 1993.0}, {15.3, 15.3}}, identifier: 'info.circle.fill', label: '정보'
+                                                      Image, 0x10a554f00, {{362.3, 1994.7}, {7.0, 12.0}}, identifier: 'collapsed'
+                                                  Other, 0x10a555040, {{369.0, 116.0}, {30.0, 675.0}}, label: '수직 스크롤 막대, 4페이지', value: 0%
+                                                    Other, 0x10a555180, {{396.0, 119.0}, {3.0, 332.7}}
+                                                  Other, 0x10a5552c0, {{369.0, 116.0}, {30.0, 675.0}}, label: '수직 스크롤 막대, 4페이지', value: 0%
+                                                    Other, 0x10a555400, {{396.0, 119.0}, {3.0, 332.7}}
+                                        Toolbar, 0x10a555540, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: '도구 막대'
+                                          Other, 0x10a555680, {{0.0, 0.0}, {402.0, 874.0}}
+                                Toolbar, 0x10a5557c0, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: '도구 막대'
+                                  Other, 0x10a555900, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x10a555a40, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x10a555b80, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x10a555cc0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10a555e00, {{0.0, 791.0}, {402.0, 83.0}}
+                    Other, 0x10a555f40, {{0.0, 0.0}, {402.0, 874.0}}
+                      TabBar, 0x10a556080, {{0.0, 791.0}, {402.0, 83.0}}, label: '탭 막대'
+                        Other, 0x10a5561c0, {{21.0, 791.0}, {360.0, 62.0}}
+                          Other, 0x10a556300, {{21.0, 791.0}, {95.0, 54.0}}
+                          Other, 0x10a556440, {{21.0, 791.0}, {360.0, 62.0}}
+                            Button, 0x10a556580, {{25.0, 795.0}, {95.0, 54.0}}, identifier: 'tab-today', label: 'Today', Selected
+                              Image, 0x10a5566c0, {{60.0, 798.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: '채워진 텍스트 클립보드에 있는 하트'
+                            Button, 0x10a556800, {{110.7, 795.0}, {95.0, 54.0}}, identifier: 'tab-activity', label: 'Activity'
+                              Image, 0x10a556940, {{146.7, 799.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: '불꽃'
+                            Button, 0x10a556a80, {{196.3, 795.0}, {95.0, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x10a556bc0, {{229.7, 802.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: '나뭇잎'
+                            Button, 0x10a556d00, {{282.0, 795.0}, {95.0, 54.0}}, identifier: 'tab-life', label: 'Life'
+                              Image, 0x10a556e40, {{313.7, 801.3}, {32.0, 27.3}}, identifier: 'checklist', label: '체크 표시가 있는 체크리스트'
+                          Other, 0x10a556f80, {{21.0, 791.0}, {360.0, 62.0}}
+                          Other, 0x10a5570c0, {{25.0, 795.0}, {95.0, 54.0}}
+                            Other, 0x10a557200, {{25.0, 795.0}, {95.0, 54.0}}
+                              Other, 0x10a557340, {{25.0, 795.0}, {95.0, 54.0}}
+                              Other, 0x10a557480, {{25.0, 795.0}, {95.0, 54.0}}
+                                Other, 0x10a5575c0, {{25.0, 795.0}, {95.0, 54.0}}
+                                  Other, 0x10a557700, {{25.0, 795.0}, {95.0, 54.0}}
+                                    Other, 0x10a557840, {{25.0, 795.0}, {95.0, 54.0}}
+                                  Other, 0x10a557980, {{25.0, 795.0}, {95.0, 54.0}}
+                                Other, 0x10a557ac0, {{25.0, 795.0}, {95.0, 54.0}}
+                    Other, 0x10a557c00, {{0.0, 791.0}, {402.0, 83.0}}
+                      Other, 0x10a557d40, {{0.0, 791.0}, {402.0, 83.0}}
+                        Other, 0x10a557e80, {{0.0, 791.0}, {402.0, 83.0}}
+                          Other, 0x114ae4000, {{0.0, 791.0}, {402.0, 83.0}}
+                            Other, 0x114ae4140, {{0.0, 791.0}, {402.0, 83.0}}
+                              Other, 0x114ae4280, {{0.0, 791.0}, {402.0, 83.0}}
+                          Other, 0x114ae43c0, {{0.0, 791.0}, {402.0, 83.0}}
+                            Other, 0x114ae4500, {{0.0, 791.0}, {402.0, 83.0}}
+              Other, 0x114ae4640, {{0.0, 62.0}, {402.0, 778.0}}
+              Other, 0x114ae4780, {{201.0, 451.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x10a59c3c0, pid: 23274, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x114ae48c0, pid: 23274, label: 'DUNE'
+  }

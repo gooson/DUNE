@@ -52,6 +52,9 @@ struct ScoreHeroPalette {
         }
         return paleGold
     }
+    /// Data must stay readable on the opaque dark hero in either appearance.
+    /// The dusk highlight belongs to the ring, where it is only a gradient stop.
+    var trendLine: Color { isDesert ? heroHighlight : heroAccent }
     var heroPositive: Color {
         if colorScheme == .light && theme == .contourAtlas {
             return Color(red: 0.741, green: 0.835, blue: 0.525)

@@ -1,0 +1,1907 @@
+{
+  "note": "Immutable raw records compressed without changing original paths/revisions. Failed and earlier pending assessment records retain their historical state; final gate is stated in review README.",
+  "files": [
+    {
+      "original_local_copy": ".codex-checks/pipeline/check-1d9b376df83f0266f8486f12.json",
+      "archived_file": "raw/current-pipeline/check-1d9b376df83f0266f8486f12.json.gz",
+      "uncompressed_sha256": "c640c352f156926d9defa2f53287d06fb85a153553b64dec7f51d30ad2b2d976",
+      "uncompressed_bytes": 968
+    },
+    {
+      "original_local_copy": ".codex-checks/pipeline/check-5ad02caf4f08a95f92e60c42.json",
+      "archived_file": "raw/current-pipeline/check-5ad02caf4f08a95f92e60c42.json.gz",
+      "uncompressed_sha256": "4e2cb4ad437afea8505cbd2cb7898bf06d24e023460696adf32a935690196080",
+      "uncompressed_bytes": 1051
+    },
+    {
+      "original_local_copy": ".codex-checks/pipeline/check-80c31dcb92d875d893c5d063.json",
+      "archived_file": "raw/current-pipeline/check-80c31dcb92d875d893c5d063.json.gz",
+      "uncompressed_sha256": "3f75ca14fb79579627e9caf15f4dc2a8fcb61bf39d3faa01fd8c624e8a4ae392",
+      "uncompressed_bytes": 2136
+    },
+    {
+      "original_local_copy": ".codex-checks/pipeline/check-80e25b9b054d54dc983f11e5.json",
+      "archived_file": "raw/current-pipeline/check-80e25b9b054d54dc983f11e5.json.gz",
+      "uncompressed_sha256": "08ae47a281babece65d0c69ae19cd88267c38d02794c924227d57304b71480aa",
+      "uncompressed_bytes": 1078
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/actor-compile-retry.json",
+      "archived_file": "raw/actor-compile-retry.json.gz",
+      "uncompressed_sha256": "0195305c6de9873654c5820eed74d3787de2597cbbb779b628a5f90e1f728ea8",
+      "uncompressed_bytes": 783
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/app-quality-final-gate.md",
+      "archived_file": "raw/app-quality-final-gate.md.gz",
+      "uncompressed_sha256": "fa53f5eaa449e2fa1bc5f6de52293ecdb7ea58da8fbce9d0768aa01e7a49ccd3",
+      "uncompressed_bytes": 5173
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/app-quality-preflight.md",
+      "archived_file": "raw/app-quality-preflight.md.gz",
+      "uncompressed_sha256": "c4d8d76526f962a129f4283f008e951442b494d4472a308516d63f62a4d5dcdf",
+      "uncompressed_bytes": 4941
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/artifact-retention-incident.json",
+      "archived_file": "raw/artifact-retention-incident.json.gz",
+      "uncompressed_sha256": "78455f60276cfb47c7fb9fb4dc1d93f3e4123c44a417e53cbabf4348aff72762",
+      "uncompressed_bytes": 729
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/asset-fallback-fix.json",
+      "archived_file": "raw/asset-fallback-fix.json.gz",
+      "uncompressed_sha256": "ca5e4cf6b6987109a2e5af02f51ede79d2a8d7a80807315d130b449d7cbae465",
+      "uncompressed_bytes": 2304
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/build-final-gallery.py",
+      "archived_file": "raw/build-final-gallery.py.gz",
+      "uncompressed_sha256": "f87c6a39f374ddf4ecb3fd9ef5fd1824ca260f150965cd1a990c30e7032b5209",
+      "uncompressed_bytes": 3943
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/build-stage-extra-native.py",
+      "archived_file": "raw/build-stage-extra-native.py.gz",
+      "uncompressed_sha256": "197ca438331437e2a358779ea0ddb0c43a83cb967d7db8f62676f8c2e5961760",
+      "uncompressed_bytes": 30206
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-closed-a-cli-retry.json",
+      "archived_file": "raw/duo-closed-a-cli-retry.json.gz",
+      "uncompressed_sha256": "681a0b09172543319091229ad3a355d6de6146f1d29ac5aa6649d975422b94b9",
+      "uncompressed_bytes": 397
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-native-review.md",
+      "archived_file": "raw/duo-native-review.md.gz",
+      "uncompressed_sha256": "d522f3d54b75af77ba32b0a8879d2a45532d984844bd3216be4aff7bd890b4d4",
+      "uncompressed_bytes": 2181
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-open-orientation-retry.json",
+      "archived_file": "raw/duo-open-orientation-retry.json.gz",
+      "uncompressed_sha256": "2f393cb420e2bf28a1aac6eb0ab9e15b8c67be969c89943aff0916bf76a77bbd",
+      "uncompressed_bytes": 879
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-open-viewport-cause.json",
+      "archived_file": "raw/duo-open-viewport-cause.json.gz",
+      "uncompressed_sha256": "89a1c8b6972483a5eeaa6c34195d521224f2879e8336102e8c635a91124f08b5",
+      "uncompressed_bytes": 1735
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-open-viewport-mapping-diagnosis.md",
+      "archived_file": "raw/duo-open-viewport-mapping-diagnosis.md.gz",
+      "uncompressed_sha256": "de3376ccf01a73f106cdcd68a11d86f44acdc73495fd6464cd535943c5851e75",
+      "uncompressed_bytes": 6537
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-orientation-driver.original-one-shot.py",
+      "archived_file": "raw/duo-orientation-driver.original-one-shot.py.gz",
+      "uncompressed_sha256": "fdd1242e18cf870ac8c2d1790231e1516de297fad28009d7fa31e6e463a40d9e",
+      "uncompressed_bytes": 1175
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-orientation-driver.py",
+      "archived_file": "raw/duo-orientation-driver.py.gz",
+      "uncompressed_sha256": "0b7ac2cd972f93390eb1cb900ed8632a6d35784795565f0cbcd2b85f90b574ba",
+      "uncompressed_bytes": 2942
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-orientation-lifetime-proposal.md",
+      "archived_file": "raw/duo-orientation-lifetime-proposal.md.gz",
+      "uncompressed_sha256": "76c1682afb7cbf1da2e65b044df30704ee13228af1363b85a0d3bc91d53ac4d6",
+      "uncompressed_bytes": 8135
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-remaining-batches.json",
+      "archived_file": "raw/duo-remaining-batches.json.gz",
+      "uncompressed_sha256": "0149a6cd14025504402cb2dd5a68a114abf960361a07733af533b5a42cbb0d44",
+      "uncompressed_bytes": 861
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/checkpoints.jsonl",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/checkpoints.jsonl.gz",
+      "uncompressed_sha256": "a040b21d75809ce5975b10b4beceb33539f2682d05c0715cf9c359fa2f03d6df",
+      "uncompressed_bytes": 14789
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/displays-after.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/displays-after.json.gz",
+      "uncompressed_sha256": "c7b9c2ba1dfce737559afbcc8dc2d07c782e6e6205fe0fdd3206fb54f2f88a62",
+      "uncompressed_bytes": 2313
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/displays-before.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/displays-before.json.gz",
+      "uncompressed_sha256": "c7b9c2ba1dfce737559afbcc8dc2d07c782e6e6205fe0fdd3206fb54f2f88a62",
+      "uncompressed_bytes": 2313
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/displays-post-test.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/displays-post-test.json.gz",
+      "uncompressed_sha256": "c7b9c2ba1dfce737559afbcc8dc2d07c782e6e6205fe0fdd3206fb54f2f88a62",
+      "uncompressed_bytes": 2313
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/driver-source.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/driver-source.json.gz",
+      "uncompressed_sha256": "4f440f229fdf70ad5045022fd02f0123e5774d9a5ffe4931ac2b74cdbcac4fdf",
+      "uncompressed_bytes": 653
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/hinge-set.log",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/hinge-set.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "uncompressed_bytes": 0
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/host-stdout.log",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/host-stdout.log.gz",
+      "uncompressed_sha256": "fc675aef7661e1b2d3a92a81e0b0ec56dd35e2a80433d3149c08be7c2e633a89",
+      "uncompressed_bytes": 8845
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/orientation-after.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/orientation-after.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/orientation-before.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/orientation-before.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/orientation-post-test.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/orientation-post-test.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/pairs.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/pairs.json.gz",
+      "uncompressed_sha256": "98a74ebfe8655531d29a83f9a126a87846ee029297542b55531f9d747c32e01e",
+      "uncompressed_bytes": 78508
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/pose-after.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/pose-after.json.gz",
+      "uncompressed_sha256": "b7a17c8f7f011dee25fda797448c336af7ae89ae8d86d4b779afec95bdf48b7f",
+      "uncompressed_bytes": 329
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/pose-post-test.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/pose-post-test.json.gz",
+      "uncompressed_sha256": "97a6bb8bfb7461a3ff346aec27a803475928e9d44931b9f3068081e9da556fe6",
+      "uncompressed_bytes": 333
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/preflight.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/preflight.json.gz",
+      "uncompressed_sha256": "aa99caf01a2c3340a4b336a7c5e9d5523452d04fb49521032ff476dd896aa918",
+      "uncompressed_bytes": 2903
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/run.log",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/run.log.gz",
+      "uncompressed_sha256": "a2ec92bd4ad0fba5d3c75089da7f059455cd5a4517e7bb930e777b3c69e254f0",
+      "uncompressed_bytes": 220955
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/runner-result.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/runner-result.json.gz",
+      "uncompressed_sha256": "33ec81a0f1c9ddaea918dcd656ba427ec68a410bbccf5b147ff856d41a9db2c8",
+      "uncompressed_bytes": 105
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/ui.log",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/ui.log.gz",
+      "uncompressed_sha256": "d798943f1e85aaa4d56fe807ac3efb1ddd624c9e1f972a36d52b3b4e0135ccf0",
+      "uncompressed_bytes": 219619
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/ui.log.host.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/ui.log.host.json.gz",
+      "uncompressed_sha256": "9a9b6840c523c4a945a88c86169cedd4e14baf49b2e8ce7371360fcc036f9e39",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/ui.log.result.json",
+      "archived_file": "raw/duo-theme-closed-ArcticDawn-SolarPop-ContourAtlas-WaterLilies-20261114T123207Z/ui.log.result.json.gz",
+      "uncompressed_sha256": "bb2c59ac42a6d136aeeff11d7105c253172d8292f745de5da15443a86c585849",
+      "uncompressed_bytes": 845
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/checkpoints.jsonl",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/checkpoints.jsonl.gz",
+      "uncompressed_sha256": "792cf723a5b19a7230d82108f778a8ddd73c09fa672c530f44d2c4058d887bd2",
+      "uncompressed_bytes": 14941
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/displays-after.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/displays-after.json.gz",
+      "uncompressed_sha256": "662592c8934895b84ba8cd7a7148d6fa17f10cb4b82fcf2e71bf6d2618722405",
+      "uncompressed_bytes": 2317
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/displays-before.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/displays-before.json.gz",
+      "uncompressed_sha256": "d0e943ad58b09576cf1d8cc1c8b487285c99ee0aace60285f5e2385b952f16e5",
+      "uncompressed_bytes": 2263
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/displays-post-test.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/displays-post-test.json.gz",
+      "uncompressed_sha256": "c7b9c2ba1dfce737559afbcc8dc2d07c782e6e6205fe0fdd3206fb54f2f88a62",
+      "uncompressed_bytes": 2313
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/driver-source.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/driver-source.json.gz",
+      "uncompressed_sha256": "4f440f229fdf70ad5045022fd02f0123e5774d9a5ffe4931ac2b74cdbcac4fdf",
+      "uncompressed_bytes": 653
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/hinge-set.log",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/hinge-set.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "uncompressed_bytes": 0
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/host-stdout.log",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/host-stdout.log.gz",
+      "uncompressed_sha256": "35d15034f85ea7b4976676304932211a2aed02592656b173ae5515676a919002",
+      "uncompressed_bytes": 8892
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/orientation-after.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/orientation-after.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/orientation-before.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/orientation-before.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/orientation-post-test.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/orientation-post-test.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/pairs.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/pairs.json.gz",
+      "uncompressed_sha256": "5fad44df508e6fc55716417e3538ff959b7c1bef2b00488d8675facd1ceff418",
+      "uncompressed_bytes": 79397
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/pose-after.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/pose-after.json.gz",
+      "uncompressed_sha256": "b7a17c8f7f011dee25fda797448c336af7ae89ae8d86d4b779afec95bdf48b7f",
+      "uncompressed_bytes": 329
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/pose-post-test.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/pose-post-test.json.gz",
+      "uncompressed_sha256": "97a6bb8bfb7461a3ff346aec27a803475928e9d44931b9f3068081e9da556fe6",
+      "uncompressed_bytes": 333
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/preflight.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/preflight.json.gz",
+      "uncompressed_sha256": "4a3169495ac37e855ab3991219b4c4137e5d269c525469944c86802861405064",
+      "uncompressed_bytes": 2663
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/run.log",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/run.log.gz",
+      "uncompressed_sha256": "a23615acaa638e4c9bce01f1c992cd8acdd48eef5d7003d85a2a4cabbfcd36d4",
+      "uncompressed_bytes": 271509
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/runner-result.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/runner-result.json.gz",
+      "uncompressed_sha256": "24605a7b6ed6bfeec78585eec0bedce6925c1958e64dc930c8b49f34e3610ad3",
+      "uncompressed_bytes": 105
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/ui.log",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/ui.log.gz",
+      "uncompressed_sha256": "c02bd2834f888a2666107fbfb9c2d5a6cad42b8c35f539475ce56a00e78137b9",
+      "uncompressed_bytes": 270177
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/ui.log.host.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/ui.log.host.json.gz",
+      "uncompressed_sha256": "8db75827c6e0788c2b52d3c0e4fdb93905c1dc37694a3aa49a39398049a251d4",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/ui.log.result.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/ui.log.result.json.gz",
+      "uncompressed_sha256": "36d6c8ececcec3a3691d0b5c28ae1a06d0a39475c723e130934aa9d88c7d67bf",
+      "uncompressed_bytes": 843
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/validated-existing-evidence.json",
+      "archived_file": "raw/duo-theme-closed-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T120247Z/validated-existing-evidence.json.gz",
+      "uncompressed_sha256": "2c4212687059e9d02a41403a3e547113e113dfe2d9ed7d40a2db7c4b0c8de3c3",
+      "uncompressed_bytes": 1024
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/checkpoints.jsonl",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/checkpoints.jsonl.gz",
+      "uncompressed_sha256": "7721893a96050a8d0ced4063df68073d08daf995ddff670347c1d22dff3242d6",
+      "uncompressed_bytes": 5937
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/displays-after.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/displays-after.json.gz",
+      "uncompressed_sha256": "c7b9c2ba1dfce737559afbcc8dc2d07c782e6e6205fe0fdd3206fb54f2f88a62",
+      "uncompressed_bytes": 2313
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/displays-before.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/displays-before.json.gz",
+      "uncompressed_sha256": "c7b9c2ba1dfce737559afbcc8dc2d07c782e6e6205fe0fdd3206fb54f2f88a62",
+      "uncompressed_bytes": 2313
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/displays-post-test.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/displays-post-test.json.gz",
+      "uncompressed_sha256": "c7b9c2ba1dfce737559afbcc8dc2d07c782e6e6205fe0fdd3206fb54f2f88a62",
+      "uncompressed_bytes": 2313
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/driver-source.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/driver-source.json.gz",
+      "uncompressed_sha256": "4f440f229fdf70ad5045022fd02f0123e5774d9a5ffe4931ac2b74cdbcac4fdf",
+      "uncompressed_bytes": 653
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/hinge-set.log",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/hinge-set.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "uncompressed_bytes": 0
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/host-stdout.log",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/host-stdout.log.gz",
+      "uncompressed_sha256": "b237bba8130d4f256b638f644cdf40a85e62b930d22f5cbef611c9176da3b28e",
+      "uncompressed_bytes": 3733
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/orientation-after.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/orientation-after.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/orientation-before.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/orientation-before.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/orientation-post-test.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/orientation-post-test.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/pairs.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/pairs.json.gz",
+      "uncompressed_sha256": "7180b447cc5af471b8431d95444c3dbb2e034e29be1ed673fd9ec86898f088df",
+      "uncompressed_bytes": 27533
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/pose-after.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/pose-after.json.gz",
+      "uncompressed_sha256": "b7a17c8f7f011dee25fda797448c336af7ae89ae8d86d4b779afec95bdf48b7f",
+      "uncompressed_bytes": 329
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/pose-post-test.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/pose-post-test.json.gz",
+      "uncompressed_sha256": "97a6bb8bfb7461a3ff346aec27a803475928e9d44931b9f3068081e9da556fe6",
+      "uncompressed_bytes": 333
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/preflight.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/preflight.json.gz",
+      "uncompressed_sha256": "832fb2934911573a77a8b0f3cf75a744a6eff93040fa4497ecc5e7913638e7c8",
+      "uncompressed_bytes": 2776
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/run.log",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/run.log.gz",
+      "uncompressed_sha256": "97e8178f261a0e1365a7ca9eed3bdefc1055cd91527143ab01e3f4d2f39de83e",
+      "uncompressed_bytes": 87956
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/runner-result.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/runner-result.json.gz",
+      "uncompressed_sha256": "3d9fdc97c5a7e3fd98e8573c43df267b23adcf43783c2b4fbf23908644c6a12b",
+      "uncompressed_bytes": 105
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/ui.log",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/ui.log.gz",
+      "uncompressed_sha256": "dc1fede46382b98e309a4bfc1b6bd03b14dc42779e4e2e278b2c3be92179cfa2",
+      "uncompressed_bytes": 86839
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/ui.log.host.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/ui.log.host.json.gz",
+      "uncompressed_sha256": "d2c50e2b4f2afd806740454cb0dfb96d0c63a177f570c3318df1ca0e0fdc0423",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-closed-WaterLilies-20261114T124643Z/ui.log.result.json",
+      "archived_file": "raw/duo-theme-closed-WaterLilies-20261114T124643Z/ui.log.result.json.gz",
+      "uncompressed_sha256": "0dd6fa88de65870879354544d625db04b15b48f1c384ac60c652575c6e25c78e",
+      "uncompressed_bytes": 706
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-20261114T140619Z/displays-after.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-20261114T140619Z/displays-after.json.gz",
+      "uncompressed_sha256": "fe81b045127e6c06df58de50dc8a210c41110ee1496a276304d8a584d5180117",
+      "uncompressed_bytes": 2312
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-20261114T140619Z/displays-before.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-20261114T140619Z/displays-before.json.gz",
+      "uncompressed_sha256": "1fc15dcdad3c4c19d16a42692950db234786469e961bdd658c24110830a68697",
+      "uncompressed_bytes": 2263
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-20261114T140619Z/driver-source.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-20261114T140619Z/driver-source.json.gz",
+      "uncompressed_sha256": "dc9490afde2ef55f88f9ed4f8cd0f5b4c399912195a7fa51529758dc19b96b83",
+      "uncompressed_bytes": 653
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-20261114T140619Z/hinge-set.log",
+      "archived_file": "raw/duo-theme-open-DesertWarm-20261114T140619Z/hinge-set.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "uncompressed_bytes": 0
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-20261114T140619Z/orientation-after.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-20261114T140619Z/orientation-after.json.gz",
+      "uncompressed_sha256": "69d16236398bed25b137c8beb41dc0e19b4b49adb6a1868b218c6deb4233faac",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-20261114T140619Z/orientation-before.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-20261114T140619Z/orientation-before.json.gz",
+      "uncompressed_sha256": "69d16236398bed25b137c8beb41dc0e19b4b49adb6a1868b218c6deb4233faac",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-20261114T140619Z/orientation-driver-1794665191632592000.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-20261114T140619Z/orientation-driver-1794665191632592000.json.gz",
+      "uncompressed_sha256": "23a5085259bc9af51d415b4848403a7a55ec340001feadbc0a0f91d54ebe3a5b",
+      "uncompressed_bytes": 1054
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/displays-after.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/displays-after.json.gz",
+      "uncompressed_sha256": "bd87ba082654c2e2d71e03d09574d4149d0a831f5c948f15319190779d406f36",
+      "uncompressed_bytes": 2312
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/displays-before.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/displays-before.json.gz",
+      "uncompressed_sha256": "c7b9c2ba1dfce737559afbcc8dc2d07c782e6e6205fe0fdd3206fb54f2f88a62",
+      "uncompressed_bytes": 2313
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/driver-source.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/driver-source.json.gz",
+      "uncompressed_sha256": "4f440f229fdf70ad5045022fd02f0123e5774d9a5ffe4931ac2b74cdbcac4fdf",
+      "uncompressed_bytes": 653
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/hinge-set.log",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/hinge-set.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "uncompressed_bytes": 0
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/orientation-after.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/orientation-after.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/orientation-before.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T125152Z/orientation-before.json.gz",
+      "uncompressed_sha256": "901da1426cf3985654db06ae51c0cf1993b6d9e6ac71b67efa75cfb14f5887c3",
+      "uncompressed_bytes": 639
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/002-orientation.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/002-orientation.json.gz",
+      "uncompressed_sha256": "1231c1b4ee554e27d7006a78aa28401e03f55f0d6c93fd8744f5a0d90b36f1c9",
+      "uncompressed_bytes": 269
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/005-orientation.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/005-orientation.json.gz",
+      "uncompressed_sha256": "1231c1b4ee554e27d7006a78aa28401e03f55f0d6c93fd8744f5a0d90b36f1c9",
+      "uncompressed_bytes": 269
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/008-orientation.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/008-orientation.json.gz",
+      "uncompressed_sha256": "1231c1b4ee554e27d7006a78aa28401e03f55f0d6c93fd8744f5a0d90b36f1c9",
+      "uncompressed_bytes": 269
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/011-orientation.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/011-orientation.json.gz",
+      "uncompressed_sha256": "1231c1b4ee554e27d7006a78aa28401e03f55f0d6c93fd8744f5a0d90b36f1c9",
+      "uncompressed_bytes": 269
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/checkpoints.jsonl",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/checkpoints.jsonl.gz",
+      "uncompressed_sha256": "7f677b7a39ab930ada450eff6e4f6e663a97cc80454b277c8895ce4f1df3e4b5",
+      "uncompressed_bytes": 3081
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/displays-after.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/displays-after.json.gz",
+      "uncompressed_sha256": "bd87ba082654c2e2d71e03d09574d4149d0a831f5c948f15319190779d406f36",
+      "uncompressed_bytes": 2312
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/displays-before.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/displays-before.json.gz",
+      "uncompressed_sha256": "bd87ba082654c2e2d71e03d09574d4149d0a831f5c948f15319190779d406f36",
+      "uncompressed_bytes": 2312
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/displays-post-failure.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/displays-post-failure.json.gz",
+      "uncompressed_sha256": "bd87ba082654c2e2d71e03d09574d4149d0a831f5c948f15319190779d406f36",
+      "uncompressed_bytes": 2312
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/driver-source.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/driver-source.json.gz",
+      "uncompressed_sha256": "02eefc1507cbd0a62931ce15625be6266f71959578f4d330b97aa5ed3e1be058",
+      "uncompressed_bytes": 653
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/hinge-set.log",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/hinge-set.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "uncompressed_bytes": 0
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/host-stdout.log",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/host-stdout.log.gz",
+      "uncompressed_sha256": "cf23c2135c64947f4e101cbf77ffc2bd129a9902d6a8018d49c5201a1e9f3051",
+      "uncompressed_bytes": 7392
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-after.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-after.json.gz",
+      "uncompressed_sha256": "a92aef791013e11b120d1944596979acfe0d4b427005f52b3e97ff4b8a4ff8f9",
+      "uncompressed_bytes": 649
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-before.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-before.json.gz",
+      "uncompressed_sha256": "a92aef791013e11b120d1944596979acfe0d4b427005f52b3e97ff4b8a4ff8f9",
+      "uncompressed_bytes": 649
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-driver-1794661629512312000.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-driver-1794661629512312000.json.gz",
+      "uncompressed_sha256": "73ea9a3127965cb8f6f03e8b11a2f237f91da17be2df8a59d9f78fa634dd3b32",
+      "uncompressed_bytes": 1068
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-driver-1794661661715140000.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-driver-1794661661715140000.json.gz",
+      "uncompressed_sha256": "cabc838ab5d07fffa5599e65c63cdf201f57f773679ae6d2bf4ac5294adfc4fb",
+      "uncompressed_bytes": 1069
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-driver-1794661697136415000.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-driver-1794661697136415000.json.gz",
+      "uncompressed_sha256": "4df9c08e6b8d10ab3d4ab0f6af04d160cfffc400ee7dcc75907d90b8d47a2089",
+      "uncompressed_bytes": 1070
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-driver-1794661733619375000.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-driver-1794661733619375000.json.gz",
+      "uncompressed_sha256": "94cd32f09ff2dd1439a2f86918582f48292a06edae89afea59af795142b34956",
+      "uncompressed_bytes": 1069
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-driver-1794661769622295000.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-driver-1794661769622295000.json.gz",
+      "uncompressed_sha256": "69a05123d88275b72d5a78c8d81194386f2ff3dbee87427b636c5726eee0e373",
+      "uncompressed_bytes": 1069
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-post-failure.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/orientation-post-failure.json.gz",
+      "uncompressed_sha256": "a92aef791013e11b120d1944596979acfe0d4b427005f52b3e97ff4b8a4ff8f9",
+      "uncompressed_bytes": 649
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/pose-after.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/pose-after.json.gz",
+      "uncompressed_sha256": "1e1eb18e580a1b02489d799eb7256e3b7245de77de605a78ce2c2775788b1d19",
+      "uncompressed_bytes": 336
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/preflight.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/preflight.json.gz",
+      "uncompressed_sha256": "a30cdc39d906bc294e0d2e17a02125daf971bfd20dfda47f4402e9ca95a1c7d6",
+      "uncompressed_bytes": 2948
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/run.log",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/run.log.gz",
+      "uncompressed_sha256": "8999d1f391ce9bd47b5e9c68da687b7dec39337021cbba2f4404aae12ffa2487",
+      "uncompressed_bytes": 53167
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/runner-result.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/runner-result.json.gz",
+      "uncompressed_sha256": "270f777fbad8507fafd87b837d299efbcadd80338e14ccd3684599880d9c2b7c",
+      "uncompressed_bytes": 106
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/ui.log",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/ui.log.gz",
+      "uncompressed_sha256": "4c3419e67da109e120640a61a3562894315a455465028a83538d44a41ac826aa",
+      "uncompressed_bytes": 47690
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/ui.log.host.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/ui.log.host.json.gz",
+      "uncompressed_sha256": "37a02fb403ba6485062e4d1e63d685d8c3a01b7eea12b229967a57a4e2def84a",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/ui.log.result.json",
+      "archived_file": "raw/duo-theme-open-DesertWarm-OceanCool-ForestGreen-SakuraCalm-20261114T130704Z/ui.log.result.json.gz",
+      "uncompressed_sha256": "d970dcbcb249537cbf939660d5aafa6d8947a060a1e70e3ca5b4681462214c58",
+      "uncompressed_bytes": 3242
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/ipad-native/manifest.json",
+      "archived_file": "raw/exports/ipad-native/manifest.json.gz",
+      "uncompressed_sha256": "c4f346f13bdffa6cda638d285986bad86c092be41bcf8fe483411ac06305e2b3",
+      "uncompressed_bytes": 158528
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/ipad-native/summary.json",
+      "archived_file": "raw/exports/ipad-native/summary.json.gz",
+      "uncompressed_sha256": "ab917f47d2198351324a6c21a2b86d57007363b0192af45c0d3349743c3dc5ac",
+      "uncompressed_bytes": 1072
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/ipad-native/tests.json",
+      "archived_file": "raw/exports/ipad-native/tests.json.gz",
+      "uncompressed_sha256": "7c5e6a40cce7a1315af630b317854e8272e1581f9dfcaa917c63f9244f0bab72",
+      "uncompressed_bytes": 6324
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-final-roots/manifest.json",
+      "archived_file": "raw/exports/phone-final-roots/manifest.json.gz",
+      "uncompressed_sha256": "91a460bd9b1a9234796aa757774cad7ed1c968b640ed28817b366c2a7c4c6566",
+      "uncompressed_bytes": 130546
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-final-roots/summary.json",
+      "archived_file": "raw/exports/phone-final-roots/summary.json.gz",
+      "uncompressed_sha256": "69f30f88d016e4e00038b9941aee9c91959bd5ae71241e65b2e2e957c381bcc6",
+      "uncompressed_bytes": 1058
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-final-roots/tests.json",
+      "archived_file": "raw/exports/phone-final-roots/tests.json.gz",
+      "uncompressed_sha256": "ad2575d5996fa015f440af3f3dafaa1ae8a5154eac63fa1fcb8ba898987ebd3e",
+      "uncompressed_bytes": 5012
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-high-contrast/manifest.json",
+      "archived_file": "raw/exports/phone-high-contrast/manifest.json.gz",
+      "uncompressed_sha256": "2eedc4aa12f733636d7b2abe9ea138df6eb5bc99a774775eb66d1a178caba62f",
+      "uncompressed_bytes": 16277
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-high-contrast/summary.json",
+      "archived_file": "raw/exports/phone-high-contrast/summary.json.gz",
+      "uncompressed_sha256": "6aeb4819a18f87eb04bf536a1ac03ec7d2802a32b635c5037ca8b04061777d4b",
+      "uncompressed_bytes": 1058
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-high-contrast/tests.json",
+      "archived_file": "raw/exports/phone-high-contrast/tests.json.gz",
+      "uncompressed_sha256": "862b18f18241301314739c2976b404e7481e382f676ad35c135ffde8d4fbce9c",
+      "uncompressed_bytes": 1646
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-voiceover/manifest.json",
+      "archived_file": "raw/exports/phone-voiceover/manifest.json.gz",
+      "uncompressed_sha256": "16f3cc596abe6270ea036acaa938e4e5a13bcf7067ef133504ca834860942f40",
+      "uncompressed_bytes": 13785
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-voiceover/summary.json",
+      "archived_file": "raw/exports/phone-voiceover/summary.json.gz",
+      "uncompressed_sha256": "aad19926d3583252969de996f3b7ffdb655109e37f826399bc2ddba0966e240a",
+      "uncompressed_bytes": 1550
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-voiceover/tests.json",
+      "archived_file": "raw/exports/phone-voiceover/tests.json.gz",
+      "uncompressed_sha256": "6f08e934b9c2426a471dc9cb842595614a498874fb863ccbc85cd9684f74e9fb",
+      "uncompressed_bytes": 2247
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-voiceover-fixed/manifest.json",
+      "archived_file": "raw/exports/phone-voiceover-fixed/manifest.json.gz",
+      "uncompressed_sha256": "c7bcdb9ad67e0868dcc92651cd0ca2cb1c1a0c7565c7937949666019434879b3",
+      "uncompressed_bytes": 7578
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-voiceover-fixed/summary.json",
+      "archived_file": "raw/exports/phone-voiceover-fixed/summary.json.gz",
+      "uncompressed_sha256": "39a6ce1008b5886f806ae5ec624969f92c35c4367533a4a63a27f77397ff16b5",
+      "uncompressed_bytes": 1058
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/phone-voiceover-fixed/tests.json",
+      "archived_file": "raw/exports/phone-voiceover-fixed/tests.json.gz",
+      "uncompressed_sha256": "b79b71db892433ad089319b567a6c7c03fefbca6b89e9c7c41a09bcdd12795ab",
+      "uncompressed_bytes": 1715
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/theme-phone-arctic/manifest.json",
+      "archived_file": "raw/exports/theme-phone-arctic/manifest.json.gz",
+      "uncompressed_sha256": "b4c0af3177555a28d2d2434f8f25feb3e50ec4480579cc5ed293b4d74102b70e",
+      "uncompressed_bytes": 41835
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/theme-phone-contour/manifest.json",
+      "archived_file": "raw/exports/theme-phone-contour/manifest.json.gz",
+      "uncompressed_sha256": "a6a7fd7d64899c73598a0ec3a1ccb3aae8c07d1d36382b0af8bffd950bcd042e",
+      "uncompressed_bytes": 41891
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/theme-phone-desert-capture-recovery/manifest.json",
+      "archived_file": "raw/exports/theme-phone-desert-capture-recovery/manifest.json.gz",
+      "uncompressed_sha256": "6847d3a1631b896372a737e2c652941f5eba832381ac50f554e61dcec25da955",
+      "uncompressed_bytes": 42957
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/theme-phone-forest/manifest.json",
+      "archived_file": "raw/exports/theme-phone-forest/manifest.json.gz",
+      "uncompressed_sha256": "0f4c3f5ad4ac94a7eed03cc82cb0f930964d6a35d2d9fb50daa1f2dd757cbec8",
+      "uncompressed_bytes": 41824
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/theme-phone-ocean-capture-recovery/manifest.json",
+      "archived_file": "raw/exports/theme-phone-ocean-capture-recovery/manifest.json.gz",
+      "uncompressed_sha256": "65a64d58791da5261ea7d3f97b65c6351d1f2fabd766131079f7aa057a6b2362",
+      "uncompressed_bytes": 41764
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/theme-phone-sakura/manifest.json",
+      "archived_file": "raw/exports/theme-phone-sakura/manifest.json.gz",
+      "uncompressed_sha256": "fdd009adb0435929243f9095ca451b19e7f46a2d00bc3df282391d182545baad",
+      "uncompressed_bytes": 41844
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/theme-phone-solar/manifest.json",
+      "archived_file": "raw/exports/theme-phone-solar/manifest.json.gz",
+      "uncompressed_sha256": "88b1f85d131ce9dab4783dd6f1090fd17e2171c0166348f15edf2f590e7161fd",
+      "uncompressed_bytes": 41733
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/watch-native/manifest.json",
+      "archived_file": "raw/exports/watch-native/manifest.json.gz",
+      "uncompressed_sha256": "bb12269960fe75c3ed1afb373aac307333170b5ce117e6a90a89b3427af20d3a",
+      "uncompressed_bytes": 27582
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/watch-native/summary.json",
+      "archived_file": "raw/exports/watch-native/summary.json.gz",
+      "uncompressed_sha256": "a18f1eb443421d0385c620eabbfcdfb0c70de371b2762fa1cf6b8f0b753fff58",
+      "uncompressed_bytes": 1094
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/watch-native/tests.json",
+      "archived_file": "raw/exports/watch-native/tests.json.gz",
+      "uncompressed_sha256": "b94f4497c28a4890df3b5c5423aa47358c7494bb567b51952f66044d086f04cf",
+      "uncompressed_bytes": 9365
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/watch-native-failed-home/manifest.json",
+      "archived_file": "raw/exports/watch-native-failed-home/manifest.json.gz",
+      "uncompressed_sha256": "15a29b496ff5bf270e425214006c26b5ab327a5a2d94938883bdeeb33c748509",
+      "uncompressed_bytes": 91321
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/watch-native-failed-home/summary.json",
+      "archived_file": "raw/exports/watch-native-failed-home/summary.json.gz",
+      "uncompressed_sha256": "c27953ba281f87dcd10cf22a689839477f5a6c27a03f808083497dcb1da6c641",
+      "uncompressed_bytes": 8722
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/exports/watch-native-failed-home/tests.json",
+      "archived_file": "raw/exports/watch-native-failed-home/tests.json.gz",
+      "uncompressed_sha256": "76f16e16443ae1fa96b23803908a28a7e6d36cce4d48074aa0e1df3996958e04",
+      "uncompressed_bytes": 17788
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/final-ui-compile.log",
+      "archived_file": "raw/final-ui-compile.log.gz",
+      "uncompressed_sha256": "b6498626b8acc8b7e180043b6448a8e693fcba57b3c6a3ae24c700e8ed1b6aac",
+      "uncompressed_bytes": 1862254
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/final-ui-plan.json",
+      "archived_file": "raw/final-ui-plan.json.gz",
+      "uncompressed_sha256": "425271275bb6071649593770a01d191decae64d8d5d8b16e210e4905c571bd15",
+      "uncompressed_bytes": 11744
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/import-native-theme-evidence.py",
+      "archived_file": "raw/import-native-theme-evidence.py.gz",
+      "uncompressed_sha256": "5b5cceeaf60f0c618735b2bcbcb8f0040a449484480e525c843603d9576ce9b6",
+      "uncompressed_bytes": 17955
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/import-theme-roots-to-phone-map.py",
+      "archived_file": "raw/import-theme-roots-to-phone-map.py.gz",
+      "uncompressed_sha256": "a53a79da60b823f35920dbed79c208a1b89d2760f7b626790d06942b11eea6cc",
+      "uncompressed_bytes": 10848
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-0418e4fda6ed22610a1b7d1f.json",
+      "archived_file": "raw/imported-pipeline-records/check-0418e4fda6ed22610a1b7d1f.json.gz",
+      "uncompressed_sha256": "c823ccb06585108b8ef037cea51df17bc87832ef1c99d72c19901f38dc10b9d2",
+      "uncompressed_bytes": 1336
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-0449353cb4fa4faddb2fdf21.json",
+      "archived_file": "raw/imported-pipeline-records/check-0449353cb4fa4faddb2fdf21.json.gz",
+      "uncompressed_sha256": "ed76b184d252f8b714b1c91f0b5c796e7f58d86f6b7c29029bc397b01ecf6379",
+      "uncompressed_bytes": 1324
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-14dfd6e9c4075199f86f1792.json",
+      "archived_file": "raw/imported-pipeline-records/check-14dfd6e9c4075199f86f1792.json.gz",
+      "uncompressed_sha256": "362ffa751e0d0c5a8792754e05ba302cf2dad6a516682fa13e633667b39b6bbd",
+      "uncompressed_bytes": 3007
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-243ee36c62b4262cdf7fdcba.json",
+      "archived_file": "raw/imported-pipeline-records/check-243ee36c62b4262cdf7fdcba.json.gz",
+      "uncompressed_sha256": "1baf7e778d2800117dab33ee923d6f0d19df46c83ea3477b3c8e3418ef9d080c",
+      "uncompressed_bytes": 1077
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-3ed22c5a16cc3c6f6a366c55.json",
+      "archived_file": "raw/imported-pipeline-records/check-3ed22c5a16cc3c6f6a366c55.json.gz",
+      "uncompressed_sha256": "94382fd492030f3ad56da436cbb521bb1e191ced06f4adc531570ceaf232f11a",
+      "uncompressed_bytes": 1092
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-3fab04e87c66a76e327c5b24.json",
+      "archived_file": "raw/imported-pipeline-records/check-3fab04e87c66a76e327c5b24.json.gz",
+      "uncompressed_sha256": "b3781fe5f1e403d904c65d866296808eeb32329476dc520e242f0718c50a00bc",
+      "uncompressed_bytes": 2311
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-41c26de25ad23e0622357dfc.json",
+      "archived_file": "raw/imported-pipeline-records/check-41c26de25ad23e0622357dfc.json.gz",
+      "uncompressed_sha256": "90bb00be7e63774de70168b525413fed53167439e3c718dbbd0bd5e81615fd2c",
+      "uncompressed_bytes": 1127
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-53ad8d1ce961e97f52d341b2.json",
+      "archived_file": "raw/imported-pipeline-records/check-53ad8d1ce961e97f52d341b2.json.gz",
+      "uncompressed_sha256": "2c1a3780c57d8a40e38ab0a4cb6a0240aad74e7f42fd60ded527ef86faaeed8c",
+      "uncompressed_bytes": 1489
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-5b79d81aa59842e65056ee01.json",
+      "archived_file": "raw/imported-pipeline-records/check-5b79d81aa59842e65056ee01.json.gz",
+      "uncompressed_sha256": "8914301d65e5f59117b37519834d6615084d6d8da7881f9b0082d8d994cbc2dc",
+      "uncompressed_bytes": 1394
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-6589e3a90a1fba3168725bbe.json",
+      "archived_file": "raw/imported-pipeline-records/check-6589e3a90a1fba3168725bbe.json.gz",
+      "uncompressed_sha256": "9859b4ed790263b8a111249f63259449ee9872fc011ba9b053a1182c05f63844",
+      "uncompressed_bytes": 1333
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-7a9f2d7f0d29c52ec9a3d7e5.json",
+      "archived_file": "raw/imported-pipeline-records/check-7a9f2d7f0d29c52ec9a3d7e5.json.gz",
+      "uncompressed_sha256": "fcccbb680e1474edde1b1a8ffb083505569ed47faecc458d51db0514493e4879",
+      "uncompressed_bytes": 1066
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-80e25b9b054d54dc983f11e5.json",
+      "archived_file": "raw/imported-pipeline-records/check-80e25b9b054d54dc983f11e5.json.gz",
+      "uncompressed_sha256": "7a8eda3e4ef5f090776dd38af19cf40dd13820bb597b8a21e99e01ee528aec25",
+      "uncompressed_bytes": 1103
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-a2ebacdc88c53fb02c70a39b.json",
+      "archived_file": "raw/imported-pipeline-records/check-a2ebacdc88c53fb02c70a39b.json.gz",
+      "uncompressed_sha256": "156467b39bb9be58948222f25a4e6e62bc213a22b312387a04220e0220d8da71",
+      "uncompressed_bytes": 1611
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-ac66d1ee3dbce79c2e430544.json",
+      "archived_file": "raw/imported-pipeline-records/check-ac66d1ee3dbce79c2e430544.json.gz",
+      "uncompressed_sha256": "2b6852681a07ba94b18c8220a8267d80869514ee7ebfb329304abedcd3cb257f",
+      "uncompressed_bytes": 1328
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-ae97bbf88549bb9c9badb943.json",
+      "archived_file": "raw/imported-pipeline-records/check-ae97bbf88549bb9c9badb943.json.gz",
+      "uncompressed_sha256": "cea30de0dced0e41c372b603f42cd5d5d6989f8d4285632a1bad094ff18d146b",
+      "uncompressed_bytes": 1197
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-b102f25a0ee6031b968e3e56.json",
+      "archived_file": "raw/imported-pipeline-records/check-b102f25a0ee6031b968e3e56.json.gz",
+      "uncompressed_sha256": "0afe89c627fadc2810edfcc79f5154ac18f8a079f8183d49a014c9de961eafca",
+      "uncompressed_bytes": 3345
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-c70b208e94b9322ec7acd5e3.json",
+      "archived_file": "raw/imported-pipeline-records/check-c70b208e94b9322ec7acd5e3.json.gz",
+      "uncompressed_sha256": "3584b5d72c94acf4f0865c8d7aa7c0f5a229f44935db4219e95c8cdb5782a7dd",
+      "uncompressed_bytes": 2289
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-c88013388332b8b3a7b51014.json",
+      "archived_file": "raw/imported-pipeline-records/check-c88013388332b8b3a7b51014.json.gz",
+      "uncompressed_sha256": "49fd036bff8a2d091d6653ed7259f280f4a3e0857b48d4d8549ed0b90f9aed5c",
+      "uncompressed_bytes": 1526
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-ca910faa47a568221c27dac2.json",
+      "archived_file": "raw/imported-pipeline-records/check-ca910faa47a568221c27dac2.json.gz",
+      "uncompressed_sha256": "b3392ad7ddd4a7057dbf3d332c61c1870c49754dc8bf6f2861c7d660384432c3",
+      "uncompressed_bytes": 2468
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-d5f026f4f8676d8c5f16e85e.json",
+      "archived_file": "raw/imported-pipeline-records/check-d5f026f4f8676d8c5f16e85e.json.gz",
+      "uncompressed_sha256": "497b797726665217c80ab472cd75d8a71eca1c5da211fd1594ae04ce2e6d0a7b",
+      "uncompressed_bytes": 1332
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-e0b206d685edf7bb034d0f59.json",
+      "archived_file": "raw/imported-pipeline-records/check-e0b206d685edf7bb034d0f59.json.gz",
+      "uncompressed_sha256": "2d73d7c6bf42ad5b76c0556895ae8548a72b3515e7ec6ba27093f9635297dc29",
+      "uncompressed_bytes": 1360
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-e474b2f0bfc5bb09491dec0a.json",
+      "archived_file": "raw/imported-pipeline-records/check-e474b2f0bfc5bb09491dec0a.json.gz",
+      "uncompressed_sha256": "014e82e0e45788c195ed07e149c3fad7a75ba90fe15c043edf41b60b5c8ee4b5",
+      "uncompressed_bytes": 1339
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-e7915ac17e7c2c3763637b88.json",
+      "archived_file": "raw/imported-pipeline-records/check-e7915ac17e7c2c3763637b88.json.gz",
+      "uncompressed_sha256": "3fc811122416362a2e463fa24a106216c0eed810f886789860a61578ba16ed10",
+      "uncompressed_bytes": 1165
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-efed4c5d82c35b18dd8ea511.json",
+      "archived_file": "raw/imported-pipeline-records/check-efed4c5d82c35b18dd8ea511.json.gz",
+      "uncompressed_sha256": "40135691c8d7163aa60ebe1d25a77e26221a13e8a9f20a04f66a5bd835d5bce2",
+      "uncompressed_bytes": 2945
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-f06b41bf91588998f68a4935.json",
+      "archived_file": "raw/imported-pipeline-records/check-f06b41bf91588998f68a4935.json.gz",
+      "uncompressed_sha256": "6b68ef05a062e0542a8827f1f1ccdc2481d880dab1be1c52dab39e7211b03193",
+      "uncompressed_bytes": 1132
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/imported-pipeline-records/check-f1ae2ed257a1800b38a51237.json",
+      "archived_file": "raw/imported-pipeline-records/check-f1ae2ed257a1800b38a51237.json.gz",
+      "uncompressed_sha256": "12ff4a7d50f602aeced7d195875928162b4eb82a09cef35746f71385bb6bfa7c",
+      "uncompressed_bytes": 1362
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/ipad-native-export.log",
+      "archived_file": "raw/ipad-native-export.log.gz",
+      "uncompressed_sha256": "35dcf550aeeadcae750e249f3eb3b6d465f4abfde1e433b67358693a5769db35",
+      "uncompressed_bytes": 51661
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/ipad-native-provenance.json",
+      "archived_file": "raw/ipad-native-provenance.json.gz",
+      "uncompressed_sha256": "9a440fa6b93febe80361772a0c6f77bda7f117aab4d30e9cae44da1023b4352a",
+      "uncompressed_bytes": 1070
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/ipad-native-review.md",
+      "archived_file": "raw/ipad-native-review.md.gz",
+      "uncompressed_sha256": "e6c2799bfbec7a55e85167ca00c4024ab520707eaaebd8ef388d7f8853795397",
+      "uncompressed_bytes": 2557
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/ipad-native.log",
+      "archived_file": "raw/ipad-native.log.gz",
+      "uncompressed_sha256": "2f068eefcdf6019a08f2cf87331773a926e2d6367b7f73f0c5a6652af9990a82",
+      "uncompressed_bytes": 573905
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/ipad-native.log.host.json",
+      "archived_file": "raw/ipad-native.log.host.json.gz",
+      "uncompressed_sha256": "8ff5e012841db4816f73e6d9e3ae39871ecfb9b99a5d09cdc44df62e1093b505",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/ipad-native.log.result.json",
+      "archived_file": "raw/ipad-native.log.result.json.gz",
+      "uncompressed_sha256": "fdea61f54606b405f263bbee4337fa407363cf46777985a28ef4c3ac5e3856bd",
+      "uncompressed_bytes": 1145
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/lldb-watch-transport-plan.md",
+      "archived_file": "raw/lldb-watch-transport-plan.md.gz",
+      "uncompressed_sha256": "cf44cd4e95e3de9f0ab9855b14323a11721143895cd1fa1069db0e9f24afb424",
+      "uncompressed_bytes": 12513
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/motion-retry.json",
+      "archived_file": "raw/motion-retry.json.gz",
+      "uncompressed_sha256": "17d35e03345619cfbf7aa2950ed5fd51fc694e3df2f0d442602fdbd212a3e72f",
+      "uncompressed_bytes": 753
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-arctic.log",
+      "archived_file": "raw/phone-arctic.log.gz",
+      "uncompressed_sha256": "de4d73c05f4adb0aeac22fb0f044d8445b085a7205ea31fd8cf2994ae85bff5a",
+      "uncompressed_bytes": 58495
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-arctic.log.host.json",
+      "archived_file": "raw/phone-arctic.log.host.json.gz",
+      "uncompressed_sha256": "15e9cd2376715a9dc4151db9af9b5fc9d1a2a317248718933692333a5247c8ae",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-arctic.log.result.json",
+      "archived_file": "raw/phone-arctic.log.result.json.gz",
+      "uncompressed_sha256": "b8f6d049e1c34bceae0c52ffa594b0414215c00e6eba4bd617999d5213f3626b",
+      "uncompressed_bytes": 727
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-batches.json",
+      "archived_file": "raw/phone-batches.json.gz",
+      "uncompressed_sha256": "a0febbc6f943806eec9b8b186975e04b9748204deed4ea5f48872a77fc0086e8",
+      "uncompressed_bytes": 3645
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-capture-recovery-batches.json",
+      "archived_file": "raw/phone-capture-recovery-batches.json.gz",
+      "uncompressed_sha256": "aa001d8c1d54c04c4c69aff326465dccb6e3eec865c0a0f05ec9cac32f9d35ff",
+      "uncompressed_bytes": 1125
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-contour.log",
+      "archived_file": "raw/phone-contour.log.gz",
+      "uncompressed_sha256": "275b1bd69b5166efa4dd8ebda0e707aa46448429c702f1e62814d89b0617651e",
+      "uncompressed_bytes": 58547
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-contour.log.host.json",
+      "archived_file": "raw/phone-contour.log.host.json.gz",
+      "uncompressed_sha256": "72b2f0e6633560037c189d746304ef085826708485385d27dcd85ee7e9910f71",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-contour.log.result.json",
+      "archived_file": "raw/phone-contour.log.result.json.gz",
+      "uncompressed_sha256": "1a2acb3f107f7c925aa731b1e5862102d35d821eab28711695bd9f585d50c507",
+      "uncompressed_bytes": 734
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-desert-capture-recovery.log",
+      "archived_file": "raw/phone-desert-capture-recovery.log.gz",
+      "uncompressed_sha256": "1bd77bf8f6c3ecd78be5a7e318a5c0569b47725b6c00bfee4d6ac202442fadab",
+      "uncompressed_bytes": 76131
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-desert-capture-recovery.log.host.json",
+      "archived_file": "raw/phone-desert-capture-recovery.log.host.json.gz",
+      "uncompressed_sha256": "60068d8002bcbbe7590f29938f18b9505f1faf9ad59aa92ac068ee68e0dc41cb",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-desert-capture-recovery.log.result.json",
+      "archived_file": "raw/phone-desert-capture-recovery.log.result.json.gz",
+      "uncompressed_sha256": "591aeff32adc170ab343c6d3fb81d26bc627add4f8fd2ae8bb2eb0a0e271fb91",
+      "uncompressed_bytes": 769
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-desert.log",
+      "archived_file": "raw/phone-desert.log.gz",
+      "uncompressed_sha256": "df37cfa56316cc614c50ffe862e9dc3b1ada7c7ef067b01eb22af1d242c06ea6",
+      "uncompressed_bytes": 76103
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-desert.log.host.json",
+      "archived_file": "raw/phone-desert.log.host.json.gz",
+      "uncompressed_sha256": "8a7138f9dc2a1beff4bce7aea5a7466d4ce781d28929fb496aed4d8a804a66dd",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-desert.log.result.json",
+      "archived_file": "raw/phone-desert.log.result.json.gz",
+      "uncompressed_sha256": "f0e33dd603df714913b883230a7d4d13de9b40d684b5e571798b9753ce5626a0",
+      "uncompressed_bytes": 752
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-final-roots-export.log",
+      "archived_file": "raw/phone-final-roots-export.log.gz",
+      "uncompressed_sha256": "a603535219dab7a2632ddaaad4e6b32a1c6cda72e5283660b46b91dcabaaf8f3",
+      "uncompressed_bytes": 42700
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-final-roots-provenance.json",
+      "archived_file": "raw/phone-final-roots-provenance.json.gz",
+      "uncompressed_sha256": "119e1198e9c0ccf9ed2a89dfa978bbf617ce02e5ca1ba286c13f821903b23241",
+      "uncompressed_bytes": 938
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-final-roots.log",
+      "archived_file": "raw/phone-final-roots.log.gz",
+      "uncompressed_sha256": "aa8dc78791933fde07fdbe45f3bfe9f90d7a8eaf4b044c61fc48a59fece9eede",
+      "uncompressed_bytes": 168227
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-final-roots.log.host.json",
+      "archived_file": "raw/phone-final-roots.log.host.json.gz",
+      "uncompressed_sha256": "f4c496548bf6eadaf87717a6585ec586763d5b34ae07f411c1a6d85036cee10e",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-final-roots.log.result.json",
+      "archived_file": "raw/phone-final-roots.log.result.json.gz",
+      "uncompressed_sha256": "c63eb309cfef16afff1861cc6db13bd49391782c2ddd39b06a32444fd21c8a9e",
+      "uncompressed_bytes": 1017
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-forest.log",
+      "archived_file": "raw/phone-forest.log.gz",
+      "uncompressed_sha256": "3caf897ed4670dd89c95054136a3277148716d71962ccc2951be997271d24397",
+      "uncompressed_bytes": 58438
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-forest.log.host.json",
+      "archived_file": "raw/phone-forest.log.host.json.gz",
+      "uncompressed_sha256": "961ffdc70135eb7b47a8fd5b9330bb14e4427f4c74d9914c0edd1c23518d1a11",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-forest.log.result.json",
+      "archived_file": "raw/phone-forest.log.result.json.gz",
+      "uncompressed_sha256": "43956e183217f59c57e58e9153ee4d9a1c6b151da7446d557dbcb16a31b0617f",
+      "uncompressed_bytes": 730
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-high-contrast-before.json",
+      "archived_file": "raw/phone-high-contrast-before.json.gz",
+      "uncompressed_sha256": "f5ade4f2277cca042532597f5bfb07ab96da9261b36dba32449acc338c88924e",
+      "uncompressed_bytes": 108
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-high-contrast-enabled.json",
+      "archived_file": "raw/phone-high-contrast-enabled.json.gz",
+      "uncompressed_sha256": "f9754c91a29ffbc75d7209346d6d397a4e620407b467002d9a1e13148e5f7251",
+      "uncompressed_bytes": 108
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-high-contrast-export.log",
+      "archived_file": "raw/phone-high-contrast-export.log.gz",
+      "uncompressed_sha256": "1cc0df10a1294ed86c9130814f0781d0d95dabb9f514a02c2606803460d2a627",
+      "uncompressed_bytes": 5535
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-high-contrast-provenance.json",
+      "archived_file": "raw/phone-high-contrast-provenance.json.gz",
+      "uncompressed_sha256": "bb2383f13e2dc0b632b7adbdf0c8740c365cc19e484e7310229c00bf81d53a32",
+      "uncompressed_bytes": 561
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-high-contrast-restore.json",
+      "archived_file": "raw/phone-high-contrast-restore.json.gz",
+      "uncompressed_sha256": "5bee528a53b5fa1129abc60c4f91b4282b8be8864fc697e23b77e8b3a4f67e4e",
+      "uncompressed_bytes": 109
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-high-contrast-restored.json",
+      "archived_file": "raw/phone-high-contrast-restored.json.gz",
+      "uncompressed_sha256": "d82ee17f83108a2b9b527ad526beca73cd1f11ebd570d3badbcb35f7718c1c24",
+      "uncompressed_bytes": 110
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-high-contrast-set-enabled.json",
+      "archived_file": "raw/phone-high-contrast-set-enabled.json.gz",
+      "uncompressed_sha256": "2f807ef29b6b8196d3f19ca59abcf70e02533a2f9e598de0002030a6ab241e22",
+      "uncompressed_bytes": 108
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-high-contrast.log",
+      "archived_file": "raw/phone-high-contrast.log.gz",
+      "uncompressed_sha256": "b3ad2a7a3b3c7669d3283fa21a7157342c53043e912cb0579f36805dc17d3efd",
+      "uncompressed_bytes": 39432
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-high-contrast.log.host.json",
+      "archived_file": "raw/phone-high-contrast.log.host.json.gz",
+      "uncompressed_sha256": "04b4caa0e6d51f892ed5b73464521f5c9980ee9f8ecac91e8811be425f2a1ad6",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-high-contrast.log.result.json",
+      "archived_file": "raw/phone-high-contrast.log.result.json.gz",
+      "uncompressed_sha256": "80fc3e85015e5315a26ffdd2a2dee49a0a3b0b480306c24db4d9099260e3718c",
+      "uncompressed_bytes": 606
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-native-review.md",
+      "archived_file": "raw/phone-native-review.md.gz",
+      "uncompressed_sha256": "b288cfc2e9e92665083adb5dbc42ee9881cca56a8bed1b7b29bade132a33c17f",
+      "uncompressed_bytes": 7574
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-ocean-capture-recovery.log",
+      "archived_file": "raw/phone-ocean-capture-recovery.log.gz",
+      "uncompressed_sha256": "06cf9fb362664869e0d0396a0ce7fe4293ca95af0dbf911331a481a14cb410e7",
+      "uncompressed_bytes": 58358
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-ocean-capture-recovery.log.host.json",
+      "archived_file": "raw/phone-ocean-capture-recovery.log.host.json.gz",
+      "uncompressed_sha256": "acb6c8479eb40ab747d820bac9aec8efc39326366087c9d1ac74d3eb9d24be95",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-ocean-capture-recovery.log.result.json",
+      "archived_file": "raw/phone-ocean-capture-recovery.log.result.json.gz",
+      "uncompressed_sha256": "838c440268be8eb7774d100f6bde5da05b1e7dad93b26333a69d5c2189ab9803",
+      "uncompressed_bytes": 740
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-ocean.log",
+      "archived_file": "raw/phone-ocean.log.gz",
+      "uncompressed_sha256": "35155e43045f550cff70420dbc6969a9dc7644407cc8729aab0126489c411f27",
+      "uncompressed_bytes": 58414
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-ocean.log.host.json",
+      "archived_file": "raw/phone-ocean.log.host.json.gz",
+      "uncompressed_sha256": "012030d7ad2db01fc6fdec8b1a421b3f98873250c48f190622ee67316cda975c",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-ocean.log.result.json",
+      "archived_file": "raw/phone-ocean.log.result.json.gz",
+      "uncompressed_sha256": "f3463e1bc990eb7c90bc2067757fb5715d9fa0b7cdc90d1df3168a47b8299b35",
+      "uncompressed_bytes": 723
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-sakura.log",
+      "archived_file": "raw/phone-sakura.log.gz",
+      "uncompressed_sha256": "7a930853aa50349539f856c77dc0f4f3cec2b74837afda042c0b9bae0ec32acd",
+      "uncompressed_bytes": 58523
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-sakura.log.host.json",
+      "archived_file": "raw/phone-sakura.log.host.json.gz",
+      "uncompressed_sha256": "8bb214601f03d65fb05587b7770dfec531fca27b9f8c66e70377c3b59f118934",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-sakura.log.result.json",
+      "archived_file": "raw/phone-sakura.log.result.json.gz",
+      "uncompressed_sha256": "03b47b9d0b24116de4a1465d1089e554acf952cc8e25e9de600cd9d416020c61",
+      "uncompressed_bytes": 727
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-solar.log",
+      "archived_file": "raw/phone-solar.log.gz",
+      "uncompressed_sha256": "6105346d1978d27e369410f79c8998ad17eab9da837a4c88bc7aa590560309c0",
+      "uncompressed_bytes": 58180
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-solar.log.host.json",
+      "archived_file": "raw/phone-solar.log.host.json.gz",
+      "uncompressed_sha256": "fd147c724b58d4546176332988a91ebb94fc64dcdf85d5ed142d7050c3464250",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-solar.log.result.json",
+      "archived_file": "raw/phone-solar.log.result.json.gz",
+      "uncompressed_sha256": "fff32e1f22e476bf1f394a7a07cafc815e3305a3949dfd809c325e26876c3a0e",
+      "uncompressed_bytes": 720
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-motion-fixed.log",
+      "archived_file": "raw/phone-system-motion-fixed.log.gz",
+      "uncompressed_sha256": "9c6b09d46045864a77e545a311c452e7054d4eba9f4ee41008e8f0bf6f6f7c2a",
+      "uncompressed_bytes": 60138
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-motion-fixed.log.host.json",
+      "archived_file": "raw/phone-system-motion-fixed.log.host.json.gz",
+      "uncompressed_sha256": "b0818815f7dd4d3d4fc01c547a6e7fd2e707234744e322400017c8aed4984ab4",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-motion-fixed.log.result.json",
+      "archived_file": "raw/phone-system-motion-fixed.log.result.json.gz",
+      "uncompressed_sha256": "d2053a9ee1bcff23cf53df72da1cfbd749b99a7b724b63083fcbaad7a70d1325",
+      "uncompressed_bytes": 3430
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-motion.log",
+      "archived_file": "raw/phone-system-motion.log.gz",
+      "uncompressed_sha256": "7fcb7e2c5cb933dd0ac68a8d62ef03ab40a90e429391b3d181b068ac3185cd45",
+      "uncompressed_bytes": 63938
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-motion.log.host.json",
+      "archived_file": "raw/phone-system-motion.log.host.json.gz",
+      "uncompressed_sha256": "156affc1bb413850d2bdd6b1204ee7a4c36a4f45d949b41148e1e31eebace3bb",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-motion.log.result.json",
+      "archived_file": "raw/phone-system-motion.log.result.json.gz",
+      "uncompressed_sha256": "cd2f8de231f47d2904d61c75f749f1845aaf71facbfe936ca0ec4f018984cb6c",
+      "uncompressed_bytes": 1663
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-surfaces-fixed.log",
+      "archived_file": "raw/phone-system-surfaces-fixed.log.gz",
+      "uncompressed_sha256": "95c5a59b11b0babd4414997acd6ca00b8bc8a54edd0538ad1f1dd92643072f28",
+      "uncompressed_bytes": 143291
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-surfaces-fixed.log.host.json",
+      "archived_file": "raw/phone-system-surfaces-fixed.log.host.json.gz",
+      "uncompressed_sha256": "9e7ba8c8c0346ffd50a4c6851e7bcf6699066d24fa9030068895d775e783f921",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-surfaces-fixed.log.result.json",
+      "archived_file": "raw/phone-system-surfaces-fixed.log.result.json.gz",
+      "uncompressed_sha256": "67e4769d401d1197c50ba3720e50e54ea1f89b26de74b8ba4f3bebb5c2711f9c",
+      "uncompressed_bytes": 1719
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-surfaces.log",
+      "archived_file": "raw/phone-system-surfaces.log.gz",
+      "uncompressed_sha256": "565a5bde6c00041c2e0b080821c51f4da5dce85885fb289147e857a3e3994963",
+      "uncompressed_bytes": 40020
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-surfaces.log.host.json",
+      "archived_file": "raw/phone-system-surfaces.log.host.json.gz",
+      "uncompressed_sha256": "e23c64e1976a1e6b0c8888713b172884e8e6e29c1ec146a1cf83f142409db587",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-system-surfaces.log.result.json",
+      "archived_file": "raw/phone-system-surfaces.log.result.json.gz",
+      "uncompressed_sha256": "df9cb3a0494cf778308d9ae8bedd3edea8775944ec4f4ff9f9b9eb7f6a734452",
+      "uncompressed_bytes": 1764
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-before.json",
+      "archived_file": "raw/phone-voiceover-before.json.gz",
+      "uncompressed_sha256": "5302945d3a7a11f2ba1a8235476ad91d1fcce0916f198140544a8ecb0071884b",
+      "uncompressed_bytes": 688
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-enabled.json",
+      "archived_file": "raw/phone-voiceover-enabled.json.gz",
+      "uncompressed_sha256": "5e87b5d6e015a70913b8eb31168176d687e8125e064a03255ca1eb6fa7a4ab1a",
+      "uncompressed_bytes": 688
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-export.log",
+      "archived_file": "raw/phone-voiceover-export.log.gz",
+      "uncompressed_sha256": "341b58c1f344c13af522f53ed9af2a6167a963f5ba4302b91b6538b78a187c0e",
+      "uncompressed_bytes": 4676
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-fixed-before.json",
+      "archived_file": "raw/phone-voiceover-fixed-before.json.gz",
+      "uncompressed_sha256": "debb1717d1a882c4441945369303d5ab38f603a5ed89b3a48cf2d57ec9ba55eb",
+      "uncompressed_bytes": 694
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-fixed-enabled.json",
+      "archived_file": "raw/phone-voiceover-fixed-enabled.json.gz",
+      "uncompressed_sha256": "63620b306c5080803ab763f91f675014415e1f58a242099eb95b525c391d819b",
+      "uncompressed_bytes": 694
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-fixed-export.log",
+      "archived_file": "raw/phone-voiceover-fixed-export.log.gz",
+      "uncompressed_sha256": "de62c30a2061fe3fa90be991487017c1cabe6545e1e3f46a50fd41b8a5d2d49f",
+      "uncompressed_bytes": 2873
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-fixed-provenance.json",
+      "archived_file": "raw/phone-voiceover-fixed-provenance.json.gz",
+      "uncompressed_sha256": "d2cb97c5a058f80775eb4070bcdf0746d3e31af6aa768ab353d0a46bdb4cf3e6",
+      "uncompressed_bytes": 585
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-fixed-restore.json",
+      "archived_file": "raw/phone-voiceover-fixed-restore.json.gz",
+      "uncompressed_sha256": "8a82ba6fe86eb8a6a60867e137d5f3495c22b6907177e7d39c854ce448fba916",
+      "uncompressed_bytes": 724
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-fixed-restored.json",
+      "archived_file": "raw/phone-voiceover-fixed-restored.json.gz",
+      "uncompressed_sha256": "fc965dbe04f02f928c427c40b1c370020ed8c22bd3fb90eccc1ecaff90683821",
+      "uncompressed_bytes": 696
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-fixed-set-enabled.json",
+      "archived_file": "raw/phone-voiceover-fixed-set-enabled.json.gz",
+      "uncompressed_sha256": "bd7cef8ef628e310d6255ba042126936ddfcc0a9506e52cb1a3c402573845843",
+      "uncompressed_bytes": 725
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-fixed.log",
+      "archived_file": "raw/phone-voiceover-fixed.log.gz",
+      "uncompressed_sha256": "9b4ca092e4ec3a2d987644430c84eb74e8ec939e8c5f687cea6a5bd1c6910c10",
+      "uncompressed_bytes": 62450
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-fixed.log.host.json",
+      "archived_file": "raw/phone-voiceover-fixed.log.host.json.gz",
+      "uncompressed_sha256": "e0c58e4df6b6ded7cfdfabb9bffd0980294425b67eb63d756a8c5b3572e43a85",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-fixed.log.result.json",
+      "archived_file": "raw/phone-voiceover-fixed.log.result.json.gz",
+      "uncompressed_sha256": "bc2df75bc4ee4e7d9002d431436ded3ca237bfcb2c049d27b0be2836bb23d38a",
+      "uncompressed_bytes": 632
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-provenance.json",
+      "archived_file": "raw/phone-voiceover-provenance.json.gz",
+      "uncompressed_sha256": "6b644eed150708b69437ad16b441ea1ee8095465e247944d13f44c8457e1c05a",
+      "uncompressed_bytes": 585
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-restore.json",
+      "archived_file": "raw/phone-voiceover-restore.json.gz",
+      "uncompressed_sha256": "1f5f689ba72041465857c37adbface55eb2bbcce4611f59f47c34bac70004bac",
+      "uncompressed_bytes": 718
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-restored.json",
+      "archived_file": "raw/phone-voiceover-restored.json.gz",
+      "uncompressed_sha256": "488d71c5e51c1e6e0191278860903d3c67df3f1009fbf2501ab61e2f528e789f",
+      "uncompressed_bytes": 690
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover-set-enabled.json",
+      "archived_file": "raw/phone-voiceover-set-enabled.json.gz",
+      "uncompressed_sha256": "80a19f4bb7e0de7ad9cfbe30ddae61d4d42225dd12319ea99175726c6bf53963",
+      "uncompressed_bytes": 719
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover.log",
+      "archived_file": "raw/phone-voiceover.log.gz",
+      "uncompressed_sha256": "723808e0db0580372a318b8be2839be0f49487aa9f2518577e93700dea8001f4",
+      "uncompressed_bytes": 661060
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover.log.host.json",
+      "archived_file": "raw/phone-voiceover.log.host.json.gz",
+      "uncompressed_sha256": "e7dc2671d2772032731ba9e6b41a5c3c5fe324d99a307655e1e698f5e51dd6fc",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-voiceover.log.result.json",
+      "archived_file": "raw/phone-voiceover.log.result.json.gz",
+      "uncompressed_sha256": "bdbf4440fd666ac0f485b5c2f6f522c61c4ac82535c91add3a226d22f5fbaf8b",
+      "uncompressed_bytes": 1617
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-water-lilies.log",
+      "archived_file": "raw/phone-water-lilies.log.gz",
+      "uncompressed_sha256": "154f09cfd1378ade2da073480a31656c5aaa8f4ee1cda34c8a815f58988c1cf4",
+      "uncompressed_bytes": 1001227
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-water-lilies.log.host.json",
+      "archived_file": "raw/phone-water-lilies.log.host.json.gz",
+      "uncompressed_sha256": "c484af2031a4bcf0ff4653895f8caa8f066067e2f571ce11fbb648557d1366a0",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-water-lilies.log.result.json",
+      "archived_file": "raw/phone-water-lilies.log.result.json.gz",
+      "uncompressed_sha256": "1dfbea78b600b16505eeeea927f177137874f5d4d4939aae5d4ccd1043dc2e07",
+      "uncompressed_bytes": 893
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-widget-home-precondition.log",
+      "archived_file": "raw/phone-widget-home-precondition.log.gz",
+      "uncompressed_sha256": "e66da5a6b37c2095731065a8ea75aae29ab066f89761dd00b96a4c57130509cc",
+      "uncompressed_bytes": 64035
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-widget-home-precondition.log.host.json",
+      "archived_file": "raw/phone-widget-home-precondition.log.host.json.gz",
+      "uncompressed_sha256": "63239c479db184b0db2cae4eb5beadc0c70d129c4e3171f2ad60dd43858626a5",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-widget-home-precondition.log.result.json",
+      "archived_file": "raw/phone-widget-home-precondition.log.result.json.gz",
+      "uncompressed_sha256": "4ad4c6141ea88a1f40bff12d17b4412c18409c3ee4054f19bec3ef070281f5dd",
+      "uncompressed_bytes": 1572
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-widget-retry.log",
+      "archived_file": "raw/phone-widget-retry.log.gz",
+      "uncompressed_sha256": "8b5aa3eba96575070364fae48bf63d05915b2e3e9bb6c84ae6a1a04ba9ff1509",
+      "uncompressed_bytes": 73753
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-widget-retry.log.host.json",
+      "archived_file": "raw/phone-widget-retry.log.host.json.gz",
+      "uncompressed_sha256": "3d234e98d71fe4d08d8460994aa316b78857788564696590d9b8a6a7d6ca448d",
+      "uncompressed_bytes": 501
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/phone-widget-retry.log.result.json",
+      "archived_file": "raw/phone-widget-retry.log.result.json.gz",
+      "uncompressed_sha256": "8321878c252385d2b9381deb25953cec6cb22dfb116cb5900c2844244f7f1ac5",
+      "uncompressed_bytes": 2092
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/pipeline-content-proof.json",
+      "archived_file": "raw/pipeline-content-proof.json.gz",
+      "uncompressed_sha256": "51022bcd69095de22c414bbc5a20c7b19323e42aa390b1f3114a4dab4a946981",
+      "uncompressed_bytes": 1740
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/platform-final-checks.md",
+      "archived_file": "raw/platform-final-checks.md.gz",
+      "uncompressed_sha256": "ba3469673921f7d77f3866217d5c4dbd28af4473029e712ad191359fe17ce307",
+      "uncompressed_bytes": 5139
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/production-evidence-reuse.json",
+      "archived_file": "raw/production-evidence-reuse.json.gz",
+      "uncompressed_sha256": "f3a071e7c0363fa60d6c0c1752afe1097f919416e6a4dc61aa4f279eea7e4fa5",
+      "uncompressed_bytes": 634
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/promote-theme-stage.py",
+      "archived_file": "raw/promote-theme-stage.py.gz",
+      "uncompressed_sha256": "25bcbe31326acb9dc758c3b773f5edbd3e6b1970853234156c9be87ffc9b40fb",
+      "uncompressed_bytes": 12142
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/promote-watch-theme-captures.py",
+      "archived_file": "raw/promote-watch-theme-captures.py.gz",
+      "uncompressed_sha256": "77f815131a262b2d38afc42e8aa6ac155382fd2530f9ab14b5246c9893cee624",
+      "uncompressed_bytes": 12212
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/propagation-contracts.md",
+      "archived_file": "raw/propagation-contracts.md.gz",
+      "uncompressed_sha256": "f01cd03c73b7597d96a627133c984f13390a841d3e94b1cdd8a16306adee9e4b",
+      "uncompressed_bytes": 6428
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/real-watch-transport-plan.md",
+      "archived_file": "raw/real-watch-transport-plan.md.gz",
+      "uncompressed_sha256": "81e74f94f7d637d8aa7ae92dbc3afa9ac698d3679c457d06e7cf4cc3471cadee",
+      "uncompressed_bytes": 7061
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/review-architecture.md",
+      "archived_file": "raw/review-architecture.md.gz",
+      "uncompressed_sha256": "3915bcda29c8fc9a07ea467e1e88bf7362780a99c2077eb3b5a2721e2bfe60c7",
+      "uncompressed_bytes": 30
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/review-data.md",
+      "archived_file": "raw/review-data.md.gz",
+      "uncompressed_sha256": "7c4aeb7ec1bc49429d53f7f2aaecd6f31e7e84106e1ef4fe05493bdff08762bd",
+      "uncompressed_bytes": 451
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/review-performance.md",
+      "archived_file": "raw/review-performance.md.gz",
+      "uncompressed_sha256": "2028768be1de3e175d7dd4e0316b03ab98f70f7c26bb0f26b0d9f495a5c71dc7",
+      "uncompressed_bytes": 1540
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/review-security.md",
+      "archived_file": "raw/review-security.md.gz",
+      "uncompressed_sha256": "bc207ca3f2667460b82eb52b81d105e8b3b24eaae1c450418e7f19ab07d12d04",
+      "uncompressed_bytes": 50
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/review-simplicity.md",
+      "archived_file": "raw/review-simplicity.md.gz",
+      "uncompressed_sha256": "e8e2f85d920120273c07c32bbdba424fee610e1d90c57c844ee8c6b8d6cece57",
+      "uncompressed_bytes": 737
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/run-duo-remaining.py",
+      "archived_file": "raw/run-duo-remaining.py.gz",
+      "uncompressed_sha256": "4dbcfae33e0bd6f49828eae6a46432d9a6a6af518cf861d53179722a0f055d91",
+      "uncompressed_bytes": 1635
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/run-duo-theme-batch.executed-closed-a.py",
+      "archived_file": "raw/run-duo-theme-batch.executed-closed-a.py.gz",
+      "uncompressed_sha256": "aee7d4fc25ca82502ba37e31c614e30d0554968b68f470b1c3d690dba5532399",
+      "uncompressed_bytes": 19090
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/run-duo-theme-batch.executed-closed-b.py",
+      "archived_file": "raw/run-duo-theme-batch.executed-closed-b.py.gz",
+      "uncompressed_sha256": "97d045eeaf4d25ab7e4461bc8622283807ffa5832659cc665cc19dd2170b823e",
+      "uncompressed_bytes": 19531
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/run-duo-theme-batch.py",
+      "archived_file": "raw/run-duo-theme-batch.py.gz",
+      "uncompressed_sha256": "cf9e521bcc6035b8db90085d34fcc047ffd94e29ee7272d65f836a4bd1f38648",
+      "uncompressed_bytes": 19726
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/run-native-batch.py",
+      "archived_file": "raw/run-native-batch.py.gz",
+      "uncompressed_sha256": "23c4c8a45a7bfd0ca54321ce04e59ecf280536b3479c657daa45336fa18eb945",
+      "uncompressed_bytes": 3703
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/run-phone-final.py",
+      "archived_file": "raw/run-phone-final.py.gz",
+      "uncompressed_sha256": "6219a263f7cf4916d35b19ce3ab39e623b633d455e2ae598d4bc6e03588ad1f5",
+      "uncompressed_bytes": 802
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/run-theme-batches.py",
+      "archived_file": "raw/run-theme-batches.py.gz",
+      "uncompressed_sha256": "1754f1c2886258a672a792ac06c3ea7a69972758479e041cb5ada256a9595eaa",
+      "uncompressed_bytes": 3701
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/run-watch-native.py",
+      "archived_file": "raw/run-watch-native.py.gz",
+      "uncompressed_sha256": "22607774d052b1a2c6926150363fc03675656b5957a8da42e8538c10b2a1c833",
+      "uncompressed_bytes": 2101
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/stage-duo/provenance.json",
+      "archived_file": "raw/stage-duo/provenance.json.gz",
+      "uncompressed_sha256": "721816e5a80389845c7cb9f6675ef337abec195b52f42a03e780d5911b64b51c",
+      "uncompressed_bytes": 153693
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/stage-duo-native-evidence.py",
+      "archived_file": "raw/stage-duo-native-evidence.py.gz",
+      "uncompressed_sha256": "8fb5c9303924bc9490a921f46c982bc27bb853ace97be0a2a057131b76281c1c",
+      "uncompressed_bytes": 20779
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/stage-extra-native/provenance.json",
+      "archived_file": "raw/stage-extra-native/provenance.json.gz",
+      "uncompressed_sha256": "8e80158196df6fc5304eca5e472ff0131ace717311b4616e3bc6fd0e62d006b1",
+      "uncompressed_bytes": 93315
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/stage-ipad/provenance.json",
+      "archived_file": "raw/stage-ipad/provenance.json.gz",
+      "uncompressed_sha256": "7a0ebfb7b5934e836c5d90a32e09fa422d3bd711da4c994b59170f4e60647be2",
+      "uncompressed_bytes": 113665
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/stage-regular/provenance.json",
+      "archived_file": "raw/stage-regular/provenance.json.gz",
+      "uncompressed_sha256": "75a9bd227ac04a4fc4d6abe1d940257a619faa5f856a32fc3a47c70e51729208",
+      "uncompressed_bytes": 114649
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/unit-contrast.log",
+      "archived_file": "raw/unit-contrast.log.gz",
+      "uncompressed_sha256": "f4e339613f98c4e46195eceaf1932e6d575ca821a3cdfeaeb52b2c5963963f4a",
+      "uncompressed_bytes": 641633
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/unit-fixed.log",
+      "archived_file": "raw/unit-fixed.log.gz",
+      "uncompressed_sha256": "9db2162b87fe9674218d840f2cd560b72b2c46413ec2dedf68e67dcd6134f759",
+      "uncompressed_bytes": 521608
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/unit.log",
+      "archived_file": "raw/unit.log.gz",
+      "uncompressed_sha256": "14caa3088e97ec80676d19fc6b280f247c3f015a8ad0810cf774c502c3e57f23",
+      "uncompressed_bytes": 988957
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/validate-duo-batch.py",
+      "archived_file": "raw/validate-duo-batch.py.gz",
+      "uncompressed_sha256": "15cb69aa9ecd129e937ff57ca674a5e1970ea581b02671d2eb2a6edfe2e07f1f",
+      "uncompressed_bytes": 2016
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/voiceover-before.json",
+      "archived_file": "raw/voiceover-before.json.gz",
+      "uncompressed_sha256": "a97cd08dd255eb863915ae04787acbb3377f63c21a0ba1309221a6e746e50682",
+      "uncompressed_bytes": 625
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/voiceover-retry.json",
+      "archived_file": "raw/voiceover-retry.json.gz",
+      "uncompressed_sha256": "9950bac854651103a63a5e0df8d1308fead390fe5a6ecf576d29cc99eb5e0a2a",
+      "uncompressed_bytes": 799
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-home-retry.json",
+      "archived_file": "raw/watch-home-retry.json.gz",
+      "uncompressed_sha256": "c3a0bd62af4aa3e2f96e0b8762c75e6005521c07572d307a83e7e6d6c2d9b4db",
+      "uncompressed_bytes": 1310
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-lock-retry.json",
+      "archived_file": "raw/watch-lock-retry.json.gz",
+      "uncompressed_sha256": "573ef6511e9fb5f7c894be28a8496d4a7ae37b8500767e135d524cb3f3e3868c",
+      "uncompressed_bytes": 547
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native-export.log",
+      "archived_file": "raw/watch-native-export.log.gz",
+      "uncompressed_sha256": "2d32d31a611436b8813e54af1b3d2c1d11bf908689c187e15d29dd124488df40",
+      "uncompressed_bytes": 8058
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native-failed-home-export.log",
+      "archived_file": "raw/watch-native-failed-home-export.log.gz",
+      "uncompressed_sha256": "4a6512b78e55f585a432f96a38228a2deb3555f2945d1da5182fc1c694c3e882",
+      "uncompressed_bytes": 25916
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native-failed-home-provenance.json",
+      "archived_file": "raw/watch-native-failed-home-provenance.json.gz",
+      "uncompressed_sha256": "daf12ab24c0d8afe82d8eaf0add5bba4494a3d09d7ee004d77952b330f0ad99e",
+      "uncompressed_bytes": 1759
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native-failed-home.log",
+      "archived_file": "raw/watch-native-failed-home.log.gz",
+      "uncompressed_sha256": "4663dd597956a2daadff71317353e3c7ea7a0ddce842f65df4b2cfe4ee4489ad",
+      "uncompressed_bytes": 427832
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native-failed-home.log.host.json",
+      "archived_file": "raw/watch-native-failed-home.log.host.json.gz",
+      "uncompressed_sha256": "63b3b1370cd33f11a7c31671ced846ad99091a2f739e6e8d639b2e8fc60ba483",
+      "uncompressed_bytes": 503
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native-failed-home.log.result.json",
+      "archived_file": "raw/watch-native-failed-home.log.result.json.gz",
+      "uncompressed_sha256": "f59556a8a015c4c24ede94194ea222f929b48bb07a97719168f11076f560fe8b",
+      "uncompressed_bytes": 5080
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native-provenance.json",
+      "archived_file": "raw/watch-native-provenance.json.gz",
+      "uncompressed_sha256": "93bdd2c6bd1fa0eb69e3af0a9e8eb6cd18b388ec2839faefb5d8e08c0edec272",
+      "uncompressed_bytes": 1757
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native-reviewed-provenance.json",
+      "archived_file": "raw/watch-native-reviewed-provenance.json.gz",
+      "uncompressed_sha256": "fdd6494b09d0ccbc8cc24fb85876a7ebdbc53d9347c01b1755db53d2a364edf0",
+      "uncompressed_bytes": 2760
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native.log",
+      "archived_file": "raw/watch-native.log.gz",
+      "uncompressed_sha256": "69e4b9b67f24ad7f4f3a9384545ec72409f56e38aa3396b342aabf1036ca737d",
+      "uncompressed_bytes": 220046
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native.log.host.json",
+      "archived_file": "raw/watch-native.log.host.json.gz",
+      "uncompressed_sha256": "22e8b8e4040cfaedcf0bd18c46fa1de2cf7c0d83e245c19c63b016138ec3294a",
+      "uncompressed_bytes": 503
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/watch-native.log.result.json",
+      "archived_file": "raw/watch-native.log.result.json.gz",
+      "uncompressed_sha256": "9633f6d89fba60a509943a5be99d9a09a8453f30feb66b815ae9314a2583b48f",
+      "uncompressed_bytes": 1749
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/widget-app-library-remediation.json",
+      "archived_file": "raw/widget-app-library-remediation.json.gz",
+      "uncompressed_sha256": "0271f259af2ae36c726124cb5ccb7cda69173f430000b14afbcaec663c750d44",
+      "uncompressed_bytes": 900
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/widget-appgroup-preflight.json",
+      "archived_file": "raw/widget-appgroup-preflight.json.gz",
+      "uncompressed_sha256": "7c927b85abbf99e36552c5c4e904ae5ed2bd88602307e2924a9047a1554ddac0",
+      "uncompressed_bytes": 1082
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/widget-retry.json",
+      "archived_file": "raw/widget-retry.json.gz",
+      "uncompressed_sha256": "adf13b1ae58595eb2b35efdb5652641bba4e15f15cfd78193a8ed844160a6a81",
+      "uncompressed_bytes": 850
+    },
+    {
+      "original_local_copy": ".codex-checks/theme-overhaul/app-quality-final-gate.md",
+      "archived_file": "raw/app-quality-gate-at-973.md.gz",
+      "uncompressed_sha256": "a4022abaff76a5f609811d291caef2dbcf6ae311f5cf59cce2259eb08e71aa0c",
+      "uncompressed_bytes": 5468
+    }
+  ]
+}
