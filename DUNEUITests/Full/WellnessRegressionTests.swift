@@ -821,7 +821,38 @@ final class WellnessRegressionTests: SeededUITestBaseCase {
         openInjuryHistory()
         let rows = app.descendants(matching: .any)
             .matching(NSPredicate(format: "identifier BEGINSWITH %@", "injury-history-row-"))
+        let historyWindow = app.windows.firstMatch.frame
+        let shortDuoHistory = ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1"
+            && historyWindow.height < 700
+        if shortDuoHistory && rows.count < 2 {
+            // A recovered row follows the tall active row in the lazy landscape List.
+            // Reveal their overlap rather than treating AX materialization as model count.
+            let historyList = app.collectionViews.firstMatch
+            XCTAssertTrue(historyList.exists && historyList.isHittable)
+            for _ in 0..<4 {
+                let start = historyList.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65))
+                let end = historyList.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45))
+                start.press(forDuration: 0.35, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80), thenHoldForDuration: 0.35)
+                if rows.count >= 2 { break }
+            }
+        }
         XCTAssertGreaterThanOrEqual(rows.count, 2, "MAX Save must create a history row")
+        if shortDuoHistory {
+            let newRecoveredRow = app.buttons["injury-history-row-0"].firstMatch
+            let originalActiveRow = app.buttons["injury-history-row-1"].firstMatch
+            XCTAssertTrue(newRecoveredRow.exists && originalActiveRow.exists,
+                          "Both saved and original injury records must materialize")
+            XCTAssertTrue(newRecoveredRow.label.contains("Knee")
+                          && newRecoveredRow.label.contains("Moderate")
+                          && newRecoveredRow.label.contains("Recovered"),
+                          "New MAX record must retain Knee, Moderate and recovered state")
+            XCTAssertTrue(originalActiveRow.label.contains("Active"),
+                          "Original active injury must remain after MAX save")
+            XCTAssertTrue(app.staticTexts["Recovered"].firstMatch.exists,
+                          "Saved record must appear in Recovered section")
+            VisualAudit.capture("H08 MAX saved Active and Recovered history rows")
+        }
     }
 
     private var isCompactInjuryFormViewport: Bool {
@@ -1874,10 +1905,14 @@ final class PostureVisualAuditTests: SeededUITestBaseCase {
 
     private func reveal(_ element: XCUIElement, maxAttempts: Int = 18) {
         let scroll = app.scrollViews.firstMatch
-        // The folded Duo's History is beside a side rail; only its bottom
-        // inset shrinks. Keep the 90-point top protection on every route.
+        // Duo History has a vertical tab rail in both folded and open poses.
+        // Keep the 90-point top protection; only shrink the bottom inset when
+        // the actual rail geometry proves this is the short History viewport.
+        let wellnessTab = app.buttons["tab-wellness"].firstMatch
         let sideRailHistory = scroll.identifier == "posture-history-screen"
-            && scroll.frame.width <= 500 && scroll.frame.height <= 700
+            && scroll.frame.height <= 700 && wellnessTab.exists
+            && wellnessTab.frame.width <= 60
+            && wellnessTab.frame.minX >= scroll.frame.maxX - 80
         func visibleViewport() -> CGRect {
             let frame = scroll.frame.intersection(app.windows.firstMatch.frame)
                 .insetBy(dx: 12, dy: 0)
