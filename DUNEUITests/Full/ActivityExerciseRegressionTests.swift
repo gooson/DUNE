@@ -21,6 +21,121 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         static let notificationMissingRouteID = "ui-test-activity-workout-missing"
     }
 
+    func testVisualAuditTemplatePlanAtNormalText() throws {
+        try auditTemplatePlan(maximumText: false)
+    }
+
+    func testVisualAuditTemplatePlanAtMaximumText() throws {
+        try auditTemplatePlan(maximumText: true)
+    }
+
+    private func auditTemplatePlan(maximumText: Bool) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in B13 native visual audit only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName",
+            maximumText ? "UICTContentSizeCategoryAccessibilityXXXL" : "UICTContentSizeCategoryL"
+        ]
+        launchApp(with: configuration)
+        let size = maximumText ? "MAX" : "normal"
+
+        openTemplateList()
+        let list = app.collectionViews[AXID.workoutTemplateListScreen].firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 8))
+        let row = app.buttons[AXID.workoutTemplateRow(Fixture.circuitTemplate)].firstMatch
+        for _ in 0..<12 where !(row.exists && row.isHittable) { list.swipeUp(velocity: .slow) }
+        XCTAssertTrue(row.waitForExistence(timeout: 8) && row.isHittable)
+        XCTAssertTrue(row.label.contains("2 exercises") && row.label.contains("Squat"),
+                      "W12 seeded circuit row should preserve count and exercise names")
+        VisualAudit.capture("W12 \(size) seeded template row and exercise names")
+
+        XCTAssertTrue(app.waitAndTapToolbarAction("workout-weekly-plan-open"))
+        let plan = app.descendants(matching: .any)["weekly-workout-plan"].firstMatch
+        XCTAssertTrue(plan.waitForExistence(timeout: 8))
+        let templateList = app.scrollViews["weekly-plan-template-list"].firstMatch
+        XCTAssertTrue(templateList.waitForExistence(timeout: 5))
+        // The isolated model is seeded, but weekly assignments live in AppStorage
+        // and may persist across launches. Count the seven day buttons regardless
+        // of whether their second label is Rest Day or an assigned template.
+        let calendarPane = plan.scrollViews.element(boundBy: 0)
+        XCTAssertTrue(calendarPane.waitForExistence(timeout: 5))
+        let next = calendarPane.buttons.matching(NSPredicate(format: "label == %@", "Next Week")).firstMatch
+        let previous = calendarPane.buttons.matching(NSPredicate(format: "label == %@", "Previous Week")).firstMatch
+        func dayLabels() -> [String] {
+            calendarPane.buttons.allElementsBoundByIndex.map(\.label).filter {
+                $0 != "Previous Week" && $0 != "Next Week"
+            }
+        }
+        let before = dayLabels()
+        XCTAssertEqual(before.count, 7, "W15 should display seven calendar day rows")
+        VisualAudit.capture("W15 \(size) current seven-day plan and template pane")
+        XCTAssertTrue(next.waitForExistence(timeout: 5) && next.isHittable)
+        next.auditTap()
+        let after = dayLabels()
+        XCTAssertEqual(after.count, 7)
+        XCTAssertNotEqual(after, before, "Next Week must change the visible seven-day period")
+        VisualAudit.capture("W15 \(size) next week dates")
+        XCTAssertTrue(previous.exists && previous.isHittable)
+        previous.auditTap()
+        XCTAssertEqual(dayLabels(), before,
+                       "Previous Week must restore the original period")
+
+        let templateID = "22222222-2222-4222-8222-222222222222"
+        let assign = app.buttons["weekly-plan-template-\(templateID)"].firstMatch
+        for _ in 0..<8 where !(assign.exists && assign.isHittable) {
+            templateList.swipeUp(velocity: .slow)
+        }
+        XCTAssertTrue(assign.waitForExistence(timeout: 5) && assign.isHittable)
+        assign.auditTap()
+        let selected = app.buttons["weekly-plan-selected-template"].firstMatch
+        for _ in 0..<8 where !(selected.exists && selected.isHittable) {
+            templateList.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(selected.waitForExistence(timeout: 5) && selected.isHittable
+                      && selected.label.contains(Fixture.singleTemplate))
+        VisualAudit.capture("W15 \(size) assigned seeded template")
+        let remove = app.buttons["weekly-plan-remove"].firstMatch
+        func removeViewport() -> CGRect {
+            let window = app.windows.firstMatch.frame
+            let pane = templateList.frame.intersection(window)
+            let tabBar = app.tabBars.firstMatch
+            let bottom = tabBar.exists && tabBar.frame.minY > pane.minY
+                ? min(pane.maxY, tabBar.frame.minY) : pane.maxY
+            return CGRect(x: pane.minX + 8, y: pane.minY + 12,
+                          width: max(0, pane.width - 16),
+                          height: max(0, bottom - pane.minY - 24))
+        }
+        for _ in 0..<12 {
+            let viewport = removeViewport()
+            if remove.exists && remove.isHittable && viewport.contains(remove.frame) { break }
+            let moveUp = !remove.exists || remove.frame.midY >= viewport.midY
+            let startY: CGFloat = moveUp ? 0.68 : 0.42
+            let endY: CGFloat = moveUp ? 0.46 : 0.64
+            let start = templateList.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: startY))
+            let end = templateList.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: endY))
+            if maximumText && UIDevice.current.userInterfaceIdiom == .phone {
+                start.press(forDuration: 0.05, thenDragTo: end,
+                            withVelocity: XCUIGestureVelocity(rawValue: 80),
+                            thenHoldForDuration: 0.35)
+            } else {
+                start.press(forDuration: 0.05, thenDragTo: end)
+            }
+        }
+        let removeViewport = removeViewport()
+        XCTAssertTrue(remove.exists && remove.isHittable && removeViewport.contains(remove.frame),
+                      "The whole Remove action must be visible in the active template pane")
+        if maximumText && UIDevice.current.userInterfaceIdiom == .phone {
+            VisualAudit.capture("W15 MAX full Remove after settled scroll")
+        }
+        remove.auditTap()
+        let assignmentRemoved = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"), object: selected
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [assignmentRemoved], timeout: 5), .completed,
+                       "Removing assignment must restore Rest Day")
+    }
+
     func testVisualAuditEmbeddedAIBuilderAtNormalText() throws {
         try auditEmbeddedAIBuilder(maximumText: false)
     }
