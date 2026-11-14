@@ -1376,6 +1376,25 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             .other, identifier: "UIKeyboardLayoutStar Preview"
         ).firstMatch
         if UIDevice.current.userInterfaceIdiom == .pad && numberPadPopover.exists {
+            let keyboard = app.keyboards.firstMatch
+            let done = app.buttons["exercise-default-keyboard-done"].firstMatch
+            let numericFields = [
+                app.textFields[AXID.exerciseDefaultEditWeight].firstMatch,
+                app.textFields[AXID.exerciseDefaultEditReps].firstMatch
+            ]
+            let hasNumericFocus = NSPredicate(format: "hasKeyboardFocus == true")
+            guard keyboard.waitForExistence(timeout: 3),
+                  keyboard.frame.width > 0, keyboard.frame.height > 0,
+                  numericFields.allSatisfy({ $0.exists }),
+                  numericFields.filter({ hasNumericFocus.evaluate(with: $0) }).count == 1 else {
+                XCTFail("The numeric popup must start with a visible keyboard and one focused input")
+                return
+            }
+            guard done.waitForExistence(timeout: 3), done.isEnabled,
+                  app.windows.firstMatch.frame.contains(done.frame) else {
+                XCTFail("The app's Done action must be fully visible before dismissing the native popup")
+                return
+            }
             let dismissRegion = app.otherElements["PopoverDismissRegion"].firstMatch
             guard dismissRegion.waitForExistence(timeout: 3), dismissRegion.isHittable else {
                 XCTFail("The native number-pad popup must expose its dismissal region")
@@ -1388,7 +1407,25 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
             }
             dismissRegion.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).auditTap()
             guard numberPadPopover.waitForNonExistence(timeout: 3) else {
-                XCTFail("The numeric popup must dismiss before interacting with the app's Done action")
+                XCTFail("The numeric popup must dismiss before continuing numeric input")
+                return
+            }
+            if keyboard.waitForNonExistence(timeout: 3) {
+                guard numericFields.allSatisfy({ $0.exists }) else {
+                    XCTFail("Both numeric fields must remain present after popup dismissal")
+                    return
+                }
+                let focusCleared = numericFields.map { field in
+                    XCTNSPredicateExpectation(
+                        predicate: NSPredicate(format: "hasKeyboardFocus == false"), object: field
+                    )
+                }
+                guard XCTWaiter.wait(for: focusCleared, timeout: 3) == .completed,
+                      done.waitForNonExistence(timeout: 3) else {
+                    XCTFail("Popup dismissal must clear numeric focus and its Done action when the keyboard closes")
+                    return
+                }
+                VisualAudit.capture("S03 iPad popup dismissal cleared numeric focus and keyboard")
                 return
             }
         }
