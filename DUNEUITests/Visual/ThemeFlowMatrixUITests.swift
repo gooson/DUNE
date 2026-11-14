@@ -21,20 +21,24 @@ final class ThemeFlowMatrixUITests: SeededUITestBaseCase {
             let hero = app.descendants(matching: .any)[AXID.dashboardHeroCondition].firstMatch
             XCTAssertTrue(hero.waitForExistence(timeout: 15), "\(combination): condition hero")
             hero.tap()
-            XCTAssertTrue(app.descendants(matching: .any)["condition-score-detail-screen"].firstMatch.waitForExistence(timeout: 10))
-            addScreenshotAttachment(named: "\(combination) Detail")
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.conditionScoreDetailScreen].firstMatch.waitForExistence(timeout: 10))
+            captureFlowEvidence("\(combination) Detail")
 
             launchTheme(rawValue, style: style)
             navigateToWellness()
             XCTAssertTrue(app.waitAndTapToolbarAction("wellness-compare-metrics"), "\(combination): comparison action")
             XCTAssertTrue(app.descendants(matching: .any)["metric-comparison-first"].firstMatch.waitForExistence(timeout: 10))
-            addScreenshotAttachment(named: "\(combination) Sheet")
+            captureFlowEvidence("\(combination) Sheet")
 
             launchTheme(rawValue, style: style)
             navigateToActivity()
             XCTAssertTrue(app.waitAndTap(AXID.activityToolbarAdd), "\(combination): toolbar add action")
-            XCTAssertTrue(app.descendants(matching: .any)["picker-root-list"].firstMatch.waitForExistence(timeout: 10))
-            addScreenshotAttachment(named: "\(combination) Workout")
+            XCTAssertTrue(app.descendants(matching: .any)[AXID.pickerRootList].firstMatch.waitForExistence(timeout: 10))
+            let firstExercise = app.descendants(matching: .any)
+                .matching(NSPredicate(format: "identifier BEGINSWITH %@", "picker-row-"))
+                .firstMatch
+            XCTAssertTrue(firstExercise.waitForExistence(timeout: 10), "\(combination): exercise rows should finish loading")
+            captureFlowEvidence("\(combination) Workout")
         }
     }
 
@@ -47,5 +51,10 @@ final class ThemeFlowMatrixUITests: SeededUITestBaseCase {
         ]
         app.launch()
         XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "\(rawValue) \(style): primary navigation")
+    }
+
+    private func captureFlowEvidence(_ name: String) {
+        VisualAudit.capture(name)
+        if !VisualAudit.isEnabled { addScreenshotAttachment(named: name) }
     }
 }

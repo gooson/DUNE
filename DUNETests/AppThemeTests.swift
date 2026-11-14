@@ -90,9 +90,9 @@ struct AppThemeTests {
         #expect(AppTheme.normalizedRawValue(fromPersistedRawValue: "waterLilies") == "waterLilies")
     }
 
-    @Test("Water Lilies resolves required themed assets")
+    @Test("Every theme resolves required themed color assets")
     @MainActor
-    func waterLiliesAssets() throws {
+    func requiredAssets() throws {
         let suffixes = [
             "Accent", "Bronze", "Dusk", "Sand", "CardBackground",
             "TabTrain", "TabWellness", "TabLife",
@@ -100,9 +100,11 @@ struct AppThemeTests {
             "MetricHRV", "MetricRHR", "MetricHeartRate", "MetricSleep", "MetricActivity", "MetricSteps", "MetricBody",
             "WeatherRain", "WeatherSnow", "WeatherCloudy", "WeatherNight"
         ]
-        for suffix in suffixes {
-            let name = AppTheme.waterLilies.themedAssetName(defaultAsset: "unused", variantSuffix: suffix)
-            #expect(UIColor(named: name) != nil, "Missing asset: \(name)")
+        for theme in AppTheme.allCases {
+            for suffix in suffixes {
+                let name = theme.themedAssetName(defaultAsset: "unused", variantSuffix: suffix)
+                #expect(UIColor(named: name) != nil, "Missing asset for \(theme.rawValue): \(name)")
+            }
         }
     }
 

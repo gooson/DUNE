@@ -50,6 +50,32 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         XCTAssertTrue(themeButton("waterLilies").isSelected)
     }
 
+    func testEnglishAndKoreanRootNavigation() {
+        for (language, locale) in [("en", "en_US"), ("ko", "ko_KR")] {
+            var configuration = launchConfiguration
+            configuration.additionalArguments += [
+                "-AppleLanguages", "(\(language))", "-AppleLocale", locale
+            ]
+            launchApp(with: configuration)
+            XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "\(language): primary navigation")
+
+            let roots: [(String, () -> Void, String)] = [
+                ("Today", navigateToDashboard, AXID.dashboardHeroCondition),
+                ("Activity", navigateToActivity, AXID.activityHeroReadiness),
+                ("Wellness", navigateToWellness, AXID.wellnessHeroScore),
+                ("Life", navigateToLife, AXID.lifeHeroProgress)
+            ]
+            for (tab, navigate, identifier) in roots {
+                navigate()
+                let hero = app.descendants(matching: .any)[identifier].firstMatch
+                XCTAssertTrue(hero.waitForExistence(timeout: 10), "\(language) \(tab): root should load")
+                XCTAssertTrue(hero.frame.intersects(app.windows.firstMatch.frame),
+                              "\(language) \(tab): root should be on screen")
+                captureRootEvidence("Water Lilies \(language) \(tab)")
+            }
+        }
+    }
+
     private func assertAndCaptureTabRoots(style: String) {
         navigateToDashboard()
         XCTAssertTrue(waitForElement(AXID.dashboardHeroCondition, timeout: 10).exists)
@@ -57,29 +83,34 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         XCTAssertTrue(app.buttons[AXID.dashboardHeroCondition].firstMatch.exists)
         XCTAssertFalse(app.buttons["dashboard-primary-activity"].exists,
                        "Today hero should not expose a cross-tab Activity action")
-        addScreenshotAttachment(named: "Water Lilies Today \(style)")
+        captureRootEvidence("Water Lilies Today \(style)")
 
         navigateToActivity()
         XCTAssertTrue(waitForElement(AXID.activityHeroReadiness, timeout: 10).exists)
         XCTAssertTrue(waitForElement("activity-hero-ring", timeout: 10).exists)
         XCTAssertTrue(waitForElement(AXID.activityToolbarAdd, timeout: 10).exists)
-        addScreenshotAttachment(named: "Water Lilies Activity \(style)")
+        captureRootEvidence("Water Lilies Activity \(style)")
 
         navigateToWellness()
         XCTAssertTrue(waitForElement(AXID.wellnessHeroScore, timeout: 10).exists)
         XCTAssertTrue(waitForElement("wellness-hero-ring", timeout: 10).exists)
         XCTAssertTrue(waitForElement("wellness-hero-sleep", timeout: 10).exists)
-        addScreenshotAttachment(named: "Water Lilies Wellness \(style)")
+        captureRootEvidence("Water Lilies Wellness \(style)")
 
         navigateToLife()
         XCTAssertTrue(waitForElement(AXID.lifeHeroProgress, timeout: 10).exists)
         XCTAssertTrue(waitForElement("life-hero-ring", timeout: 10).exists)
         XCTAssertFalse(app.buttons["life-hero-checklist-button"].exists)
+        captureRootEvidence("Water Lilies Life \(style)")
         XCTAssertTrue(app.scrollToElementIfNeeded(AXID.lifeSectionHabits, maxSwipes: 6))
-        addScreenshotAttachment(named: "Water Lilies Life \(style)")
 
         navigateToDashboard()
         XCTAssertTrue(waitForElement(AXID.dashboardHeroCondition, timeout: 10).exists)
+    }
+
+    private func captureRootEvidence(_ name: String) {
+        VisualAudit.capture(name)
+        if !VisualAudit.isEnabled { addScreenshotAttachment(named: name) }
     }
 
     private func themeButton(
