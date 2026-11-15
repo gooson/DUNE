@@ -68,6 +68,8 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-11-15 Watch 완료 후 복귀 검증에서 [F02 유산소 요약](actual/watch/index.html)을 전용 40mm Watch·watchOS 27.2·en_US 기본 글씨의 새 XCTest PNG로 갱신했다. 저장 → 최종 완료 → 백그라운드·복귀 → 앱 재실행의 UI 1/1이 통과했으며, 완료 후 홈 복귀를 확인했다. 모의 세션·in-memory SwiftData의 내비게이션 검사이고 실제 HealthKit의 닫힌 세션 반환·영속 저장·중복 제거까지 검증한 것은 아니다. F06 실제 복구 오류는 새 캡처가 없으며 기존 이미지로 이번 수정 완료를 표시하지 않는다. F02의 기존 하단 지표 가림은 유지한다. [수정과 검증 범위](../../solutions/general/2026-11-15-watch-workout-recovery-identity.md)를 따른다.
+
 2026-11-14 Today(T03)와 알림 요약(T10)의 날씨 응답 대기 의존을 분리했다. [최종 실제 화면 4장](actual/today-loading-2026-11-14/index.html)은 `origin/main` 기반 P2 보완 후 일반 iPhone·iPad의 요약 진입·Today 복귀이며, 이전 소스의 6장은 역사 기록이다. 최종 단위 44건·선택 UI 1/1씩의 결과와 목표 Duo 접힘·펼침 가로의 미갱신 범위는 [리뷰·Ship 기록](../../reviews/2026-11-14-today-loading/review-ship.md)을 따른다. 기존 화면 ID 개수는 바뀌지 않았다.
 
 2026-11-04 Watch 운동 요약의 스크롤 내용과 고정 완료/재시도 버튼 사이를 12pt로 띄웠다. 전용 40mm Watch·watchOS 27.2에서 관련 UI 4개가 통과했고, [실제 Watch 맵](actual/watch/index.html)의 F01·F02·F03·F06·F07 원본과 출처를 갱신했다. F03의 맨 아래 운동 내역과 버튼 사이 여백을 직접 확인했다. F05 저장 중 상태는 이번에 재캡처하지 않았으며 이전 이미지는 이번 변경의 완료 증거가 아니다. 요약 진입 상태의 기존 지표 가림 표시는 별개 관찰로 유지한다. iPhone·iPad·Duo는 영향이 없다. [배치 기준](../layout-map/watch-summary-spacing.md)과 [해결책·검증 제한](../../solutions/general/2026-11-04-watch-summary-bottom-spacing.md)을 따른다.
