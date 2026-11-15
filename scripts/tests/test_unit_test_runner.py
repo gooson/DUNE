@@ -139,6 +139,7 @@ class UnitRunnerTests(unittest.TestCase):
         python = fake_bin / "python3"
         python.write_text("#!/bin/sh\n"
                           'case "$1:$3" in */simulator-test-lock.py:--verify) exit 0 ;; esac\n'
+                          'case "$1" in */watch-simulator-preflight.py) echo "$2"; exit 0 ;; esac\n'
                           f'exec "{sys.executable}" "$@"\n')
         python.chmod(0o755)
         xcodegen = fake_bin / "xcodegen"
@@ -341,6 +342,7 @@ class UnitRunnerTests(unittest.TestCase):
                               '    DUNE_SIM_TEST_LOCK_FD=fixture exec "$1" --no-regen --log-file "$FAKE_DEFAULT_LOG" ;;\n'
                               '  */simulator-test-lock.py:--verify) exit 0 ;;\n'
                               'esac\n'
+                              'case "$1" in */watch-simulator-preflight.py) echo "$2"; exit 0 ;; esac\n'
                               f'exec "{sys.executable}" "$@"\n')
             python.chmod(0o755)
             xcodegen = fake_bin / "xcodegen"
