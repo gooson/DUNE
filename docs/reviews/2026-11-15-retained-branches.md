@@ -1,3 +1,10 @@
+---
+tags: [git, branch-cleanup, history-reconciliation, watchos]
+date: 2026-11-15
+category: solution
+status: reviewed
+---
+
 # 남은 브랜치 통합 검토
 
 기준: 2026-11-15, main `c67f9f1f76764cbd081461b40a441314add56422`.
@@ -71,6 +78,7 @@ P03의 일반 iPhone·iPad actual-map PNG는 최종본이었지만 인덱스의 
 
 - `python3 -B -m unittest scripts.tests.test_watch_simulator_preflight scripts.tests.test_unit_test_runner scripts.tests.test_simulator_readiness`: 43개 통과, 28.575초.
 - `bash -n scripts/test-unit.sh`, `git diff --check`: 통과.
+- 설치된 Watch 기기의 `simctl list devices/runtimes -j`를 읽어 실제 runtime/bundle 검증 통과. 기기 생성·부팅·테스트 실행 없음.
 - runtime preflight는 CLI fixture와 실패 전파·clone 전/후 중단·정상 boot 순서를 포함한다.
 - 앱 Swift·문자열·프로젝트 설정 변경 없음: 앱 빌드·UI·새 캡처는 생략한다.
 - 최종 PR diff 및 이력 통합 전후 tree equality를 별도로 확인한다.

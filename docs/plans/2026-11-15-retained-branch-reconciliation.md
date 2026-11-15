@@ -1,4 +1,6 @@
 ---
+tags: [git, branch-cleanup, watchos, simulator-preflight]
+category: plan
 topic: retained-branch-reconciliation
 date: 2026-11-15
 status: approved
