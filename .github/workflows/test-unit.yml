@@ -17,6 +17,7 @@ on:
       - 'scripts/lib/regen-project.sh'
       - 'scripts/lib/simulator-boot.sh'
       - 'scripts/lib/verify-simulator-ready.py'
+      - 'scripts/lib/watch-simulator-preflight.py'
       - 'scripts/lib/simulator-worktree.sh'
       - 'scripts/lib/simulator-test-lock.py'
 
