@@ -43,13 +43,15 @@ HealthKit이 제공하는 [workoutConfiguration](https://developer.apple.com/doc
 ## Validation
 
 - 표준 `scripts/test-unit.sh --watch-only`에서 `DUNEWatchTests/WorkoutManagerSessionRecoveryTests`와 `DUNEWatchTests/WorkoutElapsedTimeTests`: 2 suites, 12 tests 통과. watchOS 27.2 전용 clone에서 실행했다.
-- 최초 실행은 새 테스트 데이터의 필수 `duration` 인자 누락으로 컴파일 실패했다. `duration: nil` 보완 후 같은 selector를 1회 재실행해 통과했다. 실패 로그와 재실행 로그는 각각 `.xcodebuild/watch-session-recovery-unit.log`, `.xcodebuild/watch-session-recovery-unit-retry.log`에 보존한다.
+- 최초 실행은 새 테스트 데이터의 필수 `duration` 인자 누락으로 컴파일 실패했다. `duration: nil` 보완 후 같은 selector를 1회 재실행해 통과했다. 당시 실패·재실행 로그 경로는 `.xcodebuild/watch-session-recovery-unit.log`, `.xcodebuild/watch-session-recovery-unit-retry.log`였다. 이후 커밋 훅이 `.xcodebuild`를 삭제해 이 초기 로그 원문은 현재 남아 있지 않다.
 - 사용자 후속 설명에 따른 완료 표식 보완 후 같은 2 suites를 실행해 **14 tests**가 통과했다. `.xcodebuild/watch-completed-recovery-unit.log`에 기록한다. 완료된 운동 reset 뒤 재채택 거부·다음 운동 허용과 active reset의 미완료 운동 보존을 추가로 검사했다.
 - 전용 40mm Watch·watchOS 27.2에서 `DUNEWatchUITests/WatchWorkoutFlowSmokeTests/testCardioSummaryDoneStaysDismissedAfterBackgroundAndRelaunch` **1/1 통과, exit 0**. `.xcodebuild/watch-summary-return-ui.log.result.json`의 정확한 selector 결과를 확인했다. 최종 완료 후 홈 복귀, Home 버튼으로 백그라운드 전환, 앱 복귀와 재실행 후 요약·오류 재등장 없음을 검사한다. 이 UI fixture는 모의 세션과 in-memory SwiftData를 사용하므로 영속 기록 보존·중복 제거의 검증으로 확장하지 않는다.
 - 앱과 Watch test target 컴파일을 포함한다. 화면 배치·문구·String Catalog는 변경하지 않았다.
 - 실제 HealthKit active-session 복구, 종료 callback 순서, builder elapsed-time 보정 및 사용자 사진의 `0분`은 실기기 미검증이다. 시뮬레이터의 운동 경로는 HealthKit session 대신 모의 세션을 사용한다.
-- [실제 화면맵 F02](../../design/phone-design-map/actual/watch/index.html)는 위 UI 테스트에서 새로 캡처한 저장된 요약으로 갱신했다. 원본 `.xcresult`와 `.xcodebuild/watch-summary-return-attachments/manifest.json`을 보존한다. 복귀 후 홈 PNG도 직접 확인했다. 재실행 직후 PNG는 홈 제목만 뜬 부분 로딩 상태이므로 완성된 홈 화면맵 증거로 쓰지 않았다. F02의 기존 하단 지표 가림은 이번 수정 범위 밖의 관찰로 유지한다.
+- [실제 화면맵 F02](../../design/phone-design-map/actual/watch/index.html)는 위 UI 테스트에서 새로 캡처한 저장된 요약으로 갱신했다. 최종 unit·UI 원본 `.xcresult`를 별도 archive에 보존하고 UI 첨부·manifest를 다시 추출했다. 복귀 후 홈 PNG도 직접 확인했다. 재실행 직후 PNG는 홈 제목만 뜬 부분 로딩 상태이므로 완성된 홈 화면맵 증거로 쓰지 않았다. F02의 기존 하단 지표 가림은 이번 수정 범위 밖의 관찰로 유지한다.
 - F06(저장 오류)의 **실제 HealthKit 복구 상황** 새 캡처는 없다. 기존 PNG를 이번 수정의 증거로 재사용하거나 완료 표시하지 않았다. iPhone·iPad·Duo는 코드 변경 대상이 아니다.
+
+커밋 훅의 아티팩트 정리로 위 `.xcodebuild` 실행기 로그·receipt는 삭제됐다. 최종 XCTest 원본 2개는 보존됐으며 primary checkout의 ignored `.codex-checks/ship-archive/watch-recovery-2026-11-15/xcresults/`로 복사했다. 원본에서 새로 추출한 `unit-final-summary.json`·`unit-final-tests.json` 및 `ui-summary.json`·`ui-tests.json`으로 14/14·1/1 통과, 실패·skip 0을 재확인했다. `ui-attachments/manifest.json`과 `archive-manifest.json`에 출처를 기록한다. 새 export를 삭제된 실행기 원본으로 표시하지 않는다.
 
 ## Prevention
 

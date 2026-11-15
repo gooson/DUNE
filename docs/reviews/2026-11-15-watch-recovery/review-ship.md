@@ -53,6 +53,8 @@ Security·Performance·Architecture·Data Integrity·Simplicity를 별도 read-o
 - [L10N] 새 사용자 대면 문자열 없음. 변경된 로그·UserDefaults 키는 번역 면제 대상이다. `swift scripts/format-xcstrings.swift --check --check-manual`과 `git diff --check` 통과.
 - [실제 Watch 맵 F02](../../design/phone-design-map/actual/watch/index.html)의 새 캡처·출처를 확인했다. 기존 하단 지표 가림은 유지되며 이번 변경은 배치·문구를 바꾸지 않는다.
 
+커밋 훅이 `.xcodebuild` 실행기 로그·receipt를 삭제했으므로 현재 검증 원본은 별도 보관한 최종 unit·UI `.xcresult` 2개다. 원본에서 다시 추출한 `unit-final-summary.json`·`unit-final-tests.json`, `ui-summary.json`·`ui-tests.json`으로 14/14·1/1 통과, 실패·skip 0과 selector를 확인했다. `archive-manifest.json`은 원본과 새 export를 구분한다. 초기 실패·12건 재실행의 로그 원문은 현재 미보존이며 해당 경로는 이력으로만 남긴다.
+
 ## Positive Observations
 
 - HealthKit의 세션 종류와 시작 시간을 pause 복원보다 먼저 적용한다.
@@ -62,4 +64,4 @@ Security·Performance·Architecture·Data Integrity·Simplicity를 별도 read-o
 
 ## Next Steps
 
-미해결 finding은 없다. 이 검토와 최종 unit 결과를 기준으로 PR 생성·원격 머지를 진행한다. 검증 원본은 worktree 삭제 전에 primary checkout의 ignored `.codex-checks/ship-archive/watch-recovery-2026-11-15/`에 별도 보관한다.
+미해결 finding은 없다. 이 검토와 최종 unit 결과를 기준으로 PR 생성·원격 머지를 진행한다. 검증 원본은 primary checkout의 ignored `.codex-checks/ship-archive/watch-recovery-2026-11-15/`에 별도 보관했다.
