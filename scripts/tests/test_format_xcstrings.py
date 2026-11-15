@@ -161,11 +161,12 @@ class StringCatalogFormattingTests(unittest.TestCase):
                                          "Xcode sync rewrote the catalog")
 
     @unittest.skipUnless(shutil.which("xcrun"), "Xcode tools required")
-    def test_health_query_extraction_does_not_add_unmanaged_keys(self):
+    def test_known_extraction_does_not_add_unmanaged_keys(self):
         # Captured from the user's Xcode build. Existing %lld and single-%
         # entries do not cover %@ and escaped-percent extraction variants.
         keys = ["/100", "× %@", "Relative change: %@%%",
-                "Showing the latest 50 of %@ sources."]
+                "Showing the latest 50 of %@ sources.",
+                "%@ / 100", "%@ of 100", "%@%% applied", "Last %@ days", "RISK"]
         original = CATALOGS[0].read_bytes()
         strings = json.loads(original)["strings"]
         for key in keys:
@@ -175,20 +176,22 @@ class StringCatalogFormattingTests(unittest.TestCase):
             directory = Path(temporary_directory)
             catalog = directory / "Localizable.xcstrings"
             catalog.write_bytes(original)
-            extracted = directory / "HealthQueryResultCard.stringsdata"
+            extracted = directory / "KnownExtraction.stringsdata"
             extracted.write_text(json.dumps({
-                "source": "HealthQueryResultCard.swift",
+                "source": "KnownExtraction.swift",
                 "tables": {"Localizable": [{"key": key, "comment": ""} for key in keys]},
                 "version": 1,
             }), encoding="utf-8")
-            result = subprocess.run(
-                ["xcrun", "xcstringstool", "sync", str(catalog),
-                 "--stringsdata", str(extracted)],
-                capture_output=True, text=True, check=False,
-            )
-            self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertEqual(catalog.read_bytes(), original,
-                             "Health query extraction changed the catalog")
+            for sync_pass in range(2):
+                with self.subTest(sync_pass=sync_pass):
+                    result = subprocess.run(
+                        ["xcrun", "xcstringstool", "sync", str(catalog),
+                         "--stringsdata", str(extracted)],
+                        capture_output=True, text=True, check=False,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertEqual(catalog.read_bytes(), original,
+                                     "Known Xcode extraction changed the catalog")
 
     def test_formats_and_checks_without_changing_catalog_values(self):
         with tempfile.TemporaryDirectory() as temporary_directory:

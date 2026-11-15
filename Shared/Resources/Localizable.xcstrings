@@ -362,6 +362,29 @@
         }
       }
     },
+    "%@ / 100" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ / 100"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ / 100"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ / 100"
+          }
+        }
+      }
+    },
     "%@ %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -898,6 +921,29 @@
         }
       }
     },
+    "%@ of 100" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ of 100"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100点中%@点"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100점 중 %@점"
+          }
+        }
+      }
+    },
     "%@ on %@ will be permanently deleted from all your devices." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1357,6 +1403,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@%%"
+          }
+        }
+      }
+    },
+    "%@%% applied" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% applied"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "適用割合 %@%%"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "반영 비중 %@%%"
           }
         }
       }
@@ -25541,6 +25610,29 @@
         }
       }
     },
+    "Last %@ days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last %@ days"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "過去%@日間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 %@일"
+          }
+        }
+      }
+    },
     "Last %lld days" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -39923,6 +40015,10 @@
           }
         }
       }
+    },
+    "RISK" : {
+      "extractionState" : "manual",
+      "shouldTranslate" : false
     },
     "Risk Factors" : {
       "extractionState" : "manual",
