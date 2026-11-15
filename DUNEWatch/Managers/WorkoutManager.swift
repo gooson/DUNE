@@ -53,6 +53,7 @@ final class WorkoutManager: NSObject {
     private var mirroredSession: HKWorkoutSession?
     private var pendingMirrorSnapshot: WatchWorkoutSnapshot?
     private var mirrorGeneration = UUID()
+    private var sessionGeneration = UUID()
     private var mirrorRetryPolicy = WorkoutMirrorRetryPolicy()
     private var mirrorWorkoutName = String(localized: "Workout")
 
@@ -511,6 +512,7 @@ final class WorkoutManager: NSObject {
 
     /// Common HK session setup shared by strength and cardio flows.
     private func startHKSession(config: HKWorkoutConfiguration, templateName: String) async throws {
+        sessionGeneration = UUID()
         routeRecorder?.cancel()
         routeRecorder = nil
         capturedRoute = []
@@ -1026,6 +1028,12 @@ final class WorkoutManager: NSObject {
     }
 
     func reset() {
+        // Keep the acknowledgement after clearing the recovery snapshot. A later recovery
+        // request may still return this HealthKit session after the summary was dismissed.
+        if isSessionEnded, let startDate {
+            UserDefaults.standard.set(startDate, forKey: Self.dismissedWorkoutKey)
+        }
+        sessionGeneration = UUID()
         routeRecorder?.cancel()
         routeRecorder = nil
         capturedRoute = []
@@ -1090,20 +1098,34 @@ final class WorkoutManager: NSObject {
     // MARK: - Recovery
 
     func recoverSession() async {
+        guard session == nil, !isSimulatedSessionActive, !isSessionEnded else { return }
+        let generation = sessionGeneration
         do {
-            guard let recovered = try await healthStore.recoverActiveWorkoutSession() else {
+            guard let recovered = try await healthStore.recoverActiveWorkoutSession(),
+                  generation == sessionGeneration,
+                  session == nil, !isSimulatedSessionActive, !isSessionEnded else {
+                return
+            }
+            let recoveredBuilder = recovered.associatedWorkoutBuilder()
+            let recoveredStartDate = recovered.startDate ?? recoveredBuilder.startDate
+            guard shouldRecoverWorkout(startDate: recoveredStartDate) else {
+                Self.logger.info("Ignoring workout whose summary was already dismissed")
                 return
             }
             session = recovered
             recovered.delegate = self
 
             // Restore builder + delegate for live metrics (M4)
-            let recoveredBuilder = recovered.associatedWorkoutBuilder()
             builder = recoveredBuilder
             recoveredBuilder.delegate = self
 
             // Restore template/exercise state from persisted data (C4)
-            restoreRecoveredSessionState(recovered.state, at: Date())
+            restoreRecoveredSessionState(
+                recovered.state,
+                at: Date(),
+                configuration: recovered.workoutConfiguration,
+                startDate: recoveredStartDate
+            )
 
             // Restore distance from builder statistics if cardio session
             if isCardioMode {
@@ -1111,10 +1133,6 @@ final class WorkoutManager: NSObject {
                 lastAnnouncedKilometer = Int(distance / 1000)
             }
 
-            // If strength mode but template couldn't be restored, mark as recovered session
-            if !isCardioMode, templateSnapshot == nil {
-                isRecoveredSession = true
-            }
             if case .cardio(let activityType, _) = workoutMode {
                 mirrorWorkoutName = activityType.typeName
             } else {
@@ -1122,7 +1140,6 @@ final class WorkoutManager: NSObject {
             }
             isSessionEnded = recovered.state == .ended
             isPaused = recovered.state == .paused
-            startDate = startDate ?? recovered.startDate ?? recoveredBuilder.startDate
             if let startDate {
                 let now = Date()
                 let elapsed = recoveredBuilder.elapsedTime(at: now)
@@ -1188,6 +1205,15 @@ final class WorkoutManager: NSObject {
     // MARK: - Recovery State Persistence
 
     private static let recoveryKey = "com.raftel.dailve.workoutRecovery"
+    private static let dismissedWorkoutKey = "com.raftel.dailve.dismissedWorkoutStartDate"
+
+    func shouldRecoverWorkout(startDate: Date?) -> Bool {
+        guard let startDate,
+              let dismissedStartDate = UserDefaults.standard.object(forKey: Self.dismissedWorkoutKey) as? Date else {
+            return true
+        }
+        return abs(startDate.timeIntervalSince(dismissedStartDate)) >= 1
+    }
 
     private func persistRecoveryState() {
         let state = WorkoutRecoveryState(
@@ -1216,8 +1242,30 @@ final class WorkoutManager: NSObject {
         UserDefaults.standard.set(data, forKey: Self.recoveryKey)
     }
 
-    func restoreRecoveredSessionState(_ recoveredState: HKWorkoutSessionState, at now: Date) {
-        restoreRecoveryState()
+    func restoreRecoveredSessionState(
+        _ recoveredState: HKWorkoutSessionState,
+        at now: Date,
+        configuration: HKWorkoutConfiguration? = nil,
+        startDate recoveredStartDate: Date? = nil
+    ) {
+        restoreRecoveryState(matching: recoveredStartDate)
+        // HealthKit retains the session identity even when our local snapshot is unavailable.
+        // Resolve it before pause accounting, which can persist another recovery snapshot.
+        if let recoveredStartDate { startDate = recoveredStartDate }
+        if let configuration {
+            if configuration.activityType == .traditionalStrengthTraining {
+                workoutMode = .strength
+                cardioSecondaryUnit = nil
+            } else {
+                workoutMode = .cardio(
+                    activityType: WorkoutActivityType(healthKit: configuration.activityType),
+                    isOutdoor: configuration.locationType == .outdoor
+                )
+                templateSnapshot = nil
+                completedSetsData = []
+            }
+        }
+        isRecoveredSession = !isCardioMode && templateSnapshot == nil
         switch recoveredState {
         case .paused:
             // Older snapshots did not store pause accounting. Start tracking at recovery.
@@ -1231,10 +1279,17 @@ final class WorkoutManager: NSObject {
         }
     }
 
-    private func restoreRecoveryState() {
+    private func restoreRecoveryState(matching recoveredStartDate: Date? = nil) {
         guard let data = UserDefaults.standard.data(forKey: Self.recoveryKey),
               let state = try? JSONDecoder().decode(WorkoutRecoveryState.self, from: data) else {
             return
+        }
+        if let recoveredStartDate {
+            guard let snapshotStartDate = state.startDate,
+                  abs(snapshotStartDate.timeIntervalSince(recoveredStartDate)) < 1 else {
+                Self.logger.warning("Ignoring recovery snapshot from a different workout")
+                return
+            }
         }
         templateSnapshot = state.template
         // Bounds-check restored indices
@@ -1262,7 +1317,6 @@ final class WorkoutManager: NSObject {
         machineLevelWeightedSeconds = state.machineLevelWeightedSeconds
         machineLevelWeightedSum = state.machineLevelWeightedSum
         lastMachineLevelSampleDate = state.lastMachineLevelSampleDate
-        isRecoveredSession = false
     }
 
     private func clearRecoveryState() {

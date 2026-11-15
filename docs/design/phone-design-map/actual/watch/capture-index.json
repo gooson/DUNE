@@ -247,17 +247,19 @@
     },
     "F02": {
       "file": "F02.png",
-      "test": "WatchWorkoutFlowSmokeTests/testCaptureRunningDesignMap()",
+      "test": "WatchWorkoutFlowSmokeTests/testCardioSummaryDoneStaysDismissedAfterBackgroundAndRelaunch()",
       "device": "Apple Watch SE 3 (40mm)",
-      "timestamp": 1793749960.879,
-      "resultBundle": "Test-DUNEWatchUITests-2026.11.04_08-50-51-+0900.xcresult",
-      "source_revision": "269a61dbef1b74ea4baf8a17bc7ce8765c3ec3c1",
+      "timestamp": 1794717887.521,
+      "resultBundle": "Test-DUNEWatchUITests-2026.11.15_13-43-43-+0900.xcresult",
+      "source_revision": "aa2eaa06a61da1f4da3cb4d312fd43fed91928c4",
       "source_worktree_dirty": true,
-      "simulator_udid": "9738E15C-3FC6-4895-A295-8E2B308E5772",
+      "simulator_udid": "4D15A336-2A6B-4DFF-B058-3BFA623FBE6B",
       "runtime": "watchOS 27.2",
       "locale": "en_US",
       "text_size": "system default",
-      "provenance": "2026-11-04 · 하단 inset 간격 12pt. F03은 맨 아래 스크롤 상태; 다른 요약은 진입 상태."
+      "sha256": "0297af9ba862129510fd92c70836ec7ba3e910693e459a66aff79f69353eb11e",
+      "current_verification": "passed",
+      "provenance": "2026-11-15 · 유산소 저장 후 최종 완료 → 백그라운드·복귀 → 재실행 UI 1/1 통과. 모의 세션의 저장된 요약이며 실제 HealthKit 복구 응답 재현은 미검증. 하단 지표 가림은 기존 관찰 유지."
     },
     "F03": {
       "file": "F03.png",

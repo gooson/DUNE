@@ -1083,6 +1083,47 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         )
     }
 
+    func testCardioSummaryDoneStaysDismissedAfterBackgroundAndRelaunch() throws {
+        startFixtureRunningDistanceWorkout()
+        app.swipeRight()
+        XCTAssertTrue(tapElement(WatchAXID.sessionControlsEndButton))
+        let confirm = app.buttons.matching(NSPredicate(
+            format: "label IN %@", ["End Workout", "운동 종료", "ワークアウトを終了"]
+        )).firstMatch
+        XCTAssertTrue(confirm.waitForExistence(timeout: 5))
+        confirm.tap()
+
+        if elementExists(WatchAXID.sessionSummaryEffortSheet, timeout: 5) {
+            XCTAssertTrue(tapElement(WatchAXID.sessionSummaryEffortDoneButton))
+        }
+        let status = app.staticTexts[WatchAXID.sessionSummarySaveStatus].firstMatch
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "label IN %@", ["Saved", "저장됨", "保存済み"]),
+                object: status
+            )], timeout: 15),
+            .completed
+        )
+        captureDesignState("F02", visible: WatchAXID.sessionSummaryScreen)
+        XCTAssertTrue(tapElement(WatchAXID.sessionSummaryDoneButton))
+        XCTAssertTrue(elementExists(WatchAXID.homeRoot, timeout: 8))
+
+        XCUIDevice.shared.press(.home)
+        XCTAssertTrue(app.wait(for: .runningBackground, timeout: 5)
+                      || app.state == .runningBackgroundSuspended)
+        app.activate()
+        XCTAssertTrue(elementExists(WatchAXID.homeRoot, timeout: 8))
+        XCTAssertFalse(elementExists(WatchAXID.sessionSummaryScreen, timeout: 2))
+        XCTAssertFalse(elementExists("watch-session-summary-save-retry-button", timeout: 1))
+        addScreenshotAttachment(named: "watch-summary-done-after-background")
+
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(elementExists(WatchAXID.homeRoot, timeout: 8))
+        XCTAssertFalse(elementExists(WatchAXID.sessionSummaryScreen, timeout: 2))
+        addScreenshotAttachment(named: "watch-summary-done-after-relaunch")
+    }
+
     private func restSeconds(from label: String) -> Int? {
         let components = label.split(separator: ":")
         guard components.count == 2,
