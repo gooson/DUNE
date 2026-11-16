@@ -1,0 +1,650 @@
+{
+  "created": "2026-11-03",
+  "mode": "built-in image_gen",
+  "status": "generated-exploration-not-approved",
+  "basis": "사용자가 관심을 표현한8개 방향. 최종 제작안 승인 아님.",
+  "families": [
+    {
+      "id": "ocean",
+      "name": "오션 글라스",
+      "parentId": "62-e-02",
+      "parentNumber": 62,
+      "parentName": "오션 글라스 스터디",
+      "themeName": "OCEAN · 시안",
+      "palette": {
+        "bg": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      }
+    },
+    {
+      "id": "ice",
+      "name": "아이스 레이어",
+      "parentId": "65-e-05",
+      "parentNumber": 65,
+      "parentName": "아이스 레이어",
+      "themeName": "ARCTIC · 민트",
+      "palette": {
+        "bg": "#0e1b33",
+        "ink": "#a7f4dc",
+        "secondary": "#64afce",
+        "highlight": "#48649b"
+      }
+    },
+    {
+      "id": "orbit",
+      "name": "오픈 오빗",
+      "parentId": "52-d-02",
+      "parentNumber": 52,
+      "parentName": "오픈 오빗",
+      "themeName": "OCEAN · 시안",
+      "palette": {
+        "bg": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      }
+    },
+    {
+      "id": "interleave",
+      "name": "인터리브",
+      "parentId": "53-d-03",
+      "parentNumber": 53,
+      "parentName": "인터리브",
+      "themeName": "FOREST · 세이지",
+      "palette": {
+        "bg": "#172f29",
+        "ink": "#a6c58b",
+        "secondary": "#4f7f61",
+        "highlight": "#e8c86b"
+      }
+    },
+    {
+      "id": "gap",
+      "name": "브리지 갭",
+      "parentId": "54-d-04",
+      "parentNumber": 54,
+      "parentName": "브리지 갭",
+      "themeName": "SAKURA · 피치",
+      "palette": {
+        "bg": "#574354",
+        "ink": "#ffe3d5",
+        "secondary": "#ba8d9a",
+        "highlight": "#efc0a7"
+      }
+    },
+    {
+      "id": "negative",
+      "name": "네거티브 플로",
+      "parentId": "56-d-06",
+      "parentNumber": 56,
+      "parentName": "네거티브 플로",
+      "themeName": "DUNE · 골드",
+      "palette": {
+        "bg": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      }
+    },
+    {
+      "id": "connected",
+      "name": "커넥티드 레벨",
+      "parentId": "57-d-07",
+      "parentNumber": 57,
+      "parentName": "커넥티드 레벨",
+      "themeName": "CONTOUR · 라임",
+      "palette": {
+        "bg": "#343a31",
+        "ink": "#e4efb0",
+        "secondary": "#bbcf72",
+        "highlight": "#657c36"
+      }
+    },
+    {
+      "id": "cross",
+      "name": "크로스 리듬",
+      "parentId": "58-d-08",
+      "parentNumber": 58,
+      "parentName": "크로스 리듬",
+      "themeName": "WATER LILIES · 라일락",
+      "palette": {
+        "bg": "#303649",
+        "ink": "#c47cc5",
+        "secondary": "#457cab",
+        "highlight": "#8abf75"
+      }
+    }
+  ],
+  "concepts": [
+    {
+      "id": "71-ocean-clarity",
+      "number": 71,
+      "version": "v4",
+      "group": "ocean",
+      "groupName": "오션 글라스",
+      "parentId": "62-e-02",
+      "parentNumber": 62,
+      "parentName": "오션 글라스 스터디",
+      "themeName": "OCEAN · 시안",
+      "palette": {
+        "bg": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      },
+      "name": "오션 글라스 · 정돈",
+      "variant": "정돈",
+      "desc": "두 레이어의 곡률과 간격을 정돈",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #0a2932. Foreground palette #4fc3d5, #205b75, #d7faf6. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Refine the reference into exactly two broad translucent cyan and ice-white dune ribbons, each with a single rolling crest and valley. Balance their optical weight; maintain one unmistakable clean overlap at the left-center. Enlarge the dark gap to remain clear at thumbnail size; remove any needle-like ends. Smooth substantial soft-cut tips. Overall mark 78% wide and 58% high. Material looks like very shallow frosted glass planes, minimal edge light only.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/62-e-02.png"
+    },
+    {
+      "id": "72-ocean-layer",
+      "number": 72,
+      "version": "v4",
+      "group": "ocean",
+      "groupName": "오션 글라스",
+      "parentId": "62-e-02",
+      "parentNumber": 62,
+      "parentName": "오션 글라스 스터디",
+      "themeName": "OCEAN · 시안",
+      "palette": {
+        "bg": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      },
+      "name": "오션 글라스 · 레이어",
+      "variant": "레이어",
+      "desc": "겹치는 판과 앞뒤 관계를 더 명확하게",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #0a2932. Foreground palette #4fc3d5, #205b75, #d7faf6. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Keep two flowing dune ribbons from the reference, but introduce stronger spatial separation: one ice-white ribbon passes over a rich cyan ribbon at a single left-of-center crossover. A single small transparent transition clarifies which plane sits in front. Larger higher crest and deeper lower valley, 76% by 64%. Broad consistent 10% bands, no extra ribbons, no cast glow. Quiet translucent depth, clean flat-facing surfaces.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/62-e-02.png"
+    },
+    {
+      "id": "73-ocean-bold",
+      "number": 73,
+      "version": "v4",
+      "group": "ocean",
+      "groupName": "오션 글라스",
+      "parentId": "62-e-02",
+      "parentNumber": 62,
+      "parentName": "오션 글라스 스터디",
+      "themeName": "OCEAN · 시안",
+      "palette": {
+        "bg": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      },
+      "name": "오션 글라스 · 볼드",
+      "variant": "볼드",
+      "desc": "두꺼운 리본과 짧은 끝으로 작은 크기 대응",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #0a2932. Foreground palette #4fc3d5, #205b75, #d7faf6. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Redraw the same two-ribbon cyan dune gesture as a compact heavy icon, 74% wide by 66% high, each stroke 13% of canvas. Shorten the tails and make all termini substantial and softly rounded. Keep a single restrained translucent overlap and a very clear dark valley. More vertical mass and more decisive edge contrast, but still airy open strokes, never a filled blob.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/62-e-02.png"
+    },
+    {
+      "id": "74-ice-clarity",
+      "number": 74,
+      "version": "v4",
+      "group": "ice",
+      "groupName": "아이스 레이어",
+      "parentId": "65-e-05",
+      "parentNumber": 65,
+      "parentName": "아이스 레이어",
+      "themeName": "ARCTIC · 민트",
+      "palette": {
+        "bg": "#0e1b33",
+        "ink": "#a7f4dc",
+        "secondary": "#64afce",
+        "highlight": "#48649b"
+      },
+      "name": "아이스 레이어 · 정돈",
+      "variant": "정돈",
+      "desc": "세 층의 간격과 곡률을 같은 체계로",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #0e1b33. Foreground palette #a7f4dc, #64afce, #48649b. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Refine exactly three mint, ice-blue and indigo dune strokes from the reference. Harmonize curve tension and staggered heights; preserve their layered crossing relationship, but make negative channels evenly generous. Slightly shorten and thicken every tip. Overall 77% by 60%, shallow separated frosted planes, no haze, no external glow.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/65-e-05.png"
+    },
+    {
+      "id": "75-ice-layer",
+      "number": 75,
+      "version": "v4",
+      "group": "ice",
+      "groupName": "아이스 레이어",
+      "parentId": "65-e-05",
+      "parentNumber": 65,
+      "parentName": "아이스 레이어",
+      "themeName": "ARCTIC · 민트",
+      "palette": {
+        "bg": "#0e1b33",
+        "ink": "#a7f4dc",
+        "secondary": "#64afce",
+        "highlight": "#48649b"
+      },
+      "name": "아이스 레이어 · 레이어",
+      "variant": "레이어",
+      "desc": "세 개의 판을 앞뒤가 읽히도록 분리",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #0e1b33. Foreground palette #a7f4dc, #64afce, #48649b. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Three clean broad translucent dune ribbon planes: mint upper, ice-blue middle, indigo lower. Offset them slightly in depth and laterally so their two restrained overlap joints are unmistakable; front-facing broad surfaces remain crisp. Raise the main crest and give the lower band a smooth return. 74% by 65% compact silhouette. No additional stripes, no specular streaks or glossy tile.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/65-e-05.png"
+    },
+    {
+      "id": "76-ice-bold",
+      "number": 76,
+      "version": "v4",
+      "group": "ice",
+      "groupName": "아이스 레이어",
+      "parentId": "65-e-05",
+      "parentNumber": 65,
+      "parentName": "아이스 레이어",
+      "themeName": "ARCTIC · 민트",
+      "palette": {
+        "bg": "#0e1b33",
+        "ink": "#a7f4dc",
+        "secondary": "#64afce",
+        "highlight": "#48649b"
+      },
+      "name": "아이스 레이어 · 볼드",
+      "variant": "볼드",
+      "desc": "민트와 빙하색의 굵은 세 곡선",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #0e1b33. Foreground palette #a7f4dc, #64afce, #48649b. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Three chunky matte-translucent dune strokes, dominant mint and ice-blue with a shorter indigo lower stroke. Each 11% wide, substantial rounded ends and unusually clear navy gaps. Overall 72% by 68%, retain one overlap to acknowledge the reference layering, but simplify fine transparency details for a strong 40px impression.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/65-e-05.png"
+    },
+    {
+      "id": "77-orbit-clarity",
+      "number": 77,
+      "version": "v4",
+      "group": "orbit",
+      "groupName": "오픈 오빗",
+      "parentId": "52-d-02",
+      "parentNumber": 52,
+      "parentName": "오픈 오빗",
+      "themeName": "OCEAN · 시안",
+      "palette": {
+        "bg": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      },
+      "name": "오픈 오빗 · 정돈",
+      "variant": "정돈",
+      "desc": "고리와 능선이 따로 보이지 않도록 연결",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #0a2932. Foreground palette #4fc3d5, #205b75, #d7faf6. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Evolve the reference into ONE integrated open cyan orbit whose lower arc morphs continuously into a broad rolling dune S-curve. Put a clear opening on the lower-left and one short ice-blue inner dune echo, so orbit and wave feel like one designed mark rather than a sun over a landscape. Circle-like 72% by 72% footprint, 10% thick arcs with soft substantial ends. No actual sun, moon, horizon or progress ring.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/52-d-02.png"
+    },
+    {
+      "id": "78-orbit-layer",
+      "number": 78,
+      "version": "v4",
+      "group": "orbit",
+      "groupName": "오픈 오빗",
+      "parentId": "52-d-02",
+      "parentNumber": 52,
+      "parentName": "오픈 오빗",
+      "themeName": "OCEAN · 시안",
+      "palette": {
+        "bg": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      },
+      "name": "오픈 오빗 · 편심",
+      "variant": "편심",
+      "desc": "비대칭 궤도와 높은 능선으로 방향성 부여",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #0a2932. Foreground palette #4fc3d5, #205b75, #d7faf6. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Transform the reference round arc into a subtly diagonal off-center open oval orbit, broken on its upper-right side. Its lower part sweeps into one broad cyan dune crest that rises through the center; add a short ice-white return curve. Strong integrated 70% by 74% silhouette. 9% thick arc, pronounced asymmetric opening, no standalone sun disc, no arrows or planetary imagery.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/52-d-02.png"
+    },
+    {
+      "id": "79-orbit-bold",
+      "number": 79,
+      "version": "v4",
+      "group": "orbit",
+      "groupName": "오픈 오빗",
+      "parentId": "52-d-02",
+      "parentNumber": 52,
+      "parentName": "오픈 오빗",
+      "themeName": "OCEAN · 시안",
+      "palette": {
+        "bg": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      },
+      "name": "오픈 오빗 · 볼드",
+      "variant": "볼드",
+      "desc": "굵은 열린 고리와 단순한 내부 곡선",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #0a2932. Foreground palette #4fc3d5, #205b75, #d7faf6. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: A single chunky cyan three-quarter loop with a large deliberate opening at lower-right joins directly to one heavy internal rolling dune stroke. One small ice-white inner curve only if needed for separation. 70% by 72%, 13% line weight, clear central void, generous rounded end gaps. Avoid separate horizon beneath a circular sun: the terrain is structurally part of the loop.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/52-d-02.png"
+    },
+    {
+      "id": "80-interleave-clarity",
+      "number": 80,
+      "version": "v4",
+      "group": "interleave",
+      "groupName": "인터리브",
+      "parentId": "53-d-03",
+      "parentNumber": 53,
+      "parentName": "인터리브",
+      "themeName": "FOREST · 세이지",
+      "palette": {
+        "bg": "#172f29",
+        "ink": "#a6c58b",
+        "secondary": "#4f7f61",
+        "highlight": "#e8c86b"
+      },
+      "name": "인터리브 · 정돈",
+      "variant": "정돈",
+      "desc": "한 번의 교차와 좌우 무게 균형을 정돈",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #172f29. Foreground palette #a6c58b, #4f7f61, #e8c86b. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Two broad open sage-green and pale-gold dune strokes interweave once just right of center. Keep the reference's gentle flowing crossing but make the two crests slightly different heights and terminal lengths to avoid a generic infinity sign. Crisp underpass separation and rounded substantial ends. 77% by 54%, 11% bands, simple flat tonal surfaces.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/53-d-03.png"
+    },
+    {
+      "id": "81-interleave-layer",
+      "number": 81,
+      "version": "v4",
+      "group": "interleave",
+      "groupName": "인터리브",
+      "parentId": "53-d-03",
+      "parentNumber": 53,
+      "parentName": "인터리브",
+      "themeName": "FOREST · 세이지",
+      "palette": {
+        "bg": "#172f29",
+        "ink": "#a6c58b",
+        "secondary": "#4f7f61",
+        "highlight": "#e8c86b"
+      },
+      "name": "인터리브 · 레이어",
+      "variant": "레이어",
+      "desc": "교차부에서 앞뒤 관계가 읽히는 리본",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #172f29. Foreground palette #a6c58b, #4f7f61, #e8c86b. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Preserve two green and pale-gold flowing dune ribbons and exactly one crossover. At the crossover make the green upper plane visibly pass over the gold with a small restrained translucent area and a narrow dark seam; absolutely no extra loops or knots. Taller asymmetric crest at left and shallower right valley. 75% by 61%, quiet matte-glass material, no plastic shine.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/53-d-03.png"
+    },
+    {
+      "id": "82-interleave-bold",
+      "number": 82,
+      "version": "v4",
+      "group": "interleave",
+      "groupName": "인터리브",
+      "parentId": "53-d-03",
+      "parentNumber": 53,
+      "parentName": "인터리브",
+      "themeName": "FOREST · 세이지",
+      "palette": {
+        "bg": "#172f29",
+        "ink": "#a6c58b",
+        "secondary": "#4f7f61",
+        "highlight": "#e8c86b"
+      },
+      "name": "인터리브 · 볼드",
+      "variant": "볼드",
+      "desc": "넓은 두 획과 큰 교차 간격",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #172f29. Foreground palette #a6c58b, #4f7f61, #e8c86b. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Two very thick (14%) rounded open dune bands, sage and warm pale gold, intersect once off center and continue into two asymmetric rolling crests. Use short thick termini and a generous dark underpass notch so the overlap stays distinct at small size. Compact 72% by 62%; not an infinity symbol, no closed loops, no tiny shading.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/53-d-03.png"
+    },
+    {
+      "id": "83-gap-clarity",
+      "number": 83,
+      "version": "v4",
+      "group": "gap",
+      "groupName": "브리지 갭",
+      "parentId": "54-d-04",
+      "parentNumber": 54,
+      "parentName": "브리지 갭",
+      "themeName": "SAKURA · 피치",
+      "palette": {
+        "bg": "#574354",
+        "ink": "#ffe3d5",
+        "secondary": "#ba8d9a",
+        "highlight": "#efc0a7"
+      },
+      "name": "브리지 갭 · 정돈",
+      "variant": "정돈",
+      "desc": "끊김의 폭과 끝을 일관되게",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #574354. Foreground palette #ffe3d5, #ba8d9a, #efc0a7. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Three broad peach, dusty-rose and apricot dune strokes preserve the reference's intentional breaks. Exactly one clean 5%-canvas-wide break in each curve, staggered just past the crests. All cut surfaces share a rounded soft-chisel treatment; no tiny detached slivers. 76% by 61%, 10% bands and spacious channels. Optical continuity remains obvious.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/54-d-04.png"
+    },
+    {
+      "id": "84-gap-layer",
+      "number": 84,
+      "version": "v4",
+      "group": "gap",
+      "groupName": "브리지 갭",
+      "parentId": "54-d-04",
+      "parentNumber": 54,
+      "parentName": "브리지 갭",
+      "themeName": "SAKURA · 피치",
+      "palette": {
+        "bg": "#574354",
+        "ink": "#ffe3d5",
+        "secondary": "#ba8d9a",
+        "highlight": "#efc0a7"
+      },
+      "name": "브리지 갭 · 오프셋",
+      "variant": "오프셋",
+      "desc": "끊김 위치를 옮겨 새로운 리듬 형성",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #574354. Foreground palette #ffe3d5, #ba8d9a, #efc0a7. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Keep three peach dune bands but stagger the three intentional broad gaps along an ascending diagonal: upper gap before crest, middle gap just after crest, lower gap near the last rise. The curves themselves stay smooth and substantial; no extra cutouts. Taller more compact 72% by 66%, 10% thick strokes, consistent broad dark gaps and clean softly rounded cuts.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/54-d-04.png"
+    },
+    {
+      "id": "85-gap-bold",
+      "number": 85,
+      "version": "v4",
+      "group": "gap",
+      "groupName": "브리지 갭",
+      "parentId": "54-d-04",
+      "parentNumber": 54,
+      "parentName": "브리지 갭",
+      "themeName": "SAKURA · 피치",
+      "palette": {
+        "bg": "#574354",
+        "ink": "#ffe3d5",
+        "secondary": "#ba8d9a",
+        "highlight": "#efc0a7"
+      },
+      "name": "브리지 갭 · 볼드",
+      "variant": "볼드",
+      "desc": "두 곡선과 두 끊김으로 단순화",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #574354. Foreground palette #ffe3d5, #ba8d9a, #efc0a7. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Reduce the reference from three curves to exactly TWO very heavy 13%-wide peach and soft-apricot dune waves, each with one wide intentional break. Offset the breaks so they never align into a single vertical cut. Short rounded tails, compact 73% by 62%; clear bold fragments that still read as continuous dunes, no dots or tiny pieces.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/54-d-04.png"
+    },
+    {
+      "id": "86-negative-clarity",
+      "number": 86,
+      "version": "v4",
+      "group": "negative",
+      "groupName": "네거티브 플로",
+      "parentId": "56-d-06",
+      "parentNumber": 56,
+      "parentName": "네거티브 플로",
+      "themeName": "DUNE · 골드",
+      "palette": {
+        "bg": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "name": "네거티브 플로 · 정돈",
+      "variant": "정돈",
+      "desc": "안쪽 여백과 곡선의 굵기를 명확하게",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #302b2a. Foreground palette #e1b453, #b2854c, #f5d778. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Refine the reference into a single open flowing gold ribbon boundary with a generous dark S-shaped inner channel. One high off-center dune crest above, one deeper valley below; make left and right ends softly blunted and keep one clear opening on the right. 77% by 57%, 11% thick boundaries. Asymmetric dune flow, not lips or an eye, no central dot.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/56-d-06.png"
+    },
+    {
+      "id": "87-negative-layer",
+      "number": 87,
+      "version": "v4",
+      "group": "negative",
+      "groupName": "네거티브 플로",
+      "parentId": "56-d-06",
+      "parentNumber": 56,
+      "parentName": "네거티브 플로",
+      "themeName": "DUNE · 골드",
+      "palette": {
+        "bg": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "name": "네거티브 플로 · 레이어",
+      "variant": "레이어",
+      "desc": "골드 윤곽의 두 면과 빈 공간을 대비",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #302b2a. Foreground palette #e1b453, #b2854c, #f5d778. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: A restrained folded gold dune ribbon outlines one large dark wave-shaped opening. Two tonal gold/bronze faces show a single gentle fold where the upper crest transitions into the lower return; there is a deliberate wide opening at lower-left. 74% by 62%, broad 12% structural width, crisp contour, no shiny metal, no filled landform, no enclosed eye.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/56-d-06.png"
+    },
+    {
+      "id": "88-negative-bold",
+      "number": 88,
+      "version": "v4",
+      "group": "negative",
+      "groupName": "네거티브 플로",
+      "parentId": "56-d-06",
+      "parentNumber": 56,
+      "parentName": "네거티브 플로",
+      "themeName": "DUNE · 골드",
+      "palette": {
+        "bg": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "name": "네거티브 플로 · 볼드",
+      "variant": "볼드",
+      "desc": "짧고 두꺼운 윤곽으로 하나의 기호화",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #302b2a. Foreground palette #e1b453, #b2854c, #f5d778. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Condense the negative-flow reference into a very bold open asymmetrical dune loop, 70% by 66%, with 14% gold stroke thickness. Keep a large undulating dark inner void and a generous visible break at the right edge. Two softly rounded thick ends; high upper crest and offset lower valley prevent an eye/lips reading. Flat single gold with subtle bronze lower edge only.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/56-d-06.png"
+    },
+    {
+      "id": "89-connected-clarity",
+      "number": 89,
+      "version": "v4",
+      "group": "connected",
+      "groupName": "커넥티드 레벨",
+      "parentId": "57-d-07",
+      "parentNumber": 57,
+      "parentName": "커넥티드 레벨",
+      "themeName": "CONTOUR · 라임",
+      "palette": {
+        "bg": "#343a31",
+        "ink": "#e4efb0",
+        "secondary": "#bbcf72",
+        "highlight": "#657c36"
+      },
+      "name": "커넥티드 레벨 · 정돈",
+      "variant": "정돈",
+      "desc": "하나의 경로와 두 회전부를 매끄럽게",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #343a31. Foreground palette #e4efb0, #bbcf72, #657c36. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Refine the reference into ONE continuous pale-lime dune path with three broad flowing levels connected by exactly two smooth round turns on alternate sides. Make all stroke thickness 10%, keep clear wide inner channels and substantial short terminal ends. Overall 72% by 67%. Open path, no closed loops, no maze, retain the original organic contour rhythm.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/57-d-07.png"
+    },
+    {
+      "id": "90-connected-layer",
+      "number": 90,
+      "version": "v4",
+      "group": "connected",
+      "groupName": "커넥티드 레벨",
+      "parentId": "57-d-07",
+      "parentNumber": 57,
+      "parentName": "커넥티드 레벨",
+      "themeName": "CONTOUR · 라임",
+      "palette": {
+        "bg": "#343a31",
+        "ink": "#e4efb0",
+        "secondary": "#bbcf72",
+        "highlight": "#657c36"
+      },
+      "name": "커넥티드 레벨 · 레벨",
+      "variant": "레벨",
+      "desc": "세 층의 높이 차이를 더 분명하게",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #343a31. Foreground palette #e4efb0, #bbcf72, #657c36. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: A single continuous lime path snakes through three dune contour levels in a taller 66% width by 73% height footprint. Each level has an offset rounded crest; connect through two large generous side turns, using slightly different lime tonal planes to clarify the progression. Stroke 10%, wide channels, no hidden small loops, no dotted route or arrows.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/57-d-07.png"
+    },
+    {
+      "id": "91-connected-bold",
+      "number": 91,
+      "version": "v4",
+      "group": "connected",
+      "groupName": "커넥티드 레벨",
+      "parentId": "57-d-07",
+      "parentNumber": 57,
+      "parentName": "커넥티드 레벨",
+      "themeName": "CONTOUR · 라임",
+      "palette": {
+        "bg": "#343a31",
+        "ink": "#e4efb0",
+        "secondary": "#bbcf72",
+        "highlight": "#657c36"
+      },
+      "name": "커넥티드 레벨 · 볼드",
+      "variant": "볼드",
+      "desc": "굵고 간결한 연속선의 실루엣",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #343a31. Foreground palette #e4efb0, #bbcf72, #657c36. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: One very bold lime 13%-wide continuous organic line forms three broad unequal dune sweeps joined by two large soft turns. Shorten the top and bottom tails, broaden the central channel and create a compact 71% by 69% silhouette with two open rounded endpoints. Flat near-monochrome, no gradients necessary, no tiny interior detail.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/57-d-07.png"
+    },
+    {
+      "id": "92-cross-clarity",
+      "number": 92,
+      "version": "v4",
+      "group": "cross",
+      "groupName": "크로스 리듬",
+      "parentId": "58-d-08",
+      "parentNumber": 58,
+      "parentName": "크로스 리듬",
+      "themeName": "WATER LILIES · 라일락",
+      "palette": {
+        "bg": "#303649",
+        "ink": "#c47cc5",
+        "secondary": "#457cab",
+        "highlight": "#8abf75"
+      },
+      "name": "크로스 리듬 · 정돈",
+      "variant": "정돈",
+      "desc": "서로 다른 두 곡률과 한 번의 교차",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #303649. Foreground palette #c47cc5, #457cab, #8abf75. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Two broad lilac and muted-blue dune strokes cross exactly once left of center. Make the lilac stroke a taller smooth crest and the blue stroke a lower counter-curving valley. Shorten tails slightly, consistent 11% thickness, rounded ends, clear dark underpass notch. Compact 75% by 58%. Asymmetric terrain rhythm, not a generic letter X, not infinity.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/58-d-08.png"
+    },
+    {
+      "id": "93-cross-layer",
+      "number": 93,
+      "version": "v4",
+      "group": "cross",
+      "groupName": "크로스 리듬",
+      "parentId": "58-d-08",
+      "parentNumber": 58,
+      "parentName": "크로스 리듬",
+      "themeName": "WATER LILIES · 라일락",
+      "palette": {
+        "bg": "#303649",
+        "ink": "#c47cc5",
+        "secondary": "#457cab",
+        "highlight": "#8abf75"
+      },
+      "name": "크로스 리듬 · 레이어",
+      "variant": "레이어",
+      "desc": "교차에서 생기는 라일락과 블루의 깊이",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #303649. Foreground palette #c47cc5, #457cab, #8abf75. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Preserve exactly two flowing lilac and blue dune strokes with one shallow off-center crossing. A restrained translucent overlap patch and one crisp edge show the lilac plane above blue; front faces stay broad and clean. Increase vertical spread to 64% and keep width 74%. Soft substantial ends, no green third stroke, no glow or glass tile.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/58-d-08.png"
+    },
+    {
+      "id": "94-cross-bold",
+      "number": 94,
+      "version": "v4",
+      "group": "cross",
+      "groupName": "크로스 리듬",
+      "parentId": "58-d-08",
+      "parentNumber": 58,
+      "parentName": "크로스 리듬",
+      "themeName": "WATER LILIES · 라일락",
+      "palette": {
+        "bg": "#303649",
+        "ink": "#c47cc5",
+        "secondary": "#457cab",
+        "highlight": "#8abf75"
+      },
+      "name": "크로스 리듬 · 볼드",
+      "variant": "볼드",
+      "desc": "굵은 두 획과 넓은 골짜기로 무게 강화",
+      "prompt": "Use case: logo-brand / precise-object-edit. Create ONE refined square DUNE health/recovery app icon. Input image is the EXACT selected parent concept to develop, not a generic moodboard. Preserve that parent's recognizable topology, dune/body-rhythm/recovery meaning and theme palette, while making the requested refinement visible. Change geometry and stroke/spacing as described; not just recoloring. Maintain a strong small-size silhouette and airy deliberate negative space. Square UNMASKED opaque canvas, full background #303649. Foreground palette #c47cc5, #457cab, #8abf75. No baked-in rounded app tile, no device, frame, text, numbers, sun, heart, literal ECG, photo, sparkles, decorative particles or scenery. Clean continuous edges, no hairlines or needle tips, no random extra strokes. Material rendering is restrained exploratory appearance, not heavy gloss. Specific refinement: Two heavy 14%-wide lilac and muted-blue organic dune strokes cross once asymmetrically, with rounded thick caps and very clear open valleys around the intersection. Compact 71% width by 65% height; top crest and lower valley have visibly different curvature. Flat graphic contrast with only a tiny dark underpass, no extra effects or third stroke.",
+      "reference": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/docs/design/theme-map/themes/assets/dune-icon-development/v3/58-d-08.png"
+    }
+  ]
+}

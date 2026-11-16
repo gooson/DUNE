@@ -7,7 +7,7 @@ status: draft
 
 # 폰 계열 전체 화면 인벤토리
 
-SwiftUI View와 인라인 프레젠테이션 **110개**를 화면 단위로 대조한다. W17·W18은 소스에 남아 있지만 현재 앱에서 호출하는 곳이 없어 캡처 대상 수에서 제외한다. 차트·카드·버튼 같은 내부 컴포넌트는 별도 화면이 아니다.
+SwiftUI View와 인라인 프레젠테이션 **111개**를 화면 단위로 대조한다. W17·W18은 소스에 남아 있지만 현재 앱에서 호출하는 곳이 없어 캡처 대상 수에서 제외한다. 차트·카드·버튼 같은 내부 컴포넌트는 별도 화면이 아니다.
 
 ## 시작 · 오늘 · 알림 (19)
 
@@ -144,7 +144,7 @@ SwiftUI View와 인라인 프레젠테이션 **110개**를 화면 단위로 대�
 | L08 | 주간 습관 리포트 | 라이프 분석 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Life/WeeklyHabitReportView.swift:3` |
 | L09 | 지난 날짜 습관 기록 | 라이프·습관 이력 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Life/HabitPastRecordSheet.swift:3` |
 
-## 설정 · 기타 (7)
+## 설정 · 기타 (8)
 
 | ID | 화면 | 진입 | 표시 방식 | 일반 iPhone | iPad | Duo | 코드 |
 |---|---|---|---|---|---|---|---|
@@ -155,3 +155,4 @@ SwiftUI View와 인라인 프레젠테이션 **110개**를 화면 단위로 대�
 | S05 | 새 소식 | 오늘·설정·앱 시작 | push/sheet | 상세 push 또는 시트 | 상세 push 또는 시트 | push 또는 시트 · 상태 유지 | `DUNE/Presentation/WhatsNew/WhatsNewView.swift:8` |
 | S06 | 새 기능 상세 | 새 소식 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/WhatsNew/WhatsNewView.swift:151` |
 | S07 | 운동 분석 별도 창 | iPad 운동 중 | window | 운동 분석 시트로 대체 | 별도 읽기 전용 창 | 운동 분석 시트로 대체 | `DUNE/App/DUNEApp.swift:1150` |
+| S08 | 앱 아이콘 선택 | 설정 → 외관 → 앱 아이콘 | push | 3개 형태·시작 화면 미리보기 | 한 열 Form | 선택·스크롤 유지 | `DUNE/Presentation/Settings/AppIconPickerView.swift:3` |

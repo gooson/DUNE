@@ -339,3 +339,16 @@ H05 구현 검증: iPhone·iPad·Duo 접힘·펼침의 기존 검사 5건과 실
 2026-11-14 [H08 실제 증거와 남은DuoMAX](../full-redesign-map/review/injury-record-form-h08-2026-11-14/index.html). 과거실패는 보존하며 대기범위를 통과로 표시하지 않는다.
 
 2026-11-14 S03: [`exercise-default-edit-s03.html`](exercise-default-edit-s03.html)는 정적 배치 계약이며 [실제 Phone·iPad 범위 증거](../full-redesign-map/review/exercise-default-edit-s03-2026-11-14/index.html)와 구분한다. iPad 일반·MAX 검증.
+
+
+2026-11-03 후속 아이콘 요청은 선의 무게·비율·테마 키컬러·연결·레이어로 새50개21–70을 탐색한다. [대시보드](../theme-map/themes/dune-icon-development.html)와 [Apple·Dribbble 조사](../theme-map/themes/assets/dune-icon-development/v3/research.md)를 연결하며 기존20개 이력을 유지한다.
+
+2026-11-03 [DUNE 아이콘 발전 과정](../theme-map/themes/dune-icon-development.html)을 추가했다. 원형 계승 10개·꽉 찬 형태 10개, App Store 레퍼런스 6개, 홈 화면 목업과 후보·메모를 비교한다. [배치·기록 계약](app-icon-development.md)을 따르며 실제 앱·기기 캡처와 구분한다.
+
+2026-11-03 아이콘4차: [8방향 발전24안](../theme-map/themes/dune-icon-development.html)을 최신 탐색으로 연결했다. 출발 시안·현재 앱 아이콘 비교와 방향별 비교판을 제공한다. 이전70개와 후보·메모 이력은 유지하며, 관심 표현은 최종안 승인으로 취급하지 않는다.
+
+2026-11-03 5차: 사용자가 선택한86·87·84·81·82·80·75·74·71의 색상 통일 테스트를95–103으로 추가했다. 투톤 허용을 반영해 골드·앰버와 차콜을 공통 기준으로 쓴다. 원래 형태·크기·재질 보존을 목표로 하는 AI 편집이며 픽셀 단위 기하 일치는 보장하지 않는다. 이전94개와 후보·메모를 유지하고, 전용 브랜치 `codex/dune-icon-two-tone-study`에서 작업한다. 최종안 승인·앱 적용은 아니다. [배치·발전 기록](app-icon-development.md)을 따른다.
+
+2026-11-03 6차 교정: 사용자가 말한 투톤은 같은 골드의 명도차로 한정하는 뜻이 아니라 서로 다른 컬러도 사용 가능하다는 뜻이다. 같은9개86·87·84·81·82·80·75·74·71을 골드×시안 조합104–112로 다시 비교한다. 이전95–103은 assistant의 명도차 해석 실험으로 구분해 보존한다. 전용 브랜치는 `codex/dune-icon-two-tone-study`이며 최종 팔레트 승인·앱 적용은 아니다.
+
+2026-11-16 [아이콘 설정·시작 화면 배치](../layout-map/app-icon-settings.md): 사용자 선택82·71·87, 기본82/P04와 나머지테마 자동색을 네이티브에 연결한다. 기존 웹 시안·112개 이력은 보존하고 실제 기기 캡처 검증을 별도 기록한다.

@@ -1,0 +1,99 @@
+{
+  "date": "2026-11-03",
+  "method": "linkedom DOM execution, Node syntax, local asset checks; no rendered-browser screenshot",
+  "passed": {
+    "conceptSelections": 20,
+    "references": 6,
+    "favorite": true,
+    "perConceptNotes": true,
+    "localStorage": true,
+    "compareToggle": true,
+    "wallpaper": true,
+    "iconSize": true,
+    "timeline": true,
+    "displayedImagePaths": true
+  },
+  "visualReview": {
+    "generatedArt": "20 original PNGs inspected in conversation",
+    "browser": "performed-isolated-headless-chrome",
+    "reason": "2026-11-03 사용자 캡처 요청으로 잠금 화면과 사용자 브라우저 세션을 조작하지 않는 별도 headless Chrome 렌더러를 사용했다. 지연 로딩 이미지가 decode 대기를 끝내지 않아 첫 실행을 종료하고 eager loading과 실행 deadline을 적용한 1회 재실행으로 완료했다.",
+    "nativeDeviceCapture": "not-performed-proposal-only",
+    "captures": "captures/capture-index.json",
+    "verified": "모바일 전체 대시보드, 1/2차 각각10개 비교판, 원본과11/15/16번 홈 화면 목업. 2차 비교판·15번 병렬 홈 화면·모바일 대시보드 PNG를 시각 확인했다."
+  },
+  "v3": {
+    "created": "2026-11-03",
+    "newConcepts": 50,
+    "dashboardTotal": 70,
+    "mode": "built-in image_gen",
+    "captureIndex": "v3/captures/capture-index.json",
+    "curation": "v3/curation.json",
+    "visualReview": [
+      "five icon boards covering all50",
+      "shortlist home board covering27/39/46/57/70",
+      "mobile dashboard"
+    ],
+    "status": "proposal-only-no-native-device-installation"
+  },
+  "v4": {
+    "assets": "v4/asset-qa.json",
+    "browser": "v4/captures/capture-index.json",
+    "curation": "v4/curation.json",
+    "count": 24,
+    "totalGallery": 94,
+    "nativeAppChanged": false,
+    "status": "exploration-not-approved"
+  },
+  "v5": {
+    "assets": "v5/asset-qa.json",
+    "browser": "v5/captures/capture-index.json",
+    "count": 9,
+    "totalGallery": 103,
+    "branch": "codex/dune-icon-two-tone-study",
+    "nativeAppChanged": false,
+    "status": "palette-test-not-approved",
+    "visualReview": [
+      "all-9.png",
+      "pairs-3.png",
+      "comparisons/103-mono-71.png",
+      "dashboard-mobile.png"
+    ],
+    "note": "공통 골드·앰버 팔레트. 생성 편집으로 미세한 색·기하 차이 가능."
+  },
+  "v6": {
+    "assets": "v6/asset-qa.json",
+    "browser": "v6/captures/capture-index.json",
+    "count": 9,
+    "totalGallery": 112,
+    "branch": "codex/dune-icon-two-tone-study",
+    "nativeAppChanged": false,
+    "status": "different-hue-test-not-approved",
+    "visualReview": [
+      "all-9.png",
+      "pairs-3.png",
+      "comparisons/112-duo-71.png"
+    ],
+    "colorCheck": "모든 이미지에서 골드와 시안 HSV 구간이 각각 전체 픽셀1% 이상. 기계적 색 포함 검사이며 지각 평가와 구분.",
+    "correction": "투톤은 서로 다른 컬러도 가능. v5는 명도차 해석 실험으로 보존."
+  },
+  "colorLab": {
+    "palettes": "color-lab/palettes.json",
+    "sourceManifest": "color-lab/source-manifest.json",
+    "browser": "color-lab/captures/capture-index.json",
+    "paletteCount": 20,
+    "formCount": 9,
+    "combinations": 180,
+    "historicalConcepts": 112,
+    "branch": "codex/dune-icon-two-tone-study",
+    "mode": "runtime browser SVG color matrix; source PNGs unchanged",
+    "nativeAppChanged": false,
+    "newAiGenerations": 0,
+    "visualReview": [
+      "color-lab/captures/palettes-20.png",
+      "color-lab/captures/home-palette-comparison.png",
+      "color-lab/captures/dashboard-mobile-430.png",
+      "color-lab/captures/exports/dune-71-lilac-peach-AB-preset.png"
+    ],
+    "status": "interactive-palette-exploration-not-approved"
+  }
+}

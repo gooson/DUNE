@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DUNE · Icon Development</title>
+<style>
+:root{color-scheme:dark;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;background:#171615;color:#f5eee2;--gold:#e6b85f;--muted:#b6aa99;--line:#443b30}
+*{box-sizing:border-box}body{margin:0}button,select,textarea{font:inherit}button,select{cursor:pointer}a{color:inherit}button,a,select,textarea{outline-offset:4px}button:focus-visible,a:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold)}button{color:inherit;border:1px solid var(--line);background:#29241f;border-radius:10px;padding:10px 14px}button[aria-pressed=true]{background:#e6b85f;color:#231b10;border-color:#e6b85f}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(36px,5vw,66px);line-height:1.05;letter-spacing:-.055em;margin-bottom:14px}h2{font-size:23px;letter-spacing:-.035em}h3{font-size:17px}p{line-height:1.65}.shell{max-width:1530px;margin:auto;padding:28px 28px 64px}.eyebrow{color:var(--gold);font-size:11px;letter-spacing:.19em;font-weight:750;margin-bottom:12px}.topline{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:35px}.topline a{font-size:13px;color:var(--muted);text-decoration:none}.intro{max-width:700px;color:var(--muted);font-size:15px;margin-bottom:25px}.badge{display:inline-block;border:1px solid #655237;border-radius:99px;padding:6px 11px;font-size:11px;color:#e5bf80}.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:20px 0}.toolbar label{color:var(--muted);font-size:12px;display:flex;align-items:center;gap:7px}select{padding:10px 12px;border-radius:10px;background:#29241f;border:1px solid var(--line);color:inherit}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 414px;gap:30px;align-items:start}.panel{border:1px solid var(--line);border-radius:22px;background:#201c18;padding:24px}.details{display:flex;gap:24px;align-items:center;margin-bottom:22px}.icon{aspect-ratio:1;object-fit:cover;display:block;border-radius:23%;background:#121214}.hero-icon{width:174px;flex:none}.detail-copy{min-width:0}.detail-copy h2{margin-bottom:9px}.detail-copy p{font-size:13px;color:var(--muted);margin-bottom:10px}.detail-copy a{font-size:12px;color:#e2bc7c}.sizes{display:flex;align-items:end;gap:16px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:22px}.sizes figure{margin:0;text-align:center}.sizes figcaption{font-size:10px;color:var(--muted);margin-top:7px}.sizes .baseline{padding-right:16px;border-right:1px solid var(--line)}.small-note{font-size:11px;color:var(--muted);line-height:1.55}.tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:17px}.tabs button{font-size:12px;padding:9px 11px}.gallery{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.choice{padding:8px;background:#191613;border-radius:14px;min-width:0;text-align:left;color:#eee0cb}.choice[aria-pressed=true]{background:#3f3020;border:2px solid var(--gold);padding:7px;color:#fff3d7}.choice img{width:100%;border-radius:22%;margin-bottom:7px}.choice span{font-size:10px;line-height:1.45;display:block;overflow-wrap:anywhere}.choice strong{font-size:11px;color:#e4b770}.choice .star{color:#f4ce71;float:right}.gallery-note{font-size:12px;color:var(--muted);margin:15px 0 0}.phone-column{position:sticky;top:18px;min-width:0}.phone-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.phone-heading h2{font-size:16px;margin:0}.phone-heading span{font-size:11px;color:var(--muted)}.phone-scroll{overflow-x:auto;padding-bottom:8px;max-width:100%}.phones{display:flex;gap:24px;width:max-content}.device{width:410px;padding:10px;border-radius:56px;background:#080808;border:1px solid #635e57;box-shadow:0 20px 55px #0006}.screen{width:390px;height:844px;border-radius:46px;overflow:hidden;position:relative;background:radial-gradient(ellipse at 85% 20%,#a5b8c7 0,transparent 45%),linear-gradient(153deg,#d6ddd8 12%,#8fa0ac 48%,#223b50 100%);color:white;isolation:isolate}.screen::before{content:'';position:absolute;z-index:-1;width:700px;height:560px;background:linear-gradient(120deg,#d6b78f,#876952 70%);border-radius:50%;transform:rotate(-27deg);top:475px;left:-190px;box-shadow:80px -50px 0 #aa947f}.screen[data-wallpaper=night]{background:radial-gradient(ellipse at 70% 10%,#365a63,transparent 60%),#111c26}.screen[data-wallpaper=night]::before{background:linear-gradient(120deg,#594d47,#27272c 75%);box-shadow:80px -50px 0 #39424a}.screen[data-wallpaper=plain]{background:#c8c3b9}.screen[data-wallpaper=plain]::before{display:none}.status{height:69px;display:flex;justify-content:space-between;padding:17px 27px 0;font-size:14px;font-weight:650}.island{position:absolute;width:116px;height:34px;top:10px;left:137px;background:#050505;border-radius:30px}.status-right{letter-spacing:2px;font-size:11px;padding-top:2px}.home-grid{display:grid;grid-template-columns:repeat(4,1fr);row-gap:26px;padding:24px 23px 0;align-items:start}.app{text-align:center;width:86px;min-width:0}.app img,.generic{width:60px;height:60px;margin:auto;border-radius:23%;display:block;object-fit:cover;box-shadow:0 3px 8px #0002}.app span{display:block;font-size:11px;margin-top:7px;text-shadow:0 1px 4px #000a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.generic{display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:500;background:linear-gradient(#679fd2,#2679c5)}.generic.notes{background:linear-gradient(#efca4f 23%,#fff9e7 23%);color:#a69f8c}.generic.calendar{background:#fff9f5;color:#222;font-size:25px;border-top:14px solid #e06353}.generic.music{background:linear-gradient(#ef5c7c,#c62343)}.generic.book{background:linear-gradient(#e7a543,#c97821)}.generic.mail{background:linear-gradient(#7ab6d8,#347dd3)}.generic.weather{background:linear-gradient(#356b95,#6eb3d1)}.generic.camera{background:#d0d2d5;color:#383d40}.screen.large-icons .app img,.screen.large-icons .generic{width:68px;height:68px}.screen.large-icons .app span{visibility:hidden}.dock{position:absolute;bottom:22px;left:14px;right:14px;padding:15px 0;display:flex;justify-content:space-around;border-radius:32px;background:#e6e0d43b;backdrop-filter:blur(15px)}.dock .generic{margin:0}.homebar{position:absolute;bottom:7px;left:132px;width:126px;height:5px;border-radius:9px;background:#fff}.page-dots{position:absolute;bottom:131px;width:100%;text-align:center;font-size:12px;letter-spacing:6px}.device-label{text-align:center;font-size:12px;color:var(--muted);margin:12px 0 0}.compare .workspace{grid-template-columns:minmax(0,1fr)}.compare .phone-column{position:static}.compare .phone-scroll{max-width:100%}.compare .phones{margin:auto}.compare .phone-heading{max-width:845px;margin:0 auto 12px}.compare .editor{max-width:1100px;width:100%;margin:auto}.compare .workspace{gap:24px}.refs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.ref{border:1px solid var(--line);border-radius:14px;padding:15px;background:#191613}.ref img{width:72px;height:72px;border-radius:23%;margin-bottom:12px}.ref h3{margin-bottom:8px;font-size:13px}.ref p{font-size:12px;color:var(--muted);margin-bottom:8px}.ref a{font-size:11px;color:#e4bc78}.timeline{border-left:1px solid #8a6d43;padding-left:23px;margin-left:6px}.timeline article{padding:2px 0 20px}.timeline p{font-size:13px;color:var(--muted)}.timeline time{font-size:11px;color:#d2a768}.notes-panel{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}.notes-panel h3{margin-bottom:12px}.notes-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.notes-actions button{font-size:12px}textarea{width:100%;resize:vertical;min-height:86px;background:#151311;color:inherit;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:13px;line-height:1.6}.saved{font-size:11px;color:var(--muted);min-height:17px}.foot{border-top:1px solid var(--line);margin-top:28px;padding-top:18px;color:var(--muted);font-size:11px;line-height:1.6}.foot a{color:#dbb278}[hidden]{display:none!important}.noscript{background:#4a2b20;padding:20px}
+.gallery.focused{grid-template-columns:repeat(3,minmax(0,1fr))}.sizes{overflow-x:auto}.sizes figure{flex-shrink:0}.parent-context{border-left:2px solid #a58c67;padding-left:10px;color:#d3bea0!important}.capture-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;font-size:12px;color:#d8b683}
+@media(min-width:1450px){.workspace{grid-template-columns:minmax(0,1fr) 440px}.hero-icon{width:202px}}
+@media(max-width:1000px){.workspace{grid-template-columns:minmax(0,1fr)}.phone-column{position:static}.phone-scroll{margin:auto}.phones{margin:auto}.phone-heading{max-width:410px;margin:0 auto 10px}.details{gap:18px}.hero-icon{width:150px}}
+@media(max-width:600px){.gallery.focused{grid-template-columns:repeat(2,minmax(0,1fr))}.shell{padding:20px 14px 40px}.topline{margin-bottom:25px}.panel{padding:16px}.details{align-items:start}.hero-icon{width:110px}.detail-copy h2{font-size:20px}.gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.refs{grid-template-columns:repeat(2,minmax(0,1fr))}.sizes{gap:13px}.toolbar{gap:7px}.phone-column{margin:0 -4px}.phone-scroll{overflow:auto}.phones{margin:0}.intro{font-size:14px}.topline{flex-wrap:wrap}}
+
+.palette-panel{border:1px solid #60533f;background:#27221d;border-radius:16px;padding:16px;margin-bottom:22px}.palette-panel h3{margin:0 0 12px}.palette-panel .toolbar{margin:10px 0}.palette-panel select{max-width:100%}.palette-colors{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0;font-size:11px;color:var(--muted)}.palette-colors span{display:flex;gap:6px;align-items:center}.palette-colors i{width:16px;height:16px;border-radius:50%;border:1px solid #ffffff44}.palette-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:14px}.palette-choice{padding:8px 6px;text-align:left;min-width:0;background:#171513}.palette-choice img{display:block;width:64px;max-width:100%;aspect-ratio:1;border-radius:23%;margin:0 auto 7px}.palette-choice strong,.palette-choice span,.palette-choice small{display:block;font-size:10px;line-height:1.45;overflow-wrap:anywhere}.palette-choice strong{color:#d6b882;font-size:11px}.palette-choice[aria-pressed=true]{background:#48351f;color:#fff4df}.palette-choice small{color:#bcae98;margin-top:3px}.palette-panel summary{cursor:pointer;padding:8px 0;font-size:12px;color:#e4bf84}.palette-panel .small-note{margin:10px 0 0}#palette-current{font-size:12px;line-height:1.6;color:#decfb9;margin:8px 0}#palette-select{min-width:0}#palette-swap{font-size:12px}.palette-step{padding:10px 12px;min-width:44px}.palette-filters{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}.capture-links{margin-bottom:16px}
+@media(max-width:600px){.palette-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.palette-panel{padding:12px}.palette-panel label{max-width:100%;flex-wrap:wrap}.palette-panel select{min-width:0}.palette-choice{padding:7px 4px}.palette-choice span{font-size:9px}.palette-choice small{display:none}}@media(max-width:360px){.palette-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<svg class="palette-filters" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs id="palette-filter-defs"></defs></svg>
+<!-- BEGIN STATIC PREVIEW IMAGE BANK -->
+<div id="dune-image-bank" hidden aria-hidden="true">
+<img data-image="original.png" src="assets/dune-icon-development/original.png" loading="lazy" alt="">
+<img data-image="v1/01-refined-wave.png" src="assets/dune-icon-development/v1/01-refined-wave.png" loading="lazy" alt="">
+<img data-image="v1/02-folded-dune.png" src="assets/dune-icon-development/v1/02-folded-dune.png" loading="lazy" alt="">
+<img data-image="v1/03-sandstone-relief.png" src="assets/dune-icon-development/v1/03-sandstone-relief.png" loading="lazy" alt="">
+<img data-image="v1/04-breathing-ribbon.png" src="assets/dune-icon-development/v1/04-breathing-ribbon.png" loading="lazy" alt="">
+<img data-image="v1/05-negative-ridge.png" src="assets/dune-icon-development/v1/05-negative-ridge.png" loading="lazy" alt="">
+<img data-image="v1/06-contour-rhythm.png" src="assets/dune-icon-development/v1/06-contour-rhythm.png" loading="lazy" alt="">
+<img data-image="v1/07-recovery-orbit.png" src="assets/dune-icon-development/v1/07-recovery-orbit.png" loading="lazy" alt="">
+<img data-image="v1/08-dune-monogram.png" src="assets/dune-icon-development/v1/08-dune-monogram.png" loading="lazy" alt="">
+<img data-image="v1/09-soft-ivory.png" src="assets/dune-icon-development/v1/09-soft-ivory.png" loading="lazy" alt="">
+<img data-image="v1/10-golden-terrain.png" src="assets/dune-icon-development/v1/10-golden-terrain.png" loading="lazy" alt="">
+<img data-image="v2/11-full-terrain.png" src="assets/dune-icon-development/v2/11-full-terrain.png" loading="lazy" alt="">
+<img data-image="v2/12-gold-field.png" src="assets/dune-icon-development/v2/12-gold-field.png" loading="lazy" alt="">
+<img data-image="v2/13-dune-mass.png" src="assets/dune-icon-development/v2/13-dune-mass.png" loading="lazy" alt="">
+<img data-image="v2/14-layered-crest.png" src="assets/dune-icon-development/v2/14-layered-crest.png" loading="lazy" alt="">
+<img data-image="v2/15-dune-orb.png" src="assets/dune-icon-development/v2/15-dune-orb.png" loading="lazy" alt="">
+<img data-image="v2/16-bold-d.png" src="assets/dune-icon-development/v2/16-bold-d.png" loading="lazy" alt="">
+<img data-image="v2/17-copper-inverse.png" src="assets/dune-icon-development/v2/17-copper-inverse.png" loading="lazy" alt="">
+<img data-image="v2/18-ivory-terrain.png" src="assets/dune-icon-development/v2/18-ivory-terrain.png" loading="lazy" alt="">
+<img data-image="v2/19-soft-volume.png" src="assets/dune-icon-development/v2/19-soft-volume.png" loading="lazy" alt="">
+<img data-image="v2/20-carved-flow.png" src="assets/dune-icon-development/v2/20-carved-flow.png" loading="lazy" alt="">
+<img data-image="v3/21-a-01.png" src="assets/dune-icon-development/v3/21-a-01.png" loading="lazy" alt="">
+<img data-image="v3/22-a-02.png" src="assets/dune-icon-development/v3/22-a-02.png" loading="lazy" alt="">
+<img data-image="v3/23-a-03.png" src="assets/dune-icon-development/v3/23-a-03.png" loading="lazy" alt="">
+<img data-image="v3/24-a-04.png" src="assets/dune-icon-development/v3/24-a-04.png" loading="lazy" alt="">
+<img data-image="v3/25-a-05.png" src="assets/dune-icon-development/v3/25-a-05.png" loading="lazy" alt="">
+<img data-image="v3/26-a-06.png" src="assets/dune-icon-development/v3/26-a-06.png" loading="lazy" alt="">
+<img data-image="v3/27-a-07.png" src="assets/dune-icon-development/v3/27-a-07.png" loading="lazy" alt="">
+<img data-image="v3/28-a-08.png" src="assets/dune-icon-development/v3/28-a-08.png" loading="lazy" alt="">
+<img data-image="v3/29-a-09.png" src="assets/dune-icon-development/v3/29-a-09.png" loading="lazy" alt="">
+<img data-image="v3/30-a-10.png" src="assets/dune-icon-development/v3/30-a-10.png" loading="lazy" alt="">
+<img data-image="v3/31-b-01.png" src="assets/dune-icon-development/v3/31-b-01.png" loading="lazy" alt="">
+<img data-image="v3/32-b-02.png" src="assets/dune-icon-development/v3/32-b-02.png" loading="lazy" alt="">
+<img data-image="v3/33-b-03.png" src="assets/dune-icon-development/v3/33-b-03.png" loading="lazy" alt="">
+<img data-image="v3/34-b-04.png" src="assets/dune-icon-development/v3/34-b-04.png" loading="lazy" alt="">
+<img data-image="v3/35-b-05.png" src="assets/dune-icon-development/v3/35-b-05.png" loading="lazy" alt="">
+<img data-image="v3/36-b-06.png" src="assets/dune-icon-development/v3/36-b-06.png" loading="lazy" alt="">
+<img data-image="v3/37-b-07.png" src="assets/dune-icon-development/v3/37-b-07.png" loading="lazy" alt="">
+<img data-image="v3/38-b-08.png" src="assets/dune-icon-development/v3/38-b-08.png" loading="lazy" alt="">
+<img data-image="v3/39-b-09.png" src="assets/dune-icon-development/v3/39-b-09.png" loading="lazy" alt="">
+<img data-image="v3/40-b-10.png" src="assets/dune-icon-development/v3/40-b-10.png" loading="lazy" alt="">
+<img data-image="v3/41-c-01.png" src="assets/dune-icon-development/v3/41-c-01.png" loading="lazy" alt="">
+<img data-image="v3/42-c-02.png" src="assets/dune-icon-development/v3/42-c-02.png" loading="lazy" alt="">
+<img data-image="v3/43-c-03.png" src="assets/dune-icon-development/v3/43-c-03.png" loading="lazy" alt="">
+<img data-image="v3/44-c-04.png" src="assets/dune-icon-development/v3/44-c-04.png" loading="lazy" alt="">
+<img data-image="v3/45-c-05.png" src="assets/dune-icon-development/v3/45-c-05.png" loading="lazy" alt="">
+<img data-image="v3/46-c-06.png" src="assets/dune-icon-development/v3/46-c-06.png" loading="lazy" alt="">
+<img data-image="v3/47-c-07.png" src="assets/dune-icon-development/v3/47-c-07.png" loading="lazy" alt="">
+<img data-image="v3/48-c-08.png" src="assets/dune-icon-development/v3/48-c-08.png" loading="lazy" alt="">
+<img data-image="v3/49-c-09.png" src="assets/dune-icon-development/v3/49-c-09.png" loading="lazy" alt="">
+<img data-image="v3/50-c-10.png" src="assets/dune-icon-development/v3/50-c-10.png" loading="lazy" alt="">
+<img data-image="v3/51-d-01.png" src="assets/dune-icon-development/v3/51-d-01.png" loading="lazy" alt="">
+<img data-image="v3/52-d-02.png" src="assets/dune-icon-development/v3/52-d-02.png" loading="lazy" alt="">
+<img data-image="v3/53-d-03.png" src="assets/dune-icon-development/v3/53-d-03.png" loading="lazy" alt="">
+<img data-image="v3/54-d-04.png" src="assets/dune-icon-development/v3/54-d-04.png" loading="lazy" alt="">
+<img data-image="v3/55-d-05.png" src="assets/dune-icon-development/v3/55-d-05.png" loading="lazy" alt="">
+<img data-image="v3/56-d-06.png" src="assets/dune-icon-development/v3/56-d-06.png" loading="lazy" alt="">
+<img data-image="v3/57-d-07.png" src="assets/dune-icon-development/v3/57-d-07.png" loading="lazy" alt="">
+<img data-image="v3/58-d-08.png" src="assets/dune-icon-development/v3/58-d-08.png" loading="lazy" alt="">
+<img data-image="v3/59-d-09.png" src="assets/dune-icon-development/v3/59-d-09.png" loading="lazy" alt="">
+<img data-image="v3/60-d-10.png" src="assets/dune-icon-development/v3/60-d-10.png" loading="lazy" alt="">
+<img data-image="v3/61-e-01.png" src="assets/dune-icon-development/v3/61-e-01.png" loading="lazy" alt="">
+<img data-image="v3/62-e-02.png" src="assets/dune-icon-development/v3/62-e-02.png" loading="lazy" alt="">
+<img data-image="v3/63-e-03.png" src="assets/dune-icon-development/v3/63-e-03.png" loading="lazy" alt="">
+<img data-image="v3/64-e-04.png" src="assets/dune-icon-development/v3/64-e-04.png" loading="lazy" alt="">
+<img data-image="v3/65-e-05.png" src="assets/dune-icon-development/v3/65-e-05.png" loading="lazy" alt="">
+<img data-image="v3/66-e-06.png" src="assets/dune-icon-development/v3/66-e-06.png" loading="lazy" alt="">
+<img data-image="v3/67-e-07.png" src="assets/dune-icon-development/v3/67-e-07.png" loading="lazy" alt="">
+<img data-image="v3/68-e-08.png" src="assets/dune-icon-development/v3/68-e-08.png" loading="lazy" alt="">
+<img data-image="v3/69-e-09.png" src="assets/dune-icon-development/v3/69-e-09.png" loading="lazy" alt="">
+<img data-image="v3/70-e-10.png" src="assets/dune-icon-development/v3/70-e-10.png" loading="lazy" alt="">
+<img data-image="v4/71-ocean-clarity.png" src="assets/dune-icon-development/v4/71-ocean-clarity.png" loading="lazy" alt="">
+<img data-image="v4/72-ocean-layer.png" src="assets/dune-icon-development/v4/72-ocean-layer.png" loading="lazy" alt="">
+<img data-image="v4/73-ocean-bold.png" src="assets/dune-icon-development/v4/73-ocean-bold.png" loading="lazy" alt="">
+<img data-image="v4/74-ice-clarity.png" src="assets/dune-icon-development/v4/74-ice-clarity.png" loading="lazy" alt="">
+<img data-image="v4/75-ice-layer.png" src="assets/dune-icon-development/v4/75-ice-layer.png" loading="lazy" alt="">
+<img data-image="v4/76-ice-bold.png" src="assets/dune-icon-development/v4/76-ice-bold.png" loading="lazy" alt="">
+<img data-image="v4/77-orbit-clarity.png" src="assets/dune-icon-development/v4/77-orbit-clarity.png" loading="lazy" alt="">
+<img data-image="v4/78-orbit-layer.png" src="assets/dune-icon-development/v4/78-orbit-layer.png" loading="lazy" alt="">
+<img data-image="v4/79-orbit-bold.png" src="assets/dune-icon-development/v4/79-orbit-bold.png" loading="lazy" alt="">
+<img data-image="v4/80-interleave-clarity.png" src="assets/dune-icon-development/v4/80-interleave-clarity.png" loading="lazy" alt="">
+<img data-image="v4/81-interleave-layer.png" src="assets/dune-icon-development/v4/81-interleave-layer.png" loading="lazy" alt="">
+<img data-image="v4/82-interleave-bold.png" src="assets/dune-icon-development/v4/82-interleave-bold.png" loading="lazy" alt="">
+<img data-image="v4/83-gap-clarity.png" src="assets/dune-icon-development/v4/83-gap-clarity.png" loading="lazy" alt="">
+<img data-image="v4/84-gap-layer.png" src="assets/dune-icon-development/v4/84-gap-layer.png" loading="lazy" alt="">
+<img data-image="v4/85-gap-bold.png" src="assets/dune-icon-development/v4/85-gap-bold.png" loading="lazy" alt="">
+<img data-image="v4/86-negative-clarity.png" src="assets/dune-icon-development/v4/86-negative-clarity.png" loading="lazy" alt="">
+<img data-image="v4/87-negative-layer.png" src="assets/dune-icon-development/v4/87-negative-layer.png" loading="lazy" alt="">
+<img data-image="v4/88-negative-bold.png" src="assets/dune-icon-development/v4/88-negative-bold.png" loading="lazy" alt="">
+<img data-image="v4/89-connected-clarity.png" src="assets/dune-icon-development/v4/89-connected-clarity.png" loading="lazy" alt="">
+<img data-image="v4/90-connected-layer.png" src="assets/dune-icon-development/v4/90-connected-layer.png" loading="lazy" alt="">
+<img data-image="v4/91-connected-bold.png" src="assets/dune-icon-development/v4/91-connected-bold.png" loading="lazy" alt="">
+<img data-image="v4/92-cross-clarity.png" src="assets/dune-icon-development/v4/92-cross-clarity.png" loading="lazy" alt="">
+<img data-image="v4/93-cross-layer.png" src="assets/dune-icon-development/v4/93-cross-layer.png" loading="lazy" alt="">
+<img data-image="v4/94-cross-bold.png" src="assets/dune-icon-development/v4/94-cross-bold.png" loading="lazy" alt="">
+<img data-image="v5/95-mono-86.png" src="assets/dune-icon-development/v5/95-mono-86.png" loading="lazy" alt="">
+<img data-image="v5/96-mono-87.png" src="assets/dune-icon-development/v5/96-mono-87.png" loading="lazy" alt="">
+<img data-image="v5/97-mono-84.png" src="assets/dune-icon-development/v5/97-mono-84.png" loading="lazy" alt="">
+<img data-image="v5/98-mono-81.png" src="assets/dune-icon-development/v5/98-mono-81.png" loading="lazy" alt="">
+<img data-image="v5/99-mono-82.png" src="assets/dune-icon-development/v5/99-mono-82.png" loading="lazy" alt="">
+<img data-image="v5/100-mono-80.png" src="assets/dune-icon-development/v5/100-mono-80.png" loading="lazy" alt="">
+<img data-image="v5/101-mono-75.png" src="assets/dune-icon-development/v5/101-mono-75.png" loading="lazy" alt="">
+<img data-image="v5/102-mono-74.png" src="assets/dune-icon-development/v5/102-mono-74.png" loading="lazy" alt="">
+<img data-image="v5/103-mono-71.png" src="assets/dune-icon-development/v5/103-mono-71.png" loading="lazy" alt="">
+<img data-image="v6/104-duo-86.png" src="assets/dune-icon-development/v6/104-duo-86.png" loading="lazy" alt="">
+<img data-image="v6/105-duo-87.png" src="assets/dune-icon-development/v6/105-duo-87.png" loading="lazy" alt="">
+<img data-image="v6/106-duo-84.png" src="assets/dune-icon-development/v6/106-duo-84.png" loading="lazy" alt="">
+<img data-image="v6/107-duo-81.png" src="assets/dune-icon-development/v6/107-duo-81.png" loading="lazy" alt="">
+<img data-image="v6/108-duo-82.png" src="assets/dune-icon-development/v6/108-duo-82.png" loading="lazy" alt="">
+<img data-image="v6/109-duo-80.png" src="assets/dune-icon-development/v6/109-duo-80.png" loading="lazy" alt="">
+<img data-image="v6/110-duo-75.png" src="assets/dune-icon-development/v6/110-duo-75.png" loading="lazy" alt="">
+<img data-image="v6/111-duo-74.png" src="assets/dune-icon-development/v6/111-duo-74.png" loading="lazy" alt="">
+<img data-image="v6/112-duo-71.png" src="assets/dune-icon-development/v6/112-duo-71.png" loading="lazy" alt="">
+<img data-image="references/1576857102.png" src="assets/dune-icon-development/references/1576857102.png" loading="lazy" alt="">
+<img data-image="references/493145008.png" src="assets/dune-icon-development/references/493145008.png" loading="lazy" alt="">
+<img data-image="references/426826309.png" src="assets/dune-icon-development/references/426826309.png" loading="lazy" alt="">
+<img data-image="references/1043837948.png" src="assets/dune-icon-development/references/1043837948.png" loading="lazy" alt="">
+<img data-image="references/1346247457.png" src="assets/dune-icon-development/references/1346247457.png" loading="lazy" alt="">
+<img data-image="references/1543571755.png" src="assets/dune-icon-development/references/1543571755.png" loading="lazy" alt="">
+<img data-image="references/dribbble/15732362.jpg" src="assets/dune-icon-development/references/dribbble/15732362.jpg" loading="lazy" alt="">
+</div>
+<!-- END STATIC PREVIEW IMAGE BANK -->
+<main class="shell">
+<div class="topline"><a href="../index.html">← 디자인 대시보드 · Theme Map</a><span class="badge">2026.11.16 · 선택3종 앱 적용</span></div>
+<p class="intro"><a href="../../phone-design-map/actual/app-icon-2026-11-16/index.html">82·71·87 설정 선택 · P04·테마 자동색 · 새 네이티브 캡처18장 ↗</a></p>
+<header><p class="eyebrow">DUNE / COLOR LAB / 20 PALETTES × 9 FORMS</p><h1>마음에 드는 색을,<br>직접 비교해요.</h1><p class="intro">20가지 컬러 조합을 선택하신9개 형태에 바로 적용해요.<br>조합을 누르면 작은 크기와 홈 화면까지 함께 바뀌어요. 형태는 고정하고 색을 비교해 보세요.</p></header>
+<div class="toolbar" aria-label="홈 화면 미리보기 설정">
+<label>배경 <select id="wallpaper"><option value="day">밝은 사구</option><option value="night">어두운 사구</option><option value="plain">단색</option></select></label>
+<label>아이콘 <select id="icon-size"><option value="60">기본 · 60px</option><option value="68">크게 · 68px</option></select></label>
+<label id="compare-source-control" hidden>비교 기준 <select id="compare-source"><option value="parent">출발 시안</option><option value="original">현재 앱 아이콘</option><option value="palette" id="palette-compare-option">다른 컬러 조합</option></select></label><label id="palette-compare-control" hidden>나란히 볼 조합 <select id="palette-compare" aria-label="비교할 컬러 조합"></select></label><button id="compare" aria-pressed="false">출발 시안과 나란히 보기</button><button id="jump-phone">홈 화면으로 이동 ↓</button>
+<span class="small-note">390×844 CSS px 홈 화면 목업 · 실제 기기 캡처 아님</span>
+</div>
+<noscript><p class="noscript">시안 선택과 홈 화면 전환에는 JavaScript가 필요해요. 원본 PNG와 프롬프트는 같은 폴더의 assets/dune-icon-development에서 볼 수 있어요.</p></noscript>
+<div class="workspace">
+<section class="panel editor" aria-label="아이콘 탐색">
+<div class="details"><img id="hero-icon" class="icon hero-icon" alt="선택한 DUNE 시안"><div class="detail-copy"><p class="eyebrow" id="selected-number"></p><h2 id="selected-title"></h2><p id="selected-description"></p><p class="parent-context small-note" id="parent-context" hidden></p><a id="download" download>원본 PNG 다운로드 ↗</a></div></div>
+<div class="sizes" aria-label="작은 크기와 기존 아이콘 비교"><figure class="baseline"><img class="icon" src="assets/dune-icon-development/original.png" width="60" height="60" alt="기존 DUNE 아이콘"><figcaption>현재 · 60px</figcaption></figure><figure id="parent-mini" hidden><img class="icon" id="parent-thumb" width="60" height="60" alt="출발 시안"><figcaption id="parent-caption">출발 · 60px</figcaption></figure><figure><img class="icon selected-size" width="60" height="60" alt="선택 시안 60픽셀"><figcaption>60px</figcaption></figure><figure><img class="icon selected-size" width="40" height="40" alt="선택 시안 40픽셀"><figcaption>40px</figcaption></figure><figure><img class="icon selected-size" width="29" height="29" alt="선택 시안 29픽셀"><figcaption>29px</figcaption></figure></div>
+<nav class="tabs" aria-label="개발 단계"><button data-tab="lab" aria-pressed="true">컬러랩 · 20조합×9형태</button><button data-tab="v6" aria-pressed="false">6차 · 골드×시안 9</button><button data-tab="v5" aria-pressed="false">5차 · 골드 명도차 9</button><button data-tab="v4" aria-pressed="false">4차 · 8방향 발전 24</button><button data-tab="v3" aria-pressed="false">3차 · 다양한 관점 50</button><button data-tab="v2" aria-pressed="false">2차 · 넓은 면 10</button><button data-tab="v1" aria-pressed="false">1차 · 원형 계승 10</button><button data-tab="refs" aria-pressed="false">레퍼런스·Apple</button><button data-tab="history" aria-pressed="false">발전 기록</button></nav>
+<section id="palette-panel" class="palette-panel" aria-label="20가지 컬러 조합">
+<h3>컬러 조합 고르기</h3><div class="toolbar"><label>20가지 조합 <select id="palette-select" aria-label="컬러 조합"></select></label><button id="palette-prev" class="palette-step" aria-label="이전 컬러 조합">←</button><button id="palette-next" class="palette-step" aria-label="다음 컬러 조합">→</button><button id="palette-swap" aria-pressed="false">두 색 위치 바꾸기 ⇄</button></div>
+<div class="toolbar"><label>아이콘 바탕 <select id="palette-background"><option value="preset">조합에 맞는 바탕</option><option value="charcoal">같은 차콜 바탕</option><option value="ivory">같은 아이보리 바탕</option></select></label></div>
+<p id="palette-current" role="status"></p><div id="palette-colors" class="palette-colors"></div>
+<details open><summary>20개 조합 한눈에 보기</summary><div id="palette-grid" class="palette-grid"></div></details>
+<p class="small-note">선택한 형태로20개를 미리 보여드려요. 후보와 메모는 형태·컬러·색 순서·바탕별로 저장돼요.</p>
+</section>
+<div class="toolbar" id="v4-controls"><label>출발 방향 <select id="v4-family"><option value="all">전체 24개</option><option value="ocean">62 · 오션 글라스 → 71–73</option><option value="ice">65 · 아이스 레이어 → 74–76</option><option value="orbit">52 · 오픈 오빗 → 77–79</option><option value="interleave">53 · 인터리브 → 80–82</option><option value="gap">54 · 브리지 갭 → 83–85</option><option value="negative">56 · 네거티브 플로 → 86–88</option><option value="connected">57 · 커넥티드 레벨 → 89–91</option><option value="cross">58 · 크로스 리듬 → 92–94</option></select></label><span class="small-note" id="family-caption"></span></div>
+<div class="toolbar" id="v3-controls"><label>탐색 관점 <select id="v3-group"><option value="a">A · 굵은 선 21–30</option><option value="b">B · 비율과 실루엣 31–40</option><option value="c">C · 테마 키컬러 41–50</option><option value="d">D · 연결과 여백 51–60</option><option value="e">E · 레이어와 재질 61–70</option><option value="all">전체 50개</option></select></label><span class="small-note" id="group-caption"></span></div>
+<div class="capture-links"><a href="assets/dune-icon-development/color-lab/captures/palettes-20.png" target="_blank">20컬러 비교판 ↗</a><a href="assets/dune-icon-development/color-lab/palettes.json" target="_blank">20개 팔레트·색상값 ↗</a><a href="assets/dune-icon-development/v6/captures/all-9.png" target="_blank">골드×시안9개 비교판 ↗</a><a href="assets/dune-icon-development/v6/boards/before-after.html" target="_blank">서로 다른 두 색 전후 비교 ↗</a><a href="assets/dune-icon-development/v6/boards/homes.html" target="_blank">골드×시안 홈 화면9개 ↗</a><a href="assets/dune-icon-development/v5/captures/all-9.png" target="_blank">이전 골드 명도차9개 ↗</a><a href="assets/dune-icon-development/v5/boards/before-after.html" target="_blank">이전 명도차 전후 비교 ↗</a><a href="assets/dune-icon-development/v5/boards/homes.html" target="_blank">이전 명도차 홈 화면 ↗</a><a href="assets/dune-icon-development/v4/captures/all-24.png" target="_blank">새24개 전체 비교판 ↗</a><a href="assets/dune-icon-development/v4/boards/index.html" target="_blank">8방향 · 출발 시안과 발전안 비교 ↗</a></div><div id="gallery" class="gallery"></div><p id="gallery-note" class="gallery-note">시안을 누르면 홈 화면 미리보기에 반영돼요. ★ 표시는 이 브라우저에 저장한 후보예요.</p>
+<div id="refs" class="refs" hidden></div>
+<div id="history" hidden><div class="timeline">
+<article><time>기준 · 기존 아이콘</time><h3>세 개의 곡선에서 시작</h3><p>모래언덕과 HRV·심박의 파동을 연결해요. 따뜻한 코퍼·앰버와 어두운 바탕, 자연스러운 변화와 회복력을 유지해요.</p></article>
+<article><time>2026-11-03 · 1차 · 01—10</time><h3>형태와 재질 탐색</h3><p>정제된 웨이브, 접힌 능선, 부조, 호흡 리본, 여백, 등고선, 순환, D, 아이보리, 골드 면을 비교했어요. 원본과 연결은 강하지만 일부는 여전히 가로로 길고 가늘어요.</p></article>
+<article><time>사용자 피드백</time><h3>“아이콘으로 인지가 조금 더 잘되게 꽉 찬 느낌”</h3><p>기존 앱 아이콘 패턴을 조사하고, 발전 과정을 대시보드에 연결해 기록해요. 아이폰 홈 화면에서 보는 느낌을 비교해요.</p></article>
+<article><time>2026-11-03 · 레퍼런스 조사</time><h3>선에서 면으로</h3><p>App Store의 여섯 앱 아이콘을 보존했어요. 큰 단일 실루엣, 넓은 색면, 명확한 여백이라는 패턴을 DUNE에 적용했어요. 이 분석은 시각적 해석이며 인지성 사용자 실험 결과는 아니에요.</p></article>
+<article><time>2026-11-03 · 2차 · 11—20</time><h3>면적과 세로 비중 확대</h3><p>화면을 채운 사구, 골드 필드, 큰 덩어리, 겹친 능선, 오브, 볼드 D, 반전, 아이보리, 볼륨, 깎아낸 흐름으로 발전했어요. 원본과 1차 파일도 보존해요.</p></article>
+<article><time>사용자 교정 · 2026-11-03</time><h3>꽉 찬 느낌을 색면 채우기로 한정하지 않기</h3><p>선을 굵게 하거나 테마 키컬러를 적용하는 등 다양한 관점의 50개를 요청했어요. Apple 관점과 Dribbble의 추가 레퍼런스를 확인해 형태의 무게·비율·간격·연결·색·레이어로 탐색 범위를 넓혔어요.</p></article>
+<article><time>2026-11-03 · 3차 · 21—70</time><h3>다섯 관점, 50개의 별도 시안</h3><p>A 굵은 선, B 비율과 실루엣, C 테마 키컬러, D 연결과 여백, E 레이어와 재질. 각10개씩 별도 프롬프트로 생성해요. DUNE·OCEAN·FOREST·SAKURA·ARCTIC·SOLAR·CONTOUR·WATER LILIES와 아이보리·단색 대안을 사용해요. 재질 이미지는 시스템 Liquid Glass 검증 결과가 아니에요.</p></article>
+<article><time>사용자 관심 방향 · 2026-11-03</time><h3>연결·교차·겹침의 8개 방향</h3><p>오션 글라스 스터디62, 아이스 레이어65, 오픈 오빗52, 인터리브53, 브리지 갭54, 네거티브 플로56, 커넥티드 레벨57, 크로스 리듬58을 더 발전시키기로 했어요. 최종 제작안 선택·승인이 아닌 선호 방향이에요.</p></article>
+<article><time>2026-11-03 · 4차 · 71—94</time><h3>각 방향을 세 갈래로 다듬기</h3><p>원래 구조와 테마 색을 유지하면서 곡률·간격·끝을 정돈한 안, 겹침·앞뒤 관계·구조를 발전시킨 안, 굵기와 단순화로 작은 크기의 인지성을 강화한 안을 비교해요. 24개는 각기 해당 출발 시안을 직접 참고했어요. 비교 기준에서 출발 시안과 현재 앱 아이콘을 전환할 수 있어요.</p></article>
+<article><time>2026-11-03 · 5차 · 95—103</time><h3>선택한9개의 골드 명도 차이 실험</h3><p>86·87·84·81·82·80·75·74·71 순서로 골드·앰버 투톤과 차콜 배경을 공통 적용했어요. 투톤을 같은 색의 명도 차이로 해석한 실험이에요. 이후 사용자가 서로 다른 컬러를 사용해도 된다는 뜻으로 교정했어요. 새로운 형태를 추가하는 단계가 아닌 색상 비교이며, 출발 시안의 구조·크기·재질 보존을 목표로 편집했어요. AI 편집이므로 픽셀 단위 형태 일치를 보장하지 않아요.</p></article><article><time>사용자 교정 · 2026-11-03 · 6차104—112</time><h3>투톤은 서로 다른 두 색도 가능</h3><p>앞선 골드 명도 차이 해석을 바로잡고 같은9개를 골드×시안으로 다시 비교해요. 위아래 면·교차하는 리본·앞뒤 레이어를 다른 색으로 구분하고 차콜 배경을 공통 사용해요. 최종 팔레트 승인이 아닌 색상 테스트예요.</p></article><article><time>2026-11-03 · 컬러랩</time><h3>9개 형태를20가지 팔레트로 탐색</h3><p>사용자가 조합을 직접 바꾸어 비교할 수 있도록20개 팔레트를 제공해요. 두 색 위치와 아이콘 바탕을 바꾸고 다른 조합과 홈 화면에서 나란히 볼 수 있어요. 형태는6차의 같은 PNG를 유지하며 브라우저에서 색만 변환해요. 180개를 새로 생성한 결과가 아닌 색상 탐색이에요. 현재 형태·컬러를1024px PNG로 저장할 수 있어요.</p></article><article><time>사용자 선택 · 2026-11-16</time><h3>82·71·87을 앱 설정으로</h3><p>설정에서 세 형태를 선택하고 DUNE은P04, 나머지 테마는 자동 팔레트를 사용해요. 시작 화면도 선택한 형태와 테마를 따르도록 네이티브에 적용했어요. iOS의 앱 실행 전 정적 화면은 기본82/P04를 사용해요.</p><a href="../../layout-map/app-icon-settings.md">네이티브 배치·검증 범위 ↗</a> · <a href="../../phone-design-map/actual/app-icon-2026-11-16/index.html">새 실제 화면 캡처 ↗</a></article><article><time>다음 단계 · 미확정</time><h3>후보 선택과 작은 크기 다듬기</h3><p>홈 화면에서 후보를 고른 뒤 곡선 간격·색 대비·마스크를 다듬어요. 실제 iPhone·Watch 설치, 시스템의 다크·클리어·틴트 표현과 Icon Composer 검증은 후보 확정 후 진행해요.</p></article>
+</div><p class="small-note"><a href="../../layout-map/app-icon-development.md">배치·검증 범위 기록 ↗</a> · <a href="assets/dune-icon-development/v1/prompts.json">1차 프롬프트</a> · <a href="assets/dune-icon-development/v2/prompts.json">2차 프롬프트</a> · <a href="assets/dune-icon-development/v3/prompts.json">3차 50개 전체 프롬프트</a> · <a href="assets/dune-icon-development/v6/prompts.json">6차9개 프롬프트·두 색 기준</a> · <a href="assets/dune-icon-development/v5/prompts.json">5차 명도차 실험 프롬프트</a> · <a href="assets/dune-icon-development/v4/prompts.json">4차24개 프롬프트·출발 시안</a> · <a href="assets/dune-icon-development/v3/research.md">Apple·Dribbble 조사</a></p></div>
+<div class="notes-panel"><h3 id="note-title">선택한 시안 메모</h3><textarea id="note" aria-label="선택한 시안 메모" placeholder="예: 15번의 원형은 유지하고, 능선 사이를 조금 더 넓게"></textarea><div class="notes-actions"><button id="favorite" aria-pressed="false">☆ 후보에 추가</button><button id="export">후보·메모 JSON 내보내기</button></div><p id="saved" class="saved" role="status">메모는 이 브라우저에 자동 저장돼요. 내보낸 JSON으로 기록을 전달할 수 있어요.</p></div>
+</section>
+<section class="phone-column" id="phone-preview" aria-label="아이폰 홈 화면 목업"><div class="phone-heading"><h2>홈 화면에서 비교</h2><span id="phone-caption">선택한 시안</span></div><div class="phone-scroll"><div class="phones"><div id="new-device"></div><div id="original-device" hidden></div></div></div><p class="small-note">브라우저 100% 배율 기준의 크기 비교예요. 기기·설정에 따라 실제 크기와 시스템 마스크는 달라져요. 배경 전환은 배경만 바꾸며, iOS 시스템 다크 아이콘 변환을 재현하지 않아요.</p></section>
+</div>
+<footer class="foot">이전 시안112개: built-in image_gen 생성. 컬러랩은 그중9개 PNG의 화면 색상 변환으로20개 팔레트를 비교해요. AI 생성 원본 PNG와 전체 프롬프트를 보존했어요. App Store·Dribbble 레퍼런스의 권리는 각 소유자에게 있어요. <a href="assets/dune-icon-development/references/sources.json">App Store 출처</a> · <a href="assets/dune-icon-development/references/dribbble/sources.json">Dribbble 출처</a> · <a href="https://developer.apple.com/design/human-interface-guidelines/app-icons" target="_blank" rel="noopener">Apple App Icons</a>. 이전 재질 시안은 실제 Liquid Glass 렌더링이 아니에요. 승인된82·71·87의 네이티브 적용과 검증 범위는 별도 실제 화면 갤러리에서 확인해요.</footer>
+</main>
+<!-- BEGIN EMBEDDED LAB SOURCE PRELOADS -->
+<script src="assets/dune-icon-development/color-lab/export-sources/104-duo-86.js"></script>
+<script src="assets/dune-icon-development/color-lab/export-sources/105-duo-87.js"></script>
+<script src="assets/dune-icon-development/color-lab/export-sources/106-duo-84.js"></script>
+<script src="assets/dune-icon-development/color-lab/export-sources/107-duo-81.js"></script>
+<script src="assets/dune-icon-development/color-lab/export-sources/108-duo-82.js"></script>
+<script src="assets/dune-icon-development/color-lab/export-sources/109-duo-80.js"></script>
+<script src="assets/dune-icon-development/color-lab/export-sources/110-duo-75.js"></script>
+<script src="assets/dune-icon-development/color-lab/export-sources/111-duo-74.js"></script>
+<script src="assets/dune-icon-development/color-lab/export-sources/112-duo-71.js"></script>
+<!-- END EMBEDDED LAB SOURCE PRELOADS -->
+<script src="assets/dune-icon-development/data.js"></script>
+<script src="assets/dune-icon-development/color-lab/palettes.js"></script>
+<script src="assets/dune-icon-development/color-lab/lab.js"></script>
+<script>
+'use strict';
+const base='assets/dune-icon-development/';
+const concepts=window.duneIconData.concepts, references=window.duneIconData.references;
+const $=id=>document.getElementById(id);
+const numberOf=c=>c.number||parseInt(c.id,10);
+// Static references are resolved by the host preview before dynamic thumbnails render.
+const previewImages=new Map([...$('dune-image-bank').querySelectorAll('img[data-image]')].map(img=>[img.dataset.image,img]));
+const embeddedConcepts=new Map(concepts.filter(c=>c.version==='v6').map(c=>[c.image,c.id]));
+function imageSource(path){
+ const embedded=window.duneLabExportSources?.[embeddedConcepts.get(path)];
+ if(embedded)return embedded;
+ const declared=previewImages.get(path);
+ return declared?.currentSrc||declared?.src||base+path;
+}
+const escapeHTML=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const storageKey='dune-icon-development-2026-11-03';
+const lab=window.DuneColorLab;
+let saved={selected:'104-duo-86',favorites:[],notes:{},latestSeen:'palette-lab',view:'lab',paletteId:'lilac-peach',paletteSwap:false,paletteBackground:'preset',paletteCompareId:'mint-periwinkle',paletteFavorites:[],paletteNotes:{}};
+try {
+ const raw=JSON.parse(localStorage.getItem(storageKey)||'null');
+ if(raw&&typeof raw==='object') {
+  if(concepts.some(c=>c.id===raw.selected)) saved.selected=raw.selected;
+  if(raw.latestSeen==='palette-lab'&&['lab','v1','v2','v3','v4','v5','v6','refs','history'].includes(raw.view)) saved.view=raw.view;
+  if(Array.isArray(raw.favorites)) saved.favorites=raw.favorites.filter(id=>concepts.some(c=>c.id===id));
+  for(const key of ['notes','paletteNotes']) if(raw[key]&&typeof raw[key]==='object'&&!Array.isArray(raw[key])) saved[key]=raw[key];
+  if(Array.isArray(raw.paletteFavorites)) saved.paletteFavorites=raw.paletteFavorites.filter(key=>typeof key==='string');
+  for(const key of ['paletteId','paletteCompareId']) if(window.dunePaletteData.palettes.some(p=>p.id===raw[key])) saved[key]=raw[key];
+  saved.paletteSwap=raw.paletteSwap===true;
+  if(['preset','charcoal','ivory'].includes(raw.paletteBackground)) saved.paletteBackground=raw.paletteBackground;
+ }
+} catch(error) {$('saved').textContent='이 브라우저에서 저장 기록을 읽지 못했어요. JSON 내보내기로 기록을 보관할 수 있어요.';}
+let activeTab=saved.view;
+let compare=false;
+const patternNotes={'1576857102':'크고 둥근 유기적 덩어리와 겹침. DUNE의 사구를 넓은 면으로 묶는 데 참고해요.','493145008':'거대한 단일 원형과 단순한 색 대비. 작은 크기에 남는 실루엣을 참고해요.','426826309':'배경 전체의 브랜드 컬러와 단순한 역상 심볼. 골드 필드·코퍼 반전에 참고해요.','1043837948':'굵은 원형과 짧은 선으로 만든 단일 기호. DUNE 곡선을 한 덩어리로 압축하는 데 참고해요.','1346247457':'한정된 색과 연결된 여백. 능선 사이를 명확하게 가르는 데 참고해요.','1543571755':'큰 계단형 면과 대각선 방향성. 겹친 사구의 높이와 무게감을 참고해요.'};
+function persist(){try{localStorage.setItem(storageKey,JSON.stringify(saved));$('saved').textContent='이 브라우저에 저장됨 · 저장소 기록은 JSON 내보내기로 전달해요.';}catch(error){$('saved').textContent='브라우저에 저장하지 못했어요. JSON 내보내기로 기록을 보관해 주세요.';}}
+function renderGallery(){
+ const inLab=lab.active();
+ const version=inLab?'v6':['v1','v2','v3','v4','v5','v6'].includes(activeTab)?activeTab:'v6';
+ const group=$('v3-group').value||'a',family=$('v4-family').value||'all';
+ const visible=concepts.filter(c=>c.version===version&&(version!=='v3'||group==='all'||c.group===group)&&(version!=='v4'||family==='all'||c.group===family));
+ $('gallery').classList.toggle('focused',inLab||['v4','v5','v6'].includes(version));
+ $('gallery').innerHTML=visible.map(c=>{
+  const favorite=inLab?lab.isFavorite(c):saved.favorites.includes(c.id);
+  const title=inLab?c.parentName:c.name,number=inLab?c.sourceNumber:numberOf(c);
+  const theme=inLab?lab.palette().name:c.themeName;
+  return `<button class="choice" data-id="${c.id}" aria-pressed="${c.id===saved.selected}" aria-label="${escapeHTML(number+'번 '+title)}"><img class="icon" src="${imageSource(c.image)}" alt="" loading="lazy"><span><strong>${number}</strong><b class="star">${favorite?'★':''}</b> ${escapeHTML(title)}${theme?'<br><small>'+escapeHTML(theme)+'</small>':''}${!inLab&&c.parentNumber?'<br><small>출발 '+c.parentNumber+' → '+c.number+'</small>':''}</span></button>`;
+ }).join('');
+ $('group-caption').textContent=version==='v3'?(window.duneIconData.groups.find(g=>g.id===group)?.desc||'다섯 관점 전체')+' · '+visible.length+'개':'';
+ $('family-caption').textContent=version==='v4'?(window.duneIconData.families.find(f=>f.id===family)?.parentName||'8개 선호 방향')+' · '+visible.length+'개':'';
+}
+function appImage(id,name){const ref=references.find(r=>r.id===id);return `<div class="app"><img src="${imageSource(ref.local_image)}" alt="${escapeHTML(name)}"><span>${escapeHTML(name)}</span></div>`;}
+function generic(name,kind,symbol){return `<div class="app"><div class="generic ${kind}" aria-hidden="true">${symbol}</div><span>${name}</span></div>`;}
+function phone(original){return `<div class="device"><div class="screen" data-wallpaper="${$('wallpaper').value}"><div class="status"><span>9:41</span><span class="status-right">▮▮▮ ◉ ▰</span></div><div class="island"></div><div class="home-grid">${generic('캘린더','calendar','3')+generic('사진','weather','✿')+generic('카메라','camera','◉')+generic('날씨','weather','☀')+appImage('493145008','Headspace')+appImage('1043837948','Oura')+appImage('426826309','Strava')+appImage('1576857102','Gentler Streak')}<div class="app"><img class="${original?'original-home':'selected-home'}" src="${imageSource('original.png')}" alt="${original?'기존':'선택한'} DUNE 아이콘"><span>DUNE</span></div>${appImage('1543571755','Athlytic')+appImage('1346247457','Endel')+generic('메모','notes','≡')+generic('도서','book','▤')+generic('메일','mail','✉')+generic('음악','music','♫')+generic('파일','mail','▱')}</div><div class="page-dots">● · ·</div><div class="dock"><div class="generic" style="background:#42b66b" aria-label="전화">☎</div><div class="generic" style="background:#5096d2" aria-label="브라우저">◈</div><div class="generic" style="background:#43ba62" aria-label="메시지">▰</div><div class="generic music" aria-label="음악">♫</div></div><div class="homebar"></div></div></div><p class="device-label">${original?'기존 아이콘':'선택한 시안'} · 홈 화면 목업</p>`;}
+function updateComparison(){
+ const c=concepts.find(c=>c.id===saved.selected),parent=c?.parentId?concepts.find(p=>p.id===c.parentId):null;
+ const paletteCompare=lab.active()&&$('compare-source').value==='palette';
+ const basis=paletteCompare?c:parent&&$('compare-source').value==='parent'?parent:null;
+ $('compare-source-control').hidden=!parent&&!lab.active();$('parent-context').hidden=!parent;$('parent-mini').hidden=!parent;
+ if(parent){$('parent-context').textContent=`출발 ${numberOf(parent)} · ${parent.name} → ${lab.active()?lab.palette().name:c.variant}`;$('parent-thumb').src=imageSource(parent.image);$('parent-caption').textContent=numberOf(parent)+' · 출발';}
+ document.querySelectorAll('.original-home').forEach(img=>{img.src=imageSource(basis?basis.image:'original.png');img.style.filter=paletteCompare?lab.filter(saved.paletteCompareId):'';img.alt=paletteCompare?lab.palette(saved.paletteCompareId).name:basis?basis.name+' 출발 시안':'기존 DUNE 아이콘';});
+ const label=document.querySelector('#original-device .device-label');
+ if(label)label.textContent=(paletteCompare?'P'+String(lab.palette(saved.paletteCompareId).number).padStart(2,'0')+' · '+lab.palette(saved.paletteCompareId).name:basis?numberOf(basis)+' · '+basis.name+' (출발 시안)':'기존 아이콘')+' · 홈 화면 목업';
+ $('palette-compare-control').hidden=!paletteCompare;
+ $('compare').textContent=compare?'선택 시안만 보기':paletteCompare?'다른 조합과 나란히 보기':basis?'출발 시안과 나란히 보기':'원본과 나란히 보기';
+}
+function selectConcept(id,save=true){
+ const c=concepts.find(c=>c.id===id);if(!c)return;
+ saved.selected=id;saved.view=activeTab;
+ const inLab=lab.active(),p=inLab?lab.palette():null,title=inLab?c.parentName:c.name;
+ $('hero-icon').src=imageSource(c.image);$('hero-icon').alt=inLab?title+' · '+p.name:title;
+ $('selected-number').textContent=inLab?`컬러랩 / ${c.sourceNumber} · P${String(p.number).padStart(2,'0')}`:`${c.version.toUpperCase()} / ${numberOf(c)}`;
+ $('selected-title').textContent=title;$('selected-description').textContent=inLab?p.desc:c.desc;
+ $('download').href=imageSource(c.image);$('download').download=c.id+'.png';$('download').textContent='원본 PNG 다운로드 ↗';
+ document.querySelectorAll('.selected-size,.selected-home').forEach(img=>img.src=imageSource(c.image));
+ $('phone-caption').textContent=(inLab?c.sourceNumber+' · '+p.name:numberOf(c)+' · '+c.name);
+ $('note-title').textContent=numberOf(c)+'번 · 비교 메모';$('note').value=typeof saved.notes[id]==='string'?saved.notes[id]:'';
+ const favorite=saved.favorites.includes(id);$('favorite').setAttribute('aria-pressed',favorite);$('favorite').textContent=favorite?'★ 후보에서 빼기':'☆ 후보에 추가';
+ updateComparison();renderGallery();lab.refresh();if(save)persist();
+}
+function setTab(tab,save=true){
+ activeTab=tab;saved.view=tab;
+ document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tab===tab));
+ $('gallery').hidden=!['lab','v1','v2','v3','v4','v5','v6'].includes(tab);$('gallery-note').hidden=$('gallery').hidden;
+ $('v3-controls').hidden=tab!=='v3';$('v4-controls').hidden=tab!=='v4';$('refs').hidden=tab!=='refs';$('history').hidden=tab!=='history';
+ lab.onTabChange();
+ if(tab==='lab')saved.selected=lab.sourceFor(saved.selected);
+ selectConcept(saved.selected,false);if(save)persist();
+}
+$('new-device').innerHTML=phone(false);$('original-device').innerHTML=phone(true);
+$('refs').innerHTML=references.map(r=>`<article class="ref"><img src="${imageSource(r.local_image)}" alt="${escapeHTML(r.name)} App Store 아이콘" loading="lazy"><h3>${escapeHTML(r.name)}</h3><p>${patternNotes[r.id]}</p><a href="${escapeHTML(r.app_store)}" target="_blank" rel="noopener">App Store 출처 ↗</a></article>`).join('');
+$('refs').insertAdjacentHTML('beforeend',(window.duneIconData.designReferences||[]).map(r=>`<article class="ref">${r.local_image?'<img src="'+imageSource(r.local_image)+'" alt="'+escapeHTML(r.name)+'" loading="lazy">':'<p class="eyebrow">DRIBBBLE / SOURCE</p>'}<h3>${escapeHTML(r.name)}</h3><p>${escapeHTML(r.observation)}</p><p class="small-note">${escapeHTML(r.author)} · ${r.local_image?'이미지 확인':'원문 설명 참고'}</p><a href="${escapeHTML(r.url)}" target="_blank" rel="noopener">작품 원문 ↗</a></article>`).join('')+'<article class="ref"><p class="eyebrow">APPLE / HIG</p><h3>간결한 중심과 또렷한 윤곽</h3><p>하나의 중심 개념, 작은 크기의 인지성, 깨끗한 가장자리, 플랫폼 간 일관성, 원본의 마스크 여유를 기준으로 삼아요. 시스템 효과와 재질 시안은 구분해요.</p><a href="https://developer.apple.com/design/human-interface-guidelines/app-icons" target="_blank" rel="noopener">Apple 공식 가이드 ↗</a></article>');
+$('gallery').addEventListener('click',event=>{const button=event.target.closest('[data-id]');if(button)selectConcept(button.dataset.id);});
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+$('v3-group').addEventListener('change',()=>renderGallery());
+$('v4-family').addEventListener('change',()=>renderGallery());
+$('compare-source').addEventListener('change',()=>updateComparison());
+$('wallpaper').addEventListener('change',()=>document.querySelectorAll('.screen').forEach(s=>s.dataset.wallpaper=$('wallpaper').value));
+$('icon-size').addEventListener('change',()=>document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('large-icons',$('icon-size').value==='68')));
+$('compare').addEventListener('click',()=>{compare=!compare;document.body.classList.toggle('compare',compare);$('original-device').hidden=!compare;$('compare').setAttribute('aria-pressed',compare);updateComparison();});
+$('jump-phone').addEventListener('click',()=>$('phone-preview').scrollIntoView({block:'start',behavior:'auto'}));
+$('note').addEventListener('input',()=>{if(lab.active())saved.paletteNotes[lab.key(concepts.find(c=>c.id===saved.selected))]=$('note').value;else saved.notes[saved.selected]=$('note').value;persist();});
+$('favorite').addEventListener('click',()=>{if(lab.active())lab.toggleFavorite(concepts.find(c=>c.id===saved.selected));else{const i=saved.favorites.indexOf(saved.selected);if(i===-1)saved.favorites.push(saved.selected);else saved.favorites.splice(i,1);}selectConcept(saved.selected);});
+$('export').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([JSON.stringify({study:'dune-icon-development',exported_at:new Date().toISOString(),...saved},null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='dune-icon-feedback.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+lab.init({concepts,base,imageSource,saved,getTab:()=>activeTab,persist,selectConcept,renderGallery,updateComparison});
+if(activeTab==='v3')$('v3-group').value=concepts.find(c=>c.id===saved.selected)?.group||'a';setTab(activeTab,false);
+</script>
+</body>
+</html>

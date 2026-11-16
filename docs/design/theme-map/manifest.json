@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-14",
+  "updated": "2026-11-16",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -1552,6 +1552,18 @@
         "layout": "../layout-map/exercise-default-edit-s03.html",
         "status": "phone-ipad-normal-MAX-verified",
         "actual": "../full-redesign-map/review/exercise-default-edit-s03-2026-11-14/index.html"
+      }
+    },
+    {
+      "id": "dune-icon-development",
+      "name": "DUNE 아이콘 발전 과정",
+      "title": "82·71·87 네이티브 선택 · P04·테마 자동색 · 컬러랩20조합",
+      "file": "dune-icon-development.html",
+      "detail": "2026-11-03 팔레트 조합을 직접 바꾸는 컬러랩 추가. 파스텔·자연·쿨톤·웜톤·보색·밝은 배경 등20개를 선택한9개 형태에 실시간 적용. 두 색 위치·배경3모드·다른 조합/출발/현재 앱 비교·60/40/29px·1024px PNG 저장·형태와 팔레트별 후보/메모·JSON 보존. 같은6차 PNG에 브라우저 색상 변환을 적용하며180개 AI 이미지를 새로 생성하지 않음. 기존112개 보존. codex/dune-icon-two-tone-study 브랜치. 2026-11-16 후속 선택:82·71·87을 실제 설정에서 선택, DUNE 기본P04·나머지테마자동색·선택형 스플래시 네이티브 적용. iPhone·iPad의 실제 화면과 검증 범위는 별도 실제 캡처 갤러리에서 확인. 최종 네이티브 캡처18장, 관련단위4개·iPhone/iPad의선택저장/테마전환/3종스플래시 통과. Duo·실물기기·시스템아이콘표현별검증은미포함.",
+      "implementation": {
+        "layout": "../layout-map/app-icon-settings.md",
+        "actual_captures": "../phone-design-map/actual/app-icon-2026-11-16/index.html",
+        "status": "native-implemented-iphone-ipad-focused-validation"
       }
     }
   ]
