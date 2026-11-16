@@ -410,3 +410,5 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 
 
 2026-11-16 [앱 아이콘82·71·87과 시작 화면 실제 캡처18장](actual/app-icon-2026-11-16/index.html)을 추가했다. T01·S01·신규S08의 iPhone·iPad 최종 화면이며 기본82/P04·테마 자동색·선택 저장·스플래시를 확인했다. 관련 단위4개와 기기별 두 고유 UI selector가 통과했다. iPad의 스플래시 통과 증거는 유지하고 하단에 걸친 항목 탭 실패만 보정해 한 번 조건부 재실행했다. 기존 기기 인덱스의 과거 PNG를 새 증거로 덮어쓰지 않았으며 S08은 별도 갤러리에서 확인한다. Duo 두 자세·실물 기기·시스템 정적 실행 프레임·다크/클리어/틴트 표현은 미갱신이다.
+
+2026-11-17 W28 운동 상세의 콘텐츠 끝에 24pt 여백을 추가하고 [새 iPhone 일반·최대 글씨 / iPad 일반 실제 화면 3장](actual/workout-bottom-spacing-2026-11-17/index.html)을 등록했다. 선택 UI는 2/2·1/1 통과했고 iPhone 카드와 하단 탭 바 frame 간격이 24pt임을 확인했다. fixture는 Weather가 마지막이며 날씨 없는 마지막 심박 구간 카드·Duo 두 자세·iPad 최대 글씨·어두운 모드는 미갱신이다. 기존 화면 ID 개수는 바뀌지 않았다.

@@ -1,7 +1,7 @@
 ---
 topic: workout-detail-bottom-spacing
 date: 2026-11-17
-status: approved
+status: implemented
 confidence: high
 tags: [swiftui, workout-detail, spacing, tab-bar]
 category: plan
@@ -60,3 +60,7 @@ W28 콘텐츠 스택에 `DS.Spacing.xxl`(24pt) 하단 padding을 추가한다. �
 초기 AX에서 구간 카드 ID가 내부 라벨에 전파되고 검사가 제목 frame만 측정한 것을 확인했다. 카드에 children: .contain 그룹을 지정해 실제 카드 frame과 기존 출처/구간 ID를 보존한다. 이 변경 뒤 기존 출처 검사 통과(52.235초)를 확인했다.
 
 Activity의 seeded recent 목록에는 advanced strength fixture가 없어 해당 진입 검사를 시작 직후 중단했다. 최종 계약은 이미 검증된 알림 workout route의 직접 push로 바꾸며, 이 fixture의 마지막 Weather 카드 전체를 측정한다. 동일 콘텐츠 끝 padding이 마지막 심박 구간/날씨에 적용되므로 고정 하단 탭 바와의 충돌을 이 fixture로 검증한다. 초기 sheet PNG는 최종 탭 바 증거에서 제외한다. 새로운 정확한 selector 2건만 실행하며 기존 class 실행의 실패/중단 기록을 보존한다.
+
+## 완료 증거
+
+최종 iPhone 일반/MAX 선택 UI 2/2와 iPad 일반 1/1 통과, skip0. 실제 PNG/AX와 소스 해시는 `docs/design/phone-design-map/actual/workout-bottom-spacing-2026-11-17/`에 기록했다. 최종 P1/P2=0, P3 마지막-zone 변형 검증 한계 1건은 리뷰·해결 문서를 따른다.
