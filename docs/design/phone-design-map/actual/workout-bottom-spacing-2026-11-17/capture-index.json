@@ -1,0 +1,82 @@
+{
+  "screen_id": "W28",
+  "source_revision": "153982ec9",
+  "source_worktree_dirty": true,
+  "source_sha256": {
+    "DUNE/Presentation/Exercise/HealthKitWorkoutDetailView.swift": "8fa23333b24872d70b54aa05874a7ae5b1033796f283d02d4e88540337b45aba",
+    "DUNEUITests/Full/WorkoutZoneDetailUITests.swift": "faa869747c7bb53c426e6278e93706ac0003c0a774aed69b50f9038d695a24c9"
+  },
+  "runtime": "iOS 27.2",
+  "xcode": "27.2 (27B52)",
+  "locale": "en_US",
+  "theme": "DESERT HORIZON, light",
+  "fixture": "activity-exercise-seeded notification ui-test-activity-workout-running; no HR samples, final Weather card",
+  "captures": [
+    {
+      "device": "iphone",
+      "size": "normal",
+      "file": "iphone-normal.png",
+      "attachment": "8F1C5832-587A-4697-804F-05F008F56F8D.png",
+      "device_udid": "4E8C819C-AB5A-414B-B9B5-AAF611D2B9EF",
+      "device_name": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "captured_at": "2026-11-17T02:16:16.473000+09:00",
+      "sha256": "eab0ba47e4d55d229d72a36e2d43f1be47d2b804cda98c16795bc6f3f226d22c"
+    },
+    {
+      "device": "iphone",
+      "size": "normal",
+      "file": "iphone-normal.txt",
+      "attachment": "BB9E13BA-1B52-4869-B883-C45C712480E0.txt",
+      "device_udid": "4E8C819C-AB5A-414B-B9B5-AAF611D2B9EF",
+      "device_name": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "captured_at": "2026-11-17T02:16:16.473000+09:00",
+      "sha256": "b87acd7496991c28472d31e7b942dfcda0bbeb821dbb93a70ba9c9c9910bf963"
+    },
+    {
+      "device": "iphone",
+      "size": "max",
+      "file": "iphone-max.png",
+      "attachment": "82D9F17E-837C-4992-A143-85093142AC69.png",
+      "device_udid": "4E8C819C-AB5A-414B-B9B5-AAF611D2B9EF",
+      "device_name": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "captured_at": "2026-11-17T02:17:15.364000+09:00",
+      "sha256": "4204fe2cb7be8fd3b398d9de06ba071c3825d0ead74ccbe6c78d61e7cc4c2f4c"
+    },
+    {
+      "device": "iphone",
+      "size": "max",
+      "file": "iphone-max.txt",
+      "attachment": "BE8D169D-36FC-405F-AA1D-EF3D80A18F81.txt",
+      "device_udid": "4E8C819C-AB5A-414B-B9B5-AAF611D2B9EF",
+      "device_name": "iPhone 18 Pro-wt-Health-work-1bb990dd45f0",
+      "captured_at": "2026-11-17T02:17:15.364000+09:00",
+      "sha256": "57133ab4f07425a5beefc560879f0f88b5054c7c8f602aa943cf41cedbbf0105"
+    },
+    {
+      "device": "ipad",
+      "size": "normal",
+      "file": "ipad-normal.png",
+      "attachment": "AB5D15AC-4D9B-403F-9286-889572899B8D.png",
+      "device_udid": "FA35D25E-1598-4F8B-950A-93EE43BD85E8",
+      "device_name": "iPad mini-wt-Health-work-1bb990dd45f0",
+      "captured_at": "2026-11-17T02:20:51.336000+09:00",
+      "sha256": "6d7803105f880b8c65e13258e45d669c244d027ac7474c983bc7d24613afa5c4"
+    },
+    {
+      "device": "ipad",
+      "size": "normal",
+      "file": "ipad-normal.txt",
+      "attachment": "756C74A7-E32A-4BCA-BCE3-C30258E58DED.txt",
+      "device_udid": "FA35D25E-1598-4F8B-950A-93EE43BD85E8",
+      "device_name": "iPad mini-wt-Health-work-1bb990dd45f0",
+      "captured_at": "2026-11-17T02:20:51.336000+09:00",
+      "sha256": "68d953948c2dae30e5bc43ec7b6ae2d570c2c8b59c772d32e0bfc62175c680df"
+    }
+  ],
+  "limits": [
+    "final Zone card without Weather not recaptured",
+    "Duo folded/open not recaptured",
+    "iPad MAX not run",
+    "Dark appearance not recaptured"
+  ]
+}

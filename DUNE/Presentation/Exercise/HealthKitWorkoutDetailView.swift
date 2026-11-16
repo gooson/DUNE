@@ -36,6 +36,7 @@ struct HealthKitWorkoutDetailView: View {
                 weatherSection
             }
             .padding(.horizontal, DS.Spacing.lg)
+            .padding(.bottom, DS.Spacing.xxl)
         }
         .accessibilityIdentifier("healthkit-workout-detail-screen")
         .appEntityIdentifier(EntityIdentifier(for: HealthWorkoutEntity.self, identifier: "healthkit:\(workout.id)"))
@@ -464,6 +465,8 @@ struct HealthKitWorkoutDetailView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(DS.Spacing.md)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("healthkit-workout-weather-section")
         }
     }
 
@@ -570,6 +573,7 @@ private struct WorkoutZoneDistributionView: View {
         }
         .padding(DS.Spacing.md)
         .chartSurface(cornerRadius: DS.Radius.md, topBloomHeight: 34)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("healthkit-workout-zones-section")
     }
 
