@@ -1,0 +1,1057 @@
+{
+  "created": "2026-11-03",
+  "mode": "built-in image_gen",
+  "user_feedback": "꽉 찬 느낌은 색 채우기만이 아님. 선을 굵게, 테마 키컬러, 최대한 다양한 관점의50개. Apple·Dribbble 참조.",
+  "status": "generated-exploration-not-approved",
+  "groups": [
+    {
+      "id": "a",
+      "name": "굵은 선",
+      "desc": "같은 DUNE 골드로 선의 무게·끝·간격을 비교"
+    },
+    {
+      "id": "b",
+      "name": "비율과 실루엣",
+      "desc": "곡선의 높이·밀도·방향과 중심을 재구성"
+    },
+    {
+      "id": "c",
+      "name": "테마 키컬러",
+      "desc": "테마 팔레트와 곡선 리듬의 조합"
+    },
+    {
+      "id": "d",
+      "name": "연결과 여백",
+      "desc": "하나의 선·열린 경로·교차·빈 공간을 탐색"
+    },
+    {
+      "id": "e",
+      "name": "레이어와 재질",
+      "desc": "명확한 구조 위에 겹침·두께·표면을 절제해 실험"
+    }
+  ],
+  "palettes": {
+    "dune": {
+      "name": "DUNE · 골드",
+      "background": "#302b2a",
+      "ink": "#e1b453",
+      "secondary": "#b2854c",
+      "highlight": "#f5d778"
+    },
+    "ivory": {
+      "name": "DUNE · 아이보리",
+      "background": "#faf8f3",
+      "ink": "#a46c2e",
+      "secondary": "#d3a258",
+      "highlight": "#7b492c"
+    },
+    "ocean": {
+      "name": "OCEAN · 시안",
+      "background": "#0a2932",
+      "ink": "#4fc3d5",
+      "secondary": "#205b75",
+      "highlight": "#d7faf6"
+    },
+    "forest": {
+      "name": "FOREST · 세이지",
+      "background": "#172f29",
+      "ink": "#a6c58b",
+      "secondary": "#4f7f61",
+      "highlight": "#e8c86b"
+    },
+    "sakura": {
+      "name": "SAKURA · 피치",
+      "background": "#574354",
+      "ink": "#ffe3d5",
+      "secondary": "#ba8d9a",
+      "highlight": "#efc0a7"
+    },
+    "arctic": {
+      "name": "ARCTIC · 민트",
+      "background": "#0e1b33",
+      "ink": "#a7f4dc",
+      "secondary": "#64afce",
+      "highlight": "#48649b"
+    },
+    "solar": {
+      "name": "SOLAR · 앰버",
+      "background": "#3d2222",
+      "ink": "#ffe19a",
+      "secondary": "#f1ad46",
+      "highlight": "#9d4a36"
+    },
+    "contour": {
+      "name": "CONTOUR · 라임",
+      "background": "#343a31",
+      "ink": "#e4efb0",
+      "secondary": "#bbcf72",
+      "highlight": "#657c36"
+    },
+    "lilies": {
+      "name": "WATER LILIES · 라일락",
+      "background": "#303649",
+      "ink": "#c47cc5",
+      "secondary": "#8abf75",
+      "highlight": "#457cab"
+    },
+    "mono": {
+      "name": "MONO · 아이보리",
+      "background": "#171715",
+      "ink": "#f4eddf",
+      "secondary": "#d1c8b8",
+      "highlight": "#ffffff"
+    }
+  },
+  "concepts": [
+    {
+      "id": "21-a-01",
+      "number": 21,
+      "group": "a",
+      "groupName": "굵은 선",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "트윈 볼드",
+      "desc": "두 개의 굵은 곡선과 둥근 끝으로 무게를 확보",
+      "direction": "Exactly two separate thick sweeping dune-wave strokes, constant 11% canvas-width line weight, fully rounded caps. Upper stroke rises into a broad off-center crest, lower stroke forms an opposing lower valley, with abundant clear dark air between them. Compact 78% wide by 48% high mark. Solid single gold ink.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Exactly two separate thick sweeping dune-wave strokes, constant 11% canvas-width line weight, fully rounded caps. Upper stroke rises into a broad off-center crest, lower stroke forms an opposing lower valley, with abundant clear dark air between them. Compact 78% wide by 48% high mark. Solid single gold ink."
+    },
+    {
+      "id": "22-a-02",
+      "number": 22,
+      "group": "a",
+      "groupName": "굵은 선",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "트리플 모노라인",
+      "desc": "세 곡선을 같은 굵기로 정돈",
+      "direction": "Exactly three substantial constant-width 7% wave strokes, identical rounded caps, vertically stacked with wide equal negative gaps, asymmetrical crests gently offset. Combined emblem 78% wide by 58% high. Pure solid single gold ink, no taper.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Exactly three substantial constant-width 7% wave strokes, identical rounded caps, vertically stacked with wide equal negative gaps, asymmetrical crests gently offset. Combined emblem 78% wide by 58% high. Pure solid single gold ink, no taper."
+    },
+    {
+      "id": "23-a-03",
+      "number": 23,
+      "group": "a",
+      "groupName": "굵은 선",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "헤비 리듬",
+      "desc": "두꺼운 중앙 선에 시각적 중심을 둠",
+      "direction": "Three wave strokes with a 12%-thick dominant middle stroke and two 5%-thick supporting strokes above and below; all have rounded ends and generous gaps, forming one strong compact dune rhythm. Solid single gold.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Three wave strokes with a 12%-thick dominant middle stroke and two 5%-thick supporting strokes above and below; all have rounded ends and generous gaps, forming one strong compact dune rhythm. Solid single gold."
+    },
+    {
+      "id": "24-a-04",
+      "number": 24,
+      "group": "a",
+      "groupName": "굵은 선",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "라운드 테이퍼",
+      "desc": "끝을 가늘게 없애지 않고 둥글게 줄임",
+      "direction": "Two bold opposing dune-wave bands, broad in the middle (12% canvas width) and tapering only slightly to substantial rounded 6%-wide ends; the two lobes have a smooth central valley and never touch. Compact height about 50%.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Two bold opposing dune-wave bands, broad in the middle (12% canvas width) and tapering only slightly to substantial rounded 6%-wide ends; the two lobes have a smooth central valley and never touch. Compact height about 50%."
+    },
+    {
+      "id": "25-a-05",
+      "number": 25,
+      "group": "a",
+      "groupName": "굵은 선",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "플랫 캡",
+      "desc": "직선으로 잘린 끝과 유기적 곡선의 대비",
+      "direction": "Three chunky 8%-wide parallel rolling dune strokes with crisp flat cut terminals on both ends, broad rounded crests and staggered horizontal offsets. Strong graphic almost-rectangular footprint 76% by 60%, but no enclosing box.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Three chunky 8%-wide parallel rolling dune strokes with crisp flat cut terminals on both ends, broad rounded crests and staggered horizontal offsets. Strong graphic almost-rectangular footprint 76% by 60%, but no enclosing box."
+    },
+    {
+      "id": "26-a-06",
+      "number": 26,
+      "group": "a",
+      "groupName": "굵은 선",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "치즐 웨이브",
+      "desc": "사선으로 자른 끝이 흐름을 강조",
+      "direction": "Two extra-bold 13%-wide flowing dune strokes with precise diagonal chisel cut ends, dynamically rising toward the right while staying smooth. Broad black valley between them. Strong simple two-part brand emblem.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Two extra-bold 13%-wide flowing dune strokes with precise diagonal chisel cut ends, dynamically rising toward the right while staying smooth. Broad black valley between them. Strong simple two-part brand emblem."
+    },
+    {
+      "id": "27-a-07",
+      "number": 27,
+      "group": "a",
+      "groupName": "굵은 선",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "더블 헤비",
+      "desc": "선 두 개만으로 만든 가장 굵은 계승안",
+      "direction": "Exactly two very heavy 16%-wide gold rounded strokes, each a wide rolling sine-like dune curve with a single crest and valley. Compact 75% width by 62% height. Clear large dark gap, no sharp tails, no extra details.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Exactly two very heavy 16%-wide gold rounded strokes, each a wide rolling sine-like dune curve with a single crest and valley. Compact 75% width by 62% height. Clear large dark gap, no sharp tails, no extra details."
+    },
+    {
+      "id": "28-a-08",
+      "number": 28,
+      "group": "a",
+      "groupName": "굵은 선",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "좁은 리듬",
+      "desc": "선의 두께를 유지하면서 간격을 압축",
+      "direction": "Three broad 8%-wide gold strokes packed into a compact 70% width by 52% height emblem, 4%-canvas negative-space gaps remain visible. Smooth off-center dune crests, blunt rounded caps. Dense line system rather than filled terrain.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Three broad 8%-wide gold strokes packed into a compact 70% width by 52% height emblem, 4%-canvas negative-space gaps remain visible. Smooth off-center dune crests, blunt rounded caps. Dense line system rather than filled terrain."
+    },
+    {
+      "id": "29-a-09",
+      "number": 29,
+      "group": "a",
+      "groupName": "굵은 선",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "넓은 호흡",
+      "desc": "큰 간격과 굵은 선이 함께 만드는 존재감",
+      "direction": "Two bold 10%-wide arcs each shaped as an elongated low dune crest, positioned farther apart vertically, with an unusually generous dark valley spanning 18% of the canvas. Overall 76% width by 65% height, strong calm open silhouette.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Two bold 10%-wide arcs each shaped as an elongated low dune crest, positioned farther apart vertically, with an unusually generous dark valley spanning 18% of the canvas. Overall 76% width by 65% height, strong calm open silhouette."
+    },
+    {
+      "id": "30-a-10",
+      "number": 30,
+      "group": "a",
+      "groupName": "굵은 선",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "평행 능선",
+      "desc": "비슷한 세 곡선의 길이를 단계적으로 조절",
+      "direction": "Three gold 8%-wide dune-wave strokes, upper 52% canvas width, middle 65%, lower 78%; aligned around a shared center with crests progressively shifting to the right. A bold stepped organic silhouette, round caps, clear gaps.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Three gold 8%-wide dune-wave strokes, upper 52% canvas width, middle 65%, lower 78%; aligned around a shared center with crests progressively shifting to the right. A bold stepped organic silhouette, round caps, clear gaps."
+    },
+    {
+      "id": "31-b-01",
+      "number": 31,
+      "group": "b",
+      "groupName": "비율과 실루엣",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "하이 크레스트",
+      "desc": "능선을 세로로 높여 정사각형 안의 비중을 키움",
+      "direction": "Three broad clean dune-wave strokes, 8% line weight, with a tall central crest and deep low valley, forming a nearly square 72% by 70% compact mark. Rounded ends, smooth natural curves, absolutely no sharp mountain peak.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Three broad clean dune-wave strokes, 8% line weight, with a tall central crest and deep low valley, forming a nearly square 72% by 70% compact mark. Rounded ends, smooth natural curves, absolutely no sharp mountain peak."
+    },
+    {
+      "id": "32-b-02",
+      "number": 32,
+      "group": "b",
+      "groupName": "비율과 실루엣",
+      "theme": "ivory",
+      "themeName": "DUNE · 아이보리",
+      "name": "로우 와이드",
+      "desc": "낮고 넓되 굵은 선으로 안정감을 확보",
+      "direction": "Two horizontal long low rolling strokes, 13%-wide thick with rounded tips. Overall 82% wide by 42% high. A solid warm-brown mark on warm ivory with a generous central gap. Stable, deliberate, visually heavy without increasing height.",
+      "palette": {
+        "name": "DUNE · 아이보리",
+        "background": "#faf8f3",
+        "ink": "#a46c2e",
+        "secondary": "#d3a258",
+        "highlight": "#7b492c"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #faf8f3; primary #a46c2e; secondary #d3a258; optional highlight #7b492c. Respect this theme, no extra warm gold in cool variants. Specific design: Two horizontal long low rolling strokes, 13%-wide thick with rounded tips. Overall 82% wide by 42% high. A solid warm-brown mark on warm ivory with a generous central gap. Stable, deliberate, visually heavy without increasing height."
+    },
+    {
+      "id": "33-b-03",
+      "number": 33,
+      "group": "b",
+      "groupName": "비율과 실루엣",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "대각선 상승",
+      "desc": "평행한 곡선이 대각선으로 상승",
+      "direction": "Three chunky gold dune strokes, 8%-wide, form a compact diagonal ascending emblem rotated about 24 degrees upward. Rounded ends, flowing crests; symbol 74% width by 65% height. No arrows.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Three chunky gold dune strokes, 8%-wide, form a compact diagonal ascending emblem rotated about 24 degrees upward. Rounded ends, flowing crests; symbol 74% width by 65% height. No arrows."
+    },
+    {
+      "id": "34-b-04",
+      "number": 34,
+      "group": "b",
+      "groupName": "비율과 실루엣",
+      "theme": "ocean",
+      "themeName": "OCEAN · 시안",
+      "name": "대각선 반향",
+      "desc": "반대 방향의 기울기로 활력을 탐색",
+      "direction": "Two very bold smooth wave strokes arranged on a descending diagonal with counter-curving ends, each 11% thickness, overall 75% by 65%. Cool cyan on ocean-dark, rounded caps. Still recognizably layered dune curves, no foam.",
+      "palette": {
+        "name": "OCEAN · 시안",
+        "background": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #0a2932; primary #4fc3d5; secondary #205b75; optional highlight #d7faf6. Respect this theme, no extra warm gold in cool variants. Specific design: Two very bold smooth wave strokes arranged on a descending diagonal with counter-curving ends, each 11% thickness, overall 75% by 65%. Cool cyan on ocean-dark, rounded caps. Still recognizably layered dune curves, no foam."
+    },
+    {
+      "id": "35-b-05",
+      "number": 35,
+      "group": "b",
+      "groupName": "비율과 실루엣",
+      "theme": "forest",
+      "themeName": "FOREST · 세이지",
+      "name": "센터 밸리",
+      "desc": "골짜기를 중심에 두고 양쪽 곡선으로 균형",
+      "direction": "Two thick mirrored-but-asymmetric rolling bands form a central deep valley with rounded shoulders on either side. Nearly square compact 70% by 64% silhouette, 11% line weight, sage on forest background. No heart shape, no letter M.",
+      "palette": {
+        "name": "FOREST · 세이지",
+        "background": "#172f29",
+        "ink": "#a6c58b",
+        "secondary": "#4f7f61",
+        "highlight": "#e8c86b"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #172f29; primary #a6c58b; secondary #4f7f61; optional highlight #e8c86b. Respect this theme, no extra warm gold in cool variants. Specific design: Two thick mirrored-but-asymmetric rolling bands form a central deep valley with rounded shoulders on either side. Nearly square compact 70% by 64% silhouette, 11% line weight, sage on forest background. No heart shape, no letter M."
+    },
+    {
+      "id": "36-b-06",
+      "number": 36,
+      "group": "b",
+      "groupName": "비율과 실루엣",
+      "theme": "sakura",
+      "themeName": "SAKURA · 피치",
+      "name": "오프셋 크레스트",
+      "desc": "가장 높은 곡선을 한쪽으로 이동",
+      "direction": "Three 8%-wide thick peach strokes form dune crests far toward the upper-right, with shorter supporting curves balancing lower-left. Asymmetrical but optically centered 78% by 64% emblem. Bold blunt ends, pure graphic.",
+      "palette": {
+        "name": "SAKURA · 피치",
+        "background": "#574354",
+        "ink": "#ffe3d5",
+        "secondary": "#ba8d9a",
+        "highlight": "#efc0a7"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #574354; primary #ffe3d5; secondary #ba8d9a; optional highlight #efc0a7. Respect this theme, no extra warm gold in cool variants. Specific design: Three 8%-wide thick peach strokes form dune crests far toward the upper-right, with shorter supporting curves balancing lower-left. Asymmetrical but optically centered 78% by 64% emblem. Bold blunt ends, pure graphic."
+    },
+    {
+      "id": "37-b-07",
+      "number": 37,
+      "group": "b",
+      "groupName": "비율과 실루엣",
+      "theme": "arctic",
+      "themeName": "ARCTIC · 민트",
+      "name": "컴팩트 스택",
+      "desc": "길이를 줄이고 세 층을 더 높게 쌓음",
+      "direction": "Three short thick mint dune curves stacked tightly into a tall 60%-wide by 72%-high mark, with 9% weight and 7% clear dark gaps. Each curve has an offset crest and round end. Strong compact vertical presence.",
+      "palette": {
+        "name": "ARCTIC · 민트",
+        "background": "#0e1b33",
+        "ink": "#a7f4dc",
+        "secondary": "#64afce",
+        "highlight": "#48649b"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #0e1b33; primary #a7f4dc; secondary #64afce; optional highlight #48649b. Respect this theme, no extra warm gold in cool variants. Specific design: Three short thick mint dune curves stacked tightly into a tall 60%-wide by 72%-high mark, with 9% weight and 7% clear dark gaps. Each curve has an offset crest and round end. Strong compact vertical presence."
+    },
+    {
+      "id": "38-b-08",
+      "number": 38,
+      "group": "b",
+      "groupName": "비율과 실루엣",
+      "theme": "contour",
+      "themeName": "CONTOUR · 라임",
+      "name": "오픈 렌즈",
+      "desc": "두 곡선이 열린 렌즈형 실루엣을 이룸",
+      "direction": "Two bold 11%-wide olive-lime dune curves bow around a generous lens-shaped dark central opening. Outer silhouette 78% wide by 60% high, open at both left and right ends, rounded tips. Not an eye: no dot, pupil, or literal eye symbol.",
+      "palette": {
+        "name": "CONTOUR · 라임",
+        "background": "#343a31",
+        "ink": "#e4efb0",
+        "secondary": "#bbcf72",
+        "highlight": "#657c36"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #343a31; primary #e4efb0; secondary #bbcf72; optional highlight #657c36. Respect this theme, no extra warm gold in cool variants. Specific design: Two bold 11%-wide olive-lime dune curves bow around a generous lens-shaped dark central opening. Outer silhouette 78% wide by 60% high, open at both left and right ends, rounded tips. Not an eye: no dot, pupil, or literal eye symbol."
+    },
+    {
+      "id": "39-b-09",
+      "number": 39,
+      "group": "b",
+      "groupName": "비율과 실루엣",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "소프트 D",
+      "desc": "굵은 능선이 D의 전체 비율을 은근히 형성",
+      "direction": "A large abstract open D-shaped outline made from one 10%-wide looping dune-like stroke plus one 9%-wide internal rolling wave. Straightish short left spine and organic right shoulder. 67% width by 74% height; dark inner space remains broad. No typeset letter.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: A large abstract open D-shaped outline made from one 10%-wide looping dune-like stroke plus one 9%-wide internal rolling wave. Straightish short left spine and organic right shoulder. 67% width by 74% height; dark inner space remains broad. No typeset letter."
+    },
+    {
+      "id": "40-b-10",
+      "number": 40,
+      "group": "b",
+      "groupName": "비율과 실루엣",
+      "theme": "mono",
+      "themeName": "MONO · 아이보리",
+      "name": "둥근 사각 리듬",
+      "desc": "곡선의 끝을 접어 거의 정사각형인 열린 구조",
+      "direction": "Three broad ivory wave strokes turn gently upward at alternating outer ends to form an open near-square footprint, 70% by 68%. 8% even line weight, soft quarter-circle corners and very clear separate channels. No enclosing app tile or frame.",
+      "palette": {
+        "name": "MONO · 아이보리",
+        "background": "#171715",
+        "ink": "#f4eddf",
+        "secondary": "#d1c8b8",
+        "highlight": "#ffffff"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #171715; primary #f4eddf; secondary #d1c8b8; optional highlight #ffffff. Respect this theme, no extra warm gold in cool variants. Specific design: Three broad ivory wave strokes turn gently upward at alternating outer ends to form an open near-square footprint, 70% by 68%. 8% even line weight, soft quarter-circle corners and very clear separate channels. No enclosing app tile or frame."
+    },
+    {
+      "id": "41-c-01",
+      "number": 41,
+      "group": "c",
+      "groupName": "테마 키컬러",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "듄 코어",
+      "desc": "기본 테마의 브라운·골드로 파동을 압축",
+      "direction": "Exactly three bold 8%-wide dune curves with generous clear valleys, one central rising crest; upper honey-gold, middle pale sand, lower muted bronze, each as a substantial rounded stroke. Compact 76% width by 60% height.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Exactly three bold 8%-wide dune curves with generous clear valleys, one central rising crest; upper honey-gold, middle pale sand, lower muted bronze, each as a substantial rounded stroke. Compact 76% width by 60% height."
+    },
+    {
+      "id": "42-c-02",
+      "number": 42,
+      "group": "c",
+      "groupName": "테마 키컬러",
+      "theme": "ivory",
+      "themeName": "DUNE · 아이보리",
+      "name": "샌드 페이퍼",
+      "desc": "아이보리와 브론즈의 대비로 선 자체를 강조",
+      "direction": "Exactly two bold 12%-wide sculptural-looking but flat brown dune-wave strokes on warm ivory, one high crest and one low valley; rounded ends. A short ochre supporting third stroke sits lower-left, 7% wide. Overall compact 75% by 61%.",
+      "palette": {
+        "name": "DUNE · 아이보리",
+        "background": "#faf8f3",
+        "ink": "#a46c2e",
+        "secondary": "#d3a258",
+        "highlight": "#7b492c"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #faf8f3; primary #a46c2e; secondary #d3a258; optional highlight #7b492c. Respect this theme, no extra warm gold in cool variants. Specific design: Exactly two bold 12%-wide sculptural-looking but flat brown dune-wave strokes on warm ivory, one high crest and one low valley; rounded ends. A short ochre supporting third stroke sits lower-left, 7% wide. Overall compact 75% by 61%."
+    },
+    {
+      "id": "43-c-03",
+      "number": 43,
+      "group": "c",
+      "groupName": "테마 키컬러",
+      "theme": "ocean",
+      "themeName": "OCEAN · 시안",
+      "name": "오션 커런트",
+      "desc": "시안·옅은 하늘색의 두 흐름",
+      "direction": "Two clean chunky 11%-wide cyan and icy-white dune-wave strokes cross in visual rhythm but remain spatially separate. Different curve heights and a short deep-blue supporting arc. Compact 74% by 62%, no foam or literal ocean illustration.",
+      "palette": {
+        "name": "OCEAN · 시안",
+        "background": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #0a2932; primary #4fc3d5; secondary #205b75; optional highlight #d7faf6. Respect this theme, no extra warm gold in cool variants. Specific design: Two clean chunky 11%-wide cyan and icy-white dune-wave strokes cross in visual rhythm but remain spatially separate. Different curve heights and a short deep-blue supporting arc. Compact 74% by 62%, no foam or literal ocean illustration."
+    },
+    {
+      "id": "44-c-04",
+      "number": 44,
+      "group": "c",
+      "groupName": "테마 키컬러",
+      "theme": "forest",
+      "themeName": "FOREST · 세이지",
+      "name": "포레스트 리듬",
+      "desc": "세이지 중심에 작은 골드 대비를 더함",
+      "direction": "Three broad gently rising rounded dune strokes: two substantial sage-green 9% strokes and one shorter pale-gold 7% accent, staggered like natural terrain. Compact 74% by 60%, dark evergreen backdrop, no leaves or tree icons.",
+      "palette": {
+        "name": "FOREST · 세이지",
+        "background": "#172f29",
+        "ink": "#a6c58b",
+        "secondary": "#4f7f61",
+        "highlight": "#e8c86b"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #172f29; primary #a6c58b; secondary #4f7f61; optional highlight #e8c86b. Respect this theme, no extra warm gold in cool variants. Specific design: Three broad gently rising rounded dune strokes: two substantial sage-green 9% strokes and one shorter pale-gold 7% accent, staggered like natural terrain. Compact 74% by 60%, dark evergreen backdrop, no leaves or tree icons."
+    },
+    {
+      "id": "45-c-05",
+      "number": 45,
+      "group": "c",
+      "groupName": "테마 키컬러",
+      "theme": "sakura",
+      "themeName": "SAKURA · 피치",
+      "name": "사쿠라 브리즈",
+      "desc": "피치와 더스티 핑크의 부드러운 파동",
+      "direction": "Three broad peach and dusty-rose dune bands, rounded 9%-wide strokes, flowing in a gentle asymmetric S rhythm with slightly elevated right ends. Near-square compact 72% by 65%. Plum background, no blossoms, no petals.",
+      "palette": {
+        "name": "SAKURA · 피치",
+        "background": "#574354",
+        "ink": "#ffe3d5",
+        "secondary": "#ba8d9a",
+        "highlight": "#efc0a7"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #574354; primary #ffe3d5; secondary #ba8d9a; optional highlight #efc0a7. Respect this theme, no extra warm gold in cool variants. Specific design: Three broad peach and dusty-rose dune bands, rounded 9%-wide strokes, flowing in a gentle asymmetric S rhythm with slightly elevated right ends. Near-square compact 72% by 65%. Plum background, no blossoms, no petals."
+    },
+    {
+      "id": "46-c-06",
+      "number": 46,
+      "group": "c",
+      "groupName": "테마 키컬러",
+      "theme": "arctic",
+      "themeName": "ARCTIC · 민트",
+      "name": "아틱 드리프트",
+      "desc": "민트·빙하색으로 두꺼운 곡선을 드러냄",
+      "direction": "Two substantial mint and ice-blue 12%-wide parallel dune-wave strokes, a little taller and more vertical than the reference; separated by a crisp navy channel. 72% by 64% compact footprint, rounded ends. No glow or aurora photographic effects.",
+      "palette": {
+        "name": "ARCTIC · 민트",
+        "background": "#0e1b33",
+        "ink": "#a7f4dc",
+        "secondary": "#64afce",
+        "highlight": "#48649b"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #0e1b33; primary #a7f4dc; secondary #64afce; optional highlight #48649b. Respect this theme, no extra warm gold in cool variants. Specific design: Two substantial mint and ice-blue 12%-wide parallel dune-wave strokes, a little taller and more vertical than the reference; separated by a crisp navy channel. 72% by 64% compact footprint, rounded ends. No glow or aurora photographic effects."
+    },
+    {
+      "id": "47-c-07",
+      "number": 47,
+      "group": "c",
+      "groupName": "테마 키컬러",
+      "theme": "solar",
+      "themeName": "SOLAR · 앰버",
+      "name": "솔라 펄스",
+      "desc": "코퍼·앰버의 따뜻한 대비와 상승감",
+      "direction": "Three very thick 9%-wide warm ivory-amber and copper wave strokes, forming a rising staircase of organic crests. Deep oxblood background, compact 76% by 64%. Emphasize positive pulse energy without sun, flames, or rays.",
+      "palette": {
+        "name": "SOLAR · 앰버",
+        "background": "#3d2222",
+        "ink": "#ffe19a",
+        "secondary": "#f1ad46",
+        "highlight": "#9d4a36"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #3d2222; primary #ffe19a; secondary #f1ad46; optional highlight #9d4a36. Respect this theme, no extra warm gold in cool variants. Specific design: Three very thick 9%-wide warm ivory-amber and copper wave strokes, forming a rising staircase of organic crests. Deep oxblood background, compact 76% by 64%. Emphasize positive pulse energy without sun, flames, or rays."
+    },
+    {
+      "id": "48-c-08",
+      "number": 48,
+      "group": "c",
+      "groupName": "테마 키컬러",
+      "theme": "contour",
+      "themeName": "CONTOUR · 라임",
+      "name": "컨투어 트레이스",
+      "desc": "올리브·라임으로 세 개의 두꺼운 등고선",
+      "direction": "Three bold nested lime and pale-olive dune contour paths, each 7%-wide, open on the left, rounded ends and spacious gaps. Not a dense topographic map: just three large paths with a high rounded crest and low basin. 72% by 68%.",
+      "palette": {
+        "name": "CONTOUR · 라임",
+        "background": "#343a31",
+        "ink": "#e4efb0",
+        "secondary": "#bbcf72",
+        "highlight": "#657c36"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #343a31; primary #e4efb0; secondary #bbcf72; optional highlight #657c36. Respect this theme, no extra warm gold in cool variants. Specific design: Three bold nested lime and pale-olive dune contour paths, each 7%-wide, open on the left, rounded ends and spacious gaps. Not a dense topographic map: just three large paths with a high rounded crest and low basin. 72% by 68%."
+    },
+    {
+      "id": "49-c-09",
+      "number": 49,
+      "group": "c",
+      "groupName": "테마 키컬러",
+      "theme": "lilies",
+      "themeName": "WATER LILIES · 라일락",
+      "name": "릴리 리플",
+      "desc": "라일락·블루·세이지를 제한된 곡선에 배치",
+      "direction": "Three bold flowing 9%-wide dune-wave strokes in lilac, muted blue and sage, each distinctly separated on deep blue-violet. Asymmetrical center crest, compact 76% by 60%. No flower, no impressionist painting, crisp simple graphic.",
+      "palette": {
+        "name": "WATER LILIES · 라일락",
+        "background": "#303649",
+        "ink": "#c47cc5",
+        "secondary": "#8abf75",
+        "highlight": "#457cab"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #303649; primary #c47cc5; secondary #8abf75; optional highlight #457cab. Respect this theme, no extra warm gold in cool variants. Specific design: Three bold flowing 9%-wide dune-wave strokes in lilac, muted blue and sage, each distinctly separated on deep blue-violet. Asymmetrical center crest, compact 76% by 60%. No flower, no impressionist painting, crisp simple graphic."
+    },
+    {
+      "id": "50-c-10",
+      "number": 50,
+      "group": "c",
+      "groupName": "테마 키컬러",
+      "theme": "mono",
+      "themeName": "MONO · 아이보리",
+      "name": "모노 시그니처",
+      "desc": "단색에서도 남는 굵은 세 곡선",
+      "direction": "Exactly three substantial 8%-wide ivory dune strokes on near-black, no gradients. Their lengths are staggered and crests offset; the negative spaces create a second hidden flowing rhythm. 76% wide by 64% high. Strong one-color brand silhouette.",
+      "palette": {
+        "name": "MONO · 아이보리",
+        "background": "#171715",
+        "ink": "#f4eddf",
+        "secondary": "#d1c8b8",
+        "highlight": "#ffffff"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #171715; primary #f4eddf; secondary #d1c8b8; optional highlight #ffffff. Respect this theme, no extra warm gold in cool variants. Specific design: Exactly three substantial 8%-wide ivory dune strokes on near-black, no gradients. Their lengths are staggered and crests offset; the negative spaces create a second hidden flowing rhythm. 76% wide by 64% high. Strong one-color brand silhouette."
+    },
+    {
+      "id": "51-d-01",
+      "number": 51,
+      "group": "d",
+      "groupName": "연결과 여백",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "싱글 브레스",
+      "desc": "끊김 없는 굵은 한 선이 두 능선을 연결",
+      "direction": "One continuous bold 10%-wide gold stroke traces two rolling dune crests and one deep smooth valley, then folds gently underneath into a short return stroke. One open path with two rounded endpoints, compact 76% by 62%, not a loop or infinity symbol.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: One continuous bold 10%-wide gold stroke traces two rolling dune crests and one deep smooth valley, then folds gently underneath into a short return stroke. One open path with two rounded endpoints, compact 76% by 62%, not a loop or infinity symbol."
+    },
+    {
+      "id": "52-d-02",
+      "number": 52,
+      "group": "d",
+      "groupName": "연결과 여백",
+      "theme": "ocean",
+      "themeName": "OCEAN · 시안",
+      "name": "오픈 오빗",
+      "desc": "열린 원호가 능선으로 바뀌는 하나의 흐름",
+      "direction": "One broad 9%-wide cyan open circular arc transforms seamlessly into a rolling dune wave through its lower half; a small separate ice-blue inner wave balances it. Near-circular footprint 72% by 72%, clear open gap, no arrows, no progress ring.",
+      "palette": {
+        "name": "OCEAN · 시안",
+        "background": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #0a2932; primary #4fc3d5; secondary #205b75; optional highlight #d7faf6. Respect this theme, no extra warm gold in cool variants. Specific design: One broad 9%-wide cyan open circular arc transforms seamlessly into a rolling dune wave through its lower half; a small separate ice-blue inner wave balances it. Near-circular footprint 72% by 72%, clear open gap, no arrows, no progress ring."
+    },
+    {
+      "id": "53-d-03",
+      "number": 53,
+      "group": "d",
+      "groupName": "연결과 여백",
+      "theme": "forest",
+      "themeName": "FOREST · 세이지",
+      "name": "인터리브",
+      "desc": "두 곡선이 위아래로 한 번만 교차",
+      "direction": "Two very broad 11%-wide sage and pale-gold flowing dune bands interweave exactly once at center, with a small clean dark occlusion at the crossing for readability. Open round-ended strokes, 76% by 62%, no complex knot, no infinity sign.",
+      "palette": {
+        "name": "FOREST · 세이지",
+        "background": "#172f29",
+        "ink": "#a6c58b",
+        "secondary": "#4f7f61",
+        "highlight": "#e8c86b"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #172f29; primary #a6c58b; secondary #4f7f61; optional highlight #e8c86b. Respect this theme, no extra warm gold in cool variants. Specific design: Two very broad 11%-wide sage and pale-gold flowing dune bands interweave exactly once at center, with a small clean dark occlusion at the crossing for readability. Open round-ended strokes, 76% by 62%, no complex knot, no infinity sign."
+    },
+    {
+      "id": "54-d-04",
+      "number": 54,
+      "group": "d",
+      "groupName": "연결과 여백",
+      "theme": "sakura",
+      "themeName": "SAKURA · 피치",
+      "name": "브리지 갭",
+      "desc": "의도적인 끊김으로 곡선의 연결을 암시",
+      "direction": "Three chunky 9%-wide peach dune strokes; a single intentional wide break near each crest creates optical continuation. Breaks are offset so the emblem still reads as layered dune rhythms. Soft blunt terminals, compact 74% by 64%, no dotted paths.",
+      "palette": {
+        "name": "SAKURA · 피치",
+        "background": "#574354",
+        "ink": "#ffe3d5",
+        "secondary": "#ba8d9a",
+        "highlight": "#efc0a7"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #574354; primary #ffe3d5; secondary #ba8d9a; optional highlight #efc0a7. Respect this theme, no extra warm gold in cool variants. Specific design: Three chunky 9%-wide peach dune strokes; a single intentional wide break near each crest creates optical continuation. Breaks are offset so the emblem still reads as layered dune rhythms. Soft blunt terminals, compact 74% by 64%, no dotted paths."
+    },
+    {
+      "id": "55-d-05",
+      "number": 55,
+      "group": "d",
+      "groupName": "연결과 여백",
+      "theme": "arctic",
+      "themeName": "ARCTIC · 민트",
+      "name": "듀얼 페이즈",
+      "desc": "위상 차이를 가진 두 파동 사이의 공간",
+      "direction": "Two heavy 12%-wide mint and ice-blue S-shaped dune paths, phase-shifted horizontally, almost touching in the middle but with a crisp 6% dark channel. Compact 74% by 66%, rounded ends. Organic dual rhythm, no literal DNA helix.",
+      "palette": {
+        "name": "ARCTIC · 민트",
+        "background": "#0e1b33",
+        "ink": "#a7f4dc",
+        "secondary": "#64afce",
+        "highlight": "#48649b"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #0e1b33; primary #a7f4dc; secondary #64afce; optional highlight #48649b. Respect this theme, no extra warm gold in cool variants. Specific design: Two heavy 12%-wide mint and ice-blue S-shaped dune paths, phase-shifted horizontally, almost touching in the middle but with a crisp 6% dark channel. Compact 74% by 66%, rounded ends. Organic dual rhythm, no literal DNA helix."
+    },
+    {
+      "id": "56-d-06",
+      "number": 56,
+      "group": "d",
+      "groupName": "연결과 여백",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "네거티브 플로",
+      "desc": "하나의 굵은 윤곽 안에서 빈 곡선이 흐름",
+      "direction": "A single bold gold open contour silhouette follows a dune crest above and a valley below, with one large dark wave-shaped opening inside. Think an open flowing ribbon outline 11% thick, 76% by 62%, not a filled globe or full square.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: A single bold gold open contour silhouette follows a dune crest above and a valley below, with one large dark wave-shaped opening inside. Think an open flowing ribbon outline 11% thick, 76% by 62%, not a filled globe or full square."
+    },
+    {
+      "id": "57-d-07",
+      "number": 57,
+      "group": "d",
+      "groupName": "연결과 여백",
+      "theme": "contour",
+      "themeName": "CONTOUR · 라임",
+      "name": "커넥티드 레벨",
+      "desc": "세 층이 한쪽에서 연결된 하나의 굵은 경로",
+      "direction": "One continuous 8%-wide lime line snakes through three broad stacked dune contours, connected at alternating rounded side turns. Large dark interior channels; 70% by 70% footprint. Three simple sweeps only, no tiny maze.",
+      "palette": {
+        "name": "CONTOUR · 라임",
+        "background": "#343a31",
+        "ink": "#e4efb0",
+        "secondary": "#bbcf72",
+        "highlight": "#657c36"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #343a31; primary #e4efb0; secondary #bbcf72; optional highlight #657c36. Respect this theme, no extra warm gold in cool variants. Specific design: One continuous 8%-wide lime line snakes through three broad stacked dune contours, connected at alternating rounded side turns. Large dark interior channels; 70% by 70% footprint. Three simple sweeps only, no tiny maze."
+    },
+    {
+      "id": "58-d-08",
+      "number": 58,
+      "group": "d",
+      "groupName": "연결과 여백",
+      "theme": "lilies",
+      "themeName": "WATER LILIES · 라일락",
+      "name": "크로스 리듬",
+      "desc": "서로 다른 곡률의 굵은 두 선이 대비",
+      "direction": "Two broad lilac and muted-blue dune strokes cross at a shallow angle off-center, one a high arch and one a low S bend. Clear simple overlap, 11% weight and short rounded terminals. Compact 70% by 66%; no X typography.",
+      "palette": {
+        "name": "WATER LILIES · 라일락",
+        "background": "#303649",
+        "ink": "#c47cc5",
+        "secondary": "#8abf75",
+        "highlight": "#457cab"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #303649; primary #c47cc5; secondary #8abf75; optional highlight #457cab. Respect this theme, no extra warm gold in cool variants. Specific design: Two broad lilac and muted-blue dune strokes cross at a shallow angle off-center, one a high arch and one a low S bend. Clear simple overlap, 11% weight and short rounded terminals. Compact 70% by 66%; no X typography."
+    },
+    {
+      "id": "59-d-09",
+      "number": 59,
+      "group": "d",
+      "groupName": "연결과 여백",
+      "theme": "ivory",
+      "themeName": "DUNE · 아이보리",
+      "name": "컷 아웃 웨이브",
+      "desc": "굵은 테라코타 윤곽을 넓은 여백으로 나눔",
+      "direction": "A thick terracotta continuous dune-ribbon boundary with two large warm-ivory wave gaps; open at both right ends. The outline is thick, 10% canvas width, compact 73% by 65%, airy legible structure, no solid filled landform blob.",
+      "palette": {
+        "name": "DUNE · 아이보리",
+        "background": "#faf8f3",
+        "ink": "#a46c2e",
+        "secondary": "#d3a258",
+        "highlight": "#7b492c"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #faf8f3; primary #a46c2e; secondary #d3a258; optional highlight #7b492c. Respect this theme, no extra warm gold in cool variants. Specific design: A thick terracotta continuous dune-ribbon boundary with two large warm-ivory wave gaps; open at both right ends. The outline is thick, 10% canvas width, compact 73% by 65%, airy legible structure, no solid filled landform blob."
+    },
+    {
+      "id": "60-d-10",
+      "number": 60,
+      "group": "d",
+      "groupName": "연결과 여백",
+      "theme": "mono",
+      "themeName": "MONO · 아이보리",
+      "name": "엣지 커넥트",
+      "desc": "양 끝의 연결이 하나의 심볼을 만듦",
+      "direction": "Three bold ivory flowing dune paths link only at their short left endpoints into a small curved spine, then open separately to the right as round-capped wave ends. 8%-wide equal strokes, compact D-like 72% by 66%, no literal letter or fan rays.",
+      "palette": {
+        "name": "MONO · 아이보리",
+        "background": "#171715",
+        "ink": "#f4eddf",
+        "secondary": "#d1c8b8",
+        "highlight": "#ffffff"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #171715; primary #f4eddf; secondary #d1c8b8; optional highlight #ffffff. Respect this theme, no extra warm gold in cool variants. Specific design: Three bold ivory flowing dune paths link only at their short left endpoints into a small curved spine, then open separately to the right as round-capped wave ends. 8%-wide equal strokes, compact D-like 72% by 66%, no literal letter or fan rays."
+    },
+    {
+      "id": "61-e-01",
+      "number": 61,
+      "group": "e",
+      "groupName": "레이어와 재질",
+      "theme": "dune",
+      "themeName": "DUNE · 골드",
+      "name": "플랫 레이어",
+      "desc": "두꺼운 평면 선의 겹침만으로 깊이를 표현",
+      "direction": "Three broad 10%-wide matte gold and bronze ribbon strokes follow dunes, with one clean overlap junction and solid tonal planes. No physical texture or cast shadows. Compact 75% by 64%, blunt softly rounded ends. Structural layering, not filled terrain.",
+      "palette": {
+        "name": "DUNE · 골드",
+        "background": "#302b2a",
+        "ink": "#e1b453",
+        "secondary": "#b2854c",
+        "highlight": "#f5d778"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #302b2a; primary #e1b453; secondary #b2854c; optional highlight #f5d778. Respect this theme, no extra warm gold in cool variants. Specific design: Three broad 10%-wide matte gold and bronze ribbon strokes follow dunes, with one clean overlap junction and solid tonal planes. No physical texture or cast shadows. Compact 75% by 64%, blunt softly rounded ends. Structural layering, not filled terrain."
+    },
+    {
+      "id": "62-e-02",
+      "number": 62,
+      "group": "e",
+      "groupName": "레이어와 재질",
+      "theme": "ocean",
+      "themeName": "OCEAN · 시안",
+      "name": "오션 글라스 스터디",
+      "desc": "두 개의 굵은 반투명 리본 레이어",
+      "direction": "Two large thick cyan and ice-blue dune ribbon strokes with restrained translucent overlapping planes and minimal clean edge highlights. 12% structural width, dark teal background, compact 72% by 65%. An exploratory material rendering, no giant glass app tile, no excessive glow or bevel.",
+      "palette": {
+        "name": "OCEAN · 시안",
+        "background": "#0a2932",
+        "ink": "#4fc3d5",
+        "secondary": "#205b75",
+        "highlight": "#d7faf6"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #0a2932; primary #4fc3d5; secondary #205b75; optional highlight #d7faf6. Respect this theme, no extra warm gold in cool variants. Specific design: Two large thick cyan and ice-blue dune ribbon strokes with restrained translucent overlapping planes and minimal clean edge highlights. 12% structural width, dark teal background, compact 72% by 65%. An exploratory material rendering, no giant glass app tile, no excessive glow or bevel."
+    },
+    {
+      "id": "63-e-03",
+      "number": 63,
+      "group": "e",
+      "groupName": "레이어와 재질",
+      "theme": "forest",
+      "themeName": "FOREST · 세이지",
+      "name": "매트 세이지",
+      "desc": "광택 없는 세이지 선으로 차분한 무게감",
+      "direction": "Three substantial sage ceramic-matte dune strokes, 9% width, extremely restrained shallow thickness visible only along one edge. Large clean gaps, compact 74% by 65%, rounded substantial ends. No grain or stone photo texture.",
+      "palette": {
+        "name": "FOREST · 세이지",
+        "background": "#172f29",
+        "ink": "#a6c58b",
+        "secondary": "#4f7f61",
+        "highlight": "#e8c86b"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #172f29; primary #a6c58b; secondary #4f7f61; optional highlight #e8c86b. Respect this theme, no extra warm gold in cool variants. Specific design: Three substantial sage ceramic-matte dune strokes, 9% width, extremely restrained shallow thickness visible only along one edge. Large clean gaps, compact 74% by 65%, rounded substantial ends. No grain or stone photo texture."
+    },
+    {
+      "id": "64-e-04",
+      "number": 64,
+      "group": "e",
+      "groupName": "레이어와 재질",
+      "theme": "sakura",
+      "themeName": "SAKURA · 피치",
+      "name": "피치 리본",
+      "desc": "두꺼운 리본이 접히며 피치의 두 면을 드러냄",
+      "direction": "One broad 14%-wide peach ribbon makes a deep rolling dune S curve and one gentle fold exposing a dusty-rose reverse side. Add a short separate 8%-wide peach lower dune stroke. Compact 73% by 62%. Crisp flat-fold planes with minimal shading, no paper scene.",
+      "palette": {
+        "name": "SAKURA · 피치",
+        "background": "#574354",
+        "ink": "#ffe3d5",
+        "secondary": "#ba8d9a",
+        "highlight": "#efc0a7"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #574354; primary #ffe3d5; secondary #ba8d9a; optional highlight #efc0a7. Respect this theme, no extra warm gold in cool variants. Specific design: One broad 14%-wide peach ribbon makes a deep rolling dune S curve and one gentle fold exposing a dusty-rose reverse side. Add a short separate 8%-wide peach lower dune stroke. Compact 73% by 62%. Crisp flat-fold planes with minimal shading, no paper scene."
+    },
+    {
+      "id": "65-e-05",
+      "number": 65,
+      "group": "e",
+      "groupName": "레이어와 재질",
+      "theme": "arctic",
+      "themeName": "ARCTIC · 민트",
+      "name": "아이스 레이어",
+      "desc": "빙하색의 겹침과 선명한 외곽",
+      "direction": "Three thick mint and ice-blue dune strokes offset as separate shallow translucent planes. Broad 9% widths and clear dark channels; restrained material depth, no heavy baked-in specular shine. Compact 72% by 65%, simple iconic silhouette.",
+      "palette": {
+        "name": "ARCTIC · 민트",
+        "background": "#0e1b33",
+        "ink": "#a7f4dc",
+        "secondary": "#64afce",
+        "highlight": "#48649b"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #0e1b33; primary #a7f4dc; secondary #64afce; optional highlight #48649b. Respect this theme, no extra warm gold in cool variants. Specific design: Three thick mint and ice-blue dune strokes offset as separate shallow translucent planes. Broad 9% widths and clear dark channels; restrained material depth, no heavy baked-in specular shine. Compact 72% by 65%, simple iconic silhouette."
+    },
+    {
+      "id": "66-e-06",
+      "number": 66,
+      "group": "e",
+      "groupName": "레이어와 재질",
+      "theme": "solar",
+      "themeName": "SOLAR · 앰버",
+      "name": "새틴 앰버",
+      "desc": "두꺼운 앰버 곡선의 은은한 새틴 표면",
+      "direction": "Two 13%-wide warm amber dune strokes with a restrained broad satin tonal transition, no shiny chrome, gold foil, or star highlights. One higher crest and one deep valley, rounded substantial terminals, compact 75% by 61% on oxblood.",
+      "palette": {
+        "name": "SOLAR · 앰버",
+        "background": "#3d2222",
+        "ink": "#ffe19a",
+        "secondary": "#f1ad46",
+        "highlight": "#9d4a36"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #3d2222; primary #ffe19a; secondary #f1ad46; optional highlight #9d4a36. Respect this theme, no extra warm gold in cool variants. Specific design: Two 13%-wide warm amber dune strokes with a restrained broad satin tonal transition, no shiny chrome, gold foil, or star highlights. One higher crest and one deep valley, rounded substantial terminals, compact 75% by 61% on oxblood."
+    },
+    {
+      "id": "67-e-07",
+      "number": 67,
+      "group": "e",
+      "groupName": "레이어와 재질",
+      "theme": "contour",
+      "themeName": "CONTOUR · 라임",
+      "name": "엠보스 컨투어",
+      "desc": "세 개의 굵은 능선에 낮은 높이를 더함",
+      "direction": "Three bold 8%-wide pale-lime raised contour wave paths with extremely shallow embossed thickness. Dark olive background remains flat, large gaps, compact 72% by 70%. Clean ends, no realistic terrain or tiny contour details.",
+      "palette": {
+        "name": "CONTOUR · 라임",
+        "background": "#343a31",
+        "ink": "#e4efb0",
+        "secondary": "#bbcf72",
+        "highlight": "#657c36"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #343a31; primary #e4efb0; secondary #bbcf72; optional highlight #657c36. Respect this theme, no extra warm gold in cool variants. Specific design: Three bold 8%-wide pale-lime raised contour wave paths with extremely shallow embossed thickness. Dark olive background remains flat, large gaps, compact 72% by 70%. Clean ends, no realistic terrain or tiny contour details."
+    },
+    {
+      "id": "68-e-08",
+      "number": 68,
+      "group": "e",
+      "groupName": "레이어와 재질",
+      "theme": "lilies",
+      "themeName": "WATER LILIES · 라일락",
+      "name": "라일락 크로스페이드",
+      "desc": "라일락에서 블루로 흐르는 두꺼운 곡선",
+      "direction": "Three substantial 9%-wide dune strokes with a restrained lilac-to-muted-blue color flow, one short sage accent only. Clean even edges, no blur or glow, compact 75% by 64%, rounded caps. Surface color flow preserves the strong separated strokes.",
+      "palette": {
+        "name": "WATER LILIES · 라일락",
+        "background": "#303649",
+        "ink": "#c47cc5",
+        "secondary": "#8abf75",
+        "highlight": "#457cab"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #303649; primary #c47cc5; secondary #8abf75; optional highlight #457cab. Respect this theme, no extra warm gold in cool variants. Specific design: Three substantial 9%-wide dune strokes with a restrained lilac-to-muted-blue color flow, one short sage accent only. Clean even edges, no blur or glow, compact 75% by 64%, rounded caps. Surface color flow preserves the strong separated strokes."
+    },
+    {
+      "id": "69-e-09",
+      "number": 69,
+      "group": "e",
+      "groupName": "레이어와 재질",
+      "theme": "ivory",
+      "themeName": "DUNE · 아이보리",
+      "name": "잉크 앤 샌드",
+      "desc": "따뜻한 종이색 위에 굵은 브론즈 인장 같은 선",
+      "direction": "Three flat solid warm-bronze 10%-wide dune strokes on ivory, slight purposeful asymmetry and soft square end caps. One-color print-like clarity, no distressed texture, nearly square 69% by 67% overall silhouette. Elegant crafted mark.",
+      "palette": {
+        "name": "DUNE · 아이보리",
+        "background": "#faf8f3",
+        "ink": "#a46c2e",
+        "secondary": "#d3a258",
+        "highlight": "#7b492c"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #faf8f3; primary #a46c2e; secondary #d3a258; optional highlight #7b492c. Respect this theme, no extra warm gold in cool variants. Specific design: Three flat solid warm-bronze 10%-wide dune strokes on ivory, slight purposeful asymmetry and soft square end caps. One-color print-like clarity, no distressed texture, nearly square 69% by 67% overall silhouette. Elegant crafted mark."
+    },
+    {
+      "id": "70-e-10",
+      "number": 70,
+      "group": "e",
+      "groupName": "레이어와 재질",
+      "theme": "mono",
+      "themeName": "MONO · 아이보리",
+      "name": "화이트 릴리프",
+      "desc": "단색의 굵은 곡선으로 깊이를 최소화",
+      "direction": "Two heavy ivory 13%-wide dune curves with a third short 8%-wide supporting stroke. Crisp solid front faces and a single very subtle warm-gray side plane create shallow relief on nearly-black. Rounded blunt ends, compact 74% by 64%. No metallic shine or surrounding badge.",
+      "palette": {
+        "name": "MONO · 아이보리",
+        "background": "#171715",
+        "ink": "#f4eddf",
+        "secondary": "#d1c8b8",
+        "highlight": "#ffffff"
+      },
+      "prompt": "Use case: logo-brand. Asset: ONE original DUNE health/recovery iPhone app icon exploration, 1:1 square image. Brand reference image means ONLY the semantic flowing dune/HRV curve identity; redraw the requested geometry, do NOT copy its thin horizontal composition. Interpret visual fullness as STROKE WEIGHT, optical size, deliberate rhythm and proportion, not merely filling in colors. Preserve dunes + body rhythm + recovery. Simple, highly crafted, memorable in a 40px thumbnail. Large bold open curved strokes, distinct negative space and strong silhouette. Center the described mark with safe outer breathing room; full square opaque background with NO baked-in outer rounded app corners. No words, text, numerals, tiny lines, particles, sun, stars, heart, ECG spikes, photos, frames, hardware, comparison grid or movie imagery. Avoid closed filled blobs, fully painted landscapes, glossy tile within tile. Foreground edges must be crisp and continuous. Color palette: background #171715; primary #f4eddf; secondary #d1c8b8; optional highlight #ffffff. Respect this theme, no extra warm gold in cool variants. Specific design: Two heavy ivory 13%-wide dune curves with a third short 8%-wide supporting stroke. Crisp solid front faces and a single very subtle warm-gray side plane create shallow relief on nearly-black. Rounded blunt ends, compact 74% by 64%. No metallic shine or surrounding badge."
+    }
+  ]
+}

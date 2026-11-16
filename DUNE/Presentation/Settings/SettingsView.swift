@@ -249,6 +249,12 @@ struct SettingsView: View {
 
     private var appearanceSection: some View {
         Section {
+            NavigationLink {
+                AppIconPickerView()
+            } label: {
+                Label("App Icon", systemImage: "app.badge")
+            }
+            .accessibilityIdentifier("settings-row-app-icon")
             ThemePickerSection()
         } header: {
             settingsSectionHeader("Appearance")

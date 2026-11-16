@@ -8,6 +8,7 @@ import AppIntents
 struct DUNEApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
+    @AppStorage(AppIconStyle.storageKey) private var selectedIconStyle: AppIconStyle = .defaultStyle
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
     @AppStorage("hasRequestedHealthKitAuthorization") private var hasRequestedHealthKitAuthorization = false
     @AppStorage("hasRequestedNotificationAuthorization") private var hasRequestedNotificationAuthorization = false
@@ -65,6 +66,14 @@ struct DUNEApp: App {
     private static var isRunningXCTest: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
         || isRunningUITests
+    }
+
+    private static var shouldShowLaunchBrandForUITests: Bool {
+#if DEBUG
+        isRunningUITests && ProcessInfo.processInfo.arguments.contains("--ui-test-launch-brand")
+#else
+        false
+#endif
     }
 
     private static var isRunningUITests: Bool {
@@ -279,6 +288,17 @@ struct DUNEApp: App {
         }
 #endif
 
+#if DEBUG
+        if Self.shouldResetUITestState {
+            UserDefaults.standard.removeObject(forKey: AppIconStyle.storageKey)
+        }
+        if let index = ProcessInfo.processInfo.arguments.firstIndex(of: "--ui-test-icon"),
+           ProcessInfo.processInfo.arguments.indices.contains(index + 1),
+           let style = AppIconStyle(rawValue: ProcessInfo.processInfo.arguments[index + 1]) {
+            UserDefaults.standard.set(style.rawValue, forKey: AppIconStyle.storageKey)
+            _selectedIconStyle = AppStorage(wrappedValue: style, AppIconStyle.storageKey)
+        }
+#endif
         let persistedThemeRawValue = UserDefaults.standard.string(forKey: AppTheme.storageKey)
         if let normalizedTheme = AppTheme.resolvedTheme(fromPersistedRawValue: persistedThemeRawValue) {
             if persistedThemeRawValue != normalizedTheme.rawValue {
@@ -431,6 +451,8 @@ struct DUNEApp: App {
         Group {
             if Self.isRunningUnitTests {
                 Color.clear
+            } else if Self.shouldShowLaunchBrandForUITests {
+                LaunchSplashView(style: selectedIconStyle, theme: selectedTheme, isResolving: false)
             } else if Self.shouldSeedMockData {
                 // UI test with mock data — seed and skip splash
                 seedableAppContent
@@ -442,7 +464,7 @@ struct DUNEApp: App {
                     }
 
                     if isShowingLaunchSplash {
-                        LaunchSplashView(isResolving: isResolvingLaunchSplash)
+                        LaunchSplashView(style: selectedIconStyle, theme: selectedTheme, isResolving: isResolvingLaunchSplash)
                             .allowsHitTesting(!isResolvingLaunchSplash)
                     }
                 }
@@ -469,6 +491,10 @@ struct DUNEApp: App {
         .tint(selectedTheme.accentColor)
         .preferredColorScheme(Self.forcedUITestColorScheme)
         .onAppear { WidgetDataWriter.writeTheme(selectedTheme) }
+        .task(id: AppIconConfiguration(style: selectedIconStyle, theme: selectedTheme)) {
+            guard !Self.isRunningUnitTests else { return }
+            await AppIconService.shared.synchronize(AppIconConfiguration(style: selectedIconStyle, theme: selectedTheme))
+        }
 #if DEBUG
         .task { await WatchWorkoutActivityPreview.startIfRequested() }
 #endif
@@ -503,6 +529,9 @@ struct DUNEApp: App {
 #endif
             guard newPhase == .active else { return }
             Task {
+                if !Self.isRunningUnitTests {
+                    await AppIconService.shared.synchronize(AppIconConfiguration(style: selectedIconStyle, theme: selectedTheme))
+                }
                 await refreshAppRuntimeIfNeeded()
                 await refreshLimitedReadAccessIfNeeded()
                 await requestDeferredAuthorizationsIfNeeded()
@@ -1221,6 +1250,8 @@ private struct WorkoutInsightsWindowView: View {
 private struct LaunchSplashView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    let style: AppIconStyle
+    let theme: AppTheme
     let isResolving: Bool
 
     private var backgroundDissolveAnimation: SwiftUI.Animation {
@@ -1238,11 +1269,11 @@ private struct LaunchSplashView: View {
     }
 
     var body: some View {
-        Color("LaunchBackground")
+        theme.appIconBackgroundColor
             .opacity(isResolving ? 0 : 1)
             .animation(backgroundDissolveAnimation, value: isResolving)
             .overlay {
-                Image("LaunchLogo")
+                AppLaunchBrandView(style: style, theme: theme)
                     .opacity(isResolving ? 0 : 1)
                     .scaleEffect(isResolving ? 0.985 : 1)
                     .animation(logoDissolveAnimation, value: isResolving)

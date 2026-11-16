@@ -438,3 +438,18 @@ H09 통계 기호: 실제 Duo의 밝은 버튼에서 확인한 2.57:1 대비를 
 2026-11-14 [H08 시안과 별도실제증거](../full-redesign-map/review/injury-record-form-h08-2026-11-14/index.html). 과거실패는 보존하며 대기범위를 통과로 표시하지 않는다.
 
 2026-11-14 S03: 정적 시안과 [Phone·iPad 일반/MAX 실제 PNG/AX](../full-redesign-map/review/exercise-default-edit-s03-2026-11-14/index.html)를 구분한다. iPad 일반·MAX 검증; Nov 7 HELD 원본 보존.
+
+
+2026-11-03 후속 교정: 사용자는 ‘꽉 찬 느낌’을 색면 채우기로만 해석하지 말고, 굵은 선·테마 키컬러 등 다양한 관점의50개와 Apple·Dribbble 추가 조사를 요청했다. [아이콘 대시보드](themes/dune-icon-development.html)에 3차21–70을 A 선 굵기 / B 비율과 실루엣 / C 테마 키컬러 / D 연결과 여백 / E 레이어와 재질로 나눠 추가한다. [전체 프롬프트](themes/assets/dune-icon-development/v3/prompts.json)와 [Apple·Dribbble 출처·확인 수준](themes/assets/dune-icon-development/v3/research.md)을 보존하며 이전20개도 유지한다. 새로운50개는 별도 생성한 래스터 시안이며 시스템 Liquid Glass 검증·실제 앱 적용을 의미하지 않는다.
+
+2026-11-03 [DUNE 아이콘 발전 대시보드](themes/dune-icon-development.html)를 추가했다. 기존 사구·HRV 파동·회복력 의미를 계승한 1차 01–10과, 사용자 피드백에 따라 면적·세로 비중을 키운 2차 11–20을 보존한다. App Store 레퍼런스 6개·출처·원본 PNG·전체 프롬프트·단계별 피드백은 `themes/assets/dune-icon-development/`에 둔다. 홈 화면 목업에서 원본 병렬 비교·60/68px·배경 전환을 제공하고 후보·메모는 브라우저 localStorage와 JSON 내보내기로 남긴다. [배치·검증 범위](../layout-map/app-icon-development.md)를 따르며 후보 미선택·앱 미적용·실제 기기 캡처 아님 상태를 유지한다.
+
+2026-11-03 4차: 사용자가 관심을 표현한 오션 글라스62·아이스 레이어65·오픈 오빗52·인터리브53·브리지 갭54·네거티브 플로56·커넥티드 레벨57·크로스 리듬58을 각3개씩 발전한71–94를 추가했다. [24개 프롬프트와 출발 시안](themes/assets/dune-icon-development/v4/prompts.json), [방향별 비교판](themes/assets/dune-icon-development/v4/boards/index.html)을 보존한다. 대시보드는 최신24개로 시작하며 기존 후보·메모와 이전70개를 유지한다. 관심 방향이며 최종안 승인·앱 적용은 아니다.
+
+2026-11-03 5차: 사용자가 선택한86·87·84·81·82·80·75·74·71의 색상 통일 테스트를95–103으로 추가했다. 투톤 허용을 반영해 골드·앰버와 차콜을 공통 기준으로 쓴다. 원래 형태·크기·재질 보존을 목표로 하는 AI 편집이며 픽셀 단위 기하 일치는 보장하지 않는다. 이전94개와 후보·메모를 유지하고, 전용 브랜치 `codex/dune-icon-two-tone-study`에서 작업한다. 최종안 승인·앱 적용은 아니다. [프롬프트·팔레트](themes/assets/dune-icon-development/v5/prompts.json) · [9개 비교판](themes/assets/dune-icon-development/v5/boards/all-9.html) · [전후 비교](themes/assets/dune-icon-development/v5/boards/before-after.html).
+
+2026-11-03 6차 교정: 사용자가 말한 투톤은 같은 골드의 명도차로 한정하는 뜻이 아니라 서로 다른 컬러도 사용 가능하다는 뜻이다. 같은9개86·87·84·81·82·80·75·74·71을 골드×시안 조합104–112로 다시 비교한다. 이전95–103은 assistant의 명도차 해석 실험으로 구분해 보존한다. 전용 브랜치는 `codex/dune-icon-two-tone-study`이며 최종 팔레트 승인·앱 적용은 아니다.
+
+2026-11-16 [아이콘 설정·시작 화면 배치](../layout-map/app-icon-settings.md): 사용자 선택82·71·87, 기본82/P04와 나머지테마 자동색을 네이티브에 연결한다. 기존 웹 시안·112개 이력은 보존하고 실제 기기 캡처 검증을 별도 기록한다.
+
+2026-11-16 아이콘 설정 구현을 마쳤다. [새 네이티브 캡처18장](../phone-design-map/actual/app-icon-2026-11-16/index.html)은 iPhone·iPad의 T01·S01·S08을 보여주며 웹 시안과 구분한다. 기본82/P04, 형태71·87 선택과 테마 자동색, 같은 선택을 쓰는 스플래시를 연결했다. 실제 기기 설치·시스템 다크/클리어/틴트 및 Duo 자세는 이 검증에 포함하지 않았다.

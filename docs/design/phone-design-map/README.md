@@ -407,3 +407,6 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 2026-11-07 S07: [새 실제 PNG/AX](../full-redesign-map/review/workout-insights-window-s07-2026-11-07/index.html)에 통과 범위와 미갱신 기기를 기록했다.
 
 2026-11-07 W32: [새 실제 PNG/AX](../full-redesign-map/review/workout-insights-sheet-w32-2026-11-07/index.html)에 통과 범위와 미갱신 기기를 기록했다.
+
+
+2026-11-16 [앱 아이콘82·71·87과 시작 화면 실제 캡처18장](actual/app-icon-2026-11-16/index.html)을 추가했다. T01·S01·신규S08의 iPhone·iPad 최종 화면이며 기본82/P04·테마 자동색·선택 저장·스플래시를 확인했다. 관련 단위4개와 기기별 두 고유 UI selector가 통과했다. iPad의 스플래시 통과 증거는 유지하고 하단에 걸친 항목 탭 실패만 보정해 한 번 조건부 재실행했다. 기존 기기 인덱스의 과거 PNG를 새 증거로 덮어쓰지 않았으며 S08은 별도 갤러리에서 확인한다. Duo 두 자세·실물 기기·시스템 정적 실행 프레임·다크/클리어/틴트 표현은 미갱신이다.

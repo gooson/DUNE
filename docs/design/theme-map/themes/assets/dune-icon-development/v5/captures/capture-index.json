@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-03",
+  "method": "isolated headless Chrome; original generated PNGs and local HTML",
+  "nativeDeviceCapture": false,
+  "browserErrors": [],
+  "concepts": [
+    {
+      "id": "95-mono-86",
+      "sourceNumber": 86,
+      "parentId": "86-negative-clarity",
+      "home": "homes/95-mono-86.png",
+      "comparison": "comparisons/95-mono-86.png"
+    },
+    {
+      "id": "96-mono-87",
+      "sourceNumber": 87,
+      "parentId": "87-negative-layer",
+      "home": "homes/96-mono-87.png",
+      "comparison": "comparisons/96-mono-87.png"
+    },
+    {
+      "id": "97-mono-84",
+      "sourceNumber": 84,
+      "parentId": "84-gap-layer",
+      "home": "homes/97-mono-84.png",
+      "comparison": "comparisons/97-mono-84.png"
+    },
+    {
+      "id": "98-mono-81",
+      "sourceNumber": 81,
+      "parentId": "81-interleave-layer",
+      "home": "homes/98-mono-81.png",
+      "comparison": "comparisons/98-mono-81.png"
+    },
+    {
+      "id": "99-mono-82",
+      "sourceNumber": 82,
+      "parentId": "82-interleave-bold",
+      "home": "homes/99-mono-82.png",
+      "comparison": "comparisons/99-mono-82.png"
+    },
+    {
+      "id": "100-mono-80",
+      "sourceNumber": 80,
+      "parentId": "80-interleave-clarity",
+      "home": "homes/100-mono-80.png",
+      "comparison": "comparisons/100-mono-80.png"
+    },
+    {
+      "id": "101-mono-75",
+      "sourceNumber": 75,
+      "parentId": "75-ice-layer",
+      "home": "homes/101-mono-75.png",
+      "comparison": "comparisons/101-mono-75.png"
+    },
+    {
+      "id": "102-mono-74",
+      "sourceNumber": 74,
+      "parentId": "74-ice-clarity",
+      "home": "homes/102-mono-74.png",
+      "comparison": "comparisons/102-mono-74.png"
+    },
+    {
+      "id": "103-mono-71",
+      "sourceNumber": 71,
+      "parentId": "71-ocean-clarity",
+      "home": "homes/103-mono-71.png",
+      "comparison": "comparisons/103-mono-71.png"
+    }
+  ],
+  "checks": {
+    "all9MappingsOrderAndThreeDigitNumbers": true,
+    "compareParentOrApp": true,
+    "persistence": true,
+    "previous94AndFamilyFilter": true,
+    "wallpaperAndSize": true,
+    "referencesAndHistory": true,
+    "previousFavoritesNotesMigration": true,
+    "mobileNoPageOverflow": true
+  },
+  "captures": [
+    "all-9.png",
+    "before-after.png",
+    "pairs-1.png",
+    "pairs-2.png",
+    "pairs-3.png",
+    "homes.png",
+    "dashboard-mobile.png"
+  ],
+  "mobileCaptureNote": "Headless Chrome full-page offscreen backdrop compositing omitted dock children; capture-only dock backdrop-filter disabled to show icons. Layout and icon assets unchanged."
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/AppIconSettingsUITests/testSelectionPersistsAndThemeUpdatesIconAndSplash",
+    "DUNEUITests/AppIconLaunchUITests/testSplashUsesAllThreeSelectedDesigns"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 1,
+  "failures": [
+    "481: /tmp/dune-icon-review-ship/DUNEUITests/Full/AppIconSettingsUITests.swift:28: error: -[DUNEUITests.AppIconSettingsUITests testSelectionPersistsAndThemeUpdatesIconAndSplash] : XCTAssertEqual failed: (\"XCTWaiterResult(rawValue: 2)\") is not equal to (\"XCTWaiterResult(rawValue: 1)\")",
+    "487: Test Case '-[DUNEUITests.AppIconSettingsUITests testSelectionPersistsAndThemeUpdatesIconAndSplash]' failed (50.382 seconds).",
+    "488: Test Suite 'AppIconSettingsUITests' failed at 2026-11-16 09:22:19.335.",
+    "490: Test Suite 'DUNEUITests.xctest' failed at 2026-11-16 09:22:19.335.",
+    "492: Test Suite 'Selected tests' failed at 2026-11-16 09:22:19.336.",
+    "504: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/AppIconSettingsUITests/testSelectionPersistsAndThemeUpdatesIconAndSplash"
+  ],
+  "log_path": "/private/tmp/dune-icon-review-ship/.xcodebuild/app-icon-ship-ipad.log"
+}

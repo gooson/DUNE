@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "target": "DUNEUITests",
+  "run_exit_status": 65,
+  "requested_selectors": [
+    "DUNEUITests/AppIconSettingsUITests/testSelectionPersistsAndThemeUpdatesIconAndSplash",
+    "DUNEUITests/AppIconLaunchUITests/testSplashUsesAllThreeSelectedDesigns"
+  ],
+  "skipped_selectors": [],
+  "evidence_scope": {
+    "kind": "selector_execution",
+    "complete_test_inventory": false
+  },
+  "counts": {
+    "executed": 2,
+    "passed": 1,
+    "skipped": 0,
+    "failed": 1
+  },
+  "passed_cases": 1,
+  "failures": [
+    "440: /Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/DUNEUITests/Full/AppIconSettingsUITests.swift:60: error: -[DUNEUITests.AppIconSettingsUITests testSelectionPersistsAndThemeUpdatesIconAndSplash] : XCTAssertTrue failed",
+    "446: Test Case '-[DUNEUITests.AppIconSettingsUITests testSelectionPersistsAndThemeUpdatesIconAndSplash]' failed (56.013 seconds).",
+    "447: Test Suite 'AppIconSettingsUITests' failed at 2026-11-16 03:06:55.292.",
+    "449: Test Suite 'DUNEUITests.xctest' failed at 2026-11-16 03:06:55.297.",
+    "451: Test Suite 'Selected tests' failed at 2026-11-16 03:06:55.440.",
+    "463: ** TEST FAILED **",
+    "xcodebuild exited 65",
+    "UI test log reports 1 failures",
+    "requested UI test selector has no execution evidence"
+  ],
+  "required_selectors_missing": [
+    "DUNEUITests/AppIconSettingsUITests/testSelectionPersistsAndThemeUpdatesIconAndSplash"
+  ],
+  "log_path": "/Users/shanks/.codex/worktrees/cleanup-chat-ownership/Health/.xcodebuild/app-icon-ui-final-ipad.log"
+}
