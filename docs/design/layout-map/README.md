@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+2026-11-18 [FOREST 배치와 안개 시안](../theme-map/themes/forest-green-direction.html)은 T03 상단에 숲 전경을 두고 A01·H01·L01의 첫 카드에는 수관·먼 능선·줄기를 각각 배치한다. 좁은 폭과 큰 글씨, A01 주간 기록을 펼친 상태에서는 장식을 카드 하단으로 보내 점수·근거·버튼의 읽기 공간을 확보한다.
+
 2026-11-18 [OCEAN 파도 배치](../theme-map/themes/ocean-cool-direction.html)는 T03 상단과 A01·H01·L01 첫 카드 오른쪽 아래를 사용한다. 카드 하단의 장식 영역을 점수·근거·상세 버튼 아래에 따로 확보한다.
 
 2026-11-14 후속 작업은 [T12 수치 강조 계약](notification-message-detail-proposal.md)과 [Watch 시간 우선 유산소 현재 존 계약](watch-cardio-time-zone-proposal.md)을 따른다. 테마 시안과 실제 캡처 검증을 구분한다.

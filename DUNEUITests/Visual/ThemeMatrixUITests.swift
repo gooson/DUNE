@@ -228,6 +228,65 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         captureTheme("forestGreen", named: "Forest")
     }
 
+    func testForestGreenSettingsPreview() {
+        var configuration = launchConfiguration
+        configuration.initialTabSelectionArgument = "today"
+        configuration.additionalArguments += [
+            "--ui-test-theme", "forestGreen",
+            "--ui-test-style", "light",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        dismissIconConfirmation()
+        navigateToSettings()
+
+        let identifier = "settings-theme-forestGreen"
+        let form = app.collectionViews.firstMatch
+        XCTAssertTrue(app.revealFullyVisible(identifier, in: form),
+                      "The Forest theme row and its sample should fit in the Settings viewport")
+        XCTAssertTrue(app.buttons[identifier].firstMatch.isSelected)
+        captureRootEvidence("Forest Light Settings")
+    }
+
+    func testForestGreenExpandedHistoryAtExtraLargeText() {
+        var configuration = launchConfiguration
+        configuration.initialTabSelectionArgument = "train"
+        configuration.additionalArguments += [
+            "--ui-test-theme", "forestGreen",
+            "--ui-test-style", "dark",
+            "--ui-hero-rhythm-fixtures",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryXL",
+            "-morningBriefingDisabled", "YES"
+        ]
+        launchApp(with: configuration)
+        dismissIconConfirmation()
+        navigateToActivity()
+
+        let scroll = app.scrollViews["activity-root-scroll"].firstMatch
+        let disclosureID = "activity-hero-history-disclosure"
+        XCTAssertTrue(app.revealFullyVisible(disclosureID, in: scroll))
+        let disclosure = app.buttons[disclosureID].firstMatch
+        let collapsedWidth = disclosure.frame.width
+        disclosure.tap()
+
+        let history = waitForElement("activity-hero-trend", timeout: 10)
+        XCTAssertGreaterThan(disclosure.frame.width, collapsedWidth + 1,
+                             "The disclosure should span the wider card after expansion")
+        XCTAssertGreaterThan(history.frame.width, scroll.frame.width * 0.75,
+                             "Expanded history should use most of the compact viewport")
+        XCTAssertEqual(history.frame.width, disclosure.frame.width, accuracy: 2)
+        for index in 0..<7 {
+            XCTAssertTrue(history.descendants(matching: .any)["activity-hero-trend-day-\(index)"].firstMatch.exists)
+        }
+        let lastDay = "activity-hero-trend-day-6"
+        XCTAssertTrue(app.revealFullyVisible(lastDay, in: scroll),
+                      "The latest date and value should be reachable together")
+        let latestEntry = waitForElement(lastDay)
+        XCTAssertTrue(history.frame.contains(latestEntry.frame),
+                      "The latest entry should fit inside the history chart")
+        captureRootEvidence("Forest Dark Activity Expanded History")
+    }
+
     func testSakuraCalmMatrix() {
         captureTheme("sakuraCalm", named: "Sakura")
     }

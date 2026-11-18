@@ -1,0 +1,258 @@
+Attributes: Application, 0x110a08b40, pid: 64739, label: 'DUNE'
+Element subtree:
+ →Application, 0x110a08b40, pid: 64739, label: 'DUNE'
+    Window, 0x110a08500, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x110a09040, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x110a09b80, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x110a09a40, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x110a09f40, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x110a0bc00, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x110a09680, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x110a097c0, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x110a0b980, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x110a0b700, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x110a0b340, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x110a0b0c0, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x110a0b480, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x110a0aa80, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x110a0af80, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x110a0ad00, {{0.0, -0.0}, {951.0, 669.0}}
+                                Toolbar, 0x110a0abc0, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: '도구 막대'
+                                  Other, 0x110a0ae40, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x110a0a800, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x110a0a940, {{0.0, -0.0}, {951.0, 669.0}}
+                                    Other, 0x110a0b5c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                      Other, 0x110a0bd40, {{0.0, -0.0}, {951.0, 669.0}}
+                                        NavigationBar, 0x110a0be80, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Life'
+                                          StaticText, 0x110a0bac0, {{20.0, 31.0}, {48.0, 34.0}}, label: 'Life'
+                                        Toolbar, 0x110a08f00, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: '도구 막대'
+                                          Other, 0x110a09540, {{0.0, -0.0}, {951.0, 669.0}}
+                                        Other, 0x110a0a080, {{0.0, -0.0}, {951.0, 669.0}}
+                                          Other, 0x110a09900, {{0.0, -0.0}, {951.0, 669.0}}
+                                            Other, 0x110a0a6c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                              Other, 0x110a0a1c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                                ScrollView, 0x110a0a440, {{0.0, -0.0}, {951.0, 669.0}}
+                                                  Other, 0x110a0a580, {{0.0, -0.0}, {951.0, 669.0}}
+                                                    Other, 0x110a09e00, {{0.0, -0.0}, {951.0, 122.0}}
+                                                  Other, 0x110a09cc0, {{0.0, -0.0}, {951.0, 669.0}}
+                                                  Other, 0x110a0a300, {{0.0, 82.0}, {867.0, 2382.3}}
+                                                    Other, 0x110a092c0, {{77.3, 62.0}, {895.0, 360.3}}, identifier: 'life-hero-progress', label: '라이프 진행 1 / 3'
+                                                      Image, 0x110a09400, {{211.7, 62.0}, {760.7, 360.3}}
+                                                      Image, 0x110a08dc0, {{305.3, 104.0}, {507.3, 187.7}}
+                                                      Image, 0x110a0b200, {{305.7, 102.7}, {507.3, 187.7}}
+                                                      Image, 0x102be5cc0, {{305.7, 103.0}, {507.3, 187.7}}
+                                                      Other, 0x102be7200, {{77.3, 114.0}, {712.3, 167.7}}
+                                                      StaticText, 0x102be6800, {{93.5, 133.0}, {58.7, 14.3}}, identifier: 'life-hero-heading', label: 'HABITS'
+                                                      StaticText, 0x102be6a80, {{448.5, 130.0}, {26.0, 18.0}}, label: '오늘'
+                                                      Other, 0x102be7ac0, {{93.3, 161.0}, {104.0, 104.0}}, identifier: 'life-hero-ring', label: '3개 중 1개 완료'
+                                                        StaticText, 0x102be4c80, {{118.7, 191.2}, {53.7, 30.0}}, label: '1 / 3'
+                                                        StaticText, 0x102be7d40, {{135.8, 221.2}, {19.3, 13.3}}, label: '완료'
+                                                      Image, 0x102be6580, {{159.0, 165.3}, {750.7, 172.7}}
+                                                      StaticText, 0x102be7700, {{217.5, 160.0}, {41.7, 76.7}}, identifier: 'life-hero-remaining', label: '2'
+                                                      StaticText, 0x102be5900, {{267.2, 206.7}, {26.0, 18.0}}, label: '남음'
+                                                      Image, 0x102be6300, {{225.0, 247.0}, {9.7, 12.3}}, identifier: 'figure.run', label: '달리기'
+                                                      Image, 0x102be5a40, {{232.7, 256.0}, {9.0, 9.0}}, identifier: 'checkmark.circle.fill', label: '선택됨', Selected
+                                                      Image, 0x102be66c0, {{252.3, 248.0}, {13.0, 10.3}}, identifier: 'book.fill', label: '북마크'
+                                                      Image, 0x102be6e40, {{284.0, 247.7}, {8.0, 11.3}}, identifier: 'drop.fill', label: '물방울'
+                                                    StaticText, 0x102be4000, {{77.5, 304.8}, {91.3, 24.0}}, identifier: 'life-section-habits', label: '오늘의 실천'
+                                                    Button, 0x102be6080, {{722.0, 297.7}, {67.3, 44.0}}, identifier: 'life-past-record-button', label: '지난 기록'
+                                                      StaticText, 0x102be5180, {{722.0, 297.7}, {67.3, 44.0}}, label: '지난 기록'
+                                                      Image, 0x102be5b80, {{722.0, 313.3}, {13.7, 12.3}}, identifier: 'clock.arrow.circlepath', label: '원형 화살표가 있는 시계'
+                                                    ScrollView, 0x102be7c00, {{77.3, 357.7}, {712.3, 44.0}}
+                                                      Other, 0x102be5f40, {{77.3, 357.7}, {283.3, 44.0}}
+                                                        Button, 0x102be57c0, {{78.8, 357.2}, {45.0, 45.0}}, identifier: 'life-filter-all', label: '전체', Selected
+                                                        Button, 0x102be7e80, {{127.3, 357.7}, {52.3, 44.0}}, identifier: 'life-filter-health', label: '신체'
+                                                          Image, 0x102be7340, {{136.7, 374.7}, {10.7, 10.0}}, identifier: 'heart.fill', label: '좋아요'
+                                                          StaticText, 0x102be6bc0, {{150.7, 372.5}, {21.0, 14.3}}, label: '신체'
+                                                        Button, 0x102be7980, {{183.7, 357.7}, {51.0, 44.0}}, identifier: 'life-filter-growth', label: '성장'
+                                                          Image, 0x102be70c0, {{193.0, 374.0}, {9.3, 11.7}}, identifier: 'book.closed.fill', label: '닫힌 책, 채워짐'
+                                                          StaticText, 0x102be6f80, {{205.7, 372.5}, {21.0, 14.3}}, label: '성장'
+                                                        Button, 0x102be7480, {{238.7, 357.7}, {51.0, 44.0}}, identifier: 'life-filter-mind', label: '마음'
+                                                          Image, 0x102be7840, {{247.7, 373.7}, {10.0, 12.3}}, identifier: 'sparkles', label: '반짝반짝'
+                                                          StaticText, 0x102be6d00, {{260.7, 372.5}, {21.0, 14.3}}, label: '마음'
+                                                        Button, 0x102be5540, {{293.7, 357.7}, {65.0, 44.0}}, identifier: 'life-filter-life', label: '라이프'
+                                                          Image, 0x102be75c0, {{303.0, 374.0}, {13.0, 11.3}}, identifier: 'house.fill', label: '집'
+                                                          StaticText, 0x102be5680, {{319.3, 372.5}, {31.3, 14.3}}, label: '라이프'
+                                                    Other, 0x102be4280, {{77.3, 417.7}, {712.3, 390.0}}, identifier: 'life-habit-group-today'
+                                                      Other, 0x102be5e00, {{77.3, 417.7}, {712.3, 152.0}}
+                                                        Image, 0x102be5400, {{93.3, 433.7}, {52.0, 52.0}}, identifier: 'book.fill', label: '북마크'
+                                                        StaticText, 0x105de9400, {{157.5, 433.7}, {40.3, 20.3}}, identifier: 'life-habit-row-Read', label: 'Read'
+                                                        Button, 0x105de9680, {{729.7, 433.7}, {44.0, 44.0}}, identifier: 'life-habit-actions-Read', label: '추가 작업'
+                                                        StaticText, 0x105de8b40, {{93.5, 498.3}, {18.7, 33.7}}, identifier: 'life-habit-value-Read', label: '0'
+                                                        StaticText, 0x102a84780, {{120.2, 510.7}, {55.7, 18.0}}, label: '/ 30 min'
+                                                        Button, 0x102a87ac0, {{717.7, 510.7}, {56.0, 18.0}}, label: '시간 수정'
+                                                        ProgressIndicator, 0x102a87e80, {{93.3, 549.7}, {680.3, 4.0}}, label: 'Read 진행', value: 0%
+                                                          ProgressIndicator, 0x102a87c00, {{93.3, 539.7}, {680.3, 24.0}}, value: 0%
+                                                      Other, 0x1101a3480, {{77.3, 581.7}, {712.3, 162.0}}
+                                                        Image, 0x1101a3ac0, {{93.3, 597.7}, {52.0, 52.0}}, identifier: 'drop.fill', label: '물방울'
+                                                        StaticText, 0x1101a2800, {{157.5, 597.7}, {47.3, 20.3}}, identifier: 'life-habit-row-Water', label: 'Water'
+                                                        Button, 0x1101a3200, {{729.7, 597.7}, {44.0, 44.0}}, identifier: 'life-habit-actions-Water', label: '추가 작업'
+                                                        Button, 0x1101a26c0, {{93.3, 661.7}, {44.0, 44.0}}, identifier: 'minus', label: 'Water 줄이기', Disabled
+                                                        StaticText, 0x1101a2940, {{145.5, 666.8}, {18.7, 33.7}}, identifier: 'life-habit-value-Water', label: '0'
+                                                        Button, 0x1101a3340, {{249.3, 661.7}, {44.0, 44.0}}, identifier: 'plus', label: 'Water 늘리기'
+                                                        StaticText, 0x1101a3840, {{168.2, 679.2}, {73.3, 18.0}}, label: '/ 8 glasses'
+                                                        Image, 0x1101a2a80, {{94.3, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: '물방울'
+                                                        Image, 0x1101a3d40, {{108.7, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: '물방울'
+                                                        Image, 0x1101a3e80, {{123.0, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: '물방울'
+                                                        Image, 0x1101a3980, {{137.3, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: '물방울'
+                                                        Image, 0x1101a3700, {{151.7, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: '물방울'
+                                                        Image, 0x1101a35c0, {{166.0, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: '물방울'
+                                                        Image, 0x1101a2300, {{180.3, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: '물방울'
+                                                        Image, 0x1101a2440, {{195.0, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: '물방울'
+                                                      Button, 0x1101a2f80, {{77.3, 755.7}, {712.3, 52.0}}, identifier: 'life-completed-toggle', label: '완료 1개'
+                                                        StaticText, 0x1101a2d00, {{77.3, 755.7}, {712.3, 52.0}}, label: '완료 1개'
+                                                        Image, 0x1101a2e40, {{781.7, 775.7}, {7.0, 12.0}}, identifier: 'collapsed'
+                                                    StaticText, 0x1101a3c00, {{67.2, 823.7}, {732.5, 197.0}}, identifier: 'life-workout-summary', label: '이번 주 운동 업적, 1/9 완료, 11월 16일 – 11월 22일, 운동 기록 · 월–일 · DUNE + Apple 건강'
+                                                      StaticText, 0x1101a30c0, {{99.7, 844.7}, {162.8, 24.0}}, label: '이번 주 운동 업적'
+                                                      Image, 0x1101a2bc0, {{99.7, 845.3}, {17.3, 22.3}}, identifier: 'figure.run', label: '달리기'
+                                                      StaticText, 0x1101a2580, {{97.5, 877.3}, {112.0, 14.3}}, identifier: 'life-workout-week-period', label: '11월 16일 – 11월 22일'
+                                                      StaticText, 0x105de1a40, {{97.5, 903.8}, {29.3, 71.7}}, label: '1'
+                                                      Image, 0x105de1180, {{689.7, 899.7}, {80.0, 80.0}}, identifier: 'trophy', label: 'Trophy Cup'
+                                                      StaticText, 0x105de1680, {{130.8, 939.8}, {25.3, 26.3}}, label: '/ 9'
+                                                      StaticText, 0x105de1b80, {{160.2, 949.5}, {21.0, 14.3}}, label: '완료'
+                                                      Other, 0x105de12c0, {{67.2, 981.7}, {732.5, 24.7}}
+                                                      Other, 0x105de1540, {{97.3, 987.7}, {149.0, 13.0}}
+                                                    Button, 0x105de0780, {{97.3, 1020.7}, {672.3, 65.0}}, identifier: 'life-workout-challenges-toggle', label: '운동 도전, 1/9', value: 펼쳐짐
+                                                      StaticText, 0x105de03c0, {{97.5, 1044.2}, {55.7, 18.0}}, label: '운동 도전'
+                                                      StaticText, 0x105de08c0, {{731.2, 1046.0}, {17.0, 14.3}}, label: '1/9'
+                                                      Image, 0x105de1400, {{757.7, 1050.0}, {10.7, 6.3}}, identifier: 'chevron.down', label: '아래로 이동'
+                                                    StaticText, 0x105de17c0, {{122.2, 1095.0}, {68.7, 18.0}}, identifier: 'life-workout-group-routine', label: '루틴 일관성'
+                                                    StaticText, 0x105de1cc0, {{750.5, 1096.8}, {19.0, 14.3}}, label: '0/2'
+                                                    StaticText, 0x105de0b40, {{97.5, 1126.3}, {22.0, 40.7}}, label: '3'
+                                                    StaticText, 0x105de0a00, {{123.5, 1147.3}, {10.7, 14.3}}, label: '회'
+                                                    Other, 0x105de0dc0, {{98.3, 1206.0}, {57.2, 14.3}}, identifier: 'life-workout-metric-weeklyWorkout5', label: '주 5회 운동, 3 / 5'
+                                                      Image, 0x105de0280, {{98.3, 1207.3}, {12.0, 12.0}}, identifier: 'circle', label: '원'
+                                                      StaticText, 0x105de0140, {{113.5, 1206.0}, {42.0, 14.3}}, label: '운동 5회'
+                                                    Other, 0x105de1040, {{172.3, 1206.0}, {56.8, 14.3}}, identifier: 'life-workout-metric-weeklyWorkout7', label: '주 7회 운동, 3 / 7'
+                                                      Image, 0x105de0000, {{172.3, 1207.3}, {12.0, 12.0}}, identifier: 'circle', label: '원'
+                                                      StaticText, 0x105de0640, {{187.5, 1206.0}, {41.7, 14.3}}, label: '운동 7회'
+                                                    StaticText, 0x105de0c80, {{126.5, 1248.3}, {55.7, 18.0}}, identifier: 'life-workout-group-strength', label: '근력 분할'
+                                                    StaticText, 0x105de1900, {{750.5, 1250.2}, {19.0, 14.3}}, label: '1/6'
+                                                    StaticText, 0x110c36300, {{98.3, 1390.3}, {83.8, 14.4}}, label: '최고 연속 1주'
+                                                    StaticText, 0x110c34000, {{119.8, 1434.2}, {55.7, 18.0}}, identifier: 'life-workout-group-running', label: '러닝 거리'
+                                                    StaticText, 0x110c34140, {{750.5, 1436.1}, {19.0, 14.3}}, label: '0/1'
+                                                    StaticText, 0x110c361c0, {{97.5, 1465.7}, {672.0, 40.7}}, identifier: 'life-workout-metric-weeklyRunning15km', label: '0, / 15 km, 15 km 남음'
+                                                      StaticText, 0x110c34500, {{97.5, 1465.7}, {22.0, 40.7}}, label: '0'
+                                                      StaticText, 0x110c34280, {{123.5, 1486.7}, {42.7, 14.3}}, label: '/ 15 km'
+                                                      StaticText, 0x110c34640, {{709.8, 1486.7}, {59.7, 14.3}}, label: '15 km 남음'
+                                                    StaticText, 0x110c348c0, {{97.5, 1638.7}, {183.0, 13.3}}, identifier: 'life-workout-source', label: '운동 기록 · 월–일 · DUNE + Apple 건강'
+                                                    Button, 0x110c35cc0, {{97.3, 1708.0}, {672.3, 44.0}}, identifier: 'habit-heatmap', label: '실천의 리듬'
+                                                      StaticText, 0x110c34780, {{97.3, 1708.0}, {672.3, 44.0}}, label: '실천의 리듬'
+                                                      Image, 0x110c34b40, {{99.3, 1722.0}, {22.0, 16.0}}, identifier: 'chart.bar.fill', label: '막대 차트'
+                                                      Image, 0x110c34a00, {{215.3, 1726.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                                    StaticText, 0x110c34dc0, {{97.5, 1768.1}, {118.0, 40.7}}, label: '1건 완료'
+                                                    StaticText, 0x110c34c80, {{97.5, 1824.7}, {93.3, 14.3}}, label: '현재 등록 습관 기준'
+                                                    Other, 0x110c343c0, {{97.5, 1855.1}, {672.0, 59.3}}, identifier: 'life-hero-trend'
+                                                      StaticText, 0x110c34f00, {{97.5, 1855.1}, {69.0, 14.3}}, label: '일별 완료 기록'
+                                                      StaticText, 0x110c35680, {{673.5, 1856.1}, {96.0, 13.3}}, label: '11월 13일–11월 19일'
+                                                      StaticText, 0x110c35540, {{97.5, 1896.4}, {211.0, 18.0}}, label: '추이를 보여줄 데이터가 부족합니다.'
+                                                    StaticText, 0x110c35400, {{97.5, 1945.4}, {91.7, 18.0}}, label: '28일 기록 패턴'
+                                                    Other, 0x110c352c0, {{97.3, 1979.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '10월 23일', value: 시작 전
+                                                    Other, 0x110c35180, {{194.0, 1979.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '10월 24일', value: 시작 전
+                                                    Other, 0x110c35040, {{290.7, 1979.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '10월 25일', value: 시작 전
+                                                    Other, 0x110c35a40, {{387.3, 1979.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: '10월 26일', value: 시작 전
+                                                    Other, 0x110c35f40, {{483.7, 1979.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '10월 27일', value: 시작 전
+                                                    Other, 0x110c35e00, {{580.3, 1979.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '10월 28일', value: 시작 전
+                                                    Other, 0x110c36080, {{677.0, 1979.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: '10월 29일', value: 시작 전
+                                                    Other, 0x110c35b80, {{97.3, 2001.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '10월 30일', value: 시작 전
+                                                    Other, 0x110c357c0, {{194.0, 2001.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '10월 31일', value: 시작 전
+                                                    Other, 0x110c35900, {{290.7, 2001.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 1일', value: 시작 전
+                                                    Other, 0x110693480, {{387.3, 2001.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 2일', value: 시작 전
+                                                    Other, 0x110691b80, {{483.7, 2001.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 3일', value: 시작 전
+                                                    Other, 0x110691cc0, {{580.3, 2001.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 4일', value: 시작 전
+                                                    Other, 0x110691e00, {{677.0, 2001.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 5일', value: 시작 전
+                                                    Other, 0x110691f40, {{97.3, 2023.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 6일', value: 시작 전
+                                                    Other, 0x110692080, {{194.0, 2023.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 7일', value: 시작 전
+                                                    Other, 0x1106921c0, {{290.7, 2023.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 8일', value: 시작 전
+                                                    Other, 0x110692300, {{387.3, 2023.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 9일', value: 시작 전
+                                                    Other, 0x110692440, {{483.7, 2023.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 10일', value: 시작 전
+                                                    Other, 0x110692580, {{580.3, 2023.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 11일', value: 시작 전
+                                                    Other, 0x1106926c0, {{677.0, 2023.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 12일', value: 시작 전
+                                                    Other, 0x110692800, {{97.3, 2045.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 13일', value: 시작 전
+                                                    Other, 0x110692940, {{194.0, 2045.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 14일', value: 시작 전
+                                                    Other, 0x110692a80, {{290.7, 2045.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 15일', value: 시작 전
+                                                    Other, 0x110692bc0, {{387.3, 2045.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 16일', value: 시작 전
+                                                    Other, 0x110692d00, {{483.7, 2045.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 17일', value: 시작 전
+                                                    Other, 0x110692e40, {{580.3, 2045.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 18일', value: 시작 전
+                                                    Other, 0x110692f80, {{677.0, 2045.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: '11월 19일', value: 1
+                                                    StaticText, 0x1106930c0, {{97.5, 2079.4}, {103.3, 13.3}}, label: '시작 전 · 0 · 1 · 2 · 3+'
+                                                    Button, 0x110693200, {{97.3, 2148.7}, {672.3, 44.0}}, identifier: 'life-weekly-report-button', label: '주간 돌아보기'
+                                                      StaticText, 0x110693340, {{97.3, 2148.7}, {672.3, 44.0}}, label: '주간 돌아보기'
+                                                      Image, 0x110691a40, {{99.0, 2161.0}, {16.0, 19.3}}, identifier: 'sparkles', label: '반짝반짝'
+                                                      Image, 0x110690140, {{223.3, 2167.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                                    StaticText, 0x1106903c0, {{97.5, 2208.7}, {111.0, 14.3}}, label: '11월 16일 – 11월 19일'
+                                                    StaticText, 0x110690500, {{97.5, 2239.1}, {22.7, 40.7}}, identifier: 'life-weekly-days-recorded', label: '1'
+                                                    StaticText, 0x110690640, {{443.5, 2239.1}, {22.7, 40.7}}, identifier: 'life-weekly-completed-practices', label: '1'
+                                                    StaticText, 0x110690780, {{97.5, 2283.7}, {55.3, 14.3}}, label: '기록한 날짜'
+                                                    StaticText, 0x110690a00, {{443.5, 2283.7}, {55.3, 14.3}}, label: '완료한 실천'
+                                                    StaticText, 0x110690b40, {{97.5, 2314.1}, {93.3, 14.3}}, label: '현재 등록 습관 기준'
+                                                    Button, 0x110690c80, {{77.3, 2364.3}, {712.3, 76.0}}, identifier: 'life-manage-habits', label: '습관 관리'
+                                                      StaticText, 0x110690dc0, {{93.3, 2380.3}, {680.3, 44.0}}, label: '습관 관리'
+                                                      Image, 0x110690f00, {{95.3, 2395.0}, {17.7, 15.0}}, identifier: 'slider.horizontal.3', label: '편집'
+                                                      Image, 0x110691040, {{192.3, 2399.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                                    Other, 0x110691180, {{0.0, 0.0}, {0.0, 0.0}}
+                                                  Other, 0x1106912c0, {{918.0, 82.0}, {30.0, 532.0}}, label: '수직 스크롤 막대, 5페이지', value: 0%
+                                                    Other, 0x110691400, {{945.0, 85.0}, {3.0, 141.0}}
+                                                  Other, 0x1106917c0, {{918.0, 82.0}, {30.0, 532.0}}, label: '수직 스크롤 막대, 5페이지', value: 0%
+                                                    Other, 0x110691900, {{945.0, 85.0}, {3.0, 141.0}}
+                                                Button, 0x1106935c0, {{403.7, 198.0}, {60.0, 24.0}}, identifier: 'wave-refresh-test-trigger', label: 'Trigger Refresh', value: 0
+                                                Other, 0x110693700, {{433.7, 358.7}, {0.0, 0.0}}
+                            Other, 0x110693d40, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x110693e80, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x110693ac0, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x110693c00, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: '도구 막대'
+                    Other, 0x110693840, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x110693980, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x110691540, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x110691680, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1106908c0, {{879.0, 124.0}, {48.0, 48.0}}
+                              Other, 0x110690280, {{879.0, 124.0}, {48.0, 48.0}}
+                                Other, 0x1109f4000, {{884.0, 130.0}, {38.0, 36.0}}
+                                  Other, 0x1109f4140, {{884.0, 130.0}, {38.0, 36.0}}
+                                    Other, 0x1109f4280, {{884.0, 130.0}, {38.0, 36.0}}
+                                      Other, 0x1109f43c0, {{884.0, 130.0}, {38.0, 36.0}}
+                                        Button, 0x1109f4500, {{890.3, 130.0}, {25.3, 36.0}}, identifier: 'life-toolbar-add', label: '습관 추가'
+                                          Button, 0x1109f4640, {{890.3, 130.0}, {25.3, 36.0}}
+                                            Image, 0x1109f4780, {{894.0, 139.0}, {18.0, 18.0}}, identifier: 'plus', label: '추가'
+                        Other, 0x1109f48c0, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x1109f4a00, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x1109f4b40, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x1109f4c80, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x1109f4dc0, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x1109f4f00, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x1109f5040, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x1109f5180, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x1109f52c0, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x1109f5400, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x1109f5540, {{881.0, 435.0}, {44.0, 58.0}}, identifier: 'tab-today', label: 'Today'
+                                            Image, 0x1109f5680, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: '채워진 텍스트 클립보드에 있는 하트'
+                                          Button, 0x1109f57c0, {{881.0, 485.0}, {44.0, 58.0}}, identifier: 'tab-activity', label: 'Activity'
+                                            Image, 0x1109f5900, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: '불꽃'
+                                          Button, 0x1109f5a40, {{881.0, 535.0}, {44.0, 58.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                                            Image, 0x1109f5b80, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: '나뭇잎'
+                                          Button, 0x1109f5cc0, {{881.0, 585.0}, {44.0, 58.0}}, identifier: 'tab-life', label: 'Life', Selected
+                                            Image, 0x1109f5e00, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: '체크 표시가 있는 체크리스트'
+                                        Other, 0x1109f5f40, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x1109f6080, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x1109f61c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x1109f6300, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x1109f6440, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x1109f6580, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x1109f66c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x1109f6800, {{881.0, 585.0}, {44.0, 58.0}}
+                                          Other, 0x1109f6940, {{881.0, 585.0}, {44.0, 58.0}}
+                                            Other, 0x1109f6a80, {{881.0, 585.0}, {44.0, 58.0}}
+                                            Other, 0x1109f6bc0, {{881.0, 585.0}, {44.0, 58.0}}
+                                              Other, 0x1109f6d00, {{881.0, 585.0}, {44.0, 58.0}}
+                                                Other, 0x1109f6e40, {{881.0, 585.0}, {44.0, 58.0}}
+                                                  Other, 0x1109f6f80, {{881.0, 585.0}, {44.0, 58.0}}
+                                                Other, 0x1109f70c0, {{881.0, 585.0}, {44.0, 58.0}}
+                                              Other, 0x1109f7200, {{881.0, 585.0}, {44.0, 58.0}}
+              Other, 0x1109f7340, {{433.5, 317.5}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x110a08b40, pid: 64739, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1109f7480, pid: 64739, label: 'DUNE'
+  }

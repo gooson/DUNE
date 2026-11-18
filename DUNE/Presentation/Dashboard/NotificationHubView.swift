@@ -254,7 +254,7 @@ struct NotificationHubView: View {
         .scrollContentBackground(.hidden)
         .frame(maxWidth: 720)
         .frame(maxWidth: .infinity)
-        .background { TabWaveBackground() }
+        .background { TabWaveBackground(forestArtwork: .silhouettes) }
         .navigationBarTitleDisplayMode(.inline)
         .englishNavigationTitle("Notifications")
         .toolbar(.visible, for: .tabBar)

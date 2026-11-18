@@ -1,0 +1,185 @@
+{
+  "selector": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+  "device": "2D8AF89B-3A9E-402B-B8E0-D47158542568",
+  "profile": "ipad",
+  "results": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "2D8AF89B-3A9E-402B-B8E0-D47158542568",
+          "deviceName": "iPad mini (A20 Pro)-wt-Health-a743-4e4d063d0e47",
+          "modelName": "iPad mini (A20 Pro)",
+          "osBuildNumber": "24B8117",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 1,
+        "skippedTests": 0,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Design Capture"
+        }
+      }
+    ],
+    "environmentDescription": "DUNEUITests-DesignCapture \u00b7 Built with macOS 27.2.1",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1795014016.413,
+    "passedTests": 1,
+    "result": "Passed",
+    "runtimeWarnings": [],
+    "skippedTests": 0,
+    "startTime": 1795013772.727,
+    "statistics": [],
+    "testFailures": [],
+    "title": "Test - DUNEUITests",
+    "topInsights": [],
+    "totalTestCount": 1
+  },
+  "screens": [
+    {
+      "screen": "T03",
+      "tab": "Today",
+      "appearance": "Light",
+      "variant": null,
+      "png": "ipad/light/T03.png",
+      "hierarchy": "ipad/light/T03.txt",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "viewport": [
+        756,
+        1158
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Light",
+      "variant": null,
+      "png": "ipad/light/A01.png",
+      "hierarchy": "ipad/light/A01.txt",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "viewport": [
+        756,
+        1158
+      ]
+    },
+    {
+      "screen": "H01",
+      "tab": "Wellness",
+      "appearance": "Light",
+      "variant": null,
+      "png": "ipad/light/H01.png",
+      "hierarchy": "ipad/light/H01.txt",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "viewport": [
+        756,
+        1158
+      ]
+    },
+    {
+      "screen": "L01",
+      "tab": "Life",
+      "appearance": "Light",
+      "variant": null,
+      "png": "ipad/light/L01.png",
+      "hierarchy": "ipad/light/L01.txt",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "viewport": [
+        756,
+        1158
+      ]
+    },
+    {
+      "screen": "T03",
+      "tab": "Today",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "ipad/dark/T03.png",
+      "hierarchy": "ipad/dark/T03.txt",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "viewport": [
+        756,
+        1158
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "ipad/dark/A01.png",
+      "hierarchy": "ipad/dark/A01.txt",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "viewport": [
+        756,
+        1158
+      ]
+    },
+    {
+      "screen": "H01",
+      "tab": "Wellness",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "ipad/dark/H01.png",
+      "hierarchy": "ipad/dark/H01.txt",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "viewport": [
+        756,
+        1158
+      ]
+    },
+    {
+      "screen": "L01",
+      "tab": "Life",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "ipad/dark/L01.png",
+      "hierarchy": "ipad/dark/L01.txt",
+      "pixels": [
+        1512,
+        2316
+      ],
+      "viewport": [
+        756,
+        1158
+      ]
+    }
+  ],
+  "extra_screens": [],
+  "source_run": {
+    "id": "export-ipad-20261118T145531Z",
+    "source_commit": "99fc2a5630c6320c4a45df0ca1f9130208e0da77",
+    "log_sha256": "e5182b385fbb2fde3f2f382e3f22d813867e19abdac4b42d39dbc11b0ffff8ef",
+    "test_case_log": [
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenMatrix]' started.",
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenMatrix]' passed (161.350 seconds)."
+    ]
+  },
+  "test_statuses": {
+    "ThemeMatrixUITests/testForestGreenMatrix()": "Passed"
+  }
+}

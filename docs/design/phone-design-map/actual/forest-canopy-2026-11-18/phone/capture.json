@@ -1,0 +1,281 @@
+{
+  "selector": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+  "device": "87818ADA-F2A2-4D87-9CFC-7FC6939F7BD4",
+  "profile": "phone",
+  "results": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "87818ADA-F2A2-4D87-9CFC-7FC6939F7BD4",
+          "deviceName": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+          "modelName": "iPhone 18 Pro",
+          "osBuildNumber": "24B8117",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        },
+        "expectedFailures": 0,
+        "failedTests": 1,
+        "passedTests": 2,
+        "skippedTests": 0,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Design Capture"
+        }
+      }
+    ],
+    "environmentDescription": "DUNEUITests-DesignCapture \u00b7 Built with macOS 27.2.1",
+    "expectedFailures": 0,
+    "failedTests": 1,
+    "finishTime": 1795013345.571,
+    "passedTests": 2,
+    "result": "Failed",
+    "runtimeWarnings": [],
+    "skippedTests": 0,
+    "startTime": 1795012757.879,
+    "statistics": [],
+    "testFailures": [
+      {
+        "failureText": "XCTAssertEqualWithAccuracy failed: (\"358.6904602050781\") is not equal to (\"366.0\") +/- (\"2.0\")",
+        "targetName": "DUNEUITests",
+        "testIdentifier": 1,
+        "testIdentifierString": "ThemeMatrixUITests/testForestGreenExpandedHistoryAtExtraLargeText()",
+        "testIdentifierURL": "test://com.apple.xcode/DUNE/DUNEUITests/ThemeMatrixUITests/testForestGreenExpandedHistoryAtExtraLargeText",
+        "testName": "testForestGreenExpandedHistoryAtExtraLargeText()"
+      }
+    ],
+    "title": "Test - DUNEUITests",
+    "topInsights": [],
+    "totalTestCount": 3
+  },
+  "screens": [
+    {
+      "screen": "T03",
+      "tab": "Today",
+      "appearance": "Light",
+      "variant": null,
+      "png": "phone/light/T03.png",
+      "hierarchy": "phone/light/T03.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402,
+        874
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Light",
+      "variant": null,
+      "png": "phone/light/A01.png",
+      "hierarchy": "phone/light/A01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402,
+        874
+      ]
+    },
+    {
+      "screen": "H01",
+      "tab": "Wellness",
+      "appearance": "Light",
+      "variant": null,
+      "png": "phone/light/H01.png",
+      "hierarchy": "phone/light/H01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402,
+        874
+      ]
+    },
+    {
+      "screen": "L01",
+      "tab": "Life",
+      "appearance": "Light",
+      "variant": null,
+      "png": "phone/light/L01.png",
+      "hierarchy": "phone/light/L01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402,
+        874
+      ]
+    },
+    {
+      "screen": "T03",
+      "tab": "Today",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "phone/dark/T03.png",
+      "hierarchy": "phone/dark/T03.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402,
+        874
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "phone/dark/A01.png",
+      "hierarchy": "phone/dark/A01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402,
+        874
+      ]
+    },
+    {
+      "screen": "H01",
+      "tab": "Wellness",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "phone/dark/H01.png",
+      "hierarchy": "phone/dark/H01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402,
+        874
+      ]
+    },
+    {
+      "screen": "L01",
+      "tab": "Life",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "phone/dark/L01.png",
+      "hierarchy": "phone/dark/L01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402,
+        874
+      ]
+    }
+  ],
+  "extra_screens": [
+    {
+      "screen": "S01",
+      "tab": "Settings",
+      "appearance": "Light",
+      "variant": "S01-Forest-preview",
+      "png": "phone/light/S01-Forest-preview.png",
+      "hierarchy": "phone/light/S01-Forest-preview.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402,
+        874
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Dark",
+      "variant": "A01-expanded-history-extra-large",
+      "png": "phone/dark/A01-expanded-history-extra-large.png",
+      "hierarchy": "phone/dark/A01-expanded-history-extra-large.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402,
+        874
+      ]
+    }
+  ],
+  "source_run": {
+    "id": "export-phone-20261118T143858Z",
+    "source_commit": "99fc2a5630c6320c4a45df0ca1f9130208e0da77",
+    "log_sha256": "dff08ac97f16b47a65825ce276f13bc3f22d5e2ecc5139b43749c923e072c45d",
+    "test_case_log": [
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenExpandedHistoryAtExtraLargeText]' started.",
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenExpandedHistoryAtExtraLargeText]' failed (46.636 seconds).",
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenMatrix]' started.",
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenMatrix]' passed (120.998 seconds).",
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenSettingsPreview]' started.",
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenSettingsPreview]' passed (42.531 seconds)."
+    ]
+  },
+  "test_statuses": {
+    "ThemeMatrixUITests/testForestGreenExpandedHistoryAtExtraLargeText()": "Failed",
+    "ThemeMatrixUITests/testForestGreenMatrix()": "Passed",
+    "ThemeMatrixUITests/testForestGreenSettingsPreview()": "Passed"
+  },
+  "follow_up": {
+    "id": "history-retry-20261118T145022Z",
+    "selector": "DUNEUITests/ThemeMatrixUITests/testForestGreenExpandedHistoryAtExtraLargeText",
+    "result": {
+      "devicesAndConfigurations": [
+        {
+          "device": {
+            "architecture": "arm64",
+            "deviceId": "87818ADA-F2A2-4D87-9CFC-7FC6939F7BD4",
+            "deviceName": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+            "modelName": "iPhone 18 Pro",
+            "osBuildNumber": "24B8117",
+            "osVersion": "27.2",
+            "platform": "iOS Simulator"
+          },
+          "expectedFailures": 0,
+          "failedTests": 0,
+          "passedTests": 1,
+          "skippedTests": 0,
+          "testPlanConfiguration": {
+            "configurationId": "1",
+            "configurationName": "Design Capture"
+          }
+        }
+      ],
+      "environmentDescription": "DUNEUITests-DesignCapture \u00b7 Built with macOS 27.2.1",
+      "expectedFailures": 0,
+      "failedTests": 0,
+      "finishTime": 1795013523.293,
+      "passedTests": 1,
+      "result": "Passed",
+      "runtimeWarnings": [],
+      "skippedTests": 0,
+      "startTime": 1795013445.575,
+      "statistics": [],
+      "testFailures": [],
+      "title": "Test - DUNEUITests",
+      "topInsights": [],
+      "totalTestCount": 1
+    },
+    "log_sha256": "46ff9515f5b72e09be981c004361a5d80e3b9d61210adf61dbb110e4e8c61c3c",
+    "test_source_sha256": "0761ac505add2bb88a7944fd91d5c86ea8f6939e83a1cd2610c133b5a02a9a8a",
+    "test_case_log": [
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenExpandedHistoryAtExtraLargeText]' started.",
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenExpandedHistoryAtExtraLargeText]' passed (42.198 seconds)."
+    ],
+    "reason": "The first run passed all chart sizing and reachability checks. An AX edge-equality assertion rejected a fully contained date/value group with a 7.31pt trailing inset. The retry checks containment."
+  }
+}

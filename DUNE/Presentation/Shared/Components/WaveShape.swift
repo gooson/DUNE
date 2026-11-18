@@ -172,6 +172,8 @@ extension View {
 /// Tab root background: theme-aware wave motif + gradient.
 /// Dispatches to theme-specific background layers based on `\.appTheme`.
 struct TabWaveBackground: View {
+    var forestArtwork: ForestTabWaveBackground.Artwork = .canopy
+
     @Environment(\.appTheme) private var theme
 
     var body: some View {
@@ -179,7 +181,7 @@ struct TabWaveBackground: View {
             switch theme {
             case .desertWarm:  DesertTabWaveBackground()
             case .oceanCool:   OceanTabWaveBackground()
-            case .forestGreen: ForestTabWaveBackground()
+            case .forestGreen: ForestTabWaveBackground(artwork: forestArtwork)
             case .sakuraCalm:  SakuraTabWaveBackground()
             case .arcticDawn:  OceanLegacyArcticTabWaveBackground()
             case .solarPop:    SolarTabWaveBackground()

@@ -432,6 +432,20 @@ struct ActivityView: View {
                                     .accessibilityIdentifier("activity-hero-score-external")
                                 themeReadinessCopy(readiness)
                             }
+                        } else if theme == .forestGreen {
+                            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                                ViewThatFits(in: .horizontal) {
+                                    HStack(spacing: DS.Spacing.md) {
+                                        themeReadinessRing(readiness)
+                                        themeReadinessStatus(readiness)
+                                    }
+                                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                                        themeReadinessRing(readiness)
+                                        themeReadinessStatus(readiness)
+                                    }
+                                }
+                                themeReadinessNarrative(readiness)
+                            }
                         } else {
                             HStack(alignment: .center, spacing: 18) {
                                 themeReadinessRing(readiness)
@@ -497,6 +511,12 @@ struct ActivityView: View {
         }
         .padding(20)
         .padding(.bottom, theme == .oceanCool ? 44 : 0)
+        .forestHeroArtwork(
+            .train,
+            cornerRadius: 23,
+            borderColor: theme.accentColor.opacity(0.25),
+            prefersFooter: showsReadinessHistory
+        )
         .background {
             if theme == .desertWarm {
                 DesertCardSurface(cornerRadius: 23)
@@ -510,8 +530,10 @@ struct ActivityView: View {
                         }
                     }
                     .overlay {
-                        RoundedRectangle(cornerRadius: 23)
-                            .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
+                        if theme != .forestGreen {
+                            RoundedRectangle(cornerRadius: 23)
+                                .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
+                        }
                     }
             }
         }
@@ -538,14 +560,22 @@ struct ActivityView: View {
 
     private func themeReadinessCopy(_ readiness: TrainingReadiness) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(readiness.status.label)
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(readinessInk)
-            Text(readiness.narrativeMessage)
-                .font(.subheadline)
-                .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : readinessInk.opacity(0.74))
-                .fixedSize(horizontal: false, vertical: true)
+            themeReadinessStatus(readiness)
+            themeReadinessNarrative(readiness)
         }
+    }
+
+    private func themeReadinessStatus(_ readiness: TrainingReadiness) -> some View {
+        Text(readiness.status.label)
+            .font(.title3.weight(.semibold))
+            .foregroundStyle(readinessInk)
+    }
+
+    private func themeReadinessNarrative(_ readiness: TrainingReadiness) -> some View {
+        Text(readiness.narrativeMessage)
+            .font(.subheadline)
+            .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : readinessInk.opacity(0.74))
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     @ViewBuilder

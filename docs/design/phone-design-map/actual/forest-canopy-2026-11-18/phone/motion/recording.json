@@ -1,0 +1,48 @@
+{
+  "profile": "phone",
+  "device": "87818ADA-F2A2-4D87-9CFC-7FC6939F7BD4",
+  "source_recording": "xcrun simctl io <owned device> recordVideo --codec=h264",
+  "source_sha256": "08d7063ee6faa637e3b45fdc86e2d2cd904dd4edecbb06a91ea2455c1eed61b4",
+  "appearance": "Light",
+  "screen": "T03",
+  "source_viewport_px": [
+    1206,
+    2622
+  ],
+  "crop_px": [
+    0,
+    0,
+    1206,
+    678
+  ],
+  "motion_enabled": true,
+  "published_clip_source_start_seconds": 3.25,
+  "video": "phone/motion/today-light.mp4",
+  "frames": [
+    {
+      "source_seconds": 3.8,
+      "published_video_seconds": 0.55,
+      "label": "앞안개가 소나무를 덮은 장면",
+      "png": "phone/motion/fog-present.png"
+    },
+    {
+      "source_seconds": 16.8,
+      "published_video_seconds": 13.55,
+      "label": "안개가 걷혀 소나무가 드러난 장면",
+      "png": "phone/motion/fog-cleared.png"
+    },
+    {
+      "source_seconds": 24.8,
+      "published_video_seconds": 21.55,
+      "label": "앞안개가 다시 차오른 장면",
+      "png": "phone/motion/fog-returned.png"
+    }
+  ],
+  "canopy_region_summed_rgb_mean_absolute_difference_from_clear_frame": [
+    177.812,
+    158.674
+  ],
+  "source_duration_seconds": 25.148333,
+  "published_duration_seconds": 21.9,
+  "playback_speed": 1
+}

@@ -34,7 +34,7 @@ Today의 첫 카드는 밝은 모드에서도 어두운 표면을 유지한다. 
 |---|---|---|
 | [DUNE](themes/dune-design-direction.html) | 먼 모래 능선과 가까운 능선이 다른 속도로 흐름 | 따뜻한 금빛 광택; 데이터 선은 능선보다 선명함 |
 | [OCEAN](themes/ocean-cool-direction.html) | 역방향 해류 위 쪽빛 너울과 갈라진 흰 포말. Today 상단, Activity·Wellness·Life 카드 오른쪽 아래 | 밝은 물빛 광택; 포말은 축·값 위로 오지 않음 |
-| [FOREST](themes/forest-green-direction.html) | 안개와 숲 능선이 깊이별로 이동 | 금빛 광택; 숲의 초록을 좋은 상태색으로 오해하지 않음 |
+| [FOREST](themes/forest-green-direction.html) | 굵은 줄기는 고정하고 솔잎 끝과 잔가지만 작게 흔들림. 24초 동안 앞안개가 먼저 걷히고 골안개가 뒤따라 옅어졌다 다시 차오름 | 금빛 광택; 숲의 초록을 좋은 상태색으로 오해하지 않음 |
 | [SAKURA](themes/sakura-calm-direction.html) | 가지와 꽃 군집은 장면, 소수 꽃잎만 느리게 이동 | 옅은 장밋빛 광택; 밝은 배경에서 데이터 대비 유지 |
 | [ARCTIC](themes/arctic-dawn-direction.html) | 고정된 밤하늘 위에서 오로라 띠만 이동 | 얼음빛 광택; 그래프와 글자는 정지 |
 | [SOLAR](themes/solar-pop-direction.html) | 태양 코어는 고정, 외곽 빛 궤적만 느리게 움직임 | 따뜻한 빛 광택; 값이 변하는 듯한 점멸 금지 |

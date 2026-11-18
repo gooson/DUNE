@@ -1,0 +1,183 @@
+{
+  "selector": "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix",
+  "device": "8BBEA624-C623-42C1-AC0D-5EFDC21CD30F",
+  "profile": "duo-open",
+  "results": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/ThemeMatrixUITests/testForestGreenMatrix"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 1,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/private/tmp/dune-forest-native-a743/duo-theme-open-ForestGreen-20261118T150812Z/ui.log"
+  },
+  "screens": [
+    {
+      "screen": "T03",
+      "tab": "Today",
+      "appearance": "Light",
+      "variant": null,
+      "png": "duo-open/light/T03.png",
+      "hierarchy": "duo-open/light/T03.txt",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "viewport": [
+        951,
+        669
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Light",
+      "variant": null,
+      "png": "duo-open/light/A01.png",
+      "hierarchy": "duo-open/light/A01.txt",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "viewport": [
+        951,
+        669
+      ]
+    },
+    {
+      "screen": "H01",
+      "tab": "Wellness",
+      "appearance": "Light",
+      "variant": null,
+      "png": "duo-open/light/H01.png",
+      "hierarchy": "duo-open/light/H01.txt",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "viewport": [
+        951,
+        669
+      ]
+    },
+    {
+      "screen": "L01",
+      "tab": "Life",
+      "appearance": "Light",
+      "variant": null,
+      "png": "duo-open/light/L01.png",
+      "hierarchy": "duo-open/light/L01.txt",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "viewport": [
+        951,
+        669
+      ]
+    },
+    {
+      "screen": "T03",
+      "tab": "Today",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "duo-open/dark/T03.png",
+      "hierarchy": "duo-open/dark/T03.txt",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "viewport": [
+        951,
+        669
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "duo-open/dark/A01.png",
+      "hierarchy": "duo-open/dark/A01.txt",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "viewport": [
+        951,
+        669
+      ]
+    },
+    {
+      "screen": "H01",
+      "tab": "Wellness",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "duo-open/dark/H01.png",
+      "hierarchy": "duo-open/dark/H01.txt",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "viewport": [
+        951,
+        669
+      ]
+    },
+    {
+      "screen": "L01",
+      "tab": "Life",
+      "appearance": "Dark",
+      "variant": null,
+      "png": "duo-open/dark/L01.png",
+      "hierarchy": "duo-open/dark/L01.txt",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "viewport": [
+        951,
+        669
+      ]
+    }
+  ],
+  "extra_screens": [],
+  "source_run": {
+    "id": "duo-theme-open-ForestGreen-20261118T150812Z",
+    "source_commit": "99fc2a5630c6320c4a45df0ca1f9130208e0da77",
+    "log_sha256": "b06eba335eddf4f0ebf121d5826264368f5e297d596bbbd15c2077414c312848",
+    "test_case_log": [
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenMatrix]' started.",
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testForestGreenMatrix]' passed (252.430 seconds)."
+    ]
+  },
+  "display": {
+    "pose": "open",
+    "stage": "post-test",
+    "active_display": "LCD-1",
+    "active_native_size": [
+      2007,
+      2853
+    ],
+    "orientation": "portrait",
+    "target_angle": 180,
+    "actual_angle": null,
+    "angle_readback": "unavailable in current devicectl",
+    "verified_by": "official active display/backlight and orientation readback"
+  }
+}

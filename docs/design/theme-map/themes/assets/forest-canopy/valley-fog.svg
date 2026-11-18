@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="edge" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#f6ecd6" stop-opacity="0"/>
+      <stop offset=".12" stop-color="#f0e9d3" stop-opacity=".12"/>
+      <stop offset=".31" stop-color="#e6e7d1" stop-opacity=".82"/>
+      <stop offset=".48" stop-color="#d7decc"/>
+    </linearGradient>
+    <filter id="wisps" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".004 .022" numOctaves="3" seed="7" result="grain"/>
+      <feDisplacementMap in="SourceGraphic" in2="grain" scale="74" xChannelSelector="R" yChannelSelector="G" result="bank"/>
+      <feColorMatrix in="grain" result="density" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.18 .28 0 0 .16"/>
+      <feComposite in="bank" in2="density" operator="in"/>
+    </filter>
+  </defs>
+  <g filter="url(#wisps)"><rect x="-40" y="-12" width="800" height="360" fill="url(#edge)"/></g>
+</svg>
