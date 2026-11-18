@@ -498,7 +498,7 @@ def render_portal() -> None:
     pending_html = ''.join(f'<p style="color:#e8bf94">{escape(note)}</p>' for note in sorted(pending_notes))
     artist_gallery = HERE / "actual" / "artist-themes" / "index.html"
     artist_link = ('<p><a href="artist-themes/index.html" style="color:#e8bf94">'
-                   '작가 테마 · 네 탭과 여섯 상세 화면의 실제 캡처 →</a></p>' if artist_gallery.is_file() else '')
+                   '작가 테마 · 실제 화면과 움직임 캡처 →</a></p>' if artist_gallery.is_file() else '')
     html = ('<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             '<title>DUNE · 전체 디자인맵</title><style>'
             'body{margin:0;background:#101819;color:#f5f2eb;font-family:-apple-system,BlinkMacSystemFont,sans-serif}'

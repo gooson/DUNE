@@ -38,7 +38,7 @@ SCREENS = {
     "T04": ("컨디션 상세", "condition-score-detail-screen"),
     "A01": ("Activity", "activity-hero-readiness"),
     "A02": ("운동 준비도", "activity-training-readiness-detail-screen"),
-    "W28": ("운동 기록", "healthkit-workout-detail-screen"),
+    "W28": ("운동 기록 · 목록의 상세 패널", "healthkit-workout-detail-screen"),
     "H01": ("Wellness", "wellness-hero-score"),
     "H02": ("웰니스 점수", "wellness-score-detail-screen"),
     "T06": ("수면 상세", "metric-detail-screen-sleep"),
@@ -104,17 +104,18 @@ def read_attachments(result: Path, folder: Path, theme: str, partial: bool) -> t
     if len(configurations) != 1 or summary.get("passedTests", 0) == 0 or (not partial and summary.get("failedTests") != 0):
         raise ValueError("Expected a successful single-device XCTest result")
     device = configurations[0]["device"]
+    identifier = f"{test_name(theme)}()"
     selector_result = None
     if partial:
         details = json.loads(run("xcrun", "xcresulttool", "get", "test-results", "test-details", "--path",
-                                 str(result), "--test-id", test_name(theme)))
+                                 str(result), "--test-id", identifier))
         case = details["testIdentifier"].removeprefix("DUNEUITests/").removesuffix("()")
         device_ids = [entry["deviceId"] for entry in details.get("devices", [])]
         if case != test_name(theme) or details.get("testResult") != "Passed" or device_ids != [device["deviceId"]]:
             raise ValueError(f"xcresult does not confirm a passing {test_name(theme)} on the recorded device")
         selector_result = {"testIdentifier": details["testIdentifier"], "testResult": details["testResult"]}
     run("xcrun", "xcresulttool", "export", "attachments", "--path", str(result),
-        "--output-path", str(folder), "--test-id", test_name(theme))
+        "--output-path", str(folder), "--test-id", identifier)
     captures = defaultdict(dict)
     for test in read_json(folder / "manifest.json"):
         identifier = test["testIdentifier"].removeprefix("DUNEUITests/").removesuffix("()")
@@ -261,11 +262,14 @@ def render_index(destination: Path) -> str:
             f'<a href="{theme}/{profile}/index.html">{label}</a>'
             for profile, label in DEVICES.items() if (destination / theme / profile / "capture.json").is_file()
         ]
+        if (destination / theme / "motion" / "index.html").is_file():
+            variants.append(f'<a href="{theme}/motion/index.html">움직임</a>')
         if variants:
             links.append(f"<li>{escape(title)} · {' · '.join(variants)}</li>")
     return page("DUNE · 작가 테마 실제 화면",
                 '<p><a href="../index.html">전체 실제 화면</a></p>\n'
-                "<p>네 탭과 여섯 상세 화면의 라이트·다크, 접근성 트리 및 설정의 테마 선택을 확인할 수 있습니다.</p>\n"
+                "<p>수집한 정지 화면과 움직임 검증입니다. 정지 화면은 네 탭과 여섯 상세의 라이트·다크, "
+                "접근성 트리 및 설정의 테마 선택을 포함합니다.</p>\n"
                 + "<ul>\n" + "\n".join(links) + "\n</ul>")
 
 
