@@ -134,8 +134,10 @@
         402.0,
         874.0
       ],
-      "png_sha256": "53abb2097bcc0cefd810a46500cee93bb4b2a2df9d48efca2caf67c2d1fc52a5",
-      "txt_sha256": "955c2bf33aa3ce4edcc0145184ebd5024145438b93294f7df50eede2f2dff052"
+      "png_sha256": "0dea34b553ffcb1417acad9d3a3f13b271d32f432864d34416197af2587451e8",
+      "txt_sha256": "6078bbde492dd52f8b6082b37f7d56ba4e2ec5231d2c96a876eb80ebca355f61",
+      "source_revision": "101993fd15b4",
+      "refresh_selector": "ArtistThemeNativeUITests/testWeeklyReportReadingInk"
     },
     "light/S01": {
       "width": 1206,
@@ -244,8 +246,10 @@
         402.0,
         874.0
       ],
-      "png_sha256": "fe5ddccb1d283348c575ecf245450b06f1eda72d80d6caa4907d010609026976",
-      "txt_sha256": "11dc01b1daa4303231d2fc38d79bf8ff9e4c0c09319972180da423158bc5c234"
+      "png_sha256": "0e97aa4c2f321c583056728ae0e519efbf5219468848e19b6cbb340b1614db6b",
+      "txt_sha256": "5d86edf5475dfc73f6600bee18c8e8654abb4cef34aa7807122e37c8bbb6e5dd",
+      "source_revision": "101993fd15b4",
+      "refresh_selector": "ArtistThemeNativeUITests/testWeeklyReportReadingInk"
     },
     "dark/S01": {
       "width": 1206,
@@ -269,5 +273,63 @@
     "receipt_sha256": "fc34e6729ae05bfe76d6acd86e6262cebd80a5fb8178e28afb1269e3a20c158e",
     "emitted_xcresult": "/Users/shanks/.codex/worktrees/a743/Health/.deriveddata/artist/Logs/Test/Test-DUNEUITests-2026.11.19_02-06-55-+0900.xcresult",
     "preserved_xcresult": "/private/tmp/dune-a743-native-evidence/forest-regular/Test-DUNEUITests-2026.11.19_02-06-55-+0900.xcresult"
-  }
+  },
+  "refreshes": [
+    {
+      "theme": "forestGreen",
+      "device_profile": "regular",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "4A7F8A87-172F-4DD5-90D7-758ABFC261B2",
+        "deviceName": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+        "modelName": "iPhone 18 Pro",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "source_revision": "101993fd15b4",
+      "source_worktree_dirty": false,
+      "receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ArtistThemeNativeUITests/testWeeklyReportReadingInk"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/dune-a743-native-evidence/weekly-report-refresh/ui.log"
+      },
+      "xcresult": "/private/tmp/dune-a743-native-evidence/weekly-report-refresh/Test-DUNEUITests-2026.11.19_02-24-17-+0900.xcresult",
+      "provenance": {
+        "source_revision": "101993fd15b4",
+        "runner_status": 0,
+        "xcodebuild_exit_status": 0,
+        "log": "/private/tmp/dune-a743-native-evidence/weekly-report-refresh/ui.log",
+        "log_sha256": "166a80ea30890ee59f39e5f5c773b20a71e6afb81e18dbba4421d819e9b965a4",
+        "receipt": "/private/tmp/dune-a743-native-evidence/weekly-report-refresh/ui.log.result.json",
+        "receipt_sha256": "6d5716d5dbd71e21973bb867dbeedf8c14be4283a2a9a10b87e0fabb3c363377",
+        "emitted_xcresult": "/Users/shanks/.codex/worktrees/a743/Health/.deriveddata/artist/Logs/Test/Test-DUNEUITests-2026.11.19_02-24-17-+0900.xcresult",
+        "preserved_xcresult": "/private/tmp/dune-a743-native-evidence/weekly-report-refresh/Test-DUNEUITests-2026.11.19_02-24-17-+0900.xcresult"
+      },
+      "selector": "ArtistThemeNativeUITests/testWeeklyReportReadingInk",
+      "screens": [
+        "dark/L08",
+        "light/L08"
+      ]
+    }
+  ]
 }
