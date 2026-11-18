@@ -145,6 +145,8 @@ struct ExerciseListSection: View {
                 systemImage: "exclamationmark.triangle",
                 description: Text("This record may have been deleted.")
             )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background { DetailWaveBackground() }
         }
     }
 

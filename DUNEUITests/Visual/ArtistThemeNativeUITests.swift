@@ -1,4 +1,5 @@
 @preconcurrency import XCTest
+import UIKit
 
 /// Captures the production routes shown in the artist theme gallery.
 @MainActor
@@ -16,19 +17,60 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         continueAfterFailure = false
     }
 
+    func testOceanMotionKeepsContentAnchored() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Ocean motion capture requires a visual audit test plan") }
+        XCTAssertFalse(UIAccessibility.isReduceMotionEnabled, "The owner simulator must allow decorative motion")
+        XCTAssertFalse(ProcessInfo.processInfo.isLowPowerModeEnabled)
+        app = XCUIApplication()
+        app.launchArguments = themeLaunchConfiguration("oceanCool", style: "light").launchArguments
+            .filter { $0 != "--ui-disable-animations" }
+        app.launch()
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
+        dismissIconConfirmation()
+
+        navigateToDashboard()
+        captureOceanMotion("T03", score: AXID.dashboardHeroCondition, control: AXID.dashboardToolbarSettings)
+        open(AXID.dashboardHeroCondition)
+        _ = waitForElement(AXID.conditionScoreDetailScreen, timeout: 15)
+        captureOceanMotion("T04", score: "condition-detail-hero-ring", control: "BackButton")
+    }
+
+    private func captureOceanMotion(_ screen: String, score: String, control: String) {
+        let scoreElement = waitForElement(score, timeout: 15)
+        let controlElement = waitForElement(control, timeout: 15)
+        VisualAudit.capture("Artist oceanCool motion \(screen) frame 1")
+        let scoreFrame = scoreElement.frame
+        let scoreLabel = scoreElement.label
+        let controlFrame = controlElement.frame
+        XCTAssertFalse(scoreLabel.isEmpty)
+        XCTAssertTrue(app.windows.firstMatch.frame.intersects(scoreFrame))
+        XCTAssertTrue(controlElement.isHittable)
+        for frame in 2...3 {
+            VisualAudit.capture("Artist oceanCool motion \(screen) frame \(frame)")
+            XCTAssertEqual(scoreElement.frame, scoreFrame)
+            XCTAssertEqual(scoreElement.label, scoreLabel)
+            XCTAssertEqual(controlElement.frame, controlFrame)
+            XCTAssertTrue(controlElement.isHittable)
+        }
+    }
+
+    private func themeLaunchConfiguration(_ theme: String, style: String) -> LaunchConfiguration {
+        var configuration = launchConfiguration
+        configuration.initialTabSelectionArgument = "today"
+        configuration.additionalArguments += [
+            "--ui-test-theme", theme, "--ui-test-style", style,
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL",
+            "-morningBriefingDisabled", "YES"
+        ]
+        return configuration
+    }
+
     private func captureTheme(_ theme: String) throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Artist theme design capture requires a visual audit test plan") }
 
         for style in ["light", "dark"] {
-            var configuration = launchConfiguration
-            configuration.initialTabSelectionArgument = "today"
-            configuration.additionalArguments += [
-                "--ui-test-theme", theme, "--ui-test-style", style,
-                "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
-                "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL",
-                "-morningBriefingDisabled", "YES"
-            ]
-            launchApp(with: configuration)
+            launchApp(with: themeLaunchConfiguration(theme, style: style))
             reassertDuoOpenLandscapeIfNeeded()
             XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "Primary navigation for \(theme) \(style)")
             dismissIconConfirmation()
@@ -57,9 +99,12 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         open(AXID.activityHeroReadiness)
         capture("A02", showing: AXID.activityTrainingReadinessDetailScreen, prefix: prefix)
         goBack(to: AXID.activityHeroReadiness)
-        open("activity-recent-workout-mock-workout-running-tempo", maxSwipes: 24)
+        open(AXID.activityRecentSeeAll, maxSwipes: 24)
+        _ = waitForElement(AXID.exerciseViewScreen, timeout: 10)
+        open(AXID.exerciseRow("mock-workout-running-tempo"), maxSwipes: 12)
         capture("W28", showing: AXID.healthkitWorkoutDetailScreen, prefix: prefix)
-        goBack(to: "activity-recent-workout-mock-workout-running-tempo")
+        goBack(to: AXID.exerciseViewScreen)
+        goBack(to: AXID.activityRootScroll)
 
         navigateToLife()
         capture("L01", showing: AXID.lifeHeroProgress, prefix: prefix)
@@ -78,7 +123,7 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
 
     private func open(_ identifier: String, maxSwipes: Int = 0) {
         if maxSwipes > 0 {
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: maxSwipes),
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: maxSwipes, timeoutPerCheck: 0.25),
                           "\(identifier) should be reachable")
         }
         let element = waitForElement(identifier, timeout: 15)
@@ -87,9 +132,23 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
     }
 
     private func goBack(to identifier: String) {
-        let back = app.navigationBars.buttons["BackButton"].firstMatch
-        XCTAssertTrue(back.waitForExistence(timeout: 8) && back.isHittable, "Back button should be available")
-        back.tap()
+        let navigationBack = app.navigationBars.buttons["BackButton"].firstMatch
+        let backButtons = app.buttons.matching(identifier: "BackButton")
+        let ready = NSPredicate { _, _ in
+            MainActor.assumeIsolated {
+                (navigationBack.exists && navigationBack.isHittable)
+                    || backButtons.allElementsBoundByIndex.contains(where: \.isHittable)
+            }
+        }
+        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: ready, object: nil)], timeout: 8),
+                       .completed, "Back button should be available")
+        if navigationBack.exists && navigationBack.isHittable {
+            navigationBack.tap()
+        } else {
+            let floatingButtons = backButtons.allElementsBoundByIndex.filter(\.isHittable)
+            XCTAssertEqual(floatingButtons.count, 1, "Duo should show one floating Back button")
+            floatingButtons.first?.tap()
+        }
         _ = waitForElement(identifier, timeout: 10)
     }
 
