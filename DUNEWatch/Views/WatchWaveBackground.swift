@@ -108,6 +108,14 @@ struct WatchWaveBackground: View {
             ContourBackground(style: .watch)
         } else if theme == .waterLilies {
             WatchWaterLiliesBackground()
+        } else if theme == .patisserie {
+            RadialGradient(
+                colors: [Color("PatisserieHighlight").opacity(0.14), Color("PatisserieShadow").opacity(0.26), .clear],
+                center: .topTrailing,
+                startRadius: 4,
+                endRadius: 135
+            )
+            .accessibilityHidden(true)
         } else {
             legacyBackground
         }

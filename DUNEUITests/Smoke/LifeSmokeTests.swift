@@ -199,7 +199,7 @@ final class LifeSeededSmokeTests: SeededUITestBaseCase {
     func testCompactHeroRemainingThemes() throws {
         let themes = [
             "oceanCool", "forestGreen", "sakuraCalm", "arcticDawn",
-            "solarPop", "contourAtlas", "waterLilies"
+            "solarPop", "contourAtlas", "waterLilies", "patisserie"
         ]
         for theme in themes {
             for style in ["light", "dark"] {

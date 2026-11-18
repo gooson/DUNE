@@ -51,6 +51,7 @@ private let themes = [
     ThemePalette(theme: "solarPop", palette: "ultra-coral"),
     ThemePalette(theme: "contourAtlas", palette: "moss-jade"),
     ThemePalette(theme: "waterLilies", palette: "violet-mint"),
+    ThemePalette(theme: "patisserie", palette: "rose-cream"),
 ]
 
 private func rgb(_ hex: String) throws -> [Double] {

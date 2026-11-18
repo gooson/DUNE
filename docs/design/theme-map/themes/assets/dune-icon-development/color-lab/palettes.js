@@ -201,6 +201,16 @@ window.dunePaletteData = {
       "b": "#7DADEB",
       "background": "#252639",
       "desc": "분홍과 블루의 또렷한 대비"
+    },
+    {
+      "id": "rose-cream",
+      "number": 21,
+      "name": "로즈 × 크림",
+      "category": "파스텔",
+      "a": "#DBA6AC",
+      "b": "#FFE2B5",
+      "background": "#2B2832",
+      "desc": "장밋빛 아이싱과 부드러운 크림색"
     }
   ],
   "sourceVersion": "v6",
@@ -211,5 +221,5 @@ window.dunePaletteData = {
     "highlight": "#ffffff"
   },
   "method": "Browser SVG color matrix, same source bitmap and geometry across palettes; target anchors with tonal shading. Runtime UI, not 180 new AI generations.",
-  "scope": "9 selected forms ×20 palettes; output is color study, not app asset replacement."
+  "scope": "9 selected forms ×21 palettes; output is color study, not app asset replacement."
 };

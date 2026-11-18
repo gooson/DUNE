@@ -11,6 +11,7 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
     func testSolarPop() throws { try captureTheme("solarPop") }
     func testContourAtlas() throws { try captureTheme("contourAtlas") }
     func testWaterLilies() throws { try captureTheme("waterLilies") }
+    func testPatisserie() throws { try captureTheme("patisserie") }
 
     override func setUpWithError() throws {
         continueAfterFailure = false

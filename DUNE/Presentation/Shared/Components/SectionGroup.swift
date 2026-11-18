@@ -25,13 +25,19 @@ struct SectionGroup<Content: View>: View {
         case .sakuraCalm: 0.95
         case .arcticDawn: 0.85
         case .solarPop:   0.9
-        case .waterLilies: 0.9
+        case .waterLilies, .patisserie: 0.9
         case .desertWarm, .oceanCool, .forestGreen, .contourAtlas: 0.6
         }
     }
 
     private var sectionSurfaceGradient: LinearGradient {
         switch theme {
+        case .patisserie:
+            LinearGradient(
+                colors: [Color("PatisserieHighlight").opacity(0.10), theme.cardBackground],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         case .waterLilies:
             LinearGradient(
                 colors: [
@@ -119,7 +125,7 @@ struct SectionGroup<Content: View>: View {
                 startPoint: .top,
                 endPoint: .bottom
             )
-        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas, .patisserie:
             LinearGradient(
                 colors: [theme.accentColor.opacity(0.08), .clear],
                 startPoint: .top,
@@ -169,7 +175,7 @@ struct SectionGroup<Content: View>: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas, .patisserie:
             LinearGradient(
                 colors: [
                     theme.accentColor.opacity(colorScheme == .dark ? 0.26 : 0.12),

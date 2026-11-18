@@ -21,6 +21,7 @@ struct ScoreHeroPalette {
         case .solarPop: Color(red: 0.243, green: 0.157, blue: 0.153)
         case .contourAtlas: Color(red: 0.157, green: 0.188, blue: 0.161)
         case .waterLilies: Color(red: 0.188, green: 0.212, blue: 0.286)
+        case .patisserie: Color("PatisserieHero")
         }
     }
     var track: Color {
@@ -39,6 +40,7 @@ struct ScoreHeroPalette {
         case .solarPop: Color(red: 0.596, green: 0.376, blue: 0.282)
         case .contourAtlas: Color(red: 0.380, green: 0.455, blue: 0.318)
         case .waterLilies: Color(red: 0.408, green: 0.463, blue: 0.549)
+        case .patisserie: Color("PatisserieShadow")
         }
     }
     var gold: Color { edition?.highlight ?? (isDesert ? Color(red: 0.886, green: 0.718, blue: 0.380) : theme.accentColor) }
@@ -52,6 +54,7 @@ struct ScoreHeroPalette {
         case .sakuraCalm: Color(red: 0.992, green: 0.545, blue: 0.735)
         case .contourAtlas: Color(red: 0.808, green: 0.910, blue: 0.514)
         case .waterLilies: Color(red: 0.906, green: 0.667, blue: 0.792)
+        case .patisserie: Color("PatisserieHighlight")
         default: gold
         }
     }
@@ -96,6 +99,7 @@ struct ScoreHeroPalette {
         case .solarPop: Color(red: 1, green: 0.973, blue: 0.929)
         case .contourAtlas: Color(red: 0.953, green: 0.973, blue: 0.914)
         case .waterLilies: Color(red: 1, green: 0.965, blue: 0.984)
+        case .patisserie: Color(red: 1, green: 0.945, blue: 0.867)
         }
     }
 
