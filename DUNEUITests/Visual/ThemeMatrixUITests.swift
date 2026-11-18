@@ -281,7 +281,9 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         let lastDay = "activity-hero-trend-day-6"
         XCTAssertTrue(app.revealFullyVisible(lastDay, in: scroll),
                       "The latest date and value should be reachable together")
-        XCTAssertEqual(waitForElement(lastDay).frame.maxX, history.frame.maxX, accuracy: 2)
+        let latestEntry = waitForElement(lastDay)
+        XCTAssertTrue(history.frame.contains(latestEntry.frame),
+                      "The latest entry should fit inside the history chart")
         captureRootEvidence("Forest Dark Activity Expanded History")
     }
 

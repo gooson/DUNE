@@ -9,6 +9,8 @@ status: in-progress
 
 # DUNE 전체 디자인맵
 
+2026-11-18 FOREST의 목판 소나무와 안개를 적용한 T03·A01·H01·L01의 실제 화면 32장과 접근성 트리를 등록했다. iPhone·iPad·Duo 접힘·펼침에서 밝은 모드와 어두운 모드를 촬영했다. iPhone의 밝은 S01 테마 미리보기와 큰 글씨의 어두운 A01 펼친 기록, Today 안개가 걷혔다 돌아오는 영상도 함께 볼 수 있다. [FOREST 실제 화면](actual/forest-canopy-2026-11-18/index.html)
+
 2026-11-18 [OCEAN 네 탭 실제 화면](actual/ocean-current-2026-11-18/index.html)은 쪽빛 파도와 흰 포말 적용 후의 T03·A01·H01·L01 밝음·어두움 캡처와 접근성 트리를 제공한다.
 
 2026-10-30 Siri 건강 정보는 T17·T19 및 SQ01–SQ14를 추가했다. [시안 PNG와 실제 캡처 갱신 상태](../full-redesign-map/review/siri-health-queries-2026-10-30/index.html)를 구분한다. SDK27.2에서 새 iPhone 실제17장(14종·키보드·기록 없음)을 수집했고 관련 두 검사는 통과했다. 최대 글씨 메뉴 검사는 조건부 재시도까지 실패했으며 결과 완료 캡처는 없다. 기존 기간·출처/공유 취소 조작과 iPad·Duo 접힘/펼침은 미검증·미갱신이다. 합성 검증 기록이며 시스템 Siri 화면은 아니다. 이전 갤러리 개수와 PNG, 별도 실패 진단2장을 이번 완료 수에 합산하지 않는다.

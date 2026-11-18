@@ -1,0 +1,278 @@
+Attributes: Application, 0x1121bf5c0, pid: 20174, label: 'DUNE'
+Element subtree:
+ →Application, 0x1121bf5c0, pid: 20174, label: 'DUNE'
+    Window (Main), 0x1121be940, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x1121bed00, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x1121bdb80, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x1121bfd40, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x1121bebc0, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x1121bf700, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x1121bea80, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x1121be800, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x1121bfe80, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x1121bee40, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x1121bef80, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x1121bfc00, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x1121bf0c0, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x1121bf980, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x1121bfac0, {{0.0, 0.0}, {402.0, 874.0}}
+                                Other, 0x1121bf840, {{0.0, 0.0}, {402.0, 874.0}}
+                                  Other, 0x1121bdcc0, {{0.0, 0.0}, {402.0, 874.0}}
+                                    Other, 0x104bf2a80, {{0.0, 0.0}, {402.0, 874.0}}
+                                      Other, 0x104bf2d00, {{0.0, 0.0}, {402.0, 874.0}}
+                                        NavigationBar, 0x104bf3d40, {{0.0, 62.0}, {402.0, 106.0}}, identifier: 'Today'
+                                          Other, 0x104bf03c0, {{266.0, 66.0}, {116.0, 36.0}}
+                                            Other, 0x104bf26c0, {{266.0, 66.0}, {116.0, 36.0}}
+                                              Button, 0x104bf2800, {{266.0, 66.0}, {56.0, 36.0}}, identifier: 'dashboard-toolbar-notifications', label: '알림', value: 읽지 않은 알림 3개
+                                                Image, 0x104bf3200, {{266.0, 66.0}, {56.0, 36.0}}, identifier: 'bell', label: '알림'
+                                                StaticText, 0x104bf2f80, {{290.7, 71.0}, {16.3, 15.0}}, identifier: 'dashboard-notifications-unread-badge', label: '3'
+                                              Button, 0x104bf3840, {{334.0, 66.0}, {48.0, 36.0}}, identifier: 'dashboard-toolbar-settings', label: '설정'
+                                          StaticText, 0x104bf3c00, {{16.0, 119.7}, {95.3, 40.7}}, label: 'Today'
+                                        Other, 0x104bf3ac0, {{0.0, 0.0}, {402.0, 874.0}}
+                                          Other, 0x104bf30c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                            Other, 0x104bf3980, {{0.0, 0.0}, {402.0, 874.0}}
+                                              Other, 0x104bf3340, {{0.0, 0.0}, {402.0, 874.0}}
+                                                Image, 0x104bf2bc0, {{-267.3, -70.3}, {1025.7, 486.0}}
+                                                Image, 0x104bf2e40, {{-141.0, -13.7}, {684.0, 253.3}}
+                                                Image, 0x1150a0000, {{-140.3, -15.3}, {683.7, 253.3}}
+                                                Image, 0x1150a0140, {{-140.3, -15.0}, {683.7, 253.3}}
+                                                Image, 0x1150a0280, {{-338.3, 69.0}, {1012.0, 233.0}}
+                                                ScrollView, 0x1150a03c0, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'dashboard-root-scroll'
+                                                  Other, 0x1150a0500, {{0.0, 0.0}, {402.0, 874.0}}
+                                                    Other, 0x1150a0640, {{0.0, 0.0}, {402.0, 156.0}}
+                                                    Other, 0x1150a0780, {{0.0, 741.0}, {402.0, 133.0}}
+                                                  Other, 0x1150a08c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                                    Other, 0x1150a0a00, {{0.0, 741.0}, {402.0, 133.0}}
+                                                  Other, 0x1150a0b40, {{0.0, 168.0}, {402.0, 2618.0}}
+                                                    Button, 0x1150a0c80, {{32.0, 208.0}, {338.0, 288.7}}, identifier: 'dashboard-hero-condition', label: 'CONDITION, Condition score 84, 최상, 최상의 컨디션입니다, 편안한 밤을 위해 긴장을 풀어주세요, 컨디션 추세, 오늘, 점수 추세', value: 상승. 11월 18일 00:00부...
+                                                      StaticText, 0x1150a0dc0, {{32.0, 208.0}, {338.0, 14.3}}, identifier: 'card-navigation-header', label: 'CONDITION'
+                                                        StaticText, 0x1150a0f00, {{32.0, 208.0}, {338.0, 14.3}}, identifier: 'dashboard-hero-heading', label: 'CONDITION'
+                                                        Image, 0x1150a1040, {{121.7, 209.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                                      Other, 0x1150a1180, {{32.0, 234.3}, {104.0, 104.0}}, identifier: 'dashboard-hero-ring', label: 'Condition score 84, 최상'
+                                                        StaticText, 0x1150a12c0, {{60.8, 264.8}, {46.3, 43.0}}, label: '84'
+                                                      StaticText, 0x1150a1400, {{148.0, 254.2}, {136.7, 20.3}}, label: '최상의 컨디션입니다'
+                                                      StaticText, 0x1150a1540, {{148.0, 280.5}, {184.7, 38.0}}, label: '편안한 밤을 위해 긴장을 풀어주세요'
+                                                      StaticText, 0x1150a1680, {{32.0, 350.3}, {68.7, 18.0}}, identifier: 'dashboard-hero-trend', label: '컨디션 추세'
+                                                      StaticText, 0x1150a17c0, {{349.0, 352.2}, {21.0, 14.3}}, label: '오늘'
+                                                      Other, 0x1150a1900, {{32.0, 376.3}, {338.0, 65.3}}, identifier: 'dashboard-hourly-condition-chart', label: '점수 추세', value: 상승. 11월 18일 00:00부...
+                                                        Other, 0x1150a1a40, {{32.0, 376.3}, {338.0, 48.0}}
+                                                          Other, 0x1150a1b80, {{2.0, 376.3}, {39.5, 48.0}}, label: '1,794,920,000에서 1,794,930,000 사이', value: 71
+                                                          Other, 0x1150a1cc0, {{357.4, 376.3}, {39.5, 48.0}}, label: '1,795,010,000에서 1,795,020,000 사이', value: 84
+                                                          Other, 0x1150a1e00, {{32.0, 386.3}, {338.0, 1.0}}, value: 84
+                                                        StaticText, 0x1150a1f40, {{197.0, 428.3}, {79.3, 13.3}}, label: '11월 18일 00:00'
+                                                        StaticText, 0x1150a2080, {{280.3, 428.3}, {6.7, 13.3}}, label: '–'
+                                                        StaticText, 0x1150a21c0, {{291.0, 428.3}, {79.0, 13.3}}, label: '11월 18일 23:00'
+                                                      Other, 0x1150a2300, {{32.0, 466.7}, {338.0, 29.3}}
+                                                        StaticText, 0x1150a2440, {{32.0, 466.7}, {165.0, 29.3}}, identifier: 'dashboard-hero-baseline-HRV 14일 평균 대비', label: 'HRV 14일 평균 대비, 7'
+                                                          StaticText, 0x1150a2580, {{40.0, 474.7}, {93.3, 13.3}}, label: 'HRV 14일 평균 대비'
+                                                          StaticText, 0x1150a26c0, {{181.7, 474.7}, {7.3, 13.3}}, label: '7'
+                                                        StaticText, 0x1150a2800, {{205.0, 466.7}, {165.0, 29.3}}, identifier: 'dashboard-hero-baseline-RHR 14일 평균 대비', label: 'RHR 14일 평균 대비, -4'
+                                                          StaticText, 0x1150a2940, {{213.0, 474.7}, {93.3, 13.3}}, label: 'RHR 14일 평균 대비'
+                                                          StaticText, 0x1150a2a80, {{349.3, 474.7}, {12.7, 13.3}}, label: '-4'
+                                                    Other, 0x1150a2bc0, {{16.0, 532.7}, {370.0, 260.3}}, identifier: 'dashboard-recovery-sleep-card'
+                                                      Button, 0x1150a2d00, {{32.0, 548.7}, {338.0, 44.0}}, identifier: 'dashboard-recovery-sleep-details', label: '회복 & 수면'
+                                                        StaticText, 0x1150a2e40, {{32.0, 548.7}, {338.0, 44.0}}, label: '회복 & 수면'
+                                                        Image, 0x1150a2f80, {{34.0, 563.7}, {21.7, 14.7}}, identifier: 'bed.double.fill', label: '취침 시간'
+                                                        Image, 0x1150a30c0, {{151.3, 567.3}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                                      StaticText, 0x1150a3200, {{32.0, 602.7}, {56.0, 18.0}}, label: '지난 수면'
+                                                      StaticText, 0x1150a3340, {{32.0, 624.7}, {134.0, 33.7}}, identifier: 'dashboard-recovery-last-sleep-value', label: '7시간 10분'
+                                                      Image, 0x1150a3480, {{264.0, 633.7}, {44.0, 44.0}}, identifier: 'dashboard-recovery-sleep-debt', label: '선택됨', Selected
+                                                      StaticText, 0x1150a35c0, {{314.0, 634.3}, {56.0, 18.0}}, identifier: 'dashboard-recovery-sleep-debt', label: '수면 부채'
+                                                      StaticText, 0x1150a3700, {{32.0, 662.3}, {48.7, 14.3}}, identifier: 'dashboard-recovery-last-sleep-date', label: '11월 18일'
+                                                      StaticText, 0x1150a3840, {{314.0, 656.3}, {25.7, 20.3}}, identifier: 'dashboard-recovery-sleep-debt', label: '0분'
+                                                      StaticText, 0x1150a3980, {{32.0, 686.7}, {78.3, 14.3}}, label: '수면 기록 (시간)'
+                                                      StaticText, 0x1150a3ac0, {{259.0, 686.7}, {111.0, 14.3}}, label: '11월 12일 ~ 11월 18일'
+                                                      Other, 0x1150a3c00, {{32.0, 705.0}, {338.0, 72.0}}, identifier: 'dashboard-recovery-sleep-chart'
+                                                        Other, 0x1150a3d40, {{49.0, 711.0}, {45.9, 42.0}}, label: '2026년 11월 12일 0시에서 2026년 11월 13일 0시 사이', value: 6.7
+                                                        Other, 0x1150a3e80, {{94.9, 711.0}, {45.9, 42.0}}, label: '2026년 11월 13일 0시에서 2026년 11월 14일 0시 사이', value: 6.8
+                                                        Other, 0x1150a4000, {{140.7, 711.0}, {45.9, 42.0}}, label: '2026년 11월 14일 0시에서 2026년 11월 15일 0시 사이', value: 6.8
+                                                        Other, 0x1150a4140, {{186.6, 711.0}, {45.9, 42.0}}, label: '2026년 11월 15일 0시에서 2026년 11월 16일 0시 사이', value: 6.9
+                                                        Other, 0x1150a4280, {{232.4, 711.0}, {45.9, 42.0}}, label: '2026년 11월 16일 0시에서 2026년 11월 17일 0시 사이', value: 7
+                                                        Other, 0x1150a43c0, {{278.3, 711.0}, {45.9, 42.0}}, label: '2026년 11월 17일 0시에서 2026년 11월 18일 0시 사이', value: 7.1
+                                                        Other, 0x1150a4500, {{324.1, 711.0}, {45.9, 42.0}}, label: '2026년 11월 18일 0시에서 2026년 11월 19일 0시 사이', value: 7.2
+                                                    Other, 0x1150a4640, {{16.0, 814.0}, {370.0, 103.0}}, identifier: 'dashboard-smart-insights-section'
+                                                      Image, 0x1150a4780, {{18.0, 814.3}, {10.0, 17.3}}, identifier: 'lightbulb.fill', label: '전구'
+                                                      StaticText, 0x1150a48c0, {{35.0, 814.0}, {52.0, 18.0}}, label: '인사이트'
+                                                      Image, 0x1150a4a00, {{39.0, 857.7}, {19.7, 20.3}}, identifier: 'dashboard-insight-night-rest', label: '청명한 밤'
+                                                      StaticText, 0x1150a4b40, {{69.0, 856.0}, {26.0, 18.0}}, identifier: 'dashboard-insight-night-rest', label: '회복'
+                                                      Button, 0x1150a4c80, {{325.0, 856.0}, {44.0, 44.0}}, identifier: 'dashboard-insight-night-rest', label: '닫기'
+                                                      StaticText, 0x1150a4dc0, {{69.0, 876.0}, {169.3, 14.3}}, identifier: 'dashboard-insight-night-rest', label: '편안한 밤을 위해 긴장을 풀어주세요'
+                                                    Other, 0x1150a4f00, {{16.0, 937.0}, {370.0, 262.7}}, identifier: 'dashboard-daily-digest'
+                                                      StaticText, 0x1150a5040, {{34.0, 953.3}, {102.3, 20.3}}, identifier: 'dashboard-digest-header', label: '오늘의 요약'
+                                                      Image, 0x1150a5180, {{34.0, 954.3}, {14.7, 18.3}}, identifier: 'dashboard-digest-header', label: '일반 텍스트 문서'
+                                                      StaticText, 0x1150a52c0, {{321.3, 958.3}, {48.7, 14.3}}, identifier: 'dashboard-digest-date', label: '11월 18일'
+                                                      StaticText, 0x1150a5400, {{32.0, 990.0}, {31.3, 14.3}}, identifier: 'dashboard-digest-condition', label: '컨디션'
+                                                      Other, 0x1150a5540, {{201.0, 990.0}, {0.3, 77.3}}
+                                                      StaticText, 0x1150a5680, {{217.2, 990.0}, {34.7, 14.3}}, identifier: 'dashboard-digest-steps', label: '걸음 수'
+                                                      StaticText, 0x1150a57c0, {{32.0, 1008.3}, {44.0, 40.7}}, identifier: 'dashboard-digest-condition', label: '84'
+                                                      StaticText, 0x1150a5900, {{217.2, 1008.3}, {95.7, 40.7}}, identifier: 'dashboard-digest-steps', label: '8,200'
+                                                      StaticText, 0x1150a5a40, {{32.0, 1053.0}, {60.0, 14.3}}, identifier: 'dashboard-digest-condition', label: '어제보다 +3'
+                                                      Other, 0x1150a5b80, {{32.0, 1083.3}, {338.0, 0.3}}
+                                                      StaticText, 0x1150a5cc0, {{32.0, 1099.7}, {314.0, 38.0}}, identifier: 'dashboard-digest-preview', label: '오늘 컨디션 점수는 84점이었습니다 (어제 대비 +3). workout 운동을 완료했습니다.'
+                                                      Button, 0x1150a5e00, {{32.0, 1139.7}, {338.0, 44.0}}, identifier: 'dashboard-digest-summary-toggle', label: '요약 더 보기', value: 접힘
+                                                        StaticText, 0x1150a5f40, {{32.0, 1139.7}, {338.0, 44.0}}, label: '요약 더 보기'
+                                                        Image, 0x1150a6080, {{110.0, 1158.7}, {10.7, 6.3}}, identifier: 'chevron.down', label: '아래로 이동'
+                                                    ScrollView, 0x1150a61c0, {{16.0, 1219.7}, {370.0, 34.3}}, identifier: 'dashboard-quick-actions'
+                                                      Other, 0x1150a6300, {{16.0, 1219.7}, {195.3, 34.3}}
+                                                        Button, 0x1150a6440, {{20.0, 1219.7}, {102.7, 34.3}}, identifier: 'dashboard-quick-action-weight', label: '체중 기록'
+                                                          Image, 0x1150a6580, {{33.7, 1229.0}, {15.3, 15.7}}, identifier: 'scalemass.fill', label: '질량을 재는 저울, 채워짐'
+                                                          StaticText, 0x1150a66c0, {{54.7, 1227.8}, {56.0, 18.0}}, label: '체중 기록'
+                                                        Button, 0x1150a6800, {{130.7, 1219.7}, {76.7, 34.0}}, identifier: 'dashboard-quick-action-sleep', label: '수면'
+                                                          Image, 0x1150a6940, {{144.7, 1230.3}, {18.7, 12.7}}, identifier: 'bed.double.fill', label: '취침 시간'
+                                                          StaticText, 0x1150a6a80, {{169.3, 1227.8}, {26.0, 18.0}}, label: '수면'
+                                                    Image, 0x1150a6bc0, {{23.0, 1275.3}, {11.7, 17.3}}, identifier: 'pin.fill', label: '핀'
+                                                    StaticText, 0x1150a6d00, {{41.7, 1275.0}, {39.0, 18.0}}, label: '고정됨'
+                                                    Button, 0x1150a6e40, {{356.0, 1275.0}, {26.0, 18.0}}, identifier: 'dashboard-pinned-edit', label: '편집'
+                                                    Other, 0x1150a6f80, {{16.0, 1306.0}, {370.0, 234.7}}, identifier: 'dashboard-pinned-grid'
+                                                      Button, 0x1150a70c0, {{16.0, 1306.0}, {180.0, 234.7}}, identifier: 'dashboard-metric-hrv', label: 'HRV, 66, ms, 어제 대비, 1, 최근 기록 · 항목별 척도, 2026년 11월 18일 00:00'
+                                                        StaticText, 0x1150a7200, {{33.3, 1334.6}, {55.7, 18.0}}, label: 'HRV'
+                                                        Image, 0x1150a7340, {{33.3, 1336.0}, {15.0, 16.0}}, identifier: 'waveform.path.ecg', label: '심전도 파형 경로'
+                                                        StaticText, 0x1150a7480, {{32.0, 1374.0}, {45.0, 40.7}}, identifier: 'dashboard-workout-value-hrv', label: '66'
+                                                        StaticText, 0x1150a75c0, {{81.0, 1395.0}, {17.0, 14.3}}, label: 'ms'
+                                                        StaticText, 0x1150a7700, {{32.0, 1424.7}, {41.3, 13.3}}, label: '어제 대비'
+                                                        Image, 0x1150a7840, {{84.3, 1427.7}, {7.0, 7.0}}, identifier: 'arrow.up.right', label: '오른쪽 위를 향한 대각선 화살표'
+                                                        StaticText, 0x1150a7980, {{94.3, 1424.7}, {7.3, 13.3}}, label: '1'
+                                                        Other, 0x1150a7ac0, {{31.2, 1447.2}, {149.5, 35.5}}
+                                                        StaticText, 0x1150a7c00, {{32.0, 1490.0}, {101.7, 13.3}}, label: '최근 기록 · 항목별 척도'
+                                                        StaticText, 0x1150a7d40, {{32.0, 1511.3}, {19.3, 13.3}}, label: '2026년 11월 18일 00:00'
+                                                      Button, 0x1150a7e80, {{206.0, 1306.0}, {180.0, 234.7}}, identifier: 'dashboard-metric-rhr', label: 'RHR, 54, bpm, 어제 대비, 2, 최근 기록 · 항목별 척도, 2026년 11월 18일 00:00'
+                                                        StaticText, 0x1150a8000, {{224.0, 1335.0}, {56.3, 18.0}}, label: 'RHR'
+                                                        Image, 0x1150a8140, {{224.0, 1337.3}, {15.0, 14.0}}, identifier: 'heart.fill', label: '좋아요'
+                                                        StaticText, 0x1150a8280, {{222.0, 1374.0}, {45.0, 40.7}}, identifier: 'dashboard-workout-value-rhr', label: '54'
+                                                        StaticText, 0x1150a83c0, {{271.0, 1395.0}, {25.3, 14.3}}, label: 'bpm'
+                                                        StaticText, 0x1150a8500, {{222.0, 1424.7}, {41.3, 13.3}}, label: '어제 대비'
+                                                        Image, 0x1150a8640, {{274.3, 1427.7}, {7.0, 7.0}}, identifier: 'arrow.down.right', label: '오른쪽 아래 대각선 화살표'
+                                                        StaticText, 0x1150a8780, {{284.3, 1424.7}, {7.3, 13.3}}, label: '2'
+                                                        Other, 0x1150a88c0, {{221.2, 1447.2}, {149.5, 35.5}}
+                                                        StaticText, 0x1150a8a00, {{222.0, 1490.0}, {101.7, 13.3}}, label: '최근 기록 · 항목별 척도'
+                                                        StaticText, 0x1150a8b40, {{222.0, 1511.3}, {19.3, 13.3}}, label: '2026년 11월 18일 00:00'
+                                                    StaticText, 0x1150a8c80, {{316.0, 1560.7}, {70.0, 13.3}}, label: '11초 전 업데이트됨'
+                                                    Other, 0x1150a8dc0, {{16.0, 1594.6}, {370.0, 596.0}}, identifier: 'dashboard-section-activity'
+                                                      StaticText, 0x1150a8f00, {{17.7, 1594.6}, {48.7, 18.0}}, label: '활동'
+                                                      Image, 0x1150a9040, {{17.7, 1595.3}, {13.0, 16.7}}, identifier: 'figure.run', label: '달리기'
+                                                      Button, 0x1150a9180, {{16.0, 1623.3}, {180.0, 171.3}}, identifier: 'dashboard-metric-steps', label: '걸음 수, 8,200, 걸음, 어제 대비, 535, 2026년 11월 18일 23:46'
+                                                        StaticText, 0x1150a92c0, {{33.3, 1652.3}, {64.3, 18.0}}, label: '걸음 수'
+                                                        Image, 0x1150a9400, {{33.3, 1652.3}, {11.3, 18.0}}, identifier: 'figure.walk', label: '걷기'
+                                                        StaticText, 0x1150a9540, {{32.0, 1691.3}, {99.7, 40.7}}, identifier: 'dashboard-workout-value-steps', label: '8,200'
+                                                        StaticText, 0x1150a9680, {{135.7, 1712.3}, {21.0, 14.3}}, label: '걸음'
+                                                        StaticText, 0x1150a97c0, {{32.0, 1742.0}, {41.3, 13.3}}, label: '어제 대비'
+                                                        Image, 0x1150a9900, {{84.3, 1745.3}, {7.0, 7.0}}, identifier: 'arrow.down.right', label: '오른쪽 아래 대각선 화살표'
+                                                        StaticText, 0x1150a9a40, {{94.3, 1742.0}, {22.0, 13.3}}, label: '535'
+                                                        StaticText, 0x1150a9b80, {{32.0, 1765.3}, {19.3, 13.3}}, label: '2026년 11월 18일 23:46'
+                                                      Button, 0x1150a9cc0, {{206.0, 1623.3}, {180.0, 171.3}}, identifier: 'dashboard-metric-exercise', label: '운동, 48, 분, 14일 평균 대비, 16, 2026년 11월 17일 23:46'
+                                                        StaticText, 0x1150a9e00, {{223.3, 1653.0}, {48.0, 18.0}}, label: '운동'
+                                                        Image, 0x1150a9f40, {{223.3, 1653.0}, {12.7, 16.3}}, identifier: 'flame.fill', label: '불꽃'
+                                                        StaticText, 0x1150aa080, {{222.0, 1691.3}, {45.0, 40.7}}, identifier: 'dashboard-workout-value-exercise', label: '48'
+                                                        StaticText, 0x1150aa1c0, {{271.0, 1712.3}, {10.7, 14.3}}, label: '분'
+                                                        StaticText, 0x1150aa300, {{222.0, 1742.0}, {66.3, 13.3}}, label: '14일 평균 대비'
+                                                        Image, 0x1150aa440, {{299.3, 1745.3}, {7.0, 7.0}}, identifier: 'arrow.down.right', label: '오른쪽 아래 대각선 화살표'
+                                                        StaticText, 0x1150aa580, {{309.3, 1742.0}, {14.7, 13.3}}, label: '16'
+                                                        StaticText, 0x1150aa6c0, {{222.0, 1765.3}, {19.3, 13.3}}, label: '2026년 11월 17일 23:46'
+                                                      Button, 0x1150aa800, {{16.0, 1804.7}, {370.0, 167.3}}, identifier: 'dashboard-metric-exercise', label: '걷기, 6,874, 걸음, 비교 기록 없음, 2026년 10월 28일 23:46'
+                                                        StaticText, 0x1150aa940, {{33.3, 1833.6}, {47.3, 18.0}}, label: '걷기'
+                                                        Image, 0x1150aaa80, {{33.3, 1833.7}, {11.3, 18.0}}, identifier: 'figure.walk', label: '걷기'
+                                                        StaticText, 0x1150aabc0, {{32.0, 1872.7}, {99.7, 40.7}}, identifier: 'dashboard-workout-value-exercise-walking-steps', label: '6,874'
+                                                        StaticText, 0x1150aad00, {{135.7, 1893.7}, {21.0, 14.3}}, label: '걸음'
+                                                        StaticText, 0x1150aae40, {{32.0, 1921.3}, {63.7, 13.3}}, label: '비교 기록 없음'
+                                                        StaticText, 0x1150aaf80, {{32.0, 1942.7}, {34.3, 13.3}}, label: '2026년 10월 28일 23:46'
+                                                      StaticText, 0x1150ab0c0, {{16.0, 1982.0}, {55.3, 14.3}}, label: '종목별 운동'
+                                                      Button, 0x1150ab200, {{16.0, 2006.3}, {370.0, 60.7}}, identifier: 'dashboard-workout-exercise-tempo run', label: 'Tempo Run, 2026년 11월 17일 23:46, 48, 분'
+                                                        Image, 0x1150ab340, {{31.3, 2021.3}, {10.3, 13.3}}, identifier: 'figure.run', label: '달리기'
+                                                        StaticText, 0x1150ab480, {{48.0, 2021.0}, {64.7, 14.3}}, identifier: 'dashboard-workout-title-exercise-tempo run', label: 'Tempo Run'
+                                                        StaticText, 0x1150ab5c0, {{331.3, 2024.7}, {26.0, 24.0}}, identifier: 'dashboard-workout-value-exercise-tempo run', label: '48'
+                                                        StaticText, 0x1150ab700, {{30.0, 2039.7}, {19.3, 13.3}}, identifier: 'dashboard-workout-date-exercise-tempo run', label: '2026년 11월 17일 23:46'
+                                                        StaticText, 0x1150ab840, {{361.3, 2032.3}, {10.7, 14.3}}, label: '분'
+                                                      Button, 0x1150ab980, {{16.0, 2077.0}, {370.0, 59.7}}, identifier: 'dashboard-workout-exercise-upper strength', label: 'Upper Strength, 2026년 11월 16일 23:46, 78, 분'
+                                                        Image, 0x1150abac0, {{31.3, 2093.7}, {15.7, 9.0}}, identifier: 'dumbbell.fill', label: '채워진 아령'
+                                                        StaticText, 0x1150abc00, {{53.3, 2091.0}, {89.7, 14.3}}, identifier: 'dashboard-workout-title-exercise-upper strength', label: 'Upper Strength'
+                                                        StaticText, 0x1150abd40, {{331.3, 2094.8}, {26.0, 24.0}}, identifier: 'dashboard-workout-value-exercise-upper strength', label: '78'
+                                                        StaticText, 0x1150abe80, {{30.0, 2109.3}, {29.0, 13.3}}, identifier: 'dashboard-workout-date-exercise-upper strength', label: '2026년 11월 16일 23:46'
+                                                        StaticText, 0x1150ac000, {{361.3, 2102.5}, {10.7, 14.3}}, label: '분'
+                                                      Button, 0x1150ac140, {{16.0, 2146.7}, {370.0, 44.0}}, identifier: 'dashboard-workout-more', label: '운동 더 보기', value: 접힘
+                                                        StaticText, 0x1150ac280, {{153.7, 2159.7}, {72.7, 18.0}}, label: '운동 더 보기'
+                                                        Image, 0x1150ac3c0, {{233.3, 2165.0}, {13.0, 7.7}}, identifier: 'chevron.down', label: '아래로 이동'
+                                                    Other, 0x1150ac500, {{16.0, 2210.7}, {370.0, 481.0}}, identifier: 'dashboard-section-body'
+                                                      StaticText, 0x1150ac640, {{18.0, 2210.7}, {55.3, 18.0}}, label: '신체'
+                                                      Image, 0x1150ac780, {{18.0, 2213.0}, {19.3, 13.0}}, identifier: 'bed.double.fill', label: '취침 시간'
+                                                      Button, 0x1150ac8c0, {{16.0, 2238.7}, {180.0, 275.7}}, identifier: 'dashboard-metric-sleep', label: '수면, 7시간 10분, 어제 대비, 16, 최근 기록 · 항목별 척도, 2026년 11월 18일 00:00'
+                                                        StaticText, 0x1150aca00, {{33.3, 2268.0}, {50.3, 18.1}}, label: '수면'
+                                                        Image, 0x1150acb40, {{33.3, 2268.0}, {15.3, 17.7}}, identifier: 'moon.zzz.fill', label: '다시 알림'
+                                                        StaticText, 0x1150acc80, {{32.0, 2306.7}, {88.3, 81.7}}, identifier: 'dashboard-workout-value-sleep', label: '7시간 10분'
+                                                        StaticText, 0x1150acdc0, {{32.0, 2398.3}, {41.3, 13.3}}, label: '어제 대비'
+                                                        Image, 0x1150acf00, {{84.3, 2401.7}, {7.0, 7.0}}, identifier: 'arrow.up.right', label: '오른쪽 위를 향한 대각선 화살표'
+                                                        StaticText, 0x1150ad040, {{94.3, 2398.3}, {14.7, 13.3}}, label: '16'
+                                                        Other, 0x1150ad180, {{31.2, 2420.9}, {149.5, 35.5}}
+                                                        StaticText, 0x1150ad2c0, {{32.0, 2463.7}, {101.7, 13.3}}, label: '최근 기록 · 항목별 척도'
+                                                        StaticText, 0x1150ad400, {{32.0, 2485.0}, {19.3, 13.3}}, label: '2026년 11월 18일 00:00'
+                                                      Button, 0x1150ad540, {{206.0, 2238.7}, {180.0, 275.7}}, identifier: 'dashboard-metric-weight', label: '체중, 78.3, kg, 비교 기록 없음, 2026년 11월 18일 23:46'
+                                                        Image, 0x1150ad680, {{223.7, 2268.7}, {15.7, 16.3}}, identifier: 'scalemass.fill', label: '질량을 재는 저울, 채워짐'
+                                                        StaticText, 0x1150ad7c0, {{223.7, 2267.8}, {51.3, 18.0}}, label: '체중'
+                                                        StaticText, 0x1150ad900, {{222.0, 2306.7}, {77.0, 40.7}}, identifier: 'dashboard-workout-value-weight', label: '78.3'
+                                                        StaticText, 0x1150ada40, {{303.0, 2327.7}, {13.7, 14.3}}, label: 'kg'
+                                                        StaticText, 0x1150adb80, {{222.0, 2355.3}, {63.7, 13.3}}, label: '비교 기록 없음'
+                                                        StaticText, 0x1150adcc0, {{222.0, 2376.7}, {19.3, 13.3}}, label: '2026년 11월 18일 23:46'
+                                                      Button, 0x1150ade00, {{16.0, 2524.3}, {370.0, 167.3}}, identifier: 'dashboard-metric-bmi', label: 'BMI, 24.7, 비교 기록 없음, 2026년 11월 18일 23:46'
+                                                        StaticText, 0x1150adf40, {{34.0, 2553.5}, {45.0, 18.0}}, label: 'BMI'
+                                                        Image, 0x1150ae080, {{34.0, 2554.0}, {7.3, 17.0}}, identifier: 'figure.stand', label: '똑바로 서 있는 사람'
+                                                        StaticText, 0x1150ae1c0, {{32.0, 2592.3}, {77.0, 40.7}}, identifier: 'dashboard-workout-value-bmi', label: '24.7'
+                                                        StaticText, 0x1150ae300, {{32.0, 2641.0}, {63.7, 13.3}}, label: '비교 기록 없음'
+                                                        StaticText, 0x1150ae440, {{32.0, 2662.3}, {19.3, 13.3}}, label: '2026년 11월 18일 23:46'
+                                                    Button, 0x1150ae580, {{16.0, 2711.7}, {370.0, 58.3}}, identifier: 'dashboard-health-qa-card', label: '건강 Q&A, 수면, 회복, 최근 운동에 대해 물어보세요.'
+                                                      Image, 0x1150ae6c0, {{30.7, 2725.3}, {27.7, 23.0}}, identifier: 'message.badge.waveform.fill', label: '파형 배지가 있는 메시지 말풍선, 채워짐'
+                                                      StaticText, 0x1150ae800, {{64.0, 2723.7}, {62.7, 18.0}}, label: '건강 Q&A'
+                                                      Image, 0x1150ae940, {{364.0, 2726.7}, {8.7, 12.3}}, identifier: 'chevron.up.chevron.down', label: 'V자형 위/아래'
+                                                      StaticText, 0x1150aea80, {{64.0, 2743.7}, {193.7, 14.3}}, label: '수면, 회복, 최근 운동에 대해 물어보세요.'
+                                                  Other, 0x1150aebc0, {{369.0, 116.0}, {30.0, 675.0}}, label: '수직 스크롤 막대, 5페이지', value: 0%
+                                                    Other, 0x1150aed00, {{396.0, 350.0}, {3.0, 438.0}}
+                                                  Other, 0x1150aee40, {{369.0, 116.0}, {30.0, 675.0}}, label: '수직 스크롤 막대, 5페이지', value: 0%
+                                                    Other, 0x1150aef80, {{396.0, 350.0}, {3.0, 438.0}}
+                                                Button, 0x1150af0c0, {{171.0, 284.0}, {60.0, 24.0}}, identifier: 'wave-refresh-test-trigger', label: 'Trigger Refresh', value: 0
+                                                Other, 0x1150af200, {{201.0, 479.7}, {0.0, 0.0}}
+                                        Toolbar, 0x1150af340, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: '도구 막대'
+                                          Other, 0x1150af480, {{0.0, 0.0}, {402.0, 874.0}}
+                                Toolbar, 0x1150af5c0, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: '도구 막대'
+                                  Other, 0x1150af700, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x1150af840, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x1150af980, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x1150afac0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x1150afc00, {{0.0, 791.0}, {402.0, 83.0}}
+                    Other, 0x1150afd40, {{0.0, 0.0}, {402.0, 874.0}}
+                      TabBar, 0x1150afe80, {{0.0, 791.0}, {402.0, 83.0}}, label: '탭 막대'
+                        Other, 0x10818c000, {{21.0, 791.0}, {360.0, 62.0}}
+                          Other, 0x10818c140, {{21.0, 791.0}, {95.0, 54.0}}
+                          Other, 0x10818c280, {{21.0, 791.0}, {360.0, 62.0}}
+                            Button, 0x10818c3c0, {{25.0, 795.0}, {95.0, 54.0}}, label: 'Today', Selected
+                              Image, 0x10818c500, {{60.0, 798.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: '채워진 텍스트 클립보드에 있는 하트'
+                            Button, 0x10818c640, {{110.7, 795.0}, {95.0, 54.0}}, label: 'Activity'
+                              Image, 0x10818c780, {{146.7, 799.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: '불꽃'
+                            Button, 0x10818c8c0, {{196.3, 795.0}, {95.0, 54.0}}, label: 'Wellness'
+                              Image, 0x10818ca00, {{229.7, 802.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: '나뭇잎'
+                            Button, 0x10818cb40, {{282.0, 795.0}, {95.0, 54.0}}, label: 'Life'
+                              Image, 0x10818cc80, {{313.7, 801.3}, {32.0, 27.3}}, identifier: 'checklist', label: '체크 표시가 있는 체크리스트'
+                          Other, 0x10818cdc0, {{21.0, 791.0}, {360.0, 62.0}}
+                          Other, 0x10818cf00, {{25.0, 795.0}, {95.0, 54.0}}
+                            Other, 0x10818d040, {{25.0, 795.0}, {95.0, 54.0}}
+                              Other, 0x10818d180, {{25.0, 795.0}, {95.0, 54.0}}
+                              Other, 0x10818d2c0, {{25.0, 795.0}, {95.0, 54.0}}
+                                Other, 0x10818d400, {{25.0, 795.0}, {95.0, 54.0}}
+                                  Other, 0x10818d540, {{25.0, 795.0}, {95.0, 54.0}}
+                                    Other, 0x10818d680, {{25.0, 795.0}, {95.0, 54.0}}
+                                  Other, 0x10818d7c0, {{25.0, 795.0}, {95.0, 54.0}}
+                                Other, 0x10818d900, {{25.0, 795.0}, {95.0, 54.0}}
+                    Other, 0x10818da40, {{0.0, 791.0}, {402.0, 83.0}}
+                      Other, 0x10818db80, {{0.0, 791.0}, {402.0, 83.0}}
+                        Other, 0x10818dcc0, {{0.0, 791.0}, {402.0, 83.0}}
+                          Other, 0x10818de00, {{0.0, 791.0}, {402.0, 83.0}}
+                            Other, 0x10818df40, {{0.0, 791.0}, {402.0, 83.0}}
+                              Other, 0x10818e080, {{0.0, 791.0}, {402.0, 83.0}}
+                          Other, 0x10818e1c0, {{0.0, 791.0}, {402.0, 83.0}}
+                            Other, 0x10818e300, {{0.0, 791.0}, {402.0, 83.0}}
+              Other, 0x10818e440, {{0.0, 62.0}, {402.0, 778.0}}
+              Other, 0x10818e580, {{201.0, 451.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x1121bf5c0, pid: 20174, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x10818e6c0, pid: 20174, label: 'DUNE'
+  }

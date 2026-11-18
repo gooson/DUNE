@@ -2,11 +2,11 @@
 tags: [forest, theme, animation]
 date: 2026-11-18
 category: plan
-status: approved
+status: implemented
 ---
 # FOREST · 목판 소나무와 걷히는 안개
 
-승인된 [Forest Canopy 시안](../design/theme-map/themes/forest-green-direction.html)을 앱의 T03·A01·H01·L01에 적용한다. 기존 포레스트 상세·시트와 Watch 화면은 이 네 탭의 장식을 소비하지 않는다.
+승인된 [Forest Canopy 시안](../design/theme-map/themes/forest-green-direction.html)을 앱의 T03·A01·H01·L01에 적용한다. 테마 선택 샘플은 같은 Today 장식의 정지 화면을 쓴다. 알림과 운동 목록은 기존 숲 실루엣을 유지하고, 상세·시트와 Watch 화면은 이 네 탭의 장식을 소비하지 않는다.
 
 ## 영향 파일
 
