@@ -21,7 +21,8 @@
         "actual_captures": "../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
         "verification": "../../reviews/2026-10-24-desert-horizon-final.md",
         "status": "implemented-with-user-deferred-duo-validation"
-      }
+      },
+      "artist": "조지아 오키프"
     },
     {
       "id": "ocean",
@@ -36,7 +37,8 @@
         "#205b75",
         "#4fc3d5",
         "#d7faf6"
-      ]
+      ],
+      "artist": "가쓰시카 호쿠사이"
     },
     {
       "id": "forest",
@@ -57,7 +59,8 @@
         "actual_captures": "../phone-design-map/actual/forest-canopy-2026-11-18/index.html",
         "verification": "../../reviews/2026-11-18-forest-canopy.md",
         "status": "native-implemented"
-      }
+      },
+      "artist": "우타가와 히로시게"
     },
     {
       "id": "sakura",
@@ -72,7 +75,8 @@
         "#aa555f",
         "#e8a3a0",
         "#ffe5cc"
-      ]
+      ],
+      "artist": "사카이 호이쓰"
     },
     {
       "id": "arctic",
@@ -87,7 +91,8 @@
         "#48649b",
         "#64afce",
         "#a7f4dc"
-      ]
+      ],
+      "artist": "로렌 해리스"
     },
     {
       "id": "solar",
@@ -102,7 +107,8 @@
         "#9d4a36",
         "#f1ad46",
         "#ffe19a"
-      ]
+      ],
+      "artist": "빈센트 반 고흐"
     },
     {
       "id": "contour",
@@ -117,7 +123,8 @@
         "#657c36",
         "#bbcf72",
         "#e4efb0"
-      ]
+      ],
+      "artist": "파울 클레"
     },
     {
       "id": "water-lilies",
@@ -136,7 +143,24 @@
       "implementation": {
         "status": "implemented-validation-in-progress",
         "verification": "../full-redesign-map/review/theme-overhaul-2026-11-14/README.md"
-      }
+      },
+      "artist": "클로드 모네"
+    },
+    {
+      "id": "patisserie",
+      "name": "PÂTISSERIE",
+      "title": "Pâtisserie",
+      "file": "artist-editions.html",
+      "artist": "웨인 티보",
+      "motif": "크림색 정물과 푸른 그림자",
+      "motion": "정물은 제자리에 두고 표면의 빛만 느리게 움직임",
+      "detail": "아이싱의 밝은 모서리를 카드 윗선에, 진열대의 푸른 그림자를 카드 아래에 쓴 디자인 제안",
+      "colors": [
+        "#48445a",
+        "#855161",
+        "#dba6ac",
+        "#ffe2b5"
+      ]
     }
   ],
   "studies": [
@@ -1572,5 +1596,24 @@
         "status": "native-implemented-iphone-ipad-focused-validation"
       }
     }
-  ]
+  ],
+  "artist_study": {
+    "file": "artist-editions.html",
+    "title": "아홉 작가 테마 · 네 탭과 공통 상세",
+    "status": "design-proposal",
+    "tabs": [
+      "Today",
+      "Activity",
+      "Wellness",
+      "Life"
+    ],
+    "details": [
+      "Condition Score",
+      "Training Readiness",
+      "Workout Detail",
+      "Wellness Score",
+      "Sleep",
+      "Weekly Report"
+    ]
+  }
 }

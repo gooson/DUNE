@@ -71,9 +71,9 @@
       <div>
         <p class="eyebrow">DUNE / DESIGN ARCHIVE</p>
         <h1>Theme Map</h1>
-        <p class="intro">8개 테마의 현재 방향 시안을 보존한 맵입니다. 테마를 선택해 움직임과 Today 히어로, 그래프, 다른 탭의 표현을 보고 두 시안을 나란히 비교할 수 있습니다. <a href="../full-redesign-map/index.html">8개 테마 전체 구현 맵</a>에서 화면별 적용 범위와 남은 작업을 확인하세요.</p>
+        <p class="intro">기존 8개 테마와 신규 Pâtisserie의 방향 시안을 모았습니다. 테마를 선택해 움직임과 Today 히어로, 그래프, 다른 탭의 표현을 보고 두 시안을 나란히 비교할 수 있습니다. <a href="../full-redesign-map/index.html">8개 테마 전체 구현 맵</a>에서 화면별 적용 범위와 남은 작업을 확인하세요.</p>
       </div>
-      <a class="head-link" href="../full-redesign-map/index.html">전체 구현 맵 ↗</a>
+      <a class="head-link" href="themes/artist-editions.html">아홉 테마를 앱 화면으로 비교 ↗</a>
     </header>
     <p class="note"><strong>방향 시안</strong><span class="separator">·</span> 실제 앱 구현 및 시뮬레이터 캡처와 구분<span class="separator">·</span> <a href="../phone-design-map/actual/index.html">실제 앱 화면</a><span class="separator">·</span> 컨디션 수치와 링 색은 시안 예시이며 실제 앱의 점수 호는 상태색<span class="separator">·</span> 마지막 정리 <span id="updated-date">__UPDATED__</span></p>
     <div class="layout">
@@ -92,11 +92,11 @@
       <section class="workspace" aria-label="선택한 테마 미리보기">
         <div class="workspace-head">
           <div><p class="workspace-eyebrow" id="selected-name">__FIRST_NAME__</p><h2 id="selected-title">__FIRST_TITLE__</h2><p class="workspace-summary" id="selected-description">__FIRST_DESCRIPTION__</p></div>
-          <div class="workspace-actions"><a class="action" id="source-link" href="themes/__FIRST_FILE__" target="_blank" rel="noopener">원본 시안 열기 ↗</a><button class="action" id="compare-toggle" type="button" aria-expanded="false">두 시안 비교</button></div>
+          <div class="workspace-actions"><a class="action" id="source-link" href="themes/__FIRST_FILE__" target="_blank" rel="noopener">이전 원본 시안 ↗</a><button class="action" id="compare-toggle" type="button" aria-expanded="false">두 시안 비교</button></div>
         </div>
         <div class="compare-controls" id="compare-controls" hidden><label for="compare-select">비교할 테마</label><select id="compare-select">__COMPARE_OPTIONS__</select><span>두 미리보기가 각각 움직입니다.</span></div>
         <div class="preview-grid" id="preview-grid">
-          <div class="preview-panel"><div class="preview-caption"><span id="primary-caption">__FIRST_NAME__</span><span>현재 방향</span></div><iframe id="primary-frame" title="선택한 테마 시안" loading="eager" src="themes/__FIRST_FILE__"></iframe></div>
+          <div class="preview-panel"><div class="preview-caption"><span id="primary-caption">__FIRST_NAME__</span><span>현재 방향</span></div><iframe id="primary-frame" title="선택한 테마 시안" loading="eager" src="themes/artist-editions.html?theme=dune&amp;embed=1"></iframe></div>
           <div class="preview-panel" id="compare-panel" hidden><div class="preview-caption"><span id="compare-caption"></span><span>비교</span></div><iframe id="compare-frame" title="비교할 테마 시안" loading="lazy"></iframe></div>
         </div>
         <p class="workspace-foot">시안 원본은 이 맵과 같은 저장소에 보존됩니다. 운영체제에서 움직임 줄이기를 켜면 각 시안의 지속 애니메이션이 멈춥니다.</p>
@@ -127,10 +127,11 @@
       document.querySelectorAll(".theme-choice").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.theme === id)));
       document.getElementById("selected-name").textContent = theme.name;
       document.getElementById("selected-title").textContent = theme.title;
-      document.getElementById("selected-description").textContent = `${theme.motif} · ${theme.motion}. ${theme.detail}`;
+      document.getElementById("selected-description").textContent = `${theme.artist} · ${theme.motif}`;
       document.getElementById("primary-caption").textContent = theme.name;
-      source.href = `themes/${theme.file}`;
-      primaryFrame.src = `themes/${theme.file}`;
+      source.href = theme.file === manifest.artist_study.file ? `themes/${theme.file}?theme=${theme.id}&view=focus` : `themes/${theme.file}`;
+      source.textContent = theme.file === manifest.artist_study.file ? "테마 시안 열기 ↗" : "이전 원본 시안 ↗";
+      primaryFrame.src = `themes/${manifest.artist_study.file}?theme=${theme.id}&embed=1`;
       if (select.value === id) {
         const alternative = themes.find(item => item.id !== id);
         if (alternative) select.value = alternative.id;
@@ -144,7 +145,7 @@
       const theme = themes.find(item => item.id === select.value);
       if (!theme || theme.id === current.id) return;
       document.getElementById("compare-caption").textContent = theme.name;
-      compareFrame.src = `themes/${theme.file}`;
+      compareFrame.src = `themes/${manifest.artist_study.file}?theme=${theme.id}&embed=1`;
     }
 
     compareToggle.addEventListener("click", () => {

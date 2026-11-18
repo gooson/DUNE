@@ -1,5 +1,7 @@
 # T04 컨디션 상세 개편 계약
 
+2026-11-19 [공통 상세 테마 제안](../theme-map/themes/artist-editions.html?theme=forest&tab=today&scene=condition&view=focus)은 T04 상단의 실제 화면 제목 뒤에 테마 그림을 이어 준다. 점수, 상태, 기여 지표, 추세는 카드의 전체 내용 폭을 쓴다.
+
 검토 시안: 원본 detail-redesign-map의 T04. 원본 데이터는 이 작업의 테마 assets에 화면 단위로 보존하며 native 예시 데이터로 사용하지 않는다.
 
 1. 평가 점수: 탭과 같은 CompactConditionRing, 원래 상태 심볼/상태, 실제 평가 시점과 narrative. 접근성 글씨에서는 읽을 수 있는 숫자/상태를 우선한다.

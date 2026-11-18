@@ -35,6 +35,7 @@ def main() -> None:
     cards = []
     options = []
     for theme in data["themes"]:
+        edition_url = f'themes/{escaped(data["artist_study"]["file"])}?theme={escaped(theme["id"])}&amp;view=focus'
         colors = "".join(f'<i style="background:{escaped(color)}"></i>' for color in theme["colors"])
         cards.append(
             f'<div class="theme-card"><button class="theme-choice" type="button" '
@@ -42,7 +43,7 @@ def main() -> None:
             f'<span class="theme-name">{escaped(theme["name"])}</span>'
             f'<span class="theme-title">{escaped(theme["title"])}</span>'
             f'<span class="theme-motif">{escaped(theme["motif"])}</span></button>'
-            f'<a class="theme-open" href="themes/{escaped(theme["file"])}" target="_blank" rel="noopener">열기 ↗</a>'
+            f'<a class="theme-open" href="{edition_url}" target="_blank" rel="noopener">열기 ↗</a>'
             f'<div class="swatches" aria-hidden="true">{colors}</div></div>'
         )
         options.append(f'<option value="{escaped(theme["id"])}">{escaped(theme["name"])} · {escaped(theme["title"])}</option>')
