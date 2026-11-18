@@ -496,6 +496,9 @@ def render_portal() -> None:
     entries.append(f'<a class="card" href="live-activity/index.html">{live_preview}<div class="meta">'
                    f'<strong>WLA01 · Watch 운동 Live Activity</strong><span>{live_count} / {live_total} 상태 실제 캡처</span></div></a>')
     pending_html = ''.join(f'<p style="color:#e8bf94">{escape(note)}</p>' for note in sorted(pending_notes))
+    artist_gallery = HERE / "actual" / "artist-themes" / "index.html"
+    artist_link = ('<p><a href="artist-themes/index.html" style="color:#e8bf94">'
+                   '작가 테마 · 실제 화면과 움직임 캡처 →</a></p>' if artist_gallery.is_file() else '')
     html = ('<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             '<title>DUNE · 전체 디자인맵</title><style>'
             'body{margin:0;background:#101819;color:#f5f2eb;font-family:-apple-system,BlinkMacSystemFont,sans-serif}'
@@ -522,7 +525,7 @@ def render_portal() -> None:
             '<p><a href="../../full-redesign-map/review/hero-dark-surface-contrast-2026-10-19/index.html" style="color:#e8bf94">SAKURA·CONTOUR·WATER LILIES Today 카드 대비 수정 후 실제 캡처 →</a></p>'
             '<p><a href="../../full-redesign-map/review/duo-four-tab-hero-rings-2026-10-22/index.html" style="color:#e8bf94">전용 Duo 접힘·펼침 4탭 링 최신 실제 화면 16장 →</a></p>'
             '<p><a href="../../full-redesign-map/review/life-hero-narrative-2026-10-22/index.html" style="color:#e8bf94">Life 히어로 정보 중복 해소 후 5개 기기 조건·큰 글씨 실제 화면 15장 →</a></p>'
-            + pending_html + '<div class="grid">' + ''.join(entries) + '</div></main></html>')
+            + artist_link + pending_html + '<div class="grid">' + ''.join(entries) + '</div></main></html>')
     (HERE / "actual" / "index.html").write_text(html)
     render_watch_gallery()
     render_comparison()

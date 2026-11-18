@@ -14,8 +14,11 @@ struct LifeHabitHeroView: View {
     private var total: Int { max(0, totalCount) }
     private var remaining: Int { max(0, total - completed) }
     private var fraction: CGFloat { total > 0 ? CGFloat(completed) / CGFloat(total) : 0 }
-    private var gold: Color { theme == .desertWarm ? DS.Color.desertBronze : theme.accentColor }
-    private var lightGold: Color { theme == .desertWarm ? DS.Color.warmGlow : theme.sandColor }
+    private var edition: ArtistThemeEdition? { ArtistThemeEdition.forTheme(theme) }
+    private var gold: Color { edition?.highlight ?? (theme == .desertWarm ? DS.Color.desertBronze : theme.accentColor) }
+    private var lightGold: Color { edition?.heroInk ?? (theme == .desertWarm ? DS.Color.warmGlow : theme.sandColor) }
+    private var ink: Color { edition?.heroInk ?? .primary }
+    private var muted: Color { edition?.heroInk.opacity(0.80) ?? .secondary }
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -28,14 +31,14 @@ struct LifeHabitHeroView: View {
                 Spacer()
                 Text("Today")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(muted)
             }
 
             if total == 0 {
                 Text("No habits today")
                     .font(.title3.weight(.semibold))
                     .frame(maxWidth: .infinity, minHeight: 104, alignment: .leading)
-            } else if theme == .forestGreen && !dynamicTypeSize.isAccessibilitySize {
+            } else if theme == .forestGreen && edition == nil && !dynamicTypeSize.isAccessibilitySize {
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: DS.Spacing.xl) {
                         ring
@@ -56,37 +59,46 @@ struct LifeHabitHeroView: View {
                 }
             }
         }
-        .padding(.bottom, theme == .oceanCool ? 36 : 0)
+        .padding(.bottom, theme == .oceanCool && edition == nil ? 36 : 0)
         .padding(DS.Spacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
         .forestHeroArtwork(.life, cornerRadius: DS.Radius.xxl, borderColor: gold.opacity(DS.Opacity.cardBorder))
+        .foregroundStyle(ink)
         .background {
-            RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous)
-                .fill(theme.cardBackground)
-                .overlay {
-                    RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous)
-                        .fill(LinearGradient(colors: [gold.opacity(colorScheme == .dark ? 0.15 : 0.08), lightGold.opacity(0.06), .clear], startPoint: .topTrailing, endPoint: .bottomLeading))
-                }
-                .overlay(alignment: .bottom) {
-                    if theme == .oceanCool {
-                        OceanHeroShoreline(preset: .life)
-                    } else if theme != .forestGreen {
-                        LifeHeroTerrain()
-                            .stroke(LinearGradient(colors: [gold.opacity(0.08), lightGold.opacity(0.38), gold.opacity(0.12)], startPoint: .leading, endPoint: .trailing), lineWidth: 1)
-                            .frame(height: 72)
-                            .clipped()
-                    }
-                }
-                .overlay {
-                    if theme != .forestGreen {
-                        RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous)
-                            .strokeBorder(gold.opacity(DS.Opacity.cardBorder), lineWidth: 1)
-                    }
-                }
-                .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous))
+            if let edition {
+                ArtistCardSurface(edition: edition, cornerRadius: DS.Radius.xxl, isScoreSurface: true)
+            } else {
+                legacySurface
+            }
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("life-habit-hero")
+    }
+
+    private var legacySurface: some View {
+        RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous)
+            .fill(theme.cardBackground)
+            .overlay {
+                RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous)
+                    .fill(LinearGradient(colors: [gold.opacity(colorScheme == .dark ? 0.15 : 0.08), lightGold.opacity(0.06), .clear], startPoint: .topTrailing, endPoint: .bottomLeading))
+            }
+            .overlay(alignment: .bottom) {
+                if theme == .oceanCool {
+                    OceanHeroShoreline(preset: .life)
+                } else if theme != .forestGreen {
+                    LifeHeroTerrain()
+                        .stroke(LinearGradient(colors: [gold.opacity(0.08), lightGold.opacity(0.38), gold.opacity(0.12)], startPoint: .leading, endPoint: .trailing), lineWidth: 1)
+                        .frame(height: 72)
+                        .clipped()
+                }
+            }
+            .overlay {
+                if theme != .forestGreen {
+                    RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous)
+                        .strokeBorder(gold.opacity(DS.Opacity.cardBorder), lineWidth: 1)
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous))
     }
 
     private var progressDetails: some View {
@@ -105,7 +117,7 @@ struct LifeHabitHeroView: View {
                     .accessibilityIdentifier("life-hero-remaining")
                 Text("Remaining")
                     .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(muted)
             }
             if !dynamicTypeSize.isAccessibilitySize {
                 medals
@@ -135,7 +147,7 @@ struct LifeHabitHeroView: View {
                     .monospacedDigit()
                 Text("Done")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(muted)
             }
         }
         .frame(width: 104, height: 104)
@@ -165,7 +177,7 @@ struct LifeHabitHeroView: View {
             if total > 5 {
                 Text("+\(total - 5)")
                     .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(muted)
             }
         }
     }

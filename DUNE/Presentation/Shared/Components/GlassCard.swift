@@ -506,9 +506,95 @@ private enum GlassCardGradients {
     }
 }
 
+/// Card finish for an edition, with a lighter surface for reading and an opaque score surface.
+struct ArtistCardSurface: View {
+    let edition: ArtistThemeEdition
+    let cornerRadius: CGFloat
+    var isScoreSurface = false
+    var emphasized = false
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: cornerRadius, style: .continuous) }
+    private var fill: Color { isScoreSurface ? edition.hero : edition.surface(for: colorScheme) }
+    private var rim: Color { isScoreSurface ? edition.highlight.opacity(0.36) : edition.rim(for: colorScheme) }
+
+    var body: some View {
+        shape.fill(fill)
+            .overlay {
+                if isScoreSurface || emphasized || edition.theme == .arcticDawn {
+                    shape.fill(LinearGradient(
+                        colors: [edition.highlight.opacity(isScoreSurface ? 0.17 : 0.09), .clear],
+                        startPoint: .topTrailing,
+                        endPoint: .bottomLeading
+                    ))
+                }
+            }
+            .overlay {
+                if isScoreSurface, let poster = edition.poster {
+                    GeometryReader { proxy in
+                        Image(uiImage: poster)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: proxy.size.width, height: proxy.size.height)
+                            .clipped()
+                    }
+                    .mask(LinearGradient(colors: [.clear, .black], startPoint: .center, endPoint: .bottomTrailing))
+                    .opacity(edition.theme == .waterLilies ? 0.20 : 0.11)
+                }
+            }
+            .overlay { shape.strokeBorder(rim, lineWidth: 1) }
+            .overlay {
+                if isScoreSurface, edition.theme == .contourAtlas {
+                    shape.inset(by: 4).strokeBorder(rim, lineWidth: 1)
+                }
+            }
+            .overlay(alignment: .top) {
+                if edition.hasRaisedEdge || (isScoreSurface && edition.theme == .sakuraCalm) {
+                    Rectangle()
+                        .fill(edition.highlight)
+                        .frame(height: edition.hasRaisedEdge ? 2 : 1)
+                }
+            }
+            .clipShape(shape)
+            .shadow(color: edition.hasRaisedEdge ? edition.rim(for: .dark).opacity(0.35) : .clear,
+                    radius: 0, x: 1, y: 3)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+}
+
+private struct WorkoutSummarySurfaceModifier: ViewModifier {
+    let cornerRadius: CGFloat
+
+    @Environment(\.appTheme) private var theme
+    @Environment(\.colorScheme) private var colorScheme
+
+    func body(content: Content) -> some View {
+        let edition = ArtistThemeEdition.forTheme(theme)
+        content
+            .foregroundStyle(edition?.heroInk ?? Color.primary)
+            .environment(\.colorScheme, edition == nil ? colorScheme : .dark)
+            .background {
+                if let edition {
+                    ArtistCardSurface(edition: edition, cornerRadius: cornerRadius, isScoreSurface: true)
+                } else {
+                    RoundedRectangle(cornerRadius: cornerRadius).fill(.ultraThinMaterial)
+                }
+            }
+    }
+}
+
+extension View {
+    func workoutSummarySurface(cornerRadius: CGFloat) -> some View {
+        modifier(WorkoutSummarySurfaceModifier(cornerRadius: cornerRadius))
+    }
+}
+
 /// Hero card — dashboard hero, sleep score, prominent information.
 struct HeroCard<Content: View>: View {
     let tintColor: Color
+    var usesScoreSurface = false
     @ViewBuilder let content: () -> Content
 
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -519,11 +605,16 @@ struct HeroCard<Content: View>: View {
     private var cardPadding: CGFloat { sizeClass == .regular ? DS.Spacing.xxxl : DS.Spacing.xxl }
 
     var body: some View {
+        let edition = ArtistThemeEdition.forTheme(theme)
         content()
             .frame(maxWidth: .infinity)
             .padding(cardPadding)
+            .environment(\.colorScheme, usesScoreSurface && edition != nil ? .dark : colorScheme)
             .background {
-                if theme == .desertWarm {
+                if let edition {
+                    ArtistCardSurface(edition: edition, cornerRadius: cornerRadius,
+                                      isScoreSurface: usesScoreSurface, emphasized: true)
+                } else if theme == .desertWarm {
                     DesertCardSurface(cornerRadius: cornerRadius)
                 } else if theme == .contourAtlas {
                     ContourCardSurface(cornerRadius: cornerRadius, emphasized: true)
@@ -584,7 +675,9 @@ struct StandardCard<Content: View>: View {
         content()
             .padding(resolvedPadding)
             .background {
-                if theme == .desertWarm {
+                if let edition = ArtistThemeEdition.forTheme(theme) {
+                    ArtistCardSurface(edition: edition, cornerRadius: cornerRadius)
+                } else if theme == .desertWarm {
                     DesertCardSurface(cornerRadius: cornerRadius, isSupporting: true)
                 } else if theme == .contourAtlas {
                     ContourCardSurface(cornerRadius: cornerRadius, emphasized: false)
@@ -639,7 +732,9 @@ struct InlineCard<Content: View>: View {
         content()
             .padding(cardPadding)
             .background {
-                if theme == .desertWarm {
+                if let edition = ArtistThemeEdition.forTheme(theme) {
+                    ArtistCardSurface(edition: edition, cornerRadius: cornerRadius)
+                } else if theme == .desertWarm {
                     DesertCardSurface(cornerRadius: cornerRadius)
                 } else if theme == .contourAtlas {
                     ContourCardSurface(cornerRadius: cornerRadius, emphasized: false)
@@ -663,9 +758,11 @@ struct InlineCard<Content: View>: View {
                 }
             }
             .overlay(alignment: .bottom) {
-                GlassCardGradients.bottomSeparator(for: theme)
-                    .frame(height: 0.5)
-                    .padding(.horizontal, DS.Spacing.md)
+                if ArtistThemeEdition.forTheme(theme) == nil {
+                    GlassCardGradients.bottomSeparator(for: theme)
+                        .frame(height: 0.5)
+                        .padding(.horizontal, DS.Spacing.md)
+                }
             }
     }
 }

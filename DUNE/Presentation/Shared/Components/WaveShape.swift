@@ -178,15 +178,19 @@ struct TabWaveBackground: View {
 
     var body: some View {
         Group {
-            switch theme {
-            case .desertWarm:  DesertTabWaveBackground()
-            case .oceanCool:   OceanTabWaveBackground()
-            case .forestGreen: ForestTabWaveBackground(artwork: forestArtwork)
-            case .sakuraCalm:  SakuraTabWaveBackground()
-            case .arcticDawn:  OceanLegacyArcticTabWaveBackground()
-            case .solarPop:    SolarTabWaveBackground()
-            case .contourAtlas: ContourBackground(style: .tab)
-            case .waterLilies: WaterLiliesTabWaveBackground()
+            if let edition = ArtistThemeEdition.forTheme(theme) {
+                ArtistThemeBackground(edition: edition, placement: .tab)
+            } else {
+                switch theme {
+                case .desertWarm:  DesertTabWaveBackground()
+                case .oceanCool:   OceanTabWaveBackground()
+                case .forestGreen: ForestTabWaveBackground(artwork: forestArtwork)
+                case .sakuraCalm:  SakuraTabWaveBackground()
+                case .arcticDawn:  OceanLegacyArcticTabWaveBackground()
+                case .solarPop:    SolarTabWaveBackground()
+                case .contourAtlas: ContourBackground(style: .tab)
+                case .waterLilies: WaterLiliesTabWaveBackground()
+                }
             }
         }
         .id(theme)
@@ -203,15 +207,19 @@ struct DetailWaveBackground: View {
 
     var body: some View {
         Group {
-            switch theme {
-            case .desertWarm:  DesertDetailWaveBackground()
-            case .oceanCool:   OceanDetailWaveBackground()
-            case .forestGreen: ForestDetailWaveBackground()
-            case .sakuraCalm:  SakuraDetailWaveBackground()
-            case .arcticDawn:  OceanLegacyArcticDetailWaveBackground()
-            case .solarPop:    SolarDetailWaveBackground()
-            case .contourAtlas: ContourBackground(style: .detail)
-            case .waterLilies: WaterLiliesDetailWaveBackground()
+            if let edition = ArtistThemeEdition.forTheme(theme) {
+                ArtistThemeBackground(edition: edition, placement: .detail)
+            } else {
+                switch theme {
+                case .desertWarm:  DesertDetailWaveBackground()
+                case .oceanCool:   OceanDetailWaveBackground()
+                case .forestGreen: ForestDetailWaveBackground()
+                case .sakuraCalm:  SakuraDetailWaveBackground()
+                case .arcticDawn:  OceanLegacyArcticDetailWaveBackground()
+                case .solarPop:    SolarDetailWaveBackground()
+                case .contourAtlas: ContourBackground(style: .detail)
+                case .waterLilies: WaterLiliesDetailWaveBackground()
+                }
             }
         }
         .id(theme)
@@ -269,15 +277,19 @@ struct SheetWaveBackground: View {
 
     var body: some View {
         Group {
-            switch theme {
-            case .desertWarm:  DesertSheetWaveBackground()
-            case .oceanCool:   OceanSheetWaveBackground()
-            case .forestGreen: ForestSheetWaveBackground()
-            case .sakuraCalm:  SakuraSheetWaveBackground()
-            case .arcticDawn:  OceanLegacyArcticSheetWaveBackground()
-            case .solarPop:    SolarSheetWaveBackground()
-            case .contourAtlas: ContourBackground(style: .sheet)
-            case .waterLilies: WaterLiliesSheetWaveBackground()
+            if let edition = ArtistThemeEdition.forTheme(theme) {
+                ArtistThemeBackground(edition: edition, placement: .sheet)
+            } else {
+                switch theme {
+                case .desertWarm:  DesertSheetWaveBackground()
+                case .oceanCool:   OceanSheetWaveBackground()
+                case .forestGreen: ForestSheetWaveBackground()
+                case .sakuraCalm:  SakuraSheetWaveBackground()
+                case .arcticDawn:  OceanLegacyArcticSheetWaveBackground()
+                case .solarPop:    SolarSheetWaveBackground()
+                case .contourAtlas: ContourBackground(style: .sheet)
+                case .waterLilies: WaterLiliesSheetWaveBackground()
+                }
             }
         }
         .id(theme)

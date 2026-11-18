@@ -695,12 +695,16 @@ struct NotificationSleepDetailPushView: View {
                 SleepPredictionDetailView(prediction: prediction)
             } else if viewModel.isLoading {
                 ProgressView()
+                    .detailStatusSurface()
+                    .englishNavigationTitle("Tonight's Sleep")
             } else {
                 EmptyStateView(
                     icon: "moon.zzz",
                     title: "Sleep Detail Unavailable",
                     message: "Open Wellness to refresh your latest sleep data."
                 )
+                .detailStatusSurface()
+                .englishNavigationTitle("Tonight's Sleep")
             }
         }
         .accessibilityElement(children: .contain)

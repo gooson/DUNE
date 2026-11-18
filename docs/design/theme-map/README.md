@@ -7,6 +7,24 @@ status: in-progress
 
 # DUNE 테마 맵
 
+2026-11-19 [아홉 작가 테마 시안](themes/artist-editions.html)은 같은 앱 화면 안에서 제목 뒤 원화, 카드 표면, 링, 차트와 탭 바를 비교한다. 기존 8개와 신규 Pâtisserie 디자인 제안을 담았다. 네 탭과 컨디션·운동 준비도·운동 기록·웰니스 점수·수면·습관 주간 보고서를 라이트·다크로 확인할 수 있다. 아래 날짜별 기록은 그 시점의 방향이다.
+
+| 테마 · 작가 기준 | 앱에 옮긴 특징 | 움직이는 부분 |
+|---|---|---|
+| Dune · 조지아 오키프 | 황토색 능선의 큰 면, 모래색 카드와 짙은 흙빛 점수판 | 앞쪽 비탈을 타고 흐르는 모래바람 |
+| Ocean · 가쓰시카 호쿠사이 | 기존 앱의 흰 포말 윤곽과 쪽빛 파면, 청록 링과 물빛 추세선 | 솟아오르는 파봉과 포말 끝에서 튀는 흰 물보라 |
+| Forest · 우타가와 히로시게 | 소나무와 골안개, 솔잎색 카드와 옅은 금색 점수 링 | 숲을 가득 채웠다가 앞뒤로 걷히는 두 겹의 안개 |
+| Sakura · 사카이 호이쓰 | 먹빛 가지의 만개한 꽃송이, 자두색 점수판과 꽃잎색 윗선 | 꽃가지에서 차례로 휘돌아 떨어지는 분홍 꽃잎 |
+| Arctic · 로렌 해리스 | 빙하의 또렷한 면과 정적인 수평선, 푸른 카드의 차가운 빛 | 빙하 위에서 너울거리는 두 줄의 오로라 |
+| Solar · 빈센트 반 고흐 | 해 주위의 노란 붓질, 먹보랏빛 점수판과 금색 링 | 해를 둘러 천천히 회전하는 금빛 붓자국 |
+| Contour · 파울 클레 | 등고선과 투명한 색면, 점수판의 가는 이중 테두리 | 등고선을 따라 흐르는 먹선 |
+| Water Lilies · 클로드 모네 | 청록·보라 유화 붓질, 카드 가장자리의 반사색과 연보라 링 | 수련 사이에서 좌우로 일렁이는 반영 |
+| Pâtisserie · 웨인 티보 | 크림색 정물과 푸른 그림자를 종이 콜라주로 해석한 새 테마. 카드의 밝은 윗선과 푸른 밑그림자 | 진열대를 따라 움직이는 케이크의 그림자와 아이싱 가장자리의 빛 |
+
+휴대폰에서 [시안을 열면](themes/artist-editions.html) 오션이 한 화면 폭으로 보인다. 웰니스 제목 뒤의 흰 포말을 본 뒤 ‘테마’에서 다른 그림으로 바꾸거나 ‘전체 비교’를 선택할 수 있다. 네 탭과 상세 화면 모두 그림이 움직이는 동안 제목, 점수, 그래프는 같은 자리에 머문다. 라이트·다크에서 움직임을 재생하거나 멈출 수 있고, 시스템의 ‘동작 줄이기’를 켜면 정지 상태로 시작한다.
+
+2026-11-19 [SAKURA 방향 시안](themes/sakura-calm-direction.html)은 굵은 먹선 가지를 가득 덮는 벚꽃을 담았다. Today는 만개한 수관을 넓게 보여주고 Activity·Wellness·Life는 큰 꽃송이·먼 벚나무·늘어진 꽃가지를 각각 잘라 쓴다. 낱꽃잎만 시차를 두고 떨어진다. 라이트·다크와 재생·일시정지를 전환할 수 있다.
+
 2026-11-18 [FOREST 방향 시안](themes/forest-green-direction.html)에 우키요에풍 소나무 목판화를 더했다. Today는 골안개와 굽은 소나무가 함께 보이는 전경을 쓴다. Activity·Wellness·Life에서는 수관·먼 능선·줄기를 각각 수직으로 잘라 보여준다. 24초 동안 숲을 가득 메운 안개가 가까운 소나무부터 걷히고, 골짜기 안개가 뒤이어 옅어진다. 맑은 숲이 잠시 보인 뒤 골짜기부터 안개가 다시 찬다. 줄기와 굵은 가지는 고정한다. 바깥쪽 잔가지와 솔잎 끝만 서로 다른 간격으로 살짝 들렸다가 제자리로 돌아온다. 시안 상단에서 움직임을 멈추거나 다시 재생하고 라이트·다크를 전환할 수 있다. 동작 줄이기에서는 정지 상태로 시작한다. 앱의 네 탭과 설정 미리보기는 같은 원화를 사용한다. [기기별 실제 화면과 안개 영상](../phone-design-map/actual/forest-canopy-2026-11-18/index.html)에서 확인할 수 있다.
 
 2026-11-18 [OCEAN 방향 시안](themes/ocean-cool-direction.html)에 목판화풍 파봉을 그렸다. 쪽빛 파면 안쪽에 여백을 두고 굵은 흰 포말의 끝을 여러 갈래로 말았다. Today 상단과 Activity·Wellness·Life 하단에는 탭별 세기로 같은 너울이 움직이며 동작 줄이기에서는 정지한다. 앱은 이 시안의 파면·포말·물방울 벡터를 사용한다. [기기별 실제 캡처](../phone-design-map/actual/ocean-current-2026-11-18/index.html)에서 확인할 수 있다.
@@ -74,7 +92,7 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 | DUNE | [Desert Horizon](themes/dune-final-four-tab.html) | 세 겹의 흐르는 모래 능선, 공통 링과 4탭 정보 위계 |
 | OCEAN | [Ocean Current](themes/ocean-cool-direction.html) | 쪽빛 너울, 갈고리처럼 갈라진 흰 포말과 교차하는 해류 |
 | FOREST | [Forest Canopy](themes/forest-green-direction.html) | 굽은 소나무, 종이빛 골안개와 금빛 링 |
-| SAKURA | [Spring Haze](themes/sakura-calm-direction.html) | 벚꽃 군집과 얇은 가지, 적은 꽃잎 |
+| SAKURA | [Spring Haze](themes/sakura-calm-direction.html) | 먹선 가지를 뒤덮은 만개한 벚꽃, 천천히 떨어지는 낱꽃잎 |
 | ARCTIC | [Aurora Drift](themes/arctic-dawn-direction.html) | 고요한 배경 위로 이동하는 오로라 |
 | SOLAR | [Solar Pulse](themes/solar-pop-direction.html) | 고정된 태양 코어 주변의 빛 궤적 |
 | CONTOUR | [Contour Field](themes/contour-atlas-direction.html) | 석회색 지형과 호흡하는 등고선 |

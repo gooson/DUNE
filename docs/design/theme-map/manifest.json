@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-18",
+  "updated": "2026-11-19",
   "app_contract": "app-contract.md",
   "themes": [
     {
@@ -21,7 +21,8 @@
         "actual_captures": "../full-redesign-map/review/desert-horizon-final-2026-10-24/index.html",
         "verification": "../../reviews/2026-10-24-desert-horizon-final.md",
         "status": "implemented-with-user-deferred-duo-validation"
-      }
+      },
+      "artist": "조지아 오키프"
     },
     {
       "id": "ocean",
@@ -36,7 +37,8 @@
         "#205b75",
         "#4fc3d5",
         "#d7faf6"
-      ]
+      ],
+      "artist": "가쓰시카 호쿠사이"
     },
     {
       "id": "forest",
@@ -57,22 +59,24 @@
         "actual_captures": "../phone-design-map/actual/forest-canopy-2026-11-18/index.html",
         "verification": "../../reviews/2026-11-18-forest-canopy.md",
         "status": "native-implemented"
-      }
+      },
+      "artist": "우타가와 히로시게"
     },
     {
       "id": "sakura",
       "name": "SAKURA",
       "title": "Spring Haze",
       "file": "sakura-calm-direction.html",
-      "motif": "벚꽃 군집과 얇은 가지",
-      "motion": "봄 안개와 소수의 꽃잎이 느리게 흐름",
-      "detail": "살구와 분홍의 층, 새잎빛 링",
+      "motif": "먹빛 가지를 가득 덮은 만개한 벚꽃",
+      "motion": "꽃송이는 가지에 고정하고 낱꽃잎만 시차를 두고 가볍게 굽어 떨어짐",
+      "detail": "우키요에 목판화풍의 겹친 꽃송이, 상앗빛 꽃잎과 연지색 꽃술, 살구색 하늘과 먼 산. 네 탭마다 다른 구도로 자른 원화",
       "colors": [
-        "#574354",
-        "#ba8d9a",
-        "#efc0a7",
-        "#ffe3d5"
-      ]
+        "#513440",
+        "#aa555f",
+        "#e8a3a0",
+        "#ffe5cc"
+      ],
+      "artist": "사카이 호이쓰"
     },
     {
       "id": "arctic",
@@ -87,7 +91,8 @@
         "#48649b",
         "#64afce",
         "#a7f4dc"
-      ]
+      ],
+      "artist": "로렌 해리스"
     },
     {
       "id": "solar",
@@ -102,7 +107,8 @@
         "#9d4a36",
         "#f1ad46",
         "#ffe19a"
-      ]
+      ],
+      "artist": "빈센트 반 고흐"
     },
     {
       "id": "contour",
@@ -117,7 +123,8 @@
         "#657c36",
         "#bbcf72",
         "#e4efb0"
-      ]
+      ],
+      "artist": "파울 클레"
     },
     {
       "id": "water-lilies",
@@ -136,7 +143,24 @@
       "implementation": {
         "status": "implemented-validation-in-progress",
         "verification": "../full-redesign-map/review/theme-overhaul-2026-11-14/README.md"
-      }
+      },
+      "artist": "클로드 모네"
+    },
+    {
+      "id": "patisserie",
+      "name": "PÂTISSERIE",
+      "title": "Pâtisserie",
+      "file": "artist-editions.html",
+      "artist": "웨인 티보",
+      "motif": "크림색 정물과 푸른 그림자",
+      "motion": "정물은 제자리에 두고 표면의 빛만 느리게 움직임",
+      "detail": "아이싱의 밝은 모서리를 카드 윗선에, 진열대의 푸른 그림자를 카드 아래에 쓴 디자인 제안",
+      "colors": [
+        "#48445a",
+        "#855161",
+        "#dba6ac",
+        "#ffe2b5"
+      ]
     }
   ],
   "studies": [
@@ -1572,5 +1596,35 @@
         "status": "native-implemented-iphone-ipad-focused-validation"
       }
     }
-  ]
+  ],
+  "artist_study": {
+    "file": "artist-editions.html",
+    "title": "아홉 작가 테마 · 네 탭과 공통 상세",
+    "status": "design-proposal",
+    "motion": {
+      "dune": "앞쪽 비탈을 따라 모래바람이 낮게 흐른다.",
+      "ocean": "쪽빛 파봉이 솟으며 흰 물보라가 포말 끝에서 튄다.",
+      "forest": "앞뒤 두 겹의 안개가 소나무 사이를 채웠다가 천천히 걷힌다.",
+      "sakura": "활짝 핀 꽃가지에서 분홍 꽃잎이 하나씩 휘돌아 떨어진다.",
+      "arctic": "빙하 위로 두 줄의 오로라가 너울거린다.",
+      "solar": "겹겹의 금빛 붓질이 해를 둘러 천천히 회전한다.",
+      "contour": "먹선이 겹겹이 쌓인 등고선을 따라 흐른다.",
+      "water-lilies": "수련 사이에서 수면의 반영이 짧은 붓자국을 따라 좌우로 일렁인다.",
+      "patisserie": "케이크 아래 푸른 그림자가 움직이면서 아이싱 가장자리도 빛난다."
+    },
+    "tabs": [
+      "Today",
+      "Activity",
+      "Wellness",
+      "Life"
+    ],
+    "details": [
+      "Condition Score",
+      "Training Readiness",
+      "Workout Detail",
+      "Wellness Score",
+      "Sleep",
+      "Weekly Report"
+    ]
+  }
 }

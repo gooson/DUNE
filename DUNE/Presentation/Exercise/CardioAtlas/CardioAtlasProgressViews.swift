@@ -90,7 +90,7 @@ struct CardioAtlasJourneyView: View {
             .frame(maxWidth: 680, alignment: .leading)
             .frame(maxWidth: .infinity)
         }
-        .background { DetailWaveBackground() }
+        .background { SheetWaveBackground() }
         .navigationTitle("Journey")
         .navigationBarTitleDisplayMode(.inline)
         .accessibilityElement(children: .contain)
@@ -155,7 +155,7 @@ struct CardioAtlasPassportView: View {
             .frame(maxWidth: 780, alignment: .leading)
             .frame(maxWidth: .infinity)
         }
-        .background { DetailWaveBackground() }
+        .background { SheetWaveBackground() }
         .navigationTitle("Passport")
         .navigationBarTitleDisplayMode(.inline)
         .accessibilityElement(children: .contain)

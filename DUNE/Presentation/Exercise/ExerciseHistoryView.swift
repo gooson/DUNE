@@ -20,9 +20,11 @@ struct ExerciseHistoryView: View {
     }
 
     let exerciseName: String
+    let isPresentedInSheet: Bool
 
-    init(exerciseDefinitionID: String, exerciseName: String) {
+    init(exerciseDefinitionID: String, exerciseName: String, isPresentedInSheet: Bool = false) {
         self.exerciseName = exerciseName
+        self.isPresentedInSheet = isPresentedInSheet
         self._viewModel = State(initialValue: ExerciseHistoryViewModel(
             exerciseDefinitionID: exerciseDefinitionID,
             exerciseName: exerciseName
@@ -63,7 +65,13 @@ struct ExerciseHistoryView: View {
                 .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [.medium])
         }
         .confirmDeleteRecord($recordToDelete, context: modelContext)
-        .background { DetailWaveBackground() }
+        .background {
+            if isPresentedInSheet {
+                SheetWaveBackground()
+            } else {
+                DetailWaveBackground()
+            }
+        }
     }
 
     // MARK: - Metric Picker
@@ -253,6 +261,7 @@ struct ExerciseHistoryView: View {
                 ExerciseSessionDetailView(record: record, showHistoryLink: false)
             } else {
                 ContentUnavailableView("Record not found", systemImage: "exclamationmark.triangle")
+                    .detailStatusSurface()
             }
         } label: {
             HStack {

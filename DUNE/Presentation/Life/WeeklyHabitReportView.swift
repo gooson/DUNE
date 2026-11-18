@@ -23,7 +23,7 @@ struct WeeklyHabitReportView: View {
     // MARK: - Overview
 
     private var overviewCard: some View {
-        HeroCard(tintColor: DS.Color.tabLife) {
+        HeroCard(tintColor: DS.Color.tabLife, usesScoreSurface: true) {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
                     Image(systemName: "calendar")

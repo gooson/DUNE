@@ -37,16 +37,20 @@ struct MetricQuantityHero: View {
         .padding(sizeClass == .regular ? DS.Spacing.xxl : DS.Spacing.xl)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            RoundedRectangle(cornerRadius: radius)
-                .fill(palette.surface)
-                .overlay(alignment: .bottom) {
-                    lowDunes
-                        .clipShape(RoundedRectangle(cornerRadius: radius))
-                }
-                .overlay {
-                    RoundedRectangle(cornerRadius: radius)
-                        .strokeBorder(palette.border, lineWidth: 1)
-                }
+            if let edition = ArtistThemeEdition.forTheme(theme) {
+                ArtistCardSurface(edition: edition, cornerRadius: radius, isScoreSurface: true)
+            } else {
+                RoundedRectangle(cornerRadius: radius)
+                    .fill(palette.surface)
+                    .overlay(alignment: .bottom) {
+                        lowDunes
+                            .clipShape(RoundedRectangle(cornerRadius: radius))
+                    }
+                    .overlay {
+                        RoundedRectangle(cornerRadius: radius)
+                            .strokeBorder(palette.border, lineWidth: 1)
+                    }
+            }
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(metric.category.displayName), \(formattedValue) \(resolvedUnit)")

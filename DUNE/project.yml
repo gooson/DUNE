@@ -126,6 +126,12 @@ targets:
         group: DUNE
       - path: Resources
         group: DUNE
+        excludes:
+          - ArtistEditions
+      - path: Resources/ArtistEditions
+        type: folder
+        buildPhase: resources
+        group: DUNE
       # Shared Localization
       - path: ../Shared/Resources/Localizable.xcstrings
         group: Shared

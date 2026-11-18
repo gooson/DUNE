@@ -8,9 +8,11 @@ struct WellnessHeroCard: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.horizontalSizeClass) private var sizeClass
 
-    private var isWide: Bool { theme != .forestGreen && sizeClass == .regular && !dynamicTypeSize.isAccessibilitySize }
-    private var ink: Color { theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor }
-    private var muted: Color { theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74) }
+    private var edition: ArtistThemeEdition? { ArtistThemeEdition.forTheme(theme) }
+    private var usesLegacyForestLayout: Bool { theme == .forestGreen && edition == nil }
+    private var isWide: Bool { !usesLegacyForestLayout && sizeClass == .regular && !dynamicTypeSize.isAccessibilitySize }
+    private var ink: Color { edition?.heroInk ?? (theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor) }
+    private var muted: Color { theme == .desertWarm && edition == nil ? DesertPalette.muted : ink.opacity(0.80) }
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
@@ -38,10 +40,12 @@ struct WellnessHeroCard: View {
         }
         .padding(DS.Spacing.xl)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.bottom, theme == .oceanCool ? 44 : 0)
+        .padding(.bottom, theme == .oceanCool && edition == nil ? 44 : 0)
         .forestHeroArtwork(.wellness, cornerRadius: DS.Radius.xxl, borderColor: theme.accentColor.opacity(0.25))
         .background {
-            if theme == .desertWarm {
+            if let edition {
+                ArtistCardSurface(edition: edition, cornerRadius: DS.Radius.xxl, isScoreSurface: true)
+            } else if theme == .desertWarm {
                 DesertCardSurface(cornerRadius: DS.Radius.xxl)
             } else {
                 RoundedRectangle(cornerRadius: DS.Radius.xxl)
@@ -61,7 +65,7 @@ struct WellnessHeroCard: View {
             }
         }
         .overlay(alignment: .bottomTrailing) {
-            if theme == .desertWarm {
+            if theme == .desertWarm, edition == nil {
                 Ellipse()
                     .fill(DesertPalette.duneFar.opacity(0.12))
                     .frame(width: 200, height: 45)
@@ -91,7 +95,7 @@ struct WellnessHeroCard: View {
                             .accessibilityIdentifier("wellness-hero-external-score")
                         Text(score.status.label).font(.headline).foregroundStyle(ink)
                     }
-                } else if theme == .forestGreen {
+                } else if usesLegacyForestLayout {
                     ViewThatFits(in: .horizontal) {
                         HStack(spacing: DS.Spacing.md) {
                             scoreRing(score)
@@ -134,10 +138,10 @@ struct WellnessHeroCard: View {
     private func scoreRing(_ score: WellnessScore) -> some View {
         CompactConditionRing(
             score: score.score,
-            ringColor: theme == .desertWarm ? DS.Color.warmGlow : theme.accentColor,
-            highlightColor: theme == .desertWarm ? DS.Color.body : theme.duskColor,
+            ringColor: edition?.highlight ?? (theme == .desertWarm ? DS.Color.warmGlow : theme.accentColor),
+            highlightColor: edition?.heroInk ?? (theme == .desertWarm ? DS.Color.body : theme.duskColor),
             tipColor: score.status.color,
-            trackColor: theme == .desertWarm ? DS.Color.warmGlow : ink.opacity(0.6),
+            trackColor: edition?.highlight ?? (theme == .desertWarm ? DS.Color.warmGlow : ink.opacity(0.6)),
             textColor: ink,
             accessibilityLabel: "Wellness score \(score.score), \(score.status.label)",
             accessibilityIdentifier: "wellness-hero-ring"

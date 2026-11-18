@@ -13,8 +13,9 @@ struct ReadinessHeroEvidenceView: View {
     @Environment(\.appTheme) private var theme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    private var ink: Color { theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor }
-    private var muted: Color { theme == .desertWarm ? DesertPalette.muted : ink.opacity(0.74) }
+    private var edition: ArtistThemeEdition? { ArtistThemeEdition.forTheme(theme) }
+    private var ink: Color { edition?.heroInk ?? (theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor) }
+    private var muted: Color { theme == .desertWarm && edition == nil ? DesertPalette.muted : ink.opacity(0.80) }
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -46,7 +47,7 @@ struct ReadinessHeroEvidenceView: View {
                 Capsule().fill(ink.opacity(0.12))
                     .overlay(alignment: .leading) {
                         if let value {
-                            Capsule().fill(theme.accentColor.gradient)
+                            Capsule().fill((edition?.highlight ?? theme.accentColor).gradient)
                                 .frame(width: geometry.size.width * Double(Swift.max(0, Swift.min(100, value))) / 100)
                         }
                     }

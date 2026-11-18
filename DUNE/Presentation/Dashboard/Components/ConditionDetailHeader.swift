@@ -76,20 +76,24 @@ struct ConditionDetailHeader: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DS.Spacing.xl)
         .background {
-            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
-                .fill(palette.surface)
-                .overlay {
-                    LinearGradient(colors: [palette.heroAccent.opacity(0.28), .clear],
-                                   startPoint: .topTrailing, endPoint: .bottomLeading)
-                    ConditionHeroBands()
-                        .fill(palette.heroHighlight.opacity(0.08))
-                }
-                .overlay {
-                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
-                        .strokeBorder(palette.border, lineWidth: 1)
-                }
-                .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
-                .accessibilityHidden(true)
+            if let edition = ArtistThemeEdition.forTheme(theme) {
+                ArtistCardSurface(edition: edition, cornerRadius: DS.Radius.xl, isScoreSurface: true)
+            } else {
+                RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                    .fill(palette.surface)
+                    .overlay {
+                        LinearGradient(colors: [palette.heroAccent.opacity(0.28), .clear],
+                                       startPoint: .topTrailing, endPoint: .bottomLeading)
+                        ConditionHeroBands()
+                            .fill(palette.heroHighlight.opacity(0.08))
+                    }
+                    .overlay {
+                        RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                            .strokeBorder(palette.border, lineWidth: 1)
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
+                    .accessibilityHidden(true)
+            }
         }
     }
 

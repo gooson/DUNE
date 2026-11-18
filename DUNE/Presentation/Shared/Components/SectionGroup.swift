@@ -218,7 +218,9 @@ struct SectionGroup<Content: View>: View {
         .padding(outerPadding)
         .frame(maxHeight: fillHeight ? .infinity : nil, alignment: .top)
         .background {
-            if theme == .desertWarm {
+            if let edition = ArtistThemeEdition.forTheme(theme) {
+                ArtistCardSurface(edition: edition, cornerRadius: cornerRadius)
+            } else if theme == .desertWarm {
                 DesertCardSurface(cornerRadius: cornerRadius, isSupporting: true)
             } else if theme == .contourAtlas {
                 ContourCardSurface(cornerRadius: cornerRadius)

@@ -81,22 +81,26 @@ struct SleepPredictionDetailView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(DS.Spacing.xl)
         .background {
-            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
-                .fill(palette.surface)
-                .overlay {
-                    LinearGradient(colors: [palette.heroAccent.opacity(0.28), .clear],
-                                   startPoint: .topTrailing, endPoint: .bottomLeading)
-                    DesertDuneOverlayView(color: palette.heroHighlight, opacity: 0.12,
-                                          amplitude: 0.12, frequency: 0.7, verticalOffset: 0.60,
-                                          bottomFade: 0, driftDuration: 0,
-                                          crestColor: palette.heroAccent, crestOpacity: 0.20)
-                }
-                .overlay {
-                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
-                        .strokeBorder(palette.border, lineWidth: 1)
-                }
-                .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
-                .accessibilityHidden(true)
+            if let edition = ArtistThemeEdition.forTheme(theme) {
+                ArtistCardSurface(edition: edition, cornerRadius: DS.Radius.xl, isScoreSurface: true)
+            } else {
+                RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                    .fill(palette.surface)
+                    .overlay {
+                        LinearGradient(colors: [palette.heroAccent.opacity(0.28), .clear],
+                                       startPoint: .topTrailing, endPoint: .bottomLeading)
+                        DesertDuneOverlayView(color: palette.heroHighlight, opacity: 0.12,
+                                              amplitude: 0.12, frequency: 0.7, verticalOffset: 0.60,
+                                              bottomFade: 0, driftDuration: 0,
+                                              crestColor: palette.heroAccent, crestOpacity: 0.20)
+                    }
+                    .overlay {
+                        RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                            .strokeBorder(palette.border, lineWidth: 1)
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous))
+                    .accessibilityHidden(true)
+            }
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("sleep-prediction-hero")
