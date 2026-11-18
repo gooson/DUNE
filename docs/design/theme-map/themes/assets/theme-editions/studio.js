@@ -4,7 +4,7 @@ const editions = {
   dune: {
     name: "Dune",
     artist: "조지아 오키프",
-    motif: "모래 능선",
+    motif: "앞쪽 비탈을 흐르는 모래바람",
     ground: ["#faf2e5", "#26201d"],
     surface: ["#fff9ee", "#322a25"],
     ink: ["#3a2c24", "#fff2e1"],
@@ -16,7 +16,7 @@ const editions = {
   ocean: {
     name: "Ocean",
     artist: "가쓰시카 호쿠사이",
-    motif: "쪽빛 파도와 흰 포말",
+    motif: "파봉 끝에서 튀는 흰 포말",
     ground: ["#edf7f7", "#101e28"],
     surface: ["#f9fcfa", "#182c37"],
     ink: ["#1a3541", "#edf8f5"],
@@ -28,7 +28,7 @@ const editions = {
   forest: {
     name: "Forest",
     artist: "우타가와 히로시게",
-    motif: "안개 속 소나무",
+    motif: "소나무 사이로 차올랐다 걷히는 안개",
     ground: ["#f1f2e6", "#172720"],
     surface: ["#fafaf1", "#23362b"],
     ink: ["#223d31", "#f3f4e7"],
@@ -40,7 +40,7 @@ const editions = {
   sakura: {
     name: "Sakura",
     artist: "사카이 호이쓰",
-    motif: "만개한 꽃가지",
+    motif: "꽃가지에서 흩날리는 꽃잎",
     ground: ["#fcf1ed", "#2b2029"],
     surface: ["#fff8f1", "#382936"],
     ink: ["#4a313d", "#fff2ec"],
@@ -52,7 +52,7 @@ const editions = {
   arctic: {
     name: "Arctic",
     artist: "로렌 해리스",
-    motif: "빙하와 오로라",
+    motif: "빙하 위에서 너울거리는 오로라",
     ground: ["#eaf3f7", "#142235"],
     surface: ["#f7fbfe", "#203148"],
     ink: ["#233d54", "#edf7ff"],
@@ -64,7 +64,7 @@ const editions = {
   solar: {
     name: "Solar",
     artist: "빈센트 반 고흐",
-    motif: "해를 두르는 붓질",
+    motif: "해를 따라 도는 금빛 붓질",
     ground: ["#fcf1dc", "#2c2524"],
     surface: ["#fff8e9", "#393132"],
     ink: ["#473124", "#fff3d8"],
@@ -76,7 +76,7 @@ const editions = {
   contour: {
     name: "Contour",
     artist: "파울 클레",
-    motif: "등고선과 색면",
+    motif: "언덕의 등고선을 따라 흐르는 먹선",
     ground: ["#f0efdf", "#262a22"],
     surface: ["#faf8e9", "#34382d"],
     ink: ["#374035", "#f3f0d9"],
@@ -88,7 +88,7 @@ const editions = {
   "water-lilies": {
     name: "Water Lilies",
     artist: "클로드 모네",
-    motif: "수련과 물빛 반사",
+    motif: "수련 사이로 일렁이는 물빛",
     ground: ["#eaf1ec", "#202b31"],
     surface: ["#f7f9f2", "#2b373f"],
     ink: ["#2c474a", "#edf3ef"],
@@ -100,7 +100,7 @@ const editions = {
   patisserie: {
     name: "Pâtisserie",
     artist: "웨인 티보",
-    motif: "크림색 정물과 푸른 그림자",
+    motif: "진열대를 스치는 빛과 푸른 그림자",
     ground: ["#fbf1e6", "#2b2832"],
     surface: ["#fff9ee", "#37323d"],
     ink: ["#463341", "#fff1dd"],
@@ -208,10 +208,15 @@ const params = new URLSearchParams(location.search),
   reduced = matchMedia("(prefers-reduced-motion:reduce)"),
   dark = matchMedia("(prefers-color-scheme:dark)");
 const has = (collection, key) => Object.hasOwn(collection, key);
+const requestedView = params.get("view");
+const focusOnOpen = params.has("embed") || requestedView === "focus" ||
+  (requestedView !== "all" &&
+    (has(editions, params.get("theme")) ||
+      matchMedia("(max-width: 650px)").matches));
 const state = {
   theme: has(editions, params.get("theme")) ? params.get("theme") : "ocean",
   tab: has(tabs, params.get("tab")) ? params.get("tab") : "wellness",
-  view: params.get("view") === "focus" || params.has("embed") ? "focus" : "all",
+  view: focusOnOpen ? "focus" : "all",
   mode: ["dark", "light"].includes(params.get("mode"))
     ? params.get("mode")
     : (dark.matches ? "dark" : "light"),
@@ -254,8 +259,46 @@ function styleFor(id) {
   );
   return vars.join(";");
 }
-function art() {
-  return '<div class="print" aria-hidden="true"><div class="print-photo"></div><div class="air"></div><div class="petals"><i></i><i></i><i></i></div></div>';
+// These marks use coordinates in the original paintings, so they stay registered
+// to the artwork as the header crops between a phone and a wide review panel.
+const motionMarks = {
+  dune: `<g class="sand-stroke" fill="#fff0c5">
+      <path d="M91 83 Q115 83 133 80 Q118 85 91 84Z M148 82 Q177 77 198 67 Q177 79 148 83Z"/>
+      <path d="M182 88 Q220 85 249 76 Q227 85 207 87Z"/></g>
+    <g class="sand-stroke distant" fill="#fff4d8"><path d="M170 78 Q195 72 222 57 Q209 67 181 76Z M225 53 Q244 41 256 29 Q244 43 228 53Z"/></g>`,
+  ocean: `<g class="spray" fill="#fffdf2" stroke="#93bece" stroke-width=".4">
+      <path d="M247 36q4-7 6-5q2 3-4 8Z M257 32q2-5 4-4q2 2-2 6Z"/>
+      <circle cx="253" cy="26" r="1.7"/><circle cx="263" cy="31" r="1.1"/></g>
+    <g class="spray distant" fill="#f8fbef"><path d="M249 44q3-5 4-3q1 2-4 5Z"/><circle cx="256" cy="40" r="1.5"/></g>`,
+  arctic: `<g class="aurora-band" fill="#a3ffe4">
+      <path d="M57 52C94 29 113 32 140 19S184 2 211 -4C177 8 156 17 141 23S95 34 57 52Z"/>
+      <path d="M223 31C247 25 282 30 302 2C293 25 266 31 223 33Z"/></g>`,
+  contour: `<g class="contour-trace" fill="none" stroke-linecap="round">
+      <path pathLength="100" stroke="#895829" stroke-width="1.5" d="M101 87C115 86 123 84 131 74S147 64 161 65S190 55 197 39S210 28 222 19S238 7 249 7"/>
+      <path pathLength="100" stroke="#fff2a9" stroke-width="1.8" d="M140 85C155 92 174 96 190 91S208 86 216 80S233 67 250 69S273 64 280 57"/></g>`,
+  "water-lilies": `<g class="water-strokes" fill="#d2c3c9">
+      <path d="M111 61q9-3 18-1l6 1q-13-1-24 2Z M130 70q8-2 16 0l-5 1-12 1Z M169 53l9-2 9 1-6 1Z"/></g>
+    <g class="water-strokes distant" fill="#aabeb5"><path d="M139 42q14-4 23-1l-9 1-11 1Z M160 79q9-2 18 0-8 1-19 2Z M196 51l8-1 8 1-11 1Z"/></g>`,
+  patisserie: `<g class="countertop"><g class="cast-shadow" fill="#678eaa">
+      <path d="M109 78l29-17 1 13 13 5Z M154 79l30-20v16l9 5Z M239 80l19-15-1 10 7 4Z"/></g></g>
+    <g class="icing-glint" fill="#fff8d3"><path d="M187 38q2-4 6-4l-3 3Z M220 36q9 0 14 4l-5-1Z M263 59q9 3 14 2-6 3-14 0Z"/></g>`,
+};
+
+function art(id) {
+  const height =
+    { dune: 100, ocean: 108.3, "water-lilies": 100, patisserie: 100 }[id] ||
+    120;
+  const marks = motionMarks[id]
+    ? `<svg class="motif-detail" viewBox="0 0 300 ${height}" aria-hidden="true">${
+      motionMarks[id]
+    }</svg>`
+    : "";
+  const petals = id === "sakura"
+    ? '<div class="petals"><i></i><i></i><i></i><i></i><i></i><i></i></div>'
+    : "";
+  return `<div class="print" aria-hidden="true"><div class="art-plane" style="--art-height:${height};--cover-width:${
+    30000 / height
+  }cqh"><div class="print-photo"></div><div class="air"></div>${marks}${petals}</div></div>`;
 }
 function ring(n) {
   return '<span class="ring"><svg viewBox="0 0 42 42" aria-hidden="true"><circle class="track" cx="21" cy="21" r="18" fill="none" stroke-width="3"/><circle class="value" cx="21" cy="21" r="18" fill="none" stroke-linecap="round" stroke-width="3" pathLength="100" stroke-dasharray="' +
@@ -404,7 +447,7 @@ function detailBody(id) {
 function mockup(id, tab, scene) {
   const d = details[scene], title = d ? d.name : tabs[tab].name;
   return '<div class="device" data-theme="' + id + '" data-screen="' + scene +
-    '" style="' + styleFor(id) + '"><div class="header">' + art() +
+    '" style="' + styleFor(id) + '"><div class="header">' + art(id) +
     '<div class="time" aria-hidden="true"><span>9:41</span><span>▮▮▮ &nbsp; ▰</span></div><div class="screen-nav">' +
     (d
       ? '<button class="tool-icon" data-back aria-label="탭으로 돌아가기">' +
@@ -429,9 +472,7 @@ function edition(id, tab, scene, focus) {
   const title = focus
     ? (scene === "root" ? tabs[tab].name : details[scene].label)
     : d.name;
-  const subtitle = focus
-    ? d.name + " · " + d.artist
-    : d.artist + " · " + d.motif;
+  const subtitle = (focus ? d.name + " · " : "") + d.artist + " · " + d.motif;
   return '<section class="edition"><header class="plate-title"><div><h2>' +
     title + "</h2><small>" + subtitle + "</small></div>" +
     (focus
@@ -440,9 +481,15 @@ function edition(id, tab, scene, focus) {
         d.name + ' 테마 확대">확대 ↗</button>') +
     "</header>" + mockup(id, tab, scene) + "</section>";
 }
+function setPlayback(playing) {
+  state.play = playing;
+  root.dataset.play = playing ? "playing" : "paused";
+  document.querySelector("#motion").textContent = playing
+    ? "움직임 멈추기"
+    : "움직임 재생";
+}
 function render(updateUrl = true) {
   root.dataset.mode = state.mode;
-  root.dataset.play = state.play ? "playing" : "paused";
   document.querySelectorAll("[data-view]").forEach((b) =>
     b.setAttribute("aria-pressed", String(b.dataset.view === state.view))
   );
@@ -451,9 +498,6 @@ function render(updateUrl = true) {
       b.setAttribute("aria-pressed", String(b.dataset.mode === state.mode));
     }
   });
-  document.querySelector("#motion").textContent = state.play
-    ? "움직임 멈추기"
-    : "움직임 재생";
   themeSelect.value = state.theme;
   tabSelect.value = state.tab;
   document.querySelector("#theme-label").hidden = state.view !== "focus";
@@ -523,9 +567,7 @@ document.addEventListener("click", (e) => {
     render();
     panels.firstElementChild.scrollIntoView({ block: "nearest" });
   } else if (b.id === "motion") {
-    state.play = !state.play;
-    root.dataset.play = state.play ? "playing" : "paused";
-    b.textContent = state.play ? "움직임 멈추기" : "움직임 재생";
+    setPlayback(!state.play);
   }
 });
 themeSelect.onchange = () => {
@@ -538,7 +580,7 @@ sceneSelect.onchange = () => {
   render();
 };
 reduced.addEventListener("change", () => {
-  state.play = !reduced.matches;
-  render(false);
+  setPlayback(!reduced.matches);
 });
+setPlayback(state.play);
 render(false);

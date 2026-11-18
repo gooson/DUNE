@@ -189,23 +189,37 @@ select {
   position: relative;
   isolation: isolate;
 }
-.print, .print-photo, .air, .petals {
+.print, .print-photo, .air, .petals, .motif-detail {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 .print {
   overflow: hidden;
+  container-type: size;
   z-index: -1;
   background: var(--ground);
 }
-.print-photo, .air {
-  background-image: var(--image);
-  background-size: cover;
-  background-position: var(--framing, 65% 51%);
+.art-plane {
+  position: absolute;
+  width: max(100%, var(--cover-width));
+  aspect-ratio: 300 / var(--art-height);
+  left: 65%;
+  top: 51%;
+  transform: translate(-65%, -51%);
+}
+.motif-detail {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 .print-photo {
-  inset: -1px;
+  background-image: var(--image);
+  background-size: cover;
+  background-position: center;
+}
+.print-photo {
+  inset: 0;
   filter: saturate(var(--sat, 0.87));
   opacity: var(--strength, 0.91);
 }
@@ -587,138 +601,370 @@ button.jump::after {
 [data-theme="ocean"] .hero {
   border-bottom-color: color-mix(in srgb, var(--hi) 55%, var(--hero));
 }
-[data-theme="forest"] .air, [data-theme="forest"] .air::after {
-  background: radial-gradient(ellipse closest-side, #e1e7d4cc, transparent 98%);
-  inset: 0 -12% -16%;
-  animation: fog 24s ease-in-out infinite;
-  opacity: 1;
+/* The base print is stationary where the moving pigment has a fixed subject. */
+.sand-stroke {
+  animation: dune-wind 4.9s ease-in-out -1.4s infinite;
 }
-[data-theme="forest"] .air::after {
+.sand-stroke.distant {
+  animation-delay: -3.8s;
+  animation-duration: 6.1s;
+}
+@keyframes dune-wind {
+  0% {
+    opacity: 0;
+    transform: translate(-22px, 4px);
+  }
+  27% {
+    opacity: 0.86;
+  }
+  67% {
+    opacity: 0.92;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(24px, -5px);
+  }
+}
+[data-theme="ocean"] .print-photo {
+  transform-origin: 76% 90%;
+  animation: breaker 5.6s ease-in-out -1s infinite;
+}
+@keyframes breaker {
+  0%, 100% {
+    transform: translate(-3px, 2px) scale(1.04, 0.97);
+  }
+  48% {
+    transform: translate(4px, -3px) scale(1.035, 1.055);
+  }
+}
+.spray {
+  animation: crest-spray 3.2s ease-out -0.9s infinite;
+}
+.spray.distant {
+  animation-delay: -2.4s;
+}
+@keyframes crest-spray {
+  0% {
+    opacity: 0;
+    transform: translate(-5px, 4px);
+  }
+  20% {
+    opacity: 0.92;
+  }
+  55% {
+    opacity: 0.96;
+    transform: translate(4px, -6px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(13px, 5px);
+  }
+}
+[data-theme="ocean"] .art-plane {
+  background: #cceaf0;
+}
+[data-mode="dark"] [data-theme="ocean"] .art-plane {
+  background: #9aadb1;
+}
+[data-theme="forest"] .air {
+  opacity: 1;
+  filter: none;
+  --mist: 232, 237, 217;
+}
+[data-mode="dark"] [data-theme="forest"] .air {
+  --mist: 183, 200, 181;
+}
+[data-theme="forest"] .air::before, [data-theme="forest"] .air::after {
   content: "";
   position: absolute;
-  inset: -17% -3% 0;
-  animation-delay: -3.8s;
+  inset: -18% -23% -12%;
+  background:
+    radial-gradient(
+      ellipse 43% 24% at 58% 58%,
+      rgba(var(--mist), 0.90) 20%,
+      rgba(var(--mist), 0.45) 65%,
+      transparent 100%
+    ),
+    radial-gradient(
+    ellipse 39% 43% at 35% 63%,
+    rgba(var(--mist), 0.87) 10%,
+    transparent 100%
+  );
+  animation: valley-fog 14s ease-in-out -2.1s infinite;
 }
-@keyframes fog {
+[data-theme="forest"] .air::after {
+  inset: 0 -13% -20%;
+  background: radial-gradient(
+    ellipse 50% 33% at 62% 66%,
+    rgba(var(--mist), 0.96) 24%,
+    rgba(var(--mist), 0.56) 61%,
+    transparent 100%
+  );
+  animation: valley-fog 14s ease-in-out -3.4s infinite reverse;
+}
+@keyframes valley-fog {
   0%, 100% {
-    opacity: 0.96;
-    transform: translateY(-4%);
+    opacity: 0.98;
+    transform: translate(-4%, -9%);
   }
-  57%, 72% {
-    opacity: 0.04;
-    transform: translateY(22%);
+  32% {
+    opacity: 0.81;
+  }
+  56%, 67% {
+    opacity: 0.065;
+    transform: translate(11%, 18%);
+  }
+  82% {
+    opacity: 0.56;
   }
 }
 [data-theme="sakura"] .petals i {
   position: absolute;
-  top: 20%;
-  left: 67%;
-  width: 8px;
-  height: 5px;
-  border-radius: 70% 30% 65% 20%;
-  background: #ffe3e0;
-  border: 1px solid #ca8791;
-  animation: fall 9s ease-in-out infinite;
+  left: var(--left, 74%);
+  top: var(--top, 12%);
+  width: var(--size, 9px);
+  aspect-ratio: 1.45;
+  border-radius: 74% 25% 62% 20%;
+  background: linear-gradient(145deg, #fff0df 15%, #eea0a8 54%, #cc717f 95%);
+  box-shadow: inset 0 -0.85px #a35868;
+  animation: blossom-fall var(--duration, 5.8s) ease-in-out var(--delay, -1.4s)
+    infinite;
 }
-[data-theme="sakura"] .petals i:nth-child(2) {
-  left: 80%;
-  top: 8%;
-  animation-delay: -5s;
+.petals i:nth-child(2) {
+  --left: 62%;
+  --top: 20%;
+  --size: 7px;
+  --delay: -4s;
 }
-[data-theme="sakura"] .petals i:nth-child(3) {
-  left: 53%;
-  top: 32%;
-  animation-delay: -3s;
+.petals i:nth-child(3) {
+  --left: 92%;
+  --top: 13%;
+  --size: 11px;
+  --duration: 6.4s;
+  --delay: -2.2s;
 }
-@keyframes fall {
+.petals i:nth-child(4) {
+  --left: 75%;
+  --top: 46%;
+  --size: 10px;
+  --delay: -2.4s;
+}
+.petals i:nth-child(5) {
+  --left: 55%;
+  --top: 19%;
+  --size: 13px;
+  --duration: 6s;
+  --delay: -3.8s;
+}
+.petals i:nth-child(6) {
+  --left: 43%;
+  --top: 22%;
+  --size: 12px;
+  --duration: 6.2s;
+  --delay: -1.7s;
+}
+@keyframes blossom-fall {
   0% {
     opacity: 0;
-    transform: translate(0, -8px);
+    transform: translate(6px, -5px) rotate(-22deg);
   }
-  17%, 74% {
-    opacity: 1;
+  15%, 76% {
+    opacity: 0.96;
   }
-  52% {
-    transform: translate(-12px, 32px) rotate(55deg);
+  42% {
+    transform: translate(-16px, 29px) rotate(48deg) scaleX(0.72);
+  }
+  68% {
+    transform: translate(-10px, 55px) rotate(90deg);
   }
   100% {
     opacity: 0;
-    transform: translate(-32px, 81px) rotate(125deg);
+    transform: translate(-37px, 90px) rotate(147deg) scaleX(0.72);
   }
 }
-[data-theme="ocean"] .print-photo {
-  inset: -3px;
-  animation: tide 12s ease-in-out infinite alternate;
-}
-@keyframes tide {
-  to {
-    transform: translate(-4px, 2px);
-  }
-}
-[data-theme="water-lilies"] .air,
-[data-theme="dune"] .air,
-[data-theme="arctic"] .air,
-[data-theme="contour"] .air {
-  inset: -2px;
-  opacity: 0.65;
-  mask-image: linear-gradient(
-    110deg,
-    transparent 8%,
-    #000 40%,
-    transparent 78%
-  );
-  animation: reflection 12s ease-in-out infinite alternate;
-}
-[data-theme="water-lilies"] .air {
-  mask-image: radial-gradient(ellipse at 35% 65%, #000, transparent 58%);
-  animation-duration: 9s;
+/* Feather within the open sky: a shifted copy of the mountain silhouettes
+   would otherwise introduce slivers of ice above the unmoving ridgeline. */
+[data-theme="arctic"] .air, [data-theme="arctic"] .motif-detail {
+  mask-image:
+    radial-gradient(
+      ellipse 42% 35% at 29% 18%,
+      black 22%,
+      #000e 49%,
+      transparent 94%
+    ),
+    radial-gradient(ellipse 26% 20% at 80% -2%, black 28%, transparent 97%),
+    radial-gradient(ellipse 20% 24% at 101% 7%, black 28%, transparent 97%);
 }
 [data-theme="arctic"] .air {
-  mask-image: linear-gradient(165deg, #000, transparent 65%);
-  animation-duration: 18s;
+  opacity: 0.95;
 }
-[data-theme="contour"] .air {
-  opacity: 0.45;
-  mask-image: radial-gradient(ellipse at 76% 60%, #000, transparent 65%);
-  animation-duration: 17s;
+[data-theme="arctic"] .air::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--image) center / cover;
+  transform-origin: 48% 30%;
+  animation: polar-sky 7s ease-in-out -1.5s infinite alternate;
 }
-@keyframes reflection {
+@keyframes polar-sky {
+  from {
+    transform: scale(1.1) translate(-2%, 1%) skewY(1deg);
+  }
   to {
-    transform: translateX(3px) scaleX(1.012);
+    transform: scale(1.1) translate(3%, -3%) skewY(-1.8deg);
+  }
+}
+.aurora-band {
+  filter: blur(1.25px);
+  animation: polar-light 6.8s ease-in-out -1.7s infinite alternate;
+}
+@keyframes polar-light {
+  from {
+    opacity: 0.12;
+    transform: translate(-6px, -2px) skewY(-1deg);
+  }
+  to {
+    opacity: 0.62;
+    transform: translate(8px, 3px) skewY(0.8deg);
   }
 }
 [data-theme="solar"] .air {
-  opacity: 0.28;
-  background: radial-gradient(ellipse at 69% 46%, #ffe485 3%, transparent 45%);
-  animation: sun 10s ease-in-out infinite alternate;
-}
-@keyframes sun {
-  to {
-    opacity: 0.03;
-    transform: scale(1.04);
-  }
-}
-[data-theme="patisserie"] .air {
-  opacity: 0.19;
-  background: linear-gradient(
-    118deg,
-    transparent 40%,
-    #fff6db88 54%,
-    transparent 68%
+  background: var(--image) center / cover;
+  opacity: 0.95;
+  mask-image: radial-gradient(
+    ellipse 25% 67% at 76% 41%,
+    black 18%,
+    #000e 47%,
+    transparent 97%
   );
-  animation: glaze 14s ease-in-out infinite alternate;
+  transform-origin: 76% 41%;
+  animation: solar-pigment 7.6s ease-in-out -2s infinite alternate;
 }
-@keyframes glaze {
+@keyframes solar-pigment {
+  from {
+    transform: rotate(-8deg);
+  }
   to {
-    transform: translateX(6%);
-    opacity: 0.05;
+    transform: rotate(10deg);
   }
 }
-:root[data-play="paused"] .print *, :root[data-play="paused"] .print *::after {
+[data-theme="contour"] .air {
+  opacity: 0.94;
+  background: var(--image) center / cover;
+  mask-image: radial-gradient(
+    ellipse 30% 27% at 68% 57%,
+    #000 25%,
+    transparent 95%
+  );
+  transform-origin: 70% 63%;
+  animation: contour-register 7s ease-in-out -2.1s infinite alternate;
+}
+@keyframes contour-register {
+  from {
+    transform: translate(-1.3%, 0) scale(1.015);
+  }
+  to {
+    transform: translate(1.1%, 0.4%) scale(1.035);
+  }
+}
+.contour-trace path {
+  stroke-dasharray: 26 100;
+  animation: contour-ink 6.8s linear -1.7s infinite;
+}
+.contour-trace path + path {
+  animation-delay: -4.7s;
+}
+@keyframes contour-ink {
+  0% {
+    stroke-dashoffset: 27;
+    opacity: 0;
+  }
+  20%, 73% {
+    opacity: 0.82;
+  }
+  100% {
+    stroke-dashoffset: -100;
+    opacity: 0;
+  }
+}
+[data-theme="water-lilies"] .air {
+  opacity: 0.94;
+  background: var(--image) center / cover;
+  mask-image:
+    radial-gradient(ellipse 21% 34% at 36% 58%, #000 25%, transparent 100%),
+    radial-gradient(ellipse 24% 20% at 62% 93%, #000 30%, transparent 100%);
+  animation: pond-reflection 5.6s ease-in-out -1.3s infinite alternate;
+}
+@keyframes pond-reflection {
+  from {
+    transform: translateX(-1.2%) skewX(-1.2deg);
+  }
+  to {
+    transform: translateX(1.9%) skewX(1.4deg);
+  }
+}
+.water-strokes {
+  animation: pond-light 4.4s ease-in-out -1.7s infinite;
+}
+.water-strokes.distant {
+  animation-delay: -3.6s;
+}
+@keyframes pond-light {
+  0%, 100% {
+    opacity: 0.05;
+    transform: translate(-6px, 1px);
+  }
+  45% {
+    opacity: 0.71;
+  }
+  85% {
+    opacity: 0.12;
+    transform: translate(9px, -1px);
+  }
+}
+.countertop {
+  /* Reserve the three pastry silhouettes when their cast shadows lengthen. */
+  clip-path: path(
+    evenodd,
+    "M0 0H300V100H0Z M129 73Q130 70 134 69L137 54Q138 46 144 46H162Q167 46 169 53L173 69Q179 70 179 74Q176 80 154 80Q133 80 129 74Z M184 39Q185 33 193 33Q214 29 244 34Q250 36 250 40V76Q243 82 215 81Q191 82 184 77Z M254 59Q264 56 291 59L287 76Q282 81 262 78Z"
+  );
+}
+.cast-shadow {
+  transform-origin: 74% 80%;
+  animation: counter-light 6.4s ease-in-out -1.8s infinite alternate;
+  mix-blend-mode: multiply;
+}
+@keyframes counter-light {
+  from {
+    opacity: 0.34;
+    transform: skewX(-22deg) scaleX(1.04);
+  }
+  to {
+    opacity: 0.74;
+    transform: skewX(19deg) scaleX(0.985);
+  }
+}
+.icing-glint {
+  animation: icing-light 6.4s ease-in-out -1.8s infinite alternate;
+}
+@keyframes icing-light {
+  from {
+    opacity: 0.16;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 0.94;
+    transform: translateX(2px);
+  }
+}
+:root[data-play="paused"] .print *,
+:root[data-play="paused"] .print *::before,
+:root[data-play="paused"] .print *::after {
   animation-play-state: paused !important;
 }
 @media (prefers-reduced-motion: reduce) {
   :root:not([data-play="playing"]) .print *,
+  :root:not([data-play="playing"]) .print *::before,
   :root:not([data-play="playing"]) .print *::after {
     animation-play-state: paused !important;
   }
@@ -832,9 +1078,6 @@ button.jump::after {
     color-mix(in srgb, var(--ground) 70%, transparent) 33%,
     transparent 72%
   );
-}
-[data-theme="solar"] .air {
-  background: radial-gradient(ellipse at 84% 46%, #ffe485 3%, transparent 43%);
 }
 :root[data-embed="true"] .mast {
   display: flex;

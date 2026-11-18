@@ -59,7 +59,7 @@ def main() -> None:
         "__STUDY_DETAIL__": escaped(study["detail"]),
         "__FIRST_NAME__": escaped(first["name"]),
         "__FIRST_TITLE__": escaped(first["title"]),
-        "__FIRST_DESCRIPTION__": escaped(f'{first["motif"]} · {first["motion"]}. {first["detail"]}'),
+        "__FIRST_DESCRIPTION__": escaped(f'{first["artist"]} · {data["artist_study"]["motion"][first["id"]]}'),
         "__FIRST_FILE__": escaped(first["file"]),
         "__COMPARE_OPTIONS__": "\n".join(options),
     }

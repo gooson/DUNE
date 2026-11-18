@@ -73,7 +73,7 @@
         <h1>Theme Map</h1>
         <p class="intro">기존 8개 테마와 신규 Pâtisserie의 방향 시안을 모았습니다. 테마를 선택해 움직임과 Today 히어로, 그래프, 다른 탭의 표현을 보고 두 시안을 나란히 비교할 수 있습니다. <a href="../full-redesign-map/index.html">8개 테마 전체 구현 맵</a>에서 화면별 적용 범위와 남은 작업을 확인하세요.</p>
       </div>
-      <a class="head-link" href="themes/artist-editions.html">아홉 테마를 앱 화면으로 비교 ↗</a>
+      <a class="head-link" href="themes/artist-editions.html?theme=ocean&amp;view=focus">오션부터 한 테마씩 움직임 보기 ↗</a>
     </header>
     <p class="note"><strong>방향 시안</strong><span class="separator">·</span> 실제 앱 구현 및 시뮬레이터 캡처와 구분<span class="separator">·</span> <a href="../phone-design-map/actual/index.html">실제 앱 화면</a><span class="separator">·</span> 컨디션 수치와 링 색은 시안 예시이며 실제 앱의 점수 호는 상태색<span class="separator">·</span> 마지막 정리 <span id="updated-date">__UPDATED__</span></p>
     <div class="layout">
@@ -127,7 +127,7 @@
       document.querySelectorAll(".theme-choice").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.theme === id)));
       document.getElementById("selected-name").textContent = theme.name;
       document.getElementById("selected-title").textContent = theme.title;
-      document.getElementById("selected-description").textContent = `${theme.artist} · ${theme.motif}`;
+      document.getElementById("selected-description").textContent = `${theme.artist} · ${manifest.artist_study.motion[theme.id]}`;
       document.getElementById("primary-caption").textContent = theme.name;
       source.href = theme.file === manifest.artist_study.file ? `themes/${theme.file}?theme=${theme.id}&view=focus` : `themes/${theme.file}`;
       source.textContent = theme.file === manifest.artist_study.file ? "테마 시안 열기 ↗" : "이전 원본 시안 ↗";
