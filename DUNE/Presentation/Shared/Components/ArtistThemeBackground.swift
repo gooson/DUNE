@@ -34,7 +34,8 @@ struct ArtistThemeBackground: View {
                         Image(uiImage: image).resizable().scaledToFill()
                             .frame(width: proxy.size.width, height: height).clipped()
                     }
-                    if Self.playsMotion(visible: visible, phase: scenePhase, reduced: reducedMotion, lowPower: lowPower) {
+                    // A sheet can share the window with a still-visible animated tab.
+                    if placement != .sheet && Self.playsMotion(visible: visible, phase: scenePhase, reduced: reducedMotion, lowPower: lowPower) {
                         ArtistMotionPlayer(url: edition.movieURL)
                     }
                 }

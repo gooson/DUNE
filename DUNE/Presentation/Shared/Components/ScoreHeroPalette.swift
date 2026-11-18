@@ -66,6 +66,12 @@ struct ScoreHeroPalette {
     /// The dusk highlight belongs to the ring, where it is only a gradient stop.
     var trendLine: Color { edition?.highlight ?? (isDesert ? heroHighlight : heroAccent) }
     var heroPositive: Color {
+        if edition != nil {
+            var environment = EnvironmentValues()
+            environment.colorScheme = .dark
+            let color = theme.scoreGood.resolve(in: environment)
+            return Color(.sRGBLinear, red: Double(color.linearRed), green: Double(color.linearGreen), blue: Double(color.linearBlue))
+        }
         if colorScheme == .light && theme == .contourAtlas {
             return Color(red: 0.741, green: 0.835, blue: 0.525)
         }
