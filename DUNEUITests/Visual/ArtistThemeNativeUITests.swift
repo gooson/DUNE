@@ -68,6 +68,8 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
 
     private func captureTheme(_ theme: String) throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Artist theme design capture requires a visual audit test plan") }
+        // Each case captures both appearances through ten native routes.
+        executionTimeAllowance = 600
 
         for style in ["light", "dark"] {
             launchApp(with: themeLaunchConfiguration(theme, style: style))
@@ -99,12 +101,6 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         open(AXID.activityHeroReadiness)
         capture("A02", showing: AXID.activityTrainingReadinessDetailScreen, prefix: prefix)
         goBack(to: AXID.activityHeroReadiness)
-        open(AXID.activityRecentSeeAll, maxSwipes: 24)
-        _ = waitForElement(AXID.exerciseViewScreen, timeout: 10)
-        open(AXID.exerciseRow("mock-workout-running-tempo"), maxSwipes: 12)
-        capture("W28", showing: AXID.healthkitWorkoutDetailScreen, prefix: prefix)
-        goBack(to: AXID.exerciseViewScreen)
-        goBack(to: AXID.activityRootScroll)
 
         navigateToLife()
         capture("L01", showing: AXID.lifeHeroProgress, prefix: prefix)
@@ -119,6 +115,13 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         goBack(to: AXID.wellnessHeroScore)
         open("wellness-hero-sleep", maxSwipes: 12)
         capture("T06", showing: AXID.metricDetailScreen("sleep"), prefix: prefix)
+        goBack(to: "wellness-hero-sleep")
+
+        navigateToActivity()
+        open(AXID.activityRecentSeeAll, maxSwipes: 24)
+        _ = waitForElement(AXID.exerciseViewScreen, timeout: 10)
+        open(AXID.exerciseRow("mock-workout-running-tempo"), maxSwipes: 12)
+        capture("W28", showing: AXID.healthkitWorkoutDetailScreen, prefix: prefix)
     }
 
     private func open(_ identifier: String, maxSwipes: Int = 0) {

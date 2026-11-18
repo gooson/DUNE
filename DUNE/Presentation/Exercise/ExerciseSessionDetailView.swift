@@ -120,7 +120,7 @@ struct ExerciseSessionDetailView: View {
                         .foregroundStyle(DS.Color.textSecondary)
                     Text(record.date, style: .time)
                         .font(.caption)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
 
                 if !dynamicTypeSize.isAccessibilitySize { Spacer() }
