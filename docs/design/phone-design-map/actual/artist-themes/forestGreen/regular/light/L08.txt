@@ -1,0 +1,110 @@
+Attributes: Application, 0x110b8b340, pid: 19284, label: 'DUNE'
+Element subtree:
+ →Application, 0x110b8b340, pid: 19284, label: 'DUNE'
+    Window (Main), 0x110b8b480, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x110b8b5c0, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x110b8b700, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x106591040, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x106593200, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x106591e00, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x106593340, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x106591f40, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x1065930c0, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x106593d40, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x106591680, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x106592940, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x106590280, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x106592d00, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x106591a40, {{0.0, 0.0}, {402.0, 874.0}}
+                                Other, 0x106592580, {{0.0, 0.0}, {402.0, 874.0}}
+                                  Other, 0x106592800, {{0.0, 0.0}, {402.0, 874.0}}
+                                    Other, 0x106591400, {{0.0, 0.0}, {402.0, 874.0}}
+                                      Other, 0x106590640, {{0.0, 0.0}, {402.0, 874.0}}
+                                        NavigationBar, 0x1065903c0, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Weekly Report'
+                                          Button, 0x1065912c0, {{16.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Life'
+                                          StaticText, 0x106590b40, {{143.0, 73.7}, {116.0, 20.7}}, label: 'Weekly Report'
+                                        Other, 0x106590000, {{0.0, 0.0}, {402.0, 874.0}}
+                                          Other, 0x106592440, {{0.0, 0.0}, {402.0, 874.0}}
+                                            Other, 0x1065935c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                              Other, 0x106591cc0, {{0.0, 0.0}, {402.0, 874.0}}
+                                                Image, 0x106590500, {{-35.3, 0.0}, {472.7, 874.0}}
+                                                ScrollView, 0x106593ac0, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'life-weekly-report-scroll'
+                                                  Other, 0x1065926c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                                    Other, 0x111b3be80, {{0.0, 0.0}, {402.0, 156.0}}
+                                                    Other, 0x111b3bd40, {{0.0, 741.0}, {402.0, 133.0}}
+                                                  Other, 0x103284780, {{0.0, 0.0}, {402.0, 874.0}}
+                                                  Other, 0x103286e40, {{0.0, 116.0}, {402.0, 567.0}}
+                                                    StaticText, 0x103287480, {{59.3, 152.0}, {74.0, 18.0}}, identifier: 'life-weekly-report-period', label: 'This Week'
+                                                    StaticText, 0x106011900, {{36.0, 182.0}, {53.0, 40.7}}, identifier: 'life-weekly-report-rate', label: '4%'
+                                                    StaticText, 0x106013840, {{36.0, 234.7}, {121.0, 18.0}}, identifier: 'life-weekly-report-total', label: '1 of 21 completed'
+                                                    StaticText, 0x106012440, {{110.0, 308.7}, {58.7, 14.3}}, label: 'This Week'
+                                                    StaticText, 0x106011180, {{233.3, 308.7}, {58.7, 14.3}}, label: 'Last Week'
+                                                    StaticText, 0x106013ac0, {{121.7, 327.0}, {35.3, 26.3}}, identifier: 'life-weekly-report-comparison-current', label: '4%'
+                                                    Image, 0x106011040, {{187.0, 317.0}, {28.0, 28.0}}, identifier: 'life-weekly-report-comparison-trend', label: 'Arrow Up Circle'
+                                                    StaticText, 0x106013200, {{245.0, 327.0}, {35.3, 26.3}}, identifier: 'life-weekly-report-comparison-previous', label: '0%'
+                                                    StaticText, 0x106012300, {{50.7, 398.3}, {91.7, 20.3}}, identifier: 'life-weekly-report-best', label: 'Best Habits'
+                                                    StaticText, 0x106010b40, {{24.0, 428.7}, {110.7, 18.0}}, label: 'Morning Stretch'
+                                                    StaticText, 0x106012f80, {{346.0, 428.7}, {32.0, 18.0}}, label: '14%'
+                                                    StaticText, 0x106012800, {{24.0, 458.7}, {35.0, 18.0}}, label: 'Read'
+                                                    StaticText, 0x106013c00, {{353.3, 458.7}, {24.7, 18.0}}, label: '0%'
+                                                    StaticText, 0x1060135c0, {{24.0, 488.7}, {40.7, 18.0}}, label: 'Water'
+                                                    StaticText, 0x106012940, {{353.3, 488.7}, {24.7, 18.0}}, label: '0%'
+                                                    StaticText, 0x1060121c0, {{45.0, 548.7}, {160.7, 20.3}}, identifier: 'life-weekly-report-improvement', label: 'Needs Improvement'
+                                                    StaticText, 0x1060126c0, {{24.0, 579.0}, {40.7, 18.0}}, label: 'Water'
+                                                    StaticText, 0x106013d40, {{353.3, 579.0}, {24.7, 18.0}}, label: '0%'
+                                                    StaticText, 0x106012e40, {{24.0, 609.0}, {35.0, 18.0}}, label: 'Read'
+                                                    StaticText, 0x106011f40, {{353.3, 609.0}, {24.7, 18.0}}, label: '0%'
+                                                    StaticText, 0x1060130c0, {{24.0, 639.0}, {110.7, 18.0}}, label: 'Morning Stretch'
+                                                    StaticText, 0x106012580, {{346.0, 639.0}, {32.0, 18.0}}, label: '14%'
+                                                  Other, 0x1060103c0, {{369.0, 116.0}, {30.0, 675.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x106012080, {{396.0, 227.0}, {3.0, 561.0}}
+                                                  Other, 0x106013340, {{369.0, 116.0}, {30.0, 675.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                                                    Other, 0x1060112c0, {{396.0, 227.0}, {3.0, 561.0}}
+                                        Toolbar, 0x106012bc0, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x106010780, {{0.0, 0.0}, {402.0, 874.0}}
+                                Toolbar, 0x106010f00, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x106011400, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x106012d00, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x106011cc0, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x106011a40, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x106012a80, {{0.0, 791.0}, {402.0, 83.0}}
+                    Other, 0x106013700, {{0.0, 0.0}, {402.0, 874.0}}
+                      TabBar, 0x106013480, {{0.0, 791.0}, {402.0, 83.0}}, label: 'Tab Bar'
+                        Other, 0x106013980, {{21.0, 791.0}, {360.0, 62.0}}
+                          Other, 0x1060117c0, {{21.0, 791.0}, {95.0, 54.0}}
+                          Other, 0x106013e80, {{21.0, 791.0}, {360.0, 62.0}}
+                            Button, 0x106011b80, {{25.0, 795.0}, {95.0, 54.0}}, identifier: 'tab-today', label: 'Today'
+                              Image, 0x111b30000, {{60.0, 798.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                            Button, 0x111b30140, {{110.7, 795.0}, {95.0, 54.0}}, identifier: 'tab-activity', label: 'Activity'
+                              Image, 0x111b30280, {{146.7, 799.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                            Button, 0x111b303c0, {{196.3, 795.0}, {95.0, 54.0}}, identifier: 'tab-wellness', label: 'Wellness'
+                              Image, 0x111b30500, {{229.7, 802.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                            Button, 0x111b30640, {{282.0, 795.0}, {95.0, 54.0}}, identifier: 'tab-life', label: 'Life', Selected
+                              Image, 0x111b30780, {{313.7, 801.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                          Other, 0x111b308c0, {{21.0, 791.0}, {360.0, 62.0}}
+                          Other, 0x111b30a00, {{282.0, 795.0}, {95.0, 54.0}}
+                            Other, 0x111b30b40, {{282.0, 795.0}, {95.0, 54.0}}
+                              Other, 0x111b30c80, {{282.0, 795.0}, {95.0, 54.0}}
+                              Other, 0x111b30dc0, {{282.0, 795.0}, {95.0, 54.0}}
+                                Other, 0x111b30f00, {{282.0, 795.0}, {95.0, 54.0}}
+                                  Other, 0x111b31040, {{282.0, 795.0}, {95.0, 54.0}}
+                                    Other, 0x111b31180, {{282.0, 795.0}, {95.0, 54.0}}
+                                  Other, 0x111b312c0, {{282.0, 795.0}, {95.0, 54.0}}
+                                Other, 0x111b31400, {{282.0, 795.0}, {95.0, 54.0}}
+                    Other, 0x111b31540, {{0.0, 791.0}, {402.0, 83.0}}
+                      Other, 0x111b31680, {{0.0, 791.0}, {402.0, 83.0}}
+                        Other, 0x111b317c0, {{0.0, 791.0}, {402.0, 83.0}}
+                          Other, 0x111b31900, {{0.0, 791.0}, {402.0, 83.0}}
+                            Other, 0x111b31a40, {{0.0, 791.0}, {402.0, 83.0}}
+                              Other, 0x111b31b80, {{0.0, 791.0}, {402.0, 83.0}}
+                          Other, 0x111b31cc0, {{0.0, 791.0}, {402.0, 83.0}}
+                            Other, 0x111b31e00, {{0.0, 791.0}, {402.0, 83.0}}
+              Other, 0x111b31f40, {{0.0, 62.0}, {402.0, 778.0}}
+              Other, 0x111b32080, {{201.0, 451.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x110b8b340, pid: 19284, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x111b321c0, pid: 19284, label: 'DUNE'
+  }
