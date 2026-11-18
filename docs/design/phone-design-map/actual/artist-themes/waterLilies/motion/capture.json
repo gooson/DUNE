@@ -1,0 +1,98 @@
+{
+  "source_revision": "0b89ae3faf2d",
+  "theme": "waterLilies",
+  "scope": "T04 with the actual iOS Reduce Motion preference",
+  "test_identifier": "WaterLiliesThemeTests/testSystemReduceMotionPreservesConditionDetailState()",
+  "test_result": "Passed",
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "4A7F8A87-172F-4DD5-90D7-758ABFC261B2",
+    "deviceName": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+    "modelName": "iPhone 18 Pro",
+    "osBuildNumber": "24B8117",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "original_batch": {
+    "schema_version": 1,
+    "status": "failed",
+    "target": "DUNEUITests",
+    "run_exit_status": 65,
+    "requested_selectors": [
+      "DUNEUITests/AppIconSettingsUITests/testPatisserieSelectionPersistsAndUsesItsIconPalette",
+      "DUNEUITests/WaterLiliesThemeTests/testSystemReduceMotionPreservesConditionDetailState"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 2,
+      "passed": 1,
+      "skipped": 0,
+      "failed": 1
+    },
+    "passed_cases": 1,
+    "failures": [
+      "514: /Users/shanks/.codex/worktrees/a743/Health/DUNEUITests/Full/AppIconSettingsUITests.swift:67: error: -[DUNEUITests.AppIconSettingsUITests testPatisserieSelectionPersistsAndUsesItsIconPalette] : XCTAssertTrue failed",
+      "525: Test Case '-[DUNEUITests.AppIconSettingsUITests testPatisserieSelectionPersistsAndUsesItsIconPalette]' failed (86.420 seconds).",
+      "526: Test Suite 'AppIconSettingsUITests' failed at 2026-11-19 03:18:38.691.",
+      "697: Test Suite 'DUNEUITests.xctest' failed at 2026-11-19 03:19:29.537.",
+      "699: Test Suite 'Selected tests' failed at 2026-11-19 03:19:29.538.",
+      "711: ** TEST FAILED **",
+      "xcodebuild exited 65",
+      "UI test log reports 1 failures",
+      "requested UI test selector has no execution evidence"
+    ],
+    "required_selectors_missing": [
+      "DUNEUITests/AppIconSettingsUITests/testPatisserieSelectionPersistsAndUsesItsIconPalette"
+    ],
+    "log_path": "/private/tmp/dune-a743-native-evidence/artist-interactions/ui.log"
+  },
+  "provenance": {
+    "source_revision": "0b89ae3faf2d",
+    "runner_status": 65,
+    "xcodebuild_exit_status": 65,
+    "log": "/private/tmp/dune-a743-native-evidence/artist-interactions/ui.log",
+    "log_sha256": "3059f0f698a0883e3bf197b5d86eca5b532a3a9479e55e3f22c6f845398ab2e9",
+    "receipt": "/private/tmp/dune-a743-native-evidence/artist-interactions/ui.log.result.json",
+    "receipt_sha256": "c851273dc988da92c897eea7d71ef088780140a6b39fdeb5e2dfcdb30dbff01a",
+    "emitted_xcresult": "/Users/shanks/.codex/worktrees/a743/Health/.deriveddata/artist/Logs/Test/Test-DUNEUITests-2026.11.19_03-16-19-+0900.xcresult",
+    "preserved_xcresult": "/private/tmp/dune-a743-native-evidence/artist-interactions/Test-DUNEUITests-2026.11.19_03-16-19-+0900.xcresult"
+  },
+  "attachments": {
+    "detail-before.png": {
+      "original": "/private/tmp/dune-a743-native-evidence/artist-interactions/reduce-motion-attachments/316A5C65-7A2D-439E-9E94-6A8C031049A5.png",
+      "sha256": "5c2c186b394230b43bbe0fd18dcbe8644333fd87438db98892c65b230cf2a591"
+    },
+    "detail-enabled.png": {
+      "original": "/private/tmp/dune-a743-native-evidence/artist-interactions/reduce-motion-attachments/4C608BBE-E318-49D8-A6BC-BA9A54055E22.png",
+      "sha256": "36fef3973fb4813baf3167f8b404c866f513311573587f712404ac107debe3ae"
+    },
+    "settings-enabled.png": {
+      "original": "/private/tmp/dune-a743-native-evidence/artist-interactions/reduce-motion-attachments/D5CC8A4A-582C-49D3-8E31-92750A9E59D4.png",
+      "sha256": "bf909df2e81ff4e36578ce79f09432f15db3bb1a59e3675060853ffd6563e942"
+    },
+    "settings-original.txt": {
+      "original": "/private/tmp/dune-a743-native-evidence/artist-interactions/reduce-motion-attachments/4ED94188-5632-4B5F-AF01-52BB9AA81567.txt",
+      "sha256": "834c8ce8c50a0ab38911fe928b48c87422807e31970755bb045ccccb321af10a"
+    },
+    "settings-enabled.txt": {
+      "original": "/private/tmp/dune-a743-native-evidence/artist-interactions/reduce-motion-attachments/1A09A184-508E-4F8A-8522-ABD73EE2B9D1.txt",
+      "sha256": "c7fec2cf9d43c03a3a3b5d48f4265de90f2ce77a84284c8487d5e2ca084504f0"
+    },
+    "settings-restored.txt": {
+      "original": "/private/tmp/dune-a743-native-evidence/artist-interactions/reduce-motion-attachments/B5FAE201-822B-4E1B-BDED-76F9C1D9A50B.txt",
+      "sha256": "72eced6b9bb1f5bde53e89b0dc0273000e02dd3cd76c90c434bea75b8a179736"
+    },
+    "detail-before.txt": {
+      "original": "/private/tmp/dune-a743-native-evidence/artist-interactions/reduce-motion-attachments/428EFD97-2636-4FCA-91E6-595D414648A6.txt",
+      "sha256": "019759379bbf0f5aee3eda6bfc2f56d56e8c375e125aa9dc7795183cd711df8a"
+    },
+    "detail-enabled.txt": {
+      "original": "/private/tmp/dune-a743-native-evidence/artist-interactions/reduce-motion-attachments/241239D4-1129-460D-80A0-1A4607558279.txt",
+      "sha256": "eb7d6e9688d0c125b836a39deec837d56629bcd5fbfdc5b9e84e5be19586b56c"
+    }
+  }
+}

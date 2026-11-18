@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Water Lilies · 동작 줄이기</title>
+<style>
+  body { color-scheme: dark; margin: auto; max-width: 1250px; padding: 24px; background: #101819;
+          color: #f5f2eb; font: 16px/1.5 system-ui, sans-serif; }
+  a { color: #b7e5db; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 18px; }
+  figure { margin: 0; }
+  img { display: block; width: 100%; height: auto; }
+  figcaption { margin-top: .4em; }
+</style>
+<main>
+<h1>Water Lilies · 동작 줄이기</h1>
+<p>iOS 설정에서 동작 줄이기를 켠 뒤 UIKit에서 활성 상태를 확인했습니다. 앱으로 돌아온 뒤에도 컨디션 상세의 주간 차트 선택이 유지됐습니다.</p>
+<p>복원 직후 iOS 설정 스위치는 꺼졌고, 같은 순간 UIKit은 이전 값을 읽었습니다.</p>
+<p><a href="../../index.html">작가 테마 모음</a> · <a href="capture.json">캡처 출처</a> · <a href="settings-original.txt">처음 설정값</a> · <a href="settings-enabled.txt">활성 설정값</a> · <a href="settings-restored.txt">복원 직후 설정값</a></p>
+<div class="grid"><figure><a href="detail-before.png"><img loading="lazy" src="detail-before.png" alt="동작 줄이기 끄기" width="1206" height="2622"></a><figcaption>동작 줄이기 끄기</figcaption></figure>
+<figure><a href="settings-enabled.png"><img loading="lazy" src="settings-enabled.png" alt="iOS 설정에서 동작 줄이기 켜기" width="1206" height="2622"></a><figcaption>iOS 설정에서 동작 줄이기 켜기</figcaption></figure>
+<figure><a href="detail-enabled.png"><img loading="lazy" src="detail-enabled.png" alt="앱 복귀 후 주간 차트" width="1206" height="2622"></a><figcaption>앱 복귀 후 주간 차트</figcaption></figure></div>
+</main>
+</html>

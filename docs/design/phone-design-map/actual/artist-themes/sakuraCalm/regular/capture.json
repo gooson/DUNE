@@ -1,0 +1,336 @@
+{
+  "theme": "sakuraCalm",
+  "device_profile": "regular",
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "4A7F8A87-172F-4DD5-90D7-758ABFC261B2",
+    "deviceName": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+    "modelName": "iPhone 18 Pro",
+    "osBuildNumber": "24B8117",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "source_revision": "0df118ee4a66",
+  "source_worktree_dirty": false,
+  "receipt": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/ArtistThemeNativeUITests/testOceanCool",
+      "DUNEUITests/ArtistThemeNativeUITests/testSakuraCalm"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 2,
+      "passed": 2,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 2,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/private/tmp/dune-a743-native-evidence/ocean-sakura-regular/ui.log"
+  },
+  "captures": {
+    "light/T03": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "517844816bb929e167ce35ebb46b2a518634fa54309818017a53db56c28d2769",
+      "txt_sha256": "5b8b6806fb30245195c35d78818fa6418dbcc94fbb1fb99300954f3235b9c9e1"
+    },
+    "light/T04": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "ce21933f32afd1fc16e51f09a32cb3d48a257c0f26c94ff3ac38e866f3a89851",
+      "txt_sha256": "1b4f6fe7b6e835252691b7abb78273c4f91cc25348b73340d4350a0daaaf05bf"
+    },
+    "light/A01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "d0727af93d96f22a681b2198a0ac66a2e3365b5d45f8891b1a478e70d04fa814",
+      "txt_sha256": "e5fe6655fc74851cc46e2fead8b757818034f1f4b72d165b93033b41315851db"
+    },
+    "light/A02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "72fe788dd7fde731ba478e7f09f8de95a9d05b58b8240ee8603f0cb648faed7a",
+      "txt_sha256": "f7136c6d810fdc4128d55dd28bf80d1bd2259301e48a3d5909a2246585241804"
+    },
+    "light/W28": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "717d89ca500bf61e975543a7012e3c93fd5c722d86f9f9e810a6c473895eb94a",
+      "txt_sha256": "969b37e87ef97ed5f3fddc62429d09869d5c698f82da011ebb9ba936900782de"
+    },
+    "light/H01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "46b9aebbab213a458efe65e564c6d4e237ff058780b8ba7e9edacba827a77520",
+      "txt_sha256": "7a590611d4f4c525221c8ac345eb5d5c7e3da70c50f5be6b259f7a09f55dc501"
+    },
+    "light/H02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "8df97c9bd1111da19e07497266f0ad8c9f495a9798faf91dacaa314442f4558e",
+      "txt_sha256": "c9dc32e8ddc44bc5748085b5f53e192cbb2fff2efb3e1ed778c2675bd53f9a13"
+    },
+    "light/T06": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "2e786b1727fc94b2a96b0afa4314d300c96b31d1e0d3b1d721af51283ced56c1",
+      "txt_sha256": "c347361f2b5511055e81aa9cb2c82b0bc5bcc8424a441bffecb16ca81498a1f3"
+    },
+    "light/L01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "f2e1956cc3d800882d572c7225c96389c1d93c631d36567684f71f438e9591c6",
+      "txt_sha256": "f0d5c66014b913e7a60c53f4628f32508de11d172092361b1bb7cb16ed01b947"
+    },
+    "light/L08": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "998fe427846f06c58a964ec234c989fe215a589faa41241e5eaa28f4cd4aac5d",
+      "txt_sha256": "73a248f7b2556d2a07f36980ab85c170df7871c1392996f7f73449281d5c0406",
+      "source_revision": "101993fd15b4",
+      "refresh_selector": "ArtistThemeNativeUITests/testWeeklyReportReadingInk"
+    },
+    "light/S01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "89aa1ff42d95f931c914d7b1ea37d1a51999a0791d0efa2fd53078dc3200c342",
+      "txt_sha256": "b3a670fdf289c22ac9e6bf447680ffc25995ed6cccd2d835d799f4fcb4c676da"
+    },
+    "dark/T03": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "bd1e65bf0940eebbe8f1492573b01d506f3be000d473abdf533180538ff687e0",
+      "txt_sha256": "e783a67338ad576ade78ca2bb9c59d92dc535d2ae81cc56d95c377fa14e711c5"
+    },
+    "dark/T04": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "a2bbbac6b60a8d09d65a1b7fa74331cd780f923fbf28b39c940c3d3ac9950d7c",
+      "txt_sha256": "3d9e072610504234f9e10e3460ddada96a318b397704f7566d30321adab7868f"
+    },
+    "dark/A01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "e355948705d2088d83a92ee46b9ced57c22f3052c5f4e394f067eea672b9dff0",
+      "txt_sha256": "7e4421c467071b19a09789bcfe2f3371aa9c7cabfddfc2ab4f977614c3661c1a"
+    },
+    "dark/A02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "5b9a06a4fac3e99ce824b7021cf6af1b750f09931f20b2e91029763c07b8d8b7",
+      "txt_sha256": "e02660499e112c9632eef99ed46abe6c2b02ac934f9316cec3ceaf75cd27877b"
+    },
+    "dark/W28": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "c6c3f0b4f15320c5ec9b3658ae7031f19dc14c1da2b52b9832f55b341645543f",
+      "txt_sha256": "6c58514bd63bdeac3a553abf93852836b8bfec21c5af1139c26f1df9105fe72b"
+    },
+    "dark/H01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "e480bade6df7f04dd85bfb7499931d637f6e03f296bc61aeab62feaaf0802752",
+      "txt_sha256": "76de10ba39c0af294c5fef1f455d95779029b2aaf013fbb122a4fddb4caca3d9"
+    },
+    "dark/H02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "e6b212f1cdb89d32a0a9bfba42f79a8da78b37e1dd1a1d2a1de7a6bee7abb949",
+      "txt_sha256": "861f4a3238c7fdd7362d76e8bcd6d15afd124a3223cec6e8842f585b3e28ee5c"
+    },
+    "dark/T06": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "15a643edfadb0adfa673bc949e207556a2044d0b4aa37bd8fae3e77eb8748a77",
+      "txt_sha256": "b274096ec886a0b7ea5f93bfb3cdb1e2f9c0f8717df4ea4813b43d93726d988d"
+    },
+    "dark/L01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "8ac40b7912d764013009b47ba54aab45e9316801e5df2927c3ddb559b8dd1200",
+      "txt_sha256": "748981d4b2d17cf4639feeb5d4a1751d031985a194e651dc51dafafc2e2746fb"
+    },
+    "dark/L08": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "99d41c2e67a53f142ef98d76bb57a7ede03c7b674322193a6f0b8e41fd252d24",
+      "txt_sha256": "fd419155b858cb539898d70132b4682339c1d3dfd7385d1eeeb86bcfc0cac2d6",
+      "source_revision": "101993fd15b4",
+      "refresh_selector": "ArtistThemeNativeUITests/testWeeklyReportReadingInk"
+    },
+    "dark/S01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "65aa8d9d3d628d329e374933ae8de17482d6c79e836f4feac5429dbe6c576261",
+      "txt_sha256": "6e99680b73f120d4ad84b5eb3d606144db85f42ca285857f749fdae4513f4a70"
+    }
+  },
+  "xcresult": "/private/tmp/dune-a743-native-evidence/ocean-sakura-regular/Test-DUNEUITests-2026.11.19_02-13-02-+0900.xcresult",
+  "provenance": {
+    "source_revision": "0df118ee4a66",
+    "runner_status": 0,
+    "xcodebuild_exit_status": 0,
+    "log": "/private/tmp/dune-a743-native-evidence/ocean-sakura-regular/ui.log",
+    "log_sha256": "acb968c1d25fa05d09a3e7b181b85da9cbdcea27968237730eb3efd0e3cdf2de",
+    "receipt": "/private/tmp/dune-a743-native-evidence/ocean-sakura-regular/ui.log.result.json",
+    "receipt_sha256": "bd7ec1ae734fa335ddf25e72038e9d7ace87ca3e8cf212549eae6e58077027d5",
+    "emitted_xcresult": "/Users/shanks/.codex/worktrees/a743/Health/.deriveddata/artist/Logs/Test/Test-DUNEUITests-2026.11.19_02-13-02-+0900.xcresult",
+    "preserved_xcresult": "/private/tmp/dune-a743-native-evidence/ocean-sakura-regular/Test-DUNEUITests-2026.11.19_02-13-02-+0900.xcresult"
+  },
+  "refreshes": [
+    {
+      "theme": "sakuraCalm",
+      "device_profile": "regular",
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "4A7F8A87-172F-4DD5-90D7-758ABFC261B2",
+        "deviceName": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+        "modelName": "iPhone 18 Pro",
+        "osBuildNumber": "24B8117",
+        "osVersion": "27.2",
+        "platform": "iOS Simulator"
+      },
+      "source_revision": "101993fd15b4",
+      "source_worktree_dirty": false,
+      "receipt": {
+        "schema_version": 1,
+        "status": "passed",
+        "target": "DUNEUITests",
+        "run_exit_status": 0,
+        "requested_selectors": [
+          "DUNEUITests/ArtistThemeNativeUITests/testWeeklyReportReadingInk"
+        ],
+        "skipped_selectors": [],
+        "evidence_scope": {
+          "kind": "selector_execution",
+          "complete_test_inventory": false
+        },
+        "counts": {
+          "executed": 1,
+          "passed": 1,
+          "skipped": 0,
+          "failed": 0
+        },
+        "passed_cases": 1,
+        "failures": [],
+        "required_selectors_missing": [],
+        "log_path": "/private/tmp/dune-a743-native-evidence/weekly-report-refresh/ui.log"
+      },
+      "xcresult": "/private/tmp/dune-a743-native-evidence/weekly-report-refresh/Test-DUNEUITests-2026.11.19_02-24-17-+0900.xcresult",
+      "provenance": {
+        "source_revision": "101993fd15b4",
+        "runner_status": 0,
+        "xcodebuild_exit_status": 0,
+        "log": "/private/tmp/dune-a743-native-evidence/weekly-report-refresh/ui.log",
+        "log_sha256": "166a80ea30890ee59f39e5f5c773b20a71e6afb81e18dbba4421d819e9b965a4",
+        "receipt": "/private/tmp/dune-a743-native-evidence/weekly-report-refresh/ui.log.result.json",
+        "receipt_sha256": "6d5716d5dbd71e21973bb867dbeedf8c14be4283a2a9a10b87e0fabb3c363377",
+        "emitted_xcresult": "/Users/shanks/.codex/worktrees/a743/Health/.deriveddata/artist/Logs/Test/Test-DUNEUITests-2026.11.19_02-24-17-+0900.xcresult",
+        "preserved_xcresult": "/private/tmp/dune-a743-native-evidence/weekly-report-refresh/Test-DUNEUITests-2026.11.19_02-24-17-+0900.xcresult"
+      },
+      "selector": "ArtistThemeNativeUITests/testWeeklyReportReadingInk",
+      "screens": [
+        "dark/L08",
+        "light/L08"
+      ]
+    }
+  ]
+}
