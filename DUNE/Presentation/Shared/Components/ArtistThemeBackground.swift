@@ -51,10 +51,25 @@ struct ArtistThemeBackground: View {
                 }
                 .overlay {
                     LinearGradient(stops: [
-                        .init(color: .clear, location: 0.69),
+                        .init(color: .clear, location: placement == .tab ? 0.69 : 0.80),
                         .init(color: ground, location: 1)
                     ], startPoint: .top, endPoint: .bottom)
                 }
+                .overlay(alignment: .top) {
+                    if placement != .tab {
+                        // Inline titles and toolbar buttons span the artwork, including its bright edge.
+                        let chromeHeight: CGFloat = placement == .sheet ? 52 : 100
+                        let fadeHeight = chromeHeight + 28
+                        let scrim = ground.opacity(scheme == .dark ? 0.89 : 0.78)
+                        LinearGradient(stops: [
+                            .init(color: scrim, location: 0),
+                            .init(color: scrim, location: chromeHeight / fadeHeight),
+                            .init(color: .clear, location: 1)
+                        ], startPoint: .top, endPoint: .bottom)
+                        .frame(height: fadeHeight)
+                    }
+                }
+                .clipped()
             }
         }
         .ignoresSafeArea()
