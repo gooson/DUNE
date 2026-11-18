@@ -23,8 +23,7 @@
     },
     "passed_cases": 1,
     "failures": [],
-    "required_selectors_missing": [],
-    "log_path": "/Users/shanks/.codex/worktrees/a743/Health/.codex-checks/theme-overhaul/duo-theme-open-OceanCool-20261118T132038Z/ui.log"
+    "required_selectors_missing": []
   },
   "screens": [
     {
@@ -161,5 +160,13 @@
     "actual_angle": null,
     "angle_readback": "unavailable in current devicectl",
     "verified_by": "official active display/backlight and orientation readback"
+  },
+  "source_run": {
+    "id": "duo-theme-open-OceanCool-20261118T132038Z",
+    "log_sha256": "6706fe85bf85952dce90e5024abb0e61c5b24ab1bf450e00414dd5e85af3251c",
+    "test_case_log": [
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testOceanCoolMatrix]' started.",
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testOceanCoolMatrix]' passed (276.733 seconds)."
+    ]
   }
 }
