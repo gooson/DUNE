@@ -1,0 +1,172 @@
+{
+  "selector": "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix",
+  "device": "80516FDE-34D1-4B95-9A8C-CA29E03C99F0",
+  "profile": "duo-closed",
+  "results": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 1,
+    "failures": [],
+    "required_selectors_missing": []
+  },
+  "screens": [
+    {
+      "screen": "T03",
+      "tab": "Today",
+      "appearance": "Light",
+      "png": "duo-closed/light/T03.png",
+      "hierarchy": "duo-closed/light/T03.txt",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "viewport": [
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Light",
+      "png": "duo-closed/light/A01.png",
+      "hierarchy": "duo-closed/light/A01.txt",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "viewport": [
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "screen": "H01",
+      "tab": "Wellness",
+      "appearance": "Light",
+      "png": "duo-closed/light/H01.png",
+      "hierarchy": "duo-closed/light/H01.txt",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "viewport": [
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "screen": "L01",
+      "tab": "Life",
+      "appearance": "Light",
+      "png": "duo-closed/light/L01.png",
+      "hierarchy": "duo-closed/light/L01.txt",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "viewport": [
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "screen": "T03",
+      "tab": "Today",
+      "appearance": "Dark",
+      "png": "duo-closed/dark/T03.png",
+      "hierarchy": "duo-closed/dark/T03.txt",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "viewport": [
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Dark",
+      "png": "duo-closed/dark/A01.png",
+      "hierarchy": "duo-closed/dark/A01.txt",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "viewport": [
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "screen": "H01",
+      "tab": "Wellness",
+      "appearance": "Dark",
+      "png": "duo-closed/dark/H01.png",
+      "hierarchy": "duo-closed/dark/H01.txt",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "viewport": [
+        466.0,
+        678.0
+      ]
+    },
+    {
+      "screen": "L01",
+      "tab": "Life",
+      "appearance": "Dark",
+      "png": "duo-closed/dark/L01.png",
+      "hierarchy": "duo-closed/dark/L01.txt",
+      "pixels": [
+        1398,
+        2034
+      ],
+      "viewport": [
+        466.0,
+        678.0
+      ]
+    }
+  ],
+  "display": {
+    "pose": "closed",
+    "stage": "post-test",
+    "active_display": "LCD",
+    "active_native_size": [
+      1398,
+      2034
+    ],
+    "orientation": "portrait",
+    "target_angle": 0,
+    "actual_angle": null,
+    "angle_readback": "unavailable in current devicectl",
+    "verified_by": "official active display/backlight and orientation readback"
+  },
+  "source_run": {
+    "id": "duo-theme-closed-OceanCool-20261118T132725Z",
+    "log_sha256": "0cebaff57233a7f70b6a222b4fee91ebd692f863de2ae10ffb03e2795d716c8f",
+    "test_case_log": [
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testOceanCoolMatrix]' started.",
+      "Test Case '-[DUNEUITests.ThemeMatrixUITests testOceanCoolMatrix]' passed (213.874 seconds)."
+    ]
+  }
+}

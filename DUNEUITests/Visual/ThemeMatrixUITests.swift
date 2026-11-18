@@ -261,6 +261,7 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
 
             let combination = "\(themeName) \(style)"
             XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "\(combination): primary navigation should load")
+            dismissIconConfirmation()
             captureRoots(for: combination)
         }
     }

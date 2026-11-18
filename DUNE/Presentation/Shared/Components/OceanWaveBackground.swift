@@ -2,129 +2,117 @@ import SwiftUI
 
 // MARK: - Ocean Tab Background
 
-/// Multi-layer parallax ocean wave background for tab root screens.
-///
-/// Layers (back to front):
-/// 1. **Deep** — slowest, dark navy, low amplitude
-/// 2. **Mid** — reverse direction, rich teal, medium amplitude + stroke
-/// 3. **Surface** — bright cyan, largest amplitude + stroke + foam gradient
+private enum OceanCurrentPalette {
+    static let skyWash = Color("OceanSkyWash")
+    static let farCurrent = Color("OceanFarCurrent")
+    static let middleCurrent = Color("OceanMiddleCurrent")
+}
+
 struct OceanTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.appTheme) private var theme
     @Environment(\.weatherAtmosphere) private var atmosphere
 
-    private var isWeatherActive: Bool {
-        preset == .today && atmosphere != .default
-    }
-
-    /// Scale factor based on tab preset character.
-    private var intensityScale: CGFloat {
-        switch preset {
-        case .train:    1.2   // Rougher ocean
-        case .today:    1.0
-        case .wellness: 0.8   // Calmer deep sea
-        case .life:     0.6   // Lake-like stillness
-        }
-    }
-
     var body: some View {
-        let scale = intensityScale
-
         ZStack(alignment: .top) {
-            // Keep the wash behind the currents so the still frame retains depth.
             LinearGradient(
-                colors: oceanGradientColors,
+                colors: preset == .today && atmosphere != .default
+                    ? atmosphere.gradientColors(for: theme)
+                    : [OceanCurrentPalette.skyWash, .clear],
                 startPoint: .top,
                 endPoint: DS.Gradient.tabBackgroundEnd
             )
-
-            // Layer 1: Deep (back)
-            OceanWaveOverlayView(
-                color: theme.oceanDeepColor,
-                opacity: 0.15 * scale,
-                amplitude: 0.035 * scale,
-                frequency: 1.05,
-                verticalOffset: 0.34,
-                bottomFade: 0.5,
-                steepness: 0.12,
-                crestHeight: 0.18 * scale,
-                crestSharpness: 0.05 * scale,
-                driftDuration: 18,
-                reverseDirection: false,
-                strokeStyle: WaveStrokeStyle(
-                    color: theme.oceanFoamColor,
-                    width: 0.5,
-                    opacity: 0.12 * scale
-                )
-            )
-            .frame(height: 200)
-
-            // Layer 2: Mid (reverse for cross-current)
-            OceanWaveOverlayView(
-                color: theme.oceanMidColor,
-                opacity: 0.22 * scale,
-                amplitude: 0.065 * scale,
-                frequency: 1.65,
-                verticalOffset: 0.47,
-                bottomFade: 0.4,
-                steepness: 0.24,
-                harmonicOffset: .pi / 3,
-                crestHeight: 0.3 * scale,
-                crestSharpness: 0.09 * scale,
-                driftDuration: 15,
-                reverseDirection: true,
-                strokeStyle: WaveStrokeStyle(
-                    color: theme.oceanFoamColor,
-                    width: 2.6,
-                    opacity: 0.44 * scale
-                ),
-                foamStyle: WaveFoamStyle(
-                    color: theme.oceanFoamColor,
-                    opacity: 0.44 * scale,
-                    depth: 0.07
-                )
-            )
-            .frame(height: 200)
-
-            // Layer 3: Surface (front, most visible)
-            OceanWaveOverlayView(
-                color: theme.oceanSurfaceColor,
-                opacity: 0.32 * scale,
-                amplitude: 0.13 * scale,
-                frequency: 2.35,
-                verticalOffset: 0.60,
-                bottomFade: 0.4,
-                steepness: 0.54,
-                crestHeight: 0.5 * scale,
-                crestSharpness: 0.16 * scale,
-                driftDuration: 12,
-                reverseDirection: false,
-                strokeStyle: WaveStrokeStyle(
-                    color: theme.oceanFoamColor,
-                    width: 5.5,
-                    opacity: 0.88 * scale
-                ),
-                foamStyle: WaveFoamStyle(
-                    color: theme.oceanFoamColor,
-                    opacity: 0.82 * scale,
-                    depth: 0.15
-                )
-            )
-            .frame(height: 200)
+            if preset == .today {
+                OceanCurrentScene(preset: .today)
+                    .frame(height: 161)
+                    .mask(LinearGradient(stops: [
+                        .init(color: .black.opacity(0.12), location: 0),
+                        .init(color: .black.opacity(0.22), location: 0.27),
+                        .init(color: .black, location: 0.55)
+                    ], startPoint: .leading, endPoint: .trailing))
+                    .padding(.top, 24)
+                    .bottomFadeMask(0.18)
+            }
         }
         .ignoresSafeArea()
         .animation(DS.Animation.atmosphereTransition, value: atmosphere)
     }
+}
 
-    private var oceanGradientColors: [Color] {
-        if isWeatherActive {
-            return atmosphere.gradientColors(for: theme)
+/// The same woodcut appears at the foot of the other three tab heroes.
+struct OceanHeroShoreline: View {
+    let preset: WavePreset
+
+    var body: some View {
+        OceanCurrentScene(preset: preset)
+            .frame(height: preset == .life ? 50 : 62)
+            .mask(LinearGradient(stops: [
+                .init(color: .clear, location: 0),
+                .init(color: .black.opacity(0.15), location: 0.44),
+                .init(color: .black, location: 0.70)
+            ], startPoint: .leading, endPoint: .trailing))
+    }
+}
+
+private struct OceanCurrentScene: View {
+    let preset: WavePreset
+    @Environment(\.waveReducedMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var start = Date.now
+
+    private var strength: CGFloat {
+        switch preset {
+        case .today: 1
+        case .train: 1.2
+        case .wellness: 0.8
+        case .life: 0.6
         }
-        return [
-            theme.oceanSurfaceColor.opacity(DS.Opacity.medium),
-            theme.oceanDeepColor.opacity(DS.Opacity.subtle),
-            .clear
-        ]
+    }
+
+    var body: some View {
+        let paused = reduceMotion || scenePhase != .active
+        TimelineView(.animation(minimumInterval: 1.0 / 20, paused: paused)) { timeline in
+            let seconds = paused ? 0 : timeline.date.timeIntervalSince(start)
+            Canvas { context, size in
+                let scale = size.height / 172
+                let width = size.width / scale
+                context.scaleBy(x: scale, y: scale)
+                let turn = 2 * CGFloat.pi * seconds
+                drawCurrent(in: context, width: width, phase: turn / 18, frequency: 1.05,
+                            center: 76, amplitude: 12, skew: 0.12, crest: 0.18, color: OceanCurrentPalette.farCurrent)
+                drawCurrent(in: context, width: width, phase: -turn / 15, frequency: 1.65,
+                            center: 105, amplitude: 17, skew: 0.24, crest: 0.30, color: OceanCurrentPalette.middleCurrent)
+
+                let tide = turn / 12
+                let zoom = 0.78 + 0.22 * strength
+                // Anchor to the right on wide displays without stretching the carved fingers.
+                let inset = preset == .today ? min(228, width * 0.57) : 192
+                let anchor = width - inset + 12 * strength * sin(tide)
+                let y = 150 * (1 - zoom) + 4 * strength * (1 - cos(tide))
+                let rect = CGRect(x: anchor - 520 * zoom, y: y, width: 1005 * zoom, height: 240 * zoom)
+                context.draw(Image(decorative: "OceanBreaker"), in: rect)
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+
+    private func drawCurrent(
+        in context: GraphicsContext, width: CGFloat, phase: CGFloat, frequency: CGFloat,
+        center: CGFloat, amplitude: CGFloat, skew: CGFloat, crest: CGFloat, color: Color
+    ) {
+        var path = Path()
+        for step in 0...80 {
+            let fraction = CGFloat(step) / 80
+            let angle = 2 * .pi * frequency * fraction + phase
+            let contour = sin(angle) + skew * sin(2 * angle + .pi / 3) + crest * sin(angle / 2 + 0.3 * phase)
+            let point = CGPoint(x: width * fraction, y: center + amplitude * strength * contour)
+            if step == 0 { path.move(to: point) } else { path.addLine(to: point) }
+        }
+        path.addLine(to: CGPoint(x: width, y: 172))
+        path.addLine(to: CGPoint(x: 0, y: 172))
+        path.closeSubpath()
+        context.fill(path, with: .color(color))
     }
 }
 

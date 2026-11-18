@@ -38,12 +38,19 @@ struct WellnessHeroCard: View {
         }
         .padding(DS.Spacing.xl)
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.bottom, theme == .oceanCool ? 44 : 0)
         .background {
             if theme == .desertWarm {
                 DesertCardSurface(cornerRadius: DS.Radius.xxl)
             } else {
                 RoundedRectangle(cornerRadius: DS.Radius.xxl)
                     .fill(theme.directionPreviewBackground)
+                    .overlay(alignment: .bottomTrailing) {
+                        if theme == .oceanCool {
+                            OceanHeroShoreline(preset: .wellness)
+                                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: DS.Radius.xxl, bottomTrailingRadius: DS.Radius.xxl))
+                        }
+                    }
                     .overlay {
                         RoundedRectangle(cornerRadius: DS.Radius.xxl)
                             .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)

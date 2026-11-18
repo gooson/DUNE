@@ -1,5 +1,16 @@
 @preconcurrency import XCTest
 
+/// A theme change can trigger an OS confirmation after the app already appears ready.
+@MainActor
+func dismissIconConfirmation() {
+    let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+    let alert = springboard.alerts.firstMatch
+    if alert.waitForExistence(timeout: 3), alert.buttons.count == 1 {
+        alert.buttons.firstMatch.tap()
+        XCTAssertTrue(alert.waitForNonExistence(timeout: 3))
+    }
+}
+
 /// Temporary opt-in evidence collection. Attachments require human visual review;
 /// their presence does not imply that clipping or layout checks have passed.
 enum VisualAudit {

@@ -1,15 +1,6 @@
 @preconcurrency import XCTest
 
 @MainActor
-private func dismissIconConfirmation() {
-    let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-    let alert = springboard.alerts.firstMatch
-    if alert.waitForExistence(timeout: 3), alert.buttons.firstMatch.exists {
-        alert.buttons.firstMatch.tap()
-    }
-}
-
-@MainActor
 final class AppIconSettingsUITests: SeededUITestBaseCase {
     override var additionalLaunchArguments: [String] {
         ["--ui-test-theme", "desertWarm", "-morningBriefingDisabled", "YES", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
