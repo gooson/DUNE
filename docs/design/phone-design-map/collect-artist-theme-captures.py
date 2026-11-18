@@ -47,6 +47,8 @@ SCREENS = {
     "S01": ("설정의 선택된 테마", None),
 }
 TEST_CLASS = "ArtistThemeNativeUITests"
+WEEKLY_REPORT_SELECTOR = f"{TEST_CLASS}/testWeeklyReportReadingInk"
+WEEKLY_REPORT_REFRESH_THEMES = {"forestGreen", "oceanCool", "sakuraCalm"}
 ACTION = r"Artist (\w+) (light|dark) ([A-Z]\d{2})"
 EXPORTED_SUFFIX = re.compile(r"(?:_\d+_[0-9a-fA-F-]{36})?\.(?:png|txt)$|_\d+_[0-9a-fA-F-]{36}$")
 HIERARCHY_EXPORT_SUFFIX = re.compile(r"_\d+_[0-9a-fA-F-]{36}(?=\.swift-\d+$)")
@@ -66,9 +68,9 @@ def test_name(theme: str) -> str:
     return f"{TEST_CLASS}/test{theme[0].upper()}{theme[1:]}"
 
 
-def read_receipt(path: Path, theme: str, allow_passing_selector: bool) -> dict:
+def read_receipt(path: Path, test_identifier: str, allow_passing_selector: bool) -> dict:
     receipt = read_json(path)
-    selector = f"DUNEUITests/{test_name(theme)}"
+    selector = f"DUNEUITests/{test_identifier}"
     if selector not in receipt.get("requested_selectors", []) or selector in receipt.get("skipped_selectors", []):
         raise ValueError(f"Standard runner receipt must include {selector}")
     if receipt.get("status") == "passed" and receipt.get("run_exit_status") == 0:
@@ -98,28 +100,29 @@ def verify_provenance(path: Path, receipt_path: Path, receipt: dict, xcresult: P
     return record
 
 
-def read_attachments(result: Path, folder: Path, theme: str, partial: bool) -> tuple[dict, dict, dict | None]:
+def read_attachments(result: Path, folder: Path, theme: str, test_identifier: str,
+                     partial: bool) -> tuple[dict, dict, dict | None]:
     summary = json.loads(run("xcrun", "xcresulttool", "get", "test-results", "summary", "--path", str(result)))
     configurations = summary.get("devicesAndConfigurations", [])
     if len(configurations) != 1 or summary.get("passedTests", 0) == 0 or (not partial and summary.get("failedTests") != 0):
         raise ValueError("Expected a successful single-device XCTest result")
     device = configurations[0]["device"]
-    identifier = f"{test_name(theme)}()"
+    identifier = f"{test_identifier}()"
     selector_result = None
     if partial:
         details = json.loads(run("xcrun", "xcresulttool", "get", "test-results", "test-details", "--path",
                                  str(result), "--test-id", identifier))
         case = details["testIdentifier"].removeprefix("DUNEUITests/").removesuffix("()")
         device_ids = [entry["deviceId"] for entry in details.get("devices", [])]
-        if case != test_name(theme) or details.get("testResult") != "Passed" or device_ids != [device["deviceId"]]:
-            raise ValueError(f"xcresult does not confirm a passing {test_name(theme)} on the recorded device")
+        if case != test_identifier or details.get("testResult") != "Passed" or device_ids != [device["deviceId"]]:
+            raise ValueError(f"xcresult does not confirm a passing {test_identifier} on the recorded device")
         selector_result = {"testIdentifier": details["testIdentifier"], "testResult": details["testResult"]}
     run("xcrun", "xcresulttool", "export", "attachments", "--path", str(result),
         "--output-path", str(folder), "--test-id", identifier)
     captures = defaultdict(dict)
     for test in read_json(folder / "manifest.json"):
         identifier = test["testIdentifier"].removeprefix("DUNEUITests/").removesuffix("()")
-        if identifier != test_name(theme):
+        if identifier != test_identifier:
             continue
         for attachment in test["attachments"]:
             if attachment.get("isAssociatedWithFailure"):
@@ -175,15 +178,16 @@ def add_capture(captures: dict, key: tuple[str, str], kind: str, path: Path) -> 
     captures[key][kind] = path
 
 
-def validate_captures(captures: dict, theme: str) -> dict:
-    expected = {(style, screen) for style in STYLES for screen in SCREENS}
+def validate_captures(captures: dict, theme: str, screen_ids: tuple[str, ...] = tuple(SCREENS)) -> dict:
+    expected = {(style, screen) for style in STYLES for screen in screen_ids}
     incomplete = sorted(key for key in expected if set(captures.get(key, {})) != {"png", "txt"})
     if incomplete or captures.keys() - expected:
         raise ValueError(f"Unexpected capture inventory. Missing pairs: {incomplete}. "
                          f"Unexpected: {sorted(captures.keys() - expected)}")
     records = {}
     for style in STYLES:
-        for screen, (_, marker) in SCREENS.items():
+        for screen in screen_ids:
+            _, marker = SCREENS[screen]
             pair = captures[style, screen]
             hierarchy = pair["txt"].read_text(encoding="utf-8")
             marker = marker or f"settings-theme-{theme}"
@@ -208,10 +212,27 @@ def validate_captures(captures: dict, theme: str) -> dict:
             }
     if len({(record["width"], record["height"]) for record in records.values()}) != 1:
         raise ValueError("Capture run contains more than one viewport")
-    for screen in SCREENS:
+    for screen in screen_ids:
         if records[f"light/{screen}"]["png_sha256"] == records[f"dark/{screen}"]["png_sha256"]:
             raise ValueError(f"{screen} has identical light and dark images")
     return records
+
+
+def refresh_weekly_report(original: dict, refresh: dict, revision: str) -> dict:
+    if original["device"]["deviceId"] != refresh["device"]["deviceId"]:
+        raise ValueError("Weekly report refresh must use the existing gallery simulator")
+    previous = original["captures"]
+    replacements = refresh["captures"]
+    for route, record in replacements.items():
+        if previous[route]["viewport_points"] != record["viewport_points"]:
+            raise ValueError(f"Weekly report viewport changed at {route}")
+        previous[route] = record | {"source_revision": revision, "refresh_selector": WEEKLY_REPORT_SELECTOR}
+    original.setdefault("refreshes", []).append({
+        **{key: value for key, value in refresh.items() if key != "captures"},
+        "selector": WEEKLY_REPORT_SELECTOR,
+        "screens": sorted(replacements),
+    })
+    return original
 
 
 def page(title: str, body: str) -> str:
@@ -283,12 +304,16 @@ def main() -> None:
     parser.add_argument("--xcresult", type=Path)
     parser.add_argument("--duo-captures", type=Path)
     parser.add_argument("--duo-suffix", default="", help="Display filename suffix for captures made with 'all'")
+    parser.add_argument("--duo-separated-appearances", action="store_true",
+                        help="Require separately timed DuoLight and DuoDark methods from one run")
     parser.add_argument("--display-readback", type=Path, nargs=2, metavar=("BEFORE", "AFTER"),
                         help="Official devicectl display JSON from before and after the Duo run")
     parser.add_argument("--source-dirty", action="store_true")
     parser.add_argument("--provenance", type=Path, help="Bind the preserved xcresult to the original runner log")
     parser.add_argument("--allow-passing-selector", action="store_true",
                         help="Allow a selector that passed in an otherwise failed iPhone/iPad batch")
+    parser.add_argument("--refresh-weekly-report", action="store_true",
+                        help="Replace only L08 pairs from the focused report selector")
     parser.add_argument("--output", type=Path, default=DESTINATION)
     args = parser.parse_args()
     if not re.fullmatch(r"[0-9a-fA-F]{7,64}", args.source_revision):
@@ -303,18 +328,28 @@ def main() -> None:
     if is_duo:
         if args.xcresult or not args.duo_captures or not args.display_readback:
             parser.error("Duo requires --duo-captures and --display-readback")
-    elif not args.xcresult or args.duo_captures or args.display_readback or args.duo_suffix:
+    elif not args.xcresult or args.duo_captures or args.display_readback or args.duo_suffix or args.duo_separated_appearances:
         parser.error("iPhone and iPad require --xcresult only")
     if args.allow_passing_selector and (is_duo or not args.provenance):
         parser.error("--allow-passing-selector requires --provenance and a regular or ipad run")
     if args.provenance and is_duo:
         parser.error("--provenance is only for an xcresult-based capture run")
+    if args.refresh_weekly_report and (args.device != "regular" or args.theme not in WEEKLY_REPORT_REFRESH_THEMES
+                                       or not args.provenance or args.allow_passing_selector):
+        parser.error("Weekly report refresh requires a passing regular Forest/Ocean/Sakura result and --provenance")
     target = args.output / args.theme / args.device
-    if target.exists():
+    if args.refresh_weekly_report and not (target / "capture.json").is_file():
+        parser.error(f"Weekly report refresh requires an existing gallery: {target}")
+    if target.exists() and not args.refresh_weekly_report:
         parser.error(f"Capture directory already exists: {target}")
 
     try:
-        receipt = read_receipt(args.receipt, args.theme, args.allow_passing_selector)
+        test_identifier = WEEKLY_REPORT_SELECTOR if args.refresh_weekly_report else test_name(args.theme)
+        if args.duo_separated_appearances:
+            receipt = read_receipt(args.receipt, f"{test_identifier}DuoLight", False)
+            read_receipt(args.receipt, f"{test_identifier}DuoDark", False)
+        else:
+            receipt = read_receipt(args.receipt, test_identifier, args.allow_passing_selector)
         with tempfile.TemporaryDirectory(prefix="dune-artist-captures-") as staging:
             folder = Path(staging) / "attachments"
             if is_duo:
@@ -323,10 +358,11 @@ def main() -> None:
                 display_readbacks = read_duo_displays(args.display_readback, args.device)
             else:
                 partial = receipt["status"] != "passed"
-                captures, device, selector_result = read_attachments(args.xcresult, folder, args.theme, partial)
+                captures, device, selector_result = read_attachments(args.xcresult, folder, args.theme, test_identifier, partial)
                 if device.get("deviceId", "").upper() != simulator_udid:
                     raise ValueError("xcresult simulator is different from the requested device")
-            records = validate_captures(captures, args.theme)
+            screen_ids = ("L08",) if args.refresh_weekly_report else tuple(SCREENS)
+            records = validate_captures(captures, args.theme, screen_ids)
             bundle = {
                 "theme": args.theme, "device_profile": args.device, "device": device,
                 "source_revision": args.source_revision, "source_worktree_dirty": args.source_dirty,
@@ -343,6 +379,9 @@ def main() -> None:
                 if selector_result:
                     bundle["passing_selector_in_failed_batch"] = selector_result
             gallery = Path(staging) / "gallery"
+            if args.refresh_weekly_report:
+                shutil.copytree(target, gallery)
+                bundle = refresh_weekly_report(read_json(gallery / "capture.json"), bundle, args.source_revision)
             for (style, screen), pair in captures.items():
                 (gallery / style).mkdir(parents=True, exist_ok=True)
                 for kind, path in pair.items():
@@ -352,12 +391,20 @@ def main() -> None:
                     (gallery / name).write_text(json.dumps(readback, ensure_ascii=False, indent=2) + "\n",
                                                 encoding="utf-8")
             (gallery / "capture.json").write_text(json.dumps(bundle, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            (gallery / "index.html").write_text(render_device(args.theme, args.device, records), encoding="utf-8")
+            (gallery / "index.html").write_text(render_device(args.theme, args.device, bundle["captures"]), encoding="utf-8")
             target.parent.mkdir(parents=True, exist_ok=True)
             with tempfile.TemporaryDirectory(prefix=".stage-", dir=target.parent) as destination_staging:
                 pending = Path(destination_staging) / args.device
                 shutil.copytree(gallery, pending)
-                pending.rename(target)
+                prior = Path(destination_staging) / "prior"
+                if args.refresh_weekly_report:
+                    target.rename(prior)
+                try:
+                    pending.rename(target)
+                except OSError:
+                    if prior.exists():
+                        prior.rename(target)
+                    raise
     except (KeyError, OSError, ValueError, subprocess.SubprocessError) as error:
         if isinstance(error, subprocess.CalledProcessError):
             parser.error(error.stderr.strip() or str(error))

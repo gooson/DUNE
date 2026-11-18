@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ocean · 실제 앱 모션 샘플</title>
+<style>
+:root{color-scheme:light dark;font-family:system-ui,sans-serif;line-height:1.55}
+body{margin:0 auto;max-width:48rem;padding:1.5rem clamp(1rem,4vw,2rem) 3rem}
+h1{margin:.5rem 0;font-size:clamp(1.7rem,5vw,2.4rem)}
+p{margin:.65rem 0 1rem}
+fieldset{border:1px solid GrayText;border-radius:.7rem;margin:1.5rem 0 0;padding:.75rem;min-inline-size:0}
+fieldset label{display:inline-block;margin:0 .7rem .6rem .1rem;cursor:pointer}
+.sample{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
+#sample-1:checked~#frames-1,#sample-2:checked~#frames-2,#sample-3:checked~#frames-3{display:grid}
+figure{margin:0;min-width:0}
+figure img{display:block;width:100%;height:auto;border-radius:.55rem}
+figcaption{margin:.5rem 0;overflow-wrap:anywhere}
+figcaption span{display:block}
+table{border-collapse:collapse;width:100%}
+caption{text-align:left;margin:.5rem 0;font-weight:650}
+th,td{text-align:left;border-bottom:1px solid GrayText;padding:.45rem .3rem}
+code{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<main>
+<a href="../../index.html">아티스트 테마 실제 화면</a>
+<h1>Ocean · 헤더 모션</h1>
+<p>Today와 Condition Score에서 각각 세 시점을 캡처했습니다. 번호를 바꾸며 파도 포말과 점수 카드의 위치를 비교할 수 있습니다. 두 화면은 차례대로 캡처했으며, 각 스크린샷은 독립 샘플입니다.</p>
+<p>2026년 11월 19일 01:59 KST · iPhone 18 Pro 시뮬레이터 · iOS 27.2 (24B8117) · 밝은 모드 · 영어 · 기본 글자 크기 · 1206 × 2622 px · 소스 <code>a8ae4a239</code></p>
+<fieldset>
+<legend>샘플 선택</legend>
+<input type="radio" name="sample" id="sample-1" checked><label for="sample-1">1번</label>
+<input type="radio" name="sample" id="sample-2"><label for="sample-2">2번</label>
+<input type="radio" name="sample" id="sample-3"><label for="sample-3">3번</label>
+<section class="sample" id="frames-1" aria-label="1번 샘플">
+<figure>
+<a href="T03-1.png"><img src="T03-1.png" alt="Today 화면에서 오른쪽 헤더의 파도와 84점 컨디션 카드, 샘플 1" width="1206" height="2622"></a>
+<figcaption><strong>T03 · Today</strong>
+<span><time datetime="2026-11-19T01:59:29.074+09:00">01:59:29.074 KST</time> · <a href="T03-1.txt">접근성 트리</a></span></figcaption>
+</figure>
+<figure>
+<a href="T04-1.png"><img src="T04-1.png" alt="Condition Score 화면에서 오른쪽 헤더의 파도와 84점 컨디션 카드, 샘플 1" width="1206" height="2622"></a>
+<figcaption><strong>T04 · Condition Score</strong>
+<span><time datetime="2026-11-19T01:59:40.253+09:00">01:59:40.253 KST</time> · <a href="T04-1.txt">접근성 트리</a></span></figcaption>
+</figure>
+</section>
+<section class="sample" id="frames-2" aria-label="2번 샘플">
+<figure>
+<a href="T03-2.png"><img src="T03-2.png" alt="Today 화면에서 오른쪽 헤더의 파도와 84점 컨디션 카드, 샘플 2" width="1206" height="2622" loading="lazy"></a>
+<figcaption><strong>T03 · Today</strong>
+<span><time datetime="2026-11-19T01:59:30.990+09:00">01:59:30.990 KST</time> · <a href="T03-2.txt">접근성 트리</a></span></figcaption>
+</figure>
+<figure>
+<a href="T04-2.png"><img src="T04-2.png" alt="Condition Score 화면에서 오른쪽 헤더의 파도와 84점 컨디션 카드, 샘플 2" width="1206" height="2622" loading="lazy"></a>
+<figcaption><strong>T04 · Condition Score</strong>
+<span><time datetime="2026-11-19T01:59:42.029+09:00">01:59:42.029 KST</time> · <a href="T04-2.txt">접근성 트리</a></span></figcaption>
+</figure>
+</section>
+<section class="sample" id="frames-3" aria-label="3번 샘플">
+<figure>
+<a href="T03-3.png"><img src="T03-3.png" alt="Today 화면에서 오른쪽 헤더의 파도와 84점 컨디션 카드, 샘플 3" width="1206" height="2622" loading="lazy"></a>
+<figcaption><strong>T03 · Today</strong>
+<span><time datetime="2026-11-19T01:59:32.899+09:00">01:59:32.899 KST</time> · <a href="T03-3.txt">접근성 트리</a></span></figcaption>
+</figure>
+<figure>
+<a href="T04-3.png"><img src="T04-3.png" alt="Condition Score 화면에서 오른쪽 헤더의 파도와 84점 컨디션 카드, 샘플 3" width="1206" height="2622" loading="lazy"></a>
+<figcaption><strong>T04 · Condition Score</strong>
+<span><time datetime="2026-11-19T01:59:43.988+09:00">01:59:43.988 KST</time> · <a href="T04-3.txt">접근성 트리</a></span></figcaption>
+</figure>
+</section>
+</fieldset>
+<h2>검증 결과</h2>
+<p><code>testOceanMotionKeepsContentAnchored</code>가 통과했습니다. 세 시점에서 점수 요소의 위치와 접근성 레이블이 일치했고, Today의 설정 버튼과 Condition Score의 뒤로 버튼은 같은 위치에서 탭할 수 있었습니다. 같은 배치의 전체 화면 순회 테스트는 운동 기록 진입에서 실패했습니다.</p>
+<table>
+<caption>헤더에서 RGB 채널 중 하나라도 12 이상 바뀐 픽셀 비율</caption>
+<thead><tr><th scope="col">화면</th><th scope="col">1번과 2번</th><th scope="col">1번과 3번</th><th scope="col">2번과 3번</th></tr></thead>
+<tbody>
+<tr><th scope="row">T03</th><td>21.6%</td><td>26.5%</td><td>15.6%</td></tr>
+<tr><th scope="row">T04</th><td>20.5%</td><td>19.2%</td><td>10.4%</td></tr>
+</tbody>
+</table>
+<p>원본 캡처의 동일한 헤더 영역을 비교했습니다. 좌표와 파일별 SHA-256, 테스트 결과 및 캡처 경로는 <a href="capture.json">검증 기록</a>에 있습니다.</p>
+</main>
+</body>
+</html>

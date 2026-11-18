@@ -12,9 +12,46 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
     func testSolarPop() throws { try captureTheme("solarPop") }
     func testContourAtlas() throws { try captureTheme("contourAtlas") }
     func testWaterLilies() throws { try captureTheme("waterLilies") }
+    func testSakuraCalmDuoLight() throws { try captureTheme("sakuraCalm", styles: ["light"]) }
+    func testSakuraCalmDuoDark() throws { try captureTheme("sakuraCalm", styles: ["dark"]) }
+
+    func testOceanCoolDuoDarkWorkout() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Workout detail capture requires a visual audit test plan") }
+        var configuration = themeLaunchConfiguration("oceanCool", style: "dark")
+        configuration.initialTabSelectionArgument = "train"
+        launchApp(with: configuration)
+        reassertDuoOpenLandscapeIfNeeded()
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
+        dismissIconConfirmation()
+        captureImportedWorkout(prefix: "Artist oceanCool dark")
+    }
 
     override func setUpWithError() throws {
         continueAfterFailure = false
+    }
+
+    func testWeeklyReportReadingInk() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Weekly report capture requires a visual audit test plan") }
+        executionTimeAllowance = 600
+        for theme in ["forestGreen", "oceanCool", "sakuraCalm"] {
+            for style in ["light", "dark"] {
+                var configuration = themeLaunchConfiguration(theme, style: style)
+                configuration.initialTabSelectionArgument = "life"
+                launchApp(with: configuration)
+                XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
+                dismissIconConfirmation()
+                navigateToLife()
+                open("life-weekly-report-button", maxSwipes: 16)
+                let report = app.scrollViews["life-weekly-report-scroll"].firstMatch
+                let supportingHeading = waitForElement("life-weekly-report-improvement", timeout: 8)
+                let smallRate = report.staticTexts["14%"].firstMatch
+                XCTAssertTrue(smallRate.waitForExistence(timeout: 8))
+                let viewport = report.frame.intersection(app.windows.firstMatch.frame)
+                XCTAssertTrue(viewport.contains(supportingHeading.frame) && viewport.contains(smallRate.frame),
+                              "The report screenshot must show the supporting heading and small habit rate")
+                capture("L08", showing: "life-weekly-report-rate", prefix: "Artist \(theme) \(style)")
+            }
+        }
     }
 
     func testOceanMotionKeepsContentAnchored() throws {
@@ -66,12 +103,12 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         return configuration
     }
 
-    private func captureTheme(_ theme: String) throws {
+    private func captureTheme(_ theme: String, styles: [String] = ["light", "dark"]) throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Artist theme design capture requires a visual audit test plan") }
-        // Each case captures both appearances through ten native routes.
+        // The host audit holds each of the ten native routes while both displays are saved.
         executionTimeAllowance = 600
 
-        for style in ["light", "dark"] {
+        for style in styles {
             launchApp(with: themeLaunchConfiguration(theme, style: style))
             reassertDuoOpenLandscapeIfNeeded()
             XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15), "Primary navigation for \(theme) \(style)")
@@ -117,6 +154,10 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         capture("T06", showing: AXID.metricDetailScreen("sleep"), prefix: prefix)
         goBack(to: "wellness-hero-sleep")
 
+        captureImportedWorkout(prefix: prefix)
+    }
+
+    private func captureImportedWorkout(prefix: String) {
         navigateToActivity()
         open(AXID.activityRecentSeeAll, maxSwipes: 24)
         _ = waitForElement(AXID.exerciseViewScreen, timeout: 10)
