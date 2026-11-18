@@ -1,0 +1,274 @@
+{
+  "theme": "contourAtlas",
+  "device_profile": "regular",
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "4A7F8A87-172F-4DD5-90D7-758ABFC261B2",
+    "deviceName": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+    "modelName": "iPhone 18 Pro",
+    "osBuildNumber": "24B8117",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "source_revision": "db7e731efd6f",
+  "source_worktree_dirty": false,
+  "receipt": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/ArtistThemeNativeUITests/testContourAtlas",
+      "DUNEUITests/ArtistThemeNativeUITests/testWaterLilies"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 2,
+      "passed": 2,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 2,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/private/tmp/dune-a743-native-evidence/contour-water-regular/ui.log"
+  },
+  "captures": {
+    "light/T03": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "8576363de37321c83bee2108dacd8645fef7d2d001ac54d1a998628bf5ee1cbe",
+      "txt_sha256": "9d6570eaa505ceea6794a9dab175f404e2829d2aae389c994070dcefa54a0806"
+    },
+    "light/T04": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "3b0c498702da4605f7eafc1a176262643bf2d08314e0f6bc35cf9fd2ea2d2054",
+      "txt_sha256": "9340c1ecaad19e967dece1912cbfbbe1a8fd009576403befa931313a705f9283"
+    },
+    "light/A01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "6e9406829cd5b00e57676a6718b378870fea8acbeb6bbabeb35fa507e1cbe026",
+      "txt_sha256": "fbac96d19b305eecb3a2c29193fee5ae2d7152b116d7730ef938ac7b3e1e5f33"
+    },
+    "light/A02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "5f1fe4fa7bee625e68a747d7afb2bceaaa48cbcb5ff2815e36d4b5bf5ae82583",
+      "txt_sha256": "f8d07d14bc09dd7d5abd21fdf4776e6979ffc57da3dcf62f2fafa8a8b6fd87ba"
+    },
+    "light/W28": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "c6d16c43c801443ea20ced26a7f377a2719fefe9ecb2fabf81329ec3d65bc319",
+      "txt_sha256": "6176e6678847a73bd4ca0d7be50e2ba2fc276f09a348a024c39d423514325cee"
+    },
+    "light/H01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "0027d839e8bfc42423063c78eebebc8c1f8a0d227a53add551b2491ef54778d1",
+      "txt_sha256": "6994e33a88e3120e9a24c85f96976c38db077f9d30677df03ef14bc8ccab446a"
+    },
+    "light/H02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "4387bac9917f6332edad3fc10ef61770bfd62b104940312712a0cd3fe9c46410",
+      "txt_sha256": "9c33d840e4f674434567d866059282adaf3999af26366787787166fba6b2ef93"
+    },
+    "light/T06": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "b9ab127b2b28c7b9a731fa06e1920599fb02e97f6daa95156ea02dcc216f5c16",
+      "txt_sha256": "caf17d9711cceb20076ee32fdad8c18bf7611a85610a95e50981734e9d6e05d5"
+    },
+    "light/L01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "ba96a92e3088697aa6e30ef532e24bd76221cb19d04849b275fd2c08d19dee73",
+      "txt_sha256": "d329c5379ec6ed6f3a9bbeade9b69a328187f8b98728a75187e3d6d9eb58e962"
+    },
+    "light/L08": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "8261985ce7aac192c06e8a220779316433e592114e1780d3ec4e3b52097ad4c7",
+      "txt_sha256": "29f3fb3a951451f9a473583629f7d762354a8cc5d449bc5c8121a15228fb9161"
+    },
+    "light/S01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "016bf34361c81dae93b0ef56b9f3121ac37e5e2fceb90f26891556aca5140c6d",
+      "txt_sha256": "d5599a211b4be387e52c6b732856f572a35e30f891c357f9d47db4633579d227"
+    },
+    "dark/T03": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "4a5e14b3018142d7b862c24ea121dab52c5901fd47feab4e72141d0c4540a51e",
+      "txt_sha256": "0bd220c2ece8b0a8f62effd90c6a1c058dacf05674cfc028605d5b6b6108ab6b"
+    },
+    "dark/T04": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "d92ff8c85b73faafcf40caab7153697658ba5a430babf033c159d89cbc6501c0",
+      "txt_sha256": "ae754b61fb48435a360a8572b3fa8cba1c34c4a2b160bc594c53c97037ae0541"
+    },
+    "dark/A01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "c914780553c0db999254f1f19be9582d83463368e8a1d6c55b5d8b44c4ff0661",
+      "txt_sha256": "49eaa971b304499ae328fa02ba6e9f432be8dcd2c076e57be25da292180ec74d"
+    },
+    "dark/A02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "329c198d35d60be53f2c3dabac028ae1695a503658da5464add86a71e8bf000e",
+      "txt_sha256": "3aee099980fa06d2c0296a2c58f1ebbc6b6118c302f5d30189e13268aafdaefb"
+    },
+    "dark/W28": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "a3e6bfbcf669d0834e11c93c93c19b42c20479c2981ad1b71e30c9aeeba87f7f",
+      "txt_sha256": "91373a53694546086052db08c84005505a9f8534f90c932bdb1341c6f6418c4b"
+    },
+    "dark/H01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "8e0e6cd256dce5e482917ceb0f297d34480b21430aaeefb77f34de4239a214f5",
+      "txt_sha256": "c08878ebbe6c8f891ef1e432421ed66ee27632e7634e32a6d5affcff55b1a085"
+    },
+    "dark/H02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "d877e9735da30b301f9d35fcd365d0726a7617def219de08a9e9ceb0317eda1f",
+      "txt_sha256": "b730999af2340e2671ca3b7e88d30b509e5f3e3705b0246ad748d0a84ca6c0c3"
+    },
+    "dark/T06": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "47c10e2d36175d65cb44613e1637c8f346ff222603a6d7a50a03627114db1021",
+      "txt_sha256": "baec962d26bae02f1561015759c98913b96283e8bd81ffc9b0ecc9ebfadda9d8"
+    },
+    "dark/L01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "01ccb46bb5449d218dc1f4d3b6ca66fa065abca67644df4fb612c247e021bc60",
+      "txt_sha256": "d24957f364b54e0965f88e58a704ed2c6ef93710e4ac61055e8536a743934d4b"
+    },
+    "dark/L08": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "da5761f1a89cfc798c520360e7b6462dafb16e7eb557ea0c3e95fe5dafdb2b8e",
+      "txt_sha256": "5211715a12c844c602afd12008c2c6bf117cd03066cf33af0d67d4f16c7369d1"
+    },
+    "dark/S01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "2a0be4fd61a437bfd3502c366a488197cdfd16db7bb8c4a6686a9623bff17597",
+      "txt_sha256": "31148918a05d8407527f27eb05c2dcd56bd33016cd732e1003a280fab3124520"
+    }
+  },
+  "xcresult": "/private/tmp/dune-a743-native-evidence/contour-water-regular/Test-DUNEUITests-2026.11.19_03-33-14-+0900.xcresult",
+  "provenance": {
+    "source_revision": "db7e731efd6f",
+    "runner_status": 0,
+    "xcodebuild_exit_status": 0,
+    "log": "/private/tmp/dune-a743-native-evidence/contour-water-regular/ui.log",
+    "log_sha256": "c12fb59fa75af509893819d652342d307aeb3600adf73fdbc9671a44f2ef41ec",
+    "receipt": "/private/tmp/dune-a743-native-evidence/contour-water-regular/ui.log.result.json",
+    "receipt_sha256": "837d46e6662fb7db6dcd9d5eba726783c7b2db99c98b918176e5a9e650c37029",
+    "emitted_xcresult": "/Users/shanks/.codex/worktrees/a743/Health/.deriveddata/artist/Logs/Test/Test-DUNEUITests-2026.11.19_03-33-14-+0900.xcresult",
+    "preserved_xcresult": "/private/tmp/dune-a743-native-evidence/contour-water-regular/Test-DUNEUITests-2026.11.19_03-33-14-+0900.xcresult"
+  }
+}
