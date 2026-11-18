@@ -2,19 +2,23 @@ import SwiftUI
 
 // MARK: - Ocean Tab Background
 
+private enum OceanCurrentPalette {
+    static let skyWash = Color("OceanSkyWash")
+    static let farCurrent = Color("OceanFarCurrent")
+    static let middleCurrent = Color("OceanMiddleCurrent")
+}
+
 struct OceanTabWaveBackground: View {
     @Environment(\.wavePreset) private var preset
     @Environment(\.appTheme) private var theme
     @Environment(\.weatherAtmosphere) private var atmosphere
-    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         ZStack(alignment: .top) {
             LinearGradient(
                 colors: preset == .today && atmosphere != .default
                     ? atmosphere.gradientColors(for: theme)
-                    : [colorScheme == .dark ? Color(red: 0.098, green: 0.220, blue: 0.294)
-                                            : Color(red: 0.827, green: 0.937, blue: 0.961), .clear],
+                    : [OceanCurrentPalette.skyWash, .clear],
                 startPoint: .top,
                 endPoint: DS.Gradient.tabBackgroundEnd
             )
@@ -54,7 +58,6 @@ private struct OceanCurrentScene: View {
     let preset: WavePreset
     @Environment(\.waveReducedMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.colorScheme) private var colorScheme
     @State private var start = Date.now
 
     private var strength: CGFloat {
@@ -74,15 +77,11 @@ private struct OceanCurrentScene: View {
                 let scale = size.height / 172
                 let width = size.width / scale
                 context.scaleBy(x: scale, y: scale)
-                let far = colorScheme == .dark ? Color(red: 0.141, green: 0.259, blue: 0.337)
-                                              : Color(red: 0.729, green: 0.847, blue: 0.875)
-                let middle = colorScheme == .dark ? Color(red: 0.157, green: 0.329, blue: 0.408)
-                                                 : Color(red: 0.525, green: 0.714, blue: 0.765)
                 let turn = 2 * CGFloat.pi * seconds
                 drawCurrent(in: context, width: width, phase: turn / 18, frequency: 1.05,
-                            center: 76, amplitude: 12, skew: 0.12, crest: 0.18, color: far)
+                            center: 76, amplitude: 12, skew: 0.12, crest: 0.18, color: OceanCurrentPalette.farCurrent)
                 drawCurrent(in: context, width: width, phase: -turn / 15, frequency: 1.65,
-                            center: 105, amplitude: 17, skew: 0.24, crest: 0.30, color: middle)
+                            center: 105, amplitude: 17, skew: 0.24, crest: 0.30, color: OceanCurrentPalette.middleCurrent)
 
                 let tide = turn / 12
                 let zoom = 0.78 + 0.22 * strength
