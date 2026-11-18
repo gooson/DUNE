@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 테마 맵
 
+2026-11-18 [FOREST 방향 시안](themes/forest-green-direction.html)에 우키요에풍 소나무 목판화를 더했다. Today는 골안개와 굽은 소나무가 함께 보이는 전경을 쓴다. Activity·Wellness·Life에서는 수관·먼 능선·줄기를 각각 수직으로 잘라 보여준다. 24초 동안 숲을 가득 메운 안개가 가까운 소나무부터 걷히고, 골짜기 안개가 뒤이어 옅어진다. 맑은 숲이 잠시 보인 뒤 골짜기부터 안개가 다시 찬다. 줄기와 굵은 가지는 고정한다. 바깥쪽 잔가지와 솔잎 끝만 서로 다른 간격으로 살짝 들렸다가 제자리로 돌아온다. 시안 상단에서 움직임을 멈추거나 다시 재생하고 라이트·다크를 전환할 수 있다. 동작 줄이기에서는 정지 상태로 시작한다.
+
 2026-11-18 [OCEAN 방향 시안](themes/ocean-cool-direction.html)에 목판화풍 파봉을 그렸다. 쪽빛 파면 안쪽에 여백을 두고 굵은 흰 포말의 끝을 여러 갈래로 말았다. Today 상단과 Activity·Wellness·Life 하단에는 탭별 세기로 같은 너울이 움직이며 동작 줄이기에서는 정지한다. 앱은 이 시안의 파면·포말·물방울 벡터를 사용한다. [기기별 실제 캡처](../phone-design-map/actual/ocean-current-2026-11-18/index.html)에서 확인할 수 있다.
 
 어두운 Today 카드의 실제 추세선·작은 날짜는 장식 능선/dusk와 분리한다. 최신 [Today 상태 계약](../layout-map/today-case-matrix.md)의 Light/Dark 대비 기준을 사용하며, 원본 방향 시안과 네이티브 캡처는 별도로 보존한다.
@@ -71,7 +73,7 @@ Small 위젯의 세 점수 링과 하단 상태·시각은 카드 전체 높이�
 |---|---|---|
 | DUNE | [Desert Horizon](themes/dune-final-four-tab.html) | 세 겹의 흐르는 모래 능선, 공통 링과 4탭 정보 위계 |
 | OCEAN | [Ocean Current](themes/ocean-cool-direction.html) | 쪽빛 너울, 갈고리처럼 갈라진 흰 포말과 교차하는 해류 |
-| FOREST | [Forest Canopy](themes/forest-green-direction.html) | 안개와 깊은 숲 능선, 금빛 링 |
+| FOREST | [Forest Canopy](themes/forest-green-direction.html) | 굽은 소나무, 종이빛 골안개와 금빛 링 |
 | SAKURA | [Spring Haze](themes/sakura-calm-direction.html) | 벚꽃 군집과 얇은 가지, 적은 꽃잎 |
 | ARCTIC | [Aurora Drift](themes/arctic-dawn-direction.html) | 고요한 배경 위로 이동하는 오로라 |
 | SOLAR | [Solar Pulse](themes/solar-pop-direction.html) | 고정된 태양 코어 주변의 빛 궤적 |
