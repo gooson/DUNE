@@ -140,11 +140,13 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 DUNE_UI_TEST_WALL_TIMEOUT=1200 scripts/test-ui.sh \
   --test-plan DUNEUITests-DesignCapture --simulator-udid "$OWNED_UDID" \
   --only-testing DUNEUITests/ArtistThemeNativeUITests/testSakuraCalm \
-  --log-file .xcodebuild/artist-sakura-regular.log
+  --log-file "$EVIDENCE_DIR/artist-sakura-regular.log"
 python3 docs/design/phone-design-map/collect-artist-theme-captures.py \
-  sakuraCalm regular .xcodebuild/artist-sakura-regular.log.result.json \
+  sakuraCalm regular "$EVIDENCE_DIR/artist-sakura-regular.log.result.json" \
   "$OWNED_UDID" "$SOURCE_REVISION" --xcresult "$XCRESULT"
 ```
+
+실행 로그가 출력한 원본 xcresult를 영수증과 함께 보존한다. 여러 메서드를 실행한 배치에서 일부만 실패하면 원본 로그와 xcresult에 모두 통과로 남은 메서드의 캡처만 제출할 수 있다. 이때 `--allow-passing-selector`와 원본·보존 경로 및 로그·영수증 해시를 포함하는 `--provenance` 기록을 함께 전달한다.
 
 Duo에서는 전용 기기의 활성 디스플레이와 자세를 확인한 뒤 DuoAudit 계획과 `scripts/duo-visual-audit.py`를 사용한다. 결과 수집에는 `--duo-captures`와 실행 전후 `devicectl device info displays`의 JSON 두 개를 `--display-readback`으로 전달한다. 이 정지 화면 캡처는 움직임의 주기나 동작 줄이기 전환을 검증하지 않는다.
 
