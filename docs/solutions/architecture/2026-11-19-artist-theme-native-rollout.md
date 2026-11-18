@@ -55,3 +55,9 @@ Forest와 Ocean의 일부 탭에서 그림이 카드 옆이나 아래 공간을 
 ## Lessons Learned
 
 제목 뒤에 그림을 그리면 iPhone과 넓은 화면에서 같은 데이터 레이아웃으로 장면을 이어갈 수 있다. 정지 캡처는 레이아웃과 대비를 확인하고, 연속 프레임과 접근성 위치는 움직이는 장식에 의해 정보와 조작 영역이 이동하는지 확인한다.
+
+## 검증 범위
+
+iOS 앱 빌드와 테마·아이콘 단위 테스트 22개가 통과했다. 아홉 테마의 iPhone 화면 198장과 대표 iPad·Duo 화면 66장을 접근성 트리와 함께 보존했다. 파티스리의 Watch 홈·전체 운동·운동 중 지표는 두 UI 테스트에서 확인했다. [기기별 실제 화면](../../design/phone-design-map/actual/artist-themes/index.html)
+
+visionOS 27.2 SDK에서 실제 `AppTheme.swift`와 `VisionThemePalette.swift`를 Swift 6 엄격 동시성으로 함께 컴파일했다. 전체 `DUNEVision` 빌드는 기존 타깃에서 알림 스케줄러 프로토콜과 시간 포맷 확장을 찾지 못해 실패했다. 소스 목록 두 곳을 바로잡은 임시 빌드에서도 HealthKit 관찰자와 운동 마이그레이션의 기존 의존성이 누락돼 전체 빌드와 실행 화면은 검증하지 못했다.
