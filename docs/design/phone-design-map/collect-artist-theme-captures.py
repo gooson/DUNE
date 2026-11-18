@@ -48,6 +48,7 @@ SCREENS = {
 TEST_CLASS = "ArtistThemeNativeUITests"
 ACTION = r"Artist (\w+) (light|dark) ([A-Z]\d{2})"
 EXPORTED_SUFFIX = re.compile(r"(?:_\d+_[0-9a-fA-F-]{36})?\.(?:png|txt)$|_\d+_[0-9a-fA-F-]{36}$")
+HIERARCHY_EXPORT_SUFFIX = re.compile(r"_\d+_[0-9a-fA-F-]{36}(?=\.swift-\d+$)")
 MAIN_WINDOW = re.compile(r"^    Window(?: \(Main\))?, .*?\}, \{([\d.]+), ([\d.]+)\}\}", re.MULTILINE)
 
 
@@ -91,6 +92,7 @@ def read_attachments(result: Path, folder: Path, theme: str) -> tuple[dict, dict
             if attachment.get("isAssociatedWithFailure"):
                 continue
             name = EXPORTED_SUFFIX.sub("", attachment["suggestedHumanReadableName"])
+            name = HIERARCHY_EXPORT_SUFFIX.sub("", name)
             if match := re.fullmatch(r"screen-0-\d+x\d+-" + ACTION, name):
                 kind = "png"
             elif match := re.fullmatch(r"hierarchy-" + ACTION + r"-[\w./]+\.swift-\d+", name):
