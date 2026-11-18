@@ -415,6 +415,7 @@
 		41F70B2E0D02BEBDBC689EE2 /* WatchWorkoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33969115EAE46D431AB9EE32 /* WatchWorkoutAttributes.swift */; };
 		422477EEF7C0CEF7AF27B354 /* HabitFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A310B4212D28D0A2F364B013 /* HabitFormSheet.swift */; };
 		42BC0028C9FA6A3E1F762E17 /* Double+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9390454CB9F85AE0AE9CF75 /* Double+Formatting.swift */; };
+		4322A5A60D8014CA2DEB4862 /* ForestHeroArtwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700BB3280E7E653A0DAB76D9 /* ForestHeroArtwork.swift */; };
 		432BE0C0F10E91C7428AB25D /* FatigueCalculationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0DC4EC599FA6243D52ACB1 /* FatigueCalculationService.swift */; };
 		4337D3461D700FA31FE828E7 /* WavePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B1124C57E15A16F5393513 /* WavePreset.swift */; };
 		434AC1CD093049FF2F51942D /* HabitAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A9FDBBAE9D5FE0EE13BD50 /* HabitAnalyticsService.swift */; };
@@ -2122,6 +2123,7 @@
 		6F3CCBAEE5C10521927909F6 /* CalculateConditionScoreUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateConditionScoreUseCase.swift; sourceTree = "<group>"; };
 		6F5B4F715EAF1F4ED8C87357 /* VisionDashboardWindowScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionDashboardWindowScene.swift; sourceTree = "<group>"; };
 		6FE98F15266CFB70975BFB8F /* ConditionInsightSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionInsightSection.swift; sourceTree = "<group>"; };
+		700BB3280E7E653A0DAB76D9 /* ForestHeroArtwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForestHeroArtwork.swift; sourceTree = "<group>"; };
 		7016020C0A1A1D099AE37511 /* ExerciseDefaultEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDefaultEditView.swift; sourceTree = "<group>"; };
 		704C3FA451231F31163EC303 /* HealthQuerySnippetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthQuerySnippetView.swift; sourceTree = "<group>"; };
 		707A204BEA5651D3AC0BD6B9 /* RestTimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestTimerViewModel.swift; sourceTree = "<group>"; };
@@ -4143,6 +4145,7 @@
 				5556A8DEEE8ED55FAEDA1499 /* EmptyStateView.swift */,
 				D2A808595CDABBC582A65510 /* ExerciseMuscleMapView.swift */,
 				BFEDD0DB2BC47A9C78218FC8 /* ExerciseSetColumnHeaders.swift */,
+				700BB3280E7E653A0DAB76D9 /* ForestHeroArtwork.swift */,
 				0D8DBB9C95058AEFC28F4598 /* ForestSilhouetteShape.swift */,
 				8BF1A07B996C7686AC4D77BE /* ForestWaveBackground.swift */,
 				D3FDB2DA9908F5F63BBE4303 /* GlassCard.swift */,
@@ -5593,6 +5596,7 @@
 				BE4D77D5C41E50CEFE554A18 /* FatigueLevel+View.swift in Sources */,
 				F6F4D998FBA1E00D0A83C915 /* FatigueLevel.swift in Sources */,
 				7AC2FF009ED00C260D2EDCE2 /* FlowLayout.swift in Sources */,
+				4322A5A60D8014CA2DEB4862 /* ForestHeroArtwork.swift in Sources */,
 				EAD08235FF95AF7AF4F321F0 /* ForestSilhouetteShape.swift in Sources */,
 				C0998E402D974722DED256ED /* ForestWaveBackground.swift in Sources */,
 				A2CDC5CD2AD32D436D44E014 /* FormCheckOverlay.swift in Sources */,

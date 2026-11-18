@@ -35,34 +35,23 @@ struct LifeHabitHeroView: View {
                 Text("No habits today")
                     .font(.title3.weight(.semibold))
                     .frame(maxWidth: .infinity, minHeight: 104, alignment: .leading)
+            } else if theme == .forestGreen && !dynamicTypeSize.isAccessibilitySize {
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: DS.Spacing.xl) {
+                        ring
+                        progressDetails
+                    }
+                    VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                        ring
+                        progressDetails
+                    }
+                }
             } else {
                 HStack(alignment: .center, spacing: DS.Spacing.xl) {
                     if !dynamicTypeSize.isAccessibilitySize {
                         ring
                     }
-
-                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                        if dynamicTypeSize.isAccessibilitySize {
-                            Text("\(completed) of \(total) complete")
-                                .font(.headline)
-                                .accessibilityIdentifier("life-hero-external-progress")
-                        }
-                        HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
-                            Text(remaining.formatted())
-                                .font(.system(size: dynamicTypeSize.isAccessibilitySize ? 52 : 64, weight: .bold, design: .rounded))
-                                .minimumScaleFactor(0.75)
-                                .monospacedDigit()
-                                .foregroundStyle(gold)
-                                .accessibilityIdentifier("life-hero-remaining")
-                            Text("Remaining")
-                                .font(.subheadline.weight(.medium))
-                                .foregroundStyle(.secondary)
-                        }
-                        if !dynamicTypeSize.isAccessibilitySize {
-                            medals
-                                .accessibilityHidden(true)
-                        }
-                    }
+                    progressDetails
                     Spacer(minLength: 0)
                 }
             }
@@ -70,6 +59,7 @@ struct LifeHabitHeroView: View {
         .padding(.bottom, theme == .oceanCool ? 36 : 0)
         .padding(DS.Spacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
+        .forestHeroArtwork(.life, cornerRadius: DS.Radius.xxl, borderColor: gold.opacity(DS.Opacity.cardBorder))
         .background {
             RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous)
                 .fill(theme.cardBackground)
@@ -80,7 +70,7 @@ struct LifeHabitHeroView: View {
                 .overlay(alignment: .bottom) {
                     if theme == .oceanCool {
                         OceanHeroShoreline(preset: .life)
-                    } else {
+                    } else if theme != .forestGreen {
                         LifeHeroTerrain()
                             .stroke(LinearGradient(colors: [gold.opacity(0.08), lightGold.opacity(0.38), gold.opacity(0.12)], startPoint: .leading, endPoint: .trailing), lineWidth: 1)
                             .frame(height: 72)
@@ -88,13 +78,40 @@ struct LifeHabitHeroView: View {
                     }
                 }
                 .overlay {
-                    RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous)
-                        .strokeBorder(gold.opacity(DS.Opacity.cardBorder), lineWidth: 1)
+                    if theme != .forestGreen {
+                        RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous)
+                            .strokeBorder(gold.opacity(DS.Opacity.cardBorder), lineWidth: 1)
+                    }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous))
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("life-habit-hero")
+    }
+
+    private var progressDetails: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+            if dynamicTypeSize.isAccessibilitySize {
+                Text("\(completed) of \(total) complete")
+                    .font(.headline)
+                    .accessibilityIdentifier("life-hero-external-progress")
+            }
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                Text(remaining.formatted())
+                    .font(.system(size: dynamicTypeSize.isAccessibilitySize ? 52 : 64, weight: .bold, design: .rounded))
+                    .minimumScaleFactor(0.75)
+                    .monospacedDigit()
+                    .foregroundStyle(gold)
+                    .accessibilityIdentifier("life-hero-remaining")
+                Text("Remaining")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+            }
+            if !dynamicTypeSize.isAccessibilitySize {
+                medals
+                    .accessibilityHidden(true)
+            }
+        }
     }
 
     private var ring: some View {

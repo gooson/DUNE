@@ -8,7 +8,7 @@ struct WellnessHeroCard: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.horizontalSizeClass) private var sizeClass
 
-    private var isWide: Bool { sizeClass == .regular && !dynamicTypeSize.isAccessibilitySize }
+    private var isWide: Bool { theme != .forestGreen && sizeClass == .regular && !dynamicTypeSize.isAccessibilitySize }
     private var ink: Color { theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor }
     private var muted: Color { theme == .desertWarm ? DesertPalette.muted : theme.directionPreviewTextColor.opacity(0.74) }
 
@@ -39,6 +39,7 @@ struct WellnessHeroCard: View {
         .padding(DS.Spacing.xl)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.bottom, theme == .oceanCool ? 44 : 0)
+        .forestHeroArtwork(.wellness, cornerRadius: DS.Radius.xxl, borderColor: theme.accentColor.opacity(0.25))
         .background {
             if theme == .desertWarm {
                 DesertCardSurface(cornerRadius: DS.Radius.xxl)
@@ -52,8 +53,10 @@ struct WellnessHeroCard: View {
                         }
                     }
                     .overlay {
-                        RoundedRectangle(cornerRadius: DS.Radius.xxl)
-                            .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
+                        if theme != .forestGreen {
+                            RoundedRectangle(cornerRadius: DS.Radius.xxl)
+                                .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
+                        }
                     }
             }
         }
@@ -88,12 +91,21 @@ struct WellnessHeroCard: View {
                             .accessibilityIdentifier("wellness-hero-external-score")
                         Text(score.status.label).font(.headline).foregroundStyle(ink)
                     }
+                } else if theme == .forestGreen {
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: DS.Spacing.md) {
+                            scoreRing(score)
+                            scoreStatus(score)
+                        }
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            scoreRing(score)
+                            scoreStatus(score)
+                        }
+                    }
                 } else {
                     HStack(alignment: .center, spacing: DS.Spacing.lg) {
                         scoreRing(score)
-                        Text(score.status.label)
-                            .font(.headline.weight(.semibold))
-                            .foregroundStyle(ink)
+                        scoreStatus(score)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
@@ -111,6 +123,12 @@ struct WellnessHeroCard: View {
         .accessibilityLabel("Wellness score \(score.score), \(score.status.label)")
         .accessibilityValue("\(score.narrativeMessage), \(score.evaluationDate.formatted(.dateTime.month(.abbreviated).day().hour().minute()))")
         .accessibilityHint("Wellness Details")
+    }
+
+    private func scoreStatus(_ score: WellnessScore) -> some View {
+        Text(score.status.label)
+            .font(.headline.weight(.semibold))
+            .foregroundStyle(ink)
     }
 
     private func scoreRing(_ score: WellnessScore) -> some View {

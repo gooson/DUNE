@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import Testing
+import UIKit
 @testable import DUNE
 
 @Suite("ForestSilhouetteShape Geometry")
@@ -107,5 +108,56 @@ struct ForestSilhouetteShapeTests {
         // With zero amplitude, ridge line is approximately flat at verticalOffset (0.5 * 200 = 100).
         // Edge noise + treeModulation can shift ±3pt.
         #expect(bounds.minY >= 95 && bounds.minY <= 105)
+    }
+}
+
+@Suite("Forest Canopy woodcut playback")
+struct ForestCanopyMotionTests {
+    @Test("Foreground clears before the valley and both fill again at the seam")
+    func fogCycle() {
+        let dense = ForestCanopyMotion.frame(at: 0)
+        let clearing = ForestCanopyMotion.frame(at: ForestCanopyMotion.staticElapsed)
+        let clear = ForestCanopyMotion.frame(at: 16)
+        let refilling = ForestCanopyMotion.frame(at: 21)
+        let loop = ForestCanopyMotion.frame(at: ForestCanopyMotion.period)
+        #expect(ForestCanopyMotion.period == 24)
+        #expect(dense.frontFog.opacity > 0.9 && dense.valleyFog.opacity > 0.9)
+        #expect(clearing.frontFog.opacity < clearing.valleyFog.opacity)
+        #expect(clear.frontFog.opacity < 0.05 && clear.valleyFog.opacity < 0.15)
+        #expect(refilling.valleyFog.opacity > clear.valleyFog.opacity)
+        #expect(loop.frontFog.opacity == dense.frontFog.opacity)
+        #expect(loop.valleyFog.opacity == dense.valleyFog.opacity)
+    }
+
+    @Test("Needle tips have independent short travel in print coordinates")
+    func needleTravel() {
+        let upperPeak = ForestCanopyMotion.frame(at: 7.8 * 0.42 - 1.4)
+        let lowerPeak = ForestCanopyMotion.frame(at: 9.6 * 0.42 - 2.6)
+        #expect(abs(upperPeak.upperNeedles.y + 0.0074) < 0.00001)
+        #expect(abs(lowerPeak.lowerNeedles.y + 0.0105) < 0.00001)
+        #expect(upperPeak.lowerNeedles.y > lowerPeak.lowerNeedles.y)
+        #expect(lowerPeak.upperNeedles.y > upperPeak.upperNeedles.y)
+    }
+
+    @Test("Motion runs only for active scenes with motion and power budget")
+    func playbackPolicy() {
+        #expect(ForestCanopyMotion.shouldAnimate(scenePhase: .active, reduceMotion: false, isLowPowerModeEnabled: false))
+        #expect(!ForestCanopyMotion.shouldAnimate(scenePhase: .inactive, reduceMotion: false, isLowPowerModeEnabled: false))
+        #expect(!ForestCanopyMotion.shouldAnimate(scenePhase: .background, reduceMotion: false, isLowPowerModeEnabled: false))
+        #expect(!ForestCanopyMotion.shouldAnimate(scenePhase: .active, reduceMotion: true, isLowPowerModeEnabled: false))
+        #expect(!ForestCanopyMotion.shouldAnimate(scenePhase: .active, reduceMotion: false, isLowPowerModeEnabled: true))
+    }
+
+    @Test("Both tip masks map to the print and the fog asset carries alpha")
+    func bundledArt() throws {
+        let print = try #require(UIImage(named: "ForestCanopyPrint")?.cgImage)
+        for name in ["ForestCanopyUpperTips", "ForestCanopyLowerTips"] {
+            let layer = try #require(UIImage(named: name)?.cgImage)
+            #expect(layer.width == print.width && layer.height == print.height)
+            #expect(layer.alphaInfo != .none && layer.alphaInfo != .noneSkipLast && layer.alphaInfo != .noneSkipFirst)
+        }
+        let fog = try #require(UIImage(named: "ForestValleyFog")?.cgImage)
+        #expect(fog.width > 0 && fog.height > 0)
+        #expect(fog.alphaInfo != .none && fog.alphaInfo != .noneSkipLast && fog.alphaInfo != .noneSkipFirst)
     }
 }

@@ -93,7 +93,7 @@ struct ExerciseView: View {
             ) {
                 await viewModel.loadHealthKitWorkouts()
             }
-            .background { TabWaveBackground() }
+            .background { TabWaveBackground(forestArtwork: .silhouettes) }
             .englishNavigationTitle("Exercise")
             .alert(
                 "Delete Exercise?",
