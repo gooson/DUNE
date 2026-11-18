@@ -1,0 +1,167 @@
+Attributes: Application, 0x10820a6c0, pid: 63117, label: 'DUNE'
+Element subtree:
+ →Application, 0x10820a6c0, pid: 63117, label: 'DUNE'
+    Window (Main), 0x108209540, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x1135fbd40, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10820e6c0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x10820f200, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x10820ee40, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x10820ebc0, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x10820c000, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x10820e300, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10820ea80, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x10820e940, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x10820c3c0, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x10820f340, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x10820fe80, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x10820f0c0, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x10820f480, {{0.0, 0.0}, {402.0, 874.0}}
+                                Other, 0x10820ef80, {{0.0, 0.0}, {402.0, 874.0}}
+                                  Other, 0x10820fd40, {{0.0, 0.0}, {402.0, 874.0}}
+                                    Other, 0x10820ed00, {{0.0, 0.0}, {402.0, 874.0}}
+                                      Other, 0x10820fc00, {{0.0, 0.0}, {402.0, 874.0}}
+                                        NavigationBar, 0x10820fac0, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Settings'
+                                          Button, 0x10820f840, {{16.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Today'
+                                          StaticText, 0x10820c280, {{167.7, 73.7}, {66.7, 20.7}}, label: 'Settings'
+                                        Other, 0x10820e580, {{0.0, 0.0}, {402.0, 874.0}}
+                                          Other, 0x10820f5c0, {{0.0, 0.0}, {402.0, 874.0}}
+                                            Other, 0x10820e440, {{0.0, 0.0}, {402.0, 874.0}}
+                                              Other, 0x10820e800, {{0.0, 0.0}, {402.0, 874.0}}
+                                                Image, 0x10820f980, {{-35.3, 0.0}, {472.7, 874.0}}
+                                                CollectionView, 0x10820f700, {{0.0, 0.0}, {402.0, 874.0}}
+                                                  Other, 0x10820c140, {{-16.0, -325.3}, {434.0, 331.0}}
+                                                  Cell, 0x1135ffe80, {{16.0, -40.0}, {370.0, 45.7}}
+                                                    Other, 0x107c170c0, {{16.0, -40.0}, {370.0, 45.7}}
+                                                    Other, 0x107c148c0, {{16.0, -40.0}, {370.0, 45.7}}
+                                                      Other, 0x107c15040, {{16.0, -40.0}, {370.0, 45.7}}
+                                                        Other, 0x107c152c0, {{16.0, -40.0}, {370.0, 45.7}}
+                                                          StaticText, 0x107c16940, {{16.0, -40.0}, {370.0, 45.7}}, label: 'DUNE skips this reminder when recent heart-rate data suggests you're already wearing your watch.'
+                                                  Other, 0x107c16300, {{0.0, 0.0}, {402.0, 874.0}}
+                                                    Other, 0x107c16800, {{0.0, 0.0}, {402.0, 156.0}}
+                                                  Other, 0x107c16d00, {{0.0, 0.0}, {402.0, 874.0}}
+                                                    Other, 0x107c16f80, {{0.0, 0.0}, {402.0, 156.0}}
+                                                  Other, 0x107c16e40, {{-16.0, 25.7}, {434.0, 92.3}}
+                                                  Cell, 0x107c166c0, {{16.0, 25.7}, {370.0, 40.3}}
+                                                    Other, 0x107c16580, {{16.0, 25.7}, {370.0, 40.3}}
+                                                    Other, 0x107c14c80, {{16.0, 25.7}, {370.0, 40.3}}
+                                                      Other, 0x107c17e80, {{16.0, 25.7}, {370.0, 40.3}}
+                                                        Other, 0x107c161c0, {{16.0, 25.7}, {370.0, 40.3}}
+                                                          StaticText, 0x107c175c0, {{16.0, 25.7}, {370.0, 40.3}}, label: 'Posture'
+                                                  Cell, 0x107c17c00, {{16.0, 66.0}, {370.0, 52.0}}
+                                                    Other, 0x107c17980, {{16.0, 66.0}, {370.0, 52.0}}
+                                                      Other, 0x107c17340, {{16.0, 66.0}, {370.0, 52.0}}
+                                                    Other, 0x107c16440, {{16.0, 66.0}, {370.0, 52.0}}
+                                                      Other, 0x107c16080, {{16.0, 66.0}, {370.0, 52.0}}
+                                                        Other, 0x107c17200, {{16.0, 66.0}, {370.0, 52.0}}
+                                                          Switch, 0x107c157c0, {{16.0, 66.0}, {370.0, 52.0}}, identifier: 'settings-row-posture-reminder', label: 'Posture Reminder', value: 0
+                                                            Image, 0x107c15a40, {{43.0, 80.3}, {10.0, 23.7}}, identifier: 'figure.stand', label: 'Figure Standing Upright'
+                                                            StaticText, 0x107c17480, {{76.0, 81.8}, {135.7, 20.3}}, label: 'Posture Reminder'
+                                                            Switch, 0x107c17700, {{305.0, 78.0}, {63.0, 28.0}}, value: 0
+                                                  Other, 0x107c15b80, {{-16.0, 138.0}, {434.0, 151.7}}
+                                                  Cell, 0x107c15680, {{16.0, 138.0}, {370.0, 38.0}}
+                                                    Other, 0x107c17840, {{16.0, 138.0}, {370.0, 38.0}}
+                                                    Other, 0x107c15e00, {{16.0, 138.0}, {370.0, 38.0}}
+                                                      Other, 0x107c16a80, {{16.0, 138.0}, {370.0, 38.0}}
+                                                        Other, 0x107c15cc0, {{16.0, 138.0}, {370.0, 38.0}}
+                                                          StaticText, 0x107c15180, {{16.0, 138.0}, {370.0, 38.0}}, label: 'Morning Briefing'
+                                                  Cell, 0x107c17d40, {{16.0, 176.0}, {370.0, 52.0}}
+                                                    Other, 0x107c15f40, {{16.0, 176.0}, {370.0, 52.0}}
+                                                      Other, 0x107c16bc0, {{16.0, 176.0}, {370.0, 52.0}}
+                                                    Other, 0x107c14f00, {{16.0, 176.0}, {370.0, 52.0}}
+                                                      Other, 0x107c14640, {{16.0, 176.0}, {370.0, 52.0}}
+                                                        Other, 0x107c17ac0, {{16.0, 176.0}, {370.0, 52.0}}
+                                                          Switch, 0x113cac000, {{16.0, 176.0}, {370.0, 52.0}}, identifier: 'settings-row-morning-briefing', label: 'Morning Briefing', value: 0
+                                                            Image, 0x113cac140, {{34.3, 193.3}, {27.7, 17.3}}, identifier: 'sun.horizon.fill', label: 'Sun At The Horizon, Filled'
+                                                            StaticText, 0x113cac280, {{76.0, 191.8}, {126.3, 20.3}}, label: 'Morning Briefing'
+                                                            Switch, 0x113cac3c0, {{305.0, 188.0}, {63.0, 28.0}}, value: 0
+                                                  Cell, 0x113cac500, {{16.0, 228.0}, {370.0, 61.7}}
+                                                    Other, 0x113cac640, {{16.0, 228.0}, {370.0, 61.7}}
+                                                    Other, 0x113cac780, {{16.0, 228.0}, {370.0, 61.7}}
+                                                      Other, 0x113cac8c0, {{16.0, 228.0}, {370.0, 61.7}}
+                                                        Other, 0x113caca00, {{16.0, 228.0}, {370.0, 61.7}}
+                                                          StaticText, 0x113cacb40, {{16.0, 228.0}, {370.0, 61.7}}, label: 'Show a daily briefing with your condition, recovery insights, and recommendations when you first open the app each morning.'
+                                                  Other, 0x113cacc80, {{-16.0, 309.7}, {434.0, 1384.0}}
+                                                  Cell, 0x113cacdc0, {{16.0, 309.7}, {370.0, 38.0}}
+                                                    Other, 0x113cacf00, {{16.0, 309.7}, {370.0, 38.0}}
+                                                    Other, 0x113cad040, {{16.0, 309.7}, {370.0, 38.0}}
+                                                      Other, 0x113cad180, {{16.0, 309.7}, {370.0, 38.0}}
+                                                        Other, 0x113cad2c0, {{16.0, 309.7}, {370.0, 38.0}}
+                                                          StaticText, 0x113cad400, {{16.0, 309.7}, {370.0, 38.0}}, identifier: 'settings-section-appearance', label: 'Appearance'
+                                                  Cell, 0x113cad540, {{16.0, 347.7}, {370.0, 52.0}}
+                                                    Other, 0x113cad680, {{16.0, 347.7}, {370.0, 52.0}}
+                                                      Other, 0x113cad7c0, {{16.0, 347.7}, {370.0, 52.0}}
+                                                    Other, 0x113cad900, {{16.0, 347.7}, {370.0, 52.0}}
+                                                      Other, 0x113cada40, {{16.0, 347.7}, {370.0, 52.0}}
+                                                        Other, 0x113cadb80, {{16.0, 347.7}, {370.0, 52.0}}
+                                                          Button, 0x113cadcc0, {{16.0, 347.7}, {370.0, 52.0}}, identifier: 'settings-row-app-icon', label: 'App Icon'
+                                                            StaticText, 0x113cade00, {{38.3, 362.3}, {105.3, 23.0}}, label: 'App Icon'
+                                                            Image, 0x113cadf40, {{38.3, 362.3}, {23.0, 23.0}}, identifier: 'app.badge', label: 'Notifications'
+                                                            Image, 0x113cae080, {{356.7, 367.7}, {7.0, 12.0}}, identifier: 'chevron.forward'
+                                                  Cell, 0x113cae1c0, {{16.0, 399.7}, {370.0, 189.7}}
+                                                    Other, 0x113cae300, {{16.0, 399.7}, {370.0, 189.7}}
+                                                      Other, 0x113cae440, {{16.0, 399.7}, {370.0, 189.7}}
+                                                    Other, 0x113cae580, {{16.0, 399.7}, {370.0, 189.7}}
+                                                      Other, 0x113cae6c0, {{16.0, 399.7}, {370.0, 189.7}}
+                                                        Other, 0x113cae800, {{16.0, 399.7}, {370.0, 189.7}}
+                                                          Button, 0x113cae940, {{16.0, 399.7}, {370.0, 189.7}}, identifier: 'settings-theme-desertWarm', label: 'Desert Warm', Selected
+                                                            StaticText, 0x113caea80, {{44.0, 423.5}, {93.7, 18.0}}, label: 'Desert Warm'
+                                                            Image, 0x113caebc0, {{339.7, 424.0}, {17.0, 17.0}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                                                            Image, 0x113caed00, {{44.0, 445.7}, {314.0, 125.3}}
+                                                            Other, 0x113caee40, {{64.0, 474.3}, {274.0, 68.0}}
+                                                            StaticText, 0x113caef80, {{132.0, 491.2}, {64.0, 17.0}}, label: 'Condition'
+                                                            StaticText, 0x113caf0c0, {{90.7, 501.7}, {14.7, 13.3}}, label: '84'
+                                                            StaticText, 0x113caf200, {{132.0, 512.2}, {83.0, 13.3}}, label: 'Sample preview'
+                                                  Other, 0x113caf340, {{76.0, 398.7}, {290.0, 1.0}}
+                                                  Cell, 0x113caf480, {{16.0, 589.3}, {370.0, 189.7}}
+                                                    Other, 0x113caf5c0, {{16.0, 589.3}, {370.0, 189.7}}
+                                                      Other, 0x113caf700, {{16.0, 589.3}, {370.0, 189.7}}
+                                                    Other, 0x113caf840, {{16.0, 589.3}, {370.0, 189.7}}
+                                                      Other, 0x113caf980, {{16.0, 589.3}, {370.0, 189.7}}
+                                                        Other, 0x113cafac0, {{16.0, 589.3}, {370.0, 189.7}}
+                                                          Button, 0x113cafc00, {{16.0, 589.3}, {370.0, 189.7}}, identifier: 'settings-theme-oceanCool', label: 'Ocean Cool'
+                                                            StaticText, 0x113cafd40, {{44.0, 613.2}, {82.3, 18.0}}, label: 'Ocean Cool'
+                                                            Image, 0x113cafe80, {{339.7, 613.7}, {17.0, 17.0}}, identifier: 'circle', label: 'Circle'
+                                                            Image, 0x1140d8000, {{44.0, 635.3}, {314.0, 125.3}}
+                                                            Other, 0x1140d8140, {{64.0, 664.0}, {274.0, 68.0}}
+                                                            StaticText, 0x1140d8280, {{132.0, 680.8}, {64.0, 17.0}}, label: 'Condition'
+                                                            StaticText, 0x1140d83c0, {{90.7, 691.3}, {14.7, 13.3}}, label: '84'
+                                                            StaticText, 0x1140d8500, {{132.0, 701.8}, {83.0, 13.3}}, label: 'Sample preview'
+                                                  Other, 0x1140d8640, {{44.0, 588.3}, {322.0, 1.0}}
+                                                  Cell, 0x1140d8780, {{16.0, 779.0}, {370.0, 189.7}}
+                                                    Other, 0x1140d88c0, {{16.0, 779.0}, {370.0, 189.7}}
+                                                      Other, 0x1140d8a00, {{16.0, 779.0}, {370.0, 189.7}}
+                                                    Other, 0x1140d8b40, {{16.0, 779.0}, {370.0, 189.7}}
+                                                      Other, 0x1140d8c80, {{16.0, 779.0}, {370.0, 189.7}}
+                                                        Other, 0x1140d8dc0, {{16.0, 779.0}, {370.0, 189.7}}
+                                                          Button, 0x1140d8f00, {{16.0, 779.0}, {370.0, 189.7}}, identifier: 'settings-theme-forestGreen', label: 'Forest Green'
+                                                            StaticText, 0x1140d9040, {{44.0, 802.8}, {92.7, 18.0}}, label: 'Forest Green'
+                                                            Image, 0x1140d9180, {{339.7, 803.3}, {17.0, 17.0}}, identifier: 'circle', label: 'Circle'
+                                                            Image, 0x1140d92c0, {{44.0, 825.0}, {314.0, 125.3}}
+                                                            Other, 0x1140d9400, {{64.0, 853.7}, {274.0, 68.0}}
+                                                            StaticText, 0x1140d9540, {{132.0, 870.5}, {64.0, 17.0}}, label: 'Condition'
+                                                            StaticText, 0x1140d9680, {{90.7, 881.0}, {14.7, 13.3}}, label: '84'
+                                                            StaticText, 0x1140d97c0, {{132.0, 891.5}, {83.0, 13.3}}, label: 'Sample preview'
+                                                  Other, 0x1140d9900, {{44.0, 778.0}, {322.0, 1.0}}
+                                                  Other, 0x1140d9a40, {{369.0, 116.0}, {30.0, 675.0}}, label: 'Vertical scroll bar, 7 pages', value: 54%
+                                                    Other, 0x1140d9b80, {{396.0, 407.3}, {3.0, 130.7}}
+                                                  Other, 0x1140d9cc0, {{369.0, 116.0}, {30.0, 675.0}}, label: 'Vertical scroll bar, 7 pages', value: 54%
+                                                    Other, 0x1140d9e00, {{396.0, 407.3}, {3.0, 130.7}}
+                                        Toolbar, 0x1140d9f40, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x1140da080, {{0.0, 0.0}, {402.0, 874.0}}
+                                Toolbar, 0x1140da1c0, {{0.0, 0.0}, {402.0, 874.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x1140da300, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x1140da440, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x1140da580, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x1140da6c0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x1140da800, {{0.0, 791.0}, {402.0, 83.0}}
+                    Other, 0x1140da940, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x1140daa80, {{0.0, 791.0}, {402.0, 83.0}}
+              Other, 0x1140dabc0, {{0.0, 62.0}, {402.0, 778.0}}
+              Other, 0x1140dad00, {{201.0, 451.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x10820a6c0, pid: 63117, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x1140dae40, pid: 63117, label: 'DUNE'
+  }
