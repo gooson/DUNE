@@ -1,0 +1,274 @@
+{
+  "theme": "desertWarm",
+  "device_profile": "regular",
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "4A7F8A87-172F-4DD5-90D7-758ABFC261B2",
+    "deviceName": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+    "modelName": "iPhone 18 Pro",
+    "osBuildNumber": "24B8117",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "source_revision": "101993fd15b4",
+  "source_worktree_dirty": false,
+  "receipt": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/ArtistThemeNativeUITests/testPatisserie",
+      "DUNEUITests/ArtistThemeNativeUITests/testDesertWarm"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 2,
+      "passed": 2,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 2,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/private/tmp/dune-a743-native-evidence/patisserie-dune-regular/ui.log"
+  },
+  "captures": {
+    "light/T03": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "5173a496e6f7a0ca3f294f88ec7e44c738deca4b9088904b1be201c5474ab260",
+      "txt_sha256": "1e7f9652a4780d32b4515767a1e1af25b894ca5385281ff0df24034a51744abc"
+    },
+    "light/T04": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "f463cf1146718560a3810da083907eb20286e5afb0ca61586d84aa48c977d9ae",
+      "txt_sha256": "5511f8d4e0a13b54e2e6c55505cfe99077432a3e0f484be45723be765e1bfc97"
+    },
+    "light/A01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "4d746ab81509d230c126df7d3af8344af1304503841b38d95b91ff3f2d21c5e0",
+      "txt_sha256": "649208598102da57862df398e9808fef4dcb36eab1f6cb0b577f6f465e60d05d"
+    },
+    "light/A02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "bd3da458c77eef2bfc59fc9133b501c31b9c5d69dca0dd16f28a50313d40c016",
+      "txt_sha256": "bbc348e150971b35785d06aba5bb87883e8463c60ab13c17090f33138f2606dd"
+    },
+    "light/W28": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "dabe141102fe06628e5ab628d473d1c0cdd5793d6347aab2819539069454131f",
+      "txt_sha256": "723899940a35e8225b8177cddba465c2f94e399c73f27e382efff111dc4e2dc6"
+    },
+    "light/H01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "292224d9e79f2e61fa535a81ed908fc4b60bc7acd9da9303d42d9695387b5df6",
+      "txt_sha256": "fe7f032111a23bcc7af7a60ab61f555f0285d984cfa48d27ffc306853f573588"
+    },
+    "light/H02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "24c7f57361f08b25cf8a656c368fdc787b687f7953997d4e7ffab6b1b13d669b",
+      "txt_sha256": "230fd6f68f8d11a8d188a3e7e72e2611622bf2c83cb5290ebd4cae005a776666"
+    },
+    "light/T06": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "01e6250f461d3f32e8e1fe89a78236d456b305f1a9a1265fe8969740161c5dd0",
+      "txt_sha256": "c4436ecda5fc6d1e4134df891ddc8f4b76e888a2b14e05d95b7db41b911d02a9"
+    },
+    "light/L01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "8bf83c8d2313aa344d52b2f32952dcbae1a6e0ba95214246a3222209c889f1c6",
+      "txt_sha256": "8ffd2ff5d893331e3bf3eba81aafe61cc2a67f435d3b9e599d6c2b91417a7b0a"
+    },
+    "light/L08": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "de8c798650326240038559c827155e7a6b455d87281d81fbc4ce71767a2bc28a",
+      "txt_sha256": "b992ba82cee8d32e4a78bd996f1db584f546c369924d793ce8a45b26dd0834a8"
+    },
+    "light/S01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "5cadb384ae3bf86ea4f34c78cff2acf13c6f2c6bf5777af9f1ef8375a3d0a823",
+      "txt_sha256": "5687bf08202574d1daf952855b40fed4d596463261fe90e07f3fb25527d38ecb"
+    },
+    "dark/T03": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "1b8a6659cf32768f69a9d367875dc5ff0ee15165fca1f9c752edc41906735681",
+      "txt_sha256": "98f49953be2dc3fc305a5536a4802c376f5897e413ff76a6220759f355feb330"
+    },
+    "dark/T04": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "5a87119ddcf92d3ecac740061b88f5f77e8dc0b8f689a93436253937ceb382d9",
+      "txt_sha256": "4310db2f4eb7067f796fdb5a9319174b354f76b5beab180822c8669b70de236b"
+    },
+    "dark/A01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "ba306e394a0e37a7bf840fc54ed459a8dd5b224361ec71a1ba998a59c12667c4",
+      "txt_sha256": "7195fbc4b94334d60cd099838f124c322fb19121a92b4b62901286071f6e8212"
+    },
+    "dark/A02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "094e45230c62c01d4911516a5e5b566628d8b2752496e45fdc616c032bb0321c",
+      "txt_sha256": "e6169360ad908d35a2d6a86b258243c24d3cabd5af3fe8ba7842b1840c39be22"
+    },
+    "dark/W28": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "e896155522dfd2c98d87b9ff912876758ef0d66627c665a42c63ba5d94fce452",
+      "txt_sha256": "8105967848a75aef9e6c129e3f90e5ec9520ef218731fcb53d5a5add5e509599"
+    },
+    "dark/H01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "b3dbcfc8bc5385bfb4d4f2021c5e17cc19977647fe46a46dac470feeadbea16f",
+      "txt_sha256": "1360d94a97beee17c2e73dca1d096e0173fad9bc50683d05a7c8171da75aca9c"
+    },
+    "dark/H02": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "ca74d04863cfd53c62daccadd7a6e08c2b4e5a05a8b67ffbc5712908662e3f73",
+      "txt_sha256": "3af10bafde5639116804b6f50e2b726b5b97ca8013f1cc4f1c4d54f9e136f422"
+    },
+    "dark/T06": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "3939bdb784a7774881c9ba82887fec6023b5070fb3674b86f6a185c5f45af675",
+      "txt_sha256": "b11bc2c0e554ec3659050ecc2b8dde52c08217edef2832f55778a696af699ec2"
+    },
+    "dark/L01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "681fbe590e550639283c6dfcae4aae1d793372fb040c33e08e9218d21fd90a2b",
+      "txt_sha256": "d8e417f4995db5eef032a60cfb01e5f35b6d6be2af7dbff208c61e07fd7b45db"
+    },
+    "dark/L08": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "0e47cc64a8cc7951f9fd40bc7e12a85caef30eb268b8a5c8055ebb3e004981ef",
+      "txt_sha256": "72ca9b258bbe1f95a1d36ff6746cfff51d006e0868a063dd096e3c2ae2f0459f"
+    },
+    "dark/S01": {
+      "width": 1206,
+      "height": 2622,
+      "viewport_points": [
+        402.0,
+        874.0
+      ],
+      "png_sha256": "47ba3313d78d8c5ed3201ae84f39e986c2dac9683de9b037bbcb6e61b2f1d9dc",
+      "txt_sha256": "6258d7be33cea8847db667f4c15e14142292ac8126660b1fa2e7ee35f2e50fe9"
+    }
+  },
+  "xcresult": "/private/tmp/dune-a743-native-evidence/patisserie-dune-regular/Test-DUNEUITests-2026.11.19_02-28-52-+0900.xcresult",
+  "provenance": {
+    "source_revision": "101993fd15b4",
+    "runner_status": 127,
+    "xcodebuild_exit_status": 0,
+    "log": "/private/tmp/dune-a743-native-evidence/patisserie-dune-regular/ui.log",
+    "log_sha256": "99b48701423302aa3cd3434647279b5a348f755a7430425ecfc68a45a4f30970",
+    "receipt": "/private/tmp/dune-a743-native-evidence/patisserie-dune-regular/ui.log.result.json",
+    "receipt_sha256": "d487692f1182d22832234a3e894fd82aed6fa1e0d04a9d035885f3b2ca2252be",
+    "emitted_xcresult": "/Users/shanks/.codex/worktrees/a743/Health/.deriveddata/artist/Logs/Test/Test-DUNEUITests-2026.11.19_02-28-52-+0900.xcresult",
+    "preserved_xcresult": "/private/tmp/dune-a743-native-evidence/patisserie-dune-regular/Test-DUNEUITests-2026.11.19_02-28-52-+0900.xcresult"
+  }
+}

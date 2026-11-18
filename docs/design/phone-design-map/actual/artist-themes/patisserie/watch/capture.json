@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "theme": "patisserie",
+  "device": {
+    "identifier": "852B2ECB-5EBF-4EEF-A5B5-1BBF2420B612",
+    "modelName": "Apple Watch Series 12",
+    "name": "Apple Watch Series 12 (46mm)-wt-Health-a743-4e4d063d0e47",
+    "operatingSystemVersionWithBuildNumber": "27.2 (24S118)"
+  },
+  "result": {
+    "source_revision": "540b3e54936144979dc8036eae07f849e3f5d8da",
+    "runner_status": 0,
+    "xcodebuild_exit_status": 0,
+    "log": "/private/tmp/dune-a743-native-evidence/patisserie-watch/ui.log",
+    "log_sha256": "c8fe2e5d75c388c9befce4880c18090bed4e9c084a9e38a3417efdb6167c7839",
+    "receipt": "/private/tmp/dune-a743-native-evidence/patisserie-watch/ui.log.result.json",
+    "receipt_sha256": "ec529c7500e7a6f037a6fd101082631452a81b8a27de6ef7addd664d3427b4d4",
+    "emitted_xcresult": "/Users/shanks/.codex/worktrees/a743/Health/.deriveddata/artist/Logs/Test/Test-DUNEWatchUITests-2026.11.19_03-46-36-+0900.xcresult",
+    "preserved_xcresult": "/private/tmp/dune-a743-native-evidence/patisserie-watch/Test-DUNEWatchUITests-2026.11.19_03-46-36-+0900.xcresult"
+  },
+  "captures": {
+    "home": {
+      "scene": "Home",
+      "selector": "DUNEWatchUITests/WatchThemeMatrixUITests/testPatisserieHomeAndExerciseList",
+      "pixel_size": [
+        416,
+        496
+      ],
+      "accessibility_ids": [
+        "watch-home-root"
+      ],
+      "png": {
+        "file": "home.png",
+        "source_attachment": "Pâtisserie Watch Home_0_37A76A4E-78FB-4EA2-B8E1-28F1FF637C29.png",
+        "source_attachment_uuid": "FE577E8C-CB0C-4569-9EA1-173E5A0FEA08",
+        "source_attachment_name": "Pâtisserie Watch Home",
+        "timestamp": "2026-11-19T03:47:01.578+0900",
+        "sha256": "ef81a283e3fdf46d1077941e9412a13b5b66ea43393689fe95fd9524e80e41a3"
+      },
+      "ax": {
+        "file": "home.txt",
+        "source_attachment": "hierarchy-Pâtisserie Watch Home_0_4F235F86-56C1-48EC-9F87-E17827A10BDE.txt",
+        "source_attachment_uuid": "61BD122B-916A-45F5-8D75-14F4052DC884",
+        "source_attachment_name": "hierarchy-Pâtisserie Watch Home",
+        "timestamp": "2026-11-19T03:47:01.687+0900",
+        "sha256": "98139b86552dd1da590a04fed20d0b1a25540665d0820928c514a9179ff07838"
+      }
+    },
+    "all-exercises": {
+      "scene": "All Exercises",
+      "selector": "DUNEWatchUITests/WatchThemeMatrixUITests/testPatisserieHomeAndExerciseList",
+      "pixel_size": [
+        416,
+        496
+      ],
+      "accessibility_ids": [
+        "watch-quickstart-screen",
+        "watch-quickstart-exercise-ui-test-squat"
+      ],
+      "png": {
+        "file": "all-exercises.png",
+        "source_attachment": "Pâtisserie Watch All Exercises_0_9A885345-5F36-40C7-8430-33312A85FBD5.png",
+        "source_attachment_uuid": "CB8C8A8F-0249-4418-B937-714997B48F59",
+        "source_attachment_name": "Pâtisserie Watch All Exercises",
+        "timestamp": "2026-11-19T03:47:14.529+0900",
+        "sha256": "2ae0896acfaf711708f29d8007613b4c965c16f813a5c8765905450c0cb91b61"
+      },
+      "ax": {
+        "file": "all-exercises.txt",
+        "source_attachment": "hierarchy-Pâtisserie Watch All Exercises_0_FF034CC2-65CD-4E39-8614-74F90EE8F4FF.txt",
+        "source_attachment_uuid": "A8E178F3-FDF5-4F0C-BCA3-D050438E1972",
+        "source_attachment_name": "hierarchy-Pâtisserie Watch All Exercises",
+        "timestamp": "2026-11-19T03:47:14.620+0900",
+        "sha256": "dd5f5e1570a3cf362b68bb1e4b884a766f6d57f9bbf590a8ee55c7766667829d"
+      }
+    },
+    "workout": {
+      "scene": "Workout",
+      "selector": "DUNEWatchUITests/WatchThemeMatrixUITests/testPatisserieWorkoutTheme",
+      "pixel_size": [
+        416,
+        496
+      ],
+      "accessibility_ids": [
+        "watch-session-metrics-screen"
+      ],
+      "png": {
+        "file": "workout.png",
+        "source_attachment": "Pâtisserie Watch Workout_0_876F7DC9-8E84-4110-81A2-F058E3EA95B0.png",
+        "source_attachment_uuid": "CD17F423-5F84-46DD-A35E-6B1D0B7F1749",
+        "source_attachment_name": "Pâtisserie Watch Workout",
+        "timestamp": "2026-11-19T03:47:45.041+0900",
+        "sha256": "b35d9351527796e9ea9584e3b528cf0281496c760bba48d9984e8f407d075e1f"
+      },
+      "ax": {
+        "file": "workout.txt",
+        "source_attachment": "hierarchy-Pâtisserie Watch Workout_0_94731EF5-542A-40D1-BED8-CC81FE255E5C.txt",
+        "source_attachment_uuid": "631DB636-D725-4401-AD72-E077A5DAB6E5",
+        "source_attachment_name": "hierarchy-Pâtisserie Watch Workout",
+        "timestamp": "2026-11-19T03:47:45.110+0900",
+        "sha256": "85c8c1b31940894cd05729cee1dd17a4c8d7c5224914d327d5d33c267d9cbf85"
+      }
+    }
+  }
+}

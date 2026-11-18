@@ -1,0 +1,256 @@
+Attributes: Application, 0x113171cc0, pid: 91936, label: 'DUNE'
+Element subtree:
+ →Application, 0x113171cc0, pid: 91936, label: 'DUNE'
+    Window, 0x113171e00, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x113171f40, {{0.0, -0.0}, {951.0, 669.0}}
+      Other, 0x113172080, {{0.0, -0.0}, {951.0, 669.0}}
+        Other, 0x113173e80, {{0.0, -0.0}, {951.0, 669.0}}
+          Other, 0x113173980, {{0.0, -0.0}, {951.0, 669.0}}
+            Other, 0x113173340, {{0.0, -0.0}, {951.0, 669.0}}
+              Other, 0x113173ac0, {{0.0, -0.0}, {867.0, 635.0}}
+              Other, 0x113173d40, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x113173200, {{0.0, -0.0}, {951.0, 669.0}}
+                  Other, 0x113173840, {{0.0, -0.0}, {951.0, 669.0}}
+                    Other, 0x1131730c0, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x1131735c0, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x113171540, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x113172940, {{0.0, -0.0}, {951.0, 669.0}}
+                            Other, 0x113171b80, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x113172f80, {{0.0, -0.0}, {951.0, 669.0}}
+                                Toolbar, 0x113172800, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                  Other, 0x113173700, {{0.0, -0.0}, {951.0, 669.0}}
+                                Other, 0x1131721c0, {{0.0, -0.0}, {951.0, 669.0}}
+                                  Other, 0x113172300, {{0.0, -0.0}, {951.0, 669.0}}
+                                    Other, 0x113172440, {{0.0, -0.0}, {951.0, 669.0}}
+                                      Other, 0x113172580, {{0.0, -0.0}, {951.0, 669.0}}
+                                        NavigationBar, 0x1131726c0, {{0.0, 24.0}, {951.0, 58.0}}, identifier: 'Life'
+                                          StaticText, 0x113172a80, {{20.0, 31.0}, {48.0, 34.0}}, label: 'Life'
+                                        Toolbar, 0x113171680, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                                          Other, 0x1095c6300, {{0.0, -0.0}, {951.0, 669.0}}
+                                        Other, 0x1095c7840, {{0.0, -0.0}, {951.0, 669.0}}
+                                          Other, 0x1095c5a40, {{0.0, -0.0}, {951.0, 669.0}}
+                                            Other, 0x1095c4780, {{0.0, -0.0}, {951.0, 669.0}}
+                                              Other, 0x1095c7340, {{0.0, -0.0}, {951.0, 669.0}}
+                                                Image, 0x1095c6800, {{0.0, -76.3}, {951.0, 745.3}}
+                                                ScrollView, 0x1095c5b80, {{0.0, -0.0}, {951.0, 669.0}}
+                                                  Other, 0x1095c6440, {{0.0, -0.0}, {951.0, 669.0}}
+                                                    Other, 0x1095c66c0, {{0.0, -0.0}, {951.0, 122.0}}
+                                                  Other, 0x1095c6a80, {{0.0, -0.0}, {951.0, 669.0}}
+                                                  Other, 0x1095c4dc0, {{0.0, 82.0}, {867.0, 2382.3}}
+                                                    Other, 0x1095c61c0, {{77.3, 55.3}, {712.3, 285.0}}, identifier: 'life-hero-progress', label: 'Life progress 1 of 3'
+                                                      Image, 0x1095c6d00, {{77.3, 55.3}, {712.3, 285.0}}
+                                                      StaticText, 0x1095c7700, {{93.5, 133.0}, {58.7, 14.3}}, identifier: 'life-hero-heading', label: 'HABITS'
+                                                      StaticText, 0x1095c75c0, {{732.2, 130.0}, {41.3, 18.0}}, label: 'Today'
+                                                      Other, 0x1095c6bc0, {{93.3, 161.0}, {104.0, 104.0}}, identifier: 'life-hero-ring', label: '1 of 3 complete'
+                                                        StaticText, 0x1095c7980, {{118.7, 191.2}, {53.7, 30.0}}, label: '1 / 3'
+                                                        StaticText, 0x1095c4a00, {{131.7, 221.2}, {27.7, 13.3}}, label: 'Done'
+                                                      StaticText, 0x1095c7e80, {{217.5, 160.0}, {41.7, 76.7}}, identifier: 'life-hero-remaining', label: '2'
+                                                      StaticText, 0x1095c7c00, {{267.2, 206.7}, {73.7, 18.0}}, label: 'Remaining'
+                                                      Image, 0x1095c6580, {{225.0, 247.0}, {9.7, 12.3}}, identifier: 'figure.run', label: 'Running'
+                                                      Image, 0x1095c5e00, {{232.7, 256.0}, {9.0, 9.0}}, identifier: 'checkmark.circle.fill', label: 'Selected', Selected
+                                                      Image, 0x1095c6f80, {{252.3, 248.0}, {13.0, 10.3}}, identifier: 'book.fill', label: 'Bookmark'
+                                                      Image, 0x1095c7480, {{284.0, 247.7}, {8.0, 11.3}}, identifier: 'drop.fill', label: 'Water Drop'
+                                                    StaticText, 0x1095c7ac0, {{77.5, 304.8}, {151.7, 24.0}}, identifier: 'life-section-habits', label: 'Today's Practice'
+                                                    Button, 0x1095c7200, {{696.0, 297.7}, {93.7, 44.0}}, identifier: 'life-past-record-button', label: 'Past Record'
+                                                      StaticText, 0x1095c70c0, {{696.0, 297.7}, {93.7, 44.0}}, label: 'Past Record'
+                                                      Image, 0x1095c6e40, {{696.0, 313.3}, {13.7, 12.3}}, identifier: 'clock.arrow.circlepath', label: 'Clock With A Circular Arrow'
+                                                    ScrollView, 0x1095c6940, {{77.3, 357.7}, {712.3, 44.0}}
+                                                      Other, 0x1095c5540, {{77.3, 357.7}, {308.0, 44.0}}
+                                                        Button, 0x1095c57c0, {{78.8, 357.2}, {45.0, 45.0}}, identifier: 'life-filter-all', label: 'All', Selected
+                                                        Button, 0x1095c5900, {{127.3, 357.7}, {60.3, 44.0}}, identifier: 'life-filter-health', label: 'Body'
+                                                          Image, 0x1095c5680, {{136.7, 374.7}, {10.7, 10.0}}, identifier: 'heart.fill', label: 'Love'
+                                                          StaticText, 0x1095c4b40, {{150.7, 372.5}, {29.0, 14.3}}, label: 'Body'
+                                                        Button, 0x1095c4c80, {{191.7, 357.7}, {71.0, 44.0}}, identifier: 'life-filter-growth', label: 'Growth'
+                                                          Image, 0x1095c5400, {{201.0, 374.0}, {9.3, 11.7}}, identifier: 'book.closed.fill', label: 'Closed Book, Filled'
+                                                          StaticText, 0x1095c52c0, {{213.7, 372.5}, {41.0, 14.3}}, label: 'Growth'
+                                                        Button, 0x1095c7d40, {{266.7, 357.7}, {58.0, 44.0}}, identifier: 'life-filter-mind', label: 'Mind'
+                                                          Image, 0x1095c5040, {{275.7, 373.7}, {10.0, 12.3}}, identifier: 'sparkles', label: 'Sparkle'
+                                                          StaticText, 0x1095c4f00, {{288.7, 372.5}, {28.0, 14.3}}, label: 'Mind'
+                                                        Button, 0x1095c5cc0, {{328.7, 357.7}, {54.7, 44.0}}, identifier: 'life-filter-life', label: 'Life'
+                                                          Image, 0x1095c5f40, {{338.0, 374.0}, {13.0, 11.3}}, identifier: 'house.fill', label: 'Home'
+                                                          StaticText, 0x1095c6080, {{354.3, 372.5}, {21.0, 14.3}}, label: 'Life'
+                                                    Other, 0x1095c5180, {{77.3, 417.7}, {712.3, 390.0}}, identifier: 'life-habit-group-today'
+                                                      Other, 0x1095c4500, {{77.3, 417.7}, {712.3, 152.0}}
+                                                        Image, 0x1095c4640, {{93.3, 433.7}, {52.0, 52.0}}, identifier: 'book.fill', label: 'Bookmark'
+                                                        StaticText, 0x1095c48c0, {{157.5, 433.7}, {40.3, 20.3}}, identifier: 'life-habit-row-Read', label: 'Read'
+                                                        Button, 0x108959b80, {{729.7, 433.7}, {44.0, 44.0}}, identifier: 'life-habit-actions-Read', label: 'More actions'
+                                                        StaticText, 0x1089597c0, {{93.5, 498.3}, {18.7, 33.7}}, identifier: 'life-habit-value-Read', label: '0'
+                                                        StaticText, 0x108959e00, {{120.2, 510.7}, {55.7, 18.0}}, label: '/ 30 min'
+                                                        Button, 0x10895a580, {{711.7, 510.7}, {62.0, 18.0}}, label: 'Edit time'
+                                                        ProgressIndicator, 0x10895abc0, {{93.3, 549.7}, {680.3, 4.0}}, label: 'Read progress', value: 0%
+                                                          ProgressIndicator, 0x10895a1c0, {{93.3, 539.7}, {680.3, 24.0}}, value: 0%
+                                                      Other, 0x10895a440, {{77.3, 581.7}, {712.3, 162.0}}
+                                                        Image, 0x108959a40, {{93.3, 597.7}, {52.0, 52.0}}, identifier: 'drop.fill', label: 'Water Drop'
+                                                        StaticText, 0x108959900, {{157.5, 597.7}, {47.3, 20.3}}, identifier: 'life-habit-row-Water', label: 'Water'
+                                                        Button, 0x108959680, {{729.7, 597.7}, {44.0, 44.0}}, identifier: 'life-habit-actions-Water', label: 'More actions'
+                                                        Button, 0x10895a6c0, {{93.3, 661.7}, {44.0, 44.0}}, identifier: 'minus', label: 'Decrease Water', Disabled
+                                                        StaticText, 0x10895a300, {{145.5, 666.8}, {18.7, 33.7}}, identifier: 'life-habit-value-Water', label: '0'
+                                                        Button, 0x108959f40, {{249.3, 661.7}, {44.0, 44.0}}, identifier: 'plus', label: 'Increase Water'
+                                                        StaticText, 0x10895a080, {{168.2, 679.2}, {73.3, 18.0}}, label: '/ 8 glasses'
+                                                        Image, 0x10895b840, {{94.3, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: 'Water Droplet'
+                                                        Image, 0x10895a800, {{108.7, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: 'Water Droplet'
+                                                        Image, 0x10529fe80, {{123.0, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: 'Water Droplet'
+                                                        Image, 0x10529f700, {{137.3, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: 'Water Droplet'
+                                                        Image, 0x10529fac0, {{151.7, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: 'Water Droplet'
+                                                        Image, 0x10898da40, {{166.0, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: 'Water Droplet'
+                                                        Image, 0x10898c8c0, {{180.3, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: 'Water Droplet'
+                                                        Image, 0x10898fc00, {{195.0, 714.7}, {8.3, 12.0}}, identifier: 'drop', label: 'Water Droplet'
+                                                      Button, 0x10898cdc0, {{77.3, 755.7}, {712.3, 52.0}}, identifier: 'life-completed-toggle', label: 'Completed 1'
+                                                        StaticText, 0x10898c3c0, {{77.3, 755.7}, {712.3, 52.0}}, label: 'Completed 1'
+                                                        Image, 0x10898fd40, {{782.0, 775.7}, {7.0, 12.0}}, identifier: 'collapsed'
+                                                    StaticText, 0x10898c500, {{67.2, 823.7}, {732.5, 197.0}}, identifier: 'life-workout-summary', label: 'Weekly Workout Achievements, 1/9 done, Nov 16 – Nov 22, Workouts · Mon–Sun · DUNE + Apple Health'
+                                                      StaticText, 0x10898c140, {{99.7, 844.7}, {311.5, 24.0}}, label: 'Weekly Workout Achievements'
+                                                      Image, 0x10898c780, {{99.7, 845.3}, {17.3, 22.3}}, identifier: 'figure.run', label: 'Running'
+                                                      StaticText, 0x10898c280, {{97.5, 877.3}, {93.0, 14.3}}, identifier: 'life-workout-week-period', label: 'Nov 16 – Nov 22'
+                                                      StaticText, 0x10898c640, {{97.5, 903.8}, {29.3, 71.7}}, label: '1'
+                                                      Image, 0x10898f340, {{689.7, 899.7}, {80.0, 80.0}}, identifier: 'trophy', label: 'Trophy Cup'
+                                                      StaticText, 0x10898dcc0, {{130.8, 939.8}, {25.3, 26.3}}, label: '/ 9'
+                                                      StaticText, 0x10898df40, {{160.2, 949.5}, {29.7, 14.3}}, label: 'Done'
+                                                      Other, 0x10898d900, {{67.2, 981.7}, {732.5, 24.7}}
+                                                      Other, 0x10898e6c0, {{97.3, 987.7}, {149.0, 13.0}}
+                                                    Button, 0x10898e580, {{97.3, 1020.7}, {672.3, 65.0}}, identifier: 'life-workout-challenges-toggle', label: 'Workout Challenges, 1/9', value: Expanded
+                                                      StaticText, 0x10898de00, {{97.5, 1044.2}, {143.7, 18.0}}, label: 'Workout Challenges'
+                                                      StaticText, 0x10898e300, {{731.2, 1046.0}, {17.0, 14.3}}, label: '1/9'
+                                                      Image, 0x10898c000, {{757.7, 1050.0}, {10.7, 6.3}}, identifier: 'chevron.down', label: 'Go Down'
+                                                    StaticText, 0x10898e1c0, {{122.2, 1095.0}, {147.0, 18.0}}, identifier: 'life-workout-group-routine', label: 'Routine Consistency'
+                                                    StaticText, 0x10898e440, {{750.5, 1096.8}, {19.0, 14.3}}, label: '0/2'
+                                                    StaticText, 0x10898ebc0, {{97.5, 1126.3}, {22.0, 40.7}}, label: '3'
+                                                    StaticText, 0x10898e800, {{123.5, 1147.3}, {51.7, 14.3}}, label: 'workouts'
+                                                    Other, 0x10898ea80, {{98.3, 1206.0}, {79.8, 14.3}}, identifier: 'life-workout-metric-weeklyWorkout5', label: 'Workout 5x / week, 3 / 5'
+                                                      Image, 0x10898ed00, {{98.3, 1207.3}, {12.0, 12.0}}, identifier: 'circle', label: 'Circle'
+                                                      StaticText, 0x10898db80, {{113.5, 1206.0}, {64.7, 14.3}}, label: 'Workout 5x'
+                                                    Other, 0x10898ef80, {{195.0, 1206.0}, {78.8, 14.3}}, identifier: 'life-workout-metric-weeklyWorkout7', label: 'Workout 7x / week, 3 / 7'
+                                                      Image, 0x10898ee40, {{195.0, 1207.3}, {12.0, 12.0}}, identifier: 'circle', label: 'Circle'
+                                                      StaticText, 0x10898e940, {{210.2, 1206.0}, {63.7, 14.3}}, label: 'Workout 7x'
+                                                    StaticText, 0x10898f480, {{126.5, 1248.3}, {99.0, 18.0}}, identifier: 'life-workout-group-strength', label: 'Strength Split'
+                                                    StaticText, 0x10898d680, {{750.5, 1250.2}, {19.0, 14.3}}, label: '1/6'
+                                                    StaticText, 0x10898fac0, {{98.3, 1390.3}, {105.5, 14.4}}, label: 'Best streak 1w'
+                                                    StaticText, 0x10898cf00, {{119.8, 1434.2}, {125.3, 18.0}}, identifier: 'life-workout-group-running', label: 'Running Distance'
+                                                    StaticText, 0x10898f840, {{750.5, 1436.1}, {19.0, 14.3}}, label: '0/1'
+                                                    StaticText, 0x10898f700, {{97.5, 1465.7}, {672.0, 40.7}}, identifier: 'life-workout-metric-weeklyRunning15km', label: '0, / 15 km, 15 km remaining'
+                                                      StaticText, 0x10898f980, {{97.5, 1465.7}, {22.0, 40.7}}, label: '0'
+                                                      StaticText, 0x10898f200, {{123.5, 1486.7}, {42.7, 14.3}}, label: '/ 15 km'
+                                                      StaticText, 0x10898f0c0, {{674.8, 1486.7}, {94.7, 14.3}}, label: '15 km remaining'
+                                                    StaticText, 0x10898d7c0, {{97.5, 1638.7}, {230.3, 13.3}}, identifier: 'life-workout-source', label: 'Workouts · Mon–Sun · DUNE + Apple Health'
+                                                    Button, 0x10898d2c0, {{97.3, 1708.0}, {672.3, 44.0}}, identifier: 'habit-heatmap', label: 'Practice Rhythm'
+                                                      StaticText, 0x10898f5c0, {{97.3, 1708.0}, {672.3, 44.0}}, label: 'Practice Rhythm'
+                                                      Image, 0x10898d040, {{99.3, 1722.0}, {22.0, 16.0}}, identifier: 'chart.bar.fill', label: 'Chart Column'
+                                                      Image, 0x10898ca00, {{269.0, 1726.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                                    StaticText, 0x10898d180, {{97.5, 1768.1}, {225.3, 40.7}}, label: '1 completions'
+                                                    StaticText, 0x10898d540, {{97.5, 1824.7}, {205.3, 14.3}}, label: 'Based on currently registered habits'
+                                                    Other, 0x10898e080, {{97.5, 1855.1}, {672.0, 59.3}}, identifier: 'life-hero-trend'
+                                                      StaticText, 0x10898cb40, {{97.5, 1855.1}, {105.0, 14.3}}, label: 'Daily completions'
+                                                      StaticText, 0x10898d400, {{690.8, 1856.1}, {78.7, 13.3}}, label: 'Nov 13–Nov 19'
+                                                      StaticText, 0x10898cc80, {{97.5, 1896.4}, {216.7, 18.0}}, label: 'Not enough data to show trend.'
+                                                    StaticText, 0x1095bea80, {{97.5, 1945.4}, {108.7, 18.0}}, label: '28-day pattern'
+                                                    Other, 0x1095be300, {{97.3, 1979.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Oct 23', value: Before start
+                                                    Other, 0x1095bf5c0, {{194.0, 1979.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Oct 24', value: Before start
+                                                    Other, 0x1095bef80, {{290.7, 1979.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Oct 25', value: Before start
+                                                    Other, 0x1095be800, {{387.3, 1979.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Oct 26', value: Before start
+                                                    Other, 0x1095bebc0, {{483.7, 1979.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Oct 27', value: Before start
+                                                    Other, 0x1095bee40, {{580.3, 1979.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Oct 28', value: Before start
+                                                    Other, 0x1095bf980, {{677.0, 1979.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Oct 29', value: Before start
+                                                    Other, 0x1095bf700, {{97.3, 2001.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Oct 30', value: Before start
+                                                    Other, 0x1095bf840, {{194.0, 2001.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Oct 31', value: Before start
+                                                    Other, 0x1095bfc00, {{290.7, 2001.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 1', value: Before start
+                                                    Other, 0x1095be1c0, {{387.3, 2001.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 2', value: Before start
+                                                    Other, 0x1095bfd40, {{483.7, 2001.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 3', value: Before start
+                                                    Other, 0x1095bfe80, {{580.3, 2001.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 4', value: Before start
+                                                    Other, 0x1095bfac0, {{677.0, 2001.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 5', value: Before start
+                                                    Other, 0x1095bf340, {{97.3, 2023.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 6', value: Before start
+                                                    Other, 0x1095bf0c0, {{194.0, 2023.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 7', value: Before start
+                                                    Other, 0x1095bf200, {{290.7, 2023.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 8', value: Before start
+                                                    Other, 0x1095bf480, {{387.3, 2023.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 9', value: Before start
+                                                    Other, 0x1095be6c0, {{483.7, 2023.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 10', value: Before start
+                                                    Other, 0x1095be080, {{580.3, 2023.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 11', value: Before start
+                                                    Other, 0x1095bed00, {{677.0, 2023.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 12', value: Before start
+                                                    Other, 0x1095bde00, {{97.3, 2045.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 13', value: Before start
+                                                    Other, 0x1095bdf40, {{194.0, 2045.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 14', value: Before start
+                                                    Other, 0x1095be440, {{290.7, 2045.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 15', value: Before start
+                                                    Other, 0x1095be940, {{387.3, 2045.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 16', value: Before start
+                                                    Other, 0x1095be580, {{483.7, 2045.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 17', value: Before start
+                                                    Other, 0x1138483c0, {{580.3, 2045.3}, {92.7, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 18', value: Before start
+                                                    Other, 0x113848140, {{677.0, 2045.3}, {92.3, 18.0}}, identifier: 'life-rhythm-pattern', label: 'Nov 19', value: 1
+                                                    StaticText, 0x113848000, {{97.5, 2079.4}, {133.7, 13.3}}, label: 'Before start · 0 · 1 · 2 · 3+'
+                                                    Button, 0x11323e800, {{97.3, 2148.7}, {672.3, 44.0}}, identifier: 'life-weekly-report-button', label: 'Weekly Reflection'
+                                                      StaticText, 0x11323e080, {{97.3, 2148.7}, {672.3, 44.0}}, label: 'Weekly Reflection'
+                                                      Image, 0x11323ebc0, {{99.0, 2161.0}, {16.0, 19.3}}, identifier: 'sparkles', label: 'Sparkle'
+                                                      Image, 0x11323db80, {{273.7, 2167.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                                    StaticText, 0x11323e300, {{97.5, 2208.7}, {91.7, 14.3}}, label: 'Nov 16 – Nov 19'
+                                                    StaticText, 0x11323dcc0, {{97.5, 2239.1}, {22.7, 40.7}}, identifier: 'life-weekly-days-recorded', label: '1'
+                                                    StaticText, 0x11323df40, {{443.5, 2239.1}, {22.7, 40.7}}, identifier: 'life-weekly-completed-practices', label: '1'
+                                                    StaticText, 0x11323e1c0, {{97.5, 2283.7}, {82.3, 14.3}}, label: 'Days recorded'
+                                                    StaticText, 0x11323de00, {{443.5, 2283.7}, {118.0, 14.3}}, label: 'Completed practices'
+                                                    StaticText, 0x11323d040, {{97.5, 2314.1}, {205.3, 14.3}}, label: 'Based on currently registered habits'
+                                                    Button, 0x11323da40, {{77.3, 2364.3}, {712.3, 76.0}}, identifier: 'life-manage-habits', label: 'Manage Habits'
+                                                      StaticText, 0x11323d7c0, {{93.3, 2380.3}, {680.3, 44.0}}, label: 'Manage Habits'
+                                                      Image, 0x11323d680, {{95.3, 2395.0}, {17.7, 15.0}}, identifier: 'slider.horizontal.3', label: 'Edit'
+                                                      Image, 0x11323d540, {{248.7, 2399.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'Forward'
+                                                    Other, 0x11323d400, {{0.0, 0.0}, {0.0, 0.0}}
+                                                  Other, 0x11323d180, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 5 pages', value: 0%
+                                                    Other, 0x11323cf00, {{945.0, 85.0}, {3.0, 141.0}}
+                                                  Other, 0x11323fc00, {{918.0, 82.0}, {30.0, 532.0}}, label: 'Vertical scroll bar, 5 pages', value: 0%
+                                                    Other, 0x11323e940, {{945.0, 85.0}, {3.0, 141.0}}
+                                                Button, 0x11323f480, {{403.7, 198.0}, {60.0, 24.0}}, identifier: 'wave-refresh-test-trigger', label: 'Trigger Refresh', value: 0
+                                                Other, 0x11323d2c0, {{433.7, 358.7}, {0.0, 0.0}}
+                            Other, 0x11323d900, {{0.0, -0.0}, {951.0, 669.0}}
+                              Other, 0x11323e6c0, {{0.0, -0.0}, {951.0, 669.0}}
+                Other, 0x11323ea80, {{0.0, -0.0}, {951.0, 669.0}}
+                  Toolbar, 0x11323ee40, {{0.0, -0.0}, {951.0, 669.0}}, identifier: 'Toolbar', label: 'Toolbar'
+                    Other, 0x11323f340, {{0.0, -0.0}, {951.0, 669.0}}
+                      Other, 0x11323e580, {{0.0, -0.0}, {951.0, 669.0}}
+                        Other, 0x11323f0c0, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x11323ef80, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x11323ed00, {{879.0, 124.0}, {48.0, 48.0}}
+                              Other, 0x11323f700, {{879.0, 124.0}, {48.0, 48.0}}
+                                Other, 0x11323f980, {{884.0, 130.0}, {38.0, 36.0}}
+                                  Other, 0x11323e440, {{884.0, 130.0}, {38.0, 36.0}}
+                                    Other, 0x11323fe80, {{884.0, 130.0}, {38.0, 36.0}}
+                                      Other, 0x11323fd40, {{884.0, 130.0}, {38.0, 36.0}}
+                                        Button, 0x11323f840, {{890.3, 130.0}, {25.3, 36.0}}, identifier: 'life-toolbar-add', label: 'Add habit'
+                                          Button, 0x11323f5c0, {{890.3, 130.0}, {25.3, 36.0}}
+                                            Image, 0x11323fac0, {{894.0, 139.0}, {18.0, 18.0}}, identifier: 'plus', label: 'Add'
+                        Other, 0x11323f200, {{0.0, -0.0}, {951.0, 669.0}}
+                          Other, 0x1089708c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x108970dc0, {{879.0, 433.0}, {48.0, 212.0}}
+                              Other, 0x108970c80, {{879.0, 433.0}, {48.0, 212.0}}
+                                Other, 0x108970780, {{879.0, 433.0}, {48.0, 212.0}}
+                                  Other, 0x108970640, {{879.0, 433.0}, {48.0, 212.0}}
+                                    Other, 0x108970140, {{879.0, 433.0}, {48.0, 212.0}}
+                                      Other, 0x108970a00, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x108970500, {{879.0, 433.0}, {44.0, 58.0}}
+                                        Other, 0x1089703c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Button, 0x108970280, {{881.0, 435.0}, {44.0, 58.0}}, label: 'Today'
+                                            Image, 0x108970000, {{890.3, 447.3}, {25.3, 31.7}}, identifier: 'heart.text.clipboard.fill', label: 'Heart on a text clipboard, filled'
+                                          Button, 0x108970b40, {{881.0, 485.0}, {44.0, 58.0}}, label: 'Activity'
+                                            Image, 0x11384fe80, {{891.3, 498.7}, {23.3, 28.7}}, identifier: 'flame.fill', label: 'Flame'
+                                          Button, 0x11384d400, {{881.0, 535.0}, {44.0, 58.0}}, label: 'Wellness'
+                                            Image, 0x11384da40, {{888.7, 551.3}, {28.7, 25.3}}, identifier: 'leaf.fill', label: 'Leaf'
+                                          Button, 0x11384dcc0, {{881.0, 585.0}, {44.0, 58.0}}, label: 'Life', Selected
+                                            Image, 0x11384f980, {{887.0, 600.3}, {32.0, 27.3}}, identifier: 'checklist', label: 'Checklist with checkmarks'
+                                        Other, 0x11384de00, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x11384f0c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                          Other, 0x11384e080, {{879.0, 433.0}, {48.0, 212.0}}
+                                            Other, 0x11384e580, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x11384db80, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x11384c8c0, {{879.0, 433.0}, {48.0, 212.0}}
+                                                  Other, 0x11384ca00, {{879.0, 433.0}, {48.0, 212.0}}
+                                              Other, 0x11384cc80, {{879.0, 433.0}, {48.0, 212.0}}
+                                                Other, 0x11384d180, {{879.0, 433.0}, {48.0, 212.0}}
+                                        Other, 0x11384d2c0, {{881.0, 585.0}, {44.0, 58.0}}
+                                          Other, 0x11384cdc0, {{881.0, 585.0}, {44.0, 58.0}}
+                                            Other, 0x11384cf00, {{881.0, 585.0}, {44.0, 58.0}}
+                                            Other, 0x11384d040, {{881.0, 585.0}, {44.0, 58.0}}
+                                              Other, 0x11384c780, {{881.0, 585.0}, {44.0, 58.0}}
+                                                Other, 0x11384c3c0, {{881.0, 585.0}, {44.0, 58.0}}
+                                                  Other, 0x11384c640, {{881.0, 585.0}, {44.0, 58.0}}
+                                                Other, 0x11384c280, {{881.0, 585.0}, {44.0, 58.0}}
+                                              Other, 0x11384fd40, {{881.0, 585.0}, {44.0, 58.0}}
+              Other, 0x11384fc00, {{433.5, 317.5}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x113171cc0, pid: 91936, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x11384f340, pid: 91936, label: 'DUNE'
+  }

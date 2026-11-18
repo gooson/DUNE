@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "theme": "oceanCool",
+  "appearance": "light",
+  "locale": "en_US",
+  "content_size_category": "UICTContentSizeCategoryL",
+  "device": {
+    "platform": "iOS Simulator",
+    "model": "iPhone 18 Pro",
+    "simulator_name": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+    "simulator_udid": "4A7F8A87-172F-4DD5-90D7-758ABFC261B2",
+    "os_version": "27.2 (24B8117)",
+    "pixel_size": [
+      1206,
+      2622
+    ],
+    "window_points": [
+      402,
+      874
+    ]
+  },
+  "source_revision": "a8ae4a239",
+  "capture_kind": "three original XCTest sampled frames per screen",
+  "xctest": {
+    "selector": "ArtistThemeNativeUITests/testOceanMotionKeepsContentAnchored()",
+    "result": "Passed",
+    "duration_seconds": 33.335,
+    "score_assertions": [
+      "stable frame",
+      "same nonempty label",
+      "initial frame intersects viewport"
+    ],
+    "control_assertions": [
+      "stable frame",
+      "hittable in all three samples"
+    ],
+    "reduce_motion_enabled": false,
+    "low_power_mode_enabled": false
+  },
+  "batch": {
+    "xcodebuild_exit_status": 65,
+    "sibling_failed_selector": "ArtistThemeNativeUITests/testOceanCool()",
+    "xcresult": "/private/tmp/dune-a743-native-evidence/ocean-regular-pilot/Test-DUNEUITests-2026.11.19_01-50-54-+0900.xcresult",
+    "log": {
+      "file": "/private/tmp/dune-a743-native-evidence/ocean-regular-pilot/ui.log",
+      "sha256": "b66633e6d87c706a0b0fcf2b8f892ad57cfa2ac08f0dd51a8b5e00f200fe8134"
+    },
+    "receipt": {
+      "file": "/private/tmp/dune-a743-native-evidence/ocean-regular-pilot/ui.log.result.json",
+      "sha256": "ba02de8bdc39f3259afec2e2468bd5e886649854eddc69f53eb5dd84c83fdab7"
+    }
+  },
+  "pixel_difference": {
+    "bounds_xyxy_pixels": [
+      639,
+      210,
+      1134,
+      498
+    ],
+    "criterion": "Maximum absolute difference across R, G, and B channels at least 12 on the 0–255 scale.",
+    "statistic": "Percentage of pixels meeting the criterion in the header sample area.",
+    "measurement_scope": "Post-capture comparison; separate from the XCTest layout and hit-testing assertions."
+  },
+  "routes": {
+    "T03": {
+      "title": "Today",
+      "route_id": "dashboard-root-scroll",
+      "score_accessibility_id": "dashboard-hero-condition",
+      "control_accessibility_id": "dashboard-toolbar-settings",
+      "score_frame_points_xywh": [
+        32.0,
+        208.0,
+        338.0,
+        288.7
+      ],
+      "control_frame_points_xywh": [
+        334.0,
+        66.0,
+        48.0,
+        36.0
+      ],
+      "frames": [
+        {
+          "sample": 1,
+          "captured_at": "2026-11-19T01:59:29.074+09:00",
+          "png": {
+            "file": "T03-1.png",
+            "sha256": "662708866950c9ea06eae05ac909d7a8d4b84beff2e617ec669e191a53590361",
+            "attachment": "screen-0-1206x2622-Artist oceanCool motion T03 frame 1_0_D7A1DD91-BB99-430C-AA45-454B1160EF9F.png",
+            "exported_file": "B717CC8A-85EB-4E09-BCB4-325CEBEC40DB.png"
+          },
+          "ax": {
+            "file": "T03-1.txt",
+            "sha256": "d012e9048206fbf5d9fbdfdf4f2f4da43b431f27b800baecb858f104d2232bde",
+            "attachment": "hierarchy-Artist oceanCool motion T03 frame 1-DUNEUITestsArtistThemeNativeUITests_1_D7A1DD91-BB99-430C-AA45-454B1160EF9F.swift-42",
+            "exported_file": "E0152514-E3DA-474E-B7EC-D44FD07C51D7.txt"
+          }
+        },
+        {
+          "sample": 2,
+          "captured_at": "2026-11-19T01:59:30.990+09:00",
+          "png": {
+            "file": "T03-2.png",
+            "sha256": "0b233c66abf1d65a22709e727f80f958abb2f61a1232661b0d85fc6b462a00e7",
+            "attachment": "screen-0-1206x2622-Artist oceanCool motion T03 frame 2_0_B24C7AAA-6537-4713-9725-AE2C42C78748.png",
+            "exported_file": "3C796268-CBB6-4E9D-BDD9-EE679D849308.png"
+          },
+          "ax": {
+            "file": "T03-2.txt",
+            "sha256": "48fc68b23c922ed07026208c87f2451197bf4a71882c496a6cdb2117efccea80",
+            "attachment": "hierarchy-Artist oceanCool motion T03 frame 2-DUNEUITestsArtistThemeNativeUITests_1_B24C7AAA-6537-4713-9725-AE2C42C78748.swift-50",
+            "exported_file": "981CAF77-52DB-41B4-B999-4ACC7A789342.txt"
+          }
+        },
+        {
+          "sample": 3,
+          "captured_at": "2026-11-19T01:59:32.899+09:00",
+          "png": {
+            "file": "T03-3.png",
+            "sha256": "92d6918975686620a887a704f0ed7cf108f427ec06c456ee6ce0bd5b1d48e024",
+            "attachment": "screen-0-1206x2622-Artist oceanCool motion T03 frame 3_0_AEC8A1C5-F3C1-4905-9097-79C15F256D7B.png",
+            "exported_file": "AB789D24-09B2-43CE-A451-12CEBE84CD9C.png"
+          },
+          "ax": {
+            "file": "T03-3.txt",
+            "sha256": "2b6e4f321d1c34107666b40d8f39f47ad2c03dda7f292997c9c833e60e56de8d",
+            "attachment": "hierarchy-Artist oceanCool motion T03 frame 3-DUNEUITestsArtistThemeNativeUITests_1_AEC8A1C5-F3C1-4905-9097-79C15F256D7B.swift-50",
+            "exported_file": "DFAFEBFD-67AF-415D-AAC5-0EA5E2A8C1C2.txt"
+          }
+        }
+      ],
+      "pairs": [
+        {
+          "frames": [
+            1,
+            2
+          ],
+          "percent_pixels_delta_at_least_12": 21.604236812570146
+        },
+        {
+          "frames": [
+            1,
+            3
+          ],
+          "percent_pixels_delta_at_least_12": 26.485690235690235
+        },
+        {
+          "frames": [
+            2,
+            3
+          ],
+          "percent_pixels_delta_at_least_12": 15.608164983164983
+        }
+      ]
+    },
+    "T04": {
+      "title": "Condition Score",
+      "route_id": "condition-score-detail-screen",
+      "score_accessibility_id": "condition-detail-hero-ring",
+      "control_accessibility_id": "BackButton",
+      "score_frame_points_xywh": [
+        36.0,
+        238.0,
+        104.0,
+        104.0
+      ],
+      "control_frame_points_xywh": [
+        16.0,
+        62.0,
+        44.0,
+        44.0
+      ],
+      "frames": [
+        {
+          "sample": 1,
+          "captured_at": "2026-11-19T01:59:40.253+09:00",
+          "png": {
+            "file": "T04-1.png",
+            "sha256": "4070e6db68f0fd9bab8a627a9398ae8019f553090ceb765bf4e5159c9b1eb0c3",
+            "attachment": "screen-0-1206x2622-Artist oceanCool motion T04 frame 1_0_060D77DB-05B4-46E0-8A0B-53E6D22979D5.png",
+            "exported_file": "8CA1EF63-937D-488F-86A2-ED5894C0A1B0.png"
+          },
+          "ax": {
+            "file": "T04-1.txt",
+            "sha256": "5bbe93b5bbc38543a7c4495fcb5a8e7e48ef818a18475a7eb9f95c697c8d2f0b",
+            "attachment": "hierarchy-Artist oceanCool motion T04 frame 1-DUNEUITestsArtistThemeNativeUITests_1_060D77DB-05B4-46E0-8A0B-53E6D22979D5.swift-42",
+            "exported_file": "B6437CE4-A08F-4882-A01D-9AD65A710896.txt"
+          }
+        },
+        {
+          "sample": 2,
+          "captured_at": "2026-11-19T01:59:42.029+09:00",
+          "png": {
+            "file": "T04-2.png",
+            "sha256": "47d8f1085036119ac46c29a34c3034126b116d41a40689b5fdf643748facffc9",
+            "attachment": "screen-0-1206x2622-Artist oceanCool motion T04 frame 2_0_CD37DBAC-0F88-4B48-A468-39A1E10DACC0.png",
+            "exported_file": "24D14C44-CE1F-471D-8F99-B7670A7E15D7.png"
+          },
+          "ax": {
+            "file": "T04-2.txt",
+            "sha256": "eadd7acd7305766aa5c946cc00d929939e003317f1443374288acb607c54f1c2",
+            "attachment": "hierarchy-Artist oceanCool motion T04 frame 2-DUNEUITestsArtistThemeNativeUITests_1_CD37DBAC-0F88-4B48-A468-39A1E10DACC0.swift-50",
+            "exported_file": "E9772494-239A-4FB1-B62A-3DF914606DBA.txt"
+          }
+        },
+        {
+          "sample": 3,
+          "captured_at": "2026-11-19T01:59:43.988+09:00",
+          "png": {
+            "file": "T04-3.png",
+            "sha256": "a83661a5ae608239774dd99d896cd695df3a2543b373907e39733f90b445cfe3",
+            "attachment": "screen-0-1206x2622-Artist oceanCool motion T04 frame 3_0_46E2B94D-1BEA-4312-9D22-061B9673F456.png",
+            "exported_file": "AF09EA29-60B9-4503-A9DE-59A57B67989D.png"
+          },
+          "ax": {
+            "file": "T04-3.txt",
+            "sha256": "b8b7bf2595ee2269ee485277ac0a9ac142a91017d3189643051bf00bf424414a",
+            "attachment": "hierarchy-Artist oceanCool motion T04 frame 3-DUNEUITestsArtistThemeNativeUITests_1_46E2B94D-1BEA-4312-9D22-061B9673F456.swift-50",
+            "exported_file": "C4A438F4-BA8B-4846-96B3-3C09CE135A75.txt"
+          }
+        }
+      ],
+      "pairs": [
+        {
+          "frames": [
+            1,
+            2
+          ],
+          "percent_pixels_delta_at_least_12": 20.459455667789
+        },
+        {
+          "frames": [
+            1,
+            3
+          ],
+          "percent_pixels_delta_at_least_12": 19.216470258136926
+        },
+        {
+          "frames": [
+            2,
+            3
+          ],
+          "percent_pixels_delta_at_least_12": 10.359147025813693
+        }
+      ]
+    }
+  }
+}

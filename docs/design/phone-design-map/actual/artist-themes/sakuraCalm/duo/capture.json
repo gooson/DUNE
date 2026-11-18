@@ -1,0 +1,262 @@
+{
+  "theme": "sakuraCalm",
+  "device_profile": "duo",
+  "device": {
+    "deviceId": "6DDE7477-47F7-49AD-AF47-4B90BBDAF266",
+    "modelName": "iPhone Duo"
+  },
+  "source_revision": "0b89ae3faf2d",
+  "source_worktree_dirty": false,
+  "receipt": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/ArtistThemeNativeUITests/testSakuraCalmDuoLight",
+      "DUNEUITests/ArtistThemeNativeUITests/testSakuraCalmDuoDark"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 2,
+      "passed": 2,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 2,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/private/tmp/dune-a743-native-evidence/duo-closed/ui.log"
+  },
+  "captures": {
+    "light/T03": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "6e5b0de6f3bee23f4591edf0c60fdb248f4123481d5edec59289b02742f6c200",
+      "txt_sha256": "a5847c31d05b7e6e15dcb03bcd861b60304fd46f979806a5fd5d8e2b705b5aa9"
+    },
+    "light/T04": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "39d39131a8d965d2a842f59c93c40ee48e43aad1fe6e289c8a820957ee0ccfdc",
+      "txt_sha256": "56f89e46a8c55f85ff0e3de8b4c3771b40b8d752e6fc57a8bdac4722d2d8b4eb"
+    },
+    "light/A01": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "3e2ab97d0b2cf4bf6a98b31ed328408f3e005c58d38726b73e844a315675ae7d",
+      "txt_sha256": "272d5b0a1ee63d41312c06d124915f2bdae1597851d4263a8c105c72bb20c587"
+    },
+    "light/A02": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "985a84ecbbcbae48e95f76e3a5315b05bfcf470b9b7083e65fcd50fc8ec39369",
+      "txt_sha256": "2f1fd91d7776d30d2ea8d09db84f0b85cda2f401109ca5d1d217c2093b729d79"
+    },
+    "light/W28": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "e974cccad369f72b9354596e8fe73f38bd163f2e60af0565ae921337e89244b1",
+      "txt_sha256": "d2393cbe8447f4bc9572f4b9f6946f44c3c68627a7db476f3d5c5a630122f86d"
+    },
+    "light/H01": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "26884ca0df8902f69304f6f93468e36f650c9c5da12f6e40cab7234f443981b1",
+      "txt_sha256": "65c85b53816724878074235dcaab0424156d17a3e4fb650781d486434819ddba"
+    },
+    "light/H02": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "eabeba6c3bdb53b7a9a9bd4ea473e9269de052149b805317f9e6762463801222",
+      "txt_sha256": "544f0a57d87eb1c1b81ed4dc8a72843a68a7c65eefabaeb1d6ec4ceb76843fff"
+    },
+    "light/T06": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "ca1ac36fd0f7a1c58787f5101d79ffaa302c50b1d0fbe30d2cf870f002d3ca27",
+      "txt_sha256": "6c50ac9de9f807dcb9f894acaa7736f5ce64c2be1bac1b53406b76ef041fc156"
+    },
+    "light/L01": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "831298429b851b88b3eddc7f657b2c188a4e97396d93b90452d671ff7bc42119",
+      "txt_sha256": "399eec1feb0778b336c1ec7b31967e64933e0849ce7ff98f2f4e104a87ee210e"
+    },
+    "light/L08": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "fbb1ba1e18a11888b54362aa6285853c7278aa8a535a1b9757b11a1b1959e376",
+      "txt_sha256": "b572b5e5d74c16b4929b2d3cb6512f01854034ac7677269d22b0508de7ebe9c9"
+    },
+    "light/S01": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "003b4fc2607dd5f7b28f329157d6a66ee1229952a20c2ea63cf290b6426bb17e",
+      "txt_sha256": "3c4c9d05660b8f330c0566cde86cde12f18d57f79430d53bfcaaf76c3a0cc3fc"
+    },
+    "dark/T03": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "0a2ead5f56b768399422c7a1afc6f881494308423f8a467962b1d2bf76cff477",
+      "txt_sha256": "b859713a7092e3f3518b96d1ea5a4f2b95bd83145d41f936b455d55ac72a97f1"
+    },
+    "dark/T04": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "2ef69c3d6b5663dd9556de61fd47fe9082645592288daae07ef60d58b79261be",
+      "txt_sha256": "f25b0550cc721d0ad9a981da404587e15caea52b64a3e4383867dfc35c2cba60"
+    },
+    "dark/A01": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "3b225f34c964cc19899b92635561c11760737f4f6c3cc129f588477a1b965b39",
+      "txt_sha256": "41bc00189b0ba04d453bf928c347ee1302e444005bacdffe4303b460caffd6f7"
+    },
+    "dark/A02": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "8b1776582b1bf25cf3807d2621d44a5b61f8620c3087650513ac34c97d76deb7",
+      "txt_sha256": "fe4d2466530ed9bcdc3e37c6c17815f7732986a70aa2c5465164c4b6ef1c9c05"
+    },
+    "dark/W28": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "2e08bf750b47003d9fa0464d25f64549ca21cb4ae9c41da502e90b0df31ef21a",
+      "txt_sha256": "fcfecd0a32693f41fdb38637f8a080bfc0430f4959e4a9cb1c373b00fbf55eed"
+    },
+    "dark/H01": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "d6d9f8adfcee7eb4d5ea5af8d5fbf4c4cf7f40c940f73a31a8d6d76a11e2bd5d",
+      "txt_sha256": "683214aae954d7b8633182eac2435349c675eff7701eb3311f54d7c823b719b8"
+    },
+    "dark/H02": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "a659f7f5b3c57861948250a53a3bc411099f2012c7471bc115b6543b1f8a5a25",
+      "txt_sha256": "bc712cdb261e48491f663703a0b2ba6417e93ebefbaa2f1f78b7023a078430e4"
+    },
+    "dark/T06": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "87fecffbd71720d93133ff75c33074681ad2bfb5511f815e521e38528d79a302",
+      "txt_sha256": "4733d3e5bb8ac06344532e634a8bea3606f19b4860e480bedd200760d2460d76"
+    },
+    "dark/L01": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "b1125ee55be92f51262b593fe439784a8c711c4f2d73eb542169902b8f2c310a",
+      "txt_sha256": "66e0f51115e1de2289b88b182aff1168c27ae4ddd78d700b9e35ac6bad96bd39"
+    },
+    "dark/L08": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "e26f0a88455632ee931d970c9ecc1f239d373efd2591f4f9dee474e73c1fe717",
+      "txt_sha256": "1093dd32ada31cd7085f881de252e282c23bd2a17184805ed289aed561d151f6"
+    },
+    "dark/S01": {
+      "width": 1398,
+      "height": 2034,
+      "viewport_points": [
+        466.0,
+        678.0
+      ],
+      "png_sha256": "7fb18936c75b39894dd1149850b0c41ab0e1ce321db1458386552fee1eb9c168",
+      "txt_sha256": "aa498004c24f70d5b69dc27ddb46829cdaaae63d29db4b422c9744dc240b982e"
+    }
+  },
+  "capture_run": "/private/tmp/dune-a743-native-evidence/duo-closed",
+  "display_readbacks": [
+    "display-before.json",
+    "display-after.json"
+  ]
+}
