@@ -128,7 +128,7 @@ struct HealthKitWorkoutDetailView: View {
 
                     Text(workout.date, style: .time)
                         .font(.caption)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(DS.Color.textSecondary)
                 }
 
                 if !dynamicTypeSize.isAccessibilitySize { Spacer() }
