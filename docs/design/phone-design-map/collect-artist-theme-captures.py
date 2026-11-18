@@ -10,6 +10,7 @@ from html import escape
 import json
 from pathlib import Path
 import re
+import runpy
 import shutil
 import subprocess
 import tempfile
@@ -65,22 +66,53 @@ def test_name(theme: str) -> str:
     return f"{TEST_CLASS}/test{theme[0].upper()}{theme[1:]}"
 
 
-def read_receipt(path: Path, theme: str) -> dict:
+def read_receipt(path: Path, theme: str, allow_passing_selector: bool) -> dict:
     receipt = read_json(path)
     selector = f"DUNEUITests/{test_name(theme)}"
-    if (receipt.get("status") != "passed" or receipt.get("run_exit_status") != 0
-            or selector not in receipt.get("requested_selectors", [])
-            or selector in receipt.get("skipped_selectors", [])):
-        raise ValueError(f"Expected a passing standard runner receipt for {selector}")
-    return receipt
+    if selector not in receipt.get("requested_selectors", []) or selector in receipt.get("skipped_selectors", []):
+        raise ValueError(f"Standard runner receipt must include {selector}")
+    if receipt.get("status") == "passed" and receipt.get("run_exit_status") == 0:
+        return receipt
+    if allow_passing_selector:
+        verifier = HERE.parents[2] / "scripts" / "lib" / "verify-ui-test-log.py"
+        _, passed_cases, _ = runpy.run_path(str(verifier))["read_log"](Path(receipt["log_path"]), "DUNEUITests")
+        if selector in passed_cases:
+            return receipt
+    raise ValueError(f"Expected passing runner evidence for {selector}")
 
 
-def read_attachments(result: Path, folder: Path, theme: str) -> tuple[dict, dict]:
+def verify_provenance(path: Path, receipt_path: Path, receipt: dict, xcresult: Path, revision: str) -> dict:
+    record = read_json(path)
+    log = Path(receipt["log_path"]).resolve(strict=True)
+    if (Path(record["log"]).resolve() != log
+            or Path(record["receipt"]).resolve() != receipt_path.resolve()
+            or Path(record["preserved_xcresult"]).resolve() != xcresult.resolve()
+            or record["source_revision"] != revision
+            or record["log_sha256"] != sha256(log.read_bytes()).hexdigest()
+            or record["receipt_sha256"] != sha256(receipt_path.read_bytes()).hexdigest()):
+        raise ValueError("Provenance must bind the receipt, original log, source revision and preserved xcresult")
+    source_result = record["emitted_xcresult"]
+    sources = re.findall(r"(?m)^\s*(/[^\r\n]*\.xcresult)\s*$", log.read_text(encoding="utf-8", errors="replace"))
+    if source_result not in sources:
+        raise ValueError("The original test log did not emit the xcresult in provenance")
+    return record
+
+
+def read_attachments(result: Path, folder: Path, theme: str, partial: bool) -> tuple[dict, dict, dict | None]:
     summary = json.loads(run("xcrun", "xcresulttool", "get", "test-results", "summary", "--path", str(result)))
     configurations = summary.get("devicesAndConfigurations", [])
-    if len(configurations) != 1 or summary.get("failedTests") != 0 or summary.get("passedTests", 0) == 0:
+    if len(configurations) != 1 or summary.get("passedTests", 0) == 0 or (not partial and summary.get("failedTests") != 0):
         raise ValueError("Expected a successful single-device XCTest result")
     device = configurations[0]["device"]
+    selector_result = None
+    if partial:
+        details = json.loads(run("xcrun", "xcresulttool", "get", "test-results", "test-details", "--path",
+                                 str(result), "--test-id", test_name(theme)))
+        case = details["testIdentifier"].removeprefix("DUNEUITests/").removesuffix("()")
+        device_ids = [entry["deviceId"] for entry in details.get("devices", [])]
+        if case != test_name(theme) or details.get("testResult") != "Passed" or device_ids != [device["deviceId"]]:
+            raise ValueError(f"xcresult does not confirm a passing {test_name(theme)} on the recorded device")
+        selector_result = {"testIdentifier": details["testIdentifier"], "testResult": details["testResult"]}
     run("xcrun", "xcresulttool", "export", "attachments", "--path", str(result),
         "--output-path", str(folder), "--test-id", test_name(theme))
     captures = defaultdict(dict)
@@ -101,7 +133,7 @@ def read_attachments(result: Path, folder: Path, theme: str) -> tuple[dict, dict
                 continue
             if match[1] == theme:
                 add_capture(captures, (match[2], match[3]), kind, folder / attachment["exportedFileName"])
-    return captures, device
+    return captures, device, selector_result
 
 
 def read_duo_checkpoints(folder: Path, theme: str, udid: str, suffix: str) -> dict:
@@ -250,6 +282,9 @@ def main() -> None:
     parser.add_argument("--display-readback", type=Path, nargs=2, metavar=("BEFORE", "AFTER"),
                         help="Official devicectl display JSON from before and after the Duo run")
     parser.add_argument("--source-dirty", action="store_true")
+    parser.add_argument("--provenance", type=Path, help="Bind the preserved xcresult to the original runner log")
+    parser.add_argument("--allow-passing-selector", action="store_true",
+                        help="Allow a selector that passed in an otherwise failed iPhone/iPad batch")
     parser.add_argument("--output", type=Path, default=DESTINATION)
     args = parser.parse_args()
     if not re.fullmatch(r"[0-9a-fA-F]{7,64}", args.source_revision):
@@ -266,12 +301,16 @@ def main() -> None:
             parser.error("Duo requires --duo-captures and --display-readback")
     elif not args.xcresult or args.duo_captures or args.display_readback or args.duo_suffix:
         parser.error("iPhone and iPad require --xcresult only")
+    if args.allow_passing_selector and (is_duo or not args.provenance):
+        parser.error("--allow-passing-selector requires --provenance and a regular or ipad run")
+    if args.provenance and is_duo:
+        parser.error("--provenance is only for an xcresult-based capture run")
     target = args.output / args.theme / args.device
     if target.exists():
         parser.error(f"Capture directory already exists: {target}")
 
     try:
-        receipt = read_receipt(args.receipt, args.theme)
+        receipt = read_receipt(args.receipt, args.theme, args.allow_passing_selector)
         with tempfile.TemporaryDirectory(prefix="dune-artist-captures-") as staging:
             folder = Path(staging) / "attachments"
             if is_duo:
@@ -279,7 +318,8 @@ def main() -> None:
                 device = {"deviceId": simulator_udid, "modelName": "iPhone Duo"}
                 display_readbacks = read_duo_displays(args.display_readback, args.device)
             else:
-                captures, device = read_attachments(args.xcresult, folder, args.theme)
+                partial = receipt["status"] != "passed"
+                captures, device, selector_result = read_attachments(args.xcresult, folder, args.theme, partial)
                 if device.get("deviceId", "").upper() != simulator_udid:
                     raise ValueError("xcresult simulator is different from the requested device")
             records = validate_captures(captures, args.theme)
@@ -293,6 +333,11 @@ def main() -> None:
                 bundle["display_readbacks"] = list(display_readbacks)
             else:
                 bundle["xcresult"] = str(args.xcresult.resolve())
+                if args.provenance:
+                    bundle["provenance"] = verify_provenance(args.provenance, args.receipt, receipt,
+                                                            args.xcresult, args.source_revision)
+                if selector_result:
+                    bundle["passing_selector_in_failed_batch"] = selector_result
             gallery = Path(staging) / "gallery"
             for (style, screen), pair in captures.items():
                 (gallery / style).mkdir(parents=True, exist_ok=True)
