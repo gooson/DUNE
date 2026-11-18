@@ -100,6 +100,14 @@ struct AppThemeTests {
         #expect(AppTheme.normalizedRawValue(fromPersistedRawValue: "patisserie") == "patisserie")
     }
 
+    @Test("Every selectable theme has a bundled artist edition")
+    @MainActor
+    func installedArtistEditions() {
+        for theme in AppTheme.allCases {
+            #expect(ArtistThemeEdition.forTheme(theme) != nil, "Missing artist edition for \(theme.rawValue)")
+        }
+    }
+
     @Test("Pâtisserie text remains readable on its paper and card surfaces")
     @MainActor
     func patisserieContrast() throws {
