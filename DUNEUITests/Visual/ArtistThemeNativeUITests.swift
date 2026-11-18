@@ -17,6 +17,30 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         continueAfterFailure = false
     }
 
+    func testWeeklyReportReadingInk() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Weekly report capture requires a visual audit test plan") }
+        executionTimeAllowance = 600
+        for theme in ["forestGreen", "oceanCool", "sakuraCalm"] {
+            for style in ["light", "dark"] {
+                var configuration = themeLaunchConfiguration(theme, style: style)
+                configuration.initialTabSelectionArgument = "life"
+                launchApp(with: configuration)
+                XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
+                dismissIconConfirmation()
+                navigateToLife()
+                open("life-weekly-report-button", maxSwipes: 16)
+                let report = app.scrollViews["life-weekly-report-scroll"].firstMatch
+                let supportingHeading = waitForElement("life-weekly-report-improvement", timeout: 8)
+                let smallRate = report.staticTexts["14%"].firstMatch
+                XCTAssertTrue(smallRate.waitForExistence(timeout: 8))
+                let viewport = report.frame.intersection(app.windows.firstMatch.frame)
+                XCTAssertTrue(viewport.contains(supportingHeading.frame) && viewport.contains(smallRate.frame),
+                              "The report screenshot must show the supporting heading and small habit rate")
+                capture("L08", showing: "life-weekly-report-rate", prefix: "Artist \(theme) \(style)")
+            }
+        }
+    }
+
     func testOceanMotionKeepsContentAnchored() throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Ocean motion capture requires a visual audit test plan") }
         XCTAssertFalse(UIAccessibility.isReduceMotionEnabled, "The owner simulator must allow decorative motion")
