@@ -213,7 +213,7 @@ private enum GlassCardGradients {
         case .sakuraCalm:  sakuraHeroBorder
         case .arcticDawn:  arcticHeroBorder
         case .solarPop:    solarHeroBorder
-        case .contourAtlas: clearBorder
+        case .contourAtlas, .patisserie: clearBorder
         case .waterLilies: lilyHeroBorder
         }
     }
@@ -225,7 +225,7 @@ private enum GlassCardGradients {
         case .sakuraCalm:  sakuraDarkBorder
         case .arcticDawn:  arcticDarkBorder
         case .solarPop:    solarDarkBorder
-        case .contourAtlas: clearBorder
+        case .contourAtlas, .patisserie: clearBorder
         case .waterLilies: lilyDarkBorder
         }
     }
@@ -237,7 +237,7 @@ private enum GlassCardGradients {
         case .sakuraCalm:  sakuraBottomSeparator
         case .arcticDawn:  arcticBottomSeparator
         case .solarPop:    solarBottomSeparator
-        case .contourAtlas: clearBorder
+        case .contourAtlas, .patisserie: clearBorder
         case .waterLilies: lilyBottomSeparator
         }
     }
@@ -299,7 +299,7 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .contourAtlas:
+        case .contourAtlas, .patisserie:
             clearBorder
         }
     }
@@ -360,7 +360,7 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .contourAtlas:
+        case .contourAtlas, .patisserie:
             clearBorder
         }
     }
@@ -406,7 +406,7 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas, .patisserie:
             clearBorder
         }
     }
@@ -453,7 +453,7 @@ private enum GlassCardGradients {
                 startPoint: .top,
                 endPoint: .bottom
             )
-        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas, .patisserie:
             clearBorder
         }
     }
@@ -500,7 +500,7 @@ private enum GlassCardGradients {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas:
+        case .desertWarm, .oceanCool, .forestGreen, .contourAtlas, .patisserie:
             clearBorder
         }
     }

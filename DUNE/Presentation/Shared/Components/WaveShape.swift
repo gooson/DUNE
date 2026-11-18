@@ -190,6 +190,7 @@ struct TabWaveBackground: View {
                 case .solarPop:    SolarTabWaveBackground()
                 case .contourAtlas: ContourBackground(style: .tab)
                 case .waterLilies: WaterLiliesTabWaveBackground()
+                case .patisserie: Color("PatisserieBackground")
                 }
             }
         }
@@ -219,6 +220,7 @@ struct DetailWaveBackground: View {
                 case .solarPop:    SolarDetailWaveBackground()
                 case .contourAtlas: ContourBackground(style: .detail)
                 case .waterLilies: WaterLiliesDetailWaveBackground()
+                case .patisserie: Color("PatisserieBackground")
                 }
             }
         }
@@ -289,6 +291,7 @@ struct SheetWaveBackground: View {
                 case .solarPop:    SolarSheetWaveBackground()
                 case .contourAtlas: ContourBackground(style: .sheet)
                 case .waterLilies: WaterLiliesSheetWaveBackground()
+                case .patisserie: Color("PatisserieBackground")
                 }
             }
         }

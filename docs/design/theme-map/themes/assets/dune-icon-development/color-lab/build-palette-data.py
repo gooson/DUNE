@@ -22,9 +22,10 @@ specs=[
 ('paper-lilac','페이퍼 라일락','밝은 배경','#796CB5','#C37673','#F4F0EB','밝은 종이 위 보라와 로즈'),
 ('cream-ocean','크림 오션','밝은 배경','#348A94','#CC9565','#F5F0E6','크림 바탕의 해류와 황토빛'),
 ('white-forest','화이트 포레스트','밝은 배경','#407F6A','#AC7E63','#EEF2EB','옅은 바탕의 숲과 흙빛'),
-('pink-blue','핑크 × 블루','선명한 대비','#EC82B5','#7DADEB','#252639','분홍과 블루의 또렷한 대비')]
+('pink-blue','핑크 × 블루','선명한 대비','#EC82B5','#7DADEB','#252639','분홍과 블루의 또렷한 대비'),
+('rose-cream','로즈 × 크림','파스텔','#DBA6AC','#FFE2B5','#2B2832','장밋빛 아이싱과 부드러운 크림색')]
 palettes=[dict(id=s[0],number=i,name=s[1],category=s[2],a=s[3],b=s[4],background=s[5],desc=s[6]) for i,s in enumerate(specs,1)]
-data={'version':'palette-lab','created':'2026-11-03','palettes':palettes,'sourceVersion':'v6','sourceAnchors':{'background':'#302b2a','a':'#e1b453','b':'#4fc3d5','highlight':'#ffffff'},'method':'Browser SVG color matrix, same source bitmap and geometry across palettes; target anchors with tonal shading. Runtime UI, not 180 new AI generations.','scope':'9 selected forms ×20 palettes; output is color study, not app asset replacement.'}
+data={'version':'palette-lab','created':'2026-11-03','palettes':palettes,'sourceVersion':'v6','sourceAnchors':{'background':'#302b2a','a':'#e1b453','b':'#4fc3d5','highlight':'#ffffff'},'method':'Browser SVG color matrix, same source bitmap and geometry across palettes; target anchors with tonal shading. Runtime UI, not 180 new AI generations.','scope':f'9 selected forms ×{len(palettes)} palettes; output is color study, not app asset replacement.'}
 (root/'palettes.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 (root/'palettes.js').write_text('window.dunePaletteData = '+json.dumps(data,ensure_ascii=False,indent=2)+';\n')
 source=json.loads((root.parent/'v6/prompts.json').read_text());export=root/'export-sources';export.mkdir(exist_ok=True)
@@ -34,4 +35,4 @@ for c in source['concepts']:
  (export/(c['id']+'.js')).write_text('window.duneLabExportSources=window.duneLabExportSources||{};window.duneLabExportSources['+json.dumps(c['id'])+']='+json.dumps(uri)+';\n')
  receipts.append({'id':c['id'],'image':c['image'],'sha256':hashlib.sha256(raw).hexdigest()})
 (root/'source-manifest.json').write_text(json.dumps(receipts,indent=2)+'\n')
-print('20 unique palettes; 9 byte-preserving lazy export sources')
+print(f'{len(palettes)} unique palettes; {len(receipts)} byte-preserving lazy export sources')

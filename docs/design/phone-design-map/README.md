@@ -9,6 +9,10 @@ status: in-progress
 
 # DUNE 전체 디자인맵
 
+2026-11-19 아홉 작가 테마의 iPhone 실제 화면을 등록했다. 각 테마에서 Today·Activity·Wellness·Life, 컨디션·운동 준비도·운동 기록·웰니스·수면·습관 주간 보고서 상세, 설정의 테마 선택을 라이트·다크로 촬영했다. iPhone 198장과 Forest iPad·Ocean Duo 펼침·Sakura Duo 접힘 66장에는 각각 접근성 트리가 있다. Ocean의 포말 움직임, 수련의 시스템 동작 줄이기, 파티스리의 앱 재실행 후 선택 유지와 아이콘은 별도 항목에서 확인할 수 있다. [아홉 테마 실제 화면](actual/artist-themes/index.html)
+
+파티스리의 Apple Watch 홈, 전체 운동 목록, 운동 중 지표 화면은 46mm 시뮬레이터에서 촬영했다. 각 원본 이미지에 접근성 트리와 실행 기록을 연결했다. [파티스리 Watch 실제 화면](actual/artist-themes/patisserie/watch/index.html)
+
 2026-11-18 FOREST의 목판 소나무와 안개를 적용한 T03·A01·H01·L01의 실제 화면 32장과 접근성 트리를 등록했다. iPhone·iPad·Duo 접힘·펼침에서 밝은 모드와 어두운 모드를 촬영했다. iPhone의 밝은 S01 테마 미리보기와 큰 글씨의 어두운 A01 펼친 기록, Today 안개가 걷혔다 돌아오는 영상도 함께 볼 수 있다. [FOREST 실제 화면](actual/forest-canopy-2026-11-18/index.html)
 
 2026-11-18 [OCEAN 네 탭 실제 화면](actual/ocean-current-2026-11-18/index.html)은 쪽빛 파도와 흰 포말 적용 후의 T03·A01·H01·L01 밝음·어두움 캡처와 접근성 트리를 제공한다.
@@ -38,7 +42,7 @@ status: in-progress
 
 [폰·패드·Duo의 같은 화면 비교](actual/compare.html)
 
-[테마 방향 시안 8개와 공통 시각 언어 맵](../theme-map/index.html)은 별도로 보존한다. 테마 맵은 구현된 앱 화면의 캡처가 아니다.
+[아홉 테마의 방향 시안과 공통 시각 언어](../theme-map/index.html)는 승인된 그림과 움직임을 비교하는 참고 자료다.
 
 통합 맵에서 폰·패드·Duo·Watch는 **현재 구현된 앱 화면을 시뮬레이터에서 실제로 열어 캡처**한 결과를 보여준다. Watch의 기존 운동 재작업 디자인 보드는 실제 캡처와 별도 구역에 있다. 자료의 성격은 각 갤러리에 명시했다. [폰 화면 인벤토리](screen-inventory.md)의 108개 항목 중 W17·W18은 현재 앱 진입 경로가 없는 소스 잔여 View이므로 캡처 대상에서 제외한다. 일반 iPhone 105/105, iPad 106/106, Duo 접힘 105/105, Duo 펼침 105/105 화면을 실제 이미지로 채웠다.
 

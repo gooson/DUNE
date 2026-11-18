@@ -12,6 +12,7 @@ enum VisionThemePalette {
         case .solarPop: String(localized: "Solar Pop")
         case .contourAtlas: String(localized: "Contour Atlas")
         case .waterLilies: String(localized: "Water Lilies")
+        case .patisserie: String(localized: "Pâtisserie")
         }
     }
 
@@ -26,6 +27,7 @@ enum VisionThemePalette {
         case .solarPop: assetName = "SolarAccent"
         case .contourAtlas: assetName = "ContourAccent"
         case .waterLilies: assetName = "LilyAccent"
+        case .patisserie: assetName = "PatisserieAccent"
         }
         return Color(assetName)
     }

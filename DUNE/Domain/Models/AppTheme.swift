@@ -13,6 +13,7 @@ enum AppTheme: String, CaseIterable, Codable, Sendable {
     case solarPop    = "solarPop"
     case contourAtlas = "contourAtlas"
     case waterLilies = "waterLilies"
+    case patisserie = "patisserie"
 }
 
 extension AppTheme {

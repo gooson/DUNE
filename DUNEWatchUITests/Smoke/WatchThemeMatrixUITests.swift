@@ -11,6 +11,7 @@ final class WatchThemeMatrixUITests: WatchUITestBaseCase {
     func testSolarWorkoutTheme() { captureWorkoutTheme("solarPop", named: "Solar") }
     func testContourWorkoutTheme() { captureWorkoutTheme("contourAtlas", named: "Contour") }
     func testWaterLiliesWorkoutTheme() { captureWorkoutTheme("waterLilies", named: "Water Lilies") }
+    func testPatisserieWorkoutTheme() { captureWorkoutTheme("patisserie", named: "Pâtisserie") }
 
     func testDesertHomeAndExerciseList() { captureHomeAndExerciseList("desertWarm", named: "Desert") }
     func testOceanHomeAndExerciseList() { captureHomeAndExerciseList("oceanCool", named: "Ocean") }
@@ -20,6 +21,7 @@ final class WatchThemeMatrixUITests: WatchUITestBaseCase {
     func testSolarHomeAndExerciseList() { captureHomeAndExerciseList("solarPop", named: "Solar") }
     func testContourHomeAndExerciseList() { captureHomeAndExerciseList("contourAtlas", named: "Contour") }
     func testWaterLiliesHomeAndExerciseList() { captureHomeAndExerciseList("waterLilies", named: "Water Lilies") }
+    func testPatisserieHomeAndExerciseList() { captureHomeAndExerciseList("patisserie", named: "Pâtisserie") }
 
     func testWeightRepsDesignMapCapture() {
         captureDesignMapMetrics(WatchAXID.quickStartExerciseSquat, state: "S01")

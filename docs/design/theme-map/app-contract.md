@@ -5,13 +5,23 @@ category: plan
 status: complete
 ---
 
-# 7개 테마 앱 적용 맵
+# DUNE 테마 앱 적용 맵
+
+## 2026-11-19 · 아홉 작가 테마
+
+iOS 설정에서 Dune, Ocean, Forest, Sakura, Arctic, Solar, Contour, Water Lilies, Pâtisserie를 선택한다. 각 테마는 팔레트 JSON, 정지 원화 JPG와 무음 반복 MP4를 앱 번들에서 읽는다. Today·Activity·Wellness·Life는 네이티브 제목 뒤에 원화를 그린다. Forest와 Ocean의 기존 카드 장식 영역은 새 원화를 사용할 때 본문 폭으로 돌아간다. [아홉 작가 테마 방향 시안](themes/artist-editions.html)
+
+일반 상세는 짧은 그림 배경을 사용한다. 대표 경로는 컨디션 T04, 운동 준비도 A02, 가져온 운동 기록 W28, 웰니스 점수 H02, 관측 수면 T06, 습관 주간 보고서 L08이다. 설정 미리보기와 시트는 정지 원화를 사용한다. 화면 이탈, 앱 비활성화, 동작 줄이기, 저전력 모드에서는 영상 재생을 중단한다. [화면 배치 계약](../layout-map/README.md)
+
+점수판의 밝은 링과 어두운 표면은 테마 팔레트에서 가져온다. 건강 상태색과 축·기간·수치는 각 화면의 데이터 표현을 따른다. Watch는 공유 테마 색을 기본 배경과 운동 카드 윤곽에 쓰고, Pâtisserie는 옅은 하이라이트와 그림자로 배경을 표현한다. [공용 적용 구조](../../solutions/architecture/2026-11-19-artist-theme-native-rollout.md)
+
+## 2026-10-17 · 7개 테마 적용 이력
 
 이 문서는 2026-10-17 당시 기존 7개 앱 테마의 적용 기록이다. 8개 시안 전체와 WATER LILIES 신규 테마화를 포함한 다음 구현 목표는 [전체 디자인 개편 맵](../full-redesign-map/index.html)에서 추적한다.
 
 [테마 방향 시안](index.html)과 [4탭 레이아웃 기준맵](../layout-map/index.html)을 함께 읽는다. 이 문서는 기존 7개 앱 테마를 네 루트 화면에 적용할 때 시안의 요소가 맡는 역할을 고정한다. 당시 WATER LILIES는 시안으로만 보존했다. 시안의 샘플 점수·문구는 건강 데이터가 아니다.
 
-## 공통 화면 계약
+### 공통 화면 계약
 
 | 층 | Today | Activity | Wellness | Life |
 |---|---|---|---|---|
@@ -28,7 +38,7 @@ Today의 첫 카드는 밝은 모드에서도 어두운 표면을 유지한다. 
 
 앱의 `*Sand` 색상 asset은 점수 단위·차트 눈금·보조 설명에도 쓰이는 글자색이다. 밝은 화면의 연한 시안색을 그대로 옮기지 않고 짙은 계열로 조정해 보통 글자 대비 4.5:1 이상을 목표로 한다. 어두운 화면과 Watch에서는 밝은 계열을 쓴다. 원본 시안의 꽃·포말·능선 색은 별도 장면 색으로 보존한다.
 
-## 테마별 표현 계약
+### 테마별 표현 계약
 
 | 테마 | 배경 장면과 운동 | 링 광택·그래프 분리 |
 |---|---|---|
@@ -40,13 +50,13 @@ Today의 첫 카드는 밝은 모드에서도 어두운 표면을 유지한다. 
 | [SOLAR](themes/solar-pop-direction.html) | 태양 코어는 고정, 외곽 빛 궤적만 느리게 움직임 | 따뜻한 빛 광택; 값이 변하는 듯한 점멸 금지 |
 | [CONTOUR](themes/contour-atlas-direction.html) | 굵은 기준선과 얇은 등고선이 천천히 호흡 | 석회빛 광택; 데이터 선·축과 지형선을 구별 |
 
-## 구현과 검증 연결
+### 구현과 검증 연결
 
 - 장면: `TabWaveBackground`의 7개 기존 분기와 각 테마 배경 컴포넌트.
 - 상태 링: 4탭 히어로가 `TabHeroScoreRing`의 Today 기준 지름·획·숫자 계층을 공유한다. Life는 같은 링에 오늘 완료한 습관 수/대상 수를 표시한다.
 - 비교: 테마별 밝음·어두움, `Reduce Motion`, 작은 iPhone과 iPad·Duo의 상단 가독성을 확인한다. 변경된 앱 화면은 [실제 화면 디자인맵](../phone-design-map/actual/index.html)에 새 캡처와 출처를 기록한다.
 
-## 적용 확인
+### 적용 확인
 
 - 기존 7개 테마의 Today를 밝음·어두움으로 각각 확인했다. SAKURA와 CONTOUR는 Activity·Wellness·Life까지 밝음·어두움으로 교차 확인했다. 이 확인은 화면의 표현과 가독성에 관한 것으로, 모든 테마·탭 조합의 자동화 검증을 뜻하지 않는다.
 - DUNE 기본 테마의 Today·Activity·Wellness 변경 화면은 일반 iPhone, iPad, Duo 접힘·펼침에서 새로 캡처하여 [실제 화면 디자인맵](../phone-design-map/actual/index.html)에 반영했다.

@@ -16,6 +16,7 @@ struct AppThemeTests {
         #expect(AppTheme.solarPop.rawValue == "solarPop")
         #expect(AppTheme.contourAtlas.rawValue == "contourAtlas")
         #expect(AppTheme.waterLilies.rawValue == "waterLilies")
+        #expect(AppTheme.patisserie.rawValue == "patisserie")
     }
 
     @Test("Codable round-trip preserves identity")
@@ -29,7 +30,7 @@ struct AppThemeTests {
 
     @Test("CaseIterable includes all themes")
     func allCases() {
-        #expect(AppTheme.allCases.count == 8)
+        #expect(AppTheme.allCases.count == 9)
         #expect(AppTheme.allCases.contains(.desertWarm))
         #expect(AppTheme.allCases.contains(.oceanCool))
         #expect(AppTheme.allCases.contains(.forestGreen))
@@ -38,6 +39,7 @@ struct AppThemeTests {
         #expect(AppTheme.allCases.contains(.solarPop))
         #expect(AppTheme.allCases.contains(.contourAtlas))
         #expect(AppTheme.allCases.contains(.waterLilies))
+        #expect(AppTheme.allCases.contains(.patisserie))
     }
 
     @Test("Init from unknown rawValue returns nil")
@@ -64,11 +66,12 @@ struct AppThemeTests {
         #expect(AppTheme.solarPop.assetPrefix == "Solar")
         #expect(AppTheme.contourAtlas.assetPrefix == "Contour")
         #expect(AppTheme.waterLilies.assetPrefix == "Lily")
+        #expect(AppTheme.patisserie.assetPrefix == "Patisserie")
     }
 
     @Test("usesGlassBorder returns true for glass-border themes")
     func glassBorderThemes() {
-        let glassThemes: [AppTheme] = [.sakuraCalm, .arcticDawn, .solarPop, .waterLilies]
+        let glassThemes: [AppTheme] = [.sakuraCalm, .arcticDawn, .solarPop, .waterLilies, .patisserie]
         let plainThemes: [AppTheme] = [.desertWarm, .oceanCool, .forestGreen, .contourAtlas]
 
         for theme in glassThemes {
@@ -89,6 +92,36 @@ struct AppThemeTests {
     func waterLiliesPersistence() {
         #expect(AppTheme.resolvedTheme(fromPersistedRawValue: " waterLilies ") == .waterLilies)
         #expect(AppTheme.normalizedRawValue(fromPersistedRawValue: "waterLilies") == "waterLilies")
+    }
+
+    @Test("Pâtisserie selection survives persisted-value normalization")
+    func patisseriePersistence() {
+        #expect(AppTheme.resolvedTheme(fromPersistedRawValue: " patisserie ") == .patisserie)
+        #expect(AppTheme.normalizedRawValue(fromPersistedRawValue: "patisserie") == "patisserie")
+    }
+
+    @Test("Every selectable theme has a bundled artist edition")
+    @MainActor
+    func installedArtistEditions() {
+        for theme in AppTheme.allCases {
+            #expect(ArtistThemeEdition.forTheme(theme) != nil, "Missing artist edition for \(theme.rawValue)")
+        }
+    }
+
+    @Test("Pâtisserie text remains readable on its paper and card surfaces")
+    @MainActor
+    func patisserieContrast() throws {
+        for style in [UIUserInterfaceStyle.light, .dark] {
+            let traits = UITraitCollection(userInterfaceStyle: style)
+            for foregroundName in ["PatisserieInk", "PatisserieAccent", "PatisserieSand"] {
+                let foreground = try #require(UIColor(named: foregroundName)).resolvedColor(with: traits)
+                for backgroundName in ["PatisserieBackground", "PatisserieCardBackground"] {
+                    let background = try #require(UIColor(named: backgroundName)).resolvedColor(with: traits)
+                    #expect(contrast(foreground, on: background) >= 4.5,
+                            "\(foregroundName) must remain readable on \(backgroundName) in \(style)")
+                }
+            }
+        }
     }
 
     @Test("Every theme resolves required themed color assets")

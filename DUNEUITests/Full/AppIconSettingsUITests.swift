@@ -46,6 +46,38 @@ final class AppIconSettingsUITests: SeededUITestBaseCase {
         addScreenshotAttachment(named: "app-icon-flow-forest")
     }
 
+    func testPatisserieSelectionPersistsAndUsesItsIconPalette() {
+        navigateToSettings()
+        let identifier = "settings-theme-patisserie"
+        reveal(identifier)
+        let theme = app.buttons[identifier].firstMatch
+        XCTAssertTrue(theme.exists && theme.isHittable)
+        XCTAssertEqual(theme.label, "Pâtisserie")
+        theme.tap()
+        dismissIconConfirmation()
+        XCTAssertTrue(theme.isSelected)
+
+        var configuration = launchConfiguration
+        configuration.resetState = false
+        // The mock seeder clears AppTheme.storageKey even without a state reset.
+        configuration.shouldSeedMockData = false
+        configuration.additionalArguments = ["-morningBriefingDisabled", "YES", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        launchApp(with: configuration)
+        dismissIconConfirmation()
+        navigateToSettings()
+        reveal(identifier)
+        XCTAssertTrue(app.buttons[identifier].firstMatch.isSelected)
+        addScreenshotAttachment(named: "Pâtisserie Settings")
+
+        reveal("settings-row-app-icon", scrollingDown: false)
+        app.descendants(matching: .any)["settings-row-app-icon"].firstMatch.tap()
+        reveal("settings-app-icon-palette")
+        XCTAssertEqual(app.staticTexts["settings-app-icon-palette"].label, "Rose × Cream")
+        addScreenshotAttachment(named: "Pâtisserie App Icon Palette")
+        reveal("launch-brand-interleave-patisserie")
+        XCTAssertTrue(app.images["launch-brand-interleave-patisserie"].exists)
+    }
+
     private func openIconPicker() {
         reveal("settings-row-app-icon")
         let row = app.descendants(matching: .any)["settings-row-app-icon"].firstMatch

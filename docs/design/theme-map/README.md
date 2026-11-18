@@ -7,9 +7,11 @@ status: in-progress
 
 # DUNE 테마 맵
 
-2026-11-19 [아홉 작가 테마 시안](themes/artist-editions.html)은 같은 앱 화면 안에서 제목 뒤 원화, 카드 표면, 링, 차트와 탭 바를 비교한다. 기존 8개와 신규 Pâtisserie 디자인 제안을 담았다. 네 탭과 컨디션·운동 준비도·운동 기록·웰니스 점수·수면·습관 주간 보고서를 라이트·다크로 확인할 수 있다. 아래 날짜별 기록은 그 시점의 방향이다.
+2026-11-19 iOS 앱의 아홉 테마는 네 탭의 제목 뒤와 일반 상세에 같은 원화를 사용한다. 앱 번들의 무음 반복 영상에는 그림의 움직임만 담고 SwiftUI가 제목, 수치, 그래프와 버튼을 표시한다. 시트와 설정 샘플에는 정지 원화가 보인다. Watch는 공유 색을 배경과 카드 윤곽에 쓰고 Pâtisserie의 하이라이트와 그림자를 네이티브 배경에 적용한다. [앱 적용 맵](app-contract.md)
 
-| 테마 · 작가 기준 | 앱에 옮긴 특징 | 움직이는 부분 |
+[아홉 작가 테마 시안](themes/artist-editions.html)에서 네 탭과 여섯 상세의 제목 뒤 원화, 카드, 링, 차트와 탭 바를 밝게·어둡게 비교할 수 있다. 아래 날짜별 기록은 당시의 시안과 구현을 설명한다.
+
+| 테마 · 작가 기준 | 시안의 표현 | 움직이는 부분 |
 |---|---|---|
 | Dune · 조지아 오키프 | 황토색 능선의 큰 면, 모래색 카드와 짙은 흙빛 점수판 | 앞쪽 비탈을 타고 흐르는 모래바람 |
 | Ocean · 가쓰시카 호쿠사이 | 기존 앱의 흰 포말 윤곽과 쪽빛 파면, 청록 링과 물빛 추세선 | 솟아오르는 파봉과 포말 끝에서 튀는 흰 물보라 |
@@ -31,7 +33,7 @@ status: in-progress
 
 어두운 Today 카드의 실제 추세선·작은 날짜는 장식 능선/dusk와 분리한다. 최신 [Today 상태 계약](../layout-map/today-case-matrix.md)의 Light/Dark 대비 기준을 사용하며, 원본 방향 시안과 네이티브 캡처는 별도로 보존한다.
 
-2026-11-14 [8개 테마 마무리 계획](../../plans/2026-11-14-theme-overhaul-completion.md)과 [새 네이티브 실행 상태](../full-redesign-map/review/theme-overhaul-2026-11-14/README.md)를 현재 검증 기준으로 사용한다. Today Compact·Activity Flow·Wellness Flow·현재 Life의 승인된 배치를 보존한다. 컨디션/누적 스트레스 상세 두 시안은 별도 테마가 아닌 화면 연구안이므로 manifest의 `studies`에 보존한다. WATER LILIES 원본 시안의 수련 깊이/수면 질감을 네이티브에 보완했으며 시안 HTML은 실제 앱 캡처가 아니다.
+2026-11-14에는 Today Compact·Activity Flow·Wellness Flow·Life의 승인 배치를 기준으로 기존 여덟 테마를 검증했다. 컨디션과 누적 스트레스 상세는 화면 연구안으로 manifest의 `studies`에 보존했다. WATER LILIES의 수련 깊이와 수면 질감을 당시 앱에 보완했다. [8개 테마 마무리 계획](../../plans/2026-11-14-theme-overhaul-completion.md) · [당시 네이티브 검증](../full-redesign-map/review/theme-overhaul-2026-11-14/README.md)
 
 2026-11-14 [T12 수치 강조 후속 시안](themes/dune-notification-message-reading.html)은 작은 헤더·실제 저장 시각과 체성분 값 카드를 제안한다. [Watch 유산소 현재 존 시안](themes/dune-watch-cardio-time-zone.html)은 시간 우선 계단·유산소 화면에 러닝과 같은 존 번호·가변 구간 막대를 통합한다. 두 HTML은 설명용 예시이며 실제 앱 캡처는 별도로 보존한다.
 

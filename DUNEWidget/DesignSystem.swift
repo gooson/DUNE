@@ -19,6 +19,7 @@ enum WidgetDS {
         case "solarPop": assetName = "SolarAccent"
         case "contourAtlas": assetName = "ContourAccent"
         case "waterLilies": assetName = "LilyAccent"
+        case "patisserie": assetName = "PatisserieAccent"
         default: assetName = "AccentColor"
         }
         return SwiftUI.Color(assetName)

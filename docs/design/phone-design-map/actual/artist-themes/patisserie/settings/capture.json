@@ -1,0 +1,60 @@
+{
+  "theme": "patisserie",
+  "source_revision": "db7e731efd6f",
+  "test_identifier": "AppIconSettingsUITests/testPatisserieSelectionPersistsAndUsesItsIconPalette",
+  "test_result": "Passed",
+  "device": {
+    "architecture": "arm64",
+    "deviceId": "4A7F8A87-172F-4DD5-90D7-758ABFC261B2",
+    "deviceName": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+    "modelName": "iPhone 18 Pro",
+    "osBuildNumber": "24B8117",
+    "osVersion": "27.2",
+    "platform": "iOS Simulator"
+  },
+  "receipt": {
+    "schema_version": 1,
+    "status": "passed",
+    "target": "DUNEUITests",
+    "run_exit_status": 0,
+    "requested_selectors": [
+      "DUNEUITests/AppIconSettingsUITests/testPatisserieSelectionPersistsAndUsesItsIconPalette"
+    ],
+    "skipped_selectors": [],
+    "evidence_scope": {
+      "kind": "selector_execution",
+      "complete_test_inventory": false
+    },
+    "counts": {
+      "executed": 1,
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    "passed_cases": 1,
+    "failures": [],
+    "required_selectors_missing": [],
+    "log_path": "/private/tmp/dune-a743-native-evidence/patisserie-settings-corrected/ui.log"
+  },
+  "provenance": {
+    "source_revision": "db7e731efd6f",
+    "runner_status": 0,
+    "xcodebuild_exit_status": 0,
+    "log": "/private/tmp/dune-a743-native-evidence/patisserie-settings-corrected/ui.log",
+    "log_sha256": "730e1ca6180ed3e2e2a69d3f2126f692458ba86fb918bf5b73adebd7671fc56e",
+    "receipt": "/private/tmp/dune-a743-native-evidence/patisserie-settings-corrected/ui.log.result.json",
+    "receipt_sha256": "9b270fb9c026d974fa34ca13f13c6347bc70c01ec86c595c60e1493eda5b9870",
+    "emitted_xcresult": "/Users/shanks/.codex/worktrees/a743/Health/.deriveddata/artist/Logs/Test/Test-DUNEUITests-2026.11.19_03-31-01-+0900.xcresult",
+    "preserved_xcresult": "/private/tmp/dune-a743-native-evidence/patisserie-settings-corrected/Test-DUNEUITests-2026.11.19_03-31-01-+0900.xcresult"
+  },
+  "attachments": {
+    "theme-selected.png": {
+      "original": "/private/tmp/dune-a743-native-evidence/patisserie-settings-corrected/settings-attachments/0555CFD0-4FDF-4B03-AEC9-BAEFB34C900D.png",
+      "sha256": "90660bf900e116cb90ea3f3f7fb22b7ab41f945b95d58c3437c568f4ab8800de"
+    },
+    "app-icon-palette.png": {
+      "original": "/private/tmp/dune-a743-native-evidence/patisserie-settings-corrected/settings-attachments/4EA5C271-B7D7-4C8D-84A2-C493B2BB842A.png",
+      "sha256": "f960dcf9caca97831d3c226cc04e700a40ea81b1159d6f48069b45d4202f8abc"
+    }
+  }
+}

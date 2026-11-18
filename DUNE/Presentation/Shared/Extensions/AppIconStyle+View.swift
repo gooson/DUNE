@@ -34,6 +34,7 @@ extension AppTheme {
         case .solarPop: String(localized: "Ultramarine × Coral")
         case .contourAtlas: String(localized: "Moss × Jade")
         case .waterLilies: String(localized: "Violet × Mint")
+        case .patisserie: String(localized: "Rose × Cream")
         }
     }
 
@@ -47,6 +48,7 @@ extension AppTheme {
         case .solarPop: IconBackground.solar
         case .contourAtlas: IconBackground.contour
         case .waterLilies: IconBackground.lily
+        case .patisserie: Color("PatisserieIconBackground")
         }
     }
 }

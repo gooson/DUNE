@@ -31,7 +31,7 @@ struct AppIconStyleTests {
                 }
             }
         }
-        #expect(names.count == 23)
+        #expect(names.count == 26)
     }
 
     @Test("Default theme uses P04 while every other theme owns its palette")
@@ -39,7 +39,8 @@ struct AppIconStyleTests {
         #expect(AppTheme.desertWarm.appIconPaletteName == String(localized: "Coral × Sand"))
         #expect(AppTheme.oceanCool.appIconPaletteName == String(localized: "Mint × Periwinkle"))
         #expect(AppTheme.forestGreen.appIconPaletteName == String(localized: "Sage × Cream"))
-        #expect(Set(AppTheme.allCases.map(\.appIconPaletteName)).count == 8)
+        #expect(AppTheme.patisserie.appIconPaletteName == String(localized: "Rose × Cream"))
+        #expect(Set(AppTheme.allCases.map(\.appIconPaletteName)).count == 9)
     }
 
     @Test("Persisted icon choice survives defaults round trip")
