@@ -88,65 +88,66 @@ struct WeeklyHabitReportView: View {
     // MARK: - Best Habits
 
     private var bestHabitsCard: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            reportHeading("Best Habits", systemImage: "star.fill", identifier: "life-weekly-report-best")
-                .font(.headline)
-                .foregroundStyle(DS.Color.positive)
+        StandardCard(padding: DS.Spacing.md) {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                reportHeading(
+                    "Best Habits", systemImage: "star.fill", tint: DS.Color.positive,
+                    identifier: "life-weekly-report-best"
+                )
 
-            if report.bestHabits.isEmpty {
-                Text("No data yet")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            } else {
-                ForEach(report.bestHabits, id: \.name) { habit in
-                    habitRow(name: habit.name, rate: habit.rate)
+                if report.bestHabits.isEmpty {
+                    Text("No data yet")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(report.bestHabits, id: \.name) { habit in
+                        habitRow(name: habit.name, rate: habit.rate)
+                    }
                 }
             }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(DS.Spacing.md)
-        .background {
-            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .fill(.ultraThinMaterial)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
     // MARK: - Worst Habits
 
     private var worstHabitsCard: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            reportHeading("Needs Improvement", systemImage: "arrow.up.right", identifier: "life-weekly-report-improvement")
-                .font(.headline)
-                .foregroundStyle(DS.Color.negative)
+        StandardCard(padding: DS.Spacing.md) {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                reportHeading(
+                    "Needs Improvement", systemImage: "arrow.up.right", tint: DS.Color.negative,
+                    identifier: "life-weekly-report-improvement"
+                )
 
-            if report.worstHabits.isEmpty {
-                Text("No data yet")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            } else {
-                ForEach(report.worstHabits, id: \.name) { habit in
-                    habitRow(name: habit.name, rate: habit.rate)
+                if report.worstHabits.isEmpty {
+                    Text("No data yet")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(report.worstHabits, id: \.name) { habit in
+                        habitRow(name: habit.name, rate: habit.rate)
+                    }
                 }
             }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(DS.Spacing.md)
-        .background {
-            RoundedRectangle(cornerRadius: DS.Radius.sm)
-                .fill(.ultraThinMaterial)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
     // MARK: - Helpers
 
-    private func reportHeading(_ title: LocalizedStringKey, systemImage: String, identifier: String) -> some View {
+    private func reportHeading(
+        _ title: LocalizedStringKey, systemImage: String, tint: Color, identifier: String
+    ) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xs) {
             Image(systemName: systemImage)
+                .foregroundStyle(tint)
                 .accessibilityHidden(true)
             Text(title)
+                .foregroundStyle(.primary)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityIdentifier(identifier)
         }
+        .font(.headline)
     }
 
     private func habitRow(name: String, rate: Double) -> some View {
@@ -160,7 +161,7 @@ struct WeeklyHabitReportView: View {
             if !dynamicTypeSize.isAccessibilitySize { Spacer() }
             Text("\(Int(rate * 100))%")
                 .font(.subheadline.bold())
-                .foregroundStyle(rateColor(rate))
+                .foregroundStyle(.primary)
                 .fixedSize(horizontal: true, vertical: false)
         }
         .padding(.vertical, DS.Spacing.xxs)
