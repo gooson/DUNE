@@ -99,9 +99,12 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         open(AXID.activityHeroReadiness)
         capture("A02", showing: AXID.activityTrainingReadinessDetailScreen, prefix: prefix)
         goBack(to: AXID.activityHeroReadiness)
-        open("activity-recent-workout-mock-workout-running-tempo", maxSwipes: 24)
+        open(AXID.activityRecentSeeAll, maxSwipes: 24)
+        _ = waitForElement(AXID.exerciseViewScreen, timeout: 10)
+        open(AXID.exerciseRow("mock-workout-running-tempo"), maxSwipes: 12)
         capture("W28", showing: AXID.healthkitWorkoutDetailScreen, prefix: prefix)
-        goBack(to: "activity-recent-workout-mock-workout-running-tempo")
+        goBack(to: AXID.exerciseViewScreen)
+        goBack(to: AXID.activityRootScroll)
 
         navigateToLife()
         capture("L01", showing: AXID.lifeHeroProgress, prefix: prefix)
@@ -120,7 +123,7 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
 
     private func open(_ identifier: String, maxSwipes: Int = 0) {
         if maxSwipes > 0 {
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: maxSwipes),
+            XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: maxSwipes, timeoutPerCheck: 0.25),
                           "\(identifier) should be reachable")
         }
         let element = waitForElement(identifier, timeout: 15)
