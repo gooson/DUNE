@@ -1,4 +1,10 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OCEAN · Ocean Current</title>
 <style>
+  :root { color-scheme:light dark; background:light-dark(#fafdfd,#101c26); }
   #ocean-direction {
     color-scheme: light dark;
     --dd-bg: light-dark(#edf8fa, #0d1c2a);
@@ -29,11 +35,9 @@
   #ocean-direction .dd-stage { display: grid; grid-template-columns: minmax(0, 1.03fr) minmax(0, .97fr); gap: 22px; align-items: stretch; }
   #ocean-direction .dd-phone { background: var(--dd-bg); border: 1px solid var(--dd-line); border-radius: 34px; min-height: 690px; padding: 23px 23px 17px; position: relative; overflow: hidden; box-shadow: 0 22px 45px light-dark(#584a3520, #00000050); }
   #ocean-direction .dd-phone::before { content: ""; position: absolute; inset:0 0 auto; height:215px; background:linear-gradient(180deg, light-dark(#d3eff5, #19384b), var(--dd-bg)); }
-  #ocean-direction .dd-phone .dd-phone-wave { top:0; left:0; height:185px; opacity:.48; }
-  #ocean-direction .dd-phone-wave .far { fill:light-dark(#779bb5, #1b354a); }
-  #ocean-direction .dd-phone-wave .middle { fill:light-dark(#2e8b9e, #1a6b7a); }
-  #ocean-direction .dd-phone-wave .near { fill:var(--dd-dune); }
-  #ocean-direction .dd-phone-wave .foam { fill:none; stroke:light-dark(#e8f4f8, #d0ebf0); stroke-width:1.8; opacity:.85; }
+  #ocean-direction .dd-phone .dd-phone-wave { height:185px; }
+  #ocean-direction .far { fill:light-dark(#bad8df,#244256); }
+  #ocean-direction .middle { fill:light-dark(#86b6c3,#285468); }
   #ocean-direction .dd-phone > *:not(.dd-phone-wave) { position: relative; z-index: 1; }
   #ocean-direction .dd-system { display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700; min-height:26px; }
   #ocean-direction .dd-system .dd-system-right { font-size:10px; letter-spacing:.08em; }
@@ -85,11 +89,8 @@
   #ocean-direction .dd-nav .active { color:var(--dd-copper); }
   #ocean-direction .dd-right { display:grid; grid-template-rows:repeat(3,minmax(0,1fr)); gap:13px; }
   #ocean-direction .dd-preview { position:relative; display:flex; flex-direction:column; justify-content:space-between; min-height:0; background:var(--dd-bg); border:1px solid var(--dd-line); border-radius:23px; padding:18px 20px; overflow:hidden; }
-  #ocean-direction .dd-preview-wave { top:auto; bottom:0; height:74px; opacity:.55; }
-  #ocean-direction .dd-preview-wave .far { fill:var(--dd-wave); }
-  #ocean-direction .dd-preview-wave .middle { fill:var(--dd-sand); opacity:.38; }
-  #ocean-direction .dd-preview-wave .near { fill:var(--dd-dune); opacity:.24; }
-  #ocean-direction .dd-preview-wave .foam { fill:none; stroke:light-dark(#e8f4f8, #d0ebf0); stroke-width:1.2; opacity:.7; }
+  #ocean-direction .dd-preview-wave { top:auto; bottom:0; height:110px; mask-image:linear-gradient(90deg,transparent 12%,#0003 44%,black 70%); }
+  #ocean-direction .dd-preview-wave[data-ocean-wave="life"] { height:88px; }
   #ocean-direction .dd-preview > *:not(.dd-preview-wave) { position:relative; z-index:1; }
   #ocean-direction .dd-preview-head { display:flex; justify-content:space-between; align-items:center; color:var(--dd-muted); font-size:11px; font-weight:750; letter-spacing:.08em; }
   #ocean-direction .dd-preview-head strong { color:var(--dd-ink); font-size:20px; letter-spacing:-.04em; }
@@ -140,14 +141,38 @@
 </style>
 
 <section id="ocean-direction" aria-label="Ocean Cool 테마 디자인 방향 개념 시안">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- The hollow under the lip stays open onto the lighter current behind it. -->
+      <g id="ocean-breaker">
+        <path style="fill:light-dark(#1f526b,#17506a)" d="M-520 162 C-345 143 -192 164 -95 122 C-39 98 -16 72 18 47 C53 20 89 15 114 32 C128 42 133 55 130 68 C118 53 105 52 94 58 C75 69 76 91 93 108 C120 137 165 141 224 126 C294 108 351 124 485 148 L485 240 H-520Z"/>
+        <g fill="none" style="stroke:light-dark(#a5d8db,#83c1ca)" stroke-width="1.1" stroke-linecap="round">
+          <path d="M-188 152 C-99 143 -51 113 3 64 C39 33 68 22 91 26 M-161 155 C-81 145 -36 107 12 66 C38 44 59 31 82 30"/>
+          <path d="M-119 151 C-48 132 -12 90 26 59 C43 45 58 38 69 36 M-88 151 C-34 132 1 91 31 68"/>
+          <path d="M-54 150 C-7 128 19 93 44 71 C53 63 61 57 69 54 M-16 151 C15 130 36 100 57 82"/>
+          <path d="M61 106 C76 140 122 161 183 150 M71 107 C89 134 126 147 169 143 M100 126 C121 140 148 141 159 138"/>
+        </g>
+        <!-- Unequal lobes and cutouts form a solid white cap with hooked fingers. -->
+        <path fill="#f6faf0" d="M-29 93 C-8 73 0 53 23 38 C42 25 54 23 64 21 Q69 15 77 19 Q84 12 93 18 Q108 14 113 23 Q124 22 128 32 Q140 33 141 45 Q150 50 147 58 Q146 63 141 65 Q144 56 137 53 Q140 66 134 73 Q132 76 128 77 Q132 65 127 60 Q125 72 118 73 Q122 60 115 55 Q112 51 109 51 Q112 60 106 65 Q108 55 100 52 Q94 50 91 57 Q89 60 86 61 Q89 48 98 45 Q83 43 76 51 Q79 41 89 37 Q75 35 61 43 Q65 36 73 33 C51 34 42 48 28 49 Q33 43 38 39 C20 45 11 61 0 65 Q4 59 7 55Z"/>
+        <g fill="#45798b">
+          <path d="M84 23 Q93 18 101 24 Q91 21 84 25Z M113 32 Q123 32 126 41 Q119 35 113 34Z M129 45 Q137 47 137 53 Q133 48 129 48Z"/>
+        </g>
+        <g fill="#f6faf0">
+          <path d="M150 46 Q153 39 156 42 Q159 46 152 51Z M140 76 Q143 69 145 71 Q146 74 140 79Z M124 83 Q127 76 129 78 Q130 81 124 86Z M99 63 Q103 59 103 63 Q103 66 99 67Z"/>
+          <circle cx="144" cy="29" r="2.4"/><circle cx="154" cy="34" r="1.4"/><circle cx="161" cy="53" r="1.8"/>
+          <circle cx="114" cy="14" r="1.5"/><circle cx="132" cy="21" r="1.2"/><circle cx="151" cy="67" r="1.3"/>
+        </g>
+      </g>
+    </defs>
+  </svg>
   <header class="dd-heading">
     <div class="dd-eyebrow">DUNE · OCEAN COOL</div>
     <h2>Ocean Current</h2>
-    <p class="dd-tagline">깊은 물결, 역방향 해류, 얇은 포말이 네 화면의 배경을 잇습니다</p>
+    <p class="dd-tagline">쪽빛 너울 위로 흰 포말이 굽어지고, 갈라진 끝에서 물보라가 흩어집니다.</p>
   </header>
   <div class="dd-stage">
     <div class="dd-phone" aria-label="Today 화면 개념 시안">
-      <svg class="dd-wave-art dd-phone-wave" data-ocean-wave="today" viewBox="0 0 400 100" preserveAspectRatio="none" role="img" aria-label="Today 상단 배경의 세 겹 파도가 지속적으로 흐름"><path class="far"/><path class="middle"/><path class="near"/><path class="foam"/></svg>
+      <svg class="dd-wave-art dd-phone-wave" data-ocean-wave="today" viewBox="0 0 400 172" preserveAspectRatio="none" role="img" aria-label="Today 상단에서 쪽빛 파도 위로 흰 포말이 말려드는 모습"><path class="far"/><path class="middle"/><use href="#ocean-breaker" transform="translate(198 1)"/></svg>
       <div class="dd-system"><span>9:41</span><span class="dd-system-right">●●● ▰</span></div>
       <div class="dd-apphead"><strong>Today</strong><div class="dd-head-actions" aria-hidden="true"><span>◌</span><span>⚙</span></div></div>
       <div class="dd-hero">
@@ -166,19 +191,19 @@
     </div>
     <div class="dd-right" aria-label="다른 탭의 같은 시각 언어">
       <div class="dd-preview">
-        <svg class="dd-wave-art dd-preview-wave" data-ocean-wave="activity" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true"><path class="far"/><path class="middle"/><path class="near"/><path class="foam"/></svg>
+        <svg class="dd-wave-art dd-preview-wave" data-ocean-wave="activity" viewBox="0 0 400 172" preserveAspectRatio="xMaxYMax meet" aria-hidden="true"><path class="far"/><path class="middle"/><use href="#ocean-breaker" transform="translate(198 1)"/></svg>
         <div class="dd-preview-head"><strong>Activity</strong><span>움직임</span></div>
         <div class="dd-preview-body"><div class="dd-preview-number">71</div><div class="dd-preview-copy"><b>보통 강도로</b><span>준비도와 회복 지도를 함께 보고 시작</span></div></div>
         <div class="dd-preview-foot">운동 기록 시작 <span aria-hidden="true">→</span></div>
       </div>
       <div class="dd-preview">
-        <svg class="dd-wave-art dd-preview-wave" data-ocean-wave="wellness" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true"><path class="far"/><path class="middle"/><path class="near"/><path class="foam"/></svg>
+        <svg class="dd-wave-art dd-preview-wave" data-ocean-wave="wellness" viewBox="0 0 400 172" preserveAspectRatio="xMaxYMax meet" aria-hidden="true"><path class="far"/><path class="middle"/><use href="#ocean-breaker" transform="translate(198 1)"/></svg>
         <div class="dd-preview-head"><strong>Wellness</strong><span>회복</span></div>
         <div class="dd-preview-body"><div class="dd-bars" role="img" aria-label="수면 추세 예시 막대그래프"><i style="height:32px"></i><i style="height:45px"></i><i style="height:39px"></i><i style="height:52px"></i><i style="height:43px"></i><i style="height:55px"></i><i style="height:49px"></i></div><div class="dd-preview-copy"><b>7시간 10분</b><span>수면의 흐름을 한눈에</span></div></div>
         <div class="dd-preview-foot">수면 자세히 <span aria-hidden="true">→</span></div>
       </div>
       <div class="dd-preview">
-        <svg class="dd-wave-art dd-preview-wave" data-ocean-wave="life" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true"><path class="far"/><path class="middle"/><path class="near"/><path class="foam"/></svg>
+        <svg class="dd-wave-art dd-preview-wave" data-ocean-wave="life" viewBox="0 0 400 172" preserveAspectRatio="xMaxYMax meet" aria-hidden="true"><path class="far"/><path class="middle"/><use href="#ocean-breaker" transform="translate(198 1)"/></svg>
         <div class="dd-preview-head"><strong>Life</strong><span>습관</span></div>
         <div class="dd-preview-body"><div class="dd-preview-number">2/3</div><div class="dd-checks"><span class="done">✓ 아침 산책</span><span class="done">✓ 물 마시기</span><span>○ 휴식하기</span></div></div>
         <div class="dd-preview-foot">오늘의 습관 <span aria-hidden="true">→</span></div>
@@ -192,7 +217,7 @@
     <span class="dd-token"><i class="dd-swatch ink"></i>진한 글자</span>
     <span class="dd-token"><i class="dd-swatch copper"></i>행동 강조</span>
     <span class="dd-token"><i class="dd-swatch sage"></i>건강 신호</span>
-    <span class="dd-token">세 겹 해류 · 역방향 중간 파도 · 얇은 포말</span>
+    <span class="dd-token">쪽빛 너울 · 갈라지는 흰 포말 · 역방향 해류</span>
   </div>
   <p class="dd-footnote">개념 시안 · 수치는 예시 데이터 · 앱 구현 화면 아님</p>
 </section>
@@ -205,35 +230,40 @@
   const intensity = { today: 1, activity: 1.2, wellness: 0.8, life: 0.6 };
   const layers = [
     { name: "far", center: 44, amplitude: 7, frequency: 1.05, seconds: 18, skew: 0.12, crest: 0.18, direction: 1 },
-    { name: "middle", center: 61, amplitude: 10, frequency: 1.65, seconds: 15, skew: 0.24, crest: 0.30, direction: -1 },
-    { name: "near", center: 77, amplitude: 14, frequency: 2.35, seconds: 12, skew: 0.38, crest: 0.42, direction: 1 }
+    { name: "middle", center: 61, amplitude: 10, frequency: 1.65, seconds: 15, skew: 0.24, crest: 0.30, direction: -1 }
   ];
   const screens = Array.from(root.querySelectorAll("svg[data-ocean-wave]")).map(svg => ({
     strength: intensity[svg.dataset.oceanWave] || 1,
     paths: layers.map(layer => svg.querySelector(`path.${layer.name}`)),
-    foam: svg.querySelector("path.foam")
+    breaker: svg.querySelector("use"),
+    anchor: svg.dataset.oceanWave === "today" ? 172 : 208
   }));
   const ringGlint = root.querySelector(".dd-ring-glint");
   const startTime = performance.now();
 
-  function oceanPath(layer, strength, seconds, closed = true) {
+  function oceanPath(layer, strength, seconds) {
     const phase = twoPi * seconds / layer.seconds * layer.direction;
-    const swell = layer.name === "near" ? 0.92 + 0.08 * Math.sin(twoPi * seconds / 20) : 1;
     const points = [];
-    for (let x = 0; x <= 400; x += 5) {
+    for (let x = -400; x <= 400; x += 5) {
       const angle = twoPi * layer.frequency * x / 400 + phase;
       const contour = Math.sin(angle) + layer.skew * Math.sin(2 * angle + Math.PI / 3) + layer.crest * Math.sin(0.5 * angle + 0.3 * phase);
-      const y = layer.center + layer.amplitude * strength * swell * contour - (closed ? 0 : 1.5);
-      points.push(`${x === 0 ? "M" : "L"}${x} ${y.toFixed(2)}`);
+      const y = (layer.center + layer.amplitude * strength * contour) * 1.72;
+      points.push(`${points.length === 0 ? "M" : "L"}${x} ${y.toFixed(2)}`);
     }
-    return closed ? `${points.join(" ")} L400 100 L0 100 Z` : points.join(" ");
+    return `${points.join(" ")} L400 172 L-400 172 Z`;
   }
 
   function draw(seconds) {
     screens.forEach(screen => layers.forEach((layer, index) => {
       screen.paths[index].setAttribute("d", oceanPath(layer, screen.strength, seconds));
     }));
-    screens.forEach(screen => screen.foam.setAttribute("d", oceanPath(layers[2], screen.strength, seconds, false)));
+    const tide = twoPi * seconds / 12;
+    screens.forEach(({ breaker, strength, anchor }) => {
+      const scale = 0.78 + 0.22 * strength;
+      const x = anchor + 12 * strength * Math.sin(tide);
+      const y = 150 * (1 - scale) + 4 * strength * (1 - Math.cos(tide));
+      breaker.setAttribute("transform", `translate(${x} ${y}) scale(${scale})`);
+    });
     if (ringGlint) {
       const sweep = Math.max(0, seconds - 1.25);
       const fraction = (sweep % 5) / 5;
@@ -259,3 +289,4 @@
   updateMotion();
 })();
 </script>
+</html>

@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 레이아웃 맵
 
+2026-11-18 [OCEAN 파도 배치](../theme-map/themes/ocean-cool-direction.html)는 T03 상단과 A01·H01·L01 첫 카드 오른쪽 아래를 사용한다. 카드 하단의 장식 영역을 점수·근거·상세 버튼 아래에 따로 확보한다.
+
 2026-11-14 후속 작업은 [T12 수치 강조 계약](notification-message-detail-proposal.md)과 [Watch 시간 우선 유산소 현재 존 계약](watch-cardio-time-zone-proposal.md)을 따른다. 테마 시안과 실제 캡처 검증을 구분한다.
 
 2026-11-05 [H07·P06 자세 기록 상세 배치 계약](posture-record-detail-h07.html)은 저장된 점수 다음에 실제 평가 항목의 값·상태·신뢰도를 두고, Front/Side 사진과 원래 행동을 뒤에 둔다. [정적 DUNE 시안](../theme-map/themes/dune-posture-record-detail-h07.html)은 실제 기록이나 앱 캡처가 아니다. H07·P06의 현재 소스 `1514deb7`에서 네 프로필의 핵심 검사 11건과 실제 PNG/AX 20쌍을 검토했다. [실제 화면과 검증 범위](../full-redesign-map/review/h07-p06-posture-native-2026-11-05/index.html)는 English·Light 및 Duo 0°/180°이며 원래 90° FOLD 실패는 별도로 보존한다.

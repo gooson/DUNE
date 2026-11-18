@@ -67,6 +67,7 @@ struct LifeHabitHeroView: View {
                 }
             }
         }
+        .padding(.bottom, theme == .oceanCool ? 36 : 0)
         .padding(DS.Spacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
@@ -77,10 +78,14 @@ struct LifeHabitHeroView: View {
                         .fill(LinearGradient(colors: [gold.opacity(colorScheme == .dark ? 0.15 : 0.08), lightGold.opacity(0.06), .clear], startPoint: .topTrailing, endPoint: .bottomLeading))
                 }
                 .overlay(alignment: .bottom) {
-                    LifeHeroTerrain()
-                        .stroke(LinearGradient(colors: [gold.opacity(0.08), lightGold.opacity(0.38), gold.opacity(0.12)], startPoint: .leading, endPoint: .trailing), lineWidth: 1)
-                        .frame(height: 72)
-                        .clipped()
+                    if theme == .oceanCool {
+                        OceanHeroShoreline(preset: .life)
+                    } else {
+                        LifeHeroTerrain()
+                            .stroke(LinearGradient(colors: [gold.opacity(0.08), lightGold.opacity(0.38), gold.opacity(0.12)], startPoint: .leading, endPoint: .trailing), lineWidth: 1)
+                            .frame(height: 72)
+                            .clipped()
+                    }
                 }
                 .overlay {
                     RoundedRectangle(cornerRadius: DS.Radius.xxl, style: .continuous)

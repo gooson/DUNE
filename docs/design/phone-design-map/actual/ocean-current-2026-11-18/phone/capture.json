@@ -1,0 +1,164 @@
+{
+  "selector": "DUNEUITests/ThemeMatrixUITests/testOceanCoolMatrix",
+  "device": "5B99DFAA-CBD6-4FF9-AC00-ABBAC9ADE385",
+  "profile": "phone",
+  "results": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "5B99DFAA-CBD6-4FF9-AC00-ABBAC9ADE385",
+          "deviceName": "iPhone 18 Pro-wt-Health-a743-4e4d063d0e47",
+          "modelName": "iPhone 18 Pro",
+          "osBuildNumber": "24B8117",
+          "osVersion": "27.2",
+          "platform": "iOS Simulator"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 1,
+        "skippedTests": 0,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Design Capture"
+        }
+      }
+    ],
+    "environmentDescription": "DUNEUITests-DesignCapture \u00b7 Built with macOS 27.2.1",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1795007637.12,
+    "passedTests": 1,
+    "result": "Passed",
+    "runtimeWarnings": [],
+    "skippedTests": 0,
+    "startTime": 1795007484.05,
+    "statistics": [],
+    "testFailures": [],
+    "title": "Test - DUNEUITests",
+    "topInsights": [],
+    "totalTestCount": 1
+  },
+  "screens": [
+    {
+      "screen": "T03",
+      "tab": "Today",
+      "appearance": "Light",
+      "png": "phone/light/T03.png",
+      "hierarchy": "phone/light/T03.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402.0,
+        874.0
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Light",
+      "png": "phone/light/A01.png",
+      "hierarchy": "phone/light/A01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402.0,
+        874.0
+      ]
+    },
+    {
+      "screen": "H01",
+      "tab": "Wellness",
+      "appearance": "Light",
+      "png": "phone/light/H01.png",
+      "hierarchy": "phone/light/H01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402.0,
+        874.0
+      ]
+    },
+    {
+      "screen": "L01",
+      "tab": "Life",
+      "appearance": "Light",
+      "png": "phone/light/L01.png",
+      "hierarchy": "phone/light/L01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402.0,
+        874.0
+      ]
+    },
+    {
+      "screen": "T03",
+      "tab": "Today",
+      "appearance": "Dark",
+      "png": "phone/dark/T03.png",
+      "hierarchy": "phone/dark/T03.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402.0,
+        874.0
+      ]
+    },
+    {
+      "screen": "A01",
+      "tab": "Activity",
+      "appearance": "Dark",
+      "png": "phone/dark/A01.png",
+      "hierarchy": "phone/dark/A01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402.0,
+        874.0
+      ]
+    },
+    {
+      "screen": "H01",
+      "tab": "Wellness",
+      "appearance": "Dark",
+      "png": "phone/dark/H01.png",
+      "hierarchy": "phone/dark/H01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402.0,
+        874.0
+      ]
+    },
+    {
+      "screen": "L01",
+      "tab": "Life",
+      "appearance": "Dark",
+      "png": "phone/dark/L01.png",
+      "hierarchy": "phone/dark/L01.txt",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "viewport": [
+        402.0,
+        874.0
+      ]
+    }
+  ]
+}

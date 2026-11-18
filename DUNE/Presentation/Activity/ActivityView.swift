@@ -496,12 +496,19 @@ struct ActivityView: View {
             }
         }
         .padding(20)
+        .padding(.bottom, theme == .oceanCool ? 44 : 0)
         .background {
             if theme == .desertWarm {
                 DesertCardSurface(cornerRadius: 23)
             } else {
                 RoundedRectangle(cornerRadius: 23)
                     .fill(theme.directionPreviewBackground)
+                    .overlay(alignment: .bottomTrailing) {
+                        if theme == .oceanCool {
+                            OceanHeroShoreline(preset: .train)
+                                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 23, bottomTrailingRadius: 23))
+                        }
+                    }
                     .overlay {
                         RoundedRectangle(cornerRadius: 23)
                             .strokeBorder(theme.accentColor.opacity(0.25), lineWidth: 1)
