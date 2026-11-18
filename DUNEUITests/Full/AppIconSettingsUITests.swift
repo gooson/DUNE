@@ -59,6 +59,8 @@ final class AppIconSettingsUITests: SeededUITestBaseCase {
 
         var configuration = launchConfiguration
         configuration.resetState = false
+        // The mock seeder clears AppTheme.storageKey even without a state reset.
+        configuration.shouldSeedMockData = false
         configuration.additionalArguments = ["-morningBriefingDisabled", "YES", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         launchApp(with: configuration)
         dismissIconConfirmation()
