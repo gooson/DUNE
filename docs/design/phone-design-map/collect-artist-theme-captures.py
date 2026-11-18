@@ -304,6 +304,8 @@ def main() -> None:
     parser.add_argument("--xcresult", type=Path)
     parser.add_argument("--duo-captures", type=Path)
     parser.add_argument("--duo-suffix", default="", help="Display filename suffix for captures made with 'all'")
+    parser.add_argument("--duo-separated-appearances", action="store_true",
+                        help="Require separately timed DuoLight and DuoDark methods from one run")
     parser.add_argument("--display-readback", type=Path, nargs=2, metavar=("BEFORE", "AFTER"),
                         help="Official devicectl display JSON from before and after the Duo run")
     parser.add_argument("--source-dirty", action="store_true")
@@ -326,7 +328,7 @@ def main() -> None:
     if is_duo:
         if args.xcresult or not args.duo_captures or not args.display_readback:
             parser.error("Duo requires --duo-captures and --display-readback")
-    elif not args.xcresult or args.duo_captures or args.display_readback or args.duo_suffix:
+    elif not args.xcresult or args.duo_captures or args.display_readback or args.duo_suffix or args.duo_separated_appearances:
         parser.error("iPhone and iPad require --xcresult only")
     if args.allow_passing_selector and (is_duo or not args.provenance):
         parser.error("--allow-passing-selector requires --provenance and a regular or ipad run")
@@ -343,7 +345,11 @@ def main() -> None:
 
     try:
         test_identifier = WEEKLY_REPORT_SELECTOR if args.refresh_weekly_report else test_name(args.theme)
-        receipt = read_receipt(args.receipt, test_identifier, args.allow_passing_selector)
+        if args.duo_separated_appearances:
+            receipt = read_receipt(args.receipt, f"{test_identifier}DuoLight", False)
+            read_receipt(args.receipt, f"{test_identifier}DuoDark", False)
+        else:
+            receipt = read_receipt(args.receipt, test_identifier, args.allow_passing_selector)
         with tempfile.TemporaryDirectory(prefix="dune-artist-captures-") as staging:
             folder = Path(staging) / "attachments"
             if is_duo:
