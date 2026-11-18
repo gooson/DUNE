@@ -284,7 +284,12 @@ def render_index(destination: Path) -> str:
             for profile, label in DEVICES.items() if (destination / theme / profile / "capture.json").is_file()
         ]
         if (destination / theme / "motion" / "index.html").is_file():
-            variants.append(f'<a href="{theme}/motion/index.html">움직임</a>')
+            label = "동작 줄이기" if theme == "waterLilies" else "움직임"
+            variants.append(f'<a href="{theme}/motion/index.html">{label}</a>')
+        if (destination / theme / "settings" / "index.html").is_file():
+            variants.append(f'<a href="{theme}/settings/index.html">테마 및 앱 아이콘</a>')
+        if (destination / theme / "watch" / "index.html").is_file():
+            variants.append(f'<a href="{theme}/watch/index.html">Watch</a>')
         if variants:
             links.append(f"<li>{escape(title)} · {' · '.join(variants)}</li>")
     return page("DUNE · 작가 테마 실제 화면",
