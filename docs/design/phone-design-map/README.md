@@ -134,6 +134,20 @@ python3 docs/design/phone-design-map/refresh-actual-screen.py watch S16 <Watch-U
 4. `python3 docs/design/phone-design-map/collect-real-captures.py regular <xcresult> [추가 xcresult...]`로 캡처의 화면 식별자를 인벤토리와 연결하고 갤러리·보드를 만든다. 매칭되지 않는 첨부 파일은 `capture-index.json`의 `unmatched`에 기록한다.
 5. Watch는 `python3 docs/design/watch-workout/collect-actual-captures.py <watch-xcresult>`로 이름이 붙은 UI 테스트 첨부 화면을 추출하고 상태별 갤러리를 갱신한다.
 
+작가 테마는 `ArtistThemeNativeUITests`에서 테마 하나를 지정한다. 각 메서드는 라이트·다크에서 네 탭과 T04·A02·W28·H02·T06·L08을 열고, 설정에서 선택된 테마도 확인한다. 기기별 갤러리는 한 실행의 통과 영수증과 같은 화면의 PNG·접근성 트리 22쌍으로 만든다.
+
+```bash
+DUNE_UI_TEST_WALL_TIMEOUT=1200 scripts/test-ui.sh \
+  --test-plan DUNEUITests-DesignCapture --simulator-udid "$OWNED_UDID" \
+  --only-testing DUNEUITests/ArtistThemeNativeUITests/testSakuraCalm \
+  --log-file .xcodebuild/artist-sakura-regular.log
+python3 docs/design/phone-design-map/collect-artist-theme-captures.py \
+  sakuraCalm regular .xcodebuild/artist-sakura-regular.log.result.json \
+  "$OWNED_UDID" "$SOURCE_REVISION" --xcresult "$XCRESULT"
+```
+
+Duo에서는 전용 기기의 활성 디스플레이와 자세를 확인한 뒤 DuoAudit 계획과 `scripts/duo-visual-audit.py`를 사용한다. 결과 수집에는 `--duo-captures`와 실행 전후 `devicectl device info displays`의 JSON 두 개를 `--display-readback`으로 전달한다. 이 정지 화면 캡처는 움직임의 주기나 동작 줄이기 전환을 검증하지 않는다.
+
 캡처 출처 테스트의 후속 조작이 실패한 경우에도 화면별 실제 PNG와 접근성 계층이 생성됐는지 확인한 뒤 해당 화면만 채웠다. `capture-index.json`에는 선택된 화면마다 테스트 이름과 캡처 동작을 기록했다.
 
 2026-10-25 WLA01 Watch 운동 Live Activity의 정보 위계를 개선한 뒤 [전용 iPhone 실제 시스템 요소 PNG 세 장](actual/live-activity/index.html)을 갱신했다. 진행·일시 정지·긴 한국어 근력 운동명에서 제목·시간·지표를 직접 확인했다. 관련 테스트 로그는 3건 통과·연결 대기 1건 실패이며 Xcode 결과 정리가 멈춰 실행기는 124로 종료됐다. 원본 PNG는 중단된 번들의 payload에서 수정 없이 복구했고 출처·해시를 기록했다. 연결 대기 fixture 수정·밝은 모드·큰 글씨·Island·Watch small·iPad·Duo는 미검증이며 기존 이미지로 대체하지 않는다.

@@ -109,6 +109,7 @@ struct PostureHistoryView: View {
                 PostureDetailView(record: record)
             } else {
                 ContentUnavailableView("Record not found", systemImage: "exclamationmark.triangle")
+                    .detailStatusSurface()
             }
         }
         .navigationDestination(for: PostureComparisonDestination.self) { destination in
@@ -123,6 +124,7 @@ struct PostureHistoryView: View {
                 )
             } else {
                 ContentUnavailableView("Records not found", systemImage: "exclamationmark.triangle")
+                    .detailStatusSurface()
             }
         }
         .alert(

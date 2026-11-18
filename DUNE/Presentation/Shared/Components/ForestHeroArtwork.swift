@@ -26,7 +26,7 @@ private struct ForestHeroArtworkModifier: ViewModifier {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     func body(content: Content) -> some View {
-        if theme == .forestGreen {
+        if theme == .forestGreen, ArtistThemeEdition.forTheme(theme) == nil {
             let outline = RoundedRectangle(cornerRadius: cornerRadius)
             ForestHeroArtworkLayout(prefersStack: prefersFooter || dynamicTypeSize >= .xxLarge) {
                 content

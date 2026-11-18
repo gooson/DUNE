@@ -288,13 +288,17 @@ private struct A02ReadinessDetailHero: View {
         .padding(DS.Spacing.xl)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
-                .fill(palette.surface)
-                .overlay {
-                    RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
-                        .strokeBorder(palette.border, lineWidth: 1)
-                }
-                .accessibilityHidden(true)
+            if let edition = ArtistThemeEdition.forTheme(theme) {
+                ArtistCardSurface(edition: edition, cornerRadius: DS.Radius.xl, isScoreSurface: true)
+            } else {
+                RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                    .fill(palette.surface)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: DS.Radius.xl, style: .continuous)
+                            .strokeBorder(palette.border, lineWidth: 1)
+                    }
+                    .accessibilityHidden(true)
+            }
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("training-readiness-detail-hero")

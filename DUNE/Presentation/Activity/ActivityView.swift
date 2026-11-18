@@ -400,6 +400,8 @@ struct ActivityView: View {
         )
     }
 
+    private var readinessEdition: ArtistThemeEdition? { ArtistThemeEdition.forTheme(theme) }
+
     private var themeReadinessPreview: some View {
         VStack(alignment: .leading, spacing: 18) {
             NavigationLink(value: ActivityDetailDestination.trainingReadiness) {
@@ -419,7 +421,7 @@ struct ActivityView: View {
                         if viewModel.trainingReadiness?.isCalibrating == true {
                             Text("Calibrating")
                                 .font(.caption.weight(.semibold))
-                                .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                                .foregroundStyle(readinessInk.opacity(0.74))
                         }
                     }
 
@@ -432,7 +434,7 @@ struct ActivityView: View {
                                     .accessibilityIdentifier("activity-hero-score-external")
                                 themeReadinessCopy(readiness)
                             }
-                        } else if theme == .forestGreen {
+                        } else if theme == .forestGreen, readinessEdition == nil {
                             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                                 ViewThatFits(in: .horizontal) {
                                     HStack(spacing: DS.Spacing.md) {
@@ -460,7 +462,7 @@ struct ActivityView: View {
                     } else {
                         Text("Need More Data")
                             .font(.headline)
-                            .foregroundStyle(theme.directionPreviewTextColor.opacity(0.74))
+                            .foregroundStyle(readinessInk.opacity(0.74))
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -502,7 +504,7 @@ struct ActivityView: View {
                         points: viewModel.readinessHistory,
                         title: "Recorded Readiness",
                         upperBound: 100,
-                        tint: theme.accentColor,
+                        tint: readinessEdition?.highlight ?? theme.accentColor,
                         accessibilityIdentifier: "activity-hero-trend"
                     )
                 }
@@ -510,7 +512,7 @@ struct ActivityView: View {
             }
         }
         .padding(20)
-        .padding(.bottom, theme == .oceanCool ? 44 : 0)
+        .padding(.bottom, theme == .oceanCool && readinessEdition == nil ? 44 : 0)
         .forestHeroArtwork(
             .train,
             cornerRadius: 23,
@@ -518,7 +520,9 @@ struct ActivityView: View {
             prefersFooter: showsReadinessHistory
         )
         .background {
-            if theme == .desertWarm {
+            if let readinessEdition {
+                ArtistCardSurface(edition: readinessEdition, cornerRadius: 23, isScoreSurface: true)
+            } else if theme == .desertWarm {
                 DesertCardSurface(cornerRadius: 23)
             } else {
                 RoundedRectangle(cornerRadius: 23)
@@ -544,8 +548,8 @@ struct ActivityView: View {
     private func themeReadinessRing(_ readiness: TrainingReadiness) -> some View {
         CompactConditionRing(
             score: readiness.score,
-            ringColor: theme.accentColor,
-            highlightColor: theme.duskColor,
+            ringColor: readinessEdition?.highlight ?? theme.accentColor,
+            highlightColor: readinessEdition?.heroInk ?? theme.duskColor,
             tipColor: readiness.status.color,
             trackColor: readinessInk.opacity(0.6),
             textColor: readinessInk,
@@ -555,7 +559,7 @@ struct ActivityView: View {
     }
 
     private var readinessInk: Color {
-        theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor
+        readinessEdition?.heroInk ?? (theme == .desertWarm ? DesertPalette.ink : theme.directionPreviewTextColor)
     }
 
     private func themeReadinessCopy(_ readiness: TrainingReadiness) -> some View {
@@ -574,7 +578,7 @@ struct ActivityView: View {
     private func themeReadinessNarrative(_ readiness: TrainingReadiness) -> some View {
         Text(readiness.narrativeMessage)
             .font(.subheadline)
-            .foregroundStyle(theme == .desertWarm ? DesertPalette.muted : readinessInk.opacity(0.74))
+            .foregroundStyle(theme == .desertWarm && readinessEdition == nil ? DesertPalette.muted : readinessInk.opacity(0.80))
             .fixedSize(horizontal: false, vertical: true)
     }
 

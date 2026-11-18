@@ -68,7 +68,11 @@ struct ExerciseSessionDetailView: View {
         .sheet(isPresented: $isCompactHistoryPresented) {
             if let defID = record.exerciseDefinitionID, !defID.isEmpty {
                 NavigationStack {
-                    ExerciseHistoryView(exerciseDefinitionID: defID, exerciseName: record.exerciseType)
+                    ExerciseHistoryView(
+                        exerciseDefinitionID: defID,
+                        exerciseName: record.exerciseType,
+                        isPresentedInSheet: true
+                    )
                         .toolbar {
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("Done") { isCompactHistoryPresented = false }
@@ -147,7 +151,7 @@ struct ExerciseSessionDetailView: View {
             }
         }
         .padding(DS.Spacing.lg)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .workoutSummarySurface(cornerRadius: DS.Radius.md)
     }
 
     // MARK: - HealthKit Badge

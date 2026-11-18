@@ -43,13 +43,17 @@ struct DesertHorizonConditionHeroView: View {
         .accessibilityIdentifier("dashboard-hero-condition")
         .accessibilityHint("View Details")
         .background {
-            RoundedRectangle(cornerRadius: 25)
-                .fill(surface)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 25)
-                        .strokeBorder(border, lineWidth: 1)
-                }
-                .shadow(color: Color(red: 0.455, green: 0.357, blue: 0.196).opacity(0.16), radius: 16, y: 9)
+            if let edition = ArtistThemeEdition.forTheme(theme) {
+                ArtistCardSurface(edition: edition, cornerRadius: 25, isScoreSurface: true)
+            } else {
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(surface)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 25)
+                            .strokeBorder(border, lineWidth: 1)
+                    }
+                    .shadow(color: Color(red: 0.455, green: 0.357, blue: 0.196).opacity(0.16), radius: 16, y: 9)
+            }
         }
     }
 

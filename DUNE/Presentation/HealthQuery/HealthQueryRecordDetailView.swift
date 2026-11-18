@@ -16,6 +16,7 @@ struct HealthQueryRecordDetailView: View {
         Group {
             if isLocked {
                 ContentUnavailableView("Unlock your device to view health data.", systemImage: "lock")
+                    .detailStatusSurface()
             } else if let manualRecord {
                 ExerciseSessionDetailView(record: manualRecord, activityType: snapshot.activityType ?? .other,
                                           displayName: snapshot.name)
@@ -23,8 +24,10 @@ struct HealthQueryRecordDetailView: View {
                 HealthKitWorkoutDetailView(workout: healthWorkout)
             } else if finishedLoading {
                 ContentUnavailableView("Record no longer available", systemImage: "tray")
+                    .detailStatusSurface()
             } else {
                 ProgressView("Opening record...")
+                    .detailStatusSurface()
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.protectedDataWillBecomeUnavailableNotification)) { _ in

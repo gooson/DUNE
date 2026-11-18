@@ -130,8 +130,8 @@ struct WorkoutTemplateListView: View {
                     }
                 }
             }
-            .scrollContentBackground(.hidden)
         }
+        .scrollContentBackground(.hidden)
         .accessibilityIdentifier("workout-template-list-screen")
     }
 

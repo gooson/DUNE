@@ -158,7 +158,7 @@ struct HealthKitWorkoutDetailView: View {
             .padding(.top, DS.Spacing.xs)
         }
         .padding(DS.Spacing.lg)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .workoutSummarySurface(cornerRadius: DS.Radius.md)
     }
 
     private func statItem(value: String, label: LocalizedStringKey) -> some View {

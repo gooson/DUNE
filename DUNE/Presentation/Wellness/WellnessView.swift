@@ -340,6 +340,8 @@ struct WellnessView: View {
                 )
             } else {
                 ProgressView()
+                    .detailStatusSurface()
+                    .englishNavigationTitle("Wellness Score")
             }
         }
         .navigationDestination(for: SleepPredictionDestination.self) { _ in
@@ -347,6 +349,8 @@ struct WellnessView: View {
                 SleepPredictionDetailView(prediction: prediction)
             } else {
                 ProgressView()
+                    .detailStatusSurface()
+                    .englishNavigationTitle("Tonight's Sleep")
             }
         }
         .waveRefreshable {
@@ -808,6 +812,7 @@ private struct PostureRecordLookupView: View {
             PostureDetailView(record: record)
         } else {
             ContentUnavailableView("Record not found", systemImage: "exclamationmark.triangle")
+                .detailStatusSurface()
         }
     }
 }
