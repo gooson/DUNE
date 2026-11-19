@@ -1,12 +1,24 @@
 import HealthKit
 
 protocol WorkoutQuerying: Sendable {
+    var isReminderHealthDataAvailable: Bool { get }
+    func latestWorkoutDate(before date: Date, excludingIDs: Set<String>) async throws -> Date?
     func fetchWorkouts(days: Int) async throws -> [WorkoutSummary]
     func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary]
     func fetchWorkouts(start: Date, end: Date, limit: Int) async throws -> [WorkoutSummary]
 }
 
 extension WorkoutQuerying {
+    var isReminderHealthDataAvailable: Bool { true }
+
+    func latestWorkoutDate(before date: Date, excludingIDs: Set<String>) async throws -> Date? {
+        try await fetchWorkouts(start: .distantPast, end: date)
+            .lazy.filter {
+                $0.date <= date && $0.duration.isFinite && $0.duration > 0 && !excludingIDs.contains($0.id)
+            }
+            .map(\.date).max()
+    }
+
     /// Compatibility for existing providers; production applies the cap in HealthKit.
     func fetchWorkouts(start: Date, end: Date, limit: Int) async throws -> [WorkoutSummary] {
         let records = try await fetchWorkouts(start: start, end: end)
@@ -95,6 +107,33 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
             limit: boundedLimit
         )
         return try await manager.execute(descriptor).map(toSummary)
+    }
+
+    var isReminderHealthDataAvailable: Bool {
+        manager.isAvailable || SimulatorAdvancedMockDataProvider.current() != nil
+    }
+
+    func latestWorkoutDate(before date: Date, excludingIDs: Set<String>) async throws -> Date? {
+        if let mockData = SimulatorAdvancedMockDataProvider.current() {
+            return mockData.workoutSummaries(start: .distantPast, end: date.addingTimeInterval(1))
+                .lazy.filter {
+                    $0.date <= date && $0.duration.isFinite && $0.duration > 0 && !excludingIDs.contains($0.id)
+                }
+                .map(\.date).max()
+        }
+        guard manager.isAvailable else { return nil }
+
+        let excludedUUIDs = Set(excludingIDs.compactMap { UUID(uuidString: $0) })
+        let datePredicate = HKQuery.predicateForSamples(withStart: nil, end: date, options: .strictStartDate)
+        let durationPredicate = HKQuery.predicateForWorkouts(with: .greaterThan, duration: 0)
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, durationPredicate])
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.workout(predicate)],
+            sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
+            limit: excludedUUIDs.count + 1
+        )
+        let workouts = try await manager.execute(descriptor, treatUnrequestedAuthorizationAsEmpty: false)
+        return workouts.first { !excludedUUIDs.contains($0.uuid) }?.startDate
     }
 
     // MARK: - HKWorkout → WorkoutSummary

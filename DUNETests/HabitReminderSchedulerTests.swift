@@ -58,6 +58,43 @@ struct HabitReminderSchedulerTests {
         #expect(client.pending.allSatisfy { $0.trigger?.repeats == (duration == 0) })
     }
 
+    @Test("A failed background workout read leaves existing notification requests intact")
+    func backgroundWorkoutReadFailure() async throws {
+        let container = try ModelContainer(for: HabitDefinition.self, HabitLog.self, ExerciseRecord.self,
+                                           configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let habit = HabitDefinition(name: "Run", iconCategory: .fitness, habitType: .check,
+                                   goalValue: 1, goalUnit: nil, frequency: .daily,
+                                   isAutoLinked: true, autoLinkSource: "exercise")
+        container.mainContext.insert(habit)
+        try container.mainContext.save()
+
+        let client = PausingHabitNotificationClient(shouldPauseFirstAdd: false)
+        let existing = "dune.life.habit.\(habit.id.uuidString).next1d"
+        client.seedPendingRequests(identifiers: [existing])
+        let health = LifeHealthKitWorkouts(service: FailingReminderWorkoutService())
+        await health.refreshReminders(in: container.mainContext, scheduler: HabitReminderScheduler(client: client))
+        #expect(client.pending.map(\.identifier) == [existing])
+    }
+
+    @Test("The latest local workout ignores future records and tombstoned HealthKit links")
+    func latestLocalWorkoutDate() throws {
+        let container = try ModelContainer(for: ExerciseRecord.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let context = container.mainContext
+        let now = Date()
+        let expected = now.addingTimeInterval(-3600)
+        for _ in 0..<33 {
+            let deleted = ExerciseRecord(date: now.addingTimeInterval(-1))
+            deleted.healthKitWorkoutID = "deleted"
+            context.insert(deleted)
+        }
+        context.insert(ExerciseRecord(date: expected))
+        context.insert(ExerciseRecord(date: now.addingTimeInterval(1)))
+        try context.save()
+
+        let actual = try LifeHealthKitWorkouts.latestLocalWorkoutDate(in: context, before: now, excludingIDs: ["deleted"])
+        #expect(actual == expected)
+    }
+
     @Test("Rolling requests never displace baseline repeat or interval schedules", arguments: [true, false])
     func preservesBaselineSchedules(repeats: Bool) async throws {
         let client = PausingHabitNotificationClient(shouldPauseFirstAdd: false)
@@ -473,4 +510,9 @@ private final class PausingHabitNotificationClient: HabitReminderNotificationSch
         firstAddContinuation?.resume()
         firstAddContinuation = nil
     }
+}
+
+private struct FailingReminderWorkoutService: WorkoutQuerying {
+    func fetchWorkouts(days: Int) async throws -> [WorkoutSummary] { throw CocoaError(.fileReadNoPermission) }
+    func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] { throw CocoaError(.fileReadNoPermission) }
 }

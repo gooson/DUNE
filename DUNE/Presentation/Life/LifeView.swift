@@ -125,8 +125,8 @@ struct LifeView: View {
             .scrollBounceBehavior(.basedOnSize)
             .waveRefreshable {
                 if canLoadHealthKitData {
+                    await LifeHealthKitWorkouts.shared.invalidateWorkoutHistory()
                     await LifeHealthKitWorkouts.shared.refresh()
-                    await LifeHealthKitWorkouts.shared.loadPreviousWeeks(force: true)
                 }
                 await MainActor.run { localRefreshSignal += 1 }
             }
@@ -250,6 +250,11 @@ private struct HabitListQueryView: View {
 
     // Correction #68: O(1) lookup instead of O(N) per row
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
+    private struct WorkoutRead: Equatable {
+        let week: Date
+        let generation: Int
+    }
+
     private let healthWorkouts = LifeHealthKitWorkouts.shared
     @State private var historyWeek = LifeAutoAchievementService.weekStart(containing: Date())
     private var todayExerciseExists: Bool { viewModel.hasWorkout(on: Date()) }
@@ -340,8 +345,8 @@ private struct HabitListQueryView: View {
         } message: {
             Text(viewModel.validationError ?? "")
         }
-        .task(id: canLoadHealthKitData ? historyWeek : nil) {
-            if canLoadHealthKitData { await healthWorkouts.loadPreviousWeeks() }
+        .task(id: workoutRead) {
+            if workoutRead != nil { await healthWorkouts.refresh() }
         }
         .onChange(of: healthWorkouts.revision) { _, _ in
             recalculateWorkouts()
@@ -376,6 +381,11 @@ private struct HabitListQueryView: View {
         .onAppear {
             recalculateWorkouts()
         }
+    }
+
+    private var workoutRead: WorkoutRead? {
+        guard canLoadHealthKitData, scenePhase == .active else { return nil }
+        return WorkoutRead(week: historyWeek, generation: healthWorkouts.historyGeneration)
     }
 
     private var autoAchievementInputSignature: Int {
@@ -1012,9 +1022,8 @@ private struct HabitListQueryView: View {
     private func recalculateWorkouts() {
         let now = Date()
         historyWeek = LifeAutoAchievementService.weekStart(containing: now)
-        let healthHistory = healthWorkouts.previousWeeks + healthWorkouts.workouts
         viewModel.calculateAutoExerciseProgresses(
-            exerciseRecords: exerciseRecords, healthKitWorkouts: healthHistory, referenceDate: now
+            exerciseRecords: exerciseRecords, healthKitWorkouts: canLoadHealthKitData ? healthWorkouts.workouts : [], referenceDate: now
         )
         recalculate()
     }

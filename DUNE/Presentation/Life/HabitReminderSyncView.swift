@@ -9,11 +9,14 @@ extension Notification.Name {
 struct HabitReminderSyncView: View {
     @Query private var habits: [HabitDefinition]
     @Query private var logs: [HabitLog]
-    @Query private var recentExerciseRecords: [ExerciseRecord]
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
     @State private var viewModel = LifeViewModel()
     @State private var syncState = HabitReminderSyncState()
     @State private var refreshGeneration = 0
+    @State private var tombstoneGeneration = 0
+    @State private var localWorkoutSource: HabitReminderSyncState.WorkoutSource = .pending
+    private let healthWorkouts = LifeHealthKitWorkouts.shared
 
     let canLoadHealthKitData: Bool
 
@@ -27,9 +30,6 @@ struct HabitReminderSyncView: View {
         _logs = Query(filter: #Predicate<HabitLog> {
             $0.date >= recentStart || $0.habitDefinition?.frequencyTypeRaw == "interval"
         })
-        var latest = FetchDescriptor<ExerciseRecord>(sortBy: [SortDescriptor(\.date, order: .reverse)])
-        latest.fetchLimit = 1
-        _recentExerciseRecords = Query(latest)
     }
 
     private var currentSnapshot: HabitReminderSyncState.Snapshot {
@@ -51,7 +51,7 @@ struct HabitReminderSyncView: View {
             hasher.combine(habit.isAutoLinked)
             hasher.combine(habit.autoLinkSourceRaw)
             habitSignatures[habit.id] = hasher.finalize()
-            if habit.isAutoLinked, habit.autoLinkSourceRaw == "exercise" {
+            if !habit.isArchived, habit.isAutoLinked, habit.autoLinkSourceRaw == "exercise" {
                 autoLinkedHabitIDs.insert(habit.id)
             }
         }
@@ -70,27 +70,32 @@ struct HabitReminderSyncView: View {
             habits: habitSignatures,
             logs: logSignatures,
             autoLinkedHabitIDs: autoLinkedHabitIDs,
-            todayExerciseExists: LifeHealthKitWorkouts.shared.hasWorkout(on: Date()) || HabitReminderSyncState.exerciseExists(
-                on: recentExerciseRecords.map(\.date), referenceDate: Date()),
-            latestWorkoutDate: [recentExerciseRecords.first?.date, LifeHealthKitWorkouts.shared.latestDate].compactMap { $0 }.max(),
+            workoutSource: workoutSource,
             generation: refreshGeneration
         )
     }
 
+    private var workoutSource: HabitReminderSyncState.WorkoutSource {
+        guard case .resolved(let localDate) = localWorkoutSource else { return .pending }
+        guard healthWorkouts.isReminderHealthDataAvailable else { return .resolved(localDate) }
+        guard canLoadHealthKitData else { return .pending }
+        return LifeHealthKitWorkouts.combinedReminderDate(local: localDate, health: healthWorkouts.reminderHealthWorkoutSource)
+    }
+
     var body: some View {
-        let loadIntervalHistory = canLoadHealthKitData && habits.contains {
-            !$0.isArchived && $0.isAutoLinked && $0.autoLinkSourceRaw == "exercise" && $0.frequencyTypeRaw == "interval"
-        }
         let snapshot = currentSnapshot
+        let needsWorkoutDate = !snapshot.autoLinkedHabitIDs.isEmpty
+        let refreshHealthWorkoutDate = scenePhase == .active && needsWorkoutDate
+            && canLoadHealthKitData && healthWorkouts.isReminderHealthDataAvailable
         Color.clear
             .frame(width: 0, height: 0)
             .accessibilityHidden(true)
-            .task(id: canLoadHealthKitData ? refreshGeneration : nil) {
-                if canLoadHealthKitData { await LifeHealthKitWorkouts.shared.refresh() }
+            .task(id: needsWorkoutDate ? refreshGeneration : nil) {
+                if needsWorkoutDate { refreshLocalWorkoutDate() }
             }
-            .task(id: loadIntervalHistory ? refreshGeneration : nil) {
-                if loadIntervalHistory {
-                    await LifeHealthKitWorkouts.shared.loadPreviousWeeks()
+            .task(id: refreshHealthWorkoutDate ? [refreshGeneration, tombstoneGeneration, healthWorkouts.reminderAccessGeneration] : nil) {
+                if refreshHealthWorkoutDate, !Task.isCancelled {
+                    await healthWorkouts.refreshReminderHealthWorkoutDate(before: Date())
                 }
             }
             .task(id: snapshot) {
@@ -100,8 +105,19 @@ struct HabitReminderSyncView: View {
                 } catch {
                     return
                 }
-                guard !Task.isCancelled else { return }
+                guard !Task.isCancelled, snapshot == currentSnapshot else { return }
                 synchronize(snapshot: snapshot)
+            }
+            .onReceive(NotificationCenter.default.mainThreadPublisher(for: ModelContext.didSave)) { notification in
+                if needsWorkoutDate, Self.containsWorkoutChanges(notification) {
+                    refreshLocalWorkoutDate()
+                    if refreshHealthWorkoutDate, !healthWorkouts.reminderLookupIncludesCurrentTombstones {
+                        tombstoneGeneration += 1
+                    }
+                }
+            }
+            .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSPersistentStoreRemoteChange)) { _ in
+                if needsWorkoutDate { refreshLocalWorkoutDate() }
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active { refreshGeneration += 1 }
@@ -117,6 +133,25 @@ struct HabitReminderSyncView: View {
             }
     }
 
+    private static func containsWorkoutChanges(_ notification: Notification) -> Bool {
+        let entity = Schema.entityName(for: ExerciseRecord.self)
+        let keys: [ModelContext.NotificationKey] = [.insertedIdentifiers, .updatedIdentifiers, .deletedIdentifiers]
+        return keys.contains { key in
+            let identifiers = notification.userInfo?[key.rawValue] as? Set<PersistentIdentifier>
+            return identifiers?.contains { $0.entityName == entity } == true
+        }
+    }
+
+    private func refreshLocalWorkoutDate() {
+        do {
+            let latest = try LifeHealthKitWorkouts.latestLocalWorkoutDate(in: modelContext, before: Date())
+            localWorkoutSource = .resolved(latest)
+        } catch {
+            localWorkoutSource = .pending
+            AppLogger.notification.error("Local workout date query failed: \(error.localizedDescription, privacy: .private)")
+        }
+    }
+
     private func synchronize(snapshot: HabitReminderSyncState.Snapshot) {
         let plan = syncState.plan(for: snapshot)
         if plan.cleanUpOrphans {
@@ -124,12 +159,21 @@ struct HabitReminderSyncView: View {
         }
         guard !plan.habitIDs.isEmpty else { return }
         let logsByHabit = Dictionary(grouping: logs, by: { $0.habitDefinition?.id })
-        viewModel.setWorkoutDates(snapshot.latestWorkoutDate.map { [$0] } ?? [])
+        let now = Date()
+        let latestDate: Date?
+        if case .resolved(let date) = snapshot.workoutSource {
+            latestDate = date
+        } else {
+            latestDate = nil
+        }
+        let todayExerciseExists = latestDate.map { Calendar.current.isDate($0, inSameDayAs: now) } ?? false
+        viewModel.setWorkoutDates(latestDate.map { [$0] } ?? [])
         for habit in habits where plan.habitIDs.contains(habit.id) {
             viewModel.refreshReminderSchedule(
                 for: habit,
+                referenceDate: now,
                 additionalLogs: logsByHabit[habit.id] ?? [],
-                todayExerciseExists: snapshot.todayExerciseExists
+                todayExerciseExists: todayExerciseExists
             )
         }
     }

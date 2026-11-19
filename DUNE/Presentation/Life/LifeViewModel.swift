@@ -296,7 +296,21 @@ final class LifeViewModel {
 
     // Project one completion per workout day. Reading the source keeps history in sync
     // with Health corrections without writing duplicate, device-specific CloudKit logs.
-    private var workoutDays: [Date: (id: UUID, time: Date)] = [:]
+    private struct WorkoutDay: Equatable {
+        let id: UUID
+        let time: Date
+    }
+
+    private struct WorkoutLogProjection {
+        let firstDay: Date
+        let timeZone: TimeZone
+        let goalValue: Double
+        let loggedTotals: [Date: Double]
+        let logs: [HabitLog]
+    }
+
+    private var workoutDays: [Date: WorkoutDay] = [:]
+    @ObservationIgnored private var workoutLogProjections: [UUID: WorkoutLogProjection] = [:]
 
     func hasWorkout(on date: Date) -> Bool {
         workoutDays[Calendar.current.startOfDay(for: date)] != nil
@@ -304,13 +318,15 @@ final class LifeViewModel {
 
     func setWorkoutDates(_ dates: [Date]) {
         let calendar = Calendar.current
-        var days: [Date: (id: UUID, time: Date)] = [:]
+        var days: [Date: WorkoutDay] = [:]
         for date in dates {
             let day = calendar.startOfDay(for: date)
             if let existing = days[day], existing.time >= date { continue }
-            days[day] = (days[day]?.id ?? workoutDays[day]?.id ?? UUID(), date)
+            days[day] = WorkoutDay(id: days[day]?.id ?? workoutDays[day]?.id ?? UUID(), time: date)
         }
+        guard days != workoutDays else { return }
         workoutDays = days
+        workoutLogProjections.removeAll()
     }
 
     private func rawLogs(for habit: HabitDefinition, additionalLogs: [HabitLog]) -> [HabitLog] {
@@ -322,21 +338,42 @@ final class LifeViewModel {
         for log in additionalLogs where log.habitDefinition?.id == habit.id {
             if seen.insert(log.id).inserted { result.append(log) }
         }
-        if habit.isAutoLinked, habit.autoLinkSourceRaw == "exercise" {
-            let calendar = Calendar.current
-            let firstDay = calendar.startOfDay(for: habit.createdAt)
-            let totals = Dictionary(grouping: HabitLogResolution.resolve(result, habitID: habit.id)) {
-                calendar.startOfDay(for: $0.date)
-            }.mapValues { $0.reduce(0) { $0 + $1.value } }
-            for (day, workout) in workoutDays where day >= firstDay {
-                let remainder = habit.goalValue - (totals[day] ?? 0)
-                guard remainder > 0 else { continue }
-                let log = HabitLog(date: day, value: remainder, isAutoCompleted: true, completedAt: workout.time)
-                log.id = workout.id
-                result.append(log)
-            }
+        if habit.isAutoLinked, habit.autoLinkSourceRaw == "exercise", !workoutDays.isEmpty {
+            result.append(contentsOf: projectedWorkoutLogs(for: habit, recordedLogs: result))
         }
         return result
+    }
+
+    private func projectedWorkoutLogs(for habit: HabitDefinition, recordedLogs: [HabitLog]) -> [HabitLog] {
+        let calendar = Calendar.current
+        let firstDay = calendar.startOfDay(for: habit.createdAt)
+        let goalValue = habit.goalValue
+        var loggedTotals: [Date: Double] = [:]
+        for log in HabitLogResolution.resolve(recordedLogs, habitID: habit.id) where log.value != 0 {
+            let day = calendar.startOfDay(for: log.date)
+            guard day >= firstDay, workoutDays[day] != nil else { continue }
+            loggedTotals[day, default: 0] += log.value
+        }
+        if let cached = workoutLogProjections[habit.id],
+           cached.firstDay == firstDay, cached.timeZone == calendar.timeZone,
+           cached.goalValue == goalValue, cached.loggedTotals == loggedTotals {
+            return cached.logs
+        }
+
+        var logs: [HabitLog] = []
+        for (day, workout) in workoutDays where day >= firstDay {
+            let remainder = goalValue - (loggedTotals[day] ?? 0)
+            guard remainder > 0 else { continue }
+            let log = HabitLog(date: day, value: remainder, isAutoCompleted: true, completedAt: workout.time)
+            log.id = workout.id
+            logs.append(log)
+        }
+        if !habit.isArchived {
+            workoutLogProjections[habit.id] = WorkoutLogProjection(
+                firstDay: firstDay, timeZone: calendar.timeZone, goalValue: goalValue, loggedTotals: loggedTotals, logs: logs
+            )
+        }
+        return logs
     }
 
     func createValidatedLog(for habit: HabitDefinition, value: Double, date: Date = Date()) -> HabitLog? {
@@ -497,8 +534,15 @@ final class LifeViewModel {
 
         var progresses: [HabitProgress] = []
 
+        let activeHabits = habits.filter { !$0.isArchived }
+        if !workoutLogProjections.isEmpty {
+            let workoutHabitIDs = Set(activeHabits.lazy.filter {
+                $0.isAutoLinked && $0.autoLinkSourceRaw == "exercise"
+            }.map(\.id))
+            workoutLogProjections = workoutLogProjections.filter { workoutHabitIDs.contains($0.key) }
+        }
         let logsByHabit = Dictionary(grouping: additionalLogs, by: { $0.habitDefinition?.id })
-        for habit in habits where !habit.isArchived {
+        for habit in activeHabits {
             let raw = rawLogs(for: habit, additionalLogs: logsByHabit[habit.id] ?? [])
             if let cycleSnapshot = makeCycleSnapshot(for: habit, referenceDate: referenceDate, calendar: calendar, logsOverride: raw) {
                 let isCompleted = cycleSnapshot.lastAction == .complete
@@ -619,10 +663,27 @@ final class LifeViewModel {
         referenceDate: Date = Date()
     ) {
         let deleted = DeletedWorkoutTombstoneStore.shared.tombstonedIDs
-        let records = exerciseRecords.filter { !deleted.contains($0.healthKitWorkoutID ?? "") }
-        let workouts = LifeHealthKitWorkouts.eligible(healthKitWorkouts)
+        var seenRecordIdentities = Set<String>()
+        // Collapse local copies before one of them can acquire a different HealthKit identity.
+        let records = exerciseRecords.filter {
+            $0.date <= referenceDate && $0.date.timeIntervalSinceReferenceDate.isFinite
+                && !deleted.contains($0.healthKitWorkoutID ?? "")
+        }.sorted { $0.date > $1.date }.filter { record in
+            let identity = LifeAutoAchievementService.workoutIdentity(
+                sourceWorkoutID: record.healthKitWorkoutID,
+                date: record.date,
+                activityID: record.exerciseDefinitionID,
+                exerciseType: record.exerciseType
+            )
+            return seenRecordIdentities.insert(identity).inserted
+        }
+        let workouts = LifeHealthKitWorkouts.eligible(healthKitWorkouts).filter {
+            $0.date <= referenceDate && $0.date.timeIntervalSinceReferenceDate.isFinite
+        }
         let byID = Dictionary(workouts.map { ($0.id.lowercased(), $0) }, uniquingKeysWith: { first, _ in first })
-        let linkedIDs = Set(records.compactMap { $0.healthKitWorkoutID?.lowercased() })
+        let linkedIDs = Set(records.compactMap {
+            $0.healthKitWorkoutID?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        })
         // Older app workouts can lack an ID link. Restrict the shared two-minute
         // matching rule to nearby candidates, even when loading years of history.
         let unlinkedByBucket = Dictionary(grouping: workouts.filter {
@@ -642,23 +703,24 @@ final class LifeViewModel {
             return LifeAutoWorkoutEntry(
                 sourceWorkoutID: summary?.id ?? linkedID,
                 date: record.date,
-                activityID: summary?.activityType.rawValue ?? record.exerciseDefinitionID,
+                activityID: record.exerciseDefinitionID,
                 exerciseType: record.exerciseType,
                 distanceKm: summary?.distance.map { $0 / 1_000 } ?? LifeAutoAchievementService.legacyDistanceKm(record.distance),
                 hasSetData: record.hasSetData,
                 primaryMuscles: record.primaryMuscles,
-                secondaryMuscles: record.secondaryMuscles
+                secondaryMuscles: record.secondaryMuscles,
+                healthKitActivityType: summary?.activityType
             )
         }
         for workout in workouts where !matchedIDs.contains(workout.id) {
             entries.append(LifeAutoWorkoutEntry(
-                sourceWorkoutID: workout.id, date: workout.date, activityID: workout.activityType.rawValue,
+                sourceWorkoutID: workout.id, date: workout.date, activityID: nil,
                 exerciseType: workout.type, distanceKm: workout.distance.map { $0 / 1_000 },
-                hasSetData: false, primaryMuscles: [], secondaryMuscles: []
+                hasSetData: false, primaryMuscles: [], secondaryMuscles: [], healthKitActivityType: workout.activityType
             ))
         }
 
-        setWorkoutDates(entries.map(\.date).filter { $0 <= referenceDate })
+        setWorkoutDates(entries.map(\.date))
         autoExerciseProgresses = LifeAutoAchievementService.calculateProgresses(
             from: entries,
             referenceDate: referenceDate
