@@ -10,6 +10,15 @@ related_solutions: [2026-02-26-watchos-app-icon-validation, 2026-11-16-themed-ap
 
 App Store Connect의 빌드 자산에서 iOS는 인터리브 82/P04를 표시하고 Watch는 예전 능선 로고를 표시한다. 두 타깃의 AppIcon 설정은 유효하지만 서로 다른 PNG를 포함한다.
 
+## Affected Files
+
+| 파일 | 변경 내용 |
+|---|---|
+| `DUNEWatch/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png` | Watch 기본 아이콘 교체 |
+| `scripts/generate-app-icon-assets.swift` | 기본 아이콘 재생성 시 Watch 동기화 |
+| `scripts/tests/test_watch_primary_icon.py`, `.github/workflows/build-ios.yml` | 두 카탈로그가 선언한 원본의 일치 검사 |
+| `docs/design/layout-map/app-icon-settings.md` | iOS 설정과 Watch 기본 아이콘의 적용 범위 |
+
 ## 변경과 검증
 
 1. `DUNEWatch/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png`를 승인된 iOS 기본 아이콘과 같은 불투명 1024px 원본으로 교체한다. 원형 마스크는 시스템에 맡긴다.
