@@ -317,6 +317,13 @@ private func generate() throws {
         }
     }
     try writeLaunchAssets(in: assetDirectory, colorSpace: colorSpace)
+
+    // A custom output directory is an isolated preview of the iOS catalog.
+    if arguments.count == 1 {
+        let primaryIcon = assetDirectory.appendingPathComponent("AppIcon.appiconset/AppIcon.png")
+        let watchIcon = root.appendingPathComponent("DUNEWatch/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png")
+        try Data(contentsOf: primaryIcon).write(to: watchIcon, options: .atomic)
+    }
 }
 
 do {
