@@ -1,7 +1,7 @@
 ---
 topic: Watch 기본 앱 아이콘 동기화
 date: 2026-11-19
-status: approved
+status: implemented
 confidence: high
 related_solutions: [2026-02-26-watchos-app-icon-validation, 2026-11-16-themed-app-icon-and-launch-branding]
 ---
