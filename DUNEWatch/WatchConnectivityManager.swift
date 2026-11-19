@@ -161,12 +161,12 @@ final class WatchConnectivityManager: NSObject {
     /// UI-test-only fixture path to make Watch flows deterministic without WC/iPhone dependency.
     @discardableResult
     private func applyUITestFixturesIfNeeded() -> Bool {
-        guard ProcessInfo.processInfo.arguments.contains("--uitesting-watch") else {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard arguments.contains("--uitesting-watch") else {
             return false
         }
 
 #if DEBUG
-        let arguments = ProcessInfo.processInfo.arguments
         if let themeIndex = arguments.firstIndex(of: "--ui-theme"),
            arguments.indices.contains(themeIndex + 1),
            let theme = AppTheme.resolvedTheme(fromPersistedRawValue: arguments[themeIndex + 1]) {
