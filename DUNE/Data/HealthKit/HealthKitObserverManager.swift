@@ -22,6 +22,7 @@ final class HealthKitObserverManager {
     private let store: any HealthKitObserverStoring
     private let coordinator: AppRefreshCoordinating
     private let notificationEvaluator: BackgroundNotificationEvaluator?
+    private let refreshExerciseReminders: @MainActor @Sendable () async -> Void
     private let watchReminder: any WatchBedtimeReminderRechecking
 
     /// Registration, retention, and stopping are synchronous on the same actor.
@@ -41,18 +42,21 @@ final class HealthKitObserverManager {
         (HKQuantityType(.bodyMassIndex), .immediate),
         // Secondary metrics — hourly delivery
         (HKQuantityType(.stepCount), .hourly),
-        (HKSampleType.workoutType(), .hourly),
+        // Reconcile exercise-linked reminders as soon as a workout is delivered.
+        (HKSampleType.workoutType(), .immediate),
     ]
 
     init(
         store: any HealthKitObserverStoring,
         coordinator: AppRefreshCoordinating,
         notificationEvaluator: BackgroundNotificationEvaluator? = nil,
+        refreshExerciseReminders: @escaping @MainActor @Sendable () async -> Void = {},
         watchReminder: any WatchBedtimeReminderRechecking = AppleWatchBedtimeReminderScheduler.shared
     ) {
         self.store = store
         self.coordinator = coordinator
         self.notificationEvaluator = notificationEvaluator
+        self.refreshExerciseReminders = refreshExerciseReminders
         self.watchReminder = watchReminder
     }
 
@@ -82,13 +86,14 @@ final class HealthKitObserverManager {
     // MARK: - Private
 
     private func registerObserver(for sampleType: HKSampleType) {
-        let query = HKObserverQuery(sampleType: sampleType, predicate: nil) { [coordinator, notificationEvaluator, watchReminder] _, completionHandler, error in
+        let query = HKObserverQuery(sampleType: sampleType, predicate: nil) { [coordinator, notificationEvaluator, watchReminder, refreshExerciseReminders] _, completionHandler, error in
             Self.handleObserverUpdate(
                 sampleType: sampleType,
                 error: error,
                 coordinator: coordinator,
                 notificationEvaluator: notificationEvaluator,
                 watchReminder: watchReminder,
+                refreshExerciseReminders: refreshExerciseReminders,
                 completion: completionHandler
             )
         }
@@ -106,6 +111,7 @@ final class HealthKitObserverManager {
         coordinator: AppRefreshCoordinating,
         notificationEvaluator: BackgroundNotificationEvaluator?,
         watchReminder: any WatchBedtimeReminderRechecking,
+        refreshExerciseReminders: @escaping @MainActor @Sendable () async -> Void = {},
         completion: @escaping () -> Void
     ) -> Task<Void, Never>? {
         if let error {
@@ -129,13 +135,15 @@ final class HealthKitObserverManager {
             async let notifyTask: Void = {
                 await notificationEvaluator?.evaluateAndNotify(sampleType: sampleType)
             }()
-            async let bedtimeTask: Void = {
-                if sampleType.identifier == HKCategoryType(.sleepAnalysis).identifier {
+            async let reminderTask: Void = {
+                if sampleType == HKSampleType.workoutType() {
+                    await refreshExerciseReminders()
+                } else if sampleType.identifier == HKCategoryType(.sleepAnalysis).identifier {
                     await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
                     await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule(force: true)
                 }
             }()
-            _ = await (refreshTask, notifyTask, bedtimeTask)
+            _ = await (refreshTask, notifyTask, reminderTask)
         }
     }
 

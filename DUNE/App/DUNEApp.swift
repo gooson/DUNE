@@ -248,7 +248,10 @@ struct DUNEApp: App {
             observerManager = HealthKitObserverManager(
                 store: hkStore,
                 coordinator: refreshCoordinator,
-                notificationEvaluator: evaluator
+                notificationEvaluator: evaluator,
+                refreshExerciseReminders: {
+                    await LifeHealthKitWorkouts.shared.refreshReminders(in: modelContainer.mainContext)
+                }
             )
         } else {
             observerManager = nil

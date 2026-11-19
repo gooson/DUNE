@@ -15,7 +15,10 @@ struct HabitReminderSyncView: View {
     @State private var syncState = HabitReminderSyncState()
     @State private var refreshGeneration = 0
 
-    init() {
+    let canLoadHealthKitData: Bool
+
+    init(canLoadHealthKitData: Bool) {
+        self.canLoadHealthKitData = canLoadHealthKitData
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         let recentStart = calendar.date(byAdding: .day, value: -2, to: today) ?? .distantPast
@@ -24,9 +27,9 @@ struct HabitReminderSyncView: View {
         _logs = Query(filter: #Predicate<HabitLog> {
             $0.date >= recentStart || $0.habitDefinition?.frequencyTypeRaw == "interval"
         })
-        _recentExerciseRecords = Query(filter: #Predicate<ExerciseRecord> {
-            $0.date >= recentStart
-        })
+        var latest = FetchDescriptor<ExerciseRecord>(sortBy: [SortDescriptor(\.date, order: .reverse)])
+        latest.fetchLimit = 1
+        _recentExerciseRecords = Query(latest)
     }
 
     private var currentSnapshot: HabitReminderSyncState.Snapshot {
@@ -67,17 +70,29 @@ struct HabitReminderSyncView: View {
             habits: habitSignatures,
             logs: logSignatures,
             autoLinkedHabitIDs: autoLinkedHabitIDs,
-            todayExerciseExists: HabitReminderSyncState.exerciseExists(
+            todayExerciseExists: LifeHealthKitWorkouts.shared.hasWorkout(on: Date()) || HabitReminderSyncState.exerciseExists(
                 on: recentExerciseRecords.map(\.date), referenceDate: Date()),
+            latestWorkoutDate: [recentExerciseRecords.first?.date, LifeHealthKitWorkouts.shared.latestDate].compactMap { $0 }.max(),
             generation: refreshGeneration
         )
     }
 
     var body: some View {
+        let loadIntervalHistory = canLoadHealthKitData && habits.contains {
+            !$0.isArchived && $0.isAutoLinked && $0.autoLinkSourceRaw == "exercise" && $0.frequencyTypeRaw == "interval"
+        }
         let snapshot = currentSnapshot
         Color.clear
             .frame(width: 0, height: 0)
             .accessibilityHidden(true)
+            .task(id: canLoadHealthKitData ? refreshGeneration : nil) {
+                if canLoadHealthKitData { await LifeHealthKitWorkouts.shared.refresh() }
+            }
+            .task(id: loadIntervalHistory ? refreshGeneration : nil) {
+                if loadIntervalHistory {
+                    await LifeHealthKitWorkouts.shared.loadPreviousWeeks()
+                }
+            }
             .task(id: snapshot) {
                 // Cloud imports can deliver many related changes in successive updates.
                 do {
@@ -109,6 +124,7 @@ struct HabitReminderSyncView: View {
         }
         guard !plan.habitIDs.isEmpty else { return }
         let logsByHabit = Dictionary(grouping: logs, by: { $0.habitDefinition?.id })
+        viewModel.setWorkoutDates(snapshot.latestWorkoutDate.map { [$0] } ?? [])
         for habit in habits where plan.habitIDs.contains(habit.id) {
             viewModel.refreshReminderSchedule(
                 for: habit,

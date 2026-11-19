@@ -85,6 +85,7 @@ struct LifeView: View {
     private let scrollToTopSignal: Int
     private let refreshSignal: Int
     private let checklistSignal: Int
+    private let canLoadHealthKitData: Bool
 
     private var isRegular: Bool { sizeClass == .regular }
 
@@ -92,11 +93,12 @@ struct LifeView: View {
         case top
     }
 
-    init(historySelection: Binding<HabitHistorySelection?>, scrollToTopSignal: Int = 0, refreshSignal: Int = 0, checklistSignal: Int = 0) {
+    init(historySelection: Binding<HabitHistorySelection?>, scrollToTopSignal: Int = 0, refreshSignal: Int = 0, checklistSignal: Int = 0, canLoadHealthKitData: Bool = true) {
         self._historySelection = historySelection
         self.scrollToTopSignal = scrollToTopSignal
         self.refreshSignal = refreshSignal
         self.checklistSignal = checklistSignal
+        self.canLoadHealthKitData = canLoadHealthKitData
     }
 
     var body: some View {
@@ -110,6 +112,7 @@ struct LifeView: View {
                     // Isolated @Query child — prevents parent re-layout (Correction #179)
                     HabitListQueryView(
                         viewModel: viewModel,
+                        canLoadHealthKitData: canLoadHealthKitData,
                         refreshSignal: refreshSignal + localRefreshSignal,
                         historySelection: $historySelection
                     )
@@ -121,9 +124,11 @@ struct LifeView: View {
             }
             .scrollBounceBehavior(.basedOnSize)
             .waveRefreshable {
-                await MainActor.run {
-                    localRefreshSignal += 1
+                if canLoadHealthKitData {
+                    await LifeHealthKitWorkouts.shared.refresh()
+                    await LifeHealthKitWorkouts.shared.loadPreviousWeeks(force: true)
                 }
+                await MainActor.run { localRefreshSignal += 1 }
             }
             .onChange(of: scrollToTopSignal) { _, _ in
                 withAnimation(DS.Animation.standard) {
@@ -181,7 +186,6 @@ struct LifeView: View {
                 onSave: {
                     if let habit = viewModel.createValidatedHabit() {
                         modelContext.insert(habit)
-                        refreshReminderSchedule(for: habit)
                         viewModel.didFinishSaving()
                         viewModel.resetForm()
                         viewModel.isShowingAddSheet = false
@@ -196,14 +200,6 @@ struct LifeView: View {
                     isEdit: true,
                     onSave: {
                         if let habit = viewModel.editingHabit, viewModel.applyUpdate(to: habit) {
-                            let habitID = habit.id
-                            do {
-                                let descriptor = FetchDescriptor<HabitLog>(predicate: #Predicate { $0.habitDefinition?.id == habitID })
-                                let logs = try modelContext.fetch(descriptor)
-                                refreshReminderSchedule(for: habit, additionalLogs: logs)
-                            } catch {
-                                AppLogger.notification.error("Habit reminder query failed: \(error.localizedDescription, privacy: .private)")
-                            }
                             viewModel.didFinishSaving()
                             viewModel.isShowingEditSheet = false
                             viewModel.resetForm()
@@ -213,29 +209,6 @@ struct LifeView: View {
             }
         }
         .englishNavigationTitle("Life")
-    }
-
-    private func refreshReminderSchedule(for habit: HabitDefinition, additionalLogs: [HabitLog] = []) {
-        var todayExerciseExists = false
-        if habit.isAutoLinked, habit.autoLinkSourceRaw == "exercise" {
-            let calendar = Calendar.current
-            let today = calendar.startOfDay(for: Date())
-            let tomorrow = calendar.date(byAdding: .day, value: 1, to: today) ?? today
-            var descriptor = FetchDescriptor<ExerciseRecord>(predicate: #Predicate {
-                $0.date >= today && $0.date < tomorrow
-            })
-            descriptor.fetchLimit = 1
-            do {
-                let records = try modelContext.fetch(descriptor)
-                todayExerciseExists = !records.isEmpty
-            } catch {
-                AppLogger.notification.error("Habit reminder exercise query failed: \(error.localizedDescription, privacy: .private)")
-                return
-            }
-        }
-        viewModel.refreshReminderSchedule(
-            for: habit, additionalLogs: additionalLogs, todayExerciseExists: todayExerciseExists
-        )
     }
 }
 
@@ -267,6 +240,7 @@ private struct HabitListQueryView: View {
 
     @Bindable var viewModel: LifeViewModel
     @Environment(\.scenePhase) private var scenePhase
+    let canLoadHealthKitData: Bool
     let refreshSignal: Int
 
     @Environment(\.modelContext) private var modelContext
@@ -276,8 +250,9 @@ private struct HabitListQueryView: View {
 
     // Correction #68: O(1) lookup instead of O(N) per row
     @State private var habitsByID: [UUID: HabitDefinition] = [:]
-    // Correction #102: cached today exercise check (avoid body-path Calendar ops)
-    @State private var cachedTodayExerciseExists = false
+    private let healthWorkouts = LifeHealthKitWorkouts.shared
+    @State private var historyWeek = LifeAutoAchievementService.weekStart(containing: Date())
+    private var todayExerciseExists: Bool { viewModel.hasWorkout(on: Date()) }
     @Binding var historySelection: HabitHistorySelection?
     @State private var actionSelection: HabitActionSelection?
     @State private var selectedCategoryFilter: HabitPurpose?
@@ -365,9 +340,11 @@ private struct HabitListQueryView: View {
         } message: {
             Text(viewModel.validationError ?? "")
         }
-        .background {
-            // Isolated @Query child — keeps today's exercise lookup off the main body path.
-            TodayExerciseCheckView(exists: $cachedTodayExerciseExists)
+        .task(id: canLoadHealthKitData ? historyWeek : nil) {
+            if canLoadHealthKitData { await healthWorkouts.loadPreviousWeeks() }
+        }
+        .onChange(of: healthWorkouts.revision) { _, _ in
+            recalculateWorkouts()
         }
         .onChange(of: habitDefinitionSignature) { _, _ in
             recalculate()
@@ -376,29 +353,28 @@ private struct HabitListQueryView: View {
             recalculate()
         }
         .onChange(of: autoAchievementInputSignature) { _, _ in
-            recalculate()
+            recalculateWorkouts()
         }
         .onChange(of: refreshSignal) { _, _ in
-            recalculate()
+            recalculateWorkouts()
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { recalculate() }
+            if phase == .active {
+                recalculateWorkouts()
+            }
         }
         .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSCalendarDayChanged)) { _ in
-            recalculate()
+            recalculateWorkouts()
         }
         .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSSystemTimeZoneDidChange)) { _ in
-            recalculate()
+            recalculateWorkouts()
         }
         .onChange(of: viewModel.isShowingEditSheet) { old, new in
             // Recalculate when edit sheet dismisses (habit properties may have changed)
             if old, !new { recalculate() }
         }
-        .onChange(of: cachedTodayExerciseExists) { _, _ in
-            recalculate()
-        }
         .onAppear {
-            recalculate()
+            recalculateWorkouts()
         }
     }
 
@@ -407,6 +383,7 @@ private struct HabitListQueryView: View {
         hasher.combine(exerciseRecords.count)
         for record in exerciseRecords.prefix(200) {
             hasher.combine(record.id)
+            hasher.combine(record.date)
             hasher.combine(record.healthKitWorkoutID ?? "")
             hasher.combine(record.isFromHealthKit)
             hasher.combine(record.exerciseDefinitionID ?? "")
@@ -928,7 +905,7 @@ private struct HabitListQueryView: View {
         undoRecord = UndoRecord(habitID: habit.id, removed: saved,
                                 insertedIDs: Set(replacement.newLog.map { [$0.id] } ?? []), expectedSignature: logSignature(replacement.newLog.map { [$0] } ?? []), date: Calendar.current.startOfDay(for: date))
         viewModel.didFinishSaving()
-        viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: cachedTodayExerciseExists)
+        viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: todayExerciseExists)
         recalculate()
         let isCompleted = viewModel.habitProgresses.first { $0.id == habit.id }?.isCompleted ?? false
         if !isPastEntry && !showsCompleted && wasCompleted != isCompleted { todayFocused = true }
@@ -958,7 +935,7 @@ private struct HabitListQueryView: View {
             }
         }
         undoRecord = nil
-        viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: cachedTodayExerciseExists)
+        viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: todayExerciseExists)
         recalculate()
         todayFocused = true
     }
@@ -973,7 +950,7 @@ private struct HabitListQueryView: View {
             undoRecord = UndoRecord(habitID: habit.id, removed: [], insertedIDs: [log.id],
                 expectedSignature: logSignature(allLogs(for: habit).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: log.date) }), date: log.date)
             viewModel.didFinishSaving()
-            viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: cachedTodayExerciseExists)
+            viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: todayExerciseExists)
             recalculate()
         }
     }
@@ -991,7 +968,7 @@ private struct HabitListQueryView: View {
             undoRecord = UndoRecord(habitID: habit.id, removed: [], insertedIDs: [log.id],
                 expectedSignature: logSignature(allLogs(for: habit).filter { !$0.isAutoCompleted && Calendar.current.isDate($0.date, inSameDayAs: log.date) }), date: log.date)
             viewModel.didFinishSaving()
-            viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: cachedTodayExerciseExists)
+            viewModel.refreshReminderSchedule(for: habit, additionalLogs: allLogs(for: habit), todayExerciseExists: todayExerciseExists)
             recalculate()
         }
     }
@@ -1026,13 +1003,20 @@ private struct HabitListQueryView: View {
         }
         viewModel.calculateProgresses(
             habits: habits,
-            todayExerciseExists: cachedTodayExerciseExists,
+            todayExerciseExists: todayExerciseExists,
             additionalLogs: habitLogs
         )
-        viewModel.calculateAutoExerciseProgresses(
-            exerciseRecords: exerciseRecords
-        )
         recalculateAnalytics()
+    }
+
+    private func recalculateWorkouts() {
+        let now = Date()
+        historyWeek = LifeAutoAchievementService.weekStart(containing: now)
+        let healthHistory = healthWorkouts.previousWeeks + healthWorkouts.workouts
+        viewModel.calculateAutoExerciseProgresses(
+            exerciseRecords: exerciseRecords, healthKitWorkouts: healthHistory, referenceDate: now
+        )
+        recalculate()
     }
 
     private func recalculateAnalytics() {
@@ -1393,42 +1377,6 @@ struct HabitHistorySheet: View {
         case .skip: DS.Color.negative
         case .snooze: DS.Color.tabWellness
         }
-    }
-}
-
-// MARK: - Today Exercise Check (Isolated @Query)
-// Avoids unbounded ExerciseRecord fetch in parent view.
-
-private struct TodayExerciseCheckView: View {
-    @Query private var recentRecords: [ExerciseRecord]
-
-    @Binding var exists: Bool
-
-    init(exists: Binding<Bool>) {
-        _exists = exists
-        var descriptor = FetchDescriptor<ExerciseRecord>(
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        descriptor.fetchLimit = 20
-        _recentRecords = Query(descriptor)
-    }
-
-    var body: some View {
-        Color.clear
-            .frame(width: 0, height: 0)
-            .onChange(of: recentRecords.count) { _, _ in
-                updateCheck()
-            }
-            .onAppear {
-                updateCheck()
-            }
-    }
-
-    private func updateCheck() {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        // Check only first few records (sorted by date desc) — today's records are at the front
-        exists = recentRecords.contains { calendar.isDate($0.date, inSameDayAs: today) }
     }
 }
 

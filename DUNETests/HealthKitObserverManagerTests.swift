@@ -47,7 +47,7 @@ struct HealthKitObserverManagerTests {
         #expect(store.state.withLock { $0.stopped.count } == 18)
     }
 
-    @Test("Body composition requests immediate delivery while steps and workouts remain hourly")
+    @Test("Body composition and workouts request immediate delivery while steps remain hourly")
     @MainActor
     func bodyCompositionDeliveryFrequency() {
         let store = ObserverStoreSpy()
@@ -59,7 +59,7 @@ struct HealthKitObserverManagerTests {
         }
         #expect(frequencies[HKQuantityType(.heartRate).identifier] == .immediate)
         #expect(frequencies[HKQuantityType(.stepCount).identifier] == .hourly)
-        #expect(frequencies[HKSampleType.workoutType().identifier] == .hourly)
+        #expect(frequencies[HKSampleType.workoutType().identifier] == .immediate)
         manager.stopObserving()
     }
 
@@ -78,6 +78,23 @@ struct HealthKitObserverManagerTests {
         #expect(completions.withLock { $0 } == 0)
         await gate.release()
         await task.value
+        #expect(completions.withLock { $0 } == 1)
+    }
+
+    @Test("Workout delivery waits for linked habit reminders before acknowledging HealthKit")
+    func workoutRechecksHabitReminders() async {
+        let gate = ObserverWorkGate()
+        let completions = Mutex(0)
+        let task = HealthKitObserverManager.handleObserverUpdate(
+            sampleType: HKSampleType.workoutType(), error: nil, coordinator: ObserverRefreshStub(),
+            notificationEvaluator: nil, watchReminder: await ObserverWatchReminderSpy(gate: ObserverWorkGate()),
+            refreshExerciseReminders: { await gate.wait() },
+            completion: { completions.withLock { $0 += 1 } }
+        )
+        await gate.waitUntilStarted()
+        #expect(completions.withLock { $0 } == 0)
+        await gate.release()
+        await task?.value
         #expect(completions.withLock { $0 } == 1)
     }
 

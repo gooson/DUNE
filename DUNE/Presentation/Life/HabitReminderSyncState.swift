@@ -12,6 +12,7 @@ struct HabitReminderSyncState {
         let logs: [UUID: Log]
         let autoLinkedHabitIDs: Set<UUID>
         let todayExerciseExists: Bool
+        var latestWorkoutDate: Date? = nil
         let generation: Int
     }
 
@@ -45,7 +46,7 @@ struct HabitReminderSyncState {
         for (id, log) in previous.logs where current.logs[id] == nil {
             if let habitID = log.habitID { changed.insert(habitID) }
         }
-        if previous.todayExerciseExists != current.todayExerciseExists {
+        if previous.todayExerciseExists != current.todayExerciseExists || previous.latestWorkoutDate != current.latestWorkoutDate {
             changed.formUnion(current.autoLinkedHabitIDs)
         }
         return Plan(habitIDs: changed.intersection(currentIDs),

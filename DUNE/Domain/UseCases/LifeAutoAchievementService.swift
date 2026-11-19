@@ -5,7 +5,7 @@ struct LifeAutoWorkoutEntry: Sendable {
     let date: Date
     let activityID: String?
     let exerciseType: String
-    let distance: Double?
+    let distanceKm: Double?
     let hasSetData: Bool
     let primaryMuscles: [MuscleGroup]
     let secondaryMuscles: [MuscleGroup]
@@ -203,8 +203,8 @@ enum LifeAutoAchievementService {
                 }
             }
 
-            if isRunning {
-                metrics.runningDistanceKm += normalizedDistanceKm(entry.distance)
+            if isRunning, let km = entry.distanceKm, km.isFinite, km > 0 {
+                metrics.runningDistanceKm += km
             }
 
             result[weekKey] = metrics
@@ -333,7 +333,7 @@ enum LifeAutoAchievementService {
 
     // MARK: - Normalization
 
-    private static func normalizedDistanceKm(_ rawDistance: Double?) -> Double {
+    static func legacyDistanceKm(_ rawDistance: Double?) -> Double {
         guard let distance = rawDistance, distance.isFinite, distance > 0 else { return 0 }
         // Guard against meter-stored values from imported records.
         if distance > 300 {
@@ -371,6 +371,10 @@ enum LifeAutoAchievementService {
         let timestamp = Int(entry.date.timeIntervalSinceReferenceDate.rounded())
         let type = normalizedToken(entry.activityID) ?? normalizedToken(entry.exerciseType) ?? "unknown"
         return "local:\(timestamp):\(type)"
+    }
+
+    static func weekStart(containing date: Date) -> Date {
+        weekStart(for: date, calendar: mondayStartCalendar())
     }
 
     private static func mondayStartCalendar() -> Calendar {

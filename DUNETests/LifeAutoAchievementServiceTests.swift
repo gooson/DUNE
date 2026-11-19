@@ -196,7 +196,7 @@ struct LifeAutoAchievementServiceTests {
             date: date,
             activityID: activityID,
             exerciseType: exerciseType,
-            distance: distance,
+            distanceKm: LifeAutoAchievementService.legacyDistanceKm(distance),
             hasSetData: hasSetData,
             primaryMuscles: primaryMuscles,
             secondaryMuscles: secondaryMuscles

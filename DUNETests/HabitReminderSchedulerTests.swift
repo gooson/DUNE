@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import Testing
 import UserNotifications
 @testable import DUNE
@@ -35,6 +36,26 @@ struct HabitReminderSchedulerTests {
             #expect(client.pending.count == 1)
             #expect(client.pending.first?.trigger?.repeats == true)
         }
+    }
+
+    @Test("A background workout update skips today's linked reminder without opening Life",
+          arguments: [0.0, 1740.0])
+    func backgroundWorkoutReminder(duration: Double) async throws {
+        let container = try ModelContainer(for: HabitDefinition.self, HabitLog.self, ExerciseRecord.self,
+                                           configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let context = container.mainContext
+        let habit = HabitDefinition(name: "Run", iconCategory: .fitness, habitType: .check,
+                                   goalValue: 1, goalUnit: nil, frequency: .daily,
+                                   isAutoLinked: true, autoLinkSource: "exercise")
+        context.insert(habit)
+        try context.save()
+        let run = WorkoutSummary(id: "run", type: "Running", activityType: .running, duration: duration,
+                                 calories: nil, distance: nil, date: Date(), isIndoor: true)
+        let health = LifeHealthKitWorkouts(service: MockAllDataWorkoutService(workouts: [run]))
+        let client = PausingHabitNotificationClient(shouldPauseFirstAdd: false)
+        await health.refreshReminders(in: context, scheduler: HabitReminderScheduler(client: client))
+        #expect(client.pending.count == (duration > 0 ? 7 : 1))
+        #expect(client.pending.allSatisfy { $0.trigger?.repeats == (duration == 0) })
     }
 
     @Test("Rolling requests never displace baseline repeat or interval schedules", arguments: [true, false])
