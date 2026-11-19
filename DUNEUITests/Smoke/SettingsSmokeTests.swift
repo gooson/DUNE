@@ -274,30 +274,43 @@ final class WhatsNewVisualAuditTests: UITestBaseCase {
     func testManualReleaseListOpensFeatureAndReturns() throws {
         openSettingsForAudit()
         openManualReleaseFromSettings()
-        let release = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
-        XCTAssertTrue(release.staticTexts["0.8.0"].firstMatch.waitForExistence(timeout: 5),
+        let release = app.scrollViews[AXID.whatsNewScreen].firstMatch
+        XCTAssertTrue(release.staticTexts["0.9.0"].firstMatch.waitForExistence(timeout: 5),
                       "Current manual release retains its catalog version")
-        let feature = app.descendants(matching: .any)[AXID.whatsNewRow("ios27Support")].firstMatch
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.whatsNewRow("ios27Support"), maxSwipes: 8),
+        let feature = app.descendants(matching: .any)[AXID.whatsNewRow("artistThemes")].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.whatsNewRow("artistThemes"), maxSwipes: 8),
                       "Current release feature stays reachable")
-        XCTAssertTrue(feature.label.contains("iOS 27 Support"), "Feature keeps its supplied title")
+        XCTAssertTrue(feature.label.contains("Nine Artist Themes"), "Feature keeps its supplied title")
+        let captureDuo = ProcessInfo.processInfo.environment["DUNE_VISUAL_AUDIT_FOLD"] == "1"
+        if captureDuo {
+            VisualAudit.capture("FOLD:closed S05 release list")
+            VisualAudit.capture("FOLD:openFlat S05 release list")
+            reassertDuoOpenLandscapeIfNeeded()
+        }
         VisualAudit.capture("S05 manual release list")
         feature.auditTap()
 
-        let detail = app.descendants(matching: .any)["whatsnew-detail-ios27Support"].firstMatch
+        let detail = app.scrollViews["whatsnew-detail-artistThemes"].firstMatch
         XCTAssertTrue(detail.waitForExistence(timeout: 5), "Manual release opens its feature detail")
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.whatsNewArtwork("ios27Support", style: "hero")]
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.whatsNewArtwork("artistThemes", style: "hero")]
             .firstMatch.waitForExistence(timeout: 5), "Original feature artwork remains")
         XCTAssertFalse(app.buttons["whatsnew-close-button"].exists,
                        "Manual release uses native Back instead of Done")
         VisualAudit.capture("S06 manual feature detail")
+        if captureDuo {
+            VisualAudit.capture("FOLD:closed S06 feature detail")
+        }
 
-        let detailBack = app.navigationBars["iOS 27 Support"].buttons["BackButton"].firstMatch
+        let detailBack = captureDuo
+            ? app.buttons["BackButton"].firstMatch
+            : app.navigationBars["Nine Artist Themes"].buttons["BackButton"].firstMatch
         XCTAssertTrue(detailBack.waitForExistence(timeout: 5) && detailBack.isHittable,
                       "Feature detail keeps native Back")
         detailBack.auditTap()
         XCTAssertTrue(release.waitForExistence(timeout: 5), "Back returns to the release list")
-        let releaseBack = app.navigationBars["What's New"].buttons["BackButton"].firstMatch
+        let releaseBack = captureDuo
+            ? app.buttons["BackButton"].firstMatch
+            : app.navigationBars["What's New"].buttons["BackButton"].firstMatch
         XCTAssertTrue(releaseBack.waitForExistence(timeout: 5) && releaseBack.isHittable,
                       "Release list keeps native Back")
         releaseBack.auditTap()
@@ -314,7 +327,7 @@ final class WhatsNewVisualAuditTests: UITestBaseCase {
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
         ]
         launchApp(with: configuration)
-        let release = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
+        let release = app.scrollViews[AXID.whatsNewScreen].firstMatch
         XCTAssertTrue(release.waitForExistence(timeout: 8), "Automatic release opens")
         let done = app.buttons["whatsnew-close-button"].firstMatch
         XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable,
@@ -331,37 +344,37 @@ final class WhatsNewVisualAuditTests: UITestBaseCase {
         openSettingsForAudit()
         openManualReleaseFromSettings()
         let window = app.windows.firstMatch.frame
-        let release = app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch
-        let version = release.staticTexts["0.8.0"].firstMatch
+        let release = app.scrollViews[AXID.whatsNewScreen].firstMatch
+        let version = release.staticTexts["0.9.0"].firstMatch
         XCTAssertTrue(version.waitForExistence(timeout: 5), "S05 MAX shows the catalog version")
         XCTAssertGreaterThan(version.frame.width, 0)
         XCTAssertLessThanOrEqual(version.frame.maxX, window.maxX - 4,
                                  "S05 MAX version stays inside the window")
         VisualAudit.capture("S05 MAX version header")
 
-        let feature = app.descendants(matching: .any)[AXID.whatsNewRow("ios27Support")].firstMatch
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.whatsNewRow("ios27Support"), maxSwipes: 8),
+        let feature = app.descendants(matching: .any)[AXID.whatsNewRow("artistThemes")].firstMatch
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.whatsNewRow("artistThemes"), maxSwipes: 8),
                       "S05 MAX feature row remains reachable")
-        XCTAssertTrue(feature.label.contains("iOS 27 Support"), "S05 MAX keeps the full feature title")
+        XCTAssertTrue(feature.label.contains("Nine Artist Themes"), "S05 MAX keeps the full feature title")
         XCTAssertLessThanOrEqual(feature.frame.maxX, window.maxX - 4)
         VisualAudit.capture("S05 MAX feature row")
         feature.auditTap()
 
-        let detail = app.descendants(matching: .any)["whatsnew-detail-ios27Support"].firstMatch
+        let detail = app.scrollViews["whatsnew-detail-artistThemes"].firstMatch
         XCTAssertTrue(detail.waitForExistence(timeout: 5), "S06 MAX feature detail opens")
-        let title = detail.staticTexts["iOS 27 Support"].firstMatch
-        let summary = detail.staticTexts["Refined for iOS 27, with the familiar experience you know."].firstMatch
+        let title = detail.staticTexts["Nine Artist Themes"].firstMatch
+        let summary = detail.staticTexts["Choose a theme for your health screens and change the app icon in Settings."].firstMatch
         XCTAssertTrue(title.waitForExistence(timeout: 5) && summary.waitForExistence(timeout: 5),
                       "S06 MAX retains its supplied title and summary")
         XCTAssertLessThanOrEqual(title.frame.maxX, window.maxX - 4)
         XCTAssertLessThanOrEqual(summary.frame.maxX, window.maxX - 4)
-        XCTAssertTrue(detail.staticTexts["0.8.0"].firstMatch.exists,
+        XCTAssertTrue(detail.staticTexts["0.9.0"].firstMatch.exists,
                       "S06 MAX retains the supplied version badge")
         VisualAudit.capture("S06 MAX feature header")
         for _ in 0..<4 where !summary.isHittable { detail.swipeUp() }
         XCTAssertTrue(summary.isHittable, "S06 MAX summary remains readable by scrolling")
         VisualAudit.capture("S06 MAX readable summary")
-        let back = app.navigationBars["iOS 27 Support"].buttons["BackButton"].firstMatch
+        let back = app.navigationBars["Nine Artist Themes"].buttons["BackButton"].firstMatch
         XCTAssertTrue(back.waitForExistence(timeout: 5) && back.isHittable,
                       "S06 MAX native Back stays reachable")
     }
@@ -400,8 +413,9 @@ final class WhatsNewVisualAuditTests: UITestBaseCase {
                       "Settings opens the News filter")
         let release = app.buttons[AXID.notificationsNewsRelease].firstMatch
         XCTAssertTrue(release.waitForExistence(timeout: 5), "Current release is available")
+        VisualAudit.capture("T11 current release in News")
         release.auditTap()
-        XCTAssertTrue(app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch.waitForExistence(timeout: 5),
+        XCTAssertTrue(app.scrollViews[AXID.whatsNewScreen].firstMatch.waitForExistence(timeout: 5),
                       "Manual release opens from News")
     }
 }

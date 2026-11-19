@@ -1,0 +1,82 @@
+{
+  "version": "0.9.0",
+  "build": "1",
+  "date": "2026-11-19",
+  "language": "en",
+  "os": "27.2",
+  "screens": [
+    "duo-closed-S05",
+    "duo-closed-T11",
+    "duo-open-S05",
+    "duo-open-S06",
+    "ipad-S05",
+    "ipad-S06",
+    "ipad-T11",
+    "iphone-S05",
+    "iphone-S06",
+    "iphone-T11",
+    "iphone-max-S05",
+    "iphone-max-S06"
+  ],
+  "ui_tests": {
+    "iphone": {
+      "status": "passed",
+      "counts": {
+        "executed": 2,
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "requested_selectors": [
+        "DUNEUITests/WhatsNewVisualAuditTests/testManualReleaseListOpensFeatureAndReturns",
+        "DUNEUITests/WhatsNewVisualAuditTests/testManualReleaseListAndDetailAtMaximumAccessibilitySize"
+      ],
+      "result_bundle": "Test-DUNEUITests-2026.11.19_12-04-05-+0900.xcresult"
+    },
+    "ipad": {
+      "status": "passed",
+      "counts": {
+        "executed": 1,
+        "passed": 1,
+        "skipped": 0,
+        "failed": 0
+      },
+      "requested_selectors": [
+        "DUNEUITests/WhatsNewVisualAuditTests/testManualReleaseListOpensFeatureAndReturns"
+      ],
+      "result_bundle": "Test-DUNEUITests-2026.11.19_12-10-12-+0900.xcresult"
+    },
+    "duo": {
+      "status": "failed",
+      "counts": {
+        "executed": 1,
+        "passed": 0,
+        "skipped": 0,
+        "failed": 1
+      },
+      "requested_selectors": [
+        "DUNEUITests/WhatsNewVisualAuditTests/testManualReleaseListOpensFeatureAndReturns"
+      ],
+      "result_bundle": "Test-DUNEUITests-2026.11.19_12-22-45-+0900.xcresult"
+    }
+  },
+  "unit_tests": {
+    "suites": [
+      "WhatsNewManagerTests",
+      "WhatsNewStoreTests"
+    ],
+    "passed": 31
+  },
+  "duo_display_checks": {
+    "007-displays": [
+      "LCD"
+    ],
+    "008-displays": [
+      "LCD-1"
+    ],
+    "013-displays": [
+      "LCD"
+    ]
+  },
+  "duo_notes": "Duo posture is verified by active display, backlight and viewport. Hinge angle in degrees was unavailable."
+}

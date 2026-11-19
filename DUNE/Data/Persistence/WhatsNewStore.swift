@@ -1,6 +1,6 @@
 import Foundation
 
-/// Persists the most recent build that the user already opened from the What's New entry point.
+/// Persists the most recent version and build that the user already opened from the What's New entry point.
 final class WhatsNewStore: @unchecked Sendable {
     static let shared = WhatsNewStore()
     static let didChangeNotification = Notification.Name("WhatsNewStore.didChange")
@@ -20,24 +20,24 @@ final class WhatsNewStore: @unchecked Sendable {
         self.queue = queue
     }
 
-    func lastOpenedBuild() -> String? {
+    func lastOpenedReleaseID() -> String? {
         queue.sync {
             defaults.string(forKey: Keys.lastOpenedBuild)
         }
     }
 
-    func shouldShowBadge(build: String) -> Bool {
-        guard !build.isEmpty else { return false }
+    func shouldShowBadge(version: String, build: String) -> Bool {
+        guard !version.isEmpty, !build.isEmpty else { return false }
         return queue.sync {
-            defaults.string(forKey: Keys.lastOpenedBuild) != build
+            defaults.string(forKey: Keys.lastOpenedBuild) != "\(version)/\(build)"
         }
     }
 
-    func markOpened(build: String) {
-        guard !build.isEmpty else { return }
+    func markOpened(version: String, build: String) {
+        guard !version.isEmpty, !build.isEmpty else { return }
         let changed = queue.sync {
-            guard defaults.string(forKey: Keys.lastOpenedBuild) != build else { return false }
-            defaults.set(build, forKey: Keys.lastOpenedBuild)
+            guard defaults.string(forKey: Keys.lastOpenedBuild) != "\(version)/\(build)" else { return false }
+            defaults.set("\(version)/\(build)", forKey: Keys.lastOpenedBuild)
             return true
         }
         if changed {
@@ -62,6 +62,6 @@ struct WhatsNewInboxRelease {
         let resolvedBuild = build ?? manager.currentBuildNumber()
         guard !resolvedBuild.isEmpty,
               let release = manager.currentRelease(for: resolvedVersion) else { return nil }
-        return Self(release: release, build: resolvedBuild, isUnread: store.shouldShowBadge(build: resolvedBuild))
+        return Self(release: release, build: resolvedBuild, isUnread: store.shouldShowBadge(version: resolvedVersion, build: resolvedBuild))
     }
 }

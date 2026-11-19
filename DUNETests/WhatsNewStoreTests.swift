@@ -9,8 +9,8 @@ struct WhatsNewStoreTests {
         let defaults = makeDefaults(suffix: #function)
         let store = WhatsNewStore(defaults: defaults)
 
-        #expect(store.shouldShowBadge(build: "42"))
-        #expect(store.lastOpenedBuild() == nil)
+        #expect(store.shouldShowBadge(version: "0.9.0", build: "42"))
+        #expect(store.lastOpenedReleaseID() == nil)
     }
 
     @Test("Hides the badge after the same build is opened")
@@ -18,10 +18,10 @@ struct WhatsNewStoreTests {
         let defaults = makeDefaults(suffix: #function)
         let store = WhatsNewStore(defaults: defaults)
 
-        store.markOpened(build: "42")
+        store.markOpened(version: "0.9.0", build: "42")
 
-        #expect(store.shouldShowBadge(build: "42") == false)
-        #expect(store.lastOpenedBuild() == "42")
+        #expect(store.shouldShowBadge(version: "0.9.0", build: "42") == false)
+        #expect(store.lastOpenedReleaseID() == "0.9.0/42")
     }
 
     @Test("Shows the badge again when the build changes")
@@ -29,9 +29,23 @@ struct WhatsNewStoreTests {
         let defaults = makeDefaults(suffix: #function)
         let store = WhatsNewStore(defaults: defaults)
 
-        store.markOpened(build: "42")
+        store.markOpened(version: "0.9.0", build: "42")
 
-        #expect(store.shouldShowBadge(build: "43"))
+        #expect(store.shouldShowBadge(version: "0.9.0", build: "43"))
+    }
+
+    @Test("A legacy read marker or an earlier version with the same build leaves the new release unread")
+    func reusedBuildNumber() {
+        let defaults = makeDefaults(suffix: #function)
+        let store = WhatsNewStore(defaults: defaults)
+        let key = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".whatsNew.lastOpenedBuild"
+        defaults.set("1", forKey: key)
+        #expect(store.shouldShowBadge(version: "0.9.0", build: "1"))
+
+        store.markOpened(version: "0.8.0", build: "1")
+        #expect(store.shouldShowBadge(version: "0.9.0", build: "1"))
+        store.markOpened(version: "0.9.0", build: "1")
+        #expect(!store.shouldShowBadge(version: "0.9.0", build: "1"))
     }
 
     @Test("Ignores empty build strings")
@@ -39,11 +53,11 @@ struct WhatsNewStoreTests {
         let defaults = makeDefaults(suffix: #function)
         let store = WhatsNewStore(defaults: defaults)
 
-        #expect(store.shouldShowBadge(build: "") == false)
+        #expect(store.shouldShowBadge(version: "0.9.0", build: "") == false)
 
-        store.markOpened(build: "")
+        store.markOpened(version: "0.9.0", build: "")
 
-        #expect(store.lastOpenedBuild() == nil)
+        #expect(store.lastOpenedReleaseID() == nil)
     }
 
     @Test("Inbox shows only the current catalog release and one unread item per build")
@@ -62,7 +76,7 @@ struct WhatsNewStoreTests {
         #expect(unread?.release.version == "2.0")
         #expect(unread?.isUnread == true)
 
-        store.markOpened(build: "20")
+        store.markOpened(version: "2.0", build: "20")
         let read = WhatsNewInboxRelease.current(manager: manager, store: store, version: "2.0", build: "20")
         #expect(read?.isUnread == false)
         #expect(WhatsNewInboxRelease.current(manager: manager, store: store, version: "2.0", build: "21")?.isUnread == true)

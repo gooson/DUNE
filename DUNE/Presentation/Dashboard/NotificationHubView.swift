@@ -415,7 +415,7 @@ struct NotificationHubView: View {
     private var readAllButton: some View {
         Button {
             inboxManager.markAllRead()
-            if let release { whatsNewStore.markOpened(build: release.build) }
+            if let release { whatsNewStore.markOpened(version: release.release.version, build: release.build) }
         } label: {
             Text("Read All")
                 .foregroundStyle(theme.prominentButtonForegroundColor(for: colorScheme))
@@ -459,7 +459,7 @@ struct NotificationHubView: View {
         Section {
             if let release {
                 Button {
-                    whatsNewStore.markOpened(build: release.build)
+                    whatsNewStore.markOpened(version: release.release.version, build: release.build)
                     destination = .whatsNew(version: release.release.version)
                 } label: {
                     InlineCard {

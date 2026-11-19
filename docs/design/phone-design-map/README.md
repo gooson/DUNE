@@ -9,6 +9,8 @@ status: in-progress
 
 # DUNE 전체 디자인맵
 
+2026-11-19 [0.9.0 새 소식과 공지 상세](actual/release-0.9.0/index.html)에 T11 새 소식, S05 공지 목록, S06 기능 상세의 기기별 실제 화면과 검증 결과를 보존했다.
+
 2026-11-19 아홉 작가 테마의 iPhone 실제 화면을 등록했다. 각 테마에서 Today·Activity·Wellness·Life, 컨디션·운동 준비도·운동 기록·웰니스·수면·습관 주간 보고서 상세, 설정의 테마 선택을 라이트·다크로 촬영했다. iPhone 198장과 Forest iPad·Ocean Duo 펼침·Sakura Duo 접힘 66장에는 각각 접근성 트리가 있다. Ocean의 포말 움직임, 수련의 시스템 동작 줄이기, 파티스리의 앱 재실행 후 선택 유지와 아이콘은 별도 항목에서 확인할 수 있다. [아홉 테마 실제 화면](actual/artist-themes/index.html)
 
 파티스리의 Apple Watch 홈, 전체 운동 목록, 운동 중 지표 화면은 46mm 시뮬레이터에서 촬영했다. 각 원본 이미지에 접근성 트리와 실행 기록을 연결했다. [파티스리 Watch 실제 화면](actual/artist-themes/patisserie/watch/index.html)

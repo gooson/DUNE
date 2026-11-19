@@ -759,7 +759,7 @@ struct DUNEApp: App {
 
         guard !build.isEmpty,
               let currentRelease = whatsNewManager.currentRelease(for: version),
-              whatsNewStore.shouldShowBadge(build: build) else {
+              whatsNewStore.shouldShowBadge(version: version, build: build) else {
             finishLaunchExperienceIfNeeded()
             return
         }
@@ -781,7 +781,7 @@ struct DUNEApp: App {
     @MainActor
     private func handleAutomaticWhatsNewDismissed() {
         if !automaticWhatsNewPresentedBuild.isEmpty {
-            whatsNewStore.markOpened(build: automaticWhatsNewPresentedBuild)
+            whatsNewStore.markOpened(version: whatsNewManager.currentAppVersion(), build: automaticWhatsNewPresentedBuild)
         }
 
         automaticWhatsNewPresentedBuild = ""
