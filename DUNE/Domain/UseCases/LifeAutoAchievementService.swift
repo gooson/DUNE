@@ -5,10 +5,11 @@ struct LifeAutoWorkoutEntry: Sendable {
     let date: Date
     let activityID: String?
     let exerciseType: String
-    let distance: Double?
+    let distanceKm: Double?
     let hasSetData: Bool
     let primaryMuscles: [MuscleGroup]
     let secondaryMuscles: [MuscleGroup]
+    var healthKitActivityType: WorkoutActivityType? = nil
 }
 
 struct LifeAutoAchievementProgress: Identifiable, Sendable {
@@ -203,8 +204,8 @@ enum LifeAutoAchievementService {
                 }
             }
 
-            if isRunning {
-                metrics.runningDistanceKm += normalizedDistanceKm(entry.distance)
+            if isRunning, let km = entry.distanceKm, km.isFinite, km > 0 {
+                metrics.runningDistanceKm += km
             }
 
             result[weekKey] = metrics
@@ -238,6 +239,9 @@ enum LifeAutoAchievementService {
     // MARK: - Classification
 
     private static func resolveActivityType(for entry: LifeAutoWorkoutEntry) -> WorkoutActivityType? {
+        if let healthKitType = entry.healthKitActivityType, healthKitType != .other {
+            return healthKitType
+        }
         if let raw = normalizedToken(entry.activityID),
            let resolved = activityType(from: raw) {
             return resolved
@@ -281,6 +285,9 @@ enum LifeAutoAchievementService {
         bodyAreas: Set<StrengthBodyArea>
     ) -> Bool {
         if entry.hasSetData { return true }
+        if let healthKitType = entry.healthKitActivityType, healthKitType != .other {
+            return healthKitType.category == .strength
+        }
         if let activityType, activityType.category == .strength { return true }
         if !bodyAreas.isEmpty, let activityType {
             return activityType.category == .strength
@@ -326,6 +333,9 @@ enum LifeAutoAchievementService {
         _ entry: LifeAutoWorkoutEntry,
         activityType: WorkoutActivityType?
     ) -> Bool {
+        if let healthKitType = entry.healthKitActivityType, healthKitType != .other {
+            return healthKitType == .running
+        }
         if activityType == .running { return true }
         let lowered = entry.exerciseType.lowercased()
         return lowered.contains("running") || lowered.contains("run")
@@ -333,7 +343,7 @@ enum LifeAutoAchievementService {
 
     // MARK: - Normalization
 
-    private static func normalizedDistanceKm(_ rawDistance: Double?) -> Double {
+    static func legacyDistanceKm(_ rawDistance: Double?) -> Double {
         guard let distance = rawDistance, distance.isFinite, distance > 0 else { return 0 }
         // Guard against meter-stored values from imported records.
         if distance > 300 {
@@ -356,7 +366,12 @@ enum LifeAutoAchievementService {
         results.reserveCapacity(entries.count)
 
         for entry in entries.sorted(by: { $0.date > $1.date }) {
-            let key = dedupKey(for: entry)
+            let key = workoutIdentity(
+                sourceWorkoutID: entry.sourceWorkoutID,
+                date: entry.date,
+                activityID: entry.activityID,
+                exerciseType: entry.exerciseType
+            )
             if seen.insert(key).inserted {
                 results.append(entry)
             }
@@ -364,13 +379,23 @@ enum LifeAutoAchievementService {
         return results
     }
 
-    private static func dedupKey(for entry: LifeAutoWorkoutEntry) -> String {
-        if let id = normalizedToken(entry.sourceWorkoutID) {
+    static func workoutIdentity(
+        sourceWorkoutID: String?,
+        date: Date,
+        activityID: String?,
+        exerciseType: String
+    ) -> String {
+        if let id = normalizedToken(sourceWorkoutID) {
             return "hk:\(id)"
         }
-        let timestamp = Int(entry.date.timeIntervalSinceReferenceDate.rounded())
-        let type = normalizedToken(entry.activityID) ?? normalizedToken(entry.exerciseType) ?? "unknown"
+        let rounded = date.timeIntervalSinceReferenceDate.rounded()
+        let timestamp = Int(exactly: rounded).map { String($0) } ?? String(rounded)
+        let type = normalizedToken(activityID) ?? normalizedToken(exerciseType) ?? "unknown"
         return "local:\(timestamp):\(type)"
+    }
+
+    static func weekStart(containing date: Date) -> Date {
+        weekStart(for: date, calendar: mondayStartCalendar())
     }
 
     private static func mondayStartCalendar() -> Calendar {

@@ -365,4 +365,55 @@ struct LifeLogReplacementTests {
         #expect(cycle?.historyCount == 1)
     }
 
+    @Test("Projected workout history responds to synced totals and goal edits")
+    func workoutProjectionTracksLogAndGoalChanges() {
+        let now = Date()
+        let workoutDay = day(-1, from: now)
+        let habit = habit(createdAt: day(-10, from: now))
+        habit.isAutoLinked = true
+        habit.autoLinkSourceRaw = "exercise"
+        let prior = HabitLog(date: workoutDay, value: 1, completedAt: now.addingTimeInterval(-60), memo: HabitLogResolution.dailyTotalMemo)
+        let latest = HabitLog(date: workoutDay, value: 2, completedAt: now, memo: HabitLogResolution.dailyTotalMemo)
+        habit.logs = [prior, latest]
+        let vm = LifeViewModel()
+        vm.setWorkoutDates([workoutDay])
+
+        let expectedInitial = [2.0, 3.0]
+        #expect(vm.historyEntries(for: habit).map(\.value).sorted() == expectedInitial)
+        vm.calculateProgresses(habits: [habit], todayExerciseExists: false, referenceDate: now)
+        vm.setWorkoutDates([workoutDay])
+        #expect(vm.historyEntries(for: habit).map(\.value).sorted() == expectedInitial)
+
+        latest.value = 4
+        #expect(vm.historyEntries(for: habit).map(\.value).sorted() == [1.0, 4.0])
+        habit.goalValue = 7
+        #expect(vm.historyEntries(for: habit).map(\.value).sorted() == [3.0, 4.0])
+    }
+
+    @Test("Workout corrections update projected history and the recurring anchor")
+    func workoutProjectionTracksCorrections() {
+        let now = Date()
+        let workoutDay = day(-2, from: now)
+        let habit = habit(type: .check, frequency: .interval(days: 7), createdAt: day(-10, from: now))
+        habit.isAutoLinked = true
+        habit.autoLinkSourceRaw = "exercise"
+        habit.recurringStartPointRaw = HabitRecurringStartPoint.firstCompletion.rawValue
+        let vm = LifeViewModel()
+        vm.setWorkoutDates([workoutDay])
+
+        #expect(vm.cycleSnapshot(for: habit, referenceDate: now)?.nextDueDate == day(5, from: now))
+        let initialID = vm.historyEntries(for: habit).first?.id
+        let correctedTime = workoutDay.addingTimeInterval(3_600)
+        vm.setWorkoutDates([correctedTime])
+        #expect(vm.historyEntries(for: habit).first?.completedAt == correctedTime)
+        #expect(vm.historyEntries(for: habit).first?.id == initialID)
+
+        habit.createdAt = day(-1, from: now)
+        #expect(vm.historyEntries(for: habit).isEmpty)
+        habit.createdAt = day(-10, from: now)
+        vm.setWorkoutDates([])
+        #expect(vm.historyEntries(for: habit).isEmpty)
+        #expect(vm.cycleSnapshot(for: habit, referenceDate: now)?.nextDueDate == nil)
+    }
+
 }

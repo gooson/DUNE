@@ -723,6 +723,118 @@ struct LifeViewModelTests {
         #expect(weekly5?.currentValue == 1)
     }
 
+    @Test("Apple Health indoor running contributes measured meters once, with or without a local copy",
+          arguments: [false, true])
+    func healthKitIndoorRun(hasLocalCopy: Bool) async {
+        let now = Date()
+        let start = now.addingTimeInterval(-1)
+        let run = WorkoutSummary(id: "indoor", type: "달리기", activityType: .running, duration: 1740,
+                                 calories: 271, distance: 250, date: start, isIndoor: true)
+        let empty = WorkoutSummary(id: "empty", type: "달리기", activityType: .running, duration: 0,
+                                   calories: 0, distance: nil, date: start, isIndoor: true)
+        let health = LifeHealthKitWorkouts(service: MockAllDataWorkoutService(workouts: [empty, run]))
+        await health.refresh(now: now)
+        #expect(health.hasWorkout(on: now))
+        let local = ExerciseRecord(date: start, exerciseType: "달리기", duration: 1740)
+        local.healthKitWorkoutID = run.id
+        let vm = LifeViewModel()
+        vm.calculateAutoExerciseProgresses(exerciseRecords: hasLocalCopy ? [local] : [],
+                                          healthKitWorkouts: health.workouts, referenceDate: now)
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyRunning15km" }?.currentValue == 0.25)
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyWorkout5" }?.currentValue == 1)
+    }
+
+    @Test("An unlinked local treadmill run keeps its matching watch distance",
+          arguments: [false, true])
+    func legacyTreadmillDistance(hasDuplicate: Bool) {
+        let now = Date()
+        let watch = WorkoutSummary(id: "watch", type: "Running", activityType: .running,
+                                   duration: 1740, calories: 271, distance: 3500, date: now,
+                                   isFromThisApp: true, isIndoor: true)
+        let local = ExerciseRecord(date: now, exerciseType: "달리기", duration: 1740,
+                                   exerciseDefinitionID: "running")
+        let vm = LifeViewModel()
+        let duplicate = ExerciseRecord(date: now, exerciseType: "달리기", duration: 1740,
+                                       distance: 3.5, exerciseDefinitionID: "running")
+        vm.calculateAutoExerciseProgresses(exerciseRecords: hasDuplicate ? [local, duplicate] : [local],
+                                          healthKitWorkouts: [watch], referenceDate: now)
+        #expect(vm.hasWorkout(on: now))
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyRunning15km" }?.currentValue == 3.5)
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyWorkout5" }?.currentValue == 1)
+    }
+
+    @Test("HealthKit activity types take precedence over display titles")
+    func healthKitActivityTypes() {
+        let now = Date()
+        let cycling = WorkoutSummary(id: "cycling", type: "Run club ride", activityType: .cycling,
+                                     duration: 2400, calories: nil, distance: 20_000, date: now)
+        let core = WorkoutSummary(id: "core", type: "Core", activityType: .coreTraining,
+                                   duration: 1200, calories: nil, distance: nil, date: now)
+        let vm = LifeViewModel()
+
+        vm.calculateAutoExerciseProgresses(exerciseRecords: [], healthKitWorkouts: [cycling, core], referenceDate: now)
+
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyWorkout5" }?.currentValue == 2)
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyStrength3" }?.currentValue == 1)
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyRunning15km" }?.currentValue == 0)
+    }
+
+    @Test("A linked HealthKit Other workout keeps its local running classification")
+    func healthKitOtherUsesLocalClassification() {
+        let now = Date()
+        let record = ExerciseRecord(date: now, exerciseType: "달리기", duration: 1200,
+                                    distance: 3, healthKitWorkoutID: "other", exerciseDefinitionID: "running")
+        let workout = WorkoutSummary(id: "other", type: "Other", activityType: .other,
+                                      duration: 1200, calories: nil, distance: nil, date: now)
+        let vm = LifeViewModel()
+
+        vm.calculateAutoExerciseProgresses(exerciseRecords: [record], healthKitWorkouts: [workout], referenceDate: now)
+
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyWorkout5" }?.currentValue == 1)
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyRunning15km" }?.currentValue == 3)
+    }
+
+    @Test("Future workouts cannot affect the current week's achievements or today's completion")
+    func excludesFutureWorkouts() {
+        let start = LifeAutoAchievementService.weekStart(containing: Date())
+        let now = start.addingTimeInterval(3600)
+        let future = now.addingTimeInterval(3600)
+        let record = ExerciseRecord(date: future, exerciseType: "running", duration: 1200, distance: 3)
+        let workout = WorkoutSummary(id: "future", type: "Running", activityType: .running,
+                                      duration: 1200, calories: nil, distance: 3000, date: future)
+        let vm = LifeViewModel()
+
+        vm.calculateAutoExerciseProgresses(exerciseRecords: [record], healthKitWorkouts: [workout], referenceDate: now)
+
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyWorkout5" }?.currentValue == 0)
+        #expect(vm.autoExerciseProgresses.first { $0.id == "weeklyRunning15km" }?.currentValue == 0)
+        #expect(!vm.hasWorkout(on: now))
+    }
+
+    @Test("Workout history earns one completion per day after the habit starts and follows source deletions",
+          arguments: [HabitFrequency.daily, .interval(days: 3)])
+    func workoutDayHistory(frequency: HabitFrequency) throws {
+        let now = Date()
+        let calendar = Calendar.current
+        let yesterday = try #require(calendar.date(byAdding: .day, value: -1, to: now))
+        let older = try #require(calendar.date(byAdding: .day, value: -3, to: now))
+        let habit = HabitDefinition(name: "Workout", iconCategory: .fitness, habitType: .check,
+                                   goalValue: 1, goalUnit: nil, frequency: frequency,
+                                   isAutoLinked: true, autoLinkSource: "exercise")
+        habit.createdAt = yesterday
+        habit.recurringStartConfiguredAt = yesterday
+        let vm = LifeViewModel()
+        vm.setWorkoutDates([older, yesterday, now, now])
+        vm.calculateProgresses(habits: [habit], todayExerciseExists: true, referenceDate: now)
+        #expect(vm.historyEntries(for: habit).count == 2)
+        #expect(vm.autoLinkedProgresses.first?.isAutoCompleted == true)
+        #expect(habit.logs?.isEmpty == true)
+        vm.setWorkoutDates([yesterday])
+        vm.calculateProgresses(habits: [habit], todayExerciseExists: false, referenceDate: now)
+        #expect(vm.autoLinkedProgresses.first?.isCompleted == false)
+        #expect(vm.historyEntries(for: habit).count == 1)
+    }
+
     @Test("autoLinkedProgresses filters only auto-linked habits")
     func autoLinkedProgressesFilter() {
         let vm = LifeViewModel()

@@ -195,10 +195,13 @@ actor HealthKitManager: HealthKitManaging {
         // for read types, so we skip the check and let queries return empty data.
     }
 
-    func execute<S: HKSample>(_ query: HKSampleQueryDescriptor<S>) async throws -> [S] {
+    func execute<S: HKSample>(
+        _ query: HKSampleQueryDescriptor<S>,
+        treatUnrequestedAuthorizationAsEmpty: Bool = true
+    ) async throws -> [S] {
         do {
             return try await query.result(for: store)
-        } catch let error as HKError where error.code == .errorAuthorizationNotDetermined {
+        } catch let error as HKError where treatUnrequestedAuthorizationAsEmpty && error.code == .errorAuthorizationNotDetermined {
             logger.info("HK sample query skipped: authorization not yet requested")
             return []
         } catch {

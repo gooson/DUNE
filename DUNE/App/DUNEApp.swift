@@ -248,7 +248,10 @@ struct DUNEApp: App {
             observerManager = HealthKitObserverManager(
                 store: hkStore,
                 coordinator: refreshCoordinator,
-                notificationEvaluator: evaluator
+                notificationEvaluator: evaluator,
+                refreshExerciseReminders: {
+                    await LifeHealthKitWorkouts.shared.refreshReminders(in: modelContainer.mainContext)
+                }
             )
         } else {
             observerManager = nil
@@ -527,6 +530,10 @@ struct DUNEApp: App {
                 }
             }
 #endif
+            if newPhase == .background {
+                // Read permission can change in Settings while the app is away.
+                LifeHealthKitWorkouts.shared.invalidateWorkoutHistory(discardCached: true)
+            }
             guard newPhase == .active else { return }
             Task {
                 if !Self.isRunningUnitTests {
@@ -865,6 +872,7 @@ struct DUNEApp: App {
         guard hasCompletedHealthKitAuthorizationThisLaunch,
               !Self.shouldBypassLaunchExperienceForTests else { return }
         let windowChanged = await HealthKitManager.shared.refreshLimitedReadAccessWindow()
+        if windowChanged { LifeHealthKitWorkouts.shared.invalidateWorkoutHistory(discardCached: true) }
         let hadPendingConditionChange = await HealthKitManager.shared.conditionAccessChangePending()
         let conditionChanged = await invalidateConditionHistoryIfNeeded()
         guard !hadPendingConditionChange || conditionChanged else { return }

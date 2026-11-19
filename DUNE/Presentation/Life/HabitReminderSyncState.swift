@@ -7,11 +7,16 @@ struct HabitReminderSyncState {
         let signature: Int
     }
 
+    enum WorkoutSource: Equatable {
+        case pending
+        case resolved(Date?)
+    }
+
     struct Snapshot: Equatable {
         let habits: [UUID: Int]
         let logs: [UUID: Log]
         let autoLinkedHabitIDs: Set<UUID>
-        let todayExerciseExists: Bool
+        let workoutSource: WorkoutSource
         let generation: Int
     }
 
@@ -26,13 +31,13 @@ struct HabitReminderSyncState {
         let previousSnapshot = previous
         previous = current
         guard let previous = previousSnapshot else {
-            return Plan(habitIDs: Set(current.habits.keys), cleanUpOrphans: true)
+            return Plan(habitIDs: eligibleIDs(Set(current.habits.keys), in: current), cleanUpOrphans: true)
         }
 
         let previousIDs = Set(previous.habits.keys)
         let currentIDs = Set(current.habits.keys)
         if previous.generation != current.generation {
-            return Plan(habitIDs: currentIDs, cleanUpOrphans: true)
+            return Plan(habitIDs: eligibleIDs(currentIDs, in: current), cleanUpOrphans: true)
         }
 
         var changed = Set(current.habits.compactMap { id, signature in
@@ -45,18 +50,15 @@ struct HabitReminderSyncState {
         for (id, log) in previous.logs where current.logs[id] == nil {
             if let habitID = log.habitID { changed.insert(habitID) }
         }
-        if previous.todayExerciseExists != current.todayExerciseExists {
+        if previous.workoutSource != current.workoutSource {
             changed.formUnion(current.autoLinkedHabitIDs)
         }
-        return Plan(habitIDs: changed.intersection(currentIDs),
+        return Plan(habitIDs: eligibleIDs(changed.intersection(currentIDs), in: current),
                     cleanUpOrphans: previousIDs != currentIDs)
     }
 
-    static func exerciseExists(
-        on dates: [Date],
-        referenceDate: Date,
-        calendar: Calendar = .current
-    ) -> Bool {
-        dates.contains { calendar.isDate($0, inSameDayAs: referenceDate) }
+    private func eligibleIDs(_ habitIDs: Set<UUID>, in snapshot: Snapshot) -> Set<UUID> {
+        guard snapshot.workoutSource == .pending else { return habitIDs }
+        return habitIDs.subtracting(snapshot.autoLinkedHabitIDs)
     }
 }

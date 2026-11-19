@@ -337,7 +337,8 @@ struct ContentView: View {
                         historySelection: $lifeHistorySelection,
                         scrollToTopSignal: lifeScrollToTopSignal,
                         refreshSignal: refreshSignal,
-                        checklistSignal: lifeChecklistSignal
+                        checklistSignal: lifeChecklistSignal,
+                        canLoadHealthKitData: canLoadHealthKitData
                     )
                     .navigationDestination(for: NotificationPresentationDestination.self) { destination in
                         notificationDestinationView(for: destination)
@@ -388,7 +389,7 @@ struct ContentView: View {
             guard shortcutTemplateSignal > 0, shortcutTemplateID != nil else { return }
             selectedSection = .train
         }
-        .background { HabitReminderSyncView() }
+        .background { HabitReminderSyncView(canLoadHealthKitData: canLoadHealthKitData) }
         // Foreground refresh: scenePhase .background → .active (Correction #16/#60)
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .active {

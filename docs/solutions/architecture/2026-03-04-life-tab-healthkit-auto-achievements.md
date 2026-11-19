@@ -69,6 +69,12 @@ calendar.firstWeekday = 2 // Monday start
 calendar.minimumDaysInFirstWeek = 4
 ```
 
+### 2026-11-19 실내 달리기 누락과 습관 알림
+
+Activity에는 Apple 건강의 운동이 보였지만 Life는 SwiftData의 `ExerciseRecord`만 읽고 있었다. 이제 Life는 HealthKit이 보고한 미터 단위 거리를 km로 변환하고, 연결된 로컬 운동과 합쳐 주간 목표에 반영한다. 거리가 없는 운동도 시간이 양수이면 운동 횟수에 포함한다.
+
+운동 연동 습관의 이력은 습관 생성일부터 실제 운동이 있는 날짜당 한 건을 계산한다. HealthKit 운동 변경을 받으면 앱이 백그라운드에 있어도 해당 습관의 알림 예약을 갱신한다. 회귀 테스트는 실내 달리기, 0초 운동, 중복 운동, 원본 삭제, 백그라운드 알림 예약을 확인한다.
+
 ## Prevention
 
 ### Checklist Addition

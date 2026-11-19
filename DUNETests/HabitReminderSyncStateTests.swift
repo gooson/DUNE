@@ -12,11 +12,11 @@ struct HabitReminderSyncStateTests {
         habits: [UUID: Int],
         logs: [UUID: HabitReminderSyncState.Log] = [:],
         autoLinked: Set<UUID> = [],
-        exerciseExists: Bool = false,
+        workoutSource: HabitReminderSyncState.WorkoutSource = .resolved(nil),
         generation: Int = 0
     ) -> HabitReminderSyncState.Snapshot {
         .init(habits: habits, logs: logs, autoLinkedHabitIDs: autoLinked,
-              todayExerciseExists: exerciseExists,
+              workoutSource: workoutSource,
               generation: generation)
     }
 
@@ -66,7 +66,7 @@ struct HabitReminderSyncStateTests {
         var state = HabitReminderSyncState()
         _ = state.plan(for: snapshot(habits: [first: 1, second: 1], autoLinked: [first]))
         let completed = snapshot(habits: [first: 1, second: 1], autoLinked: [first],
-                                 exerciseExists: true)
+                                 workoutSource: .resolved(Date()))
         #expect(state.plan(for: completed) == .init(habitIDs: [first], cleanUpOrphans: false))
 
         #expect(state.plan(for: completed) == .init(habitIDs: [], cleanUpOrphans: false))
@@ -75,15 +75,16 @@ struct HabitReminderSyncStateTests {
         #expect(state.plan(for: undone) == .init(habitIDs: [first], cleanUpOrphans: false))
     }
 
-    @Test("Exercise date check uses the calendar day, including boundary changes")
-    func exerciseDay() throws {
-        let calendar = Calendar(identifier: .gregorian)
-        let today = try #require(calendar.date(from: DateComponents(year: 2026, month: 11, day: 6, hour: 8)))
-        let yesterday = try #require(calendar.date(byAdding: .day, value: -1, to: today))
-        let tonight = try #require(calendar.date(byAdding: .hour, value: 12, to: today))
-        #expect(!HabitReminderSyncState.exerciseExists(on: [yesterday], referenceDate: today,
-                                                       calendar: calendar))
-        #expect(HabitReminderSyncState.exerciseExists(on: [yesterday, tonight], referenceDate: today,
-                                                      calendar: calendar))
+    @Test("Pending workout reads preserve linked requests while manual schedules refresh")
+    func pendingWorkoutRead() {
+        var state = HabitReminderSyncState()
+        let initial = snapshot(habits: [first: 1, second: 1], autoLinked: [first], workoutSource: .pending)
+        #expect(state.plan(for: initial) == .init(habitIDs: [second], cleanUpOrphans: true))
+
+        let editedWhilePending = snapshot(habits: [first: 2, second: 1], autoLinked: [first], workoutSource: .pending)
+        #expect(state.plan(for: editedWhilePending) == .init(habitIDs: [], cleanUpOrphans: false))
+
+        let resolved = snapshot(habits: [first: 2, second: 1], autoLinked: [first])
+        #expect(state.plan(for: resolved) == .init(habitIDs: [first], cleanUpOrphans: false))
     }
 }
