@@ -15,8 +15,10 @@ on:
       - 'scripts/lib/xcodebuild-resources.sh'
       - 'scripts/lib/regen-project.sh'
       - 'scripts/format-xcstrings.swift'
+      - 'scripts/generate-app-icon-assets.swift'
       - 'scripts/hooks/pre-commit.sh'
       - 'scripts/tests/test_format_xcstrings.py'
+      - 'scripts/tests/test_watch_primary_icon.py'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -39,6 +41,9 @@ jobs:
 
       - name: Validate string catalog extraction
         run: python3 -B -m unittest scripts.tests.test_format_xcstrings
+
+      - name: Check Watch primary icon matches iOS
+        run: python3 -B -m unittest scripts.tests.test_watch_primary_icon
 
       - name: Build iOS
         run: scripts/build-ios.sh
