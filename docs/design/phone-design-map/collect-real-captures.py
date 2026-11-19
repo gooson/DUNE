@@ -508,6 +508,7 @@ def render_portal() -> None:
             '.card img,.pending{display:block;width:100%;height:400px;object-fit:contain;image-orientation:from-image;background:#0b1112}'
             '.pending{display:grid;place-items:center;color:#91a09d}.meta{display:flex;justify-content:space-between;gap:12px;padding:16px}'
             '.meta span{color:#c9ad8e}</style><main><h1>DUNE · 전체 디자인맵</h1>'
+            '<p><a href="release-0.9.0/index.html">0.9.0 · 새 소식과 공지 상세</a></p>'
             '<p>iPhone·iPad·Duo의 현재 앱 실제 화면과 Watch 운동 재작업 결과를 한곳에서 확인합니다.</p>'
             '<p><a href="app-icon-2026-11-16/index.html" style="color:#e8bf94">82·71·87 앱 아이콘 선택 · P04·테마 자동색 · 시작 화면 실제 캡처 →</a></p>'
             '<p><a href="../../full-redesign-map/review/daily-summary-reading-2026-10-27/index.html" style="color:#e8bf94">오늘의 요약 · 핵심 먼저 · 관련 기기 통과·새 실제 화면25장 →</a></p>'

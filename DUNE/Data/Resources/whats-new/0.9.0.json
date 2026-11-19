@@ -1,0 +1,33 @@
+{
+  "version": "0.9.0",
+  "features": [
+    {
+      "id": "artistThemes",
+      "titleKey": "Nine Artist Themes",
+      "summaryKey": "Choose a theme for your health screens and change the app icon in Settings.",
+      "symbolName": "paintpalette",
+      "area": "settings"
+    },
+    {
+      "id": "watchWorkoutLiveActivity",
+      "titleKey": "Watch Workouts on the Lock Screen",
+      "summaryKey": "Start a workout on Apple Watch and check elapsed time or heart rate on your iPhone Lock Screen.",
+      "symbolName": "applewatch",
+      "area": "watch"
+    },
+    {
+      "id": "cardioRouteSharing",
+      "titleKey": "Outdoor Workout Routes",
+      "summaryKey": "View a recorded route on the map. When sharing it, you can hide the areas around the start and finish.",
+      "symbolName": "map",
+      "area": "activity"
+    },
+    {
+      "id": "siriHealthQueries",
+      "titleKey": "Ask Siri About Your Records",
+      "summaryKey": "Ask Siri about last night's sleep or this week's workouts.",
+      "symbolName": "waveform",
+      "area": "today"
+    }
+  ]
+}
