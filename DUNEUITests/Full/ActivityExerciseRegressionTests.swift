@@ -5247,6 +5247,17 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         finalLevel.auditTap()
         let selection = app.descendants(matching: .any)["cardio-level-history-selection"].firstMatch
         XCTAssertTrue(selection.label.hasSuffix("3"), "Selected level should follow the tapped final change")
+        let chart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
+        let scroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        for _ in 0..<8 {
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
+            if viewport.contains(CGPoint(x: chart.frame.midX, y: chart.frame.midY)) { break }
+            scroll.swipeDown(velocity: .slow)
+        }
+        XCTAssertTrue(scroll.frame.intersection(app.windows.firstMatch.frame)
+            .contains(CGPoint(x: chart.frame.midX, y: chart.frame.midY)))
+        addScreenshotAttachment(named: "R12-screen")
     }
 
     func testVisualAuditCardioAtDefaultTextSize() throws {
