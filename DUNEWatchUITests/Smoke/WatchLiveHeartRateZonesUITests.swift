@@ -40,6 +40,14 @@ final class WatchLiveHeartRateZonesUITests: WatchUITestBaseCase {
         XCTAssertFalse(app.staticTexts["watch-live-heart-rate-zone-label"].firstMatch.exists)
     }
 
+    func testRecentHeartRateHistoryHasGaps() {
+        relaunchApp(withAdditionalArguments: ["--ui-watch-heart-history"])
+        XCTAssertTrue(elementExists(WatchAXID.sessionPagingRoot, timeout: 10))
+        app.swipeLeft()
+        XCTAssertTrue(elementExists("watch-heart-rate-history", timeout: 5))
+        captureDesignState("C03")
+    }
+
     func testKilometerMilestoneAppearsOnCurrentPage() {
         relaunchApp(withAdditionalArguments: ["--ui-watch-kilometer-milestone"])
         XCTAssertTrue(elementExists("watch-cardio-main-metrics", timeout: 10))
