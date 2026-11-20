@@ -195,6 +195,41 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         }
     }
 
+    func testSparseSleepDateSelectionAndMissingDay() {
+        for (language, locale, missingText) in [
+            ("(en)", "en_US", "No record"),
+            ("(ko)", "ko_KR", "기록 없음")
+        ] {
+            var configuration = launchConfiguration
+            configuration.additionalEnvironment["DUNE_UI_SLEEP_SAMPLE_COUNT"] = "2"
+            if let languageIndex = configuration.additionalArguments.firstIndex(of: "-AppleLanguages") {
+                configuration.additionalArguments[languageIndex + 1] = language
+            }
+            if let localeIndex = configuration.additionalArguments.firstIndex(of: "-AppleLocale") {
+                configuration.additionalArguments[localeIndex + 1] = locale
+            }
+            launchApp(with: configuration)
+            navigateToWellness()
+            let count = reveal("wellness-sleep-observation-count")
+            XCTAssertTrue(count.label.contains("2"))
+
+            let missingDay = reveal("wellness-sleep-day-3")
+            XCTAssertTrue(missingDay.label.contains(missingText),
+                          "The missing calendar day must announce its actual state")
+            missingDay.tap()
+            let selectedEmpty = waitForElement("wellness-sleep-selected-empty", timeout: 5)
+            XCTAssertTrue(selectedEmpty.label.contains(missingText))
+            XCTAssertTrue(element("wellness-sleep-average").exists)
+            addScreenshotAttachment(named: "H01-sleep-selected-missing-\(locale)")
+
+            let observedDay = reveal("wellness-sleep-day-2")
+            XCTAssertFalse(observedDay.label.contains(missingText))
+            observedDay.tap()
+            let selectedValue = waitForElement("wellness-sleep-selected-value", timeout: 5)
+            XCTAssertFalse(selectedValue.label.contains(missingText))
+        }
+    }
+
     func testSparseSleepDarkAndAccessibility() {
         for maximumAX in [false, true] {
             var configuration = launchConfiguration
@@ -209,12 +244,14 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
             }
             launchApp(with: configuration)
             navigateToWellness()
-            reveal("wellness-sleep-bar-6")
+            reveal("wellness-sleep-day-6")
             let viewport = app.scrollViews.firstMatch.frame.intersection(app.windows.firstMatch.frame)
             for slot in [2, 6] {
-                let bar = waitForElement("wellness-sleep-bar-\(slot)", timeout: 10)
-                XCTAssertEqual(bar.frame.width, 16, accuracy: 0.5)
-                XCTAssertTrue(viewport.contains(bar.frame))
+                let day = waitForElement("wellness-sleep-day-\(slot)", timeout: 10)
+                XCTAssertGreaterThan(day.frame.width, 16)
+                XCTAssertTrue(viewport.contains(day.frame))
+                XCTAssertTrue(day.isHittable)
+                XCTAssertFalse(day.label.contains("No record"), "Seeded days 2 and 6 are observed")
             }
             if maximumAX {
                 let labels = [0, 3, 6].map { waitForElement("wellness-sleep-date-\($0)") }
@@ -238,7 +275,7 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         launchApp(with: configuration)
         navigateToWellness()
         XCTAssertTrue(reveal("wellness-sleep-empty-state").isHittable)
-        XCTAssertFalse(element("wellness-sleep-bar-6").exists)
+        XCTAssertFalse(element("wellness-sleep-day-6").exists)
         XCTAssertFalse(element("wellness-sleep-average").exists)
         addScreenshotAttachment(named: "H01-sleep-0-records")
     }
