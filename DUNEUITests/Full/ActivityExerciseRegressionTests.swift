@@ -5249,8 +5249,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue((chart.value as? String)?.contains("3") == true)
         let scroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 5))
-        for _ in 0..<8 where !finalLevel.isHittable { scroll.swipeUp(velocity: .slow) }
-        XCTAssertTrue(finalLevel.isHittable)
+        for _ in 0..<8 {
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 100)
+            if viewport.contains(finalLevel.frame) { break }
+            scroll.swipeUp(velocity: .slow)
+        }
+        let rowViewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 100)
+        XCTAssertTrue(rowViewport.contains(finalLevel.frame),
+                      "Final level row must be fully on screen before tapping")
         finalLevel.auditTap()
         let selection = app.descendants(matching: .any)["cardio-level-history-selection"].firstMatch
         XCTAssertTrue(selection.waitForExistence(timeout: 5) && selection.label.hasSuffix("3"),
