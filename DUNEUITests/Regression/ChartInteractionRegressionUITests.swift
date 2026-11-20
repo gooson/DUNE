@@ -328,6 +328,8 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         openTrainingVolumeDetail()
 
         let chart = trainingVolumeChart()
+        XCTAssertTrue(app.descendants(matching: .any)["training-load-selected-day"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["training-load-selected-value"].firstMatch.exists)
         let selectionProbe = waitForElement(AXID.trainingVolumeChartTrainingLoadSelectionProbe, timeout: 15)
         let initialRange = visibleRangeValue(of: chart)
         XCTAssertEqual(selectionProbe.label, "none", "Selection probe should be empty before long press")

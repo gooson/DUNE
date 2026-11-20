@@ -40,21 +40,39 @@ struct TrainingLoadChartView: View {
                     }
                 }
                 Spacer()
+            }
+
+            if data.isEmpty {
+                placeholderView
+            } else {
+                if let point = displayedPoint {
+                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                            Text(point.date, format: .dateTime.month(.abbreviated).day())
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
+                            Text(point.load.formattedWithSeparator(fractionDigits: 1))
+                                .font(.largeTitle.weight(.bold).monospacedDigit())
+                                .minimumScaleFactor(0.8)
+                                .accessibilityIdentifier("training-load-selected-value")
+                        }
+                        Spacer(minLength: 0)
+                    }
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("training-load-selected-day")
+                }
+
+                chartView
+                    .frame(height: 140)
+                    .clipped()
+                    .overlay { chartAccessibilitySurface }
+
                 if let summary = cachedWeekSummary {
                     Text(summary)
                         .accessibilityIdentifier("training-volume-chart-week-summary")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
                 }
-            }
-
-            if data.isEmpty {
-                placeholderView
-            } else {
-                chartView
-                    .frame(height: 140)
-                    .clipped()
-                    .overlay { chartAccessibilitySurface }
 
                 // Legend
                 HStack(spacing: DS.Spacing.md) {
@@ -220,6 +238,10 @@ struct TrainingLoadChartView: View {
 
     private var visibleRangeLabel: String {
         period.visibleRangeLabel(from: scrollPosition)
+    }
+
+    private var displayedPoint: TrainingLoadDataPoint? {
+        selectedPoint ?? data.max(by: { $0.date < $1.date })
     }
 
     private var selectedPoint: TrainingLoadDataPoint? {
