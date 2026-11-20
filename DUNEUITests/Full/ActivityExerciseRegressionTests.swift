@@ -3095,11 +3095,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(firstDay.waitForExistence(timeout: 10), "The seeded achievement date should exist")
         XCTAssertTrue(firstTitle.waitForExistence(timeout: 10), "The first seeded achievement should exist")
         let eventID = String(firstTitle.identifier.dropFirst(titlePrefix.count))
-        let firstEvent = app.descendants(matching: .any)["activity-personal-records-achievement-\(eventID)"].firstMatch
-        XCTAssertTrue(firstEvent.exists)
-        let points = firstEvent.staticTexts.matching(NSPredicate(
-            format: "label ENDSWITH %@", " pts"
-        )).firstMatch
+        XCTAssertFalse(eventID.isEmpty)
+        let firstDetail = app.staticTexts["activity-personal-records-achievement-detail-\(eventID)"].firstMatch
+        XCTAssertTrue(firstDetail.waitForExistence(timeout: 10),
+                      "The first visible title and detail should belong to the same seeded reward")
 
         func viewport() -> CGRect {
             let window = app.windows.firstMatch.frame
@@ -3120,19 +3119,16 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             let visible = viewport()
             if firstDay.frame.minY >= visible.minY,
                firstDay.frame.minY < visible.maxY,
-               visible.contains(firstTitle.frame) { break }
+               visible.contains(firstTitle.frame),
+               visible.contains(firstDetail.frame) { break }
             if firstDay.frame.minY < visible.minY { scroll.swipeDown(velocity: .slow) }
             else { scroll.swipeUp(velocity: .slow) }
         }
         let visible = viewport()
         XCTAssertTrue(firstDay.frame.minY >= visible.minY && firstDay.frame.minY < visible.maxY,
                       "The date group should begin in the visible detail viewport")
-        XCTAssertTrue(visible.contains(firstTitle.frame), "The first achievement should be fully visible")
-        XCTAssertTrue(firstDay.frame.intersects(firstEvent.frame),
-                      "The first achievement should belong to the first date group")
-        if points.exists {
-            XCTAssertTrue(visible.contains(points.frame), "Visible achievement points should fit the viewport")
-        }
+        XCTAssertTrue(visible.contains(firstTitle.frame), "The first achievement title should be fully visible")
+        XCTAssertTrue(visible.contains(firstDetail.frame), "The matching reward detail should be fully visible")
         VisualAudit.capture("A10 achievement date group and first reward")
         addScreenshotAttachment(named: "A10-achievement-date-group")
     }
