@@ -3124,12 +3124,26 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             if firstDay.frame.minY < visible.minY { scroll.swipeDown(velocity: .slow) }
             else { scroll.swipeUp(velocity: .slow) }
         }
+        // Bring the day rail near the top so the screenshot shows multiple same-day events.
+        for _ in 0..<8 {
+            let visible = viewport()
+            let displacement = firstDay.frame.minY - (visible.minY + 20)
+            if abs(displacement) < 16 { break }
+            let step = max(-160, min(160, displacement))
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -step)))
+        }
         let visible = viewport()
-        XCTAssertTrue(firstDay.frame.minY >= visible.minY && firstDay.frame.minY < visible.maxY,
-                      "The date group should begin in the visible detail viewport")
+        let secondTitle = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", titlePrefix
+        )).element(boundBy: 1)
+        XCTAssertTrue(firstDay.frame.minY >= visible.minY && firstDay.frame.minY <= visible.minY + 80,
+                      "The date group should start near the top of the visible detail viewport")
         XCTAssertTrue(visible.contains(firstTitle.frame), "The first achievement title should be fully visible")
         XCTAssertTrue(visible.contains(firstDetail.frame), "The matching reward detail should be fully visible")
-        VisualAudit.capture("A10 achievement date group and first reward")
+        XCTAssertTrue(secondTitle.exists && visible.contains(secondTitle.frame),
+                      "At least two same-day rewards should be visible in the native capture")
+        VisualAudit.capture("A10 achievement date group and first rewards")
         addScreenshotAttachment(named: "A10-achievement-date-group")
     }
 
