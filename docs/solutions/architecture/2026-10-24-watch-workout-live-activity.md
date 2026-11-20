@@ -34,8 +34,8 @@ WatchConnectivity의 운동 시작 메시지나 완료 기록 동기화는 iPhon
 2. iPhone은 `DUNEApp.init`의 데이터 저장소 초기화보다 먼저 `workoutSessionMirroringStartHandler`를 등록한다. 핸들러의 콜백 큐에서 즉시 라이브 액티비티를 요청한 뒤 MainActor에 세션 관리를 넘긴다. 첫 운동 데이터나 MainActor 초기화를 기다리지 않는다.
 3. Watch는 5초 간격 및 정지·재개·운동 변경 시 소형 `WatchWorkoutSnapshot`을 보낸다. 경과 시간은 활성 시간이며, 시스템 타이머가 매초 표시를 갱신하므로 전송 주기를 늘릴 필요가 없다.
 4. iPhone은 세션 identity, 업데이트 시각, 시작 시각, 수치 범위를 검증한다. nil 시작 시각의 임시값은 첫 유효한 Watch 패킷만 한 번 보정할 수 있다. ActivityKit 작업을 직렬 처리해 갱신·종료 경합을 방지한다.
-5. Watch 장애당 5초 후 한 번만 자동 재시도한다. 재시도 예산은 실제 첫 전송 성공 후 초기화하고, 실패 소진 후에는 실제 WatchConnectivity 연결 해제→연결 이벤트만 재개를 허용한다. 중복 오류가 예약된 재시도를 취소하지 않게 한다.
-6. 별도 운동 attributes와 위젯을 등록해 기존 휴식 액티비티를 유지한다. 오래된 상태는 30초 staleDate 뒤 수치를 숨기고 연결 대기를 표시한다. 정지 시 타이머를 고정하고 compact/minimal에 정지 아이콘을 쓴다.
+5. Watch는 운동 중 전송 오류가 발생하면 5초 뒤 미러링을 다시 시작한다. 실패가 반복되면 대기 시간을 두 배씩 늘려 최대 2분 간격으로 재시도한다. 예약 중 iPhone이 다시 연결되면 바로 시도하고, 전송 성공이나 세션 정리 시 간격을 초기화한다.
+6. 별도 운동 attributes와 위젯을 등록해 기존 휴식 액티비티를 유지한다. 마지막 Watch 표본에서 5분이 지나면 수치를 숨기고 연결 대기를 표시한다. 정지 시 타이머를 고정하고 compact/minimal에 정지 아이콘을 쓴다.
 
 Apple은 [WWDC23 multi-device workout 안내](https://developer.apple.com/videos/play/wwdc2023/10023/)와 [미러링 시작 핸들러 문서](https://developer.apple.com/documentation/healthkit/hkhealthstore/workoutsessionmirroringstarthandler)에서 iPhone 백그라운드 실행과 이 핸들러의 라이브 액티비티 시작 권한을 설명한다. 설치된 SDK의 `HKHealthStore.h`에서도 해당 일회성 권한을 확인했다.
 
@@ -64,7 +64,7 @@ Apple은 [WWDC23 multi-device workout 안내](https://developer.apple.com/videos
 - Watch에서 시작하는 기능은 iPhone에서 먼저 시작해야 하는 기능과 분리해 호출 경로를 확인한다.
 - 백그라운드 시작 권한을 얻는 핸들러에서는 첫 데이터나 MainActor 작업을 기다리지 않는다.
 - 비동기 콜백의 상태는 actor hop 전에 값으로 캡처한다. 하나의 판단에 쓰는 날짜와 fallback 여부는 같은 읽기에서 결정한다.
-- 연결 오류, 중복 오류, 소진된 재시도, 실제 재연결을 별도 상태로 테스트한다. Swift Testing 매크로 안에서 mutating 호출을 하지 않고 먼저 결과를 계산한다.
+- 연결 오류, 중복 오류, 연속 실패 시 대기 상한, 실제 재연결을 별도 상태로 테스트한다. Swift Testing 매크로 안에서 mutating 호출을 하지 않고 먼저 결과를 계산한다.
 - 정지·진행 시스템 타이머의 표시 폭과 정렬을 실제 캡처에서 비교한다. 캡처는 현재 구현과 일치시킨다.
 
 ## Lessons Learned
@@ -84,3 +84,11 @@ Apple은 [WWDC23 multi-device workout 안내](https://developer.apple.com/videos
 브랜드 식별 보완: 운동 정보만으로 DUNE임을 알아보기 어렵다는 피드백에 따라 공통 헤더의 상태 행을 `DUNE · 운동` 형태로 바꿨다. 번역하지 않는 작은 bold rounded 워드마크에 자간과 기존 액센트를 적용하며 카드 행·높이를 늘리지 않는다. UI 테스트에 브랜드 이름·식별자·포함 프레임 검사를 추가했다. 이전 실제 PNG는 모두 워드마크 추가 전으로 표시했다. SDK 결과 정리 문제의 정상화가 확인되지 않아 후속 UI 실행과 새 캡처는 보류했으며, 빌드 결과는 `.xcodebuild/live-activity-brand-build.log`에 기록한다.
 
 2026-10-25 Watch 종료 후 `연결 대기`가 남는 경로를 보완했다. 취소되는 최종 미러 패킷에 의존하지 않고 WC terminal snapshot을 ActivityKit end에 연결한다. 정확한 Watch 시작 시각·lifecycle 순서·초기 identity 보류·cold orphan 정리와 검증 한계는 [종료 정리 해결 문서](../general/2026-10-25-watch-workout-ended-live-activity-cleanup.md)를 따른다.
+
+## 2026-11-21 운동 중 백그라운드 갱신 지연
+
+운동 중 iPhone을 잠그면 카드가 연결 대기로 바뀌고 앱을 열면 다시 갱신되는 사례가 있었다. Watch가 5초마다 보내더라도 iOS가 일시 정지되면 HealthKit은 여러 분의 데이터를 모아서 전달할 수 있다. 종전 30초 만료 시간은 정상적인 전달 지연에도 연결 대기를 표시했다. [Apple의 백그라운드 운동 데이터 전달 설명](https://developer.apple.com/documentation/healthkit/hkworkoutsessiondelegate/workoutsession%28_%3Adidreceivedatafromremoteworkoutsession%3A%29)
+
+카드 생성과 갱신은 같은 만료 계산을 사용한다. 5분은 앱이 선택한 유예 시간이며 Watch의 표본 시각을 기준으로 계산한다. 미러를 다시 붙일 때 생성한 임시 상태보다 먼저 측정된 표본도 같은 운동의 첫 Watch 데이터이면 반영한다. 워치 표본은 측정 시각 순서로 적용하고, 표본보다 뒤에 관측한 일시 정지·재개는 순서대로 타이머에 반영한다. 심박수 등 수치의 표시 기한은 원래 표본 시각을 기준으로 한다. 실제 전송 오류가 이어지면 위의 재시도 정책을 적용한다.
+
+전용 iPhone 시뮬레이터에서 iPhone·Watch·Widget 타깃을 빌드하고 `WatchWorkoutActivityTests`와 `WorkoutMirrorRetryPolicyTests` 27건이 통과했다. 잠긴 실물 iPhone과 Watch에서의 백그라운드 전달 간격과 프로세스 종료 후 복구는 미검증이다.
