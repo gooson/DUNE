@@ -3101,6 +3101,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.activityPersonalRecordsAchievementHistory].firstMatch.waitForExistence(timeout: 15),
             "Personal Records detail should show the achievement history"
         )
+        let dayHeaders = app.descendants(matching: .any).matching(
+            NSPredicate(format: "identifier BEGINSWITH %@", "activity-personal-records-achievement-day-")
+        )
+        XCTAssertGreaterThan(dayHeaders.count, 0, "Seeded achievements should group by day")
         if VisualAudit.isEnabled {
             let scroll = app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch
             XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Personal Records should own its scroll viewport")
