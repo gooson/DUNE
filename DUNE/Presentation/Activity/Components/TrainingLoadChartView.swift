@@ -257,26 +257,21 @@ struct TrainingLoadChartView: View {
 
     /// This week's total vs last week
     private func computeWeekSummary() -> String? {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        guard let weekAgo = calendar.date(byAdding: .day, value: -7, to: today),
-              let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: today)
-        else { return nil }
+        guard let totals = TrainingLoadWeekTotals(data: data, today: Date(), calendar: .current) else { return nil }
+        let thisWeek = totals.current
+        let lastWeek = totals.previous
 
-        let thisWeek = data.filter { $0.date >= weekAgo }.reduce(0) { $0 + $1.load }
-        let lastWeek = data.filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }.reduce(0) { $0 + $1.load }
-
-        guard thisWeek > 0 else { return nil }
+        guard thisWeek > 0 || lastWeek > 0 else { return nil }
 
         let formattedTotal = thisWeek.formattedWithSeparator(fractionDigits: 1)
         if lastWeek > 0 {
             let change = ((thisWeek - lastWeek) / lastWeek) * 100
-            guard change.isFinite, !change.isNaN else { return String(localized: "This week \(formattedTotal)") }
-            let arrow = change >= 0 ? "↑" : "↓"
+            guard change.isFinite, !change.isNaN else { return String(localized: "Last 7 days \(formattedTotal)") }
+            let arrow = change == 0 ? "" : (change > 0 ? "↑" : "↓")
             let formattedChange = abs(change).formattedWithSeparator()
-            return String(localized: "This week \(formattedTotal) (\(arrow)\(formattedChange)%)")
+            return String(localized: "Last 7 days \(formattedTotal) (\(arrow)\(formattedChange)%)")
         }
-        return String(localized: "This week \(formattedTotal)")
+        return String(localized: "Last 7 days \(formattedTotal)")
     }
 }
 

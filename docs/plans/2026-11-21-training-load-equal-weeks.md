@@ -1,0 +1,10 @@
+---
+tags: [training-load, date, calendar]
+date: 2026-11-21
+category: plan
+status: approved
+---
+# 훈련 부하 비교 기간 (R07)
+Activity 훈련량 상세의 TrainingLoadChartView에서 달력 기준 내일 0시를 배타적 종료 시각으로 사용한다. 최근 7일과 이전 7일은 겹치지 않으며 미래 표본과 14일 밖의 표본은 제외한다. 표시는 기존 포맷을 쓰고 변화가 0일 때 상승 화살표를 제거한다. 동일 부하, 경계일, DST가 포함된 주를 TrainingLoadWeekTotalsTests에서 확인하고 iOS 표준 빌드와 관련 테스트를 실행한다. 훈련 부하 선택 위계(R06)는 다음 독립 PR에서 다룬다.
+
+진행 순서: 계획 → 구현/빌드 → 변경 범위 UI 검증 → 리뷰/품질 → 해결 → 해결책 기록 → PR/머지.
