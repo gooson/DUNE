@@ -42,6 +42,7 @@ struct TrainingLoadChartView: View {
                 Spacer()
                 if let summary = cachedWeekSummary {
                     Text(summary)
+                        .accessibilityIdentifier("training-volume-chart-week-summary")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
                 }
@@ -71,9 +72,11 @@ struct TrainingLoadChartView: View {
             recalculateChartData()
             resetScrollPosition()
         }
-        .onChange(of: data.count) { _, _ in
+        .onChange(of: data) { previous, updated in
             recalculateChartData()
-            resetScrollPosition()
+            if previous.first?.date != updated.first?.date || previous.last?.date != updated.last?.date {
+                resetScrollPosition()
+            }
         }
     }
 
@@ -277,7 +280,7 @@ struct TrainingLoadChartView: View {
 
 // MARK: - Data Point
 
-struct TrainingLoadDataPoint: Identifiable {
+struct TrainingLoadDataPoint: Identifiable, Equatable {
     var id: Date { date }
     let date: Date
     let load: Double
