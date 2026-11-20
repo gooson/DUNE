@@ -192,11 +192,11 @@ struct CalculateCumulativeStressUseCaseTests {
 
     @Test("Score is always clamped to 0-100")
     func scoreClamped() {
-        let averages = (0..<14).map { i in
-            CalculateCumulativeStressUseCase.Input.DailyAverage(
-                date: Date().addingTimeInterval(TimeInterval(-i * 86400)),
-                value: Double((i % 5 + 1) * 90) // valid, extreme variation
-            )
+        let today = Date()
+        let averages: [CalculateCumulativeStressUseCase.Input.DailyAverage] = (0..<14).map { day in
+            let date = today.addingTimeInterval(-Double(day) * 86_400)
+            let value = Double((day % 5) + 1) * 90
+            return .init(date: date, value: value)
         }
         let input = CalculateCumulativeStressUseCase.Input(hrvDailyAverages: averages)
         let result = sut.execute(input: input)

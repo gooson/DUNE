@@ -149,6 +149,7 @@ final class TodayCompactUITests: SeededUITestBaseCase {
         XCTAssertTrue(element("dashboard-stress-source-hrv").label.contains("Recorded"))
         XCTAssertTrue(element("dashboard-stress-source-sleep").label.contains("No record"))
         XCTAssertTrue(element("dashboard-stress-source-training").label.contains("Recorded"))
+        addScreenshotAttachment(named: "T03-stress-evidence-unavailable")
     }
 
     func testInsightDismissTargetIncludesItsPadding() {
