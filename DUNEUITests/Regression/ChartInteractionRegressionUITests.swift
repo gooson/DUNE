@@ -346,6 +346,7 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             "none",
             "Long press selection should update the training load selection probe"
         )
+        addScreenshotAttachment(named: "R06-screen")
     }
 
     func testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList() throws {
