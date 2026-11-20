@@ -50,126 +50,68 @@ struct CardioSessionSummaryView: View {
                 .font(.system(size: 56))
                 .foregroundStyle(DS.Color.positive)
 
-            Text("Workout Complete!")
+            Text(exercise.localizedName)
                 .font(.title2.weight(.bold))
                 .multilineTextAlignment(.center)
 
-            Text(exercise.localizedName)
+            Text("Workout Complete!")
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(DS.Color.textSecondary)
         }
     }
 
-    // MARK: - Metrics Grid
-
-    private var metricRowLayout: AnyLayout {
-        dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(spacing: DS.Spacing.md))
-            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
-    }
+    // MARK: - Results
 
     private var metricsGrid: some View {
-        VStack(spacing: DS.Spacing.md) {
-            metricRowLayout {
-                summaryCard(
-                    title: "Duration",
-                    value: viewModel.formattedElapsed,
-                    icon: "timer",
-                    color: DS.Color.activity
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            if viewModel.showsDistance {
+                primaryResult(
+                    title: "Distance",
+                    value: "\(viewModel.formattedDistance) km"
                 )
+                .accessibilityIdentifier("cardio-summary-distance")
 
-                if viewModel.showsDistance {
-                    summaryCard(
-                        title: "Distance",
-                        value: "\(viewModel.formattedDistance) km",
-                        icon: "location.fill",
-                        color: DS.Color.positive
-                    )
-                }
+                Text(viewModel.formattedElapsed)
+                    .font(.title2.weight(.semibold).monospacedDigit())
+                    .accessibilityIdentifier("cardio-summary-duration")
+                Text("Duration")
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
+            } else {
+                primaryResult(title: "Duration", value: viewModel.formattedElapsed)
+                    .accessibilityIdentifier("cardio-summary-duration")
             }
 
-            metricRowLayout {
+            VStack(spacing: 0) {
                 if viewModel.showsDistance {
-                    summaryCard(
-                        title: "Avg Pace",
-                        value: "\(viewModel.formattedPace) /km",
-                        icon: "speedometer",
-                        color: DS.Color.activity
-                    )
+                    metricRow(title: "Avg Pace", value: "\(viewModel.formattedPace) /km")
                 } else if viewModel.supportsMachineLevel {
-                    summaryCard(
-                        title: "Avg Level",
-                        value: viewModel.formattedAverageMachineLevel,
-                        icon: "sum",
-                        color: DS.Color.activity
-                    )
+                    metricRow(title: "Avg Level", value: viewModel.formattedAverageMachineLevel)
                 }
-
-                summaryCard(
-                    title: "Calories",
-                    value: "\(Int(viewModel.estimatedCalories)) kcal",
-                    icon: "flame.fill",
-                    color: DS.Color.caution
-                )
-            }
-
-            metricRowLayout {
-                summaryCard(
-                    title: "Steps",
-                    value: summaryStepsValue,
-                    icon: "figure.walk",
-                    color: DS.Color.steps
-                )
-
+                metricRow(title: "Calories", value: "\(Int(viewModel.estimatedCalories)) kcal")
+                metricRow(title: "Steps", value: summaryStepsValue)
                 if viewModel.supportsMachineLevel {
-                    summaryCard(
-                        title: "Max Level",
-                        value: viewModel.formattedMaxMachineLevel,
-                        icon: "arrow.up.circle.fill",
-                        color: DS.Color.activity
-                    )
+                    metricRow(title: "Max Level", value: viewModel.formattedMaxMachineLevel)
                 } else {
-                    summaryCard(
+                    metricRow(
                         title: "Cadence",
                         value: viewModel.cadenceStepsPerMinute > 0
-                            ? "\(Int(viewModel.cadenceStepsPerMinute)) spm"
-                            : "--",
-                        icon: "gauge.with.dots.needle.50percent",
-                        color: DS.Color.activity
+                            ? "\(Int(viewModel.cadenceStepsPerMinute)) spm" : "--"
                     )
                 }
-            }
-
-            let hasElevation = viewModel.totalElevationGainMeters > 0
-            let hasVO2Max = viewModel.cardioFitnessVO2Max != nil
-
-            if hasElevation || hasVO2Max {
-                metricRowLayout {
-                    if hasElevation {
-                        summaryCard(
-                            title: "Elevation Gain",
-                            value: "\(Int(viewModel.totalElevationGainMeters)) m",
-                            icon: "mountain.2.fill",
-                            color: DS.Color.positive
-                        )
-                    }
-
-                    if let vo2Max = viewModel.cardioFitnessVO2Max {
-                        summaryCard(
-                            title: "Cardio Fitness",
-                            value: "\(String(format: "%.1f", vo2Max)) ml/kg/min",
-                            icon: "heart.circle.fill",
-                            color: DS.Color.heartRate
-                        )
-                    }
-
-                    if !(hasElevation && hasVO2Max) && !dynamicTypeSize.isAccessibilitySize {
-                        Color.clear.frame(maxWidth: .infinity)
-                    }
+                if viewModel.totalElevationGainMeters > 0 {
+                    metricRow(title: "Elevation Gain", value: "\(Int(viewModel.totalElevationGainMeters)) m")
+                }
+                if let vo2Max = viewModel.cardioFitnessVO2Max {
+                    metricRow(title: "Cardio Fitness", value: "\(String(format: "%.1f", vo2Max)) ml/kg/min")
                 }
             }
+            .padding(.horizontal, DS.Spacing.md)
+            .background(DS.Color.cardBackground, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+            .accessibilityIdentifier("cardio-summary-secondary-metrics")
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var summaryStepsValue: String {
@@ -179,25 +121,35 @@ struct CardioSessionSummaryView: View {
         return viewModel.formattedStepCount
     }
 
-    private func summaryCard(title: LocalizedStringKey, value: String, icon: String, color: SwiftUI.Color) -> some View {
-        VStack(spacing: DS.Spacing.sm) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundStyle(color)
-
+    private func primaryResult(title: LocalizedStringKey, value: String) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
             Text(value)
-                .font(.title3.weight(.bold).monospacedDigit())
-                .multilineTextAlignment(.center)
+                .font(.largeTitle.weight(.bold).monospacedDigit())
                 .fixedSize(horizontal: false, vertical: true)
-
             Text(title)
-                .font(.caption)
-                .multilineTextAlignment(.center)
+                .font(.subheadline)
                 .foregroundStyle(DS.Color.textSecondary)
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, DS.Spacing.md)
-        .background(DS.Color.cardBackground, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+        .accessibilityElement(children: .combine)
+    }
+
+    private func metricRow(title: LocalizedStringKey, value: String) -> some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xxs))
+            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: DS.Spacing.sm))
+        return layout {
+            Text(title)
+                .foregroundStyle(DS.Color.textSecondary)
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: DS.Spacing.sm) }
+            Text(value)
+                .fontWeight(.semibold)
+                .monospacedDigit()
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .font(.subheadline)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, DS.Spacing.sm)
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Save

@@ -5237,6 +5237,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         app.buttons[AXID.cardioSessionEnd].firstMatch.auditTap()
         app.buttons[AXID.cardioSessionConfirmEnd].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.descendants(matching: .any)["cardio-summary-duration"].firstMatch.exists)
+        XCTAssertFalse(app.descendants(matching: .any)["cardio-summary-distance"].firstMatch.exists)
         XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch.exists)
         XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch.exists)
     }
@@ -5311,6 +5313,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             XCTAssertTrue(app.staticTexts["Workout Complete!"].firstMatch.waitForExistence(timeout: 8),
                           "Summary title should render after the permission dialog is handled")
         }
+        let distance = app.descendants(matching: .any)["cardio-summary-distance"].firstMatch
+        let duration = app.descendants(matching: .any)["cardio-summary-duration"].firstMatch
+        XCTAssertTrue(distance.exists && duration.exists, "Running result and duration should be visible")
+        XCTAssertLessThan(distance.frame.minY, duration.frame.minY, "Distance should precede duration")
+        XCTAssertTrue(app.descendants(matching: .any)["cardio-summary-secondary-metrics"].firstMatch.exists)
         let save = app.buttons["cardio-session-summary-save"].firstMatch
         XCTAssertTrue(waitForHittable(save, timeout: 5), "Summary Save must be reachable\n\(app.debugDescription)")
         XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
