@@ -40,21 +40,41 @@ struct TrainingLoadChartView: View {
                     }
                 }
                 Spacer()
+            }
+
+            if data.isEmpty {
+                placeholderView
+            } else {
+                if let point = displayedPoint {
+                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                            Text(point.date, format: .dateTime.month(.abbreviated).day())
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
+                            Text(point.load.formattedWithSeparator(fractionDigits: 1))
+                                .font(.largeTitle.weight(.bold).monospacedDigit())
+                                .minimumScaleFactor(0.8)
+                                .accessibilityIdentifier("training-load-selected-value")
+                        }
+                        Spacer(minLength: 0)
+                    }
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("training-load-selected-day")
+                }
+
+                GeometryReader { geometry in
+                    chartView(availableWidth: geometry.size.width)
+                }
+                .frame(height: 140)
+                .clipped()
+                .overlay { chartAccessibilitySurface }
+
                 if let summary = cachedWeekSummary {
                     Text(summary)
                         .accessibilityIdentifier("training-volume-chart-week-summary")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
                 }
-            }
-
-            if data.isEmpty {
-                placeholderView
-            } else {
-                chartView
-                    .frame(height: 140)
-                    .clipped()
-                    .overlay { chartAccessibilitySurface }
 
                 // Legend
                 HStack(spacing: DS.Spacing.md) {
@@ -87,7 +107,7 @@ struct TrainingLoadChartView: View {
 
     // MARK: - Chart
 
-    private var chartView: some View {
+    private func chartView(availableWidth: CGFloat) -> some View {
         Chart {
             ForEach(data) { point in
                 BarMark(
@@ -96,6 +116,8 @@ struct TrainingLoadChartView: View {
                 )
                 .foregroundStyle(barColor(for: point))
                 .clipShape(RoundedRectangle(cornerRadius: 2))
+                .accessibilityLabel(Text(point.date, format: .dateTime.year().month(.wide).day()))
+                .accessibilityValue(Text(point.load.formattedWithSeparator(fractionDigits: 1)))
             }
 
             if cachedMovingAverage.count >= 2 {
@@ -118,7 +140,11 @@ struct TrainingLoadChartView: View {
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .day, count: period.chartAxisStrideCount)) { _ in
+            // Compact phone and Duo plots cannot fit seven localized month/day labels.
+            // Only the tick density changes; every bar remains selectable by date.
+            AxisMarks(values: .stride(by: .day, count: availableWidth < 500
+                                     ? max(2, period.chartAxisStrideCount)
+                                     : period.chartAxisStrideCount)) { _ in
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day())
                     .foregroundStyle(theme.sandColor)
                 AxisGridLine()
@@ -220,6 +246,10 @@ struct TrainingLoadChartView: View {
 
     private var visibleRangeLabel: String {
         period.visibleRangeLabel(from: scrollPosition)
+    }
+
+    private var displayedPoint: TrainingLoadDataPoint? {
+        selectedPoint ?? data.max(by: { $0.date < $1.date })
     }
 
     private var selectedPoint: TrainingLoadDataPoint? {
