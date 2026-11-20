@@ -47,7 +47,9 @@ struct ExerciseSessionDetailView: View {
                     )
                 }
                 cardioMetricsSection
-                CardioMachineLevelHistoryView(changes: record.cardioMachineLevelChanges)
+                CardioMachineLevelHistoryView(
+                    changes: record.cardioMachineLevelChanges, duration: record.duration
+                )
                 healthKitBadge
                 setsList
                 heartRateSection

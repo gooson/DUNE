@@ -5241,6 +5241,12 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertFalse(app.descendants(matching: .any)["cardio-summary-distance"].firstMatch.exists)
         XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch.exists)
         XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch.exists)
+        let finalLevel = app.descendants(matching: .any)["cardio-level-history-row-2"].firstMatch
+        XCTAssertTrue(finalLevel.exists, "Two increases should record the final level of 3")
+        finalLevel.auditTap()
+        let selection = app.descendants(matching: .any)["cardio-level-history-selection"].firstMatch
+        XCTAssertTrue(selection.label.hasSuffix("3"), "Selected level should follow the tapped final change")
     }
 
     func testVisualAuditCardioAtDefaultTextSize() throws {
