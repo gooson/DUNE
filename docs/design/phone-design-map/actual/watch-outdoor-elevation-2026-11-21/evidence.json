@@ -1,0 +1,38 @@
+{
+  "feature": "R04",
+  "branch_source_before_evidence": "5ecf086fbbc85ea17845dc3020395aa8fde67d22",
+  "device": "Apple Watch Series 12 (46mm)",
+  "runtime": "watchOS 27.2",
+  "device_udid": "20F1C441-B5FE-46DC-9895-31B64EED3F2C",
+  "native_pixels": [
+    416,
+    496
+  ],
+  "test_bundle": "Test-DUNEWatchUITests-2026.11.21_03-26-11-+0900.xcresult",
+  "fixture": "seeded workout",
+  "scope": "Combined build of approved functional branches; screenshots correspond to the selected state.",
+  "verified_source_sha256": {
+    "DUNEWatch/Models/WatchElevationProfile.swift": "98fa34cf8afda0c4b511fa2378451d0843cd2c8120db92e3dbeb5fd6e7323979",
+    "DUNEWatch/Views/Cardio/CardioSecondaryPage.swift": "3ee6e115343e72d92a523894263032d9bfa71a5753492b61864f775134309a61"
+  },
+  "captures": [
+    {
+      "state": "C04",
+      "caption": "현재 고도 148m, 누적 상승 48m",
+      "file": "C04.png",
+      "sha256": "e6324fdd60d9b0ffcc682e7d83abe4d4f223538ace61843d9a89480e1fe95b98",
+      "selector": "WatchOutdoorElevationUITests/testOutdoorElevationUsesMeasuredFixture()",
+      "xctest_attachment": "watch-design-map-C04-outdoor-elevation_0_ACD8F0A9-694B-4164-9F4B-9F2FCE8E9DDB.png",
+      "timestamp": 1795199251.541
+    },
+    {
+      "state": "C04-empty",
+      "caption": "유효한 고도 기록이 없는 상태",
+      "file": "C04-empty.png",
+      "sha256": "58579792bfccc711fe34eccf42b82e6f933415693bcf5cdd261b60323628c281",
+      "selector": "WatchOutdoorElevationUITests/testUnavailableAltitudeHasNoGraph()",
+      "xctest_attachment": "watch-design-map-C04-outdoor-elevation-unavailable_0_A1B30DC0-BA2F-4AF7-A7B0-0F4B8A631D0D.png",
+      "timestamp": 1795199264.554
+    }
+  ]
+}

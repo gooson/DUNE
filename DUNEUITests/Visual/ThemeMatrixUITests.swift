@@ -157,11 +157,11 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
             XCTAssertTrue(average.waitForExistence(timeout: 5), "\(state): sleep average should load")
 
             let scoreBounds = scoreLink.frame.insetBy(dx: -1, dy: -1)
-            let sleepBounds = sleepLink.frame.insetBy(dx: -1, dy: -1)
+            let sleepBounds = app.descendants(matching: .any)["wellness-sleep-summary-card"].firstMatch.frame
             XCTAssertTrue(scoreBounds.contains(narrative.frame), "\(state): narrative should fit inside the score link")
-            for item in [latest, average] {
-                XCTAssertTrue(sleepBounds.contains(item.frame), "\(state): \(item.identifier) should fit inside the sleep link")
-            }
+            XCTAssertLessThanOrEqual(sleepLink.frame.maxY, latest.frame.minY + 1,
+                                     "\(state): interactive sleep dates follow the detail header")
+            XCTAssertLessThanOrEqual(sleepBounds.minY, latest.frame.minY)
             XCTAssertGreaterThanOrEqual(average.frame.minY, latest.frame.maxY - 1,
                                         "\(state): average should follow the latest sleep duration")
             if category == nil {

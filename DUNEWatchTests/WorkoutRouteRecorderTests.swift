@@ -198,6 +198,58 @@ struct WorkoutRouteRecorderTests {
         #expect(!recorder.isRecording)
     }
 
+    @Test("Measured altitude honors accuracy, pause, and segment boundaries")
+    func measuredElevation() {
+        var profile = WatchElevationProfile()
+        let start = date
+        profile.observe(altitude: 100, at: start, beginsSegment: true)
+        profile.observe(altitude: 102, at: start.addingTimeInterval(1), beginsSegment: false)
+        #expect(profile.ascentMeters == 0)
+        profile.observe(altitude: 104, at: start.addingTimeInterval(2), beginsSegment: false)
+        #expect(profile.ascentMeters == 4)
+        profile.breakSegment()
+        profile.observe(altitude: 120, at: start.addingTimeInterval(10), beginsSegment: true)
+        #expect(profile.ascentMeters == 4)
+        profile.observe(altitude: nil, at: start.addingTimeInterval(11), beginsSegment: false)
+        #expect(profile.currentAltitude == nil)
+        profile.observe(altitude: 130, at: start.addingTimeInterval(12), beginsSegment: true)
+        #expect(profile.ascentMeters == 4)
+    }
+
+    @Test("Outdoor chart keeps elapsed-time gaps instead of packing valid points together")
+    func elevationChartGaps() {
+        let end = date.addingTimeInterval(1_800)
+        var profile = WatchElevationProfile()
+        profile.observe(altitude: 100, at: end.addingTimeInterval(-900), beginsSegment: true)
+        profile.breakSegment()
+        profile.observe(altitude: 104, at: end.addingTimeInterval(-60), beginsSegment: true)
+        let buckets = profile.chartBuckets(endingAt: end)
+        #expect(buckets.count == 60)
+        #expect(buckets[30] == 100)
+        #expect(buckets[58] == 104)
+        #expect(buckets[31] == nil)
+        #expect(buckets[57] == nil)
+        #expect(profile.ascentMeters == 0)
+        #expect(profile.currentAltitude(at: end) == nil)
+    }
+
+    @Test("Outdoor recorder rejects inaccurate altitude while retaining route points")
+    func verticalAccuracyGatesAltitude() {
+        let recorder = WorkoutRouteRecorder(locationManager: LocationProvider())
+        recorder.start(at: date)
+        let inaccurate = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37, longitude: 127),
+                                    altitude: 110, horizontalAccuracy: 5, verticalAccuracy: 30, timestamp: date)
+        recorder.receive([inaccurate], at: date)
+        #expect(recorder.points.count == 1)
+        #expect(recorder.elevationProfile.samples.isEmpty)
+        let valid = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37, longitude: 127.00001),
+                               altitude: 100, horizontalAccuracy: 5, verticalAccuracy: 5,
+                               timestamp: date.addingTimeInterval(1))
+        recorder.receive([valid], at: date.addingTimeInterval(1))
+        #expect(recorder.elevationProfile.currentAltitude == 100)
+        recorder.cancel()
+    }
+
     @Test("Route memory is bounded and reusing a recorder excludes earlier-session samples")
     func boundAndReuse() {
         let recorder = WorkoutRouteRecorder(locationManager: LocationProvider())

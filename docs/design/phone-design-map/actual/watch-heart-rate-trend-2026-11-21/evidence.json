@@ -1,0 +1,28 @@
+{
+  "feature": "R03",
+  "branch_source_before_evidence": "10b64562188282250898c455651a01118f7e000b",
+  "device": "Apple Watch Series 12 (46mm)",
+  "runtime": "watchOS 27.2",
+  "device_udid": "20F1C441-B5FE-46DC-9895-31B64EED3F2C",
+  "native_pixels": [
+    416,
+    496
+  ],
+  "test_bundle": "Test-DUNEWatchUITests-2026.11.21_03-26-11-+0900.xcresult",
+  "fixture": "seeded workout",
+  "scope": "Combined build of approved functional branches; screenshots correspond to the selected state.",
+  "verified_source_sha256": {
+    "DUNEWatch/Models/WatchHeartRateHistory.swift": "48b0171a369f673c5df72caa4e381fc1d360d9676993fdb9e72cdbc6d0ed328e"
+  },
+  "captures": [
+    {
+      "state": "C03",
+      "caption": "수신 공백이 있는 30분 심박 기록",
+      "file": "C03.png",
+      "sha256": "5a7585b0bda40ffd8f33a0dac3aa9d882f522d189f429818458bbe8871285f3d",
+      "selector": "WatchLiveHeartRateZonesUITests/testRecentHeartRateHistoryHasGaps()",
+      "xctest_attachment": "watch-design-map-C03_0_D8B29988-B120-403B-8D24-AB9F96F5F667.png",
+      "timestamp": 1795199230.84
+    }
+  ]
+}

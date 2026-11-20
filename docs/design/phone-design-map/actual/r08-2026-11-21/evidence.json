@@ -1,0 +1,465 @@
+{
+  "feature": "R08",
+  "screens": [
+    "A01"
+  ],
+  "source": {
+    "source_revision": "09afc8f23f743768c82730672f4e2abefa7de052",
+    "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20,9d56a10d504b9970029186331187604a962cf472,dfea466897aefd82e290e29b81531b027a2b2258,0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+    "combined_build": true,
+    "fixture": "A01 준비도 근거 일부 및 없음",
+    "locale": "화면별 테스트 언어",
+    "appearance": "화면별 테스트 설정",
+    "notes": "각 이미지를 통과한 개별 UI 테스트에 연결했다. Duo 내부 화면은 지정된 체크포인트에서 활성 LCD-1 프레임버퍼를 직접 캡처했다. 파일별 빌드·크기·관찰 결과는 아래 기록에 있다.",
+    "branch_comparison": {
+      "base": "b1fdbc1564dc130bd99375643eb1a3e0ef17a353",
+      "branches": {
+        "load-equal-weeks": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "load-selected-date": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "cardio-summary-hierarchy": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "machine-level-profile": "95481eed6980e593252656bcd47ada549178285f",
+        "achievement-day-groups": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "sleep-observed-days": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "readiness-evidence": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "readiness-score-bands": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "stress-source-evidence": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f"
+      },
+      "verified_source": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "identical_directories": [
+        "DUNE",
+        "Shared",
+        "DUNETests",
+        "DUNEUITests",
+        "DUNEWatch",
+        "DUNEWatchTests",
+        "DUNEWatchUITests"
+      ],
+      "source_trees": {
+        "DUNE": "838f24417a197ba9a3a7f771803a234e31d829ef",
+        "Shared": "107daa92979696e109a16a53e8569202f92490b8",
+        "DUNETests": "ad2cc01fada0a800d96e39638c2cd3469bd235fd",
+        "DUNEUITests": "42da1717fc25fcf7259c71be2405a8c5309f85cd",
+        "DUNEWatch": "08312632eec0a3627604fdddbf491f3bf2fff22e",
+        "DUNEWatchTests": "91eccbfe9ff3f61f2e7b21f0c99298f2576330a0",
+        "DUNEWatchUITests": "443eeaadb2b39e186eae87778b31c9d360d82a03"
+      }
+    }
+  },
+  "assets": [
+    {
+      "device": "regular",
+      "artifact": "A01-readiness-evidence-none",
+      "selector": "ActivityFlowUITests/testReadinessEvidenceStatesCapturePartialAndEmpty",
+      "original_name": "B8D8D22B-CA83-40D6-9821-E447047CBFA4.png",
+      "sha256": "9763d904af818b86aa4588e634e9306e5554869a46c997d92b02db159148022d",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795199886.996,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "A01-readiness-evidence-none_0_DFD3D6FE-A319-405E-B35F-3BA516043211.png",
+      "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20",
+      "xcresult_manifest_sha256": "7aa974c75e670f9df598791928e4e3f7aff808948e4991b3b8c51834fb00ed8c",
+      "passed_case_receipt_sha256": "64a83b1cf5883f96adbee99aef887071867fff3877398dcdab3fafeb91a11834",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/B8D8D22B-CA83-40D6-9821-E447047CBFA4.png",
+      "device_source": {
+        "source_revision": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20",
+        "combined_build": true
+      },
+      "visual_observation": "근거 일부 상태에는 Recovery가 표시되고, 근거 없음 상태에는 점수 대신 안내가 보인다. 빈 기록 테스트 기기에서는 권한 확인 안내도 함께 보인다."
+    },
+    {
+      "device": "regular",
+      "artifact": "A01-readiness-evidence-partial",
+      "selector": "ActivityFlowUITests/testReadinessEvidenceStatesCapturePartialAndEmpty",
+      "original_name": "8994782D-09CC-46AA-8153-6617CA3C1E65.png",
+      "sha256": "60e2c5141c049e13674c857dae0d387480a0ae7cbdf2389f67ec19cb52dd2f8e",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795199877.434,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "A01-readiness-evidence-partial_0_E2E9B3C3-4EAC-420C-B717-3E77F7937744.png",
+      "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20",
+      "xcresult_manifest_sha256": "7aa974c75e670f9df598791928e4e3f7aff808948e4991b3b8c51834fb00ed8c",
+      "passed_case_receipt_sha256": "64a83b1cf5883f96adbee99aef887071867fff3877398dcdab3fafeb91a11834",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/8994782D-09CC-46AA-8153-6617CA3C1E65.png",
+      "device_source": {
+        "source_revision": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20",
+        "combined_build": true
+      },
+      "visual_observation": "근거 일부 상태에는 Recovery가 표시되고, 근거 없음 상태에는 점수 대신 안내가 보인다. 빈 기록 테스트 기기에서는 권한 확인 안내도 함께 보인다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "A01-readiness-evidence-none",
+      "selector": "ActivityFlowUITests/testReadinessEvidenceStatesCapturePartialAndEmpty",
+      "original_name": "25DE7C3C-BE83-4CCF-83F3-E914230642B2.png",
+      "sha256": "d42a4b2e952fba1546adf71af1770434c7dc1f60a1246e082fc30fc7ffa4d4c1",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795201536.838,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "A01-readiness-evidence-none_0_C935334A-9510-426A-9F8F-BE771500A37C.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "979ee6cc0f28d5f6082c7d7bcede1aafaa02add1b982c7b95cbe5fc5578250e1",
+      "passed_case_receipt_sha256": "e286c2f12ed70d1bb319b29f019ebf72aec0ffe2922f04859e067573bafbd411",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/25DE7C3C-BE83-4CCF-83F3-E914230642B2.png",
+      "device_source": {
+        "source_revision": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "iPad mini 실기기 캡처: 부분 입력은 점수 없이 Available Data와 Recovery를 표시한다. 무입력은 Need More Data로 표시되지만 상단에 HealthKit 권한 오류 배너가 겹쳐 별도 원인 확인이 필요하다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "A01-readiness-evidence-partial",
+      "selector": "ActivityFlowUITests/testReadinessEvidenceStatesCapturePartialAndEmpty",
+      "original_name": "5F9739D6-7AB6-477A-A61D-B797CB5E77E9.png",
+      "sha256": "fa96e9a1b4fc746d50479e4702aa7e185fd7960080351d583ff4d451d7acb7c8",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795201527.017,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "A01-readiness-evidence-partial_0_7E639385-6E8B-434D-A84A-C25009D4398E.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "979ee6cc0f28d5f6082c7d7bcede1aafaa02add1b982c7b95cbe5fc5578250e1",
+      "passed_case_receipt_sha256": "e286c2f12ed70d1bb319b29f019ebf72aec0ffe2922f04859e067573bafbd411",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/5F9739D6-7AB6-477A-A61D-B797CB5E77E9.png",
+      "device_source": {
+        "source_revision": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "iPad mini 실기기 캡처: 부분 입력은 점수 없이 Available Data와 Recovery를 표시한다. 무입력은 Need More Data로 표시되지만 상단에 HealthKit 권한 오류 배너가 겹쳐 별도 원인 확인이 필요하다."
+    },
+    {
+      "device": "duo",
+      "artifact": "A01-readiness-evidence-none",
+      "selector": "ActivityFlowUITests/testReadinessEvidenceStatesCapturePartialAndEmpty",
+      "original_name": "D8B41C34-1715-462C-AAC3-D023DA70DEF8.png",
+      "sha256": "5f4e96442286601b663732341d162f50d0f40d77f22d0aeffe08e7e52efab2a5",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795202807.726,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "A01-readiness-evidence-none_0_3B4A23D0-462D-43BC-AA36-22C6627CC016.png",
+      "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+      "xcresult_manifest_sha256": "ba7b06347bfd56eee263f95f398799d107d5a03af2ca5bad99b50d1f0844c0cb",
+      "passed_case_receipt_sha256": "48d549ff2c317deea8b25b110dbc4aa8db78ec622d819049fa81fe9f41a54213",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "d03007691624d1146fdb5d73bcb257d423b1dc78acd95ef843cdabef1810caf4"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "89725a047b957426c22353c33db8a41a95e784e37645947f7b28c5b8106592d4"
+        }
+      },
+      "file": "images/duo/D8B41C34-1715-462C-AAC3-D023DA70DEF8.png",
+      "device_source": {
+        "source_revision": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 접힘 LCD 1398×2034 원본: 부분 입력은 점수 없이 Available Data/Recovery를, 무입력은 Need More Data를 표시한다. 무입력에서는 기존 활동 오류 분류로 HealthKit 권한 배너가 readiness 제목 상단을 덮는다."
+    },
+    {
+      "device": "duo",
+      "artifact": "A01-readiness-evidence-partial",
+      "selector": "ActivityFlowUITests/testReadinessEvidenceStatesCapturePartialAndEmpty",
+      "original_name": "CC9C683C-ACE0-4B58-9E10-97CB5630AA6D.png",
+      "sha256": "bbc23f0cf0fc6c62b603b3f9b35e652df3530700034d3222cafbd3af992376be",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795202798.977,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "A01-readiness-evidence-partial_0_583A6AF6-7D64-488A-8350-A6DE1E42BEE0.png",
+      "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+      "xcresult_manifest_sha256": "ba7b06347bfd56eee263f95f398799d107d5a03af2ca5bad99b50d1f0844c0cb",
+      "passed_case_receipt_sha256": "48d549ff2c317deea8b25b110dbc4aa8db78ec622d819049fa81fe9f41a54213",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "d03007691624d1146fdb5d73bcb257d423b1dc78acd95ef843cdabef1810caf4"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "89725a047b957426c22353c33db8a41a95e784e37645947f7b28c5b8106592d4"
+        }
+      },
+      "file": "images/duo/CC9C683C-ACE0-4B58-9E10-97CB5630AA6D.png",
+      "device_source": {
+        "source_revision": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 접힘 LCD 1398×2034 원본: 부분 입력은 점수 없이 Available Data/Recovery를, 무입력은 Need More Data를 표시한다. 무입력에서는 기존 활동 오류 분류로 HealthKit 권한 배너가 readiness 제목 상단을 덮는다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "A01-readiness-evidence-none",
+      "selector": "ActivityFlowUITests/testReadinessEvidenceStatesCapturePartialAndEmpty",
+      "original_name": "A01-readiness-evidence-none.png",
+      "sha256": "2039d51e95d96914bedf8af8e0b43959b812835e39b57eb4e37ab7a1339ede6c",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T20:03:30.195535+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "A01-readiness-evidence-none",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "e6d21c2609298f074c97db514c7fc7e2647cdf7c6df72dd855205ae72924da04",
+      "passed_case_receipt_sha256": "612d7fc26202811c7a6bb47b79e88d9400b0475f1b68d9e20931e8c16dcd271f",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "FE251C4A-61FE-4AC6-A228-D13D30111F85.png",
+        "human_name": "A01-readiness-evidence-none_0_4CC1DFE1-124E-4940-B8F1-62A9E9DD1F4D.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795205009.265
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    27.49s Added attachment named 'A01-readiness-evidence-none'",
+        "time_utc": "2026-11-20T20:03:30.195535+00:00",
+        "observer_receipt_sha256": "03cdee6ed72904475dff4cc50a8e63810a268feade5e9122a8b49ac0d53ba64f",
+        "observer_log": "dune-reference-open-extra-duo-open.log",
+        "case_result": "Passed"
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "a70239b4be367dfaee10d4867ee1b5c5b5902f8e7cdabd32a858bd729b699e01"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "5dbeaec7d3fbbcb3d5d2ee36ef2178f05af8defed338b6b499ac44458968a380"
+        }
+      },
+      "file": "images/duo-open/A01-readiness-evidence-none.png",
+      "device_source": {
+        "source_revision": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "펼친 Duo의 준비도 카드에 Need More Data가 보이고 점수는 표시되지 않는다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "A01-readiness-evidence-partial",
+      "selector": "ActivityFlowUITests/testReadinessEvidenceStatesCapturePartialAndEmpty",
+      "original_name": "A01-readiness-evidence-partial-host.png",
+      "sha256": "a14396dbd3996c8d80859becf0ba462886f2554da97c59698c668a0e3c0a7710",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T20:06:51.615390+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "A01-readiness-evidence-partial",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "251e83c40a12637889c568174cedf6c32f8aa6cd590ac148a590d078b18c6832",
+      "passed_case_receipt_sha256": "91dd8780d70be6e8ab1d957930747147911b7c1b3af73356f8f1c39ab3e649f3",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "0F798A55-44E1-4CCA-B5CC-2F057F6A4B7C.png",
+        "human_name": "A01-readiness-evidence-partial_0_05D7EAEF-C7EC-440B-BD54-9043EF807874.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795205211.337
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    21.11s Checking existence of `\"activity-hero-components\" Any`",
+        "time_utc": "2026-11-20T20:06:51.615390+00:00",
+        "observer_receipt_sha256": "0e01ecdc311a93dd18a7d13a0de3694a6ac66a9dcf110c72fb7d189ada8c4de5",
+        "observer_log": "dune-reference-open-r08-partial-duo-open.log",
+        "case_result": "Passed",
+        "attachment_event": "t =    22.07s Added attachment named 'A01-readiness-evidence-partial'",
+        "attachment_event_delta_seconds": 0.96
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "af2d096c5f445569f4b88287e2a429ba812885e29b66663194b85b3adb8f0ae9"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "4e5ce7cc92ee34948783d3d56eb3d008313796c2751171570654a0428a17fb75"
+        }
+      },
+      "file": "images/duo-open/A01-readiness-evidence-partial-host.png",
+      "device_source": {
+        "source_revision": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "펼친 Duo의 준비도 카드에 추가 기록 안내와 Available Data, Recovery가 보인다."
+    }
+  ],
+  "unverified_devices": [],
+  "uncaptured_artifacts_by_device": {
+    "regular": [],
+    "ipad": [],
+    "duo": [],
+    "duo-open": []
+  },
+  "unverified_screen_ids": [],
+  "visual_inspection": {
+    "status": "원본 화면 검토 완료",
+    "notes": "근거 일부 상태에는 Recovery가 표시되고, 근거 없음 상태에는 점수 대신 안내가 보인다. 빈 기록 테스트 기기에서는 권한 확인 안내도 함께 보인다. iPad mini 실기기 캡처: 부분 입력은 점수 없이 Available Data와 Recovery를 표시한다. 무입력은 Need More Data로 표시되지만 상단에 HealthKit 권한 오류 배너가 겹쳐 별도 원인 확인이 필요하다. Duo 접힘 LCD 1398×2034 원본: 부분 입력은 점수 없이 Available Data/Recovery를, 무입력은 Need More Data를 표시한다. 무입력에서는 기존 활동 오류 분류로 HealthKit 권한 배너가 readiness 제목 상단을 덮는다. 펼친 Duo의 준비도 카드에 Need More Data가 보이고 점수는 표시되지 않는다. 펼친 Duo의 준비도 카드에 추가 기록 안내와 Available Data, Recovery가 보인다.",
+    "reviewer": "기능별 캡처 검토"
+  }
+}

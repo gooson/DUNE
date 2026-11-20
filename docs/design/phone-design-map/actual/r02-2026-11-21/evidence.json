@@ -1,0 +1,662 @@
+{
+  "feature": "R02",
+  "screens": [
+    "H01"
+  ],
+  "source": {
+    "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+    "build_revision": "9d56a10d504b9970029186331187604a962cf472,1df57fcfd77f4a6a385fb80f626a872956185f3c,676e10da12b4cc957e8cb6eb516fbee14af5035f,dfea466897aefd82e290e29b81531b027a2b2258,0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+    "combined_build": true,
+    "fixture": "최근 7일의 수면 기록 1·2·4·7일과 선택한 누락일",
+    "locale": "화면별 테스트 언어",
+    "appearance": "화면별 테스트 설정",
+    "notes": "각 이미지를 통과한 개별 UI 테스트에 연결했다. Duo 내부 화면은 지정된 체크포인트에서 활성 LCD-1 프레임버퍼를 직접 캡처했다. 파일별 빌드·크기·관찰 결과는 아래 기록에 있다.",
+    "branch_comparison": {
+      "base": "b1fdbc1564dc130bd99375643eb1a3e0ef17a353",
+      "branches": {
+        "load-equal-weeks": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "load-selected-date": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "cardio-summary-hierarchy": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "machine-level-profile": "95481eed6980e593252656bcd47ada549178285f",
+        "achievement-day-groups": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "sleep-observed-days": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "readiness-evidence": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "readiness-score-bands": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "stress-source-evidence": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f"
+      },
+      "verified_source": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "identical_directories": [
+        "DUNE",
+        "Shared",
+        "DUNETests",
+        "DUNEUITests",
+        "DUNEWatch",
+        "DUNEWatchTests",
+        "DUNEWatchUITests"
+      ],
+      "source_trees": {
+        "DUNE": "838f24417a197ba9a3a7f771803a234e31d829ef",
+        "Shared": "107daa92979696e109a16a53e8569202f92490b8",
+        "DUNETests": "ad2cc01fada0a800d96e39638c2cd3469bd235fd",
+        "DUNEUITests": "42da1717fc25fcf7259c71be2405a8c5309f85cd",
+        "DUNEWatch": "08312632eec0a3627604fdddbf491f3bf2fff22e",
+        "DUNEWatchTests": "91eccbfe9ff3f61f2e7b21f0c99298f2576330a0",
+        "DUNEWatchUITests": "443eeaadb2b39e186eae87778b31c9d360d82a03"
+      }
+    }
+  },
+  "assets": [
+    {
+      "device": "regular",
+      "artifact": "H01-sleep-1-records",
+      "selector": "WellnessFlowUITests/testSparseSleepBarsKeepCalendarPositionsAndWidth",
+      "original_name": "AAC4B5D7-4469-484C-ADA1-9500B3607073.png",
+      "sha256": "1743d96cd683422e4edebf0efd813bff316d227bd34a67c443bf32769947528f",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795201017.421,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "H01-sleep-1-records_0_5E7FDC24-F69C-4504-87D9-710D774C6E05.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "9652dfda54ac310fd8f11de7c70a2a957ca24f055f5e30f4738ec02625013aad",
+      "passed_case_receipt_sha256": "58bf3b494080c885805bfeb42edddd3bfac95f78fea1953277a3365ee547f6bd",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/AAC4B5D7-4469-484C-ADA1-9500B3607073.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "최근 수면 시간·날짜와 관측일 수가 보인다. 기록 수에 따라 일곱 날짜 중 측정한 날에만 막대가 있고, 누락일을 선택하면 한국어·영어에서 날짜와 기록 부재가 함께 표시된다."
+    },
+    {
+      "device": "regular",
+      "artifact": "H01-sleep-2-records",
+      "selector": "WellnessFlowUITests/testSparseSleepBarsKeepCalendarPositionsAndWidth",
+      "original_name": "EA0E597E-35B8-49B4-B682-A0C0CE40F417.png",
+      "sha256": "7fb1f02e799b594aae027867e7b58dc027080710e46f311d32b7d2035b01b6c9",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795201051.132,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "H01-sleep-2-records_0_D30B6776-8697-46A5-A700-7A17487DF5FA.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "9652dfda54ac310fd8f11de7c70a2a957ca24f055f5e30f4738ec02625013aad",
+      "passed_case_receipt_sha256": "58bf3b494080c885805bfeb42edddd3bfac95f78fea1953277a3365ee547f6bd",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/EA0E597E-35B8-49B4-B682-A0C0CE40F417.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "최근 수면 시간·날짜와 관측일 수가 보인다. 기록 수에 따라 일곱 날짜 중 측정한 날에만 막대가 있고, 누락일을 선택하면 한국어·영어에서 날짜와 기록 부재가 함께 표시된다."
+    },
+    {
+      "device": "regular",
+      "artifact": "H01-sleep-4-records",
+      "selector": "WellnessFlowUITests/testSparseSleepBarsKeepCalendarPositionsAndWidth",
+      "original_name": "555C8C73-77D7-47E2-9338-CA316B3E83E6.png",
+      "sha256": "6bc7214bbce72dc5719285ddf11c746a9a237203a1f5d351c48c0c8075d14425",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795201084.055,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "H01-sleep-4-records_0_B5268BCD-C1B5-49CA-A0A7-344AA31CCA89.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "9652dfda54ac310fd8f11de7c70a2a957ca24f055f5e30f4738ec02625013aad",
+      "passed_case_receipt_sha256": "58bf3b494080c885805bfeb42edddd3bfac95f78fea1953277a3365ee547f6bd",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/555C8C73-77D7-47E2-9338-CA316B3E83E6.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "최근 수면 시간·날짜와 관측일 수가 보인다. 기록 수에 따라 일곱 날짜 중 측정한 날에만 막대가 있고, 누락일을 선택하면 한국어·영어에서 날짜와 기록 부재가 함께 표시된다."
+    },
+    {
+      "device": "regular",
+      "artifact": "H01-sleep-7-records",
+      "selector": "WellnessFlowUITests/testSparseSleepBarsKeepCalendarPositionsAndWidth",
+      "original_name": "B31530E8-04FE-40FD-ABAB-0634490096D0.png",
+      "sha256": "ff863ad9228537de12b9196080a522857ff41585232f04a77593330b7f19e76e",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795201116.27,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "H01-sleep-7-records_0_5BD9411B-83CF-48F3-A9EE-6FE2D5DF78F9.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "9652dfda54ac310fd8f11de7c70a2a957ca24f055f5e30f4738ec02625013aad",
+      "passed_case_receipt_sha256": "58bf3b494080c885805bfeb42edddd3bfac95f78fea1953277a3365ee547f6bd",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/B31530E8-04FE-40FD-ABAB-0634490096D0.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "최근 수면 시간·날짜와 관측일 수가 보인다. 기록 수에 따라 일곱 날짜 중 측정한 날에만 막대가 있고, 누락일을 선택하면 한국어·영어에서 날짜와 기록 부재가 함께 표시된다."
+    },
+    {
+      "device": "regular",
+      "artifact": "H01-sleep-selected-missing-en_US",
+      "selector": "WellnessFlowUITests/testSparseSleepDateSelectionAndMissingDay",
+      "original_name": "A73E31C8-E6A0-413D-96A9-E4BEC14AFE0A.png",
+      "sha256": "2e44adf280a22d2fd4b0055d15c1886eeb3b2747c4d53701e2ac1e9a85f4617e",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795201148.395,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "H01-sleep-selected-missing-en_US_0_188A595E-BC12-4959-AA33-E870076B3432.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "9652dfda54ac310fd8f11de7c70a2a957ca24f055f5e30f4738ec02625013aad",
+      "passed_case_receipt_sha256": "58bf3b494080c885805bfeb42edddd3bfac95f78fea1953277a3365ee547f6bd",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/A73E31C8-E6A0-413D-96A9-E4BEC14AFE0A.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "최근 수면 시간·날짜와 관측일 수가 보인다. 기록 수에 따라 일곱 날짜 중 측정한 날에만 막대가 있고, 누락일을 선택하면 한국어·영어에서 날짜와 기록 부재가 함께 표시된다."
+    },
+    {
+      "device": "regular",
+      "artifact": "H01-sleep-selected-missing-ko_KR",
+      "selector": "WellnessFlowUITests/testSparseSleepDateSelectionAndMissingDay",
+      "original_name": "89CBBE79-624C-45F4-AF19-B77EC86FAD2D.png",
+      "sha256": "94bc42f126cfec65d300e6fc3341a66ede92f2bae619ad8aca7a5e5063296fed",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795201176.416,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "H01-sleep-selected-missing-ko_KR_0_04E40682-3D57-4C5C-BBD5-0F763AD82CC4.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "9652dfda54ac310fd8f11de7c70a2a957ca24f055f5e30f4738ec02625013aad",
+      "passed_case_receipt_sha256": "58bf3b494080c885805bfeb42edddd3bfac95f78fea1953277a3365ee547f6bd",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/89CBBE79-624C-45F4-AF19-B77EC86FAD2D.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "최근 수면 시간·날짜와 관측일 수가 보인다. 기록 수에 따라 일곱 날짜 중 측정한 날에만 막대가 있고, 누락일을 선택하면 한국어·영어에서 날짜와 기록 부재가 함께 표시된다."
+    },
+    {
+      "device": "regular",
+      "artifact": "H01-sleep-0-records",
+      "selector": "WellnessFlowUITests/testNoSleepRecordsShowsEmptyState",
+      "original_name": "B484E2EA-4C4D-4F16-AC9D-6E0A3A43A777.png",
+      "sha256": "93e261058733b3f106df328b5ead97c6db63f57a1fa43789d1d26b4f2bd490f9",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795202418.193,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "H01-sleep-0-records_0_1C9C0191-5EA5-445F-AB18-A6100F0E668E.png",
+      "build_revision": "1df57fcfd77f4a6a385fb80f626a872956185f3c",
+      "xcresult_manifest_sha256": "ba43ee5d63598391f86122a2d58bc7fb74dc77f30a235490ec9c4c6f32a72f15",
+      "passed_case_receipt_sha256": "eb15060a18c1e5ff087311ef127a55d030c8ed820425ac88b8cde433ced413b2",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/B484E2EA-4C4D-4F16-AC9D-6E0A3A43A777.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "1df57fcfd77f4a6a385fb80f626a872956185f3c",
+        "combined_build": true
+      },
+      "visual_observation": "기록이 없을 때 Need More Data와 Recorded 0 of 7 nights가 표시된다."
+    },
+    {
+      "device": "regular",
+      "artifact": "H01-sleep-2-records-MaxAX",
+      "selector": "WellnessFlowUITests/testSparseSleepDarkAndAccessibility",
+      "original_name": "96A27C67-EA35-45EB-A15E-92890D905EDA.png",
+      "sha256": "ea2899cc74cf352b5090c35b6ac8c898150d6a566ecebf418e9f6876c2895d0a",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795202476.21,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "H01-sleep-2-records-MaxAX_0_C014D124-275E-4004-8613-E6C0BA071D97.png",
+      "build_revision": "1df57fcfd77f4a6a385fb80f626a872956185f3c",
+      "xcresult_manifest_sha256": "ba43ee5d63598391f86122a2d58bc7fb74dc77f30a235490ec9c4c6f32a72f15",
+      "passed_case_receipt_sha256": "eb15060a18c1e5ff087311ef127a55d030c8ed820425ac88b8cde433ced413b2",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/96A27C67-EA35-45EB-A15E-92890D905EDA.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "1df57fcfd77f4a6a385fb80f626a872956185f3c",
+        "combined_build": true
+      },
+      "visual_observation": "어두운 테마의 최대 접근성 글씨에서 시간과 평균이 줄바꿈되고 15·18·21 날짜 및 두 막대가 보인다."
+    },
+    {
+      "device": "regular",
+      "artifact": "H01-sleep-2-records-dark",
+      "selector": "WellnessFlowUITests/testSparseSleepDarkAndAccessibility",
+      "original_name": "017823A9-98D9-420E-B57C-FF9215E0E04E.png",
+      "sha256": "9123a810285f1da1287ff69685c86f3b6e515685e62048971f59569437b61012",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795202449.706,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "H01-sleep-2-records-dark_0_4DE726E6-0C8F-44DC-AD98-AAE351CF6A36.png",
+      "build_revision": "1df57fcfd77f4a6a385fb80f626a872956185f3c",
+      "xcresult_manifest_sha256": "ba43ee5d63598391f86122a2d58bc7fb74dc77f30a235490ec9c4c6f32a72f15",
+      "passed_case_receipt_sha256": "eb15060a18c1e5ff087311ef127a55d030c8ed820425ac88b8cde433ced413b2",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/017823A9-98D9-420E-B57C-FF9215E0E04E.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "1df57fcfd77f4a6a385fb80f626a872956185f3c",
+        "combined_build": true
+      },
+      "visual_observation": "어두운 테마 기본 글씨의 원본에는 최근 수면 카드 상단과 최신 시간이 보인다. 아래 그래프는 이 캡처의 화면 밖에 있다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "H01-sleep-selected-missing-en_US",
+      "selector": "WellnessFlowUITests/testSparseSleepDateSelectionAndMissingDay",
+      "original_name": "B772CB11-DDF4-4D57-8A29-6F428362DF16.png",
+      "sha256": "cfb2ee869335db14af326558508e25b1eb576af3f6404f805e57d53bf3378886",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795202112.034,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "H01-sleep-selected-missing-en_US_0_1A5D05E8-BC63-439E-8274-608751EB2BE6.png",
+      "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+      "xcresult_manifest_sha256": "60b1a4630416c0f959774744a80f781eb39005c65291feb4d5fab915794824ab",
+      "passed_case_receipt_sha256": "6d059de5a18a5cade9af848d2bdf184e6cc571bda6403d85f7e48a367d35e057",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/B772CB11-DDF4-4D57-8A29-6F428362DF16.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+        "combined_build": true
+      },
+      "visual_observation": "iPad mini 영어·한국어 원본 캡처: 최근 수면 7시간 54분과 7일 평균 7시간 30분이 큰 값으로 보이고, 2/7 기록·선택한 11월 18일 기록 없음·7일 막대 두 개가 카드 안에 온전히 보인다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "H01-sleep-selected-missing-ko_KR",
+      "selector": "WellnessFlowUITests/testSparseSleepDateSelectionAndMissingDay",
+      "original_name": "45EE6A22-DD35-4D00-A3E9-BD2489BF4B56.png",
+      "sha256": "c1a00b4039df0ec83746cc0b1a8b33ffb6430a471139b651882610de659ebcc2",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795202132.43,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "H01-sleep-selected-missing-ko_KR_0_D2AF00CD-1ED9-45FD-80AD-8F189454DB06.png",
+      "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+      "xcresult_manifest_sha256": "60b1a4630416c0f959774744a80f781eb39005c65291feb4d5fab915794824ab",
+      "passed_case_receipt_sha256": "6d059de5a18a5cade9af848d2bdf184e6cc571bda6403d85f7e48a367d35e057",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/45EE6A22-DD35-4D00-A3E9-BD2489BF4B56.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+        "combined_build": true
+      },
+      "visual_observation": "iPad mini 영어·한국어 원본 캡처: 최근 수면 7시간 54분과 7일 평균 7시간 30분이 큰 값으로 보이고, 2/7 기록·선택한 11월 18일 기록 없음·7일 막대 두 개가 카드 안에 온전히 보인다."
+    },
+    {
+      "device": "duo",
+      "artifact": "H01-sleep-selected-missing-en_US",
+      "selector": "WellnessFlowUITests/testSparseSleepDateSelectionAndMissingDay",
+      "original_name": "8AAB6E5B-38F5-434C-B707-108F3C28FD3D.png",
+      "sha256": "f060de392bf0da5983f05029b8ac0d9f202546d51c16e711652eca4adb0d5243",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795202899.367,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "H01-sleep-selected-missing-en_US_0_9B6CCA35-237C-452B-8D43-60AC9DC40D33.png",
+      "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+      "xcresult_manifest_sha256": "ba7b06347bfd56eee263f95f398799d107d5a03af2ca5bad99b50d1f0844c0cb",
+      "passed_case_receipt_sha256": "48d549ff2c317deea8b25b110dbc4aa8db78ec622d819049fa81fe9f41a54213",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "d03007691624d1146fdb5d73bcb257d423b1dc78acd95ef843cdabef1810caf4"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "89725a047b957426c22353c33db8a41a95e784e37645947f7b28c5b8106592d4"
+        }
+      },
+      "file": "images/duo/8AAB6E5B-38F5-434C-B707-108F3C28FD3D.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 접힘 LCD 1398×2034 원본 영어·한국어 캡처: 최근 수면과 7일 평균이 큰 값으로 읽히고 2/7 관측, 선택한 18일 기록 없음, 17·21일 막대가 표시된다. 오른쪽 도킹 영역과 겹침은 없으며 하단 날짜 일부는 스크롤 범위 밖에 있다."
+    },
+    {
+      "device": "duo",
+      "artifact": "H01-sleep-selected-missing-ko_KR",
+      "selector": "WellnessFlowUITests/testSparseSleepDateSelectionAndMissingDay",
+      "original_name": "4EDE7F41-39B6-4576-B783-2950BB527E51.png",
+      "sha256": "71c845261aaaae34f79d750049b680d569732ad2a14843243db961aafe77c3f6",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795202928.834,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "H01-sleep-selected-missing-ko_KR_0_68599FDC-A543-4FF1-B412-5FC825556BF9.png",
+      "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+      "xcresult_manifest_sha256": "ba7b06347bfd56eee263f95f398799d107d5a03af2ca5bad99b50d1f0844c0cb",
+      "passed_case_receipt_sha256": "48d549ff2c317deea8b25b110dbc4aa8db78ec622d819049fa81fe9f41a54213",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "d03007691624d1146fdb5d73bcb257d423b1dc78acd95ef843cdabef1810caf4"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "89725a047b957426c22353c33db8a41a95e784e37645947f7b28c5b8106592d4"
+        }
+      },
+      "file": "images/duo/4EDE7F41-39B6-4576-B783-2950BB527E51.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 접힘 LCD 1398×2034 원본 영어·한국어 캡처: 최근 수면과 7일 평균이 큰 값으로 읽히고 2/7 관측, 선택한 18일 기록 없음, 17·21일 막대가 표시된다. 오른쪽 도킹 영역과 겹침은 없으며 하단 날짜 일부는 스크롤 범위 밖에 있다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "H01-sleep-selected-missing-en_US",
+      "selector": "WellnessFlowUITests/testSparseSleepDateSelectionAndMissingDay",
+      "original_name": "H01-sleep-selected-missing-en_US.png",
+      "sha256": "067d2c537280ac2a1862330152e096d3efbffb6c61e61beb31bd844719f32897",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T19:59:41.634045+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "H01-sleep-selected-missing-en_US",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "2312ae3b7f357004101b7974dd54af077eb883e5c29d8df43a6469b309e4fb52",
+      "passed_case_receipt_sha256": "31799d4653ece94ac3d8c1acd9cc5994ff6080f3e225b0c3cd1760b78cffb460",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "6FED6699-C9A4-495B-ACA2-9C464335E6EB.png",
+        "human_name": "H01-sleep-selected-missing-en_US_0_DC6B9BCA-C948-4B14-BC9B-B20A591802FE.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795204780.437
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    28.08s Added attachment named 'H01-sleep-selected-missing-en_US'",
+        "time_utc": "2026-11-20T19:59:41.634045+00:00",
+        "observer_receipt_sha256": "b52e430e4a36b9e8c0d0f5d6bd96a8f090ff9ff10e9d3723d66d44b7e4cdfac7",
+        "observer_log": "dune-reference-evidence-duo-open.log",
+        "case_result": "Passed"
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "9be04ad44dbb879985e162baa4c809cf4904476342c109a50434924d4dbb13bc"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "4116e1f1702f67d9dd07d6a90b56a66c48578e879608108aff39d99ba647f946"
+        }
+      },
+      "file": "images/duo-open/H01-sleep-selected-missing-en_US.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 펼침 활성 LCD-1 2853×2007 물리 프레임 영어·한국어 원본: 두 언어 모두 최근 7시간 54분, 7일 평균 7시간 30분, 관측 2/7, 선택한 18일 기록 없음과 실제 두 막대가 두 열 카드에서 잘림 없이 읽힌다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "H01-sleep-selected-missing-ko_KR",
+      "selector": "WellnessFlowUITests/testSparseSleepDateSelectionAndMissingDay",
+      "original_name": "H01-sleep-selected-missing-ko_KR.png",
+      "sha256": "b2988923c9edae416bcf185e441269c7604e0a7462977edfa4da39240c26933c",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T20:00:07.323692+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "H01-sleep-selected-missing-ko_KR",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "2312ae3b7f357004101b7974dd54af077eb883e5c29d8df43a6469b309e4fb52",
+      "passed_case_receipt_sha256": "31799d4653ece94ac3d8c1acd9cc5994ff6080f3e225b0c3cd1760b78cffb460",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "B0ED8B1A-4AF1-40F8-9D5F-ADEEB6160795.png",
+        "human_name": "H01-sleep-selected-missing-ko_KR_0_77BB8A2A-7FB4-4DD4-AFE6-7945D24EF112.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795204806.131
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    53.78s Added attachment named 'H01-sleep-selected-missing-ko_KR'",
+        "time_utc": "2026-11-20T20:00:07.323692+00:00",
+        "observer_receipt_sha256": "95f2ad78e84842d12b313adfada7ba37920127c6e814395ea84524f3db789221",
+        "observer_log": "dune-reference-evidence-duo-open.log",
+        "case_result": "Passed"
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "9be04ad44dbb879985e162baa4c809cf4904476342c109a50434924d4dbb13bc"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "4116e1f1702f67d9dd07d6a90b56a66c48578e879608108aff39d99ba647f946"
+        }
+      },
+      "file": "images/duo-open/H01-sleep-selected-missing-ko_KR.png",
+      "device_source": {
+        "source_revision": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 펼침 활성 LCD-1 2853×2007 물리 프레임 영어·한국어 원본: 두 언어 모두 최근 7시간 54분, 7일 평균 7시간 30분, 관측 2/7, 선택한 18일 기록 없음과 실제 두 막대가 두 열 카드에서 잘림 없이 읽힌다."
+    }
+  ],
+  "unverified_devices": [],
+  "uncaptured_artifacts_by_device": {
+    "regular": [],
+    "ipad": [
+      "H01-sleep-0-records",
+      "H01-sleep-1-records",
+      "H01-sleep-2-records",
+      "H01-sleep-2-records-MaxAX",
+      "H01-sleep-2-records-dark",
+      "H01-sleep-4-records",
+      "H01-sleep-7-records"
+    ],
+    "duo": [
+      "H01-sleep-0-records",
+      "H01-sleep-1-records",
+      "H01-sleep-2-records",
+      "H01-sleep-2-records-MaxAX",
+      "H01-sleep-2-records-dark",
+      "H01-sleep-4-records",
+      "H01-sleep-7-records"
+    ],
+    "duo-open": [
+      "H01-sleep-0-records",
+      "H01-sleep-1-records",
+      "H01-sleep-2-records",
+      "H01-sleep-2-records-MaxAX",
+      "H01-sleep-2-records-dark",
+      "H01-sleep-4-records",
+      "H01-sleep-7-records"
+    ]
+  },
+  "unverified_screen_ids": [],
+  "visual_inspection": {
+    "status": "원본 화면 검토 완료",
+    "notes": "최근 수면 시간·날짜와 관측일 수가 보인다. 기록 수에 따라 일곱 날짜 중 측정한 날에만 막대가 있고, 누락일을 선택하면 한국어·영어에서 날짜와 기록 부재가 함께 표시된다. 기록이 없을 때 Need More Data와 Recorded 0 of 7 nights가 표시된다. 어두운 테마의 최대 접근성 글씨에서 시간과 평균이 줄바꿈되고 15·18·21 날짜 및 두 막대가 보인다. 어두운 테마 기본 글씨의 원본에는 최근 수면 카드 상단과 최신 시간이 보인다. 아래 그래프는 이 캡처의 화면 밖에 있다. iPad mini 영어·한국어 원본 캡처: 최근 수면 7시간 54분과 7일 평균 7시간 30분이 큰 값으로 보이고, 2/7 기록·선택한 11월 18일 기록 없음·7일 막대 두 개가 카드 안에 온전히 보인다. Duo 접힘 LCD 1398×2034 원본 영어·한국어 캡처: 최근 수면과 7일 평균이 큰 값으로 읽히고 2/7 관측, 선택한 18일 기록 없음, 17·21일 막대가 표시된다. 오른쪽 도킹 영역과 겹침은 없으며 하단 날짜 일부는 스크롤 범위 밖에 있다. Duo 펼침 활성 LCD-1 2853×2007 물리 프레임 영어·한국어 원본: 두 언어 모두 최근 7시간 54분, 7일 평균 7시간 30분, 관측 2/7, 선택한 18일 기록 없음과 실제 두 막대가 두 열 카드에서 잘림 없이 읽힌다.",
+    "reviewer": "기능별 캡처 검토"
+  }
+}
