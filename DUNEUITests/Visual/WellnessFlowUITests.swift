@@ -180,7 +180,11 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
             navigateToWellness()
             let days = (0..<7).map { waitForElement("wellness-sleep-day-\($0)", timeout: 10) }
             XCTAssertEqual(days.count, 7)
+            // All seven slots share one row; reveal its middle before checking hit targets.
+            reveal("wellness-sleep-day-3")
             for day in days {
+                XCTAssertGreaterThanOrEqual(day.frame.width, 44, "Each calendar slot needs a full-width hit target")
+                XCTAssertGreaterThanOrEqual(day.frame.height, 44, "Each calendar slot needs a 44pt hit target")
                 XCTAssertTrue(day.isHittable, "Each observed or missing day remains selectable")
             }
             let spacing = days[1].frame.midX - days[0].frame.midX
@@ -190,7 +194,6 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
             }
             XCTAssertEqual(element("wellness-sleep-average").exists, count >= 2)
             // Native screenshot verifies the 16-point bar inside each accessible day button.
-            reveal("wellness-hero-sleep", direction: .down)
             addScreenshotAttachment(named: "H01-sleep-\(count)-records")
         }
     }

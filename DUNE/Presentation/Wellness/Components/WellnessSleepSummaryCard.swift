@@ -113,6 +113,7 @@ struct WellnessSleepSummaryCard: View {
                                 Text(duration(Int(selectedSample.minutes.rounded())))
                             }
                             .font(.subheadline.weight(.semibold).monospacedDigit())
+                            .accessibilityElement(children: .combine)
                             .accessibilityIdentifier("wellness-sleep-selected-value")
                         } else {
                             HStack(spacing: DS.Spacing.xs) {
@@ -120,6 +121,7 @@ struct WellnessSleepSummaryCard: View {
                                 Text("No record")
                             }
                             .font(.subheadline)
+                            .accessibilityElement(children: .combine)
                             .accessibilityIdentifier("wellness-sleep-selected-empty")
                         }
                     }
@@ -152,7 +154,7 @@ struct WellnessSleepSummaryCard: View {
         let scale = barScaleMinutes
         let days = recentDays
         return VStack(spacing: DS.Spacing.sm) {
-            HStack(alignment: .bottom, spacing: DS.Spacing.xs) {
+            HStack(alignment: .bottom, spacing: 0) {
                 ForEach(Array(days.enumerated()), id: \.element) { index, day in
                     let sample = samples.last { Calendar.current.isDate($0.date, inSameDayAs: day) }
                     Button {
@@ -167,11 +169,11 @@ struct WellnessSleepSummaryCard: View {
                                     .accessibilityIdentifier("wellness-sleep-bar-\(index)")
                             }
                         }
-                        .frame(height: 64)
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, minHeight: 64)
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity, minHeight: 64)
                     .accessibilityLabel(dayAccessibilityLabel(day: day, sample: sample))
                     .accessibilityIdentifier("wellness-sleep-day-\(index)")
                 }
