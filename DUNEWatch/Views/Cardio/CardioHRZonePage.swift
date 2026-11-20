@@ -39,7 +39,7 @@ struct CardioHRZonePage: View {
             }
             .scrollBounceBehavior(.basedOnSize)
         }
-        .accessibilityIdentifier("watch-cardio-hr-zone")
+        .accessibilityElement(children: .contain)
     }
 
     private func heartRateChart(endingAt date: Date) -> some View {
@@ -91,6 +91,8 @@ struct CardioHRZonePage: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("watch-cardio-hr-zone")
     }
 
     // MARK: - Zone Label

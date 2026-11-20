@@ -1,0 +1,28 @@
+{
+  "feature": "R01",
+  "branch_source_before_evidence": "c495f09368c349cd4dc231ded168d0787b57155e",
+  "device": "Apple Watch Series 12 (46mm)",
+  "runtime": "watchOS 27.2",
+  "device_udid": "20F1C441-B5FE-46DC-9895-31B64EED3F2C",
+  "native_pixels": [
+    416,
+    496
+  ],
+  "test_bundle": "Test-DUNEWatchUITests-2026.11.21_03-26-11-+0900.xcresult",
+  "fixture": "seeded workout",
+  "scope": "Combined build of approved functional branches; screenshots correspond to the selected state.",
+  "verified_source_sha256": {
+    "DUNEWatch/Views/Cardio/Components/HRZoneBar.swift": "032d4e36791d9212d60b440a0291d242dc501b4a938488032f1f47ec4f7ee12a"
+  },
+  "captures": [
+    {
+      "state": "C01",
+      "caption": "6개 존 중 3번째 구간의 현재 위치",
+      "file": "C01.png",
+      "sha256": "292469f4ed07c301a0eceeac40bf79ce76cece10900ea11636e447ae51ed3a33",
+      "selector": "WatchLiveHeartRateZonesUITests/testSixZoneWorkoutUsesLiveHealthKitConfiguration()",
+      "xctest_attachment": "watch-design-map-C01_0_700F2C2C-94F8-4F07-B865-E0236343E608.png",
+      "timestamp": 1795199238.854
+    }
+  ]
+}
