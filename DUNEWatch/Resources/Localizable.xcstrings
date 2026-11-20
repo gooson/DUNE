@@ -2815,6 +2815,23 @@
         }
       }
     },
+    "No heart rate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "心拍数なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "심박 수신 없음"
+          }
+        }
+      }
+    },
     "No movement detected" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5015,6 +5032,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "존 %lld"
+          }
+        }
+      }
+    },
+    "Zone %lld of %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゾーン%1$lld / %2$lld"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld / %2$lld존"
           }
         }
       }
