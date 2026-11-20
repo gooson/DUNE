@@ -27,7 +27,10 @@ final class ActivityViewModel {
     private(set) var recommendationContext: WorkoutRecommendationContext
 
     // New data for redesigned Activity tab
+    enum ReadinessEvidenceState { case sufficient, partial, none }
     var trainingReadiness: TrainingReadiness?
+    private(set) var readinessEvidenceState: ReadinessEvidenceState = .none
+    private(set) var readinessAvailableSources: [String] = []
     private(set) var readinessHistory: [WeeklyHeroTrendPoint] = []
     private(set) var readinessSleepAvailable = false
     private(set) var readinessRecoveryAvailable = false
@@ -793,11 +796,12 @@ final class ActivityViewModel {
             canQueryHealthKit: healthKitAvailable
         )
 
-        let (exerciseResult, stepsResult, workoutsResult, loadResult, sleepResult, readinessResult, sleepDailyResult) = await (
+        let (exerciseResult, stepsResult, workoutsResult, loadResult, sleepOutcome, readinessResult, sleepDailyResult) = await (
             exerciseTask, stepsTask, workoutsTask, trainingLoadTask, sleepTask, readinessTask, sleepDailyTask
         )
 
         guard isCurrentLoadRequest(requestID) else { return }
+        let sleepResult = sleepOutcome.summary
 
         weeklyExerciseMinutes = exerciseResult.weeklyData
         todayExercise = exerciseResult.todayMetric
@@ -877,6 +881,21 @@ final class ActivityViewModel {
             fatigueStates: fatigueStates
         )
         trainingReadiness = readinessUseCase.execute(input: readinessInput)
+        let hasValidHRV = readinessResult.hrvSamples.contains { $0.value > 0 && $0.value <= 500 && $0.value.isFinite }
+        let hasValidRHR = readinessResult.todayRHR.map { (20...300).contains($0) && $0.isFinite } ?? false
+        let hasValidSleep = sleepResult.map { (0...1440).contains($0.totalSleepMinutes) && $0.totalSleepMinutes.isFinite } ?? false
+        let hasRecovery = fatigueStates.contains { $0.lastTrainedDate != nil }
+        readinessAvailableSources = [
+            hasValidHRV ? String(localized: "HRV") : nil,
+            hasValidRHR ? String(localized: "Resting Heart Rate") : nil,
+            hasValidSleep ? String(localized: "Sleep") : nil,
+            hasRecovery ? String(localized: "Recovery") : nil
+        ].compactMap { $0 }
+        if trainingReadiness != nil {
+            readinessEvidenceState = .sufficient
+        } else {
+            readinessEvidenceState = readinessAvailableSources.isEmpty ? .none : .partial
+        }
         readinessSleepAvailable = sleepResult.map {
             $0.totalSleepMinutes.isFinite && (0...1440).contains($0.totalSleepMinutes)
         } ?? false
@@ -891,6 +910,9 @@ final class ActivityViewModel {
                 readinessScore: readiness.score
             )
             await service.loadTodaySparklines()
+        } else if readinessResult.isConclusive && sleepOutcome.isConclusive,
+                  let service = scoreRefreshService {
+            await service.invalidateCurrentReadinessSnapshot()
         }
         readinessSparkline = scoreRefreshService?.readinessSparkline ?? .empty
         // Fetch recorded scores, rather than reconstructing an approximate past readiness.
@@ -1330,16 +1352,30 @@ final class ActivityViewModel {
 
     // MARK: - Sleep Fetch (for recovery modifier)
 
-    private func safeSleepFetch(snapshot: SharedHealthSnapshot?, canQueryHealthKit: Bool) async -> SleepSummary? {
+    private struct SleepFetchOutcome {
+        let summary: SleepSummary?
+        let isConclusive: Bool
+    }
+
+    private func safeSleepFetch(
+        snapshot: SharedHealthSnapshot?,
+        canQueryHealthKit: Bool
+    ) async -> SleepFetchOutcome {
         if let snapshot {
-            return snapshot.sleepSummaryForRecovery
+            return SleepFetchOutcome(
+                summary: snapshot.sleepSummaryForRecovery,
+                isConclusive: !snapshot.failedSources.contains(.todaySleepStages)
+            )
         }
-        guard canQueryHealthKit else { return nil }
+        guard canQueryHealthKit else { return SleepFetchOutcome(summary: nil, isConclusive: false) }
         do {
-            return try await sleepService.fetchLastNightSleepSummary(for: Date())
+            return SleepFetchOutcome(
+                summary: try await sleepService.fetchLastNightSleepSummary(for: Date()),
+                isConclusive: true
+            )
         } catch {
             AppLogger.ui.error("Sleep fetch failed: \(error.localizedDescription)")
-            return nil
+            return SleepFetchOutcome(summary: nil, isConclusive: false)
         }
     }
 
@@ -1393,6 +1429,7 @@ final class ActivityViewModel {
         let todayRHR: Double?
         let rhrBaseline: [Double]
         let rhrCollection: [(date: Date, average: Double)]
+        let isConclusive: Bool
     }
 
     private func safeReadinessFetch(
@@ -1425,12 +1462,16 @@ final class ActivityViewModel {
                 hrvSamples: hrvSamples,
                 todayRHR: todayRHR,
                 rhrBaseline: rhrBaseline,
-                rhrCollection: validRHRCollection
+                rhrCollection: validRHRCollection,
+                isConclusive: snapshot.failedSources.isDisjoint(with: [.hrvSamples, .todayRHR, .rhrCollection])
             )
         }
 
         guard canQueryHealthKit else {
-            return ReadinessResult(hrvZScore: nil, rhrDelta: nil, hrvSamples: [], todayRHR: nil, rhrBaseline: [], rhrCollection: [])
+            return ReadinessResult(
+                hrvZScore: nil, rhrDelta: nil, hrvSamples: [], todayRHR: nil,
+                rhrBaseline: [], rhrCollection: [], isConclusive: false
+            )
         }
 
         do {
@@ -1477,11 +1518,15 @@ final class ActivityViewModel {
                 hrvSamples: hrvSamples,
                 todayRHR: todayRHR,
                 rhrBaseline: rhrBaseline,
-                rhrCollection: validRHRCollection
+                rhrCollection: validRHRCollection,
+                isConclusive: true
             )
         } catch {
             AppLogger.ui.error("Readiness fetch failed: \(error.localizedDescription)")
-            return ReadinessResult(hrvZScore: nil, rhrDelta: nil, hrvSamples: [], todayRHR: nil, rhrBaseline: [], rhrCollection: [])
+            return ReadinessResult(
+                hrvZScore: nil, rhrDelta: nil, hrvSamples: [], todayRHR: nil,
+                rhrBaseline: [], rhrCollection: [], isConclusive: false
+            )
         }
     }
 

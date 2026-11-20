@@ -177,6 +177,25 @@ final class ScoreRefreshService {
         }
     }
 
+    /// Clear an earlier score for this hour when readiness evidence disappears.
+    func invalidateCurrentReadinessSnapshot() async {
+        let hourDate = HourlyScoreSnapshot.hourTruncated(Date())
+        let hourEnd = Calendar.current.date(byAdding: .hour, value: 1, to: hourDate) ?? hourDate
+        do {
+            let descriptor = FetchDescriptor<HourlyScoreSnapshot>(
+                predicate: #Predicate { $0.date >= hourDate && $0.date < hourEnd }
+            )
+            if let snapshot = try context.fetch(descriptor).first,
+               snapshot.readinessScore != nil {
+                snapshot.readinessScore = nil
+                try context.save()
+            }
+            await loadTodaySparklines()
+        } catch {
+            AppLogger.data.error("[ScoreRefreshService] Failed to clear readiness: \(error.localizedDescription)")
+        }
+    }
+
     /// Debounced sparkline reload — coalesces multiple rapid recordSnapshot calls
     /// (from Dashboard, Wellness, Activity VMs) into a single fetch.
     private func scheduleSparklineReload() {

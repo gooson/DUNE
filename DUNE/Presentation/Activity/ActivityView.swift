@@ -460,9 +460,23 @@ struct ActivityView: View {
                         ProgressView()
                             .accessibilityLabel("Loading")
                     } else {
-                        Text("Need More Data")
-                            .font(.headline)
-                            .foregroundStyle(readinessInk.opacity(0.74))
+                        Group {
+                            if viewModel.readinessEvidenceState == .partial {
+                                VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                                    Text("Readiness needs more records")
+                                    Text("Available Data")
+                                        .font(.caption)
+                                    ForEach(viewModel.readinessAvailableSources, id: \.self) { source in
+                                        Text(verbatim: source).font(.caption)
+                                    }
+                                }
+                            } else {
+                                Text("Need More Data")
+                            }
+                        }
+                        .font(.headline)
+                        .foregroundStyle(readinessInk.opacity(0.74))
+                        .accessibilityIdentifier("activity-readiness-evidence-state")
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
