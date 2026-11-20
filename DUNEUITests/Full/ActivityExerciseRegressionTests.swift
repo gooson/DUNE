@@ -3067,6 +3067,76 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Exercise type manual strength Month loaded")
     }
 
+    func testCaptureA10AchievementDayGroupNative() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in A10 native capture only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL",
+            "--ui-test-style", "light",
+            "--ui-visual-personal-records-recent-fixture"
+        ]
+        launchApp(with: configuration)
+        openActivityDetail(
+            sectionIdentifier: AXID.activitySectionPR,
+            destinationIdentifier: AXID.activityPersonalRecordsDetailScreen,
+            maxSwipes: 24
+        )
+
+        let scroll = app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        let firstDay = app.descendants(matching: .any).matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", "activity-personal-records-achievement-day-"
+        )).firstMatch
+        let titlePrefix = "activity-personal-records-achievement-title-"
+        let firstTitle = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", titlePrefix
+        )).firstMatch
+        XCTAssertTrue(firstDay.waitForExistence(timeout: 10), "The seeded achievement date should exist")
+        XCTAssertTrue(firstTitle.waitForExistence(timeout: 10), "The first seeded achievement should exist")
+        let eventID = String(firstTitle.identifier.dropFirst(titlePrefix.count))
+        let firstEvent = app.descendants(matching: .any)["activity-personal-records-achievement-\(eventID)"].firstMatch
+        XCTAssertTrue(firstEvent.exists)
+        let points = firstEvent.staticTexts.matching(NSPredicate(
+            format: "label ENDSWITH %@", " pts"
+        )).firstMatch
+
+        func viewport() -> CGRect {
+            let window = app.windows.firstMatch.frame
+            var visible = scroll.frame.intersection(window).insetBy(dx: 8, dy: 8)
+            let navigation = app.navigationBars.firstMatch
+            if navigation.exists && navigation.frame.intersects(visible) {
+                let top = max(visible.minY, navigation.frame.maxY + 8)
+                visible = CGRect(x: visible.minX, y: top,
+                                 width: visible.width, height: max(0, visible.maxY - top))
+            }
+            let tabs = app.tabBars.firstMatch
+            if tabs.exists && tabs.frame.intersects(visible) {
+                visible.size.height = max(0, min(visible.maxY, tabs.frame.minY - 8) - visible.minY)
+            }
+            return visible
+        }
+        for _ in 0..<18 {
+            let visible = viewport()
+            if firstDay.frame.minY >= visible.minY,
+               firstDay.frame.minY < visible.maxY,
+               visible.contains(firstTitle.frame) { break }
+            if firstDay.frame.minY < visible.minY { scroll.swipeDown(velocity: .slow) }
+            else { scroll.swipeUp(velocity: .slow) }
+        }
+        let visible = viewport()
+        XCTAssertTrue(firstDay.frame.minY >= visible.minY && firstDay.frame.minY < visible.maxY,
+                      "The date group should begin in the visible detail viewport")
+        XCTAssertTrue(visible.contains(firstTitle.frame), "The first achievement should be fully visible")
+        XCTAssertTrue(firstDay.frame.intersects(firstEvent.frame),
+                      "The first achievement should belong to the first date group")
+        if points.exists {
+            XCTAssertTrue(visible.contains(points.frame), "Visible achievement points should fit the viewport")
+        }
+        VisualAudit.capture("A10 achievement date group and first reward")
+        addScreenshotAttachment(named: "A10-achievement-date-group")
+    }
+
     func testPersonalRecordsDetailShowsTimelineRewardsAndHistory() throws {
         if VisualAudit.isEnabled {
             var configuration = launchConfiguration
