@@ -3067,6 +3067,90 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("Exercise type manual strength Month loaded")
     }
 
+    func testCaptureA10AchievementDayGroupNative() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Opt-in A10 native capture only") }
+        var configuration = launchConfiguration
+        configuration.additionalArguments += [
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL",
+            "--ui-test-style", "light",
+            "--ui-visual-personal-records-recent-fixture"
+        ]
+        launchApp(with: configuration)
+        openActivityDetail(
+            sectionIdentifier: AXID.activitySectionPR,
+            destinationIdentifier: AXID.activityPersonalRecordsDetailScreen,
+            maxSwipes: 24
+        )
+
+        let scroll = app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        let firstDay = app.descendants(matching: .any).matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", "activity-personal-records-achievement-day-"
+        )).firstMatch
+        let titlePrefix = "activity-personal-records-achievement-title-"
+        let firstTitle = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", titlePrefix
+        )).firstMatch
+        XCTAssertTrue(firstDay.waitForExistence(timeout: 10), "The seeded achievement date should exist")
+        XCTAssertTrue(firstTitle.waitForExistence(timeout: 10), "The first seeded achievement should exist")
+        let eventID = String(firstTitle.identifier.dropFirst(titlePrefix.count))
+        XCTAssertFalse(eventID.isEmpty)
+        let firstDetail = app.staticTexts["activity-personal-records-achievement-detail-\(eventID)"].firstMatch
+        XCTAssertTrue(firstDetail.waitForExistence(timeout: 10),
+                      "The first visible title and detail should belong to the same seeded reward")
+
+        func viewport() -> CGRect {
+            let window = app.windows.firstMatch.frame
+            var visible = scroll.frame.intersection(window).insetBy(dx: 8, dy: 8)
+            let navigation = app.navigationBars.firstMatch
+            if navigation.exists && navigation.frame.intersects(visible) {
+                let top = max(visible.minY, navigation.frame.maxY + 8)
+                visible = CGRect(x: visible.minX, y: top,
+                                 width: visible.width, height: max(0, visible.maxY - top))
+            }
+            let tabs = app.tabBars.firstMatch
+            if tabs.exists && tabs.frame.intersects(visible) {
+                visible.size.height = max(0, min(visible.maxY, tabs.frame.minY - 8) - visible.minY)
+            }
+            return visible
+        }
+        for _ in 0..<18 {
+            let visible = viewport()
+            if firstDay.frame.minY >= visible.minY,
+               firstDay.frame.minY < visible.maxY,
+               visible.contains(firstTitle.frame),
+               visible.contains(firstDetail.frame) { break }
+            if firstDay.frame.minY < visible.minY { scroll.swipeDown(velocity: .slow) }
+            else { scroll.swipeUp(velocity: .slow) }
+        }
+        let secondTitle = app.staticTexts.matching(NSPredicate(
+            format: "identifier BEGINSWITH %@", titlePrefix
+        )).element(boundBy: 1)
+        // Stop as soon as the date and two events are visible, including at the end of the list.
+        for _ in 0..<8 {
+            let visible = viewport()
+            if firstDay.frame.minY >= visible.minY,
+               visible.contains(firstTitle.frame), visible.contains(firstDetail.frame),
+               secondTitle.exists && visible.contains(secondTitle.frame) { break }
+            let displacement = firstDay.frame.minY - (visible.minY + 20)
+            if abs(displacement) < 8 { break }
+            let step = max(-160, min(160, displacement))
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.72, dy: 0.55))
+            let end = start.withOffset(CGVector(dx: 0, dy: -step))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        let visible = viewport()
+        XCTAssertTrue(firstDay.frame.minY >= visible.minY && firstDay.frame.minY < visible.maxY,
+                      "The date must be visible with its first two rewards")
+        XCTAssertTrue(visible.contains(firstTitle.frame), "The first achievement title should be fully visible")
+        XCTAssertTrue(visible.contains(firstDetail.frame), "The matching reward detail should be fully visible")
+        XCTAssertTrue(secondTitle.exists && visible.contains(secondTitle.frame),
+                      "At least two same-day rewards should be visible in the native capture")
+        VisualAudit.capture("A10 achievement date group and first rewards")
+        addScreenshotAttachment(named: "A10-achievement-date-group")
+    }
+
     func testPersonalRecordsDetailShowsTimelineRewardsAndHistory() throws {
         if VisualAudit.isEnabled {
             var configuration = launchConfiguration
@@ -3101,6 +3185,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.activityPersonalRecordsAchievementHistory].firstMatch.waitForExistence(timeout: 15),
             "Personal Records detail should show the achievement history"
         )
+        let dayHeaders = app.descendants(matching: .any).matching(
+            NSPredicate(format: "identifier BEGINSWITH %@", "activity-personal-records-achievement-day-")
+        )
+        XCTAssertGreaterThan(dayHeaders.count, 0, "Seeded achievements should group by day")
         if VisualAudit.isEnabled {
             let scroll = app.scrollViews[AXID.activityPersonalRecordsDetailScreen].firstMatch
             XCTAssertTrue(scroll.waitForExistence(timeout: 5), "Personal Records should own its scroll viewport")
@@ -3254,8 +3342,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 captureLeaf(firstTitle, named: "history event title")
                 captureLeaf(app.staticTexts["activity-personal-records-achievement-detail-\(eventID)"].firstMatch,
                             named: "history event detail")
-                captureLeaf(app.staticTexts["activity-personal-records-achievement-date-\(eventID)"].firstMatch,
-                            named: "history event date")
+                let firstDay = dayHeaders.firstMatch
+                captureLeaf(firstDay, named: "history day group")
+                addScreenshotAttachment(named: "R13-screen")
             } else {
                 XCTAssertTrue(empty.waitForExistence(timeout: 5), "History should show an event or its real empty state")
                 XCTAssertFalse(empty.label.isEmpty)
@@ -5231,14 +5320,72 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let increase = app.buttons["cardio-level-increase"].firstMatch
         XCTAssertTrue(increase.waitForExistence(timeout: 5))
         increase.auditTap()
+        let firstRecordedLevel = app.staticTexts["cardio-level-value"].firstMatch.label
+        XCTAssertEqual(firstRecordedLevel, "2")
         increase.auditTap()
-        XCTAssertEqual(app.staticTexts["cardio-level-value"].firstMatch.label, "3")
+        let finalRecordedLevel = app.staticTexts["cardio-level-value"].firstMatch.label
+        XCTAssertEqual(finalRecordedLevel, "3")
 
         app.buttons[AXID.cardioSessionEnd].firstMatch.auditTap()
         app.buttons[AXID.cardioSessionConfirmEnd].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.waitForExistence(timeout: 10))
-        XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch.exists)
-        XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["cardio-summary-duration"].firstMatch.exists)
+        XCTAssertFalse(app.descendants(matching: .any)["cardio-summary-distance"].firstMatch.exists)
+        let scroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-row-0", in: scroll),
+                      "First recorded level row must be loaded and visible")
+        let firstLevel = app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch
+        XCTAssertTrue(firstLevel.exists && firstLevel.label.hasSuffix(firstRecordedLevel),
+                      "The first history row should match the first live stepper reading")
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-row-1", in: scroll),
+                      "Final recorded level row must be loaded and visible before tapping")
+        let finalLevel = app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch
+        XCTAssertTrue(finalLevel.exists && finalLevel.label.hasSuffix(finalRecordedLevel),
+                      "The final history row should match the second live stepper reading")
+        let chart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
+        XCTAssertTrue(chart.waitForExistence(timeout: 5))
+        XCTAssertTrue((chart.value as? String)?.contains(finalRecordedLevel) == true)
+        let save = app.buttons["cardio-session-summary-save"].firstMatch
+        XCTAssertTrue(save.waitForExistence(timeout: 5))
+        // The summary scroll's accessibility frame extends underneath its pinned Save footer.
+        let footerTop = save.frame.minY - 16
+        for _ in 0..<4 where finalLevel.frame.maxY > footerTop {
+            scroll.swipeUp(velocity: .slow)
+        }
+        XCTAssertLessThanOrEqual(finalLevel.frame.maxY, footerTop,
+                                 "The pinned save footer must clear the row before tapping it")
+        let navBar = app.navigationBars.firstMatch
+        if navBar.exists {
+            XCTAssertGreaterThanOrEqual(finalLevel.frame.midY, navBar.frame.maxY)
+        }
+        finalLevel.auditTap()
+        let selection = app.descendants(matching: .any)["cardio-level-history-selection"].firstMatch
+        XCTAssertTrue(selection.waitForExistence(timeout: 5) && selection.label.hasSuffix("3"),
+                      "Selected level should follow the tapped final change")
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-chart", in: scroll),
+                      "The selected level chart must be fully visible in the summary")
+        addScreenshotAttachment(named: "R12-screen")
+
+        XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isHittable)
+        save.auditTap()
+        let summary = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch
+        let dismissed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: summary)
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 30), .completed)
+
+        openExerciseViewFromRecentWorkouts(maxSwipes: 24)
+        let savedRowID = AXID.exerciseRow("stair-climber")
+        XCTAssertTrue(app.scrollToElementIfNeeded(savedRowID, maxSwipes: 12))
+        let savedRow = app.descendants(matching: .any)[savedRowID].firstMatch
+        XCTAssertTrue(savedRow.waitForExistence(timeout: 8) && savedRow.isHittable)
+        savedRow.auditTap()
+        let detailScroll = app.scrollViews["exercise-session-detail-scroll"].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 8))
+        let savedChart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-chart", in: detailScroll),
+                      "Saved workout detail should show the complete machine-level chart")
+        XCTAssertTrue((savedChart.value as? String)?.contains("3") == true)
+        addScreenshotAttachment(named: "W27-stair-level-history-saved-detail")
     }
 
     func testVisualAuditCardioAtDefaultTextSize() throws {
@@ -5311,23 +5458,37 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             XCTAssertTrue(app.staticTexts["Workout Complete!"].firstMatch.waitForExistence(timeout: 8),
                           "Summary title should render after the permission dialog is handled")
         }
+        let distance = app.descendants(matching: .any)["cardio-summary-distance"].firstMatch
+        let duration = app.descendants(matching: .any)["cardio-summary-duration"].firstMatch
+        XCTAssertTrue(distance.exists && duration.exists, "Running result and duration should be visible")
+        XCTAssertLessThan(distance.frame.minY, duration.frame.minY, "Distance should precede duration")
+        XCTAssertTrue(app.descendants(matching: .any)["cardio-summary-secondary-metrics"].firstMatch.exists)
         let save = app.buttons["cardio-session-summary-save"].firstMatch
         XCTAssertTrue(waitForHittable(save, timeout: 5), "Summary Save must be reachable\n\(app.debugDescription)")
         XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
                       "The whole summary Save action should fit above the window edge")
+        addScreenshotAttachment(named: "R10-screen")
         VisualAudit.capture("W25 cardio \(accessibilityText ? "MAX" : "normal") summary top and full Save")
         if VisualAudit.isEnabled {
             let summaryScroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
             XCTAssertTrue(summaryScroll.waitForExistence(timeout: 5), "Cardio summary should own a metric scroll view")
             for (metric, checkpoint) in [("Steps", "steps"), ("Cadence", "cadence")] {
-                let label = app.staticTexts[metric].firstMatch
-                for _ in 0..<8 {
+                let label = summaryScroll.staticTexts[metric].firstMatch
+                for _ in 0..<20 {
                     let scrollFrame = summaryScroll.frame.intersection(app.windows.firstMatch.frame)
                     let viewport = CGRect(x: scrollFrame.minX + 8, y: scrollFrame.minY + 8,
                                           width: max(0, scrollFrame.width - 16),
                                           height: max(0, min(scrollFrame.maxY, save.frame.minY) - scrollFrame.minY - 16))
                     if label.exists && viewport.contains(label.frame) { break }
-                    summaryScroll.swipeUp(velocity: .slow)
+                    let offset = label.exists ? label.frame.midY - viewport.midY : viewport.height
+                    let distance = min(max(abs(offset), viewport.height * 0.15), viewport.height * 0.5)
+                    let start = summaryScroll.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                        dx: viewport.midX - summaryScroll.frame.minX,
+                        dy: viewport.midY - summaryScroll.frame.minY
+                    ))
+                    start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(
+                        dx: 0, dy: offset < 0 ? distance : -distance
+                    )))
                 }
                 let scrollFrame = summaryScroll.frame.intersection(app.windows.firstMatch.frame)
                     let viewport = CGRect(x: scrollFrame.minX + 8, y: scrollFrame.minY + 8,

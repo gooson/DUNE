@@ -1,0 +1,297 @@
+{
+  "feature": "R13",
+  "screens": [
+    "A10"
+  ],
+  "source": {
+    "source_revision": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+    "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20,676e10da12b4cc957e8cb6eb516fbee14af5035f,0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+    "combined_build": true,
+    "fixture": "A10 같은 날 여러 달성 기록",
+    "locale": "화면별 테스트 언어",
+    "appearance": "화면별 테스트 설정",
+    "notes": "각 이미지를 통과한 개별 UI 테스트에 연결했다. Duo 내부 화면은 지정된 체크포인트에서 활성 LCD-1 프레임버퍼를 직접 캡처했다. 파일별 빌드·크기·관찰 결과는 아래 기록에 있다.",
+    "branch_comparison": {
+      "base": "b1fdbc1564dc130bd99375643eb1a3e0ef17a353",
+      "branches": {
+        "load-equal-weeks": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "load-selected-date": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "cardio-summary-hierarchy": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "machine-level-profile": "95481eed6980e593252656bcd47ada549178285f",
+        "achievement-day-groups": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "sleep-observed-days": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "readiness-evidence": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "readiness-score-bands": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "stress-source-evidence": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f"
+      },
+      "verified_source": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "identical_directories": [
+        "DUNE",
+        "Shared",
+        "DUNETests",
+        "DUNEUITests",
+        "DUNEWatch",
+        "DUNEWatchTests",
+        "DUNEWatchUITests"
+      ],
+      "source_trees": {
+        "DUNE": "838f24417a197ba9a3a7f771803a234e31d829ef",
+        "Shared": "107daa92979696e109a16a53e8569202f92490b8",
+        "DUNETests": "ad2cc01fada0a800d96e39638c2cd3469bd235fd",
+        "DUNEUITests": "42da1717fc25fcf7259c71be2405a8c5309f85cd",
+        "DUNEWatch": "08312632eec0a3627604fdddbf491f3bf2fff22e",
+        "DUNEWatchTests": "91eccbfe9ff3f61f2e7b21f0c99298f2576330a0",
+        "DUNEWatchUITests": "443eeaadb2b39e186eae87778b31c9d360d82a03"
+      }
+    }
+  },
+  "assets": [
+    {
+      "device": "regular",
+      "artifact": "R13-screen",
+      "selector": "ActivityExerciseRegressionTests/testPersonalRecordsDetailShowsTimelineRewardsAndHistory",
+      "original_name": "7AFC76B1-764C-4DC9-91A8-EAF45236516E.png",
+      "sha256": "75a2811d175769ba49160f4df28059eaabba568e482e380ca5933ce23f19703c",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795199695.039,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "R13-screen_0_E1BB2FEA-E577-4E0F-A899-05604DADE5F5.png",
+      "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20",
+      "xcresult_manifest_sha256": "fc79a0a579c69172e26e7931b3746ca01be0d821710238aa5493e89241b84da9",
+      "passed_case_receipt_sha256": "b82b5ed1dd77ce230c6bb7224f332eebd05b03dee7f1e98ed5b3fbb0874c2bd6",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/7AFC76B1-764C-4DC9-91A8-EAF45236516E.png",
+      "device_source": {
+        "source_revision": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20",
+        "combined_build": true
+      },
+      "visual_observation": "기본 글씨와 최대 글씨에서 같은 날의 달성 이력이 하나의 날짜 제목을 공유하고 첫 기록의 제목, 설명 및 40점이 보인다."
+    },
+    {
+      "device": "regular",
+      "artifact": "A10-achievement-date-group",
+      "selector": "ActivityExerciseRegressionTests/testCaptureA10AchievementDayGroupNative",
+      "original_name": "E3A6D80D-34C6-44AC-970E-97AF4B5F06D4.png",
+      "sha256": "0aaa333e79c9b23ab40339bb0b586e8df5b6f9394063acd46467ce67a2745ad1",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795202291.602,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "A10-achievement-date-group_0_17480408-1466-4EAA-BBCC-DFE32D3575E9.png",
+      "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+      "xcresult_manifest_sha256": "36a749c8059d1952372974f27d5312c2c01619b1a59809863a05313df3faab22",
+      "passed_case_receipt_sha256": "2681b50a5fab7467ac2e0e1612f8f88ddc687b1ad1d855aac2553b15d4943424",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/E3A6D80D-34C6-44AC-970E-97AF4B5F06D4.png",
+      "device_source": {
+        "source_revision": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+        "combined_build": true
+      },
+      "visual_observation": "기본 글씨와 최대 글씨에서 같은 날의 달성 이력이 하나의 날짜 제목을 공유하고 첫 기록의 제목, 설명 및 40점이 보인다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "A10-achievement-date-group",
+      "selector": "ActivityExerciseRegressionTests/testCaptureA10AchievementDayGroupNative",
+      "original_name": "67533108-1819-4FB7-9B8B-FCF518FC0B6A.png",
+      "sha256": "1dbd7280fed579502a1e5643b04546a1171d9e83ccb8db2c18a90942b53cb7a3",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795201713.084,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "A10-achievement-date-group_0_E624AD0A-1954-4C1A-B6C1-9552309FAA0F.png",
+      "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+      "xcresult_manifest_sha256": "60b1a4630416c0f959774744a80f781eb39005c65291feb4d5fab915794824ab",
+      "passed_case_receipt_sha256": "6d059de5a18a5cade9af848d2bdf184e6cc571bda6403d85f7e48a367d35e057",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/67533108-1819-4FB7-9B8B-FCF518FC0B6A.png",
+      "device_source": {
+        "source_revision": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+        "combined_build": true
+      },
+      "visual_observation": "iPad A10 실제 PNG에서 Achievement History의 November 2026 아래 날짜 20/Fri가 왼쪽 레일에 한 번 표시되고, 같은 날짜의 여러 달성 카드가 오른쪽에 세로로 묶여 있다. 카드 제목·상세·포인트가 읽히며 마지막 카드까지 화면 안에 보인다. 다른 날짜/빈 상태/최대 글씨는 이 한 장으로 검증하지 않는다."
+    },
+    {
+      "device": "duo",
+      "artifact": "A10-achievement-date-group",
+      "selector": "ActivityExerciseRegressionTests/testCaptureA10AchievementDayGroupNative",
+      "original_name": "697B15D0-9ACE-4A70-81DA-D457AFF69374.png",
+      "sha256": "1c7f8cf4d12f9e706db087cebbe5c89c884621543a7883de6b9472c9415cf840",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795205107.61,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "A10-achievement-date-group_0_2498AC4C-958A-468B-B1A5-1233E003A86C.png",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "25629f48e945bd275bc527128abad119ba4163ed5f94f71d4cfc7fbda664bfe0",
+      "passed_case_receipt_sha256": "a6944c8f1492bf60af0512fc19d5dae81ae86c8fdb0e1f97d1ca86ceee34617f",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "0d73e8b8e4cfb0112942be1f03cc01c92c1da9349a3616f5723c0e2c1ad7b85f"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "08acb38db54d3d1e461f61c9e7bd090607d1086867155d53ddb6402f1dcc8193"
+        }
+      },
+      "file": "images/duo/697B15D0-9ACE-4A70-81DA-D457AFF69374.png",
+      "device_source": {
+        "source_revision": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "접힌 화면에서 20일 날짜가 한 번 표시되고 같은 날 달성한 네 개의 보상 카드가 차례로 보인다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "A10-achievement-date-group",
+      "selector": "ActivityExerciseRegressionTests/testCaptureA10AchievementDayGroupNative",
+      "original_name": "A10-achievement-date-group.png",
+      "sha256": "7ada5856a60ca27a79c0e09d8e1465444b4e45baea8a2e65cbc1705790fb6111",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T20:01:22.283028+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "A10-achievement-date-group",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "e6d21c2609298f074c97db514c7fc7e2647cdf7c6df72dd855205ae72924da04",
+      "passed_case_receipt_sha256": "612d7fc26202811c7a6bb47b79e88d9400b0475f1b68d9e20931e8c16dcd271f",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "45F03878-F770-4D10-B8CD-E9B82C16748B.png",
+        "human_name": "A10-achievement-date-group_0_DAE2948B-7D18-4DFA-840A-4FCB2D5CB225.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795204881.098
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    54.03s Added attachment named 'A10-achievement-date-group'",
+        "time_utc": "2026-11-20T20:01:22.283028+00:00",
+        "observer_receipt_sha256": "ffdd7d815dc51a619db351bdb89077b2166be7f4dbdf797198c6214487d4f0a3",
+        "observer_log": "dune-reference-open-extra-duo-open.log",
+        "case_result": "Passed"
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "a70239b4be367dfaee10d4867ee1b5c5b5902f8e7cdabd32a858bd729b699e01"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "5dbeaec7d3fbbcb3d5d2ee36ef2178f05af8defed338b6b499ac44458968a380"
+        }
+      },
+      "file": "images/duo-open/A10-achievement-date-group.png",
+      "device_source": {
+        "source_revision": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "펼친 화면의 20일 날짜 오른쪽에 첫 마일스톤과 배지, 개인 기록 갱신 및 다음 배지가 같은 그룹으로 정렬된다."
+    }
+  ],
+  "unverified_devices": [],
+  "uncaptured_artifacts_by_device": {
+    "regular": [],
+    "ipad": [
+      "R13-screen"
+    ],
+    "duo": [
+      "R13-screen"
+    ],
+    "duo-open": [
+      "R13-screen"
+    ]
+  },
+  "unverified_screen_ids": [],
+  "visual_inspection": {
+    "status": "원본 화면 검토 완료",
+    "notes": "기본 글씨와 최대 글씨에서 같은 날의 달성 이력이 하나의 날짜 제목을 공유하고 첫 기록의 제목, 설명 및 40점이 보인다. iPad A10 실제 PNG에서 Achievement History의 November 2026 아래 날짜 20/Fri가 왼쪽 레일에 한 번 표시되고, 같은 날짜의 여러 달성 카드가 오른쪽에 세로로 묶여 있다. 카드 제목·상세·포인트가 읽히며 마지막 카드까지 화면 안에 보인다. 다른 날짜/빈 상태/최대 글씨는 이 한 장으로 검증하지 않는다. 접힌 화면에서 20일 날짜가 한 번 표시되고 같은 날 달성한 네 개의 보상 카드가 차례로 보인다. 펼친 화면의 20일 날짜 오른쪽에 첫 마일스톤과 배지, 개인 기록 갱신 및 다음 배지가 같은 그룹으로 정렬된다.",
+    "reviewer": "기능별 캡처 검토"
+  }
+}

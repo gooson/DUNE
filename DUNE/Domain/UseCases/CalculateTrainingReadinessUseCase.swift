@@ -60,6 +60,18 @@ struct CalculateTrainingReadinessUseCase: TrainingReadinessCalculating, Sendable
 
     func execute(input: Input) -> TrainingReadiness? {
         let dailyAverages = computeDailyAverages(from: input.hrvSamples)
+        // A published score needs measured recovery inputs for every weighted component.
+        guard dailyAverages.count >= minimumBaselineDays,
+              let latest = dailyAverages.first,
+              Calendar.current.isDate(latest.date, inSameDayAs: input.evaluationDate),
+              let todayRHR = input.todayRHR, todayRHR.isFinite,
+              (20...300).contains(todayRHR),
+              input.rhrBaseline.filter({ $0.isFinite && (20...300).contains($0) }).count >= minimumBaselineDays,
+              let sleepMinutes = input.sleepDurationMinutes, sleepMinutes.isFinite,
+              sleepMinutes > 0, sleepMinutes <= 1440,
+              input.fatigueStates.contains(where: { $0.lastTrainedDate != nil }) else {
+            return nil
+        }
         let hrvComponent = computeHRVScore(dailyAverages: dailyAverages)
         let rhrComponent = computeRHRScore(today: input.todayRHR, baseline: input.rhrBaseline)
         let sleepComponent = computeSleepScore(

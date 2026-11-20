@@ -14,9 +14,10 @@ struct CardioSecondaryPage: View {
             VStack(spacing: DS.Spacing.md) {
                 // Page title
                 HStack {
-                    Text(workoutManager.supportsMachineLevel ? "Level" : profile.secondaryPageTitle)
+                    Text(workoutManager.supportsMachineLevel ? String(localized: "Level") : isOutdoor ? String(localized: "Elevation") : profile.secondaryPageTitle)
                         .font(DS.Typography.metricLabel)
                         .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("watch-cardio-secondary")
                     Spacer()
                 }
 
@@ -26,7 +27,7 @@ struct CardioSecondaryPage: View {
             .padding(.horizontal, DS.Spacing.sm)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .accessibilityIdentifier("watch-cardio-secondary")
+        .accessibilityElement(children: .contain)
     }
 
     // MARK: - Profile
@@ -51,6 +52,8 @@ struct CardioSecondaryPage: View {
                 }
                 .scrollBounceBehavior(.basedOnSize)
             }
+        } else if isOutdoor {
+            outdoorElevationContent(now: now)
         } else {
             switch profile {
             case .running:
@@ -125,6 +128,80 @@ struct CardioSecondaryPage: View {
                         .foregroundStyle(.tertiary)
                 }
                 .frame(maxWidth: .infinity)
+            }
+        }
+    }
+
+    private var isOutdoor: Bool {
+        if case .cardio(_, let outdoor) = workoutManager.workoutMode { return outdoor }
+        return false
+    }
+
+    private func outdoorElevationContent(now: Date) -> some View {
+        let profile = workoutManager.liveElevation
+        let buckets = profile.chartBuckets(endingAt: now)
+        let values = buckets.compactMap { $0 }
+        return VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            if !values.isEmpty {
+                let lowest = values.min() ?? 0
+                let highest = values.max() ?? lowest
+                HStack(alignment: .bottom, spacing: 1) {
+                    ForEach(buckets.indices, id: \.self) { index in
+                        if let altitude = buckets[index] {
+                            RoundedRectangle(cornerRadius: 1)
+                                .fill(DS.Color.activity)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: max(3, (altitude - lowest) / max(1, highest - lowest) * 48))
+                        } else {
+                            Color.clear.frame(maxWidth: .infinity).frame(height: 2)
+                        }
+                    }
+                }
+                .frame(height: 48, alignment: .bottom)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Elevation")
+                .accessibilityValue(elevationAccessibilityValue(profile: profile, now: now))
+                .accessibilityIdentifier("watch-outdoor-elevation-chart")
+
+                HStack(alignment: .top) {
+                    elevationMetric("Altitude", value: profile.currentAltitude(at: now))
+                    Spacer(minLength: DS.Spacing.xs)
+                    elevationMetric("Ascent", value: profile.ascentMeters)
+                }
+            } else {
+                Text("--")
+                    .font(DS.Typography.secondaryMetric)
+                    .foregroundStyle(.secondary)
+                    .accessibilityIdentifier("watch-outdoor-elevation-unavailable")
+            }
+        }
+    }
+
+    private func elevationAccessibilityValue(profile: WatchElevationProfile, now: Date) -> Text {
+        let ascent = Text("Ascent")
+            + Text(verbatim: " \(profile.ascentMeters.formatted(.number.precision(.fractionLength(0)))) m")
+        guard let currentAltitude = profile.currentAltitude(at: now) else { return ascent }
+        return Text("Altitude")
+            + Text(verbatim: " \(currentAltitude.formatted(.number.precision(.fractionLength(0)))) m, ")
+            + ascent
+    }
+
+    private func elevationMetric(_ label: LocalizedStringKey, value: Double?) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            Text(label)
+                .font(DS.Typography.metricLabel)
+                .foregroundStyle(.secondary)
+            HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.xxs) {
+                if let value {
+                    Text(value, format: .number.precision(.fractionLength(0)))
+                        .font(DS.Typography.secondaryMetric)
+                } else {
+                    Text("--")
+                        .font(DS.Typography.secondaryMetric)
+                }
+                Text("m")
+                    .font(DS.Typography.metricLabel)
+                    .foregroundStyle(.secondary)
             }
         }
     }

@@ -286,6 +286,24 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         VisualAudit.capture("A05 Last Week current metrics from the same seeded window")
     }
 
+    func testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06() throws {
+        openTrainingVolumeDetail()
+
+        let chart = trainingVolumeChart()
+        XCTAssertTrue(chart.exists, "The seeded training load chart should render on A06")
+        let summary = app.staticTexts["training-volume-chart-week-summary"].firstMatch
+        XCTAssertTrue(summary.waitForExistence(timeout: 15), "The seeded chart should show its seven-day comparison")
+        XCTAssertTrue(
+            ["Last 7 days", "최근 7일", "直近7日間"].contains { summary.label.hasPrefix($0) },
+            "The visible summary should name the rolling seven-day window"
+        )
+        XCTAssertTrue(
+            scrollTrainingVolumeDetailUntilHittable(summary, maxSwipes: 4),
+            "The seven-day label should be visible on the chart card before capture"
+        )
+        addScreenshotAttachment(named: defaultArtifactName(suffix: "A06-training-load-seven-days"))
+    }
+
     func testTrainingVolumeTrainingLoadChartScrollsToPastData() throws {
         openTrainingVolumeDetail()
 
@@ -310,6 +328,8 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         openTrainingVolumeDetail()
 
         let chart = trainingVolumeChart()
+        XCTAssertTrue(app.descendants(matching: .any)["training-load-selected-day"].firstMatch.exists)
+        XCTAssertTrue(app.descendants(matching: .any)["training-load-selected-value"].firstMatch.exists)
         let selectionProbe = waitForElement(AXID.trainingVolumeChartTrainingLoadSelectionProbe, timeout: 15)
         let initialRange = visibleRangeValue(of: chart)
         XCTAssertEqual(selectionProbe.label, "none", "Selection probe should be empty before long press")
@@ -326,6 +346,36 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
             "none",
             "Long press selection should update the training load selection probe"
         )
+
+        // Frame the selected date/value and the whole training-load plot together.
+        // A capture at the original scroll offset can show the preceding duration
+        // chart while cropping the selected load plot below the screen.
+        let selectedDay = waitForElement("training-load-selected-day", timeout: 10)
+        let selectedValue = waitForElement("training-load-selected-value", timeout: 10)
+        let detailScroll = app.scrollViews[AXID.activityTrainingVolumeDetailScreen].firstMatch
+        XCTAssertTrue(detailScroll.exists)
+        let navigationBar = app.navigationBars.firstMatch
+        let tabBar = app.tabBars.firstMatch
+        let topBoundary = max(detailScroll.frame.minY + 12,
+                              navigationBar.exists && navigationBar.frame.maxY < app.frame.midY ? navigationBar.frame.maxY + 12 : app.frame.minY + 12)
+        let bottomBoundary = tabBar.exists && tabBar.frame.minY > app.frame.midY && tabBar.frame.width > app.frame.width * 0.6
+            ? min(detailScroll.frame.maxY - 12, tabBar.frame.minY - 12)
+            : min(detailScroll.frame.maxY - 12, app.frame.maxY - 40)
+
+        func targetIsFramed() -> Bool {
+            selectedDay.frame.minY >= topBoundary && chart.frame.maxY <= bottomBoundary
+                && selectedValue.frame.minY >= topBoundary
+        }
+
+        for _ in 0..<6 where !targetIsFramed() {
+            let movingUp = chart.frame.maxY > bottomBoundary
+            let start = detailScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.86, dy: movingUp ? 0.78 : 0.38))
+            let end = detailScroll.coordinate(withNormalizedOffset: CGVector(dx: 0.86, dy: movingUp ? 0.43 : 0.73))
+            start.press(forDuration: 0.05, thenDragTo: end)
+        }
+        XCTAssertTrue(targetIsFramed(), "Selected date, value, and complete training-load chart should fit in the capture viewport")
+        XCTAssertEqual(selectionProbe.label, probeLabel, "Framing the capture should preserve the selected date")
+        addScreenshotAttachment(named: "R06-screen")
     }
 
     func testTrainingVolumeSurfaceShowsOverviewChartsAndTypeList() throws {

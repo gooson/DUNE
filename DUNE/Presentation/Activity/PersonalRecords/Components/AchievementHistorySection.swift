@@ -3,6 +3,13 @@ import SwiftUI
 /// Enhanced achievement history with visual hierarchy and monthly grouping.
 struct AchievementHistorySection: View {
     let groupedHistory: [(month: String, events: [WorkoutRewardEvent])]
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    struct DayGroup: Identifiable {
+        let date: Date
+        var events: [WorkoutRewardEvent]
+        var id: Date { date }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -46,10 +53,53 @@ struct AchievementHistorySection: View {
                 .foregroundStyle(DS.Color.textSecondary)
                 .padding(.bottom, 2)
 
-            ForEach(group.events) { event in
-                eventRow(event)
+            ForEach(Self.dayGroups(in: group.events)) { day in
+                let layout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+                    : AnyLayout(HStackLayout(alignment: .top, spacing: DS.Spacing.md))
+                layout {
+                    dayLabel(day.date)
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        ForEach(day.events) { event in
+                            eventRow(event)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .accessibilityIdentifier("activity-personal-records-achievement-day-\(day.id.timeIntervalSince1970)")
             }
         }
+    }
+
+    @ViewBuilder
+    private func dayLabel(_ date: Date) -> some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            Text(date, format: .dateTime.weekday(.wide).month(.abbreviated).day())
+                .font(.headline)
+        } else {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(date, format: .dateTime.day())
+                    .font(.title2.weight(.bold).monospacedDigit())
+                Text(date, format: .dateTime.weekday(.abbreviated))
+                    .font(.caption2)
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+            .frame(width: 44, alignment: .leading)
+        }
+    }
+
+    static func dayGroups(in events: [WorkoutRewardEvent]) -> [DayGroup] {
+        let calendar = Calendar.current
+        var groups: [DayGroup] = []
+        for event in events {
+            let day = calendar.startOfDay(for: event.date)
+            if let lastIndex = groups.indices.last, groups[lastIndex].date == day {
+                groups[lastIndex].events.append(event)
+            } else {
+                groups.append(DayGroup(date: day, events: [event]))
+            }
+        }
+        return groups
     }
 
     private func eventRow(_ event: WorkoutRewardEvent) -> some View {
@@ -68,11 +118,6 @@ struct AchievementHistorySection: View {
                     .font(.caption)
                     .foregroundStyle(DS.Color.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
-
-                Text(event.date, style: .date)
-                    .accessibilityIdentifier("activity-personal-records-achievement-date-\(event.id)")
-                    .font(.caption)
-                    .foregroundStyle(DS.Color.textSecondary)
 
                 if event.pointsAwarded > 0 {
                     Text(

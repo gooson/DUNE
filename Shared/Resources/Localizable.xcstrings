@@ -7213,6 +7213,23 @@
         }
       }
     },
+    "Available Data" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "利用できる記録"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확인된 기록"
+          }
+        }
+      }
+    },
     "Average" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -16970,6 +16987,23 @@
         }
       }
     },
+    "Elevation Gain" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "獲得標高"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "누적 상승"
+          }
+        }
+      }
+    },
     "Elliptical" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -25991,6 +26025,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최근 7일"
+          }
+        }
+      }
+    },
+    "Last 7 days %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近7日間 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 7일 %@"
+          }
+        }
+      }
+    },
+    "Last 7 days %@ (%@%@%%)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近7日間 %@（%@%@%%）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 7일 %@ (%@%@%%)"
           }
         }
       }
@@ -37506,6 +37574,23 @@
         }
       }
     },
+    "Readiness needs more records" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "準備度の記録がさらに必要です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "준비도 기록이 더 필요해요"
+          }
+        }
+      }
+    },
     "Readiness Trend" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -38237,6 +38322,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "기록일"
+          }
+        }
+      }
+    },
+    "Recorded %lld of 7 nights" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近7日間の記録 %lld夜"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 7일 중 %lld일 기록"
           }
         }
       }
