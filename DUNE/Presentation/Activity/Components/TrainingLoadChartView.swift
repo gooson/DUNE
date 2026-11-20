@@ -62,10 +62,12 @@ struct TrainingLoadChartView: View {
                     .accessibilityIdentifier("training-load-selected-day")
                 }
 
-                chartView
-                    .frame(height: 140)
-                    .clipped()
-                    .overlay { chartAccessibilitySurface }
+                GeometryReader { geometry in
+                    chartView(availableWidth: geometry.size.width)
+                }
+                .frame(height: 140)
+                .clipped()
+                .overlay { chartAccessibilitySurface }
 
                 if let summary = cachedWeekSummary {
                     Text(summary)
@@ -105,7 +107,7 @@ struct TrainingLoadChartView: View {
 
     // MARK: - Chart
 
-    private var chartView: some View {
+    private func chartView(availableWidth: CGFloat) -> some View {
         Chart {
             ForEach(data) { point in
                 BarMark(
@@ -114,6 +116,8 @@ struct TrainingLoadChartView: View {
                 )
                 .foregroundStyle(barColor(for: point))
                 .clipShape(RoundedRectangle(cornerRadius: 2))
+                .accessibilityLabel(Text(point.date, format: .dateTime.year().month(.wide).day()))
+                .accessibilityValue(Text(point.load.formattedWithSeparator(fractionDigits: 1)))
             }
 
             if cachedMovingAverage.count >= 2 {
@@ -136,7 +140,11 @@ struct TrainingLoadChartView: View {
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .day, count: period.chartAxisStrideCount)) { _ in
+            // Compact phone and Duo plots cannot fit seven localized month/day labels.
+            // Only the tick density changes; every bar remains selectable by date.
+            AxisMarks(values: .stride(by: .day, count: availableWidth < 500
+                                     ? max(2, period.chartAxisStrideCount)
+                                     : period.chartAxisStrideCount)) { _ in
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day())
                     .foregroundStyle(theme.sandColor)
                 AxisGridLine()
