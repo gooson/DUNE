@@ -334,6 +334,24 @@ final class ScoreRefreshService {
         return latestByHour.sorted { $0.key < $1.key }.map { (date: $0.key, score: $0.value.score) }
     }
 
+    /// Remove a stale same-hour stress value when measured evidence is unavailable.
+    func invalidateCurrentStressSnapshot() async {
+        let hourDate = HourlyScoreSnapshot.hourTruncated(Date())
+        let hourEnd = Calendar.current.date(byAdding: .hour, value: 1, to: hourDate) ?? hourDate
+        do {
+            let descriptor = FetchDescriptor<HourlyScoreSnapshot>(
+                predicate: #Predicate { $0.date >= hourDate && $0.date < hourEnd }
+            )
+            if let snapshot = try context.fetch(descriptor).first,
+               snapshot.stressScore != nil {
+                snapshot.stressScore = nil
+                try context.save()
+            }
+        } catch {
+            AppLogger.data.error("[ScoreRefreshService] Failed to clear stress: \(error.localizedDescription)")
+        }
+    }
+
     // MARK: - Private
 
     private func rollingDescriptor(from startDate: Date, fetchLimit: Int) -> FetchDescriptor<HourlyScoreSnapshot> {

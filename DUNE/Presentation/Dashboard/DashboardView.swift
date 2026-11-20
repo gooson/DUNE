@@ -369,6 +369,42 @@ struct DashboardView: View {
             CumulativeStressCard(stressScore: stressScore)
             .transition(Self.sectionTransition)
             .staggeredAppear(index: 6)
+        } else {
+            StandardCard {
+                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                    Text("Cumulative Stress").font(.headline)
+                    Text("Stress evidence unavailable").foregroundStyle(DS.Color.textSecondary)
+                    LabeledContent("HRV") {
+                        switch viewModel.stressEvidenceStatus.hrv {
+                        case .none: Text("No record")
+                        case .partial: Text("Need More Data")
+                        case .sufficient: Text("Recorded")
+                        case .unavailable: Text("Unable to load data.")
+                        }
+                    }
+                    .accessibilityIdentifier("dashboard-stress-source-hrv")
+                    LabeledContent("Sleep") {
+                        switch viewModel.stressEvidenceStatus.sleep {
+                        case .none: Text("No record")
+                        case .partial: Text("Need More Data")
+                        case .sufficient: Text("Recorded")
+                        case .unavailable: Text("Unable to load data.")
+                        }
+                    }
+                    .accessibilityIdentifier("dashboard-stress-source-sleep")
+                    LabeledContent("Training Load") {
+                        switch viewModel.stressEvidenceStatus.training {
+                        case .none: Text("No record")
+                        case .partial: Text("Need More Data")
+                        case .sufficient: Text("Recorded")
+                        case .unavailable: Text("Unable to load data.")
+                        }
+                    }
+                    .accessibilityIdentifier("dashboard-stress-source-training")
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .accessibilityIdentifier("dashboard-stress-evidence-unavailable")
         }
 
         // Exercise Intelligence Card (morning/daytime only)

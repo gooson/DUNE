@@ -137,6 +137,20 @@ final class TodayCompactUITests: SeededUITestBaseCase {
                       "Stress evidence must be present without expanding a disclosure")
     }
 
+    func testStressWithoutEvidenceHasNoNumberOrDetailRoute() {
+        var configuration = launchConfiguration
+        configuration.additionalArguments += ["--ui-visual-stress-absent-fixture", "--ui-dashboard-hour", "8"]
+        launchApp(with: configuration)
+        navigateToDashboard()
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("dashboard-stress-evidence-unavailable", maxSwipes: 16))
+        XCTAssertTrue(element("dashboard-stress-evidence-unavailable").exists)
+        XCTAssertFalse(element("dashboard-stress-score-value").exists)
+        XCTAssertFalse(app.buttons["dashboard-stress-details"].firstMatch.exists)
+        XCTAssertTrue(element("dashboard-stress-source-hrv").label.contains("Recorded"))
+        XCTAssertTrue(element("dashboard-stress-source-sleep").label.contains("No record"))
+        XCTAssertTrue(element("dashboard-stress-source-training").label.contains("Recorded"))
+    }
+
     func testInsightDismissTargetIncludesItsPadding() {
         var configuration = launchConfiguration
         configuration.additionalArguments.removeAll { $0 == "--ui-visual-condition-components-fixture" }

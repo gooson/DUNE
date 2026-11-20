@@ -45,7 +45,13 @@ struct CalculateCumulativeStressUseCase: Sendable {
     }
 
     func execute(input: Input) -> CumulativeStressScore? {
-        let validHRV = input.hrvDailyAverages.filter { $0.value > 0 && $0.value.isFinite }
+        let calendar = Calendar.current
+        let validHRV = Dictionary(grouping: input.hrvDailyAverages.filter {
+            $0.value > 0 && $0.value <= 500 && $0.value.isFinite
+        }) { calendar.startOfDay(for: $0.date) }
+        .map { day, values in
+            Input.DailyAverage(date: day, value: values.map(\.value).reduce(0, +) / Double(values.count))
+        }
         guard validHRV.count >= Self.minimumDays else { return nil }
 
         // --- HRV Variability (coefficient of variation) ---
@@ -186,7 +192,9 @@ struct CalculateCumulativeStressUseCase: Sendable {
     private func computeActivityLoadScore(
         durations: Input.WeeklyTrainingDurations?
     ) -> ScoredContribution? {
-        guard let d = durations, d.chronicWeeklyMinutes > 0 else { return nil }
+        guard let d = durations, d.chronicWeeklyMinutes > 0,
+              d.chronicWeeklyMinutes.isFinite, d.acuteMinutes >= 0,
+              d.acuteMinutes.isFinite else { return nil }
 
         let ratio = d.acuteMinutes / d.chronicWeeklyMinutes
 

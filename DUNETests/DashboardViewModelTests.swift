@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import Observation
 import Testing
 @testable import DUNE
@@ -97,6 +98,8 @@ private actor ToggleHRVService: HRVQuerying {
 }
 
 private struct MockSleepService: SleepQuerying {
+    enum FetchError: Error { case unavailable }
+    var failYesterday = false
     var todayStages: [SleepStage] = []
     var yesterdayStages: [SleepStage] = []
     var latestStages: (stages: [SleepStage], date: Date)?
@@ -104,7 +107,10 @@ private struct MockSleepService: SleepQuerying {
     func fetchSleepStages(for date: Date) async throws -> [SleepStage] {
         let calendar = Calendar.current
         if calendar.isDateInToday(date) { return todayStages }
-        if calendar.isDateInYesterday(date) { return yesterdayStages }
+        if calendar.isDateInYesterday(date) {
+            if failYesterday { throw FetchError.unavailable }
+            return yesterdayStages
+        }
         return []
     }
     func fetchLatestSleepStages(withinDays days: Int) async throws -> (stages: [SleepStage], date: Date)? { latestStages }
@@ -685,6 +691,78 @@ struct DashboardViewModelTests {
         #expect(vm.limitedConditionHistoryStartDate == start)
         #expect(vm.conditionScore != nil)
         #expect(vm.hasLimitedConditionHistory)
+    }
+
+    @Test("Stress source status uses recorded HRV and workout days")
+    func stressSourceCoverage() async {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let hrv = (0..<8).compactMap { offset -> HRVSample? in
+            calendar.date(byAdding: .day, value: -offset, to: today)
+                .map { HRVSample(value: 50, date: $0) }
+        }
+        let workouts = [-2, -7, -14, -21].compactMap { offset -> WorkoutSummary? in
+            calendar.date(byAdding: .day, value: offset, to: today).map { date in
+                WorkoutSummary(id: "stress-\(offset)", type: "Running", duration: 1800,
+                               calories: nil, distance: nil, date: date)
+            }
+        }
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(samples: hrv),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(workouts: workouts),
+            stepsService: MockStepsService(), bodyService: MockBodyService(),
+            coachingMessageEnhancer: nil
+        )
+        await vm.loadData()
+        #expect(vm.stressEvidenceStatus.hrv == .sufficient)
+        #expect(vm.stressEvidenceStatus.sleep == .none)
+        #expect(vm.stressEvidenceStatus.training == .sufficient)
+        #expect(vm.cumulativeStressScore == nil)
+        let partial = DashboardViewModel(
+            hrvService: MockHRVService(samples: Array(hrv.prefix(1))),
+            sleepService: MockSleepService(),
+            workoutService: MockWorkoutService(workouts: Array(workouts.prefix(1))),
+            stepsService: MockStepsService(), bodyService: MockBodyService(),
+            coachingMessageEnhancer: nil
+        )
+        await partial.loadData()
+        #expect(partial.stressEvidenceStatus.hrv == .partial)
+        #expect(partial.stressEvidenceStatus.training == .partial)
+        #expect(partial.cumulativeStressScore == nil)
+    }
+
+    @Test("Transient sleep failure leaves the previously persisted stress value intact")
+    func transientStressFailurePreservesSnapshot() async throws {
+        let container = try ModelContainer(
+            for: HourlyScoreSnapshot.self,
+            configurations: ModelConfiguration("StressFailure-\(UUID().uuidString)",
+                                               isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+        )
+        let context = ModelContext(container)
+        context.insert(HourlyScoreSnapshot(
+            date: HourlyScoreSnapshot.hourTruncated(Date()), stressScore: 42
+        ))
+        try context.save()
+        let vm = DashboardViewModel(
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(failYesterday: true),
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(), bodyService: MockBodyService(),
+            coachingMessageEnhancer: nil,
+            scoreRefreshService: ScoreRefreshService(modelContainer: container)
+        )
+        await vm.loadData()
+        #expect(vm.stressEvidenceStatus.sleep == .unavailable)
+        #expect(vm.stressEvidenceQueryFailed)
+        let snapshot = try #require(ModelContext(container).fetch(FetchDescriptor<HourlyScoreSnapshot>()).first)
+        #expect(snapshot.stressScore == 42)
+
+        await vm.loadData(canLoadHealthKitData: false)
+        #expect(vm.stressEvidenceStatus.sleep == .none)
+        #expect(!vm.stressEvidenceQueryFailed)
+        let deferredSnapshot = try #require(ModelContext(container).fetch(FetchDescriptor<HourlyScoreSnapshot>()).first)
+        #expect(deferredSnapshot.stressScore == 42)
     }
 
     @Test("A resting-heart-rate-only read limit is visible with an incomplete baseline")

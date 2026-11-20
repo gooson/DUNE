@@ -33,6 +33,14 @@ struct CalculateCumulativeStressUseCaseTests {
         #expect(result != nil)
     }
 
+    @Test("Repeated readings on one date do not satisfy seven-day coverage")
+    func repeatedDayIsInsufficient() {
+        let readings = (0..<10).map { _ in
+            CalculateCumulativeStressUseCase.Input.DailyAverage(date: Date(), value: 50)
+        }
+        #expect(sut.execute(input: .init(hrvDailyAverages: readings)) == nil)
+    }
+
     // MARK: - Low Stress
 
     @Test("Consistent HRV + regular sleep + balanced load → low stress")
@@ -187,7 +195,7 @@ struct CalculateCumulativeStressUseCaseTests {
         let averages = (0..<14).map { i in
             CalculateCumulativeStressUseCase.Input.DailyAverage(
                 date: Date().addingTimeInterval(TimeInterval(-i * 86400)),
-                value: Double(i * 100) // extreme variation
+                value: Double((i % 5 + 1) * 90) // valid, extreme variation
             )
         }
         let input = CalculateCumulativeStressUseCase.Input(hrvDailyAverages: averages)
