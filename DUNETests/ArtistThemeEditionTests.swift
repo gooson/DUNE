@@ -1,5 +1,6 @@
 import AVFoundation
 import SwiftUI
+import Synchronization
 import Testing
 @testable import DUNE
 
@@ -13,6 +14,40 @@ struct ArtistThemeEditionTests {
         #expect(!ArtistThemeBackground.playsMotion(visible: true, phase: .background, reduced: false, lowPower: false))
         #expect(!ArtistThemeBackground.playsMotion(visible: true, phase: .active, reduced: true, lowPower: false))
         #expect(!ArtistThemeBackground.playsMotion(visible: true, phase: .active, reduced: false, lowPower: true))
+    }
+
+    @Test func auroraLoopStartsDisconnectedFromSystemAudio() async throws {
+        let edition = try #require(ArtistThemeEdition.forTheme(.arcticDawn))
+        let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+        let window = UIWindow(windowScene: scene)
+        let host = UIViewController()
+        window.rootViewController = host
+        window.isHidden = false
+        defer { window.isHidden = true }
+        let view = ArtistPlayerView(frame: host.view.bounds)
+        let layer = try #require(view.layer as? AVPlayerLayer)
+        let attachments = Mutex(0)
+        let observation = layer.observe(\.player, options: .new) { layer, _ in
+            if layer.player != nil { attachments.withLock { $0 += 1 } }
+        }
+        defer { observation.invalidate() }
+
+        view.configure(url: edition.movieURL)
+        host.view.addSubview(view)
+        view.removeFromSuperview()
+        host.view.addSubview(view)
+        defer { view.removeFromSuperview() }
+
+        let deadline = ContinuousClock.now.advanced(by: .seconds(10))
+        while ContinuousClock.now < deadline {
+            if layer.isReadyForDisplay, let player = layer.player, player.currentTime().seconds > 0 { break }
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        let player = try #require(layer.player)
+        #expect(player.disconnectedFromSystemAudio)
+        #expect(layer.isReadyForDisplay)
+        #expect(player.currentTime().seconds > 0)
+        #expect(attachments.withLock { $0 } == 1)
     }
 
     @Test("Positive score changes and primary actions remain readable on their opaque fills")
