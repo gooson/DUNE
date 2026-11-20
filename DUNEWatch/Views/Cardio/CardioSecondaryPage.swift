@@ -17,6 +17,7 @@ struct CardioSecondaryPage: View {
                     Text(workoutManager.supportsMachineLevel ? String(localized: "Level") : isOutdoor ? String(localized: "Elevation") : profile.secondaryPageTitle)
                         .font(DS.Typography.metricLabel)
                         .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("watch-cardio-secondary")
                     Spacer()
                 }
 
@@ -26,7 +27,7 @@ struct CardioSecondaryPage: View {
             .padding(.horizontal, DS.Spacing.sm)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .accessibilityIdentifier("watch-cardio-secondary")
+        .accessibilityElement(children: .contain)
     }
 
     // MARK: - Profile
@@ -159,6 +160,7 @@ struct CardioSecondaryPage: View {
                 .frame(height: 48, alignment: .bottom)
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel("Elevation")
+                .accessibilityValue(elevationAccessibilityValue(profile: profile, now: now))
                 .accessibilityIdentifier("watch-outdoor-elevation-chart")
 
                 HStack(alignment: .top) {
@@ -173,6 +175,15 @@ struct CardioSecondaryPage: View {
                     .accessibilityIdentifier("watch-outdoor-elevation-unavailable")
             }
         }
+    }
+
+    private func elevationAccessibilityValue(profile: WatchElevationProfile, now: Date) -> Text {
+        let ascent = Text("Ascent")
+            + Text(verbatim: " \(profile.ascentMeters.formatted(.number.precision(.fractionLength(0)))) m")
+        guard let currentAltitude = profile.currentAltitude(at: now) else { return ascent }
+        return Text("Altitude")
+            + Text(verbatim: " \(currentAltitude.formatted(.number.precision(.fractionLength(0)))) m, ")
+            + ascent
     }
 
     private func elevationMetric(_ label: LocalizedStringKey, value: Double?) -> some View {
