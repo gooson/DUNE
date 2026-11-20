@@ -40,20 +40,41 @@ struct TrainingLoadChartView: View {
                     }
                 }
                 Spacer()
-                if let summary = cachedWeekSummary {
-                    Text(summary)
-                        .font(.caption)
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
             }
 
             if data.isEmpty {
                 placeholderView
             } else {
-                chartView
-                    .frame(height: 140)
-                    .clipped()
-                    .overlay { chartAccessibilitySurface }
+                if let point = displayedPoint {
+                    HStack(alignment: .firstTextBaseline, spacing: DS.Spacing.sm) {
+                        VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                            Text(point.date, format: .dateTime.month(.abbreviated).day())
+                                .font(.caption)
+                                .foregroundStyle(DS.Color.textSecondary)
+                            Text(point.load.formattedWithSeparator(fractionDigits: 1))
+                                .font(.largeTitle.weight(.bold).monospacedDigit())
+                                .minimumScaleFactor(0.8)
+                                .accessibilityIdentifier("training-load-selected-value")
+                        }
+                        Spacer(minLength: 0)
+                    }
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("training-load-selected-day")
+                }
+
+                GeometryReader { geometry in
+                    chartView(availableWidth: geometry.size.width)
+                }
+                .frame(height: 140)
+                .clipped()
+                .overlay { chartAccessibilitySurface }
+
+                if let summary = cachedWeekSummary {
+                    Text(summary)
+                        .accessibilityIdentifier("training-volume-chart-week-summary")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
 
                 // Legend
                 HStack(spacing: DS.Spacing.md) {
@@ -71,9 +92,11 @@ struct TrainingLoadChartView: View {
             recalculateChartData()
             resetScrollPosition()
         }
-        .onChange(of: data.count) { _, _ in
+        .onChange(of: data) { previous, updated in
             recalculateChartData()
-            resetScrollPosition()
+            if previous.first?.date != updated.first?.date || previous.last?.date != updated.last?.date {
+                resetScrollPosition()
+            }
         }
     }
 
@@ -84,7 +107,7 @@ struct TrainingLoadChartView: View {
 
     // MARK: - Chart
 
-    private var chartView: some View {
+    private func chartView(availableWidth: CGFloat) -> some View {
         Chart {
             ForEach(data) { point in
                 BarMark(
@@ -93,6 +116,8 @@ struct TrainingLoadChartView: View {
                 )
                 .foregroundStyle(barColor(for: point))
                 .clipShape(RoundedRectangle(cornerRadius: 2))
+                .accessibilityLabel(Text(point.date, format: .dateTime.year().month(.wide).day()))
+                .accessibilityValue(Text(point.load.formattedWithSeparator(fractionDigits: 1)))
             }
 
             if cachedMovingAverage.count >= 2 {
@@ -115,7 +140,11 @@ struct TrainingLoadChartView: View {
             }
         }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .day, count: period.chartAxisStrideCount)) { _ in
+            // Compact phone and Duo plots cannot fit seven localized month/day labels.
+            // Only the tick density changes; every bar remains selectable by date.
+            AxisMarks(values: .stride(by: .day, count: availableWidth < 500
+                                     ? max(2, period.chartAxisStrideCount)
+                                     : period.chartAxisStrideCount)) { _ in
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day())
                     .foregroundStyle(theme.sandColor)
                 AxisGridLine()
@@ -219,6 +248,10 @@ struct TrainingLoadChartView: View {
         period.visibleRangeLabel(from: scrollPosition)
     }
 
+    private var displayedPoint: TrainingLoadDataPoint? {
+        selectedPoint ?? data.max(by: { $0.date < $1.date })
+    }
+
     private var selectedPoint: TrainingLoadDataPoint? {
         guard let selectedDate else { return nil }
         return ChartSelectionInteraction.nearestPoint(to: selectedDate, in: data, date: \.date)
@@ -257,32 +290,27 @@ struct TrainingLoadChartView: View {
 
     /// This week's total vs last week
     private func computeWeekSummary() -> String? {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        guard let weekAgo = calendar.date(byAdding: .day, value: -7, to: today),
-              let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: today)
-        else { return nil }
+        guard let totals = TrainingLoadWeekTotals(data: data, today: Date(), calendar: .current) else { return nil }
+        let thisWeek = totals.current
+        let lastWeek = totals.previous
 
-        let thisWeek = data.filter { $0.date >= weekAgo }.reduce(0) { $0 + $1.load }
-        let lastWeek = data.filter { $0.date >= twoWeeksAgo && $0.date < weekAgo }.reduce(0) { $0 + $1.load }
-
-        guard thisWeek > 0 else { return nil }
+        guard thisWeek > 0 || lastWeek > 0 else { return nil }
 
         let formattedTotal = thisWeek.formattedWithSeparator(fractionDigits: 1)
         if lastWeek > 0 {
             let change = ((thisWeek - lastWeek) / lastWeek) * 100
-            guard change.isFinite, !change.isNaN else { return String(localized: "This week \(formattedTotal)") }
-            let arrow = change >= 0 ? "↑" : "↓"
+            guard change.isFinite, !change.isNaN else { return String(localized: "Last 7 days \(formattedTotal)") }
+            let arrow = change == 0 ? "" : (change > 0 ? "↑" : "↓")
             let formattedChange = abs(change).formattedWithSeparator()
-            return String(localized: "This week \(formattedTotal) (\(arrow)\(formattedChange)%)")
+            return String(localized: "Last 7 days \(formattedTotal) (\(arrow)\(formattedChange)%)")
         }
-        return String(localized: "This week \(formattedTotal)")
+        return String(localized: "Last 7 days \(formattedTotal)")
     }
 }
 
 // MARK: - Data Point
 
-struct TrainingLoadDataPoint: Identifiable {
+struct TrainingLoadDataPoint: Identifiable, Equatable {
     var id: Date { date }
     let date: Date
     let load: Double

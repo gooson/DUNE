@@ -172,34 +172,93 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         }
     }
 
+    private func alignSleepSummaryForCapture() {
+        let latest = waitForElement("wellness-sleep-latest", timeout: 5)
+        let lastDay = waitForElement("wellness-sleep-day-6", timeout: 5)
+        let scroll = app.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        let window = app.windows.firstMatch.frame
+        let visibleScroll = scroll.frame.intersection(window)
+        let navigation = app.navigationBars.firstMatch
+        let top = max(visibleScroll.minY, navigation.exists ? navigation.frame.maxY : visibleScroll.minY) + 12
+        let tabBar = app.tabBars.firstMatch
+        let bottom = min(visibleScroll.maxY, tabBar.exists ? tabBar.frame.minY : window.maxY) - 12
+        for _ in 0..<6 {
+            let displacement: CGFloat
+            if latest.frame.minY < top {
+                displacement = min(160, top - latest.frame.minY + 12)
+            } else if lastDay.frame.maxY > bottom {
+                displacement = -min(160, lastDay.frame.maxY - bottom + 12)
+            } else {
+                break
+            }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: displacement)))
+        }
+        XCTAssertGreaterThanOrEqual(latest.frame.minY, top, "Latest sleep metric should clear the top bar")
+        XCTAssertLessThanOrEqual(lastDay.frame.maxY, bottom, "Calendar bars should fit the visible Wellness viewport")
+    }
+
     func testSparseSleepBarsKeepCalendarPositionsAndWidth() {
-        for (count, slots) in [(1, [6]), (2, [2, 6]), (4, [0, 3, 5, 6]), (7, Array(0..<7))] {
+        for count in [1, 2, 4, 7] {
             var configuration = launchConfiguration
             configuration.additionalEnvironment["DUNE_UI_SLEEP_SAMPLE_COUNT"] = String(count)
             launchApp(with: configuration)
             navigateToWellness()
-            reveal("wellness-sleep-bar-6")
-            let bars = slots.map { waitForElement("wellness-sleep-bar-\($0)", timeout: 10) }
-            for index in 0..<7 {
-                XCTAssertEqual(element("wellness-sleep-bar-\(index)").exists, slots.contains(index),
-                               "Missing dates must remain empty: count=\(count), slot=\(index)")
+            let days = (0..<7).map { waitForElement("wellness-sleep-day-\($0)", timeout: 10) }
+            XCTAssertEqual(days.count, 7)
+            // All seven slots share one row; reveal its middle before checking hit targets.
+            reveal("wellness-sleep-day-3")
+            for day in days {
+                XCTAssertGreaterThanOrEqual(day.frame.width, 44, "Each calendar slot needs a full-width hit target")
+                XCTAssertGreaterThanOrEqual(day.frame.height, 44, "Each calendar slot needs a 44pt hit target")
+                XCTAssertTrue(day.isHittable, "Each observed or missing day remains selectable")
             }
-            for bar in bars {
-                XCTAssertEqual(bar.frame.width, 16, accuracy: 0.5)
-                XCTAssertLessThanOrEqual(bar.frame.height, 64.5)
-                XCTAssertTrue(bar.isHittable)
-            }
-            if bars.count > 1 {
-                let slotWidth = (bars.last!.frame.midX - bars.first!.frame.midX) /
-                    CGFloat(slots.last! - slots.first!)
-                for index in 1..<bars.count {
-                    XCTAssertEqual(bars[index].frame.midX - bars[index - 1].frame.midX,
-                                   CGFloat(slots[index] - slots[index - 1]) * slotWidth, accuracy: 1)
-                }
+            let spacing = days[1].frame.midX - days[0].frame.midX
+            for index in 2..<7 {
+                XCTAssertEqual(days[index].frame.midX - days[index - 1].frame.midX, spacing, accuracy: 1,
+                               "Missing days must retain their calendar positions")
             }
             XCTAssertEqual(element("wellness-sleep-average").exists, count >= 2)
-            reveal("wellness-hero-sleep", direction: .down)
+            // Keep both the latest metric and all seven slots inside the capture viewport.
+            alignSleepSummaryForCapture()
             addScreenshotAttachment(named: "H01-sleep-\(count)-records")
+        }
+    }
+
+    func testSparseSleepDateSelectionAndMissingDay() {
+        for (language, locale, missingText) in [
+            ("(en)", "en_US", "No record"),
+            ("(ko)", "ko_KR", "기록 없음")
+        ] {
+            var configuration = launchConfiguration
+            configuration.additionalEnvironment["DUNE_UI_SLEEP_SAMPLE_COUNT"] = "2"
+            if let languageIndex = configuration.additionalArguments.firstIndex(of: "-AppleLanguages") {
+                configuration.additionalArguments[languageIndex + 1] = language
+            }
+            if let localeIndex = configuration.additionalArguments.firstIndex(of: "-AppleLocale") {
+                configuration.additionalArguments[localeIndex + 1] = locale
+            }
+            launchApp(with: configuration)
+            navigateToWellness()
+            let count = reveal("wellness-sleep-observation-count")
+            XCTAssertTrue(count.label.contains("2"))
+
+            let missingDay = reveal("wellness-sleep-day-3")
+            XCTAssertTrue(missingDay.label.contains(missingText),
+                          "The missing calendar day must announce its actual state")
+            missingDay.tap()
+            let selectedEmpty = waitForElement("wellness-sleep-selected-empty", timeout: 5)
+            XCTAssertTrue(selectedEmpty.label.contains(missingText))
+            XCTAssertTrue(element("wellness-sleep-average").exists)
+            alignSleepSummaryForCapture()
+            addScreenshotAttachment(named: "H01-sleep-selected-missing-\(locale)")
+
+            let observedDay = reveal("wellness-sleep-day-2")
+            XCTAssertFalse(observedDay.label.contains(missingText))
+            observedDay.tap()
+            let selectedValue = waitForElement("wellness-sleep-selected-value", timeout: 5)
+            XCTAssertFalse(selectedValue.label.contains(missingText))
         }
     }
 
@@ -217,12 +276,14 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
             }
             launchApp(with: configuration)
             navigateToWellness()
-            reveal("wellness-sleep-bar-6")
+            reveal("wellness-sleep-day-6")
             let viewport = app.scrollViews.firstMatch.frame.intersection(app.windows.firstMatch.frame)
             for slot in [2, 6] {
-                let bar = waitForElement("wellness-sleep-bar-\(slot)", timeout: 10)
-                XCTAssertEqual(bar.frame.width, 16, accuracy: 0.5)
-                XCTAssertTrue(viewport.contains(bar.frame))
+                let day = waitForElement("wellness-sleep-day-\(slot)", timeout: 10)
+                XCTAssertGreaterThan(day.frame.width, 16)
+                XCTAssertTrue(viewport.contains(day.frame))
+                XCTAssertTrue(day.isHittable)
+                XCTAssertFalse(day.label.contains("No record"), "Seeded days 2 and 6 are observed")
             }
             if maximumAX {
                 let labels = [0, 3, 6].map { waitForElement("wellness-sleep-date-\($0)") }
@@ -246,7 +307,7 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         launchApp(with: configuration)
         navigateToWellness()
         XCTAssertTrue(reveal("wellness-sleep-empty-state").isHittable)
-        XCTAssertFalse(element("wellness-sleep-bar-6").exists)
+        XCTAssertFalse(element("wellness-sleep-day-6").exists)
         XCTAssertFalse(element("wellness-sleep-average").exists)
         addScreenshotAttachment(named: "H01-sleep-0-records")
     }
