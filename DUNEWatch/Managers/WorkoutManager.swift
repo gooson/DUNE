@@ -65,6 +65,7 @@ final class WorkoutManager: NSObject {
     /// Timeout watchdog for flaky simulator callback paths.
     private var finalizationTimeoutTask: Task<Void, Never>?
     private var routeRecorder: WorkoutRouteRecorder?
+    private(set) var liveElevation = WatchElevationProfile()
     private var capturedRoute: [WorkoutRoutePoint] = []
     private var capturedPlace: WorkoutPlace?
     // Completed-workout jobs are independent of session/reset generation and own immutable inputs.
@@ -516,6 +517,7 @@ final class WorkoutManager: NSObject {
         sessionGeneration = UUID()
         routeRecorder?.cancel()
         routeRecorder = nil
+        liveElevation = WatchElevationProfile()
         capturedRoute = []
         capturedPlace = nil
         runningVoiceFeedback.stop()
@@ -598,6 +600,7 @@ final class WorkoutManager: NSObject {
         } catch {
             routeRecorder?.cancel()
             routeRecorder = nil
+            liveElevation = WatchElevationProfile()
             capturedRoute = []
             capturedPlace = nil
             Self.logger.error("Failed to start HK session: \(String(describing: error), privacy: .public)")
@@ -626,6 +629,7 @@ final class WorkoutManager: NSObject {
         isSessionEnded = false
         isFinalizingWorkout = false
         heartRateHistory = WatchHeartRateHistory()
+        liveElevation = WatchElevationProfile()
         startDate = Date()
         lastMachineLevelSampleDate = supportsMachineLevel ? startDate : nil
         completedDuration = nil
@@ -669,6 +673,13 @@ final class WorkoutManager: NSObject {
                 heartRateSamples.append(bpm)
             }
             heartRate = 134
+        }
+        if ProcessInfo.processInfo.arguments.contains("--ui-watch-outdoor-elevation"),
+           case .cardio(_, true) = workoutMode {
+            let now = Date()
+            for index in 0..<25 {
+                liveElevation.observe(altitude: 100 + Double(index) * 2, at: now.addingTimeInterval(Double(index - 24) * 15), beginsSegment: index == 0)
+            }
         }
         if ProcessInfo.processInfo.arguments.contains("--ui-watch-no-heart-rate") {
             heartRate = 0
@@ -1048,6 +1059,7 @@ final class WorkoutManager: NSObject {
         sessionGeneration = UUID()
         routeRecorder?.cancel()
         routeRecorder = nil
+        liveElevation = WatchElevationProfile()
         capturedRoute = []
         capturedPlace = nil
         runningVoiceFeedback.stop()
@@ -1583,6 +1595,7 @@ final class WorkoutManager: NSObject {
               WorkoutRouteRecorder.shouldRecord(mode: workoutMode)
                 || WorkoutRouteRecorder.shouldCapturePlace(mode: workoutMode) else { return }
         let recorder = WorkoutRouteRecorder()
+        recorder.onElevationUpdate = { [weak self] profile in self?.liveElevation = profile }
         routeRecorder = recorder
         recorder.start(at: date, capturesPlaceOnly: WorkoutRouteRecorder.shouldCapturePlace(mode: workoutMode))
     }
@@ -1979,6 +1992,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
             guard let currentSession = session, workoutSession === currentSession else { return }
             routeRecorder?.cancel()
             routeRecorder = nil
+            liveElevation = WatchElevationProfile()
             capturedRoute = []
             capturedPlace = nil
             Self.logger.error("Workout session failed: \(error.localizedDescription, privacy: .public)")
