@@ -119,6 +119,32 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(header.isEnabled, "The seeded readiness should retain its detail route")
         header.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.12)).tap()
         XCTAssertTrue(waitForElement(AXID.activityTrainingReadinessDetailScreen, timeout: 10).exists)
+        XCTAssertTrue(waitForElement("training-readiness-score-bands", timeout: 5).exists)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("training-readiness-score-bands", maxSwipes: 8))
+        let bands = element("training-readiness-score-bands")
+        let scroll = app.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        let window = app.windows.firstMatch.frame
+        let visibleScroll = scroll.frame.intersection(window)
+        let navigation = app.navigationBars.firstMatch
+        let top = max(visibleScroll.minY, navigation.exists ? navigation.frame.maxY : visibleScroll.minY) + 12
+        let tabBar = app.tabBars.firstMatch
+        let bottom = min(visibleScroll.maxY, tabBar.exists ? tabBar.frame.minY : window.maxY) - 12
+        for _ in 0..<6 {
+            let displacement: CGFloat
+            if bands.frame.maxY > bottom {
+                displacement = min(160, bands.frame.maxY - bottom + 12)
+            } else if bands.frame.minY < top {
+                displacement = -min(160, top - bands.frame.minY + 12)
+            } else {
+                break
+            }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -displacement)))
+        }
+        XCTAssertGreaterThanOrEqual(bands.frame.minY, top, "Score band heading should clear the navigation bar")
+        XCTAssertLessThanOrEqual(bands.frame.maxY, bottom, "All score band captions should fit the visible detail viewport")
+        addScreenshotAttachment(named: "A02-readiness-score-bands")
     }
 
     func testReadinessEvidenceStatesCapturePartialAndEmpty() {

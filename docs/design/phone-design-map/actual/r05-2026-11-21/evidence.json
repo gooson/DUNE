@@ -1,0 +1,263 @@
+{
+  "feature": "R05",
+  "screens": [
+    "A02"
+  ],
+  "source": {
+    "source_revision": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+    "build_revision": "9d56a10d504b9970029186331187604a962cf472,676e10da12b4cc957e8cb6eb516fbee14af5035f,dfea466897aefd82e290e29b81531b027a2b2258,0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+    "combined_build": true,
+    "fixture": "시드 준비도 점수의 현재 구간 및 경계",
+    "locale": "화면별 테스트 언어",
+    "appearance": "화면별 테스트 설정",
+    "notes": "각 이미지를 통과한 개별 UI 테스트에 연결했다. Duo 내부 화면은 지정된 체크포인트에서 활성 LCD-1 프레임버퍼를 직접 캡처했다. 파일별 빌드·크기·관찰 결과는 아래 기록에 있다.",
+    "branch_comparison": {
+      "base": "b1fdbc1564dc130bd99375643eb1a3e0ef17a353",
+      "branches": {
+        "load-equal-weeks": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "load-selected-date": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "cardio-summary-hierarchy": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "machine-level-profile": "95481eed6980e593252656bcd47ada549178285f",
+        "achievement-day-groups": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "sleep-observed-days": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "readiness-evidence": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "readiness-score-bands": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "stress-source-evidence": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f"
+      },
+      "verified_source": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "identical_directories": [
+        "DUNE",
+        "Shared",
+        "DUNETests",
+        "DUNEUITests",
+        "DUNEWatch",
+        "DUNEWatchTests",
+        "DUNEWatchUITests"
+      ],
+      "source_trees": {
+        "DUNE": "838f24417a197ba9a3a7f771803a234e31d829ef",
+        "Shared": "107daa92979696e109a16a53e8569202f92490b8",
+        "DUNETests": "ad2cc01fada0a800d96e39638c2cd3469bd235fd",
+        "DUNEUITests": "42da1717fc25fcf7259c71be2405a8c5309f85cd",
+        "DUNEWatch": "08312632eec0a3627604fdddbf491f3bf2fff22e",
+        "DUNEWatchTests": "91eccbfe9ff3f61f2e7b21f0c99298f2576330a0",
+        "DUNEWatchUITests": "443eeaadb2b39e186eae87778b31c9d360d82a03"
+      }
+    }
+  },
+  "assets": [
+    {
+      "device": "regular",
+      "artifact": "A02-readiness-score-bands",
+      "selector": "ActivityFlowUITests/testReadinessHeaderTrailingEdgeOpensDetail",
+      "original_name": "05A51211-CDDE-48E5-AFB6-08EF6D0A8289.png",
+      "sha256": "88696da5bfbc7e43741b5a44e03b1002c2c461fd59311bb0efab93ec32d93218",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795200975.209,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "A02-readiness-score-bands_0_61B678CE-7E37-48F2-A9A5-1F6018246166.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "9652dfda54ac310fd8f11de7c70a2a957ca24f055f5e30f4738ec02625013aad",
+      "passed_case_receipt_sha256": "58bf3b494080c885805bfeb42edddd3bfac95f78fea1953277a3365ee547f6bd",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/05A51211-CDDE-48E5-AFB6-08EF6D0A8289.png",
+      "device_source": {
+        "source_revision": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "준비도 구간 카드 전체가 하단 탭 위에 들어온다. 0–39, 40–59, 60–79, 80–100 레이블과 현재 위치 표식이 보인다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "A02-readiness-score-bands",
+      "selector": "ActivityFlowUITests/testReadinessHeaderTrailingEdgeOpensDetail",
+      "original_name": "E691D816-2EBF-4FD2-A181-393AEBF06C2F.png",
+      "sha256": "c602c460e6fcbe73aa662ff19c8c5fc6e204f8e45ad996e878013d0fa66e1a38",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795201954.267,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "A02-readiness-score-bands_0_AB62EB63-CC21-4F74-80E5-9F25E95AAB87.png",
+      "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+      "xcresult_manifest_sha256": "60b1a4630416c0f959774744a80f781eb39005c65291feb4d5fab915794824ab",
+      "passed_case_receipt_sha256": "6d059de5a18a5cade9af848d2bdf184e6cc571bda6403d85f7e48a367d35e057",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/E691D816-2EBF-4FD2-A181-393AEBF06C2F.png",
+      "device_source": {
+        "source_revision": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+        "combined_build": true
+      },
+      "visual_observation": "iPad mini 원본 캡처: 준비도 77점과 보통 상태, 0–39/40–59/60–79/80–100 구간의 수치·설명·현재 점이 화면 폭 안에 모두 보이며 구간 카드가 하단에서 잘리지 않는다."
+    },
+    {
+      "device": "duo",
+      "artifact": "A02-readiness-score-bands",
+      "selector": "ActivityFlowUITests/testReadinessHeaderTrailingEdgeOpensDetail",
+      "original_name": "9C103786-47A4-4230-8276-02DFBAB1B8A6.png",
+      "sha256": "05f01d616b7d4e02deb24ae32627b256043536d80f1eaf01dd365fa5b17f5d73",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795202828.666,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "A02-readiness-score-bands_0_1812F1B4-E349-42AA-ACAA-C900A37AC98C.png",
+      "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+      "xcresult_manifest_sha256": "ba7b06347bfd56eee263f95f398799d107d5a03af2ca5bad99b50d1f0844c0cb",
+      "passed_case_receipt_sha256": "48d549ff2c317deea8b25b110dbc4aa8db78ec622d819049fa81fe9f41a54213",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "d03007691624d1146fdb5d73bcb257d423b1dc78acd95ef843cdabef1810caf4"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "89725a047b957426c22353c33db8a41a95e784e37645947f7b28c5b8106592d4"
+        }
+      },
+      "file": "images/duo/9C103786-47A4-4230-8276-02DFBAB1B8A6.png",
+      "device_source": {
+        "source_revision": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 접힘 LCD 1398×2034 원본: 준비도 구간 카드의 0–39, 40–59, 60–79, 80–100 숫자·문구와 77점 위치 표시가 모두 오른쪽 도킹 영역과 겹치지 않고 읽힌다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "A02-readiness-score-bands",
+      "selector": "ActivityFlowUITests/testReadinessHeaderTrailingEdgeOpensDetail",
+      "original_name": "A02-readiness-score-bands.png",
+      "sha256": "4f5c2c03579bda38adff06bc5dad889fd644f415893076c7db7af136416e6578",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T20:03:52.792963+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "A02-readiness-score-bands",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "e6d21c2609298f074c97db514c7fc7e2647cdf7c6df72dd855205ae72924da04",
+      "passed_case_receipt_sha256": "612d7fc26202811c7a6bb47b79e88d9400b0475f1b68d9e20931e8c16dcd271f",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "DBCAA245-7F9F-4677-A9A3-E50D1C9EB174.png",
+        "human_name": "A02-readiness-score-bands_0_2651203C-D8E6-4822-A485-021665C47DC0.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795205031.728
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    19.58s Added attachment named 'A02-readiness-score-bands'",
+        "time_utc": "2026-11-20T20:03:52.792963+00:00",
+        "observer_receipt_sha256": "cbad3811cf71ec187f69e611ad3f449eea336f480c8406bdcdbe43b5668792ae",
+        "observer_log": "dune-reference-open-extra-duo-open.log",
+        "case_result": "Passed"
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "a70239b4be367dfaee10d4867ee1b5c5b5902f8e7cdabd32a858bd729b699e01"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "5dbeaec7d3fbbcb3d5d2ee36ef2178f05af8defed338b6b499ac44458968a380"
+        }
+      },
+      "file": "images/duo-open/A02-readiness-score-bands.png",
+      "device_source": {
+        "source_revision": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 펼침 활성 LCD-1 2853×2007 물리 프레임: 준비도 77점의 검은 위치 점과 네 구간 수치·문구가 가로 카드에서 모두 잘림 없이 보이고 우측 도킹 영역과 분리된다."
+    }
+  ],
+  "unverified_devices": [],
+  "uncaptured_artifacts_by_device": {
+    "regular": [],
+    "ipad": [],
+    "duo": [],
+    "duo-open": []
+  },
+  "unverified_screen_ids": [],
+  "visual_inspection": {
+    "status": "원본 화면 검토 완료",
+    "notes": "준비도 구간 카드 전체가 하단 탭 위에 들어온다. 0–39, 40–59, 60–79, 80–100 레이블과 현재 위치 표식이 보인다. iPad mini 원본 캡처: 준비도 77점과 보통 상태, 0–39/40–59/60–79/80–100 구간의 수치·설명·현재 점이 화면 폭 안에 모두 보이며 구간 카드가 하단에서 잘리지 않는다. Duo 접힘 LCD 1398×2034 원본: 준비도 구간 카드의 0–39, 40–59, 60–79, 80–100 숫자·문구와 77점 위치 표시가 모두 오른쪽 도킹 영역과 겹치지 않고 읽힌다. Duo 펼침 활성 LCD-1 2853×2007 물리 프레임: 준비도 77점의 검은 위치 점과 네 구간 수치·문구가 가로 카드에서 모두 잘림 없이 보이고 우측 도킹 영역과 분리된다.",
+    "reviewer": "기능별 캡처 검토"
+  }
+}
