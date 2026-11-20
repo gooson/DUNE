@@ -172,6 +172,29 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         }
     }
 
+    private func alignSleepSummaryForCapture() {
+        let latest = waitForElement("wellness-sleep-latest", timeout: 5)
+        let lastDay = waitForElement("wellness-sleep-day-6", timeout: 5)
+        let scroll = app.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        let top = max(scroll.frame.minY, app.navigationBars.firstMatch.frame.maxY) + 12
+        let bottom = min(scroll.frame.maxY, app.tabBars.firstMatch.frame.minY) - 12
+        for _ in 0..<6 {
+            let displacement: CGFloat
+            if latest.frame.minY < top {
+                displacement = min(160, top - latest.frame.minY + 12)
+            } else if lastDay.frame.maxY > bottom {
+                displacement = -min(160, lastDay.frame.maxY - bottom + 12)
+            } else {
+                break
+            }
+            let start = scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55))
+            start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: displacement)))
+        }
+        XCTAssertGreaterThanOrEqual(latest.frame.minY, top, "Latest sleep metric should clear the top bar")
+        XCTAssertLessThanOrEqual(lastDay.frame.maxY, bottom, "Calendar bars should clear the tab bar")
+    }
+
     func testSparseSleepBarsKeepCalendarPositionsAndWidth() {
         for count in [1, 2, 4, 7] {
             var configuration = launchConfiguration
@@ -193,7 +216,8 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
                                "Missing days must retain their calendar positions")
             }
             XCTAssertEqual(element("wellness-sleep-average").exists, count >= 2)
-            // Native screenshot verifies the 16-point bar inside each accessible day button.
+            // Keep both the latest metric and all seven slots inside the capture viewport.
+            alignSleepSummaryForCapture()
             addScreenshotAttachment(named: "H01-sleep-\(count)-records")
         }
     }
@@ -223,6 +247,7 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
             let selectedEmpty = waitForElement("wellness-sleep-selected-empty", timeout: 5)
             XCTAssertTrue(selectedEmpty.label.contains(missingText))
             XCTAssertTrue(element("wellness-sleep-average").exists)
+            alignSleepSummaryForCapture()
             addScreenshotAttachment(named: "H01-sleep-selected-missing-\(locale)")
 
             let observedDay = reveal("wellness-sleep-day-2")
