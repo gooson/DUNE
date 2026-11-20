@@ -1434,21 +1434,12 @@ final class WorkoutManager: NSObject {
 
     private func handleMirrorFailure(for workoutSession: HKWorkoutSession) {
         guard session === workoutSession, !isSessionEnded else { return }
-        // A send failure and disconnect callback can describe the same outage.
-        guard !mirrorRetryPolicy.isRetryScheduled else { return }
-        let shouldRetry = mirrorRetryPolicy.recordFailure()
+        guard let delay = mirrorRetryPolicy.scheduleRetry() else { return }
         stopMirrorTransport(resetRetryPolicy: false)
-        if shouldRetry {
-            scheduleMirrorRetry(for: workoutSession)
-        }
-    }
-
-    private func scheduleMirrorRetry(for workoutSession: HKWorkoutSession) {
-        guard mirrorRetryTask == nil else { return }
         let generation = mirrorGeneration
         mirrorRetryTask = Task { @MainActor [weak self] in
             do {
-                try await Task.sleep(for: .seconds(5))
+                try await Task.sleep(for: .seconds(delay))
             } catch {
                 return
             }
@@ -1465,8 +1456,8 @@ final class WorkoutManager: NSObject {
     func phoneDidReconnect() {
         guard let workoutSession = session,
               !isSessionEnded,
-              mirrorRetryPolicy.recordReconnect() else { return }
-        scheduleMirrorRetry(for: workoutSession)
+              mirrorRetryPolicy.beginRetry() else { return }
+        startMirrorTransport(for: workoutSession, isRetry: true)
     }
 
     private func workoutSnapshot(at now: Date = Date()) -> WatchWorkoutSnapshot? {
@@ -1521,7 +1512,7 @@ final class WorkoutManager: NSObject {
                 }
                 guard self.mirrorGeneration == generation,
                       self.session === mirroredSession else { return }
-                self.mirrorRetryPolicy.recordSuccess()
+                self.mirrorRetryPolicy.reset()
             }
             self.mirrorSendTask = nil
         }

@@ -37,7 +37,7 @@ final class WatchWorkoutMirrorManager: NSObject {
             var requestedID: String?
             if reportedStart != nil {
                 do {
-                    requestedID = try WatchWorkoutActivityRequest.start(mirrorID: id, snapshot: initial)
+                    requestedID = try WatchWorkoutActivityRequest.start(mirrorID: id, snapshot: initial, sampledAt: initial.updatedAt)
                 } catch {
                     AppLogger.ui.error("Unable to start mirrored workout activity: \(error.localizedDescription, privacy: .private)")
                 }
@@ -93,11 +93,7 @@ extension WatchWorkoutMirrorManager: HKWorkoutSessionDelegate {
             case .ended, .stopped:
                 finish(workoutSession, at: date)
             case .paused, .running:
-                guard var snapshot = activity.snapshot else { return }
-                snapshot.elapsedSeconds = snapshot.elapsed(at: date)
-                snapshot.updatedAt = max(date, snapshot.updatedAt)
-                snapshot.phase = toState == .paused ? .paused : .running
-                activity.receive(snapshot, mirrorID: mirrorID)
+                activity.receivePhase(toState == .paused ? .paused : .running, at: date, mirrorID: mirrorID)
             default:
                 break
             }
@@ -125,7 +121,7 @@ extension WatchWorkoutMirrorManager: HKWorkoutSessionDelegate {
             for packet in data where packet.count <= 4_096 {
                 do {
                     let snapshot = try JSONDecoder().decode(WatchWorkoutSnapshot.self, from: packet)
-                    activity.receive(snapshot, mirrorID: mirrorID, authoritative: true)
+                    activity.receive(snapshot, mirrorID: mirrorID)
                 } catch {
                     AppLogger.ui.error("Invalid Watch workout snapshot: \(error.localizedDescription, privacy: .private)")
                 }

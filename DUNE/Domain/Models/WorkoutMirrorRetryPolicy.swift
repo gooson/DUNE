@@ -1,50 +1,25 @@
-/// Allows one delayed retry per mirroring outage. A new connection can reopen
-/// an exhausted outage, while success prepares the next independent outage.
+/// Back off while a workout is active, including when the phone stays in the background.
 struct WorkoutMirrorRetryPolicy {
-    private enum State {
-        case ready
-        case scheduled
-        case retrying
-        case exhausted
+    private var nextDelaySeconds = 5
+    private var retryScheduled = false
+
+    /// The send and disconnect callbacks can report the same failure.
+    mutating func scheduleRetry() -> Int? {
+        guard !retryScheduled else { return nil }
+        retryScheduled = true
+        let delay = nextDelaySeconds
+        nextDelaySeconds = min(delay * 2, 120)
+        return delay
     }
 
-    private var state: State = .ready
-
-    var isRetryScheduled: Bool { state == .scheduled }
-
-    /// Returns true only when a new delayed retry should be scheduled.
-    mutating func recordFailure() -> Bool {
-        switch state {
-        case .ready:
-            state = .scheduled
-            return true
-        case .retrying:
-            state = .exhausted
-            return false
-        case .scheduled, .exhausted:
-            return false
-        }
-    }
-
-    /// Marks the single scheduled retry as underway.
+    /// Both the timer and a reachability change can claim the pending retry.
     mutating func beginRetry() -> Bool {
-        guard state == .scheduled else { return false }
-        state = .retrying
-        return true
-    }
-
-    mutating func recordSuccess() {
-        state = .ready
-    }
-
-    /// Reopens only an exhausted outage after an actual unreachable-to-reachable change.
-    mutating func recordReconnect() -> Bool {
-        guard state == .exhausted else { return false }
-        state = .scheduled
+        guard retryScheduled else { return false }
+        retryScheduled = false
         return true
     }
 
     mutating func reset() {
-        state = .ready
+        self = Self()
     }
 }

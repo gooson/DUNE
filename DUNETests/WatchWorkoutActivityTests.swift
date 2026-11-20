@@ -26,6 +26,13 @@ struct WatchWorkoutActivityTests {
         )
     }
 
+    @Test("Background delivery tolerates a multi-minute gap and expires from the Watch sample time")
+    func backgroundDeliveryStaleDate() {
+        let sample = snapshot()
+        let content = WatchWorkoutActivityRequest.content(sample, sampledAt: sample.updatedAt)
+        #expect(content.staleDate == sample.updatedAt.addingTimeInterval(300))
+    }
+
     @Test("Requests once, updates the activity, and ends it on finish")
     func startsUpdatesAndFinishes() async {
         let driver = MockWatchWorkoutActivityDriver()
@@ -72,12 +79,76 @@ struct WatchWorkoutActivityTests {
         #expect(driver.events.last == "end:background-activity")
     }
 
+    @Test("A reattached mirror adopts buffered Watch data once, then rejects older packets")
+    func bufferedUpdateAfterBackgroundLaunch() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        activity.start(mirrorID: mirrorID, snapshot: snapshot(updatedAtOffset: 180),
+                       requestedID: "background", didRequest: true)
+        let buffered = snapshot(updatedAtOffset: 170, elapsedSeconds: 165)
+        activity.receive(buffered, mirrorID: mirrorID)
+        activity.receive(snapshot(updatedAtOffset: 160), mirrorID: mirrorID)
+        await activity.waitForPendingUpdates()
+        #expect(activity.snapshot == buffered)
+        #expect(driver.updates.map(\.snapshot) == [buffered])
+    }
+
+    @Test("Buffered measurements update through a newer pause without restarting the timer")
+    func phaseCallbackBeforeBufferedData() async {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        activity.start(mirrorID: mirrorID, snapshot: snapshot(updatedAtOffset: 180),
+                       requestedID: "background", didRequest: true)
+        let pause = startedAt.addingTimeInterval(185)
+        activity.receivePhase(.paused, at: pause, mirrorID: mirrorID)
+        var buffered = snapshot(updatedAtOffset: 170, elapsedSeconds: 160)
+        buffered.exerciseName = "Bench Press"
+        activity.receive(buffered, mirrorID: mirrorID)
+        buffered.updatedAt = startedAt.addingTimeInterval(175)
+        buffered.elapsedSeconds = 165
+        buffered.heartRate = 128
+        activity.receive(buffered, mirrorID: mirrorID)
+        activity.receive(snapshot(updatedAtOffset: 171), mirrorID: mirrorID)
+        await activity.waitForPendingUpdates()
+        #expect(activity.snapshot?.exerciseName == "Bench Press")
+        #expect(activity.snapshot?.heartRate == 128)
+        #expect(activity.snapshot?.phase == .paused)
+        #expect(activity.snapshot?.elapsedSeconds == 175)
+
+        let resumed = snapshot(updatedAtOffset: 195)
+        activity.receive(resumed, mirrorID: mirrorID)
+        activity.receivePhase(.paused, at: pause, mirrorID: mirrorID)
+        #expect(activity.snapshot == resumed)
+    }
+
+    @Test("A pause and resume preserve measured time and keep old metrics stale")
+    func bufferedDataThroughPauseAndResume() async throws {
+        let driver = MockWatchWorkoutActivityDriver()
+        let activity = WatchWorkoutActivity(driver: driver)
+        activity.start(mirrorID: mirrorID, snapshot: snapshot(updatedAtOffset: 20))
+        await activity.waitForPendingUpdates()
+        activity.receivePhase(.paused, at: startedAt.addingTimeInterval(30), mirrorID: mirrorID)
+        let resume = startedAt.addingTimeInterval(400)
+        activity.receivePhase(.running, at: resume, mirrorID: mirrorID)
+        let buffered = snapshot(updatedAtOffset: 25, elapsedSeconds: 20)
+        activity.receive(buffered, mirrorID: mirrorID)
+        await activity.waitForPendingUpdates()
+
+        let update = try #require(driver.updates.last)
+        #expect(update.snapshot.phase == .running)
+        #expect(update.snapshot.elapsed(at: resume) == 25)
+        let content = WatchWorkoutActivityRequest.content(update.snapshot, sampledAt: update.sampledAt)
+        #expect(content.staleDate == buffered.updatedAt.addingTimeInterval(300))
+        #expect(try #require(content.staleDate) < resume)
+    }
+
     @Test("Rejects stale timestamps, wrong mirror IDs, and mismatched workout start times")
     func rejectsStaleOrUnrelatedUpdates() async {
         let driver = MockWatchWorkoutActivityDriver()
         let activity = WatchWorkoutActivity(driver: driver)
         let initial = snapshot()
         activity.start(mirrorID: mirrorID, snapshot: initial)
+        activity.receive(initial, mirrorID: mirrorID)
         await activity.waitForPendingUpdates()
 
         activity.receive(snapshot(updatedAtOffset: 9), mirrorID: mirrorID)
@@ -114,8 +185,8 @@ struct WatchWorkoutActivityTests {
         let activity = WatchWorkoutActivity(driver: driver)
         activity.start(mirrorID: mirrorID, snapshot: snapshot(), allowsStartCorrection: true)
         let actual = snapshot(updatedAtOffset: 20, startedAtOffset: -60, elapsedSeconds: 80)
-        activity.receive(actual, mirrorID: mirrorID, authoritative: true)
-        activity.receive(snapshot(updatedAtOffset: 30, startedAtOffset: -120), mirrorID: mirrorID, authoritative: true)
+        activity.receive(actual, mirrorID: mirrorID)
+        activity.receive(snapshot(updatedAtOffset: 30, startedAtOffset: -120), mirrorID: mirrorID)
         await activity.waitForPendingUpdates()
         #expect(activity.snapshot == actual)
     }
@@ -330,7 +401,7 @@ struct WatchWorkoutActivityTests {
         #expect(driver.starts.isEmpty)
 
         let identified = snapshot(updatedAtOffset: 20, startedAtOffset: -60, elapsedSeconds: 80)
-        activity.receive(identified, mirrorID: mirrorID, authoritative: true)
+        activity.receive(identified, mirrorID: mirrorID)
         await activity.waitForPendingUpdates()
         #expect(driver.starts.map(\.snapshot) == [identified])
     }
@@ -346,7 +417,7 @@ struct WatchWorkoutActivityTests {
         await activity.waitForPendingUpdates()
         #expect(driver.starts.isEmpty)
 
-        activity.receive(snapshot(updatedAtOffset: 20, startedAtOffset: -60), mirrorID: mirrorID, authoritative: true)
+        activity.receive(snapshot(updatedAtOffset: 20, startedAtOffset: -60), mirrorID: mirrorID)
         await activity.waitForPendingUpdates()
         #expect(activity.snapshot == final)
         #expect(driver.starts.isEmpty)
@@ -384,6 +455,7 @@ private final class MockWatchWorkoutActivityDriver: WatchWorkoutActivityDriving 
     }
 
     struct UpdateCall {
+        var sampledAt: Date
         var id: String
         var snapshot: WatchWorkoutSnapshot
     }
@@ -402,7 +474,7 @@ private final class MockWatchWorkoutActivityDriver: WatchWorkoutActivityDriving 
         shouldBlockNextUpdate = blockUpdates
     }
 
-    func start(mirrorID: UUID, snapshot: WatchWorkoutSnapshot) throws -> String? {
+    func start(mirrorID: UUID, snapshot: WatchWorkoutSnapshot, sampledAt: Date) throws -> String? {
         starts.append(StartCall(mirrorID: mirrorID, snapshot: snapshot))
         events.append("start")
         switch startBehavior {
@@ -415,8 +487,8 @@ private final class MockWatchWorkoutActivityDriver: WatchWorkoutActivityDriving 
         }
     }
 
-    func update(id: String, snapshot: WatchWorkoutSnapshot) async {
-        updates.append(UpdateCall(id: id, snapshot: snapshot))
+    func update(id: String, snapshot: WatchWorkoutSnapshot, sampledAt: Date) async {
+        updates.append(UpdateCall(sampledAt: sampledAt, id: id, snapshot: snapshot))
         events.append("update-start:\(id)")
         updateHasStarted = true
         updateStartedContinuation?.resume()
