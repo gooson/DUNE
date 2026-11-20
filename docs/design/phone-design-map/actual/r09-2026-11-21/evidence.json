@@ -1,0 +1,265 @@
+{
+  "feature": "R09",
+  "screens": [
+    "T03"
+  ],
+  "source": {
+    "source_revision": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f",
+    "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20,9d56a10d504b9970029186331187604a962cf472,dfea466897aefd82e290e29b81531b027a2b2258,0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+    "combined_build": true,
+    "fixture": "T03 스트레스 근거 없음",
+    "locale": "화면별 테스트 언어",
+    "appearance": "화면별 테스트 설정",
+    "notes": "각 이미지를 통과한 개별 UI 테스트에 연결했다. Duo 내부 화면은 지정된 체크포인트에서 활성 LCD-1 프레임버퍼를 직접 캡처했다. 파일별 빌드·크기·관찰 결과는 아래 기록에 있다.",
+    "branch_comparison": {
+      "base": "b1fdbc1564dc130bd99375643eb1a3e0ef17a353",
+      "branches": {
+        "load-equal-weeks": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "load-selected-date": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "cardio-summary-hierarchy": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "machine-level-profile": "95481eed6980e593252656bcd47ada549178285f",
+        "achievement-day-groups": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "sleep-observed-days": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "readiness-evidence": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "readiness-score-bands": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "stress-source-evidence": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f"
+      },
+      "verified_source": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "identical_directories": [
+        "DUNE",
+        "Shared",
+        "DUNETests",
+        "DUNEUITests",
+        "DUNEWatch",
+        "DUNEWatchTests",
+        "DUNEWatchUITests"
+      ],
+      "source_trees": {
+        "DUNE": "838f24417a197ba9a3a7f771803a234e31d829ef",
+        "Shared": "107daa92979696e109a16a53e8569202f92490b8",
+        "DUNETests": "ad2cc01fada0a800d96e39638c2cd3469bd235fd",
+        "DUNEUITests": "42da1717fc25fcf7259c71be2405a8c5309f85cd",
+        "DUNEWatch": "08312632eec0a3627604fdddbf491f3bf2fff22e",
+        "DUNEWatchTests": "91eccbfe9ff3f61f2e7b21f0c99298f2576330a0",
+        "DUNEWatchUITests": "443eeaadb2b39e186eae87778b31c9d360d82a03"
+      }
+    }
+  },
+  "assets": [
+    {
+      "device": "regular",
+      "artifact": "T03-stress-evidence-unavailable",
+      "selector": "TodayCompactUITests/testStressWithoutEvidenceHasNoNumberOrDetailRoute",
+      "original_name": "138EEE06-D434-48BD-84B6-49584378D331.png",
+      "sha256": "0caff82b319fbe93cd1506b91d3ecfacc6b731470673756cd405f44b7bc3212d",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795199962.124,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "T03-stress-evidence-unavailable_0_2885FC73-26A8-4085-A35D-3C80673016A3.png",
+      "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20",
+      "xcresult_manifest_sha256": "7aa974c75e670f9df598791928e4e3f7aff808948e4991b3b8c51834fb00ed8c",
+      "passed_case_receipt_sha256": "64a83b1cf5883f96adbee99aef887071867fff3877398dcdab3fafeb91a11834",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/138EEE06-D434-48BD-84B6-49584378D331.png",
+      "device_source": {
+        "source_revision": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f",
+        "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20",
+        "combined_build": true
+      },
+      "visual_observation": "총점 대신 누적 스트레스의 HRV·수면·훈련 부하별 기록 상태가 한 카드 안에 보인다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "T03-stress-evidence-unavailable",
+      "selector": "TodayCompactUITests/testStressWithoutEvidenceHasNoNumberOrDetailRoute",
+      "original_name": "234AEA27-DF84-492F-9A8E-73F29631CD3E.png",
+      "sha256": "0bd3e32b99c8df4608414a7a7b9799307b932f8dc27a52b8c7654cac9fa831fd",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795201583.643,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "T03-stress-evidence-unavailable_0_21FA4111-B6DC-4595-BECF-C5CA05ED55B7.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "979ee6cc0f28d5f6082c7d7bcede1aafaa02add1b982c7b95cbe5fc5578250e1",
+      "passed_case_receipt_sha256": "e286c2f12ed70d1bb319b29f019ebf72aec0ffe2922f04859e067573bafbd411",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/234AEA27-DF84-492F-9A8E-73F29631CD3E.png",
+      "device_source": {
+        "source_revision": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "iPad mini 실기기 캡처: Cumulative Stress는 숫자 없이 Stress evidence unavailable을 표시하고 HRV·Training Load Recorded, Sleep No record를 구분한다. 카드의 글자와 상태가 잘림 없이 보인다."
+    },
+    {
+      "device": "duo",
+      "artifact": "T03-stress-evidence-unavailable",
+      "selector": "TodayCompactUITests/testStressWithoutEvidenceHasNoNumberOrDetailRoute",
+      "original_name": "3A0FB193-9A10-4010-BB45-7E315814E113.png",
+      "sha256": "32ebc6a28a9c3a66c30ec0824ba6136bf1ff4121cf76bce56eeb5cd38fc1c6ff",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795202859.717,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "T03-stress-evidence-unavailable_0_F5511205-0FFE-4D4E-8918-06A166B03D2D.png",
+      "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+      "xcresult_manifest_sha256": "ba7b06347bfd56eee263f95f398799d107d5a03af2ca5bad99b50d1f0844c0cb",
+      "passed_case_receipt_sha256": "48d549ff2c317deea8b25b110dbc4aa8db78ec622d819049fa81fe9f41a54213",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "d03007691624d1146fdb5d73bcb257d423b1dc78acd95ef843cdabef1810caf4"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "89725a047b957426c22353c33db8a41a95e784e37645947f7b28c5b8106592d4"
+        }
+      },
+      "file": "images/duo/3A0FB193-9A10-4010-BB45-7E315814E113.png",
+      "device_source": {
+        "source_revision": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f",
+        "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 접힘 LCD 1398×2034 원본: Cumulative Stress 카드는 숫자 없이 evidence unavailable을 표시하고 HRV·Training Load Recorded, Sleep No record를 잘림 없이 구분한다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "T03-stress-evidence-unavailable",
+      "selector": "TodayCompactUITests/testStressWithoutEvidenceHasNoNumberOrDetailRoute",
+      "original_name": "T03-stress-evidence-unavailable-host.png",
+      "sha256": "13f9d1c92f02a0dd415af0aa42a2caafd8d6aeddf80a1cb2d2bfc26e413e8e8f",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T20:05:58.151616+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "T03-stress-evidence-unavailable",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "78f5925c2c22f2016bbfe0604f50b71e451f3d1d2de00d36c4016004165da783",
+      "passed_case_receipt_sha256": "58975ca9e4cd29cae6b916784c6cacf536d07b5a61d0dc82faa79ee076796712",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "53BFAB23-2EDF-48F9-A547-928E3BAD9EF7.png",
+        "human_name": "T03-stress-evidence-unavailable_0_9A3203B6-984B-4949-A0D8-7B714159B909.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795205157.149
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    30.25s Added attachment named 'T03-stress-evidence-unavailable'",
+        "time_utc": "2026-11-20T20:05:58.151616+00:00",
+        "observer_receipt_sha256": "b7677274b2cc0fa1f6450644d9bd6c68cc47f7897ba1f9030a051edba99eb1fc",
+        "observer_log": "dune-reference-open-stress-duo-open.log",
+        "case_result": "Passed",
+        "attachment_event": "t =    30.25s Added attachment named 'T03-stress-evidence-unavailable'",
+        "attachment_event_delta_seconds": 0.0
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "50f404c6d3c033d5ba0b902c00351b1ef80e736eb5823822db52aceb2986fae2"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "b36eb1a38d07f7e89e61bd038390d16bb97bfc255c042597aa70359e304a9cba"
+        }
+      },
+      "file": "images/duo-open/T03-stress-evidence-unavailable-host.png",
+      "device_source": {
+        "source_revision": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "펼친 화면에서 누적 스트레스 근거 부족 메시지 아래에 HRV 기록 있음, 수면 기록 없음, 훈련 부하 기록 있음이 표시된다."
+    }
+  ],
+  "unverified_devices": [],
+  "uncaptured_artifacts_by_device": {
+    "regular": [],
+    "ipad": [],
+    "duo": [],
+    "duo-open": []
+  },
+  "unverified_screen_ids": [],
+  "visual_inspection": {
+    "status": "원본 화면 검토 완료",
+    "notes": "총점 대신 누적 스트레스의 HRV·수면·훈련 부하별 기록 상태가 한 카드 안에 보인다. iPad mini 실기기 캡처: Cumulative Stress는 숫자 없이 Stress evidence unavailable을 표시하고 HRV·Training Load Recorded, Sleep No record를 구분한다. 카드의 글자와 상태가 잘림 없이 보인다. Duo 접힘 LCD 1398×2034 원본: Cumulative Stress 카드는 숫자 없이 evidence unavailable을 표시하고 HRV·Training Load Recorded, Sleep No record를 잘림 없이 구분한다. 펼친 화면에서 누적 스트레스 근거 부족 메시지 아래에 HRV 기록 있음, 수면 기록 없음, 훈련 부하 기록 있음이 표시된다.",
+    "reviewer": "기능별 캡처 검토"
+  }
+}

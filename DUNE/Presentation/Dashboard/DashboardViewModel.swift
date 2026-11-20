@@ -50,6 +50,15 @@ final class DashboardViewModel {
     private(set) var todaySleepMinutes: Double = 0
 
     // Phase 3: Cumulative stress + daily digest + time-aware ordering
+    struct StressEvidenceStatus {
+        enum Availability: Equatable { case none, partial, sufficient, unavailable }
+        let hrv: Availability
+        let sleep: Availability
+        let training: Availability
+        static let empty = StressEvidenceStatus(hrv: .none, sleep: .none, training: .none)
+    }
+    private(set) var stressEvidenceStatus: StressEvidenceStatus = .empty
+    private(set) var stressEvidenceQueryFailed = false
     private(set) var cumulativeStressScore: CumulativeStressScore?
     private(set) var dailyDigest: DailyDigest?
     var pinnedCategories: [HealthMetric.Category]
@@ -396,7 +405,13 @@ final class DashboardViewModel {
         if let retainedWorkoutSummary {
             yesterdayWorkoutSummary = retainedWorkoutSummary
         }
-        buildCumulativeStressScore()
+        await buildCumulativeStressScore(
+            requestID: requestID,
+            canQueryHealthKit: canQueryHealthKit,
+            hrvFailed: hrvResult.failed,
+            sleepFailed: sleepResult.failed,
+            exerciseFailed: exerciseResult.failed
+        )
         buildDailyDigest(force: forceDailyDigest)
         // A deferred authorization pass has not queried health data yet.
         // Keep the first-load skeleton until the authorized request completes.
@@ -429,6 +444,11 @@ final class DashboardViewModel {
             await service.loadTodaySparklines()
         }
 
+        if isCurrentLoadRequest(requestID), canQueryHealthKit, cumulativeStressScore == nil,
+           !stressEvidenceQueryFailed,
+           let service = scoreRefreshService {
+            await service.invalidateCurrentStressSnapshot()
+        }
         await syncSparklines(requestID: requestID)
     }
 
@@ -1870,77 +1890,104 @@ final class DashboardViewModel {
 
     private let stressUseCase = CalculateCumulativeStressUseCase()
 
-    private func buildCumulativeStressScore() {
-        if ProcessInfo.processInfo.arguments.contains("--ui-visual-stress-fixture") {
-            cumulativeStressScore = CumulativeStressScore(
-                score: 42,
-                level: .moderate,
-                contributions: [
-                    .init(factor: .hrvVariability, rawScore: 40, weight: 0.4,
-                          detail: "Recent HRV pattern"),
-                    .init(factor: .sleepConsistency, rawScore: 46, weight: 0.35,
-                          detail: "Recent sleep consistency"),
-                    .init(factor: .activityLoad, rawScore: 38, weight: 0.25,
-                          detail: "Recent training load")
-                ],
-                trend: .stable
-            )
-            return
-        }
-        // Use HRV data already fetched for condition score
-        guard conditionScore != nil else {
+    private func buildCumulativeStressScore(
+        requestID: Int, canQueryHealthKit: Bool,
+        hrvFailed: Bool, sleepFailed: Bool, exerciseFailed: Bool
+    ) async {
+        stressEvidenceQueryFailed = hrvFailed || sleepFailed || exerciseFailed
+        if ProcessInfo.processInfo.arguments.contains("--ui-visual-stress-absent-fixture") {
+            stressEvidenceStatus = .init(hrv: .sufficient, sleep: .none, training: .sufficient)
             cumulativeStressScore = nil
             return
         }
-        // Build HRV daily averages from recent scores (we have 14-day window from condition)
-        // For stress score we ideally want 30 days, but use what we have
-        let dailyAverages = recentScores.compactMap { score -> CalculateCumulativeStressUseCase.Input.DailyAverage? in
-            guard score.contributions.first(where: { $0.factor == .hrv }) != nil else { return nil }
-            // Extract numeric value from detail string — use score as proxy
-            return .init(date: score.date, value: Double(score.score))
-        }
-
-        // Sleep regularity from deficit analysis
-        let sleepRegularity: SleepRegularityIndex?
-        if let deficit = sleepDeficitAnalysis, deficit.dailyDeficits.count >= 3 {
-            let dayCount = deficit.dailyDeficits.count
-            let sleepValues = deficit.dailyDeficits.map(\.actualMinutes)
-            let sleepMean = sleepValues.reduce(0, +) / Double(sleepValues.count)
-            let sleepVariance = sleepValues.reduce(0.0) { $0 + ($1 - sleepMean) * ($1 - sleepMean) } / Double(sleepValues.count)
-            let bedtimeStd = sqrt(sleepVariance)
-            sleepRegularity = SleepRegularityIndex(
-                score: max(0, min(100, Int((100.0 - bedtimeStd / 10.0).rounded()))),
-                bedtimeStdDevMinutes: bedtimeStd,
-                wakeTimeStdDevMinutes: bedtimeStd,
-                averageBedtime: DateComponents(hour: 23, minute: 0),
-                averageWakeTime: DateComponents(hour: 7, minute: 0),
-                dataPointCount: dayCount,
-                confidence: dayCount >= 14 ? .high : (dayCount >= 7 ? .medium : .low)
+        if ProcessInfo.processInfo.arguments.contains("--ui-visual-stress-fixture") {
+            stressEvidenceStatus = .init(hrv: .sufficient, sleep: .sufficient, training: .sufficient)
+            cumulativeStressScore = CumulativeStressScore(
+                score: 42, level: .moderate,
+                contributions: [
+                    .init(factor: .hrvVariability, rawScore: 40, weight: 0.4, detail: "Recent HRV pattern"),
+                    .init(factor: .sleepConsistency, rawScore: 46, weight: 0.35, detail: "Recent sleep consistency"),
+                    .init(factor: .activityLoad, rawScore: 38, weight: 0.25, detail: "Recent training load")
+                ], trend: .stable
             )
-        } else {
-            sleepRegularity = nil
+            return
         }
 
-        // Training load from exercise metric
-        let exerciseMinutes = sortedMetrics.first { $0.category == .exercise }?.value ?? 0
-        let trainingDurations: CalculateCumulativeStressUseCase.Input.WeeklyTrainingDurations?
-        if exerciseMinutes > 0 {
-            // Use today's exercise as acute estimate, condition score history as chronic proxy
-            trainingDurations = .init(
-                acuteMinutes: exerciseMinutes * 7, // extrapolate to weekly
-                chronicWeeklyMinutes: max(exerciseMinutes * 7, 150) // fallback: 150 min/week
+        guard canQueryHealthKit else {
+            stressEvidenceStatus = .empty
+            cumulativeStressScore = nil
+            return
+        }
+
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: nowProvider())
+        let start30 = calendar.date(byAdding: .day, value: -29, to: today) ?? today
+        let hrvByDay = Dictionary(grouping: conditionHourlySamples.filter {
+            $0.date >= start30 && $0.value > 0 && $0.value <= 500 && $0.value.isFinite
+        }) { calendar.startOfDay(for: $0.date) }
+        let hrv = hrvByDay.map { day, samples in
+            CalculateCumulativeStressUseCase.Input.DailyAverage(
+                date: day, value: samples.map(\.value).reduce(0, +) / Double(samples.count)
             )
-        } else {
-            trainingDurations = nil
+        }.sorted { $0.date < $1.date }
+        // Query the same deduplicated sleep-stage source used by Wellness.
+        // A missing or failed query cannot be converted into a bedtime estimate.
+        let sleepService = self.sleepService
+        let dates = (0..<14).compactMap { calendar.date(byAdding: .day, value: -$0, to: today) }
+        let (nights, nightQueryFailed) = await withTaskGroup(of: [SleepStage]?.self) { group in
+            for date in dates {
+                group.addTask { try? await sleepService.fetchSleepStages(for: date) }
+            }
+            var collected: [[SleepStage]] = []
+            var failed = false
+            for await stages in group {
+                if let stages {
+                    if !stages.isEmpty { collected.append(stages) }
+                } else {
+                    failed = true
+                }
+            }
+            return (collected, failed)
         }
-
-        let input = CalculateCumulativeStressUseCase.Input(
-            hrvDailyAverages: dailyAverages,
-            sleepRegularity: sleepRegularity,
-            weeklyTrainingDurations: trainingDurations
+        guard isCurrentLoadRequest(requestID) else { return }
+        stressEvidenceQueryFailed = stressEvidenceQueryFailed || nightQueryFailed
+        let regularity = nightQueryFailed ? nil : CalculateSleepRegularityUseCase().execute(
+            input: .init(sleepStagesByDay: nights, calendar: calendar)
         )
 
-        cumulativeStressScore = stressUseCase.execute(input: input)
+        // HealthKit workout IDs identify duplicated fetch results. The 30-day
+        // baseline and recent seven days use actual duration, never today × 7.
+        let uniqueWorkouts = Dictionary(grouping: cachedHealthKitWorkouts.filter {
+            $0.date >= start30 && $0.duration.isFinite && $0.duration > 0
+        }, by: \.id).compactMap { $0.value.first }
+        let totalMinutes = uniqueWorkouts.reduce(0.0) { $0 + $1.duration / 60 }
+        let acuteStart = calendar.date(byAdding: .day, value: -6, to: today) ?? today
+        let acuteMinutes = uniqueWorkouts.filter { $0.date >= acuteStart }
+            .reduce(0.0) { $0 + $1.duration / 60 }
+        let trainingDays = Set(uniqueWorkouts.map { calendar.startOfDay(for: $0.date) })
+        let priorDays = trainingDays.filter { $0 < acuteStart }
+        let trainingSufficient = trainingDays.count >= 4 && !priorDays.isEmpty && totalMinutes > 0
+        stressEvidenceStatus = .init(
+            hrv: hrvFailed ? .unavailable : (hrv.isEmpty ? .none : (hrv.count >= CalculateCumulativeStressUseCase.minimumDays ? .sufficient : .partial)),
+            sleep: sleepFailed || nightQueryFailed ? .unavailable : (nights.isEmpty ? .none : (regularity != nil ? .sufficient : .partial)),
+            training: exerciseFailed ? .unavailable : (trainingDays.isEmpty ? .none : (trainingSufficient ? .sufficient : .partial))
+        )
+        guard stressEvidenceStatus.hrv == .sufficient,
+              stressEvidenceStatus.sleep == .sufficient,
+              stressEvidenceStatus.training == .sufficient,
+              let regularity else {
+            cumulativeStressScore = nil
+            return
+        }
+        let training = CalculateCumulativeStressUseCase.Input.WeeklyTrainingDurations(
+            acuteMinutes: acuteMinutes, chronicWeeklyMinutes: totalMinutes * 7 / 30
+        )
+        cumulativeStressScore = stressUseCase.execute(input: .init(
+            hrvDailyAverages: hrv,
+            sleepRegularity: regularity,
+            weeklyTrainingDurations: training,
+            evaluationDate: nowProvider()
+        ))
     }
 
     // MARK: - Daily Digest
