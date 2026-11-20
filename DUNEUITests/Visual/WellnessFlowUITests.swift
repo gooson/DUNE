@@ -177,8 +177,12 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
         let lastDay = waitForElement("wellness-sleep-day-6", timeout: 5)
         let scroll = app.scrollViews.firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 5))
-        let top = max(scroll.frame.minY, app.navigationBars.firstMatch.frame.maxY) + 12
-        let bottom = min(scroll.frame.maxY, app.tabBars.firstMatch.frame.minY) - 12
+        let window = app.windows.firstMatch.frame
+        let visibleScroll = scroll.frame.intersection(window)
+        let navigation = app.navigationBars.firstMatch
+        let top = max(visibleScroll.minY, navigation.exists ? navigation.frame.maxY : visibleScroll.minY) + 12
+        let tabBar = app.tabBars.firstMatch
+        let bottom = min(visibleScroll.maxY, tabBar.exists ? tabBar.frame.minY : window.maxY) - 12
         for _ in 0..<6 {
             let displacement: CGFloat
             if latest.frame.minY < top {
@@ -192,7 +196,7 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
             start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: displacement)))
         }
         XCTAssertGreaterThanOrEqual(latest.frame.minY, top, "Latest sleep metric should clear the top bar")
-        XCTAssertLessThanOrEqual(lastDay.frame.maxY, bottom, "Calendar bars should clear the tab bar")
+        XCTAssertLessThanOrEqual(lastDay.frame.maxY, bottom, "Calendar bars should fit the visible Wellness viewport")
     }
 
     func testSparseSleepBarsKeepCalendarPositionsAndWidth() {
