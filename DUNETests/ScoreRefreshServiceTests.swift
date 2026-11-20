@@ -6,6 +6,27 @@ import Testing
 @Suite("ScoreRefreshService Tests")
 @MainActor
 struct ScoreRefreshServiceTests {
+    @Test("Missing readiness clears only the current hour score")
+    func missingReadinessClearsCurrentHour() async throws {
+        let container = try ModelContainer(
+            for: HourlyScoreSnapshot.self,
+            configurations: ModelConfiguration("ReadinessClear-\(UUID().uuidString)",
+                                               isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+        )
+        let context = ModelContext(container)
+        context.insert(HourlyScoreSnapshot(
+            date: HourlyScoreSnapshot.hourTruncated(Date()),
+            conditionScore: 70, readinessScore: 55, stressScore: 30
+        ))
+        try context.save()
+        let service = ScoreRefreshService(modelContainer: container)
+        await service.invalidateCurrentReadinessSnapshot()
+        let recorded = try #require(ModelContext(container).fetch(FetchDescriptor<HourlyScoreSnapshot>()).first)
+        #expect(recorded.readinessScore == nil)
+        #expect(recorded.conditionScore == 70)
+        #expect(recorded.stressScore == 30)
+    }
+
     @Test("Read-window changes invalidate condition data and preserve unrelated scores")
     func invalidateConditionHistory() async throws {
         let container = try ModelContainer(

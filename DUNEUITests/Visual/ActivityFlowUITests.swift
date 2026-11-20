@@ -121,6 +121,35 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(waitForElement(AXID.activityTrainingReadinessDetailScreen, timeout: 10).exists)
     }
 
+    func testReadinessEvidenceStatesCapturePartialAndEmpty() {
+        for (scenario, state, source) in [
+            (LaunchScenario.fatigueRegression, "partial", "Recovery"),
+            (LaunchScenario.empty, "none", nil)
+        ] {
+            var configuration = launchConfiguration
+            configuration.scenario = scenario
+            if let languages = configuration.additionalArguments.firstIndex(of: "-AppleLanguages") {
+                configuration.additionalArguments[languages + 1] = "(en)"
+            }
+            launchApp(with: configuration)
+            navigateToActivity()
+
+            let evidence = waitForElement("activity-readiness-evidence-state", timeout: 15)
+            let hero = app.buttons["activity-hero-readiness"].firstMatch
+            XCTAssertTrue(hero.exists)
+            XCTAssertFalse(hero.isEnabled, "A score without sufficient measured inputs must not open detail")
+            XCTAssertFalse(element("activity-hero-components").exists)
+            if let source {
+                XCTAssertTrue(evidence.label.contains("Available Data"),
+                              "The partial state should name the records that are present")
+                XCTAssertTrue(evidence.label.contains(source))
+            } else {
+                XCTAssertTrue(evidence.label.contains("Need More Data"))
+            }
+            addScreenshotAttachment(named: "A01-readiness-evidence-\(state)")
+        }
+    }
+
     func testPersonalRecordsHeaderTrailingEdgeOpensDetail() {
         navigateToActivity()
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("activity-section-pr", maxSwipes: 16))

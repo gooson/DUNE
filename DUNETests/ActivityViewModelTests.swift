@@ -1,5 +1,6 @@
 import Testing
 import Foundation
+import SwiftData
 @testable import DUNE
 
 // MARK: - Mock Services for ActivityViewModel
@@ -162,9 +163,12 @@ private actor SequencedActivityWorkoutService: WorkoutQuerying {
     }
 }
 
-private func makeEmptyActivitySharedSnapshot(fetchedAt: Date = Date()) -> SharedHealthSnapshot {
+private func makeEmptyActivitySharedSnapshot(
+    fetchedAt: Date = Date(), hrvSamples: [HRVSample] = [],
+    failedSources: Set<SharedHealthSnapshot.Source> = []
+) -> SharedHealthSnapshot {
     SharedHealthSnapshot(
-        hrvSamples: [],
+        hrvSamples: hrvSamples,
         todayRHR: nil,
         yesterdayRHR: nil,
         latestRHR: SharedHealthSnapshot.RHRSample(value: 56, date: fetchedAt),
@@ -176,7 +180,7 @@ private func makeEmptyActivitySharedSnapshot(fetchedAt: Date = Date()) -> Shared
         conditionScore: nil,
         baselineStatus: nil,
         recentConditionScores: [],
-        failedSources: [],
+        failedSources: failedSources,
         fetchedAt: fetchedAt
     )
 }
@@ -583,6 +587,59 @@ struct ActivityViewModelTests {
         #expect(vm.todaySteps?.value == 0)
         #expect(vm.recentWorkouts.isEmpty)
         #expect(vm.weeklyExerciseMinutes.count == 7) // Gap-filled with zeros
+        #expect(vm.trainingReadiness == nil)
+        #expect(vm.readinessEvidenceState == .none)
+        #expect(vm.readinessAvailableSources.isEmpty)
+    }
+
+    @Test("One valid HRV day remains partial evidence without a numeric score")
+    func partialReadinessEvidence() async {
+        let snapshot = makeEmptyActivitySharedSnapshot(
+            hrvSamples: [HRVSample(value: 50, date: Date())]
+        )
+        let vm = makeViewModel(sharedHealthDataService: MockSharedHealthDataService(snapshot: snapshot))
+        await vm.loadActivityData()
+        #expect(vm.trainingReadiness == nil)
+        #expect(vm.readinessEvidenceState == .partial)
+        #expect(vm.readinessAvailableSources.contains(String(localized: "HRV")))
+    }
+
+    @Test("Transient readiness query failure preserves the recorded current-hour score")
+    func transientReadinessFailurePreservesSnapshot() async throws {
+        let container = try ModelContainer(
+            for: HourlyScoreSnapshot.self,
+            configurations: ModelConfiguration(
+                "ReadinessTransient-\(UUID().uuidString)",
+                isStoredInMemoryOnly: true,
+                cloudKitDatabase: .none
+            )
+        )
+        let context = ModelContext(container)
+        context.insert(HourlyScoreSnapshot(
+            date: HourlyScoreSnapshot.hourTruncated(Date()),
+            conditionScore: 70,
+            readinessScore: 55,
+            stressScore: 30
+        ))
+        try context.save()
+
+        let snapshot = makeEmptyActivitySharedSnapshot(failedSources: [.hrvSamples])
+        let vm = ActivityViewModel(
+            workoutService: MockWorkoutService(),
+            stepsService: MockStepsService(),
+            hrvService: MockHRVService(),
+            sleepService: MockSleepService(),
+            sharedHealthDataService: MockSharedHealthDataService(snapshot: snapshot),
+            personalRecordStore: makeIsolatedPRStore(),
+            recommendationSettingsStore: makeIsolatedRecommendationStore(),
+            scoreRefreshService: ScoreRefreshService(modelContainer: container)
+        )
+        await vm.loadActivityData()
+
+        #expect(vm.trainingReadiness == nil)
+        let recorded = try #require(ModelContext(container).fetch(FetchDescriptor<HourlyScoreSnapshot>()).first)
+        #expect(recorded.readinessScore == 55)
+        #expect(recorded.conditionScore == 70)
     }
 
     // MARK: - Multiple Workouts Same Day

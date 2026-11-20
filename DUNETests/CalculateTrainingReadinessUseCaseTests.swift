@@ -54,7 +54,7 @@ struct CalculateTrainingReadinessUseCaseTests {
         sleepMinutes: Double? = 450,
         deepSleepRatio: Double? = 0.22,
         remSleepRatio: Double? = 0.22,
-        fatigueStates: [MuscleFatigueState] = [],
+        fatigueStates: [MuscleFatigueState]? = nil,
         evaluationDate: Date? = nil
     ) -> CalculateTrainingReadinessUseCase.Input {
         .init(
@@ -64,7 +64,7 @@ struct CalculateTrainingReadinessUseCaseTests {
             sleepDurationMinutes: sleepMinutes,
             deepSleepRatio: deepSleepRatio,
             remSleepRatio: remSleepRatio,
-            fatigueStates: fatigueStates,
+            fatigueStates: fatigueStates ?? [makeFatigueState(hoursAgo: 24)],
             evaluationDate: evaluationDate ?? referenceDate
         )
     }
@@ -109,15 +109,12 @@ struct CalculateTrainingReadinessUseCaseTests {
 
     // MARK: - Calibrating State
 
-    @Test("isCalibrating true when no HRV samples")
+    @Test("No numeric readiness when HRV is absent")
     func calibratingNoSamples() {
-        let input = makeDefaultInput(hrvValues: [])
-        let result = sut.execute(input: input)
-        #expect(result != nil)
-        #expect(result!.isCalibrating)
+        #expect(sut.execute(input: makeDefaultInput(hrvValues: [])) == nil)
     }
 
-    @Test("isCalibrating true when fewer than 7 days of HRV data")
+    @Test("No numeric readiness when fewer than 7 days of HRV data")
     func calibratingInsufficientDays() {
         // 5 samples on same day = only 1 daily average
         let samples = (0..<5).map { i in
@@ -133,9 +130,7 @@ struct CalculateTrainingReadinessUseCaseTests {
             fatigueStates: [],
             evaluationDate: referenceDate
         )
-        let result = sut.execute(input: input)
-        #expect(result != nil)
-        #expect(result!.isCalibrating)
+        #expect(sut.execute(input: input) == nil)
     }
 
     @Test("isCalibrating false with 7+ daily averages")
@@ -143,6 +138,20 @@ struct CalculateTrainingReadinessUseCaseTests {
         let result = sut.execute(input: makeDefaultInput())
         #expect(result != nil)
         #expect(!result!.isCalibrating)
+    }
+
+    @Test("Invalid HRV readings cannot create a readiness score")
+    func invalidHRVIsMissing() {
+        for value in [0.0, -1.0, 501.0, .nan, .infinity] {
+            #expect(sut.execute(input: makeDefaultInput(hrvValues: Array(repeating: value, count: 10))) == nil)
+        }
+    }
+
+    @Test("Current HRV alone does not certify missing recovery inputs")
+    func currentHRVWithoutRecovery() {
+        #expect(sut.execute(input: makeDefaultInput(todayRHR: nil)) == nil)
+        #expect(sut.execute(input: makeDefaultInput(sleepMinutes: nil)) == nil)
+        #expect(sut.execute(input: makeDefaultInput(fatigueStates: [])) == nil)
     }
 
     // MARK: - Status Thresholds
@@ -231,8 +240,7 @@ struct CalculateTrainingReadinessUseCaseTests {
     func hrvFallbackZeroSamples() {
         let input = makeDefaultInput(hrvValues: Array(repeating: 0.0, count: 10))
         let result = sut.execute(input: input)
-        #expect(result != nil)
-        #expect(result!.components.hrvScore == 50) // Neutral fallback
+        #expect(result == nil)
     }
 
     // MARK: - RHR Component
@@ -263,16 +271,15 @@ struct CalculateTrainingReadinessUseCaseTests {
     func rhrNeutralNoData() {
         let input = makeDefaultInput(todayRHR: nil, rhrBaseline: [])
         let result = sut.execute(input: input)
-        #expect(result != nil)
-        #expect(result!.components.rhrScore == 50)
+        #expect(result == nil)
     }
 
     @Test("RHR rejects out-of-range values")
     func rhrRejectsOutOfRange() {
         let tooLow = makeDefaultInput(todayRHR: 15)
         let tooHigh = makeDefaultInput(todayRHR: 350)
-        #expect(sut.execute(input: tooLow)!.components.rhrScore == 50)
-        #expect(sut.execute(input: tooHigh)!.components.rhrScore == 50)
+        #expect(sut.execute(input: tooLow) == nil)
+        #expect(sut.execute(input: tooHigh) == nil)
     }
 
     // MARK: - Sleep Component
@@ -305,14 +312,13 @@ struct CalculateTrainingReadinessUseCaseTests {
     func sleepNeutralNoData() {
         let input = makeDefaultInput(sleepMinutes: nil)
         let result = sut.execute(input: input)
-        #expect(result != nil)
-        #expect(result!.components.sleepScore == 50)
+        #expect(result == nil)
     }
 
     @Test("Sleep rejects out-of-range duration")
     func sleepRejectsOutOfRange() {
         let tooHigh = makeDefaultInput(sleepMinutes: 1500)  // > 1440
-        #expect(sut.execute(input: tooHigh)!.components.sleepScore == 50)
+        #expect(sut.execute(input: tooHigh) == nil)
     }
 
     @Test("Sleep rejects invalid deep/rem ratios")
@@ -358,8 +364,7 @@ struct CalculateTrainingReadinessUseCaseTests {
     func fatigueDefaultNoStates() {
         let input = makeDefaultInput(fatigueStates: [])
         let result = sut.execute(input: input)
-        #expect(result != nil)
-        #expect(result!.components.fatigueScore == 80)
+        #expect(result == nil)
     }
 
     @Test("Fatigue recency weighting: older fatigue has less impact")
@@ -408,9 +413,7 @@ struct CalculateTrainingReadinessUseCaseTests {
         // Only 2 daily averages — not enough for trend
         let input = makeDefaultInput(hrvValues: [50, 55])
         let result = sut.execute(input: input)
-        // With < 7 days, isCalibrating=true and trendBonus=50 (neutral)
-        #expect(result != nil)
-        #expect(result!.components.trendBonus == 50)
+        #expect(result == nil)
     }
 
     // MARK: - NaN / Infinite Defense
@@ -422,10 +425,7 @@ struct CalculateTrainingReadinessUseCaseTests {
             sleepMinutes: Double.nan
         )
         let result = sut.execute(input: input)
-        // Should still return a result since NaN values get fallback
-        #expect(result != nil)
-        #expect(result!.components.rhrScore == 50)
-        #expect(result!.components.sleepScore == 50)
+        #expect(result == nil)
     }
 
     @Test("Returns nil for Infinite input values")
@@ -435,9 +435,7 @@ struct CalculateTrainingReadinessUseCaseTests {
             sleepMinutes: Double.infinity
         )
         let result = sut.execute(input: input)
-        #expect(result != nil)
-        #expect(result!.components.rhrScore == 50)
-        #expect(result!.components.sleepScore == 50)
+        #expect(result == nil)
     }
 
     // MARK: - Weighted Formula Verification
@@ -454,9 +452,6 @@ struct CalculateTrainingReadinessUseCaseTests {
             evaluationDate: referenceDate
         )
         let result = sut.execute(input: input)
-        #expect(result != nil)
-        // HRV=50, RHR=50, Sleep=50, Fatigue=80(default), Trend=50
-        // Weighted: 50*0.3 + 50*0.2 + 50*0.25 + 80*0.15 + 50*0.1 = 15+10+12.5+12+5 = 54.5
-        #expect(result!.score >= 50 && result!.score <= 60)
+        #expect(result == nil)
     }
 }
