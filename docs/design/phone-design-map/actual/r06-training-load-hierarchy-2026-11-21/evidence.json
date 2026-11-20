@@ -1,0 +1,265 @@
+{
+  "feature": "R06",
+  "screens": [
+    "A06"
+  ],
+  "source": {
+    "source_revision": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+    "build_revision": "112f1d6e8b8627579efe5fa334735ff84c4f01d1,676e10da12b4cc957e8cb6eb516fbee14af5035f,e4600dc0700a0362fc4dcc42a0def7bf96c0b475,0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+    "combined_build": true,
+    "fixture": "A06 훈련 부하 날짜 선택",
+    "locale": "화면별 테스트 언어",
+    "appearance": "화면별 테스트 설정",
+    "notes": "각 이미지를 통과한 개별 UI 테스트에 연결했다. Duo 내부 화면은 지정된 체크포인트에서 활성 LCD-1 프레임버퍼를 직접 캡처했다. 파일별 빌드·크기·관찰 결과는 아래 기록에 있다.",
+    "branch_comparison": {
+      "base": "b1fdbc1564dc130bd99375643eb1a3e0ef17a353",
+      "branches": {
+        "load-equal-weeks": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "load-selected-date": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "cardio-summary-hierarchy": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "machine-level-profile": "95481eed6980e593252656bcd47ada549178285f",
+        "achievement-day-groups": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "sleep-observed-days": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "readiness-evidence": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "readiness-score-bands": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "stress-source-evidence": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f"
+      },
+      "verified_source": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "identical_directories": [
+        "DUNE",
+        "Shared",
+        "DUNETests",
+        "DUNEUITests",
+        "DUNEWatch",
+        "DUNEWatchTests",
+        "DUNEWatchUITests"
+      ],
+      "source_trees": {
+        "DUNE": "838f24417a197ba9a3a7f771803a234e31d829ef",
+        "Shared": "107daa92979696e109a16a53e8569202f92490b8",
+        "DUNETests": "ad2cc01fada0a800d96e39638c2cd3469bd235fd",
+        "DUNEUITests": "42da1717fc25fcf7259c71be2405a8c5309f85cd",
+        "DUNEWatch": "08312632eec0a3627604fdddbf491f3bf2fff22e",
+        "DUNEWatchTests": "91eccbfe9ff3f61f2e7b21f0c99298f2576330a0",
+        "DUNEWatchUITests": "443eeaadb2b39e186eae87778b31c9d360d82a03"
+      }
+    }
+  },
+  "assets": [
+    {
+      "device": "regular",
+      "artifact": "R06-screen",
+      "selector": "ChartInteractionRegressionUITests/testTrainingVolumeTrainingLoadLongPressKeepsVisibleRangeAndActivatesSelection",
+      "original_name": "878AFE2A-0B6F-42A2-AEB8-02088514E8B3.png",
+      "sha256": "811e54541b9000b500f01619c28172a22b58c68b1300cb9431458da01f7a9ad5",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795203979.959,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "R06-screen_0_D0AC3EB8-397A-4E99-B104-152341F21DD4.png",
+      "build_revision": "112f1d6e8b8627579efe5fa334735ff84c4f01d1",
+      "xcresult_manifest_sha256": "a5a7b3c9aad36d35d0e22156b7e211e7db4f1bb2b60a88f72b7468239672e4d3",
+      "passed_case_receipt_sha256": "06770e06289c28e0b7658d41ab0dbda8bbffbb35c48a12edb6c22b357a987fa0",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/878AFE2A-0B6F-42A2-AEB8-02088514E8B3.png",
+      "device_source": {
+        "source_revision": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "build_revision": "112f1d6e8b8627579efe5fa334735ff84c4f01d1",
+        "combined_build": true
+      },
+      "visual_observation": "선택 날짜 11월 21일과 값 0.0, 간격을 둔 날짜 눈금, 7일 합계 및 범례를 한 화면에서 읽을 수 있다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "R06-screen",
+      "selector": "ChartInteractionRegressionUITests/testTrainingVolumeTrainingLoadLongPressKeepsVisibleRangeAndActivatesSelection",
+      "original_name": "9A771F9F-FBE5-4B84-9C37-FEFC1EC971B8.png",
+      "sha256": "5636ff0ae1a79f056266c701f58ac499d3ce602d6ad8c5fff114af8623d4bc1e",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795202053.326,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "R06-screen_0_BB815A2E-FD91-4EF7-B924-70DBCE05E391.png",
+      "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+      "xcresult_manifest_sha256": "60b1a4630416c0f959774744a80f781eb39005c65291feb4d5fab915794824ab",
+      "passed_case_receipt_sha256": "6d059de5a18a5cade9af848d2bdf184e6cc571bda6403d85f7e48a367d35e057",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/9A771F9F-FBE5-4B84-9C37-FEFC1EC971B8.png",
+      "device_source": {
+        "source_revision": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+        "combined_build": true
+      },
+      "visual_observation": "iPad A06 실제 PNG에서 선택 날짜(11월 21일)와 큰 부하 값 0.0이 차트 위에 있고, 7일 막대·이동평균선·최근 7일 34.1(↑55%) 비교·고정 구간 범례가 모두 보인다. 카드 하단과 범례가 화면 안에 있으며 레이아웃 겹침은 보이지 않는다. 이 한 장은 탭/빈 상태나 다른 날짜 선택을 검증하지 않는다."
+    },
+    {
+      "device": "duo",
+      "artifact": "R06-screen",
+      "selector": "ChartInteractionRegressionUITests/testTrainingVolumeTrainingLoadLongPressKeepsVisibleRangeAndActivatesSelection",
+      "original_name": "4683C8E3-EB1C-450A-A5D5-3718A1250F5C.png",
+      "sha256": "42e78a46e6fb53dd24f85f27055c86d16e8a28d02e72cabee725371edfd887b5",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795204230.507,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "R06-screen_0_8328660B-C3F2-46B6-B7CF-8F67105E3EB1.png",
+      "build_revision": "e4600dc0700a0362fc4dcc42a0def7bf96c0b475",
+      "xcresult_manifest_sha256": "d8c808486be7e37e5ed59c986e59b16d930c0a5fb155e7faee158a56189cd4a4",
+      "passed_case_receipt_sha256": "18ec468bced06fc06b389151b9ae5bf48a39cad088c1c1a4c3086e229ba00d77",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "f49f4f74b24d11f1a63c59eb08e231a7b38021ef5a64fffe071a4be8670a3cd7"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "5f11d2af91f3d0aea65b3b5951b2e07a9f1d4a576c84076e9a5ab0669a0ffe71"
+        }
+      },
+      "file": "images/duo/4683C8E3-EB1C-450A-A5D5-3718A1250F5C.png",
+      "device_source": {
+        "source_revision": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "build_revision": "e4600dc0700a0362fc4dcc42a0def7bf96c0b475",
+        "combined_build": true
+      },
+      "visual_observation": "접힌 외부 화면에서 선택 날짜·값, 훈련 부하 그래프 전체, 16·18·20일 눈금과 합계 및 범례가 함께 보인다. 위쪽 일별 운동 시간 카드는 별개 차트다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "R06-screen",
+      "selector": "ChartInteractionRegressionUITests/testTrainingVolumeTrainingLoadLongPressKeepsVisibleRangeAndActivatesSelection",
+      "original_name": "R06-screen.png",
+      "sha256": "a61b4dd23483486ec0cc406f480f34c68cff3056dad15852f9ce94662cfe0c30",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T19:57:34.857688+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "R06-screen",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "2989c1fc379992f0d992bb5e64b4c776b61c5ad37e5d435f07707215f0643491",
+      "passed_case_receipt_sha256": "e234872723f3f39f519640bd34dcefe08d2b369c5fa1086b4da5dcf8d053274f",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "78DC4D6E-D9ED-40E7-B45E-B9931AA6EDAF.png",
+        "human_name": "R06-screen_0_29A79753-986D-43E4-8506-581CD3F9AB4E.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795204653.723
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    48.46s Added attachment named 'R06-screen'",
+        "time_utc": "2026-11-20T19:57:34.857688+00:00",
+        "observer_receipt_sha256": "3336a7bad573dc2397f37954b90bedb32268c293342364e2e17399032271b00c",
+        "observer_log": "dune-reference-workouts-duo-open.log",
+        "case_result": "Passed"
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "b55420c7c3690010dd248936e613c01297d5ff02003ea6dc0aa077323667792a"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "c68210cf8c04f3f4a97ca5e98ee4b22a3df633d9b905e7474116ceb0756b11c9"
+        }
+      },
+      "file": "images/duo-open/R06-screen.png",
+      "device_source": {
+        "source_revision": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 내부 가로 화면에서 선택일과 0.0, 막대 그래프 전부, 7일 합계와 범례가 같은 카드 안에 표시된다."
+    }
+  ],
+  "unverified_devices": [],
+  "uncaptured_artifacts_by_device": {
+    "regular": [],
+    "ipad": [],
+    "duo": [],
+    "duo-open": []
+  },
+  "unverified_screen_ids": [],
+  "visual_inspection": {
+    "status": "원본 화면 검토 완료",
+    "notes": "선택 날짜 11월 21일과 값 0.0, 간격을 둔 날짜 눈금, 7일 합계 및 범례를 한 화면에서 읽을 수 있다. iPad A06 실제 PNG에서 선택 날짜(11월 21일)와 큰 부하 값 0.0이 차트 위에 있고, 7일 막대·이동평균선·최근 7일 34.1(↑55%) 비교·고정 구간 범례가 모두 보인다. 카드 하단과 범례가 화면 안에 있으며 레이아웃 겹침은 보이지 않는다. 이 한 장은 탭/빈 상태나 다른 날짜 선택을 검증하지 않는다. 접힌 외부 화면에서 선택 날짜·값, 훈련 부하 그래프 전체, 16·18·20일 눈금과 합계 및 범례가 함께 보인다. 위쪽 일별 운동 시간 카드는 별개 차트다. Duo 내부 가로 화면에서 선택일과 0.0, 막대 그래프 전부, 7일 합계와 범례가 같은 카드 안에 표시된다.",
+    "reviewer": "기능별 캡처 검토"
+  }
+}
