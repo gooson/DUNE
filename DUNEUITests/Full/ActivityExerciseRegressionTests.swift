@@ -5239,25 +5239,52 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.waitForExistence(timeout: 10))
         XCTAssertTrue(app.descendants(matching: .any)["cardio-summary-duration"].firstMatch.exists)
         XCTAssertFalse(app.descendants(matching: .any)["cardio-summary-distance"].firstMatch.exists)
-        XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch.exists)
-        XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch.exists)
-        XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch.exists)
-        let finalLevel = app.descendants(matching: .any)["cardio-level-history-row-2"].firstMatch
-        XCTAssertTrue(finalLevel.exists, "Two increases should record the final level of 3")
-        finalLevel.auditTap()
-        let selection = app.descendants(matching: .any)["cardio-level-history-selection"].firstMatch
-        XCTAssertTrue(selection.label.hasSuffix("3"), "Selected level should follow the tapped final change")
+        let firstLevel = app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch
+        let finalLevel = app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch
+        XCTAssertTrue(firstLevel.exists && firstLevel.label.hasSuffix("2"))
+        XCTAssertTrue(finalLevel.exists && finalLevel.label.hasSuffix("3"),
+                      "The two recorded increases should end at level 3")
         let chart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
+        XCTAssertTrue(chart.waitForExistence(timeout: 5))
+        XCTAssertTrue((chart.value as? String)?.contains("3") == true)
         let scroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        for _ in 0..<8 where !finalLevel.isHittable { scroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(finalLevel.isHittable)
+        finalLevel.auditTap()
+        let selection = app.descendants(matching: .any)["cardio-level-history-selection"].firstMatch
+        XCTAssertTrue(selection.waitForExistence(timeout: 5) && selection.label.hasSuffix("3"),
+                      "Selected level should follow the tapped final change")
         for _ in 0..<8 {
-            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame)
-            if viewport.contains(CGPoint(x: chart.frame.midX, y: chart.frame.midY)) { break }
+            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 100)
+            if viewport.contains(chart.frame) { break }
             scroll.swipeDown(velocity: .slow)
         }
         XCTAssertTrue(scroll.frame.intersection(app.windows.firstMatch.frame)
             .contains(CGPoint(x: chart.frame.midX, y: chart.frame.midY)))
         addScreenshotAttachment(named: "R12-screen")
+
+        let save = app.buttons["cardio-session-summary-save"].firstMatch
+        XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isHittable)
+        save.auditTap()
+        let summary = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch
+        let dismissed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: summary)
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 30), .completed)
+
+        openExerciseViewFromRecentWorkouts(maxSwipes: 24)
+        let savedRowID = AXID.exerciseRow("stair-climber")
+        XCTAssertTrue(app.scrollToElementIfNeeded(savedRowID, maxSwipes: 12))
+        let savedRow = app.descendants(matching: .any)[savedRowID].firstMatch
+        XCTAssertTrue(savedRow.waitForExistence(timeout: 8) && savedRow.isHittable)
+        savedRow.auditTap()
+        let detailScroll = app.scrollViews["exercise-session-detail-scroll"].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 8))
+        let savedChart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
+        for _ in 0..<12 where !savedChart.isHittable { detailScroll.swipeUp(velocity: .slow) }
+        XCTAssertTrue(savedChart.exists && savedChart.isHittable,
+                      "Saved workout detail should retain the machine-level history")
+        XCTAssertTrue((savedChart.value as? String)?.contains("3") == true)
+        addScreenshotAttachment(named: "W27-stair-level-history-saved-detail")
     }
 
     func testVisualAuditCardioAtDefaultTextSize() throws {

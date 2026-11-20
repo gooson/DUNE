@@ -42,11 +42,20 @@ struct CardioMachineLevelHistoryView: View {
         return orderedChanges.last(where: { $0.elapsedSeconds <= selectedElapsed }) ?? orderedChanges.first
     }
 
+    private var chartAccessibilitySummary: Text {
+        guard let first = orderedChanges.first, let last = orderedChanges.last else {
+            return Text("Need More Data")
+        }
+        return Text("Level") + Text(verbatim: " \(first.level)–\(last.level), ")
+            + Text("Elapsed Time") + Text(verbatim: " \(last.formattedElapsed)")
+    }
+
     var body: some View {
         if !changes.isEmpty {
             VStack(alignment: .leading, spacing: DS.Spacing.md) {
                 Label("Level History", systemImage: "chart.xyaxis.line")
                     .font(.headline)
+                    .accessibilityIdentifier("cardio-level-history")
 
                 if let selectedChange {
                     HStack(alignment: .firstTextBaseline) {
@@ -83,6 +92,9 @@ struct CardioMachineLevelHistoryView: View {
                 .chartXSelection(value: $selectedElapsed)
                 .frame(height: 130)
                 .clipped()
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Level History")
+                .accessibilityValue(chartAccessibilitySummary)
                 .accessibilityIdentifier("cardio-level-history-chart")
 
                 LazyVStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -121,7 +133,7 @@ struct CardioMachineLevelHistoryView: View {
             .padding(DS.Spacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.md))
-            .accessibilityIdentifier("cardio-level-history")
+            .accessibilityElement(children: .contain)
         }
     }
 }
