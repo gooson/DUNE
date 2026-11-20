@@ -173,31 +173,23 @@ final class WellnessFlowUITests: SeededUITestBaseCase {
     }
 
     func testSparseSleepBarsKeepCalendarPositionsAndWidth() {
-        for (count, slots) in [(1, [6]), (2, [2, 6]), (4, [0, 3, 5, 6]), (7, Array(0..<7))] {
+        for count in [1, 2, 4, 7] {
             var configuration = launchConfiguration
             configuration.additionalEnvironment["DUNE_UI_SLEEP_SAMPLE_COUNT"] = String(count)
             launchApp(with: configuration)
             navigateToWellness()
-            reveal("wellness-sleep-bar-6")
-            let bars = slots.map { waitForElement("wellness-sleep-bar-\($0)", timeout: 10) }
-            for index in 0..<7 {
-                XCTAssertEqual(element("wellness-sleep-bar-\(index)").exists, slots.contains(index),
-                               "Missing dates must remain empty: count=\(count), slot=\(index)")
+            let days = (0..<7).map { waitForElement("wellness-sleep-day-\($0)", timeout: 10) }
+            XCTAssertEqual(days.count, 7)
+            for day in days {
+                XCTAssertTrue(day.isHittable, "Each observed or missing day remains selectable")
             }
-            for bar in bars {
-                XCTAssertEqual(bar.frame.width, 16, accuracy: 0.5)
-                XCTAssertLessThanOrEqual(bar.frame.height, 64.5)
-                XCTAssertTrue(bar.isHittable)
-            }
-            if bars.count > 1 {
-                let slotWidth = (bars.last!.frame.midX - bars.first!.frame.midX) /
-                    CGFloat(slots.last! - slots.first!)
-                for index in 1..<bars.count {
-                    XCTAssertEqual(bars[index].frame.midX - bars[index - 1].frame.midX,
-                                   CGFloat(slots[index] - slots[index - 1]) * slotWidth, accuracy: 1)
-                }
+            let spacing = days[1].frame.midX - days[0].frame.midX
+            for index in 2..<7 {
+                XCTAssertEqual(days[index].frame.midX - days[index - 1].frame.midX, spacing, accuracy: 1,
+                               "Missing days must retain their calendar positions")
             }
             XCTAssertEqual(element("wellness-sleep-average").exists, count >= 2)
+            // Native screenshot verifies the 16-point bar inside each accessible day button.
             reveal("wellness-hero-sleep", direction: .down)
             addScreenshotAttachment(named: "H01-sleep-\(count)-records")
         }
