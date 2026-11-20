@@ -124,8 +124,12 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         let bands = element("training-readiness-score-bands")
         let scroll = app.scrollViews.firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 5))
-        let top = max(scroll.frame.minY, app.navigationBars.firstMatch.frame.maxY) + 12
-        let bottom = min(scroll.frame.maxY, app.tabBars.firstMatch.frame.minY) - 12
+        let window = app.windows.firstMatch.frame
+        let visibleScroll = scroll.frame.intersection(window)
+        let navigation = app.navigationBars.firstMatch
+        let top = max(visibleScroll.minY, navigation.exists ? navigation.frame.maxY : visibleScroll.minY) + 12
+        let tabBar = app.tabBars.firstMatch
+        let bottom = min(visibleScroll.maxY, tabBar.exists ? tabBar.frame.minY : window.maxY) - 12
         for _ in 0..<6 {
             let displacement: CGFloat
             if bands.frame.maxY > bottom {
@@ -139,7 +143,7 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
             start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -displacement)))
         }
         XCTAssertGreaterThanOrEqual(bands.frame.minY, top, "Score band heading should clear the navigation bar")
-        XCTAssertLessThanOrEqual(bands.frame.maxY, bottom, "All score band captions should clear the tab bar")
+        XCTAssertLessThanOrEqual(bands.frame.maxY, bottom, "All score band captions should fit the visible detail viewport")
         addScreenshotAttachment(named: "A02-readiness-score-bands")
     }
 
