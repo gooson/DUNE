@@ -120,6 +120,8 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         header.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.12)).tap()
         XCTAssertTrue(waitForElement(AXID.activityTrainingReadinessDetailScreen, timeout: 10).exists)
         XCTAssertTrue(waitForElement("training-readiness-score-bands", timeout: 5).exists)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded("training-readiness-score-bands", maxSwipes: 8))
+        addScreenshotAttachment(named: "A02-readiness-score-bands")
     }
 
     func testPersonalRecordsHeaderTrailingEdgeOpensDetail() {
