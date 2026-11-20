@@ -373,7 +373,9 @@ struct DashboardView: View {
             StandardCard {
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                     Text("Cumulative Stress").font(.headline)
-                    Text("Stress evidence unavailable").foregroundStyle(DS.Color.textSecondary)
+                    Text("Stress evidence unavailable")
+                        .foregroundStyle(DS.Color.textSecondary)
+                        .accessibilityIdentifier("dashboard-stress-evidence-unavailable")
                     LabeledContent("HRV") {
                         switch viewModel.stressEvidenceStatus.hrv {
                         case .none: Text("No record")
@@ -382,6 +384,7 @@ struct DashboardView: View {
                         case .unavailable: Text("Unable to load data.")
                         }
                     }
+                    .accessibilityElement(children: .combine)
                     .accessibilityIdentifier("dashboard-stress-source-hrv")
                     LabeledContent("Sleep") {
                         switch viewModel.stressEvidenceStatus.sleep {
@@ -391,6 +394,7 @@ struct DashboardView: View {
                         case .unavailable: Text("Unable to load data.")
                         }
                     }
+                    .accessibilityElement(children: .combine)
                     .accessibilityIdentifier("dashboard-stress-source-sleep")
                     LabeledContent("Training Load") {
                         switch viewModel.stressEvidenceStatus.training {
@@ -400,11 +404,11 @@ struct DashboardView: View {
                         case .unavailable: Text("Unable to load data.")
                         }
                     }
+                    .accessibilityElement(children: .combine)
                     .accessibilityIdentifier("dashboard-stress-source-training")
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .accessibilityIdentifier("dashboard-stress-evidence-unavailable")
         }
 
         // Exercise Intelligence Card (morning/daytime only)
