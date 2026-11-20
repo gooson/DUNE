@@ -5237,6 +5237,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         app.buttons[AXID.cardioSessionEnd].firstMatch.auditTap()
         app.buttons[AXID.cardioSessionConfirmEnd].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.descendants(matching: .any)["cardio-summary-duration"].firstMatch.exists)
+        XCTAssertFalse(app.descendants(matching: .any)["cardio-summary-distance"].firstMatch.exists)
         XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch.exists)
         XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch.exists)
     }
@@ -5311,23 +5313,37 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             XCTAssertTrue(app.staticTexts["Workout Complete!"].firstMatch.waitForExistence(timeout: 8),
                           "Summary title should render after the permission dialog is handled")
         }
+        let distance = app.descendants(matching: .any)["cardio-summary-distance"].firstMatch
+        let duration = app.descendants(matching: .any)["cardio-summary-duration"].firstMatch
+        XCTAssertTrue(distance.exists && duration.exists, "Running result and duration should be visible")
+        XCTAssertLessThan(distance.frame.minY, duration.frame.minY, "Distance should precede duration")
+        XCTAssertTrue(app.descendants(matching: .any)["cardio-summary-secondary-metrics"].firstMatch.exists)
         let save = app.buttons["cardio-session-summary-save"].firstMatch
         XCTAssertTrue(waitForHittable(save, timeout: 5), "Summary Save must be reachable\n\(app.debugDescription)")
         XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(save.frame),
                       "The whole summary Save action should fit above the window edge")
+        addScreenshotAttachment(named: "R10-screen")
         VisualAudit.capture("W25 cardio \(accessibilityText ? "MAX" : "normal") summary top and full Save")
         if VisualAudit.isEnabled {
             let summaryScroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
             XCTAssertTrue(summaryScroll.waitForExistence(timeout: 5), "Cardio summary should own a metric scroll view")
             for (metric, checkpoint) in [("Steps", "steps"), ("Cadence", "cadence")] {
-                let label = app.staticTexts[metric].firstMatch
-                for _ in 0..<8 {
+                let label = summaryScroll.staticTexts[metric].firstMatch
+                for _ in 0..<20 {
                     let scrollFrame = summaryScroll.frame.intersection(app.windows.firstMatch.frame)
                     let viewport = CGRect(x: scrollFrame.minX + 8, y: scrollFrame.minY + 8,
                                           width: max(0, scrollFrame.width - 16),
                                           height: max(0, min(scrollFrame.maxY, save.frame.minY) - scrollFrame.minY - 16))
                     if label.exists && viewport.contains(label.frame) { break }
-                    summaryScroll.swipeUp(velocity: .slow)
+                    let offset = label.exists ? label.frame.midY - viewport.midY : viewport.height
+                    let distance = min(max(abs(offset), viewport.height * 0.15), viewport.height * 0.5)
+                    let start = summaryScroll.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                        dx: viewport.midX - summaryScroll.frame.minX,
+                        dy: viewport.midY - summaryScroll.frame.minY
+                    ))
+                    start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(
+                        dx: 0, dy: offset < 0 ? distance : -distance
+                    )))
                 }
                 let scrollFrame = summaryScroll.frame.intersection(app.windows.firstMatch.frame)
                     let viewport = CGRect(x: scrollFrame.minX + 8, y: scrollFrame.minY + 8,
