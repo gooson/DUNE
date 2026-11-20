@@ -119,6 +119,7 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
         XCTAssertTrue(header.isEnabled, "The seeded readiness should retain its detail route")
         header.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.12)).tap()
         XCTAssertTrue(waitForElement(AXID.activityTrainingReadinessDetailScreen, timeout: 10).exists)
+        XCTAssertTrue(waitForElement("training-readiness-score-bands", timeout: 5).exists)
     }
 
     func testPersonalRecordsHeaderTrailingEdgeOpensDetail() {

@@ -29,6 +29,8 @@ struct TrainingReadinessDetailView: View {
                     // 1. Score Hero
                     scoreHero(readiness)
                         .staggeredAppear(index: 0)
+                    readinessBands(readiness: readiness)
+                        .staggeredAppear(index: 0)
 
                     // 2. Time-of-Day Card
                     TimeOfDayCard(
@@ -187,6 +189,69 @@ struct TrainingReadinessDetailView: View {
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("training-readiness-detail-trend-card")
         .animation(.easeInOut(duration: 0.25), value: viewModel.selectedPeriod)
+    }
+
+    private func readinessBands(readiness: TrainingReadiness) -> some View {
+        let bands: [(TrainingReadiness.Status, String, CGFloat)] = [
+            (.rest, "0–39", 0.40), (.light, "40–59", 0.20),
+            (.moderate, "60–79", 0.20), (.ready, "80–100", 0.20)
+        ]
+        return StandardCard {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                Text("Readiness")
+                    .font(.headline)
+                GeometryReader { geometry in
+                    ZStack(alignment: .leading) {
+                        HStack(spacing: 2) {
+                            ForEach(bands.indices, id: \.self) { index in
+                                Capsule().fill(bands[index].0.color)
+                                    .frame(width: (geometry.size.width - 6) * bands[index].2)
+                            }
+                        }
+                        Circle()
+                            .fill(.primary)
+                            .frame(width: 12, height: 12)
+                            .offset(x: max(0, min(geometry.size.width - 12,
+                                                  geometry.size.width * CGFloat(readiness.score) / 100 - 6)))
+                    }
+                }
+                .frame(height: 12)
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        ForEach(bands.indices, id: \.self) { index in
+                            HStack(spacing: DS.Spacing.xs) {
+                                Capsule().fill(bands[index].0.color).frame(width: 12, height: 4)
+                                Text(bands[index].1).monospacedDigit()
+                                Text(bands[index].0.label)
+                            }
+                            .font(.caption)
+                        }
+                    }
+                } else {
+                    GeometryReader { geometry in
+                        HStack(alignment: .top, spacing: 2) {
+                            ForEach(bands.indices, id: \.self) { index in
+                                VStack(spacing: 2) {
+                                    Text(bands[index].1).monospacedDigit()
+                                    Text(bands[index].0.label)
+                                }
+                                .font(.caption2)
+                                .multilineTextAlignment(.center)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.7)
+                                .frame(width: (geometry.size.width - 6) * bands[index].2)
+                            }
+                        }
+                    }
+                    .frame(height: 42)
+                }
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel((
+            Text("Readiness") + Text(verbatim: " \(readiness.score), ") + Text(readiness.status.label)
+        ))
+        .accessibilityIdentifier("training-readiness-score-bands")
     }
 
     private func calculationBullets(_ readiness: TrainingReadiness) -> [LocalizedStringKey] {
