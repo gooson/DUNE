@@ -335,6 +335,7 @@
 		352ED91E2AFBCB7D9230D6C5 /* NotificationCenterMainThreadPublisherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C92728229474AF34F191464 /* NotificationCenterMainThreadPublisherTests.swift */; };
 		355FFF68245814A7DA6C738F /* ActivityExercisePickerRegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96841558FBD75B40C651390 /* ActivityExercisePickerRegressionTests.swift */; };
 		35E9918996EC7599C2583570 /* RPETrendChartDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E8F869B4BB4FCFFB6731BD /* RPETrendChartDataTests.swift */; };
+		35F236E9EE487A9122C4F7E3 /* TrainingLoadWeekTotals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE11BDF426A3D81CDFE2366 /* TrainingLoadWeekTotals.swift */; };
 		361397F6233AFC5C8E9D6F7C /* WidgetScoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A31CA7C67605E5BBC1CCAA6 /* WidgetScoreData.swift */; };
 		3621734E919A1A149CC6AC4B /* DuoScoreComponentLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4EA75A5E97B71EFA2215BB /* DuoScoreComponentLayoutTests.swift */; };
 		3639E18201EEAB25A9A23101 /* ExerciseDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F2EFD9169B4451946FB6BD /* ExerciseDefinition.swift */; };
@@ -461,6 +462,7 @@
 		48DE836DA322881D4FADE46D /* ScoreContributorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF579A9A174455A12FC98E4E /* ScoreContributorsView.swift */; };
 		4903EECF2D88756A7FDCBA1E /* LifeHeroTrendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FE00776696981F8FA6BC9 /* LifeHeroTrendTests.swift */; };
 		490F8CE40C3C06C263D4B793 /* Comparable+Clamped.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3897C53EAD361B927BF3ED1 /* Comparable+Clamped.swift */; };
+		492345D0BB73A9BA38B72CD6 /* TrainingLoadWeekTotalsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B88517A71D6C017D978AE36 /* TrainingLoadWeekTotalsTests.swift */; };
 		494BC0DB8DBDA569E28C5AD6 /* BackgroundNotificationEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8145B825EB89E83F3FF7278D /* BackgroundNotificationEvaluator.swift */; };
 		49549B1E64283C6B177E5EDD /* CardioAtlasProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01758FB89E84504B925EF060 /* CardioAtlasProgress.swift */; };
 		49B148EB1B7172FA7F182196 /* ChangeBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD368331A74E7D7C21FE142B /* ChangeBadge.swift */; };
@@ -1889,12 +1891,14 @@
 		3AD45A61544B3F15CF2623F7 /* AverageBedtimeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageBedtimeCard.swift; sourceTree = "<group>"; };
 		3B37646C759053B5DDFECC87 /* PeriodSwipeModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodSwipeModifier.swift; sourceTree = "<group>"; };
 		3B86E4DA2F54DAF3728251E2 /* catalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = catalog.json; sourceTree = "<group>"; };
+		3B88517A71D6C017D978AE36 /* TrainingLoadWeekTotalsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingLoadWeekTotalsTests.swift; sourceTree = "<group>"; };
 		3B916AEC4875C9E95AC4F53C /* WorkoutTemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListView.swift; sourceTree = "<group>"; };
 		3BB0F8D9854042BBD7FCDAEF /* HRVQueryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HRVQueryService.swift; sourceTree = "<group>"; };
 		3BC8B4B3BFD26DAD35A67F21 /* WellnessBodySummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessBodySummaryCard.swift; sourceTree = "<group>"; };
 		3BC9C8CA380772ECFFA7FB65 /* OpenMeteoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoService.swift; sourceTree = "<group>"; };
 		3BF5891EE9B8437AD351BA9E /* CardioStartSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardioStartSheet.swift; sourceTree = "<group>"; };
 		3C690F0174B90F16E6C94F39 /* TodayPinnedMetricsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayPinnedMetricsStore.swift; sourceTree = "<group>"; };
+		3CE11BDF426A3D81CDFE2366 /* TrainingLoadWeekTotals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingLoadWeekTotals.swift; sourceTree = "<group>"; };
 		3CE6430C3ED0ED4375E479E8 /* ArtistThemeEditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistThemeEditionTests.swift; sourceTree = "<group>"; };
 		3CF2611CED068D025B7ACA1B /* MuscleGroup+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MuscleGroup+View.swift"; sourceTree = "<group>"; };
 		3CF28CA7C65C0AFC53AF621E /* BodyCompositionQueryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyCompositionQueryService.swift; sourceTree = "<group>"; };
@@ -3251,6 +3255,7 @@
 				D59264C570F446879E08646B /* SuggestedExerciseRow.swift */,
 				7A2510385B772323D5C13668 /* SuggestedWorkoutSection.swift */,
 				452C53BC912873CAE1EB8C80 /* TrainingLoadChartView.swift */,
+				3CE11BDF426A3D81CDFE2366 /* TrainingLoadWeekTotals.swift */,
 				E4BD23B1BCEE1EAD42D1D802 /* TrainingReadinessHeroCard.swift */,
 				678255ED9F9E81750C531CE4 /* VolumeAlgorithmSheet.swift */,
 				CF8815B7EE0E03F982CA0013 /* VolumeIntensity.swift */,
@@ -4931,6 +4936,7 @@
 				594FC93D0C20E4F8A7F02483 /* TimePeriodTests.swift */,
 				847585087F21B95D5E185401 /* TodayPinnedMetricsStoreTests.swift */,
 				C81FE2AA2F8ECA1FF2ACDCDD /* TrainingLoadServiceTests.swift */,
+				3B88517A71D6C017D978AE36 /* TrainingLoadWeekTotalsTests.swift */,
 				C66A00A21341C94FBA8E9A5F /* TrainingReadinessDetailViewModelTests.swift */,
 				D6928C569558FBEFFD1EA543 /* TrainingVolumeAnalysisServiceTests.swift */,
 				04426AA09C83C5581442899A /* TrainingVolumeViewModelTests.swift */,
@@ -5944,6 +5950,7 @@
 				8BCEAE42230CF81E58AD218B /* TodayMetricCard.swift in Sources */,
 				C87F315285B70A14E03F9ACF /* TodayPinnedMetricsStore.swift in Sources */,
 				9FD1CAD985502E0D26263A34 /* TrainingLoadChartView.swift in Sources */,
+				35F236E9EE487A9122C4F7E3 /* TrainingLoadWeekTotals.swift in Sources */,
 				4D74E7852FD8B18E48667B91 /* TrainingReadiness+View.swift in Sources */,
 				D7B344787EBB0C2C11792896 /* TrainingReadiness.swift in Sources */,
 				DA83780193707D20D1192F26 /* TrainingReadinessDetailView.swift in Sources */,
@@ -6723,6 +6730,7 @@
 				C5ACA6DE702F654AB70474EC /* TimePeriodTests.swift in Sources */,
 				40A627615FD400DEAF79875A /* TodayPinnedMetricsStoreTests.swift in Sources */,
 				56A3C640B03DF99A0E308584 /* TrainingLoadServiceTests.swift in Sources */,
+				492345D0BB73A9BA38B72CD6 /* TrainingLoadWeekTotalsTests.swift in Sources */,
 				521EB2CF97C571558208C902 /* TrainingReadinessDetailViewModelTests.swift in Sources */,
 				0C934030B8302CF8BC4F929D /* TrainingVolumeAnalysisServiceTests.swift in Sources */,
 				6CE77FC67B4548ED0DC8EC21 /* TrainingVolumeViewModelTests.swift in Sources */,

@@ -286,6 +286,24 @@ final class ChartInteractionRegressionUITests: SeededUITestBaseCase {
         VisualAudit.capture("A05 Last Week current metrics from the same seeded window")
     }
 
+    func testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06() throws {
+        openTrainingVolumeDetail()
+
+        let chart = trainingVolumeChart()
+        XCTAssertTrue(chart.exists, "The seeded training load chart should render on A06")
+        let summary = app.staticTexts["training-volume-chart-week-summary"].firstMatch
+        XCTAssertTrue(summary.waitForExistence(timeout: 15), "The seeded chart should show its seven-day comparison")
+        XCTAssertTrue(
+            ["Last 7 days", "최근 7일", "直近7日間"].contains { summary.label.hasPrefix($0) },
+            "The visible summary should name the rolling seven-day window"
+        )
+        XCTAssertTrue(
+            scrollTrainingVolumeDetailUntilHittable(summary, maxSwipes: 4),
+            "The seven-day label should be visible on the chart card before capture"
+        )
+        addScreenshotAttachment(named: defaultArtifactName(suffix: "A06-training-load-seven-days"))
+    }
+
     func testTrainingVolumeTrainingLoadChartScrollsToPastData() throws {
         openTrainingVolumeDetail()
 
