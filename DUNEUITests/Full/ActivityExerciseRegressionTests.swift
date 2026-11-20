@@ -3258,8 +3258,9 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                 captureLeaf(firstTitle, named: "history event title")
                 captureLeaf(app.staticTexts["activity-personal-records-achievement-detail-\(eventID)"].firstMatch,
                             named: "history event detail")
-                captureLeaf(app.staticTexts["activity-personal-records-achievement-date-\(eventID)"].firstMatch,
-                            named: "history event date")
+                let firstDay = dayHeaders.firstMatch
+                captureLeaf(firstDay, named: "history day group")
+                addScreenshotAttachment(named: "R13-screen")
             } else {
                 XCTAssertTrue(empty.waitForExistence(timeout: 5), "History should show an event or its real empty state")
                 XCTAssertFalse(empty.label.isEmpty)
