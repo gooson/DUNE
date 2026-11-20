@@ -5231,26 +5231,32 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let increase = app.buttons["cardio-level-increase"].firstMatch
         XCTAssertTrue(increase.waitForExistence(timeout: 5))
         increase.auditTap()
+        let firstRecordedLevel = app.staticTexts["cardio-level-value"].firstMatch.label
+        XCTAssertEqual(firstRecordedLevel, "2")
         increase.auditTap()
-        XCTAssertEqual(app.staticTexts["cardio-level-value"].firstMatch.label, "3")
+        let finalRecordedLevel = app.staticTexts["cardio-level-value"].firstMatch.label
+        XCTAssertEqual(finalRecordedLevel, "3")
 
         app.buttons[AXID.cardioSessionEnd].firstMatch.auditTap()
         app.buttons[AXID.cardioSessionConfirmEnd].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.waitForExistence(timeout: 10))
         XCTAssertTrue(app.descendants(matching: .any)["cardio-summary-duration"].firstMatch.exists)
         XCTAssertFalse(app.descendants(matching: .any)["cardio-summary-distance"].firstMatch.exists)
-        let firstLevel = app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch
-        let finalLevel = app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch
-        XCTAssertTrue(firstLevel.exists && firstLevel.label.hasSuffix("2"))
-        XCTAssertTrue(finalLevel.exists && finalLevel.label.hasSuffix("3"),
-                      "The two recorded increases should end at level 3")
-        let chart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
-        XCTAssertTrue(chart.waitForExistence(timeout: 5))
-        XCTAssertTrue((chart.value as? String)?.contains("3") == true)
         let scroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-row-0", in: scroll),
+                      "First recorded level row must be loaded and visible")
+        let firstLevel = app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch
+        XCTAssertTrue(firstLevel.exists && firstLevel.label.hasSuffix(firstRecordedLevel),
+                      "The first history row should match the first live stepper reading")
         XCTAssertTrue(app.revealFullyVisible("cardio-level-history-row-1", in: scroll),
-                      "Final level row must be fully on screen before tapping")
+                      "Final recorded level row must be loaded and visible before tapping")
+        let finalLevel = app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch
+        XCTAssertTrue(finalLevel.exists && finalLevel.label.hasSuffix(finalRecordedLevel),
+                      "The final history row should match the second live stepper reading")
+        let chart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
+        XCTAssertTrue(chart.waitForExistence(timeout: 5))
+        XCTAssertTrue((chart.value as? String)?.contains(finalRecordedLevel) == true)
         finalLevel.auditTap()
         let selection = app.descendants(matching: .any)["cardio-level-history-selection"].firstMatch
         XCTAssertTrue(selection.waitForExistence(timeout: 5) && selection.label.hasSuffix("3"),
