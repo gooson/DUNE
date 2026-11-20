@@ -1,0 +1,199 @@
+{
+  "screen_id": "A06",
+  "feature_id": "R07",
+  "kind": "native XCTest screenshot",
+  "test": "DUNEUITests/ChartInteractionRegressionUITests/testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06()",
+  "test_status": "passed (provided receipt)",
+  "source_revision": "8a0d632d7",
+  "base_revision": "9d2f8239809b3e7feb3b9d4cfcd88e05e3cfbaa2",
+  "device": {
+    "model": "iPhone 18 Pro",
+    "name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+    "udid": "C79B5667-45E2-431B-8551-9548C37052B0",
+    "os": "iOS 27.2"
+  },
+  "locale": "ko_KR",
+  "appearance": "light",
+  "content_size": "not recorded in supplied attachment metadata",
+  "captured_at": "2026-11-21T02:54:31.530000+09:00",
+  "image": {
+    "file": "images/A06-iphone18pro-ko-light.png",
+    "sha256": "8e421db43065611aff9df1ff7566e2e9bd42b6862a71f195225b08471f5702aa",
+    "native_dimensions": [
+      1206,
+      2622
+    ],
+    "unmodified_from_attachment": "DD110BB6-65E6-4A02-9934-5B9834BBFB6F.png"
+  },
+  "visual_scope": "A06 Training Volume chart card with visible latest-7-days comparison; lower part of chart is near the tab bar. No other visual state is certified.",
+  "pending": [],
+  "source_manifest": "source-manifest.json",
+  "additional_captures": [
+    {
+      "device": "ipad",
+      "artifact": "A06-training-load-seven-days",
+      "selector": "ChartInteractionRegressionUITests/testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06",
+      "original_name": "BAF95D68-35BB-453D-8F30-2ADB120B71C6.png",
+      "sha256": "6ec6d7ab4d277ba75397f405a49d381d07e99fc6e596816a8ec99413d92d5c6d",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795200540.561,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "ChartInteractionRegressionUITests-testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06--A06-training-load-seven-days_0_90214354-B739-4971-A537-A96AAAFD99C5.png",
+      "file": "images/ipad/BAF95D68-35BB-453D-8F30-2ADB120B71C6.png",
+      "device_source": {
+        "source_revision": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "build_revision": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "combined_build": false
+      },
+      "visual_observation": "7일 막대·기준선과 최근 7일 34.1(+55%) 합계가 같은 카드에 보이고 선택된 기간의 양 끝이 화면에 들어온다."
+    },
+    {
+      "device": "duo",
+      "artifact": "A06-training-load-seven-days",
+      "selector": "ChartInteractionRegressionUITests/testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06",
+      "original_name": "C6D1DE72-1836-4019-800A-3F4514935CE0.png",
+      "sha256": "d9f6f9ef0d5c969537bb163f55362505c35017bf60a4cf1d09d1a89239c0c54d",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795203665.849,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "ChartInteractionRegressionUITests-testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06--A06-training-load-seven-days_0_F8FB2ACC-7E70-42BC-BAE8-E1555E249255.png",
+      "file": "images/duo/C6D1DE72-1836-4019-800A-3F4514935CE0.png",
+      "device_source": {
+        "source_revision": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "build_revision": "112f1d6e8b8627579efe5fa334735ff84c4f01d1",
+        "combined_build": true
+      },
+      "visual_observation": "훈련 부하 카드에는 간격을 둔 11월 16·18·20일 눈금과 최근 7일 34.1(+55%)가 함께 보이며 이웃한 날짜 문자열이 겹치지 않는다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "A06-training-load-seven-days",
+      "selector": "ChartInteractionRegressionUITests/testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06",
+      "original_name": "A06-training-load-seven-days.png",
+      "sha256": "5e7a336ab3406c13b3606e5da6847d363d57b73c025233fb9f94a289d0b2ab68",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T19:56:43.822511+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "A06-training-load-seven-days",
+      "file": "images/duo-open/A06-training-load-seven-days.png",
+      "device_source": {
+        "source_revision": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "xctest_attachment": {
+        "original_name": "FBFF6C3C-645A-47CC-8319-CACD83D27610.png",
+        "human_name": "ChartInteractionRegressionUITests-testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06--A06-training-load-seven-days_0_F4543ECE-08E0-4273-B81D-A4D6A3851A41.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795204602.635
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    47.03s Added attachment named 'ChartInteractionRegressionUITests-testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06--A06-training-load-seven-days'",
+        "time_utc": "2026-11-20T19:56:43.822511+00:00",
+        "observer_receipt_sha256": "240a02e29f23b276b30c84bf176f58f87f96ab9140a7d411f772eff619e2c7fa",
+        "observer_log": "dune-reference-workouts-duo-open.log",
+        "case_result": "Passed"
+      },
+      "visual_observation": "Duo 내부 가로 화면에서 7일 막대와 기준선, 합계와 증감률이 우측 도크와 떨어져 보인다. 활성 내부 패널 원본을 검사했다."
+    }
+  ],
+  "additional_source": {
+    "source_revision": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+    "build_revision": "mixed; inspect devices below",
+    "combined_build": true,
+    "fixture": "A06 seeded seven-day comparison; exact test configuration is in each xcresult",
+    "locale": "Korean seeded comparison, system labels as captured",
+    "appearance": "Light",
+    "notes": "각 이미지를 통과한 개별 UI 테스트에 연결했다. Duo 내부 화면은 지정된 체크포인트에서 활성 LCD-1 프레임버퍼를 직접 캡처했다. 파일별 빌드·크기·관찰 결과는 아래 기록에 있다.",
+    "devices": {
+      "ipad": {
+        "source_revision": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "build_revision": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "combined_build": false
+      },
+      "duo": {
+        "source_revision": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "build_revision": "112f1d6e8b8627579efe5fa334735ff84c4f01d1",
+        "combined_build": true
+      },
+      "duo-open": {
+        "source_revision": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      }
+    },
+    "branch_comparison": {
+      "base": "b1fdbc1564dc130bd99375643eb1a3e0ef17a353",
+      "branches": {
+        "load-equal-weeks": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "load-selected-date": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "cardio-summary-hierarchy": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "machine-level-profile": "95481eed6980e593252656bcd47ada549178285f",
+        "achievement-day-groups": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "sleep-observed-days": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "readiness-evidence": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "readiness-score-bands": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "stress-source-evidence": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f"
+      },
+      "verified_source": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "identical_directories": [
+        "DUNE",
+        "Shared",
+        "DUNETests",
+        "DUNEUITests",
+        "DUNEWatch",
+        "DUNEWatchTests",
+        "DUNEWatchUITests"
+      ],
+      "source_trees": {
+        "DUNE": "838f24417a197ba9a3a7f771803a234e31d829ef",
+        "Shared": "107daa92979696e109a16a53e8569202f92490b8",
+        "DUNETests": "ad2cc01fada0a800d96e39638c2cd3469bd235fd",
+        "DUNEUITests": "42da1717fc25fcf7259c71be2405a8c5309f85cd",
+        "DUNEWatch": "08312632eec0a3627604fdddbf491f3bf2fff22e",
+        "DUNEWatchTests": "91eccbfe9ff3f61f2e7b21f0c99298f2576330a0",
+        "DUNEWatchUITests": "443eeaadb2b39e186eae87778b31c9d360d82a03"
+      }
+    }
+  },
+  "additional_visual_inspection": {
+    "status": "원본 화면 검토 완료",
+    "notes": "7일 막대·기준선과 최근 7일 34.1(+55%) 합계가 같은 카드에 보이고 선택된 기간의 양 끝이 화면에 들어온다. 훈련 부하 카드에는 간격을 둔 11월 16·18·20일 눈금과 최근 7일 34.1(+55%)가 함께 보이며 이웃한 날짜 문자열이 겹치지 않는다. Duo 내부 가로 화면에서 7일 막대와 기준선, 합계와 증감률이 우측 도크와 떨어져 보인다. 활성 내부 패널 원본을 검사했다.",
+    "reviewer": "기능별 캡처 검토"
+  },
+  "pending_reasons": {},
+  "posture_readbacks": {
+    "duo-after": {
+      "file": "readback/duo-after.json",
+      "sha256": "3d63f37ce259aac00a8e26c5289ea62b16de37fca509ae87224b6d80cc5a33b1",
+      "status": "raw readback; review scope is recorded in additional_visual_inspection"
+    },
+    "duo-before": {
+      "file": "readback/duo-before.json",
+      "sha256": "174b87df92e58f39cd4be2951579b86406b22e327997463d7e4fa9a974d28bf5",
+      "status": "raw readback; review scope is recorded in additional_visual_inspection"
+    },
+    "duo-open-after": {
+      "file": "readback/duo-open-after.json",
+      "sha256": "c68210cf8c04f3f4a97ca5e98ee4b22a3df633d9b905e7474116ceb0756b11c9",
+      "status": "raw readback; review scope is recorded in additional_visual_inspection"
+    },
+    "duo-open-before": {
+      "file": "readback/duo-open-before.json",
+      "sha256": "b55420c7c3690010dd248936e613c01297d5ff02003ea6dc0aa077323667792a",
+      "status": "raw readback; review scope is recorded in additional_visual_inspection"
+    }
+  }
+}
