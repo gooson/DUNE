@@ -1,0 +1,47 @@
+{
+  "screen_id": "A06",
+  "feature_id": "R07",
+  "kind": "native XCTest screenshot",
+  "test": "DUNEUITests/ChartInteractionRegressionUITests/testTrainingLoadChartShowsRollingSevenDaySummaryAndCapturesA06()",
+  "test_status": "passed (provided receipt)",
+  "source_revision": "8a0d632d7",
+  "base_revision": "9d2f8239809b3e7feb3b9d4cfcd88e05e3cfbaa2",
+  "device": {
+    "model": "iPhone 18 Pro",
+    "name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+    "udid": "C79B5667-45E2-431B-8551-9548C37052B0",
+    "os": "iOS 27.2"
+  },
+  "locale": "ko_KR",
+  "appearance": "light",
+  "content_size": "not recorded in supplied attachment metadata",
+  "captured_at": "2026-11-21T02:54:31.530000+09:00",
+  "image": {
+    "file": "images/A06-iphone18pro-ko-light.png",
+    "sha256": "8e421db43065611aff9df1ff7566e2e9bd42b6862a71f195225b08471f5702aa",
+    "native_dimensions": [
+      1206,
+      2622
+    ],
+    "unmodified_from_attachment": "DD110BB6-65E6-4A02-9934-5B9834BBFB6F.png"
+  },
+  "visual_scope": "A06 Training Volume chart card with visible latest-7-days comparison; lower part of chart is near the tab bar. No other visual state is certified.",
+  "pending": [
+    {
+      "device": "iPad",
+      "screen_id": "A06",
+      "reason": "no new R07 capture supplied"
+    },
+    {
+      "device": "iPhone Duo folded",
+      "screen_id": "A06",
+      "reason": "no new R07 capture supplied"
+    },
+    {
+      "device": "iPhone Duo open",
+      "screen_id": "A06",
+      "reason": "no new R07 capture supplied"
+    }
+  ],
+  "source_manifest": "source-manifest.json"
+}
