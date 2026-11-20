@@ -1,0 +1,289 @@
+{
+  "feature": "R10",
+  "screens": [
+    "W25"
+  ],
+  "source": {
+    "source_revision": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+    "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20,9d56a10d504b9970029186331187604a962cf472,676e10da12b4cc957e8cb6eb516fbee14af5035f,7b077bad0e854e86f904ecefe839d25f208de766,0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+    "combined_build": true,
+    "fixture": "W25 달리기 완료 요약",
+    "locale": "화면별 테스트 언어",
+    "appearance": "화면별 테스트 설정",
+    "notes": "각 이미지를 통과한 개별 UI 테스트에 연결했다. Duo 내부 화면은 지정된 체크포인트에서 활성 LCD-1 프레임버퍼를 직접 캡처했다. 파일별 빌드·크기·관찰 결과는 아래 기록에 있다.",
+    "branch_comparison": {
+      "base": "b1fdbc1564dc130bd99375643eb1a3e0ef17a353",
+      "branches": {
+        "load-equal-weeks": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "load-selected-date": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "cardio-summary-hierarchy": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "machine-level-profile": "95481eed6980e593252656bcd47ada549178285f",
+        "achievement-day-groups": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "sleep-observed-days": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "readiness-evidence": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "readiness-score-bands": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "stress-source-evidence": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f"
+      },
+      "verified_source": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "identical_directories": [
+        "DUNE",
+        "Shared",
+        "DUNETests",
+        "DUNEUITests",
+        "DUNEWatch",
+        "DUNEWatchTests",
+        "DUNEWatchUITests"
+      ],
+      "source_trees": {
+        "DUNE": "838f24417a197ba9a3a7f771803a234e31d829ef",
+        "Shared": "107daa92979696e109a16a53e8569202f92490b8",
+        "DUNETests": "ad2cc01fada0a800d96e39638c2cd3469bd235fd",
+        "DUNEUITests": "42da1717fc25fcf7259c71be2405a8c5309f85cd",
+        "DUNEWatch": "08312632eec0a3627604fdddbf491f3bf2fff22e",
+        "DUNEWatchTests": "91eccbfe9ff3f61f2e7b21f0c99298f2576330a0",
+        "DUNEWatchUITests": "443eeaadb2b39e186eae87778b31c9d360d82a03"
+      }
+    }
+  },
+  "assets": [
+    {
+      "device": "regular",
+      "artifact": "R10-screen",
+      "selector": "ActivityExerciseRegressionTests/testCardioFlowReachesSummary",
+      "original_name": "4511E13C-7219-4C1E-ADB4-08F08939CA70.png",
+      "sha256": "516edee3cf4dc5e9b99aafd20a09b8328a9b3d5c9f4b1a461f946a8823a2d6c2",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795199456.694,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "R10-screen_0_BEB3C75B-25EB-467B-B6A4-23DEF59D0569.png",
+      "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20",
+      "xcresult_manifest_sha256": "fc79a0a579c69172e26e7931b3746ca01be0d821710238aa5493e89241b84da9",
+      "passed_case_receipt_sha256": "b82b5ed1dd77ce230c6bb7224f332eebd05b03dee7f1e98ed5b3fbb0874c2bd6",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/4511E13C-7219-4C1E-ADB4-08F08939CA70.png",
+      "device_source": {
+        "source_revision": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "build_revision": "47781c2d49de3f1c1ea54aef44a457ea8bb99b20",
+        "combined_build": true
+      },
+      "visual_observation": "기본 글씨에서 거리와 시간이 보조 지표보다 먼저 보인다. 최대 접근성 글씨에서 요약은 세로로 스크롤되고 저장 버튼이 하단에 보인다."
+    },
+    {
+      "device": "regular",
+      "artifact": "R10-screen",
+      "selector": "ActivityExerciseRegressionTests/testVisualAuditCardioAtDefaultTextSize",
+      "original_name": "C5A992B4-1767-496E-ACA3-C0ED058487FE.png",
+      "sha256": "17bbe1ac2ebcc569d4f430732f41eef895ca37efa877d1d78e0aba671353d6cb",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795201393.901,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "R10-screen_0_A73A233D-7397-4F02-BE10-23FB69A24419.png",
+      "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+      "xcresult_manifest_sha256": "99be09827a5db1eb9cd5bf07aed32495fe81f6c6d6abb6f7de289b27f2202275",
+      "passed_case_receipt_sha256": "fe30224afa483e263df78301e067149a990be54b0a4b3570847da86332068d83",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/C5A992B4-1767-496E-ACA3-C0ED058487FE.png",
+      "device_source": {
+        "source_revision": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "build_revision": "9d56a10d504b9970029186331187604a962cf472",
+        "combined_build": true
+      },
+      "visual_observation": "기본 글씨에서 거리와 시간이 보조 지표보다 먼저 보인다. 최대 접근성 글씨에서 요약은 세로로 스크롤되고 저장 버튼이 하단에 보인다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "R10-screen",
+      "selector": "ActivityExerciseRegressionTests/testCardioFlowReachesSummary",
+      "original_name": "F9496220-7D76-4BE8-8CA0-E6958F0D23C1.png",
+      "sha256": "12532a3d5aa6a9d29de59f266db1d90743f039dd4ea46fde3f707f94d1396d84",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795201814.806,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "R10-screen_0_F9A7890A-81BF-4BB6-A8DE-7DA9C4827D0A.png",
+      "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+      "xcresult_manifest_sha256": "60b1a4630416c0f959774744a80f781eb39005c65291feb4d5fab915794824ab",
+      "passed_case_receipt_sha256": "6d059de5a18a5cade9af848d2bdf184e6cc571bda6403d85f7e48a367d35e057",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/F9496220-7D76-4BE8-8CA0-E6958F0D23C1.png",
+      "device_source": {
+        "source_revision": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "build_revision": "676e10da12b4cc957e8cb6eb516fbee14af5035f",
+        "combined_build": true
+      },
+      "visual_observation": "iPad W25 실제 PNG에서 달리기 완료 제목 다음에 거리 0.00 km가 가장 크고 시간 0:17이 두 번째로 보이며, 하단 Save Workout 버튼 전체가 시트 안에 있다. 보조 지표는 스크롤 아래에 있어 이 한 장으로 행 배치를 판정할 수 없다. 한글 종목명과 영어 완료 문구가 혼재하지만 이 캡처의 테스트 언어 설정은 별도 확인이 필요하다."
+    },
+    {
+      "device": "duo",
+      "artifact": "R10-screen",
+      "selector": "ActivityExerciseRegressionTests/testCardioFlowReachesSummary",
+      "original_name": "32CC4726-2FCE-4A07-A93F-2DE6DA84E7E4.png",
+      "sha256": "0449eaf72025e168e50659acbfc9d70d478c4843146e7c7dad92c3fa9c8d7df4",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795203564.587,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "R10-screen_0_681AC5E9-88A0-4913-8A1C-55F9C902BA6A.png",
+      "build_revision": "7b077bad0e854e86f904ecefe839d25f208de766",
+      "xcresult_manifest_sha256": "72dbd246b98e94596e3220a62a3450d6617ebcc3ae2d8b2a2b64b9beefdd7cee",
+      "passed_case_receipt_sha256": "4ce01cbc488dfa87a7cef81b6ee54008b9ff6276ff2c0b3c3026bc9450b3ad8c",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "9ab452091895951b8490637cdb6a0e0dd9976c5a4f7065aff8a175a3a08d82c6"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "506fd7b210844384547805d07bd8084a4b84b0c754816c3b654b13cecfe4e12a"
+        }
+      },
+      "file": "images/duo/32CC4726-2FCE-4A07-A93F-2DE6DA84E7E4.png",
+      "device_source": {
+        "source_revision": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "build_revision": "7b077bad0e854e86f904ecefe839d25f208de766",
+        "combined_build": true
+      },
+      "visual_observation": "접힘·최대 글자 크기: 거리 0.00 km가 주 결과로 크게 보이고 저장 버튼도 화면 안에 온전히 표시된다. 다만 영문 완료 문구와 달리기 이름이 매우 커서 시간 및 보조 지표는 이 한 장에 보이지 않으며, 화면 안의 한국어·영어 혼용도 확인된다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "R10-screen",
+      "selector": "ActivityExerciseRegressionTests/testCardioFlowReachesSummary",
+      "original_name": "R10-screen.png",
+      "sha256": "a25b9dacaff74b22f525151166b6a7a36361c194f69328fffecdbd3d27618b75",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T20:02:45.256985+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "R10-screen",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "e6d21c2609298f074c97db514c7fc7e2647cdf7c6df72dd855205ae72924da04",
+      "passed_case_receipt_sha256": "612d7fc26202811c7a6bb47b79e88d9400b0475f1b68d9e20931e8c16dcd271f",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "870469FB-AE52-4F25-B530-04AE315D528C.png",
+        "human_name": "R10-screen_0_7031E246-697A-4C30-AE78-FF765CA37A5D.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795204964.082
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    80.42s Added attachment named 'R10-screen'",
+        "time_utc": "2026-11-20T20:02:45.256985+00:00",
+        "observer_receipt_sha256": "4f0e956a9262cd791da200c88ae60b3cb0b6b53932f1306109239a4a217cb099",
+        "observer_log": "dune-reference-open-extra-duo-open.log",
+        "case_result": "Passed"
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "a70239b4be367dfaee10d4867ee1b5c5b5902f8e7cdabd32a858bd729b699e01"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "5dbeaec7d3fbbcb3d5d2ee36ef2178f05af8defed338b6b499ac44458968a380"
+        }
+      },
+      "file": "images/duo-open/R10-screen.png",
+      "device_source": {
+        "source_revision": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "펼친 Duo의 최대 글자 크기에서 달리기 완료 시트에 거리 0.00 km와 시간 0:17이 세로로 표시되고 저장 버튼 전체가 보인다."
+    }
+  ],
+  "unverified_devices": [],
+  "uncaptured_artifacts_by_device": {
+    "regular": [],
+    "ipad": [],
+    "duo": [],
+    "duo-open": []
+  },
+  "unverified_screen_ids": [],
+  "visual_inspection": {
+    "status": "원본 화면 검토 완료",
+    "notes": "기본 글씨에서 거리와 시간이 보조 지표보다 먼저 보인다. 최대 접근성 글씨에서 요약은 세로로 스크롤되고 저장 버튼이 하단에 보인다. iPad W25 실제 PNG에서 달리기 완료 제목 다음에 거리 0.00 km가 가장 크고 시간 0:17이 두 번째로 보이며, 하단 Save Workout 버튼 전체가 시트 안에 있다. 보조 지표는 스크롤 아래에 있어 이 한 장으로 행 배치를 판정할 수 없다. 한글 종목명과 영어 완료 문구가 혼재하지만 이 캡처의 테스트 언어 설정은 별도 확인이 필요하다. 접힘·최대 글자 크기: 거리 0.00 km가 주 결과로 크게 보이고 저장 버튼도 화면 안에 온전히 표시된다. 다만 영문 완료 문구와 달리기 이름이 매우 커서 시간 및 보조 지표는 이 한 장에 보이지 않으며, 화면 안의 한국어·영어 혼용도 확인된다. 펼친 Duo의 최대 글자 크기에서 달리기 완료 시트에 거리 0.00 km와 시간 0:17이 세로로 표시되고 저장 버튼 전체가 보인다.",
+    "reviewer": "기능별 캡처 검토"
+  }
+}
