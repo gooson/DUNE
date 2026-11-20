@@ -5249,25 +5249,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue((chart.value as? String)?.contains("3") == true)
         let scroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
         XCTAssertTrue(scroll.waitForExistence(timeout: 5))
-        for _ in 0..<8 {
-            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 100)
-            if viewport.contains(finalLevel.frame) { break }
-            scroll.swipeUp(velocity: .slow)
-        }
-        let rowViewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 100)
-        XCTAssertTrue(rowViewport.contains(finalLevel.frame),
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-row-1", in: scroll),
                       "Final level row must be fully on screen before tapping")
         finalLevel.auditTap()
         let selection = app.descendants(matching: .any)["cardio-level-history-selection"].firstMatch
         XCTAssertTrue(selection.waitForExistence(timeout: 5) && selection.label.hasSuffix("3"),
                       "Selected level should follow the tapped final change")
-        for _ in 0..<8 {
-            let viewport = scroll.frame.intersection(app.windows.firstMatch.frame).insetBy(dx: 8, dy: 100)
-            if viewport.contains(chart.frame) { break }
-            scroll.swipeDown(velocity: .slow)
-        }
-        XCTAssertTrue(scroll.frame.intersection(app.windows.firstMatch.frame)
-            .contains(CGPoint(x: chart.frame.midX, y: chart.frame.midY)))
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-chart", in: scroll),
+                      "The selected level chart must be fully visible in the summary")
         addScreenshotAttachment(named: "R12-screen")
 
         let save = app.buttons["cardio-session-summary-save"].firstMatch
@@ -5286,9 +5275,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let detailScroll = app.scrollViews["exercise-session-detail-scroll"].firstMatch
         XCTAssertTrue(detailScroll.waitForExistence(timeout: 8))
         let savedChart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
-        for _ in 0..<12 where !savedChart.isHittable { detailScroll.swipeUp(velocity: .slow) }
-        XCTAssertTrue(savedChart.exists && savedChart.isHittable,
-                      "Saved workout detail should retain the machine-level history")
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-chart", in: detailScroll),
+                      "Saved workout detail should show the complete machine-level chart")
         XCTAssertTrue((savedChart.value as? String)?.contains("3") == true)
         addScreenshotAttachment(named: "W27-stair-level-history-saved-detail")
     }
