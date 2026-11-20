@@ -5257,6 +5257,19 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let chart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
         XCTAssertTrue(chart.waitForExistence(timeout: 5))
         XCTAssertTrue((chart.value as? String)?.contains(finalRecordedLevel) == true)
+        let save = app.buttons["cardio-session-summary-save"].firstMatch
+        XCTAssertTrue(save.waitForExistence(timeout: 5))
+        // The summary scroll's accessibility frame extends underneath its pinned Save footer.
+        let footerTop = save.frame.minY - 16
+        for _ in 0..<4 where finalLevel.frame.maxY > footerTop {
+            scroll.swipeUp(velocity: .slow)
+        }
+        XCTAssertLessThanOrEqual(finalLevel.frame.maxY, footerTop,
+                                 "The pinned save footer must clear the row before tapping it")
+        let navBar = app.navigationBars.firstMatch
+        if navBar.exists {
+            XCTAssertGreaterThanOrEqual(finalLevel.frame.midY, navBar.frame.maxY)
+        }
         finalLevel.auditTap()
         let selection = app.descendants(matching: .any)["cardio-level-history-selection"].firstMatch
         XCTAssertTrue(selection.waitForExistence(timeout: 5) && selection.label.hasSuffix("3"),
@@ -5265,7 +5278,6 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
                       "The selected level chart must be fully visible in the summary")
         addScreenshotAttachment(named: "R12-screen")
 
-        let save = app.buttons["cardio-session-summary-save"].firstMatch
         XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isHittable)
         save.auditTap()
         let summary = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch
