@@ -1,0 +1,466 @@
+{
+  "feature": "R12",
+  "screens": [
+    "W25",
+    "W27"
+  ],
+  "source": {
+    "source_revision": "95481eed6980e593252656bcd47ada549178285f",
+    "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258,0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871,112f1d6e8b8627579efe5fa334735ff84c4f01d1",
+    "combined_build": true,
+    "fixture": "마지막 레벨 3인 계단 운동 종료와 저장 후 상세",
+    "locale": "화면별 테스트 언어",
+    "appearance": "화면별 테스트 설정",
+    "notes": "각 이미지를 통과한 개별 UI 테스트에 연결했다. Duo 내부 화면은 지정된 체크포인트에서 활성 LCD-1 프레임버퍼를 직접 캡처했다. 파일별 빌드·크기·관찰 결과는 아래 기록에 있다.",
+    "branch_comparison": {
+      "base": "b1fdbc1564dc130bd99375643eb1a3e0ef17a353",
+      "branches": {
+        "load-equal-weeks": "ff202e013a87dc50f47a87927166b79823f3fbe3",
+        "load-selected-date": "67c7fef94e88e615d011d7ce1d35fb00fc004ef9",
+        "cardio-summary-hierarchy": "41de4dfbcbb5265ae80d5b86f295842d965c992b",
+        "machine-level-profile": "95481eed6980e593252656bcd47ada549178285f",
+        "achievement-day-groups": "9a9b3d73296551225a07c50af812f2ff75fbc54b",
+        "sleep-observed-days": "772b22affeb78f970d3b31b388e2db6bb31e73f4",
+        "readiness-evidence": "09afc8f23f743768c82730672f4e2abefa7de052",
+        "readiness-score-bands": "2748d6dafd773a44894b95ce46b8750f396e79e0",
+        "stress-source-evidence": "e73101a0d3f7f8bcc57bfcbf7847df5aa37a233f"
+      },
+      "verified_source": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "identical_directories": [
+        "DUNE",
+        "Shared",
+        "DUNETests",
+        "DUNEUITests",
+        "DUNEWatch",
+        "DUNEWatchTests",
+        "DUNEWatchUITests"
+      ],
+      "source_trees": {
+        "DUNE": "838f24417a197ba9a3a7f771803a234e31d829ef",
+        "Shared": "107daa92979696e109a16a53e8569202f92490b8",
+        "DUNETests": "ad2cc01fada0a800d96e39638c2cd3469bd235fd",
+        "DUNEUITests": "42da1717fc25fcf7259c71be2405a8c5309f85cd",
+        "DUNEWatch": "08312632eec0a3627604fdddbf491f3bf2fff22e",
+        "DUNEWatchTests": "91eccbfe9ff3f61f2e7b21f0c99298f2576330a0",
+        "DUNEWatchUITests": "443eeaadb2b39e186eae87778b31c9d360d82a03"
+      }
+    }
+  },
+  "assets": [
+    {
+      "device": "duo",
+      "artifact": "R12-screen",
+      "selector": "ActivityExerciseRegressionTests/testStairClimberLevelChangesAppearInSummary",
+      "original_name": "A88E559D-CD95-476D-BFCA-E3059AA26757.png",
+      "sha256": "709663d3f9ebac156204472f14c7adcdc59ad8eb4227d401e660f8a52f7405c3",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795203231.44,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "R12-screen_0_6B9A7227-DEB9-4536-8681-6631598686D8.png",
+      "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+      "xcresult_manifest_sha256": "7bec7feade42806073b2c658eb7b87e4a1d3d0d24f04ec5cebeb64c40446d413",
+      "passed_case_receipt_sha256": "91d5c37a7c54ec24f005bc388a098a8ed20aff86761c58c1b5b3909d38d1f469",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "c88369d95a59e703568ef8bc280d575e6f4e7c48ed657b5a3650bc543a32be91"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "6cafe45244c09c382343024c49588e3e4970b1713c7e44590e36ba514ac735cb"
+        }
+      },
+      "file": "images/duo/A88E559D-CD95-476D-BFCA-E3059AA26757.png",
+      "device_source": {
+        "source_revision": "95481eed6980e593252656bcd47ada549178285f",
+        "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 접힘 W25 요약 PNG에서 선택 시간 0:12·레벨 3, 레벨 2→3 계단 그래프와 0:09/0:12 두 행이 모두 읽힌다. 차트 카드와 Save Workout 버튼 전체가 외부 화면에 들어오며 겹침은 보이지 않는다. 위쪽 보조 통계 일부는 스크롤 위에 있어 전체 요약을 이 한 장으로 검증하지 않는다."
+    },
+    {
+      "device": "duo",
+      "artifact": "W27-stair-level-history-saved-detail",
+      "selector": "ActivityExerciseRegressionTests/testStairClimberLevelChangesAppearInSummary",
+      "original_name": "CFC34B0F-DF59-4852-BAFF-4428F20416A6.png",
+      "sha256": "8d84448dec8223c84090cc76af94f36a061d0c92d1a8f30777c2a9a8cf44fd81",
+      "width": 1398,
+      "height": 2034,
+      "timestamp": 1795203273.636,
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "W27-stair-level-history-saved-detail_0_10FE7C61-31E3-4A92-B230-4602CC45F775.png",
+      "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+      "xcresult_manifest_sha256": "7bec7feade42806073b2c658eb7b87e4a1d3d0d24f04ec5cebeb64c40446d413",
+      "passed_case_receipt_sha256": "91d5c37a7c54ec24f005bc388a098a8ed20aff86761c58c1b5b3909d38d1f469",
+      "case_result": "Passed",
+      "case_device": "duo",
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "c88369d95a59e703568ef8bc280d575e6f4e7c48ed657b5a3650bc543a32be91"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 0,
+          "angleReadback": null,
+          "activeDisplay": "LCD",
+          "displayId": 1,
+          "backlightState": "activeOn",
+          "active": true,
+          "currentOrientation": "rot0",
+          "nativePixels": [
+            1398,
+            2034
+          ],
+          "capturedPixels": [
+            1398,
+            2034
+          ],
+          "readback_sha256": "6cafe45244c09c382343024c49588e3e4970b1713c7e44590e36ba514ac735cb"
+        }
+      },
+      "file": "images/duo/CFC34B0F-DF59-4852-BAFF-4428F20416A6.png",
+      "device_source": {
+        "source_revision": "95481eed6980e593252656bcd47ada549178285f",
+        "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 접힘 W27 저장 상세 PNG에서 선택 시간 0:09·레벨 2, 종료까지 이어지는 레벨 3 구간, 두 변경 행이 읽힌다. 카드 제목 일부는 상단 고정 바에 가려져 이 프레임은 차트와 기록 행을 검증하며 전체 상세 헤더 배치는 검증하지 않는다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "R12-screen",
+      "selector": "ActivityExerciseRegressionTests/testStairClimberLevelChangesAppearInSummary",
+      "original_name": "R12-screen.png",
+      "sha256": "1ce79601e4fd50357fd613ecf8e58bd45bf80b37ce5c4e02133e3cb969e9ef74",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T19:55:17.506637+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "R12-screen",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "2989c1fc379992f0d992bb5e64b4c776b61c5ad37e5d435f07707215f0643491",
+      "passed_case_receipt_sha256": "e234872723f3f39f519640bd34dcefe08d2b369c5fa1086b4da5dcf8d053274f",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "20E80B93-13FF-4A8B-8187-5FFB46F51147.png",
+        "human_name": "R12-screen_0_B2A68126-ADC1-4D43-86E0-274652747505.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795204515.088
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =    95.37s Added attachment named 'R12-screen'",
+        "time_utc": "2026-11-20T19:55:17.506637+00:00",
+        "observer_receipt_sha256": "1629ba5f196502b3148dbc40b6108dc42943082c36680c56eefa398a8e59ab5e",
+        "observer_log": "dune-reference-workouts-duo-open.log",
+        "case_result": "Passed"
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "b55420c7c3690010dd248936e613c01297d5ff02003ea6dc0aa077323667792a"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "c68210cf8c04f3f4a97ca5e98ee4b22a3df633d9b905e7474116ceb0756b11c9"
+        }
+      },
+      "file": "images/duo-open/R12-screen.png",
+      "device_source": {
+        "source_revision": "95481eed6980e593252656bcd47ada549178285f",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 내부 화면에서 완료 요약은 0:13·레벨 3과 저장 버튼을 보여 준다. 저장 후에는 운동 목록 옆 상세에 레벨 2→3 그래프가 보인다."
+    },
+    {
+      "device": "duo-open",
+      "artifact": "W27-stair-level-history-saved-detail",
+      "selector": "ActivityExerciseRegressionTests/testStairClimberLevelChangesAppearInSummary",
+      "original_name": "W27-stair-level-history-saved-detail.png",
+      "sha256": "85fa9509569292ec90fc30f1d3fc8933aa06a1e64645a4f3d6d8674f101b2044",
+      "width": 2853,
+      "height": 2007,
+      "timestamp": "2026-11-20T19:55:53.957117+00:00",
+      "device_name": "iPhone 17-wt-feature-run-codex-checks-c471d55107ee-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+      "human_name": "W27-stair-level-history-saved-detail",
+      "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+      "xcresult_manifest_sha256": "2989c1fc379992f0d992bb5e64b4c776b61c5ad37e5d435f07707215f0643491",
+      "passed_case_receipt_sha256": "e234872723f3f39f519640bd34dcefe08d2b369c5fa1086b4da5dcf8d053274f",
+      "case_result": "Passed",
+      "case_device": "duo-open",
+      "xctest_attachment": {
+        "original_name": "52947C1D-6BEA-461B-A811-2B673AA7432A.png",
+        "human_name": "W27-stair-level-history-saved-detail_0_56B09230-51F6-4D93-824A-28047224A8FD.png",
+        "sha256": "0cf5ab5f428d489692d32df055608f14255ba440555d75c76e88cddc0fce0394",
+        "width": 2006,
+        "height": 2852,
+        "timestamp": 1795204552.172
+      },
+      "framebuffer_capture": {
+        "kind": "simctl io screenshot",
+        "deviceId": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+        "displayId": 3,
+        "display": "LCD-1",
+        "trigger": "t =   132.45s Added attachment named 'W27-stair-level-history-saved-detail'",
+        "time_utc": "2026-11-20T19:55:53.957117+00:00",
+        "observer_receipt_sha256": "a45fe8d82f245963d7ff9f45977d9b19fdef47cc4b8eab3b97a00d32d8a4d233",
+        "observer_log": "dune-reference-workouts-duo-open.log",
+        "case_result": "Passed"
+      },
+      "display_readbacks": {
+        "before": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "b55420c7c3690010dd248936e613c01297d5ff02003ea6dc0aa077323667792a"
+        },
+        "after": {
+          "device": "16AAE525-B19C-4709-A941-589BEA0E16D4",
+          "requestedAngle": 180,
+          "angleReadback": null,
+          "activeDisplay": "LCD-1",
+          "displayId": 3,
+          "backlightState": "activeOn",
+          "coreDeviceReportedActiveFlag": true,
+          "displaySelectionBasis": "Only illuminated framebuffer; cross-checked against explicit framebuffer native size and test attachment size",
+          "currentOrientation": "rot90",
+          "nativePixels": [
+            2007,
+            2853
+          ],
+          "capturedPixels": [
+            2853,
+            2007
+          ],
+          "readback_sha256": "c68210cf8c04f3f4a97ca5e98ee4b22a3df633d9b905e7474116ceb0756b11c9"
+        }
+      },
+      "file": "images/duo-open/W27-stair-level-history-saved-detail.png",
+      "device_source": {
+        "source_revision": "95481eed6980e593252656bcd47ada549178285f",
+        "build_revision": "0a266b6ad3dedb4b8cb2e990f9e27cb77a54a871",
+        "combined_build": true
+      },
+      "visual_observation": "Duo 내부 화면에서 완료 요약은 0:13·레벨 3과 저장 버튼을 보여 준다. 저장 후에는 운동 목록 옆 상세에 레벨 2→3 그래프가 보인다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "R12-screen",
+      "selector": "ActivityExerciseRegressionTests/testStairClimberLevelChangesAppearInSummary",
+      "original_name": "43B1369E-CF15-46D8-9172-FE610B5B9D1D.png",
+      "sha256": "5061faba5259a3210bdfd1bceb19c3842b66922557c1dbd69110940ed4d33c03",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795202644.554,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "R12-screen_0_6DC5F261-69AF-47F3-9B72-721507ABA14B.png",
+      "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+      "xcresult_manifest_sha256": "cdcc88a978b4a30eb87eb0e7535dd4f242c46574f77f9d0fa5a27005c643ab4b",
+      "passed_case_receipt_sha256": "1e09d7ca33df9a21c0f772890a1adcb80178cc49278be44998a7de7df19a918e",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/43B1369E-CF15-46D8-9172-FE610B5B9D1D.png",
+      "device_source": {
+        "source_revision": "95481eed6980e593252656bcd47ada549178285f",
+        "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+        "combined_build": true
+      },
+      "visual_observation": "iPad W25 계단 운동 완료 요약의 레벨 이력 카드에서 선택 시각 0:11·레벨 3이 그래프 위에 보인다. 그래프는 0:08 레벨 2에서 0:11 레벨 3으로 계단식 변경 후 종료까지 유지되며 아래에 두 변경 행이 모두 표시된다. Save Workout 전체 버튼도 보인다."
+    },
+    {
+      "device": "ipad",
+      "artifact": "W27-stair-level-history-saved-detail",
+      "selector": "ActivityExerciseRegressionTests/testStairClimberLevelChangesAppearInSummary",
+      "original_name": "26CB0289-F681-4649-BFC2-08554D2B0EF8.png",
+      "sha256": "904f83095e39c6d0c7568aed3be245241712f235abf32c01ed49f109a9def8d0",
+      "width": 1512,
+      "height": 2316,
+      "timestamp": 1795202678.114,
+      "device_name": "iPad mini (A20 Pro)-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "CD969F7E-A6BC-46C8-8815-836959EF454C",
+      "human_name": "W27-stair-level-history-saved-detail_0_C6EC82D3-DDB9-4709-AF6E-D19E225C256C.png",
+      "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+      "xcresult_manifest_sha256": "cdcc88a978b4a30eb87eb0e7535dd4f242c46574f77f9d0fa5a27005c643ab4b",
+      "passed_case_receipt_sha256": "1e09d7ca33df9a21c0f772890a1adcb80178cc49278be44998a7de7df19a918e",
+      "case_result": "Passed",
+      "case_device": "ipad",
+      "file": "images/ipad/26CB0289-F681-4649-BFC2-08554D2B0EF8.png",
+      "device_source": {
+        "source_revision": "95481eed6980e593252656bcd47ada549178285f",
+        "build_revision": "dfea466897aefd82e290e29b81531b027a2b2258",
+        "combined_build": true
+      },
+      "visual_observation": "iPad W27 저장 후 Exercise 상세의 레벨 이력 카드에서 선택 시각 0:08·레벨 2, 계단식 레벨 2→3 그래프, 0:08/0:11 두 변경 행이 함께 보인다. 저장된 기록에서도 기구 레벨 이력이 유지되며 이 캡처는 다른 운동 길이나 단일 변경 상태는 검증하지 않는다."
+    },
+    {
+      "device": "regular",
+      "artifact": "R12-screen",
+      "selector": "ActivityExerciseRegressionTests/testStairClimberLevelChangesAppearInSummary",
+      "original_name": "09072618-5FAC-4C4F-A928-9FA801D6ACAD.png",
+      "sha256": "a9c08cb24f599a0957fcf200f695cbdb0940be25a050ecea9ce8824627f43842",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795203887.794,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "R12-screen_0_36C2EEBC-A0D6-4B70-969C-F153907B084D.png",
+      "build_revision": "112f1d6e8b8627579efe5fa334735ff84c4f01d1",
+      "xcresult_manifest_sha256": "a5a7b3c9aad36d35d0e22156b7e211e7db4f1bb2b60a88f72b7468239672e4d3",
+      "passed_case_receipt_sha256": "06770e06289c28e0b7658d41ab0dbda8bbffbb35c48a12edb6c22b357a987fa0",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/09072618-5FAC-4C4F-A928-9FA801D6ACAD.png",
+      "device_source": {
+        "source_revision": "95481eed6980e593252656bcd47ada549178285f",
+        "build_revision": "112f1d6e8b8627579efe5fa334735ff84c4f01d1",
+        "combined_build": true
+      },
+      "visual_observation": "운동 종료 화면에서 선택된 0:11·레벨 3과 하단 저장 버튼이 보인다. 저장한 운동 상세에서도 0:08·레벨 2에서 시작해 다음 레벨 3까지 이어지는 두 구간이 보인다."
+    },
+    {
+      "device": "regular",
+      "artifact": "W27-stair-level-history-saved-detail",
+      "selector": "ActivityExerciseRegressionTests/testStairClimberLevelChangesAppearInSummary",
+      "original_name": "022941D8-1829-4E7C-BE94-634044BCD144.png",
+      "sha256": "13a609c0dd634f800eca75c9bba680019ab3427b1ce45eae2e4ad35d620cd2de",
+      "width": 1206,
+      "height": 2622,
+      "timestamp": 1795203925.652,
+      "device_name": "iPhone 18 Pro-wt-feature-run-codex-checks-c471d55107ee",
+      "device_id": "C79B5667-45E2-431B-8551-9548C37052B0",
+      "human_name": "W27-stair-level-history-saved-detail_0_2E094379-8418-427F-BCD7-B0F6F4D345CF.png",
+      "build_revision": "112f1d6e8b8627579efe5fa334735ff84c4f01d1",
+      "xcresult_manifest_sha256": "a5a7b3c9aad36d35d0e22156b7e211e7db4f1bb2b60a88f72b7468239672e4d3",
+      "passed_case_receipt_sha256": "06770e06289c28e0b7658d41ab0dbda8bbffbb35c48a12edb6c22b357a987fa0",
+      "case_result": "Passed",
+      "case_device": "regular",
+      "file": "images/regular/022941D8-1829-4E7C-BE94-634044BCD144.png",
+      "device_source": {
+        "source_revision": "95481eed6980e593252656bcd47ada549178285f",
+        "build_revision": "112f1d6e8b8627579efe5fa334735ff84c4f01d1",
+        "combined_build": true
+      },
+      "visual_observation": "운동 종료 화면에서 선택된 0:11·레벨 3과 하단 저장 버튼이 보인다. 저장한 운동 상세에서도 0:08·레벨 2에서 시작해 다음 레벨 3까지 이어지는 두 구간이 보인다."
+    }
+  ],
+  "unverified_devices": [],
+  "uncaptured_artifacts_by_device": {
+    "regular": [],
+    "ipad": [],
+    "duo": [],
+    "duo-open": []
+  },
+  "unverified_screen_ids": [],
+  "visual_inspection": {
+    "status": "원본 화면 검토 완료",
+    "notes": "Duo 접힘 W25 요약 PNG에서 선택 시간 0:12·레벨 3, 레벨 2→3 계단 그래프와 0:09/0:12 두 행이 모두 읽힌다. 차트 카드와 Save Workout 버튼 전체가 외부 화면에 들어오며 겹침은 보이지 않는다. 위쪽 보조 통계 일부는 스크롤 위에 있어 전체 요약을 이 한 장으로 검증하지 않는다. Duo 접힘 W27 저장 상세 PNG에서 선택 시간 0:09·레벨 2, 종료까지 이어지는 레벨 3 구간, 두 변경 행이 읽힌다. 카드 제목 일부는 상단 고정 바에 가려져 이 프레임은 차트와 기록 행을 검증하며 전체 상세 헤더 배치는 검증하지 않는다. Duo 내부 화면에서 완료 요약은 0:13·레벨 3과 저장 버튼을 보여 준다. 저장 후에는 운동 목록 옆 상세에 레벨 2→3 그래프가 보인다. iPad W25 계단 운동 완료 요약의 레벨 이력 카드에서 선택 시각 0:11·레벨 3이 그래프 위에 보인다. 그래프는 0:08 레벨 2에서 0:11 레벨 3으로 계단식 변경 후 종료까지 유지되며 아래에 두 변경 행이 모두 표시된다. Save Workout 전체 버튼도 보인다. iPad W27 저장 후 Exercise 상세의 레벨 이력 카드에서 선택 시각 0:08·레벨 2, 계단식 레벨 2→3 그래프, 0:08/0:11 두 변경 행이 함께 보인다. 저장된 기록에서도 기구 레벨 이력이 유지되며 이 캡처는 다른 운동 길이나 단일 변경 상태는 검증하지 않는다. 운동 종료 화면에서 선택된 0:11·레벨 3과 하단 저장 버튼이 보인다. 저장한 운동 상세에서도 0:08·레벨 2에서 시작해 다음 레벨 3까지 이어지는 두 구간이 보인다.",
+    "reviewer": "기능별 캡처 검토"
+  }
+}

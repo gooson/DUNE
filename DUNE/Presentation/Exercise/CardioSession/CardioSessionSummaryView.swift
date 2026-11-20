@@ -20,7 +20,9 @@ struct CardioSessionSummaryView: View {
             VStack(spacing: DS.Spacing.xl) {
                 completionHeader
                 metricsGrid
-                CardioMachineLevelHistoryView(changes: viewModel.machineLevelChanges)
+                CardioMachineLevelHistoryView(
+                    changes: viewModel.machineLevelChanges, duration: viewModel.elapsedSeconds
+                )
             }
             .padding(DS.Spacing.lg)
         }

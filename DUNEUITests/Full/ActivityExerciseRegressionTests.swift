@@ -5231,16 +5231,72 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         let increase = app.buttons["cardio-level-increase"].firstMatch
         XCTAssertTrue(increase.waitForExistence(timeout: 5))
         increase.auditTap()
+        let firstRecordedLevel = app.staticTexts["cardio-level-value"].firstMatch.label
+        XCTAssertEqual(firstRecordedLevel, "2")
         increase.auditTap()
-        XCTAssertEqual(app.staticTexts["cardio-level-value"].firstMatch.label, "3")
+        let finalRecordedLevel = app.staticTexts["cardio-level-value"].firstMatch.label
+        XCTAssertEqual(finalRecordedLevel, "3")
 
         app.buttons[AXID.cardioSessionEnd].firstMatch.auditTap()
         app.buttons[AXID.cardioSessionConfirmEnd].firstMatch.auditTap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.waitForExistence(timeout: 10))
         XCTAssertTrue(app.descendants(matching: .any)["cardio-summary-duration"].firstMatch.exists)
         XCTAssertFalse(app.descendants(matching: .any)["cardio-summary-distance"].firstMatch.exists)
-        XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch.exists)
-        XCTAssertTrue(app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch.exists)
+        let scroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
+        XCTAssertTrue(scroll.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-row-0", in: scroll),
+                      "First recorded level row must be loaded and visible")
+        let firstLevel = app.descendants(matching: .any)["cardio-level-history-row-0"].firstMatch
+        XCTAssertTrue(firstLevel.exists && firstLevel.label.hasSuffix(firstRecordedLevel),
+                      "The first history row should match the first live stepper reading")
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-row-1", in: scroll),
+                      "Final recorded level row must be loaded and visible before tapping")
+        let finalLevel = app.descendants(matching: .any)["cardio-level-history-row-1"].firstMatch
+        XCTAssertTrue(finalLevel.exists && finalLevel.label.hasSuffix(finalRecordedLevel),
+                      "The final history row should match the second live stepper reading")
+        let chart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
+        XCTAssertTrue(chart.waitForExistence(timeout: 5))
+        XCTAssertTrue((chart.value as? String)?.contains(finalRecordedLevel) == true)
+        let save = app.buttons["cardio-session-summary-save"].firstMatch
+        XCTAssertTrue(save.waitForExistence(timeout: 5))
+        // The summary scroll's accessibility frame extends underneath its pinned Save footer.
+        let footerTop = save.frame.minY - 16
+        for _ in 0..<4 where finalLevel.frame.maxY > footerTop {
+            scroll.swipeUp(velocity: .slow)
+        }
+        XCTAssertLessThanOrEqual(finalLevel.frame.maxY, footerTop,
+                                 "The pinned save footer must clear the row before tapping it")
+        let navBar = app.navigationBars.firstMatch
+        if navBar.exists {
+            XCTAssertGreaterThanOrEqual(finalLevel.frame.midY, navBar.frame.maxY)
+        }
+        finalLevel.auditTap()
+        let selection = app.descendants(matching: .any)["cardio-level-history-selection"].firstMatch
+        XCTAssertTrue(selection.waitForExistence(timeout: 5) && selection.label.hasSuffix("3"),
+                      "Selected level should follow the tapped final change")
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-chart", in: scroll),
+                      "The selected level chart must be fully visible in the summary")
+        addScreenshotAttachment(named: "R12-screen")
+
+        XCTAssertTrue(save.waitForExistence(timeout: 5) && save.isHittable)
+        save.auditTap()
+        let summary = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch
+        let dismissed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: summary)
+        XCTAssertEqual(XCTWaiter.wait(for: [dismissed], timeout: 30), .completed)
+
+        openExerciseViewFromRecentWorkouts(maxSwipes: 24)
+        let savedRowID = AXID.exerciseRow("stair-climber")
+        XCTAssertTrue(app.scrollToElementIfNeeded(savedRowID, maxSwipes: 12))
+        let savedRow = app.descendants(matching: .any)[savedRowID].firstMatch
+        XCTAssertTrue(savedRow.waitForExistence(timeout: 8) && savedRow.isHittable)
+        savedRow.auditTap()
+        let detailScroll = app.scrollViews["exercise-session-detail-scroll"].firstMatch
+        XCTAssertTrue(detailScroll.waitForExistence(timeout: 8))
+        let savedChart = app.descendants(matching: .any)["cardio-level-history-chart"].firstMatch
+        XCTAssertTrue(app.revealFullyVisible("cardio-level-history-chart", in: detailScroll),
+                      "Saved workout detail should show the complete machine-level chart")
+        XCTAssertTrue((savedChart.value as? String)?.contains("3") == true)
+        addScreenshotAttachment(named: "W27-stair-level-history-saved-detail")
     }
 
     func testVisualAuditCardioAtDefaultTextSize() throws {
