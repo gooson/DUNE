@@ -93,7 +93,7 @@ private struct ArtistMotionPlayer: UIViewRepresentable {
     static func dismantleUIView(_ view: ArtistPlayerView, coordinator: ()) { view.stop() }
 }
 
-private final class ArtistPlayerView: UIView {
+final class ArtistPlayerView: UIView {
     override class var layerClass: AnyClass { AVPlayerLayer.self }
     private var movieLayer: AVPlayerLayer? { layer as? AVPlayerLayer }
     private var url: URL?
@@ -115,18 +115,29 @@ private final class ArtistPlayerView: UIView {
     }
 
     private func startIfVisible() {
-        guard window != nil, queue == nil, let url, let movieLayer else { return }
+        guard window != nil, queue == nil, let url else { return }
         let player = AVQueuePlayer()
         player.isMuted = true
         player.preventsDisplaySleepDuringVideoPlayback = false
         player.allowsExternalPlayback = false
         player.audiovisualBackgroundPlaybackPolicy = .pauses
+        queue = player
+        // Muting alone still lets playback activate the shared audio session.
+        player.setDisconnectedFromSystemAudio(true) { [weak self, weak player] in
+            Task { @MainActor in
+                guard let self, let player, self.queue === player else { return }
+                self.startLoop(player: player, url: url)
+            }
+        }
+    }
+
+    private func startLoop(player: AVQueuePlayer, url: URL) {
+        guard let movieLayer else { return }
         isUserInteractionEnabled = false
         isOpaque = false
         movieLayer.opacity = 0
         movieLayer.videoGravity = .resizeAspectFill
         movieLayer.player = player
-        queue = player
         looper = AVPlayerLooper(player: player, templateItem: AVPlayerItem(url: url))
         readyObservation = movieLayer.observe(\.isReadyForDisplay, options: [.initial, .new]) { [weak self] _, _ in
             Task { @MainActor [weak self] in

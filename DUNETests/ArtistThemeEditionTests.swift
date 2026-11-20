@@ -15,6 +15,27 @@ struct ArtistThemeEditionTests {
         #expect(!ArtistThemeBackground.playsMotion(visible: true, phase: .active, reduced: false, lowPower: true))
     }
 
+    @Test func auroraLoopStartsDisconnectedFromSystemAudio() async throws {
+        let edition = try #require(ArtistThemeEdition.forTheme(.arcticDawn))
+        let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+        let window = UIWindow(windowScene: scene)
+        let view = ArtistPlayerView()
+        let layer = try #require(view.layer as? AVPlayerLayer)
+        view.configure(url: edition.movieURL)
+        window.addSubview(view)
+        view.removeFromSuperview()
+        window.addSubview(view)
+        defer { view.removeFromSuperview() }
+
+        let deadline = ContinuousClock.now.advanced(by: .seconds(5))
+        while layer.player == nil && ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        let player = try #require(layer.player)
+        #expect(player.disconnectedFromSystemAudio)
+        #expect(player.rate > 0)
+    }
+
     @Test("Positive score changes and primary actions remain readable on their opaque fills")
     func opaqueSurfaceContrast() {
         for scheme in [ColorScheme.light, .dark] {
