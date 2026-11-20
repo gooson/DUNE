@@ -43,7 +43,13 @@ final class WatchLiveHeartRateZonesUITests: WatchUITestBaseCase {
     func testRecentHeartRateHistoryHasGaps() {
         relaunchApp(withAdditionalArguments: ["--ui-watch-heart-history"])
         XCTAssertTrue(elementExists(WatchAXID.sessionPagingRoot, timeout: 10))
-        app.swipeLeft()
+        let page = app.descendants(matching: .any)["watch-cardio-hr-zone"].firstMatch
+        for _ in 0..<4 {
+            if page.exists && page.isHittable { break }
+            app.swipeLeft()
+        }
+        XCTAssertTrue(page.exists && page.isHittable,
+                      "The history must be checked on the visible heart-rate page")
         XCTAssertTrue(elementExists("watch-heart-rate-history", timeout: 5))
         captureDesignState("C03")
     }
