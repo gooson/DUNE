@@ -23,6 +23,8 @@ extension CLLocationManager: WorkoutRouteLocationProviding {}
 final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
     private let locationManager: any WorkoutRouteLocationProviding
     private(set) var points: [WorkoutRoutePoint] = []
+    private(set) var elevationProfile = WatchElevationProfile()
+    var onElevationUpdate: ((WatchElevationProfile) -> Void)?
     private(set) var capturedPlace: WorkoutPlace?
     private(set) var isRecording = false
     private(set) var isPaused = false
@@ -63,6 +65,7 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         locationManager.distanceFilter = capturesPlaceOnly ? kCLDistanceFilterNone : 10
         locationManager.allowsBackgroundLocationUpdates = !capturesPlaceOnly
         points = []
+        elevationProfile = WatchElevationProfile()
         acceptsSamplesFrom = date
         isRecording = true
         applyAuthorization(locationManager.authorizationStatus, requestsPermission: true)
@@ -86,6 +89,7 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         guard isRecording else { return }
         isPaused = true
         previousPoint = nil
+        elevationProfile.breakSegment()
         stopUpdates()
         // A paused one-shot request is cancelled; resume may make one fresh request.
         if capturesPlaceOnly, capturedPlace == nil { hasRequestedPlace = false }
@@ -96,6 +100,7 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         isPaused = false
         acceptsSamplesFrom = date
         previousPoint = nil
+        elevationProfile.breakSegment()
         applyAuthorization(locationManager.authorizationStatus, requestsPermission: false)
     }
 
@@ -155,9 +160,14 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
                   var point = WorkoutRoutePoint(
                     latitude: location.coordinate.latitude, longitude: location.coordinate.longitude,
                     timestamp: location.timestamp,
-                    altitude: location.verticalAccuracy >= 0 ? location.altitude : nil,
+                    altitude: location.verticalAccuracy >= 0 && location.verticalAccuracy <= 20 && location.altitude.isFinite
+                        ? location.altitude : nil,
                     horizontalAccuracy: location.horizontalAccuracy
-                  ) else { previousPoint = nil; continue }
+                  ) else {
+                    previousPoint = nil
+                    elevationProfile.breakSegment()
+                    continue
+                  }
             if capturesPlaceOnly {
                 capturedPlace = WorkoutPlace(latitude: point.latitude, longitude: point.longitude,
                                              name: "", source: .gps)
@@ -171,6 +181,8 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
                 point.startsNewSegment = interval > 30 || previousPoint.distance(to: point) >= 100
             }
             points.append(point)
+            elevationProfile.observe(altitude: point.altitude, at: point.timestamp, beginsSegment: point.startsNewSegment)
+            onElevationUpdate?(elevationProfile)
             previousPoint = point
             if points.count > WorkoutLocationPayload.maxRoutePoints {
                 points = WorkoutLocationPayload.normalizedRoute(points, limit: WorkoutLocationPayload.maxRoutePoints / 2)

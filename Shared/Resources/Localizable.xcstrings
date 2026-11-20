@@ -16987,6 +16987,23 @@
         }
       }
     },
+    "Elevation Gain" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "獲得標高"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "누적 상승"
+          }
+        }
+      }
+    },
     "Elliptical" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -26008,6 +26025,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최근 7일"
+          }
+        }
+      }
+    },
+    "Last 7 days %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近7日間 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 7일 %@"
+          }
+        }
+      }
+    },
+    "Last 7 days %@ (%@%@%%)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近7日間 %@（%@%@%%）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 7일 %@ (%@%@%%)"
           }
         }
       }
@@ -38271,6 +38322,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "기록일"
+          }
+        }
+      }
+    },
+    "Recorded %lld of 7 nights" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "直近7日間の記録 %lld夜"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 7일 중 %lld일 기록"
           }
         }
       }
