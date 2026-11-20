@@ -153,6 +153,7 @@ final class WorkoutManager: NSObject {
 
     /// Running samples for average HR calculation.
     private var heartRateSamples: [Double] = []
+    private(set) var heartRateHistory = WatchHeartRateHistory()
     private var machineLevelWeightedSeconds: TimeInterval = 0
     private var machineLevelWeightedSum: Double = 0
     private var lastMachineLevelSampleDate: Date?
@@ -522,6 +523,7 @@ final class WorkoutManager: NSObject {
         stopMirrorTransport()
         mirrorWorkoutName = templateName
         self.heartRateSamples = []
+        self.heartRateHistory = WatchHeartRateHistory()
         self.liveZoneDistribution = nil
         self.liveZoneIndex = nil
         self.steps = 0
@@ -623,6 +625,7 @@ final class WorkoutManager: NSObject {
         isPaused = false
         isSessionEnded = false
         isFinalizingWorkout = false
+        heartRateHistory = WatchHeartRateHistory()
         startDate = Date()
         lastMachineLevelSampleDate = supportsMachineLevel ? startDate : nil
         completedDuration = nil
@@ -657,6 +660,15 @@ final class WorkoutManager: NSObject {
             lastAnnouncedKilometer = 3
             currentPace = 1_170 / 3.24
             heartRate = 148
+        }
+        if ProcessInfo.processInfo.arguments.contains("--ui-watch-heart-history") {
+            let now = Date()
+            for minute in 0..<30 where !(12...15).contains(minute) {
+                let bpm = Double(105 + minute)
+                heartRateHistory.append(bpm: bpm, at: now.addingTimeInterval(Double(minute - 29) * 60), receivedAt: now)
+                heartRateSamples.append(bpm)
+            }
+            heartRate = 134
         }
         if ProcessInfo.processInfo.arguments.contains("--ui-watch-no-heart-rate") {
             heartRate = 0
@@ -1064,6 +1076,7 @@ final class WorkoutManager: NSObject {
         currentPace = 0
         estimatedMaxHR = HeartRateZoneCalculator.defaultMaxHR
         heartRateSamples = []
+        heartRateHistory = WatchHeartRateHistory()
         currentMachineLevel = nil
         averageMachineLevel = nil
         maxMachineLevel = nil
@@ -2026,6 +2039,7 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
         // Extract primitive values on the delegate callback thread (before actor hop)
         // to avoid cross-actor access of non-Sendable HKLiveWorkoutBuilder.
         var heartRateValue: Double?
+        var heartRateDate: Date?
         var caloriesValue: Double?
         var distanceValue: Double?
         var floorsValue: Double?
@@ -2041,6 +2055,7 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
                 let bpm = stats.mostRecentQuantity()?.doubleValue(for: unit) ?? 0
                 if (20...250).contains(bpm) {
                     heartRateValue = bpm
+                    heartRateDate = stats.mostRecentQuantityDateInterval()?.end
                 }
 
             case HKQuantityType(.activeEnergyBurned):
@@ -2080,7 +2095,12 @@ extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
             guard !isSessionEnded,
                   let builder,
                   ObjectIdentifier(builder) == callbackBuilderID else { return }
-            if let bpm = heartRateValue {
+            if let bpm = heartRateValue,
+               let heartRateDate,
+               let startDate,
+               heartRateDate >= startDate,
+               !isPaused,
+               heartRateHistory.append(bpm: bpm, at: heartRateDate, receivedAt: Date()) {
                 heartRate = bpm
                 heartRateSamples.append(bpm)
             }

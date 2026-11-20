@@ -8,9 +8,11 @@ struct CardioHRZonePage: View {
     @Environment(\.appTheme) private var theme
 
     var body: some View {
-        TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { _ in
+        TimelineView(.periodic(from: .now, by: isLuminanceReduced ? 10 : 1)) { context in
             ScrollView(.vertical) {
                 VStack(spacing: DS.Spacing.md) {
+
+                    heartRateChart(endingAt: context.date)
 
                     // Current HR (large, zone-colored)
                     heartRateDisplay
@@ -38,6 +40,32 @@ struct CardioHRZonePage: View {
             .scrollBounceBehavior(.basedOnSize)
         }
         .accessibilityElement(children: .contain)
+    }
+
+    private func heartRateChart(endingAt date: Date) -> some View {
+        let buckets = workoutManager.heartRateHistory.minuteBuckets(endingAt: date)
+        return VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+            Text("Last 30 min")
+                .font(DS.Typography.metricLabel)
+                .foregroundStyle(.secondary)
+
+            HStack(alignment: .bottom, spacing: 1) {
+                ForEach(buckets.indices, id: \.self) { index in
+                    if let bpm = buckets[index] {
+                        RoundedRectangle(cornerRadius: 1)
+                            .fill(zoneColor)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: max(2, min(48, (bpm - 40) / 210 * 48)))
+                    } else {
+                        Color.clear.frame(maxWidth: .infinity).frame(height: 2)
+                    }
+                }
+            }
+            .frame(height: 48, alignment: .bottom)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Last 30 min")
+            .accessibilityIdentifier("watch-heart-rate-history")
+        }
     }
 
     // MARK: - Heart Rate Display
