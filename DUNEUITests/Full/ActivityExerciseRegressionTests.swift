@@ -5328,14 +5328,22 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             let summaryScroll = app.descendants(matching: .any)[AXID.cardioSessionSummaryScreen].firstMatch.scrollViews.firstMatch
             XCTAssertTrue(summaryScroll.waitForExistence(timeout: 5), "Cardio summary should own a metric scroll view")
             for (metric, checkpoint) in [("Steps", "steps"), ("Cadence", "cadence")] {
-                let label = app.staticTexts[metric].firstMatch
-                for _ in 0..<8 {
+                let label = summaryScroll.staticTexts[metric].firstMatch
+                for _ in 0..<20 {
                     let scrollFrame = summaryScroll.frame.intersection(app.windows.firstMatch.frame)
                     let viewport = CGRect(x: scrollFrame.minX + 8, y: scrollFrame.minY + 8,
                                           width: max(0, scrollFrame.width - 16),
                                           height: max(0, min(scrollFrame.maxY, save.frame.minY) - scrollFrame.minY - 16))
                     if label.exists && viewport.contains(label.frame) { break }
-                    summaryScroll.swipeUp(velocity: .slow)
+                    let offset = label.exists ? label.frame.midY - viewport.midY : viewport.height
+                    let distance = min(max(abs(offset), viewport.height * 0.15), viewport.height * 0.5)
+                    let start = summaryScroll.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                        dx: viewport.midX - summaryScroll.frame.minX,
+                        dy: viewport.midY - summaryScroll.frame.minY
+                    ))
+                    start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(
+                        dx: 0, dy: offset < 0 ? distance : -distance
+                    )))
                 }
                 let scrollFrame = summaryScroll.frame.intersection(app.windows.firstMatch.frame)
                     let viewport = CGRect(x: scrollFrame.minX + 8, y: scrollFrame.minY + 8,
