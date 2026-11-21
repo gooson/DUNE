@@ -375,30 +375,38 @@ final class SettingsHubKoreanCaptureTests: UITestBaseCase {
         ["-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR", "--ui-test-style", "light"]
     }
 
+    private func capture(_ name: String) {
+        if VisualAudit.isEnabled {
+            VisualAudit.capture(name)
+        } else {
+            addScreenshotAttachment(named: name)
+        }
+    }
+
     func testKoreanHubGalleryPreviewAndDetails() {
         navigateToSettings()
         XCTAssertTrue(elementExists(AXID.settingsHubHome, timeout: 5))
-        addScreenshotAttachment(named: "S01-ko-settings-home")
+        capture("S01-ko-settings-home")
 
         openSettingsCategory(AXID.settingsSectionAppearance)
         let gallery = app.scrollViews[AXID.settingsThemeGallery].firstMatch
         XCTAssertTrue(gallery.waitForExistence(timeout: 5))
-        addScreenshotAttachment(named: "S01-ko-theme-gallery")
+        capture("S01-ko-theme-gallery")
         XCTAssertTrue(app.revealFullyVisible(
             "settings-theme-patisserie", in: gallery, maxMoves: 20
         ))
         app.buttons["settings-theme-patisserie"].auditTap()
         XCTAssertTrue(elementExists(AXID.settingsThemeApply, timeout: 5))
-        addScreenshotAttachment(named: "S01-ko-theme-preview-light")
+        capture("S01-ko-theme-preview-light")
         app.descendants(matching: .any)[AXID.settingsPreviewDark].firstMatch.auditTap()
-        addScreenshotAttachment(named: "S01-ko-theme-preview-dark")
+        capture("S01-ko-theme-preview-dark")
 
         openSettingsCategory(AXID.settingsHubWorkout)
         XCTAssertTrue(elementExists(AXID.settingsRowRestTime, timeout: 5))
-        addScreenshotAttachment(named: "S01-ko-workout-detail")
+        capture("S01-ko-workout-detail")
         openSettingsCategory(AXID.settingsHubPrivacy)
         XCTAssertTrue(elementExists(AXID.settingsRowICloudSync, timeout: 5))
-        addScreenshotAttachment(named: "S01-ko-privacy-detail")
+        capture("S01-ko-privacy-detail")
     }
 }
 
