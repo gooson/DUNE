@@ -44,7 +44,6 @@ struct ThemeGalleryView: View {
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        .accessibilityElement(children: .ignore)
                         .accessibilityLabel(theme.displayName)
                         .accessibilityHint("Preview theme")
                         .accessibilityAddTraits(selectedTheme == theme ? .isSelected : [])
@@ -56,7 +55,7 @@ struct ThemeGalleryView: View {
                 .frame(maxWidth: .infinity)
             }
             .accessibilityIdentifier("settings-theme-gallery")
-        .scrollBounceBehavior(.basedOnSize)
+            .scrollBounceBehavior(.basedOnSize)
         }
     }
 }
@@ -100,7 +99,6 @@ struct SettingsCurrentThemeCard: View {
             .contentShape(RoundedRectangle(cornerRadius: DS.Radius.lg))
         }
         .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
         .accessibilityLabel(String(localized: "Change theme, current \(selectedTheme.displayName)"))
         .accessibilityHint("Open theme gallery")
         .accessibilityIdentifier("settings-section-appearance")

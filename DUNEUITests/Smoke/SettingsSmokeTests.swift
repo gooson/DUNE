@@ -183,9 +183,9 @@ final class SettingsSmokeTests: UITestBaseCase {
         dismissIconConfirmation()
         let gallery = app.scrollViews[AXID.settingsThemeGallery].firstMatch
         XCTAssertTrue(gallery.waitForExistence(timeout: 5), "Apply should open the gallery")
-        let selected = app.buttons["settings-theme-patisserie"].firstMatch
-        XCTAssertTrue(app.revealFullyVisible(selected.identifier, in: gallery, maxMoves: 20))
-        XCTAssertTrue(selected.isSelected)
+        let themeID = "settings-theme-patisserie"
+        XCTAssertTrue(app.revealFullyVisible(themeID, in: gallery, maxMoves: 20))
+        XCTAssertTrue(app.buttons[themeID].firstMatch.isSelected)
     }
 
     func testCategoryDetailsOpenFromHub() throws {
@@ -388,10 +388,11 @@ final class SettingsHubKoreanCaptureTests: UITestBaseCase {
         addScreenshotAttachment(named: "S01-ko-settings-home")
 
         openSettingsCategory(AXID.settingsSectionAppearance)
-        XCTAssertTrue(app.buttons["settings-theme-patisserie"].waitForExistence(timeout: 5))
+        let gallery = app.scrollViews[AXID.settingsThemeGallery].firstMatch
+        XCTAssertTrue(gallery.waitForExistence(timeout: 5))
         addScreenshotAttachment(named: "S01-ko-theme-gallery")
         XCTAssertTrue(app.revealFullyVisible(
-            "settings-theme-patisserie", in: app.scrollViews[AXID.settingsThemeGallery].firstMatch, maxMoves: 20
+            "settings-theme-patisserie", in: gallery, maxMoves: 20
         ))
         app.buttons["settings-theme-patisserie"].auditTap()
         XCTAssertTrue(elementExists(AXID.settingsThemeApply, timeout: 5))
