@@ -344,17 +344,19 @@ extension AppTheme {
 }
 
 extension AppTheme {
-    var displayName: String {
+    var displayNameResource: LocalizedStringResource {
         switch self {
-        case .desertWarm:  String(localized: "Desert Warm")
-        case .oceanCool:   String(localized: "Ocean Cool")
-        case .forestGreen: String(localized: "Forest Green")
-        case .sakuraCalm:  String(localized: "Sakura Calm")
-        case .arcticDawn:  String(localized: "Arctic Dawn")
-        case .solarPop:    String(localized: "Solar Pop")
-        case .contourAtlas: String(localized: "Contour Atlas")
-        case .waterLilies: String(localized: "Water Lilies")
-        case .patisserie: String(localized: "Pâtisserie")
+        case .desertWarm: "Desert Warm"
+        case .oceanCool: "Ocean Cool"
+        case .forestGreen: "Forest Green"
+        case .sakuraCalm: "Sakura Calm"
+        case .arcticDawn: "Arctic Dawn"
+        case .solarPop: "Solar Pop"
+        case .contourAtlas: "Contour Atlas"
+        case .waterLilies: "Water Lilies"
+        case .patisserie: "Pâtisserie"
         }
     }
+
+    var displayName: String { String(localized: displayNameResource) }
 }

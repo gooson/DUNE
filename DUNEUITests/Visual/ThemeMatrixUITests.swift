@@ -239,10 +239,11 @@ final class ThemeMatrixUITests: SeededUITestBaseCase {
         launchApp(with: configuration)
         dismissIconConfirmation()
         navigateToSettings()
+        openSettingsCategory(AXID.settingsSectionAppearance)
 
         let identifier = "settings-theme-forestGreen"
-        let form = app.collectionViews.firstMatch
-        XCTAssertTrue(app.revealFullyVisible(identifier, in: form),
+        let gallery = app.scrollViews[AXID.settingsThemeGallery].firstMatch
+        XCTAssertTrue(app.revealFullyVisible(identifier, in: gallery),
                       "The Forest theme row and its sample should fit in the Settings viewport")
         XCTAssertTrue(app.buttons[identifier].firstMatch.isSelected)
         captureRootEvidence("Forest Light Settings")

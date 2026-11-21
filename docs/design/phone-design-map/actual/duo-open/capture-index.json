@@ -152,16 +152,41 @@
     },
     "S01": {
       "row_id": "S01",
-      "evidence": "title:Settings",
-      "test": "SettingsSmokeTests/testWhatsNewMuscleMapDetailExists()",
-      "action": "tap dashboard-toolbar-settings",
-      "timestamp": 1791827412.691,
-      "image": "EAB7BC3D-6E9F-4544-B2FC-FF52B7BDE129.png",
-      "screen": "screen-1-2006x2852-tap dashboard-toolbar-settings_1_1900DDAA-53C6-49AE-9E62-C1D06A6B5171.png",
       "file": "S01.png",
-      "current_verification": "pending",
-      "current_verification_note": "B07 현재 화면 캡처 보류: 새 전용 Duo에서도 부팅 중 Data Migration Failed가 발생해 SDK 검사를 시작하지 못했습니다. 표시된 이미지는 이전 소스의 역사적 화면이며 이번 변경의 완료 증거가 아닙니다.",
-      "capture_scope": "Historical image retained; B07 current-source Duo capture pending"
+      "evidence": "2026-11-21 S01 host display and AX checkpoints",
+      "test": "SettingsHubKoreanCaptureTests/testKoreanHubGalleryPreviewAndDetails()",
+      "action": "VisualAudit S01-ko-settings-home",
+      "timestamp": 1795229189.9257667,
+      "timestamp_kind": "host PNG file mtime",
+      "capture_kind": "host-simctl-active-display+AX",
+      "source_revision": "22eac5366",
+      "device_udid": "5D1371D5-F22D-4B9E-8B0C-E623E2F20E09",
+      "sha256": "41b781278c2d9aa5bc3e7daafab2dd2b9414b47bf05ad6aa393fc2428aab0348",
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "capture_scope": "2026-11-21 Korean settings home and named settings scenarios",
+      "capture_gallery": "../settings-hub-2026-11-21/index.html",
+      "source_evidence": "../settings-hub-2026-11-21/duo-open/evidence.json",
+      "active_display": "3",
+      "active_native_size": [
+        2007,
+        2853
+      ],
+      "host_proof": "../settings-hub-2026-11-21/duo-open/host-proof.json",
+      "xcresults": [
+        "duo-open-native.xcresult"
+      ],
+      "named_states": {
+        "ko-privacy-detail": "../settings-hub-2026-11-21/duo-open/ko-privacy-detail.png",
+        "ko-settings-home": "images/S01.png",
+        "ko-theme-gallery": "../settings-hub-2026-11-21/duo-open/ko-theme-gallery.png",
+        "ko-theme-preview-dark": "../settings-hub-2026-11-21/duo-open/ko-theme-preview-dark.png",
+        "ko-theme-preview-light": "../settings-hub-2026-11-21/duo-open/ko-theme-preview-light.png",
+        "ko-workout-detail": "../settings-hub-2026-11-21/duo-open/ko-workout-detail.png"
+      },
+      "pose_readback": "../settings-hub-2026-11-21/duo-open/pose-readback.json"
     },
     "S03": {
       "row_id": "S03",

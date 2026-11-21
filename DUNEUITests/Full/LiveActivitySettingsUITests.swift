@@ -8,6 +8,8 @@ final class LiveActivitySettingsUITests: UITestBaseCase {
 
     func testSportMetricsAndStylePersistIndependently() {
         navigateToSettings()
+        openSettingsCategory(AXID.settingsHubWorkout)
+        openSettingsCategory(AXID.settingsLinkLiveActivity)
 
         select("settings-watch-live-activity-cardio-metric", option: "settings-watch-live-activity-cardio-distance")
         select("settings-watch-live-activity-strength-metric", option: "settings-watch-live-activity-strength-weight")
@@ -22,6 +24,8 @@ final class LiveActivitySettingsUITests: UITestBaseCase {
         configuration.resetState = false
         launchApp(with: configuration)
         navigateToSettings()
+        openSettingsCategory(AXID.settingsHubWorkout)
+        openSettingsCategory(AXID.settingsLinkLiveActivity)
         assertSelected("settings-watch-live-activity-cardio-metric", value: "Distance")
         assertSelected("settings-watch-live-activity-strength-metric", value: "Current Set Weight")
         assertSelected("settings-watch-live-activity-style", value: "Standard")

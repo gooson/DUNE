@@ -635,24 +635,40 @@
     "S01": {
       "row_id": "S01",
       "file": "S01.png",
-      "test": "TodaySettingsRegressionTests/testSettingsShowsPhaseTwoRows()",
-      "action": "Current normal Settings top controls",
-      "timestamp": 1793978469.385,
-      "source_revision": "2930ba45dd419634932ef3e4ced117ae13b7556e",
-      "source_worktree_dirty": false,
-      "device_udid": "BDE984E2-8EC6-41B9-9E24-ADC5F0C53586",
-      "capture_kind": "XCTest-native-PNG+AX",
-      "sha256": "403d7cd7ace9e4be857acb5eebdaa3fbc709fa1ca951288b83cff1ea71194be9",
-      "ax_sha256": "b7bb40de4a872df01deab2884ea4183373ed8edb7eef75a70ed1a72afaeb362f",
+      "evidence": "2026-11-21 named S01 state attachments",
+      "test": "SettingsHubKoreanCaptureTests/testKoreanHubGalleryPreviewAndDetails()",
+      "action": "S01-ko-settings-home_0_7E79B996-61EF-4077-8A60-DCC3EC424A70.png",
+      "timestamp": 1795227813.91,
+      "timestamp_kind": "xcresult attachment manifest timestamp",
+      "capture_kind": "xctest-named-attachment",
+      "source_revision": "f779a59e9",
+      "device_udid": "58DF10CE-D19E-4D27-97F9-8BC17968B2A8",
+      "sha256": "5855d486d9896d51e3194147e7f322a6c97533bf9261179baaf0aefd18bfbc0f",
       "native_dimensions": [
-        1320,
-        2868
+        1206,
+        2622
       ],
-      "source_json": "../../../full-redesign-map/review/settings-s01-2026-11-07/manifest.json",
-      "source_record": "records: profile=regular,kind=after,run_id=phone-first",
-      "capture_scope": "B07 selected normal state; see gallery gates and limits",
-      "actual_angle": null,
-      "current_verification": "normal-captured"
+      "capture_scope": "2026-11-21 Korean settings home and named settings scenarios",
+      "capture_gallery": "../settings-hub-2026-11-21/index.html",
+      "source_evidence": "../settings-hub-2026-11-21/regular/evidence.json",
+      "xcresults": [
+        "phone-gallery.xcresult",
+        "phone-mixed.xcresult"
+      ],
+      "named_states": {
+        "ko-privacy-detail": "../settings-hub-2026-11-21/regular/ko-privacy-detail.png",
+        "ko-settings-home": "images/S01.png",
+        "ko-theme-gallery": "../settings-hub-2026-11-21/regular/ko-theme-gallery.png",
+        "ko-theme-preview-dark": "../settings-hub-2026-11-21/regular/ko-theme-preview-dark.png",
+        "ko-theme-preview-light": "../settings-hub-2026-11-21/regular/ko-theme-preview-light.png",
+        "ko-workout-detail": "../settings-hub-2026-11-21/regular/ko-workout-detail.png",
+        "settings-bedtime-detail": "../settings-hub-2026-11-21/regular/settings-bedtime-detail.png",
+        "settings-privacy": "../settings-hub-2026-11-21/regular/settings-privacy.png",
+        "settings-search-bedtime": "../settings-hub-2026-11-21/regular/settings-search-bedtime.png",
+        "settings-search-empty": "../settings-hub-2026-11-21/regular/settings-search-empty.png",
+        "settings-workout": "../settings-hub-2026-11-21/regular/settings-workout.png"
+      },
+      "pose_readback": null
     },
     "L05": {
       "row_id": "L05",

@@ -267,7 +267,24 @@ enum AXID {
     static func habitManagementRow(_ habitName: String) -> String { "habit-management-row-\(habitName)" }
     static func habitManagementRestore(_ habitName: String) -> String { "habit-management-restore-\(habitName)" }
 
-    // MARK: - Settings (active rows)
+    // MARK: - Settings hub and active rows
+    static let settingsHubHome = "settings-hub-home"
+    static let settingsHubWorkout = "settings-hub-workout"
+    static let settingsHubAlerts = "settings-hub-alerts"
+    static let settingsHubPrivacy = "settings-hub-privacy"
+    static let settingsHubAbout = "settings-hub-about"
+    static let settingsHubMockData = "settings-hub-mockData"
+    static let settingsHubSearch = "settings-hub-search"
+    static let settingsSearchField = "settings-search-field"
+    static func settingsSearchResult(_ id: String) -> String { "settings-search-result-\(id)" }
+    static let settingsDetailBack = "settings-detail-back"
+    static let settingsThemeGallery = "settings-theme-gallery"
+    static let settingsThemeApply = "settings-theme-apply"
+    static let settingsPreviewLight = "settings-preview-light"
+    static let settingsPreviewDark = "settings-preview-dark"
+    static let settingsRowAppIcon = "settings-row-app-icon"
+    static let settingsLinkLiveActivity = "settings-link-liveActivity"
+    static let settingsLinkBedtime = "settings-link-bedtime"
     static let settingsRowExerciseDefaults = "settings-row-exercisedefaults"
     static let settingsRowPreferredExercises = "settings-row-preferredexercises"
     static let settingsRowRestTime = "settings-row-resttime"

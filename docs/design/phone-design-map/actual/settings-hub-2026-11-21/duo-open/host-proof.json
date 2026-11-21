@@ -1,0 +1,148 @@
+{
+  "active_display": "3",
+  "active_native_size": [
+    2007,
+    2853
+  ],
+  "runner_result": {
+    "pid": 33728,
+    "returncode": 0,
+    "termination": null,
+    "cleanup_error": null,
+    "checkpoints_attempted": 15
+  },
+  "states": {
+    "ko-settings-home": {
+      "checkpoint": {
+        "sequence": 4,
+        "action": "DUNE_VISUAL_AUDIT_READY S01-ko-settings-home [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229219.1852689",
+        "elapsed_seconds": 0.751,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "capture_row": [
+        "004",
+        "DUNE_VISUAL_AUDIT_READY S01-ko-settings-home [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229219.1852689",
+        "0",
+        "1"
+      ],
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "png_sha256": "41b781278c2d9aa5bc3e7daafab2dd2b9414b47bf05ad6aa393fc2428aab0348",
+      "ax_sha256": "81ba9ccad28d33c2b9bba17bbc08dc94c45bb357d57e68b5795c73f3c1f7c507"
+    },
+    "ko-theme-gallery": {
+      "checkpoint": {
+        "sequence": 6,
+        "action": "DUNE_VISUAL_AUDIT_READY S01-ko-theme-gallery [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229227.5499182",
+        "elapsed_seconds": 0.637,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "capture_row": [
+        "006",
+        "DUNE_VISUAL_AUDIT_READY S01-ko-theme-gallery [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229227.5499182",
+        "0",
+        "1"
+      ],
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "png_sha256": "cee5b38b550218bb86a6b6ef94f3ab65d27c9155da145acf7a28be25620beed1",
+      "ax_sha256": "40ff5dfa08f19f734d9024489e227e2974c30d5042847c7ebf946b9d3ee07c60"
+    },
+    "ko-theme-preview-light": {
+      "checkpoint": {
+        "sequence": 8,
+        "action": "DUNE_VISUAL_AUDIT_READY S01-ko-theme-preview-light [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229237.179162",
+        "elapsed_seconds": 0.83,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "capture_row": [
+        "008",
+        "DUNE_VISUAL_AUDIT_READY S01-ko-theme-preview-light [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229237.179162",
+        "0",
+        "1"
+      ],
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "png_sha256": "b96729dd8bb071f886de6e5f8ebd978f8974b4cd666052d646ad96b7bc2832e1",
+      "ax_sha256": "e0fb265c10882704518b580eefd1bbb85d16f71a40a714ad816abd918e1fdc04"
+    },
+    "ko-theme-preview-dark": {
+      "checkpoint": {
+        "sequence": 10,
+        "action": "DUNE_VISUAL_AUDIT_READY S01-ko-theme-preview-dark [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229241.769885",
+        "elapsed_seconds": 0.568,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "capture_row": [
+        "010",
+        "DUNE_VISUAL_AUDIT_READY S01-ko-theme-preview-dark [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229241.769885",
+        "0",
+        "1"
+      ],
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "png_sha256": "9aed0a16c79b72bd14869c023770ad6c6f36274519be9a71fc70b3b2fb09a091",
+      "ax_sha256": "32d0d06f6b8cd68a132591d42d9f776c5ecd8c8203c99ff3058d57bbc57368f2"
+    },
+    "ko-workout-detail": {
+      "checkpoint": {
+        "sequence": 12,
+        "action": "DUNE_VISUAL_AUDIT_READY S01-ko-workout-detail [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229252.354673",
+        "elapsed_seconds": 0.706,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "capture_row": [
+        "012",
+        "DUNE_VISUAL_AUDIT_READY S01-ko-workout-detail [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229252.354673",
+        "0",
+        "1"
+      ],
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "png_sha256": "f7de2cdf64685349750edb71f71510c44e2af54766bbc9a9f350327e21e7206e",
+      "ax_sha256": "649f3590394f4e0c9d97e16bc4eb982d53c82ea40cf2de2465299e1e47151ea4"
+    },
+    "ko-privacy-detail": {
+      "checkpoint": {
+        "sequence": 14,
+        "action": "DUNE_VISUAL_AUDIT_READY S01-ko-privacy-detail [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229265.865281",
+        "elapsed_seconds": 0.861,
+        "acknowledged": true,
+        "valid_evidence": true,
+        "error": null
+      },
+      "capture_row": [
+        "014",
+        "DUNE_VISUAL_AUDIT_READY S01-ko-privacy-detail [DUNEUITests/SettingsSmokeTests.swift:380] DEADLINE=1795229265.865281",
+        "0",
+        "1"
+      ],
+      "native_dimensions": [
+        2853,
+        2007
+      ],
+      "png_sha256": "3318496d3083665a0c5af734fcf4f16ad61a66b2c87db976ff769c5ab00dac94",
+      "ax_sha256": "8894e44756be805637f67bced97a4a1f3815811c2ab310def77d5cf873a458f6"
+    }
+  }
+}

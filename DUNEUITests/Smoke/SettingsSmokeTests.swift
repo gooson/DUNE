@@ -1,4 +1,5 @@
 @preconcurrency import XCTest
+import UIKit
 
 /// Smoke tests for the Settings screen.
 /// Verifies key UI elements exist and the screen renders without crashing.
@@ -17,6 +18,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWorkoutDefaultsSectionExists() throws {
+        openSettingsCategory(AXID.settingsHubWorkout)
         XCTAssertTrue(
             elementExists(AXID.settingsRowRestTime, timeout: 5),
             "Rest Time setting row should exist"
@@ -24,6 +26,8 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testBedtimeReminderSettingsExist() throws {
+        openSettingsCategory(AXID.settingsHubAlerts)
+        openSettingsCategory(AXID.settingsLinkBedtime)
         _ = app.scrollToElementIfNeeded(AXID.settingsRowBedtimeReminder)
 
         XCTAssertTrue(
@@ -42,16 +46,18 @@ final class SettingsSmokeTests: UITestBaseCase {
             elementExists(AXID.settingsRowAppleWatchBedtimeReminderLeadTime, timeout: 5),
             "Apple Watch bedtime lead time row should exist"
         )
-        XCTAssertTrue(
-            elementExists(AXID.settingsRowPostureReminder, timeout: 5),
-            "Posture reminder row should exist"
-        )
-
-        _ = app.scrollToHittableElementIfNeeded(AXID.settingsRowPostureReminder)
+        _ = app.scrollToHittableElementIfNeeded(AXID.settingsRowAppleWatchBedtimeReminderLeadTime)
         addScreenshotAttachment(named: defaultArtifactName(suffix: "bedtime-settings"))
     }
 
+    func testPostureReminderExists() throws {
+        openSettingsCategory(AXID.settingsHubAlerts)
+        openSettingsCategory("settings-link-otherAlerts")
+        XCTAssertTrue(elementExists(AXID.settingsRowPostureReminder, timeout: 5))
+    }
+
     func testExerciseDefaultsLinkExists() throws {
+        openSettingsCategory(AXID.settingsHubWorkout)
         XCTAssertTrue(
             elementExists(AXID.settingsRowExerciseDefaults, timeout: 5),
             "Exercise Defaults navigation link should exist"
@@ -59,6 +65,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testPreferredExercisesLinkExists() throws {
+        openSettingsCategory(AXID.settingsHubWorkout)
         XCTAssertTrue(
             elementExists(AXID.settingsRowPreferredExercises, timeout: 5),
             "Preferred Exercises navigation link should exist"
@@ -66,32 +73,128 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testNavigateToExerciseDefaults() throws {
+        openSettingsCategory(AXID.settingsHubWorkout)
         let link = app.descendants(matching: .any)[AXID.settingsRowExerciseDefaults].firstMatch
         XCTAssertTrue(link.waitForExistence(timeout: 5), "Exercise Defaults link should exist")
         link.tap()
 
-        let title = app.navigationBars["Exercise Defaults"]
-        XCTAssertTrue(title.waitForExistence(timeout: 5), "Exercise Defaults screen should open")
+        XCTAssertTrue(elementExists(AXID.exerciseDefaultsScreen, timeout: 5),
+                      "Exercise Defaults screen should open")
     }
 
     func testNavigateToPreferredExercises() throws {
+        openSettingsCategory(AXID.settingsHubWorkout)
         let link = app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch
         XCTAssertTrue(link.waitForExistence(timeout: 5), "Preferred Exercises link should exist")
         link.tap()
 
-        let title = app.navigationBars["Preferred Exercises"]
-        XCTAssertTrue(title.waitForExistence(timeout: 5), "Preferred Exercises screen should open")
+        XCTAssertTrue(elementExists(AXID.preferredExercisesScreen, timeout: 5),
+                      "Preferred Exercises screen should open")
     }
 
     func testAppearanceSectionExists() throws {
-        _ = app.scrollToElementIfNeeded(AXID.settingsSectionAppearance)
         XCTAssertTrue(
             elementExists(AXID.settingsSectionAppearance, timeout: 5),
-            "Appearance section should exist"
+            "Appearance gallery entry should exist"
         )
     }
 
+    func testThemePreviewCancelAndApply() throws {
+        let gallery = AXID.settingsSectionAppearance
+        XCTAssertTrue(elementExists(gallery, timeout: 5))
+        addScreenshotAttachment(named: "S01-settings-home")
+        openSettingsCategory(gallery)
+        let themeID = "settings-theme-patisserie"
+        XCTAssertTrue(app.revealFullyVisible(
+            themeID, in: app.scrollViews[AXID.settingsThemeGallery].firstMatch, maxMoves: 20
+        ))
+        addScreenshotAttachment(named: "S01-theme-gallery")
+        app.buttons[themeID].auditTap()
+        XCTAssertTrue(elementExists(AXID.settingsThemeApply, timeout: 5))
+        XCTAssertTrue(elementExists(AXID.settingsPreviewLight, timeout: 5))
+        addScreenshotAttachment(named: "S01-theme-preview-light")
+        app.descendants(matching: .any)[AXID.settingsPreviewDark].firstMatch.auditTap()
+        addScreenshotAttachment(named: "S01-theme-preview-dark")
+
+        let back = settingsBackButton
+        XCTAssertTrue(back.waitForExistence(timeout: 5))
+        back.auditTap()
+        XCTAssertTrue(app.buttons[themeID].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons[themeID].isSelected, "Preview cancellation must not save the candidate")
+
+        app.buttons[themeID].auditTap()
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.settingsThemeApply].firstMatch.waitForExistence(timeout: 5))
+        app.descendants(matching: .any)[AXID.settingsThemeApply].firstMatch.auditTap()
+        dismissIconConfirmation()
+        XCTAssertTrue(app.buttons[themeID].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons[themeID].isSelected, "Apply should save the chosen theme")
+
+        openSettingsCategory(AXID.settingsRowAppIcon)
+        let palette = app.staticTexts["settings-app-icon-palette"]
+        XCTAssertTrue(palette.waitForExistence(timeout: 5))
+        XCTAssertTrue(["로즈 × 크림", "Rose × Cream", "ローズ × クリーム"].contains(palette.label),
+                      "Expected the selected Patisserie palette, got \(palette.label)")
+    }
+
+    func testSearchBedtimeEmptyResultsAndReturn() throws {
+        openSettingsCategory(AXID.settingsHubSearch)
+        let field = app.textFields[AXID.settingsSearchField].firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 5))
+        field.auditTap()
+        field.typeText("bedtime")
+        let bedtime = app.descendants(matching: .any)[AXID.settingsSearchResult("bedtime")].firstMatch
+        XCTAssertTrue(bedtime.waitForExistence(timeout: 5))
+        addScreenshotAttachment(named: "S01-settings-search-bedtime")
+        bedtime.auditTap()
+        XCTAssertTrue(elementExists(AXID.settingsRowBedtimeReminder, timeout: 5))
+        addScreenshotAttachment(named: "S01-settings-bedtime-detail")
+
+        let back = settingsBackButton
+        XCTAssertTrue(back.waitForExistence(timeout: 5))
+        back.auditTap()
+        XCTAssertTrue(field.waitForExistence(timeout: 5))
+        XCTAssertEqual(field.value as? String, "bedtime", "Back should retain the search query")
+        field.auditTap()
+        field.typeKey("a", modifierFlags: .command)
+        field.typeText("zz-no-matching-setting")
+        XCTAssertFalse(bedtime.exists)
+        addScreenshotAttachment(named: "S01-settings-search-empty")
+    }
+
+    func testSearchThemeApplyReturnsToGallery() throws {
+        openSettingsCategory(AXID.settingsHubSearch)
+        let field = app.textFields[AXID.settingsSearchField].firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 5))
+        field.auditTap()
+        field.typeText("patisserie")
+        let result = app.buttons[AXID.settingsSearchResult("theme-patisserie")].firstMatch
+        XCTAssertTrue(result.waitForExistence(timeout: 5))
+        result.auditTap()
+        let apply = app.buttons[AXID.settingsThemeApply].firstMatch
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        apply.auditTap()
+        dismissIconConfirmation()
+        let gallery = app.scrollViews[AXID.settingsThemeGallery].firstMatch
+        XCTAssertTrue(gallery.waitForExistence(timeout: 5), "Apply should open the gallery")
+        let themeID = "settings-theme-patisserie"
+        XCTAssertTrue(app.revealFullyVisible(themeID, in: gallery, maxMoves: 20))
+        XCTAssertTrue(app.buttons[themeID].firstMatch.isSelected)
+    }
+
+    func testCategoryDetailsOpenFromHub() throws {
+        openSettingsCategory(AXID.settingsHubWorkout)
+        XCTAssertTrue(elementExists(AXID.settingsRowRestTime, timeout: 5))
+        addScreenshotAttachment(named: "S01-settings-workout")
+        openSettingsCategory(AXID.settingsHubPrivacy)
+        XCTAssertTrue(elementExists(AXID.settingsRowICloudSync, timeout: 5))
+        addScreenshotAttachment(named: "S01-settings-privacy")
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            XCTAssertTrue(elementExists(AXID.settingsHubHome, timeout: 5), "Split layout keeps the hub visible")
+        }
+    }
+
     func testDataPrivacySectionExists() throws {
+        openSettingsCategory(AXID.settingsHubPrivacy)
         _ = app.scrollToElementIfNeeded(AXID.settingsRowICloudSync)
         XCTAssertTrue(
             elementExists(AXID.settingsRowICloudSync, timeout: 5),
@@ -105,6 +208,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testSimulatorMockDataControlsExist() throws {
+        openSettingsCategory(AXID.settingsHubMockData)
         _ = app.scrollToElementIfNeeded(AXID.settingsButtonSeedAdvancedMockData, maxSwipes: 8)
         XCTAssertTrue(
             elementExists(AXID.settingsButtonSeedAdvancedMockData, timeout: 5),
@@ -117,6 +221,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testAboutSectionExists() throws {
+        openSettingsCategory(AXID.settingsHubAbout)
         _ = app.scrollToElementIfNeeded(AXID.settingsRowVersion)
         XCTAssertTrue(
             elementExists(AXID.settingsRowVersion, timeout: 5),
@@ -125,6 +230,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     func testWhatsNewLinkExists() throws {
+        openSettingsCategory(AXID.settingsHubAbout)
         _ = app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew)
         XCTAssertTrue(
             elementExists(AXID.settingsRowWhatsNew, timeout: 5),
@@ -238,6 +344,7 @@ final class SettingsSmokeTests: UITestBaseCase {
     }
 
     private func openReleaseFromSettings() {
+        openSettingsCategory(AXID.settingsHubAbout)
         XCTAssertTrue(app.scrollToElementIfNeeded(AXID.settingsRowWhatsNew),
                       "What's New entry should remain reachable in Settings")
         let link = app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch
@@ -258,6 +365,48 @@ final class SettingsSmokeTests: UITestBaseCase {
         release.tap()
         XCTAssertTrue(app.descendants(matching: .any)[AXID.whatsNewScreen].firstMatch.waitForExistence(timeout: 5),
                       "Manual release detail should open from News")
+    }
+}
+
+
+@MainActor
+final class SettingsHubKoreanCaptureTests: UITestBaseCase {
+    override var additionalLaunchArguments: [String] {
+        ["-AppleLanguages", "(ko)", "-AppleLocale", "ko_KR", "--ui-test-style", "light"]
+    }
+
+    private func capture(_ name: String) {
+        if VisualAudit.isEnabled {
+            VisualAudit.capture(name)
+        } else {
+            addScreenshotAttachment(named: name)
+        }
+    }
+
+    func testKoreanHubGalleryPreviewAndDetails() {
+        navigateToSettings()
+        XCTAssertTrue(elementExists(AXID.settingsHubHome, timeout: 5))
+        capture("S01-ko-settings-home")
+
+        openSettingsCategory(AXID.settingsSectionAppearance)
+        let gallery = app.scrollViews[AXID.settingsThemeGallery].firstMatch
+        XCTAssertTrue(gallery.waitForExistence(timeout: 5))
+        capture("S01-ko-theme-gallery")
+        XCTAssertTrue(app.revealFullyVisible(
+            "settings-theme-patisserie", in: gallery, maxMoves: 20
+        ))
+        app.buttons["settings-theme-patisserie"].auditTap()
+        XCTAssertTrue(elementExists(AXID.settingsThemeApply, timeout: 5))
+        capture("S01-ko-theme-preview-light")
+        app.descendants(matching: .any)[AXID.settingsPreviewDark].firstMatch.auditTap()
+        capture("S01-ko-theme-preview-dark")
+
+        openSettingsCategory(AXID.settingsHubWorkout)
+        XCTAssertTrue(elementExists(AXID.settingsRowRestTime, timeout: 5))
+        capture("S01-ko-workout-detail")
+        openSettingsCategory(AXID.settingsHubPrivacy)
+        XCTAssertTrue(elementExists(AXID.settingsRowICloudSync, timeout: 5))
+        capture("S01-ko-privacy-detail")
     }
 }
 
@@ -401,6 +550,7 @@ final class WhatsNewVisualAuditTests: UITestBaseCase {
     }
 
     private func openManualReleaseFromSettings() {
+        openSettingsCategory(AXID.settingsHubAbout)
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowWhatsNew, maxSwipes: 12),
                       "What's New stays reachable in Settings")
         app.descendants(matching: .any)[AXID.settingsRowWhatsNew].firstMatch.auditTap()

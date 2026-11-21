@@ -31,10 +31,16 @@ final class ContourThemeTests: SeededUITestBaseCase {
         openSettings()
         let desert = themeButton("desertWarm")
         desert.tap()
+        let applyDesert = app.descendants(matching: .any)[AXID.settingsThemeApply].firstMatch
+        XCTAssertTrue(applyDesert.waitForExistence(timeout: 5))
+        applyDesert.auditTap()
         XCTAssertTrue(desert.isSelected)
 
         let contour = themeButton("contourAtlas")
         contour.tap()
+        let applyTheme = app.descendants(matching: .any)[AXID.settingsThemeApply].firstMatch
+        XCTAssertTrue(applyTheme.waitForExistence(timeout: 5))
+        applyTheme.auditTap()
         XCTAssertTrue(contour.isSelected)
 
         app.terminate()
@@ -78,9 +84,8 @@ final class ContourThemeTests: SeededUITestBaseCase {
         direction: ScrollDirection = .up
     ) -> XCUIElement {
         let identifier = "settings-theme-\(rawValue)"
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(
-            identifier, maxSwipes: 8, direction: direction, timeoutPerCheck: 0.2
-        ))
+        let gallery = app.scrollViews[AXID.settingsThemeGallery].firstMatch
+        XCTAssertTrue(app.revealFullyVisible(identifier, in: gallery, maxMoves: 20))
         let button = app.buttons[identifier]
         XCTAssertTrue(button.waitForExistence(timeout: 5))
         return button
@@ -103,6 +108,7 @@ final class ContourThemeTests: SeededUITestBaseCase {
         }
         button.tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5))
+        openSettingsCategory(AXID.settingsSectionAppearance)
     }
 
     private func capture(_ name: String) {

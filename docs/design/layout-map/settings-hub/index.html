@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DUNE · 설정 개편안</title>
+  <link rel="stylesheet" href="settings.css">
+  <script defer src="details.js"></script>
+  <script defer src="prototype.js"></script>
+</head>
+<body>
+  <header class="mast">
+    <div class="mast-inner">
+      <div class="signature"><img alt="" src="../../../../DUNE/Resources/Assets.xcassets/AppIconPreview-interleave-desertWarm.imageset/Preview.png"><b>DUNE</b><span>디자인 시안</span></div>
+      <a class="spec-link" href="#notes">설계 근거 <span aria-hidden="true">↓</span></a>
+    </div>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="board-title">
+      <div><h1 id="board-title">설정 개편안</h1><p>필요한 설정은 바로 열고, 테마는 한곳에서 비교합니다.</p></div>
+      <div class="tools" aria-label="시안 보기 옵션">
+        <div class="segments" aria-label="기기 배치">
+          <button type="button" data-mode="phone" aria-pressed="true">iPhone</button>
+          <button type="button" data-mode="tablet" aria-pressed="false">iPad</button>
+        </div>
+        <button type="button" class="tool" id="dark" aria-label="시안 다크 모드" aria-pressed="false" title="시안 다크 모드"><span data-symbol="moon"></span></button>
+        <button type="button" class="tool" id="large" aria-label="시안 큰 글씨" aria-pressed="false" title="시안 큰 글씨"><span aria-hidden="true">가<span class="small-ga">가</span></span></button>
+      </div>
+    </section>
+    <div id="phones" aria-label="iPhone 시안">
+      <div id="phone-strip"></div>
+    </div>
+    <section id="tablet" hidden aria-label="iPad 분할 보기 시안">
+      <div class="tablet-shell">
+        <div class="tablet-status"></div>
+        <div class="tablet-columns"><div class="pane" id="sidebar"></div><div class="pane" id="detail"></div></div>
+      </div>
+    </section>
+    <p class="board-hint">각 화면을 눌러볼 수 있습니다. 변경한 값은 이 시안에서만 유지됩니다.</p>
+    <section id="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">설계 근거</h2>
+      <div class="note-grid">
+        <article><h3>첫 화면에서 목적지 선택</h3><p>기존 설정에는 42개 행이 이어집니다. 현재 테마, 앱 아이콘, 네 가지 설정 범주를 먼저 보여주고, 항목 이름을 알면 검색으로 바로 엽니다.</p></article>
+        <article><h3>아홉 장의 원화로 비교</h3><p>기본 글씨 크기에서는 세 열로 원화를 비교합니다. 하나를 열면 Today 화면의 밝고 어두운 모습을 확인할 수 있고, 적용 버튼을 누를 때 선택이 바뀝니다.</p></article>
+        <article><h3>화면 크기에 맞춘 탐색</h3><p>iPad의 넓은 창에서는 설정 목록을 옆에 둔 채 상세 항목을 바꿉니다. 작은 창은 한 화면씩 열고, 큰 글씨에서는 갤러리 열 수를 줄입니다.</p></article>
+      </div>
+      <a href="README.md">기존 항목 배치와 참고 자료 <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+  <div class="sr-only" id="announcement" role="status"></div>
+</body>
+</html>

@@ -2,6 +2,19 @@ import SwiftUI
 
 /// Per-type notification toggles for the Settings screen.
 struct NotificationSettingsSection: View {
+    enum Scope {
+        case all
+        case healthAlerts
+        case bedtime
+        case otherAlerts
+    }
+
+    let scope: Scope
+
+    init(scope: Scope = .all) {
+        self.scope = scope
+    }
+
     @State private var settingsStore = NotificationSettingsStore.shared
     @AppStorage(BedtimeReminderScheduler.settingsKey) private var isBedtimeReminderEnabled = true
     @AppStorage(BedtimeReminderLeadTime.generalStorageKey)
@@ -21,9 +34,19 @@ struct NotificationSettingsSection: View {
 
     var body: some View {
         Group {
-            notificationsSection
-            bedtimeReminderSection
-            postureReminderSection
+            switch scope {
+            case .all:
+                notificationsSection
+                bedtimeReminderSection
+                postureReminderSection
+            case .healthAlerts:
+                healthAlertsSection
+            case .bedtime:
+                bedtimeReminderSection
+            case .otherAlerts:
+                otherAlertsSection
+                postureReminderSection
+            }
         }
         .onChange(of: isBedtimeReminderEnabled) { _, _ in
             rescheduleBedtimeReminder()
@@ -50,17 +73,42 @@ struct NotificationSettingsSection: View {
             ForEach(Self.healthTypes, id: \.self) { type in
                 notificationToggle(for: type)
             }
-            notificationToggle(for: .workoutPR)
-            Toggle(isOn: $isDailyDigestEnabled) {
-                Label(HealthInsight.InsightType.dailyDigest.settingsDisplayName,
-                      systemImage: HealthInsight.InsightType.dailyDigest.settingsIcon)
-            }
-            .accessibilityIdentifier("settings-row-daily-digest")
+            otherNotificationToggles
         } header: {
             Text("Notifications")
         } footer: {
             Text("Health alerts are sent at most once per day, duplicates are suppressed for one hour, and informational alerts use a daily budget.")
         }
+    }
+
+    private var healthAlertsSection: some View {
+        Section {
+            ForEach(Self.healthTypes, id: \.self) { type in
+                notificationToggle(for: type)
+            }
+        } header: {
+            Text("Health Alerts")
+        } footer: {
+            Text("Health alerts are sent at most once per day, duplicates are suppressed for one hour, and informational alerts use a daily budget.")
+        }
+    }
+
+    private var otherAlertsSection: some View {
+        Section {
+            otherNotificationToggles
+        } header: {
+            Text("Other Alerts")
+        }
+    }
+
+    @ViewBuilder
+    private var otherNotificationToggles: some View {
+        notificationToggle(for: .workoutPR)
+        Toggle(isOn: $isDailyDigestEnabled) {
+            Label(HealthInsight.InsightType.dailyDigest.settingsDisplayName,
+                  systemImage: HealthInsight.InsightType.dailyDigest.settingsIcon)
+        }
+        .accessibilityIdentifier("settings-row-daily-digest")
     }
 
     private var bedtimeReminderSection: some View {
