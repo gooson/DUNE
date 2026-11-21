@@ -83,6 +83,16 @@ class SimulatorWorktreeTests(unittest.TestCase):
             with self.assertRaises(OSError):
                 registry.run_simctl("list", "devices", capture_output=True)
 
+    def test_destination_does_not_emit_an_empty_id_if_clone_fails(self):
+        source = "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
+        command = f"""
+        ensure_worktree_simulator() {{ return 1; }}
+        apply_worktree_destination 'platform=watchOS Simulator,id={source}' 'Watch' watchOS
+        """
+        result = self.shell(self.worktrees[0], command, check=False)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, "")
+
     def test_same_basename_has_distinct_stable_device_names(self):
         command = '''
         _find_simulator_by_name() { printf '%s\\n' "$1"; }
