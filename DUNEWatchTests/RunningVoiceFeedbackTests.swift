@@ -16,6 +16,13 @@ struct RunningVoiceFeedbackTests {
             "Split 3,000 meters. Time 5 minutes 0 seconds. Pace 5 minutes 5 seconds per kilometer.")
     }
 
+    @Test("Spoken text follows the voice language",
+          arguments: [("ko-KR", "러닝을 시작합니다."), ("ja-JP", "ランニングを開始します。")])
+    func localizedStartCue(language: String, expected: String) {
+        let (feedback, _) = makeFeedback(locale: Locale(identifier: language))
+        #expect(feedback.message(for: .started) == expected)
+    }
+
     @Test("Invalid distance cues are not spoken")
     func invalidSplit() {
         let (feedback, speaker) = makeFeedback()
@@ -164,10 +171,10 @@ struct RunningVoiceFeedbackTests {
             "Split 1,000 meters. Time 5 minutes 0 seconds. Pace 5 minutes 0 seconds per kilometer.")
     }
 
-    private func makeFeedback() -> (RunningVoiceFeedback, MockRunningVoiceSpeaker) {
+    private func makeFeedback(locale: Locale = Locale(identifier: "en")) -> (RunningVoiceFeedback, MockRunningVoiceSpeaker) {
         let speaker = MockRunningVoiceSpeaker()
         let defaults = UserDefaults(suiteName: "RunningVoiceFeedbackTests.\(UUID().uuidString)")!
-        return (RunningVoiceFeedback(defaults: defaults, speaker: speaker, locale: Locale(identifier: "en")), speaker)
+        return (RunningVoiceFeedback(defaults: defaults, speaker: speaker, locale: locale), speaker)
     }
 }
 

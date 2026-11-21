@@ -65,14 +65,17 @@ final class WatchLiveHeartRateZonesUITests: WatchUITestBaseCase {
 
     func testKilometerMilestoneAppearsOnCurrentPage() {
         relaunchApp(withAdditionalArguments: ["--ui-watch-kilometer-milestone"])
-        XCTAssertTrue(elementExists("watch-cardio-main-metrics", timeout: 10))
-        XCTAssertTrue(app.staticTexts["0.99"].waitForExistence(timeout: 5))
+        let distance = app.staticTexts["watch-running-distance-value"].firstMatch
+        XCTAssertTrue(distance.waitForExistence(timeout: 10))
+        XCTAssertEqual(distance.value as? String, "0.99 km")
         navigateToHeartRatePage()
         XCTAssertTrue(elementExists("watch-cardio-hr-zone", timeout: 5))
         XCTAssertTrue(app.staticTexts["watch-cardio-distance-milestone"].waitForExistence(timeout: 5))
         captureDesignState("C13")
         app.swipeRight()
-        XCTAssertTrue(app.staticTexts["1.01"].waitForExistence(timeout: 5))
+        app.swipeRight()
+        XCTAssertTrue(distance.waitForExistence(timeout: 5))
+        XCTAssertEqual(distance.value as? String, "1.01 km")
     }
 
     private func navigateToHeartRatePage() {

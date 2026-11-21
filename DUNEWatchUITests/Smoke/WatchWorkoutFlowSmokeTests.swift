@@ -176,9 +176,9 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertEqual(XCTWaiter.wait(for: [timePassed], timeout: 5), .completed)
 
         XCTAssertTrue(tapElement("계속 운동"))
-        let elapsed = app.staticTexts["watch-cardio-elapsed-time"].firstMatch
+        let elapsed = app.staticTexts["watch-running-elapsed-value"].firstMatch
         XCTAssertTrue(elapsed.waitForExistence(timeout: 5))
-        let components = elapsed.label.split(separator: ":").compactMap { Int($0) }
+        let components = accessibleMetricText(elapsed).split(separator: ":").compactMap { Int($0) }
         XCTAssertEqual(components.count, 2)
         XCTAssertGreaterThanOrEqual(components[0] * 60 + components[1], 3)
     }
@@ -397,7 +397,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertFalse(zone.label.contains("--"))
         let zoneBar = app.descendants(matching: .any)["watch-running-heart-rate-zones"].firstMatch
         XCTAssertTrue(zoneBar.exists)
-        XCTAssertEqual(zoneBar.value as? String, "5")
+        XCTAssertEqual(zoneBar.value as? String, "Zone 3 of 5")
         XCTAssertLessThanOrEqual(zoneBar.frame.maxY, app.frame.maxY - 8,
                                  "The zone bar must fit above the small-Watch bottom edge")
         XCTAssertLessThanOrEqual(
@@ -446,14 +446,14 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertTrue(zone.waitForExistence(timeout: 5))
         XCTAssertTrue(zone.label.contains("1"))
         let bar = app.descendants(matching: .any)["watch-running-heart-rate-zones"].firstMatch
-        XCTAssertEqual(bar.value as? String, "6")
+        XCTAssertEqual(bar.value as? String, "Zone 1 of 6")
         captureDesignState("C21", visible: "watch-running-heart-rate-zone-label")
         app.swipeLeft()
         let timeFirstZone = app.staticTexts["watch-cardio-main-heart-rate-zone-label"].firstMatch
         XCTAssertTrue(timeFirstZone.waitForExistence(timeout: 5))
         XCTAssertTrue(timeFirstZone.label.contains("1"))
         let timeFirstBar = app.descendants(matching: .any)["watch-cardio-main-heart-rate-zones"].firstMatch
-        XCTAssertEqual(timeFirstBar.value as? String, "6")
+        XCTAssertEqual(timeFirstBar.value as? String, "Zone 1 of 6")
         XCTAssertTrue(app.frame.insetBy(dx: 0, dy: 8).contains(timeFirstBar.frame),
                       "The time-first zone bar should clear the page indicators")
         captureDesignState("C01", visible: "watch-cardio-main-heart-rate-zone-label")
@@ -467,7 +467,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertTrue(zone.waitForExistence(timeout: 5))
         XCTAssertTrue(zone.label.contains("1"))
         let bar = app.descendants(matching: .any)["watch-cardio-main-heart-rate-zones"].firstMatch
-        XCTAssertEqual(bar.value as? String, "6")
+        XCTAssertEqual(bar.value as? String, "Zone 1 of 6")
         assertStairZoneInFirstViewport(zone: zone, bar: bar)
         captureDesignState("C02", visible: "watch-cardio-main-heart-rate-zone-label")
     }
@@ -479,7 +479,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
         XCTAssertTrue(zone.waitForExistence(timeout: 5))
         XCTAssertTrue(zone.label.contains("--"))
         let bar = app.descendants(matching: .any)["watch-cardio-main-heart-rate-zones"].firstMatch
-        XCTAssertEqual(bar.value as? String, "6")
+        XCTAssertEqual(bar.value as? String, "No heart rate")
         assertStairZoneInFirstViewport(zone: zone, bar: bar)
     }
 
@@ -624,8 +624,14 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     }
 
     private func scrollToRunningFeedbackControl(_ element: XCUIElement) {
-        for _ in 0..<4 where !element.isHittable {
-            app.swipeUp()
+        // Scroll along the form edge so the gesture does not adjust the volume slider.
+        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.16, dy: 0.80))
+        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.16, dy: 0.40))
+        for _ in 0..<8 {
+            if element.exists && element.isHittable && app.frame.insetBy(dx: 0, dy: 12).contains(
+                CGPoint(x: element.frame.midX, y: element.frame.midY)
+            ) { return }
+            start.press(forDuration: 0.05, thenDragTo: end, withVelocity: .slow, thenHoldForDuration: 0.1)
         }
     }
 
@@ -733,7 +739,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     private func startStairZoneWorkout(arguments: [String]) {
         launchApp(with: LaunchConfiguration(
             scenario: .responsiveLayout,
-            additionalArguments: ["--ui-watch-home-empty"] + arguments
+            additionalArguments: ["--ui-watch-home-empty", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"] + arguments
         ))
         openAllExercises()
         guard let stair = findQuickStartExercise(identifier: "watch-quickstart-exercise-stair-climber") else {

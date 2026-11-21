@@ -378,13 +378,13 @@ class WatchUITestBaseCase: XCTestCase {
     func ensureHomeVisible(timeout: TimeInterval = 10) {
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: timeout))
         XCTAssertTrue(elementExists(WatchAXID.homeRoot, timeout: timeout), "Home root should exist")
-        let hasCarousel = elementExists(WatchAXID.homeCarousel, timeout: 1)
-        let hasEmptyState = elementExists(WatchAXID.homeEmptyState, timeout: 1)
-        let hasVisibleHomeCard = elementExists(WatchAXID.homeAllExercisesCard, timeout: 2)
-        let hasBrowseLink = elementExists(WatchAXID.homeBrowseAllLink, timeout: 1)
+        let card = app.buttons.matching(
+            NSPredicate(format: "identifier BEGINSWITH %@", "watch-home-card-")
+        ).firstMatch
+        let browseLink = app.buttons[WatchAXID.homeBrowseAllLink].firstMatch
         XCTAssertTrue(
-            hasCarousel || hasEmptyState || hasVisibleHomeCard || hasBrowseLink,
-            "Home should render a visible card or empty state control"
+            (card.exists && card.isHittable) || browseLink.waitForExistence(timeout: 2),
+            "Home should render a visible card or the empty library browse link"
         )
     }
 
@@ -411,11 +411,25 @@ class WatchUITestBaseCase: XCTestCase {
     func openAllExercises() {
         ensureHomeVisible()
 
-        let didTap = tapElement(WatchAXID.homeAllExercisesCard, timeout: 5)
-            || tapElement(WatchAXID.homeBrowseAllLink, timeout: 3)
+        let browse = app.buttons[WatchAXID.homeBrowseAllLink].firstMatch
+        if browse.exists && browse.isHittable {
+            browse.tap()
+            ensureQuickStartVisible()
+            return
+        }
 
-        XCTAssertTrue(didTap, "Should navigate to All Exercises from home")
-        ensureQuickStartVisible()
+        let home = app.scrollViews[WatchAXID.homeRoot].firstMatch
+        let allExercises = app.buttons[WatchAXID.homeAllExercisesCard].firstMatch
+        for swipe in 0...16 {
+            if allExercises.exists && allExercises.isHittable,
+               home.frame.insetBy(dx: 0, dy: 18).contains(CGPoint(x: allExercises.frame.midX, y: allExercises.frame.midY)) {
+                allExercises.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+                ensureQuickStartVisible()
+                return
+            }
+            if swipe < 16 { home.swipeUp(velocity: .slow) }
+        }
+        XCTFail("All Exercises should be reachable by scrolling the home carousel")
     }
 
     func findQuickStartExercise(identifier: String, maxSwipes: Int = 12) -> XCUIElement? {
