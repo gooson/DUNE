@@ -1,506 +1,269 @@
 import SwiftUI
-import SwiftData
-import CoreLocation
+
+enum SettingsHubRoute: Hashable, Identifiable {
+    case home, search, gallery, preview(AppTheme), icons
+    case workout, exerciseDefaults, preferredExercises, liveActivity
+    case alerts, healthAlerts, bedtime, otherAlerts, privacy, about, news, mockData
+
+    var id: Self { self }
+
+    var navigationTitle: String {
+        switch self {
+        case .home: "Settings"
+        case .search: "Search Settings"
+        case .gallery: "Themes"
+        case .preview: "Theme Preview"
+        case .icons: "App Icon"
+        case .workout: "Workout Settings"
+        case .exerciseDefaults: "Exercise Defaults"
+        case .preferredExercises: "Preferred Exercises"
+        case .liveActivity: "Workout Live Activity"
+        case .alerts: "Notifications & Briefing"
+        case .healthAlerts: "Health Alerts"
+        case .bedtime: "Bedtime"
+        case .otherAlerts: "Other Alerts"
+        case .privacy: "Data & Privacy"
+        case .about: "About"
+        case .news: "Notifications"
+        case .mockData: "Mock Data"
+        }
+    }
+
+    var category: Self {
+        switch self {
+        case .preview: .gallery
+        case .liveActivity, .exerciseDefaults, .preferredExercises: .workout
+        case .healthAlerts, .bedtime, .otherAlerts: .alerts
+        case .news: .about
+        default: self
+        }
+    }
+}
 
 struct SettingsView: View {
     let sharedHealthDataService: SharedHealthDataService?
     let canLoadHealthKitData: Bool
     let hasFailedHealthKitAuthorization: Bool
+    private let entry: SettingsHubRoute
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         canLoadHealthKitData: Bool = true,
-        hasFailedHealthKitAuthorization: Bool = false
+        hasFailedHealthKitAuthorization: Bool = false,
+        entry: SettingsHubRoute = .home
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.canLoadHealthKitData = canLoadHealthKitData
         self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
+        self.entry = entry
     }
 
-    @AppStorage(CloudSyncPreferenceStore.storageKey) private var isCloudSyncEnabled = false
-    @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.openURL) private var openURL
-    @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-
-    @State private var locationStatus: CLAuthorizationStatus = .notDetermined
-    @State private var restSeconds: Double = WorkoutSettingsStore.shared.restSeconds
-    @State private var setCount: Int = WorkoutSettingsStore.shared.setCount
-    @State private var bodyWeightKg: Double = WorkoutSettingsStore.shared.bodyWeightKg
-    @State private var liveActivityPreferences = WorkoutLiveActivityPreferences.read()
-    @State private var isProcessingSimulatorMockData = false
-    @State private var simulatorMockStatusMessage: String?
-    @State private var isSyncing = false
-    @State private var lastCloudSyncDate: Date?
-
-    private let store = WorkoutSettingsStore.shared
+    @Environment(\.dismiss) private var dismiss
+    @State private var pushed: SettingsHubRoute?
+    @State private var columnHistory: [SettingsHubRoute] = []
+    @State private var searchQuery = ""
 
     var body: some View {
-        Form {
-            workoutDefaultsSection
-            liveActivitySection
-            exerciseDefaultsSection
-            NotificationSettingsSection()
-            morningBriefingSection
-            appearanceSection
-            if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
-                simulatorMockDataSection
-            }
-            dataPrivacySection
-            aboutSection
-        }
-        .scrollContentBackground(.hidden)
-        .contentMargins(.top, DS.Spacing.md, for: .scrollContent)
-        .contentMargins(.horizontal, DS.Spacing.lg, for: .scrollContent)
-        .contentMargins(.bottom, DS.Spacing.lg, for: .scrollContent)
-        .listSectionSpacing(DS.Spacing.xl)
-        .background { DetailWaveBackground() }
-        .englishNavigationTitle("Settings")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
-        .onChange(of: restSeconds) { _, newValue in
-            store.restSeconds = newValue
-            WatchSessionManager.shared.syncWorkoutSettingsToWatch()
-        }
-        .onChange(of: setCount) { _, newValue in
-            store.setCount = newValue
-        }
-        .onChange(of: bodyWeightKg) { _, newValue in
-            store.bodyWeightKg = newValue
-        }
-        .onAppear {
-            liveActivityPreferences = WorkoutLiveActivityPreferences.read()
-        }
-        .onChange(of: scenePhase) { _, newPhase in
-            if newPhase == .active {
-                locationStatus = CLLocationManager().authorizationStatus
-            }
-        }
-    }
-
-    private func settingsSectionHeader(_ title: LocalizedStringKey) -> some View {
-        Text(title)
-            .font(.subheadline.weight(.semibold))
-            .foregroundStyle(.primary)
-    }
-
-    // MARK: - Workout Defaults
-
-    private var workoutDefaultsSection: some View {
-        Section {
-            Stepper(value: $restSeconds, in: WorkoutSettingsStore.restSecondsRange, step: 15) {
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    Label("Rest Time", systemImage: "timer")
-                        .labelStyle(.titleAndIcon)
-                    Text(restTimeLabel)
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
-            }
-            .accessibilityIdentifier("settings-row-resttime")
-
-            Stepper(value: $setCount, in: WorkoutSettingsStore.setCountRange) {
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    Label("Default Sets", systemImage: "list.number")
-                        .labelStyle(.titleAndIcon)
-                    Text("\(setCount)")
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
-            }
-
-            Stepper(value: $bodyWeightKg, in: WorkoutSettingsStore.bodyWeightRange, step: 0.5) {
-                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
-                    Label("Body Weight", systemImage: "figure.stand")
-                        .labelStyle(.titleAndIcon)
-                    Text("\(bodyWeightKg.formatted(.number.precision(.fractionLength(1)))) kg")
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
-            }
-        } header: {
-            settingsSectionHeader("Workout Defaults")
-        } footer: {
-            Text("These values are used as defaults when starting a new workout session.")
-        }
-    }
-
-    private var restTimeLabel: String {
-        let minutes = Int(restSeconds) / 60
-        let seconds = Int(restSeconds) % 60
-        if minutes > 0 && seconds > 0 {
-            return "\(minutes)m \(seconds)s"
-        } else if minutes > 0 {
-            return "\(minutes)m"
-        } else {
-            return "\(seconds)s"
-        }
-    }
-
-    // MARK: - Live Activity
-
-    private var liveActivitySection: some View {
-        Section {
-            Picker("Cardio Metric", selection: liveActivityMetricBinding(for: .cardio)) {
-                ForEach([WorkoutLiveActivityMetric.elapsedTime, .distance, .heartRate], id: \.self) { metric in
-                    Text(metric.displayName)
-                        .tag(metric)
-                        .accessibilityIdentifier("settings-watch-live-activity-cardio-\(metric.rawValue)")
-                }
-            }
-            .accessibilityIdentifier("settings-watch-live-activity-cardio-metric")
-
-            Picker("Strength Metric", selection: liveActivityMetricBinding(for: .strength)) {
-                ForEach([WorkoutLiveActivityMetric.elapsedTime, .weight, .heartRate], id: \.self) { metric in
-                    Text(metric.displayName)
-                        .tag(metric)
-                        .accessibilityIdentifier("settings-watch-live-activity-strength-\(metric.rawValue)")
-                }
-            }
-            .accessibilityIdentifier("settings-watch-live-activity-strength-metric")
-
-            Picker("Live Activity Style", selection: Binding(
-                get: { liveActivityPreferences.style },
-                set: { newValue in
-                    liveActivityPreferences.style = newValue
-                    saveLiveActivityPreferences()
-                }
-            )) {
-                ForEach(WorkoutLiveActivityStyle.allCases, id: \.self) { style in
-                    Text(style.displayName)
-                        .tag(style)
-                        .accessibilityIdentifier("settings-watch-live-activity-style-\(style.rawValue)")
-                }
-            }
-            .accessibilityIdentifier("settings-watch-live-activity-style")
-        } header: {
-            settingsSectionHeader("Workout Live Activity")
-        } footer: {
-            Text("Unavailable readings show elapsed time instead.")
-        }
-    }
-
-    private func liveActivityMetricBinding(for kind: WatchWorkoutSnapshot.WorkoutKind) -> Binding<WorkoutLiveActivityMetric> {
-        Binding(
-            get: {
-                switch kind {
-                case .cardio: liveActivityPreferences.cardioMetric
-                case .strength: liveActivityPreferences.strengthMetric
-                }
-            },
-            set: { newValue in
-                switch kind {
-                case .cardio: liveActivityPreferences.cardioMetric = newValue
-                case .strength: liveActivityPreferences.strengthMetric = newValue
-                }
-                saveLiveActivityPreferences()
-            }
-        )
-    }
-
-    private func saveLiveActivityPreferences() {
-        liveActivityPreferences.save()
-        WatchWorkoutMirrorManager.shared.refreshLiveActivityPreferences()
-    }
-
-    // MARK: - Exercise Defaults
-
-    private var exerciseDefaultsSection: some View {
-        Section {
-            NavigationLink {
-                ExerciseDefaultsListView()
-            } label: {
-                Label("Exercise Defaults", systemImage: "dumbbell")
-            }
-            .accessibilityIdentifier("settings-row-exercisedefaults")
-
-            NavigationLink {
-                PreferredExercisesListView()
-            } label: {
-                Label("Preferred Exercises", systemImage: "star")
-            }
-            .accessibilityIdentifier("settings-row-preferredexercises")
-        } header: {
-            settingsSectionHeader("Per-Exercise")
-        } footer: {
-            Text("Set default values and choose exercises that should stay near the top of Quick Start.")
-        }
-    }
-
-    // MARK: - Morning Briefing
-
-    @State private var isMorningBriefingEnabled = MorningBriefingViewModel.isEnabled
-
-    private var morningBriefingSection: some View {
-        Section {
-            Toggle(isOn: $isMorningBriefingEnabled) {
-                Label("Morning Briefing", systemImage: "sun.horizon.fill")
-            }
-            .onChange(of: isMorningBriefingEnabled) { _, newValue in
-                MorningBriefingViewModel.isEnabled = newValue
-            }
-            .accessibilityIdentifier("settings-row-morning-briefing")
-        } header: {
-            settingsSectionHeader("Morning Briefing")
-        } footer: {
-            Text("Show a daily briefing with your condition, recovery insights, and recommendations when you first open the app each morning.")
-        }
-    }
-
-    // MARK: - Appearance
-
-    private var appearanceSection: some View {
-        Section {
-            NavigationLink {
-                AppIconPickerView()
-            } label: {
-                Label("App Icon", systemImage: "app.badge")
-            }
-            .accessibilityIdentifier("settings-row-app-icon")
-            ThemePickerSection()
-        } header: {
-            settingsSectionHeader("Appearance")
-                .accessibilityIdentifier("settings-section-appearance")
-        }
-    }
-
-    // MARK: - Data & Privacy
-
-    private var valueRowLayout: AnyLayout {
-        dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
-            : AnyLayout(HStackLayout())
-    }
-
-    private var simulatorMockDataSection: some View {
-        Section {
-            valueRowLayout {
-                Text("Preset")
-                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
-                Text("Advanced Athlete")
-                    .foregroundStyle(DS.Color.textSecondary)
-            }
-
-            valueRowLayout {
-                Text("Status")
-                    .accessibilityIdentifier("settings-mock-status-label")
-                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
-                Text(isSimulatorMockEnabled ? "Enabled" : "Disabled")
-                    .foregroundStyle(isSimulatorMockEnabled ? Color.accentColor : DS.Color.textSecondary)
-            }
-
-            Button {
-                seedAdvancedMockData()
-            } label: {
-                Label("Seed Advanced Mock Data", systemImage: "shippingbox.fill")
-            }
-            .accessibilityIdentifier("settings-button-seed-advanced-mock-data")
-            .disabled(isProcessingSimulatorMockData)
-
-            Button(role: .destructive) {
-                resetAdvancedMockData()
-            } label: {
-                Label("Reset Mock Data", systemImage: "trash")
-            }
-            .accessibilityIdentifier("settings-button-reset-mock-data")
-            .disabled(isProcessingSimulatorMockData || !isSimulatorMockEnabled)
-        } header: {
-            settingsSectionHeader("Mock Data")
-        } footer: {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Simulator only. Seeds advanced athlete health trends, workouts, and per-exercise history.")
-                if let simulatorMockStatusMessage {
-                    Text(verbatim: simulatorMockStatusMessage)
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
-            }
-        }
-    }
-
-    private var dataPrivacySection: some View {
-        Section {
-            Toggle(isOn: cloudSyncBinding) {
-                Label("iCloud Sync", systemImage: "icloud")
-            }
-            .accessibilityIdentifier("settings-row-icloud-sync")
-
-            Button {
-                triggerCloudKitSync()
-            } label: {
-                Label {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Force Sync")
-                        if let lastSync = lastCloudSyncDate {
-                            Text(lastSync, style: .relative)
-                                .font(.caption2)
-                                .foregroundStyle(DS.Color.textSecondary)
+        GeometryReader { proxy in
+            let wide = proxy.size.width >= 700
+            let current = columnHistory.last ?? entry
+            Group {
+                if wide {
+                    HStack(spacing: 0) {
+                        home(selection: current == .home ? .gallery : current.category) { route in
+                            searchQuery = ""
+                            columnHistory = [route]
                         }
+                        .frame(width: min(340, proxy.size.width * 0.38))
+                        Divider()
+                        column(current == .home ? .gallery : current)
                     }
-                } icon: {
-                    Image(systemName: "arrow.triangle.2.circlepath.icloud")
+                } else if !columnHistory.isEmpty {
+                    // A narrowed split window keeps its selected detail and back history.
+                    column(current)
+                } else if entry == .home {
+                    home(selection: nil) { pushed = $0 }
+                } else {
+                    destination(entry, onOpen: { pushed = $0 }, onFinish: { dismiss() })
                 }
             }
-            .disabled(isSyncing)
-            .accessibilityIdentifier("settings-row-force-sync")
+            .englishNavigationTitle(wide ? "Settings" : current.navigationTitle)
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        .toolbar(.hidden, for: .tabBar)
+        .navigationDestination(item: $pushed) { next in
+            SettingsView(
+                sharedHealthDataService: sharedHealthDataService,
+                canLoadHealthKitData: canLoadHealthKitData,
+                hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization,
+                entry: next
+            )
+        }
+    }
 
-            Button {
-                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-                openURL(url)
-            } label: {
-                Label("HealthKit Permissions", systemImage: "heart.circle")
-            }
+    private func home(selection: SettingsHubRoute?, onOpen: @escaping (SettingsHubRoute) -> Void) -> some View {
+        SettingsHome(selected: selection, onOpen: onOpen)
+    }
 
-            Button {
-                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-                openURL(url)
-            } label: {
-                valueRowLayout {
-                    Label("Location Access", systemImage: "location")
-                        .fixedSize(horizontal: false, vertical: true)
-                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
-                    Text(locationStatusText)
-                        .foregroundStyle(DS.Color.textSecondary)
+    private func column(_ route: SettingsHubRoute) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                if !columnHistory.isEmpty {
+                    Button {
+                        columnHistory.removeLast()
+                    } label: {
+                        Image(systemName: "chevron.backward")
+                            .frame(minWidth: 44, minHeight: 44)
+                    }
+                    .accessibilityLabel(Text("Go Back"))
+                    .accessibilityIdentifier("settings-detail-back")
                 }
-            }
-            .accessibilityIdentifier("settings-row-location-access")
-        } header: {
-            settingsSectionHeader("Data & Privacy")
-        }
-    }
-
-    private var locationStatusText: String {
-        switch locationStatus {
-        case .authorizedWhenInUse: String(localized: "When In Use")
-        case .authorizedAlways: String(localized: "Always")
-        case .denied: String(localized: "Denied")
-        case .restricted: String(localized: "Restricted")
-        case .notDetermined: String(localized: "Not Set")
-        @unknown default: String(localized: "Unknown")
-        }
-    }
-
-    private var cloudSyncBinding: Binding<Bool> {
-        Binding(
-            get: { isCloudSyncEnabled },
-            set: { newValue in
-                CloudSyncPreferenceStore.setEnabled(newValue)
-                isCloudSyncEnabled = newValue
-            }
-        )
-    }
-
-    private func triggerCloudKitSync() {
-        guard !isSyncing else { return }
-        isSyncing = true
-
-        // Dummy write + delete triggers CloudKit sync cycle
-        let marker = ExerciseRecord(
-            date: .distantPast,
-            exerciseType: "__cloudkit_sync_trigger__",
-            duration: 0
-        )
-        modelContext.insert(marker)
-        try? modelContext.save()
-        modelContext.delete(marker)
-        try? modelContext.save()
-
-        lastCloudSyncDate = Date()
-
-        Task {
-            try? await Task.sleep(nanoseconds: 2_000_000_000)
-            isSyncing = false
-        }
-    }
-
-    // MARK: - About
-
-    private var aboutSection: some View {
-        Section {
-            NavigationLink {
-                NotificationHubView(
-                    sharedHealthDataService: sharedHealthDataService,
-                    canLoadHealthKitData: canLoadHealthKitData,
-                    hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization,
-                    initialFilter: .news
-                )
-            } label: {
-                Label("What's New", systemImage: "bell")
-                    .accessibilityIdentifier("settings-row-whatsnew")
-            }
-
-            HStack {
-                Text("Version")
+                Text(verbatim: route.navigationTitle)
+                    .font(.title2.bold())
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
                 Spacer()
-                Text(appVersion)
-                    .foregroundStyle(DS.Color.textSecondary)
             }
-            .accessibilityElement(children: .combine)
-            .accessibilityIdentifier("settings-row-version")
-
-            HStack {
-                Text("Build")
-                Spacer()
-                Text(buildNumber)
-                    .foregroundStyle(DS.Color.textSecondary)
-            }
-
-            HStack {
-                Text("Weather Data")
-                Spacer()
-                Text("Open-Meteo.com (CC BY 4.0)")
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .font(.caption)
-            }
-        } header: {
-            settingsSectionHeader("About")
+            .padding(.horizontal, DS.Spacing.lg)
+            .frame(minHeight: 48)
+            destination(route, onOpen: { columnHistory.append($0) }, onFinish: {
+                if columnHistory.count > 1 { columnHistory.removeLast() }
+                else { columnHistory = [.gallery] }
+            })
+            .id(route)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 
-    // MARK: - App Info
-
-    private var appVersion: String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
-    }
-
-    private var buildNumber: String {
-        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—"
-    }
-
-    private func seedAdvancedMockData() {
-        isProcessingSimulatorMockData = true
-        simulatorMockStatusMessage = nil
-
-        Task { @MainActor in
-            defer { isProcessingSimulatorMockData = false }
-            do {
-                try SimulatorAdvancedMockDataProvider.seed(into: modelContext)
-                isSimulatorMockEnabled = true
-                simulatorMockStatusMessage = String(localized: "Mock data seeded.")
-            } catch {
-                simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
-                AppLogger.data.error("Simulator mock data seed failed: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    private func resetAdvancedMockData() {
-        isProcessingSimulatorMockData = true
-        simulatorMockStatusMessage = nil
-
-        Task { @MainActor in
-            defer { isProcessingSimulatorMockData = false }
-            do {
-                try SimulatorAdvancedMockDataProvider.reset(into: modelContext)
-                isSimulatorMockEnabled = false
-                simulatorMockStatusMessage = String(localized: "Mock data reset.")
-            } catch {
-                simulatorMockStatusMessage = String(localized: "Mock data could not be updated.")
-                AppLogger.data.error("Simulator mock data reset failed: \(error.localizedDescription)")
-            }
+    @ViewBuilder
+    private func destination(
+        _ route: SettingsHubRoute,
+        onOpen: @escaping (SettingsHubRoute) -> Void,
+        onFinish: @escaping () -> Void
+    ) -> some View {
+        switch route {
+        case .gallery:
+            ThemeGalleryView { onOpen(.preview($0)) }
+        case .preview(let theme):
+            SettingsThemePreview(theme: theme, onApply: onFinish)
+        case .search:
+            SettingsHubSearchView(query: $searchQuery, onOpen: onOpen)
+        case .icons:
+            AppIconPickerView()
+        default:
+            SettingsDetailView(
+                route: route, sharedHealthDataService: sharedHealthDataService,
+                canLoadHealthKitData: canLoadHealthKitData,
+                hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization,
+                onOpen: onOpen
+            )
         }
     }
 }
 
-#Preview {
-    NavigationStack {
-        SettingsView()
+private struct SettingsHome: View {
+    let selected: SettingsHubRoute?
+    let onOpen: (SettingsHubRoute) -> Void
+
+    @Environment(\.appTheme) private var theme
+    @AppStorage(AppIconStyle.storageKey) private var icon: AppIconStyle = .defaultStyle
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: DS.Spacing.md) {
+                HStack {
+                    Text("Appearance").font(.headline).accessibilityAddTraits(.isHeader)
+                    Spacer()
+                    Button { onOpen(.search) } label: {
+                        Image(systemName: "magnifyingglass")
+                            .frame(minWidth: 44, minHeight: 44)
+                            .background(theme.cardBackground, in: Circle())
+                    }
+                    .accessibilityLabel(Text("Search Settings"))
+                    .accessibilityIdentifier("settings-hub-search")
+                }
+                SettingsCurrentThemeCard { onOpen(.gallery) }
+                Button { onOpen(.icons) } label: {
+                    HStack(spacing: DS.Spacing.md) {
+                        Image(icon.previewAssetName(for: theme))
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                            .clipShape(.rect(cornerRadius: DS.Radius.sm))
+                            .accessibilityHidden(true)
+                        (typeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading)) : AnyLayout(HStackLayout())) {
+                            Text("App Icon").font(.body.weight(.semibold))
+                            if !typeSize.isAccessibilitySize { Spacer() }
+                            Text(icon.displayName).font(.subheadline).foregroundStyle(.secondary)
+                        }
+                        Spacer(minLength: 0)
+                        chevron
+                    }
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+                }
+                .accessibilityIdentifier("settings-row-app-icon")
+                Divider()
+                VStack(spacing: 0) {
+                    menuRow(.workout, id: "workout", title: "Workout Settings", subtitle: "Rest time and exercise defaults", symbol: "dumbbell")
+                    Divider()
+                    menuRow(.alerts, id: "alerts", title: "Notifications & Briefing", subtitle: "Health alerts and bedtime reminders", symbol: "bell")
+                    Divider()
+                    menuRow(.privacy, id: "privacy", title: "Data & Privacy", subtitle: "iCloud sync and permissions", symbol: "hand.raised")
+                    Divider()
+                    menuRow(.about, id: "about", title: "About", subtitle: "What's new and version", symbol: "info.circle")
+                }
+                .padding(.horizontal, DS.Spacing.md)
+                .background(theme.cardBackground, in: .rect(cornerRadius: DS.Radius.lg))
+                if SimulatorAdvancedMockDataModeStore.isSimulatorAvailable {
+                    menuRow(.mockData, id: "mockData", title: "Mock Data", subtitle: nil, symbol: "shippingbox")
+                }
+            }
+            .padding(.horizontal, DS.Spacing.lg)
+            .padding(.bottom, DS.Spacing.lg)
+            .frame(maxWidth: 620)
+            .frame(maxWidth: .infinity)
+        }
+        .background(DS.Color.surfacePrimary)
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("settings-hub-home")
     }
+
+    private var chevron: some View {
+        Image(systemName: "chevron.forward").font(.caption.weight(.semibold)).foregroundStyle(.tertiary)
+            .accessibilityHidden(true)
+    }
+
+    private func menuRow(
+        _ route: SettingsHubRoute, id: String, title: LocalizedStringKey,
+        subtitle: LocalizedStringKey?, symbol: String
+    ) -> some View {
+        Button { onOpen(route) } label: {
+            HStack(spacing: DS.Spacing.md) {
+                Image(systemName: symbol)
+                    .foregroundStyle(theme.accentColor)
+                    .frame(width: DS.Spacing.xxl)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text(title).font(.body.weight(.semibold))
+                    if let subtitle {
+                        Text(subtitle).font(.caption).foregroundStyle(.secondary)
+                    }
+                }
+                .fixedSize(horizontal: false, vertical: true)
+                Spacer()
+                chevron
+            }
+            .frame(minHeight: 44)
+            .padding(.vertical, DS.Spacing.xs)
+            .contentShape(Rectangle())
+        }
+        .background(selected == route ? theme.accentColor.opacity(0.10) : .clear)
+        .accessibilityAddTraits(selected == route ? .isSelected : [])
+        .accessibilityIdentifier("settings-hub-\(id)")
+    }
+}
+
+#Preview {
+    NavigationStack { SettingsView() }
 }
