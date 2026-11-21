@@ -22,19 +22,25 @@ struct ExerciseVariantMigrationTests {
             exerciseType: "Running Intervals",
             exerciseDefinitionID: "running-intervals"
         )
-        var shouldFail = true
+        var failedFetch: Int? = failingFetch
+        func checkFetch(_ index: Int) throws {
+            if failedFetch == index {
+                failedFetch = nil
+                throw SimulatedFailure.fetch
+            }
+        }
         var saveCount = 0
         let store = ExerciseVariantMigration.Store(
             fetchRecords: {
-                if shouldFail && failingFetch == 0 { throw SimulatedFailure.fetch }
+                try checkFetch(0)
                 return [record]
             },
             fetchDefaults: {
-                if shouldFail && failingFetch == 1 { throw SimulatedFailure.fetch }
+                try checkFetch(1)
                 return []
             },
             fetchTemplates: {
-                if shouldFail && failingFetch == 2 { throw SimulatedFailure.fetch }
+                try checkFetch(2)
                 return []
             },
             save: { saveCount += 1 }
@@ -45,7 +51,6 @@ struct ExerciseVariantMigrationTests {
         #expect(record.exerciseDefinitionID == "running-intervals")
         #expect(saveCount == 0)
 
-        shouldFail = false
         ExerciseVariantMigration.migrateIfNeeded(store: store, defaults: defaults)
         #expect(defaults.bool(forKey: migrationKey))
         #expect(record.exerciseDefinitionID == "running")
@@ -86,7 +91,6 @@ struct ExerciseVariantMigrationTests {
         let recordID = record.id
         let defaultID = exerciseDefault.id
         let templateEntryID = template.exerciseEntries[0].id
-        var shouldFailSave = true
         var saveCount = 0
         let store = ExerciseVariantMigration.Store(
             fetchRecords: { [record] },
@@ -94,7 +98,7 @@ struct ExerciseVariantMigrationTests {
             fetchTemplates: { [template] },
             save: {
                 saveCount += 1
-                if shouldFailSave { throw SimulatedFailure.save }
+                if saveCount == 1 { throw SimulatedFailure.save }
             }
         )
 
@@ -105,7 +109,6 @@ struct ExerciseVariantMigrationTests {
         #expect(template.exerciseEntries.first?.exerciseDefinitionID == "running")
         #expect(saveCount == 1)
 
-        shouldFailSave = false
         ExerciseVariantMigration.migrateIfNeeded(store: store, defaults: defaults)
         #expect(defaults.bool(forKey: migrationKey))
         #expect(saveCount == 2)
@@ -206,7 +209,6 @@ struct ExerciseVariantMigrationTests {
         let defaults = try #require(UserDefaults(suiteName: suite))
         defer { defaults.removePersistentDomain(forName: suite) }
 
-        var shouldFailSave = true
         var saveCount = 0
         let store = ExerciseVariantMigration.Store(
             fetchRecords: { [] },
@@ -214,14 +216,13 @@ struct ExerciseVariantMigrationTests {
             fetchTemplates: { [] },
             save: {
                 saveCount += 1
-                if shouldFailSave { throw SimulatedFailure.save }
+                if saveCount == 1 { throw SimulatedFailure.save }
             }
         )
 
         ExerciseVariantMigration.migrateIfNeeded(store: store, defaults: defaults)
         #expect(!defaults.bool(forKey: migrationKey))
 
-        shouldFailSave = false
         ExerciseVariantMigration.migrateIfNeeded(store: store, defaults: defaults)
         #expect(defaults.bool(forKey: migrationKey))
         #expect(saveCount == 2)

@@ -337,16 +337,18 @@ struct CumulativeStressDetailViewModelTests {
     @Test("history failures are distinct from successful empty records and reset on retry")
     func errorAndEmptyStates() async {
         let now = fixedNow
-        var fails = true
+        var isFirstLoad = true
         let vm = CumulativeStressDetailViewModel(nowProvider: { now }, calendar: utc) { _, _, _ in
-            if fails { throw CocoaError(.fileReadUnknown) }
+            if isFirstLoad {
+                isFirstLoad = false
+                throw CocoaError(.fileReadUnknown)
+            }
             return []
         }
         await vm.loadData()
         #expect(vm.loadError != nil)
         #expect(vm.summaryStats == nil)
         #expect(!vm.isLoading)
-        fails = false
         await vm.loadData()
         #expect(vm.loadError == nil)
         #expect(vm.chartData.isEmpty)
