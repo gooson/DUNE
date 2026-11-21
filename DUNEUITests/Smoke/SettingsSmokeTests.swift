@@ -116,16 +116,9 @@ final class SettingsSmokeTests: UITestBaseCase {
         app.descendants(matching: .any)[AXID.settingsPreviewDark].firstMatch.auditTap()
         addScreenshotAttachment(named: "S01-theme-preview-dark")
 
-        let back = app.navigationBars.buttons["BackButton"].firstMatch.exists
-            ? app.navigationBars.buttons["BackButton"].firstMatch
-            : app.navigationBars.buttons.element(boundBy: 0)
-        let detailBack = app.buttons[AXID.settingsDetailBack].firstMatch
-        if detailBack.exists && detailBack.isHittable {
-            detailBack.auditTap()
-        } else {
-            XCTAssertTrue(back.waitForExistence(timeout: 5))
-            back.auditTap()
-        }
+        let back = settingsBackButton
+        XCTAssertTrue(back.waitForExistence(timeout: 5))
+        back.auditTap()
         XCTAssertTrue(app.buttons[themeID].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons[themeID].isSelected, "Preview cancellation must not save the candidate")
 
@@ -156,11 +149,9 @@ final class SettingsSmokeTests: UITestBaseCase {
         XCTAssertTrue(elementExists(AXID.settingsRowBedtimeReminder, timeout: 5))
         addScreenshotAttachment(named: "S01-settings-bedtime-detail")
 
-        let back = app.navigationBars.buttons["BackButton"].firstMatch.exists
-            ? app.navigationBars.buttons["BackButton"].firstMatch
-            : app.navigationBars.buttons.element(boundBy: 0)
-        let detailBack = app.buttons[AXID.settingsDetailBack].firstMatch
-        if detailBack.exists && detailBack.isHittable { detailBack.auditTap() } else { back.auditTap() }
+        let back = settingsBackButton
+        XCTAssertTrue(back.waitForExistence(timeout: 5))
+        back.auditTap()
         XCTAssertTrue(field.waitForExistence(timeout: 5))
         XCTAssertEqual(field.value as? String, "bedtime", "Back should retain the search query")
         field.auditTap()

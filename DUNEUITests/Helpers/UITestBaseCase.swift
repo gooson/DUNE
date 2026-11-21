@@ -229,21 +229,23 @@ class UITestBaseCase: XCTestCase {
         _ = app.waitAndTap(AXID.dashboardToolbarSettings)
     }
 
+    var settingsBackButton: XCUIElement {
+        let detail = app.buttons[AXID.settingsDetailBack].firstMatch
+        if detail.exists && detail.isHittable { return detail }
+        // Duo presents the native BackButton outside its navigation bar.
+        let back = app.buttons["BackButton"].firstMatch
+        if back.exists && back.isHittable { return back }
+        return app.navigationBars.buttons.element(boundBy: 0)
+    }
+
     /// Opens a destination from the Settings hub on compact and split layouts.
     /// A compact detail hides the hub, so unwind nested details before changing categories.
     func openSettingsCategory(_ identifier: String) {
         let destination = app.descendants(matching: .any)[identifier].firstMatch
         for _ in 0..<3 where !destination.exists {
-            let namedBack = app.navigationBars.buttons["BackButton"].firstMatch
-            let back = namedBack.exists ? namedBack : app.navigationBars.buttons.element(boundBy: 0)
-            let detailBack = app.buttons[AXID.settingsDetailBack].firstMatch
-            if detailBack.exists && detailBack.isHittable {
-                detailBack.auditTap()
-            } else if back.exists && back.isHittable {
-                back.auditTap()
-            } else {
-                break
-            }
+            let back = settingsBackButton
+            guard back.exists && back.isHittable else { break }
+            back.auditTap()
         }
         XCTAssertTrue(destination.waitForExistence(timeout: 5), "Settings category '\(identifier)' should exist")
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 8))
