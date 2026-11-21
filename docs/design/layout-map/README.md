@@ -71,6 +71,8 @@ Life의 링 옆에는 현재 진행 상태를 설명하는 문장을 둔다. 히
 
 ## 화면별 맵 목록
 
+2026-11-21 [설정 허브 개편 시안](settings-hub/index.html)과 [구조·근거](settings-hub/README.md)를 추가했다. 기존 S01은 구현 기록으로 보존하며, 새 화면은 정적 배치 제안이다.
+
 2026-10-31 [A06 Training Volume 상세 배치](activity-training-volume-detail-a06.html)는 실제 네 기간·네 현재/이전 지표·1W 주간 목표 링과 긴 기간의 실제 활동일 건수/별도 주간 참고·한 날짜 범위·도넛 세 모드·분 단위 일별 차트와 조건부 하위 그래프를 보존하는 제안이다. HTML 숫자는 예시이며 실제 앱 캡처가 아니다. [구현 계획](../../plans/2026-10-31-a06-training-volume-detail-redesign.md)과 [테마 표현](../theme-map/themes/dune-training-volume-detail-a06.html)을 함께 본다.
 
 2026-10-31 [A03 근육 지도 상세 · A04 3D 진입 비활성화](activity-muscle-map-detail-a04.md)는 2D 선택, compact/regular 배치와 기존 테마 유지 계약이다. 실제 화면 캡처와 구분한다.
