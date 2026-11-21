@@ -96,6 +96,9 @@ jobs:
           mkdir -p .xcodebuild
           python3 scripts/lib/command-deadline.py --seconds 30 -- xcrun simctl list devices -j > .xcodebuild/unit-test-devices.json 2>&1 || true
           python3 scripts/lib/command-deadline.py --seconds 30 -- xcrun simctl list pairs -j > .xcodebuild/unit-test-pairs.json 2>&1 || true
+          if [[ '${{ matrix.platform }}' == 'watch' ]]; then
+            python3 scripts/lib/command-deadline.py --seconds 30 -- xcrun simctl list runtimes -j > .xcodebuild/unit-test-runtimes.json 2>&1 || true
+          fi
 
       - name: Upload test results
         if: always()

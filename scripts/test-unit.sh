@@ -416,10 +416,12 @@ fi
 if [[ "$RUN_WATCH" -eq 1 ]]; then
     if [[ "$DRY_RUN" -eq 0 ]]; then
         if [[ -z "${DAILVE_WATCH_DESTINATION:-}" ]]; then
-            WATCH_DESTINATION="$(resolve_sim_destination "watchOS" "watchOS-${WATCH_SIM_OS//./-}" "$WATCH_SIM_NAME" "$WATCH_SIM_OS" "27")"
+            WATCH_DESTINATION=$(python3 "$ROOT_DIR/scripts/lib/watch-simulator-preflight.py" --select "$WATCH_SIM_NAME" "$WATCH_SIM_OS")
+        else
+            # An explicit destination is strict: never substitute another Watch.
+            WATCH_DESTINATION=$(python3 "$ROOT_DIR/scripts/lib/watch-simulator-preflight.py" "$WATCH_DESTINATION")
         fi
-        # Reject unavailable source runtimes before cloning, and validate the clone before boot.
-        WATCH_DESTINATION=$(python3 "$ROOT_DIR/scripts/lib/watch-simulator-preflight.py" "$WATCH_DESTINATION")
+        # The source has been validated; validate the owned clone separately before boot.
         WATCH_DESTINATION=$(apply_worktree_destination "$WATCH_DESTINATION" "$WATCH_SIM_NAME" "watchOS")
         WATCH_DESTINATION=$(python3 "$ROOT_DIR/scripts/lib/watch-simulator-preflight.py" "$WATCH_DESTINATION")
         if [[ "$WATCH_BUILD_BEFORE_BOOT" -eq 0 ]]; then
