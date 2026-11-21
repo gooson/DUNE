@@ -250,6 +250,7 @@ class UITestBaseCase: XCTestCase {
         destination.auditTap()
     }
 
+    @MainActor
     func selectSettingsTheme(_ rawValue: String) {
         openSettingsCategory(AXID.settingsSectionAppearance)
         let themeID = "settings-theme-\(rawValue)"
