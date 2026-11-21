@@ -32,6 +32,7 @@ final class RunningVoiceFeedback {
     private static let settingsPrefix = "runningFeedback."
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private let speaker: any RunningVoiceSpeaking
+    @ObservationIgnored private let cueBundle: Bundle
     @ObservationIgnored private let locale: Locale
     @ObservationIgnored private let language: String
     private var isSpeaking = false
@@ -82,6 +83,12 @@ final class RunningVoiceFeedback {
         case "ja": self.language = "ja-JP"
         default: self.language = "en-US"
         }
+        // String(localized:locale:) formats values with that locale, but resolves
+        // translations using the bundle's preferred language.
+        let voiceLocale = Locale(identifier: language)
+        let localization = voiceLocale.language.languageCode?.identifier ?? "en"
+        self.cueBundle = Bundle.main.url(forResource: localization, withExtension: "lproj")
+            .flatMap(Bundle.init(url:)) ?? .main
         self.isEnabled = defaults.object(forKey: Self.enabledKey) as? Bool ?? true
         let loadedSettings = Self.loadSettings(from: defaults)
         self.settings = loadedSettings
@@ -153,13 +160,13 @@ final class RunningVoiceFeedback {
     func message(for event: Event) -> String? {
         switch event {
         case .started:
-            return String(localized: "Run started.", locale: locale)
+            return String(localized: "Run started.", bundle: cueBundle, locale: locale)
         case .paused:
-            return String(localized: "Run paused.", locale: locale)
+            return String(localized: "Run paused.", bundle: cueBundle, locale: locale)
         case .resumed:
-            return String(localized: "Run resumed.", locale: locale)
+            return String(localized: "Run resumed.", bundle: cueBundle, locale: locale)
         case .ended:
-            return String(localized: "Run finished.", locale: locale)
+            return String(localized: "Run finished.", bundle: cueBundle, locale: locale)
         case .split(let distance, let duration, let pace):
             guard distance > 0, duration.isFinite, duration > 0, duration <= 86_400,
                   pace.isFinite, pace > 0, pace < 3_600 else { return nil }
@@ -169,11 +176,11 @@ final class RunningVoiceFeedback {
             let splitRemainder = splitSeconds % 60
             let paceMinutes = paceSeconds / 60
             let paceRemainder = paceSeconds % 60
-            return String(localized: "Split \(distance) meters. Time \(splitMinutes) minutes \(splitRemainder) seconds. Pace \(paceMinutes) minutes \(paceRemainder) seconds per kilometer.", locale: locale)
+            return String(localized: "Split \(distance) meters. Time \(splitMinutes) minutes \(splitRemainder) seconds. Pace \(paceMinutes) minutes \(paceRemainder) seconds per kilometer.", bundle: cueBundle, locale: locale)
         case .tooFast:
-            return String(localized: "Slow down. You are faster than your target pace.", locale: locale)
+            return String(localized: "Slow down. You are faster than your target pace.", bundle: cueBundle, locale: locale)
         case .tooSlow:
-            return String(localized: "Speed up. You are slower than your target pace.", locale: locale)
+            return String(localized: "Speed up. You are slower than your target pace.", bundle: cueBundle, locale: locale)
         }
     }
 

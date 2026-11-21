@@ -137,17 +137,19 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
         openPreview(for: "running")
         XCTAssertTrue(tapElement(WatchAXID.workoutPreviewCardioIndoorButton, timeout: 5))
         XCTAssertTrue(elementExists(WatchAXID.sessionPagingRoot, timeout: 10))
+        XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 5))
+        app.swipeLeft()
         XCTAssertTrue(app.staticTexts["달리기"].firstMatch.waitForExistence(timeout: 5),
                       "The cardio activity title should use the Watch Korean catalog")
 
-        let calories = app.staticTexts["kcal"].firstMatch
-        XCTAssertTrue(calories.waitForExistence(timeout: 5), "The bottom metric row should render")
-        let scrollView = app.scrollViews.firstMatch
+        XCTAssertTrue(elementExists("watch-cardio-calories-value"), "The activity header should include calories")
+        let bottomMetric = app.descendants(matching: .any)["watch-cardio-main-heart-rate-zones"].firstMatch
+        let scrollView = app.scrollViews["watch-cardio-main-metrics"].firstMatch
         XCTAssertTrue(scrollView.exists, "Cardio metrics should offer vertical scrolling")
-        for _ in 0..<3 where !calories.isHittable {
+        for _ in 0..<3 where !bottomMetric.isHittable {
             scrollView.swipeUp()
         }
-        XCTAssertTrue(calories.isHittable, "Calories should be reachable on a small watch at large text sizes")
+        XCTAssertTrue(bottomMetric.exists && bottomMetric.isHittable, "Heart rate zones should be reachable at large text sizes")
         addScreenshotAttachment(named: defaultArtifactName(suffix: "korean-xxxl-cardio-bottom"))
     }
 
@@ -210,7 +212,7 @@ final class WatchResponsiveWorkoutLayoutTests: WatchUITestBaseCase {
     private func openPreview(for exerciseID: String) {
         openAllExercises()
         let identifier = "watch-quickstart-exercise-\(exerciseID)"
-        guard let exercise = findQuickStartExercise(identifier: identifier, maxSwipes: 8) else {
+        guard let exercise = findQuickStartExercise(identifier: identifier, maxSwipes: 20) else {
             XCTFail("Fixture \(exerciseID) should be hittable in All Exercises")
             return
         }
