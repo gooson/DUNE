@@ -144,9 +144,9 @@ struct WellnessSleepSummaryCard: View {
     private func dayAccessibilityLabel(day: Date, sample: SleepDailySample?) -> Text {
         let date = Text(day, format: .dateTime.month(.abbreviated).day())
         if let sample {
-            return date + Text(verbatim: ", ") + Text(duration(Int(sample.minutes.rounded())))
+            return Text("\(date), \(duration(Int(sample.minutes.rounded())))")
         }
-        return date + Text(verbatim: ", ") + Text("No record")
+        return Text("\(date), No record")
     }
 
     private func observedBars(latest: SleepDailySample) -> some View {

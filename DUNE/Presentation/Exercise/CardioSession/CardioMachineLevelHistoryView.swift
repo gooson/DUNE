@@ -46,8 +46,7 @@ struct CardioMachineLevelHistoryView: View {
         guard let first = orderedChanges.first, let last = orderedChanges.last else {
             return Text("Need More Data")
         }
-        return Text("Level") + Text(verbatim: " \(first.level)–\(last.level), ")
-            + Text("Elapsed Time") + Text(verbatim: " \(last.formattedElapsed)")
+        return Text("Level \(first.level)–\(last.level), Elapsed Time \(last.formattedElapsed)")
     }
 
     var body: some View {
@@ -122,8 +121,7 @@ struct CardioMachineLevelHistoryView: View {
                         .onTapGesture { selectedElapsed = change.elapsedSeconds }
                         .accessibilityElement(children: .combine)
                         .accessibilityLabel(
-                            Text("Elapsed Time") + Text(verbatim: ": \(elapsed), ")
-                            + Text("Level") + Text(verbatim: " \(change.level)")
+                            Text("Elapsed Time: \(elapsed), Level \(change.level)")
                         )
                         .accessibilityAddTraits(.isButton)
                         .accessibilityIdentifier("cardio-level-history-row-\(index)")

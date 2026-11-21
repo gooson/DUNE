@@ -128,8 +128,7 @@ struct SessionSummaryView: View {
                             .font(DS.Typography.metricLabel)
                             .accessibilityElement(children: .combine)
                             .accessibilityLabel(
-                                Text("Elapsed Time") + Text(verbatim: ": \(elapsed), ")
-                                + Text("Level") + Text(verbatim: " \(change.level)")
+                                Text("Elapsed Time: \(elapsed), Level \(change.level)")
                             )
                             .accessibilityIdentifier("watch-level-history-row-\(index)")
                         }
