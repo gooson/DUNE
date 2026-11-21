@@ -101,24 +101,36 @@
     "S01": {
       "row_id": "S01",
       "file": "S01.png",
-      "test": "TodaySettingsRegressionTests/testSettingsShowsPhaseTwoRows()",
-      "action": "Current normal Settings top controls",
-      "timestamp": 1793980032.508,
-      "source_revision": "23c6d0948808b76e2e1233d70bf5a1d9faa68c36",
-      "source_worktree_dirty": false,
-      "device_udid": "24951882-46DA-4DC3-A26A-CA11BAE8E163",
-      "capture_kind": "XCTest-native-PNG+AX",
-      "sha256": "c046480d58d57d4f20005df01f0bf353a01ff63750376ea638d470ff06c865b8",
-      "ax_sha256": "bed65b24bc9431d027dbf68bc489b17ab86edf3c7a3107984f0c143e7916011b",
+      "evidence": "2026-11-21 named S01 state attachments",
+      "test": "SettingsHubKoreanCaptureTests/testKoreanHubGalleryPreviewAndDetails()",
+      "action": "S01-ko-settings-home_0_72DB6A47-293F-4BA1-BBA7-4F293A53F2F9.png",
+      "timestamp": 1795228370.074,
+      "timestamp_kind": "xcresult attachment manifest timestamp",
+      "capture_kind": "xctest-named-attachment",
+      "source_revision": "839452aa7",
+      "device_udid": "96865C8C-18E8-4288-ABDF-06DD1012DDAB",
+      "sha256": "be951c3954002c9fc3a07174e8dbeab1a43ffd80d14bc22b4bf0c7e5e32e352f",
       "native_dimensions": [
         1512,
         2316
       ],
-      "source_json": "../../../full-redesign-map/review/settings-s01-2026-11-07/manifest.json",
-      "source_record": "records: profile=ipad,kind=after,run_id=ipad-first",
-      "capture_scope": "B07 selected normal state; see gallery gates and limits",
-      "actual_angle": null,
-      "current_verification": "normal-captured"
+      "capture_scope": "2026-11-21 Korean settings home and named settings scenarios",
+      "capture_gallery": "../settings-hub-2026-11-21/index.html",
+      "source_evidence": "../settings-hub-2026-11-21/ipad/evidence.json",
+      "xcresults": [
+        "ipad.xcresult"
+      ],
+      "named_states": {
+        "ko-privacy-detail": "../settings-hub-2026-11-21/ipad/ko-privacy-detail.png",
+        "ko-settings-home": "images/S01.png",
+        "ko-theme-gallery": "../settings-hub-2026-11-21/ipad/ko-theme-gallery.png",
+        "ko-theme-preview-dark": "../settings-hub-2026-11-21/ipad/ko-theme-preview-dark.png",
+        "ko-theme-preview-light": "../settings-hub-2026-11-21/ipad/ko-theme-preview-light.png",
+        "ko-workout-detail": "../settings-hub-2026-11-21/ipad/ko-workout-detail.png",
+        "settings-privacy": "../settings-hub-2026-11-21/ipad/settings-privacy.png",
+        "settings-workout": "../settings-hub-2026-11-21/ipad/settings-workout.png"
+      },
+      "pose_readback": null
     },
     "S03": {
       "row_id": "S03",

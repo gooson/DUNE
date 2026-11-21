@@ -1,0 +1,103 @@
+Attributes: Application, 0x109658a00, pid: 40280, label: 'DUNE'
+Element subtree:
+ →Application, 0x109658a00, pid: 40280, label: 'DUNE'
+    Window (Main), 0x109659040, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x109659180, {{0.0, 0.0}, {466.0, 678.0}}
+      Other, 0x1096592c0, {{0.0, 0.0}, {466.0, 678.0}}
+        Other, 0x109659400, {{0.0, 0.0}, {466.0, 678.0}}
+          Other, 0x109659540, {{0.0, 0.0}, {466.0, 678.0}}
+            Other, 0x109659680, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x1096597c0, {{0.0, 0.0}, {382.0, 644.0}}
+              Other, 0x109659900, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x109659a40, {{0.0, 0.0}, {466.0, 678.0}}
+                  Other, 0x109659b80, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x10965b700, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x109658dc0, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x109658f00, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x10965be80, {{0.0, 0.0}, {466.0, 678.0}}
+                            Other, 0x10965bd40, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x10965bac0, {{0.0, 0.0}, {466.0, 678.0}}
+                                Toolbar, 0x10965bc00, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: '도구 막대'
+                                  Other, 0x10965b840, {{0.0, 0.0}, {466.0, 678.0}}
+                                Other, 0x10965b980, {{0.0, 0.0}, {466.0, 678.0}}
+                                  Other, 0x109658780, {{0.0, 0.0}, {466.0, 678.0}}
+                                    Other, 0x109658c80, {{0.0, 0.0}, {466.0, 678.0}}
+                                      Other, 0x109658b40, {{0.0, 0.0}, {466.0, 678.0}}
+                                        Toolbar, 0x10965b340, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: '도구 막대'
+                                          Other, 0x10965b480, {{0.0, 0.0}, {466.0, 678.0}}
+                                        NavigationBar, 0x10965ad00, {{0.0, 24.0}, {466.0, 58.0}}, identifier: 'Settings'
+                                          StaticText, 0x10965b200, {{20.0, 37.7}, {66.7, 20.7}}, label: 'Settings'
+                                        Other, 0x10965b0c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                          Other, 0x10965af80, {{0.0, 0.0}, {466.0, 678.0}}
+                                            Other, 0x10965ae40, {{0.0, 0.0}, {466.0, 678.0}}
+                                              Other, 0x10965a6c0, {{0.0, 0.0}, {466.0, 678.0}}
+                                                ScrollView, 0x10965abc0, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'settings-hub-home'
+                                                  Other, 0x10965aa80, {{0.0, 0.0}, {466.0, 678.0}}
+                                                    Other, 0x10965a940, {{0.0, 0.0}, {466.0, 122.0}}
+                                                  Other, 0x10965a800, {{0.0, 0.0}, {466.0, 678.0}}
+                                                  Other, 0x10965b5c0, {{0.0, 82.0}, {382.0, 601.7}}
+                                                    StaticText, 0x10965a580, {{16.0, 93.8}, {29.7, 20.3}}, label: '외관'
+                                                    Button, 0x109658500, {{322.0, 82.0}, {44.0, 44.0}}, identifier: 'settings-hub-search', label: '설정 검색'
+                                                    Button, 0x109659cc0, {{16.0, 138.0}, {350.0, 176.3}}, identifier: 'settings-section-appearance', label: '테마 변경, 현재 Desert Warm'
+                                                      Image, 0x1096588c0, {{16.0, 127.0}, {350.0, 140.0}}
+                                                      StaticText, 0x109659f40, {{28.0, 264.0}, {45.0, 14.3}}, label: '현재 테마'
+                                                      StaticText, 0x10965a440, {{28.0, 282.3}, {120.3, 24.0}}, label: 'Desert Warm'
+                                                      StaticText, 0x10965a300, {{287.7, 278.0}, {45.0, 14.3}}, label: '테마 변경'
+                                                      Image, 0x10965a1c0, {{339.0, 280.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: '앞으로'
+                                                    Button, 0x10965a080, {{16.0, 326.3}, {350.0, 44.0}}, identifier: 'settings-row-app-icon', label: '앱 아이콘, 인터리브'
+                                                      Image, 0x109659e00, {{16.0, 332.3}, {32.0, 32.0}}, label: 'AppIconPreview-interleave-desertWarm'
+                                                      StaticText, 0x109658140, {{60.0, 338.2}, {63.0, 20.3}}, label: '앱 아이콘'
+                                                      StaticText, 0x109658640, {{280.7, 339.3}, {52.0, 18.0}}, label: '인터리브'
+                                                      Image, 0x108499040, {{359.0, 343.0}, {6.3, 10.7}}, identifier: 'chevron.forward', label: '앞으로'
+                                                    Button, 0x1084992c0, {{28.0, 394.7}, {326.0, 52.0}}, identifier: 'settings-hub-workout', label: '운동 설정, 휴식 시간, 운동별 기본값'
+                                                      StaticText, 0x108e16940, {{64.0, 402.3}, {63.0, 20.3}}, label: '운동 설정'
+                                                      Image, 0x108e16a80, {{29.7, 414.7}, {21.0, 12.3}}, identifier: 'dumbbell', label: '덤벨 웨이트'
+                                                      Image, 0x108e16e40, {{347.0, 415.3}, {6.3, 10.7}}, identifier: 'chevron.forward', label: '앞으로'
+                                                      StaticText, 0x108e16f80, {{64.0, 424.7}, {117.7, 14.3}}, label: '휴식 시간, 운동별 기본값'
+                                                    Button, 0x108e17200, {{28.0, 447.0}, {326.0, 52.0}}, identifier: 'settings-hub-alerts', label: '알림과 브리핑, 건강 알림, 취침 알림'
+                                                      StaticText, 0x108e17480, {{64.0, 454.7}, {92.3, 20.3}}, label: '알림과 브리핑'
+                                                      Image, 0x108e15400, {{32.3, 464.3}, {15.7, 17.3}}, identifier: 'bell', label: '알림'
+                                                      Image, 0x108e17700, {{347.0, 467.7}, {6.3, 10.7}}, identifier: 'chevron.forward', label: '앞으로'
+                                                      StaticText, 0x108e17e80, {{64.0, 477.0}, {97.0, 14.3}}, label: '건강 알림, 취침 알림'
+                                                    Button, 0x108e17840, {{28.0, 499.3}, {326.0, 52.0}}, identifier: 'settings-hub-privacy', label: '데이터 및 개인정보, iCloud 동기화, 접근 권한'
+                                                      StaticText, 0x108e152c0, {{64.0, 507.0}, {126.0, 20.3}}, label: '데이터 및 개인정보'
+                                                      Image, 0x108e17d40, {{34.0, 516.3}, {13.7, 18.3}}, identifier: 'hand.raised', label: '차단'
+                                                      Image, 0x108e15900, {{347.0, 520.0}, {6.3, 10.7}}, identifier: 'chevron.forward', label: '앞으로'
+                                                      StaticText, 0x108e17980, {{64.0, 529.3}, {122.7, 14.3}}, label: 'iCloud 동기화, 접근 권한'
+                                                    Button, 0x108e15180, {{28.0, 551.7}, {326.0, 52.0}}, identifier: 'settings-hub-about', label: '앱 정보, 새 소식, 버전'
+                                                      StaticText, 0x108e16300, {{64.0, 559.3}, {48.3, 20.3}}, label: '앱 정보'
+                                                      Image, 0x108e15a40, {{31.7, 569.3}, {17.0, 17.0}}, identifier: 'info.circle', label: '정보'
+                                                      Image, 0x108e16440, {{347.0, 572.3}, {6.3, 10.7}}, identifier: 'chevron.forward', label: '앞으로'
+                                                      StaticText, 0x108e16580, {{64.0, 581.7}, {62.3, 14.3}}, label: '새 소식, 버전'
+                                                    Button, 0x108e15b80, {{16.0, 615.7}, {350.0, 52.0}}, identifier: 'settings-hub-mockData', label: '목업 데이터'
+                                                      StaticText, 0x108e16080, {{16.0, 615.7}, {350.0, 52.0}}, label: '목업 데이터'
+                                                      Image, 0x108e15cc0, {{19.7, 632.3}, {17.0, 18.3}}, identifier: 'shippingbox', label: '상자'
+                                                      Image, 0x108e15f40, {{359.0, 636.3}, {6.3, 10.7}}, identifier: 'chevron.forward', label: '앞으로'
+                                                  Other, 0x108e15e00, {{433.0, 82.0}, {30.0, 537.0}}, label: '수직 스크롤 막대, 2페이지', value: 0%
+                                                    Other, 0x108e17ac0, {{460.0, 85.0}, {3.0, 505.7}}
+                                                  Other, 0x108e16bc0, {{433.0, 82.0}, {30.0, 537.0}}, label: '수직 스크롤 막대, 2페이지', value: 0%
+                                                    Other, 0x108e17340, {{460.0, 85.0}, {3.0, 505.7}}
+                            Other, 0x108e15040, {{0.0, 0.0}, {466.0, 678.0}}
+                              Other, 0x108e15680, {{0.0, 0.0}, {466.0, 678.0}}
+                Other, 0x108e170c0, {{0.0, 0.0}, {466.0, 678.0}}
+                  Toolbar, 0x108e15540, {{0.0, 0.0}, {466.0, 678.0}}, identifier: 'Toolbar', label: '도구 막대'
+                    Other, 0x108e157c0, {{0.0, 0.0}, {466.0, 678.0}}
+                      Other, 0x108e14f00, {{0.0, 0.0}, {466.0, 678.0}}
+                        Other, 0x108e16800, {{0.0, 0.0}, {466.0, 678.0}}
+                          Other, 0x108e166c0, {{0.0, 0.0}, {0.0, 0.0}}
+                            Other, 0x108e17c00, {{394.0, 174.0}, {48.0, 48.0}}
+                              Other, 0x108e161c0, {{394.0, 174.0}, {48.0, 48.0}}
+                                Other, 0x108e175c0, {{399.0, 179.0}, {38.0, 38.0}}
+                                  Other, 0x108e16d00, {{399.0, 179.0}, {38.0, 38.0}}
+                                    Button, 0x108e1c000, {{399.0, 179.0}, {38.0, 38.0}}, identifier: 'BackButton'
+                  Other, 0x108e1c140, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x108e1c280, {{0.0, 0.0}, {466.0, 678.0}}
+                    Other, 0x108e1c3c0, {{0.0, 0.0}, {466.0, 678.0}}
+              Other, 0x108e1c500, {{191.0, 322.0}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x109658a00, pid: 40280, label: 'DUNE'
+Query chain:
+ →Find: Target Application 'com.raftel.dailve'
+  Output: {
+    Application, 0x108e1c640, pid: 40280, label: 'DUNE'
+  }

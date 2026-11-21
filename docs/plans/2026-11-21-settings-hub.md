@@ -3,7 +3,7 @@ tags: [settings, theme, navigation]
 topic: S01 설정 허브
 date: 2026-11-21
 category: plan
-status: approved
+status: implemented
 confidence: high
 related_solutions: [2026-11-07-settings-s01, 2026-11-19-artist-theme-native-rollout]
 ---
