@@ -137,8 +137,10 @@ final class SettingsSmokeTests: UITestBaseCase {
         XCTAssertTrue(app.buttons[themeID].isSelected, "Apply should save the chosen theme")
 
         openSettingsCategory(AXID.settingsRowAppIcon)
-        XCTAssertTrue(app.staticTexts["settings-app-icon-palette"].waitForExistence(timeout: 5))
-        XCTAssertEqual(app.staticTexts["settings-app-icon-palette"].label, "Rose × Cream")
+        let palette = app.staticTexts["settings-app-icon-palette"]
+        XCTAssertTrue(palette.waitForExistence(timeout: 5))
+        XCTAssertTrue(["로즈 × 크림", "Rose × Cream", "ローズ × クリーム"].contains(palette.label),
+                      "Expected the selected Patisserie palette, got \(palette.label)")
     }
 
     func testSearchBedtimeEmptyResultsAndReturn() throws {
