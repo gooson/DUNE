@@ -424,19 +424,23 @@ struct HealthQueryResultCard: View {
         let start = memo.index(firstMatch.lowerBound, offsetBy: -80, limitedBy: memo.startIndex) ?? memo.startIndex
         let end = memo.index(firstMatch.upperBound, offsetBy: 160, limitedBy: memo.endIndex) ?? memo.endIndex
         let excerpt = String(memo[start..<end])
-        var output = Text(start == memo.startIndex ? "" : "…")
+        var output = AttributedString(start == memo.startIndex ? "" : "…")
         var cursor = excerpt.startIndex
         var highlightedCount = 0
         while highlightedCount < 50,
               let match = excerpt.range(of: query, options: options, range: cursor..<excerpt.endIndex),
               match.upperBound > cursor {
-            output = output + Text(String(excerpt[cursor..<match.lowerBound]))
-                + Text(String(excerpt[match])).bold().foregroundColor(DS.Color.warmGlow)
+            output.append(AttributedString(excerpt[cursor..<match.lowerBound]))
+            var highlighted = AttributedString(excerpt[match])
+            highlighted.inlinePresentationIntent = .stronglyEmphasized
+            highlighted.foregroundColor = DS.Color.warmGlow
+            output.append(highlighted)
             cursor = match.upperBound
             highlightedCount += 1
         }
-        output = output + Text(String(excerpt[cursor...]))
-        return output + Text(end == memo.endIndex ? "" : "…")
+        output.append(AttributedString(excerpt[cursor...]))
+        if end != memo.endIndex { output.append(AttributedString("…")) }
+        return Text(output)
     }
 
     private func comparisonRow(_ metric: HealthQueryMetric) -> some View {

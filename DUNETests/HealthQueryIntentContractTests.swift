@@ -14,7 +14,7 @@ struct HealthQueryIntentContractTests {
 
     @Test("Typed query preserves selected periods and record context")
     func requestPreservesContext() {
-        var intent = QueryHealthInformationIntent(.workoutComparison)
+        let intent = QueryHealthInformationIntent(.workoutComparison)
         intent.period = .thisWeek
         intent.comparisonPeriod = .lastWeek
         intent.exercise = HealthExerciseEntity(id: "squat", name: "Squat")
