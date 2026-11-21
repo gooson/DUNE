@@ -26,8 +26,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Keep xcrun and xcodebuild on the same installation without mutating the host.
-  DEVELOPER_DIR: /Applications/Xcode_27.app/Contents/Developer
   SIMULATOR_BOOT_TIMEOUT: '300'
   SIMULATOR_BOOT_RETRIES: '2'
 
@@ -36,6 +34,8 @@ jobs:
     name: unit-tests (${{ matrix.platform }})
     runs-on: xcode-27
     timeout-minutes: ${{ matrix.timeout_minutes }}
+    env:
+      DEVELOPER_DIR: /Applications/${{ matrix.xcode_app }}/Contents/Developer
     # Boot each runtime on its own runner. A Watch startup failure must not
     # prevent iOS tests from starting, or leave both runtimes competing for RAM.
     strategy:
@@ -44,8 +44,12 @@ jobs:
         include:
           # Cold iOS compilation can consume 21 minutes before the full suite starts.
           - platform: ios
+            xcode_app: Xcode_27.app
             timeout_minutes: 60
           - platform: watch
+            # Pair the SDK with the Watch runtime that stays mounted on this image.
+            xcode_app: Xcode_27.2.app
+            watch_os: '27.2'
             timeout_minutes: 30
 
     steps:
@@ -78,6 +82,7 @@ jobs:
         shell: bash
         working-directory: ${{ runner.temp }}/dune-unit-tests
         env:
+          DUNE_WATCH_SIM_OS: ${{ matrix.watch_os }}
           DAILVE_XCODEBUILD_JOBS: ${{ matrix.platform == 'watch' && '2' || '' }}
           DAILVE_COMPILER_INDEX_STORE_ENABLE: ${{ matrix.platform == 'watch' && 'NO' || '' }}
         run: |

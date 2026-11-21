@@ -293,7 +293,7 @@ apply_worktree_destination() {
     fi
 
     local new_udid
-    new_udid=$(ensure_worktree_simulator "$udid" "$sim_name")
+    new_udid=$(ensure_worktree_simulator "$udid" "$sim_name") || return 1
     echo "platform=${platform} Simulator,id=${new_udid}"
 }
 
