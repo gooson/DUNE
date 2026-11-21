@@ -55,7 +55,8 @@ struct ThemeGalleryView: View {
                 .frame(maxWidth: 660)
                 .frame(maxWidth: .infinity)
             }
-            .scrollBounceBehavior(.basedOnSize)
+            .accessibilityIdentifier("settings-theme-gallery")
+        .scrollBounceBehavior(.basedOnSize)
         }
     }
 }

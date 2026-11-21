@@ -59,10 +59,16 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
 
         let desert = themeButton("desertWarm", direction: .down)
         desert.tap()
+        let applyDesert = app.descendants(matching: .any)[AXID.settingsThemeApply].firstMatch
+        XCTAssertTrue(applyDesert.waitForExistence(timeout: 5))
+        applyDesert.auditTap()
         XCTAssertTrue(desert.isSelected)
 
         let waterLilies = themeButton("waterLilies")
         waterLilies.tap()
+        let applyTheme = app.descendants(matching: .any)[AXID.settingsThemeApply].firstMatch
+        XCTAssertTrue(applyTheme.waitForExistence(timeout: 5))
+        applyTheme.auditTap()
         XCTAssertTrue(waterLilies.isSelected)
 
         app.terminate()
@@ -383,9 +389,8 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         direction: ScrollDirection = .up
     ) -> XCUIElement {
         let identifier = "settings-theme-\(rawValue)"
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(
-            identifier, maxSwipes: 8, direction: direction, timeoutPerCheck: 0.2
-        ))
+        let gallery = app.scrollViews[AXID.settingsThemeGallery].firstMatch
+        XCTAssertTrue(app.revealFullyVisible(identifier, in: gallery, maxMoves: 20))
         let button = app.buttons[identifier]
         XCTAssertTrue(button.waitForExistence(timeout: 5))
         return button
@@ -409,5 +414,6 @@ final class WaterLiliesThemeTests: SeededUITestBaseCase {
         }
         button.tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5))
+        openSettingsCategory(AXID.settingsSectionAppearance)
     }
 }

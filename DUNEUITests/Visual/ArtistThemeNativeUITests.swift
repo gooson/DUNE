@@ -122,8 +122,9 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         navigateToDashboard()
         open(AXID.dashboardToolbarSettings)
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 8))
+        openSettingsCategory(AXID.settingsSectionAppearance)
         let themeRow = "settings-theme-\(theme)"
-        XCTAssertTrue(app.revealFullyVisible(themeRow, in: app.collectionViews.firstMatch, maxMoves: 20),
+        XCTAssertTrue(app.revealFullyVisible(themeRow, in: app.scrollViews[AXID.settingsThemeGallery].firstMatch, maxMoves: 20),
                       "Settings preview for \(theme) should be visible")
         XCTAssertTrue(app.buttons[themeRow].firstMatch.isSelected, "Settings should report \(theme) as selected")
         capture("S01", showing: themeRow, prefix: prefix)
@@ -177,22 +178,22 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
     }
 
     private func goBack(to identifier: String) {
-        let navigationBack = app.navigationBars.buttons["BackButton"].firstMatch
-        let backButtons = app.buttons.matching(identifier: "BackButton")
-        let ready = NSPredicate { _, _ in
-            MainActor.assumeIsolated {
-                (navigationBack.exists && navigationBack.isHittable)
-                    || backButtons.allElementsBoundByIndex.contains(where: \.isHittable)
+        let target = app.descendants(matching: .any)[identifier].firstMatch
+        for _ in 0..<3 where !target.exists {
+            let native = app.navigationBars.buttons["BackButton"].firstMatch
+            let floating = app.buttons.matching(identifier: "BackButton")
+                .allElementsBoundByIndex.first(where: \.isHittable)
+            let detail = app.buttons[AXID.settingsDetailBack].firstMatch
+            if native.exists && native.isHittable {
+                native.auditTap()
+            } else if let floating {
+                floating.auditTap()
+            } else if detail.exists && detail.isHittable {
+                detail.auditTap()
+            } else {
+                XCTFail("Back button should be available")
+                return
             }
-        }
-        XCTAssertEqual(XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: ready, object: nil)], timeout: 8),
-                       .completed, "Back button should be available")
-        if navigationBack.exists && navigationBack.isHittable {
-            navigationBack.tap()
-        } else {
-            let floatingButtons = backButtons.allElementsBoundByIndex.filter(\.isHittable)
-            XCTAssertEqual(floatingButtons.count, 1, "Duo should show one floating Back button")
-            floatingButtons.first?.tap()
         }
         _ = waitForElement(identifier, timeout: 10)
     }

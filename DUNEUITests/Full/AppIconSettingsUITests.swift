@@ -33,12 +33,9 @@ final class AppIconSettingsUITests: SeededUITestBaseCase {
         navigateToSettings()
         openIconPicker()
         XCTAssertTrue(app.buttons["settings-app-icon-flow"].isSelected)
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-        reveal("settings-theme-forestGreen")
-        app.buttons["settings-theme-forestGreen"].tap()
+        selectSettingsTheme("forestGreen")
         dismissIconConfirmation()
-        reveal("settings-row-app-icon", scrollingDown: false)
-        app.descendants(matching: .any)["settings-row-app-icon"].firstMatch.tap()
+        openSettingsCategory(AXID.settingsRowAppIcon)
         reveal("launch-brand-flow-forestGreen")
         XCTAssertTrue(app.images["launch-brand-flow-forestGreen"].waitForExistence(timeout: 8))
         reveal("settings-app-icon-palette")
@@ -49,11 +46,15 @@ final class AppIconSettingsUITests: SeededUITestBaseCase {
     func testPatisserieSelectionPersistsAndUsesItsIconPalette() {
         navigateToSettings()
         let identifier = "settings-theme-patisserie"
+        openSettingsCategory(AXID.settingsSectionAppearance)
         reveal(identifier)
         let theme = app.buttons[identifier].firstMatch
         XCTAssertTrue(theme.exists && theme.isHittable)
         XCTAssertEqual(theme.label, "Pâtisserie")
         theme.tap()
+        let apply = app.descendants(matching: .any)[AXID.settingsThemeApply].firstMatch
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        apply.auditTap()
         dismissIconConfirmation()
         XCTAssertTrue(theme.isSelected)
 
@@ -65,12 +66,12 @@ final class AppIconSettingsUITests: SeededUITestBaseCase {
         launchApp(with: configuration)
         dismissIconConfirmation()
         navigateToSettings()
+        openSettingsCategory(AXID.settingsSectionAppearance)
         reveal(identifier)
         XCTAssertTrue(app.buttons[identifier].firstMatch.isSelected)
         addScreenshotAttachment(named: "Pâtisserie Settings")
 
-        reveal("settings-row-app-icon", scrollingDown: false)
-        app.descendants(matching: .any)["settings-row-app-icon"].firstMatch.tap()
+        openSettingsCategory(AXID.settingsRowAppIcon)
         reveal("settings-app-icon-palette")
         XCTAssertEqual(app.staticTexts["settings-app-icon-palette"].label, "Rose × Cream")
         addScreenshotAttachment(named: "Pâtisserie App Icon Palette")
@@ -90,6 +91,12 @@ final class AppIconSettingsUITests: SeededUITestBaseCase {
 
     /// Short drags keep a single row from being skipped by a page-sized swipe.
     private func reveal(_ identifier: String, scrollingDown: Bool = true) {
+        if identifier.hasPrefix("settings-theme-") {
+            XCTAssertTrue(app.revealFullyVisible(
+                identifier, in: app.scrollViews[AXID.settingsThemeGallery].firstMatch, maxMoves: 20
+            ))
+            return
+        }
         let target = app.descendants(matching: .any)[identifier].firstMatch
         for _ in 0..<24 {
             let viewport = app.frame

@@ -45,35 +45,52 @@ struct SettingsView: View {
     let canLoadHealthKitData: Bool
     let hasFailedHealthKitAuthorization: Bool
     private let entry: SettingsHubRoute
+    private let selectInRootColumn: ((SettingsHubRoute) -> Void)?
+    private let didApplySearchResult: (() -> Void)?
 
     init(
         sharedHealthDataService: SharedHealthDataService? = nil,
         canLoadHealthKitData: Bool = true,
         hasFailedHealthKitAuthorization: Bool = false,
-        entry: SettingsHubRoute = .home
+        entry: SettingsHubRoute = .home,
+        selectInRootColumn: ((SettingsHubRoute) -> Void)? = nil,
+        didApplySearchResult: (() -> Void)? = nil
     ) {
         self.sharedHealthDataService = sharedHealthDataService
         self.canLoadHealthKitData = canLoadHealthKitData
         self.hasFailedHealthKitAuthorization = hasFailedHealthKitAuthorization
         self.entry = entry
+        self.selectInRootColumn = selectInRootColumn
+        self.didApplySearchResult = didApplySearchResult
     }
 
     @Environment(\.dismiss) private var dismiss
     @State private var pushed: SettingsHubRoute?
     @State private var columnHistory: [SettingsHubRoute] = []
     @State private var searchQuery = ""
+    @State private var showingAppliedGallery = false
+
+    private var page: SettingsHubRoute { showingAppliedGallery ? .gallery : entry }
+
+    // A sidebar selection belongs to the hub root even after expanding a pushed phone page.
+    private func selectColumn(_ route: SettingsHubRoute) {
+        if let selectInRootColumn {
+            selectInRootColumn(route)
+        } else {
+            pushed = nil
+            columnHistory = [route]
+            searchQuery = ""
+        }
+    }
 
     var body: some View {
         GeometryReader { proxy in
             let wide = proxy.size.width >= 700
-            let current = columnHistory.last ?? entry
+            let current = columnHistory.last ?? page
             Group {
                 if wide {
                     HStack(spacing: 0) {
-                        home(selection: current == .home ? .gallery : current.category) { route in
-                            searchQuery = ""
-                            columnHistory = [route]
-                        }
+                        home(selection: current == .home ? .gallery : current.category, onOpen: selectColumn)
                         .frame(width: min(340, proxy.size.width * 0.38))
                         Divider()
                         column(current == .home ? .gallery : current)
@@ -81,14 +98,18 @@ struct SettingsView: View {
                 } else if !columnHistory.isEmpty {
                     // A narrowed split window keeps its selected detail and back history.
                     column(current)
-                } else if entry == .home {
+                } else if page == .home {
                     home(selection: nil) { pushed = $0 }
                 } else {
-                    destination(entry, onOpen: { pushed = $0 }, onFinish: { dismiss() })
+                    destination(page, onOpen: { pushed = $0 }, onFinish: {
+                        didApplySearchResult?()
+                        dismiss()
+                    })
                 }
             }
             .englishNavigationTitle(wide ? "Settings" : current.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(!wide && !columnHistory.isEmpty)
         }
         .toolbar(.hidden, for: .tabBar)
         .navigationDestination(item: $pushed) { next in
@@ -96,7 +117,9 @@ struct SettingsView: View {
                 sharedHealthDataService: sharedHealthDataService,
                 canLoadHealthKitData: canLoadHealthKitData,
                 hasFailedHealthKitAuthorization: hasFailedHealthKitAuthorization,
-                entry: next
+                entry: next,
+                selectInRootColumn: selectColumn,
+                didApplySearchResult: page == .search ? { showingAppliedGallery = true } : nil
             )
         }
     }
@@ -127,8 +150,7 @@ struct SettingsView: View {
             .padding(.horizontal, DS.Spacing.lg)
             .frame(minHeight: 48)
             destination(route, onOpen: { columnHistory.append($0) }, onFinish: {
-                if columnHistory.count > 1 { columnHistory.removeLast() }
-                else { columnHistory = [.gallery] }
+                selectColumn(.gallery)
             })
             .id(route)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -211,7 +233,7 @@ private struct SettingsHome: View {
                     Divider()
                     menuRow(.privacy, id: "privacy", title: "Data & Privacy", subtitle: "iCloud sync and permissions", symbol: "hand.raised")
                     Divider()
-                    menuRow(.about, id: "about", title: "About", subtitle: "What's new and version", symbol: "info.circle")
+                    menuRow(.about, id: "about", title: "App Information", subtitle: "What's new and version", symbol: "info.circle")
                 }
                 .padding(.horizontal, DS.Spacing.md)
                 .background(theme.cardBackground, in: .rect(cornerRadius: DS.Radius.lg))

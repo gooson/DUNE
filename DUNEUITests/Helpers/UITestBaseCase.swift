@@ -229,6 +229,39 @@ class UITestBaseCase: XCTestCase {
         _ = app.waitAndTap(AXID.dashboardToolbarSettings)
     }
 
+    /// Opens a destination from the Settings hub on compact and split layouts.
+    /// A compact detail hides the hub, so unwind nested details before changing categories.
+    func openSettingsCategory(_ identifier: String) {
+        let destination = app.descendants(matching: .any)[identifier].firstMatch
+        for _ in 0..<3 where !destination.exists {
+            let namedBack = app.navigationBars.buttons["BackButton"].firstMatch
+            let back = namedBack.exists ? namedBack : app.navigationBars.buttons.element(boundBy: 0)
+            let detailBack = app.buttons[AXID.settingsDetailBack].firstMatch
+            if detailBack.exists && detailBack.isHittable {
+                detailBack.auditTap()
+            } else if back.exists && back.isHittable {
+                back.auditTap()
+            } else {
+                break
+            }
+        }
+        XCTAssertTrue(destination.waitForExistence(timeout: 5), "Settings category '\(identifier)' should exist")
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(identifier, maxSwipes: 8))
+        destination.auditTap()
+    }
+
+    func selectSettingsTheme(_ rawValue: String) {
+        openSettingsCategory(AXID.settingsSectionAppearance)
+        let themeID = "settings-theme-\(rawValue)"
+        let gallery = app.scrollViews[AXID.settingsThemeGallery].firstMatch
+        XCTAssertTrue(app.revealFullyVisible(themeID, in: gallery, maxMoves: 20))
+        app.buttons[themeID].firstMatch.auditTap()
+        let apply = app.descendants(matching: .any)[AXID.settingsThemeApply].firstMatch
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        apply.auditTap()
+        dismissIconConfirmation()
+    }
+
     /// Wait for an element with a given accessibility identifier
     @discardableResult
     func waitForElement(_ identifier: String, timeout: TimeInterval = 5) -> XCUIElement {

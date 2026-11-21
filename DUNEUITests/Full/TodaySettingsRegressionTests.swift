@@ -682,68 +682,31 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     func testSettingsShowsPhaseTwoRows() throws {
         openSettings()
-        VisualAudit.capture("Settings top controls")
+        VisualAudit.capture("Settings hub")
+        openSettingsCategory(AXID.settingsHubWorkout)
         XCTAssertTrue(app.scrollToHittableElementIfNeeded("settings-row-resttime-Increment", maxSwipes: 8))
-        XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.settingsRowRestTime].firstMatch.waitForExistence(timeout: 5),
-            "Rest Time row should exist"
-        )
         let restStepper = app.steppers[AXID.settingsRowRestTime]
         let previousValue = restStepper.value as? String
         app.buttons["settings-row-resttime-Increment"].auditTap()
-        XCTAssertNotEqual(restStepper.value as? String, previousValue, "Rest time increment must work")
+        XCTAssertNotEqual(restStepper.value as? String, previousValue)
         app.buttons["settings-row-resttime-Decrement"].auditTap()
-        XCTAssertEqual(restStepper.value as? String, previousValue, "Rest time decrement must restore the value")
+        XCTAssertEqual(restStepper.value as? String, previousValue)
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowExerciseDefaults, maxSwipes: 8))
-        XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.settingsRowExerciseDefaults].firstMatch.waitForExistence(timeout: 5),
-            "Exercise Defaults row should exist"
-        )
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowPreferredExercises, maxSwipes: 8))
-        XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch.waitForExistence(timeout: 5),
-            "Preferred Exercises row should exist"
-        )
+        VisualAudit.capture("Settings workout controls")
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.settingsRowICloudSync, maxSwipes: 32), "iCloud Sync row should be reachable")
-        XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.settingsRowICloudSync].firstMatch.waitForExistence(timeout: 5),
-            "iCloud Sync row should exist"
-        )
+        openSettingsCategory(AXID.settingsHubPrivacy)
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.settingsRowICloudSync, maxSwipes: 8))
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.settingsRowLocationAccess, maxSwipes: 8))
+        VisualAudit.capture("Settings privacy controls")
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.settingsRowLocationAccess, maxSwipes: 32), "Location Access row should be reachable")
-        XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.settingsRowLocationAccess].firstMatch.waitForExistence(timeout: 5),
-            "Location Access row should exist"
-        )
+        openSettingsCategory(AXID.settingsHubAbout)
+        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.settingsRowVersion, maxSwipes: 8))
+        VisualAudit.capture("Settings about controls")
 
-        XCTAssertTrue(app.scrollToElementIfNeeded(AXID.settingsRowVersion, maxSwipes: 32), "Version row should be reachable")
-        XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.settingsRowVersion].firstMatch.waitForExistence(timeout: 5),
-            "Version row should exist"
-        )
-        if VisualAudit.isEnabled {
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowVersion, maxSwipes: 40),
-                          "The final Settings row must be reachable")
-            VisualAudit.capture("Settings bottom privacy and version")
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded(
-                "settings-mock-status-label", maxSwipes: 20, direction: .down
-            ), "Mock data status must be reachable")
-            VisualAudit.capture("Settings mock status")
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded(
-                "settings-row-resttime-Increment", maxSwipes: 40, direction: .down
-            ), "Settings top controls should be reachable")
-            let scroll = app.collectionViews.firstMatch.exists ? app.collectionViews.firstMatch : app.scrollViews.firstMatch
-            for index in 1...3 {
-                scroll.swipeUp()
-                VisualAudit.capture("Settings controls lower viewport \(index)")
-            }
-            XCTAssertTrue(app.scrollToHittableElementIfNeeded(
-                "settings-row-resttime-Increment", maxSwipes: 40, direction: .down
-            ), "Settings should return to its top controls")
-            VisualAudit.capture("Settings returned top controls")
-        }
-
+        openSettingsCategory(AXID.settingsHubMockData)
+        XCTAssertTrue(app.scrollToElementIfNeeded("settings-mock-status-label", maxSwipes: 8))
+        VisualAudit.capture("Settings mock controls")
     }
 
     func testExerciseDefaultsListSearchesAndOpensEditRoute() throws {
@@ -1073,8 +1036,8 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         }
 
         XCTAssertTrue(
-            app.descendants(matching: .any)[AXID.settingsRowRestTime].firstMatch.waitForExistence(timeout: 8),
-            "Settings root should open from Today toolbar"
+            app.descendants(matching: .any)[AXID.settingsHubHome].firstMatch.waitForExistence(timeout: 8),
+            "Settings hub should open from Today toolbar"
         )
     }
 
@@ -1087,13 +1050,15 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         navigateToDashboard()
         openSettings()
 
+        openSettingsCategory(AXID.settingsHubWorkout)
         let increment = app.buttons["settings-row-resttime-Increment"].firstMatch
         XCTAssertTrue(increment.waitForExistence(timeout: 5) && increment.isHittable,
                       "First native Stepper control stays reachable at maximum text size")
         VisualAudit.capture("S01 MAX native controls at top")
 
-        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowVersion, maxSwipes: 40),
-                      "Last Settings row stays reachable in the native Form")
+        openSettingsCategory(AXID.settingsHubAbout)
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowVersion, maxSwipes: 8),
+                      "About version row stays reachable at maximum text size")
         VisualAudit.capture("S01 MAX final section")
     }
 
@@ -1155,6 +1120,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("S02 MAX searched exercise row")
 
         returnToSettingsFromFilteredList("Exercise Defaults")
+        openSettingsCategory(AXID.settingsHubWorkout)
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowPreferredExercises, maxSwipes: 8))
         app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch.auditTap()
         searchPreferredExercises(Fixture.deadliftSearchQuery)
@@ -1175,29 +1141,21 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
     }
 
     private func returnToSettingsFromFilteredList(_ title: String) {
-        let navigationBar = app.navigationBars[title]
-        let closeSearch = navigationBar.buttons["Close"].firstMatch
-        if closeSearch.exists { closeSearch.auditTap() }
-
-        let back = navigationBar.buttons["BackButton"].firstMatch
-        if back.waitForExistence(timeout: 2) {
-            XCTAssertTrue(back.isHittable, "Back to Settings should be reachable")
-            back.auditTap()
-        } else if UIDevice.current.userInterfaceIdiom == .pad {
-            // iPad AX omits Back while the trailing search field is active,
-            // although the round Back control remains visible at the leading edge.
-            XCTAssertTrue(navigationBar.exists, "Filtered list navigation bar remains visible")
-            // 1512px native PNG / scale 2: Back center is 32pt from the bar leading edge.
-            let point = CGPoint(x: navigationBar.frame.minX + 32, y: navigationBar.frame.minY + 22)
-            XCTAssertTrue(navigationBar.frame.contains(point))
-            XCTAssertFalse(navigationBar.searchFields.firstMatch.frame.contains(point))
-            navigationBar.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
-                .withOffset(CGVector(dx: 32, dy: 22)).auditTap()
+        let splitBack = app.buttons[AXID.settingsDetailBack].firstMatch
+        if splitBack.exists && splitBack.isHittable {
+            splitBack.auditTap()
         } else {
-            XCTFail("Back to Settings should be available after closing search")
+            let navigationBar = app.navigationBars[title]
+            let closeSearch = navigationBar.buttons["Close"].firstMatch
+            if closeSearch.exists { closeSearch.auditTap() }
+            let back = navigationBar.buttons["BackButton"].firstMatch
+            XCTAssertTrue(back.waitForExistence(timeout: 5) && back.isHittable,
+                          "Back to Workout Settings should be reachable")
+            back.auditTap()
         }
-        XCTAssertTrue(app.navigationBars["Settings"].firstMatch.waitForExistence(timeout: 5),
-                      "Settings root should reopen after leaving the filtered list")
+        XCTAssertTrue(app.descendants(matching: .any)[AXID.settingsRowExerciseDefaults]
+            .firstMatch.waitForExistence(timeout: 5),
+            "Workout Settings should reopen after leaving the filtered list")
     }
 
     func testPreferredExerciseToggleSurvivesScreenReentry() throws {
@@ -1217,6 +1175,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
         VisualAudit.capture("S04 preferred selection in filtered results")
 
         returnToSettingsFromFilteredList("Preferred Exercises")
+        openSettingsCategory(AXID.settingsHubWorkout)
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowPreferredExercises, maxSwipes: 8))
         app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch.auditTap()
         searchPreferredExercises(Fixture.deadliftSearchQuery)
@@ -1463,6 +1422,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     private func openExerciseDefaults() {
         openSettings()
+        openSettingsCategory(AXID.settingsHubWorkout)
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(AXID.settingsRowExerciseDefaults, maxSwipes: 12),
                       "Exercise Defaults row should be reachable in Settings")
         let row = app.descendants(matching: .any)[AXID.settingsRowExerciseDefaults].firstMatch
@@ -1477,6 +1437,7 @@ final class TodaySettingsRegressionTests: SeededUITestBaseCase {
 
     private func openPreferredExercises() {
         openSettings()
+        openSettingsCategory(AXID.settingsHubWorkout)
         let row = app.descendants(matching: .any)[AXID.settingsRowPreferredExercises].firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 5), "Preferred Exercises row should exist in Settings")
         row.auditTap()
