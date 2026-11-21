@@ -248,6 +248,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.raftel.dailve.watchkitapp
         PRODUCT_NAME: DUNEWatch
+        # The Watch app has no App Intents declarations.
+        LM_SKIP_METADATA_EXTRACTION: YES
         CURRENT_PROJECT_VERSION: *currentProjectVersion
         MARKETING_VERSION: *marketingVersion
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
