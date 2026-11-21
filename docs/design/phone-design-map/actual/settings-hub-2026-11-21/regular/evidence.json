@@ -1,0 +1,165 @@
+{
+  "profile": "regular",
+  "label": "iPhone",
+  "udid": "58DF10CE-D19E-4D27-97F9-8BC17968B2A8",
+  "revision": "f779a59e9",
+  "xcresults": [
+    {
+      "bundle": "phone-gallery.xcresult",
+      "revision": "f779a59e9"
+    },
+    {
+      "bundle": "phone-mixed.xcresult",
+      "revision": "95dac630f"
+    }
+  ],
+  "imported_at_utc": "2026-11-21T02:27:42Z",
+  "canonical_state": "ko-settings-home",
+  "states": {
+    "ko-privacy-detail": {
+      "path": "ko-privacy-detail.png",
+      "attachment_name": "S01-ko-privacy-detail_0_D326B89F-420B-4347-8E88-A8B2FFF351B6.png",
+      "test_identifier": "SettingsHubKoreanCaptureTests/testKoreanHubGalleryPreviewAndDetails()",
+      "xcresult": "phone-gallery.xcresult",
+      "source_revision": "f779a59e9",
+      "timestamp": 1795227834.72,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "480280978dac35819e72f7e795a1390329a3ea55cac1ccd32a3344c6261c7675"
+    },
+    "ko-settings-home": {
+      "path": "../../regular/images/S01.png",
+      "attachment_name": "S01-ko-settings-home_0_7E79B996-61EF-4077-8A60-DCC3EC424A70.png",
+      "test_identifier": "SettingsHubKoreanCaptureTests/testKoreanHubGalleryPreviewAndDetails()",
+      "xcresult": "phone-gallery.xcresult",
+      "source_revision": "f779a59e9",
+      "timestamp": 1795227813.91,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "5855d486d9896d51e3194147e7f322a6c97533bf9261179baaf0aefd18bfbc0f"
+    },
+    "ko-theme-gallery": {
+      "path": "ko-theme-gallery.png",
+      "attachment_name": "S01-ko-theme-gallery_0_D2384DEA-28B8-4AF0-BBE1-3609C838DB9F.png",
+      "test_identifier": "SettingsHubKoreanCaptureTests/testKoreanHubGalleryPreviewAndDetails()",
+      "xcresult": "phone-gallery.xcresult",
+      "source_revision": "f779a59e9",
+      "timestamp": 1795227818.401,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "b1f1025db5e66e8bb5245c7840ab7e0fa59ef7833f4ef5ddace3e80b51617182"
+    },
+    "ko-theme-preview-dark": {
+      "path": "ko-theme-preview-dark.png",
+      "attachment_name": "S01-ko-theme-preview-dark_0_8469F1AB-6144-4ABD-837A-90C67BEB723E.png",
+      "test_identifier": "SettingsHubKoreanCaptureTests/testKoreanHubGalleryPreviewAndDetails()",
+      "xcresult": "phone-gallery.xcresult",
+      "source_revision": "f779a59e9",
+      "timestamp": 1795227822.642,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "b2990b663cce9061410705685f30ea79805beac066a99bd785855f1a89290a41"
+    },
+    "ko-theme-preview-light": {
+      "path": "ko-theme-preview-light.png",
+      "attachment_name": "S01-ko-theme-preview-light_0_4544CCFE-A1D0-4C93-A0E8-2D6350276AB7.png",
+      "test_identifier": "SettingsHubKoreanCaptureTests/testKoreanHubGalleryPreviewAndDetails()",
+      "xcresult": "phone-gallery.xcresult",
+      "source_revision": "f779a59e9",
+      "timestamp": 1795227822.075,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "d7ed159ae55edbdb5d7b48e00e33ddbc972ffde33c6a0190fd9edcfc95e73560"
+    },
+    "ko-workout-detail": {
+      "path": "ko-workout-detail.png",
+      "attachment_name": "S01-ko-workout-detail_0_EF4325C1-FC63-480E-8766-FB061B94D1AC.png",
+      "test_identifier": "SettingsHubKoreanCaptureTests/testKoreanHubGalleryPreviewAndDetails()",
+      "xcresult": "phone-gallery.xcresult",
+      "source_revision": "f779a59e9",
+      "timestamp": 1795227828.961,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "f15d904bd5dc4a2a75f4dfb47466be6f52fe9763d70ed281520a21e13f626621"
+    },
+    "settings-bedtime-detail": {
+      "path": "settings-bedtime-detail.png",
+      "attachment_name": "S01-settings-bedtime-detail_0_A1D264A4-42D2-42A9-9EA2-84B3BB8266FD.png",
+      "test_identifier": "SettingsSmokeTests/testSearchBedtimeEmptyResultsAndReturn()",
+      "xcresult": "phone-mixed.xcresult",
+      "source_revision": "95dac630f",
+      "timestamp": 1795227530.339,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "3630f4fcc8495e3813553e233487cde4cb288a197fd6155acd308d05e94d5dec"
+    },
+    "settings-privacy": {
+      "path": "settings-privacy.png",
+      "attachment_name": "S01-settings-privacy_0_DC0BB460-4C55-4774-8504-5937F1DA6BBC.png",
+      "test_identifier": "SettingsSmokeTests/testCategoryDetailsOpenFromHub()",
+      "xcresult": "phone-mixed.xcresult",
+      "source_revision": "95dac630f",
+      "timestamp": 1795227509.966,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "27ca047cbe12ef2949f2a674939339ffcbbb2e917e4ef97ec9048fce29d5cca2"
+    },
+    "settings-search-bedtime": {
+      "path": "settings-search-bedtime.png",
+      "attachment_name": "S01-settings-search-bedtime_0_88C23820-C188-4F76-86F5-4A2F5645BFF0.png",
+      "test_identifier": "SettingsSmokeTests/testSearchBedtimeEmptyResultsAndReturn()",
+      "xcresult": "phone-mixed.xcresult",
+      "source_revision": "95dac630f",
+      "timestamp": 1795227528.31,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "d41db9e1a94e4944ef0dfdc2455b80124e9a07e7d8fdd08d24b30e811690d60a"
+    },
+    "settings-search-empty": {
+      "path": "settings-search-empty.png",
+      "attachment_name": "S01-settings-search-empty_0_7B19C01D-988F-446B-B815-44738B672778.png",
+      "test_identifier": "SettingsSmokeTests/testSearchBedtimeEmptyResultsAndReturn()",
+      "xcresult": "phone-mixed.xcresult",
+      "source_revision": "95dac630f",
+      "timestamp": 1795227536.794,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "b6c994089cc9dbfbddba09793bbb9d965a954d7fd13d64cad0ccff1920d900ea"
+    },
+    "settings-workout": {
+      "path": "settings-workout.png",
+      "attachment_name": "S01-settings-workout_0_EDBCED39-5EAF-4911-AA0F-252AECD5F159.png",
+      "test_identifier": "SettingsSmokeTests/testCategoryDetailsOpenFromHub()",
+      "xcresult": "phone-mixed.xcresult",
+      "source_revision": "95dac630f",
+      "timestamp": 1795227504.324,
+      "dimensions_px": [
+        1206,
+        2622
+      ],
+      "sha256": "6cbef7307cfd0038083fc887296b1f1780cec1b13eb5160080971f4ed8557f58"
+    }
+  },
+  "pose_readback": null,
+  "pose_readback_sha256": null
+}

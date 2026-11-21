@@ -2,16 +2,18 @@
 tags: [settings, ios, ipados, accessibility, design]
 date: 2026-11-21
 category: brainstorm
-status: draft
+status: approved
 ---
 
-# S01 설정 개편안
+# S01 설정 허브 배치와 구현
 
-[인터랙티브 시안](index.html) · [세 화면 한눈에 보기](overview.png) · [기존 S01 배치](../settings-s01.html)
+[승인된 인터랙티브 시안](index.html) · [시안 세 화면 한눈에 보기](overview.png) · [신규 네이티브 실제 화면·검증 범위](../../phone-design-map/actual/settings-hub-2026-11-21/index.html) · [이전 S01 배치](../settings-s01.html)
+
+이 문서의 시안과 PNG는 브라우저에서 만든 배치 제안이다. 현재 네이티브 구조는 `SettingsView.swift`의 홈·검색·갤러리·미리보기·범주별 상세로 구현되었다. 새 앱 화면의 캡처와 기기별 검증 상태는 위 실제 화면 링크에서 따로 확인한다.
 
 ## 첫 화면에서 찾기
 
-현재 일반 기기의 설정 화면은 10개 섹션, 42개 행이다. 테마 앞에 운동·알림·브리핑 24개 행과 앱 아이콘이 있고, 개인정보는 원화 9장 아래에 있다. 시뮬레이터는 테스트 데이터 섹션 4개 행을 추가로 노출한다. [현재 설정](../../../../DUNE/Presentation/Settings/SettingsView.swift) · [알림 섹션](../../../../DUNE/Presentation/Settings/Components/NotificationSettingsSection.swift) · [테마 목록](../../../../DUNE/Presentation/Settings/Components/ThemePickerSection.swift)
+변경 전 일반 기기의 단일 Form은 10개 섹션, 42개 행이었다. 테마 앞에 운동·알림·브리핑 24개 행과 앱 아이콘이 있었고, 개인정보는 원화 9장 아래에 있었다. 시뮬레이터는 테스트 데이터 섹션 4개 행을 추가로 노출했다. 이 수치와 [2026-11-07 실제 화면](../../full-redesign-map/review/settings-s01-2026-11-07/index.html)은 이전 구조의 비교 기준이다. 현재 코드: [설정 허브](../../../../DUNE/Presentation/Settings/SettingsView.swift) · [알림 상세](../../../../DUNE/Presentation/Settings/Components/NotificationSettingsSection.swift) · [테마 갤러리·미리보기](../../../../DUNE/Presentation/Settings/Components/ThemePickerSection.swift).
 
 | 홈에서 여는 곳 | 상세 화면에 두는 항목 |
 |---|---|
@@ -22,7 +24,7 @@ status: draft
 | 데이터와 개인정보 | iCloud 동기화와 동기화 요청, Apple 건강 권한, 위치 접근 |
 | 앱 정보 | 새 소식, 버전, 빌드, 날씨 데이터 출처 |
 
-검색 버튼은 설정 이름이나 테마 이름을 알고 있을 때 쓴다. 예를 들어 ‘취침’을 입력하면 iPhone과 Watch 관련 결과가 뜨고, 결과를 누르면 해당 취침 설정 화면이 열린다. 뒤로 가면 검색어가 유지된다. 시스템 권한과 동기화 실행은 실제 앱에서 처리하는 동작으로 표시했다. 시뮬레이터 전용 데이터 도구는 구현 시 조건부 개발 항목으로 둔다.
+현재 홈은 검색, 현재 테마 카드, 앱 아이콘, 운동 설정·알림과 브리핑·데이터와 개인정보·앱 정보 순서다. 검색 결과는 범주 상세와 같은 목적지를 열며, 검색으로 복귀할 때 입력값을 보존한다. 시뮬레이터 전용 Mock Data 진입점은 사용 가능한 환경에서만 표시한다. 시스템 권한과 동기화 실행은 실제 앱의 상세 설정이 처리한다.
 
 ## 테마 선택
 
@@ -31,7 +33,7 @@ status: draft
 3. 원화를 누르면 그 테마의 기존 Today 예시를 볼 수 있다. **밝게**와 **어둡게**는 미리보기 조명만 전환한다. **이 테마 적용**을 눌러 선택을 확정하고 갤러리로 돌아간다. 뒤로 가면 기존 선택이 유지된다.
 4. 다른 테마를 적용하면 홈 카드, 선택 표시, 선택한 형태의 앱 아이콘이 함께 바뀐다.
 
-갤러리는 [앱 번들의 아홉 원화](../../../../DUNE/Resources/ArtistEditions/)를 직접 사용한다. 미리보기 속 Today 이미지는 [기존 아티스트 테마 검증 자료](../../phone-design-map/actual/artist-themes/index.html)에서 가져왔다. 함께 표시한 설정 홈·갤러리·적용 화면은 새 브라우저 시안이다.
+네이티브 갤러리는 [앱 번들의 아홉 정지 원화](../../../../DUNE/Resources/ArtistEditions/)를 직접 사용한다. 네이티브 미리보기는 후보 테마의 원화와 고정 예시값을 기존 카드·링·배경 컴포넌트로 그리며 건강 데이터는 읽지 않는다. 브라우저 시안 속 Today 이미지는 [기존 아티스트 테마 검증 자료](../../phone-design-map/actual/artist-themes/index.html)에서 가져온 것이다. 시안의 설정 홈·갤러리·적용 화면은 실제 앱 캡처가 아니다.
 
 ## 기기별 배치
 

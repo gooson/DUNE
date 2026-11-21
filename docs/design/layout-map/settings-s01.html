@@ -1,1 +1,30 @@
-<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>S01 배치 계약</title><style>body{max-width:850px;margin:auto;padding:24px;background:#faf8f3;color:#302a24;font:16px/1.6 -apple-system,sans-serif}section{padding:20px;background:white;border-radius:16px;margin:16px 0}</style><h1>S01 배치 계약</h1><p><a href="../theme-map/themes/dune-settings-s01.html">기존 정적 시안</a>은 실제 앱 캡처가 아닙니다. <a href="settings-hub/index.html">설정 허브 개편 시안</a>은 별도 제안이며 이 S01 구현 기록을 대체하지 않습니다.</p><section><h2>읽기와 조작 순서</h2><p>Native Form → 운동 기본값 → Live Activity → 운동별 설정 → 알림·브리핑 → 테마 → 데이터·개인정보 → 정보. 안전 영역을 중복 가산하지 않고 DS 간격과 system-primary 섹션 제목을 사용한다. 기존 모든 컨트롤·값·아이콘·동작은 유지한다.</p></section><section><h2>상태·보존·검증</h2><p>로딩·검색 결과 없음·저장된 값·기본값·선택·확인·복귀는 원래 코드의 상태를 유지한다. 새 수치나 사용자 데이터는 시안에서 가져오지 않는다. iPhone·iPad의 일반/MAX와 긴 이름의 실제 PNG/AX를 확인한다. 사용 가능한 전용 Duo가 없어 접힘·펼침은 실제 재개 조건이 확인될 때까지 미갱신으로 기록한다. 시안과 이전 PNG는 새 증거가 아니다.</p></section></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>S01 설정 배치 계약</title>
+  <style>
+    body{max-width:850px;margin:auto;padding:24px;background:#faf8f3;color:#302a24;font:16px/1.6 -apple-system,sans-serif}
+    section{padding:20px;background:white;border-radius:16px;margin:16px 0}
+    a{color:#754a31}
+  </style>
+</head>
+<body>
+  <h1>S01 설정 배치 계약</h1>
+  <p>현재 구현 기준은 <a href="settings-hub/index.html">승인된 설정 허브 배치 시안</a>과 <a href="../phone-design-map/actual/settings-hub-2026-11-21/index.html">2026-11-21 네이티브 실제 화면·검증 범위</a>다. 시안은 브라우저에서 만든 배치 제안이고, 실제 화면은 별도 캡처로 확인한다.</p>
+
+  <section>
+    <h2>현재 네이티브 배치</h2>
+    <p>설정 홈은 검색, 현재 테마 원화 카드, 앱 아이콘, 운동 설정·알림과 브리핑·데이터와 개인정보·앱 정보 순으로 읽는다. 시뮬레이터에서는 Mock Data 진입점이 뒤에 추가된다. 각 범주를 열면 해당 상세 설정으로 이동하며 홈의 다른 메뉴 위치는 유지된다.</p>
+    <p>테마 카드는 사용 중인 원화 한 장과 이름·변경 동작을 표시한다. 갤러리는 번들의 정지 원화 9장을 기본 3열로 배열하고, 좁은 폭이나 큰 글씨에서는 열 수를 줄인다. 각 원화는 선택 전 미리보기를 열며, 미리보기의 밝기 전환은 예시 화면에만 적용된다. 저장된 테마는 적용 버튼을 누를 때만 바뀐다.</p>
+    <p>좁은 화면은 홈과 상세를 한 번에 하나씩 보여주고, 넓은 화면은 홈 목록과 선택한 상세를 나란히 둔다. 검색 결과와 상세는 같은 목적지로 연결한다. 배치 근거와 화면별 경로는 <a href="settings-hub/README.md">설정 허브 설명</a>을 따른다.</p>
+  </section>
+
+  <section>
+    <h2>이전 S01 기록 · 42행 Form</h2>
+    <p>2026-11-07 구현은 Native Form 안에 운동 기본값 → Live Activity → 운동별 설정 → 알림·브리핑 → 테마 → 데이터·개인정보 → 정보 순서로 10개 섹션, 일반 기기 기준 42개 행을 놓았다. 시뮬레이터에는 테스트 데이터 4개 행을 더했다. 이 순서와 <a href="../full-redesign-map/review/settings-s01-2026-11-07/index.html">당시 실제 PNG·AX</a>는 변경 전 비교 자료이며 현재 허브의 화면 캡처가 아니다.</p>
+    <p><a href="../theme-map/themes/dune-settings-s01.html">기존 정적 시안</a>도 실제 앱 화면이 아니다. 이전 PNG나 시안을 새 갤러리·검색·상세 화면의 검증 증거로 재사용하지 않는다.</p>
+  </section>
+</body>
+</html>
