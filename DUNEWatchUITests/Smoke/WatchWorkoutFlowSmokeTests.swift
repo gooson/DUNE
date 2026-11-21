@@ -543,7 +543,10 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     }
 
     func testRunningFeedbackSettingsPersistAcrossSheetAndRelaunch() throws {
-        startFixtureRunningDistanceWorkout()
+        var running = runningLaunchConfiguration()
+        running.additionalArguments.append("--ui-watch-direct-running")
+        launchApp(with: running)
+        XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 10))
         app.swipeRight()
         openRunningFeedbackSettings()
         captureDesignState("C17", visible: "watch-running-feedback-settings")
@@ -568,7 +571,7 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
 
         let paceAlerts = app.switches["watch-running-pace-alerts-toggle"].firstMatch
         scrollToRunningFeedbackControl(paceAlerts)
-        XCTAssertTrue(paceAlerts.isHittable)
+        XCTAssertTrue(paceAlerts.exists && paceAlerts.isHittable, "The pace alerts switch should be reachable")
         if paceAlerts.value as? String != "1" {
             // watchOS exposes the full row as a switch; tap its trailing thumb.
             paceAlerts.coordinate(withNormalizedOffset: CGVector(dx: 0.85, dy: 0.5)).tap()
@@ -600,13 +603,10 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
                                       targetPace: targetPace, tolerance: chosenTolerance)
         XCTAssertTrue(tapElement("watch-running-feedback-settings-done"))
 
-        launchApp(with: runningLaunchConfiguration(resetState: false))
-        if elementExists(WatchAXID.homeRoot, timeout: 3) {
-            startRunningWorkoutFromHome()
-        }
-        if elementExists("watch-running-distance-metrics", timeout: 3) {
-            app.swipeRight()
-        }
+        running.resetState = false
+        launchApp(with: running)
+        XCTAssertTrue(elementExists("watch-running-distance-metrics", timeout: 10))
+        app.swipeRight()
         openRunningFeedbackSettings()
         assertRunningFeedbackSettings(distance: chosenDistance, volume: chosenVolume,
                                       targetPace: targetPace, tolerance: chosenTolerance)
@@ -624,14 +624,18 @@ final class WatchWorkoutFlowSmokeTests: WatchUITestBaseCase {
     }
 
     private func scrollToRunningFeedbackControl(_ element: XCUIElement) {
-        // Scroll along the form edge so the gesture does not adjust the volume slider.
-        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.16, dy: 0.80))
-        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.16, dy: 0.40))
-        for _ in 0..<8 {
-            if element.exists && element.isHittable && app.frame.insetBy(dx: 0, dy: 12).contains(
+        let form = app.collectionViews["watch-running-feedback-settings"].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 5))
+        // Drag inside the form but outside the slider’s horizontal hit area.
+        let start = form.coordinate(withNormalizedOffset: CGVector(dx: 0.045, dy: 0.78))
+        let end = form.coordinate(withNormalizedOffset: CGVector(dx: 0.045, dy: 0.32))
+        for swipe in 0...10 {
+            if element.exists && element.isHittable && form.frame.insetBy(dx: 0, dy: 12).contains(
                 CGPoint(x: element.frame.midX, y: element.frame.midY)
             ) { return }
-            start.press(forDuration: 0.05, thenDragTo: end, withVelocity: .slow, thenHoldForDuration: 0.1)
+            if swipe < 10 {
+                start.press(forDuration: 0.1, thenDragTo: end, withVelocity: .slow, thenHoldForDuration: 0.1)
+            }
         }
     }
 
