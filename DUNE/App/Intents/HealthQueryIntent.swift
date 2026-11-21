@@ -186,7 +186,7 @@ struct QueryHealthInformationIntent: AppIntent {
         try Task.checkCancellation()
         try await MainActor.run { try HealthQueryIntentAccess.requireProtectedData() }
         let answer = await MainActor.run { HealthQueryIntentState.shared.retain(result) }
-        var snippet = HealthQuerySnippetIntent()
+        let snippet = HealthQuerySnippetIntent()
         snippet.answerID = answer.id
         return .result(value: answer, dialog: healthQueryDialog(result), snippetIntent: snippet)
     }
@@ -253,7 +253,7 @@ struct AskDUNEHealthIntent: AppIntent {
 #endif
         try await MainActor.run { try HealthQueryIntentAccess.requireProtectedData() }
         let answer = await MainActor.run { HealthQueryIntentState.shared.retain(result) }
-        var snippet = HealthQuerySnippetIntent()
+        let snippet = HealthQuerySnippetIntent()
         snippet.answerID = answer.id
         return .result(value: answer, dialog: healthQueryDialog(result), snippetIntent: snippet)
     }

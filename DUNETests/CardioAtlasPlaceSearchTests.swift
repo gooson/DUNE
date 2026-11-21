@@ -1,5 +1,4 @@
 import CoreLocation
-import Contacts
 import Foundation
 import MapKit
 import Testing
@@ -250,19 +249,14 @@ struct CardioAtlasPlaceSearchTests {
     }
 
     private func item(_ name: String, latitude: Double, longitude: Double) -> MKMapItem {
-        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let item = MKMapItem(placemark: MKPlacemark(coordinate: coordinate))
+        let item = MKMapItem(location: CLLocation(latitude: latitude, longitude: longitude), address: nil)
         item.name = name
         return item
     }
 
     private func addressItem(_ name: String, street: String, latitude: Double, longitude: Double) -> MKMapItem {
-        let address = CNMutablePostalAddress()
-        address.street = street
-        address.city = "서울"
-        address.country = "대한민국"
-        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let item = MKMapItem(placemark: MKPlacemark(coordinate: coordinate, postalAddress: address))
+        let address = MKAddress(fullAddress: "\(street), 서울, 대한민국", shortAddress: street)
+        let item = MKMapItem(location: CLLocation(latitude: latitude, longitude: longitude), address: address)
         item.name = name
         return item
     }

@@ -8,10 +8,11 @@ struct WorkoutLocationSharingTests {
 
     @Test("Hidden place removes route, coordinates, and name while preserving indoor state")
     func hiddenPlace() throws {
+        let place = try #require(WorkoutPlace(latitude: 0, longitude: 0, name: "Home", source: .manual))
         let original = WorkoutLocationPayload(
             isIndoor: false,
             route: [point(0, at: 0), point(0.001, at: 10)],
-            place: try #require(WorkoutPlace(latitude: 0, longitude: 0, name: "Home", source: .manual))
+            place: place
         )
 
         let shared = original.shareLocation(showPlace: false, trimDistanceMeters: 0)

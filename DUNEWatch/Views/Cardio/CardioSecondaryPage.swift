@@ -178,12 +178,11 @@ struct CardioSecondaryPage: View {
     }
 
     private func elevationAccessibilityValue(profile: WatchElevationProfile, now: Date) -> Text {
-        let ascent = Text("Ascent")
-            + Text(verbatim: " \(profile.ascentMeters.formatted(.number.precision(.fractionLength(0)))) m")
-        guard let currentAltitude = profile.currentAltitude(at: now) else { return ascent }
-        return Text("Altitude")
-            + Text(verbatim: " \(currentAltitude.formatted(.number.precision(.fractionLength(0)))) m, ")
-            + ascent
+        let ascent = profile.ascentMeters.formatted(.number.precision(.fractionLength(0)))
+        let ascentText = Text("Ascent \(ascent) m")
+        guard let currentAltitude = profile.currentAltitude(at: now) else { return ascentText }
+        let altitude = currentAltitude.formatted(.number.precision(.fractionLength(0)))
+        return Text("Altitude \(altitude) m, Ascent \(ascent) m")
     }
 
     private func elevationMetric(_ label: LocalizedStringKey, value: Double?) -> some View {

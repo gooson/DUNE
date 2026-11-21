@@ -248,9 +248,7 @@ struct TrainingReadinessDetailView: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel((
-            Text("Readiness") + Text(verbatim: " \(readiness.score), ") + Text(readiness.status.label)
-        ))
+        .accessibilityLabel(Text("Readiness \(readiness.score), \(readiness.status.label)"))
         .accessibilityIdentifier("training-readiness-score-bands")
     }
 

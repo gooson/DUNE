@@ -50,13 +50,9 @@ struct FormVoiceCoachTests {
 
     // MARK: - Tests
 
-    @Test("Disabled coach does not process form state")
+    @Test("A new voice coach is disabled by default")
     func disabledCoach() {
         let coach = makeCoach()
-        let state = makeFormState(results: [
-            makeResult(checkpointName: "Knee Depth", status: .warning, currentDegrees: 130),
-        ])
-        // isEnabled is false by default — processFormState is guarded in the caller
         #expect(!coach.isEnabled)
     }
 

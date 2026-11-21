@@ -19,8 +19,8 @@ struct AppNotificationCenterDelegateTests {
 
     @Test("init accepts custom response handler without calling it")
     func initAcceptsCustomResponseHandler() {
-        // Verifies delegate can be constructed with a custom handler
-        let delegate = AppNotificationCenterDelegate { _ in }
-        #expect(delegate is UNUserNotificationCenterDelegate)
+        _ = AppNotificationCenterDelegate { _ in
+            Issue.record("Initializing the delegate unexpectedly delivered a notification response")
+        }
     }
 }

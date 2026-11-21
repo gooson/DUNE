@@ -1780,7 +1780,7 @@ struct DashboardViewModelTests {
         )
         await vm?.loadData()
         await weather.waitUntilStarted()
-        weak var releasedViewModel = vm
+        weak let releasedViewModel = vm
         vm = nil
         #expect(releasedViewModel == nil)
         await weather.resume(with: makeTestWeatherSnapshot())

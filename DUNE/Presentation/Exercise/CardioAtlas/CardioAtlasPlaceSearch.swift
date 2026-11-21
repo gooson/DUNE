@@ -102,10 +102,13 @@ enum CardioAtlasPlaceSearch {
             return normalized.split(separator: " ").map { foldedForMatch(String($0)) }
         }
         let validItems = items.enumerated().compactMap { index, item -> (index: Int, item: MKMapItem, coordinate: CLLocationCoordinate2D)? in
-            let itemCoordinate = item.placemark.coordinate
+            let itemCoordinate = item.location.coordinate
             guard isValid(itemCoordinate) else { return nil }
             if let hangulWords {
-                let nameAndAddress = foldedForMatch([item.name, item.placemark.title]
+                let address = item.addressRepresentations?
+                    .fullAddress(includingRegion: true, singleLine: true)
+                    ?? item.address?.fullAddress
+                let nameAndAddress = foldedForMatch([item.name, address]
                     .compactMap { $0 }.joined(separator: " "))
                 // A facility category satisfies only that generic word; other
                 // words (such as a district) must still match the name/address.

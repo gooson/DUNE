@@ -131,9 +131,7 @@ struct BodyHistoryDetailView: View {
                 Text("\(muscle.formattedWithSeparator(fractionDigits: 1)) kg"),
                 category: .leanBodyMass,
                 accessibilityLabel: item.source == .manual
-                    ? Text("Muscle Mass (kg)")
-                        + Text(verbatim: ": ")
-                        + Text(verbatim: muscle.formattedWithSeparator(fractionDigits: 1))
+                    ? Text("Muscle Mass (kg): \(muscle.formattedWithSeparator(fractionDigits: 1))")
                     : nil
             )
         }
@@ -156,7 +154,7 @@ struct BodyHistoryDetailView: View {
         .padding(.vertical, DS.Spacing.xs)
         .background(category.themeColor.opacity(0.12), in: Capsule())
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityLabel ?? (Text(category.displayName) + Text(verbatim: ": ") + value))
+        .accessibilityLabel(accessibilityLabel ?? Text("\(category.displayName): \(value)"))
         .fixedSize(horizontal: true, vertical: false)
     }
 

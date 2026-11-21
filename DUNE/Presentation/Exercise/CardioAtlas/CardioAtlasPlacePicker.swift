@@ -80,19 +80,22 @@ struct CardioAtlasPlacePicker: View {
                                 .foregroundStyle(DS.Color.textSecondary)
                         } else {
                             ForEach(results, id: \.self) { item in
+                                let address = item.addressRepresentations?
+                                    .fullAddress(includingRegion: true, singleLine: true)
+                                    ?? item.address?.fullAddress
                                 Button {
-                                    let coordinate = item.placemark.coordinate
+                                    let coordinate = item.location.coordinate
                                     selectPlace(WorkoutPlace(
                                         latitude: coordinate.latitude,
                                         longitude: coordinate.longitude,
-                                        name: item.name ?? item.placemark.title ?? query,
+                                        name: item.name ?? address ?? query,
                                         source: .manual
                                     ))
                                 } label: {
                                     VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                                        Text(item.name ?? item.placemark.title ?? "Place")
+                                        Text(item.name ?? address ?? "Place")
                                             .foregroundStyle(.primary)
-                                        if let address = item.placemark.title, address != item.name {
+                                        if let address, address != item.name {
                                             Text(address)
                                                 .font(.caption)
                                                 .foregroundStyle(DS.Color.textSecondary)
@@ -330,17 +333,17 @@ private enum CardioAtlasPlaceSearchFixture {
 
     static var results: [MKMapItem] {
         (1...24).reversed().map { index in
-            let item = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(
+            let item = MKMapItem(location: CLLocation(
                 latitude: coordinate.latitude + Double(index) * 0.001,
                 longitude: coordinate.longitude
-            )))
+            ), address: nil)
             item.name = "Atlas Test Gym \(index)"
             return item
         } + ["헬스플러스", "헬스클럽", "서울숲 수영장", "Danubius Hotel Helia"].enumerated().map { index, name in
-            let item = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(
+            let item = MKMapItem(location: CLLocation(
                 latitude: coordinate.latitude + Double(index + 1) * 0.001,
                 longitude: coordinate.longitude + 0.001
-            )))
+            ), address: nil)
             item.name = name
             return item
         }
