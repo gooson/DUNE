@@ -16,6 +16,55 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
     func testSakuraCalmDuoLight() throws { try captureTheme("sakuraCalm", styles: ["light"]) }
     func testSakuraCalmDuoDark() throws { try captureTheme("sakuraCalm", styles: ["dark"]) }
 
+    private func captureThemeScreen(_ name: String) {
+        if VisualAudit.isEnabled {
+            VisualAudit.capture(name)
+        } else {
+            addScreenshotAttachment(named: name)
+        }
+    }
+
+    func testOceanDarkHeaderAndThemePreviewButton() {
+        launchApp(with: themeLaunchConfiguration("oceanCool", style: "dark"))
+        reassertDuoOpenLandscapeIfNeeded()
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
+        dismissIconConfirmation()
+        navigateToDashboard()
+        _ = waitForElement(AXID.dashboardHeroCondition, timeout: 15)
+        captureThemeScreen("T03-ocean-dark")
+        open(AXID.dashboardHeroCondition)
+        _ = waitForElement(AXID.conditionScoreDetailScreen)
+        captureThemeScreen("T04-ocean-dark")
+        goBack(to: AXID.dashboardHeroCondition)
+        navigateToSettings()
+        openSettingsCategory(AXID.settingsSectionAppearance)
+
+        let gallery = app.scrollViews[AXID.settingsThemeGallery].firstMatch
+        for (theme, isCurrent) in [("oceanCool", true), ("forestGreen", false)] {
+            let identifier = "settings-theme-\(theme)"
+            XCTAssertTrue(app.revealFullyVisible(identifier, in: gallery, maxMoves: 8))
+            app.buttons[identifier].firstMatch.auditTap()
+            let action = app.buttons[AXID.settingsThemeApply].firstMatch
+            XCTAssertTrue(action.waitForExistence(timeout: 5))
+            let sample = app.descendants(matching: .any)["settings-theme-sample"].firstMatch
+            XCTAssertEqual(action.frame.minY - sample.frame.maxY, 16, accuracy: 1)
+            let scroll = app.scrollViews["settings-theme-preview-scroll"].firstMatch
+            // The appearance picker shares the visible card edges, including on Duo's inset viewport.
+            let picker = app.otherElements["Today preview appearance"].firstMatch
+            XCTAssertEqual(action.frame.minX, picker.frame.minX, accuracy: 1)
+            XCTAssertEqual(action.frame.maxX, picker.frame.maxX, accuracy: 1)
+            XCTAssertGreaterThanOrEqual(action.frame.height, 52)
+            if !app.windows.firstMatch.frame.contains(action.frame) {
+                scroll.swipeUp()
+            }
+            XCTAssertTrue(app.windows.firstMatch.frame.contains(action.frame))
+            XCTAssertEqual(action.isEnabled, !isCurrent)
+            XCTAssertEqual(action.label, isCurrent ? "Current theme" : "Apply this theme")
+            captureThemeScreen("S01-\(theme)-dark")
+            if isCurrent { settingsBackButton.auditTap() }
+        }
+    }
+
     func testOceanCoolDuoDarkWorkout() throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Workout detail capture requires a visual audit test plan") }
         var configuration = themeLaunchConfiguration("oceanCool", style: "dark")

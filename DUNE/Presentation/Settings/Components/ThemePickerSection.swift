@@ -141,55 +141,64 @@ struct SettingsThemePreview: View {
 
     private var colorScheme: ColorScheme { previewColorScheme ?? systemColorScheme }
 
+    private var isCurrentTheme: Bool { selectedTheme == theme }
+
     var body: some View {
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: DS.Spacing.lg) {
-                    Text(theme.displayName)
-                        .font(.title2.weight(.bold))
-                        .fixedSize(horizontal: false, vertical: true)
+        ScrollView {
+            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                Text(theme.displayName)
+                    .font(.title2.weight(.bold))
+                    .fixedSize(horizontal: false, vertical: true)
 
-                    HStack(spacing: DS.Spacing.xs) {
-                        appearanceButton("Light appearance", symbol: "sun.max", scheme: .light, identifier: "settings-preview-light")
-                        appearanceButton("Dark appearance", symbol: "moon", scheme: .dark, identifier: "settings-preview-dark")
-                    }
-                    .padding(DS.Spacing.xs)
-                    .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: DS.Radius.md))
-                    .accessibilityElement(children: .contain)
-                    .accessibilityLabel("Today preview appearance")
-
-                    ThemeTodaySample(theme: theme)
-                        .environment(\.colorScheme, colorScheme)
-                        .accessibilityElement(children: .ignore)
-                        .accessibilityLabel("Today preview with sample data")
+                HStack(spacing: DS.Spacing.xs) {
+                    appearanceButton("Light appearance", symbol: "sun.max", scheme: .light, identifier: "settings-preview-light")
+                    appearanceButton("Dark appearance", symbol: "moon", scheme: .dark, identifier: "settings-preview-dark")
                 }
-                .padding(DS.Spacing.lg)
-                .frame(maxWidth: 560)
-                .frame(maxWidth: .infinity)
-            }
-            .scrollBounceBehavior(.basedOnSize)
+                .padding(DS.Spacing.xs)
+                .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: DS.Radius.md))
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Today preview appearance")
 
-            Button {
-                selectedTheme = theme
-                onApply()
-            } label: {
-                Group {
-                    if selectedTheme == theme {
-                        Text("Current theme")
-                    } else {
-                        Text("Apply this theme")
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(theme.prominentButtonForegroundColor(for: systemColorScheme))
+                ThemeTodaySample(theme: theme)
+                    .environment(\.colorScheme, colorScheme)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Today preview with sample data")
+                    .accessibilityIdentifier("settings-theme-sample")
+
+                applyButton
             }
-            .buttonStyle(.borderedProminent)
-            .tint(theme.accentColor)
-            .disabled(selectedTheme == theme)
-            .accessibilityIdentifier("settings-theme-apply")
             .padding(DS.Spacing.lg)
-            .background(.regularMaterial)
+            .frame(maxWidth: 560)
+            .frame(maxWidth: .infinity)
         }
+        .scrollBounceBehavior(.basedOnSize)
+        .accessibilityIdentifier("settings-theme-preview-scroll")
+    }
+
+    private var applyButton: some View {
+        Button {
+            selectedTheme = theme
+            onApply()
+        } label: {
+            Group {
+                if isCurrentTheme {
+                    Label("Current theme", systemImage: "checkmark")
+                } else {
+                    Text("Apply this theme")
+                }
+            }
+            .font(.headline)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, DS.Spacing.md)
+            .padding(.vertical, DS.Spacing.sm)
+            .frame(maxWidth: .infinity, minHeight: 52)
+            .foregroundStyle(isCurrentTheme ? Color.primary : theme.prominentButtonForegroundColor(for: systemColorScheme))
+            .glassEffect(isCurrentTheme ? .regular : .regular.tint(theme.accentColor).interactive(), in: .capsule)
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .disabled(isCurrentTheme)
+        .accessibilityIdentifier("settings-theme-apply")
     }
 
     private func appearanceButton(

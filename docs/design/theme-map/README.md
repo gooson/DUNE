@@ -7,6 +7,8 @@ status: in-progress
 
 # DUNE 테마 맵
 
+2026-11-22 네 탭과 일반 상세의 원화는 좌우 밝기를 고르게 유지한다. 상태 막대와 제목 뒤에는 옅은 세로 음영을 두고 그림 하단을 본문 색으로 연결한다. [작가 테마 시안](themes/artist-editions.html) · [Ocean Cool 실제 화면](../phone-design-map/actual/theme-preview-2026-11-22/index.html)
+
 2026-11-19 iOS 앱의 아홉 테마는 네 탭의 제목 뒤와 일반 상세에 같은 원화를 사용한다. 앱 번들의 무음 반복 영상에는 그림의 움직임만 담고 SwiftUI가 제목, 수치, 그래프와 버튼을 표시한다. 시트와 설정 샘플에는 정지 원화가 보인다. Watch는 공유 색을 배경과 카드 윤곽에 쓰고 Pâtisserie의 하이라이트와 그림자를 네이티브 배경에 적용한다. [앱 적용 맵](app-contract.md)
 
 [아홉 작가 테마 시안](themes/artist-editions.html)에서 네 탭과 여섯 상세의 제목 뒤 원화, 카드, 링, 차트와 탭 바를 밝게·어둡게 비교할 수 있다. 아래 날짜별 기록은 당시의 시안과 구현을 설명한다.
