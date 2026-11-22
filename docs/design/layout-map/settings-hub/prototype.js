@@ -155,12 +155,12 @@
     const back = route === "home" ? "" : '<button class="back" data-back>' + symbol("chevron.left") + backLabel + "</button>";
     const applied = state.theme === pane.candidate;
     const footer = route === "preview" ? '<div class="apply-bar"><button class="apply" data-apply ' +
-      (applied ? "disabled" : "") + ">" + (applied ? "사용 중인 테마" : "이 테마 적용") + "</button></div>" : "";
+      (applied ? "disabled" : "") + ">" + (applied ? "✓ 사용 중인 테마" : "이 테마 적용") + "</button></div>" : "";
     pane.el.dataset.route = route;
     setAccent(pane.el, route === "preview" ? pane.candidate : state.theme);
     const caption = pane.el.closest(".panel")?.querySelector(".caption h2");
     if (caption) caption.textContent = ({home:"설정 홈", gallery:"테마 갤러리", preview:"적용 전 미리보기"})[route] || titles[route];
-    pane.el.innerHTML = '<div class="pane-body"><div class="sheet-scroll">' + back + screen(route, pane) + "</div>" + footer + "</div>";
+    pane.el.innerHTML = '<div class="pane-body"><div class="sheet-scroll">' + back + screen(route, pane) + footer + "</div></div>";
     if (route === "search") {
       pane.el.querySelector("input").value = pane.query;
       pane.el.querySelector(".search-results").innerHTML = results(pane.query);

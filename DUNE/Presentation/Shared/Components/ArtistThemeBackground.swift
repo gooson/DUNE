@@ -43,11 +43,20 @@ struct ArtistThemeBackground: View {
                 .clipped()
                 .opacity(scheme == .dark ? 0.70 : 0.96)
                 .overlay {
-                    LinearGradient(stops: [
-                        .init(color: ground.opacity(0.93), location: 0),
-                        .init(color: ground.opacity(0.58), location: 0.32),
-                        .init(color: .clear, location: 0.68)
-                    ], startPoint: .leading, endPoint: .trailing)
+                    if placement == .sheet {
+                        LinearGradient(stops: [
+                            .init(color: ground.opacity(0.93), location: 0),
+                            .init(color: ground.opacity(0.58), location: 0.32),
+                            .init(color: .clear, location: 0.68)
+                        ], startPoint: .leading, endPoint: .trailing)
+                    } else {
+                        // Keep native titles legible without obscuring one side of the artwork.
+                        LinearGradient(stops: [
+                            .init(color: ground.opacity(0.32), location: 0),
+                            .init(color: ground.opacity(0.12), location: 0.4),
+                            .init(color: ground.opacity(0.32), location: 1)
+                        ], startPoint: .top, endPoint: .bottom)
+                    }
                 }
                 .overlay {
                     LinearGradient(stops: [
@@ -56,9 +65,8 @@ struct ArtistThemeBackground: View {
                     ], startPoint: .top, endPoint: .bottom)
                 }
                 .overlay(alignment: .top) {
-                    if placement != .tab {
-                        // Inline titles and toolbar buttons span the artwork, including its bright edge.
-                        let chromeHeight: CGFloat = placement == .sheet ? 52 : 100
+                    if placement == .sheet {
+                        let chromeHeight: CGFloat = 52
                         let fadeHeight = chromeHeight + 28
                         let scrim = ground.opacity(scheme == .dark ? 0.89 : 0.78)
                         LinearGradient(stops: [

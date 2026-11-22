@@ -230,11 +230,11 @@ select {
   background:
     linear-gradient(to top, var(--ground), transparent 25%),
     linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--ground) 90%, transparent) 0%,
-    color-mix(in srgb, var(--ground) 55%, transparent) 32%,
-    transparent 64%
-  );
+      to bottom,
+      color-mix(in srgb, var(--ground) 32%, transparent),
+      color-mix(in srgb, var(--ground) 12%, transparent) 40%,
+      color-mix(in srgb, var(--ground) 32%, transparent)
+    );
 }
 [data-mode="dark"] .print-photo, [data-mode="dark"] .air {
   filter: brightness(0.75) saturate(0.78);
@@ -1068,16 +1068,6 @@ button.jump::after {
 [data-theme="solar"] .print {
   --strength: 0.85;
   --sat: 0.83;
-}
-[data-theme="solar"] .print::after {
-  background:
-    linear-gradient(to top, var(--ground), transparent 30%),
-    linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--ground) 95%, transparent),
-    color-mix(in srgb, var(--ground) 70%, transparent) 33%,
-    transparent 72%
-  );
 }
 :root[data-embed="true"] .mast {
   display: flex;
