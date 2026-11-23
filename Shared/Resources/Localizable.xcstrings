@@ -17033,6 +17033,29 @@
         }
       }
     },
+    "Elapsed Time: %@, Level %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elapsed Time: %1$@, Level %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "経過時間: %1$@, レベル %2$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "경과 시간: %1$@, 레벨 %2$@"
+          }
+        }
+      }
+    },
     "Elapsed Time: %@, Level %lld" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -27204,6 +27227,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "레벨"
+          }
+        }
+      }
+    },
+    "Level %@–%@, Elapsed Time %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Level %1$@–%2$@, Elapsed Time %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レベル %1$@–%2$@, 経過時間 %3$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "레벨 %1$@–%2$@, 경과 시간 %3$@"
           }
         }
       }
@@ -37872,6 +37918,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "준비도"
+          }
+        }
+      }
+    },
+    "Readiness %@, %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Readiness %1$@, %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "トレーニング準備度 %1$@, %2$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 준비도 %1$@, %2$@"
           }
         }
       }
