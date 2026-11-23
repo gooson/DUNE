@@ -212,7 +212,7 @@ struct WorkoutBadgeDefinition: Identifiable, Sendable, Hashable {
             ("badge-100-workouts", .milestone, String(localized: "Centurion"), String(localized: "Complete 100 workouts"), "figure.run"),
             ("badge-365-days", .milestone, String(localized: "Year Strong"), String(localized: "1 year of training"), "calendar.badge.checkmark"),
             // Improvement badges
-            ("badge-10pct-improve", .improvement, String(localized: "Progress"), String(localized: "10% improvement on any lift"), "arrow.up.right"),
+            ("badge-10pct-improve", .improvement, String(localized: "Progress"), String(localized: "\(10.formatted(.percent)) improvement on any lift"), "arrow.up.right"),
             ("badge-double-lift", .improvement, String(localized: "Double Up"), String(localized: "Double your weight on any lift"), "arrow.up.circle.fill"),
             ("badge-sub5-pace", .improvement, String(localized: "Speed Demon"), String(localized: "Sub 5-min/km pace"), "hare.fill"),
         ]

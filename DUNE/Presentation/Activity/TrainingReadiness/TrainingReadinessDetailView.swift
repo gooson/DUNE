@@ -254,7 +254,7 @@ struct TrainingReadinessDetailView: View {
 
     private func calculationBullets(_ readiness: TrainingReadiness) -> [LocalizedStringKey] {
         var bullets: [LocalizedStringKey] = [
-            "Final score = HRV(30%) + RHR(20%) + Sleep(25%) + Recovery(15%) + Trend(10%).",
+            "Final score = HRV(\(30, format: .percent)) + RHR(\(20, format: .percent)) + Sleep(\(25, format: .percent)) + Recovery(\(15, format: .percent)) + Trend(\(10, format: .percent)).",
             "Each component is normalized to 0-100 before weighting.",
             "HRV/RHR are compared against your personal baseline; positive trend increases score.",
         ]
