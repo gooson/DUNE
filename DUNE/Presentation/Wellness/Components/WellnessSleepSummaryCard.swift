@@ -101,7 +101,7 @@ struct WellnessSleepSummaryCard: View {
                                 .accessibilityIdentifier("wellness-sleep-average")
                         }
                         if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
-                        Text("Recorded \(recentSamples.count) of 7 nights")
+                        Text("Recorded \(recentSamples.count, specifier: "%lld") of 7 nights")
                         .font(.caption.monospacedDigit())
                         .foregroundStyle(muted)
                         .accessibilityIdentifier("wellness-sleep-observation-count")
@@ -131,7 +131,7 @@ struct WellnessSleepSummaryCard: View {
                 Text("Need More Data")
                     .font(.subheadline).foregroundStyle(muted)
                     .accessibilityIdentifier("wellness-sleep-empty-state")
-                Text("Recorded \(0) of 7 nights")
+                Text("Recorded \(0, specifier: "%lld") of 7 nights")
                 .font(.caption)
                 .foregroundStyle(muted)
                 .accessibilityIdentifier("wellness-sleep-observation-count")

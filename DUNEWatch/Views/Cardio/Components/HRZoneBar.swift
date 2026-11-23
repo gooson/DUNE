@@ -32,7 +32,7 @@ struct HRZoneBar: View {
         .animation(isLuminanceReduced ? nil : DS.Animation.standard, value: activeIndex)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Heart Rate Zones")
-        .accessibilityValue(activeIndex.map { Text("Zone \($0) of \(zoneCount)") } ?? Text("No heart rate"))
+        .accessibilityValue(activeIndex.map { Text("Zone \($0, specifier: "%lld") of \(zoneCount, specifier: "%lld")") } ?? Text("No heart rate"))
         .accessibilityIdentifier("watch-live-heart-rate-zones")
     }
 

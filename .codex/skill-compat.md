@@ -182,6 +182,7 @@ Codex가 iOS·iPadOS·Duo·watchOS의 보이는 화면 배치, 글자, 상태, �
 ### /ship
 
 - `gh` 기반 비대화형 흐름을 우선한다.
+- `/ship`, `/run`의 Ship, `review-ship`에서 PR을 생성하거나 기존 PR을 이어 맡으면 그 작업 채팅의 `list_attachments`에서 저장소와 번호를 확인한다. 없으면 `create_attachment(attachment_type="pull_request", url=PR_URL)`로 붙이고 목록을 다시 읽는다. 브랜치를 전환하거나 삭제하기 전에 이 단계를 수행한다. GitHub의 머지 상태와 채팅 첨부 확인은 따로 기록한다. 도구 오류가 있으면 원격 결과와 미연결 상태를 구분해 알린다.
 - 최종 PR reviewer는 이전 리뷰 증거/미해결 findings와 그 이후 변경분을 우선 확인한다. 이전 증거가 없거나 범위/기준이 다르면 전체 대상 diff를 검토한다. 최종 통합/크래시 위험 게이트는 유지한다.
 - 원격 인증/네트워크가 막히면 local merge로 우회하지 않는다.
 - PR 생성 또는 merge 실패 시 복사용 title/body/manual command를 남긴다.

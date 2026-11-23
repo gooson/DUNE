@@ -193,6 +193,26 @@ class StringCatalogFormattingTests(unittest.TestCase):
                     self.assertEqual(catalog.read_bytes(), original,
                                      "Known Xcode extraction changed the catalog")
 
+    @unittest.skipUnless(shutil.which("xcrun"), "Xcode tools required")
+    def test_integer_labels_extract_the_translated_catalog_keys(self):
+        cases = (
+            ("DUNE/Presentation/Wellness/Components/WellnessSleepSummaryCard.swift",
+             CATALOGS[0], "Recorded %lld of 7 nights", "Recorded %@ of 7 nights"),
+            ("DUNEWatch/Views/Cardio/Components/HRZoneBar.swift",
+             ROOT / "DUNEWatch/Resources/Localizable.xcstrings", "Zone %lld of %lld", "Zone %@ of %@"),
+        )
+        for source, catalog, key, duplicate in cases:
+            with self.subTest(source=source), tempfile.TemporaryDirectory() as directory:
+                subprocess.run(["xcrun", "extractLocStrings", "-SwiftUI", "-o", directory, ROOT / source],
+                               capture_output=True, check=True)
+                table = Path(directory) / "Localizable.strings"
+                extracted = plistlib.loads(subprocess.check_output(["plutil", "-convert", "xml1", "-o", "-", table]))
+                self.assertIn(key, extracted)
+                self.assertNotIn(duplicate, extracted)
+                strings = json.loads(catalog.read_bytes())["strings"]
+                self.assertEqual(strings[key]["extractionState"], "manual")
+                self.assertNotIn(duplicate, strings)
+
     def test_formats_and_checks_without_changing_catalog_values(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             catalog = Path(temporary_directory) / "Localizable.xcstrings"
