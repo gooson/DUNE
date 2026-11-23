@@ -153,7 +153,7 @@ struct GenerateWorkoutReportUseCase: WorkoutReportGenerating, Sendable {
         if let change = stats.volumeChangePercent, change > 0.1 {
             highlights.append(.init(
                 type: .volumeIncrease,
-                description: String(localized: "Volume up \(Int(change * 100))% vs last period")
+                description: String(localized: "Volume up \(Int(change * 100).formatted(.percent)) vs last period")
             ))
         }
 

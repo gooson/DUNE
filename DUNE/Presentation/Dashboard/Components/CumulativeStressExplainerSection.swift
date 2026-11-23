@@ -41,21 +41,21 @@ struct CumulativeStressExplainerSection: View {
                 .fixedSize(horizontal: false, vertical: true)
             explainerItem(
                 icon: "waveform.path.ecg",
-                title: "HRV Variability (40%)",
+                title: "HRV Variability (\(40, format: .percent))",
                 description: "Measures day-to-day fluctuation in your HRV. High variability suggests your autonomic nervous system is under inconsistent stress.",
                 factor: .hrvVariability
             )
             Divider()
             explainerItem(
                 icon: "moon.fill",
-                title: "Sleep Consistency (35%)",
+                title: "Sleep Consistency (\(35, format: .percent))",
                 description: "Evaluates regularity of your sleep patterns. Irregular sleep timing disrupts circadian rhythm and increases physiological stress.",
                 factor: .sleepConsistency
             )
             Divider()
             explainerItem(
                 icon: "figure.run",
-                title: "Activity Load (25%)",
+                title: "Activity Load (\(25, format: .percent))",
                 description: "Compares recent training volume to your chronic baseline. Both overtraining and sudden detraining contribute to stress accumulation.",
                 factor: .activityLoad
             )
@@ -91,7 +91,7 @@ struct CumulativeStressExplainerSection: View {
                             .accessibilityLabel("Current score \(Int(contribution.rawScore.rounded()))")
                             .accessibilityIdentifier("stress-explainer-score-\(factor.rawValue)")
                         if let weight = score?.effectiveContributionWeights?[contribution.id] {
-                            Text("\(Int((weight * 100).rounded()))% applied")
+                            Text("\(Int((weight * 100).rounded()), format: .percent) applied")
                                 .font(.caption).foregroundStyle(DS.Color.textSecondary)
                                 .fixedSize(horizontal: false, vertical: true)
                         }

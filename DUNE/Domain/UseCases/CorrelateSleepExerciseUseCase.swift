@@ -114,7 +114,7 @@ struct CorrelateSleepExerciseUseCase: SleepExerciseCorrelating, Sendable {
         if let restStats = breakdown[.rest] {
             let diff = bestBand.value.avgScore - restStats.avgScore
             if diff > 5 {
-                improvement = String(localized: "\(Int(diff))% better than rest days")
+                improvement = String(localized: "\(Int(diff).formatted(.percent)) better than rest days")
             } else {
                 return nil
             }

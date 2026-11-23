@@ -24,9 +24,9 @@ struct TemplateReportFormatter: WorkoutReportFormatting, Sendable {
         // Volume change
         if let change = report.stats.volumeChangePercent {
             if change > 0.05 {
-                parts.append(String(localized: "Volume is up \(Int(change * 100))% compared to last period."))
+                parts.append(String(localized: "Volume is up \(Int(change * 100).formatted(.percent)) compared to last period."))
             } else if change < -0.05 {
-                parts.append(String(localized: "Volume is down \(Int(abs(change) * 100))% compared to last period."))
+                parts.append(String(localized: "Volume is down \(Int(abs(change) * 100).formatted(.percent)) compared to last period."))
             }
         }
 

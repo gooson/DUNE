@@ -230,7 +230,7 @@ final class BodyCompositionViewModel {
         let bodyFat: Double? = newBodyFat.isEmpty ? nil : Double(newBodyFat)
         if !newBodyFat.isEmpty {
             guard let bf = bodyFat, bf >= 0, bf <= maxBodyFat else {
-                validationError = String(localized: "Body fat must be between 0% and \(Int(maxBodyFat))%")
+                validationError = String(localized: "Body fat must be between \(0.formatted(.percent)) and \(Int(maxBodyFat).formatted(.percent))")
                 return nil
             }
         }

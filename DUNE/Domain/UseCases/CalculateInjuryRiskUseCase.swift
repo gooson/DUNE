@@ -108,7 +108,7 @@ struct CalculateInjuryRiskUseCase: InjuryRiskCalculating, Sendable {
             factors.append(.init(
                 type: .volumeSpike,
                 contribution: Int(volumeRisk * volumeSpikeWeight * 100),
-                detail: String(localized: "Volume increased \(Int(ratio * 100))% vs last week")
+                detail: String(localized: "Volume increased \(Int(ratio * 100).formatted(.percent)) vs last week")
             ))
         }
         if sleepRisk > 0 {

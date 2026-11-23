@@ -54,6 +54,13 @@ class StringCatalogFormattingTests(unittest.TestCase):
                 self.assertEqual(unmanaged, [],
                                  f"Register catalog entries as manual: {unmanaged[:10]}")
 
+    def test_shared_catalog_formats_numeric_percentages_in_code(self):
+        strings = json.loads(CATALOGS[0].read_text(encoding="utf-8"))["strings"]
+        # Match a number or integer argument followed by a literal percent.
+        # An adjacent format argument, as in "%lld%@", supplies its own unit.
+        numeric_percent = re.compile(r"(?:\d|%(?:\d+\$)?(?:lld|d))%(?![@\w$])")
+        self.assertEqual([key for key in strings if numeric_percent.search(key)], [])
+
     def test_siri_trigger_phrases_have_all_requested_localizations(self):
         source = (ROOT / "DUNE/App/Intents/DUNEShortcuts.swift").read_text(encoding="utf-8")
         phrases = {
@@ -162,11 +169,11 @@ class StringCatalogFormattingTests(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("xcrun"), "Xcode tools required")
     def test_known_extraction_does_not_add_unmanaged_keys(self):
-        # Captured from the user's Xcode build. Existing %lld and single-%
-        # entries do not cover %@ and escaped-percent extraction variants.
+        # SwiftUI extracts the applied-weight percentage as one formatted string.
+        # Numeric and escaped-percent placeholders are distinct catalog keys.
         keys = ["/100", "× %@", "Relative change: %@%%",
                 "Showing the latest 50 of %@ sources.",
-                "%@ / 100", "%@ of 100", "%@%% applied", "Last %@ days", "RISK"]
+                "%@ / 100", "%@ of 100", "%@ applied", "Last %@ days", "RISK"]
         original = CATALOGS[0].read_bytes()
         strings = json.loads(original)["strings"]
         for key in keys:

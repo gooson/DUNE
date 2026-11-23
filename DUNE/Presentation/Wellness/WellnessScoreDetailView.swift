@@ -32,7 +32,7 @@ struct WellnessScoreDetailView: View {
         static let body = String(localized: "Body")
         static let posture = String(localized: "Posture")
         nonisolated(unsafe) static let calculationBullets: [LocalizedStringKey] = [
-            "Final score = weighted average of Sleep(35%), Condition(30%), Body(20%), and Posture(15%).",
+            "Final score = weighted average of Sleep(\(35, format: .percent)), Condition(\(30, format: .percent)), Body(\(20, format: .percent)), and Posture(\(15, format: .percent)).",
             "Sleep and Condition come from Apple Watch signals, then normalized to 0-100.",
             "Body score is derived from 7-day trend stability and direction changes.",
             "Posture score reflects your latest posture assessment result (0-100).",

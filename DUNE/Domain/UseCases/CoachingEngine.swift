@@ -161,7 +161,7 @@ struct CoachingEngine: Sendable {
                 id: "weather-high-humidity",
                 priority: .standard,
                 category: .weather,
-                title: String(localized: "High humidity (\(humidityPercent)%)"),
+                title: String(localized: "High humidity (\(humidityPercent.formatted(.percent)))"),
                 message: String(localized: "High humidity makes it harder for your body to cool down. Lower the intensity and hydrate frequently."),
                 iconName: "humidity.fill"
             ))
@@ -273,7 +273,7 @@ struct CoachingEngine: Sendable {
                 priority: .high,
                 category: .recovery,
                 title: String(localized: "Condition is trending down"),
-                message: String(localized: "Your HRV has been declining for \(input.hrvTrend.consecutiveDays) days. Reduce training volume to 70% and try to get 30 more minutes of sleep."),
+                message: String(localized: "Your HRV has been declining for \(input.hrvTrend.consecutiveDays) days. Reduce training volume to \(70.formatted(.percent)) and try to get 30 more minutes of sleep."),
                 iconName: "arrow.down.right.circle.fill"
             ))
         }
@@ -564,7 +564,7 @@ struct CoachingEngine: Sendable {
                 id: "motivation-monthly-high",
                 priority: .celebration,
                 category: .motivation,
-                title: String(localized: "Over 80% of monthly goal reached!"),
+                title: String(localized: "Over \(80.formatted(.percent)) of monthly goal reached!"),
                 message: String(localized: "You've hit \(streak.monthlyCount)/\(streak.monthlyGoal) days this month. Go all the way!"),
                 iconName: "chart.bar.fill"
             ))

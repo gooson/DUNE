@@ -20,7 +20,7 @@ struct WASOInfoSheet: View {
                     Text("Apple Watch detects awakenings during sleep using motion and heart rate sensors. Only awakenings lasting 5 minutes or longer are counted — brief stirrings are filtered out as normal sleep behavior.")
                 }
                 explanationCard(icon: "chart.bar", title: "Scoring", identifier: "sleep-waso-info-scoring") {
-                    Text("The WASO Score (0–100) reflects how uninterrupted your sleep was. Less time awake means a higher score. This score contributes 15% to your overall Sleep Score.")
+                    Text("The WASO Score (0–100) reflects how uninterrupted your sleep was. Less time awake means a higher score. This score contributes \(15, format: .percent) to your overall Sleep Score.")
                 }
                 levelTableSection
             }
