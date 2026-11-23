@@ -15,6 +15,8 @@ actor MirroringSharedHealthDataService: SharedHealthDataService {
     }
 
     func fetchSnapshot() async -> SharedHealthSnapshot {
+        // Read the current choice on every fetch, including toggles in an active scene.
+        guard mirrorStore.isEnabled else { return await baseService.fetchSnapshot() }
         let snapshot = await baseService.fetchSnapshot()
         Task(priority: .utility) { [mirrorStore] in
             await mirrorStore.persist(snapshot: snapshot)

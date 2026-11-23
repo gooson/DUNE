@@ -200,6 +200,24 @@ struct DUNEApp: App {
         }
     }
 
+    static func makeSharedHealthDataService(
+        modelContainer: ModelContainer,
+        healthKitAvailable: Bool,
+        useSeededMirror: Bool,
+        liveService: @autoclosure () -> any SharedHealthDataService,
+        isCloudSyncEnabled: @escaping @Sendable () -> Bool = {
+            UserDefaults.standard.bool(forKey: CloudSyncPreferenceStore.storageKey)
+        }
+    ) -> any SharedHealthDataService {
+        if useSeededMirror || !healthKitAvailable {
+            return CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
+        }
+        return MirroringSharedHealthDataService(
+            baseService: liveService(),
+            mirrorStore: HealthSnapshotMirrorStore(modelContainer: modelContainer, isCloudSyncEnabled: isCloudSyncEnabled)
+        )
+    }
+
     private static func makeAppRuntime(
         notificationService: any NotificationService,
         cloudSyncEnabled: Bool? = nil
@@ -221,20 +239,12 @@ struct DUNEApp: App {
         }
 
         let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
-        let sharedHealthDataService: SharedHealthDataService
-        if Self.shouldUseMirroredSnapshotServiceForUITests {
-            sharedHealthDataService = CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
-        } else if healthKitAvailable {
-            let baseSharedService: SharedHealthDataService = SharedHealthDataServiceImpl(healthKitManager: .shared)
-            let mirrorStore: HealthSnapshotMirroring = HealthSnapshotMirrorStore(modelContainer: modelContainer)
-            sharedHealthDataService = MirroringSharedHealthDataService(
-                baseService: baseSharedService,
-                mirrorStore: mirrorStore
-            )
-        } else {
-            AppLogger.healthKit.info("HealthKit unavailable. Falling back to cloud mirrored snapshot service.")
-            sharedHealthDataService = CloudMirroredSharedHealthDataService(modelContainer: modelContainer)
-        }
+        let sharedHealthDataService = Self.makeSharedHealthDataService(
+            modelContainer: modelContainer,
+            healthKitAvailable: healthKitAvailable,
+            useSeededMirror: Self.shouldUseMirroredSnapshotServiceForUITests,
+            liveService: SharedHealthDataServiceImpl(healthKitManager: .shared)
+        )
 
         let refreshCoordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedHealthDataService)
 

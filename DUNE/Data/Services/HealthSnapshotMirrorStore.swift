@@ -7,23 +7,27 @@ actor HealthSnapshotMirrorStore: HealthSnapshotMirroring {
 
     private let modelContainer: ModelContainer
     private let sourceDevice: String
+    private let isCloudSyncEnabled: @Sendable () -> Bool
+    nonisolated var isEnabled: Bool { isCloudSyncEnabled() }
 
     private var lastPersistedFetchedAt: Date?
 
     init(
         modelContainer: ModelContainer,
-        sourceDevice: String = HealthSnapshotMirrorStore.defaultSourceDevice
+        sourceDevice: String = HealthSnapshotMirrorStore.defaultSourceDevice,
+        isCloudSyncEnabled: @escaping @Sendable () -> Bool
     ) {
         self.modelContainer = modelContainer
         self.sourceDevice = sourceDevice
+        self.isCloudSyncEnabled = isCloudSyncEnabled
     }
 
     func persist(snapshot: SharedHealthSnapshot) async {
-        guard snapshot.fetchedAt != lastPersistedFetchedAt else { return }
+        // An old runtime's background fetch may finish after the user switches sync off.
+        guard isCloudSyncEnabled(), snapshot.fetchedAt != lastPersistedFetchedAt else { return }
 
         do {
             try persistOrUpdate(snapshot: snapshot)
-            lastPersistedFetchedAt = snapshot.fetchedAt
         } catch {
             AppLogger.data.error("HealthSnapshotMirrorStore persist failed: \(error.localizedDescription)")
         }
@@ -44,7 +48,10 @@ actor HealthSnapshotMirrorStore: HealthSnapshotMirroring {
         if let existing = try context.fetch(descriptor).first {
             // Only update if payload actually changed to avoid unnecessary
             // CloudKit sync (dirty record → sync → remote change notification).
-            guard existing.payloadJSON != payloadJSON else { return }
+            guard existing.payloadJSON != payloadJSON else {
+                lastPersistedFetchedAt = fetchedAt
+                return
+            }
             existing.syncedAt = Date()
             existing.sourceDevice = sourceDevice
             existing.payloadVersion = Self.payloadVersion
@@ -61,7 +68,12 @@ actor HealthSnapshotMirrorStore: HealthSnapshotMirroring {
         }
 
         try trimOldRecordsIfNeeded(in: context)
+        guard isCloudSyncEnabled() else {
+            context.rollback()
+            return
+        }
         try context.save()
+        lastPersistedFetchedAt = fetchedAt
     }
 
     private func trimOldRecordsIfNeeded(in context: ModelContext) throws {
