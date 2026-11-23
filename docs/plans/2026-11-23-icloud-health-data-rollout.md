@@ -15,9 +15,21 @@ related_brainstorms:
 
 # DUNE iCloud 저장 범위 단계별 전환 계획
 
-[출시 계획의 저장 정책 항목](2026-10-16-launch-focus-visual-redesign.md)을 세분화한다. 기준 코드는 `86ae97321`이다. 아래 항목은 모두 **실행 전**이다.
+[출시 계획의 저장 정책 항목](2026-10-16-launch-focus-visual-redesign.md)을 세분화한다. 계획을 작성한 기준은 `86ae97321`, PR 1의 변경 전 실기기 비교 기준은 `f1c48fcd8`이다.
 
 현재 기기에서 기록·조회, Watch 단독 운동 후 iPhone 합류, 이미 저장된 기록, 다른 기기에서의 조회·복원까지 보존 대상으로 잡는다. 작은 변경부터 통합하되, 대체 경로가 실제로 동작하기 전에 기존 쓰기·읽기 경로를 끊는 일은 피한다. 심사 기준은 앱이 개인 건강 정보를 iCloud에 저장하는 것을 제한한다. 각 기기가 사용자 권한으로 Apple 건강을 읽는 방식과 앱 자체 CloudKit 저장은 별도 경로다. [Apple 심사 지침 5.1.3](https://developer.apple.com/app-store/review/guidelines/#health-and-health-research) · [Apple 건강 데이터 동기화](https://www.apple.com/kr/legal/privacy/data/ko/health-app/)
+
+## 다른 앱이 공개한 동작과 DUNE에서의 적용
+
+| 앱 | 공개한 동작 | DUNE에서 참고할 부분 |
+|---|---|---|
+| Athlytic | Apple 건강 데이터를 iPhone과 Watch에서 읽고 처리한다. [개발사 설명](https://athlyticapp.com/) | 지원 기기에서 Today 점수를 다시 계산하는 후보. Mac에서도 같은 입력을 읽을 수 있는지는 별도 확인한다. |
+| Gentler Streak | 다른 운동 앱이 Apple 건강에 기록한 운동을 읽고, Apple 운동 앱에서 입력한 RPE도 가져온다. [운동 기록 연동](https://docs.gentler.app/health-insights-and-tips/tracking-with-a-smartwatch) · [RPE 연동](https://docs.gentler.app/release-notes-and-announcements/gentler-streak-adds-non-recorded-steps-tracking-for-a-more-c) | Apple 건강이 제공하는 운동·운동 강도와 DUNE에만 있는 세트별 RPE·메모를 구분해 복원 시험을 한다. |
+| Hevy | 사용자가 운동 이력과 신체 측정값을 따로 파일로 내보낼 수 있다. [개발사 내보내기 안내](https://help.hevyapp.com/hc/en-us/articles/43708290987415-Exporting-Your-Data-from-Hevy) | 앱 전용 기록은 사용자 주도 내보내기 후보로 둔다. DUNE에서는 내보낸 파일을 새 설치에서 가져와 세트·첨부까지 대조해야 복원 경로로 채택한다. |
+| Strong | Strong Cloud로 기기 간 운동 기록을 제공하고 Apple 건강 연동과 CSV 내보내기도 제공한다. [개발사 기능 설명](https://link.strong.app/) | 별도 계정 동기화는 운영·개인정보 처리 범위가 커지는 선택지다. 현재 PR은 이 경로를 추가하지 않는다. |
+| LiftLogic | 개발사는 HealthKit 지표를 기기에 보관하고 앱에서 작성한 운동·루틴 등을 개인 iCloud에 동기화한다고 설명한다. 이전 서버와 마지막 오프라인 사본을 삭제한 날짜도 공개했다. [개인정보처리방침 §3](https://liftlogic.fit/privacy/) | 데이터의 출처, 이전 사본의 회수 기간, 최종 복원 가능 시점을 명시하는 사례다. DUNE의 건강 필드와 연결 ID에 대한 심사 판단은 Apple의 지침을 적용한다. |
+
+**매칭 정보만 iCloud에 두는 안**은 공개 운동 카탈로그 ID와 특정 사용자의 운동 기록을 가리키는 ID를 나눠 평가한다. 후자는 날짜·삭제 이력·로컬 데이터와 조합해 개인 운동을 식별할 수 있어 PR 1의 허용 목록에서 제외한다. DUNE가 작성한 운동은 HealthKit 메타데이터의 자체 식별자로 로컬에서 대조하는 방식을 먼저 시험한다. 건강 권한 거부, 대응 운동 삭제, HealthKit ID가 없는 운동에서의 복원은 15~18의 검증 대상이다. Apple은 HealthKit 안의 동기화 키를 문서화하고 있으며, 심사 지침에는 앱의 개인 건강 정보 iCloud 저장 제한을 명시한다. [HealthKit 외부 식별자](https://developer.apple.com/documentation/healthkit/hkmetadatakeyexternaluuid) · [HealthKit 동기화 식별자](https://developer.apple.com/documentation/healthkit/hkmetadatakeysyncidentifier) · [App Review 5.1.3(ii)](https://developer.apple.com/app-store/review/guidelines/#health-and-health-research)
 
 ## 적용과 검증의 단위
 
@@ -42,6 +54,8 @@ related_brainstorms:
 | 07 | Mac에서 iPhone의 새 점수와 운동 상세를 조회한다. 지원하는 Vision 구성에서 HealthKit 직접 조회와 운동·세트 이력도 따로 확인한다. | 각 화면이 미러·운동 DB·직접 조회 중 무엇에 의존하는지, 기존 폰이 꺼진 상태에서도 어떤 기록까지 보이는지 기록한다. 해당 기기 미확보 시 종속된 전환만 보류한다. |
 
 ## P1 · 첫 코드 변경은 iCloud OFF인 iPhone 한 경로
+
+PR 1은 iPhone과 iPad가 공유하는 iOS 서비스의 미러 쓰기를 변경한다. 실물 iPad에서 동일한 합성 데이터로 기준 버전과 수정 버전을 비교했다. OFF → ON → OFF 후 총 미러 수는 기준 2 → 3 → 4건, 수정 1 → 2 → 2건이었다. 구버전이 만든 기록 1건은 덮어 설치 후에도 식별자와 내용이 일치했다. iPhone의 실제 HealthKit·위젯과 iCloud를 경유한 Mac 이력 비교는 남아 있어 09~10의 배포 판정은 보류한다. [실기기 검증 기록](../solutions/architecture/2026-11-23-health-snapshot-mirror-consent.md)
 
 | 순서 | 한 번에 할 일 | 실제 합격 조건 |
 |---|---|---|
