@@ -10,6 +10,7 @@ struct DUNEApp: App {
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
     @AppStorage(AppIconStyle.storageKey) private var selectedIconStyle: AppIconStyle = .defaultStyle
     @AppStorage("hasShownCloudSyncConsent") private var hasShownConsent = false
+    @AppStorage(CloudSyncPreferenceStore.storageKey) private var cloudSyncEnabled = false
     @AppStorage("hasRequestedHealthKitAuthorization") private var hasRequestedHealthKitAuthorization = false
     @AppStorage("hasRequestedNotificationAuthorization") private var hasRequestedNotificationAuthorization = false
     @State private var showConsentSheet = false
@@ -533,6 +534,9 @@ struct DUNEApp: App {
         .onChange(of: showConsentSheet) { oldValue, newValue in
             guard oldValue, !newValue else { return }
             Task { await advanceLaunchExperienceFlowIfNeeded() }
+        }
+        .onChange(of: cloudSyncEnabled) {
+            Task { await refreshAppRuntimeIfNeeded() }
         }
         .onChange(of: scenePhase) { _, newPhase in
 #if DEBUG
