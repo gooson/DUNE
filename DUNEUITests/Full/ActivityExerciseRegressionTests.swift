@@ -3740,14 +3740,25 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
                 .withOffset(CGVector(dx: (edit.frame.midX - done.frame.midX) / 2, dy: 0))
         }
-        if compact {
+        let sideToolbar = app.toolbars
+            .containing(.button, identifier: "exercise-inspector-close")
+            .containing(.button, identifier: "healthkit-workout-edit-title")
+            .firstMatch
+        let bar = app.navigationBars["Tempo Run"].firstMatch
+        let closePoint = CGPoint(x: done.frame.midX, y: done.frame.midY)
+        // The Duo cover display places native toolbar actions in its system rail.
+        let usesSideToolbar = compact && sideToolbar.exists && bar.exists && !bar.frame.contains(closePoint)
+        if usesSideToolbar {
+            XCTAssertTrue(edit.isHittable)
+            XCTAssertEqual(done.frame.midX, edit.frame.midX, accuracy: 4)
+            XCTAssertLessThan(done.frame.midY, edit.frame.midY)
+        } else if compact {
             XCTAssertTrue(edit.isHittable)
             XCTAssertEqual(done.frame.midY, edit.frame.midY, accuracy: 4)
             let header = sheetHeader()
             header.press(forDuration: 0.15, thenDragTo: header.withOffset(CGVector(dx: 0, dy: 32)),
                          withVelocity: .slow, thenHoldForDuration: 0.4)
             XCTAssertTrue(detail.isHittable && done.isHittable, "A partial drag must keep the detail visible")
-            let bar = app.navigationBars["Tempo Run"].firstMatch
             XCTAssertTrue(bar.exists)
             XCTAssertTrue(bar.frame.contains(CGPoint(x: done.frame.midX, y: done.frame.midY)),
                           "The close action should remain in the workout navigation bar")
@@ -3762,7 +3773,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         row.auditTap()
         XCTAssertTrue(detail.waitForExistence(timeout: 8) && detail.isHittable)
         XCTAssertTrue(done.isHittable)
-        if compact {
+        if compact && !usesSideToolbar {
             let header = sheetHeader()
             header.press(forDuration: 0.1, thenDragTo: header.withOffset(CGVector(dx: 0, dy: app.frame.height * 0.65)))
         } else {
