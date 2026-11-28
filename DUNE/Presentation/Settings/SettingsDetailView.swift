@@ -419,6 +419,13 @@ struct SettingsDetailView: View {
             .disabled(isSyncing || !isCloudSyncEnabled)
             .accessibilityIdentifier("settings-row-force-sync")
 
+            NavigationLink {
+                CloudRecoverySettingsView()
+            } label: {
+                Label("Encrypted Backup File", systemImage: "lock.document")
+            }
+            .accessibilityIdentifier("settings-row-encrypted-backup")
+
             Button {
                 Task {
                     await recovery.restore {

@@ -49,6 +49,40 @@
         "sets": 0,
         "locations": 0
       }
+    },
+    {
+      "screen": "H07 · original photo export actions",
+      "path": "H07-original-photo-actions.png",
+      "test": "PosturePhotoPresentationTests/testOriginalPhotoActionsInAssessmentDetail()",
+      "result_bundle": "dune-pr1033-file-destinations.xcresult",
+      "scope": "Unmodified, native assessment detail in a hosted iPhone simulator window. The front and side images are synthetic SF Symbols. Both export actions are visible. A physical external drive was not connected.",
+      "sha256": "0c316814f33b1705c8c15ef46799432e3f186ed2a660d6c7f01b497839bbc71c"
+    },
+    {
+      "screen": "S01-backup-key-hidden",
+      "path": "S01-backup-key-hidden.png",
+      "test": "SettingsSmokeTests/testEncryptedBackupFileShowsSeparateKeyBeforeExport()",
+      "attachment": "S01-backup-key-hidden_0_76A72A01-CD87-4714-B624-EE4A4802AF24.png",
+      "timestamp": 1795876645.087,
+      "sha256": "56509153a9dbfeb1ebe7bc6e5c8272a3088c0aeb2d21641f72d727e07d15a0c4",
+      "source_base_revision": "a460689f4",
+      "source_worktree_dirty": true,
+      "result_bundle": "Test-DUNEUITests-2026.11.28_23-35-14-+0900.xcresult",
+      "result": "1 passed, 0 failures",
+      "scope": "Dedicated iPhone 18 Pro simulator, iOS 27.2, synthetic app state. No file picker upload, clipboard copy, key disclosure or personal account access."
+    },
+    {
+      "screen": "S01-encrypted-backup-file",
+      "path": "S01-encrypted-backup-file.png",
+      "test": "SettingsSmokeTests/testEncryptedBackupFileShowsSeparateKeyBeforeExport()",
+      "attachment": "S01-encrypted-backup-file_0_F47A0C07-CD12-44FF-B5C8-340E9A917859.png",
+      "timestamp": 1795876643.254,
+      "sha256": "2edd24d64cbd13cce05847ecedc87f44db82ca1a5c07855a5c0f087abbe3a969",
+      "source_base_revision": "a460689f4",
+      "source_worktree_dirty": true,
+      "result_bundle": "Test-DUNEUITests-2026.11.28_23-35-14-+0900.xcresult",
+      "result": "1 passed, 0 failures",
+      "scope": "Dedicated iPhone 18 Pro simulator, iOS 27.2, synthetic app state. No file picker upload, clipboard copy, key disclosure or personal account access."
     }
   ]
 }

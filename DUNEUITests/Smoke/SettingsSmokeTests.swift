@@ -193,6 +193,31 @@ final class SettingsSmokeTests: UITestBaseCase {
         }
     }
 
+    func testEncryptedBackupFileShowsSeparateKeyBeforeExport() throws {
+        openSettingsCategory(AXID.settingsHubPrivacy)
+        let entry = app.descendants(matching: .any)["settings-row-encrypted-backup"].firstMatch
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.tap()
+        let create = app.buttons["backup-file-create"]
+        XCTAssertTrue(create.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["backup-file-choose"].exists)
+        addScreenshotAttachment(named: "S01-encrypted-backup-file")
+        create.tap()
+        let reveal = app.buttons["backup-file-show-key"]
+        XCTAssertTrue(reveal.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["backup-file-export"].isEnabled)
+        XCTAssertTrue(app.buttons["backup-file-external"].exists)
+        XCTAssertFalse(app.buttons["backup-file-export-settings"].exists)
+        addScreenshotAttachment(named: "S01-backup-key-hidden")
+        let cancel = app.buttons.matching(NSPredicate(format: "label IN %@", ["Cancel", "취소", "キャンセル"])).firstMatch
+        XCTAssertTrue(cancel.waitForExistence(timeout: 3))
+        cancel.tap()
+        app.buttons["backup-file-create-settings"].tap()
+        XCTAssertTrue(app.buttons["backup-file-export-settings"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["backup-file-export-settings"].isEnabled)
+        XCTAssertFalse(app.buttons["backup-file-external"].exists)
+    }
+
     func testDataPrivacySectionExists() throws {
         openSettingsCategory(AXID.settingsHubPrivacy)
         _ = app.scrollToElementIfNeeded(AXID.settingsRowICloudSync)

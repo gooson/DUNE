@@ -81,6 +81,8 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-11-28 [암호화 백업 파일과 복구 키 보관 화면](actual/workout-restore-2026-11-28/index.html)을 전용 iPhone 18 Pro 시뮬레이터에서 확인했다. 전체 기록의 기기·외장 저장과 화면 설정·단위의 파일 내보내기를 구별하는 UI 검사 1건이 통과했다. 키는 캡처에서 가려져 있다.
+
 2026-11-28 [iCloud 동의 T02와 설정 S01 개인정보](actual/workout-restore-2026-11-28/index.html)를 전용 iPhone 18 Pro 시뮬레이터의 실제 캡처로 갱신했다. 두 UI 검사가 통과했고 iPad·Duo·저장소 오류 화면은 미검증이다.
 
 2026-11-15 잔여 브랜치 대조에서 일반 iPhone·iPad P03의 PNG는 최종본인데 인덱스가 10월 출처를 가리키는 차이를 확인했다. [11월 14일 최종 P03 갤러리](../full-redesign-map/review/posture-exercise-picker-p03-2026-11-14/index.html)의 원본 PNG·AX 해시와 현재 앱 파일 해시를 확인하고 두 인덱스·갤러리·자세 보드를 동기화했다. 원래 캡처 시각과 소스 동등성 설명을 유지하며, 11월 15일 새로 캡처하거나 UI 검사를 실행한 것으로 표시하지 않는다.

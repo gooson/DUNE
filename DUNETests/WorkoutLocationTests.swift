@@ -298,6 +298,7 @@ final class HealthKitWorkoutRoundTripIntegrationTests: XCTestCase {
 import CloudKit
 import SwiftData
 import SwiftUI
+import UniformTypeIdentifiers
 
 @MainActor
 final class LegacyWorkoutRecoveryPresentationTests: XCTestCase {
@@ -373,6 +374,129 @@ final class LegacyWorkoutRecoveryPresentationTests: XCTestCase {
         await recovery.restore { try LegacyWorkoutRecovery.importRecords(records, into: container) }
         let zero = 0
         XCTAssertEqual(recovery.message, String(localized: "Restored \(zero) workouts and \(zero) sets to this device."))
+    }
+}
+#endif
+
+#if targetEnvironment(simulator) && os(iOS)
+@MainActor
+final class BackupFileWorkflowTests: XCTestCase {
+    func testRecordsStayLocalAndRequireOwnershipToCombine() async throws {
+        let schema = AppSchema.currentSchema
+        func device() throws -> ModelContainer {
+            try ModelContainer(for: schema, configurations: ModelConfiguration(
+                schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none
+            ))
+        }
+        let source = try device(), destination = try device()
+        let suites = (UUID().uuidString, UUID().uuidString)
+        let original = try XCTUnwrap(UserDefaults(suiteName: suites.0))
+        let restored = try XCTUnwrap(UserDefaults(suiteName: suites.1))
+        defer {
+            original.removePersistentDomain(forName: suites.0)
+            restored.removePersistentDomain(forName: suites.1)
+        }
+        let sample = ExerciseRecord(exerciseType: "Fixture", duration: 60)
+        source.mainContext.insert(sample)
+        try source.mainContext.save()
+        let flow = BackupFileWorkflow()
+        flow.startExport(.records)
+        await flow.saveRecords(context: source.mainContext, defaults: original)
+        XCTAssertNil(flow.savedFilename)
+        let key = flow.exportKey
+        flow.savedKey = true
+        let blocked = await flow.prepareSettingsExport(defaults: original)
+        XCTAssertFalse(blocked)
+        XCTAssertNil(flow.document)
+        await flow.saveRecords(context: source.mainContext, defaults: original)
+        let filename = try XCTUnwrap(flow.savedFilename)
+        let file = try XCTUnwrap(LocalRecoveryFiles.archives().first { $0.lastPathComponent == filename })
+        defer { try? FileManager.default.removeItem(at: file) }
+        XCTAssertEqual(flow.step, .home)
+        XCTAssertTrue(flow.exportKey.isEmpty)
+        let backupDirectory = file.deletingLastPathComponent()
+        XCTAssertEqual(try backupDirectory.resourceValues(forKeys: [.isExcludedFromBackupKey]).isExcludedFromBackup, true)
+        await flow.selectFile(.success(file))
+        XCTAssertEqual(flow.step, .restoreKey)
+        flow.inputKey = EncryptedRecoveryArchive.makeRecoveryKey()
+        await flow.restore(context: destination.mainContext, defaults: restored)
+        XCTAssertEqual(try destination.mainContext.fetchCount(FetchDescriptor<ExerciseRecord>()), 0)
+        XCTAssertEqual(flow.step, .restoreKey)
+        XCTAssertEqual(flow.message.map { String(localized: $0) },
+                       String(localized: "Couldn’t restore this file. Check the recovery key and backup file."))
+        let existing = ExerciseRecord(exerciseType: "Existing fixture", duration: 30)
+        destination.mainContext.insert(existing)
+        try destination.mainContext.save()
+        flow.inputKey = key
+        await flow.restore(context: destination.mainContext, defaults: restored)
+        XCTAssertTrue(flow.canCombine)
+        XCTAssertFalse(flow.confirmedOwnership)
+        XCTAssertEqual(try destination.mainContext.fetchCount(FetchDescriptor<ExerciseRecord>()), 1)
+        flow.confirmedOwnership = true
+        flow.inputKey = key
+        await flow.restore(context: destination.mainContext, defaults: restored)
+        XCTAssertEqual(flow.step, .home)
+        XCTAssertTrue(flow.inputKey.isEmpty)
+        XCTAssertEqual(flow.message.map { String(localized: $0) }, String(localized: "Backup file restored to this device."))
+        XCTAssertEqual(flow.restoredRecords?.workoutCount, 1)
+        XCTAssertEqual(flow.restoredRecords?.setCount, 0)
+        XCTAssertEqual(flow.restoredRecords?.insertedRowCount, 1)
+        XCTAssertEqual(Set(try destination.mainContext.fetch(FetchDescriptor<ExerciseRecord>()).map(\.id)), [existing.id, sample.id])
+    }
+
+    func testPortableSettingsExportAndRepeatedImport() async throws {
+        let schema = AppSchema.currentSchema
+        let container = try ModelContainer(for: schema, configurations: ModelConfiguration(
+            schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none
+        ))
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let file = directory.appending(path: "Fixture.dunebackup")
+        let suites = (UUID().uuidString, UUID().uuidString)
+        let source = try XCTUnwrap(UserDefaults(suiteName: suites.0))
+        let target = try XCTUnwrap(UserDefaults(suiteName: suites.1))
+        defer {
+            source.removePersistentDomain(forName: suites.0)
+            target.removePersistentDomain(forName: suites.1)
+        }
+        source.set("lb", forKey: WeightUnit.storageKey)
+        let flow = BackupFileWorkflow()
+        flow.startExport(.settings)
+        let blocked = await flow.prepareSettingsExport(defaults: source)
+        XCTAssertFalse(blocked)
+        let key = flow.exportKey
+        flow.savedKey = true
+        let ready = await flow.prepareSettingsExport(defaults: source)
+        XCTAssertTrue(ready)
+        XCTAssertNil(flow.message)
+        flow.finishedExport(.failure(CocoaError(.userCancelled)))
+        XCTAssertNil(flow.message)
+        let retry = await flow.prepareSettingsExport(defaults: source)
+        XCTAssertTrue(retry)
+        let encrypted = try XCTUnwrap(flow.document?.ciphertext)
+        try encrypted.write(to: file, options: .atomic)
+        flow.finishedExport(.success(file))
+        XCTAssertEqual(flow.message.map { String(localized: $0) }, String(localized: "Encrypted backup file saved."))
+        for _ in 0..<2 {
+            await flow.selectFile(.success(file))
+            flow.inputKey = key
+            await flow.restore(context: container.mainContext, defaults: target)
+            XCTAssertEqual(flow.step, .home)
+            XCTAssertEqual(flow.message.map { String(localized: $0) }, String(localized: "Appearance and unit settings restored."))
+            XCTAssertEqual(target.string(forKey: WeightUnit.storageKey), "lb")
+        }
+        XCTAssertEqual(try container.mainContext.fetchCount(FetchDescriptor<ExerciseRecord>()), 0)
+
+        // Public fixture-only key, never used for an app user's backup.
+        let publicFixtureKey = Data((0..<32).map(UInt8.init)).base64EncodedString()
+        let profile = try EncryptedRecoveryArchive.open(encrypted, recoveryKey: key)
+        XCTAssertEqual(profile, try AppOwnedBackup.encodeDriveSettings(defaults: source))
+        let fixture = try EncryptedRecoveryArchive.seal(profile, recoveryKey: publicFixtureKey)
+        let attachment = XCTAttachment(data: fixture, uniformTypeIdentifier: UTType.duneEncryptedBackup.identifier)
+        attachment.name = "Synthetic-DUNE-Drive-Settings.dunebackup"
+        attachment.lifetime = .keepAlways
+        add(attachment)
     }
 }
 #endif
