@@ -137,6 +137,98 @@ enum AppOwnedBackup {
         }
     }
 
+    /// Old stores can contain several distinct snapshots at one logical date. Creation time
+    /// distinguishes the observations without synthesizing an ID or combining their measurements.
+    private struct HourlyStamp {
+        let date: Date
+        let createdAt: Date
+
+        var dateID: String { date.timeIntervalSinceReferenceDate.bitPattern.description }
+        var id: String { dateID + "/" + createdAt.timeIntervalSinceReferenceDate.bitPattern.description }
+
+        init(_ date: Date, _ createdAt: Date) {
+            self.date = date
+            self.createdAt = createdAt
+        }
+
+        init(record: CKRecord) throws {
+            guard let date = record["CD_date"] as? Date, let created = record["CD_createdAt"] as? Date,
+                  date.timeIntervalSinceReferenceDate.isFinite, created.timeIntervalSinceReferenceDate.isFinite else {
+                throw Failure.invalidArchive
+            }
+            self.init(date, created)
+        }
+
+        init(row: Row) throws {
+            guard row.parent == nil, let date = row.fields["date"], let created = row.fields["createdAt"] else {
+                throw Failure.invalidArchive
+            }
+            let decoder = JSONDecoder()
+            try self.init(decoder.decode(Date.self, from: date), decoder.decode(Date.self, from: created))
+            guard row.identity == id || row.identity == dateID else { throw Failure.invalidArchive }
+        }
+
+        static func archiveRows(_ rows: [Row], writing: Bool) throws -> [Row] {
+            let items = try rows.map { (try Self(row: $0), $0) }
+            let groups = Dictionary(grouping: items, by: { $0.0.dateID })
+            var seen = Set<String>()
+            var result = [Row]()
+            for group in groups.values {
+                for (stamp, row) in group {
+                    guard seen.insert(stamp.id).inserted,
+                          group.count == 1 || row.identity == stamp.id else { throw Failure.duplicateIdentity }
+                    let key = writing && group.count == 1 ? stamp.dateID : stamp.id
+                    result.append(Row(identity: key, parent: nil, fields: row.fields))
+                }
+            }
+            return result.sorted { $0.identity < $1.identity }
+        }
+
+        /// Match exact pairs before tolerating CloudKit's millisecond date transport. New and
+        /// destination-only observations in the same hour cannot both be unmatched: either could
+        /// be the other observation with an edited timestamp.
+        static func matches(local: [Self], incoming: [Self]) throws -> [String: String] {
+            guard Set(local.map(\.id)).count == local.count,
+                  Set(incoming.map(\.id)).count == incoming.count else { throw Failure.duplicateIdentity }
+            let tolerance = 0.0011
+            let dates = Set((local + incoming).map(\.date)).sorted()
+            var groups = [Date: Int]()
+            var anchor: Date?, previous: Date?
+            var group = 0
+            for date in dates {
+                if let first = anchor, date.timeIntervalSince(first) >= tolerance {
+                    if let previous, date.timeIntervalSince(previous) < tolerance { throw Failure.destinationConflict }
+                    group += 1
+                    anchor = date
+                } else if anchor == nil { anchor = date }
+                groups[date] = group
+                previous = date
+            }
+            let localGroups = Dictionary(grouping: local, by: { groups[$0.date] })
+            let remoteGroups = Dictionary(grouping: incoming, by: { groups[$0.date] })
+            var resolved = [String: String]()
+            for (key, source) in remoteGroups {
+                let destination = localGroups[key] ?? []
+                let localIDs = Set(destination.map(\.id))
+                let exact = Set(source.map(\.id)).intersection(localIDs)
+                for id in exact { resolved[id] = id }
+                let available = destination.filter { !exact.contains($0.id) }
+                var used = Set<String>()
+                var unmatched = false
+                for stamp in source where !exact.contains(stamp.id) {
+                    let candidates = available.filter { abs($0.createdAt.timeIntervalSince(stamp.createdAt)) < tolerance }
+                    guard candidates.count <= 1 else { throw Failure.destinationConflict }
+                    if let match = candidates.first {
+                        guard used.insert(match.id).inserted else { throw Failure.destinationConflict }
+                        resolved[stamp.id] = match.id
+                    } else { unmatched = true }
+                }
+                if unmatched && used.count < available.count { throw Failure.destinationConflict }
+            }
+            return resolved
+        }
+    }
+
     private struct Table {
         let name: String
         let capture: (ModelContext) throws -> [Row]
@@ -169,23 +261,26 @@ enum AppOwnedBackup {
                 }
                 var seen = Set<String>()
                 var inserted = 0
+                let hourly = name == "HourlyScoreSnapshot"
+                let hourlyMatches: [String: String]
+                if hourly {
+                    let stamps = existing.compactMap { ($0 as? HourlyScoreSnapshot).map { HourlyStamp($0.date, $0.createdAt) } }
+                    hourlyMatches = try HourlyStamp.matches(local: stamps, incoming: records.map(HourlyStamp.init(record:)))
+                } else { hourlyMatches = [:] }
                 let known = Set(fields.map { "CD_" + $0.name })
                 for record in records {
                     try LegacyCloud.validateKeys(record, table: name, known: known)
                     let id: String
-                    if name == "HourlyScoreSnapshot" {
-                        guard let date = record["CD_date"] as? Date, date.timeIntervalSinceReferenceDate.isFinite else {
-                            throw Failure.invalidArchive
-                        }
-                        id = date.timeIntervalSinceReferenceDate.bitPattern.description
-                    } else { id = try LegacyCloud.identifier(record).uuidString }
+                    if hourly { id = try HourlyStamp(record: record).id }
+                    else { id = try LegacyCloud.identifier(record).uuidString }
                     guard seen.insert(id).inserted else { throw Failure.duplicateIdentity }
-                    let existingModel = local[id]
+                    let existingID = hourlyMatches[id] ?? id
+                    let existingModel = local[existingID]
                     let parentID = try LegacyCloud.parent(of: record, table: name, habitIDs: habitIDs)
                     var values = [String: Data]()
                     for field in fields {
                         if let data = try field.cloudValue(record) { values[field.name] = data }
-                        else if existingModel == nil {
+                        else if existingModel == nil || hourly {
                             // Initializers may generate dates and normalize defaults for *new* user input.
                             // A missing old field must instead use its archived schema's default or nil.
                             values[field.name] = try field.absentOptional ?? LegacyCloud.declaredDefault(table: name, field: field.name)
@@ -200,11 +295,11 @@ enum AppOwnedBackup {
                             let current = try field.capture(model)
                             if try LegacyCloud.same(current, incoming, isDate: field.cloudDate) { continue }
                             // Nil remote fields were skipped above. Only fill a nil local value.
-                            guard current == Data("null".utf8) || current == Data([0]) else { throw Failure.destinationConflict }
+                            guard !hourly, current == Data("null".utf8) || current == Data([0]) else { throw Failure.destinationConflict }
                         }
                         try field.restore(model, incoming)
                     }
-                    guard identity(model) == id else { throw Failure.invalidArchive }
+                    guard identity(model) == existingID else { throw Failure.invalidArchive }
                     if existingModel == nil {
                         try connect(model, parentID, &parents)
                         context.insert(model)
@@ -599,7 +694,7 @@ enum AppOwnedBackup {
       ])
 
     private static let hourlyScoreSnapshotTable = Table("HourlyScoreSnapshot", create: { _ in HourlyScoreSnapshot(date: .distantPast) },
-      identity: { $0.date.timeIntervalSinceReferenceDate.bitPattern.description }, fields: [
+      identity: { HourlyStamp($0.date, $0.createdAt).id }, fields: [
           .init("date", \.date),
           .init("conditionScore", \.conditionScore),
           .init("wellnessScore", \.wellnessScore),
@@ -1004,7 +1099,8 @@ enum AppOwnedBackup {
 
     static func encode(from context: ModelContext, defaults: UserDefaults) throws -> Data {
         guard !context.hasChanges else { throw Failure.unsavedChanges }
-        let rows = try snapshot(context)
+        var rows = try snapshot(context)
+        rows["HourlyScoreSnapshot"] = try HourlyStamp.archiveRows(rows["HourlyScoreSnapshot", default: []], writing: true)
         let preferences = try PersonalRecordStore.withMutationLock { try Preferences(defaults) }
         let archive = Archive(version: 1, tables: rows, preferences: preferences)
         let encoder = PropertyListEncoder()
@@ -1082,8 +1178,12 @@ enum AppOwnedBackup {
         let context = ModelContext(destination.container)
         context.autosaveEnabled = false
         defer { if context.hasChanges { context.rollback() } }
+        var incomingTables = archive.tables
+        let hourTable = "HourlyScoreSnapshot"
+        let incomingHours = try HourlyStamp.archiveRows(incomingTables[hourTable, default: []], writing: false)
+        incomingTables[hourTable] = incomingHours
         let existing = try snapshot(context)
-        if mode == .emptyOrMatching, !existing.values.allSatisfy(\.isEmpty), existing != archive.tables {
+        if mode == .emptyOrMatching, !existing.values.allSatisfy(\.isEmpty), existing != incomingTables {
             throw Failure.destinationConflict
         }
 
@@ -1094,10 +1194,13 @@ enum AppOwnedBackup {
         if mode == .mergeAfterOwnershipVerification {
             for set in try context.fetch(FetchDescriptor<WorkoutSet>()) { localSets[set.id] = set }
         }
+        let localHours = existing[hourTable, default: []]
+        let matchedHours = try HourlyStamp.matches(local: localHours.map(HourlyStamp.init(row:)),
+                                                   incoming: incomingHours.map(HourlyStamp.init(row:)))
         var inserted = 0
         var enriched = 0
         for table in tables {
-            guard let incoming = archive.tables[table.name], let local = existing[table.name] else {
+            guard let incoming = incomingTables[table.name], let local = existing[table.name] else {
                 throw Failure.invalidArchive
             }
             var seen = Set<String>()
@@ -1107,11 +1210,21 @@ enum AppOwnedBackup {
             for archived in incoming {
                 let row = normalized(archived, supplementalFields: allowed)
                 guard seen.insert(row.identity).inserted else { throw Failure.duplicateIdentity }
-                guard let current = byID[row.identity] else {
+                let key = table.name == hourTable ? (matchedHours[row.identity] ?? row.identity) : row.identity
+                guard let current = byID[key] else {
                     additions.append(row)
                     continue
                 }
                 guard current != row else { continue }
+                if table.name == hourTable {
+                    guard row.fields.keys == current.fields.keys else { throw Failure.invalidArchive }
+                    for (field, value) in row.fields {
+                        guard let localValue = current.fields[field],
+                              try LegacyCloud.same(localValue, value, isDate: field == "date" || field == "createdAt")
+                        else { throw Failure.destinationConflict }
+                    }
+                    continue
+                }
                 guard let id = UUID(uuidString: row.identity) else { throw Failure.destinationConflict }
                 // UUIDs belong to their model table; a workout and a set may legally share a UUID.
                 let workout = table.name == "ExerciseRecord" ? parents.exercises[id] : nil

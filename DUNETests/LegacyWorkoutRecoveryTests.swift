@@ -530,3 +530,101 @@ struct HistoricalCloudFieldRoundTripTests {
         #expect(afterFailure.frontImageData == front && afterFailure.sideImageData == side)
     }
 }
+
+extension HistoricalSettingsRecoveryTests {
+    @Test func hourlySiblingsPreserveEveryRowAcrossCloudReplayAndFullArchive() throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let file = folder.appendingPathComponent("restored.store")
+        let expectedHours = [0, 0, 1, 1, 2, 3]
+        let expected = expectedHours.enumerated().map { index, hour in
+            let date = stamp.addingTimeInterval(Double(hour) * 3600)
+            let record = old("HourlyScoreSnapshot", ["date": date as NSDate,
+                            "createdAt": date.addingTimeInterval(Double(index + 1)) as NSDate], id: false)
+            record[index.isMultiple(of: 2) ? "CD_conditionScore" : "CD_wellnessScore"] = NSNumber(value: 65 + index)
+            return record
+        }
+        func verify(_ c: ModelContext) throws {
+            let actual = try c.fetch(FetchDescriptor<HourlyScoreSnapshot>(sortBy: [SortDescriptor(\.createdAt)]))
+            try #require(actual.count == 6)
+            #expect(Set(actual.map(\.date)).count == 4)
+            for (row, cloud) in zip(actual, expected) {
+                #expect(row.date == cloud["CD_date"] as? Date && row.createdAt == cloud["CD_createdAt"] as? Date)
+                #expect(row.conditionScore == (cloud["CD_conditionScore"] as? NSNumber)?.doubleValue)
+                #expect(row.wellnessScore == (cloud["CD_wellnessScore"] as? NSNumber)?.doubleValue)
+                #expect(row.readinessScore == nil && row.sleepScore == nil && row.stressScore == nil)
+                #expect(row.hrvValue == nil && row.rhrValue == nil)
+            }
+        }
+        do {
+            let receiver = try diskStore(file)
+            let subset = [expected[0], expected[2], expected[4], expected[5]]
+            #expect(try LegacyWorkoutRecovery.importRecords(subset, into: receiver).otherRecords == 4)
+            #expect(try LegacyWorkoutRecovery.importRecords(Array(expected.reversed()), into: receiver).otherRecords == 2)
+            try verify(ModelContext(receiver))
+        }
+        let cold = try diskStore(file)
+        try verify(ModelContext(cold))
+        #expect(try LegacyWorkoutRecovery.importRecords(Array(expected.reversed()), into: cold).otherRecords == 0)
+        let suite = "HourlyArchive." + UUID().uuidString
+        let prefs = try #require(UserDefaults(suiteName: suite))
+        defer { prefs.removePersistentDomain(forName: suite) }
+        let key = EncryptedRecoveryArchive.makeRecoveryKey()
+        let sealed = try EncryptedRecoveryArchive.seal(AppOwnedBackup.encode(from: ModelContext(cold), defaults: prefs),
+                                                       recoveryKey: key)
+        let copy = try diskStore(folder.appendingPathComponent("file-restore.store"))
+        let opened = try EncryptedRecoveryArchive.open(sealed, recoveryKey: key)
+        #expect(try AppOwnedBackup.restore(opened, into: ModelContext(copy), defaults: prefs).insertedRowCount == 6)
+        try verify(ModelContext(copy))
+        #expect(try AppOwnedBackup.restore(opened, into: ModelContext(copy), defaults: prefs).insertedRowCount == 0)
+
+        let later = stamp.addingTimeInterval(86_400)
+        let addition = old("HourlyScoreSnapshot", ["date": later as NSDate, "createdAt": later as NSDate], id: false)
+        expected[0]["CD_conditionScore"] = 41 as NSNumber
+        #expect(throws: LegacyWorkoutRecovery.Failure.localConflict) {
+            try LegacyWorkoutRecovery.importRecords([addition] + expected, into: cold)
+        }
+        expected[0]["CD_conditionScore"] = 65 as NSNumber
+        try verify(ModelContext(cold))
+    }
+}
+
+extension HistoricalSettingsRecoveryTests {
+    @Test func changingHourlyCreationDateOrAmbiguousCloudPrecisionRollsBackEntireImport() throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let container = try diskStore(folder.appendingPathComponent("receiver.store"))
+        let original = stamp.addingTimeInterval(1)
+        let localRefresh = stamp.addingTimeInterval(20)
+        func source(created: Date, value: Int) -> CKRecord {
+            old("HourlyScoreSnapshot", ["date": stamp as NSDate, "createdAt": created as NSDate,
+                                        "conditionScore": NSNumber(value: value)], id: false)
+        }
+        let backedUp = source(created: original, value: 59)
+        #expect(try LegacyWorkoutRecovery.importRecords([backedUp], into: container).otherRecords == 1)
+        do {
+            let ctx = ModelContext(container)
+            let local = try #require(ctx.fetch(FetchDescriptor<HourlyScoreSnapshot>()).first)
+            // ScoreRefreshService updates both the existing bucket's value and its creation timestamp.
+            local.createdAt = localRefresh
+            local.conditionScore = 78
+            try ctx.save()
+        }
+        let other = old("ExerciseRecord", ["date": stamp as NSDate, "createdAt": stamp as NSDate,
+                                         "exerciseType": "Fixture" as NSString, "duration": 60 as NSNumber])
+        let ambiguous = [source(created: localRefresh.addingTimeInterval(-0.0008), value: 78),
+                         source(created: localRefresh.addingTimeInterval(0.0008), value: 78)]
+        for inputs in [[backedUp], ambiguous, Array(ambiguous.reversed())] {
+            #expect(throws: LegacyWorkoutRecovery.Failure.localConflict) {
+                try LegacyWorkoutRecovery.importRecords([other] + inputs, into: container)
+            }
+            let reloaded = ModelContext(container)
+            let rows = try reloaded.fetch(FetchDescriptor<HourlyScoreSnapshot>())
+            try #require(rows.count == 1)
+            #expect(rows[0].createdAt == localRefresh && rows[0].date == stamp && rows[0].conditionScore == 78)
+            #expect(try reloaded.fetchCount(FetchDescriptor<ExerciseRecord>()) == 0)
+        }
+    }
+}

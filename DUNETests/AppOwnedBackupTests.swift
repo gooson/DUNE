@@ -833,3 +833,68 @@ struct AppOwnedBackupTests {
         #expect(local.memo == "unsaved")
     }
 }
+
+extension AppOwnedBackupTests {
+    @Test func readsVersionOneHourlyDateOnlyIdentityAndRepeatsWithoutDuplicates() throws {
+        let source = try Device(), destination = try Device()
+        defer { source.clean(); destination.clean() }
+        let hour = Date(timeIntervalSince1970: 1_700_002_800)
+        let created = hour.addingTimeInterval(23)
+        let score = HourlyScoreSnapshot(date: hour, readinessScore: 71)
+        score.createdAt = created
+        source.context.insert(score)
+        try source.context.save()
+        var archive = try object(AppOwnedBackup.encode(from: source.context, defaults: source.defaults))
+        var tables = try #require(archive["tables"] as? [String: [[String: Any]]])
+        var row = try #require(tables["HourlyScoreSnapshot"]?.first)
+        // The first file format identified hourly snapshots with the raw date's bit pattern alone.
+        row["identity"] = hour.timeIntervalSinceReferenceDate.bitPattern.description
+        tables["HourlyScoreSnapshot"] = [row]
+        archive["tables"] = tables
+        archive["version"] = 1
+        let legacy = try binary(archive)
+        for count in [1, 0] {
+            let result = try AppOwnedBackup.restore(legacy, into: destination.context, defaults: destination.defaults)
+            #expect(result.insertedRowCount == count)
+            let actual = try ModelContext(destination.container).fetch(FetchDescriptor<HourlyScoreSnapshot>())
+            try #require(actual.count == 1)
+            #expect(actual[0].date == hour && actual[0].createdAt == created && actual[0].readinessScore == 71)
+            #expect(actual[0].wellnessScore == nil && actual[0].conditionScore == nil)
+        }
+    }
+}
+
+extension AppOwnedBackupTests {
+    @Test func fileMergeAfterOwnershipConfirmationRejectsOutdatedHourlySiblingAndRollsBack() throws {
+        let source = try Device(), target = try Device()
+        defer { source.clean(); target.clean() }
+        let hour = Date(timeIntervalSince1970: 1_700_002_800)
+        let original = HourlyScoreSnapshot(date: hour, conditionScore: 65, hrvValue: 37)
+        original.createdAt = hour.addingTimeInterval(7)
+        source.context.insert(original)
+        try source.context.save()
+        let first = try AppOwnedBackup.encode(from: source.context, defaults: source.defaults)
+        _ = try AppOwnedBackup.restore(first, into: target.context, defaults: target.defaults)
+        let localRefresh = hour.addingTimeInterval(55)
+        do {
+            let ctx = ModelContext(target.container)
+            let edited = try #require(ctx.fetch(FetchDescriptor<HourlyScoreSnapshot>()).first)
+            edited.createdAt = localRefresh
+            edited.conditionScore = 88
+            try ctx.save()
+        }
+        source.context.insert(ExerciseRecord(date: hour, exerciseType: "Fixture", duration: 90))
+        try source.context.save()
+        let archive = try AppOwnedBackup.encode(from: source.context, defaults: source.defaults)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(archive, into: target.context, defaults: target.defaults,
+                                       mode: .mergeAfterOwnershipVerification)
+        }
+        let cold = ModelContext(target.container)
+        let rows = try cold.fetch(FetchDescriptor<HourlyScoreSnapshot>())
+        try #require(rows.count == 1)
+        #expect(rows[0].date == hour && rows[0].createdAt == localRefresh)
+        #expect(rows[0].conditionScore == 88 && rows[0].hrvValue == 37)
+        #expect(try cold.fetchCount(FetchDescriptor<ExerciseRecord>()) == 0)
+    }
+}
