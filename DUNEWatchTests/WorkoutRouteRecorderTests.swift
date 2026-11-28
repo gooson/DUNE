@@ -1,5 +1,6 @@
 import CoreLocation
 import Foundation
+import HealthKit
 import Testing
 @testable import DUNEWatch
 
@@ -14,12 +15,17 @@ struct WorkoutRouteRecorderTests {
         var desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBest
         var distanceFilter: CLLocationDistance = 10
         var allowsBackgroundLocationUpdates = true
+        var location: CLLocation?
+        var onLocationRequest: (() -> Void)?
         var requestCount = 0
         var requestLocationCount = 0
         var startCount = 0
         var stopCount = 0
         func requestWhenInUseAuthorization() { requestCount += 1 }
-        func requestLocation() { requestLocationCount += 1 }
+        func requestLocation() {
+            requestLocationCount += 1
+            onLocationRequest?()
+        }
         func startUpdatingLocation() { startCount += 1 }
         func stopUpdatingLocation() { stopCount += 1 }
     }
@@ -87,15 +93,15 @@ struct WorkoutRouteRecorderTests {
         #expect(recorder.capturedPlace == nil)
     }
 
-    @Test("Indoor place deadline stops updates and ignores late permission or sensor callbacks")
-    func indoorPlaceDeadline() {
+    @Test("Ending indoor capture ignores late permission or sensor callbacks")
+    func indoorPlaceStop() {
         let provider = LocationProvider()
         provider.authorizationStatus = .notDetermined
         let recorder = WorkoutRouteRecorder(locationManager: provider)
         recorder.start(at: date, capturesPlaceOnly: true)
         #expect(provider.requestCount == 1)
         #expect(provider.requestLocationCount == 0)
-        recorder.finishPlaceCapture()
+        _ = recorder.stop()
         recorder.authorizationChanged(.authorizedAlways)
         recorder.receive([location(31)], at: date.addingTimeInterval(31))
         #expect(provider.startCount == 0)
@@ -104,7 +110,7 @@ struct WorkoutRouteRecorderTests {
         #expect(recorder.stop().isEmpty)
     }
 
-    @Test("Authorization requests once per active indoor interval within the deadline")
+    @Test("Duplicate authorization callbacks do not start extra requests")
     func indoorPlaceAuthorization() {
         let provider = LocationProvider()
         provider.authorizationStatus = .notDetermined
@@ -123,6 +129,121 @@ struct WorkoutRouteRecorderTests {
         #expect(provider.requestLocationCount == 2)
         #expect(provider.startCount == 0)
         recorder.cancel()
+    }
+
+    @Test("A failed or inaccurate first indoor fix is retried until one valid place is saved")
+    func retryIndoorPlace() async throws {
+        let provider = LocationProvider()
+        let recorder = WorkoutRouteRecorder(locationManager: provider, initialPlaceRetryDelay: .milliseconds(5))
+        defer { recorder.cancel() }
+        let goodFix = location(3)
+        provider.onLocationRequest = {
+            if provider.requestLocationCount == 3 {
+                recorder.receive([goodFix], at: goodFix.timestamp)
+            }
+        }
+        defer { provider.onLocationRequest = nil }
+        recorder.start(at: date, capturesPlaceOnly: true)
+        recorder.receive([location(-1), location(1, accuracy: 180)], at: date.addingTimeInterval(1))
+        // The second request gets no callback.
+        let deadline = ContinuousClock.now.advanced(by: .seconds(2))
+        while recorder.capturedPlace == nil, ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        let place = try #require(recorder.capturedPlace)
+        #expect(recorder.stop().isEmpty)
+        try await WorkoutPlaceMetadataWrite.write(place: place, timeout: .seconds(1)) { metadata, completion in
+            #expect(WorkoutPlaceMetadata.place(from: metadata) == place)
+            completion(true, nil)
+        }
+        try await Task.sleep(for: .milliseconds(35))
+        #expect(provider.requestLocationCount == 3)
+        #expect(provider.startCount == 0)
+    }
+
+    @Test("Pause, revoked permission and stop cancel pending indoor retries")
+    func cancelIndoorRetries() async throws {
+        let provider = LocationProvider()
+        let recorder = WorkoutRouteRecorder(locationManager: provider, initialPlaceRetryDelay: .milliseconds(5))
+        recorder.start(at: date, capturesPlaceOnly: true)
+        recorder.pause(at: date)
+        try await Task.sleep(for: .milliseconds(25))
+        #expect(provider.requestLocationCount == 1)
+        recorder.resume(at: date)
+        provider.authorizationStatus = .denied
+        recorder.authorizationChanged(.denied)
+        try await Task.sleep(for: .milliseconds(25))
+        #expect(provider.requestLocationCount == 2)
+        provider.authorizationStatus = .authorizedWhenInUse
+        recorder.authorizationChanged(.authorizedWhenInUse)
+        _ = recorder.stop()
+        try await Task.sleep(for: .milliseconds(25))
+        #expect(provider.requestLocationCount == 3)
+    }
+
+    @Test("Indoor acquisition stops after five retries when GPS never replies")
+    func retryBudget() async throws {
+        let provider = LocationProvider()
+        let recorder = WorkoutRouteRecorder(locationManager: provider, initialPlaceRetryDelay: .milliseconds(2))
+        defer { recorder.cancel() }
+        recorder.start(at: date, capturesPlaceOnly: true)
+        let deadline = ContinuousClock.now.advanced(by: .seconds(2))
+        while provider.requestLocationCount < 6, ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        try await Task.sleep(for: .milliseconds(90))
+        #expect(provider.requestLocationCount == 6)
+    }
+
+    @Test("Workout end waits for one fresh place after rejecting a cached fix")
+    func finalPlaceRequest() async throws {
+        let end = Date()
+        let provider = LocationProvider()
+        let recorder = WorkoutRouteRecorder(locationManager: provider)
+        func fix(_ timestamp: Date, accuracy: Double) -> CLLocation {
+            CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37, longitude: 127), altitude: 0,
+                       horizontalAccuracy: accuracy, verticalAccuracy: -1, timestamp: timestamp)
+        }
+        provider.location = fix(end.addingTimeInterval(-60), accuracy: 20)
+        let laterFix = fix(end.addingTimeInterval(1.1), accuracy: 5)
+        let goodFix = fix(end.addingTimeInterval(0.1), accuracy: 5)
+        provider.onLocationRequest = {
+            Task { @MainActor in
+                recorder.receive([laterFix], at: laterFix.timestamp)
+                #expect(recorder.capturedPlace == nil)
+                recorder.receive([goodFix], at: laterFix.timestamp)
+            }
+        }
+        defer { provider.onLocationRequest = nil }
+        let place = try #require(await recorder.capturePlaceAtWorkoutEnd(
+            workoutStartedAt: end.addingTimeInterval(-600), endedAt: end
+        ))
+        #expect(place.latitude == 37 && place.longitude == 127)
+        #expect(!recorder.isRecording && recorder.points.isEmpty)
+        let existing = await recorder.capturePlaceAtWorkoutEnd(workoutStartedAt: end, endedAt: end)
+        #expect(existing == place)
+        #expect(provider.requestLocationCount == 1)
+    }
+
+    @Test("Ending without permission, after a delay, or without a fix does not block saving")
+    func finalPlaceUnavailable() async {
+        let end = Date()
+        let provider = LocationProvider()
+        let recorder = WorkoutRouteRecorder(locationManager: provider)
+        let expiredEnd = end.addingTimeInterval(-60)
+        #expect(await recorder.capturePlaceAtWorkoutEnd(workoutStartedAt: expiredEnd, endedAt: expiredEnd) == nil)
+        provider.authorizationStatus = .denied
+        #expect(await recorder.capturePlaceAtWorkoutEnd(workoutStartedAt: end, endedAt: end) == nil)
+        #expect(provider.requestLocationCount == 0)
+        provider.authorizationStatus = .authorizedWhenInUse
+        // A cached measurement taken after this workout cannot stand in for a requested fix.
+        provider.location = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 37, longitude: 127),
+                                       altitude: 0, horizontalAccuracy: 5, verticalAccuracy: -1,
+                                       timestamp: end.addingTimeInterval(0.25))
+        #expect(await recorder.capturePlaceAtWorkoutEnd(
+            workoutStartedAt: end, endedAt: end, timeout: .milliseconds(5)
+        ) == nil)
+        #expect(provider.requestLocationCount == 1 && !recorder.isRecording)
     }
 
     @Test("Indoor place collection excludes paused movement and denial")
@@ -147,6 +268,61 @@ struct WorkoutRouteRecorderTests {
         #expect(recorder.capturedPlace == nil)
         #expect(provider.requestLocationCount == 2)
         recorder.cancel()
+    }
+
+    // MARK: - Integration
+
+    @Test(
+        "An indoor workout saved without an initial place retains the end-time GPS fix in HealthKit",
+        .enabled(if: ProcessInfo.processInfo.environment["DUNE_VERIFY_WATCH_PLACE_HEALTHKIT"] == "1"),
+        .timeLimit(.minutes(2))
+    )
+    func syntheticIndoorWorkoutReadback() async throws {
+#if targetEnvironment(simulator)
+        let healthStore = HKHealthStore()
+        try await healthStore.requestAuthorization(
+            toShare: [HKObjectType.workoutType()],
+            read: [HKObjectType.workoutType()]
+        )
+        guard healthStore.authorizationStatus(for: .workoutType()) == .sharingAuthorized else {
+            Issue.record("Grant workout write and read access to the Watch test host")
+            return
+        }
+
+        let configuration = HKWorkoutConfiguration()
+        configuration.activityType = .running
+        configuration.locationType = .indoor
+        let builder = HKWorkoutBuilder(healthStore: healthStore, configuration: configuration, device: .local())
+        let start = Date().addingTimeInterval(-90)
+        try await builder.beginCollection(at: start)
+        let end = Date()
+        // Seed the dedicated simulator with simctl location set 37.5665,126.9780.
+        let saved = try #require(try await WorkoutManager.finishCardioWorkout(
+            builder: builder, mode: .cardio(activityType: .running, isOutdoor: false),
+            capturedPlace: nil, startedAt: start, endedAt: end
+        ))
+
+        // Query the saved object, not the builder's in-memory return value.
+        let readResult: Result<[HKWorkout], any Error>
+        do {
+            let query = HKSampleQueryDescriptor(
+                predicates: [.workout(HKQuery.predicateForObject(with: saved.uuid))],
+                sortDescriptors: [], limit: 1
+            )
+            readResult = .success(try await query.result(for: healthStore))
+        } catch {
+            readResult = .failure(error)
+        }
+        try await healthStore.delete(saved)
+        let reloaded = try #require(readResult.get().first)
+        let place = try #require(WorkoutPlaceMetadata.place(from: reloaded.metadata))
+        #expect(abs(place.latitude - 37.5665) < 0.00001)
+        #expect(abs(place.longitude - 126.9780) < 0.00001)
+        #expect(place.source == .gps)
+        #expect(abs(reloaded.endDate.timeIntervalSince(end)) < 0.001)
+#else
+        Issue.record("Synthetic HealthKit verification is limited to a Watch simulator")
+#endif
     }
 
     @Test("Outdoor route uses continuous high-accuracy updates instead of a place request")
