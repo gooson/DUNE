@@ -246,6 +246,7 @@ struct WorkoutSessionView: View {
         .sheet(isPresented: $showingInsights) {
             NavigationStack {
                 WeeklyStatsDetailView()
+                    .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Close", systemImage: "xmark") { showingInsights = false }

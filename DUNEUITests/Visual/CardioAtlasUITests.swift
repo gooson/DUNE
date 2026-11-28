@@ -39,6 +39,28 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         closeAtlasDestination()
     }
 
+    func testRecordedRouteExpandedMapNavigation() {
+        openRecord("running")
+        let record = element("exercise-session-detail-scroll")
+        XCTAssertTrue(element("cardio-atlas-map").waitForExistence(timeout: 10))
+        XCTAssertTrue(scrollToAtlasDetailControl("cardio-atlas-expand-map"))
+        element("cardio-atlas-expand-map").tap()
+
+        let mapBar = app.navigationBars.matching(
+            NSPredicate(format: "label IN %@", ["Workout map", "운동 지도"])
+        ).firstMatch
+        XCTAssertTrue(mapBar.waitForExistence(timeout: 8), "Expanded map should own its navigation title")
+        let done = mapBar.buttons.matching(NSPredicate(format: "label IN %@", ["Done", "완료"])).firstMatch
+        XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable)
+        atlasScreenshot(named: "Cardio Atlas recorded route expanded map")
+
+        done.tap()
+        XCTAssertTrue(mapBar.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(record.waitForExistence(timeout: 8) && record.isHittable)
+        XCTAssertTrue(element("cardio-atlas-section").exists,
+                      "Dismissing the map should return to the selected running record")
+    }
+
     func testImportedCardioDetailPreservesAnalysis() {
         navigateToDashboard()
         XCTAssertTrue(element(AXID.dashboardHeroCondition).waitForExistence(timeout: 12))

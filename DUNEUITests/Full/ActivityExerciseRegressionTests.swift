@@ -516,7 +516,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("W32 iPad sheet fallback normal top")
         let done = app.buttons["workout-insights-close"].firstMatch
         XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable,
-                      "W32 fallback sheet must keep Done reachable")
+                      "W32 fallback sheet must keep Close reachable")
         XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(done.frame),
                       "W32 Done must fit fully within the iPad window")
         done.auditTap()
@@ -3747,7 +3747,10 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             header.press(forDuration: 0.15, thenDragTo: header.withOffset(CGVector(dx: 0, dy: 32)),
                          withVelocity: .slow, thenHoldForDuration: 0.4)
             XCTAssertTrue(detail.isHittable && done.isHittable, "A partial drag must keep the detail visible")
-            XCTAssertLessThan(done.frame.midY, detail.frame.minY)
+            let bar = app.navigationBars["Tempo Run"].firstMatch
+            XCTAssertTrue(bar.exists)
+            XCTAssertTrue(bar.frame.contains(CGPoint(x: done.frame.midX, y: done.frame.midY)),
+                          "The close action should remain in the workout navigation bar")
         } else {
             XCTAssertGreaterThanOrEqual(done.frame.minY, detail.frame.maxY)
         }
