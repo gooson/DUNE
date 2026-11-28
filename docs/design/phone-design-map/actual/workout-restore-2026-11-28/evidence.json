@@ -26,6 +26,29 @@
       "timestamp": 1795848839.149,
       "sha256": "327e4e4a5e94f53dd512c1626f2b5a1bb6ddd044ff48dd965d2a80340ce81b53",
       "storage": "local XCTest result attachment"
+    },
+    {
+      "screen": "S01 privacy · historical recovery completed",
+      "path": "S01-synthetic-restored.png",
+      "test": "LegacyWorkoutRecoveryPresentationTests/testImportedWorkoutSetAndPlaceCountsInSettings()",
+      "attachment": "S01-legacy-restored-workouts-sets-place_0_53093209-7C69-408C-B5F0-6C85BA328573.png",
+      "timestamp": 1795875099.968,
+      "sha256": "c3b771dae29e733653a607e95e3210dd0151222e031a71b88cd04a57889cc6b5",
+      "source_base_revision": "a460689f4",
+      "source_worktree_dirty": true,
+      "result_bundle": "dune-pr1033-map-results-location.xcresult",
+      "result": "1 passed, 0 failures",
+      "scope": "Native SettingsDetailView hosted in an iPhone simulator test window. In-memory SwiftData with synthetic CKRecords. No CloudKit network fetch.",
+      "first_import": {
+        "workouts": 2,
+        "sets": 3,
+        "locations": 1
+      },
+      "repeated_import": {
+        "workouts": 0,
+        "sets": 0,
+        "locations": 0
+      }
     }
   ]
 }

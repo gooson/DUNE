@@ -8,7 +8,7 @@ import Testing
 @MainActor
 struct LegacyWorkoutRecoveryTests {
     private func store() throws -> ModelContainer {
-        let schema = Schema([ExerciseRecord.self, WorkoutSet.self])
+        let schema = Schema([ExerciseRecord.self, WorkoutSet.self, WorkoutLocationRecord.self])
         return try ModelContainer(for: schema, configurations: ModelConfiguration(
             schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none
         ))
@@ -31,6 +31,70 @@ struct LegacyWorkoutRecoveryTests {
         record["CD_setNumber"] = NSNumber(value: 1)
         record["CD_reps"] = NSNumber(value: 8)
         return record
+    }
+
+    @Test func restoresHistoricalLocationAndPreservesLocalEdits() throws {
+        let container = try store()
+        let exercise = workout()
+        let record = CKRecord(recordType: "CD_WorkoutLocationRecord")
+        let healthID = UUID().uuidString
+        let stamp = Date(timeIntervalSince1970: 1_700_000_000)
+        let place = try #require(WorkoutPlace(latitude: 12, longitude: 22, name: "Fixture gym", source: .manual))
+        let route = try #require(WorkoutRoutePoint(latitude: 12.1, longitude: 22.1, timestamp: stamp))
+        let payload = WorkoutLocationPayload(isIndoor: true, route: [route], place: place)
+        record["CD_id"] = UUID().uuidString
+        record["CD_localRecordID"] = exercise["CD_id"]
+        record["CD_healthKitWorkoutID"] = healthID
+        record["CD_updatedAt"] = stamp
+        let bytes = try JSONEncoder().encode(payload)
+        let file = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: file) }
+        try bytes.write(to: file)
+        record["CD_payloadData_ckAsset"] = CKAsset(fileURL: file)
+        let first = try LegacyWorkoutRecovery.importRecords([record, exercise], into: container)
+        #expect(first.locations == 1)
+        let context = ModelContext(container)
+        let row = try #require(context.fetch(FetchDescriptor<WorkoutLocationRecord>()).first)
+        #expect(row.localRecordID?.uuidString == exercise["CD_id"] as? String)
+        #expect(row.healthKitWorkoutID == healthID)
+        #expect(row.payloadData == bytes && row.updatedAt == stamp)
+        #expect(row.payload == payload)
+        #expect(try LegacyWorkoutRecovery.importRecords([record, exercise], into: container).locations == 0)
+        row.payload = WorkoutLocationPayload(isIndoor: true)
+        try context.save()
+        #expect(throws: LegacyWorkoutRecovery.Failure.localConflict) {
+            try LegacyWorkoutRecovery.importRecords([workout(), record], into: container)
+        }
+        #expect(try ModelContext(container).fetchCount(FetchDescriptor<ExerciseRecord>()) == 1)
+        #expect(try ModelContext(container).fetch(FetchDescriptor<WorkoutLocationRecord>()).first?.payload?.place == nil)
+    }
+
+    @Test func mixedVersionRecoveryRetainsNewerFieldsAndFillsOnlyMissingValues() throws {
+        let container = try store()
+        let original = workout(), trainingSet = set(parent: original)
+        original["CD_plannedSetCount"] = NSNumber(value: 4)
+        trainingSet["CD_rpeSourceRaw"] = "manual"
+        _ = try LegacyWorkoutRecovery.importRecords([original, trainingSet], into: container)
+
+        original["CD_plannedSetCount"] = nil
+        trainingSet["CD_rpeSourceRaw"] = nil
+        original["CD_effortSourceRaw"] = "user"
+        trainingSet["CD_plannedReps"] = NSNumber(value: 8)
+        let extra = workout()
+        let records = [original, trainingSet, extra]
+        #expect(try LegacyWorkoutRecovery.importRecords(records, into: container).workouts == 1)
+        #expect(try LegacyWorkoutRecovery.importRecords(records, into: container).workouts == 0)
+        let context = ModelContext(container)
+        let set = try #require(context.fetch(FetchDescriptor<WorkoutSet>()).first)
+        #expect(set.rpeSourceRaw == "manual" && set.plannedReps == 8)
+        #expect(set.exerciseRecord?.plannedSetCount == 4 && set.exerciseRecord?.effortSourceRaw == "user")
+
+        trainingSet["CD_plannedReps"] = NSNumber(value: 10)
+        #expect(throws: LegacyWorkoutRecovery.Failure.localConflict) {
+            try LegacyWorkoutRecovery.importRecords([workout()] + records, into: container)
+        }
+        #expect(try ModelContext(container).fetchCount(FetchDescriptor<ExerciseRecord>()) == 2)
+        #expect(try ModelContext(container).fetch(FetchDescriptor<WorkoutSet>()).first?.plannedReps == 8)
     }
 
     @Test func resolvesParentsAcrossPagesAndRepeatedImports() throws {

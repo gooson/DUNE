@@ -2,17 +2,19 @@ import CloudKit
 import Foundation
 import SwiftData
 
-/// Reads the two workout types written by older DUNE builds. Only explicit recovery inserts local rows.
+/// Reads historical workout, set and location records without modifying the remote zone. Only explicit recovery inserts local rows.
 enum LegacyWorkoutRecovery {
     enum Failure: Error, Equatable { case invalidRecord, invalidRelationship, duplicateIdentity, localConflict, accountChanged, inProgress }
 
     struct Result {
         let workouts: Int
         let sets: Int
+        let locations: Int
     }
 
     private static let workoutType = "CD_ExerciseRecord"
     private static let setType = "CD_WorkoutSet"
+    private static let locationType = "CD_WorkoutLocationRecord"
 
     static func fetch() async throws -> (account: CKRecord.ID, records: [CKRecord]) {
         let container = CKContainer(identifier: "iCloud.com.raftel.dailve")
@@ -26,7 +28,7 @@ enum LegacyWorkoutRecovery {
             let page = try await db.recordZoneChanges(inZoneWith: zone, since: token, resultsLimit: 400)
             for (id, change) in page.modificationResultsByID {
                 let record = try change.get().record
-                if record.recordType == workoutType || record.recordType == setType { records[id] = record }
+                if [workoutType, setType, locationType].contains(record.recordType) { records[id] = record }
             }
             for deletion in page.deletions { records.removeValue(forKey: deletion.recordID) }
             token = page.changeToken
@@ -72,6 +74,8 @@ enum LegacyWorkoutRecovery {
             let row: ExerciseRecord
             if let existing = localWorkouts[id] {
                 guard matches(existing, decoded) else { throw Failure.localConflict }
+                try supplement(\.plannedSetCount, on: existing, from: decoded)
+                try supplement(\.effortSourceRaw, on: existing, from: decoded)
                 row = existing
             } else {
                 row = decoded
@@ -90,14 +94,63 @@ enum LegacyWorkoutRecovery {
             if let existing = localSets[id] {
                 guard existing.exerciseRecord?.id == parent.id else { throw Failure.invalidRelationship }
                 guard matches(existing, set) else { throw Failure.localConflict }
+                try supplement(\.plannedReps, on: existing, from: set)
+                try supplement(\.rpeSourceRaw, on: existing, from: set)
                 continue
             }
             set.exerciseRecord = parent
             context.insert(set)
             insertedSets += 1
         }
+        let insertedLocations = try restoreLocations(records.filter { $0.recordType == locationType }, into: context)
         if context.hasChanges { try context.save() }
-        return Result(workouts: insertedWorkouts, sets: insertedSets)
+        return Result(workouts: insertedWorkouts, sets: insertedSets, locations: insertedLocations)
+    }
+
+    private static func restoreLocations(_ records: [CKRecord], into context: ModelContext) throws -> Int {
+        guard !records.isEmpty else { return 0 }
+        var local = [UUID: WorkoutLocationRecord]()
+        for row in try context.fetch(FetchDescriptor<WorkoutLocationRecord>()) {
+            guard local.updateValue(row, forKey: row.id) == nil else { throw Failure.duplicateIdentity }
+        }
+        var seen = Set<UUID>()
+        var inserted = 0
+        for record in records {
+            let id = try identifier(record)
+            guard seen.insert(id).inserted else { throw Failure.duplicateIdentity }
+            let localID = try value(record, "CD_localRecordID", as: String.self).map { string in
+                guard let uuid = UUID(uuidString: string) else { throw Failure.invalidRecord }
+                return uuid
+            }
+            let healthID = try value(record, "CD_healthKitWorkoutID", as: String.self)
+            guard localID != nil || healthID?.isEmpty == false,
+                  let date = record["CD_updatedAt"] as? Date else { throw Failure.invalidRecord }
+            let data = try binary(record, "CD_payloadData")
+            if let data {
+                guard data.count <= 1_000_000,
+                      (try? JSONDecoder().decode(WorkoutLocationPayload.self, from: data)) != nil
+                else { throw Failure.invalidRecord }
+            }
+            if let existing = local[id] {
+                guard existing.localRecordID == localID, existing.healthKitWorkoutID == healthID,
+                      abs(existing.updatedAt.timeIntervalSince(date)) < 0.0011 else { throw Failure.localConflict }
+                if existing.payloadData != data {
+                    // Older encoders can order JSON keys differently for the same recorded location.
+                    guard let existingData = existing.payloadData, let data,
+                          let previous = try JSONSerialization.jsonObject(with: existingData) as? NSDictionary,
+                          let incoming = try JSONSerialization.jsonObject(with: data) as? NSDictionary,
+                          previous.isEqual(incoming) else { throw Failure.localConflict }
+                }
+                continue
+            }
+            let row = WorkoutLocationRecord(localRecordID: localID, healthKitWorkoutID: healthID, payload: .init())
+            row.id = id
+            row.payloadData = data
+            row.updatedAt = date
+            context.insert(row)
+            inserted += 1
+        }
+        return inserted
     }
 
     private static func identifier(_ r: CKRecord) throws -> UUID {
@@ -159,23 +212,35 @@ enum LegacyWorkoutRecovery {
         keys.allSatisfy { lhs[keyPath: $0] == rhs[keyPath: $0] }
     }
 
+    /// V17 backups omit these later fields. Retain the one available value, and reject competing values.
+    private static func supplement<Row: AnyObject, Value: Equatable>(
+        _ key: ReferenceWritableKeyPath<Row, Value?>, on local: Row, from remote: Row
+    ) throws {
+        guard let incoming = remote[keyPath: key] else { return }
+        if let current = local[keyPath: key] {
+            guard current == incoming else { throw Failure.localConflict }
+        } else {
+            local[keyPath: key] = incoming
+        }
+    }
+
     private static func matches(_ a: ExerciseRecord, _ b: ExerciseRecord) -> Bool {
         // CloudKit timestamp transport has millisecond precision.
         abs(a.date.timeIntervalSince(b.date)) < 0.0011 && abs(a.createdAt.timeIntervalSince(b.createdAt)) < 0.0011
             && equal(a, b, [\.exerciseType, \.memo, \.calorieSourceRaw])
-            && equal(a, b, [\.exerciseDefinitionID, \.equipmentRaw, \.effortSourceRaw, \.healthKitWorkoutID])
+            && equal(a, b, [\.exerciseDefinitionID, \.equipmentRaw, \.healthKitWorkoutID])
             && equal(a, b, [\.duration]) && equal(a, b, [\.isFromHealthKit])
             && equal(a, b, [\.primaryMusclesRaw, \.secondaryMusclesRaw])
             && equal(a, b, [\.cardioMachineLevelChangesData])
             && equal(a, b, [\.calories, \.distance, \.averagePaceSecondsPerKm, \.averageCadenceStepsPerMinute,
                             \.elevationGainMeters, \.floorsAscended, \.cardioMachineLevelAverage, \.estimatedCalories,
                             \.autoIntensityRaw, \.cardioFitnessVO2Max])
-            && equal(a, b, [\.stepCount, \.cardioMachineLevelMax, \.rpe, \.plannedSetCount])
+            && equal(a, b, [\.stepCount, \.cardioMachineLevelMax, \.rpe])
     }
 
     private static func matches(_ a: WorkoutSet, _ b: WorkoutSet) -> Bool {
         equal(a, b, [\.setNumber]) && equal(a, b, [\.setTypeRaw]) && equal(a, b, [\.isCompleted])
-            && equal(a, b, [\.rpeSourceRaw]) && equal(a, b, [\.reps, \.intensity, \.plannedReps])
+            && equal(a, b, [\.reps, \.intensity])
             && equal(a, b, [\.weight, \.distance, \.duration, \.restDuration, \.rpe])
     }
 

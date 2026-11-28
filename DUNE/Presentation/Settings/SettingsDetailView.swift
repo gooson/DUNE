@@ -14,8 +14,10 @@ struct SettingsDetailView: View {
         sharedHealthDataService: SharedHealthDataService? = nil,
         canLoadHealthKitData: Bool = true,
         hasFailedHealthKitAuthorization: Bool = false,
+        recovery: SettingsWorkoutRecovery = SettingsWorkoutRecovery(),
         onOpen: @escaping (SettingsHubRoute) -> Void
     ) {
+        self._recovery = State(initialValue: recovery)
         self.route = route
         self.sharedHealthDataService = sharedHealthDataService
         self.canLoadHealthKitData = canLoadHealthKitData
@@ -38,8 +40,7 @@ struct SettingsDetailView: View {
     @State private var liveActivityPreferences = WorkoutLiveActivityPreferences.read()
     @State private var isProcessingSimulatorMockData = false
     @State private var simulatorMockStatusMessage: String?
-    @State private var isRestoringLegacyWorkouts = false
-    @State private var legacyRecoveryMessage: String?
+    @State private var recovery: SettingsWorkoutRecovery
     @State private var isSyncing = false
     @State private var lastCloudSyncDate: Date?
 
@@ -419,17 +420,21 @@ struct SettingsDetailView: View {
             .accessibilityIdentifier("settings-row-force-sync")
 
             Button {
-                Task { await restoreLegacyWorkouts() }
+                Task {
+                    await recovery.restore {
+                        try await LegacyWorkoutRecovery.restore(into: modelContext.container)
+                    }
+                }
             } label: {
                 Label("Restore workouts from an earlier iCloud backup", systemImage: "icloud.and.arrow.down")
             }
-            .disabled(isRestoringLegacyWorkouts)
+            .disabled(recovery.isRestoring)
             .accessibilityIdentifier("settings-row-restore-legacy-workouts")
 
-            if isRestoringLegacyWorkouts {
+            if recovery.isRestoring {
                 ProgressView("Reading your earlier workout backup…")
-            } else if let legacyRecoveryMessage {
-                Text(verbatim: legacyRecoveryMessage)
+            } else if let message = recovery.message {
+                Text(verbatim: message)
                     .font(.footnote)
                     .foregroundStyle(DS.Color.textSecondary)
                     .accessibilityIdentifier("settings-legacy-workout-recovery-status")
@@ -461,24 +466,6 @@ struct SettingsDetailView: View {
         }
     }
 
-    @MainActor
-    private func restoreLegacyWorkouts() async {
-        guard !isRestoringLegacyWorkouts else { return }
-        isRestoringLegacyWorkouts = true
-        legacyRecoveryMessage = nil
-        defer { isRestoringLegacyWorkouts = false }
-        do {
-            let result = try await LegacyWorkoutRecovery.restore(into: modelContext.container)
-            legacyRecoveryMessage = String(localized: "Restored \(result.workouts) workouts and \(result.sets) sets to this device.")
-        } catch LegacyWorkoutRecovery.Failure.duplicateIdentity,
-                LegacyWorkoutRecovery.Failure.invalidRelationship,
-                LegacyWorkoutRecovery.Failure.localConflict,
-                LegacyWorkoutRecovery.Failure.invalidRecord {
-            legacyRecoveryMessage = String(localized: "Recovery stopped because the backup contains conflicting or unreadable records. Your local workouts are unchanged.")
-        } catch {
-            legacyRecoveryMessage = String(localized: "Couldn’t finish recovery. Check your iCloud connection and try again.")
-        }
-    }
 
     private var locationStatusText: String {
         switch locationStatus {
@@ -604,5 +591,36 @@ struct SettingsDetailView: View {
 #Preview {
     NavigationStack {
         SettingsDetailView(route: .workout, onOpen: { _ in })
+    }
+}
+
+@Observable
+@MainActor
+final class SettingsWorkoutRecovery {
+    private(set) var isRestoring = false
+    private(set) var message: String?
+
+    func restore(using operation: () async throws -> LegacyWorkoutRecovery.Result) async {
+        guard !isRestoring else { return }
+        isRestoring = true
+        message = nil
+        defer { isRestoring = false }
+        do {
+            let result = try await operation()
+            let summary = String(localized: "Restored \(result.workouts) workouts and \(result.sets) sets to this device.")
+            if result.locations > 0 {
+                let locationLabel = String(localized: "Workout location")
+                message = "\(summary)\n\(locationLabel) · \(result.locations.formatted())"
+            } else {
+                message = summary
+            }
+        } catch LegacyWorkoutRecovery.Failure.duplicateIdentity,
+                LegacyWorkoutRecovery.Failure.invalidRelationship,
+                LegacyWorkoutRecovery.Failure.localConflict,
+                LegacyWorkoutRecovery.Failure.invalidRecord {
+            message = String(localized: "Recovery stopped because the backup contains conflicting or unreadable records. Your local workouts are unchanged.")
+        } catch {
+            message = String(localized: "Couldn’t finish recovery. Check your iCloud connection and try again.")
+        }
     }
 }

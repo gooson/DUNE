@@ -1,4 +1,6 @@
+import CryptoKit
 import Foundation
+import SQLite3
 import SwiftData
 import Testing
 @testable import DUNE
@@ -201,6 +203,145 @@ struct AppSchemaTests {
         #expect(location.healthKitWorkoutID == "workout-id")
         #expect(location.payload?.place == place)
         #expect(location.payload?.isIndoor == true)
+    }
+
+    @Test("Every V19 entity, relationship and attachment survives upgrade and two cold opens")
+    func completeLegacyStoreSurvivesUpgrade() throws {
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let url = directory.appending(path: "original.store")
+        let legacy = Schema(AppSchemaV19.models)
+        let tables = legacy.entities.map { "Z" + $0.name.uppercased() }.sorted()
+        let front = Data(repeating: 0x3a, count: 1_280_003)
+        let side = Data(repeating: 0x93, count: 1_024_013)
+        let entry = TemplateEntry(exerciseDefinitionID: "test-curl", exerciseName: "Custom curl",
+                                  defaultSets: 4, defaultReps: 7, defaultWeightKg: 12.5)
+        // Retain value identities alone outside each store lifetime.
+        let habitID = UUID()
+        let recordID = UUID()
+        try autoreleasepool {
+            let config = ModelConfiguration(schema: legacy, url: url, cloudKitDatabase: .none)
+            let container = try ModelContainer(for: legacy, configurations: config)
+            let context = ModelContext(container)
+            let exercise = ExerciseRecord(date: .now, exerciseType: "Manual session", duration: 727)
+            exercise.id = recordID
+            exercise.healthKitWorkoutID = nil
+            exercise.memo = "운동 메모"
+            let set = WorkoutSet(setNumber: 2, weight: 12.5, reps: 7, isCompleted: true)
+            set.exerciseRecord = exercise
+            context.insert(exercise)
+            context.insert(set)
+            let habit = HabitDefinition(name: "Test habit", iconCategory: .health, habitType: .count,
+                                       goalValue: 7, goalUnit: "times", frequency: .weekly(targetDays: 3))
+            habit.id = habitID
+            context.insert(habit)
+            let log = HabitLog(date: .now, value: 3, memo: "습관 메모")
+            log.habitDefinition = habit
+            context.insert(log)
+            context.insert(BodyCompositionRecord(weight: 68.7, bodyFatPercentage: 17.25, muscleMass: 29, memo: "체성분"))
+            context.insert(InjuryRecord(bodyPart: .knee, bodySide: nil, severity: .minor,
+                                        startDate: .now, memo: "회복 메모"))
+            context.insert(CustomExercise(name: entry.exerciseName, category: .strength, inputType: .setsRepsWeight,
+                                          primaryMuscles: [.biceps], equipment: .bodyweight))
+            context.insert(WorkoutTemplate(name: "내 루틴", exerciseEntries: [entry]))
+            context.insert(UserCategory(name: "내 분류", colorHex: "2255AA", sortOrder: 2))
+            context.insert(ExerciseDefaultRecord(exerciseDefinitionID: entry.exerciseDefinitionID,
+                                                 defaultWeight: 12.5, defaultReps: 7, isPreferred: true))
+            context.insert(HealthSnapshotMirrorRecord(sourceDevice: "fixture", payloadJSON: "{\"version\":1}"))
+            context.insert(HourlyScoreSnapshot(date: .now, conditionScore: 75, readinessScore: 61, hrvValue: 43))
+            context.insert(PostureAssessmentRecord(overallScore: 71, frontImageData: front, sideImageData: side,
+                                                   bodyHeight: 172, memo: "자세 메모"))
+            try context.save()
+        }
+        let baseline = try legacyRows(at: url, tables: tables)
+        #expect(baseline.count == 13)
+        for _ in 0..<2 {
+            try autoreleasepool {
+                let config = ModelConfiguration(schema: AppSchema.currentSchema, url: url, cloudKitDatabase: .none)
+                let container = try ModelContainer(for: AppSchema.currentSchema, configurations: config)
+                let context = ModelContext(container)
+                #expect(try context.fetch(FetchDescriptor<WorkoutSet>()).first?.exerciseRecord?.id == recordID)
+                #expect(try context.fetch(FetchDescriptor<HabitLog>()).first?.habitDefinition?.id == habitID)
+                #expect(try context.fetch(FetchDescriptor<WorkoutTemplate>()).first?.exerciseEntries.first?.id == entry.id)
+                let photo = try #require(context.fetch(FetchDescriptor<PostureAssessmentRecord>()).first)
+                #expect(photo.frontImageData.map { SHA256.hash(data: $0) } == SHA256.hash(data: front))
+                #expect(photo.sideImageData.map { SHA256.hash(data: $0) } == SHA256.hash(data: side))
+                #expect(try context.fetchCount(FetchDescriptor<WorkoutLocationRecord>()) == 0)
+            }
+            #expect(try legacyRows(at: url, tables: tables) == baseline)
+        }
+    }
+
+    /// Reads only this synthetic fixture, comparing every persisted value independently of SQLite column order.
+    /// To-one relationships use the parent's domain UUID instead of SQLite's internal row number.
+    private func legacyRows(at url: URL, tables: [String]) throws -> [String: [String: SHA256.Digest]] {
+        var database: OpaquePointer?
+        guard sqlite3_open_v2(url.path, &database, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+            throw CocoaError(.fileReadUnknown)
+        }
+        defer { sqlite3_close(database) }
+        // Core Data can still be checkpointing the sidecars after the old stack closes.
+        sqlite3_busy_timeout(database, 5_000)
+        func queryError(_ sql: String) -> NSError {
+            NSError(domain: "LegacyMigrationFixture", code: Int(sqlite3_errcode(database)),
+                    userInfo: [NSLocalizedDescriptionKey: "\(String(cString: sqlite3_errmsg(database))) [\(sql)]"])
+        }
+        func rows(_ sql: String, visit: (OpaquePointer) throws -> Void) throws {
+            var statement: OpaquePointer?
+            guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK, let statement else {
+                throw queryError(sql)
+            }
+            defer { sqlite3_finalize(statement) }
+            var step = sqlite3_step(statement)
+            while step == SQLITE_ROW {
+                try visit(statement)
+                step = sqlite3_step(statement)
+            }
+            guard step == SQLITE_DONE else { throw queryError(sql) }
+        }
+        try rows("BEGIN") { _ in }
+        var snapshot = [String: [String: SHA256.Digest]]()
+        for table in tables {
+            var fields = [String]()
+            try rows("PRAGMA table_info(\(table))") { row in
+                let column = String(cString: sqlite3_column_text(row, 1))
+                if !["Z_PK", "Z_ENT", "Z_OPT"].contains(column) { fields.append(column) }
+            }
+            let select = fields.map { column in
+                if ["ZEXERCISERECORD", "ZHABITDEFINITION"].contains(column) {
+                    return "(SELECT parent.ZID FROM \(column) AS parent WHERE parent.Z_PK = child.\(column))"
+                }
+                return "child.\(column)"
+            }
+            var count = 0
+            try rows("SELECT \(select.joined(separator: ", ")) FROM \(table) AS child") { row in
+                count += 1
+                var values = [String: SHA256.Digest]()
+                for (index, name) in fields.enumerated() {
+                    let column = Int32(index)
+                    let kind = sqlite3_column_type(row, column)
+                    var value = Data([UInt8(kind)])
+                    switch kind {
+                    case SQLITE_INTEGER:
+                        withUnsafeBytes(of: sqlite3_column_int64(row, column).littleEndian) { value.append(contentsOf: $0) }
+                    case SQLITE_FLOAT:
+                        withUnsafeBytes(of: sqlite3_column_double(row, column).bitPattern.littleEndian) { value.append(contentsOf: $0) }
+                    case SQLITE_BLOB, SQLITE_TEXT:
+                        if let bytes = sqlite3_column_blob(row, column) {
+                            value.append(bytes.assumingMemoryBound(to: UInt8.self), count: Int(sqlite3_column_bytes(row, column)))
+                        }
+                    default: break
+                    }
+                    values[name] = SHA256.hash(data: value)
+                }
+                snapshot[table] = values
+            }
+            // Each V19 entity is deliberately populated once.
+            #expect(count == 1)
+        }
+        try rows("COMMIT") { _ in }
+        return snapshot
     }
 
     private func makeTemporaryStoreURL() -> URL {

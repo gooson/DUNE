@@ -293,3 +293,86 @@ final class HealthKitWorkoutRoundTripIntegrationTests: XCTestCase {
     }
 }
 #endif
+
+#if targetEnvironment(simulator) && os(iOS)
+import CloudKit
+import SwiftData
+import SwiftUI
+
+@MainActor
+final class LegacyWorkoutRecoveryPresentationTests: XCTestCase {
+    func testImportedWorkoutSetAndPlaceCountsInSettings() async throws {
+        guard UIDevice.current.userInterfaceIdiom == .phone else { throw XCTSkip("iPhone settings capture") }
+        let schema = Schema([ExerciseRecord.self, WorkoutSet.self, WorkoutLocationRecord.self])
+        let storage = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+        let container = try ModelContainer(for: schema, configurations: storage)
+        let stamp = Date(timeIntervalSince1970: 1_700_000_000)
+        let workouts = (0..<2).map { _ in
+            let record = CKRecord(recordType: "CD_ExerciseRecord")
+            record["CD_id"] = UUID().uuidString
+            record["CD_date"] = stamp
+            record["CD_createdAt"] = stamp
+            record["CD_exerciseType"] = "Fixture"
+            record["CD_duration"] = 60
+            return record
+        }
+        let sets = (0..<3).map { index in
+            let set = CKRecord(recordType: "CD_WorkoutSet")
+            set["CD_id"] = UUID().uuidString
+            set["CD_setNumber"] = NSNumber(value: index + 1)
+            set["CD_exerciseRecord"] = workouts[index % workouts.count].recordID.recordName
+            return set
+        }
+        let location = CKRecord(recordType: "CD_WorkoutLocationRecord")
+        location["CD_id"] = UUID().uuidString
+        location["CD_localRecordID"] = workouts[0]["CD_id"]
+        location["CD_updatedAt"] = stamp
+        let place = try XCTUnwrap(WorkoutPlace(latitude: 0.125, longitude: 0.25, name: "Fixture", source: .manual))
+        location["CD_payloadData"] = try JSONEncoder().encode(WorkoutLocationPayload(isIndoor: true, place: place))
+        let records = workouts + sets + [location]
+
+        let recovery = SettingsWorkoutRecovery()
+        let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+        let previous = scene.keyWindow
+        let window = UIWindow(windowScene: scene)
+        defer {
+            window.isHidden = true
+            previous?.makeKey()
+        }
+        let screen = NavigationStack {
+            SettingsDetailView(route: .privacy, recovery: recovery) { _ in }
+                .navigationTitle("Data & Privacy")
+        }
+        .modelContainer(container)
+        window.rootViewController = UIHostingController(rootView: screen)
+        window.makeKeyAndVisible()
+
+        await recovery.restore { try LegacyWorkoutRecovery.importRecords(records, into: container) }
+        let workoutCount = 2, setCount = 3
+        let summary = String(localized: "Restored \(workoutCount) workouts and \(setCount) sets to this device.")
+        let label = String(localized: "Workout location")
+        XCTAssertEqual(recovery.message, summary + "\n" + label + " · 1")
+        XCTAssertFalse(recovery.isRestoring)
+        let context = ModelContext(container)
+        XCTAssertEqual(try context.fetchCount(FetchDescriptor<ExerciseRecord>()), workoutCount)
+        XCTAssertEqual(try context.fetchCount(FetchDescriptor<WorkoutSet>()), setCount)
+        XCTAssertEqual(try context.fetch(FetchDescriptor<WorkoutLocationRecord>()).first?.payload?.place, place)
+
+        window.layoutIfNeeded()
+        await Task.yield()
+        window.layoutIfNeeded()
+        let renderer = UIGraphicsImageRenderer(bounds: window.bounds)
+        let image = renderer.image { _ in
+            XCTAssertTrue(window.drawHierarchy(in: window.bounds, afterScreenUpdates: true))
+        }
+        let attachment = XCTAttachment(data: try XCTUnwrap(image.pngData()), uniformTypeIdentifier: "public.png")
+        attachment.name = "S01-legacy-restored-workouts-sets-place"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+
+        await recovery.restore { try LegacyWorkoutRecovery.importRecords(records, into: container) }
+        let zero = 0
+        XCTAssertEqual(recovery.message, String(localized: "Restored \(zero) workouts and \(zero) sets to this device."))
+    }
+}
+#endif
