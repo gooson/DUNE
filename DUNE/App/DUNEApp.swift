@@ -36,12 +36,12 @@ struct DUNEApp: App {
     @State private var hasForcedConsentPresentation = false
     @State private var hasForcedAutomaticWhatsNewPresentation = false
 
-    @State private var appRuntime: AppRuntime
+    @State private var storeOpening: PersistentStoreOpening<AppRuntime>
+    private var appRuntime: AppRuntime? { storeOpening.value }
     @State private var shortcutTemplateID: UUID?
     @State private var shortcutTemplateSignal = 0
     private let notificationService: any NotificationService
     private let notificationCenterDelegate: AppNotificationCenterDelegate
-    private let cloudKitSetupBackgroundTask: CloudKitSetupBackgroundTask
     private let workoutGenerationMetricMonitor: WorkoutGenerationMetricMonitor?
     private let whatsNewManager = WhatsNewManager.shared
     private let whatsNewStore = WhatsNewStore.shared
@@ -182,23 +182,9 @@ struct DUNEApp: App {
     private static func makeModelContainer(configuration: ModelConfiguration) throws -> ModelContainer {
         // SwiftData automatic lightweight migration handles all schema upgrades.
         // No explicit SchemaMigrationPlan is used — see AppSchemaVersions.swift.
-        try ModelContainer(
-            for: AppSchema.currentSchema,
-            configurations: configuration
-        )
-    }
-
-    private static func makeInMemoryFallbackContainer() -> ModelContainer {
-        AppLogger.data.error("Falling back to in-memory ModelContainer due to persistent store failure")
-        let fallbackConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
-        do {
-            return try makeModelContainer(configuration: fallbackConfiguration)
-        } catch {
-            // Absolute last resort — should never happen but prevents fatalError crash.
-            AppLogger.data.error("In-memory ModelContainer failed: \(error). Creating minimal container.")
-            // swiftlint:disable:next force_try
-            return try! ModelContainer(for: Schema([]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
-        }
+        let container = try ModelContainer(for: AppSchema.currentSchema, configurations: configuration)
+        HealthStoreBackupPolicy.refresh(container)
+        return container
     }
 
     static func makeSharedHealthDataService(
@@ -219,25 +205,22 @@ struct DUNEApp: App {
         )
     }
 
+    private static func openRuntime(notificationService: any NotificationService) -> PersistentStoreOpening<AppRuntime> {
+        PersistentStoreOpening {
+            let config = ModelConfiguration(isStoredInMemoryOnly: Self.shouldResetUITestState, cloudKitDatabase: .none)
+            let container = try makeModelContainer(configuration: config)
+            return makeAppRuntime(notificationService: notificationService, modelContainer: container)
+        }
+    }
+
     private static func makeAppRuntime(
         notificationService: any NotificationService,
+        modelContainer: ModelContainer,
         cloudSyncEnabled: Bool? = nil
     ) -> AppRuntime {
         let resolvedCloudSyncEnabled = cloudSyncEnabled ?? (Self.isRunningXCTest
             ? false
             : CloudSyncPreferenceStore.resolvedValue())
-        let config = ModelConfiguration(
-            isStoredInMemoryOnly: Self.shouldResetUITestState,
-            cloudKitDatabase: (resolvedCloudSyncEnabled && !Self.isRunningXCTest) ? .automatic : .none
-        )
-
-        let modelContainer: ModelContainer
-        do {
-            modelContainer = try Self.makeModelContainer(configuration: config)
-        } catch {
-            AppLogger.data.error("ModelContainer failed: \(error)")
-            modelContainer = Self.recoverModelContainer(after: error, configuration: config)
-        }
 
         let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
         let sharedHealthDataService = Self.makeSharedHealthDataService(
@@ -333,12 +316,19 @@ struct DUNEApp: App {
         let notifService = NotificationServiceImpl()
         self.notificationService = notifService
         self.notificationCenterDelegate = AppNotificationCenterDelegate()
-        let cloudKitSetupBackgroundTask = CloudKitSetupBackgroundTask()
-        cloudKitSetupBackgroundTask.startObserving()
-        self.cloudKitSetupBackgroundTask = cloudKitSetupBackgroundTask
         UNUserNotificationCenter.current().delegate = notificationCenterDelegate
-        let runtime = Self.makeAppRuntime(notificationService: notifService)
-        _appRuntime = State(initialValue: runtime)
+        let opening = Self.openRuntime(notificationService: notifService)
+        _storeOpening = State(initialValue: opening)
+        if let runtime = opening.value { Self.configureConsumers(runtime) }
+    }
+
+    private func retryStoreOpen() {
+        let opening = Self.openRuntime(notificationService: notificationService)
+        if let runtime = opening.value { Self.configureConsumers(runtime) }
+        storeOpening = opening
+    }
+
+    private static func configureConsumers(_ runtime: AppRuntime) {
         DUNEAppIntentStore.shared.configure(container: runtime.modelContainer)
         HealthQueryIntentState.shared.clear()
         HealthQueryService.shared.configure(
@@ -349,61 +339,19 @@ struct DUNEApp: App {
         DUNEAppShortcuts.updateAppShortcutParameters()
     }
 
-    private static func deleteStoreFiles(at url: URL) {
-        let fm = FileManager.default
-        for suffix in ["", "-wal", "-shm"] {
-            let fileURL = URL(fileURLWithPath: url.path + suffix)
-            do {
-                try fm.removeItem(at: fileURL)
-                AppLogger.data.info("Deleted store file: \(fileURL.lastPathComponent)")
-            } catch let error as NSError where error.domain == NSCocoaErrorDomain && error.code == NSFileNoSuchFileError {
-                // File doesn't exist — nothing to delete.
-            } catch {
-                AppLogger.data.error("Failed to delete store file \(fileURL.lastPathComponent): \(error.localizedDescription)")
-            }
-        }
-    }
-
-    private static func recoverModelContainer(after error: Error, configuration: ModelConfiguration) -> ModelContainer {
-        let reflectedError = String(reflecting: error)
-        guard PersistentStoreRecovery.shouldDeleteStore(after: error) else {
-            AppLogger.data.error("Skipping store deletion for non-migration container error: \(reflectedError, privacy: .private)")
-            return makeInMemoryFallbackContainer()
-        }
-
-        AppLogger.data.error("Deleting persistent store after migration compatibility failure: \(reflectedError, privacy: .private)")
-        deleteStoreFiles(at: configuration.url)
-
-        // Retry 1: fresh container after store deletion.
-        do {
-            let container = try makeModelContainer(configuration: configuration)
-            AppLogger.data.info("ModelContainer recovered with fresh store.")
-            return container
-        } catch {
-            AppLogger.data.error("Fresh ModelContainer retry failed: \(error)")
-        }
-
-        // Retry 2: without CloudKit.
-        do {
-            let noCloudConfig = ModelConfiguration(
-                url: configuration.url,
-                cloudKitDatabase: .none
-            )
-            let container = try makeModelContainer(configuration: noCloudConfig)
-            AppLogger.data.info("ModelContainer recovered without CloudKit.")
-            return container
-        } catch {
-            AppLogger.data.error("Fresh ModelContainer retry without CloudKit also failed: \(error)")
-            return makeInMemoryFallbackContainer()
-        }
-    }
-
     var body: some Scene {
-        Self.makeWindowGroup(content: primarySceneContent)
-            .modelContainer(appRuntime.modelContainer)
-
-        Self.makeInsightsWindowGroup(content: workoutInsightsContent)
-            .modelContainer(appRuntime.modelContainer)
+        Self.makeWindowGroup(content: storeOpening.content(retry: retryStoreOpen) { runtime in
+            primarySceneContent
+                .workoutBackupWarnings()
+                .modifier(NearbyWorkoutSyncModifier(healthService: runtime.sharedHealthDataService))
+                .onReceive(NotificationCenter.default.mainThreadPublisher(for: NearbyWorkoutCache.didChange)) { _ in
+                    Task { await runtime.refreshCoordinator.forceRefresh() }
+                }
+                .modelContainer(runtime.modelContainer)
+        })
+        Self.makeInsightsWindowGroup(content: storeOpening.content(retry: retryStoreOpen) { runtime in
+            workoutInsightsContent.modelContainer(runtime.modelContainer)
+        })
     }
 
     // SwiftUI may evaluate its lazy scene builder on AsyncRenderer. Build the
@@ -418,6 +366,19 @@ struct DUNEApp: App {
 
     @ViewBuilder
     private var primarySceneContent: some View {
+#if DEBUG && targetEnvironment(simulator)
+        if ProcessInfo.processInfo.arguments.contains("--healthkit-workout-fixture-permission") {
+            WorkoutFixturePermissionView()
+        } else {
+            regularPrimarySceneContent
+        }
+#else
+        regularPrimarySceneContent
+#endif
+    }
+
+    @ViewBuilder
+    private var regularPrimarySceneContent: some View {
 #if DEBUG
         if Self.isRunningUITests && ProcessInfo.processInfo.arguments.contains("--ui-legacy-insights-content") {
             workoutInsightsContent
@@ -549,6 +510,7 @@ struct DUNEApp: App {
             }
 #endif
             if newPhase == .background {
+                if let appRuntime { HealthStoreBackupPolicy.refresh(appRuntime.modelContainer) }
                 // Read permission can change in Settings while the app is away.
                 LifeHealthKitWorkouts.shared.invalidateWorkoutHistory(discardCached: true)
             }
@@ -571,12 +533,17 @@ struct DUNEApp: App {
         }
         .onReceive(NotificationCenter.default.mainThreadPublisher(for: .NSPersistentStoreRemoteChange)) { _ in
             Task { @MainActor in
+                guard let appRuntime else { return }
                 await PersistentStoreRemoteChangeRefresh.request(using: appRuntime.refreshCoordinator)
             }
         }
     }
 
-    private var appContent: some View {
+    @ViewBuilder private var appContent: some View {
+        if let appRuntime { loadedAppContent(appRuntime) }
+    }
+
+    private func loadedAppContent(_ appRuntime: AppRuntime) -> some View {
         ContentView(
             sharedHealthDataService: appRuntime.sharedHealthDataService,
             refreshCoordinator: appRuntime.refreshCoordinator,
@@ -627,6 +594,7 @@ struct DUNEApp: App {
 
     @MainActor
     private func seedMockDataIfNeeded() {
+        guard let appRuntime else { return }
         guard Self.shouldSeedMockData, !hasSeededMockData else { return }
         // A restored auxiliary scene can appear before the main scene.
         // Both scenes share this synchronous, once-per-launch fixture gate.
@@ -659,13 +627,20 @@ struct DUNEApp: App {
             return true
         }
         return changedKeys.contains(CloudSyncPreferenceStore.storageKey)
+            || changedKeys.contains(where: QuickStartFavoriteSync.isPreferenceKey)
+            || changedKeys.contains(where: ExerciseLibraryBackup.isLibraryKey)
     }
 
     @MainActor
     private func refreshAppRuntimeIfNeeded() async {
+        guard let appRuntime else { return }
         guard !Self.isRunningXCTest else { return }
 
         let resolvedValue = CloudSyncPreferenceStore.resolvedValue()
+        if resolvedValue {
+            QuickStartFavoriteSync.synchronize(in: appRuntime.modelContainer.mainContext)
+            ExerciseLibraryBackup.synchronize(in: appRuntime.modelContainer.mainContext)
+        }
         let action = CloudSyncPreferenceStore.runtimeRefreshAction(
             currentValue: appRuntime.cloudSyncEnabled,
             resolvedValue: resolvedValue
@@ -680,23 +655,19 @@ struct DUNEApp: App {
             previousObserverManager.stopObserving()
         }
 
-        appRuntime = Self.makeAppRuntime(
+        let updated = Self.makeAppRuntime(
             notificationService: notificationService,
+            modelContainer: appRuntime.modelContainer,
             cloudSyncEnabled: nextValue
         )
-        DUNEAppIntentStore.shared.configure(container: appRuntime.modelContainer)
-        HealthQueryIntentState.shared.clear()
-        HealthQueryService.shared.configure(
-            container: appRuntime.modelContainer,
-            sharedHealthDataService: appRuntime.sharedHealthDataService,
-            protectedDataProvider: { UIApplication.shared.isProtectedDataAvailable }
-        )
+        storeOpening = .ready(updated)
+        Self.configureConsumers(updated)
 
         if isLaunchExperienceReady {
             hasStartedRuntimeServices = false
             startRuntimeServicesIfNeeded()
             Task {
-                await appRuntime.refreshCoordinator.forceRefresh()
+                await updated.refreshCoordinator.forceRefresh()
             }
         }
     }
@@ -848,6 +819,7 @@ struct DUNEApp: App {
 
     @MainActor
     private func startRuntimeServicesIfNeeded() {
+        guard let appRuntime else { return }
         guard !hasStartedRuntimeServices else { return }
         guard !Self.shouldBypassLaunchExperienceForTests else { return }
 
@@ -887,6 +859,7 @@ struct DUNEApp: App {
 
     @MainActor
     private func refreshLimitedReadAccessIfNeeded() async {
+        guard let appRuntime else { return }
         guard hasCompletedHealthKitAuthorizationThisLaunch,
               !Self.shouldBypassLaunchExperienceForTests else { return }
         let windowChanged = await HealthKitManager.shared.refreshLimitedReadAccessWindow()
@@ -901,6 +874,7 @@ struct DUNEApp: App {
 
     @MainActor
     private func invalidateConditionHistoryIfNeeded() async -> Bool {
+        guard let appRuntime else { return false }
         guard await HealthKitManager.shared.conditionAccessChangePending() else { return false }
         // The day detail chart reads the seven-day scroll buffer; older
         // archival snapshots remain outside the invalidation window.
@@ -912,6 +886,7 @@ struct DUNEApp: App {
 
     @MainActor
     private func requestDeferredAuthorizationsIfNeeded() async {
+        guard let appRuntime else { return }
         guard isLaunchExperienceReady else { return }
         guard scenePhase == .active else { return }
         guard !Self.shouldBypassLaunchExperienceForTests else { return }
@@ -968,129 +943,151 @@ struct DUNEApp: App {
     @MainActor
     /// Wire Watch workout completion → ExerciseRecord creation on iPhone.
     private func wireWatchWorkoutReceiver(modelContainer: ModelContainer) {
+        WatchSessionManager.shared.onWorkoutReceived = { update, includesEffortEdit in
+            Self.persistWatchCompletion(update, includesEffortEdit: includesEffortEdit,
+                                        context: ModelContext(modelContainer), tombstones: .shared)
+        }
+    }
+
+    @MainActor
+    static func persistWatchCompletion(_ update: WatchWorkoutUpdate, includesEffortEdit: Bool,
+                                       context: ModelContext, tombstones: DeletedWorkoutTombstoneStore) -> Bool {
         let library = ExerciseLibraryService.shared
-        WatchSessionManager.shared.onWorkoutReceived = { update in
-            let context = ModelContext(modelContainer)
-
-            // Tombstone: skip if this workout was previously deleted by the user
-            if let hkID = update.healthKitWorkoutID, !hkID.isEmpty,
-               DeletedWorkoutTombstoneStore.shared.isDeleted(healthKitWorkoutID: hkID) {
-                AppLogger.data.debug("[WatchSync] Skipped tombstoned workout: \(update.exerciseName)")
-                return
-            }
-
-            // Dedup: skip if a record with matching healthKitWorkoutID already exists (CloudKit may have synced first)
-            if let hkID = update.healthKitWorkoutID, !hkID.isEmpty {
-                var hkDedup = FetchDescriptor<ExerciseRecord>(
-                    predicate: #Predicate<ExerciseRecord> { $0.healthKitWorkoutID == hkID }
-                )
-                hkDedup.fetchLimit = 1
-                if let existing = try? context.fetch(hkDedup), !existing.isEmpty {
-                    AppLogger.data.debug("[WatchSync] Skipped duplicate (HK ID match): \(update.exerciseName)")
-                    return
+        if let id = update.recordID, tombstones.isRecordDeleted(id) { return true }
+        if let hkID = update.healthKitWorkoutID, tombstones.isDeleted(healthKitWorkoutID: hkID) { return true }
+        do {
+            if let recordID = update.recordID {
+                var query = FetchDescriptor<ExerciseRecord>(predicate: #Predicate { $0.id == recordID })
+                query.fetchLimit = 1
+                if let existing = try context.fetch(query).first {
+                    if includesEffortEdit {
+                        existing.rpe = update.rpe
+                        existing.effortSourceRaw = update.effortSourceRaw
+                        try context.save()
+                    }
+                    return true
                 }
             }
+            if let hkID = update.healthKitWorkoutID {
+                var query = FetchDescriptor<ExerciseRecord>(predicate: #Predicate { $0.healthKitWorkoutID == hkID })
+                query.fetchLimit = 1
+                if try !context.fetch(query).isEmpty { return true }
+            }
+            // Legacy senders have neither stable identifier. Match their original start instant.
+            if update.recordID == nil && update.healthKitWorkoutID == nil {
+                let date = update.startTime
+                let name = update.exerciseName
+                var query = FetchDescriptor<ExerciseRecord>(predicate: #Predicate {
+                    $0.date == date && $0.exerciseType == name
+                })
+                query.fetchLimit = 1
+                if try !context.fetch(query).isEmpty { return true }
+            }
+        } catch {
+            AppLogger.data.error("Watch workout lookup failed: \(error.localizedDescription)")
+            return false
+        }
 
-            // Dedup: skip if a record with same exercise + similar date already exists
-            let startTime = update.startTime
-            let exerciseName = update.exerciseName
-            let windowStart = startTime.addingTimeInterval(-120)
-            let windowEnd = startTime.addingTimeInterval(120)
-            var dedup = FetchDescriptor<ExerciseRecord>(
-                predicate: #Predicate<ExerciseRecord> {
-                    $0.exerciseType == exerciseName && $0.date >= windowStart && $0.date <= windowEnd
-                }
+        let definition = library.exercise(byID: update.exerciseID)
+        let duration = (update.endTime ?? Date()).timeIntervalSince(update.startTime)
+
+        let wcCalorieSource: CalorieSource
+        if let raw = update.calorieSourceRaw, let source = CalorieSource(rawValue: raw) {
+            wcCalorieSource = source
+        } else {
+            if let raw = update.calorieSourceRaw {
+                AppLogger.data.warning("[WatchSync] Unknown calorieSource: \(raw, privacy: .public)")
+            }
+            wcCalorieSource = .manual
+        }
+        let validCalories = update.calories.flatMap { (0.0...10_000.0).contains($0) ? $0 : nil }
+        let record = ExerciseRecord(
+            date: update.startTime,
+            exerciseType: update.exerciseName,
+            duration: max(0, duration),
+            calories: wcCalorieSource == .healthKit ? validCalories : nil,
+            distance: update.cardio?.distance, stepCount: update.cardio?.steps,
+            averagePaceSecondsPerKm: update.cardio?.pace, floorsAscended: update.cardio?.floors,
+            cardioMachineLevelAverage: update.cardio?.averageLevel, cardioMachineLevelMax: update.cardio?.maximumLevel,
+            cardioMachineLevelChanges: update.cardio?.levelChanges ?? [], isFromHealthKit: update.cardio != nil,
+            healthKitWorkoutID: update.healthKitWorkoutID.flatMap { UUID(uuidString: $0) != nil ? $0 : nil },
+            exerciseDefinitionID: update.exerciseID,
+            primaryMuscles: definition?.primaryMuscles ?? [],
+            secondaryMuscles: definition?.secondaryMuscles ?? [],
+            equipment: definition?.equipment,
+            estimatedCalories: wcCalorieSource == .met ? validCalories : nil,
+            calorieSource: wcCalorieSource,
+            rpe: update.rpe,
+            plannedSetCount: update.plannedSetCount,
+            effortSourceRaw: update.effortSourceRaw
+        )
+
+        if let id = update.recordID { record.id = id }
+        var workoutSets: [WorkoutSet] = []
+        for setData in update.completedSets where setData.isCompleted {
+            let set = WorkoutSet(
+                setNumber: setData.setNumber,
+                setType: setData.setTypeRaw.flatMap(SetType.init(rawValue:)) ?? .working,
+                weight: setData.weight,
+                reps: setData.reps,
+                duration: setData.duration,
+                distance: setData.distance, intensity: setData.intensity,
+                isCompleted: true,
+                restDuration: setData.restDuration,
+                rpe: setData.rpe,
+                plannedReps: setData.plannedReps,
+                rpeSourceRaw: setData.rpeSourceRaw
             )
-            dedup.fetchLimit = 1
-            if let existing = try? context.fetch(dedup), !existing.isEmpty {
-                AppLogger.data.debug("[WatchSync] Skipped duplicate: \(update.exerciseName) at \(update.startTime)")
-                return
-            }
+            if let id = setData.id { set.id = id }
+            set.exerciseRecord = record
+            workoutSets.append(set)
+        }
+        record.sets = workoutSets
 
-            let definition = library.exercise(byID: update.exerciseID)
-            let duration = (update.endTime ?? Date()).timeIntervalSince(update.startTime)
-
-            let wcCalorieSource: CalorieSource
-            if let raw = update.calorieSourceRaw, let source = CalorieSource(rawValue: raw) {
-                wcCalorieSource = source
-            } else {
-                if let raw = update.calorieSourceRaw {
-                    AppLogger.data.warning("[WatchSync] Unknown calorieSource: \(raw, privacy: .public)")
-                }
-                wcCalorieSource = .manual
+        // Match the local save path when WC delivery wins the CloudKit race.
+        let historyCutoff = record.date.addingTimeInterval(-30 * 24 * 60 * 60)
+        let recordDate = record.date
+        let exerciseID = update.exerciseID
+        let historyDescriptor = FetchDescriptor<ExerciseRecord>(
+            predicate: #Predicate<ExerciseRecord> {
+                $0.exerciseDefinitionID == exerciseID
+                    && $0.date >= historyCutoff && $0.date < recordDate
             }
-            let validCalories = update.calories.flatMap { (0.0...10_000.0).contains($0) ? $0 : nil }
-            let record = ExerciseRecord(
-                date: update.startTime,
-                exerciseType: update.exerciseName,
-                duration: max(0, duration),
-                calories: wcCalorieSource == .healthKit ? validCalories : nil,
-                healthKitWorkoutID: update.healthKitWorkoutID.flatMap { UUID(uuidString: $0) != nil ? $0 : nil },
-                exerciseDefinitionID: update.exerciseID,
-                primaryMuscles: definition?.primaryMuscles ?? [],
-                secondaryMuscles: definition?.secondaryMuscles ?? [],
-                equipment: definition?.equipment,
-                estimatedCalories: wcCalorieSource == .met ? validCalories : nil,
-                calorieSource: wcCalorieSource,
-                rpe: update.rpe,
-                plannedSetCount: update.plannedSetCount,
-                effortSourceRaw: update.effortSourceRaw
+        )
+        do {
+            let history = try context.fetch(historyDescriptor)
+            record.refreshAutoIntensity(
+                exerciseType: definition?.inputType ?? .setsRepsWeight,
+                history: history
             )
-
-            var workoutSets: [WorkoutSet] = []
-            for setData in update.completedSets where setData.isCompleted {
-                let set = WorkoutSet(
-                    setNumber: setData.setNumber,
-                    setType: setData.setTypeRaw.flatMap(SetType.init(rawValue:)) ?? .working,
-                    weight: setData.weight,
-                    reps: setData.reps,
-                    duration: setData.duration,
-                    isCompleted: true,
-                    restDuration: setData.restDuration,
-                    rpe: setData.rpe,
-                    plannedReps: setData.plannedReps,
-                    rpeSourceRaw: setData.rpeSourceRaw
-                )
-                set.exerciseRecord = record
-                workoutSets.append(set)
-            }
-            record.sets = workoutSets
-
-            // Match the local save path when WC delivery wins the CloudKit race.
-            let historyCutoff = record.date.addingTimeInterval(-30 * 24 * 60 * 60)
-            let recordDate = record.date
-            let exerciseID = update.exerciseID
-            let historyDescriptor = FetchDescriptor<ExerciseRecord>(
-                predicate: #Predicate<ExerciseRecord> {
-                    $0.exerciseDefinitionID == exerciseID
-                        && $0.date >= historyCutoff && $0.date < recordDate
-                }
+        } catch {
+            AppLogger.data.error("[WatchSync] Could not load intensity history: \(error.localizedDescription)")
+            record.refreshAutoIntensity(
+                exerciseType: definition?.inputType ?? .setsRepsWeight,
+                history: []
             )
-            do {
-                let history = try context.fetch(historyDescriptor)
-                record.refreshAutoIntensity(
-                    exerciseType: definition?.inputType ?? .setsRepsWeight,
-                    history: history
-                )
-            } catch {
-                AppLogger.data.error("[WatchSync] Could not load intensity history: \(error.localizedDescription)")
-                record.refreshAutoIntensity(
-                    exerciseType: definition?.inputType ?? .setsRepsWeight,
-                    history: []
-                )
-            }
+        }
 
-            context.insert(record)
-            do {
-                try context.save()
-                AppLogger.data.debug("[WatchSync] Saved ExerciseRecord from Watch: \(update.exerciseName) with \(workoutSets.count) sets")
-            } catch {
-                AppLogger.data.error("[WatchSync] Failed to save Watch workout: \(error.localizedDescription)")
+        context.insert(record)
+        if let cardio = update.cardio {
+            record.autoIntensityRaw = cardio.autoIntensity
+            if let place = cardio.place {
+                context.insert(WorkoutLocationRecord(localRecordID: record.id, healthKitWorkoutID: record.healthKitWorkoutID,
+                    payload: WorkoutLocationPayload(isIndoor: cardio.isIndoor, place: place)))
             }
+        }
+        do {
+            try context.save()
+            AppLogger.data.debug("[WatchSync] Saved ExerciseRecord from Watch: \(update.exerciseName) with \(workoutSets.count) sets")
+            return true
+        } catch {
+            AppLogger.data.error("[WatchSync] Failed to save Watch workout: \(error.localizedDescription)")
+            return false
         }
     }
 
     private func scheduleWorkoutTitleBackfill() {
+        guard let appRuntime else { return }
         let container = appRuntime.modelContainer
         Task(priority: .utility) {
             do {
@@ -1106,6 +1103,7 @@ struct DUNEApp: App {
     /// Backfill healthKitWorkoutID for ExerciseRecords missing an HK link.
     /// Matches by custom metadata key (com.dune.workout.exerciseName) + date proximity.
     private func backfillHealthKitWorkoutIDs() {
+        guard let appRuntime else { return }
         let container = appRuntime.modelContainer
         let manager = HealthKitManager.shared
         Task(priority: .utility) {
@@ -1307,3 +1305,38 @@ private struct LaunchSplashView: View {
             .ignoresSafeArea()
     }
 }
+
+#if DEBUG && targetEnvironment(simulator)
+/// Requests only the native permission needed to run the isolated simulator workout fixture.
+private struct WorkoutFixturePermissionView: View {
+    @State private var granted = false
+    @State private var errorMessage: String?
+    @Environment(\.scenePhase) private var phase
+    private let store = HKHealthStore()
+
+    var body: some View {
+        VStack {
+            Text(verbatim: granted ? "Workout write permission granted" : "Workout write permission required")
+                .accessibilityIdentifier(granted ? "fixture-workout-granted" : "fixture-workout-required")
+            if !granted {
+                Button(action: {
+                    Task {
+                        do {
+                            try await store.requestAuthorization(toShare: [.workoutType()], read: [.workoutType()])
+                            refresh()
+                        } catch { errorMessage = error.localizedDescription }
+                    }
+                }) { Text(verbatim: "Request workout access") }
+                .accessibilityIdentifier("fixture-request-workout-access")
+            }
+            if let errorMessage { Text(verbatim: errorMessage) }
+        }
+        .onAppear { refresh() }
+        .onChange(of: phase) { _, phase in if phase == .active { refresh() } }
+    }
+
+    private func refresh() {
+        granted = store.authorizationStatus(for: .workoutType()) == .sharingAuthorized
+    }
+}
+#endif

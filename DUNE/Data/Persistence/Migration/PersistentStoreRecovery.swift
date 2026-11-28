@@ -1,4 +1,6 @@
 import Foundation
+import OSLog
+import SwiftData
 
 enum PersistentStoreRecovery {
     private static let migrationErrorCodes: Set<Int> = [
@@ -30,7 +32,7 @@ enum PersistentStoreRecovery {
         "loadissuemodelcontainer"
     ]
 
-    static func shouldDeleteStore(after error: Error) -> Bool {
+    static func isMigrationFailure(_ error: Error) -> Bool {
         let nsErrorChain = expandedNSErrorChain(from: error)
         if nsErrorChain.contains(where: isRecoverableMigrationFailure) {
             return true
@@ -95,4 +97,64 @@ private struct ErrorFingerprint: Hashable {
     let domain: String
     let code: Int
     let description: String
+}
+
+/// Keep the deployed SQLite path and its Core Data support directories in place.
+/// Application Support is shared with other features and remains eligible for backup.
+enum HealthStoreBackupPolicy {
+    static func excludeStoreFamily(at url: URL, fileManager: FileManager = .default) throws {
+        let directory = url.deletingLastPathComponent()
+        let stem = url.deletingPathExtension().lastPathComponent
+        let files = [
+            url.lastPathComponent, url.lastPathComponent + "-wal", url.lastPathComponent + "-shm",
+            url.lastPathComponent + "-journal", "." + stem + "_SUPPORT", stem + "_ckAssets"
+        ]
+        var attributes = URLResourceValues()
+        attributes.isExcludedFromBackup = true
+        for name in files {
+            var member = directory.appendingPathComponent(name)
+            guard fileManager.fileExists(atPath: member.path) else { continue }
+            do {
+                try member.setResourceValues(attributes)
+            } catch let error as CocoaError where error.code == .fileNoSuchFile {
+                // SQLite can remove a sidecar at a checkpoint.
+                continue
+            }
+        }
+    }
+
+    static func refresh(_ container: ModelContainer) {
+        for configuration in container.configurations where !configuration.isStoredInMemoryOnly {
+            do {
+                try excludeStoreFamily(at: configuration.url)
+            } catch {
+                Logger(subsystem: Bundle.main.bundleIdentifier ?? "DUNE", category: "Persistence")
+                    .error("Could not exclude health store files from device backup: \(error, privacy: .private)")
+            }
+        }
+    }
+}
+
+/// A failed open never creates a second store. Retry uses the caller's identical configuration.
+enum PersistentStoreOpening<Value> {
+    case ready(Value)
+    case unavailable(String)
+
+    init(open: () throws -> Value) {
+        do {
+            self = .ready(try open())
+        } catch {
+            let error = error as NSError
+            let category = PersistentStoreRecovery.isMigrationFailure(error) ? "Migration" : "Store"
+            let diagnostic = "\(category) · \(error.domain) (\(error.code))"
+            Logger(subsystem: Bundle.main.bundleIdentifier ?? "DUNE", category: "Persistence")
+                .error("Persistent store unavailable: \(diagnostic, privacy: .public)")
+            self = .unavailable(diagnostic)
+        }
+    }
+
+    var value: Value? {
+        guard case let .ready(value) = self else { return nil }
+        return value
+    }
 }

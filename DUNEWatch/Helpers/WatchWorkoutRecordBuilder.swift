@@ -53,7 +53,7 @@ enum WatchWorkoutRecordBuilder {
 
     static func makeUpdate(from record: ExerciseRecord) -> WatchWorkoutUpdate {
         let sets = (record.sets ?? []).filter(\.isCompleted).sorted { $0.setNumber < $1.setNumber }
-        return WatchWorkoutUpdate(
+        var update = WatchWorkoutUpdate(
             exerciseID: record.exerciseDefinitionID ?? "",
             exerciseName: record.exerciseType,
             completedSets: sets.map { set in
@@ -67,7 +67,8 @@ enum WatchWorkoutRecordBuilder {
                     rpe: set.rpe,
                     plannedReps: set.plannedReps,
                     rpeSourceRaw: set.rpeSourceRaw,
-                    setTypeRaw: set.setTypeRaw
+                    setTypeRaw: set.setTypeRaw,
+                    id: set.id, distance: set.distance, intensity: set.intensity
                 )
             },
             startTime: record.date,
@@ -78,7 +79,17 @@ enum WatchWorkoutRecordBuilder {
             calories: record.bestCalories,
             calorieSourceRaw: record.calorieSourceRaw,
             plannedSetCount: record.plannedSetCount,
-            effortSourceRaw: record.effortSourceRaw
+            effortSourceRaw: record.effortSourceRaw,
+            recordID: record.id
         )
+        if record.isFromHealthKit {
+            update.cardio = WatchCardioDetails(
+                distance: record.distance, steps: record.stepCount, pace: record.averagePaceSecondsPerKm,
+                floors: record.floorsAscended, averageLevel: record.cardioMachineLevelAverage,
+                maximumLevel: record.cardioMachineLevelMax, levelChanges: record.cardioMachineLevelChanges,
+                autoIntensity: record.autoIntensityRaw
+            )
+        }
+        return update
     }
 }

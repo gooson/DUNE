@@ -77,6 +77,9 @@ struct ExerciseView: View {
                 updateSuggestion()
                 await viewModel.loadHealthKitWorkouts()
             }
+            .onReceive(NotificationCenter.default.mainThreadPublisher(for: NearbyWorkoutCache.didChange)) { _ in
+                Task { await viewModel.loadHealthKitWorkouts() }
+            }
             .onChange(of: viewModel.allExercises.map(\.id)) { _, ids in
                 if let selectedID = inspectedExerciseID, !ids.contains(selectedID) {
                     inspectedExerciseID = nil
@@ -276,6 +279,7 @@ struct ExerciseView: View {
                                 }
                                 .tint(.red)
                             } else if item.source == .healthKit,
+                                      !ProcessInfo.processInfo.isiOSAppOnMac,
                                       let summary = item.workoutSummary,
                                       summary.isFromThisApp {
                                 Button {

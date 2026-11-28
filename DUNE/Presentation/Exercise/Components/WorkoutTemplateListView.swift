@@ -58,7 +58,9 @@ struct WorkoutTemplateListView: View {
         ) {
             Button("Delete", role: .destructive) {
                 if let template = templateToDelete {
+                    let id = template.id
                     modelContext.delete(template)
+                    ExerciseLibraryBackup.didDelete(templateID: id, in: modelContext)
                     templateToDelete = nil
                 }
             }

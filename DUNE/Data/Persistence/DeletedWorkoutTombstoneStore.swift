@@ -21,6 +21,14 @@ final class DeletedWorkoutTombstoneStore {
         self.storageKey = "\(bundleID).deletedWorkoutTombstones"
     }
 
+    func recordDeletion(recordID: UUID) {
+        recordDeletion(healthKitWorkoutID: "record-" + recordID.uuidString)
+    }
+
+    func isRecordDeleted(_ id: UUID) -> Bool {
+        isDeleted(healthKitWorkoutID: "record-" + id.uuidString)
+    }
+
     /// Record a deleted workout's healthKitWorkoutID.
     func recordDeletion(healthKitWorkoutID: String) {
         ensureCache()

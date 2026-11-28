@@ -8,9 +8,18 @@ struct WorkoutRouteQueryService: Sendable {
 
     init(manager: HealthKitManager = .shared) { self.manager = manager }
 
-    func fetchLocation(workoutID: String) async throws -> WorkoutLocationPayload {
+    func fetchLocation(workoutID: String, forArchive: Bool = false) async throws -> WorkoutLocationPayload {
         guard let id = UUID(uuidString: workoutID) else { return WorkoutLocationPayload() }
-        guard manager.isAvailable else { return WorkoutLocationPayload() }
+        guard manager.isAvailable else {
+#if os(iOS)
+            if ProcessInfo.processInfo.isiOSAppOnMac {
+                return try await NearbyWorkoutCache.shared.location(
+                    id: workoutID, scope: try? await NearbyWorkoutTransfer.accountScope()
+                ) ?? WorkoutLocationPayload()
+            }
+#endif
+            return WorkoutLocationPayload()
+        }
         try Task.checkCancellation()
         let workoutQuery = HKSampleQueryDescriptor(
             predicates: [.workout(HKQuery.predicateForObject(with: id))],
@@ -19,7 +28,8 @@ struct WorkoutRouteQueryService: Sendable {
         guard let workout = try await manager.execute(workoutQuery).first else { return WorkoutLocationPayload() }
         return try await Self.loadLocation(
             isIndoor: workout.metadata?[HKMetadataKeyIndoorWorkout] as? Bool,
-            place: WorkoutPlaceMetadata.place(from: workout.metadata)
+            place: WorkoutPlaceMetadata.place(from: workout.metadata),
+            forArchive: forArchive
         ) {
             try await fetchRoutePoints(for: workout)
         }
@@ -27,7 +37,7 @@ struct WorkoutRouteQueryService: Sendable {
 
     /// A failed optional route must not hide a place already recorded with the workout.
     static func loadLocation(
-        isIndoor: Bool?, place: WorkoutPlace?,
+        isIndoor: Bool?, place: WorkoutPlace?, forArchive: Bool = false,
         routeLoader: @Sendable () async throws -> [WorkoutRoutePoint]
     ) async throws -> WorkoutLocationPayload {
         do {
@@ -37,6 +47,15 @@ struct WorkoutRouteQueryService: Sendable {
         } catch {
             if error is CancellationError { throw error }
             try Task.checkCancellation()
+            if forArchive {
+                // A transient failure leaves the receiver's anchor untouched. A permission restriction
+                // is complete for the current authorization and must not block unrelated workouts.
+                if let hkError = error as? HKError,
+                   [.errorAuthorizationDenied, .errorAuthorizationNotDetermined, .errorHealthDataRestricted].contains(hkError.code) {
+                    return WorkoutLocationPayload(isIndoor: isIndoor, place: place)
+                }
+                throw error
+            }
             guard let place else { throw error }
             AppLogger.healthKit.warning("Could not load recorded route; preserving workout place: \(error.localizedDescription, privacy: .private)")
             return WorkoutLocationPayload(isIndoor: isIndoor, place: place)

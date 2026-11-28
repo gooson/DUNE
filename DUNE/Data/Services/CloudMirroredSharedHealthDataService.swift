@@ -26,6 +26,13 @@ actor CloudMirroredSharedHealthDataService: SharedHealthDataService {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.sharedHealthSnapshot
         }
+#if os(iOS)
+        if ProcessInfo.processInfo.isiOSAppOnMac,
+           let scope = try? await NearbyWorkoutTransfer.accountScope(),
+           let live = try? await NearbyWorkoutCache.shared.healthSnapshot(scope: scope) {
+            return HealthSnapshotMirrorMapper.makeSnapshot(from: live)
+        }
+#endif
         let now = nowProvider()
         if let cachedSnapshot,
            let cacheExpiresAt,
@@ -64,17 +71,6 @@ actor CloudMirroredSharedHealthDataService: SharedHealthDataService {
 
         let payload = try HealthSnapshotMirrorMapper.decode(latestRecord.payloadJSON)
         let snapshot = HealthSnapshotMirrorMapper.makeSnapshot(from: payload)
-        AppLogger.data.info("""
-            [CloudMirroredSnapshot] Loaded — \
-            steps: \(snapshot.todaySteps.map { String(format: "%.0f", $0) } ?? "nil", privacy: .public), \
-            exerciseToday: \(snapshot.todayExerciseMinutes.map { String(format: "%.1fmin", $0) } ?? "nil", privacy: .public), \
-            exerciseRecent: \(snapshot.recentExercise.map { String(format: "%.1fmin", $0.minutes) } ?? "nil", privacy: .public), \
-            weight: \(snapshot.latestWeight.map { String(format: "%.1fkg", $0.value) } ?? "nil", privacy: .public), \
-            bmi: \(snapshot.latestBMI.map { String(format: "%.1f", $0.value) } ?? "nil", privacy: .public), \
-            sleepDays: \(snapshot.sleepDailyDurations.count, privacy: .public), \
-            sleepInput: \(snapshot.sleepScoreInput != nil ? "yes" : "nil", privacy: .public), \
-            fetchedAt: \(snapshot.fetchedAt, privacy: .public)
-            """)
         return snapshot
     }
 

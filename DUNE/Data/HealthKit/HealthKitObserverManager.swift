@@ -1,5 +1,10 @@
 import HealthKit
 
+@MainActor
+protocol WatchBedtimeReminderRechecking: Sendable {
+    func cancelPendingReminderIfWatchIsWorn() async
+}
+
 protocol HealthKitObserverStoring: Sendable {
     func execute(_ query: HKQuery)
     func stop(_ query: HKQuery)
@@ -23,7 +28,7 @@ final class HealthKitObserverManager {
     private let coordinator: AppRefreshCoordinating
     private let notificationEvaluator: BackgroundNotificationEvaluator?
     private let refreshExerciseReminders: @MainActor @Sendable () async -> Void
-    private let watchReminder: any WatchBedtimeReminderRechecking
+    private let watchReminder: (any WatchBedtimeReminderRechecking)?
 
     /// Registration, retention, and stopping are synchronous on the same actor.
     private var queries: [HKObserverQuery] = []
@@ -51,13 +56,17 @@ final class HealthKitObserverManager {
         coordinator: AppRefreshCoordinating,
         notificationEvaluator: BackgroundNotificationEvaluator? = nil,
         refreshExerciseReminders: @escaping @MainActor @Sendable () async -> Void = {},
-        watchReminder: any WatchBedtimeReminderRechecking = AppleWatchBedtimeReminderScheduler.shared
+        watchReminder: (any WatchBedtimeReminderRechecking)? = nil
     ) {
         self.store = store
         self.coordinator = coordinator
         self.notificationEvaluator = notificationEvaluator
         self.refreshExerciseReminders = refreshExerciseReminders
+#if os(iOS)
+        self.watchReminder = watchReminder ?? AppleWatchBedtimeReminderScheduler.shared
+#else
         self.watchReminder = watchReminder
+#endif
     }
 
     /// Registers observer queries for all tracked types and enables background delivery.
@@ -110,7 +119,7 @@ final class HealthKitObserverManager {
         error: Error?,
         coordinator: AppRefreshCoordinating,
         notificationEvaluator: BackgroundNotificationEvaluator?,
-        watchReminder: any WatchBedtimeReminderRechecking,
+        watchReminder: (any WatchBedtimeReminderRechecking)?,
         refreshExerciseReminders: @escaping @MainActor @Sendable () async -> Void = {},
         completion: @escaping () -> Void
     ) -> Task<Void, Never>? {
@@ -124,7 +133,7 @@ final class HealthKitObserverManager {
 
         if sampleType.identifier == HKQuantityType(.heartRate).identifier {
             return processUpdate(completion: completion) {
-                await watchReminder.cancelPendingReminderIfWatchIsWorn()
+                await watchReminder?.cancelPendingReminderIfWatchIsWorn()
             }
         }
 
@@ -139,8 +148,10 @@ final class HealthKitObserverManager {
                 if sampleType == HKSampleType.workoutType() {
                     await refreshExerciseReminders()
                 } else if sampleType.identifier == HKCategoryType(.sleepAnalysis).identifier {
+#if os(iOS)
                     await BedtimeReminderScheduler.shared.refreshSchedule(force: true)
                     await AppleWatchBedtimeReminderScheduler.shared.refreshSchedule(force: true)
+#endif
                 }
             }()
             _ = await (refreshTask, notifyTask, reminderTask)

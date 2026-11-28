@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-28",
+  "device": "iPhone 18 Pro simulator",
+  "system": "iOS 27.2",
+  "udid": "A6565E91-6135-40AB-BBE4-6CC58E658858",
+  "result": "2 passed, 0 failures",
+  "scheme": "DUNEUITests",
+  "plan": "DUNEUITests-Full",
+  "configuration": "Debug",
+  "base_revision": "a611d9c6d",
+  "dirty_worktree": true,
+  "result_bundle": "Test-DUNEUITests-2026.11.28_15-51-38-+0900.xcresult",
+  "screens": [
+    {
+      "screen": "T02",
+      "path": "../regular/images/T02.png",
+      "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+      "attachment": "T02-workout-restore-consent_0_0A901F6C-6727-428C-BB4F-6935E4DDF0E9.png",
+      "timestamp": 1795848819.801,
+      "sha256": "f2fd038f177a01f849679e6d9dc9270bb94369e6bee57de829317853ab1820ae"
+    },
+    {
+      "screen": "S01 privacy",
+      "test": "SettingsSmokeTests/testDataPrivacySectionExists()",
+      "attachment": "S01-workout-restore-privacy_0_50A38BD8-0565-4D19-9C1A-B219659FAD4A.png",
+      "timestamp": 1795848839.149,
+      "sha256": "327e4e4a5e94f53dd512c1626f2b5a1bb6ddd044ff48dd965d2a80340ce81b53",
+      "storage": "local XCTest result attachment"
+    }
+  ]
+}

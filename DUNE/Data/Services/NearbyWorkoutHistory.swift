@@ -98,7 +98,7 @@ struct NearbyWorkoutHistory: Codable, Sendable {
             workout.peerDisplayTitle = WorkoutTypeCorrectionStore.shared.correctedTitle(for: workout.id)
             let saved = overrides[id]
             let healthLocation = saved?.route.isEmpty == false
-                ? nil : try? await routes.fetchLocation(workoutID: workout.id)
+                ? nil : try await routes.fetchLocation(workoutID: workout.id, forArchive: true)
             try Task.checkCancellation()
             let location = Self.displayLocation(saved: saved, health: healthLocation, indoor: workout.isIndoor)
             entries.append(Entry(workout: workout, location: location,

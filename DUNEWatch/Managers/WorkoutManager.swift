@@ -67,6 +67,7 @@ final class WorkoutManager: NSObject {
     private var routeRecorder: WorkoutRouteRecorder?
     private(set) var liveElevation = WatchElevationProfile()
     private var capturedRoute: [WorkoutRoutePoint] = []
+    private(set) var completedPlace: WorkoutPlace?
     private var capturedPlace: WorkoutPlace?
     // Completed-workout jobs are independent of session/reset generation and own immutable inputs.
     private var routeSaveJobs: [UUID: WorkoutRouteSaveJob] = [:]
@@ -520,6 +521,7 @@ final class WorkoutManager: NSObject {
         liveElevation = WatchElevationProfile()
         capturedRoute = []
         capturedPlace = nil
+        completedPlace = nil
         runningVoiceFeedback.stop()
         runningVoiceFeedback.resetProgress()
         stopMirrorTransport()
@@ -603,6 +605,7 @@ final class WorkoutManager: NSObject {
             liveElevation = WatchElevationProfile()
             capturedRoute = []
             capturedPlace = nil
+            completedPlace = nil
             Self.logger.error("Failed to start HK session: \(String(describing: error), privacy: .public)")
             newSession.end()
             session = nil
@@ -1062,6 +1065,7 @@ final class WorkoutManager: NSObject {
         liveElevation = WatchElevationProfile()
         capturedRoute = []
         capturedPlace = nil
+        completedPlace = nil
         runningVoiceFeedback.stop()
         runningVoiceFeedback.resetProgress()
         stopMirrorTransport()
@@ -1924,6 +1928,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                 let endedRoute = capturedRoute
                 capturedRoute = []
                 let endedPlace = capturedPlace
+                completedPlace = endedPlace
                 capturedPlace = nil
                 if completedDuration == nil { completedDuration = activeElapsedTime(at: date) }
                 endPause(at: date, announcesResume: false)
@@ -1954,6 +1959,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                                 endedBuilder.addMetadata([WorkoutPlaceMetadata.key: value], completion: completion)
                             }
                         } catch {
+                            WorkoutBackupWarning.record()
                             Self.logger.error("Could not save workout place: \(error.localizedDescription, privacy: .private)")
                         }
                     }

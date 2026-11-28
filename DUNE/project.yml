@@ -116,6 +116,7 @@ targets:
     type: application
     platform: iOS
     sources:
+      - path: ../Shared/PersistentStoreRecoveryView.swift
       - path: App
         group: DUNE
       - path: Data
@@ -169,6 +170,7 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_NSHealthShareUsageDescription: "DUNE needs access to your health data to calculate condition scores and track your fitness progress."
         INFOPLIST_KEY_NSHealthUpdateUsageDescription: "DUNE may write workout and body composition data to Health."
+        INFOPLIST_KEY_NSLocalNetworkUsageDescription: "DUNE connects to your nearby devices to transfer workouts and recorded locations."
         INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "DUNE uses your location for weather conditions and to track distance during outdoor cardio workouts."
         INFOPLIST_KEY_NSMotionUsageDescription: "DUNE uses motion data to measure steps, pace, and cadence during cardio workouts."
         INFOPLIST_KEY_NSCameraUsageDescription: "DUNE uses the camera to capture posture assessment photos for body alignment analysis."
@@ -200,6 +202,7 @@ targets:
     type: application
     platform: watchOS
     sources:
+      - path: ../Shared/PersistentStoreRecoveryView.swift
       - path: ../DUNEWatch
       # Shared Colors
       - path: ../Shared/Resources/Colors.xcassets
@@ -225,6 +228,7 @@ targets:
       - path: Domain/Models/WorkoutMirrorRetryPolicy.swift
       - path: ../Shared/WatchWorkoutSnapshot.swift
         group: Shared
+      - path: Domain/Models/WorkoutStrengthArchive.swift
       - path: Domain/Models/HealthMetric.swift
       - path: Domain/Models/HeartRateZone.swift
       - path: Domain/Models/WorkoutZoneDistribution.swift
@@ -385,6 +389,7 @@ targets:
     type: application
     platform: visionOS
     sources:
+      - path: ../Shared/PersistentStoreRecoveryView.swift
       - path: ../DUNEVision
       - path: App/AppLogger.swift
       - path: App/AppSection.swift
@@ -427,6 +432,10 @@ targets:
         excludes:
           - "AIWorkoutTemplateGenerator.swift"
           - "BedtimeWatchReminderScheduler.swift"
+          - "DailyDigestScheduler.swift"
+          - "CalorieBackfillMigration.swift"
+          - "ExerciseVariantMigration.swift"
+          - "NearbyWorkoutTransfer.swift"
           - "HealthSnapshotMirrorStore.swift"
           - "MirroringSharedHealthDataService.swift"
           - "NotificationServiceImpl.swift"
@@ -437,6 +446,7 @@ targets:
       - path: Presentation/Shared/Components/MuscleMap3DScene.swift
       - path: Presentation/Shared/Extensions/Equipment+View.swift
       - path: Presentation/Shared/Extensions/Double+Formatting.swift
+      - path: Presentation/Shared/Extensions/TimeInterval+Formatting.swift
       - path: Presentation/Shared/Extensions/ExerciseRecord+WeeklyVolume.swift
       - path: Presentation/Shared/Extensions/MuscleGroup+View.swift
       - path: Presentation/Shared/Extensions/FatigueLevel+DisplayName.swift

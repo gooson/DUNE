@@ -6499,6 +6499,46 @@
         }
       }
     },
+    "Apple Health backup incomplete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appleヘルスケアのバックアップが未完了です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple 건강 백업 미완료"
+          }
+        }
+      }
+    },
+    "Apple Health manages iCloud sync for workouts saved to Health." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Health manages iCloud sync for workouts saved to Health."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ヘルスケアに保存したワークアウトは、ヘルスケアのiCloud設定に従って同期されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "건강 앱에 저장한 운동은 Apple 건강의 iCloud 설정에 따라 동기화됩니다."
+          }
+        }
+      }
+    },
     "Apple Watch Bedtime Reminder" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -11345,6 +11385,52 @@
         }
       }
     },
+    "Choose whether to sync favorites and routine plans with iCloud." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose whether to sync favorites and routine plans with iCloud."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お気に入りとルーティンの計画をiCloudで同期するか選んでください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선호 운동과 루틴 계획을 iCloud로 동기화할지 선택하세요."
+          }
+        }
+      }
+    },
+    "Choose whether to sync Quick Start favorites with iCloud." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose whether to sync Quick Start favorites with iCloud."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クイックスタートのお気に入りをiCloudで同期するか選んでください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "빠른 시작의 선호 운동을 iCloud로 동기화할지 선택하세요."
+          }
+        }
+      }
+    },
     "Choose whether to sync your health records across devices." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -13898,6 +13984,29 @@
         }
       }
     },
+    "Couldn’t finish recovery. Check your iCloud connection and try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t finish recovery. Check your iCloud connection and try again."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "復元を完了できませんでした。iCloudの接続を確認して、もう一度お試しください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "복구를 완료하지 못했습니다. iCloud 연결을 확인한 뒤 다시 시도하세요."
+          }
+        }
+      }
+    },
     "Couldn't update the Home Screen icon. Try again." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14596,6 +14705,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "직접 날짜"
+          }
+        }
+      }
+    },
+    "Custom names, custom exercises and weights stay on this device. Restored routine names use catalog exercise names." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom names, custom exercises and weights stay on this device. Restored routine names use catalog exercise names."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "入力した名前やカスタム種目、重量はこのデバイスに保存されます。復元したルーティン名には標準種目名が表示されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "직접 입력한 이름과 운동, 중량은 이 기기에 보관합니다. 복원한 루틴 이름은 기본 운동 이름으로 표시합니다."
           }
         }
       }
@@ -18236,6 +18368,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동 가이드는 라이브러리가 로드되면 표시됩니다."
+          }
+        }
+      }
+    },
+    "Exercise Library" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exercise Library"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エクササイズライブラリ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 라이브러리"
           }
         }
       }
@@ -31026,6 +31181,23 @@
         }
       }
     },
+    "Nearby Workout Sync" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "近くのデバイスとワークアウトを同期"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "근처 기기 운동 동기화"
+          }
+        }
+      }
+    },
     "Neck" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -32503,6 +32675,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "건강 데이터 없음"
+          }
+        }
+      }
+    },
+    "No health summary on this device" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No health summary on this device"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このデバイスには健康サマリーがありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기기에 건강 요약이 없어요"
           }
         }
       }
@@ -34090,6 +34285,29 @@
         }
       }
     },
+    "On this device" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On this device"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このデバイスに保存"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기기에 보관"
+          }
+        }
+      }
+    },
     "Ongoing" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -34222,6 +34440,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "${applicationName}에서 운동 템플릿 열기"
+          }
+        }
+      }
+    },
+    "Open Activity to see workouts available on this device." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Activity to see workouts available on this device."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activityでこのデバイスのワークアウトを確認できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activity에서 이 기기의 운동 기록을 확인하세요."
           }
         }
       }
@@ -34672,6 +34913,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "운동·생활 알림"
+          }
+        }
+      }
+    },
+    "Other devices receive Quick Start favorites and routines made with catalog exercises, including their order and target sets and reps." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other devices receive Quick Start favorites and routines made with catalog exercises, including their order and target sets and reps."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ほかのデバイスで、お気に入りと標準種目のルーティンの順序、目標セット数・回数を復元できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다른 기기에서 선호 운동과 기본 운동으로 만든 루틴의 순서, 목표 세트·횟수를 복원합니다."
           }
         }
       }
@@ -38024,6 +38288,29 @@
         }
       }
     },
+    "Reading your earlier workout backup…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading your earlier workout backup…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以前のワークアウトのバックアップを読み込み中…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이전 운동 백업을 읽는 중…"
+          }
+        }
+      }
+    },
     "Ready" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -39334,6 +39621,29 @@
         }
       }
     },
+    "Recovery stopped because the backup contains conflicting or unreadable records. Your local workouts are unchanged." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recovery stopped because the backup contains conflicting or unreadable records. Your local workouts are unchanged."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックアップに競合または読み取れない記録があるため、復元を中止しました。このデバイスのワークアウトは変更されていません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "백업에 충돌하거나 읽을 수 없는 기록이 있어 복구를 중단했습니다. 이 기기의 운동 기록은 그대로입니다."
+          }
+        }
+      }
+    },
     "recovery sufficient" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -40427,6 +40737,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "복원"
+          }
+        }
+      }
+    },
+    "Restore workouts from an earlier iCloud backup" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore workouts from an earlier iCloud backup"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以前のiCloudバックアップからワークアウトを復元"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이전 iCloud 백업에서 운동 복구"
+          }
+        }
+      }
+    },
+    "Restored %lld workouts and %lld sets to this device." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restored %lld workouts and %lld sets to this device."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このデバイスにワークアウト%1$lld件とセット%2$lld件を復元しました。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기기에 운동 %1$lld건과 세트 %2$lld개를 복구했습니다."
           }
         }
       }
@@ -45902,6 +46258,23 @@
         }
       }
     },
+    "Some workout details are only on this device. Keep the original device and check the workout in DUNE." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一部のワークアウトの詳細はこのデバイスにのみ保存されています。このデバイスを保管し、DUNEで記録を確認してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일부 운동 세부 정보가 이 기기에만 남아 있어요. 이 기기를 보관하고 DUNE에서 운동 기록을 확인하세요."
+          }
+        }
+      }
+    },
     "Something Went Wrong" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -49402,6 +49775,29 @@
         }
       }
     },
+    "This injury record will be deleted from this device." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This injury record will be deleted from this device."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このデバイスからこのケガの記録を削除します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기기에서 이 부상 기록을 삭제합니다."
+          }
+        }
+      }
+    },
     "This injury record will be permanently deleted across all your devices." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -49791,6 +50187,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@의 저장된 기본 무게와 횟수가 삭제돼요. 이 변경은 모든 기기에 동기화돼요."
+          }
+        }
+      }
+    },
+    "This will remove the saved defaults and preferred status for %@." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This will remove the saved defaults and preferred status for %@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@の保存済みの初期値を削除し、お気に入りから外します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@의 저장된 기본값을 지우고 선호 운동에서 제외합니다."
           }
         }
       }
@@ -52032,6 +52451,23 @@
         }
       }
     },
+    "Try again to reopen your existing records." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もう一度試して、保存済みの記録を開いてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시 시도해 기존 기록을 여세요."
+          }
+        }
+      }
+    },
     "Try indoor workouts or early morning/evening sessions. Stay well hydrated." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -52102,6 +52538,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iCloud 동기화 켜기"
+          }
+        }
+      }
+    },
+    "Turn this on in DUNE on both devices. Workouts, metrics and recorded locations transfer directly to a nearby Mac using the same Apple Account and iCloud Keychain." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "両方のデバイスのDUNEでオンにしてください。同じApple AccountとiCloudキーチェーンを使う近くのMacに、ワークアウト、測定値、記録した場所を直接送信します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "두 기기의 DUNE에서 켜세요. 같은 Apple 계정과 iCloud 키체인을 사용하는 근처 Mac으로 운동 기록과 측정값, 기록된 위치를 직접 보냅니다."
           }
         }
       }
@@ -57162,6 +57615,29 @@
         }
       }
     },
+    "You can keep your Quick Start favorites on this device." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can keep your Quick Start favorites on this device."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クイックスタートのお気に入りをこのデバイスだけに保存できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선호 운동을 이 기기의 빠른 시작에만 보관할 수 있습니다."
+          }
+        }
+      }
+    },
     "You completed %@." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -58014,6 +58490,29 @@
         }
       }
     },
+    "Your preferred exercises appear in Quick Start on your other devices." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your preferred exercises appear in Quick Start on your other devices."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ほかのデバイスのクイックスタートにもお気に入りのエクササイズが表示されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다른 기기의 빠른 시작에도 선호 운동이 표시됩니다."
+          }
+        }
+      }
+    },
     "Your recorded body fat" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -58033,6 +58532,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "기록된 체지방률"
+          }
+        }
+      }
+    },
+    "Your records could not be opened." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "記録を開けませんでした。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록을 열 수 없어요."
           }
         }
       }

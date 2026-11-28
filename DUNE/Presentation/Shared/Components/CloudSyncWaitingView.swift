@@ -1,57 +1,25 @@
 import SwiftUI
 
-/// Shown on Mac (mirrored read-only mode) while waiting for iCloud data to arrive.
+/// Read-only devices can show a previously stored summary when one is available.
 struct CloudSyncWaitingView: View {
-    @Environment(\.appTheme) private var theme
-
     var onRetry: (() -> Void)?
 
-    @State private var showExtendedHelp = false
-
-    private static let extendedHelpDelay: Duration = .seconds(30)
-
     var body: some View {
-        VStack(spacing: DS.Spacing.lg) {
-            ProgressView()
-                .controlSize(.large)
-                .tint(theme.accentColor)
-                .padding(.bottom, DS.Spacing.sm)
-
-            Text("Syncing with iCloud…")
+        VStack(spacing: DS.Spacing.md) {
+            Text("No health summary on this device")
                 .font(DS.Typography.sectionTitle)
-
-            if showExtendedHelp {
-                VStack(spacing: DS.Spacing.md) {
-                    Text("If data doesn't appear, make sure iCloud sync is enabled in DUNE settings on your iPhone and the app has been opened at least once.")
-                        .font(.subheadline)
-                        .foregroundStyle(DS.Color.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: 320)
-
-                    if let onRetry {
-                        Button(action: onRetry) {
-                            Label("Retry", systemImage: "arrow.clockwise")
-                        }
-                        .buttonStyle(.bordered)
-                    }
+            Text("Open Activity to see workouts available on this device.")
+                .font(.subheadline)
+                .foregroundStyle(DS.Color.textSecondary)
+                .multilineTextAlignment(.center)
+            if let onRetry {
+                Button(action: onRetry) {
+                    Label("Retry", systemImage: "arrow.clockwise")
                 }
-                .transition(.opacity.combined(with: .move(edge: .bottom)))
-            } else {
-                Text("Health data syncs through iCloud. This may take a moment on first launch.")
-                    .font(.subheadline)
-                    .foregroundStyle(DS.Color.textSecondary)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: 280)
+                .buttonStyle(.bordered)
             }
         }
         .frame(maxWidth: .infinity, minHeight: 200)
         .padding()
-        .animation(.easeInOut(duration: 0.3), value: showExtendedHelp)
-        .task {
-            do {
-                try await Task.sleep(for: Self.extendedHelpDelay)
-                showExtendedHelp = true
-            } catch {}
-        }
     }
 }

@@ -139,7 +139,7 @@ struct SpatialTrainingAnalyzer: SpatialTrainingAnalyzing, Sendable {
             exerciseName: workout.type,
             primaryMuscles: mapping.primary,
             secondaryMuscles: mapping.secondary,
-            completedSetCount: pseudoLoadUnits(for: workout),
+            completedSetCount: workout.strengthArchive?.sets.count ?? pseudoLoadUnits(for: workout),
             durationMinutes: durationMinutes > 0 ? durationMinutes : nil,
             distanceKm: distanceKm
         )

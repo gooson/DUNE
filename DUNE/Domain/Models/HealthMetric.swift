@@ -115,7 +115,8 @@ struct HeartRateRecovery: Sendable {
     }
 }
 
-struct WorkoutSummary: Identifiable, Sendable {
+struct WorkoutSummary: Identifiable, Codable, Sendable {
+    var peerDisplayTitle: String? = nil
     let id: String
     let type: String
     let activityType: WorkoutActivityType
@@ -125,6 +126,8 @@ struct WorkoutSummary: Identifiable, Sendable {
     let date: Date
     /// Whether this workout was created by this app (resolved at Data layer from HealthKit source metadata).
     let isFromThisApp: Bool
+    /// Completed sets saved by the DUNE workout writer on the originating device.
+    let strengthArchive: WorkoutStrengthArchive?
 
     // MARK: - Rich data (populated from HKWorkout statistics/metadata)
 
@@ -153,6 +156,7 @@ struct WorkoutSummary: Identifiable, Sendable {
         duration: TimeInterval,
         calories: Double?, distance: Double?, date: Date,
         isFromThisApp: Bool = false,
+        strengthArchive: WorkoutStrengthArchive? = nil,
         heartRateAvg: Double? = nil, heartRateMax: Double? = nil, heartRateMin: Double? = nil,
         averagePace: Double? = nil, averageSpeed: Double? = nil,
         elevationAscended: Double? = nil,
@@ -173,6 +177,7 @@ struct WorkoutSummary: Identifiable, Sendable {
         self.calories = calories
         self.distance = distance
         self.date = date
+        self.strengthArchive = strengthArchive
         self.isFromThisApp = isFromThisApp
         self.heartRateAvg = heartRateAvg
         self.heartRateMax = heartRateMax

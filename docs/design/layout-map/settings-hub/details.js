@@ -165,7 +165,9 @@
         break;
       case "privacy":
         content = group("iCloud", toggle("iCloud 동기화", "cloudSync", state.cloudSync) +
-          valueRow("동기화 요청", "앱에서 실행")) +
+          valueRow("근처 기기 운동 동기화", "기기별 선택") +
+          valueRow("동기화 요청", "앱에서 실행") +
+          valueRow("이전 iCloud 백업에서 운동 복구", "앱에서 실행")) +
           group("시스템 권한", valueRow("Apple 건강 권한", "iOS 설정에서 변경") +
             valueRow("위치 접근", "iOS 설정에서 변경"));
         break;

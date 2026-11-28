@@ -200,6 +200,9 @@ final class SettingsSmokeTests: UITestBaseCase {
             elementExists(AXID.settingsRowICloudSync, timeout: 5),
             "iCloud Sync row should exist"
         )
+        XCTAssertTrue(elementExists("settings-row-nearby-workouts", timeout: 3))
+        XCTAssertTrue(elementExists("settings-row-restore-legacy-workouts", timeout: 3))
+        addScreenshotAttachment(named: "S01-workout-restore-privacy")
         _ = app.scrollToElementIfNeeded(AXID.settingsRowLocationAccess, maxSwipes: 8)
         XCTAssertTrue(
             elementExists(AXID.settingsRowLocationAccess, timeout: 5),

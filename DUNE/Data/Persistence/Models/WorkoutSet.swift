@@ -54,3 +54,33 @@ final class WorkoutSet {
         set { setTypeRaw = newValue.rawValue }
     }
 }
+
+extension WorkoutStrengthArchive {
+    init?(record: ExerciseRecord) {
+        let entries = record.completedSets.map { set in
+            SetEntry(
+                id: set.id, number: set.setNumber, type: set.setTypeRaw,
+                weight: set.weight, reps: set.reps, duration: set.duration,
+                distance: set.distance, intensity: set.intensity, restDuration: set.restDuration,
+                rpe: set.rpe, plannedReps: set.plannedReps, rpeSource: set.rpeSourceRaw
+            )
+        }
+        guard !entries.isEmpty else { return nil }
+        self.init(recordID: record.id, exerciseDefinitionID: record.exerciseDefinitionID, sets: entries)
+    }
+
+    /// Transient presentation values; the HealthKit workout remains the authoritative record.
+    func displaySets() -> [WorkoutSet] {
+        sets.map { entry in
+            let set = WorkoutSet(
+                setNumber: entry.number, weight: entry.weight, reps: entry.reps,
+                duration: entry.duration, distance: entry.distance, intensity: entry.intensity,
+                isCompleted: true, restDuration: entry.restDuration, rpe: entry.rpe,
+                plannedReps: entry.plannedReps, rpeSourceRaw: entry.rpeSource
+            )
+            set.id = entry.id
+            set.setTypeRaw = entry.type
+            return set
+        }
+    }
+}

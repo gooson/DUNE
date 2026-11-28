@@ -37,13 +37,15 @@ enum WorkoutHealthKitWriter {
             averageCadenceStepsPerMinute: record.averageCadenceStepsPerMinute,
             elevationGainMeters: record.elevationGainMeters,
             floorsAscended: record.floorsAscended,
-            activityType: resolvedActivityType
+            activityType: resolvedActivityType,
+            strengthArchive: WorkoutStrengthArchive(record: record)
         )
         Task {
             do {
                 let hkID = try await WorkoutWriteService().saveWorkout(input)
                 record.healthKitWorkoutID = hkID
             } catch {
+                WorkoutBackupWarning.record()
                 AppLogger.healthKit.error("Failed to write workout to HealthKit: \(error.localizedDescription)")
             }
         }

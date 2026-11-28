@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 /// Edit default weight/reps for a specific exercise.
-/// Creates or updates ExerciseDefaultRecord in SwiftData (CloudKit synced).
+/// Creates or updates ExerciseDefaultRecord in SwiftData.
 struct ExerciseDefaultEditView: View {
     let exercise: ExerciseDefinition
 
@@ -137,7 +137,7 @@ struct ExerciseDefaultEditView: View {
                 clearDefaults()
             }
         } message: {
-            Text("This will remove the saved defaults and preferred status for \(exercise.localizedName). This change syncs across all your devices.")
+            Text("This will remove the saved defaults and preferred status for \(exercise.localizedName).")
         }
     }
 
@@ -169,6 +169,7 @@ struct ExerciseDefaultEditView: View {
         isSaving = true
 
         // Parse weight (Correction #38: trim + isEmpty check)
+        let wasPreferred = existingRecord?.isPreferred ?? false
         let trimmedWeight = weightText.trimmingCharacters(in: .whitespaces)
         let weight: Double? = if supportsWeight, !trimmedWeight.isEmpty, let parsed = Double(trimmedWeight), parsed.isFinite {
             parsed > 0 ? Swift.min(parsed, maxWeightKg) : nil
@@ -189,6 +190,9 @@ struct ExerciseDefaultEditView: View {
             // Nothing to save; clear if existing
             if let record = existingRecord {
                 withAnimation { modelContext.delete(record) }
+            }
+            if wasPreferred {
+                QuickStartFavoriteSync.didEdit(false, exerciseID: exercise.id, in: modelContext)
             }
             WatchSessionManager.shared.syncExerciseLibraryDefaultsToWatch(using: modelContext)
             isSaving = false
@@ -213,13 +217,20 @@ struct ExerciseDefaultEditView: View {
             )
             modelContext.insert(record)
         }
+        if wasPreferred != isPreferred {
+            QuickStartFavoriteSync.didEdit(isPreferred, exerciseID: exercise.id, in: modelContext)
+        }
         WatchSessionManager.shared.syncExerciseLibraryDefaultsToWatch(using: modelContext)
         isSaving = false
     }
 
     private func clearDefaults() {
         if let record = existingRecord {
+            let wasPreferred = record.isPreferred
             withAnimation { modelContext.delete(record) }
+            if wasPreferred {
+                QuickStartFavoriteSync.didEdit(false, exerciseID: exercise.id, in: modelContext)
+            }
         }
         WatchSessionManager.shared.syncExerciseLibraryDefaultsToWatch(using: modelContext)
         dismiss()

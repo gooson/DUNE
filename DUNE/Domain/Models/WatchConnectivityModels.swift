@@ -13,6 +13,8 @@ struct WatchWorkoutState: Codable, Sendable {
 
 /// Workout payload sent from Watch to iPhone for persistence.
 struct WatchWorkoutUpdate: Codable, Sendable {
+    var recordID: UUID?
+    var cardio: WatchCardioDetails?
     let exerciseID: String
     let exerciseName: String
     var completedSets: [WatchSetData]
@@ -29,7 +31,8 @@ struct WatchWorkoutUpdate: Codable, Sendable {
     init(exerciseID: String, exerciseName: String, completedSets: [WatchSetData], startTime: Date,
          endTime: Date?, heartRateSamples: [WatchHeartRateSample], rpe: Int? = nil,
          healthKitWorkoutID: String? = nil, calories: Double? = nil, calorieSourceRaw: String? = nil,
-         plannedSetCount: Int? = nil, effortSourceRaw: String? = nil) {
+         plannedSetCount: Int? = nil, effortSourceRaw: String? = nil, recordID: UUID? = nil) {
+        self.recordID = recordID
         self.exerciseID = exerciseID
         self.exerciseName = exerciseName
         self.completedSets = completedSets
@@ -47,11 +50,13 @@ struct WatchWorkoutUpdate: Codable, Sendable {
     private enum CodingKeys: String, CodingKey {
         case exerciseID, exerciseName, completedSets, startTime, endTime
         case heartRateSamples, rpe, healthKitWorkoutID, calories, calorieSourceRaw
-        case plannedSetCount, effortSourceRaw
+        case plannedSetCount, effortSourceRaw, recordID, cardio
     }
 
     init(from decoder: any Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
+        cardio = try values.decodeIfPresent(WatchCardioDetails.self, forKey: .cardio)
+        recordID = try values.decodeIfPresent(UUID.self, forKey: .recordID)
         exerciseID = try values.decode(String.self, forKey: .exerciseID)
         exerciseName = try values.decode(String.self, forKey: .exerciseName)
         completedSets = try values.decode([WatchSetData].self, forKey: .completedSets)
@@ -67,7 +72,23 @@ struct WatchWorkoutUpdate: Codable, Sendable {
     }
 }
 
+struct WatchCardioDetails: Codable, Sendable {
+    let distance: Double?
+    let steps: Int?
+    let pace: Double?
+    let floors: Double?
+    let averageLevel: Double?
+    let maximumLevel: Int?
+    let levelChanges: [CardioMachineLevelChange]
+    let autoIntensity: Double?
+    var isIndoor: Bool?
+    var place: WorkoutPlace?
+}
+
 struct WatchSetData: Codable, Sendable {
+    var id: UUID?
+    var distance: Double?
+    var intensity: Int?
     let setNumber: Int
     let weight: Double?
     let reps: Int?
@@ -81,7 +102,11 @@ struct WatchSetData: Codable, Sendable {
 
     init(setNumber: Int, weight: Double?, reps: Int?, duration: TimeInterval?,
          restDuration: TimeInterval?, isCompleted: Bool, rpe: Double? = nil,
-         plannedReps: Int? = nil, rpeSourceRaw: String? = nil, setTypeRaw: String? = nil) {
+         plannedReps: Int? = nil, rpeSourceRaw: String? = nil, setTypeRaw: String? = nil,
+         id: UUID? = nil, distance: Double? = nil, intensity: Int? = nil) {
+        self.id = id
+        self.distance = distance
+        self.intensity = intensity
         self.setNumber = setNumber
         self.weight = weight
         self.reps = reps
@@ -95,12 +120,15 @@ struct WatchSetData: Codable, Sendable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case setNumber, weight, reps, duration, restDuration, isCompleted, rpe
+        case id, distance, intensity, setNumber, weight, reps, duration, restDuration, isCompleted, rpe
         case plannedReps, rpeSourceRaw, setTypeRaw
     }
 
     init(from decoder: any Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decodeIfPresent(UUID.self, forKey: .id)
+        distance = try values.decodeIfPresent(Double.self, forKey: .distance)
+        intensity = try values.decodeIfPresent(Int.self, forKey: .intensity)
         setNumber = try values.decode(Int.self, forKey: .setNumber)
         weight = try values.decodeIfPresent(Double.self, forKey: .weight)
         reps = try values.decodeIfPresent(Int.self, forKey: .reps)

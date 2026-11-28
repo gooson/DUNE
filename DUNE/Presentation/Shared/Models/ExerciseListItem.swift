@@ -191,6 +191,8 @@ struct ExerciseListItem: Identifiable {
             distance: workout.distance,
             date: workout.date,
             source: .healthKit,
+            completedSets: workout.strengthArchive?.displaySets() ?? [],
+            exerciseDefinitionID: workout.strengthArchive?.exerciseDefinitionID,
             heartRateAvg: workout.heartRateAvg,
             averagePace: workout.averagePace,
             elevationAscended: workout.elevationAscended,

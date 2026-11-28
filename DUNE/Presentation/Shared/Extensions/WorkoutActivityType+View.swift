@@ -177,7 +177,7 @@ extension WorkoutSummary {
     }
 
     func localizedTitle(using correctionStore: WorkoutTypeCorrectionStore = .shared) -> String {
-        if let corrected = correctionStore.correctedTitle(for: id) {
+        if let corrected = correctionStore.correctedTitle(for: id) ?? peerDisplayTitle {
             return WorkoutActivityType.localizedDisplayName(
                 forStoredTitle: corrected, preferredActivity: activityType
             ) ?? corrected

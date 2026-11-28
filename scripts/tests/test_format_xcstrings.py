@@ -15,6 +15,7 @@ CATALOGS = (
     ROOT / "Shared/Resources/Localizable.xcstrings",
     ROOT / "DUNEWatch/Resources/Localizable.xcstrings",
     ROOT / "DUNEWatch/Resources/InfoPlist.xcstrings",
+    ROOT / "DUNE/Resources/InfoPlist.xcstrings",
     ROOT / "DUNE/Resources/AppShortcuts.xcstrings",
 )
 

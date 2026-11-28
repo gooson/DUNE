@@ -167,6 +167,9 @@ struct VisionDashboardWorkspaceViewModelTests {
         #expect(viewModel.summary?.condition.score == 88)
         #expect(viewModel.summary?.sleep.score == 100)
         #expect(viewModel.summary?.activity.workoutCount == 2)
+        #expect(viewModel.summary?.activity.recentWorkouts.first?.sets.first?.weight == 42)
+        #expect(viewModel.summary?.activity.recentWorkouts.first?.sets.first?.reps == 9)
+        #expect(SpatialTrainingAnalyzer.snapshot(from: makeWorkouts(now: now)[0])?.completedSetCount == 1)
         #expect(viewModel.summary?.activity.activeDays == 2)
         #expect(viewModel.summary?.body.weightKg == 81.4)
         #expect(await snapshotService.fetchCallCount() == 1)
@@ -272,7 +275,11 @@ struct VisionDashboardWorkspaceViewModelTests {
                 duration: 50 * 60,
                 calories: 320,
                 distance: nil,
-                date: now
+                date: now,
+                strengthArchive: WorkoutStrengthArchive(recordID: UUID(), exerciseDefinitionID: "row", sets: [
+                    .init(id: UUID(), number: 1, type: "working", weight: 42, reps: 9, duration: nil,
+                          distance: nil, intensity: nil, restDuration: 90, rpe: 7, plannedReps: 10, rpeSource: "user")
+                ])
             ),
             WorkoutSummary(
                 id: "run",

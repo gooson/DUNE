@@ -27,6 +27,9 @@ struct HealthKitWorkoutDetailView: View {
                         healthKitWorkoutID: workout.id
                     )
                 }
+                if let archive = workout.strengthArchive {
+                    WorkoutCompletedSetsSection(sets: archive.displaySets())
+                }
                 badgesSection
                 statsGrid
                 heartRateSection

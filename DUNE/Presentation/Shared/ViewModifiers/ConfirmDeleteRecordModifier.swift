@@ -40,6 +40,7 @@ struct ConfirmDeleteRecordModifier: ViewModifier {
                         return
                     }
 
+                    DeletedWorkoutTombstoneStore.shared.recordDeletion(recordID: record.id)
                     // Record tombstone before delete to prevent re-creation via bulk sync/backfill
                     if let hkID = hkWorkoutID, !hkID.isEmpty {
                         DeletedWorkoutTombstoneStore.shared.recordDeletion(healthKitWorkoutID: hkID)
