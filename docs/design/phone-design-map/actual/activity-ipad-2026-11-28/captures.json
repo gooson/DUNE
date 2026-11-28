@@ -1,6 +1,5 @@
 {
   "screen": "A01",
-  "device": "iPad Pro 13-inch (M5)",
   "system": "iPadOS 27.2",
   "locale": "ko_KR",
   "appearance": "dark",
@@ -165,6 +164,23 @@
         2064
       ],
       "sha256": "cef837efd1a8cc44cca2cfc69d70b7cfb0ced5c1bd091aef4a87be6e3617ac7e"
+    },
+    {
+      "file": "mini-portrait-records.png",
+      "test": "ActivityFlowUITests/testIPadActivitySectionsUseAvailableWidth()",
+      "orientation": "portrait",
+      "device_id": "1B8CC4C5-2A3D-4F9A-AD03-7C5CEAAB752F",
+      "captured": "2026-11-28T23:07:22+09:00",
+      "attachment": "A6B41511-CF43-4EDC-9E45-F6259FE01FA1.png",
+      "encoded_pixels": [
+        1512,
+        2316
+      ],
+      "display_pixels": [
+        1512,
+        2316
+      ],
+      "sha256": "2f1483b4ca2b23d2cd50dcd92b5ad1972ffa161d46b627c1b792b718c62b7853"
     }
   ],
   "verified_cases": [
@@ -175,5 +191,47 @@
   "verification_notes": [
     "The root order passed in the earlier targeted run. Portrait and landscape geometry passed after the training-observation layout change.",
     "Opening the system sidebar in portrait covered the content. The docked sidebar was verified in landscape. An intermediate test incorrectly expected a toggle in the already-open sidebar."
-  ]
+  ],
+  "devices": {
+    "74040030-32E7-4D7B-AAF3-4A8F0C698365": "iPad Pro 13-inch (M5)",
+    "1B8CC4C5-2A3D-4F9A-AD03-7C5CEAAB752F": "iPad mini (A20 Pro)"
+  },
+  "mini_partial_row_measurement": {
+    "file": "mini-portrait-records.png",
+    "row_card_counts": [
+      3,
+      3,
+      2
+    ],
+    "middle_row": {
+      "y_px": 1400,
+      "card_fill_x_px_inclusive": [
+        [
+          114,
+          528
+        ],
+        [
+          549,
+          962
+        ],
+        [
+          983,
+          1397
+        ]
+      ]
+    },
+    "last_row": {
+      "y_px": 1850,
+      "card_fill_x_px_inclusive": [
+        [
+          114,
+          745
+        ],
+        [
+          766,
+          1397
+        ]
+      ]
+    }
+  }
 }
