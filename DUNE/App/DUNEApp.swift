@@ -267,7 +267,11 @@ struct DUNEApp: App {
             observerManager = nil
         }
 
-        let scoreRefreshService = ScoreRefreshService(modelContainer: modelContainer)
+        // Devices displaying mirrored metrics must not export derived scores back to the source.
+        let scoreRefreshService = ScoreRefreshService(
+            modelContainer: modelContainer,
+            canWriteSnapshots: healthKitAvailable || Self.shouldUseMirroredSnapshotServiceForUITests
+        )
 
         // Background launches may never create an active scene. Restore observers before
         // returning the runtime; foreground authorization revalidation remains separate.

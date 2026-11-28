@@ -24,6 +24,7 @@ final class ScoreRefreshService {
 
     // MARK: - Dependencies
 
+    private let canWriteSnapshots: Bool
     private let context: ModelContext
 
     // MARK: - Internal State
@@ -33,7 +34,8 @@ final class ScoreRefreshService {
 
     // MARK: - Init
 
-    init(modelContainer: ModelContainer) {
+    init(modelContainer: ModelContainer, canWriteSnapshots: Bool = true) {
+        self.canWriteSnapshots = canWriteSnapshots
         self.context = ModelContext(modelContainer)
     }
 
@@ -62,6 +64,7 @@ final class ScoreRefreshService {
         sleepScore: Double? = nil,
         stressScore: Int? = nil
     ) async {
+        guard canWriteSnapshots else { return }
         let now = Date()
         let hourDate = HourlyScoreSnapshot.hourTruncated(now)
 
@@ -150,6 +153,7 @@ final class ScoreRefreshService {
     /// the HealthKit read window changes. Older archival snapshots stay intact.
     @discardableResult
     func invalidateVisibleConditionHistory() async -> Bool {
+        guard canWriteSnapshots else { return false }
         let cutoff = TimePeriod.day.dateRange(offset: -TimePeriod.day.scrollBufferPeriods).start
         sparklineReloadTask?.cancel()
         conditionSparkline = .empty
@@ -179,6 +183,7 @@ final class ScoreRefreshService {
 
     /// Clear an earlier score for this hour when readiness evidence disappears.
     func invalidateCurrentReadinessSnapshot() async {
+        guard canWriteSnapshots else { return }
         let hourDate = HourlyScoreSnapshot.hourTruncated(Date())
         let hourEnd = Calendar.current.date(byAdding: .hour, value: 1, to: hourDate) ?? hourDate
         do {
@@ -355,6 +360,7 @@ final class ScoreRefreshService {
 
     /// Remove a stale same-hour stress value when measured evidence is unavailable.
     func invalidateCurrentStressSnapshot() async {
+        guard canWriteSnapshots else { return }
         let hourDate = HourlyScoreSnapshot.hourTruncated(Date())
         let hourEnd = Calendar.current.date(byAdding: .hour, value: 1, to: hourDate) ?? hourDate
         do {
