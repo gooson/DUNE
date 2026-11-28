@@ -1,0 +1,42 @@
+{
+  "runtime": "iOS 27.2",
+  "fixture": "activity-exercise-seeded, mock-workout-running-tempo",
+  "captures": [
+    {
+      "screen": "W01",
+      "file": "iphone-w01.png",
+      "device": "iPhone18Pro-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "A8CF574A-2783-42A8-A615-61825E76EE24",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T07:30:10.398000+00:00",
+      "sha256": "aa7383a5f844d42086c68e8563d35471d9eb72cf091c4de8422d875f0baf76f8"
+    },
+    {
+      "screen": "W28",
+      "file": "iphone-w28.png",
+      "device": "iPhone18Pro-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "A8CF574A-2783-42A8-A615-61825E76EE24",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T07:30:08.315000+00:00",
+      "sha256": "b7a5b8785eca3da18d5356a885a40f4f6a06b0d380eae0ca80fad166e794a133"
+    },
+    {
+      "screen": "W01",
+      "file": "duo-close-w01.png",
+      "device": "iPhoneDuo-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "174F9AC9-9B45-4EEC-AC16-4E18DB731DB8",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T07:33:30.439000+00:00",
+      "sha256": "25c8feb97c541a085b1e087c3b2df0d7d1f09353b23d8bd7defc49dde96116bd"
+    },
+    {
+      "screen": "W28",
+      "file": "duo-close-w28.png",
+      "device": "iPhoneDuo-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "174F9AC9-9B45-4EEC-AC16-4E18DB731DB8",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T07:33:28.379000+00:00",
+      "sha256": "89310d6463cf6ca0b927a9704f081d47533fc06c2b756607e7c1cc8a008f1271"
+    }
+  ]
+}

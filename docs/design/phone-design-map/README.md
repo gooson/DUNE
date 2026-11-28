@@ -81,6 +81,8 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-11-28 W01에서 가져온 달리기 기록(W28)을 열 때 좁은 화면의 시트가 선택한 기록을 직접 보유하도록 수정했다. iOS 27.2의 iPhone 18 Pro와 Duo 외부 화면에서 드래그 취소·완료로 닫기·같은 기록 재열기·드래그로 닫기를 검사했다. iPhone에서 수동 기록의 운동 이력 경로도 통과했다. iPad에서 시험한 도구 막대 변경은 되돌렸으며 최종 캡처는 두 좁은 화면에 한정한다. [W01·W28 실제 화면 4장](actual/exercise-inspector-2026-11-28/index.html)
+
 2026-11-15 잔여 브랜치 대조에서 일반 iPhone·iPad P03의 PNG는 최종본인데 인덱스가 10월 출처를 가리키는 차이를 확인했다. [11월 14일 최종 P03 갤러리](../full-redesign-map/review/posture-exercise-picker-p03-2026-11-14/index.html)의 원본 PNG·AX 해시와 현재 앱 파일 해시를 확인하고 두 인덱스·갤러리·자세 보드를 동기화했다. 원래 캡처 시각과 소스 동등성 설명을 유지하며, 11월 15일 새로 캡처하거나 UI 검사를 실행한 것으로 표시하지 않는다.
 
 2026-11-15 Watch 완료 후 복귀 검증에서 [F02 유산소 요약](actual/watch/index.html)을 전용 40mm Watch·watchOS 27.2·en_US 기본 글씨의 새 XCTest PNG로 갱신했다. 저장 → 최종 완료 → 백그라운드·복귀 → 앱 재실행의 UI 1/1이 통과했으며, 완료 후 홈 복귀를 확인했다. 모의 세션·in-memory SwiftData의 내비게이션 검사이고 실제 HealthKit의 닫힌 세션 반환·영속 저장·중복 제거까지 검증한 것은 아니다. F06 실제 복구 오류는 새 캡처가 없으며 기존 이미지로 이번 수정 완료를 표시하지 않는다. F02의 기존 하단 지표 가림은 유지한다. [수정과 검증 범위](../../solutions/general/2026-11-15-watch-workout-recovery-identity.md)를 따른다.
