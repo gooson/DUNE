@@ -4,19 +4,11 @@ import SwiftUI
 struct WeeklyStatsGrid: View {
     let stats: [ActivityStat]
 
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-
-    private var columns: [GridItem] {
-        if dynamicTypeSize.isAccessibilitySize { return [GridItem(.flexible())] }
-        return [GridItem(.flexible(), spacing: DS.Spacing.sm),
-         GridItem(.flexible(), spacing: DS.Spacing.sm)]
-    }
-
     var body: some View {
         if stats.isEmpty {
             emptyState
         } else {
-            LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
+            ActivityCardGrid(minimumCardWidth: 216, maximumColumns: 4) {
                 ForEach(stats) { stat in
                     ActivityStatCardView(stat: stat)
                 }

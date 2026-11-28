@@ -730,6 +730,7 @@
 		7AE3B4296FB9F3451ED9DCAE /* ExerciseMixDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D25D0EE55C39FAFEF11AC4B /* ExerciseMixDetailViewModelTests.swift */; };
 		7B04AFE0C7552DC39F590EA1 /* StreakPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007E8BC8965A9788AD76932D /* StreakPeriod.swift */; };
 		7B83E8CC3B21248D345C7ED6 /* 0.1.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 277091EEE879AF5A61DD3BAB /* 0.1.0.json */; };
+		7BA46FA2D2F48EE895E8F8D9 /* ActivityCardGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061367AC50D01F7D0B4A26B8 /* ActivityCardGrid.swift */; };
 		7BC6428999C2838FACA61540 /* CompoundWorkoutMode+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA7833EB71B7220F7C732F8 /* CompoundWorkoutMode+View.swift */; };
 		7C6A778BA3263EB1C222BB10 /* WidgetSurfaceAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B61F201B0EA208C0C4A3EA0 /* WidgetSurfaceAccessibility.swift */; };
 		7CE956F9945533DCA98D0A3D /* HabitReminderSyncStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B953144D3D9B2D93E36F43 /* HabitReminderSyncStateTests.swift */; };
@@ -1653,6 +1654,7 @@
 		05A0D5258A848BDA2E54050D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		05D668940D35B4EF1E1D6009 /* DUNEVisionWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DUNEVisionWidgets.swift; sourceTree = "<group>"; };
 		05FA0FD0EBD6BD43AD98588D /* ActivityFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityFlowUITests.swift; sourceTree = "<group>"; };
+		061367AC50D01F7D0B4A26B8 /* ActivityCardGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCardGrid.swift; sourceTree = "<group>"; };
 		061AFC3497A2CA06787C3B0A /* ExerciseTotalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTotalsView.swift; sourceTree = "<group>"; };
 		062A0B6552190E2F4301FC65 /* ConsistencyDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistencyDetailViewModelTests.swift; sourceTree = "<group>"; };
 		0645CDC034E79FDF4FD65870 /* AppRefreshCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRefreshCoordinator.swift; sourceTree = "<group>"; };
@@ -3249,6 +3251,7 @@
 			isa = PBXGroup;
 			children = (
 				2595F1921594E0A2307D33CC /* ActiveRecoveryCard.swift */,
+				061367AC50D01F7D0B4A26B8 /* ActivityCardGrid.swift */,
 				CA283C60DB45272B367105DE /* ConsistencyCard.swift */,
 				C7D321FB021271EBB5DCBC5B /* ConsistencyInfoSheet.swift */,
 				2DAA47ED62F5CA7069691922 /* ExerciseFrequencySection.swift */,
@@ -5413,6 +5416,7 @@
 				E786FBE01EAE4A7DBA03D22A /* AchievementHistorySection.swift in Sources */,
 				14B13B70DF4016EB4425D824 /* ActiveRecoveryCard.swift in Sources */,
 				07D0BDC712EB2EAEB7223B95 /* ActiveRecoverySuggestion.swift in Sources */,
+				7BA46FA2D2F48EE895E8F8D9 /* ActivityCardGrid.swift in Sources */,
 				865904FE6915DE78A2802B90 /* ActivityDetailDestination.swift in Sources */,
 				9255615426187A26B5D6DDCD /* ActivityPersonalRecord.swift in Sources */,
 				D2FEE2B0C9C0EA14553368F4 /* ActivityPersonalRecordService.swift in Sources */,

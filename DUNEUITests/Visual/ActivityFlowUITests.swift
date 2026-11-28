@@ -1,4 +1,5 @@
 @preconcurrency import XCTest
+import UIKit
 
 /// The seeded root covers the Activity reading order and the four tab headings.
 /// Native captures are kept in separate selectors for the design-map runner.
@@ -244,18 +245,97 @@ final class ActivityFlowUITests: SeededUITestBaseCase {
                                 name: "A01-recent-achievements-\(suffix)")
     }
 
+    func testIPadActivitySectionsUseAvailableWidth() throws {
+        try XCTSkipUnless(UIDevice.current.userInterfaceIdiom == .pad)
+        let device = XCUIDevice.shared
+        let initialOrientation = device.orientation
+        defer { device.orientation = initialOrientation }
+        device.orientation = .portrait
+
+        launchDarkActivity()
+        XCTAssertTrue(waitForElement("activity-hero-readiness", timeout: 15).exists)
+        captureIPadScreen("A01-iPad-portrait-readiness")
+        alignActivityCaptureHeader("activity-section-suggested")
+        captureIPadScreen("A01-iPad-portrait-suggested")
+
+        for (orientation, name) in [(UIDeviceOrientation.portrait, "portrait"), (.landscapeLeft, "landscape")] {
+            device.orientation = orientation
+            alignActivityCaptureHeader("activity-section-pr")
+            let records = waitForElement("activity-section-pr-content").frame
+            let history = waitForElement("activity-section-achievement-content").frame
+            let historyHeader = waitForElement("activity-section-achievement").frame
+            let recent = waitForElement("activity-recent-seeall").frame
+            let gap = historyHeader.minY - records.maxY
+
+            XCTAssertEqual(records.midX, history.midX, accuracy: 2)
+            XCTAssertEqual(records.width, history.width, accuracy: 2)
+            XCTAssertGreaterThanOrEqual(records.width, recent.width - 8)
+            XCTAssertGreaterThanOrEqual(gap, 0, "Achievement history should follow all personal records")
+            XCTAssertLessThanOrEqual(gap, 80, "Only section spacing and padding should separate the cards")
+            captureIPadScreen("A01-iPad-\(name)-records")
+        }
+        alignActivityCaptureHeader("activity-section-weeklystats")
+        captureIPadScreen("A01-iPad-landscape-weekly")
+    }
+
+    func testIPadActivityWithSidebar() throws {
+        try XCTSkipUnless(UIDevice.current.userInterfaceIdiom == .pad)
+        let device = XCUIDevice.shared
+        let initialOrientation = device.orientation
+        defer { device.orientation = initialOrientation }
+        device.orientation = .portrait
+        launchDarkActivity()
+        device.orientation = .landscapeLeft
+
+        // The docked sidebar has no tab-strip toggle. Only tap it when the strip is visible.
+        let toggle = app.buttons["ToggleSideBar"].firstMatch
+        let openedSidebar = toggle.exists && toggle.isHittable
+        if openedSidebar { toggle.tap() }
+        let destinations = app.descendants(matching: .any)
+        let today = destinations.matching(NSPredicate(format: "label == %@", "Today")).firstMatch
+        let life = destinations.matching(NSPredicate(format: "label == %@", "Life")).firstMatch
+        XCTAssertTrue(today.exists && life.exists)
+        XCTAssertGreaterThan(life.frame.midY - today.frame.midY, 60, "Sidebar destinations should be stacked")
+        defer {
+            if openedSidebar, toggle.exists, toggle.isHittable { toggle.tap() }
+        }
+
+        alignActivityCaptureHeader("activity-section-suggested")
+        captureIPadScreen("A01-iPad-sidebar-suggested")
+        alignActivityCaptureHeader("activity-section-pr")
+        let records = waitForElement("activity-section-pr-content").frame
+        let history = waitForElement("activity-section-achievement-content").frame
+        XCTAssertEqual(records.minX, history.minX, accuracy: 2)
+        XCTAssertEqual(records.width, history.width, accuracy: 2)
+        XCTAssertLessThan(records.maxY, history.minY)
+        captureIPadScreen("A01-iPad-sidebar-records")
+    }
+
+    private func captureIPadScreen(_ name: String) {
+        XCTContext.runActivity(named: name) { activity in
+            let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+            attachment.name = name
+            attachment.lifetime = .keepAlways
+            activity.add(attachment)
+        }
+    }
+
     func testCaptureA01SeededFlow() {
         captureA01Flow(suffix: "")
     }
 
     func testCaptureA01DarkFlow() {
+        launchDarkActivity()
+        captureA01Flow(suffix: "-dark")
+    }
+
+    private func launchDarkActivity() {
         var configuration = launchConfiguration
-        if let styleIndex = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
-            configuration.additionalArguments[styleIndex + 1] = "dark"
+        if let style = configuration.additionalArguments.firstIndex(of: "--ui-test-style") {
+            configuration.additionalArguments[style + 1] = "dark"
         }
         launchApp(with: configuration)
-        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
-        captureA01Flow(suffix: "-dark")
+        navigateToActivity()
     }
 
     func testCaptureA01MaximumAXFlow() {
