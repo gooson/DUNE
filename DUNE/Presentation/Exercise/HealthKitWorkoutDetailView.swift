@@ -83,8 +83,11 @@ struct HealthKitWorkoutDetailView: View {
                     .textInputAutocapitalization(.words)
                     .accessibilityIdentifier("healthkit-workout-title-field")
             }
+            .scrollContentBackground(.hidden)
+            .background { SheetWaveBackground() }
             .accessibilityIdentifier("healthkit-workout-title-editor-screen")
             .englishNavigationTitle("Edit Workout Name")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

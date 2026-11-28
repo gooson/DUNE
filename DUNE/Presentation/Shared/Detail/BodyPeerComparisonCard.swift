@@ -382,6 +382,8 @@ struct BodyPeerComparisonCard: View {
                         .font(.footnote)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background { SheetWaveBackground() }
             .englishNavigationTitle("Comparison group")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -445,6 +447,7 @@ struct BodyPeerComparisonCard: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(DS.Spacing.xl)
             }
+            .background { SheetWaveBackground() }
             .englishNavigationTitle("Survey source")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

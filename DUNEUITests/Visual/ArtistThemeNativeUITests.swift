@@ -76,6 +76,77 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         captureImportedWorkout(prefix: "Artist oceanCool dark")
     }
 
+    func testPatisserieLightWorkoutModalNavigation() throws {
+        try capturePatisserieWorkoutModals(style: "light")
+    }
+
+    func testPatisserieDarkWorkoutModalNavigation() throws {
+        try capturePatisserieWorkoutModals(style: "dark")
+    }
+
+    private func capturePatisserieWorkoutModals(style: String) throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Workout modal capture requires a visual audit test plan") }
+        var configuration = themeLaunchConfiguration("patisserie", style: style)
+        configuration.initialTabSelectionArgument = "train"
+        launchApp(with: configuration)
+        XCTAssertTrue(app.hasPrimaryNavigation(timeout: 15))
+        dismissIconConfirmation()
+
+        navigateToActivity()
+        open(AXID.activityRecentSeeAll, maxSwipes: 24)
+        let list = waitForElement(AXID.exerciseViewScreen, timeout: 10)
+        let rowID = AXID.exerciseRow("mock-workout-running-tempo")
+        open(rowID, maxSwipes: 12)
+
+        let detail = waitForElement(AXID.healthkitWorkoutDetailScreen, timeout: 10)
+        let close = app.buttons["exercise-inspector-close"].firstMatch
+        let edit = app.buttons[AXID.healthkitWorkoutEditTitle].firstMatch
+        let title = app.navigationBars.staticTexts["Tempo Run"].firstMatch
+        XCTAssertTrue(close.waitForExistence(timeout: 5) && close.isHittable)
+        XCTAssertTrue(edit.waitForExistence(timeout: 5) && edit.isHittable)
+        XCTAssertTrue(title.waitForExistence(timeout: 5))
+        XCTAssertEqual(close.label, "Close")
+        XCTAssertLessThan(abs(close.frame.midY - title.frame.midY), 16)
+        XCTAssertLessThan(abs(edit.frame.midY - title.frame.midY), 16)
+        capture("W28", showing: AXID.healthkitWorkoutDetailScreen,
+                prefix: "Artist patisserie \(style) modal")
+
+        edit.auditTap()
+        _ = waitForElement(AXID.healthkitWorkoutTitleEditorScreen, timeout: 8)
+        capture("W33", showing: AXID.healthkitWorkoutTitleEditorScreen,
+                prefix: "Artist patisserie \(style) modal")
+        let cancel = app.buttons[AXID.healthkitWorkoutTitleCancel].firstMatch
+        cancel.auditTap()
+        XCTAssertTrue(cancel.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(detail.waitForExistence(timeout: 8) && detail.isHittable)
+
+        // The seeded Tempo Run already exposes Atlas actions without a separate location fixture.
+        for (action, screen, name) in [
+            ("cardio-atlas-journey", "cardio-atlas-journey-detail", "Atlas Journey"),
+            ("cardio-atlas-passport", "cardio-atlas-passport-detail", "Atlas Passport")
+        ] {
+            open(action, maxSwipes: 12)
+            let destination = waitForElement(screen, timeout: 10)
+            XCTAssertTrue(app.windows.firstMatch.frame.intersects(destination.frame))
+            captureThemeScreen("Artist patisserie \(style) modal \(name)")
+            let destinationClose = app.buttons["cardio-atlas-destination-close"].firstMatch
+            destinationClose.auditTap()
+            XCTAssertTrue(destinationClose.waitForNonExistence(timeout: 5))
+            XCTAssertTrue(detail.waitForExistence(timeout: 8) && detail.isHittable)
+        }
+
+        close.auditTap()
+        XCTAssertTrue(close.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        let row = waitForElement(rowID, timeout: 5)
+        XCTAssertTrue(row.isHittable)
+        capture("W01", showing: rowID, prefix: "Artist patisserie \(style) modal")
+        row.auditTap()
+        XCTAssertTrue(detail.waitForExistence(timeout: 8))
+        XCTAssertTrue(close.waitForExistence(timeout: 5))
+        close.auditTap()
+    }
+
     override func setUpWithError() throws {
         continueAfterFailure = false
     }

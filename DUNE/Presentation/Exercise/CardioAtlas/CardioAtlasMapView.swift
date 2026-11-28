@@ -67,6 +67,8 @@ struct CardioAtlasMapView: View {
                     NavigationStack {
                         CardioAtlasMapView(location: location, expanded: true)
                             .padding(DS.Spacing.lg)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                            .background { SheetWaveBackground() }
                             .navigationTitle("Workout map")
                             .navigationBarTitleDisplayMode(.inline)
                             .toolbar {

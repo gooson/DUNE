@@ -245,15 +245,14 @@ struct WorkoutSessionView: View {
         }
         .sheet(isPresented: $showingInsights) {
             NavigationStack {
-                VStack(spacing: 0) {
-                    HStack {
-                        Spacer()
-                        Button("Done") { showingInsights = false }
-                            .accessibilityIdentifier("workout-insights-close")
+                WeeklyStatsDetailView()
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Close", systemImage: "xmark") { showingInsights = false }
+                                .labelStyle(.iconOnly)
+                                .accessibilityIdentifier("workout-insights-close")
+                        }
                     }
-                    .padding()
-                    WeeklyStatsDetailView()
-                }
             }
             .presentationDetents([.large])
         }

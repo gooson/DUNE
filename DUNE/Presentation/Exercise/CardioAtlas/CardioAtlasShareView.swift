@@ -141,8 +141,6 @@ struct CardioAtlasShareView: View {
         }
         .navigationTitle("Share workout")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(DS.Color.surfacePrimary, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("cardio-atlas-share-screen")
         .task(id: renderKey) { await renderCard() }

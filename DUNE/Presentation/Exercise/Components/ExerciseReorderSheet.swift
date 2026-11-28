@@ -20,6 +20,8 @@ struct ExerciseReorderSheet: View {
                     viewModel.moveExercise(from: source, to: destination)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background { SheetWaveBackground() }
             .environment(\.editMode, .constant(.active))
             .navigationTitle("Reorder Exercises")
             .navigationBarTitleDisplayMode(.inline)

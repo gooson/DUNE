@@ -653,6 +653,8 @@ private struct RecommendationEquipmentSheet: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background { SheetWaveBackground() }
             .accessibilityIdentifier("activity-recommendation-equipment-sheet")
             .englishNavigationTitle(title)
             .toolbar {

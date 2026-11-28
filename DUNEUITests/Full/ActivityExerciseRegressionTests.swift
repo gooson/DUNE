@@ -3735,9 +3735,15 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(done.wait(for: \.isHittable, toEqual: true, timeout: 5),
                       "The inspector close control should be reachable")
 
-        let header = done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-            .withOffset(CGVector(dx: -80, dy: 0))
+        let edit = app.buttons["healthkit-workout-edit-title"].firstMatch
+        func sheetHeader() -> XCUICoordinate {
+            done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                .withOffset(CGVector(dx: (edit.frame.midX - done.frame.midX) / 2, dy: 0))
+        }
         if compact {
+            XCTAssertTrue(edit.isHittable)
+            XCTAssertEqual(done.frame.midY, edit.frame.midY, accuracy: 4)
+            let header = sheetHeader()
             header.press(forDuration: 0.15, thenDragTo: header.withOffset(CGVector(dx: 0, dy: 32)),
                          withVelocity: .slow, thenHoldForDuration: 0.4)
             XCTAssertTrue(detail.isHittable && done.isHittable, "A partial drag must keep the detail visible")
@@ -3754,6 +3760,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(detail.waitForExistence(timeout: 8) && detail.isHittable)
         XCTAssertTrue(done.isHittable)
         if compact {
+            let header = sheetHeader()
             header.press(forDuration: 0.1, thenDragTo: header.withOffset(CGVector(dx: 0, dy: app.frame.height * 0.65)))
         } else {
             done.auditTap()
