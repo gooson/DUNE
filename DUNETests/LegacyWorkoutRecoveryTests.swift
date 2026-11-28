@@ -628,3 +628,85 @@ extension HistoricalSettingsRecoveryTests {
         }
     }
 }
+
+extension HistoricalSettingsRecoveryTests {
+    @Test func interruptedAccountRestoreRetainsLocalDataAndRetriesWithLinks() async throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let target = try diskStore(folder.appendingPathComponent("receiver.store"))
+        target.mainContext.autosaveEnabled = false
+        let accountA = CKRecord.ID(recordName: "fixture-account-a")
+        let accountB = CKRecord.ID(recordName: "fixture-account-b")
+        let exercise = old("ExerciseRecord", ["date": stamp as NSDate, "createdAt": stamp as NSDate,
+                                             "exerciseType": "Fixture" as NSString, "duration": 60 as NSNumber])
+        let set = old("WorkoutSet", ["exerciseRecord": exercise.recordID.recordName as NSString, "setNumber": 1 as NSNumber])
+        let local = ExerciseRecord(date: stamp, exerciseType: "Device record", duration: 30)
+        target.mainContext.insert(local)
+        try target.mainContext.save()
+        let notifications = NotificationCenter()
+        // Check both a changed account and an account-change signal followed by the same account.
+        for returnsToOriginal in [false, true] {
+            var calls = 0
+            await #expect(throws: LegacyWorkoutRecovery.Failure.accountChanged) {
+                try await LegacyWorkoutRecovery.restore(into: target, fetchRecords: { [exercise, set] }, currentAccount: {
+                    calls += 1
+                    if calls == 1 { return accountA }
+                    local.memo = "Local edit during account lookup"
+                    try target.mainContext.save()
+                    if returnsToOriginal {
+                        notifications.post(name: .CKAccountChanged, object: nil)
+                        return accountA
+                    }
+                    return accountB
+                }, notifications: notifications)
+            }
+            #expect(calls == 2)
+            let fresh = ModelContext(target)
+            #expect(try fresh.fetch(FetchDescriptor<ExerciseRecord>()).map(\.memo) == ["Local edit during account lookup"])
+            #expect(try fresh.fetchCount(FetchDescriptor<WorkoutSet>()) == 0)
+        }
+        var reads = 0
+        await #expect(throws: LegacyWorkoutRecovery.Failure.localConflict) {
+            try await LegacyWorkoutRecovery.restore(into: target, fetchRecords: { [exercise, set] }, currentAccount: {
+                reads += 1
+                if reads == 2 { local.memo = "Pending local edit" }
+                return accountA
+            }, notifications: notifications)
+        }
+        #expect(target.mainContext.hasChanges && local.memo == "Pending local edit")
+        #expect(try ModelContext(target).fetchCount(FetchDescriptor<WorkoutSet>()) == 0)
+        try target.mainContext.save()
+        let added = try await LegacyWorkoutRecovery.restore(into: target, fetchRecords: { [set, exercise] },
+                                                           currentAccount: { accountA }, notifications: notifications)
+        #expect(added.workouts == 1 && added.sets == 1)
+        let fresh = ModelContext(target)
+        #expect(try fresh.fetchCount(FetchDescriptor<ExerciseRecord>()) == 2)
+        let linked = try #require(fresh.fetch(FetchDescriptor<WorkoutSet>()).first?.exerciseRecord)
+        #expect(linked.id.uuidString == exercise["CD_id"] as? String)
+        #expect(linked.sets?.first?.id.uuidString == set["CD_id"] as? String)
+    }
+
+    @Test func cancellationImmediatelyBeforeSavingRollsBackStagedRows() async throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let target = try diskStore(folder.appendingPathComponent("receiver.store"))
+        let exercise = old("ExerciseRecord", ["date": stamp as NSDate, "createdAt": stamp as NSDate,
+                                             "exerciseType": "Fixture" as NSString, "duration": 60 as NSNumber])
+        let set = old("WorkoutSet", ["exerciseRecord": exercise.recordID.recordName as NSString, "setNumber": 1 as NSNumber])
+        let task = Task { @MainActor in
+            try LegacyWorkoutRecovery.importRecords([exercise, set], into: target) {
+                withUnsafeCurrentTask { $0?.cancel() }
+            }
+        }
+        await #expect(throws: CancellationError.self) { try await task.value }
+        let fresh = ModelContext(target)
+        #expect(try fresh.fetchCount(FetchDescriptor<ExerciseRecord>()) == 0)
+        #expect(try fresh.fetchCount(FetchDescriptor<WorkoutSet>()) == 0)
+        let added = try LegacyWorkoutRecovery.importRecords([exercise, set], into: target)
+        #expect(added.workouts == 1 && added.sets == 1)
+        #expect(try ModelContext(target).fetch(FetchDescriptor<WorkoutSet>()).first?.exerciseRecord?.id.uuidString
+                == exercise["CD_id"] as? String)
+    }
+}

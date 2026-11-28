@@ -1,5 +1,6 @@
 import CloudKit
 import Foundation
+import os
 import SwiftData
 
 /// Reads the earlier Core Data private zone. All restored models share one local transaction.
@@ -20,9 +21,7 @@ enum LegacyWorkoutRecovery {
     private static let mirrorType = "CD_HealthSnapshotMirrorRecord"
     @MainActor static let recordTypes = AppOwnedBackup.legacyCloudRecordTypes.union([workoutType, setType, locationType, mirrorType])
 
-    private static func fetch() async throws -> [CKRecord] {
-        let container = CKContainer(identifier: "iCloud.com.raftel.dailve")
-        let account = try await container.userRecordID()
+    private static func fetch(in container: CKContainer) async throws -> [CKRecord] {
         let db = container.privateCloudDatabase
         let zone = CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: CKCurrentUserDefaultName)
         let supported = await recordTypes
@@ -43,27 +42,48 @@ enum LegacyWorkoutRecovery {
         } catch let error as CKError where error.code == .zoneNotFound && token == nil {
             // Accounts that never used the old mirror have no Core Data zone.
         }
-        guard try await container.userRecordID() == account else { throw Failure.accountChanged }
         return Array(records.values)
     }
 
     @MainActor private static var isRestoring = false
 
     @MainActor
+    static func restore(into container: ModelContainer) async throws -> Result {
+        let cloud = CKContainer(identifier: "iCloud.com.raftel.dailve")
+        return try await restore(into: container, fetchRecords: { try await fetch(in: cloud) },
+                                 currentAccount: { try await cloud.userRecordID() })
+    }
+
+    @MainActor
     static func restore(
         into container: ModelContainer,
-        fetchRecords: () async throws -> [CKRecord] = { try await fetch() }
+        fetchRecords: () async throws -> [CKRecord],
+        currentAccount: (() async throws -> CKRecord.ID)? = nil,
+        notifications: NotificationCenter = .default
     ) async throws -> Result {
         guard !isRestoring else { throw Failure.inProgress }
         isRestoring = true
         defer { isRestoring = false }
+        // CloudKit may post on a background thread while the main actor stages the local transaction.
+        let changed = OSAllocatedUnfairLock(initialState: false)
+        let observer = notifications.addObserver(forName: .CKAccountChanged, object: nil, queue: nil) { _ in
+            changed.withLock { $0 = true }
+        }
+        defer { notifications.removeObserver(observer) }
+        let initialAccount = try await currentAccount?()
         let records = try await fetchRecords()
+        if let currentAccount, try await currentAccount() != initialAccount { throw Failure.accountChanged }
+        // Read saved edits after the final await. An in-flight UI edit belongs to its original context.
         try Task.checkCancellation()
-        return try importRecords(records, into: container)
+        guard !container.mainContext.hasChanges else { throw Failure.localConflict }
+        return try importRecords(records, into: container) {
+            guard !changed.withLock({ $0 }) else { throw Failure.accountChanged }
+        }
     }
 
     @MainActor
-    static func importRecords(_ records: [CKRecord], into container: ModelContainer) throws -> Result {
+    static func importRecords(_ records: [CKRecord], into container: ModelContainer,
+                              beforeSave: () throws -> Void = {}) throws -> Result {
         let context = ModelContext(container)
         context.autosaveEnabled = false
         defer { if context.hasChanges { context.rollback() } }
@@ -125,6 +145,8 @@ enum LegacyWorkoutRecovery {
         catch is DecodingError { throw Failure.invalidRecord }
         var otherRecords = auxiliaryCount
         otherRecords += try restoreMirrors(records.filter { $0.recordType == mirrorType }, into: context)
+        try beforeSave()
+        try Task.checkCancellation()
         if context.hasChanges { try context.save() }
         return Result(workouts: insertedWorkouts, sets: insertedSets, locations: insertedLocations, otherRecords: otherRecords)
     }

@@ -205,7 +205,7 @@ struct AppSchemaTests {
         #expect(location.payload?.isIndoor == true)
     }
 
-    @Test("Every V19 entity, relationship and attachment survives upgrade and two cold opens")
+    @Test("Every V19 entity, relationship and attachment survives an inaccessible store, a writer lock and cold reopen")
     func completeLegacyStoreSurvivesUpgrade() throws {
         let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -256,10 +256,36 @@ struct AppSchemaTests {
         }
         let baseline = try legacyRows(at: url, tables: tables)
         #expect(baseline.count == 13)
+        func openOriginal() -> PersistentStoreOpening<ModelContainer> {
+            PersistentStoreOpening {
+                let config = ModelConfiguration(schema: AppSchema.currentSchema, url: url, cloudKitDatabase: .none)
+                return try ModelContainer(for: AppSchema.currentSchema, configurations: config)
+            }
+        }
+
+        // Make only this fixture inaccessible. The production opener must not silently substitute an empty store.
+        let files = FileManager.default
+        let permissions = try #require(files.attributesOfItem(atPath: directory.path)[.posixPermissions] as? NSNumber)
+        try files.setAttributes([.posixPermissions: 0], ofItemAtPath: directory.path)
+        do {
+            defer { try? files.setAttributes([.posixPermissions: permissions], ofItemAtPath: directory.path) }
+            try #require(!files.isReadableFile(atPath: url.path))
+            #expect(openOriginal().value == nil)
+        }
+        #expect(try legacyRows(at: url, tables: tables) == baseline)
+        try whileStoreIsWriterLocked(at: url) {
+            // SwiftData can return an error immediately or wait until the writer releases its lock.
+            if let container = openOriginal().value {
+                #expect(container.configurations.allSatisfy { !$0.isStoredInMemoryOnly && $0.url == url })
+                let records = try ModelContext(container).fetch(FetchDescriptor<ExerciseRecord>())
+                #expect(records.map(\.id) == [recordID])
+            }
+        }
+        #expect(try legacyRows(at: url, tables: tables) == baseline)
         for _ in 0..<2 {
             try autoreleasepool {
-                let config = ModelConfiguration(schema: AppSchema.currentSchema, url: url, cloudKitDatabase: .none)
-                let container = try ModelContainer(for: AppSchema.currentSchema, configurations: config)
+                let container = try #require(openOriginal().value)
+                #expect(container.configurations.allSatisfy { !$0.isStoredInMemoryOnly && $0.url == url })
                 let context = ModelContext(container)
                 #expect(try context.fetch(FetchDescriptor<WorkoutSet>()).first?.exerciseRecord?.id == recordID)
                 #expect(try context.fetch(FetchDescriptor<HabitLog>()).first?.habitDefinition?.id == habitID)
@@ -271,6 +297,43 @@ struct AppSchemaTests {
             }
             #expect(try legacyRows(at: url, tables: tables) == baseline)
         }
+    }
+
+    /// Begin opening the store under verified writer contention, then let Core Data retry.
+    private func whileStoreIsWriterLocked(at url: URL, perform: () throws -> Void) throws {
+        let acquired = DispatchSemaphore(value: 0)
+        let opening = DispatchSemaphore(value: 0)
+        let release = DispatchSemaphore(value: 0)
+        let finished = DispatchSemaphore(value: 0)
+        DispatchQueue.global(qos: .userInitiated).async {
+            var writer: OpaquePointer?
+            defer {
+                sqlite3_close(writer)
+                finished.signal()
+            }
+            guard sqlite3_open_v2(url.path, &writer, SQLITE_OPEN_READWRITE, nil) == SQLITE_OK else { return }
+            sqlite3_busy_timeout(writer, 2_000)
+            guard sqlite3_exec(writer, "PRAGMA locking_mode=EXCLUSIVE; BEGIN EXCLUSIVE", nil, nil, nil) == SQLITE_OK
+            else { return }
+            acquired.signal()
+            _ = opening.wait(timeout: .now() + 5)
+            _ = release.wait(timeout: .now() + 2)
+            sqlite3_exec(writer, "ROLLBACK", nil, nil, nil)
+        }
+        defer {
+            opening.signal()
+            release.signal()
+            #expect(finished.wait(timeout: .now() + 5) == .success)
+        }
+        try #require(acquired.wait(timeout: .now() + 5) == .success)
+
+        var probe: OpaquePointer?
+        defer { sqlite3_close(probe) }
+        try #require(sqlite3_open_v2(url.path, &probe, SQLITE_OPEN_READWRITE, nil) == SQLITE_OK)
+        sqlite3_busy_timeout(probe, 0)
+        try #require(sqlite3_exec(probe, "BEGIN IMMEDIATE", nil, nil, nil) == SQLITE_BUSY)
+        opening.signal()
+        try perform()
     }
 
     /// Reads only this synthetic fixture, comparing every persisted value independently of SQLite column order.
