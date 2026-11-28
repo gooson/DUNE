@@ -347,6 +347,10 @@ struct DUNEApp: App {
                 .onReceive(NotificationCenter.default.mainThreadPublisher(for: NearbyWorkoutCache.didChange)) { _ in
                     Task { await runtime.refreshCoordinator.forceRefresh() }
                 }
+                .onReceive(NotificationCenter.default.mainThreadPublisher(for: BackupFileWorkflow.didRestoreRecords)) { event in
+                    guard let restored = event.object as? ModelContainer, restored === runtime.modelContainer else { return }
+                    Task { await runtime.refreshCoordinator.forceRefresh() }
+                }
                 .modelContainer(runtime.modelContainer)
         })
         Self.makeInsightsWindowGroup(content: storeOpening.content(retry: retryStoreOpen) { runtime in

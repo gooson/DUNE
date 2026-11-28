@@ -139,7 +139,12 @@ final class HealthKitObserverManager {
 
         return processUpdate(completion: completion) {
             async let refreshTask: Void = {
-                _ = await coordinator.requestRefresh(source: .healthKitObserver)
+                if sampleType == HKSampleType.workoutType() {
+                    // A recovered workout may arrive just after the backup file refreshed history.
+                    await coordinator.forceRefresh()
+                } else {
+                    _ = await coordinator.requestRefresh(source: .healthKitObserver)
+                }
             }()
             async let notifyTask: Void = {
                 await notificationEvaluator?.evaluateAndNotify(sampleType: sampleType)

@@ -27,6 +27,43 @@ final class PersonalRecordStore: @unchecked Sendable {
         var processedWorkoutSignatures: [String: String] = [:]
     }
 
+    private static let mutationLock = NSLock()
+
+    /// Scoped and synchronous so a native callback and archive commit cannot interleave preferences writes.
+    static func withMutationLock<Result>(_ operation: () throws -> Result) rethrows -> Result {
+        mutationLock.lock()
+        defer { mutationLock.unlock() }
+        return try operation()
+    }
+
+    struct RewardSignature {
+        let activity: String
+        let milestone: String
+        let credited: Set<PersonalRecordType>
+
+        init?(_ value: String) {
+            let parts = value.split(separator: "|", omittingEmptySubsequences: false)
+            guard parts.count == 3, WorkoutActivityType(rawValue: String(parts[0])) != nil, !parts[1].isEmpty else { return nil }
+            let names = parts[2].isEmpty ? [] : parts[2].split(separator: ",", omittingEmptySubsequences: false)
+            let types = names.compactMap { PersonalRecordType(rawValue: String($0)) }
+            guard types.count == names.count, Set(types).count == types.count else { return nil }
+            activity = String(parts[0])
+            milestone = String(parts[1])
+            credited = Set(types)
+        }
+    }
+
+    /// Historical PR receipt IDs contain the exact workout ID and types paid by that individual event.
+    static func creditedTypes(in event: WorkoutRewardEvent) -> Set<PersonalRecordType> {
+        let prefix = "pr-" + event.workoutID + "-"
+        guard event.kind == .personalRecord, event.id.hasPrefix(prefix) else { return [] }
+        let names = event.id.dropFirst(prefix.count).split(separator: "-", omittingEmptySubsequences: false)
+        let types = Set(names.compactMap { PersonalRecordType(rawValue: String($0)) })
+        guard !types.isEmpty, types.count == names.count,
+              event.pointsAwarded == RewardPoints.personalRecordPerType * types.count else { return [] }
+        return types
+    }
+
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         let bundlePrefix = Bundle.main.bundleIdentifier ?? "com.dailve"
@@ -36,6 +73,11 @@ final class PersonalRecordStore: @unchecked Sendable {
 
     /// Returns current records for the given activity type.
     func records(for activityType: WorkoutActivityType) -> [PersonalRecordType: PersonalRecord] {
+        Self.withMutationLock { readRecords(for: activityType) }
+    }
+
+    // Decode failure removes corrupt persisted data, so even this read requires the mutation lock.
+    private func readRecords(for activityType: WorkoutActivityType) -> [PersonalRecordType: PersonalRecord] {
         let key = recordKeyPrefix + activityType.rawValue
         guard let data = defaults.data(forKey: key) else { return [:] }
         do {
@@ -51,20 +93,21 @@ final class PersonalRecordStore: @unchecked Sendable {
     /// Returns the list of newly achieved PR types.
     @discardableResult
     func updateIfNewRecords(_ workout: WorkoutSummary) -> [PersonalRecordType] {
-        let existing = records(for: workout.activityType)
-        let newTypes = PersonalRecordService.detectNewRecords(
-            workout: workout,
-            existingRecords: existing
-        )
-        guard !newTypes.isEmpty else { return [] }
-
-        let newRecords = PersonalRecordService.buildRecords(from: workout, types: newTypes)
+        Self.mutationLock.lock()
+        defer { Self.mutationLock.unlock() }
+        let existing = readRecords(for: workout.activityType)
+        let newTypes = PersonalRecordService.detectNewRecords(workout: workout, existingRecords: existing)
+        let previousWinners = existing.compactMap { $0.value.workoutID == workout.id ? $0.key : nil }
+        guard !newTypes.isEmpty || !previousWinners.isEmpty else { return [] }
+        let observed = PersonalRecordService.buildRecords(from: workout, types: Array(Set(newTypes + previousWinners)))
         var updated = existing
-        for (type, record) in newRecords {
-            updated[type] = record
+        for (type, record) in observed {
+            if newTypes.contains(type) { updated[type] = record }
+            else if let combined = existing[type]?.supplementingContext(from: record, preserveExistingOnConflict: true) {
+                updated[type] = combined
+            }
         }
-
-        saveRecords(updated, for: workout.activityType)
+        if updated != existing { saveRecords(updated, for: workout.activityType) }
         return newTypes
     }
 
@@ -108,6 +151,8 @@ final class PersonalRecordStore: @unchecked Sendable {
     /// Returns the set of all unlocked badge keys after evaluation.
     @discardableResult
     func evaluateBadges(stats: BadgeEvaluationStats) -> Set<String> {
+        Self.mutationLock.lock()
+        defer { Self.mutationLock.unlock() }
         var state = loadRewardState()
         let currentUnlocked = Set(state.unlockedBadges)
         let newlyUnlocked = WorkoutBadgeDefinition.evaluateUnlocks(
@@ -139,25 +184,30 @@ final class PersonalRecordStore: @unchecked Sendable {
         for workout: WorkoutSummary,
         newPRTypes: [PersonalRecordType]
     ) -> WorkoutRewardOutcome {
+        Self.mutationLock.lock()
+        defer { Self.mutationLock.unlock() }
         var state = loadRewardState()
+        func unchanged() -> WorkoutRewardOutcome {
+            WorkoutRewardOutcome(events: [], representativeEvent: nil, summary: summary(from: state))
+        }
         let milestone = workout.activityType.milestoneAchievement(
             distanceMeters: workout.distance,
             stepCount: workout.stepCount,
             durationSeconds: workout.duration
         )
-        let signature = rewardSignature(
-            activityType: workout.activityType,
-            milestone: milestone,
-            newPRTypes: newPRTypes
-        )
+        let previousRaw = state.processedWorkoutSignatures[workout.id]
+        let previous = previousRaw.flatMap(RewardSignature.init)
+        if previousRaw != nil, previous?.activity != workout.activityType.rawValue { return unchanged() }
 
-        if state.processedWorkoutSignatures[workout.id] == signature {
-            return WorkoutRewardOutcome(
-                events: [],
-                representativeEvent: nil,
-                summary: summary(from: state)
-            )
+        let requested = Set(newPRTypes)
+        var credited = previous?.credited ?? []
+        if previous?.milestone == (milestone?.key ?? "none"), requested.isSubset(of: credited) { return unchanged() }
+        for event in state.history where event.workoutID == workout.id && event.activityTypeRawValue == workout.activityType.rawValue {
+            credited.formUnion(Self.creditedTypes(in: event))
         }
+        let newlyCredited = requested.subtracting(credited)
+        let signature = rewardSignature(activityType: workout.activityType, milestone: milestone,
+                                        newPRTypes: Array(credited.union(requested)))
 
         var newEvents: [WorkoutRewardEvent] = []
         var sessionPoints = 0
@@ -207,7 +257,7 @@ final class PersonalRecordStore: @unchecked Sendable {
             }
         }
 
-        let uniquePRTypes = Array(Set(newPRTypes)).sorted { $0.rawValue < $1.rawValue }
+        let uniquePRTypes = newlyCredited.sorted { $0.rawValue < $1.rawValue }
         if !uniquePRTypes.isEmpty {
             let prPoints = RewardPoints.personalRecordPerType * uniquePRTypes.count
             sessionPoints += prPoints

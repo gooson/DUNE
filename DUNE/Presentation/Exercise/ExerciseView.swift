@@ -23,7 +23,7 @@ struct ExerciseView: View {
     @State private var recordToDelete: ExerciseRecord?
     @State private var healthKitWorkoutToDelete: WorkoutSummary?
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
-    @State private var inspectedExerciseID: String?
+    @State private var inspectedExercise: ExerciseListItem.Selection?
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
@@ -77,13 +77,11 @@ struct ExerciseView: View {
                 updateSuggestion()
                 await viewModel.loadHealthKitWorkouts()
             }
-            .onReceive(NotificationCenter.default.mainThreadPublisher(for: NearbyWorkoutCache.didChange)) { _ in
-                Task { await viewModel.loadHealthKitWorkouts() }
+            .onReceive(NotificationCenter.default.mainThreadPublisher(for: .appHealthDataDidRefresh)) { _ in
+                Task { await viewModel.loadHealthKitWorkouts(preservingLoadedPages: true) }
             }
-            .onChange(of: viewModel.allExercises.map(\.id)) { _, ids in
-                if let selectedID = inspectedExerciseID, !ids.contains(selectedID) {
-                    inspectedExerciseID = nil
-                }
+            .onChange(of: viewModel.allExercises.map(\.id)) { _, _ in
+                inspectedExercise = inspectedExercise?.resolve(in: viewModel.allExercises).map(ExerciseListItem.Selection.init)
             }
             .onChange(of: manualRecords) { _, newValue in
                 rebuildRecordIndex()
@@ -117,18 +115,18 @@ struct ExerciseView: View {
             }
             .confirmDeleteRecord($recordToDelete, context: modelContext)
             .inspector(isPresented: Binding(
-                get: { inspectedExerciseID != nil },
-                set: { if !$0 { inspectedExerciseID = nil } }
+                get: { inspectedExercise != nil },
+                set: { if !$0 { inspectedExercise = nil } }
             )) {
                 NavigationStack {
                     VStack(spacing: 0) {
                         HStack {
                             Spacer()
-                            Button("Done") { inspectedExerciseID = nil }
+                            Button("Done") { inspectedExercise = nil }
                                 .accessibilityIdentifier("exercise-inspector-close")
                         }
                         .padding()
-                        if let item = viewModel.allExercises.first(where: { $0.id == inspectedExerciseID }) {
+                        if let item = inspectedExercise?.resolve(in: viewModel.allExercises) {
                             exerciseDetail(item)
                                 .id(item.id)
                         }
@@ -258,7 +256,7 @@ struct ExerciseView: View {
                         Group {
                             if (item.source == .manual && findRecord(for: item) != nil)
                                 || (item.source == .healthKit && item.workoutSummary != nil) {
-                                Button { inspectedExerciseID = item.id } label: {
+                                Button { inspectedExercise = ExerciseListItem.Selection(item) } label: {
                                     UnifiedWorkoutRow(item: item, style: .full)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .contentShape(Rectangle())

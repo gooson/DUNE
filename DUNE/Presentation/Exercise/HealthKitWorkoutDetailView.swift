@@ -1,8 +1,20 @@
 import SwiftUI
 import AppIntents
+import SwiftData
 
-/// Detail view for a HealthKit-only workout (not created by this app).
-/// Shows rich data: HR chart, pace, elevation, weather, badges.
+/// A single HealthKit session can contain multiple independent DUNE exercise records.
+enum LinkedWorkoutDetail {
+    static func record(in linkedRecords: [ExerciseRecord], archiveRecordID: UUID?) -> ExerciseRecord? {
+        if let archiveRecordID { return linkedRecords.first { $0.id == archiveRecordID } }
+        return linkedRecords.count == 1 ? linkedRecords.first : nil
+    }
+
+    static func sets(record: ExerciseRecord?, archive: WorkoutStrengthArchive?) -> [WorkoutSet]? {
+        if let record, record.hasSetData { return record.completedSets }
+        return archive?.displaySets()
+    }
+}
+
 struct HealthKitWorkoutDetailView: View {
     let workout: WorkoutSummary
 
@@ -13,7 +25,16 @@ struct HealthKitWorkoutDetailView: View {
     @State private var editedTitle = ""
     @State private var correctedTitle: String?
 
+    @Query private var linkedRecords: [ExerciseRecord]
+
+    init(workout: WorkoutSummary) {
+        self.workout = workout
+        let workoutID = workout.id
+        _linkedRecords = Query(filter: #Predicate<ExerciseRecord> { $0.healthKitWorkoutID == workoutID })
+    }
+
     var body: some View {
+        let record = LinkedWorkoutDetail.record(in: linkedRecords, archiveRecordID: workout.strengthArchive?.recordID)
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 workoutHeader
@@ -24,11 +45,13 @@ struct HealthKitWorkoutDetailView: View {
                             duration: workout.duration, distanceMeters: workout.distance,
                             isIndoor: workout.isIndoor
                         ),
-                        healthKitWorkoutID: workout.id
+                        localRecordID: record?.id ?? workout.strengthArchive?.recordID,
+                        healthKitWorkoutID: workout.id,
+                        allowsUnresolvedLocation: linkedRecords.isEmpty
                     )
                 }
-                if let archive = workout.strengthArchive {
-                    WorkoutCompletedSetsSection(sets: archive.displaySets())
+                if let sets = LinkedWorkoutDetail.sets(record: record, archive: workout.strengthArchive) {
+                    WorkoutCompletedSetsSection(sets: sets)
                 }
                 badgesSection
                 statsGrid
@@ -63,6 +86,9 @@ struct HealthKitWorkoutDetailView: View {
         .task {
             correctedTitle = WorkoutTypeCorrectionStore.shared.correctedTitle(for: workout.id)
             viewModel.loadDetail(workoutID: workout.id)
+        }
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: UserDefaults.didChangeNotification)) { _ in
+            correctedTitle = WorkoutTypeCorrectionStore.shared.correctedTitle(for: workout.id)
         }
         .onDisappear {
             viewModel.cancelLoading()

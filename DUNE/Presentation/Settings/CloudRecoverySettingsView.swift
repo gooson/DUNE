@@ -56,6 +56,8 @@ struct EncryptedBackupDocument: FileDocument {
 @MainActor
 @Observable
 final class BackupFileWorkflow {
+    static let didRestoreRecords = Notification.Name("DUNEBackupFileDidRestoreRecords")
+
     enum Step { case home, exportKey, restoreKey }
     enum Scope { case records, settings }
     private(set) var scope: Scope = .records
@@ -198,6 +200,7 @@ final class BackupFileWorkflow {
             let result = try AppOwnedBackup.restore(bytes, into: context, defaults: defaults, mode: mode)
             reset()
             restoredRecords = result
+            NotificationCenter.default.post(name: Self.didRestoreRecords, object: context.container)
             message = result.archiveRowCount == 0 ? "No DUNE records in this backup." : "Backup file restored to this device."
         } catch AppOwnedBackup.Failure.destinationConflict {
             canCombine = true

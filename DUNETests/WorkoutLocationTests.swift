@@ -500,3 +500,350 @@ final class BackupFileWorkflowTests: XCTestCase {
     }
 }
 #endif
+
+#if targetEnvironment(simulator) && os(iOS)
+import CryptoKit
+
+@MainActor
+final class HealthKitAndFileArrivalTests: XCTestCase {
+    private struct Fixture {
+        let workout: HKWorkout
+        let recordID: UUID
+        let sets: [UUID]
+        let place: WorkoutPlace
+        let portraitID: UUID
+        let photoHash: Data
+        let rewards: [WorkoutRewardEvent]
+        let key: String
+        let url: URL
+    }
+
+    /// Local QA attachments for a clean replacement-device receiver. No HealthKit sample is saved.
+    func testExportSyntheticReplacementDeviceFixture() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let source = root.appendingPathComponent("source")
+        try FileManager.default.createDirectory(at: source, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let fixture = try makeSource(in: source, archiveDirectory: root)
+        try FileManager.default.removeItem(at: source)
+        struct Manifest: Encodable {
+            let format = "DUNE-synthetic-replacement-v1"
+            let workoutID: UUID
+            let recordID: UUID
+            let date: Date
+            let sets: [UUID]
+            let reps = [8, 6]
+            let weights = [15.0, 20.0]
+            let place: WorkoutPlace
+            let portraitID: UUID
+            let photoHash: Data
+            let prType = PersonalRecordType.longestDuration
+            let prValue = 120.0
+            let rewards: [WorkoutRewardEvent]
+            let fileHash: Data
+            let key: String
+        }
+        let ciphertext = try Data(contentsOf: fixture.url)
+        let manifest = Manifest(workoutID: fixture.workout.uuid, recordID: fixture.recordID,
+                                date: fixture.workout.startDate, sets: fixture.sets, place: fixture.place,
+                                portraitID: fixture.portraitID, photoHash: fixture.photoHash, rewards: fixture.rewards,
+                                fileHash: Data(SHA256.hash(data: ciphertext)), key: fixture.key)
+        for (name, bytes, type) in [
+            ("safe-fixture.dunebackup", ciphertext, UTType.data),
+            ("safe-manifest.json", try JSONEncoder().encode(manifest), UTType.json)
+        ] {
+            let file = XCTAttachment(data: bytes, uniformTypeIdentifier: type.identifier)
+            file.name = name
+            file.lifetime = .keepAlways
+            add(file)
+        }
+    }
+
+    func testHealthKitFirstThenEncryptedFile() async throws {
+        try await verifyArrival(healthFirst: true)
+    }
+
+    func testEncryptedFileFirstThenHealthKit() async throws {
+        try await verifyArrival(healthFirst: false)
+    }
+
+    func testEncryptedFilePreservesLocalWorkoutAfterHealthKitDeletion() async throws {
+        try requireAuthorizedSimulator()
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let source = root.appendingPathComponent("source")
+        try FileManager.default.createDirectory(at: source, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let fixture = try makeSource(in: source, archiveDirectory: root)
+        try await HKHealthStore().save(fixture.workout)
+        let uuid = fixture.workout.uuid
+        addTeardownBlock {
+            let predicate = HKSamplePredicate.workout(Self.ownedWorkoutPredicate(uuid))
+            let query = HKSampleQueryDescriptor(predicates: [predicate], sortDescriptors: [], limit: 1)
+            let remaining = try await query.result(for: HKHealthStore())
+            if !remaining.isEmpty {
+                let cleaned = try await Self.removeOwnedWorkout(uuid)
+                XCTAssertEqual(cleaned, 1)
+            }
+        }
+        let present = try await readWorkout(fixture)
+        XCTAssertEqual(present.map(\.id), [uuid.uuidString])
+        try FileManager.default.removeItem(at: source)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: source.path))
+        let deleted = try await Self.removeOwnedWorkout(uuid)
+        XCTAssertEqual(deleted, 1)
+        let suite = "DeletedWorkout.receiver." + UUID().uuidString
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let target = root.appendingPathComponent("receiver.store")
+        for attempt in 0..<2 {
+            let container = try diskStore(at: target)
+            let context = container.mainContext
+            let before = try await readWorkout(fixture)
+            XCTAssertTrue(before.isEmpty)
+            let beforeCount = try context.fetchCount(FetchDescriptor<ExerciseRecord>())
+            XCTAssertEqual(beforeCount, attempt)
+            if attempt == 1 {
+                let coldRecords = try context.fetch(FetchDescriptor<ExerciseRecord>())
+                let model = ExerciseViewModel(personalRecordStore: PersonalRecordStore(defaults: defaults))
+                model.manualRecords = coldRecords
+                model.healthKitWorkouts = before
+                try verifyLists(model, summaries: before, records: coldRecords, fixture: fixture)
+                let locations = try context.fetch(FetchDescriptor<WorkoutLocationRecord>())
+                let pin = CardioAtlasSection.savedLocation(in: locations, localID: fixture.recordID, healthID: uuid.uuidString)
+                XCTAssertEqual(pin?.payload?.place, fixture.place)
+            }
+            let result = try await restore(fixture, context: context, defaults: defaults)
+            if attempt == 1 { XCTAssertEqual(result.insertedRowCount, 0) }
+            let after = try await readWorkout(fixture)
+            XCTAssertTrue(after.isEmpty)
+            let records = try context.fetch(FetchDescriptor<ExerciseRecord>())
+            let model = ExerciseViewModel(personalRecordStore: PersonalRecordStore(defaults: defaults))
+            model.manualRecords = records
+            model.healthKitWorkouts = after
+            try verifyLists(model, summaries: after, records: records, fixture: fixture)
+            let locations = try context.fetch(FetchDescriptor<WorkoutLocationRecord>())
+            XCTAssertEqual(locations.count, 1)
+            let pin = CardioAtlasSection.savedLocation(in: locations, localID: fixture.recordID, healthID: uuid.uuidString)
+            XCTAssertEqual(pin?.payload?.place, fixture.place)
+        }
+    }
+
+    private func requireAuthorizedSimulator() throws {
+        let env = ProcessInfo.processInfo.environment
+        guard let id = env["DUNE_HEALTHKIT_QA_SIMULATOR_UDID"], !id.isEmpty,
+              env["SIMULATOR_UDID"] == id, UIDevice.current.userInterfaceIdiom == .phone,
+              SimulatorAdvancedMockDataProvider.current() == nil else {
+            throw XCTSkip("Select the owned iPhone simulator with real HealthKit.")
+        }
+        guard HKHealthStore.isHealthDataAvailable(),
+              HKHealthStore().authorizationStatus(for: .workoutType()) == .sharingAuthorized else {
+            throw XCTSkip("Grant DUNE workout read and write access on the owned simulator.")
+        }
+    }
+
+    private func verifyArrival(healthFirst: Bool) async throws {
+        try requireAuthorizedSimulator()
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let source = root.appendingPathComponent("source")
+        try FileManager.default.createDirectory(at: source, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let fixture = try makeSource(in: source, archiveDirectory: root)
+        try FileManager.default.removeItem(at: source)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: source.path))
+
+        let target = root.appendingPathComponent("new-device.store")
+        let suite = "Arrival.receiver." + UUID().uuidString
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        do {
+            let container = try diskStore(at: target)
+            let context = container.mainContext
+            XCTAssertEqual(try context.fetchCount(FetchDescriptor<ExerciseRecord>()), 0)
+            let absent = try await readWorkout(fixture)
+            XCTAssertTrue(absent.isEmpty)
+            let model = ExerciseViewModel(personalRecordStore: PersonalRecordStore(defaults: defaults))
+            if healthFirst {
+                try await deliverWorkout(fixture.workout)
+                let summaries = try await readWorkout(fixture)
+                model.healthKitWorkouts = summaries
+                let row = try XCTUnwrap(model.allExercises.first)
+                XCTAssertEqual(row.source, .healthKit)
+                XCTAssertEqual(row.completedSets.map(\.id), fixture.sets)
+                XCTAssertEqual(row.personalRecordTypes, [.longestDuration])
+                let store = PersonalRecordStore(defaults: defaults)
+                XCTAssertEqual(store.rewardHistory(), fixture.rewards)
+                ActivityViewModel(personalRecordStore: store).refreshCardioPersonalRecords(with: summaries)
+                XCTAssertEqual(store.rewardHistory(), fixture.rewards)
+            }
+            _ = try await restore(fixture, context: context, defaults: defaults)
+            model.manualRecords = try context.fetch(FetchDescriptor<ExerciseRecord>())
+            if !healthFirst {
+                XCTAssertEqual(model.allExercises.map(\.id), [fixture.recordID.uuidString])
+                let beforeDelivery = try await readWorkout(fixture)
+                XCTAssertTrue(beforeDelivery.isEmpty)
+                try await deliverWorkout(fixture.workout)
+            }
+            let arrived = try await readWorkout(fixture)
+            model.healthKitWorkouts = arrived
+            let rewards = PersonalRecordStore(defaults: defaults)
+            ActivityViewModel(personalRecordStore: rewards).refreshCardioPersonalRecords(with: arrived)
+            XCTAssertEqual(rewards.rewardHistory(), fixture.rewards)
+            XCTAssertEqual(rewards.records(for: .stairClimbing)[.longestDuration]?.isIndoor, true)
+            try verifyLists(model, summaries: arrived, records: model.manualRecords, fixture: fixture)
+        }
+
+        let reopened = try diskStore(at: target)
+        let context = reopened.mainContext
+        let records = try context.fetch(FetchDescriptor<ExerciseRecord>())
+        let summaries = try await readWorkout(fixture)
+        XCTAssertEqual(summaries.map(\.id), [fixture.workout.uuid.uuidString])
+        XCTAssertEqual(summaries.first?.strengthArchive?.recordID, fixture.recordID)
+        let account = PersonalRecordStore(defaults: defaults)
+        let model = ExerciseViewModel(personalRecordStore: account)
+        model.manualRecords = records
+        model.healthKitWorkouts = summaries
+        try verifyLists(model, summaries: summaries, records: records, fixture: fixture)
+        let sets = try context.fetch(FetchDescriptor<WorkoutSet>())
+        XCTAssertEqual(sets.count, fixture.sets.count)
+        XCTAssertTrue(sets.allSatisfy { $0.exerciseRecord?.id == fixture.recordID })
+        let places = try context.fetch(FetchDescriptor<WorkoutLocationRecord>())
+        XCTAssertEqual(places.count, 1)
+        XCTAssertEqual(places.first?.localRecordID, fixture.recordID)
+        let native = try XCTUnwrap(summaries.first)
+        XCTAssertTrue(native.activityType.isAtlasSupported)
+        let linked = LinkedWorkoutDetail.record(in: records, archiveRecordID: native.strengthArchive?.recordID)
+        XCTAssertEqual(linked?.id, fixture.recordID)
+        XCTAssertEqual(LinkedWorkoutDetail.sets(record: linked, archive: native.strengthArchive)?.map(\.id), fixture.sets)
+        let pin = CardioAtlasSection.savedLocation(in: places, localID: linked?.id, healthID: native.id)
+        XCTAssertEqual(pin?.payload?.isIndoor, true)
+        XCTAssertEqual(pin?.payload?.place, fixture.place)
+        let photos = try context.fetch(FetchDescriptor<PostureAssessmentRecord>())
+        XCTAssertEqual(photos.map(\.id), [fixture.portraitID])
+        XCTAssertEqual(Data(SHA256.hash(data: try XCTUnwrap(photos.first?.frontImageData))), fixture.photoHash)
+        XCTAssertEqual(account.records(for: .stairClimbing)[.longestDuration]?.workoutID,
+                       fixture.workout.uuid.uuidString)
+        ActivityViewModel(personalRecordStore: account).refreshCardioPersonalRecords(with: summaries)
+        XCTAssertEqual(account.records(for: .stairClimbing)[.longestDuration]?.isIndoor, true)
+        XCTAssertEqual(account.rewardHistory(), fixture.rewards)
+        let repeated = try await restore(fixture, context: context, defaults: defaults)
+        XCTAssertEqual(repeated.insertedRowCount, 0)
+        XCTAssertEqual(try context.fetchCount(FetchDescriptor<ExerciseRecord>()), 1)
+        XCTAssertEqual(try context.fetchCount(FetchDescriptor<WorkoutSet>()), 2)
+        XCTAssertEqual(account.rewardHistory(), fixture.rewards)
+    }
+
+    private func verifyLists(_ model: ExerciseViewModel, summaries: [WorkoutSummary], records: [ExerciseRecord],
+                             fixture: Fixture) throws {
+        let (recent, destinations) = ExerciseListSection(workouts: summaries, exerciseRecords: records,
+                                                        rewardEvents: fixture.rewards).buildItemsAndIndex()
+        for rows in [model.allExercises, recent] {
+            XCTAssertEqual(rows.map(\.id), [fixture.recordID.uuidString])
+            let row = try XCTUnwrap(rows.first)
+            XCTAssertEqual(row.source, .manual)
+            XCTAssertEqual(row.linkedWorkoutID, fixture.workout.uuid.uuidString)
+            XCTAssertEqual(row.completedSets.map(\.id), fixture.sets)
+            XCTAssertEqual(row.completedSets.compactMap(\.reps), [8, 6])
+            XCTAssertEqual(row.completedSets.compactMap(\.weight), [15, 20])
+        }
+        XCTAssertEqual(destinations[fixture.recordID]?.memo, "Synthetic detail note")
+    }
+
+    private func diskStore(at url: URL) throws -> ModelContainer {
+        let schema = AppSchema.currentSchema
+        let config = ModelConfiguration(schema: schema, url: url, cloudKitDatabase: .none)
+        XCTAssertFalse(config.isStoredInMemoryOnly)
+        return try ModelContainer(for: schema, configurations: config)
+    }
+
+    private func readWorkout(_ fixture: Fixture) async throws -> [WorkoutSummary] {
+        let workout = fixture.workout
+        return try await WorkoutQueryService(manager: .shared)
+            .fetchWorkouts(start: workout.startDate.addingTimeInterval(-1), end: workout.endDate.addingTimeInterval(1))
+            .filter { $0.id == workout.uuid.uuidString || $0.strengthArchive?.recordID == fixture.recordID }
+    }
+
+    private func deliverWorkout(_ workout: HKWorkout) async throws {
+        try await HKHealthStore().save(workout)
+        let uuid = workout.uuid
+        addTeardownBlock {
+            let removed = try await Self.removeOwnedWorkout(uuid)
+            XCTAssertEqual(removed, 1)
+        }
+    }
+
+    private nonisolated static func removeOwnedWorkout(_ uuid: UUID) async throws -> Int {
+        try await HKHealthStore().deleteObjects(of: .workoutType(), predicate: ownedWorkoutPredicate(uuid))
+    }
+
+    private nonisolated static func ownedWorkoutPredicate(_ uuid: UUID) -> NSPredicate {
+        NSCompoundPredicate(andPredicateWithSubpredicates: [
+            HKQuery.predicateForObject(with: uuid), HKQuery.predicateForObjects(from: HKSource.default())
+        ])
+    }
+
+    private func restore(_ fixture: Fixture, context: ModelContext,
+                         defaults: UserDefaults) async throws -> AppOwnedBackup.RestoreResult {
+        let workflow = BackupFileWorkflow()
+        await workflow.selectFile(.success(fixture.url))
+        workflow.inputKey = fixture.key
+        await workflow.restore(context: context, defaults: defaults)
+        if workflow.canCombine {
+            workflow.confirmedOwnership = true
+            workflow.inputKey = fixture.key
+            await workflow.restore(context: context, defaults: defaults)
+        }
+        let result = try XCTUnwrap(workflow.restoredRecords)
+        XCTAssertEqual(result.workoutCount, 1)
+        XCTAssertEqual(result.setCount, 2)
+        return result
+    }
+
+    private func makeSource(in directory: URL, archiveDirectory: URL) throws -> Fixture {
+        let source = try diskStore(at: directory.appendingPathComponent("old-device.store"))
+        let suite = "Arrival.source." + UUID().uuidString
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let start = Date(timeIntervalSince1970: floor(Date().timeIntervalSince1970) - 180)
+        let title = WorkoutActivityType.stairClimbing.rawValue
+        let record = ExerciseRecord(date: start, exerciseType: title, duration: 120, memo: "Synthetic detail note")
+        let first = WorkoutSet(setNumber: 1, weight: 15, reps: 8, isCompleted: true)
+        let second = WorkoutSet(setNumber: 2, weight: 20, reps: 6, isCompleted: true)
+        record.sets = [first, second]
+        let archive = try XCTUnwrap(WorkoutStrengthArchive(record: record))
+        var metadata = HealthKitWorkoutTitle.metadata(exerciseName: title)
+        metadata[WorkoutStrengthArchive.metadataKey] = try XCTUnwrap(archive.encodedMetadata())
+        metadata[HKMetadataKeyIndoorWorkout] = true
+        let workout = HKWorkout(activityType: .stairClimbing, start: start,
+                                end: start.addingTimeInterval(120), duration: 120,
+                                totalEnergyBurned: nil, totalDistance: nil, metadata: metadata)
+        let hkID = workout.uuid.uuidString
+        record.healthKitWorkoutID = hkID
+        let place = try XCTUnwrap(WorkoutPlace(latitude: 0.125, longitude: 0.25, name: "Synthetic gym", source: .manual))
+        let location = WorkoutLocationRecord(localRecordID: record.id, payload: WorkoutLocationPayload(isIndoor: true, place: place))
+        let image = UIGraphicsImageRenderer(size: CGSize(width: 2, height: 2)).pngData { renderer in
+            UIColor.blue.setFill()
+            renderer.fill(CGRect(x: 0, y: 0, width: 2, height: 2))
+        }
+        let portrait = PostureAssessmentRecord(frontImageData: image)
+        let context = source.mainContext
+        context.insert(record)
+        context.insert(location)
+        context.insert(portrait)
+        try context.save()
+        let summary = WorkoutSummary(id: hkID, type: title, activityType: .stairClimbing,
+                                     duration: 120, calories: nil, distance: nil, date: start, isFromThisApp: true)
+        let store = PersonalRecordStore(defaults: defaults)
+        let types = store.updateIfNewRecords(summary)
+        _ = store.evaluateReward(for: summary, newPRTypes: types)
+        let events = store.rewardHistory()
+        XCTAssertFalse(events.isEmpty)
+        let key = EncryptedRecoveryArchive.makeRecoveryKey()
+        let url = archiveDirectory.appendingPathComponent("synthetic.dunebackup")
+        let plaintext = try AppOwnedBackup.encode(from: context, defaults: defaults)
+        try EncryptedRecoveryArchive.seal(plaintext, recoveryKey: key).write(to: url, options: .atomic)
+        return Fixture(workout: workout, recordID: record.id, sets: [first.id, second.id], place: place,
+                       portraitID: portrait.id, photoHash: Data(SHA256.hash(data: image)),
+                       rewards: events, key: key, url: url)
+    }
+}
+#endif

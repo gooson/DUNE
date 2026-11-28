@@ -123,6 +123,32 @@ struct ExerciseListItem: Identifiable {
         completedSets.setSummary()
     }
 
+    /// Identifies the same exercise as its visible row moves between HealthKit and local history.
+    struct Selection: Equatable {
+        let id: String
+        let source: Source
+        let healthID: String?
+        let recordID: UUID?
+
+        init(_ item: ExerciseListItem) {
+            id = item.id
+            source = item.source
+            healthID = source == .healthKit ? id : item.linkedWorkoutID
+            recordID = source == .manual ? UUID(uuidString: id) : item.workoutSummary?.strengthArchive?.recordID
+        }
+
+        func resolve(in items: [ExerciseListItem]) -> ExerciseListItem? {
+            if let exact = items.first(where: { $0.id == id && $0.source == source }) { return exact }
+            guard let healthID, !healthID.isEmpty else { return nil }
+            let matches = items.filter { candidate in
+                guard candidate.source != source else { return false }
+                let other = Selection(candidate)
+                return other.healthID == healthID && (recordID == nil || other.recordID == nil || other.recordID == recordID)
+            }
+            return matches.count == 1 ? matches[0] : nil
+        }
+    }
+
     /// Reward history uses the HealthKit workout ID or a `manual-UUID` fallback.
     /// Never match by date or activity type: those can belong to another session.
     func matchingRewardEvents(in events: [WorkoutRewardEvent]) -> [WorkoutRewardEvent] {

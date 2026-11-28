@@ -948,7 +948,7 @@ final class ActivityViewModel {
     // MARK: - Personal Record Helpers
 
     /// Updates cardio PR cache from fresh HealthKit workouts.
-    private func refreshCardioPersonalRecords(with workouts: [WorkoutSummary]) {
+    func refreshCardioPersonalRecords(with workouts: [WorkoutSummary]) {
         for workout in workouts.sorted(by: { $0.date < $1.date }) {
             let newPRTypes: [PersonalRecordType]
             if isCardioCandidate(workout) {

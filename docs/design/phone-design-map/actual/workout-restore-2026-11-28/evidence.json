@@ -83,6 +83,16 @@
       "result_bundle": "Test-DUNEUITests-2026.11.28_23-35-14-+0900.xcresult",
       "result": "1 passed, 0 failures",
       "scope": "Dedicated iPhone 18 Pro simulator, iOS 27.2, synthetic app state. No file picker upload, clipboard copy, key disclosure or personal account access."
+    },
+    {
+      "screen": "W28 · open HealthKit workout detail after file restore",
+      "path": "W28-live-restored-place.png",
+      "test": "CardioAtlasLiveRestorePresentationTests/testOpenStairDetailShowsRestoredLocalPin()",
+      "attachment": "stair-detail-restored-local-pin_0_228B98D0-A30A-4D28-AEC4-6945DF72CA1F.png",
+      "timestamp": 1795878086.061,
+      "sha256": "17b3de33ca59164504e8d75fc0153acbc1fd410b0951efc4f05b957f2a47a9b4",
+      "scope": "A hosted iPhone simulator window stayed open while an encrypted synthetic file restored three rows. Guest pixel OCR detected Cobalt Test Gym. Set 1 and 73 reps are also visible. No tile or real location verification.",
+      "result_bundle": "locked-commit.xcresult"
     }
   ]
 }

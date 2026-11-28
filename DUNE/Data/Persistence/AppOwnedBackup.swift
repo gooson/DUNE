@@ -501,6 +501,23 @@ enum AppOwnedBackup {
             try validate()
         }
 
+        // PersonalRecordStore persists a non-String-key dictionary as alternating key/value elements.
+        // Dictionary decoding alone would silently accept a duplicate key in a malformed archive.
+        private struct RecordValues: Decodable {
+            var values = [PersonalRecordType: PersonalRecord]()
+
+            init(from decoder: Decoder) throws {
+                var pairs = try decoder.unkeyedContainer()
+                while !pairs.isAtEnd {
+                    let type = try pairs.decode(PersonalRecordType.self)
+                    let value = try pairs.decode(PersonalRecord.self)
+                    guard value.type == type, values.updateValue(value, forKey: type) == nil else {
+                        throw Failure.invalidArchive
+                    }
+                }
+            }
+        }
+
         // The persisted layout comes from PersonalRecordStore.RewardState.
         private struct RewardValue: Decodable {
             let milestoneTierByActivity: [String: Int]
@@ -509,39 +526,184 @@ enum AppOwnedBackup {
             let level: Int
             let history: [WorkoutRewardEvent]
             let processedWorkoutSignatures: [String: String]
+
+            func recordedPoints() throws -> Int {
+                var points = 0
+                for event in history {
+                    let next = points.addingReportingOverflow(event.pointsAwarded)
+                    guard !next.overflow, event.pointsAwarded >= 0 else { throw Failure.invalidArchive }
+                    points = next.partialValue
+                }
+                return points
+            }
+
+            func validate() throws {
+                guard level >= 1, totalPoints >= 0, try recordedPoints() <= totalPoints,
+                      milestoneTierByActivity.values.allSatisfy({ $0 >= 0 }),
+                      Set(unlockedBadges).count == unlockedBadges.count,
+                      Set(history.map(\.id)).count == history.count,
+                      history.allSatisfy({ !$0.id.isEmpty && !$0.workoutID.isEmpty })
+                else { throw Failure.invalidArchive }
+            }
+
+            private func coversSignatures(_ other: Self) -> Bool {
+                for (workoutID, oldValue) in other.processedWorkoutSignatures {
+                    guard let value = processedWorkoutSignatures[workoutID] else { return false }
+                    if value == oldValue { continue }
+                    guard let file = PersonalRecordStore.RewardSignature(value),
+                          let local = PersonalRecordStore.RewardSignature(oldValue),
+                          file.activity == local.activity, file.milestone == local.milestone else { return false }
+                    func earned(in events: [WorkoutRewardEvent]) -> Set<PersonalRecordType> {
+                        var types = Set<PersonalRecordType>()
+                        for event in events where event.workoutID == workoutID && event.activityTypeRawValue == file.activity {
+                            types.formUnion(PersonalRecordStore.creditedTypes(in: event))
+                        }
+                        return types
+                    }
+                    let fileEarned = earned(in: history)
+                    guard file.credited.symmetricDifference(local.credited).isSubset(of: fileEarned),
+                          local.credited.union(earned(in: other.history)).isSubset(of: file.credited.union(fileEarned))
+                    else { return false }
+                }
+                return true
+            }
+
+            func covers(_ other: Self) throws -> Bool {
+                let badges = Set(unlockedBadges), otherBadges = Set(other.unlockedBadges)
+                let receipts = Set(history), otherReceipts = Set(other.history)
+                guard otherBadges.isSubset(of: badges), otherReceipts.isSubset(of: receipts),
+                      coversSignatures(other),
+                      other.milestoneTierByActivity.allSatisfy({ (milestoneTierByActivity[$0.key] ?? -1) >= $0.value }),
+                      totalPoints >= other.totalPoints, level >= other.level else { return false }
+                if receipts == otherReceipts, badges == otherBadges, totalPoints == other.totalPoints,
+                   level == other.level, milestoneTierByActivity == other.milestoneTierByActivity,
+                   processedWorkoutSignatures.keys == other.processedWorkoutSignatures.keys {
+                    return true
+                }
+                // Older/capped ledgers can be equivalent, but an incomplete local ledger cannot prove
+                // that all of its points belong to the matching workouts. Never add two totals together.
+                guard other.unlockedBadges.isEmpty || !other.history.isEmpty,
+                      try other.recordedPoints() == other.totalPoints,
+                      other.history.allSatisfy({ other.processedWorkoutSignatures[$0.workoutID] != nil }) else {
+                    return false
+                }
+                for (activity, tier) in other.milestoneTierByActivity where tier > 0 {
+                    guard other.history.contains(where: {
+                        $0.kind == .milestone && $0.activityTypeRawValue == activity && $0.id.hasSuffix("-tier-" + String(tier))
+                    }) else { return false }
+                }
+                return other.level == 1 || other.history.contains { $0.kind == .levelUp && $0.levelAfterEvent == other.level }
+            }
+        }
+
+        // Codable accepts duplicate object members by selecting one. After typed decoding has
+        // checked JSON syntax, reject repeated names (including escaped equivalents) at any depth.
+        private func rejectDuplicateJSONMembers(in data: Data) throws {
+            var scopes = [Set<String>]()
+            var cursor = data.startIndex
+            while cursor < data.endIndex {
+                let token = data[cursor]
+                cursor += 1
+                switch token {
+                case 123: scopes.append([]) // {
+                case 125: _ = scopes.popLast() // }
+                case 34: // Skip an entire JSON string, including escaped quotation marks.
+                    let start = cursor - 1
+                    var escaped = false
+                    while cursor < data.endIndex {
+                        let byte = data[cursor]
+                        cursor += 1
+                        if byte == 34 { break }
+                        if byte == 92 {
+                            escaped = true
+                            guard cursor < data.endIndex else { throw Failure.invalidArchive }
+                            cursor += 1
+                        }
+                    }
+                    let end = cursor
+                    while cursor < data.endIndex && [9, 10, 13, 32].contains(data[cursor]) { cursor += 1 }
+                    guard cursor < data.endIndex, data[cursor] == 58, !scopes.isEmpty else { continue }
+                    let key = escaped ? try JSONDecoder().decode(String.self, from: data[start..<end])
+                        : String(decoding: data[(start + 1)..<(end - 1)], as: UTF8.self)
+                    guard scopes[scopes.count - 1].insert(key).inserted else { throw Failure.invalidArchive }
+                default: break
+                }
+            }
         }
 
         func validate() throws {
             try settings?.validate()
-            if let rewards { _ = try JSONDecoder().decode(RewardValue.self, from: rewards) }
+            if let rewards {
+                try JSONDecoder().decode(RewardValue.self, from: rewards).validate()
+                try rejectDuplicateJSONMembers(in: rewards)
+            }
             for (key, data) in records {
                 guard WorkoutActivityType(rawValue: key) != nil else { throw Failure.invalidArchive }
-                _ = try JSONDecoder().decode([PersonalRecordType: PersonalRecord].self, from: data)
+                _ = try JSONDecoder().decode(RecordValues.self, from: data)
+                try rejectDuplicateJSONMembers(in: data)
             }
+        }
+
+        private func resolvedRewards(_ local: Data?, allowLocalOnly: Bool) throws -> Data? {
+            guard let local else { return rewards }
+            guard let rewards else {
+                guard allowLocalOnly else { throw Failure.destinationConflict }
+                return local
+            }
+            let fileState = try JSONDecoder().decode(RewardValue.self, from: rewards)
+            let localState = try JSONDecoder().decode(RewardValue.self, from: local)
+            if try fileState.covers(localState) { return rewards }
+            if allowLocalOnly, try localState.covers(fileState) { return local }
+            throw Failure.destinationConflict
+        }
+
+        private func resolvedRecords(_ local: [String: Data], allowLocalOnly: Bool) throws -> [String: Data] {
+            var result = records
+            for (activity, localBytes) in local {
+                guard let fileBytes = records[activity] else {
+                    guard allowLocalOnly else { throw Failure.destinationConflict }
+                    result[activity] = localBytes
+                    continue
+                }
+                let fileValues = try JSONDecoder().decode(RecordValues.self, from: fileBytes).values
+                let localValues = try JSONDecoder().decode(RecordValues.self, from: localBytes).values
+                var combined = fileValues
+                for (type, value) in localValues {
+                    if let archived = fileValues[type] {
+                        guard let enriched = archived.supplementingContext(from: value),
+                              allowLocalOnly || enriched == archived else { throw Failure.destinationConflict }
+                        combined[type] = enriched
+                    } else {
+                        guard allowLocalOnly else { throw Failure.destinationConflict }
+                        combined[type] = value
+                    }
+                }
+                if combined != fileValues {
+                    result[activity] = combined == localValues ? localBytes : try JSONEncoder().encode(combined)
+                }
+            }
+            return result
         }
 
         func contains(_ existing: Self) throws -> Bool {
             let selected = settings ?? Settings()
+            _ = try resolvedRecords(existing.records, allowLocalOnly: false)
+            _ = try resolvedRewards(existing.rewards, allowLocalOnly: false)
             return try selected.merging(existing.settings ?? Settings()) == selected
-                && (existing.rewards == nil || existing.rewards == rewards)
                 && (existing.titles == nil || existing.titles == titles)
-                && existing.records.allSatisfy { records[$0.key] == $0.value }
         }
 
         func merged(with local: Self) throws -> Self {
-            func same<T: Equatable>(_ a: T, _ b: T) throws -> T {
-                guard a == b else { throw Failure.destinationConflict }
-                return a
-            }
             var result = self
             let selected = try (settings ?? Settings()).merging(local.settings ?? Settings())
             result.settings = selected == Settings() ? nil : selected
-            if let existing = local.rewards {
-                result.rewards = try rewards.map { try same($0, existing) } ?? existing
-            }
-            result.records = try local.records.merging(records, uniquingKeysWith: same)
+            result.rewards = try resolvedRewards(local.rewards, allowLocalOnly: true)
+            result.records = try resolvedRecords(local.records, allowLocalOnly: true)
             if local.titles != nil || titles != nil {
-                result.titles = try (local.titles ?? [:]).merging(titles ?? [:], uniquingKeysWith: same)
+                result.titles = try (local.titles ?? [:]).merging(titles ?? [:]) { a, b in
+                    guard a == b else { throw Failure.destinationConflict }
+                    return a
+                }
             }
             return result
         }
@@ -590,7 +752,9 @@ enum AppOwnedBackup {
 
     static func encode(from context: ModelContext, defaults: UserDefaults) throws -> Data {
         guard !context.hasChanges else { throw Failure.unsavedChanges }
-        let archive = try Archive(version: 1, tables: snapshot(context), preferences: Preferences(defaults))
+        let rows = try snapshot(context)
+        let preferences = try PersonalRecordStore.withMutationLock { try Preferences(defaults) }
+        let archive = Archive(version: 1, tables: rows, preferences: preferences)
         let encoder = PropertyListEncoder()
         encoder.outputFormat = .binary
         let bytes = try encoder.encode(archive)
@@ -663,15 +827,6 @@ enum AppOwnedBackup {
         try validateReferences(archive.tables)
         try archive.preferences.validate()
 
-        let currentPreferences = try Preferences(defaults)
-        let preferences: Preferences
-        switch mode {
-        case .emptyOrMatching:
-            guard try archive.preferences.contains(currentPreferences) else { throw Failure.destinationConflict }
-            preferences = archive.preferences
-        case .mergeAfterOwnershipVerification:
-            preferences = try archive.preferences.merged(with: currentPreferences)
-        }
         let context = ModelContext(destination.container)
         context.autosaveEnabled = false
         defer { if context.hasChanges { context.rollback() } }
@@ -714,9 +869,22 @@ enum AppOwnedBackup {
             try table.stage(additions, context, &parents)
             inserted += additions.count
         }
-        if context.hasChanges { try context.save() }
-        // A crash after the database commit is repairable by retrying the same archive.
-        preferences.install(into: defaults)
+        // Native HealthKit callbacks can update PR/reward defaults while rows are being staged.
+        // Re-read under their lock just before commit. A new conflict aborts all provisional rows.
+        try PersonalRecordStore.withMutationLock {
+            let currentPreferences = try Preferences(defaults)
+            let preferences: Preferences
+            switch mode {
+            case .emptyOrMatching:
+                guard try archive.preferences.contains(currentPreferences) else { throw Failure.destinationConflict }
+                preferences = archive.preferences
+            case .mergeAfterOwnershipVerification:
+                preferences = try archive.preferences.merged(with: currentPreferences)
+            }
+            if context.hasChanges { try context.save() }
+            // Retry repairs an interruption between database commit and defaults installation.
+            preferences.install(into: defaults)
+        }
         return RestoreResult(
             archiveRowCount: archive.tables.values.reduce(0) { $0 + $1.count },
             workoutCount: archive.tables["ExerciseRecord", default: []].count,

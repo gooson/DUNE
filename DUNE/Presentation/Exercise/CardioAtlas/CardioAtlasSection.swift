@@ -20,6 +20,7 @@ struct CardioAtlasSection: View {
     let session: CardioAtlasSession
     let localRecordID: UUID?
     let healthKitWorkoutID: String?
+    let allowsUnresolvedLocation: Bool
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.appTheme) private var theme
@@ -46,10 +47,13 @@ struct CardioAtlasSection: View {
     private struct LocationLoad: Equatable {
         let workoutID: String?
         let revision: Int
+        let needsHealthRoute: Bool
     }
 
-    init(session: CardioAtlasSession, localRecordID: UUID? = nil, healthKitWorkoutID: String? = nil) {
+    init(session: CardioAtlasSession, localRecordID: UUID? = nil, healthKitWorkoutID: String? = nil,
+         allowsUnresolvedLocation: Bool = true) {
         self.session = session
+        self.allowsUnresolvedLocation = allowsUnresolvedLocation
         self.localRecordID = localRecordID
         self.healthKitWorkoutID = healthKitWorkoutID
         // Nonmatching sentinels avoid a nil-ID predicate accidentally fetching every record.
@@ -64,8 +68,24 @@ struct CardioAtlasSection: View {
         )
     }
 
+    /// A sibling exercise can share the HealthKit session but still have its own manual pin.
+    static func savedLocation(in newestFirst: [WorkoutLocationRecord], localID: UUID?, healthID: String?,
+                              allowsUnresolvedLocation: Bool = true) -> WorkoutLocationRecord? {
+        if let localID, let exact = newestFirst.first(where: { $0.localRecordID == localID }) { return exact }
+        guard let healthID else { return nil }
+        let shared = newestFirst.filter { $0.healthKitWorkoutID == healthID }
+        if let session = shared.first(where: { $0.localRecordID == nil }) { return session }
+        guard localID == nil, allowsUnresolvedLocation, Set(shared.compactMap(\.localRecordID)).count == 1 else { return nil }
+        return shared.first
+    }
+
+    private var savedLocation: WorkoutLocationRecord? {
+        Self.savedLocation(in: locationRecords, localID: localRecordID, healthID: healthKitWorkoutID,
+                           allowsUnresolvedLocation: allowsUnresolvedLocation)
+    }
+
     private func prepareLocation() {
-        let saved = locationRecords.first?.payload
+        let saved = savedLocation?.payload
         let next = WorkoutLocationPayload(
             isIndoor: saved?.isIndoor ?? session.isIndoor,
             route: saved?.route.isEmpty == false ? (saved?.route ?? []) : healthKitRoute,
@@ -148,10 +168,12 @@ struct CardioAtlasSection: View {
         .accessibilityIdentifier("cardio-atlas-section")
         .onChange(of: historyInputs, initial: true) { prepareProgress() }
         .onChange(of: locationInputs, initial: true) { prepareLocation() }
+        .onChange(of: savedLocation?.id) { prepareLocation() }
         .onChange(of: distanceGoal) { prepareProgressGoal() }
         .onChange(of: durationGoal) { prepareProgressGoal() }
         .task(id: healthKitWorkoutID) { await loadHistory() }
-        .task(id: LocationLoad(workoutID: healthKitWorkoutID, revision: locationRevision)) {
+        .task(id: LocationLoad(workoutID: healthKitWorkoutID, revision: locationRevision,
+                               needsHealthRoute: savedLocation?.payload?.route.isEmpty != false)) {
             await loadLocation()
         }
 #if os(iOS)
@@ -321,8 +343,8 @@ struct CardioAtlasSection: View {
     @MainActor
     private func loadLocation() async {
         routeUnavailable = false
-        isLoadingRoute = healthKitWorkoutID != nil && locationRecords.first?.payload?.route.isEmpty != false
-        if let healthKitWorkoutID, locationRecords.first?.payload?.route.isEmpty != false {
+        isLoadingRoute = healthKitWorkoutID != nil && savedLocation?.payload?.route.isEmpty != false
+        if let healthKitWorkoutID, savedLocation?.payload?.route.isEmpty != false {
             do {
                 let location = try await WorkoutRouteQueryService().fetchLocation(workoutID: healthKitWorkoutID)
                 guard !Task.isCancelled else { return }
@@ -349,7 +371,7 @@ struct CardioAtlasSection: View {
     private func savePlace(_ place: WorkoutPlace?) -> Bool {
         var updated = displayLocation
         updated.place = place
-        let existing = locationRecords.first
+        let existing = localRecordID == nil || savedLocation?.localRecordID == localRecordID ? savedLocation : nil
         let previousData = existing?.payloadData
         let previousUpdatedAt = existing?.updatedAt
         let record = existing ?? WorkoutLocationRecord(
