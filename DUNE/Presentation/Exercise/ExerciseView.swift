@@ -24,6 +24,8 @@ struct ExerciseView: View {
     @State private var healthKitWorkoutToDelete: WorkoutSummary?
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
     @State private var inspectedExerciseID: String?
+    @State private var sheetExercise: ExerciseListItem?
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
@@ -78,6 +80,9 @@ struct ExerciseView: View {
                 await viewModel.loadHealthKitWorkouts()
             }
             .onChange(of: viewModel.allExercises.map(\.id)) { _, ids in
+                if let sheetExercise, !ids.contains(sheetExercise.id) {
+                    self.sheetExercise = nil
+                }
                 if let selectedID = inspectedExerciseID, !ids.contains(selectedID) {
                     inspectedExerciseID = nil
                 }
@@ -113,26 +118,45 @@ struct ExerciseView: View {
                 Text("\(workout.localizedTitle) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
             }
             .confirmDeleteRecord($recordToDelete, context: modelContext)
+            .sheet(item: $sheetExercise) { selected in
+                // The sheet owns its item until dismissal, including a cancelled drag.
+                workoutInspector(for: viewModel.allExercises.first { $0.id == selected.id } ?? selected) {
+                    sheetExercise = nil
+                }
+            }
             .inspector(isPresented: Binding(
                 get: { inspectedExerciseID != nil },
                 set: { if !$0 { inspectedExerciseID = nil } }
             )) {
-                NavigationStack {
-                    VStack(spacing: 0) {
-                        HStack {
-                            Spacer()
-                            Button("Done") { inspectedExerciseID = nil }
-                                .accessibilityIdentifier("exercise-inspector-close")
-                        }
-                        .padding()
-                        if let item = viewModel.allExercises.first(where: { $0.id == inspectedExerciseID }) {
-                            exerciseDetail(item)
-                                .id(item.id)
-                        }
-                    }
+                workoutInspector(for: viewModel.allExercises.first { $0.id == inspectedExerciseID }, closeEdge: .bottom) {
+                    inspectedExerciseID = nil
                 }
                 .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
             }
+    }
+
+    private func workoutInspector(
+        for item: ExerciseListItem?,
+        closeEdge: VerticalEdge = .top,
+        close: @escaping () -> Void
+    ) -> some View {
+        let closeRow = HStack {
+            Spacer()
+            Button("Done", action: close)
+                .accessibilityIdentifier("exercise-inspector-close")
+        }
+        .padding()
+
+        return NavigationStack {
+            VStack(spacing: 0) {
+                if closeEdge == .top { closeRow }
+                if let item {
+                    exerciseDetail(item)
+                        .id(item.id)
+                }
+                if closeEdge == .bottom { closeRow }
+            }
+        }
     }
 
     @ToolbarContentBuilder
@@ -255,7 +279,13 @@ struct ExerciseView: View {
                         Group {
                             if (item.source == .manual && findRecord(for: item) != nil)
                                 || (item.source == .healthKit && item.workoutSummary != nil) {
-                                Button { inspectedExerciseID = item.id } label: {
+                                Button {
+                                    if horizontalSizeClass == .compact {
+                                        sheetExercise = item
+                                    } else {
+                                        inspectedExerciseID = item.id
+                                    }
+                                } label: {
                                     UnifiedWorkoutRow(item: item, style: .full)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .contentShape(Rectangle())
