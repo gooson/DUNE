@@ -12,11 +12,13 @@ figure { margin: 0; }
 figcaption { margin-bottom: .6rem; }
 small { display: block; }
 img { width: 100%; height: auto; display: block; }
+.duo-landscape a { display: block; position: relative; aspect-ratio: 2852 / 2006; }
+.duo-landscape img { position: absolute; top: 50%; left: 50%; width: 70.34%; transform: translate(-50%, -50%) rotate(90deg); }
 </style>
 <main>
 <p><a href="../index.html">전체 실제 화면 디자인맵</a></p>
 <h1>iOS 모달 내비게이션</h1>
-<p>원본은 전용 QA 앱의 XCTest 첨부 이미지다. 운동 기록은 재현용 샘플을 사용했다. <a href="captures.json">기기, 빌드 기준, XCTest 및 PNG 해시</a></p>
+<p>원본은 전용 QA 앱의 XCTest 첨부 이미지다. 운동 기록은 재현용 샘플을 사용했다. Duo는 활성 LCD·LCD-1과 앱 화면을 확인했고, 펼침 미리보기는 읽는 방향으로 표시한다. <a href="captures.json">기기, 빌드 기준, XCTest 및 PNG 해시</a></p>
 <section class="gallery" aria-label="실제 화면">
   <figure><figcaption>W28 운동 상세 · 라이트<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w28-light.png"><img src="w28-light.png" alt="W28 운동 상세 · 라이트 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
   <figure><figcaption>W28 운동 상세 · 다크<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w28-dark.png"><img src="w28-dark.png" alt="W28 운동 상세 · 다크 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
@@ -43,7 +45,9 @@ img { width: 100%; height: auto; display: block; }
   <figure><figcaption>W26 운동 이력<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w26.png"><img src="w26.png" alt="W26 운동 이력 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
   <figure><figcaption>W28 운동 상세 · 넓은 패널<small>iPad Pro 13형 (M5) 시뮬레이터 · iPadOS 27.2</small></figcaption><a href="ipad-w28.png"><img src="ipad-w28.png" alt="W28 운동 상세 · 넓은 패널 실제 앱 화면" width="2064" height="2752" loading="lazy"></a></figure>
   <figure><figcaption>W32 운동 분석 · 시트<small>iPad Pro 13형 (M5) 시뮬레이터 · iPadOS 27.2</small></figcaption><a href="ipad-w32.png"><img src="ipad-w32.png" alt="W32 운동 분석 · 시트 실제 앱 화면" width="2064" height="2752" loading="lazy"></a></figure>
+  <figure><figcaption>W28 운동 상세 · 접힘<small>iPhone Duo 시뮬레이터 · LCD 활성</small></figcaption><a href="duo-close-w28.png"><img src="duo-close-w28.png" alt="W28 운동 상세 · 접힘 실제 앱 화면" width="1398" height="2034" loading="lazy"></a></figure>
+  <figure class="duo-landscape"><figcaption>W28 운동 상세 · 펼침<small>iPhone Duo 시뮬레이터 · LCD-1 활성</small></figcaption><a href="duo-open-w28.png"><img src="duo-open-w28.png" alt="W28 운동 상세 · 펼침 실제 앱 화면" width="2006" height="2852" loading="lazy"></a></figure>
 </section>
-<h2>추가 캡처 범위</h2><ul><li>W28·W33과 아틀라스의 실물 iPhone 캡처는 아직 없다.</li><li>iPad의 W27·W33·A20 및 다른 공용 시트는 새로 캡처하지 않았다.</li><li>Duo 접힘·펼침의 W26–W28·W32·W33·A20 및 공용 시트는 새로 캡처하지 않았다.</li><li>공용 배경을 쓰는 iPhone 화면 중 T02·T09·T17–T18, A13–A19, W03–W05·W09–W14·W19–W20·W23·W30, H08·H12–H14, P03, L03·L05–L06·L09는 이 갤러리에 새 원본을 등록하지 않았다. T18과 L05에서의 동작 확인은 UI 실행 결과에 포함된다.</li></ul>
+<h2>추가 캡처 범위</h2><ul><li>W28·W33과 아틀라스의 실물 iPhone 캡처는 아직 없다.</li><li>iPad의 W27·W33·A20 및 다른 공용 시트는 새로 캡처하지 않았다.</li><li>Duo의 W26·W27·W32·W33·A20 및 공용 시트는 새로 캡처하지 않았다. W28은 원본이 등록된 자세에서 확인했다.</li><li>공용 배경을 쓰는 iPhone 화면 중 T02·T09·T17–T18, A13–A19, W03–W05·W09–W14·W19–W20·W23·W30, H08·H12–H14, P03, L03·L05–L06·L09는 이 갤러리에 새 원본을 등록하지 않았다. T18과 L05에서의 동작 확인은 UI 실행 결과에 포함된다.</li></ul>
 </main>
 </html>
