@@ -84,6 +84,39 @@ final class ArtistThemeNativeUITests: ActivityExerciseSeededUITestBaseCase {
         try capturePatisserieWorkoutModals(style: "dark")
     }
 
+    func testPatisserieDarkModalHeadersAcrossTabs() throws {
+        guard VisualAudit.isEnabled else { throw XCTSkip("Modal capture requires a visual audit test plan") }
+        var configuration = themeLaunchConfiguration("patisserie", style: "dark")
+        configuration.initialTabSelectionArgument = "train"
+        launchApp(with: configuration)
+        dismissIconConfirmation()
+
+        navigateToActivity()
+        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.activityToolbarAdd))
+        capture("W02", showing: AXID.pickerRootList, prefix: "Artist patisserie dark modal")
+        closeModal(AXID.pickerCancelButton)
+
+        navigateToWellness()
+        XCTAssertTrue(app.waitAndTapToolbarAction(AXID.wellnessToolbarAdd))
+        open(AXID.wellnessMenuBodyRecord)
+        capture("H05", showing: "body-form-screen", prefix: "Artist patisserie dark modal")
+        XCTAssertTrue(app.buttons["body-form-save"].firstMatch.exists)
+        closeModal("body-form-cancel")
+
+        navigateToLife()
+        XCTAssertTrue(app.openLifeNewHabitForm())
+        capture("L02", showing: AXID.habitFormName, prefix: "Artist patisserie dark modal")
+        XCTAssertTrue(app.buttons[AXID.habitFormSave].firstMatch.exists)
+        closeModal("habit-form-cancel")
+    }
+
+    private func closeModal(_ identifier: String) {
+        let close = app.buttons[identifier].firstMatch
+        XCTAssertTrue(close.waitForExistence(timeout: 5) && close.isHittable)
+        close.auditTap()
+        XCTAssertTrue(close.waitForNonExistence(timeout: 5))
+    }
+
     private func capturePatisserieWorkoutModals(style: String) throws {
         guard VisualAudit.isEnabled else { throw XCTSkip("Workout modal capture requires a visual audit test plan") }
         var configuration = themeLaunchConfiguration("patisserie", style: style)
