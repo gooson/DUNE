@@ -3720,8 +3720,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
     }
 
     func testImportedRunInspectorSurvivesPartialDismissalAndReopens() throws {
-        try XCTSkipIf(app.windows.firstMatch.horizontalSizeClass == .regular,
-                      "This gesture exercises the compact workout sheet")
+        let compact = app.windows.firstMatch.horizontalSizeClass == .compact
         openExerciseViewFromRecentWorkouts()
         let rowID = "exercise-row-mock-workout-running-tempo"
         XCTAssertTrue(app.scrollToHittableElementIfNeeded(rowID, maxSwipes: 8))
@@ -3738,10 +3737,14 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
 
         let header = done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
             .withOffset(CGVector(dx: -80, dy: 0))
-        header.press(forDuration: 0.15, thenDragTo: header.withOffset(CGVector(dx: 0, dy: 32)),
-                     withVelocity: .slow, thenHoldForDuration: 0.4)
-        XCTAssertTrue(detail.isHittable && done.isHittable, "A partial drag must keep the detail visible")
-        XCTAssertLessThan(done.frame.midY, detail.frame.minY)
+        if compact {
+            header.press(forDuration: 0.15, thenDragTo: header.withOffset(CGVector(dx: 0, dy: 32)),
+                         withVelocity: .slow, thenHoldForDuration: 0.4)
+            XCTAssertTrue(detail.isHittable && done.isHittable, "A partial drag must keep the detail visible")
+            XCTAssertLessThan(done.frame.midY, detail.frame.minY)
+        } else {
+            XCTAssertGreaterThanOrEqual(done.frame.minY, detail.frame.maxY)
+        }
         addScreenshotAttachment(named: "W28 imported run after loading")
         done.auditTap()
         XCTAssertTrue(done.waitForNonExistence(timeout: 5))
@@ -3750,9 +3753,13 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         row.auditTap()
         XCTAssertTrue(detail.waitForExistence(timeout: 8) && detail.isHittable)
         XCTAssertTrue(done.isHittable)
-        header.press(forDuration: 0.1, thenDragTo: header.withOffset(CGVector(dx: 0, dy: app.frame.height * 0.65)))
+        if compact {
+            header.press(forDuration: 0.1, thenDragTo: header.withOffset(CGVector(dx: 0, dy: app.frame.height * 0.65)))
+        } else {
+            done.auditTap()
+        }
         XCTAssertTrue(done.waitForNonExistence(timeout: 5))
-        XCTAssertTrue(row.isHittable, "A completed drag should return to the selected workout in the list")
+        XCTAssertTrue(row.isHittable, "Closing should return to the selected workout in the list")
     }
 
     func testRecentWorkoutsSeeAllOpensExerciseHistory() throws {

@@ -128,26 +128,33 @@ struct ExerciseView: View {
                 get: { inspectedExerciseID != nil },
                 set: { if !$0 { inspectedExerciseID = nil } }
             )) {
-                workoutInspector(for: viewModel.allExercises.first { $0.id == inspectedExerciseID }) {
+                workoutInspector(for: viewModel.allExercises.first { $0.id == inspectedExerciseID }, closeEdge: .bottom) {
                     inspectedExerciseID = nil
                 }
                 .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
             }
     }
 
-    private func workoutInspector(for item: ExerciseListItem?, close: @escaping () -> Void) -> some View {
-        NavigationStack {
+    private func workoutInspector(
+        for item: ExerciseListItem?,
+        closeEdge: VerticalEdge = .top,
+        close: @escaping () -> Void
+    ) -> some View {
+        let closeRow = HStack {
+            Spacer()
+            Button("Done", action: close)
+                .accessibilityIdentifier("exercise-inspector-close")
+        }
+        .padding()
+
+        return NavigationStack {
             VStack(spacing: 0) {
-                HStack {
-                    Spacer()
-                    Button("Done", action: close)
-                        .accessibilityIdentifier("exercise-inspector-close")
-                }
-                .padding()
+                if closeEdge == .top { closeRow }
                 if let item {
                     exerciseDetail(item)
                         .id(item.id)
                 }
+                if closeEdge == .bottom { closeRow }
             }
         }
     }
