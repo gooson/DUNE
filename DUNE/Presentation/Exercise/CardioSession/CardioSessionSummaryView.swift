@@ -235,6 +235,7 @@ struct CardioSessionSummaryView: View {
             elevationGainMeters: data.elevationGainMeters,
             floorsAscended: data.floorsAscended,
             activityType: viewModel.activityType,
+            place: data.locationPayload.place,
             isIndoor: data.locationPayload.isIndoor,
             routePoints: data.locationPayload.route,
             endDate: data.endDate,
@@ -252,6 +253,7 @@ struct CardioSessionSummaryView: View {
                     try modelContext.save()
                 }
             } catch {
+                WorkoutBackupWarning.record()
                 AppLogger.healthKit.error("Failed to write cardio workout to HealthKit: \(error)")
             }
 

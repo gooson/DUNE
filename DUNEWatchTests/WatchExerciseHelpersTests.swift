@@ -475,6 +475,35 @@ struct WatchExerciseHelpersTests {
         #expect(result[1].weight == 52.5)
     }
 
+    @MainActor
+    @Test("Unacknowledged completions survive relaunch and late acknowledgments")
+    func completionOutboxReopens() throws {
+        let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let id = UUID()
+        let other = UUID()
+        let queue = WatchCompletionOutbox(directory: directory)
+        try queue.enqueue(id)
+        let first = try #require(queue.pending()[id.uuidString])
+        try queue.enqueue(other)
+        try queue.enqueue(id)
+        let restored = WatchCompletionOutbox(directory: directory)
+        let current = try #require(restored.pending()[id.uuidString])
+        try restored.acknowledge(recordID: id.uuidString, ticket: first)
+        #expect(try directory.resourceValues(forKeys: [.isExcludedFromBackupKey]).isExcludedFromBackup == true)
+        #expect(try restored.pending().count == 2)
+        try restored.acknowledge(recordID: id.uuidString, ticket: current)
+        #expect(try restored.pending().keys.sorted() == [other.uuidString])
+    }
+
+    @Test("An authoritative phone snapshot removes stale Watch templates including the last template")
+    func templateSnapshotRemovesDeletedRoutine() {
+        let local = WorkoutTemplate(name: "Removed", exerciseEntries: [entry()])
+        let current = WatchWorkoutTemplateInfo(id: UUID(), name: "Current", entries: [entry()], updatedAt: .now)
+        #expect(mergedRoutineTemplates(local: [local], synced: [current], authoritative: true).map(\.id) == [current.id])
+        #expect(mergedRoutineTemplates(local: [local], synced: [], authoritative: true).isEmpty)
+    }
+
     @Test("mergedRoutineTemplates prefers local template when IDs overlap")
     func mergedRoutineTemplatesPrefersLocal() {
         let templateID = UUID()

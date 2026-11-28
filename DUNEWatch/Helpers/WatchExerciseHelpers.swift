@@ -376,7 +376,8 @@ struct WatchRoutineTemplateSnapshot: Sendable {
 /// Local templates take precedence when IDs overlap.
 func mergedRoutineTemplates(
     local: [WorkoutTemplate],
-    synced: [WatchWorkoutTemplateInfo]
+    synced: [WatchWorkoutTemplateInfo],
+    authoritative: Bool = false
 ) -> [WatchRoutineTemplateSnapshot] {
     var templatesByID: [UUID: WatchRoutineTemplateSnapshot] = [:]
 
@@ -389,7 +390,7 @@ func mergedRoutineTemplates(
         )
     }
 
-    for template in local {
+    for template in local where !authoritative {
         templatesByID[template.id] = WatchRoutineTemplateSnapshot(
             id: template.id,
             name: template.name,

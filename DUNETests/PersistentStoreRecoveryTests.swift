@@ -1,11 +1,45 @@
 import Foundation
 import Testing
+import SwiftData
 @testable import DUNE
 
 @Suite("PersistentStoreRecovery")
 struct PersistentStoreRecoveryTests {
-    @Test("Deletes store for staged migration model version errors")
-    func deletesStoreForMigrationCompatibilityErrors() {
+    @Test("Opening a locked store exposes no writable runtime; retry returns records from the same store")
+    @MainActor
+    func retriesOriginalStore() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let url = directory.appendingPathComponent("exercise.store")
+        let schema = Schema([ExerciseRecord.self, WorkoutSet.self])
+        let configuration = ModelConfiguration(schema: schema, url: url, cloudKitDatabase: .none)
+        let expectedID: UUID
+        do {
+            let original = try ModelContainer(for: schema, configurations: configuration)
+            let exercise = ExerciseRecord(date: .now, exerciseType: "Fixture", duration: 60)
+            expectedID = exercise.id
+            original.mainContext.insert(exercise)
+            try original.mainContext.save()
+        }
+        let before = try Data(contentsOf: url)
+        var locked = true
+        func open() throws -> ModelContainer {
+            if locked { throw CocoaError(.fileReadNoPermission) }
+            return try ModelContainer(for: schema, configurations: configuration)
+        }
+        let blocked = PersistentStoreOpening(open: open)
+        #expect(blocked.value == nil)
+        #expect(try Data(contentsOf: url) == before)
+        locked = false
+        let reopened = try #require(PersistentStoreOpening(open: open).value)
+        let records = try reopened.mainContext.fetch(FetchDescriptor<ExerciseRecord>())
+        #expect(records.map(\.id) == [expectedID])
+        #expect(reopened.configurations.allSatisfy { !$0.isStoredInMemoryOnly })
+    }
+
+    @Test("Recognizes staged migration model version errors")
+    func recognizesMigrationCompatibilityErrors() {
         let error = NSError(
             domain: NSCocoaErrorDomain,
             code: 134504,
@@ -14,11 +48,11 @@ struct PersistentStoreRecoveryTests {
             ]
         )
 
-        #expect(PersistentStoreRecovery.shouldDeleteStore(after: error))
+        #expect(PersistentStoreRecovery.isMigrationFailure(error))
     }
 
-    @Test("Deletes store when migration failure is nested as underlying error")
-    func deletesStoreForNestedMigrationErrors() {
+    @Test("Recognizes when migration failure is nested as underlying error")
+    func recognizesNestedMigrationErrors() {
         let underlying = NSError(
             domain: NSCocoaErrorDomain,
             code: 134100,
@@ -32,18 +66,18 @@ struct PersistentStoreRecoveryTests {
             userInfo: [NSUnderlyingErrorKey: underlying]
         )
 
-        #expect(PersistentStoreRecovery.shouldDeleteStore(after: topLevel))
+        #expect(PersistentStoreRecovery.isMigrationFailure(topLevel))
     }
 
-    @Test("Deletes store for wrapped SwiftData loadIssueModelContainer errors")
-    func deletesStoreForWrappedSwiftDataLoadIssue() {
+    @Test("Recognizes wrapped SwiftData loadIssueModelContainer errors")
+    func recognizesWrappedSwiftDataLoadIssue() {
         let error = WrappedSwiftDataLoadIssueError()
 
-        #expect(PersistentStoreRecovery.shouldDeleteStore(after: error))
+        #expect(PersistentStoreRecovery.isMigrationFailure(error))
     }
 
-    @Test("Keeps store for non-migration startup failures")
-    func keepsStoreForNonMigrationFailures() {
+    @Test("Does not classify as migration: non-migration startup failures")
+    func doesNotClassifyNonMigrationFailures() {
         let error = NSError(
             domain: NSCocoaErrorDomain,
             code: 257,
@@ -52,11 +86,11 @@ struct PersistentStoreRecoveryTests {
             ]
         )
 
-        #expect(!PersistentStoreRecovery.shouldDeleteStore(after: error))
+        #expect(!PersistentStoreRecovery.isMigrationFailure(error))
     }
 
-    @Test("Keeps store for CloudKit/account availability errors")
-    func keepsStoreForCloudKitAvailabilityFailures() {
+    @Test("Does not classify as migration: CloudKit/account availability errors")
+    func doesNotClassifyCloudKitAvailabilityFailures() {
         let error = NSError(
             domain: "CKErrorDomain",
             code: 6,
@@ -65,14 +99,14 @@ struct PersistentStoreRecoveryTests {
             ]
         )
 
-        #expect(!PersistentStoreRecovery.shouldDeleteStore(after: error))
+        #expect(!PersistentStoreRecovery.isMigrationFailure(error))
     }
 
-    @Test("Keeps store for other wrapped SwiftData errors")
-    func keepsStoreForOtherWrappedSwiftDataErrors() {
+    @Test("Does not classify as migration: other wrapped SwiftData errors")
+    func doesNotClassifyOtherWrappedSwiftDataErrors() {
         let error = WrappedSwiftDataSaveIssueError()
 
-        #expect(!PersistentStoreRecovery.shouldDeleteStore(after: error))
+        #expect(!PersistentStoreRecovery.isMigrationFailure(error))
     }
 }
 

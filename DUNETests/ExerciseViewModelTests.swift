@@ -4,12 +4,14 @@ import Testing
 
 private actor SequencedExerciseWorkoutService: WorkoutQuerying {
     private let dayResults: [[WorkoutSummary]]
+    private var rangeResults: [[WorkoutSummary]]
     private var nextDayFetchIndex = 0
     private var startedDayFetches: Set<Int> = []
     private var startContinuations: [Int: CheckedContinuation<Void, Never>] = [:]
     private var releaseContinuations: [Int: CheckedContinuation<Void, Never>] = [:]
 
-    init(dayResults: [[WorkoutSummary]]) {
+    init(dayResults: [[WorkoutSummary]], rangeResults: [[WorkoutSummary]] = []) {
+        self.rangeResults = rangeResults
         self.dayResults = dayResults
     }
 
@@ -28,7 +30,7 @@ private actor SequencedExerciseWorkoutService: WorkoutQuerying {
     }
 
     func fetchWorkouts(start: Date, end: Date) async throws -> [WorkoutSummary] {
-        []
+        rangeResults.isEmpty ? [] : rangeResults.removeFirst().filter { $0.date >= start && $0.date <= end }
     }
 
     func waitUntilDayFetchStarts(call index: Int) async {
@@ -64,6 +66,49 @@ struct ExerciseViewModelTests {
         #expect(vm.allExercises.count == 2)
         #expect(vm.allExercises[0].type == "Cycling")
         #expect(vm.allExercises[1].type == "Running")
+    }
+
+    @Test("An open inspector follows one linked exercise in either order and preserves compound siblings")
+    func selectedWorkoutFollowsSourceChanges() throws {
+        let rawID = UUID().uuidString
+        let health = ExerciseListItem.fromWorkoutSummary(
+            WorkoutSummary(id: rawID, type: "Running", duration: 180, calories: nil, distance: nil, date: .now)
+        )
+        func manual(_ name: String) -> ExerciseListItem {
+            let record = ExerciseRecord(exerciseType: name, duration: 180, healthKitWorkoutID: rawID)
+            return .fromManualRecord(record, library: ExerciseLibraryService.shared)
+        }
+        let first = manual("Row"), second = manual("Press")
+        let fromHealth = ExerciseListItem.Selection(health)
+        let fromManual = ExerciseListItem.Selection(first)
+        #expect(fromHealth.resolve(in: [first])?.id == first.id)
+        #expect(fromManual.resolve(in: [health])?.id == rawID)
+        #expect(fromHealth.resolve(in: [first, second]) == nil)
+        #expect(fromManual.resolve(in: [second]) == nil)
+        #expect(fromManual.resolve(in: [second, first])?.id == first.id)
+        #expect(fromHealth.resolve(in: []) == nil)
+    }
+
+    @Test("Refreshing history preserves loaded older pages and reflects native deletions")
+    func refreshPreservesLoadedDateRange() async {
+        let end = Date()
+        func workout(_ id: String, daysAgo: Int) -> WorkoutSummary {
+            WorkoutSummary(id: id, type: "Running", duration: 10, calories: nil, distance: nil,
+                           date: end.addingTimeInterval(-Double(daysAgo) * 86_400))
+        }
+        let first = workout("first", daysAgo: 25)
+        let old = workout("old", daysAgo: 45)
+        let new = workout("new", daysAgo: 2)
+        let service = SequencedExerciseWorkoutService(dayResults: [[first]], rangeResults: [[old], [new, old]])
+        let model = ExerciseViewModel(workoutService: service)
+        let initial = Task { await model.loadHealthKitWorkouts() }
+        await service.waitUntilDayFetchStarts(call: 0)
+        await service.resumeDayFetch(call: 0)
+        await initial.value
+        await model.loadMoreWorkouts()
+        #expect(model.healthKitWorkouts.map(\.id) == ["first", "old"])
+        await model.loadHealthKitWorkouts(preservingLoadedPages: true)
+        #expect(model.healthKitWorkouts.map(\.id) == ["new", "old"])
     }
 
     @Test("HealthKit items have correct source")

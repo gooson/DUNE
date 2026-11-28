@@ -1,0 +1,117 @@
+{
+  "date": "2026-11-28",
+  "device": "iPhone 18 Pro simulator",
+  "system": "iOS 27.2",
+  "udid": "A6565E91-6135-40AB-BBE4-6CC58E658858",
+  "result": "2 passed, 0 failures",
+  "scheme": "DUNEUITests",
+  "plan": "DUNEUITests-Full",
+  "configuration": "Debug",
+  "base_revision": "a611d9c6d",
+  "dirty_worktree": true,
+  "result_bundle": "Test-DUNEUITests-2026.11.28_15-51-38-+0900.xcresult",
+  "screens": [
+    {
+      "screen": "T02",
+      "path": "../regular/images/T02.png",
+      "test": "CloudSyncConsentRegressionTests/testCloudSyncConsentHookPresentsAndDismissesSheet()",
+      "attachment": "T02-workout-restore-consent_0_0A901F6C-6727-428C-BB4F-6935E4DDF0E9.png",
+      "timestamp": 1795848819.801,
+      "sha256": "f2fd038f177a01f849679e6d9dc9270bb94369e6bee57de829317853ab1820ae"
+    },
+    {
+      "screen": "S01 privacy",
+      "test": "SettingsSmokeTests/testDataPrivacySectionExists()",
+      "attachment": "S01-workout-restore-privacy_0_50A38BD8-0565-4D19-9C1A-B219659FAD4A.png",
+      "timestamp": 1795848839.149,
+      "sha256": "327e4e4a5e94f53dd512c1626f2b5a1bb6ddd044ff48dd965d2a80340ce81b53",
+      "storage": "local XCTest result attachment"
+    },
+    {
+      "screen": "H07 · original photo export actions",
+      "path": "H07-original-photo-actions.png",
+      "test": "PosturePhotoPresentationTests/testOriginalPhotoActionsInAssessmentDetail()",
+      "result_bundle": "dune-pr1033-file-destinations.xcresult",
+      "scope": "Unmodified, native assessment detail in a hosted iPhone simulator window. The front and side images are synthetic SF Symbols. Both export actions are visible. A physical external drive was not connected.",
+      "sha256": "0c316814f33b1705c8c15ef46799432e3f186ed2a660d6c7f01b497839bbc71c"
+    },
+    {
+      "screen": "S01-backup-key-hidden",
+      "path": "S01-backup-key-hidden.png",
+      "test": "SettingsSmokeTests/testEncryptedBackupFileShowsSeparateKeyBeforeExport()",
+      "attachment": "S01-backup-key-hidden_0_76A72A01-CD87-4714-B624-EE4A4802AF24.png",
+      "timestamp": 1795876645.087,
+      "sha256": "56509153a9dbfeb1ebe7bc6e5c8272a3088c0aeb2d21641f72d727e07d15a0c4",
+      "source_base_revision": "a460689f4",
+      "source_worktree_dirty": true,
+      "result_bundle": "Test-DUNEUITests-2026.11.28_23-35-14-+0900.xcresult",
+      "result": "1 passed, 0 failures",
+      "scope": "Dedicated iPhone 18 Pro simulator, iOS 27.2, synthetic app state. No file picker upload, clipboard copy, key disclosure or personal account access."
+    },
+    {
+      "screen": "S01-encrypted-backup-file",
+      "path": "S01-encrypted-backup-file.png",
+      "test": "SettingsSmokeTests/testEncryptedBackupFileShowsSeparateKeyBeforeExport()",
+      "attachment": "S01-encrypted-backup-file_0_F47A0C07-CD12-44FF-B5C8-340E9A917859.png",
+      "timestamp": 1795876643.254,
+      "sha256": "2edd24d64cbd13cce05847ecedc87f44db82ca1a5c07855a5c0f087abbe3a969",
+      "source_base_revision": "a460689f4",
+      "source_worktree_dirty": true,
+      "result_bundle": "Test-DUNEUITests-2026.11.28_23-35-14-+0900.xcresult",
+      "result": "1 passed, 0 failures",
+      "scope": "Dedicated iPhone 18 Pro simulator, iOS 27.2, synthetic app state. No file picker upload, clipboard copy, key disclosure or personal account access."
+    },
+    {
+      "screen": "W28 · open HealthKit workout detail after file restore",
+      "path": "W28-live-restored-place.png",
+      "test": "CardioAtlasLiveRestorePresentationTests/testOpenStairDetailShowsRestoredLocalPin()",
+      "attachment": "stair-detail-restored-local-pin_0_228B98D0-A30A-4D28-AEC4-6945DF72CA1F.png",
+      "timestamp": 1795878086.061,
+      "sha256": "17b3de33ca59164504e8d75fc0153acbc1fd410b0951efc4f05b957f2a47a9b4",
+      "scope": "A hosted iPhone simulator window stayed open while an encrypted synthetic file restored three rows. Guest pixel OCR detected Cobalt Test Gym. Set 1 and 73 reps are also visible. No tile or real location verification.",
+      "result_bundle": "locked-commit.xcresult"
+    },
+    {
+      "screen": "S01 · historical iCloud records restored",
+      "device": "iPhone 18 Pro simulator (27.2)",
+      "path": "S01-synthetic-restored.png",
+      "test": "LegacyWorkoutRecoveryPresentationTests/testImportedWorkoutSetAndPlaceCountsInSettings()",
+      "attachment": "S01-iphone-legacy-restored-records_0_9E97A38A-BD1F-458A-9A40-8795C899FEC6.png",
+      "timestamp": 1795880339.259,
+      "sha256": "e7fe96fde0b03cb64d98b771c09138e9e80fa328da537b6df90b1f7124fe1a37",
+      "result_bundle": "phone.xcresult",
+      "result": "passed",
+      "scope": "Hosted SettingsDetailView on a simulator. Fixture CKRecords, local-only SwiftData.",
+      "first_import": {
+        "workouts": 2,
+        "sets": 3,
+        "locations": 1,
+        "other_records": 1
+      },
+      "repeated_import": {
+        "total_inserted": 0
+      }
+    },
+    {
+      "screen": "S01 · historical iCloud records restored",
+      "device": "iPad Pro 13-inch (M5) simulator (27.2)",
+      "path": "S01-ipad-legacy-restored.png",
+      "test": "LegacyWorkoutRecoveryPresentationTests/testImportedWorkoutSetAndPlaceCountsInSettings()",
+      "attachment": "S01-ipad-legacy-restored-records_0_E187503D-852F-4945-BEB8-541188878CB7.png",
+      "timestamp": 1795880544.715,
+      "sha256": "ea165a77e94bbdb2565dca1595f172429657b0a6327dc210aa5d895a1d501feb",
+      "result_bundle": "pad.xcresult",
+      "result": "passed",
+      "scope": "Hosted SettingsDetailView on a simulator. Fixture CKRecords, local-only SwiftData.",
+      "first_import": {
+        "workouts": 2,
+        "sets": 3,
+        "locations": 1,
+        "other_records": 1
+      },
+      "repeated_import": {
+        "total_inserted": 0
+      }
+    }
+  ]
+}

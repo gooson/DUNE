@@ -24,13 +24,9 @@ struct ExerciseSessionDetailView: View {
     @State private var heartRateRecovery: HeartRateRecovery?
     @State private var isLoadingHR = false
     @State private var hrError: String?
-    @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
 
     private let heartRateService = HeartRateQueryService(manager: .shared)
 
-    private var weightUnit: WeightUnit {
-        WeightUnit(rawValue: weightUnitRaw) ?? .kg
-    }
 
     var body: some View {
         ScrollView {
@@ -51,7 +47,7 @@ struct ExerciseSessionDetailView: View {
                     changes: record.cardioMachineLevelChanges, duration: record.duration
                 )
                 healthKitBadge
-                setsList
+                WorkoutCompletedSetsSection(sets: record.completedSets)
                 heartRateSection
                 calorieSection
                 viewHistoryLink
@@ -284,58 +280,6 @@ struct ExerciseSessionDetailView: View {
 
     // MARK: - Sets
 
-    private var setsList: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Sets")
-                .font(.headline)
-
-            let sets = record.completedSets
-            if sets.isEmpty {
-                Text("No set data recorded")
-                    .font(.subheadline)
-                    .foregroundStyle(DS.Color.textSecondary)
-            } else {
-                ForEach(sets, id: \.id) { workoutSet in
-                    setRow(workoutSet)
-                }
-            }
-        }
-    }
-
-    private func setRow(_ workoutSet: WorkoutSet) -> some View {
-        let rowLayout = dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
-            : AnyLayout(HStackLayout())
-        let valuesLayout = dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
-            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
-        return rowLayout {
-            Text("Set \(workoutSet.setNumber)")
-                .font(.subheadline.weight(.medium))
-
-            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
-
-            valuesLayout {
-                if let weight = workoutSet.weight {
-                    Text("\(formattedWeight(weight)) \(weightUnit.displayName)")
-                        .font(.subheadline.monospacedDigit())
-                }
-                if let reps = workoutSet.reps {
-                    Text("\(reps.formattedWithSeparator) reps")
-                        .font(.subheadline.monospacedDigit())
-                        .foregroundStyle(DS.Color.textSecondary)
-                }
-                if let rpe = workoutSet.rpe, let level = RPELevel.validate(rpe) {
-                    Text("RPE \(RPELevel(value: level).displayLabel)")
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(DS.Color.warmGlow)
-                }
-            }
-        }
-        .padding(DS.Spacing.md)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
-    }
-
     // MARK: - Heart Rate
 
     private var hasHealthKitLink: Bool {
@@ -487,9 +431,6 @@ struct ExerciseSessionDetailView: View {
 
     // MARK: - Formatting
 
-    private func formattedWeight(_ kg: Double) -> String {
-        weightUnit.fromKg(kg).formatted(.number.precision(.fractionLength(0...1)))
-    }
 
     private func formattedDuration(_ interval: TimeInterval) -> String {
         let totalMinutes = Int(interval) / 60
@@ -515,5 +456,70 @@ struct ExerciseSessionDetailView: View {
             return distance
         }
         return distance / 1000.0
+    }
+}
+
+struct WorkoutCompletedSetsSection: View {
+    let sets: [WorkoutSet]
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @AppStorage(WeightUnit.storageKey) private var weightUnitRaw = WeightUnit.kg.rawValue
+
+    private var weightUnit: WeightUnit {
+        WeightUnit(rawValue: weightUnitRaw) ?? .kg
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Sets")
+                .font(.headline)
+
+            if sets.isEmpty {
+                Text("No set data recorded")
+                    .font(.subheadline)
+                    .foregroundStyle(DS.Color.textSecondary)
+            } else {
+                ForEach(sets, id: \.id) { workoutSet in
+                    setRow(workoutSet)
+                }
+            }
+        }
+    }
+
+    private func setRow(_ workoutSet: WorkoutSet) -> some View {
+        let rowLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.sm))
+            : AnyLayout(HStackLayout())
+        let valuesLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: DS.Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: DS.Spacing.md))
+        return rowLayout {
+            Text("Set \(workoutSet.setNumber)")
+                .font(.subheadline.weight(.medium))
+
+            if !dynamicTypeSize.isAccessibilitySize { Spacer() }
+
+            valuesLayout {
+                if let weight = workoutSet.weight {
+                    Text("\(formattedWeight(weight)) \(weightUnit.displayName)")
+                        .font(.subheadline.monospacedDigit())
+                }
+                if let reps = workoutSet.reps {
+                    Text("\(reps.formattedWithSeparator) reps")
+                        .font(.subheadline.monospacedDigit())
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+                if let rpe = workoutSet.rpe, let level = RPELevel.validate(rpe) {
+                    Text("RPE \(RPELevel(value: level).displayLabel)")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(DS.Color.warmGlow)
+                }
+            }
+        }
+        .padding(DS.Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
+    }
+
+    private func formattedWeight(_ kg: Double) -> String {
+        weightUnit.fromKg(kg).formatted(.number.precision(.fractionLength(0...1)))
     }
 }

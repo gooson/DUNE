@@ -30,8 +30,37 @@ final class HealthKitPermissionUITests: XCTestCase {
         continueAfterFailure = true
         app = XCUIApplication()
         // Keep UI test mode explicit while still allowing real HealthKit authorization flow.
-        app.launchArguments = ["--healthkit-permission-uitest"]
+        app.launchArguments = name.contains("testGrantIsolatedWorkoutFixture")
+            ? ["--healthkit-workout-fixture-permission"]
+            : ["--healthkit-permission-uitest"]
         app.launch()
+    }
+
+    /// Verifies the native authorization status, including when the user previously made a choice.
+    func testGrantIsolatedWorkoutFixture() throws {
+        let granted = app.staticTexts["fixture-workout-granted"]
+        if granted.waitForExistence(timeout: 2) { return }
+        let request = app.buttons["fixture-request-workout-access"]
+        XCTAssertTrue(request.waitForExistence(timeout: 8))
+        request.tap()
+        let all = app.cells["UIA.Health.AuthSheet.AllCategoryButton"]
+        XCTAssertTrue(all.waitForExistence(timeout: 8))
+        all.tap()
+        app.swipeUp()
+        let next = app.buttons["UIA.Health.Allow.Button"]
+        let visible = NSPredicate(format: "exists == true AND hittable == true AND enabled == true AND label IN %@", ["계속", "Continue", "Allow", "허용"])
+        let ready = XCTNSPredicateExpectation(predicate: visible, object: next)
+        XCTAssertEqual(XCTWaiter.wait(for: [ready], timeout: 6), .completed)
+        next.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        if !granted.waitForExistence(timeout: 2) {
+            let history = app.staticTexts.matching(NSPredicate(format: "label IN %@", [
+                "기록된 모든 데이터 및 향후 데이터", "All Recorded Data and Future Data", "All Past and Future Data"
+            ])).firstMatch
+            if history.waitForExistence(timeout: 3) { history.tap() }
+            let confirm = app.buttons.matching(NSPredicate(format: "label IN %@", ["허용", "Allow", "완료", "Done", "계속", "Continue"])).firstMatch
+            if confirm.exists && confirm.isHittable && confirm.isEnabled { confirm.tap() }
+        }
+        XCTAssertTrue(granted.waitForExistence(timeout: 12), "HealthKit did not grant workout write permission.")
     }
 
     /// Automatically handles HealthKit and other system permission dialogs.

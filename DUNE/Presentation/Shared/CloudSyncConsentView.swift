@@ -25,20 +25,20 @@ struct CloudSyncConsentView: View {
 
                     InfoRow(
                         icon: "lock.shield",
-                        title: "Private storage",
-                        description: "Records are kept in your private iCloud container.",
+                        title: "Exercise Library",
+                        description: "Other devices receive Quick Start favorites and routines made with catalog exercises, including their order and target sets and reps.",
                         accent: infoAccent
                     )
                     InfoRow(
                         icon: "arrow.triangle.2.circlepath",
-                        title: "Across devices",
-                        description: "Body composition and exercise records sync across your Apple devices.",
+                        title: "Apple Health",
+                        description: "Apple Health manages iCloud sync for workouts saved to Health.",
                         accent: infoAccent
                     )
                     InfoRow(
                         icon: "externaldrive",
-                        title: "Use without iCloud",
-                        description: "Choose local storage to keep records on this device.",
+                        title: "On this device",
+                        description: "Custom names, custom exercises and weights stay on this device. Restored routine names use catalog exercise names.",
                         accent: infoAccent
                     )
                 }
@@ -107,7 +107,7 @@ struct CloudSyncConsentView: View {
                 .font(.largeTitle.bold())
                 .foregroundStyle(palette.ink)
 
-            Text("Choose whether to sync your health records across devices.")
+            Text("Choose whether to sync favorites and routine plans with iCloud.")
                 .font(.subheadline)
                 .foregroundStyle(palette.muted)
                 .fixedSize(horizontal: false, vertical: true)

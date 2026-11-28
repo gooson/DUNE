@@ -505,6 +505,7 @@ struct SessionSummaryView: View {
             }
             savedRecords.forEach { $0.rpe = effort }
             do {
+                for record in savedRecords { try WatchConnectivityManager.shared.queueWorkoutCompletion(recordID: record.id) }
                 try modelContext.save()
             } catch {
                 saveError = String(localized: "Failed to save workout data. Please try again.")
@@ -512,6 +513,7 @@ struct SessionSummaryView: View {
                 return
             }
             hasSaved = true
+            sendCompletionUpdateIfNeeded()
             savedEffort = effort
             saveError = nil
             isSaving = false
@@ -531,10 +533,15 @@ struct SessionSummaryView: View {
         if !didCreateRecords {
             // Cache the created workouts and records so a SwiftData retry cannot duplicate them.
             let allocation = perExerciseAllocation()
-            let perExerciseIDs = workoutManager.workoutMode == .strength
-                ? await saveIndividualHealthKitWorkouts(allocation: allocation)
-                : [:]
-            savedRecords = saveWorkoutRecords(perExerciseHealthKitIDs: perExerciseIDs, allocation: allocation)
+            savedRecords = makeWorkoutRecords(allocation: allocation)
+            if workoutManager.workoutMode == .strength {
+                let workoutIDs = await saveIndividualHealthKitWorkouts(records: savedRecords)
+                for record in savedRecords {
+                    record.healthKitWorkoutID = workoutIDs[record.id]
+                    if record.healthKitWorkoutID == nil { WorkoutBackupWarning.record() }
+                }
+            }
+            for record in savedRecords { modelContext.insert(record) }
             didCreateRecords = true
         }
         savedRecords.forEach { $0.rpe = effort }
@@ -542,6 +549,7 @@ struct SessionSummaryView: View {
         // Explicit save before reset — reset() triggers view transition
         // which can prevent SwiftData auto-save from flushing.
         do {
+            for record in savedRecords { try WatchConnectivityManager.shared.queueWorkoutCompletion(recordID: record.id) }
             try modelContext.save()
         } catch {
             saveError = String(localized: "Failed to save workout data. Please try again.")
@@ -563,12 +571,8 @@ struct SessionSummaryView: View {
 
     /// Send the first backup after the effort prompt closes, so it includes the chosen rating.
     private func sendCompletionUpdateIfNeeded() {
-        guard hasSaved, !workoutManager.isCardioMode, !didSendCompletionUpdate else { return }
-        for record in savedRecords {
-            WatchConnectivityManager.shared.sendWorkoutCompletion(
-                WatchWorkoutRecordBuilder.makeUpdate(from: record)
-            )
-        }
+        guard hasSaved, !didSendCompletionUpdate else { return }
+        WatchConnectivityManager.shared.flushWorkoutCompletions()
         didSendCompletionUpdate = true
     }
 
@@ -578,6 +582,7 @@ struct SessionSummaryView: View {
         guard hasSaved, savedEffort != effort else { return true }
         savedRecords.forEach { $0.rpe = effort }
         do {
+            for record in savedRecords { try WatchConnectivityManager.shared.queueWorkoutCompletion(recordID: record.id) }
             try modelContext.save()
         } catch {
             saveError = String(localized: "Failed to save workout data. Please try again.")
@@ -585,14 +590,8 @@ struct SessionSummaryView: View {
         }
         savedEffort = effort
         saveError = nil
-        if !workoutManager.isCardioMode {
-            for record in savedRecords {
-                WatchConnectivityManager.shared.sendWorkoutCompletion(
-                    WatchWorkoutRecordBuilder.makeUpdate(from: record)
-                )
-            }
-            didSendCompletionUpdate = true
-        }
+        WatchConnectivityManager.shared.flushWorkoutCompletions()
+        didSendCompletionUpdate = true
         return true
     }
 
@@ -652,48 +651,32 @@ struct SessionSummaryView: View {
 
     /// Creates individual HKWorkout per exercise via non-live HKWorkoutBuilder (parallel).
     /// Each exercise gets a sequential, non-overlapping time window to avoid HealthKit dedup.
-    /// Returns a dictionary mapping exercise index → HealthKit workout UUID.
-    private func saveIndividualHealthKitWorkouts(
-        allocation: (duration: TimeInterval, calories: Double?, calorieSource: CalorieSource)
-    ) async -> [Int: String] {
-        guard let template = workoutManager.templateSnapshot else { return [:] }
+    private func saveIndividualHealthKitWorkouts(records: [ExerciseRecord]) async -> [UUID: String] {
         let healthStore = workoutManager.healthStore
-
-        // Build exercise entries with sequential offsets so time windows don't overlap.
-        var activeIndex = 0
-        var exerciseInputs: [(index: Int, name: String, start: Date)] = []
-        for (index, setsData) in completedSetsData.enumerated() {
-            guard index < template.entries.count, !setsData.isEmpty else { continue }
-            let offsetStart = startDate.addingTimeInterval(allocation.duration * Double(activeIndex))
-            exerciseInputs.append((index, template.entries[index].exerciseName, offsetStart))
-            activeIndex += 1
-        }
-
-        // Parallel save via TaskGroup (avoids sequential N+1 round-trips).
-        return await withTaskGroup(of: (Int, String?).self) { group in
-            for input in exerciseInputs {
+        return await withTaskGroup(of: (UUID, String?).self) { group in
+            for (index, record) in records.enumerated() {
+                let id = record.id
+                let name = record.exerciseType
+                let duration = record.duration
+                let start = startDate.addingTimeInterval(duration * Double(index))
+                let calories = record.bestCalories
+                let archive = WorkoutStrengthArchive(record: record)
                 group.addTask {
                     let uuid = await WatchWorkoutWriter.saveIndividualWorkout(
-                        healthStore: healthStore,
-                        exerciseName: input.name,
-                        startDate: input.start,
-                        duration: allocation.duration,
-                        calories: allocation.calories
+                        healthStore: healthStore, exerciseName: name, startDate: start,
+                        duration: duration, calories: calories, strengthArchive: archive
                     )
-                    return (input.index, uuid)
+                    return (id, uuid)
                 }
             }
-            var ids: [Int: String] = [:]
-            for await (index, uuid) in group {
-                if let uuid { ids[index] = uuid }
-            }
+            var ids: [UUID: String] = [:]
+            for await (id, uuid) in group { ids[id] = uuid }
             return ids
         }
     }
 
-    /// Persist ExerciseRecord + WorkoutSet to SwiftData for each exercise in the session.
-    private func saveWorkoutRecords(
-        perExerciseHealthKitIDs: [Int: String],
+    /// Prepare stable record and set identities before saving the same exercise to HealthKit.
+    private func makeWorkoutRecords(
         allocation: (duration: TimeInterval, calories: Double?, calorieSource: CalorieSource)
     ) -> [ExerciseRecord] {
         guard let template = workoutManager.templateSnapshot else { return [] }
@@ -718,9 +701,8 @@ struct SessionSummaryView: View {
                     ?? .setsRepsWeight,
                 history: exerciseRecords,
                 plannedSetCount: workoutManager.plannedSetCount(for: exerciseIndex),
-                healthKitWorkoutID: perExerciseHealthKitIDs[exerciseIndex]
+                healthKitWorkoutID: nil
             )
-            modelContext.insert(record)
             records.append(record)
         }
         return records
@@ -767,6 +749,15 @@ struct SessionSummaryView: View {
             autoIntensityRaw: workoutManager.cardioMachineAutoIntensityRaw
         )
         modelContext.insert(record)
+        if let place = workoutManager.completedPlace, case let .cardio(_, isOutdoor) = workoutManager.workoutMode {
+            let location = WorkoutLocationRecord(
+                localRecordID: record.id,
+                healthKitWorkoutID: healthKitWorkoutID,
+                payload: WorkoutLocationPayload(isIndoor: !isOutdoor, place: place)
+            )
+            modelContext.insert(location)
+        }
+        if healthKitWorkoutID == nil { WorkoutBackupWarning.record() }
         return record
     }
 

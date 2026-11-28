@@ -1,5 +1,7 @@
 import SwiftUI
 import SwiftData
+import ImageIO
+import UniformTypeIdentifiers
 
 struct PostureDetailView: View {
     let record: PostureAssessmentRecord
@@ -18,6 +20,10 @@ struct PostureDetailView: View {
     @State private var showDeleteConfirmation = false
     @State private var zoomImage: ZoomableImageItem?
     @State private var pdfURL: URL?
+    @State private var photoDocument: PosturePhotoDocument?
+    @State private var choosingPhotoFolder = false
+    @State private var isWritingPhoto = false
+    @State private var photoSaveMessage: LocalizedStringKey?
     @State private var correctiveRecommendations: [CorrectiveRecommendation] = []
     @ScaledMetric(relativeTo: .caption) private var scaledScoreRingDiameter: CGFloat = 120
     @ScaledMetric(relativeTo: .largeTitle) private var scaledScoreFontSize: CGFloat = 36
@@ -90,6 +96,39 @@ struct PostureDetailView: View {
         .background { DetailWaveBackground() }
         .environment(\.waveColor, DS.Color.body)
         .postureImageZoom($zoomImage)
+        .fileImporter(isPresented: $choosingPhotoFolder, allowedContentTypes: [.folder]) { result in
+            guard let photo = photoDocument else { return }
+            photoDocument = nil
+            switch result {
+            case .success(let folder):
+                isWritingPhoto = true
+                Task {
+                    defer { isWritingPhoto = false }
+                    do {
+                        try await Task.detached(priority: .userInitiated) {
+                            _ = try LocalRecoveryFiles.savePosturePhoto(
+                                photo.bytes, fileExtension: photo.fileExtension, toRemovableFolder: folder
+                            )
+                        }.value
+                        photoSaveMessage = "Original photo saved."
+                    } catch LocalRecoveryFiles.Failure.unsupportedDestination {
+                        photoSaveMessage = "Choose a folder on a connected external drive."
+                    } catch {
+                        photoSaveMessage = "Couldn’t save the photo. Choose another location and try again."
+                    }
+                }
+            case .failure(let error):
+                if (error as? CocoaError)?.code != .userCancelled {
+                    photoSaveMessage = "Couldn’t save the photo. Choose another location and try again."
+                }
+            }
+        }
+        .alert(photoSaveMessage ?? "", isPresented: Binding(
+            get: { photoSaveMessage != nil },
+            set: { if !$0 { photoSaveMessage = nil } }
+        )) {
+            Button("OK") {}
+        }
     }
 
     // MARK: - Score
@@ -208,9 +247,28 @@ struct PostureDetailView: View {
                     }
             }
 
-            Text(label)
-                .font(.caption.weight(.medium))
-                .foregroundStyle(.primary)
+            HStack {
+                Text(label)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.primary)
+                if let imageData {
+                    Button {
+                        guard let document = PosturePhotoDocument(bytes: imageData) else {
+                            photoSaveMessage = "Couldn’t save the photo. Choose another location and try again."
+                            return
+                        }
+                        photoDocument = document
+                        choosingPhotoFolder = true
+                    } label: {
+                        Label("Save to External Drive", systemImage: "square.and.arrow.down")
+                            .labelStyle(.iconOnly)
+                            .frame(minWidth: 44, minHeight: 44)
+                    }
+                    .disabled(isWritingPhoto)
+                    .accessibilityIdentifier("posture-save-photo-" + captureType.rawValue)
+                    .accessibilityHint(Text(label))
+                }
+            }
         }
     }
 
@@ -384,5 +442,22 @@ struct PostureDetailView: View {
             try? data.write(to: tempURL)
             await MainActor.run { pdfURL = tempURL }
         }
+    }
+}
+
+/// Keep the original encoded image, including its format and orientation.
+struct PosturePhotoDocument: Sendable {
+    let bytes: Data
+    let contentType: UTType
+    let fileExtension: String
+
+    init?(bytes: Data) {
+        guard let source = CGImageSourceCreateWithData(bytes as CFData, nil),
+              CGImageSourceGetCount(source) > 0, let identifier = CGImageSourceGetType(source),
+              let type = UTType(identifier as String), type.conforms(to: .image),
+              let fileExtension = type.preferredFilenameExtension else { return nil }
+        self.bytes = bytes
+        self.contentType = type
+        self.fileExtension = fileExtension
     }
 }

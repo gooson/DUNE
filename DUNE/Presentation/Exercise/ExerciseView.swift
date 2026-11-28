@@ -23,7 +23,7 @@ struct ExerciseView: View {
     @State private var recordToDelete: ExerciseRecord?
     @State private var healthKitWorkoutToDelete: WorkoutSummary?
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
-    @State private var inspectedExerciseID: String?
+    @State private var inspectedExercise: ExerciseListItem.Selection?
     @State private var sheetExercise: ExerciseListItem?
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.modelContext) private var modelContext
@@ -79,12 +79,13 @@ struct ExerciseView: View {
                 updateSuggestion()
                 await viewModel.loadHealthKitWorkouts()
             }
-            .onChange(of: viewModel.allExercises.map(\.id)) { _, ids in
-                if let sheetExercise, !ids.contains(sheetExercise.id) {
+            .onReceive(NotificationCenter.default.mainThreadPublisher(for: .appHealthDataDidRefresh)) { _ in
+                Task { await viewModel.loadHealthKitWorkouts(preservingLoadedPages: true) }
+            }
+            .onChange(of: viewModel.allExercises.map(\.id)) { _, _ in
+                inspectedExercise = inspectedExercise?.resolve(in: viewModel.allExercises).map(ExerciseListItem.Selection.init)
+                if let sheetExercise, ExerciseListItem.Selection(sheetExercise).resolve(in: viewModel.allExercises) == nil {
                     self.sheetExercise = nil
-                }
-                if let selectedID = inspectedExerciseID, !ids.contains(selectedID) {
-                    inspectedExerciseID = nil
                 }
             }
             .onChange(of: manualRecords) { _, newValue in
@@ -120,16 +121,16 @@ struct ExerciseView: View {
             .confirmDeleteRecord($recordToDelete, context: modelContext)
             .sheet(item: $sheetExercise) { selected in
                 // The sheet owns its item until dismissal, including a cancelled drag.
-                workoutInspector(for: viewModel.allExercises.first { $0.id == selected.id } ?? selected) {
+                workoutInspector(for: ExerciseListItem.Selection(selected).resolve(in: viewModel.allExercises) ?? selected) {
                     sheetExercise = nil
                 }
             }
             .inspector(isPresented: Binding(
-                get: { inspectedExerciseID != nil },
-                set: { if !$0 { inspectedExerciseID = nil } }
+                get: { inspectedExercise != nil },
+                set: { if !$0 { inspectedExercise = nil } }
             )) {
-                workoutInspector(for: viewModel.allExercises.first { $0.id == inspectedExerciseID }, closeEdge: .bottom) {
-                    inspectedExerciseID = nil
+                workoutInspector(for: inspectedExercise?.resolve(in: viewModel.allExercises), closeEdge: .bottom) {
+                    inspectedExercise = nil
                 }
                 .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
             }
@@ -283,7 +284,7 @@ struct ExerciseView: View {
                                     if horizontalSizeClass == .compact {
                                         sheetExercise = item
                                     } else {
-                                        inspectedExerciseID = item.id
+                                        inspectedExercise = ExerciseListItem.Selection(item)
                                     }
                                 } label: {
                                     UnifiedWorkoutRow(item: item, style: .full)
@@ -306,6 +307,7 @@ struct ExerciseView: View {
                                 }
                                 .tint(.red)
                             } else if item.source == .healthKit,
+                                      !ProcessInfo.processInfo.isiOSAppOnMac,
                                       let summary = item.workoutSummary,
                                       summary.isFromThisApp {
                                 Button {

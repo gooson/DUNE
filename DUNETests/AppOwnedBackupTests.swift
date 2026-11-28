@@ -1,0 +1,900 @@
+import Foundation
+import SwiftData
+import Testing
+@testable import DUNE
+
+@Suite("App-owned recovery archive")
+@MainActor
+struct AppOwnedBackupTests {
+    @MainActor
+    private struct Device {
+        let container: ModelContainer
+        let defaults: UserDefaults
+        let suite: String
+        var context: ModelContext { container.mainContext }
+
+        init() throws {
+            let schema = AppSchema.currentSchema
+            container = try ModelContainer(for: schema, configurations: ModelConfiguration(
+                schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none
+            ))
+            let suiteName = "AppOwnedBackupTests." + UUID().uuidString
+            suite = suiteName
+            defaults = try #require(UserDefaults(suiteName: suiteName))
+        }
+        func clean() { defaults.removePersistentDomain(forName: suite) }
+    }
+
+    private func object(_ data: Data) throws -> [String: Any] {
+        try #require(PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any])
+    }
+
+    private func binary(_ value: [String: Any]) throws -> Data {
+        try PropertyListSerialization.data(fromPropertyList: value, format: .binary, options: 0)
+    }
+
+    @Test func driveFileContainsOnlyVisualChoicesAndRestoresIdempotently() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        from.defaults.set(AppTheme.oceanCool.rawValue, forKey: AppTheme.storageKey)
+        from.defaults.set(AppIconStyle.flow.rawValue, forKey: AppIconStyle.storageKey)
+        from.defaults.set(WeightUnit.lb.rawValue, forKey: WeightUnit.storageKey)
+        let visual = try AppOwnedBackup.encodeDriveSettings(defaults: from.defaults)
+        let prefix = Bundle.main.bundleIdentifier ?? "com.dailve"
+        from.defaults.set(["workout": "private name"], forKey: "workout.type.corrections.v1")
+        from.defaults.set(Data("private reward".utf8), forKey: prefix + ".workoutRewards.state")
+        from.defaults.set(Data("private PR".utf8), forKey: prefix + ".personalRecords.walking")
+        from.defaults.set(Data([0, 1, 2, 3]), forKey: "privatePhoto")
+        let training = WorkoutSettingsStore(defaults: from.defaults)
+        training.restSeconds = 45
+        training.setCount = 3
+        training.bodyWeightKg = 66
+        #expect(try AppOwnedBackup.encodeDriveSettings(defaults: from.defaults) == visual)
+        for _ in 0..<2 {
+            #expect(try AppOwnedBackup.restoreDriveSettingsIfPresent(visual, defaults: to.defaults))
+        }
+        #expect(to.defaults.string(forKey: AppTheme.storageKey) == AppTheme.oceanCool.rawValue)
+        #expect(to.defaults.string(forKey: AppIconStyle.storageKey) == AppIconStyle.flow.rawValue)
+        #expect(to.defaults.string(forKey: WeightUnit.storageKey) == WeightUnit.lb.rawValue)
+        let savedKeys = Set(to.defaults.persistentDomain(forName: to.suite)?.keys.map { $0 } ?? [])
+        #expect(savedKeys == Set([AppTheme.storageKey, AppIconStyle.storageKey, WeightUnit.storageKey]))
+    }
+
+    @Test func driveFileRejectsExtraFieldsInvalidCodesAndConflictsWithoutPartialWrites() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        #expect(try !AppOwnedBackup.restoreDriveSettingsIfPresent(Data(), defaults: to.defaults))
+        #expect(try !AppOwnedBackup.restoreDriveSettingsIfPresent(Data("unrelated file".utf8), defaults: to.defaults))
+        let empty = try AppOwnedBackup.encodeDriveSettings(defaults: from.defaults)
+        #expect(try AppOwnedBackup.restoreDriveSettingsIfPresent(empty, defaults: to.defaults))
+        #expect((to.defaults.persistentDomain(forName: to.suite) ?? [:]).isEmpty)
+        from.defaults.set(AppTheme.sakuraCalm.rawValue, forKey: AppTheme.storageKey)
+        from.defaults.set(WeightUnit.kg.rawValue, forKey: WeightUnit.storageKey)
+        let valid = try AppOwnedBackup.encodeDriveSettings(defaults: from.defaults)
+        var invalidCode = valid
+        invalidCode[invalidCode.endIndex - 1] = 255
+        for invalid in [invalidCode, Data(valid.dropLast()), valid + Data("extra personal field".utf8)] {
+            #expect(throws: AppOwnedBackup.Failure.invalidArchive) {
+                try AppOwnedBackup.restoreDriveSettingsIfPresent(invalid, defaults: to.defaults)
+            }
+        }
+        var future = valid
+        future[future.endIndex - 4] = 99
+        #expect(throws: AppOwnedBackup.Failure.unsupportedVersion) {
+            try AppOwnedBackup.restoreDriveSettingsIfPresent(future, defaults: to.defaults)
+        }
+        to.defaults.set(WeightUnit.lb.rawValue, forKey: WeightUnit.storageKey)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restoreDriveSettingsIfPresent(valid, defaults: to.defaults)
+        }
+        #expect(to.defaults.object(forKey: AppTheme.storageKey) == nil)
+        #expect(to.defaults.string(forKey: WeightUnit.storageKey) == WeightUnit.lb.rawValue)
+        from.defaults.set("private user text", forKey: AppTheme.storageKey)
+        #expect(throws: AppOwnedBackup.Failure.invalidArchive) {
+            try AppOwnedBackup.encodeDriveSettings(defaults: from.defaults)
+        }
+    }
+
+    @Test func restoresAllOwnedTablesLinksPhotosPreferencesAndExactRepeat() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        let workout = ExerciseRecord(exerciseType: "Private exercise", duration: 43, memo: "private note")
+        let linked = ExerciseRecord(exerciseType: "Second exercise", duration: 12)
+        let sharedHealthID = UUID().uuidString
+        workout.healthKitWorkoutID = sharedHealthID
+        linked.healthKitWorkoutID = sharedHealthID
+        let set = WorkoutSet(setNumber: 2, weight: 17.5, reps: 7, plannedReps: 9)
+        set.exerciseRecord = workout
+        let location = WorkoutLocationRecord(localRecordID: workout.id, healthKitWorkoutID: sharedHealthID,
+                                            payload: WorkoutLocationPayload(isIndoor: true))
+        let habit = HabitDefinition(name: "Private habit", iconCategory: .health, habitType: .check,
+                                   goalValue: 1, goalUnit: nil, frequency: .daily)
+        let log = HabitLog(date: .now, value: 1, memo: "done")
+        log.habitDefinition = habit
+        let portrait = PostureAssessmentRecord(frontImageData: Data([1, 2, 3]), sideImageData: Data([4, 5]))
+        portrait.sideMetricsJSON = "[{\"fixture\":1}]"
+        let injury = InjuryRecord(bodyPart: .knee, bodySide: nil, severity: .moderate, startDate: .now, memo: "previous")
+        let category = UserCategory(name: "Personal category")
+        let custom = CustomExercise(name: "My exercise", category: .strength, inputType: .setsRepsWeight,
+                                    primaryMuscles: [], equipment: .bodyweight, customCategoryName: category.name)
+        let entry = TemplateEntry(exerciseDefinitionID: custom.id.uuidString, exerciseName: custom.name,
+                                  defaultWeightKg: 12.5, restDuration: 45)
+        let template = WorkoutTemplate(name: "My routine", exerciseEntries: [entry])
+        from.context.insert(workout)
+        from.context.insert(linked)
+        from.context.insert(set)
+        from.context.insert(location)
+        from.context.insert(habit)
+        from.context.insert(log)
+        from.context.insert(portrait)
+        from.context.insert(injury)
+        from.context.insert(category)
+        from.context.insert(custom)
+        from.context.insert(template)
+        from.context.insert(ExerciseDefaultRecord(exerciseDefinitionID: custom.id.uuidString, defaultWeight: 7.5))
+        from.context.insert(BodyCompositionRecord(weight: 65.5, muscleMass: 29, memo: "manual"))
+        from.context.insert(HourlyScoreSnapshot(date: .now, conditionScore: 74))
+        from.context.insert(HealthSnapshotMirrorRecord(payloadJSON: "{\"privateMirror\":true}"))
+        try from.context.save()
+        let prefix = Bundle.main.bundleIdentifier ?? "com.dailve"
+        let rewards = Data(#"{"milestoneTierByActivity":{},"unlockedBadges":["badge"],"totalPoints":15,"level":1,"history":[],"processedWorkoutSignatures":{}}"#.utf8)
+        from.defaults.set(rewards, forKey: prefix + ".workoutRewards.state")
+        let pr = PersonalRecord(type: .longestDuration, value: 43, date: workout.date, workoutID: sharedHealthID)
+        from.defaults.set(try JSONEncoder().encode([PersonalRecordType.longestDuration: pr]),
+                          forKey: prefix + ".personalRecords.walking")
+        from.defaults.set(["test-workout": "My label"], forKey: "workout.type.corrections.v1")
+        from.defaults.set(AppTheme.forestGreen.rawValue, forKey: AppTheme.storageKey)
+        from.defaults.set(AppIconStyle.flow.rawValue, forKey: AppIconStyle.storageKey)
+        from.defaults.set(WeightUnit.lb.rawValue, forKey: WeightUnit.storageKey)
+        let training = WorkoutSettingsStore(defaults: from.defaults)
+        training.restSeconds = 75
+        training.setCount = 4
+        training.bodyWeightKg = 62.5
+        from.defaults.set("excluded", forKey: "nearbyWorkoutVerifiedAccount")
+        to.defaults.set("device setting", forKey: "uiOnly")
+
+        let bytes = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        // A new SwiftData entity, attribute or relationship must be consciously added to the archive.
+        let source = try object(bytes)
+        let tables = try #require(source["tables"] as? [String: [[String: Any]]])
+        let owned = AppSchema.currentSchema.entities.filter { $0.name != "HealthSnapshotMirrorRecord" }
+        #expect(Set(owned.map(\.name)) == Set(tables.keys))
+        let relationships: [String: Set<String>] = [
+            "ExerciseRecord": ["sets"], "WorkoutSet": ["exerciseRecord"],
+            "HabitDefinition": ["logs"], "HabitLog": ["habitDefinition"],
+        ]
+        for entity in owned {
+            let row = try #require(tables[entity.name]?.first)
+            let saved = try #require(row["fields"] as? [String: Data])
+            let mapped = Set(saved.keys).union(relationships[entity.name] ?? [])
+            #expect(mapped == Set(entity.properties.map(\.name)))
+        }
+        let key = EncryptedRecoveryArchive.makeRecoveryKey()
+        let encrypted = try EncryptedRecoveryArchive.seal(bytes, recoveryKey: key)
+        #expect(encrypted != bytes)
+        let decrypted = try EncryptedRecoveryArchive.open(encrypted, recoveryKey: key)
+        #expect(decrypted == bytes)
+        try AppOwnedBackup.restore(decrypted, into: to.context, defaults: to.defaults)
+        try AppOwnedBackup.restore(decrypted, into: to.context, defaults: to.defaults)
+
+        let check = ModelContext(to.container)
+        let restored = try #require(check.fetch(FetchDescriptor<WorkoutSet>()).first)
+        #expect(restored.id == set.id && restored.exerciseRecord?.id == workout.id && restored.weight == 17.5)
+        #expect(try check.fetchCount(FetchDescriptor<ExerciseRecord>()) == 2)
+        #expect(try check.fetch(FetchDescriptor<HabitLog>()).first?.habitDefinition?.id == habit.id)
+        #expect(try check.fetch(FetchDescriptor<WorkoutLocationRecord>()).first?.payloadData == location.payloadData)
+        let restoredPortrait = try #require(check.fetch(FetchDescriptor<PostureAssessmentRecord>()).first)
+        #expect(restoredPortrait.frontImageData == portrait.frontImageData && restoredPortrait.sideImageData == portrait.sideImageData)
+        #expect(try check.fetch(FetchDescriptor<WorkoutTemplate>()).first?.exerciseEntries.first?.id == entry.id)
+        #expect(try check.fetchCount(FetchDescriptor<HealthSnapshotMirrorRecord>()) == 0)
+        #expect(PersonalRecordStore(defaults: to.defaults).rewardSummary().totalPoints == 15)
+        #expect(PersonalRecordStore(defaults: to.defaults).records(for: .walking)[.longestDuration]?.value == 43)
+        #expect(WorkoutTypeCorrectionStore(userDefaults: to.defaults).correctedTitle(for: "test-workout") == "My label")
+        #expect(to.defaults.object(forKey: "nearbyWorkoutVerifiedAccount") == nil)
+        #expect(to.defaults.string(forKey: "uiOnly") == "device setting")
+        #expect(to.defaults.string(forKey: AppTheme.storageKey) == AppTheme.forestGreen.rawValue)
+        #expect(to.defaults.string(forKey: AppIconStyle.storageKey) == AppIconStyle.flow.rawValue)
+        #expect(to.defaults.string(forKey: WeightUnit.storageKey) == WeightUnit.lb.rawValue)
+        let restoredSettings = WorkoutSettingsStore(defaults: to.defaults)
+        #expect(restoredSettings.restSeconds == 75 && restoredSettings.setCount == 4 && restoredSettings.bodyWeightKg == 62.5)
+        let recovered = try AppOwnedBackup.encode(from: check, defaults: to.defaults)
+        #expect(try NSDictionary(dictionary: object(bytes)).isEqual(to: object(recovered)))
+    }
+
+    @Test func rejectsUnsupportedUnitsAndBooleanMasqueradingAsAWorkoutCount() throws {
+        let device = try Device()
+        defer { device.clean() }
+        device.defaults.set("unexpected", forKey: WeightUnit.storageKey)
+        #expect(throws: AppOwnedBackup.Failure.invalidArchive) {
+            try AppOwnedBackup.encode(from: device.context, defaults: device.defaults)
+        }
+        device.defaults.removeObject(forKey: WeightUnit.storageKey)
+        let prefix = Bundle.main.bundleIdentifier ?? "com.dailve"
+        device.defaults.set(true, forKey: prefix + ".settings.setCount")
+        #expect(throws: AppOwnedBackup.Failure.invalidArchive) {
+            try AppOwnedBackup.encode(from: device.context, defaults: device.defaults)
+        }
+    }
+
+    @Test func lateOrphanCorruptionAndUnknownVersionsRollBackEverything() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        let workout = ExerciseRecord(exerciseType: "preserve")
+        let set = WorkoutSet(setNumber: 1)
+        set.exerciseRecord = workout
+        from.context.insert(workout)
+        from.context.insert(set)
+        try from.context.save()
+        from.defaults.set(["id": "source"], forKey: "workout.type.corrections.v1")
+        let bytes = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        var archive = try object(bytes)
+        var tables = try #require(archive["tables"] as? [String: [[String: Any]]])
+        var row = try #require(tables["WorkoutSet"]?.first)
+        row["parent"] = UUID().uuidString
+        tables["WorkoutSet"] = [row]
+        archive["tables"] = tables
+        #expect(throws: AppOwnedBackup.Failure.missingParent) {
+            try AppOwnedBackup.restore(binary(archive), into: to.context, defaults: to.defaults)
+        }
+        #expect(try ModelContext(to.container).fetchCount(FetchDescriptor<ExerciseRecord>()) == 0)
+        #expect(to.defaults.object(forKey: "workout.type.corrections.v1") == nil)
+        archive["version"] = 17
+        #expect(throws: AppOwnedBackup.Failure.unsupportedVersion) {
+            try AppOwnedBackup.restore(binary(archive), into: to.context, defaults: to.defaults)
+        }
+        #expect(throws: (any Error).self) {
+            try AppOwnedBackup.restore(Data(bytes.prefix(10)), into: to.context, defaults: to.defaults)
+        }
+    }
+
+    @Test func verifiedMergePreservesDeviceGeneratedRowsAndLinksNewChildrenToExistingParents() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        let workout = ExerciseRecord(exerciseType: "archived")
+        from.context.insert(workout)
+        try from.context.save()
+        let initial = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        try AppOwnedBackup.restore(initial, into: to.context, defaults: to.defaults)
+        let score = HourlyScoreSnapshot(date: Date(timeIntervalSince1970: 3600), conditionScore: 82)
+        to.context.insert(score)
+        try to.context.save()
+        let key = "workout.type.corrections.v1"
+        from.defaults.set(["shared": "same", "from-backup": "my title"], forKey: key)
+        to.defaults.set(["shared": "same", "new-device": "local title"], forKey: key)
+        let set = WorkoutSet(setNumber: 1, reps: 3)
+        set.exerciseRecord = workout
+        from.context.insert(set)
+        try from.context.save()
+        let archive = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(archive, into: to.context, defaults: to.defaults)
+        }
+        for _ in 0..<2 {
+            try AppOwnedBackup.restore(archive, into: to.context, defaults: to.defaults,
+                                       mode: .mergeAfterOwnershipVerification)
+        }
+        let read = ModelContext(to.container)
+        let setRows = try read.fetch(FetchDescriptor<WorkoutSet>())
+        #expect(setRows.count == 1 && setRows.first?.exerciseRecord?.id == workout.id)
+        #expect(try read.fetchCount(FetchDescriptor<ExerciseRecord>()) == 1)
+        #expect(try read.fetch(FetchDescriptor<HourlyScoreSnapshot>()).first?.conditionScore == 82)
+        #expect(to.defaults.dictionary(forKey: key) as? [String: String] ==
+                ["shared": "same", "from-backup": "my title", "new-device": "local title"])
+
+        // Same child UUID with a new parent is a conflict, even though both parent UUIDs exist.
+        let alternate = ExerciseRecord(exerciseType: "alternate")
+        from.context.insert(alternate)
+        set.exerciseRecord = alternate
+        try from.context.save()
+        let conflicting = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(conflicting, into: to.context, defaults: to.defaults,
+                                       mode: .mergeAfterOwnershipVerification)
+        }
+        #expect(try ModelContext(to.container).fetchCount(FetchDescriptor<ExerciseRecord>()) == 1)
+        #expect(try ModelContext(to.container).fetch(FetchDescriptor<WorkoutSet>()).first?.exerciseRecord?.id == workout.id)
+    }
+
+    @Test func verifiedWorkoutMergeSupplementsOnlyAbsentLaterFieldsAndRollsBackCompetingValues() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        let workout = ExerciseRecord(exerciseType: "fixture", duration: 99)
+        let set = WorkoutSet(setNumber: 1, reps: 5)
+        set.exerciseRecord = workout
+        from.context.insert(workout)
+        from.context.insert(set)
+        try from.context.save()
+        let baseline = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        let first = try AppOwnedBackup.restore(baseline, into: to.context, defaults: to.defaults)
+        #expect(first.archiveRowCount == 2 && first.workoutCount == 1 && first.setCount == 1)
+        #expect(first.insertedRowCount == 2 && first.enrichedRowCount == 0)
+
+        // One device has the old workout count and set effort source, the other has the other two fields.
+        workout.plannedSetCount = 6
+        set.rpeSourceRaw = "watch"
+        try from.context.save()
+        let localWorkout = try #require(to.context.fetch(FetchDescriptor<ExerciseRecord>()).first)
+        let localSet = try #require(to.context.fetch(FetchDescriptor<WorkoutSet>()).first)
+        localWorkout.effortSourceRaw = "user"
+        localSet.plannedReps = 8
+        try to.context.save()
+        var archive = try object(AppOwnedBackup.encode(from: from.context, defaults: from.defaults))
+        var tables = try #require(archive["tables"] as? [String: [[String: Any]]])
+        // Some earlier exports may omit an optional key entirely instead of encoding null.
+        var archivedWorkout = try #require(tables["ExerciseRecord"]?.first)
+        var fields = try #require(archivedWorkout["fields"] as? [String: Data])
+        fields.removeValue(forKey: "effortSourceRaw")
+        archivedWorkout["fields"] = fields
+        tables["ExerciseRecord"] = [archivedWorkout]
+        archive["tables"] = tables
+        let incoming = try binary(archive)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(incoming, into: to.context, defaults: to.defaults)
+        }
+        let result = try AppOwnedBackup.restore(incoming, into: to.context, defaults: to.defaults,
+                                                mode: .mergeAfterOwnershipVerification)
+        #expect(result.insertedRowCount == 0 && result.enrichedRowCount == 2)
+        let repeated = try AppOwnedBackup.restore(incoming, into: to.context, defaults: to.defaults,
+                                                  mode: .mergeAfterOwnershipVerification)
+        #expect(repeated.insertedRowCount == 0 && repeated.enrichedRowCount == 0)
+        let read = ModelContext(to.container)
+        let combined = try #require(read.fetch(FetchDescriptor<ExerciseRecord>()).first)
+        let child = try #require(read.fetch(FetchDescriptor<WorkoutSet>()).first)
+        #expect(combined.plannedSetCount == 6 && combined.effortSourceRaw == "user")
+        #expect(child.plannedReps == 8 && child.rpeSourceRaw == "watch" && child.exerciseRecord?.id == workout.id)
+
+        // The workout's provisional enrichment precedes a later set conflict. Neither may be committed.
+        combined.plannedSetCount = nil
+        child.rpeSourceRaw = "local"
+        try read.save()
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(incoming, into: read, defaults: to.defaults, mode: .mergeAfterOwnershipVerification)
+        }
+        let after = ModelContext(to.container)
+        #expect(try after.fetch(FetchDescriptor<ExerciseRecord>()).first?.plannedSetCount == nil)
+        #expect(try after.fetch(FetchDescriptor<WorkoutSet>()).first?.rpeSourceRaw == "local")
+    }
+
+    @Test func independentlyComputedPRsAndRewardReceiptsSurviveEncodingOrderAndContainedProgress() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        let prefix = Bundle.main.bundleIdentifier ?? "com.dailve"
+        let recordKey = prefix + ".personalRecords.running"
+        let rewardKey = prefix + ".workoutRewards.state"
+        let source = PersonalRecordStore(defaults: from.defaults)
+        let local = PersonalRecordStore(defaults: to.defaults)
+        let workout = WorkoutSummary(id: "shared", type: WorkoutActivityType.running.typeName, activityType: .running,
+                                     duration: 1_800, calories: 220, distance: 5_300,
+                                     date: Date(timeIntervalSince1970: 100_000), averagePace: 360)
+        for store in [source, local] {
+            let types = store.updateIfNewRecords(workout)
+            #expect(types.count >= 2)
+            _ = store.evaluateReward(for: workout, newPRTypes: types)
+        }
+        let filePR = try #require(from.defaults.data(forKey: recordKey))
+        let fileRewards = try #require(from.defaults.data(forKey: rewardKey))
+        let pairs = try #require(JSONSerialization.jsonObject(with: filePR) as? [Any])
+        let reversed = stride(from: pairs.count - 2, through: 0, by: -2).flatMap { [pairs[$0], pairs[$0 + 1]] }
+        let reordered = try JSONSerialization.data(withJSONObject: reversed, options: [.prettyPrinted, .sortedKeys])
+        var ledger = try #require(JSONSerialization.jsonObject(with: fileRewards) as? [String: Any])
+        let badges = try #require(ledger["unlockedBadges"] as? [String])
+        ledger["unlockedBadges"] = Array(badges.reversed())
+        to.defaults.set(reordered, forKey: recordKey)
+        to.defaults.set(try JSONSerialization.data(withJSONObject: ledger, options: [.prettyPrinted]), forKey: rewardKey)
+        #expect(local.records(for: .running) == source.records(for: .running))
+        let first = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        try AppOwnedBackup.restore(first, into: to.context, defaults: to.defaults)
+        #expect(to.defaults.data(forKey: recordKey) == filePR)
+        #expect(to.defaults.data(forKey: rewardKey) == fileRewards)
+
+        // A health-first device may have computed only one of several PR types for the same workout.
+        to.defaults.set(try JSONSerialization.data(withJSONObject: Array(pairs.prefix(2))), forKey: recordKey)
+        let next = WorkoutSummary(id: "second", type: WorkoutActivityType.running.typeName, activityType: .running,
+                                  duration: 4_000, calories: 300, distance: 15_100, date: Date(timeIntervalSince1970: 200_000))
+        _ = source.evaluateReward(for: next, newPRTypes: [])
+        let richer = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        for _ in 0..<2 { try AppOwnedBackup.restore(richer, into: to.context, defaults: to.defaults) }
+        #expect(local.records(for: .running) == source.records(for: .running))
+        #expect(local.rewardHistory(limit: 0) == source.rewardHistory(limit: 0))
+        #expect(local.rewardSummary().totalPoints == source.rewardSummary().totalPoints)
+        #expect(to.defaults.data(forKey: rewardKey) == from.defaults.data(forKey: rewardKey))
+
+        // Distinct receipts regenerated on another workout cannot be combined by summing points.
+        to.defaults.removeObject(forKey: rewardKey)
+        let unrelated = WorkoutSummary(id: "unrelated", type: WorkoutActivityType.running.typeName, activityType: .running,
+                                       duration: 1_000, calories: 100, distance: 5_300, date: Date(timeIntervalSince1970: 300_000))
+        _ = local.evaluateReward(for: unrelated, newPRTypes: [])
+        let untouched = to.defaults.data(forKey: rewardKey)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(richer, into: to.context, defaults: to.defaults, mode: .mergeAfterOwnershipVerification)
+        }
+        #expect(to.defaults.data(forKey: rewardKey) == untouched)
+    }
+
+    @Test func rewardReplayAcrossEmptyCallbacksRestartsAndOldArchiveCreditsEachPRTypeOnce() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        let defaultsKey = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".workoutRewards.state"
+        let workout = WorkoutSummary(id: "stable-workout-id", type: WorkoutActivityType.running.typeName,
+                                     activityType: .running, duration: 100, calories: nil, distance: nil, date: .now)
+        let store = PersonalRecordStore(defaults: from.defaults)
+        let initial = store.evaluateReward(for: workout, newPRTypes: [.longestDuration, .highestCalories])
+        let oldPoints = initial.summary.totalPoints
+        let oldHistory = store.rewardHistory(limit: 0)
+        let original = try #require(from.defaults.data(forKey: defaultsKey))
+        #expect(store.evaluateReward(for: workout, newPRTypes: []).events.isEmpty)
+        #expect(store.evaluateReward(for: workout, newPRTypes: [.highestCalories]).events.isEmpty)
+        #expect(store.evaluateReward(for: workout, newPRTypes: [.highestCalories, .longestDuration]).events.isEmpty)
+        #expect(from.defaults.data(forKey: defaultsKey) == original)
+
+        // Reproduce the persisted output of an older normal empty callback, preserving its real receipts.
+        var ledger = try #require(JSONSerialization.jsonObject(with: original) as? [String: Any])
+        var signatures = try #require(ledger["processedWorkoutSignatures"] as? [String: String])
+        let signature = try #require(signatures[workout.id])
+        let base = signature.split(separator: "|", omittingEmptySubsequences: false).prefix(2).joined(separator: "|")
+        signatures[workout.id] = base + "|"
+        ledger["processedWorkoutSignatures"] = signatures
+        from.defaults.set(try JSONSerialization.data(withJSONObject: ledger), forKey: defaultsKey)
+        let legacyFile = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        to.defaults.set(original, forKey: defaultsKey)
+        try AppOwnedBackup.restore(legacyFile, into: to.context, defaults: to.defaults)
+        let recovered = PersonalRecordStore(defaults: to.defaults)
+        #expect(recovered.evaluateReward(for: workout, newPRTypes: [.longestDuration]).events.isEmpty)
+        #expect(recovered.rewardHistory(limit: 0) == oldHistory)
+        #expect(recovered.rewardSummary().totalPoints == oldPoints)
+
+        let extra = recovered.evaluateReward(for: workout, newPRTypes: [.longestDuration, .longestDistance])
+        #expect(extra.events.filter { $0.kind == .personalRecord }.map(\.pointsAwarded) == [60])
+        #expect(extra.summary.totalPoints == oldPoints + 60)
+        let restarted = PersonalRecordStore(defaults: to.defaults)
+        #expect(restarted.evaluateReward(for: workout, newPRTypes: []).events.isEmpty)
+        #expect(restarted.evaluateReward(for: workout, newPRTypes: [.longestDistance, .longestDuration, .highestCalories]).events.isEmpty)
+        let finalHistory = restarted.rewardHistory(limit: 0)
+        try AppOwnedBackup.restore(legacyFile, into: to.context, defaults: to.defaults, mode: .mergeAfterOwnershipVerification)
+        #expect(restarted.rewardHistory(limit: 0) == finalHistory)
+        #expect(restarted.rewardSummary().totalPoints == oldPoints + 60)
+        #expect(Set(finalHistory.map(\.id)).count == finalHistory.count)
+
+        // A signature claims a type never recorded by this workout. Matching totals alone cannot justify it.
+        signatures[workout.id] = base + "|highestElevation"
+        ledger["processedWorkoutSignatures"] = signatures
+        from.defaults.set(try JSONSerialization.data(withJSONObject: ledger), forKey: defaultsKey)
+        let unsupported = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(unsupported, into: to.context, defaults: to.defaults, mode: .mergeAfterOwnershipVerification)
+        }
+    }
+
+    @Test func nativeAndFileWinnerContextConvergesWithoutAwardingAnotherRecord() throws {
+        let from = try Device(), nativeFirst = try Device(), fileFirst = try Device()
+        defer { from.clean(); nativeFirst.clean(); fileFirst.clean() }
+        let date = Date(timeIntervalSince1970: 100_000)
+        func workout(indoor: Bool?, stepCount: Double?, averageHR: Double?) -> WorkoutSummary {
+            WorkoutSummary(id: "stable", type: WorkoutActivityType.walking.typeName, activityType: .walking,
+                           duration: 120, calories: nil, distance: nil, date: date, heartRateAvg: averageHR,
+                           isIndoor: indoor, stepCount: stepCount)
+        }
+        let localData = workout(indoor: nil, stepCount: 50, averageHR: 110)
+        let nativeData = workout(indoor: true, stepCount: nil, averageHR: 110)
+        let source = PersonalRecordStore(defaults: from.defaults)
+        let native = PersonalRecordStore(defaults: nativeFirst.defaults)
+        #expect(source.updateIfNewRecords(localData) == [.longestDuration])
+        #expect(native.updateIfNewRecords(nativeData) == [.longestDuration])
+        let file = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(file, into: nativeFirst.context, defaults: nativeFirst.defaults)
+        }
+        try AppOwnedBackup.restore(file, into: nativeFirst.context, defaults: nativeFirst.defaults, mode: .mergeAfterOwnershipVerification)
+        try AppOwnedBackup.restore(file, into: fileFirst.context, defaults: fileFirst.defaults)
+        let restored = PersonalRecordStore(defaults: fileFirst.defaults)
+        #expect(restored.updateIfNewRecords(nativeData).isEmpty)
+        let winner = try #require(restored.records(for: .walking)[.longestDuration])
+        #expect(winner == native.records(for: .walking)[.longestDuration])
+        #expect(winner.isIndoor == true && winner.stepCount == 50 && winner.heartRateAvg == 110)
+        #expect(restored.updateIfNewRecords(workout(indoor: false, stepCount: nil, averageHR: 150)).isEmpty)
+        #expect(restored.records(for: .walking)[.longestDuration] == winner)
+    }
+
+    @Test func unrelatedPRTypesRequireVerifiedMergeAndContextConflictsPreserveOriginal() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        from.context.insert(ExerciseRecord(exerciseType: "owned"))
+        try from.context.save()
+        let prefix = (Bundle.main.bundleIdentifier ?? "com.dailve") + ".personalRecords."
+        let key = prefix + "walking"
+        let date = Date(timeIntervalSince1970: 100_000)
+        let shared = PersonalRecord(type: .longestDuration, value: 100, date: date, workoutID: "same", heartRateAvg: 101)
+        let fileOnly = PersonalRecord(type: .longestDistance, value: 500, date: date, workoutID: "file")
+        let deviceOnly = PersonalRecord(type: .highestCalories, value: 100, date: date, workoutID: "device")
+        let file = try JSONEncoder().encode([shared.type: shared, fileOnly.type: fileOnly])
+        from.defaults.set(file, forKey: key)
+        let archive = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        let changed = PersonalRecord(type: .longestDuration, value: 100, date: date, workoutID: "same", heartRateAvg: 105)
+        let conflicting = try JSONEncoder().encode([changed.type: changed])
+        to.defaults.set(conflicting, forKey: key)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(archive, into: to.context, defaults: to.defaults, mode: .mergeAfterOwnershipVerification)
+        }
+        #expect(try ModelContext(to.container).fetchCount(FetchDescriptor<ExerciseRecord>()) == 0)
+        #expect(to.defaults.data(forKey: key) == conflicting)
+        let extra = try JSONEncoder().encode([shared.type: shared, deviceOnly.type: deviceOnly])
+        to.defaults.set(extra, forKey: key)
+        to.defaults.set(extra, forKey: prefix + "running")
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(archive, into: to.context, defaults: to.defaults)
+        }
+        try AppOwnedBackup.restore(archive, into: to.context, defaults: to.defaults, mode: .mergeAfterOwnershipVerification)
+        let store = PersonalRecordStore(defaults: to.defaults)
+        #expect(store.records(for: .walking) == [shared.type: shared, fileOnly.type: fileOnly, deviceOnly.type: deviceOnly])
+        #expect(to.defaults.data(forKey: prefix + "running") == extra)
+        let combined = to.defaults.data(forKey: key)
+        try AppOwnedBackup.restore(archive, into: to.context, defaults: to.defaults, mode: .mergeAfterOwnershipVerification)
+        #expect(to.defaults.data(forKey: key) == combined)
+    }
+
+    @Test func duplicatePRTypesRewardBadgesReceiptsAndJSONKeysFailBeforeCapture() throws {
+        let device = try Device()
+        defer { device.clean() }
+        let prefix = Bundle.main.bundleIdentifier ?? "com.dailve"
+        let recordKey = prefix + ".personalRecords.walking", rewardKey = prefix + ".workoutRewards.state"
+        let pr = PersonalRecord(type: .longestDistance, value: 1, date: .now, workoutID: "id")
+        let pairs = try #require(JSONSerialization.jsonObject(with: JSONEncoder().encode([pr.type: pr])) as? [Any])
+        device.defaults.set(try JSONSerialization.data(withJSONObject: pairs + pairs), forKey: recordKey)
+        #expect(throws: AppOwnedBackup.Failure.invalidArchive) {
+            try AppOwnedBackup.encode(from: device.context, defaults: device.defaults)
+        }
+        device.defaults.removeObject(forKey: recordKey)
+        let event = WorkoutRewardEvent(id: "receipt", workoutID: "w", activityTypeRawValue: "walking", date: .now,
+                                       kind: .personalRecord, title: "PR", detail: "", pointsAwarded: 1, levelAfterEvent: nil)
+        let receipt = try JSONSerialization.jsonObject(with: JSONEncoder().encode(event))
+        var ledger: [String: Any] = ["milestoneTierByActivity": [:], "unlockedBadges": ["same", "same"],
+                                     "totalPoints": 2, "level": 1, "history": [], "processedWorkoutSignatures": [:]]
+        let duplicateBadges = try JSONSerialization.data(withJSONObject: ledger)
+        ledger["unlockedBadges"] = []
+        ledger["history"] = [receipt, receipt]
+        let duplicateReceipts = try JSONSerialization.data(withJSONObject: ledger)
+        let duplicateKey = Data(#"{"milestoneTierByActivity":{},"unlockedBadges":[],"totalPoints":0,"level":1,"history":[],"processedWorkoutSignatures":{"w":"x","w":"y"}}"#.utf8)
+        for malformed in [duplicateBadges, duplicateReceipts, duplicateKey] {
+            device.defaults.set(malformed, forKey: rewardKey)
+            #expect(throws: AppOwnedBackup.Failure.invalidArchive) {
+                try AppOwnedBackup.encode(from: device.context, defaults: device.defaults)
+            }
+        }
+    }
+
+    @Test func savedChangesAfterExportBelongOnlyToTheLaterFileAndMergeNeverReplaysDeletion() throws {
+        let editedID = UUID(), removedID = UUID(), addedID = UUID()
+        let editedSetID = UUID(), removedSetID = UUID(), addedSetID = UUID()
+        let key = EncryptedRecoveryArchive.makeRecoveryKey()
+
+        // Only encrypted file contents escape this scope; restore has no source store or preference reference.
+        let files = try autoreleasepool { () throws -> (a: Data, b: Data) in
+            let source = try Device()
+            defer { source.clean() }
+            let context = source.context
+            @MainActor func export() throws -> Data {
+                let bytes = try AppOwnedBackup.encode(from: context, defaults: source.defaults)
+                return try EncryptedRecoveryArchive.seal(bytes, recoveryKey: key)
+            }
+            func insert(_ id: UUID, setID: UUID, memo: String) -> (ExerciseRecord, WorkoutSet) {
+                let workout = ExerciseRecord(exerciseType: "Fixture exercise", memo: memo)
+                workout.id = id
+                let set = WorkoutSet(setNumber: 1, reps: 4)
+                set.id = setID
+                set.exerciseRecord = workout
+                context.insert(workout)
+                context.insert(set)
+                return (workout, set)
+            }
+            let (edited, editedSet) = insert(editedID, setID: editedSetID, memo: "before")
+            let (removed, _) = insert(removedID, setID: removedSetID, memo: "removed later")
+            try context.save()
+            let a = try export()
+
+            edited.memo = "after"
+            editedSet.reps = 6
+            context.delete(removed)
+            _ = insert(addedID, setID: addedSetID, memo: "added later")
+            try context.save()
+            let afterSave = ModelContext(source.container)
+            let savedWorkouts = try afterSave.fetch(FetchDescriptor<ExerciseRecord>())
+            let savedSets = try afterSave.fetch(FetchDescriptor<WorkoutSet>())
+            #expect(Set(savedWorkouts.map(\.id)) == Set([editedID, addedID]))
+            #expect(Set(savedSets.map(\.id)) == Set([editedSetID, addedSetID]))
+            return (a, try export())
+        }
+
+        let earlier = try Device(), later = try Device()
+        defer { earlier.clean(); later.clean() }
+        let a = try EncryptedRecoveryArchive.open(files.a, recoveryKey: key)
+        let b = try EncryptedRecoveryArchive.open(files.b, recoveryKey: key)
+        try AppOwnedBackup.restore(a, into: earlier.context, defaults: earlier.defaults)
+        try AppOwnedBackup.restore(b, into: later.context, defaults: later.defaults)
+
+        func check(_ device: Device, expected: [UUID: UUID], memo: String, reps: Int) throws {
+            let context = ModelContext(device.container)
+            let workouts = try context.fetch(FetchDescriptor<ExerciseRecord>())
+            let sets = try context.fetch(FetchDescriptor<WorkoutSet>())
+            #expect(workouts.count == expected.count && Set(workouts.map(\.id)) == Set(expected.values))
+            #expect(sets.count == expected.count && Set(sets.map(\.id)) == Set(expected.keys))
+            #expect(sets.allSatisfy { $0.exerciseRecord?.id == expected[$0.id] })
+            #expect(workouts.first { $0.id == editedID }?.memo == memo)
+            #expect(sets.first { $0.id == editedSetID }?.reps == reps)
+        }
+        let original = [editedSetID: editedID, removedSetID: removedID]
+        let latest = [editedSetID: editedID, addedSetID: addedID]
+        try check(earlier, expected: original, memo: "before", reps: 4)
+        try check(later, expected: latest, memo: "after", reps: 6)
+
+        // Replacement edits collide on stable IDs; the new workout cannot be imported on its own.
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(b, into: earlier.context, defaults: earlier.defaults,
+                                       mode: .mergeAfterOwnershipVerification)
+        }
+        try check(earlier, expected: original, memo: "before", reps: 4)
+
+        // After explicit reconciliation, a record absent from B remains on a populated destination.
+        // File merge is additive and has no remote-deletion log.
+        let reconciliation = ModelContext(earlier.container)
+        let workout = try #require(reconciliation.fetch(FetchDescriptor<ExerciseRecord>()).first { $0.id == editedID })
+        let set = try #require(reconciliation.fetch(FetchDescriptor<WorkoutSet>()).first { $0.id == editedSetID })
+        workout.memo = "after"
+        set.reps = 6
+        try reconciliation.save()
+        let merged = try AppOwnedBackup.restore(b, into: reconciliation, defaults: earlier.defaults,
+                                                mode: .mergeAfterOwnershipVerification)
+        #expect(merged.insertedRowCount == 2 && merged.enrichedRowCount == 0)
+        let repeated = try AppOwnedBackup.restore(b, into: reconciliation, defaults: earlier.defaults,
+                                                  mode: .mergeAfterOwnershipVerification)
+        #expect(repeated.insertedRowCount == 0 && repeated.enrichedRowCount == 0)
+        try check(earlier, expected: [editedSetID: editedID, removedSetID: removedID, addedSetID: addedID],
+                  memo: "after", reps: 6)
+    }
+
+    @Test func encryptedFullHistoryRecovers410WorkoutsAnd1979SetsOverALegacyDestination() throws {
+        func stableID(_ family: UInt8, _ index: Int) -> UUID {
+            UUID(uuid: (0, 0, 0, 0, 0, 0, 0x40, 0, 0x80, family, 0, 0, 0, 0,
+                        UInt8(index >> 8), UInt8(truncatingIfNeeded: index)))
+        }
+        func numberOfSets(_ index: Int) -> Int {
+            if index < 349 { return 5 }
+            return index < 400 ? 4 : 3
+        }
+        let markedWorkouts = [19, 409]
+        func seed(_ device: Device, legacy: Bool) throws {
+            let context = device.context
+            for index in 0..<(legacy ? 400 : 410) {
+                let date = Date(timeIntervalSince1970: 1_700_000_000 + Double(index) * 3600)
+                let count = numberOfSets(index)
+                let exercise = ExerciseRecord(date: date, exerciseType: "Fixture exercise", duration: 900)
+                exercise.id = stableID(1, index)
+                exercise.createdAt = date
+                exercise.healthKitWorkoutID = stableID(2, index).uuidString
+                exercise.plannedSetCount = legacy ? nil : count
+                exercise.effortSourceRaw = legacy ? nil : "user"
+                context.insert(exercise)
+                for sequence in 0..<count {
+                    let child = WorkoutSet(setNumber: sequence + 1, weight: 20, reps: 8, isCompleted: true,
+                                           plannedReps: legacy ? nil : 10, rpeSourceRaw: legacy ? nil : "estimated")
+                    child.id = stableID(3, index * 8 + sequence)
+                    child.exerciseRecord = exercise
+                    context.insert(child)
+                }
+                if !legacy && markedWorkouts.contains(index) {
+                    let place = try #require(WorkoutPlace(latitude: 0, longitude: Double(index) / 10,
+                                                          name: "Fixture gym \(index)", source: .manual))
+                    let location = WorkoutLocationRecord(localRecordID: exercise.id,
+                                                         healthKitWorkoutID: exercise.healthKitWorkoutID,
+                                                         payload: WorkoutLocationPayload(isIndoor: true, place: place))
+                    location.id = stableID(4, index)
+                    location.updatedAt = date
+                    context.insert(location)
+                    WorkoutTypeCorrectionStore(userDefaults: device.defaults)
+                        .setCorrectedTitle("Fixture title \(index)", for: stableID(2, index).uuidString)
+                }
+            }
+            try context.save()
+        }
+        let key = EncryptedRecoveryArchive.makeRecoveryKey()
+        let encrypted = try autoreleasepool {
+            let source = try Device()
+            defer { source.clean() }
+            try seed(source, legacy: false)
+            let bytes = try AppOwnedBackup.encode(from: source.context, defaults: source.defaults)
+            return try EncryptedRecoveryArchive.seal(bytes, recoveryKey: key)
+        }
+        let destination = try Device()
+        defer { destination.clean() }
+        try seed(destination, legacy: true)
+        #expect(try destination.context.fetchCount(FetchDescriptor<ExerciseRecord>()) == 400)
+        #expect(try destination.context.fetchCount(FetchDescriptor<WorkoutSet>()) == 1_949)
+        let decrypted = try EncryptedRecoveryArchive.open(encrypted, recoveryKey: key)
+        let imported = try AppOwnedBackup.restore(decrypted, into: destination.context, defaults: destination.defaults,
+                                                  mode: .mergeAfterOwnershipVerification)
+        #expect(imported.workoutCount == 410 && imported.setCount == 1_979)
+        #expect(imported.insertedRowCount == 42 && imported.enrichedRowCount == 2_349)
+        let repeated = try AppOwnedBackup.restore(decrypted, into: destination.context, defaults: destination.defaults,
+                                                  mode: .mergeAfterOwnershipVerification)
+        #expect(repeated.insertedRowCount == 0 && repeated.enrichedRowCount == 0)
+
+        let read = ModelContext(destination.container)
+        let workouts = try read.fetch(FetchDescriptor<ExerciseRecord>())
+        let sets = try read.fetch(FetchDescriptor<WorkoutSet>())
+        let locations = try read.fetch(FetchDescriptor<WorkoutLocationRecord>())
+        #expect(workouts.count == 410 && sets.count == 1_979 && locations.count == 2)
+        let indices = Dictionary(uniqueKeysWithValues: (0..<410).map { (stableID(1, $0), $0) })
+        let groups = Dictionary(grouping: sets, by: { $0.exerciseRecord?.id })
+        #expect(Set(workouts.map(\.id)) == Set(indices.keys))
+        for workout in workouts {
+            let index = try #require(indices[workout.id])
+            let count = numberOfSets(index)
+            #expect(workout.plannedSetCount == count && workout.effortSourceRaw == "user")
+            let children = groups[workout.id] ?? []
+            let expectedIDs = Set((0..<count).map { stableID(3, index * 8 + $0) })
+            #expect(Set(children.map(\.id)) == expectedIDs)
+        }
+        #expect(sets.allSatisfy { $0.plannedReps == 10 && $0.rpeSourceRaw == "estimated" && $0.reps == 8 })
+        let corrections = WorkoutTypeCorrectionStore(userDefaults: destination.defaults)
+        for index in markedWorkouts {
+            let id = stableID(2, index).uuidString
+            let location = try #require(locations.first { $0.localRecordID == stableID(1, index) })
+            #expect(location.healthKitWorkoutID == id && location.payload?.isIndoor == true)
+            #expect(location.payload?.place?.name == "Fixture gym \(index)")
+            #expect(location.payload?.place?.longitude == Double(index) / 10)
+            #expect(corrections.correctedTitle(for: id) == "Fixture title \(index)")
+        }
+    }
+
+    @Test func preferencesOnlyRestoreReportsZeroAppRowsAndWorkouts() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        from.defaults.set(WeightUnit.lb.rawValue, forKey: WeightUnit.storageKey)
+        let bytes = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        let result = try AppOwnedBackup.restore(bytes, into: to.context, defaults: to.defaults)
+        #expect(result.archiveRowCount == 0 && result.workoutCount == 0 && result.setCount == 0)
+        #expect(result.insertedRowCount == 0 && result.enrichedRowCount == 0)
+        #expect(to.defaults.string(forKey: WeightUnit.storageKey) == WeightUnit.lb.rawValue)
+    }
+
+    @Test func malformedExerciseDefaultIDIsRejectedBeforeModelInitialization() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        from.context.insert(ExerciseDefaultRecord(exerciseDefinitionID: "valid-id"))
+        try from.context.save()
+        var archive = try object(AppOwnedBackup.encode(from: from.context, defaults: from.defaults))
+        var tables = try #require(archive["tables"] as? [String: [[String: Any]]])
+        var row = try #require(tables["ExerciseDefaultRecord"]?.first)
+        var fields = try #require(row["fields"] as? [String: Data])
+        fields["exerciseDefinitionID"] = try JSONEncoder().encode("")
+        row["fields"] = fields
+        tables["ExerciseDefaultRecord"] = [row]
+        archive["tables"] = tables
+        #expect(throws: AppOwnedBackup.Failure.invalidArchive) {
+            try AppOwnedBackup.restore(binary(archive), into: to.context, defaults: to.defaults)
+        }
+        #expect(try ModelContext(to.container).fetchCount(FetchDescriptor<ExerciseDefaultRecord>()) == 0)
+    }
+
+    @Test func rejectsDuplicateIdentitiesAndDamagedAttachmentBeforeCommitting() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        from.context.insert(ExerciseRecord(exerciseType: "fixture"))
+        from.context.insert(PostureAssessmentRecord(frontImageData: Data([10])))
+        try from.context.save()
+        let source = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        var archive = try object(source)
+        var tables = try #require(archive["tables"] as? [String: [[String: Any]]])
+        let workout = try #require(tables["ExerciseRecord"]?.first)
+        tables["ExerciseRecord"] = [workout, workout]
+        archive["tables"] = tables
+        #expect(throws: AppOwnedBackup.Failure.duplicateIdentity) {
+            try AppOwnedBackup.restore(binary(archive), into: to.context, defaults: to.defaults)
+        }
+        tables["ExerciseRecord"] = [workout]
+        var portrait = try #require(tables["PostureAssessmentRecord"]?.first)
+        var fields = try #require(portrait["fields"] as? [String: Data])
+        fields["frontImageData"] = Data([7])
+        portrait["fields"] = fields
+        tables["PostureAssessmentRecord"] = [portrait]
+        archive["tables"] = tables
+        #expect(throws: AppOwnedBackup.Failure.invalidArchive) {
+            try AppOwnedBackup.restore(binary(archive), into: to.context, defaults: to.defaults)
+        }
+        #expect(try ModelContext(to.container).fetchCount(FetchDescriptor<ExerciseRecord>()) == 0)
+    }
+
+    @Test func refusesDifferentDestinationAndResumesCommittedRowsWithMissingDefaults() throws {
+        let from = try Device(), to = try Device()
+        defer { from.clean(); to.clean() }
+        from.context.insert(ExerciseRecord(exerciseType: "source"))
+        try from.context.save()
+        let key = "workout.type.corrections.v1"
+        from.defaults.set(["id": "source title"], forKey: key)
+        let bytes = try AppOwnedBackup.encode(from: from.context, defaults: from.defaults)
+        to.defaults.set(["id": "existing title"], forKey: key)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(bytes, into: to.context, defaults: to.defaults)
+        }
+        #expect(try ModelContext(to.container).fetchCount(FetchDescriptor<ExerciseRecord>()) == 0)
+        to.defaults.removeObject(forKey: key)
+        try AppOwnedBackup.restore(bytes, into: to.context, defaults: to.defaults)
+        to.defaults.removeObject(forKey: key)
+        try AppOwnedBackup.restore(bytes, into: to.context, defaults: to.defaults)
+        #expect(to.defaults.dictionary(forKey: key) as? [String: String] == ["id": "source title"])
+        let local = try #require(to.context.fetch(FetchDescriptor<ExerciseRecord>()).first)
+        local.memo = "unsaved"
+        #expect(throws: AppOwnedBackup.Failure.unsavedChanges) {
+            try AppOwnedBackup.restore(bytes, into: to.context, defaults: to.defaults)
+        }
+        try to.context.save()
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(bytes, into: to.context, defaults: to.defaults)
+        }
+        #expect(local.memo == "unsaved")
+    }
+}
+
+extension AppOwnedBackupTests {
+    @Test func readsVersionOneHourlyDateOnlyIdentityAndRepeatsWithoutDuplicates() throws {
+        let source = try Device(), destination = try Device()
+        defer { source.clean(); destination.clean() }
+        let hour = Date(timeIntervalSince1970: 1_700_002_800)
+        let created = hour.addingTimeInterval(23)
+        let score = HourlyScoreSnapshot(date: hour, readinessScore: 71)
+        score.createdAt = created
+        source.context.insert(score)
+        try source.context.save()
+        var archive = try object(AppOwnedBackup.encode(from: source.context, defaults: source.defaults))
+        var tables = try #require(archive["tables"] as? [String: [[String: Any]]])
+        var row = try #require(tables["HourlyScoreSnapshot"]?.first)
+        // The first file format identified hourly snapshots with the raw date's bit pattern alone.
+        row["identity"] = hour.timeIntervalSinceReferenceDate.bitPattern.description
+        tables["HourlyScoreSnapshot"] = [row]
+        archive["tables"] = tables
+        archive["version"] = 1
+        let legacy = try binary(archive)
+        for count in [1, 0] {
+            let result = try AppOwnedBackup.restore(legacy, into: destination.context, defaults: destination.defaults)
+            #expect(result.insertedRowCount == count)
+            let actual = try ModelContext(destination.container).fetch(FetchDescriptor<HourlyScoreSnapshot>())
+            try #require(actual.count == 1)
+            #expect(actual[0].date == hour && actual[0].createdAt == created && actual[0].readinessScore == 71)
+            #expect(actual[0].wellnessScore == nil && actual[0].conditionScore == nil)
+        }
+    }
+}
+
+extension AppOwnedBackupTests {
+    @Test func fileMergeAfterOwnershipConfirmationRejectsOutdatedHourlySiblingAndRollsBack() throws {
+        let source = try Device(), target = try Device()
+        defer { source.clean(); target.clean() }
+        let hour = Date(timeIntervalSince1970: 1_700_002_800)
+        let original = HourlyScoreSnapshot(date: hour, conditionScore: 65, hrvValue: 37)
+        original.createdAt = hour.addingTimeInterval(7)
+        source.context.insert(original)
+        try source.context.save()
+        let first = try AppOwnedBackup.encode(from: source.context, defaults: source.defaults)
+        _ = try AppOwnedBackup.restore(first, into: target.context, defaults: target.defaults)
+        let localRefresh = hour.addingTimeInterval(55)
+        do {
+            let ctx = ModelContext(target.container)
+            let edited = try #require(ctx.fetch(FetchDescriptor<HourlyScoreSnapshot>()).first)
+            edited.createdAt = localRefresh
+            edited.conditionScore = 88
+            try ctx.save()
+        }
+        source.context.insert(ExerciseRecord(date: hour, exerciseType: "Fixture", duration: 90))
+        try source.context.save()
+        let archive = try AppOwnedBackup.encode(from: source.context, defaults: source.defaults)
+        #expect(throws: AppOwnedBackup.Failure.destinationConflict) {
+            try AppOwnedBackup.restore(archive, into: target.context, defaults: target.defaults,
+                                       mode: .mergeAfterOwnershipVerification)
+        }
+        let cold = ModelContext(target.container)
+        let rows = try cold.fetch(FetchDescriptor<HourlyScoreSnapshot>())
+        try #require(rows.count == 1)
+        #expect(rows[0].date == hour && rows[0].createdAt == localRefresh)
+        #expect(rows[0].conditionScore == 88 && rows[0].hrvValue == 37)
+        #expect(try cold.fetchCount(FetchDescriptor<ExerciseRecord>()) == 0)
+    }
+}

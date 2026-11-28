@@ -298,6 +298,21 @@ struct VisionDashboardWindowScene: View {
                             VStack(alignment: .leading, spacing: 6) {
                                 Text(verbatim: workout.title)
                                     .font(.headline)
+                                if !workout.sets.isEmpty {
+                                    DisclosureGroup("Completed Sets") {
+                                        ForEach(workout.sets, id: \.id) { set in
+                                            HStack {
+                                                Text("Set \(set.number)")
+                                                Spacer()
+                                                if let weight = set.weight {
+                                                    Text(verbatim: Measurement(value: weight, unit: UnitMass.kilograms).formatted(.measurement(width: .abbreviated, usage: .asProvided)))
+                                                }
+                                                if let reps = set.reps { Text("\(reps.formattedWithSeparator) reps") }
+                                                if let rpe = set.rpe { Text("RPE \(rpe.formatted())") }
+                                            }
+                                        }
+                                    }
+                                }
                                 Text(workout.date.formatted(date: .abbreviated, time: .shortened))
                                     .font(.callout)
                                     .foregroundStyle(.secondary)

@@ -186,8 +186,10 @@ struct HealthKitObserverManagerTests {
     func workoutRechecksHabitReminders() async {
         let gate = ObserverWorkGate()
         let completions = Mutex(0)
+        let refreshes = Mutex(0)
+        let coordinator = ObserverRefreshStub(onForce: { refreshes.withLock { $0 += 1 } })
         let task = HealthKitObserverManager.handleObserverUpdate(
-            sampleType: HKSampleType.workoutType(), error: nil, coordinator: ObserverRefreshStub(),
+            sampleType: HKSampleType.workoutType(), error: nil, coordinator: coordinator,
             notificationEvaluator: nil, watchReminder: await ObserverWatchReminderSpy(gate: ObserverWorkGate()),
             refreshExerciseReminders: { await gate.wait() },
             completion: { completions.withLock { $0 += 1 } }
@@ -196,6 +198,7 @@ struct HealthKitObserverManagerTests {
         #expect(completions.withLock { $0 } == 0)
         await gate.release()
         await task?.value
+        #expect(refreshes.withLock { $0 } == 1)
         #expect(completions.withLock { $0 } == 1)
     }
 
@@ -275,8 +278,9 @@ private final class ObserverStoreSpy: HealthKitObserverStoring {
 }
 
 private struct ObserverRefreshStub: AppRefreshCoordinating {
+    var onForce: @Sendable () -> Void = {}
     func requestRefresh(source: RefreshSource) async -> Bool { false }
-    func forceRefresh() async {}
+    func forceRefresh() async { onForce() }
     func invalidateCacheOnly() async {}
     func makeRefreshStream() async -> AsyncStream<RefreshSource> {
         AsyncStream { $0.finish() }

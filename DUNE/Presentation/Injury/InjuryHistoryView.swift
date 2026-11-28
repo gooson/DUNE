@@ -125,7 +125,7 @@ struct InjuryHistoryView: View {
                 recordToDelete = nil
             }
         } message: {
-            Text("This injury record will be permanently deleted across all your devices.")
+            Text("This injury record will be deleted from this device.")
         }
     }
 

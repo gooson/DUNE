@@ -21,7 +21,9 @@ final class ExerciseViewModel {
     private var oldestFetchedDate: Date?
     private var loadRequestID = 0
 
-    init(workoutService: WorkoutQuerying? = nil, exerciseLibrary: ExerciseLibraryQuerying? = nil) {
+    init(workoutService: WorkoutQuerying? = nil, exerciseLibrary: ExerciseLibraryQuerying? = nil,
+         personalRecordStore: PersonalRecordStore = .shared) {
+        self.personalRecordStore = personalRecordStore
         self.workoutService = workoutService ?? WorkoutQueryService(manager: .shared)
         self.exerciseLibrary = exerciseLibrary ?? ExerciseLibraryService.shared
     }
@@ -33,7 +35,7 @@ final class ExerciseViewModel {
     // comes from @Query, healthKitWorkouts from async fetch), so double invalidation
     // does not occur. If batch updates are needed in the future, add an
     // updateData(workouts:records:) method that sets both before a single invalidation.
-    private let personalRecordStore = PersonalRecordStore.shared
+    private let personalRecordStore: PersonalRecordStore
 
     private func invalidateCache() {
         let tombstoned = DeletedWorkoutTombstoneStore.shared.tombstonedIDs
@@ -53,6 +55,8 @@ final class ExerciseViewModel {
         for i in externalWorkouts.indices {
             let prTypes = personalRecordStore.updateIfNewRecords(externalWorkouts[i])
             if !prTypes.isEmpty {
+                // This list may discover the record before Activity or the HealthKit observer.
+                _ = personalRecordStore.evaluateReward(for: externalWorkouts[i], newPRTypes: prTypes)
                 externalWorkouts[i].isPersonalRecord = true
                 externalWorkouts[i].personalRecordTypes = prTypes
             }
@@ -73,25 +77,30 @@ final class ExerciseViewModel {
         allExercises = items.sorted { $0.date > $1.date }
     }
 
-    func loadHealthKitWorkouts() async {
+    func loadHealthKitWorkouts(preservingLoadedPages: Bool = false) async {
         let requestID = beginLoadRequest()
         isLoading = true
         defer { finishLoadRequest(requestID) }
 
-        hasMoreData = true
-        oldestFetchedDate = nil
+        let end = Date()
+        let firstPageStart = Calendar.current.date(byAdding: .day, value: -Self.pageSizeDays, to: end)
+        var olderCursor: Date?
+        if preservingLoadedPages, let firstPageStart, let cursor = oldestFetchedDate, cursor < firstPageStart {
+            olderCursor = cursor
+        }
 
         do {
-            let workouts = try await workoutService.fetchWorkouts(days: Self.pageSizeDays)
+            let workouts: [WorkoutSummary]
+            if let olderCursor {
+                workouts = try await workoutService.fetchWorkouts(start: olderCursor, end: end)
+            } else {
+                workouts = try await workoutService.fetchWorkouts(days: Self.pageSizeDays)
+            }
             guard isCurrentLoadRequest(requestID) else { return }
             healthKitWorkouts = workouts
-
-            if let oldest = workouts.last?.date {
-                oldestFetchedDate = oldest
-            }
-            // If fewer results than expected, no more data
-            if workouts.isEmpty {
-                hasMoreData = false
+            if olderCursor == nil {
+                oldestFetchedDate = workouts.last?.date
+                hasMoreData = !workouts.isEmpty
             }
         } catch {
             guard isCurrentLoadRequest(requestID) else { return }

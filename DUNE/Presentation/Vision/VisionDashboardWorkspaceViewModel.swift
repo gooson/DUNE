@@ -76,6 +76,7 @@ struct VisionDashboardWorkspaceSummary: Sendable {
         let duration: TimeInterval
         let date: Date
         let calories: Double?
+        let sets: [WorkoutStrengthArchive.SetEntry]
     }
 
     struct ActivitySummary: Sendable {
@@ -433,7 +434,8 @@ final class VisionDashboardWorkspaceViewModel {
                     title: $0.type,
                     duration: $0.duration,
                     date: $0.date,
-                    calories: $0.calories
+                    calories: $0.calories,
+                    sets: $0.strengthArchive?.sets.sorted { $0.number < $1.number } ?? []
                 )
             }
         )
