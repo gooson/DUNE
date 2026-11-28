@@ -146,6 +146,11 @@ struct ActivityView: View {
 
     private var isRegular: Bool { sizeClass == .regular }
 
+    private var contentMaxWidth: CGFloat {
+        guard isRegular else { return .infinity }
+        return ActivityTabletGrid.isEnabled ? ActivityTabletGrid.contentMaxWidth : DS.Layout.rootContentMaxWidth
+    }
+
     private let refreshSignal: Int
     private let scoreRefreshService: ScoreRefreshService?
 
@@ -206,7 +211,7 @@ struct ActivityView: View {
                     }
                 }
                 .padding()
-                .frame(maxWidth: isRegular ? DS.Layout.rootContentMaxWidth : .infinity)
+                .frame(maxWidth: contentMaxWidth)
                 .frame(maxWidth: .infinity)
                 .coordinateSpace(name: TabHeroStartLine.coordinateSpace)
             }
@@ -623,7 +628,7 @@ struct ActivityView: View {
         @ViewBuilder leading: () -> Leading,
         @ViewBuilder trailing: () -> Trailing
     ) -> some View {
-        if isRegular && !dynamicTypeSize.isAccessibilitySize {
+        if isRegular && !ActivityTabletGrid.isEnabled && !dynamicTypeSize.isAccessibilitySize {
             HStack(alignment: .top, spacing: DS.Spacing.md) {
                 leading().frame(maxWidth: .infinity, alignment: .topLeading)
                 trailing().frame(maxWidth: .infinity, alignment: .topLeading)
