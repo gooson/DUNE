@@ -1,6 +1,10 @@
 import Foundation
 import CoreFoundation
+import CloudKit
 import SwiftData
+
+private protocol LegacyCloudOptional {}
+extension Optional: LegacyCloudOptional {}
 
 /// Plaintext for the user-directed encrypted archive. Never persist these bytes as a staging file.
 @MainActor
@@ -93,9 +97,15 @@ enum AppOwnedBackup {
         let name: String
         let capture: (M) throws -> Data
         let restore: (M, Data) throws -> Void
+        let cloudValue: (CKRecord) throws -> Data?
+        let absentOptional: Data?
+        let cloudDate: Bool
 
         init<V: Codable>(_ name: String, _ path: ReferenceWritableKeyPath<M, V>) {
             self.name = name
+            cloudValue = { record in try LegacyCloud.scalar(record, name: name, type: V.self) }
+            cloudDate = V.self == Date.self || V.self == Date?.self
+            absentOptional = V.self is any LegacyCloudOptional.Type ? Data("null".utf8) : nil
             capture = { model in
                 let encoder = JSONEncoder()
                 encoder.outputFormatting = [.sortedKeys]
@@ -107,6 +117,11 @@ enum AppOwnedBackup {
         // Keep photos and binary attachments in binary form, distinguishing nil from zero bytes.
         init(_ name: String, _ path: ReferenceWritableKeyPath<M, Data?>) {
             self.name = name
+            cloudDate = false
+            absentOptional = Data([0])
+            cloudValue = { record in
+                try LegacyCloud.binary(record, name: name, limit: LegacyCloud.photoLimit).map { Data([1]) + $0 }
+            }
             capture = { model in
                 guard let bytes = model[keyPath: path] else { return Data([0]) }
                 return Data([1]) + bytes
@@ -126,6 +141,7 @@ enum AppOwnedBackup {
         let name: String
         let capture: (ModelContext) throws -> [Row]
         let stage: ([Row], ModelContext, inout Parents) throws -> Void
+        let importCloud: ([CKRecord], ModelContext, [CKRecord.ID: UUID], inout Parents) throws -> Int
 
         init<M: PersistentModel>(_ name: String, create: @escaping (Row) throws -> M,
                                  identity: @escaping (M) -> String,
@@ -145,6 +161,60 @@ enum AppOwnedBackup {
                     return Row(identity: id, parent: parent(model), fields: values)
                 }.sorted { $0.identity < $1.identity }
             }
+            importCloud = { records, context, habitIDs, parents in
+                let existing = try context.fetch(FetchDescriptor<M>())
+                var local = [String: M]()
+                for model in existing {
+                    guard local.updateValue(model, forKey: identity(model)) == nil else { throw Failure.duplicateIdentity }
+                }
+                var seen = Set<String>()
+                var inserted = 0
+                let known = Set(fields.map { "CD_" + $0.name })
+                for record in records {
+                    try LegacyCloud.validateKeys(record, table: name, known: known)
+                    let id: String
+                    if name == "HourlyScoreSnapshot" {
+                        guard let date = record["CD_date"] as? Date, date.timeIntervalSinceReferenceDate.isFinite else {
+                            throw Failure.invalidArchive
+                        }
+                        id = date.timeIntervalSinceReferenceDate.bitPattern.description
+                    } else { id = try LegacyCloud.identifier(record).uuidString }
+                    guard seen.insert(id).inserted else { throw Failure.duplicateIdentity }
+                    let existingModel = local[id]
+                    let parentID = try LegacyCloud.parent(of: record, table: name, habitIDs: habitIDs)
+                    var values = [String: Data]()
+                    for field in fields {
+                        if let data = try field.cloudValue(record) { values[field.name] = data }
+                        else if existingModel == nil {
+                            // Initializers may generate dates and normalize defaults for *new* user input.
+                            // A missing old field must instead use its archived schema's default or nil.
+                            values[field.name] = try field.absentOptional ?? LegacyCloud.declaredDefault(table: name, field: field.name)
+                        }
+                    }
+                    let row = Row(identity: id, parent: parentID, fields: values)
+                    let model = try existingModel ?? create(row)
+                    if existingModel != nil, parent(model) != parentID { throw Failure.destinationConflict }
+                    for field in fields {
+                        guard let incoming = values[field.name] else { continue }
+                        if existingModel != nil {
+                            let current = try field.capture(model)
+                            if try LegacyCloud.same(current, incoming, isDate: field.cloudDate) { continue }
+                            // Nil remote fields were skipped above. Only fill a nil local value.
+                            guard current == Data("null".utf8) || current == Data([0]) else { throw Failure.destinationConflict }
+                        }
+                        try field.restore(model, incoming)
+                    }
+                    guard identity(model) == id else { throw Failure.invalidArchive }
+                    if existingModel == nil {
+                        try connect(model, parentID, &parents)
+                        context.insert(model)
+                        inserted += 1
+                    } else if let habit = model as? HabitDefinition {
+                        parents.habits[habit.id] = habit
+                    }
+                }
+                return inserted
+            }
             stage = { rows, context, parents in
                 var seen = Set<String>()
                 for row in rows {
@@ -160,6 +230,188 @@ enum AppOwnedBackup {
                     context.insert(model)
                 }
             }
+        }
+    }
+
+    /// The local model/table white list also defines the legacy CloudKit field types and key paths.
+    private static var legacyCloudTables: [Table] {
+        [bodyCompositionRecordTable, customExerciseTable, workoutTemplateTable, injuryRecordTable,
+         habitDefinitionTable, habitLogTable, userCategoryTable, exerciseDefaultRecordTable, hourlyScoreSnapshotTable, postureAssessmentRecordTable]
+    }
+
+    static var legacyCloudRecordTypes: Set<String> { Set(legacyCloudTables.map { "CD_" + $0.name }) }
+
+    /// The caller owns this context's save/rollback. No preferences or CloudKit records are written.
+    static func importLegacyCloudRecords(_ records: [CKRecord], into context: ModelContext) throws -> Int {
+        let types = legacyCloudRecordTypes
+        let grouped = Dictionary(grouping: records.filter { types.contains($0.recordType) }, by: \.recordType)
+        var ids = Set<CKRecord.ID>()
+        for group in grouped.values {
+            for record in group where !ids.insert(record.recordID).inserted { throw Failure.duplicateIdentity }
+        }
+        var habitIDs = [CKRecord.ID: UUID]()
+        for habit in grouped["CD_HabitDefinition", default: []] {
+            habitIDs[habit.recordID] = try LegacyCloud.identifier(habit)
+        }
+        var parents = Parents()
+        var inserted = 0
+        for table in legacyCloudTables {
+            guard let rows = grouped["CD_" + table.name] else { continue }
+            inserted += try table.importCloud(rows, context, habitIDs, &parents)
+        }
+        return inserted
+    }
+
+    private enum LegacyCloud {
+        static let photoLimit = 32 * 1024 * 1024
+        private static let collectionLimit = 4 * 1024 * 1024
+
+        static func identifier(_ record: CKRecord) throws -> UUID {
+            guard let raw = record["CD_id"] as? String, let id = UUID(uuidString: raw) else { throw Failure.invalidArchive }
+            return id
+        }
+
+        static func parent(of record: CKRecord, table: String, habitIDs: [CKRecord.ID: UUID]) throws -> UUID? {
+            guard table == "HabitLog" else { return nil }
+            if let name = record["CD_habitDefinition"] as? String, name.isEmpty { throw Failure.missingParent }
+            guard let id = LegacyWorkoutRecovery.parentRecordID(record, key: "CD_habitDefinition"),
+                  let resolved = habitIDs[id] else { throw Failure.missingParent }
+            return resolved
+        }
+
+        /// Literal attribute defaults from the released V1–V17 definitions. Missing identity,
+        /// measurement, its timestamps, required catalog reference or routine entries are unrecoverable.
+        static func declaredDefault(table: String, field: String) throws -> Data {
+            let encoder = JSONEncoder()
+            switch (table, field) {
+            case ("BodyCompositionRecord", "memo"), ("InjuryRecord", "memo"), ("PostureAssessmentRecord", "memo"):
+                return try encoder.encode("")
+            case ("CustomExercise", "primaryMusclesRaw"), ("CustomExercise", "secondaryMusclesRaw"):
+                return try encoder.encode([String]())
+            case ("CustomExercise", "categoryRaw"): return try encoder.encode(ExerciseCategory.strength.rawValue)
+            case ("CustomExercise", "equipmentRaw"): return try encoder.encode(Equipment.bodyweight.rawValue)
+            case ("CustomExercise", "inputTypeRaw"), ("UserCategory", "defaultInputTypeRaw"):
+                return try encoder.encode(ExerciseInputType.setsRepsWeight.rawValue)
+            case ("CustomExercise", "metValue"): return try encoder.encode(3.5)
+            case ("InjuryRecord", "severityRaw"), ("HabitDefinition", "goalValue"): return try encoder.encode(1)
+            case ("HabitDefinition", "iconCategoryRaw"): return try encoder.encode("health")
+            case ("HabitDefinition", "habitTypeRaw"): return try encoder.encode("check")
+            case ("HabitDefinition", "frequencyTypeRaw"): return try encoder.encode("daily")
+            case ("HabitDefinition", "weeklyTargetDays"): return try encoder.encode(3)
+            case ("HabitDefinition", "recurringStartPointRaw"): return try encoder.encode("createdAt")
+            case ("HabitDefinition", "reminderHour"): return try encoder.encode(9)
+            case ("HabitDefinition", "timeOfDayRaw"): return try encoder.encode("anytime")
+            case ("HabitDefinition", "isAutoLinked"), ("HabitDefinition", "isArchived"), ("HabitLog", "isAutoCompleted"),
+                 ("ExerciseDefaultRecord", "isPreferred"), ("ExerciseDefaultRecord", "isManualOverride"):
+                return try encoder.encode(false)
+            case ("HabitDefinition", "reminderMinute"), ("HabitDefinition", "sortOrder"), ("UserCategory", "sortOrder"),
+                 ("PostureAssessmentRecord", "overallScore"): return try encoder.encode(0)
+            case ("UserCategory", "iconName"): return try encoder.encode("tag.fill")
+            case ("UserCategory", "colorHex"): return try encoder.encode("007AFF")
+            case ("PostureAssessmentRecord", "frontMetricsJSON"), ("PostureAssessmentRecord", "sideMetricsJSON"),
+                 ("PostureAssessmentRecord", "frontJointPositionsJSON"), ("PostureAssessmentRecord", "sideJointPositionsJSON"):
+                return try encoder.encode("[]")
+            case ("PostureAssessmentRecord", "heightEstimationRaw"): return try encoder.encode(HeightEstimationType.reference.rawValue)
+            default: throw Failure.invalidArchive
+            }
+        }
+
+        static func validateKeys(_ record: CKRecord, table: String, known: Set<String>) throws {
+            for key in record.allKeys() where key.hasPrefix("CD_") {
+                if key == "CD_entityName" || (table == "HabitLog" && key == "CD_habitDefinition") { continue }
+                let base = key.hasSuffix("_ckAsset") ? String(key.dropLast("_ckAsset".count)) : key
+                guard known.contains(base) else { throw Failure.invalidArchive }
+            }
+        }
+
+        static func same(_ local: Data, _ remote: Data, isDate: Bool) throws -> Bool {
+            if local == remote { return true }
+            guard isDate, let lhs = try JSONDecoder().decode(Date?.self, from: local),
+                  let rhs = try JSONDecoder().decode(Date?.self, from: remote) else { return false }
+            // CloudKit's transport can round existing submillisecond times.
+            return abs(lhs.timeIntervalSince(rhs)) < 0.0011
+        }
+
+        static func binary(_ record: CKRecord, name: String, limit: Int) throws -> Data? {
+            let key = "CD_" + name
+            let inline = record[key], external = record[key + "_ckAsset"]
+            guard inline != nil || external != nil else { return nil }
+            guard inline == nil || external == nil else { throw Failure.invalidArchive }
+            if let data = inline as? Data {
+                guard data.count <= limit else { throw Failure.invalidArchive }
+                return data
+            }
+            guard let asset = (external ?? inline) as? CKAsset, let url = asset.fileURL else { throw Failure.invalidArchive }
+            let file = try FileHandle(forReadingFrom: url)
+            defer { try? file.close() }
+            let size = try file.seekToEnd()
+            guard size <= UInt64(limit) else { throw Failure.invalidArchive }
+            try file.seek(toOffset: 0)
+            var bytes = Data()
+            while let chunk = try file.read(upToCount: min(1_048_576, limit - bytes.count + 1)), !chunk.isEmpty {
+                bytes.append(chunk)
+                guard bytes.count <= limit else { throw Failure.invalidArchive }
+            }
+            guard bytes.count == Int(size) else { throw Failure.invalidArchive }
+            return bytes
+        }
+
+        static func scalar<V: Codable>(_ record: CKRecord, name: String, type: V.Type) throws -> Data? {
+            let key = "CD_" + name
+            let raw = record[key], external = record[key + "_ckAsset"]
+            guard raw != nil || external != nil else { return nil }
+            guard raw == nil || external == nil else { throw Failure.invalidArchive }
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.sortedKeys]
+            if type == [String].self {
+                if let strings = raw as? [String] { return try encoder.encode(strings) }
+                guard let bytes = try binary(record, name: name, limit: collectionLimit) else { throw Failure.invalidArchive }
+                return try encoder.encode(collection([String].self, bytes: bytes))
+            }
+            if type == [TemplateEntry].self {
+                guard let bytes = try binary(record, name: name, limit: collectionLimit) else { throw Failure.invalidArchive }
+                return try encoder.encode(collection([TemplateEntry].self, bytes: bytes))
+            }
+            if type == String.self || type == String?.self {
+                if let value = raw as? String { return try encoder.encode(value) }
+                if raw is CKAsset || external != nil, let data = try binary(record, name: name, limit: collectionLimit),
+                   let value = String(data: data, encoding: .utf8) { return try encoder.encode(value) }
+                throw Failure.invalidArchive
+            }
+            guard external == nil else { throw Failure.invalidArchive }
+            if type == UUID.self { return try encoder.encode(identifier(record)) }
+            if type == Date.self || type == Date?.self, let value = raw as? Date { return try encoder.encode(value) }
+            guard let number = raw as? NSNumber else { throw Failure.invalidArchive }
+            if type == Bool.self || type == Bool?.self {
+                guard number.compare(0) == .orderedSame || number.compare(1) == .orderedSame else { throw Failure.invalidArchive }
+                return try encoder.encode(number.boolValue)
+            }
+            guard CFGetTypeID(number) != CFBooleanGetTypeID() else { throw Failure.invalidArchive }
+            if type == Int.self || type == Int?.self, number.compare(NSNumber(value: number.intValue)) == .orderedSame {
+                return try encoder.encode(number.intValue)
+            }
+            if type == Double.self || type == Double?.self, number.doubleValue.isFinite {
+                return try encoder.encode(number.doubleValue)
+            }
+            throw Failure.invalidArchive
+        }
+
+        private static func collection<T: Decodable>(_ type: T.Type, bytes: Data) throws -> T {
+            if let json = try? JSONDecoder().decode(type, from: bytes) { return json }
+            if let plist = try? PropertyListDecoder().decode(type, from: bytes) { return plist }
+            // NSPersistentCloudKitContainer may wrap a transformable in an NSSecureCoding archive.
+            guard let plist = try? PropertyListSerialization.propertyList(from: bytes, format: nil) as? [String: Any],
+                  plist["$archiver"] as? String == "NSKeyedArchiver" else { throw Failure.invalidArchive }
+            let allowed: [AnyClass] = [NSArray.self, NSDictionary.self, NSString.self, NSNumber.self, NSDate.self,
+                                       NSData.self, NSUUID.self, NSNull.self]
+            let root = try NSKeyedUnarchiver.unarchivedObject(ofClasses: allowed, from: bytes)
+            if let data = root as? Data {
+                if let decoded = try? JSONDecoder().decode(type, from: data) { return decoded }
+                return try PropertyListDecoder().decode(type, from: data)
+            }
+            guard let root, JSONSerialization.isValidJSONObject(root) else { throw Failure.invalidArchive }
+            let json = try JSONSerialization.data(withJSONObject: root)
+            return try JSONDecoder().decode(type, from: json)
         }
     }
 

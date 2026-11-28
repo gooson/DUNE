@@ -429,17 +429,20 @@ struct SettingsDetailView: View {
             Button {
                 Task {
                     await recovery.restore {
-                        try await LegacyWorkoutRecovery.restore(into: modelContext.container)
+                        let container = modelContext.container
+                        let result = try await LegacyWorkoutRecovery.restore(into: container)
+                        NotificationCenter.default.post(name: BackupFileWorkflow.didRestoreRecords, object: container)
+                        return result
                     }
                 }
             } label: {
-                Label("Restore workouts from an earlier iCloud backup", systemImage: "icloud.and.arrow.down")
+                Label("Restore DUNE records from an earlier iCloud backup", systemImage: "icloud.and.arrow.down")
             }
             .disabled(recovery.isRestoring)
             .accessibilityIdentifier("settings-row-restore-legacy-workouts")
 
             if recovery.isRestoring {
-                ProgressView("Reading your earlier workout backup…")
+                ProgressView("Reading your earlier iCloud backup…")
             } else if let message = recovery.message {
                 Text(verbatim: message)
                     .font(.footnote)
@@ -614,18 +617,19 @@ final class SettingsWorkoutRecovery {
         defer { isRestoring = false }
         do {
             let result = try await operation()
-            let summary = String(localized: "Restored \(result.workouts) workouts and \(result.sets) sets to this device.")
-            if result.locations > 0 {
-                let locationLabel = String(localized: "Workout location")
-                message = "\(summary)\n\(locationLabel) · \(result.locations.formatted())"
+            if result.workouts + result.sets + result.locations + result.otherRecords == 0 {
+                message = String(localized: "Recovery finished. No new records were added.")
             } else {
-                message = summary
+                let heading = String(localized: "Restored to this device")
+                let exercise = String(localized: "Workouts · \(result.workouts)    Sets · \(result.sets)")
+                let other = String(localized: "Workout locations · \(result.locations)    Other records · \(result.otherRecords)")
+                message = [heading, exercise, other].joined(separator: "\n")
             }
         } catch LegacyWorkoutRecovery.Failure.duplicateIdentity,
                 LegacyWorkoutRecovery.Failure.invalidRelationship,
                 LegacyWorkoutRecovery.Failure.localConflict,
                 LegacyWorkoutRecovery.Failure.invalidRecord {
-            message = String(localized: "Recovery stopped because the backup contains conflicting or unreadable records. Your local workouts are unchanged.")
+            message = String(localized: "Some backup records conflict with this device or could not be read. Recovery stopped before saving changes.")
         } catch {
             message = String(localized: "Couldn’t finish recovery. Check your iCloud connection and try again.")
         }

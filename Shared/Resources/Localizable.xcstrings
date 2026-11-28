@@ -38730,25 +38730,25 @@
         }
       }
     },
-    "Reading your earlier workout backup…" : {
+    "Reading your earlier iCloud backup…" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reading your earlier workout backup…"
+            "value" : "Reading your earlier iCloud backup…"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "以前のワークアウトのバックアップを読み込み中…"
+            "value" : "以前のiCloudバックアップを読み込み中…"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이전 운동 백업을 읽는 중…"
+            "value" : "이전 iCloud 백업을 읽는 중…"
           }
         }
       }
@@ -39859,6 +39859,29 @@
         }
       }
     },
+    "Recovery finished. No new records were added." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recovery finished. No new records were added."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "復元が完了しました。新しく追加された記録はありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "복원이 끝났습니다. 새로 추가된 기록이 없습니다."
+          }
+        }
+      }
+    },
     "Recovery first" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -40076,29 +40099,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "회복 상태"
-          }
-        }
-      }
-    },
-    "Recovery stopped because the backup contains conflicting or unreadable records. Your local workouts are unchanged." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recovery stopped because the backup contains conflicting or unreadable records. Your local workouts are unchanged."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "バックアップに競合または読み取れない記録があるため、復元を中止しました。このデバイスのワークアウトは変更されていません。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "백업에 충돌하거나 읽을 수 없는 기록이 있어 복구를 중단했습니다. 이 기기의 운동 기록은 그대로입니다."
           }
         }
       }
@@ -41200,6 +41200,29 @@
         }
       }
     },
+    "Restore DUNE records from an earlier iCloud backup" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore DUNE records from an earlier iCloud backup"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以前のiCloudバックアップからDUNEの記録を復元"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이전 iCloud 백업에서 DUNE 기록 복원"
+          }
+        }
+      }
+    },
     "Restore from Backup File" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -41234,48 +41257,25 @@
         }
       }
     },
-    "Restore workouts from an earlier iCloud backup" : {
+    "Restored to this device" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Restore workouts from an earlier iCloud backup"
+            "value" : "Restored to this device"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "以前のiCloudバックアップからワークアウトを復元"
+            "value" : "このデバイスに復元した記録"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이전 iCloud 백업에서 운동 복구"
-          }
-        }
-      }
-    },
-    "Restored %lld workouts and %lld sets to this device." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Restored %lld workouts and %lld sets to this device."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このデバイスにワークアウト%1$lld件とセット%2$lld件を復元しました。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 기기에 운동 %1$lld건과 세트 %2$lld개를 복구했습니다."
+            "value" : "이 기기에 복원한 기록"
           }
         }
       }
@@ -46667,6 +46667,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "안정적인 회복 — HRV가 안정적"
+          }
+        }
+      }
+    },
+    "Some backup records conflict with this device or could not be read. Recovery stopped before saving changes." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some backup records conflict with this device or could not be read. Recovery stopped before saving changes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一部のバックアップ記録がこのデバイスの記録と一致しないか、読み取れませんでした。変更を保存する前に復元を中止しました。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일부 백업 기록이 이 기기의 기록과 다르거나 읽을 수 없습니다. 변경 내용을 저장하기 전에 복원을 중단했습니다."
           }
         }
       }
@@ -57753,6 +57776,29 @@
         }
       }
     },
+    "Workout locations · %lld    Other records · %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workout locations · %lld    Other records · %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "運動場所 %1$lld件・その他の記録 %2$lld件"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 장소 %1$lld건 · 기타 기록 %2$lld건"
+          }
+        }
+      }
+    },
     "Workout map" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -58109,6 +58155,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "회"
+          }
+        }
+      }
+    },
+    "Workouts · %lld    Sets · %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workouts · %lld    Sets · %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワークアウト %1$lld件・セット %2$lld件"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 %1$lld건 · 세트 %2$lld개"
           }
         }
       }

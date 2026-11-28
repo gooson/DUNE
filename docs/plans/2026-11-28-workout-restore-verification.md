@@ -126,7 +126,7 @@ Mac에서 앱의 로컬 네트워크 권한이 granted로 바뀐 뒤 지정일�
 
 이번 대조 범위는 상세 화면의 표시 값이다. 실제 지도 타일의 픽셀이나 확대 조작은 검사하지 않았다. 운동 상세가 열린 뒤 과거 페이지가 도착한 경우에는 해당 운동의 위치를 다시 조회하도록 수정했다. 전용 iPhone 시뮬레이터에서 위치·근처 복원 관련 21개 테스트가 통과했다. 원본 단말 없이 새 실물 iPhone으로 복원하는 시험은 별도로 남아 있다.
 
-### 구버전 전체 저장소와 분실 복원 경로
+### 11월 28일 구버전 전체 저장소와 당시의 분실 복원 검증 범위
 
 V19 로컬 SQLite 파일에 13개 엔터티를 모두 넣었다. 현행 V20에서 두 번 다시 열고 SQLite 내부 키를 제외한 열별 해시, 운동–세트 및 습관–로그의 부모 UUID, 사용자 루틴 항목 ID, 1 MB 이상 첨부 두 개의 실제 바이트 해시를 대조했다. 추가된 장소 엔터티는 비어 있었고 기존 13개 엔터티는 모두 일치했다. 이 시험은 구버전 스키마의 합성 저장소를 사용한다. 실계정 CloudKit에 구버전 앱이 업로드한 13종 전부를 내려받은 시험은 아니다.
 
@@ -164,13 +164,13 @@ V19 로컬 SQLite 파일에 13개 엔터티를 모두 넣었다. 현행 V20에�
 
 검증 기준은 원본 저장소를 제거한 뒤 빈 DUNE 저장소에서 시작해 운동 UUID, 로컬 운동 ID, 세트별 ID·횟수·중량과 부모 운동, 수기 장소, 자세 사진의 SHA-256 및 해당 운동의 리워드 이력을 대조하는 것이다. 이 파일은 생성 시점의 사본이다. 근처 기기나 근처 캐시는 필요하지 않다. 기존 파일 단독 복원과 400건·1,949세트 위에 410건·1,979세트를 병합한 결과는 앞 절의 실행을 재사용한다.
 
-#### 파일이 없고 원본 기기도 없을 때
+#### 11월 28일 후보에서 파일과 원본 기기가 없을 때
 
 | 남은 자료 | 현재 회수 경로 |
 |---|---|
 | 이전 DUNE private DB의 운동·세트·운동 장소 | 설정에서 이전 백업 복구를 실행한다. 현재 계정의 기존 zone을 읽어 운동과 세트의 부모 연결, 저장돼 있는 장소 레코드·장소 첨부를 기기로 가져온다. 원격 DB를 수정하지 않는다. 삭제된 레코드나 과거 앱이 쓰지 않은 필드는 복원할 수 없다. |
 | Apple 건강에 남은 운동 | 건강 읽기를 허용하면 운동을 조회한다. DUNE가 운동 작성 시 실제로 넣은 세트·장소 메타데이터와 Apple 건강이 제공하는 경로가 대상이다. 같은 운동에 나중에 기록한 DUNE 수기 장소나 별도 자세 사진·리워드는 이 경로에서 생기지 않는다. |
-| 이전 private DB에만 있는 자세 사진·평가, 부상·메모, 습관·로그, 사용자 루틴·분류 등 | 현 설정의 이전 백업 복구는 이 타입을 읽어 복원하지 않는다. 구버전 로컬 저장소가 살아 있는 기기에서는 업데이트한 뒤 전체 파일을 만들 수 있다. 현재의 13종 파일 검증을 원격에만 남은 자료의 회수 증거로 쓰지 않는다. |
+| 이전 private DB에만 있는 자세 사진·평가, 부상·메모, 습관·로그, 사용자 루틴·분류 등 | 11월 28일 후보의 이전 백업 복구는 이 타입을 읽어 복원하지 않았다. 구버전 로컬 저장소가 살아 있는 기기에서는 업데이트한 뒤 전체 파일을 만들 수 있다. 현재의 13종 파일 검증을 원격에만 남은 자료의 회수 증거로 쓰지 않는다. |
 | 리워드 및 전체 파일 이후 변경 | 기기에 저장한 리워드는 전체 파일에 포함된 시점까지 복원할 수 있다. 이후 변경·삭제를 전달하는 로그는 이 파일에 없다. 이전 파일에서 복원한 로컬 운동과 Apple 건강의 현재 운동은 각각의 원본 상태를 따른다. |
 
 #### 확인한 복원 결과
@@ -196,3 +196,70 @@ V19 로컬 SQLite 파일에 13개 엔터티를 모두 넣었다. 현행 V20에�
 | 화면과 개인 자료 | 두 실행 모두 화면 활성화 없이 종료 코드 0이었다. 검증 번들을 삭제한 뒤 기기에서 사라진 것을 확인했다. 기존 DUNE 프로세스는 시험 전후 동일했다. 개인 앱 저장소는 읽거나 쓰지 않았다. |
 
 이 결과는 원본 폰이 없어도 보관해 둔 파일과 복구 키로 iPad에서 DUNE 자료를 복원할 수 있음을 확인한다. 실물 iPad에 파일을 전달한 경로는 개발자 파일 전송 서비스였다. 실물 iPad에서 Apple 건강이나 iCloud 서버로부터 수신했다고 판정하지 않는다.
+
+### 11월 29일 구버전 CloudKit 스키마와 보관된 증거
+
+로컬 V19에는 모델이 13종, 장소가 추가된 V20에는 14종이다. 전체 파일의 13종은 **V20에서 건강 미러 캐시를 제외한 13종**이다. 배포 미리보기의 11종은 **그 배포에서 생성할 타입의 차이**다. 11종 목록에 없는 세 타입의 운영 스키마 상태와 계정별 기록 수는 그 화면으로 확인할 수 없다.
+
+| 근거 | 확인 범위 |
+|---|---|
+| Git의 초기 MVP `a7f423d5a`, V1–V16 정리 직전 `bf37b3f61^`의 `AppSchemaVersions.swift` | V1 운동·체성분, V2 세트, V3 사용자 운동, V4 루틴, V5 부상, V6 습관 정의·로그, V7 분류·운동별 기본값, V8 건강 미러. V9 반복 시작, V10 VO₂max, V11 머신 레벨, V12 선호 운동 변경 전 모델, V13 선호 운동, V14 세트 RPE, V15 시간별 점수, V16 자세 평가, V17 습관 알림·시간대. |
+| `f2ac6f64c`, `162de547a`, `68f74d32d` | V18 계획 반복·운동 노력도 출처, V19 머신 레벨 변화, V20 운동 장소. 구형 행에는 나중에 추가된 선택 필드가 없을 수 있다. 속성의 기본값은 과거 측정값을 입증하지 않는다. |
+| CloudKit Console 배포 미리보기, 보관본 `deployment-preview.txt`의 Record Types (11) | 아래 표의 ‘생성’은 배포 전 Create 목록이다. 미리보기에는 모든 운영 필드 정의, 이 계정의 행 수, 사진 첨부 다운로드 결과가 없다. |
+| 운영 private DB 읽기 결과의 비식별 요약 `legacy/fields.txt` | `CD_ExerciseRecord` 400건, `CD_WorkoutSet` 1,949건에서 관측한 키와 값의 Foundation 타입을 기록했다. 당시 수집기가 이 두 타입만 남겼으므로 다른 타입은 미집계다. 값이나 레코드 이름은 여기에 기록하지 않는다. |
+
+`Dailve`에서 `DUNE`으로 이름을 바꾸기 전부터 기본 운동 모델 이름은 `ExerciseRecord`였다. 과거 마이그레이션 선언에는 `V1ExerciseRecord`, `V1BodyCompositionRecord`, `V12ExerciseRecord`·`V12WorkoutSet`, `V13ExerciseRecord`·`V13WorkoutSet` 같은 스냅샷 클래스도 있다. 이 이름에 `CD_`를 붙인 배포 타입을 추정해 같은 자료로 합치지 않는다. Watch의 기기간 메시지 타입과 앱 번들 이름도 CloudKit 레코드 타입의 근거로 삼지 않는다.
+
+아래의 필드는 V20 모델과 파일 코덱에서 대조한 **Swift 속성명**이다. 운영 키가 실측된 행만 `CD_` 접두사를 확인했다. Core Data가 관계를 반대쪽 행에 기록하거나 바이너리를 별도 자산 필드에 보관할 수 있으므로 속성 목록을 운영 서버의 필드 사전으로 쓰지 않는다.
+
+| 대상 타입 | 개발 → 운영 미리보기 | 로컬 필드 및 관계 |
+|---|---|---|
+| `CD_ExerciseRecord` | 생성 | `id`, `date`, `exerciseType`, `duration`, `calories`, `distance`, `stepCount`, `averagePaceSecondsPerKm`, `averageCadenceStepsPerMinute`, `elevationGainMeters`, `floorsAscended`, `cardioMachineLevelAverage`, `cardioMachineLevelMax`, `cardioMachineLevelChangesData`, `memo`, `isFromHealthKit`, `healthKitWorkoutID`, `createdAt`, `exerciseDefinitionID`, `primaryMusclesRaw`, `secondaryMusclesRaw`, `equipmentRaw`, `estimatedCalories`, `calorieSourceRaw`, `rpe`, `autoIntensityRaw`, `cardioFitnessVO2Max`, `plannedSetCount`, `effortSourceRaw`, `sets` |
+| `CD_WorkoutSet` | 생성 | `id`, `setNumber`, `setTypeRaw`, `weight`, `reps`, `duration`, `distance`, `intensity`, `isCompleted`, `restDuration`, `rpe`, `plannedReps`, `rpeSourceRaw`, `exerciseRecord` |
+| `CD_BodyCompositionRecord` | 목록 밖 | `id`, `date`, `weight`, `bodyFatPercentage`, `muscleMass`, `memo`, `createdAt` |
+| `CD_CustomExercise` | 목록 밖 | `id`, `name`, `categoryRaw`, `inputTypeRaw`, `primaryMusclesRaw`, `secondaryMusclesRaw`, `equipmentRaw`, `metValue`, `customCategoryName`, `cardioSecondaryUnitRaw`, `createdAt` |
+| `CD_WorkoutTemplate` | 생성 | `id`, `name`, `exerciseEntries`, `createdAt`, `updatedAt` |
+| `CD_InjuryRecord` | 생성 | `id`, `bodyPartRaw`, `bodySideRaw`, `severityRaw`, `startDate`, `endDate`, `memo`, `createdAt` |
+| `CD_HabitDefinition` | 생성 | `id`, `name`, `iconCategoryRaw`, `habitTypeRaw`, `goalValue`, `goalUnit`, `frequencyTypeRaw`, `weeklyTargetDays`, `recurringStartPointRaw`, `recurringCustomStartDate`, `recurringStartConfiguredAt`, `isAutoLinked`, `autoLinkSourceRaw`, `sortOrder`, `isArchived`, `createdAt`, `reminderHour`, `reminderMinute`, `timeOfDayRaw`, `logs` |
+| `CD_HabitLog` | 생성 | `id`, `date`, `value`, `isAutoCompleted`, `completedAt`, `memo`, `habitDefinition` |
+| `CD_UserCategory` | 목록 밖 | `id`, `name`, `iconName`, `colorHex`, `defaultInputTypeRaw`, `sortOrder`, `createdAt` |
+| `CD_ExerciseDefaultRecord` | 생성 | `id`, `exerciseDefinitionID`, `defaultWeight`, `defaultReps`, `isManualOverride`, `isPreferred`, `lastUsedDate` |
+| `CD_HourlyScoreSnapshot` | 생성 | `date`, `conditionScore`, `wellnessScore`, `readinessScore`, `hrvValue`, `rhrValue`, `sleepScore`, `stressScore`, `createdAt` |
+| `CD_PostureAssessmentRecord` | 생성 | `id`, `date`, `overallScore`, `frontMetricsJSON`, `sideMetricsJSON`, `frontJointPositionsJSON`, `sideJointPositionsJSON`, `frontImageData`, `sideImageData`, `bodyHeight`, `heightEstimationRaw`, `memo`, `createdAt` |
+| `CD_WorkoutLocationRecord` | 생성 | `id`, `localRecordID`, `healthKitWorkoutID`, `payloadData`, `updatedAt` |
+| `CD_HealthSnapshotMirrorRecord` | 생성 | `id`, `fetchedAt`, `syncedAt`, `sourceDevice`, `payloadVersion`, `payloadJSON` |
+
+운영 운동·세트 요약에서 관측된 `CD_exerciseRecord`는 부모 레코드 이름 문자열이었다. `CD_primaryMusclesRaw`·`CD_secondaryMusclesRaw`는 Data였다. 실제 운동에 `CD_plannedSetCount`, `CD_effortSourceRaw`, 세트에 `CD_plannedReps`, `CD_rpeSourceRaw`가 항상 있다고 가정할 수 없다. 자세 사진은 `frontImageData`·`sideImageData`의 원본 바이트를 별도로 확인해야 한다. 타입 존재, 합성 CKAsset 디코딩, 운영 자산 수신과 바이트 일치는 각각 다른 검증이다.
+
+**스냅샷과 기본 설정.** 건강 미러는 직렬화한 당시 상태다. 현행 `HealthSnapshotMirrorStore`는 최대 240개를 유지하고 미러 전용 `health-snapshot-mirror.store`의 CloudKit은 꺼져 있다. 운동 세트 원본·경로 전체·자세 사진을 미러에서 복원할 수 없다. 시간별 점수는 별도 엔터티이며 실제 보관된 날짜와 점수만 복원할 수 있다. 개인 최고 기록과 리워드 이벤트는 활동별 UserDefaults와 단일 리워드 상태에 있다. 이 저장소는 최근 이벤트 최대 500개와 처리 서명 최대 2,000개를 유지한다. 기록이 잘리기 전의 과거 이력을 재구성하는 원장이 아니다. 체크된 앱 설정, DUNE 전체 파일과 Apple 건강의 포함 범위는 위 파일 검증표를 따른다. 전체 파일 v2는 직렬화 원본 256 MiB까지 허용하며 한도를 초과하면 전체 저장을 실패 처리한다.
+
+**운영 확인 방법.** 운영 스키마는 Console에서 Production의 Record Types 및 개별 필드 또는 읽기 전용 스키마 내보내기로 확인한다. 계정의 실제 기록 수는 해당 계정의 기존 private zone을 변경 토큰 없이 처음부터 마지막 페이지까지 읽고, 속성 값이 필요 없는 조사에는 `desiredKeys: []`를 지정한다. 페이지별 성공만 집계하고 변경과 삭제를 ID 기준으로 반영한다. 한 항목이라도 읽기에 실패했거나 계정이 바뀌면 전체 집계를 미확인으로 남긴다. 외부 결과에는 타입별 개수만 남긴다. 한 계정·한 존의 0건으로 다른 계정이나 운영 스키마 전체에 자료가 없다고 결론내릴 수 없다.
+
+#### 운영 계정의 현재 private zone 확인
+
+11월 29일 HAL에서 Production 서명을 확인한 읽기 전용 도구로 Core Data private zone의 첫 변경 토큰부터 마지막 페이지까지 읽었다. `desiredKeys: []`로 필드와 첨부를 요청하지 않았고 삭제 이벤트를 반영했다. 조회 시작·종료 시 같은 계정임을 확인했다. 이 표는 현재 남아 있는 행을 나타낸다. 삭제 이력이나 다른 사용자의 보관 상태는 판정하지 않는다.
+
+| 현재 남은 자료 | 읽기 결과 |
+|---|---:|
+| 운동 | 400건 |
+| 세트 | 1,949건 |
+| 건강 미러 스냅샷 | 22건 |
+| 시간별 점수 | 6건 |
+| 운동 장소, 체성분, 사용자 운동, 루틴, 부상, 습관 정의·로그, 분류, 운동별 기본값, 자세 평가·사진 레코드 | 각 0건 |
+
+별도 장소 레코드가 없더라도 Apple 건강의 운동 메타데이터나 다른 경로로 화면에 보이는 장소가 있을 수 있다. 리워드 이력은 구버전 private zone에 대응하는 모델이 없었고, 자세 사진은 자세 평가 행의 첨부 필드였다. 서버에 이미 삭제된 사진이나 전송한 적이 없는 사진을 재구성하는 경로는 없다.
+
+#### 구버전 private zone에서 DUNE 설정으로 복원
+
+후보 앱은 이전 private zone만 읽고, 14개 모델을 같은 로컬 SwiftData 트랜잭션에서 복원한다. 예전 계정에서 생성하지 않은 존은 비어 있는 백업으로 처리한다. 습관 로그와 세트의 부모는 zone을 포함한 CloudKit 레코드 ID로 찾고, 로컬 모델은 자체 논리 ID로 대조한다. 날짜가 식별자인 시간별 점수는 원본 시각으로 대조한다. 같은 데이터의 재수신은 기존 행을 보존한다. 백업에 빠진 선택 필드 때문에 기기에 남은 값을 지우지 않는다.
+
+| 시나리오 | 검증 결과 |
+|---|---|
+| 원본과 전체 파일 없이 빈 기기 저장소에 이전 | 실제 설정의 복원 동작에 순서를 뒤섞은 14종 합성 CKRecord를 전달했다. iPhone 시뮬레이터에서 운동·세트·장소 각 1건과 기타 11건을 복원했다. |
+| SwiftData 파일을 다시 열고 같은 자료 재수신 | 운동·세트와 습관·로그의 ID 및 부모 관계, 분류·사용자 운동·루틴의 항목, 부상, 체성분, 점수와 미러, 자세 사진 원본 SHA-256을 대조했다. 두 번째 복원에서 추가된 행은 0건이었다. 루틴·근육 배열은 SwiftData가 직접 기록한 합성 SQLite의 바이트를 사용했다. |
+| 잘못된 값과 끊긴 연결 | 체중 충돌, 사라진 부모 또는 다른 zone의 부모 참조, 읽을 수 없는 첨부를 주입했다. 앞에서 처리한 행도 저장되지 않았고 기존 사진·부모·체중은 보존됐다. |
+| 회수 가능 범위 | 이번 계정에 있는 타입과 합성 대상으로 검증한 타입을 위 집계로 구분한다. 사용자 루틴·습관·자세·부상은 그 계정의 해당 행과 첨부가 있어야 복원된다. 앱 리워드의 UserDefaults 이력, 삭제된 서버 데이터, HealthKit의 실제 운동 경로는 이 private zone의 복원 대상 밖이다. |
+
+전용 iPad 시뮬레이터에서도 빈 저장소·재개방 검사가 통과했다. 앞·옆 자세 사진 두 장을 별도 자산으로 받아 원본 해시와 자세 지표·관절 좌표, 부상 양상·날짜·메모를 대조했다. 같은 사진을 인라인으로 다시 받아도 추가 행은 0건이었다. 한쪽 사진 변경, 중복 표현, 32 MiB를 초과하는 첨부는 거부됐고 같은 시도에서 앞서 처리한 부상 행도 남지 않았다. 현재 사진당 32 MiB, 변환 가능한 배열·텍스트 자산당 4 MiB가 입력 한도다. 알려지지 않은 형식을 복구한 것으로 간주하지 않는다.
+
+[설정의 iPhone·iPad 실제 캡처](../design/phone-design-map/actual/workout-restore-2026-11-28/index.html)에서 운동·세트·장소·기타 기록 수를 확인했다. 동일 번들 후보 빌드와 리소스를 포함한 엄격한 서명 검사가 통과했다. 추가 실물 iPad 검사에서는 iPadOS가 기기 잠금으로 새 검증 프로세스 실행을 거부했다. 따라서 이 구버전 CloudKit 경로의 실물 iPad 실행은 미검증이다. 앞 절의 실물 iPad **파일 복원** 성공은 그대로 유효하다. Apple 건강 및 iCloud Drive의 서버 수신은 이 시험에 포함하지 않았다.

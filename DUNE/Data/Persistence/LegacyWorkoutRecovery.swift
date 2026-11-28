@@ -2,7 +2,7 @@ import CloudKit
 import Foundation
 import SwiftData
 
-/// Reads historical workout, set and location records without modifying the remote zone. Only explicit recovery inserts local rows.
+/// Reads the earlier Core Data private zone. All restored models share one local transaction.
 enum LegacyWorkoutRecovery {
     enum Failure: Error, Equatable { case invalidRecord, invalidRelationship, duplicateIdentity, localConflict, accountChanged, inProgress }
 
@@ -10,44 +10,56 @@ enum LegacyWorkoutRecovery {
         let workouts: Int
         let sets: Int
         let locations: Int
+        let otherRecords: Int
     }
 
     private static let workoutType = "CD_ExerciseRecord"
     private static let setType = "CD_WorkoutSet"
     private static let locationType = "CD_WorkoutLocationRecord"
 
-    static func fetch() async throws -> (account: CKRecord.ID, records: [CKRecord]) {
+    private static let mirrorType = "CD_HealthSnapshotMirrorRecord"
+    @MainActor static let recordTypes = AppOwnedBackup.legacyCloudRecordTypes.union([workoutType, setType, locationType, mirrorType])
+
+    private static func fetch() async throws -> [CKRecord] {
         let container = CKContainer(identifier: "iCloud.com.raftel.dailve")
         let account = try await container.userRecordID()
         let db = container.privateCloudDatabase
         let zone = CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone", ownerName: CKCurrentUserDefaultName)
+        let supported = await recordTypes
         var records = [CKRecord.ID: CKRecord]()
         var token: CKServerChangeToken?
-        repeat {
-            try Task.checkCancellation()
-            let page = try await db.recordZoneChanges(inZoneWith: zone, since: token, resultsLimit: 400)
-            for (id, change) in page.modificationResultsByID {
-                let record = try change.get().record
-                if [workoutType, setType, locationType].contains(record.recordType) { records[id] = record }
-            }
-            for deletion in page.deletions { records.removeValue(forKey: deletion.recordID) }
-            token = page.changeToken
-            if !page.moreComing { break }
-        } while true
+        do {
+            repeat {
+                try Task.checkCancellation()
+                let page = try await db.recordZoneChanges(inZoneWith: zone, since: token, resultsLimit: 400)
+                for (id, change) in page.modificationResultsByID {
+                    let record = try change.get().record
+                    if supported.contains(record.recordType) { records[id] = record }
+                }
+                for deletion in page.deletions { records.removeValue(forKey: deletion.recordID) }
+                token = page.changeToken
+                if !page.moreComing { break }
+            } while true
+        } catch let error as CKError where error.code == .zoneNotFound && token == nil {
+            // Accounts that never used the old mirror have no Core Data zone.
+        }
         guard try await container.userRecordID() == account else { throw Failure.accountChanged }
-        return (account, Array(records.values))
+        return Array(records.values)
     }
 
     @MainActor private static var isRestoring = false
 
     @MainActor
-    static func restore(into container: ModelContainer) async throws -> Result {
+    static func restore(
+        into container: ModelContainer,
+        fetchRecords: () async throws -> [CKRecord] = { try await fetch() }
+    ) async throws -> Result {
         guard !isRestoring else { throw Failure.inProgress }
         isRestoring = true
         defer { isRestoring = false }
-        let snapshot = try await fetch()
+        let records = try await fetchRecords()
         try Task.checkCancellation()
-        return try importRecords(snapshot.records, into: container)
+        return try importRecords(records, into: container)
     }
 
     @MainActor
@@ -64,7 +76,7 @@ enum LegacyWorkoutRecovery {
         for s in try context.fetch(FetchDescriptor<WorkoutSet>()) {
             guard localSets.updateValue(s, forKey: s.id) == nil else { throw Failure.duplicateIdentity }
         }
-        var parents = [String: ExerciseRecord]()
+        var parents = [CKRecord.ID: ExerciseRecord]()
         var seenWorkouts = Set<UUID>(), seenSets = Set<UUID>()
         var insertedWorkouts = 0, insertedSets = 0
         for r in records where r.recordType == workoutType {
@@ -82,12 +94,12 @@ enum LegacyWorkoutRecovery {
                 context.insert(row)
                 insertedWorkouts += 1
             }
-            guard parents.updateValue(row, forKey: r.recordID.recordName) == nil else { throw Failure.duplicateIdentity }
+            guard parents.updateValue(row, forKey: r.recordID) == nil else { throw Failure.duplicateIdentity }
         }
         for r in records where r.recordType == setType {
             let id = try identifier(r)
             guard seenSets.insert(id).inserted else { throw Failure.duplicateIdentity }
-            guard let key = r["CD_exerciseRecord"] as? String, let parent = parents[key] else {
+            guard let key = parentRecordID(r, key: "CD_exerciseRecord"), let parent = parents[key] else {
                 throw Failure.invalidRelationship
             }
             let set = try workoutSet(r, id: id)
@@ -103,8 +115,67 @@ enum LegacyWorkoutRecovery {
             insertedSets += 1
         }
         let insertedLocations = try restoreLocations(records.filter { $0.recordType == locationType }, into: context)
+        let auxiliaryCount: Int
+        do {
+            auxiliaryCount = try AppOwnedBackup.importLegacyCloudRecords(records, into: context)
+        } catch AppOwnedBackup.Failure.duplicateIdentity { throw Failure.duplicateIdentity }
+        catch AppOwnedBackup.Failure.destinationConflict { throw Failure.localConflict }
+        catch AppOwnedBackup.Failure.missingParent { throw Failure.invalidRelationship }
+        catch is AppOwnedBackup.Failure { throw Failure.invalidRecord }
+        catch is DecodingError { throw Failure.invalidRecord }
+        var otherRecords = auxiliaryCount
+        otherRecords += try restoreMirrors(records.filter { $0.recordType == mirrorType }, into: context)
         if context.hasChanges { try context.save() }
-        return Result(workouts: insertedWorkouts, sets: insertedSets, locations: insertedLocations)
+        return Result(workouts: insertedWorkouts, sets: insertedSets, locations: insertedLocations, otherRecords: otherRecords)
+    }
+
+    static func parentRecordID(_ record: CKRecord, key: String) -> CKRecord.ID? {
+        if let name = record[key] as? String, !name.isEmpty {
+            return CKRecord.ID(recordName: name, zoneID: record.recordID.zoneID)
+        }
+        guard let reference = record[key] as? CKRecord.Reference,
+              reference.recordID.zoneID == record.recordID.zoneID else { return nil }
+        return reference.recordID
+    }
+
+    private static func restoreMirrors(_ records: [CKRecord], into context: ModelContext) throws -> Int {
+        guard !records.isEmpty else { return 0 }
+        var local = [UUID: HealthSnapshotMirrorRecord]()
+        for row in try context.fetch(FetchDescriptor<HealthSnapshotMirrorRecord>()) {
+            guard local.updateValue(row, forKey: row.id) == nil else { throw Failure.duplicateIdentity }
+        }
+        var seen = Set<UUID>()
+        var inserted = 0
+        for record in records {
+            let id = try identifier(record)
+            guard seen.insert(id).inserted else { throw Failure.duplicateIdentity }
+            guard let fetched = record["CD_fetchedAt"] as? Date, let synced = record["CD_syncedAt"] as? Date,
+                  let source = record["CD_sourceDevice"] as? String,
+                  let version = try integer(record, "CD_payloadVersion"), version == 1,
+                  let payload = record["CD_payloadJSON"] as? String,
+                  (try? HealthSnapshotMirrorMapper.decode(payload)) != nil else { throw Failure.invalidRecord }
+
+            if let row = local[id] {
+                guard abs(row.fetchedAt.timeIntervalSince(fetched)) < 0.0011,
+                      abs(row.syncedAt.timeIntervalSince(synced)) < 0.0011,
+                      row.sourceDevice == source, row.payloadVersion == version,
+                      try equivalentJSON(row.payloadJSON, payload) else { throw Failure.localConflict }
+            } else {
+                let row = HealthSnapshotMirrorRecord(fetchedAt: fetched, syncedAt: synced, sourceDevice: source,
+                                                     payloadVersion: version, payloadJSON: payload)
+                row.id = id
+                context.insert(row)
+                inserted += 1
+            }
+        }
+        return inserted
+    }
+
+    private static func equivalentJSON(_ lhs: String, _ rhs: String) throws -> Bool {
+        if lhs == rhs { return true }
+        guard let left = try JSONSerialization.jsonObject(with: Data(lhs.utf8)) as? NSDictionary,
+              let right = try JSONSerialization.jsonObject(with: Data(rhs.utf8)) as? NSDictionary else { return false }
+        return left.isEqual(right)
     }
 
     private static func restoreLocations(_ records: [CKRecord], into context: ModelContext) throws -> Int {

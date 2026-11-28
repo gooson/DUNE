@@ -28,29 +28,6 @@
       "storage": "local XCTest result attachment"
     },
     {
-      "screen": "S01 privacy · historical recovery completed",
-      "path": "S01-synthetic-restored.png",
-      "test": "LegacyWorkoutRecoveryPresentationTests/testImportedWorkoutSetAndPlaceCountsInSettings()",
-      "attachment": "S01-legacy-restored-workouts-sets-place_0_53093209-7C69-408C-B5F0-6C85BA328573.png",
-      "timestamp": 1795875099.968,
-      "sha256": "c3b771dae29e733653a607e95e3210dd0151222e031a71b88cd04a57889cc6b5",
-      "source_base_revision": "a460689f4",
-      "source_worktree_dirty": true,
-      "result_bundle": "dune-pr1033-map-results-location.xcresult",
-      "result": "1 passed, 0 failures",
-      "scope": "Native SettingsDetailView hosted in an iPhone simulator test window. In-memory SwiftData with synthetic CKRecords. No CloudKit network fetch.",
-      "first_import": {
-        "workouts": 2,
-        "sets": 3,
-        "locations": 1
-      },
-      "repeated_import": {
-        "workouts": 0,
-        "sets": 0,
-        "locations": 0
-      }
-    },
-    {
       "screen": "H07 · original photo export actions",
       "path": "H07-original-photo-actions.png",
       "test": "PosturePhotoPresentationTests/testOriginalPhotoActionsInAssessmentDetail()",
@@ -93,6 +70,48 @@
       "sha256": "17b3de33ca59164504e8d75fc0153acbc1fd410b0951efc4f05b957f2a47a9b4",
       "scope": "A hosted iPhone simulator window stayed open while an encrypted synthetic file restored three rows. Guest pixel OCR detected Cobalt Test Gym. Set 1 and 73 reps are also visible. No tile or real location verification.",
       "result_bundle": "locked-commit.xcresult"
+    },
+    {
+      "screen": "S01 · historical iCloud records restored",
+      "device": "iPhone 18 Pro simulator (27.2)",
+      "path": "S01-synthetic-restored.png",
+      "test": "LegacyWorkoutRecoveryPresentationTests/testImportedWorkoutSetAndPlaceCountsInSettings()",
+      "attachment": "S01-iphone-legacy-restored-records_0_9E97A38A-BD1F-458A-9A40-8795C899FEC6.png",
+      "timestamp": 1795880339.259,
+      "sha256": "e7fe96fde0b03cb64d98b771c09138e9e80fa328da537b6df90b1f7124fe1a37",
+      "result_bundle": "phone.xcresult",
+      "result": "passed",
+      "scope": "Hosted SettingsDetailView on a simulator. Fixture CKRecords, local-only SwiftData.",
+      "first_import": {
+        "workouts": 2,
+        "sets": 3,
+        "locations": 1,
+        "other_records": 1
+      },
+      "repeated_import": {
+        "total_inserted": 0
+      }
+    },
+    {
+      "screen": "S01 · historical iCloud records restored",
+      "device": "iPad Pro 13-inch (M5) simulator (27.2)",
+      "path": "S01-ipad-legacy-restored.png",
+      "test": "LegacyWorkoutRecoveryPresentationTests/testImportedWorkoutSetAndPlaceCountsInSettings()",
+      "attachment": "S01-ipad-legacy-restored-records_0_E187503D-852F-4945-BEB8-541188878CB7.png",
+      "timestamp": 1795880544.715,
+      "sha256": "ea165a77e94bbdb2565dca1595f172429657b0a6327dc210aa5d895a1d501feb",
+      "result_bundle": "pad.xcresult",
+      "result": "passed",
+      "scope": "Hosted SettingsDetailView on a simulator. Fixture CKRecords, local-only SwiftData.",
+      "first_import": {
+        "workouts": 2,
+        "sets": 3,
+        "locations": 1,
+        "other_records": 1
+      },
+      "repeated_import": {
+        "total_inserted": 0
+      }
     }
   ]
 }
