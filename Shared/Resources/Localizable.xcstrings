@@ -425,6 +425,29 @@
         }
       }
     },
+    "%@ applied" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ applied"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "適用割合 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "반영 비중 %@"
+          }
+        }
+      }
+    },
     "%@ badges" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -461,6 +484,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "분당 %@회"
+          }
+        }
+      }
+    },
+    "%@ better than rest days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "休息日より%@良い"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "휴식일보다 %@ 더 좋음"
           }
         }
       }
@@ -603,6 +643,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1박 평균 %@시간"
+          }
+        }
+      }
+    },
+    "%@ improvement on any lift" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リフトで%@向上"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동에서 %@ 향상"
           }
         }
       }
@@ -1449,29 +1506,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@%%"
-          }
-        }
-      }
-    },
-    "%@%% applied" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@%% applied"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "適用割合 %@%%"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "반영 비중 %@%%"
           }
         }
       }
@@ -2854,46 +2888,6 @@
         }
       }
     },
-    "%lld%% applied" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld%% applied"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "適用割合 %lld%%"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "반영 비중 %lld%%"
-          }
-        }
-      }
-    },
-    "%lld%% better than rest days" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "休息日より%lld%%良い"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "휴식일보다 %lld%% 더 좋음"
-          }
-        }
-      }
-    },
     "%lld°C — perfect conditions for a run or a walk." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3920,23 +3914,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "10단계 피로도 척도"
-          }
-        }
-      }
-    },
-    "10% improvement on any lift" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "リフトで10%向上"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "운동에서 10% 향상"
           }
         }
       }
@@ -5071,19 +5048,19 @@
         }
       }
     },
-    "Activity Load (25%)" : {
+    "Activity Load (%@)" : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "活動負荷（25%）"
+            "value" : "活動負荷（%@）"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "활동 부하 (25%)"
+            "value" : "활동 부하 (%@)"
           }
         }
       }
@@ -9246,19 +9223,25 @@
         }
       }
     },
-    "Body fat must be between 0%% and %lld%%" : {
+    "Body fat must be between %@ and %@" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Body fat must be between %1$@ and %2$@"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "体脂肪率は0%%〜%lld%%の範囲で入力してください"
+            "value" : "体脂肪率は%1$@〜%2$@の範囲で入力してください"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "체지방률은 0%%~%lld%% 사이여야 합니다"
+            "value" : "체지방률은 %1$@~%2$@ 사이여야 합니다"
           }
         }
       }
@@ -17454,6 +17437,29 @@
         }
       }
     },
+    "Elapsed Time: %@, Level %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elapsed Time: %1$@, Level %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "経過時間: %1$@, レベル %2$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "경과 시간: %1$@, 레벨 %2$@"
+          }
+        }
+      }
+    },
     "Elapsed Time: %@, Level %lld" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19950,36 +19956,48 @@
         }
       }
     },
-    "Final score = HRV(30%) + RHR(20%) + Sleep(25%) + Recovery(15%) + Trend(10%)." : {
+    "Final score = HRV(%@) + RHR(%@) + Sleep(%@) + Recovery(%@) + Trend(%@)." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Final score = HRV(%1$@) + RHR(%2$@) + Sleep(%3$@) + Recovery(%4$@) + Trend(%5$@)."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最終スコア = HRV(30%) + RHR(20%) + 睡眠(25%) + 回復(15%) + トレンド(10%)。"
+            "value" : "最終スコア = HRV(%1$@) + RHR(%2$@) + 睡眠(%3$@) + 回復(%4$@) + トレンド(%5$@)。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "최종 점수 = HRV(30%) + RHR(20%) + 수면(25%) + 회복(15%) + 추세(10%)."
+            "value" : "최종 점수 = HRV(%1$@) + RHR(%2$@) + 수면(%3$@) + 회복(%4$@) + 추세(%5$@)."
           }
         }
       }
     },
-    "Final score = weighted average of Sleep(35%), Condition(30%), Body(20%), and Posture(15%)." : {
+    "Final score = weighted average of Sleep(%@), Condition(%@), Body(%@), and Posture(%@)." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Final score = weighted average of Sleep(%1$@), Condition(%2$@), Body(%3$@), and Posture(%4$@)."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最終スコア = 睡眠(35%)、コンディション(30%)、ボディ(20%)、姿勢(15%)の加重平均です。"
+            "value" : "最終スコア = 睡眠(%1$@)、コンディション(%2$@)、ボディ(%3$@)、姿勢(%4$@)の加重平均です。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "최종 점수 = 수면(35%), 컨디션(30%), 신체(20%), 자세(15%)의 가중 평균입니다."
+            "value" : "최종 점수 = 수면(%1$@), 컨디션(%2$@), 신체(%3$@), 자세(%4$@)의 가중 평균입니다."
           }
         }
       }
@@ -23687,36 +23705,36 @@
         }
       }
     },
-    "High humidity (%lld%%)" : {
+    "High humidity (%@)" : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "高湿度 (%lld%%)"
+            "value" : "高湿度 (%@)"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "높은 습도 (%lld%%)"
+            "value" : "높은 습도 (%@)"
           }
         }
       }
     },
-    "High humidity %lld%% — stay hydrated during outdoor exercise" : {
+    "High humidity %@ — stay hydrated during outdoor exercise" : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "高湿度 %lld%% — 屋外運動時はこまめに水分補給してください"
+            "value" : "高湿度 %@ — 屋外運動時はこまめに水分補給してください"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "높은 습도 %lld%% — 실외 운동 시 수분 섭취에 신경 쓰세요"
+            "value" : "높은 습도 %@ — 실외 운동 시 수분 섭취에 신경 쓰세요"
           }
         }
       }
@@ -24874,19 +24892,19 @@
         }
       }
     },
-    "HRV Variability (40%)" : {
+    "HRV Variability (%@)" : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HRV変動性（40%）"
+            "value" : "HRV変動性（%@）"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HRV 변동성 (40%)"
+            "value" : "HRV 변동성 (%@)"
           }
         }
       }
@@ -27755,6 +27773,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "레벨"
+          }
+        }
+      }
+    },
+    "Level %@–%@, Elapsed Time %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Level %1$@–%2$@, Elapsed Time %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レベル %1$@–%2$@, 経過時間 %3$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "레벨 %1$@–%2$@, 경과 시간 %3$@"
           }
         }
       }
@@ -35493,19 +35534,19 @@
         }
       }
     },
-    "Over 80%% of monthly goal reached!" : {
+    "Over %@ of monthly goal reached!" : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "月間目標の80%%以上達成！"
+            "value" : "月間目標の%@以上達成！"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "월간 목표 80%% 이상 달성!"
+            "value" : "월간 목표 %@ 이상 달성!"
           }
         }
       }
@@ -38583,6 +38624,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "준비도"
+          }
+        }
+      }
+    },
+    "Readiness %@, %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Readiness %1$@, %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "トレーニング準備度 %1$@, %2$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운동 준비도 %1$@, %2$@"
           }
         }
       }
@@ -45452,25 +45516,25 @@
         }
       }
     },
-    "Sleep 35%, Condition 30%, Body 20%, Posture 15%. Available scores are reweighted when a component is missing." : {
+    "Sleep %@, Condition %@, Body %@, Posture %@. Available scores are reweighted when a component is missing." : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sleep 35%, Condition 30%, Body 20%, Posture 15%. Available scores are reweighted when a component is missing."
+            "value" : "Sleep %1$@, Condition %2$@, Body %3$@, Posture %4$@. Available scores are reweighted when a component is missing."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "睡眠35%、コンディション30%、体20%、姿勢15%を反映します。記録のない項目を除き、比率を調整します。"
+            "value" : "睡眠%1$@、コンディション%2$@、体%3$@、姿勢%4$@を反映します。記録のない項目を除き、比率を調整します。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "수면 35%, 컨디션 30%, 신체 20%, 자세 15%를 반영해요. 기록이 없는 항목은 제외하고 비중을 다시 나눠요."
+            "value" : "수면 %1$@, 컨디션 %2$@, 신체 %3$@, 자세 %4$@를 반영해요. 기록이 없는 항목은 제외하고 비중을 다시 나눠요."
           }
         }
       }
@@ -45560,19 +45624,19 @@
         }
       }
     },
-    "Sleep Consistency (35%)" : {
+    "Sleep Consistency (%@)" : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "睡眠の一貫性（35%）"
+            "value" : "睡眠の一貫性（%@）"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "수면 일관성 (35%)"
+            "value" : "수면 일관성 (%@)"
           }
         }
       }
@@ -50073,19 +50137,19 @@
         }
       }
     },
-    "The WASO Score (0–100) reflects how uninterrupted your sleep was. Less time awake means a higher score. This score contributes 15% to your overall Sleep Score." : {
+    "The WASO Score (0–100) reflects how uninterrupted your sleep was. Less time awake means a higher score. This score contributes %@ to your overall Sleep Score." : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "WASOスコア（0〜100）は睡眠の中断度を反映します。覚醒時間が少ないほど高スコアです。このスコアは全体の睡眠スコアの15%を占めます。"
+            "value" : "WASOスコア（0〜100）は睡眠の中断度を反映します。覚醒時間が少ないほど高スコアです。このスコアは全体の睡眠スコアの%@を占めます。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "WASO 점수(0~100)는 수면이 얼마나 중단 없이 지속되었는지를 반영합니다. 깨어 있는 시간이 적을수록 높은 점수입니다. 이 점수는 전체 수면 점수의 15%를 차지합니다."
+            "value" : "WASO 점수(0~100)는 수면이 얼마나 중단 없이 지속되었는지를 반영합니다. 깨어 있는 시간이 적을수록 높은 점수입니다. 이 점수는 전체 수면 점수의 %@를 차지합니다."
           }
         }
       }
@@ -55111,53 +55175,53 @@
         }
       }
     },
-    "Volume increased %lld%% vs last week" : {
+    "Volume increased %@ vs last week" : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ボリュームが先週比%lld%%増加"
+            "value" : "ボリュームが先週比%@増加"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "볼륨이 지난 주 대비 %lld%% 증가"
+            "value" : "볼륨이 지난 주 대비 %@ 증가"
           }
         }
       }
     },
-    "Volume is down %lld%% compared to last period." : {
+    "Volume is down %@ compared to last period." : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ボリュームが前回比%lld%%減少しました。"
+            "value" : "ボリュームが前回比%@減少しました。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "볼륨이 지난 기간 대비 %lld%% 감소했어요."
+            "value" : "볼륨이 지난 기간 대비 %@ 감소했어요."
           }
         }
       }
     },
-    "Volume is up %lld%% compared to last period." : {
+    "Volume is up %@ compared to last period." : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ボリュームが前回比%lld%%増加しました。"
+            "value" : "ボリュームが前回比%@増加しました。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "볼륨이 지난 기간 대비 %lld%% 증가했어요."
+            "value" : "볼륨이 지난 기간 대비 %@ 증가했어요."
           }
         }
       }
@@ -55179,19 +55243,19 @@
         }
       }
     },
-    "Volume up %lld%% vs last period" : {
+    "Volume up %@ vs last period" : {
       "extractionState" : "manual",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ボリュームが前回比%lld%%増加"
+            "value" : "ボリュームが前回比%@増加"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "볼륨이 지난 기간 대비 %lld%% 증가"
+            "value" : "볼륨이 지난 기간 대비 %@ 증가"
           }
         }
       }
@@ -59159,19 +59223,25 @@
         }
       }
     },
-    "Your HRV has been declining for %lld days. Reduce training volume to 70%% and try to get 30 more minutes of sleep." : {
+    "Your HRV has been declining for %lld days. Reduce training volume to %@ and try to get 30 more minutes of sleep." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your HRV has been declining for %1$lld days. Reduce training volume to %2$@ and try to get 30 more minutes of sleep."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HRVが%lld日間低下しています。トレーニング量を70%%に減らし、睡眠を30分多く取るようにしましょう。"
+            "value" : "HRVが%1$lld日間低下しています。トレーニング量を%2$@に減らし、睡眠を30分多く取るようにしましょう。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HRV가 %lld일째 하락 중입니다. 훈련량을 70%%로 줄이고 수면을 30분 더 확보해보세요."
+            "value" : "HRV가 %1$lld일째 하락 중입니다. 훈련량을 %2$@로 줄이고 수면을 30분 더 확보해보세요."
           }
         }
       }

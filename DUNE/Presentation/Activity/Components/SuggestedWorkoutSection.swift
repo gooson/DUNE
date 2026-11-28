@@ -32,18 +32,7 @@ struct SuggestedWorkoutSection: View {
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
     @Query(sort: \WorkoutTemplate.updatedAt, order: .reverse) private var templates: [WorkoutTemplate]
 
-    private static let columns: [GridItem] = [
-        GridItem(.flexible(), spacing: DS.Spacing.sm),
-        GridItem(.flexible(), spacing: DS.Spacing.sm),
-    ]
-
     private static let searchBorderColor = Color.secondary.opacity(0.15)
-
-    private var recommendationColumns: [GridItem] {
-        dynamicTypeSize.isAccessibilitySize
-            ? [GridItem(.flexible())]
-            : Self.columns
-    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -279,7 +268,7 @@ struct SuggestedWorkoutSection: View {
                     }
                 }
 
-                LazyVGrid(columns: recommendationColumns, spacing: DS.Spacing.sm) {
+                ActivityCardGrid(minimumCardWidth: 260, maximumColumns: 2) {
                     ForEach(suggestion.exercises) { exercise in
                         let excluded = isExerciseExcluded(exercise.id)
                         SuggestedExerciseRow(
@@ -292,6 +281,7 @@ struct SuggestedWorkoutSection: View {
                             },
                             onShowAlternativeDetails: { alt in detailExercise = alt }
                         )
+                        .frame(maxWidth: .infinity, maxHeight: ActivityTabletGrid.isEnabled ? .infinity : nil, alignment: .topLeading)
                         .padding(DS.Spacing.sm)
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: DS.Radius.sm))
                     }

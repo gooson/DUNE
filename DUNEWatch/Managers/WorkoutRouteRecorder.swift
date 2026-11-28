@@ -10,6 +10,7 @@ protocol WorkoutRouteLocationProviding: AnyObject {
     var desiredAccuracy: CLLocationAccuracy { get set }
     var distanceFilter: CLLocationDistance { get set }
     var allowsBackgroundLocationUpdates: Bool { get set }
+    var location: CLLocation? { get }
     func requestWhenInUseAuthorization()
     func requestLocation()
     func startUpdatingLocation()
@@ -21,6 +22,7 @@ extension CLLocationManager: WorkoutRouteLocationProviding {}
 /// Collects real Watch GPS points only. HealthKit remains the source of workout distance.
 @MainActor
 final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
+    static let finalPlaceWaitSeconds: TimeInterval = 3
     private let locationManager: any WorkoutRouteLocationProviding
     private(set) var points: [WorkoutRoutePoint] = []
     private(set) var elevationProfile = WatchElevationProfile()
@@ -32,11 +34,15 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
     private var previousPoint: WorkoutRoutePoint?
     private var isUpdatingLocation = false
     private var capturesPlaceOnly = false
-    private var hasRequestedPlace = false
-    private var placeTimeoutTask: Task<Void, Never>?
+    private let initialPlaceRetryDelay: Duration
+    private var placeRetryTask: Task<Void, Never>?
+    private var latestPlaceSample: Date?
+    private var finalPlaceCompletion: AsyncStream<Void>.Continuation?
 
-    init(locationManager: any WorkoutRouteLocationProviding = CLLocationManager()) {
+    init(locationManager: any WorkoutRouteLocationProviding = CLLocationManager(),
+         initialPlaceRetryDelay: Duration = .seconds(30)) {
         self.locationManager = locationManager
+        self.initialPlaceRetryDelay = initialPlaceRetryDelay
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -57,10 +63,10 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         return false
     }
 
-    func start(at date: Date, capturesPlaceOnly: Bool = false) {
+    func start(at date: Date, capturesPlaceOnly: Bool = false, latestPlaceSample: Date? = nil) {
         cancel()
         self.capturesPlaceOnly = capturesPlaceOnly
-        hasRequestedPlace = false
+        self.latestPlaceSample = latestPlaceSample
         locationManager.desiredAccuracy = capturesPlaceOnly ? kCLLocationAccuracyHundredMeters : kCLLocationAccuracyBest
         locationManager.distanceFilter = capturesPlaceOnly ? kCLDistanceFilterNone : 10
         locationManager.allowsBackgroundLocationUpdates = !capturesPlaceOnly
@@ -69,20 +75,6 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         acceptsSamplesFrom = date
         isRecording = true
         applyAuthorization(locationManager.authorizationStatus, requestsPermission: true)
-        if capturesPlaceOnly {
-            placeTimeoutTask = Task { @MainActor [weak self] in
-                do { try await Task.sleep(for: .seconds(30)) } catch { return }
-                self?.finishPlaceCapture()
-            }
-        }
-    }
-
-    func finishPlaceCapture() {
-        guard capturesPlaceOnly else { return }
-        isRecording = false
-        placeTimeoutTask?.cancel()
-        placeTimeoutTask = nil
-        stopUpdates()
     }
 
     func pause(at date: Date) {
@@ -91,8 +83,6 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         previousPoint = nil
         elevationProfile.breakSegment()
         stopUpdates()
-        // A paused one-shot request is cancelled; resume may make one fresh request.
-        if capturesPlaceOnly, capturedPlace == nil { hasRequestedPlace = false }
     }
 
     func resume(at date: Date) {
@@ -105,11 +95,10 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
     }
 
     func stop() -> [WorkoutRoutePoint] {
-        placeTimeoutTask?.cancel()
-        placeTimeoutTask = nil
         isRecording = false
         isPaused = false
         acceptsSamplesFrom = nil
+        latestPlaceSample = nil
         previousPoint = nil
         stopUpdates()
         return WorkoutLocationPayload.normalizedRoute(points)
@@ -122,6 +111,10 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
     }
 
     private func stopUpdates() {
+        placeRetryTask?.cancel()
+        placeRetryTask = nil
+        finalPlaceCompletion?.finish()
+        finalPlaceCompletion = nil
         locationManager.stopUpdatingLocation()
         isUpdatingLocation = false
     }
@@ -131,15 +124,13 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
             guard !isUpdatingLocation else { return }
-            if capturesPlaceOnly {
-                guard !hasRequestedPlace else { return }
-                hasRequestedPlace = true
-                isUpdatingLocation = true
-                locationManager.requestLocation()
-                return
-            }
             isUpdatingLocation = true
-            locationManager.startUpdatingLocation()
+            if capturesPlaceOnly {
+                if latestPlaceSample == nil { schedulePlaceRetries() }
+                locationManager.requestLocation()
+            } else {
+                locationManager.startUpdatingLocation()
+            }
         case .notDetermined:
             if requestsPermission { locationManager.requestWhenInUseAuthorization() }
         default:
@@ -148,11 +139,64 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
         }
     }
 
+    private func schedulePlaceRetries() {
+        // A one-shot request can fail, return an unusable fix, or never call back.
+        // Space out attempts while the workout is active and still needs its first pin.
+        placeRetryTask = Task { [weak self, initialPlaceRetryDelay] in
+            var delay = initialPlaceRetryDelay
+            for _ in 0..<5 {
+                do { try await Task.sleep(for: delay) } catch { return }
+                guard !Task.isCancelled, let self else { return }
+                let status = locationManager.authorizationStatus
+                guard status == .authorizedWhenInUse || status == .authorizedAlways else {
+                    stopUpdates()
+                    return
+                }
+                locationManager.stopUpdatingLocation()
+                locationManager.requestLocation()
+                delay *= 2
+            }
+        }
+    }
+
+    /// Allow late delivery of a workout fix while keeping its measurement tied to the end time.
+    func capturePlaceAtWorkoutEnd(
+        workoutStartedAt start: Date, endedAt end: Date, timeout: Duration = .seconds(finalPlaceWaitSeconds)
+    ) async -> WorkoutPlace? {
+        if let capturedPlace { return capturedPlace }
+        let deadline = end.addingTimeInterval(Self.finalPlaceWaitSeconds)
+        let wait = min(timeout, .seconds(deadline.timeIntervalSinceNow))
+        let status = locationManager.authorizationStatus
+        guard !Task.isCancelled, start <= end, wait > .zero,
+              status == .authorizedAlways || status == .authorizedWhenInUse else { return nil }
+
+        self.start(at: max(start, end.addingTimeInterval(-15)), capturesPlaceOnly: true, latestPlaceSample: end)
+        defer { _ = stop() }
+        if capturedPlace == nil, let cached = locationManager.location {
+            receive([cached], at: Date())
+        }
+        if let capturedPlace { return capturedPlace }
+        // A newly measured response can be timestamped just after the end button was pressed.
+        // Apply the same one-second clock tolerance as live samples, only to the requested fix.
+        latestPlaceSample = end.addingTimeInterval(1)
+        let (stream, completion) = AsyncStream<Void>.makeStream()
+        finalPlaceCompletion = completion
+        let timeoutTask = Task {
+            do { try await Task.sleep(for: wait) } catch { return }
+            completion.finish()
+        }
+        defer { timeoutTask.cancel() }
+        var iterator = stream.makeAsyncIterator()
+        _ = await iterator.next()
+        return capturedPlace
+    }
+
     /// Internal entry point allows deterministic lifecycle/sensor validation without GPS hardware.
     func receive(_ locations: [CLLocation], at now: Date) {
         guard isRecording, !isPaused, isUpdatingLocation, let acceptsSamplesFrom else { return }
         for location in locations {
             guard location.timestamp >= acceptsSamplesFrom,
+                  location.timestamp <= (latestPlaceSample ?? .distantFuture),
                   location.timestamp <= now.addingTimeInterval(1),
                   now.timeIntervalSince(location.timestamp) <= 15,
                   location.horizontalAccuracy >= 0,
@@ -171,7 +215,7 @@ final class WorkoutRouteRecorder: NSObject, CLLocationManagerDelegate {
             if capturesPlaceOnly {
                 capturedPlace = WorkoutPlace(latitude: point.latitude, longitude: point.longitude,
                                              name: "", source: .gps)
-                finishPlaceCapture()
+                _ = stop()
                 return
             }
             point.startsNewSegment = previousPoint == nil

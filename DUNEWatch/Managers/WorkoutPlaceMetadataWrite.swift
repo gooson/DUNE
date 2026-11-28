@@ -3,7 +3,22 @@ import Foundation
 /// Optional place enrichment must release workout finalization even if HealthKit never calls back.
 @MainActor
 enum WorkoutPlaceMetadataWrite {
-    enum Failure: Error, Equatable { case timedOut, missingResult }
+    enum Failure: Error, Equatable { case timedOut, missingResult, encodingFailed }
+
+    /// Writes the place selected by the recorder before workout collection ends.
+    /// The caller finishes the builder only after this operation returns.
+    static func write(
+        place: WorkoutPlace,
+        timeout: Duration,
+        addMetadata: ([String: Any], @escaping @Sendable (Bool, (any Error)?) -> Void) -> Void
+    ) async throws {
+        guard let value = WorkoutPlaceMetadata.encodedValue(for: place) else {
+            throw Failure.encodingFailed
+        }
+        try await perform(timeout: timeout) { completion in
+            addMetadata([WorkoutPlaceMetadata.key: value], completion)
+        }
+    }
 
     static func perform(
         timeout: Duration,

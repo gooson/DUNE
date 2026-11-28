@@ -380,7 +380,7 @@ struct CumulativeStressDetailView: View {
                             .accessibilityIdentifier("stress-contribution-progress-\(contribution.factor.rawValue)")
                     }
                     if let weight = stressScore.effectiveContributionWeights?[contribution.id] {
-                        Text("\(Int((weight * 100).rounded()))% applied")
+                        Text("\(Int((weight * 100).rounded()), format: .percent) applied")
                             .font(.caption.weight(.medium)).foregroundStyle(DS.Color.textSecondary)
                             .accessibilityIdentifier("stress-contribution-weight-\(contribution.factor.rawValue)")
                     }

@@ -795,11 +795,11 @@ final class WorkoutManager: NSObject {
         persistRecoveryState()
     }
 
-    /// Wait briefly for HealthKit workout finalization after `.ended` to reduce UUID races.
-    func waitForWorkoutFinalization(timeout seconds: TimeInterval = 5) async {
+    /// The session watchdog also releases summary saves if HealthKit fails to finish.
+    func waitForWorkoutFinalization() async {
         guard isSessionEnded else { return }
-        let deadline = Date().addingTimeInterval(seconds)
-        while isFinalizingWorkout, Date() < deadline {
+        let endedSession = session
+        while isFinalizingWorkout, session === endedSession, !Task.isCancelled {
             try? await Task.sleep(for: .milliseconds(100))
         }
     }
@@ -1611,6 +1611,30 @@ final class WorkoutManager: NSObject {
         self.routeRecorder = nil
     }
 
+    static func finishCardioWorkout(
+        builder: HKWorkoutBuilder, mode: WorkoutMode, capturedPlace: WorkoutPlace?,
+        startedAt: Date?, endedAt: Date
+    ) async throws -> HKWorkout? {
+        var place = capturedPlace
+        if place == nil, WorkoutRouteRecorder.shouldCapturePlace(mode: mode), let startedAt {
+            place = await WorkoutRouteRecorder().capturePlaceAtWorkoutEnd(
+                workoutStartedAt: startedAt, endedAt: endedAt
+            )
+        }
+        if let place {
+            do {
+                try await WorkoutPlaceMetadataWrite.write(place: place, timeout: .seconds(1)) { metadata, completion in
+                    builder.addMetadata(metadata, completion: completion)
+                }
+            } catch {
+                WorkoutBackupWarning.record()
+                logger.error("Could not save workout place: \(error.localizedDescription, privacy: .private)")
+            }
+        }
+        try await builder.endCollection(at: endedAt)
+        return try await builder.finishWorkout()
+    }
+
     private func enqueueRouteSave(_ points: [WorkoutRoutePoint], workout: HKWorkout) {
         guard !points.isEmpty, routeSaveJobs[workout.uuid] == nil else { return }
         // Bound concurrent optional enrichment even if workouts are ended in rapid succession.
@@ -1930,18 +1954,19 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                 let endedPlace = capturedPlace
                 completedPlace = endedPlace
                 capturedPlace = nil
+                let endedBuilder = builder
+                let endedWorkoutMode = workoutMode
+                let endedStartDate = startDate
                 if completedDuration == nil { completedDuration = activeElapsedTime(at: date) }
                 endPause(at: date, announcesResume: false)
                 isSessionEnded = true
                 stopInactivityMonitoring()
                 isFinalizingWorkout = true
                 notifyWorkoutEndedIfNeeded()
-                startFinalizationTimeoutWatchdog()
-                // Give optional metadata at most the first second of the six-second watchdog,
-                // before endCollection. Reserve the remainder for core workout finalization.
-                let placeMetadataDeadline = ContinuousClock.now.advanced(by: .seconds(1))
-                let endedBuilder = builder
-                let endedWorkoutMode = workoutMode
+                // Keep the normal HealthKit save budget after the optional end-time lookup.
+                let needsPlace = endedPlace == nil && WorkoutRouteRecorder.shouldCapturePlace(mode: endedWorkoutMode)
+                let lookupAllowance = needsPlace ? WorkoutRouteRecorder.finalPlaceWaitSeconds : 0
+                startFinalizationTimeoutWatchdog(timeout: 6 + lookupAllowance)
                 defer {
                     if session === workoutSession {
                         finalizationTimeoutTask?.cancel()
@@ -1950,29 +1975,20 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
                     }
                 }
                 do {
-                    if endedWorkoutMode != .strength, let endedBuilder, let endedPlace,
-                       let value = WorkoutPlaceMetadata.encodedValue(for: endedPlace) {
-                        do {
-                            try await WorkoutPlaceMetadataWrite.perform(
-                                timeout: ContinuousClock.now.duration(to: placeMetadataDeadline)
-                            ) { completion in
-                                endedBuilder.addMetadata([WorkoutPlaceMetadata.key: value], completion: completion)
-                            }
-                        } catch {
-                            WorkoutBackupWarning.record()
-                            Self.logger.error("Could not save workout place: \(error.localizedDescription, privacy: .private)")
-                        }
-                    }
-                    try await endedBuilder?.endCollection(at: date)
+                    guard let endedBuilder else { return }
                     if endedWorkoutMode == .strength {
+                        try await endedBuilder.endCollection(at: date)
                         // Strength template: discard the merged workout so individual
                         // per-exercise HKWorkouts can be created in SessionSummaryView.
-                        endedBuilder?.discardWorkout()
+                        endedBuilder.discardWorkout()
                         // Log after discard completes to confirm success.
                         Self.logger.info("Discarded merged builder workout for strength session")
                     } else {
                         // Cardio: keep the single live-builder workout as-is.
-                        let workout = try await endedBuilder?.finishWorkout()
+                        let workout = try await Self.finishCardioWorkout(
+                            builder: endedBuilder, mode: endedWorkoutMode, capturedPlace: endedPlace,
+                            startedAt: endedStartDate, endedAt: date
+                        )
                         if session === workoutSession,
                            let workoutID = workout?.uuid.uuidString, !workoutID.isEmpty {
                             healthKitWorkoutUUID = workoutID

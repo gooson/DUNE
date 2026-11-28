@@ -1,19 +1,12 @@
 import SwiftUI
 
-/// 2-column grid of unified personal records (strength + cardio).
+/// Unified strength and cardio records in the Activity dashboard.
 struct PersonalRecordsSection: View {
     let records: [ActivityPersonalRecord]
     let notice: String?
     let rewardSummary: WorkoutRewardSummary?
 
     @Environment(\.appTheme) private var theme
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-
-    private var columns: [GridItem] {
-        [GridItem(.flexible(), spacing: DS.Spacing.sm),
-         GridItem(.flexible(), spacing: DS.Spacing.sm)]
-    }
-
     var body: some View {
         if records.isEmpty {
             emptyState
@@ -24,17 +17,9 @@ struct PersonalRecordsSection: View {
                         rewardSummaryRow(rewardSummary)
                     }
 
-                    if dynamicTypeSize.isAccessibilitySize {
-                        VStack(spacing: DS.Spacing.sm) {
-                            ForEach(records.prefix(8)) { record in
-                                prCard(record)
-                            }
-                        }
-                    } else {
-                        LazyVGrid(columns: columns, spacing: DS.Spacing.sm) {
-                            ForEach(records.prefix(8)) { record in
-                                prCard(record)
-                            }
+                    ActivityCardGrid(minimumCardWidth: 180, maximumColumns: 4) {
+                        ForEach(records.prefix(8)) { record in
+                            prCard(record)
                         }
                     }
 
@@ -169,7 +154,7 @@ struct PersonalRecordsSection: View {
                     .accessibilityLabel(record.source == .healthKit ? Text("Apple Health") : Text("Manual entry"))
             }
         }
-        .frame(maxWidth: .infinity, alignment: .topLeading)
+        .frame(maxWidth: .infinity, maxHeight: ActivityTabletGrid.isEnabled ? .infinity : nil, alignment: .topLeading)
         .padding(DS.Spacing.md)
         .background {
             RoundedRectangle(cornerRadius: DS.Radius.lg)

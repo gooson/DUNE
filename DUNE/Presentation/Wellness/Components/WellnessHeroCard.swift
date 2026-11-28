@@ -176,7 +176,7 @@ struct WellnessHeroCard: View {
             .buttonStyle(.plain)
             .accessibilityIdentifier("wellness-hero-evidence-disclosure")
             if showsEvidence {
-                Text("Sleep 35%, Condition 30%, Body 20%, Posture 15%. Available scores are reweighted when a component is missing.")
+                Text("Sleep \(35, format: .percent), Condition \(30, format: .percent), Body \(20, format: .percent), Posture \(15, format: .percent). Available scores are reweighted when a component is missing.")
                     .font(.caption).foregroundStyle(muted)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier("wellness-hero-evidence-explanation")

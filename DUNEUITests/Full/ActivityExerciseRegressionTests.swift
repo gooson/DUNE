@@ -3719,6 +3719,49 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(calendar.isDateInToday(today), "Seed and assertions must stay on the same local day")
     }
 
+    func testImportedRunInspectorSurvivesPartialDismissalAndReopens() throws {
+        let compact = app.windows.firstMatch.horizontalSizeClass == .compact
+        openExerciseViewFromRecentWorkouts()
+        let rowID = "exercise-row-mock-workout-running-tempo"
+        XCTAssertTrue(app.scrollToHittableElementIfNeeded(rowID, maxSwipes: 8))
+        let row = app.buttons[rowID].firstMatch
+        row.auditTap()
+
+        let detail = app.scrollViews[AXID.healthkitWorkoutDetailScreen].firstMatch
+        let done = app.buttons["exercise-inspector-close"].firstMatch
+        let journey = app.buttons["cardio-atlas-journey"].firstMatch
+        XCTAssertTrue(journey.waitForExistence(timeout: 10), "Wait for Atlas history to populate")
+        XCTAssertTrue(detail.isHittable, "Imported workout content should be reachable")
+        XCTAssertTrue(done.wait(for: \.isHittable, toEqual: true, timeout: 5),
+                      "The inspector close control should be reachable")
+
+        let header = done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            .withOffset(CGVector(dx: -80, dy: 0))
+        if compact {
+            header.press(forDuration: 0.15, thenDragTo: header.withOffset(CGVector(dx: 0, dy: 32)),
+                         withVelocity: .slow, thenHoldForDuration: 0.4)
+            XCTAssertTrue(detail.isHittable && done.isHittable, "A partial drag must keep the detail visible")
+            XCTAssertLessThan(done.frame.midY, detail.frame.minY)
+        } else {
+            XCTAssertGreaterThanOrEqual(done.frame.minY, detail.frame.maxY)
+        }
+        addScreenshotAttachment(named: "W28 imported run after loading")
+        done.auditTap()
+        XCTAssertTrue(done.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(row.isHittable)
+        addScreenshotAttachment(named: "W01 after closing imported run")
+        row.auditTap()
+        XCTAssertTrue(detail.waitForExistence(timeout: 8) && detail.isHittable)
+        XCTAssertTrue(done.isHittable)
+        if compact {
+            header.press(forDuration: 0.1, thenDragTo: header.withOffset(CGVector(dx: 0, dy: app.frame.height * 0.65)))
+        } else {
+            done.auditTap()
+        }
+        XCTAssertTrue(done.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(row.isHittable, "Closing should return to the selected workout in the list")
+    }
+
     func testRecentWorkoutsSeeAllOpensExerciseHistory() throws {
         openExerciseViewFromRecentWorkouts()
 

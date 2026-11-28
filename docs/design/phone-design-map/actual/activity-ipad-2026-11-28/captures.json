@@ -1,0 +1,237 @@
+{
+  "screen": "A01",
+  "system": "iPadOS 27.2",
+  "locale": "ko_KR",
+  "appearance": "dark",
+  "fixture": "defaultSeeded",
+  "capture_source": "Native XCTest PNG",
+  "before_revision": "163cb7193650054667045af5fe1a8d1f13a99e4a",
+  "portrait_spacing_measurement": {
+    "scale": 2,
+    "x_px": 1733,
+    "before": {
+      "file": "before-records.png",
+      "between": "Achievement History and Weekly Report in trailing column",
+      "background_y_px_inclusive": [
+        851,
+        2495
+      ],
+      "gap_pt": 822.5
+    },
+    "after": {
+      "file": "portrait-records.png",
+      "between": "Personal Records and Achievement History",
+      "background_y_px_inclusive": [
+        1544,
+        1575
+      ],
+      "gap_pt": 16
+    }
+  },
+  "captures": [
+    {
+      "file": "before-records.png",
+      "test": "ActivityFlowUITests/testCaptureA01DarkFlow()",
+      "orientation": "portrait",
+      "device_id": "74040030-32E7-4D7B-AAF3-4A8F0C698365",
+      "captured": "2026-11-28T22:48:31+09:00",
+      "attachment": "902E64E1-15C7-4361-928B-C1A55222C9E7.png",
+      "encoded_pixels": [
+        2064,
+        2752
+      ],
+      "display_pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "d52002d0f9bcde5273f68389aacf3dad86a2db3feb76423174cb332c9dbb061a"
+    },
+    {
+      "file": "before-suggested.png",
+      "test": "ActivityFlowUITests/testCaptureA01DarkFlow()",
+      "orientation": "portrait",
+      "device_id": "74040030-32E7-4D7B-AAF3-4A8F0C698365",
+      "captured": "2026-11-28T22:47:58+09:00",
+      "attachment": "DA23AAEE-8290-40E7-92AD-83E26FC0D6F1.png",
+      "encoded_pixels": [
+        2064,
+        2752
+      ],
+      "display_pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "ec72ed5195cd28dbe759634104f15c893326d854db21b812e8ec43dd98721f84"
+    },
+    {
+      "file": "landscape-weekly.png",
+      "test": "ActivityFlowUITests/testIPadActivitySectionsUseAvailableWidth()",
+      "orientation": "landscape",
+      "device_id": "74040030-32E7-4D7B-AAF3-4A8F0C698365",
+      "captured": "2026-11-28T22:56:56+09:00",
+      "attachment": "2C97E4DB-3A4D-4746-9074-6D767EC2C88F.png",
+      "encoded_pixels": [
+        2064,
+        2752
+      ],
+      "display_pixels": [
+        2752,
+        2064
+      ],
+      "sha256": "841154a4aa6ca86393dbba4ad8173fc5911ff769c3059e441e7dd6aaafcb6a87"
+    },
+    {
+      "file": "portrait-records.png",
+      "test": "ActivityFlowUITests/testIPadActivitySectionsUseAvailableWidth()",
+      "orientation": "portrait",
+      "device_id": "74040030-32E7-4D7B-AAF3-4A8F0C698365",
+      "captured": "2026-11-28T22:56:32+09:00",
+      "attachment": "79E206F6-ECDF-48AF-B831-E6A6B95E40DA.png",
+      "encoded_pixels": [
+        2064,
+        2752
+      ],
+      "display_pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "c23866e84be31c155161bc3ba379b10f961ff2621e92f062db23a5554e69e586"
+    },
+    {
+      "file": "portrait-suggested.png",
+      "test": "ActivityFlowUITests/testIPadActivitySectionsUseAvailableWidth()",
+      "orientation": "portrait",
+      "device_id": "74040030-32E7-4D7B-AAF3-4A8F0C698365",
+      "captured": "2026-11-28T22:56:06+09:00",
+      "attachment": "C5E0F05E-BB09-413E-B34E-66ECE5E6C4BC.png",
+      "encoded_pixels": [
+        2064,
+        2752
+      ],
+      "display_pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "d1812619eafdbb9fc7275bcfea5da998515885a371eda872abad22c87fcd1a48"
+    },
+    {
+      "file": "portrait-readiness.png",
+      "test": "ActivityFlowUITests/testIPadActivitySectionsUseAvailableWidth()",
+      "orientation": "portrait",
+      "device_id": "74040030-32E7-4D7B-AAF3-4A8F0C698365",
+      "captured": "2026-11-28T22:55:47+09:00",
+      "attachment": "0390B6F9-C17B-4536-9BE3-23F30C806168.png",
+      "encoded_pixels": [
+        2064,
+        2752
+      ],
+      "display_pixels": [
+        2064,
+        2752
+      ],
+      "sha256": "f682b545edca91cf5f430297fad37dcd0650717c00f3a0b34507434e4403c829"
+    },
+    {
+      "file": "sidebar-records.png",
+      "test": "ActivityFlowUITests/testIPadActivityWithSidebar()",
+      "orientation": "landscape",
+      "device_id": "74040030-32E7-4D7B-AAF3-4A8F0C698365",
+      "captured": "2026-11-28T22:59:32+09:00",
+      "attachment": "C75C40FD-6F33-42F5-9106-A0A1590B1763.png",
+      "encoded_pixels": [
+        2064,
+        2752
+      ],
+      "display_pixels": [
+        2752,
+        2064
+      ],
+      "sha256": "649bdaa894f006e8fe45dd652bbec11790c7e0c1a74c44dd7990341307ce4d79"
+    },
+    {
+      "file": "sidebar-suggested.png",
+      "test": "ActivityFlowUITests/testIPadActivityWithSidebar()",
+      "orientation": "landscape",
+      "device_id": "74040030-32E7-4D7B-AAF3-4A8F0C698365",
+      "captured": "2026-11-28T22:59:15+09:00",
+      "attachment": "22D7E7EC-13BD-40AC-85A7-F858B546275A.png",
+      "encoded_pixels": [
+        2064,
+        2752
+      ],
+      "display_pixels": [
+        2752,
+        2064
+      ],
+      "sha256": "cef837efd1a8cc44cca2cfc69d70b7cfb0ced5c1bd091aef4a87be6e3617ac7e"
+    },
+    {
+      "file": "mini-portrait-records.png",
+      "test": "ActivityFlowUITests/testIPadActivitySectionsUseAvailableWidth()",
+      "orientation": "portrait",
+      "device_id": "1B8CC4C5-2A3D-4F9A-AD03-7C5CEAAB752F",
+      "captured": "2026-11-28T23:07:22+09:00",
+      "attachment": "A6B41511-CF43-4EDC-9E45-F6259FE01FA1.png",
+      "encoded_pixels": [
+        1512,
+        2316
+      ],
+      "display_pixels": [
+        1512,
+        2316
+      ],
+      "sha256": "2f1483b4ca2b23d2cd50dcd92b5ad1972ffa161d46b627c1b792b718c62b7853"
+    }
+  ],
+  "verified_cases": [
+    "testActivityRootReadinessAndFlowOrder",
+    "testIPadActivitySectionsUseAvailableWidth",
+    "testIPadActivityWithSidebar"
+  ],
+  "verification_notes": [
+    "The root order passed in the earlier targeted run. Portrait and landscape geometry passed after the training-observation layout change.",
+    "Opening the system sidebar in portrait covered the content. The docked sidebar was verified in landscape. An intermediate test incorrectly expected a toggle in the already-open sidebar."
+  ],
+  "devices": {
+    "74040030-32E7-4D7B-AAF3-4A8F0C698365": "iPad Pro 13-inch (M5)",
+    "1B8CC4C5-2A3D-4F9A-AD03-7C5CEAAB752F": "iPad mini (A20 Pro)"
+  },
+  "mini_partial_row_measurement": {
+    "file": "mini-portrait-records.png",
+    "row_card_counts": [
+      3,
+      3,
+      2
+    ],
+    "middle_row": {
+      "y_px": 1400,
+      "card_fill_x_px_inclusive": [
+        [
+          114,
+          528
+        ],
+        [
+          549,
+          962
+        ],
+        [
+          983,
+          1397
+        ]
+      ]
+    },
+    "last_row": {
+      "y_px": 1850,
+      "card_fill_x_px_inclusive": [
+        [
+          114,
+          745
+        ],
+        [
+          766,
+          1397
+        ]
+      ]
+    }
+  }
+}

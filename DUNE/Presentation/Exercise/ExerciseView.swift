@@ -24,6 +24,8 @@ struct ExerciseView: View {
     @State private var healthKitWorkoutToDelete: WorkoutSummary?
     @State private var recordsByID: [UUID: ExerciseRecord] = [:]
     @State private var inspectedExercise: ExerciseListItem.Selection?
+    @State private var sheetExercise: ExerciseListItem?
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseRecord.date, order: .reverse) private var manualRecords: [ExerciseRecord]
     @Query(sort: \CustomExercise.createdAt, order: .reverse) private var customExercises: [CustomExercise]
@@ -82,6 +84,9 @@ struct ExerciseView: View {
             }
             .onChange(of: viewModel.allExercises.map(\.id)) { _, _ in
                 inspectedExercise = inspectedExercise?.resolve(in: viewModel.allExercises).map(ExerciseListItem.Selection.init)
+                if let sheetExercise, ExerciseListItem.Selection(sheetExercise).resolve(in: viewModel.allExercises) == nil {
+                    self.sheetExercise = nil
+                }
             }
             .onChange(of: manualRecords) { _, newValue in
                 rebuildRecordIndex()
@@ -114,26 +119,45 @@ struct ExerciseView: View {
                 Text("\(workout.localizedTitle) on \(workout.date.formatted(date: .abbreviated, time: .omitted)) will be permanently deleted from all your devices.")
             }
             .confirmDeleteRecord($recordToDelete, context: modelContext)
+            .sheet(item: $sheetExercise) { selected in
+                // The sheet owns its item until dismissal, including a cancelled drag.
+                workoutInspector(for: ExerciseListItem.Selection(selected).resolve(in: viewModel.allExercises) ?? selected) {
+                    sheetExercise = nil
+                }
+            }
             .inspector(isPresented: Binding(
                 get: { inspectedExercise != nil },
                 set: { if !$0 { inspectedExercise = nil } }
             )) {
-                NavigationStack {
-                    VStack(spacing: 0) {
-                        HStack {
-                            Spacer()
-                            Button("Done") { inspectedExercise = nil }
-                                .accessibilityIdentifier("exercise-inspector-close")
-                        }
-                        .padding()
-                        if let item = inspectedExercise?.resolve(in: viewModel.allExercises) {
-                            exerciseDetail(item)
-                                .id(item.id)
-                        }
-                    }
+                workoutInspector(for: inspectedExercise?.resolve(in: viewModel.allExercises), closeEdge: .bottom) {
+                    inspectedExercise = nil
                 }
                 .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
             }
+    }
+
+    private func workoutInspector(
+        for item: ExerciseListItem?,
+        closeEdge: VerticalEdge = .top,
+        close: @escaping () -> Void
+    ) -> some View {
+        let closeRow = HStack {
+            Spacer()
+            Button("Done", action: close)
+                .accessibilityIdentifier("exercise-inspector-close")
+        }
+        .padding()
+
+        return NavigationStack {
+            VStack(spacing: 0) {
+                if closeEdge == .top { closeRow }
+                if let item {
+                    exerciseDetail(item)
+                        .id(item.id)
+                }
+                if closeEdge == .bottom { closeRow }
+            }
+        }
     }
 
     @ToolbarContentBuilder
@@ -256,7 +280,13 @@ struct ExerciseView: View {
                         Group {
                             if (item.source == .manual && findRecord(for: item) != nil)
                                 || (item.source == .healthKit && item.workoutSummary != nil) {
-                                Button { inspectedExercise = ExerciseListItem.Selection(item) } label: {
+                                Button {
+                                    if horizontalSizeClass == .compact {
+                                        sheetExercise = item
+                                    } else {
+                                        inspectedExercise = ExerciseListItem.Selection(item)
+                                    }
+                                } label: {
                                     UnifiedWorkoutRow(item: item, style: .full)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .contentShape(Rectangle())

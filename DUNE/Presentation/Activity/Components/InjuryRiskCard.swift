@@ -72,20 +72,12 @@ struct InjuryRiskCard: View {
                     Text("Training records · assessment context")
                         .font(.caption)
                         .foregroundStyle(DS.Color.textSecondary)
-                    if let volume = weeklyStats.first(where: { $0.id == "volume" }) {
-                        observation("Strength Volume", icon: "chart.bar.fill",
-                                    value: "\(volume.value) \(volume.unit)", detail: volume.change)
-                    }
-                    if let streak {
-                        observation("Consecutive Training", icon: "calendar",
-                                    value: String(localized: "\(streak.currentStreak) days"))
-                    }
-                    let observed = fatigueStates.filter { $0.fatigueLevel != .noData }
-                    let recovering = observed.filter { !$0.isRecovered }
-                    if !observed.isEmpty {
-                        observation("Muscle Recovery", icon: "figure.stand",
-                                    value: recovering.isEmpty ? String(localized: "Recovered") : String(localized: "Recovering"),
-                                    detail: recovering.prefix(2).map { $0.muscle.displayName }.joined(separator: " · "))
+                    if ActivityTabletGrid.isEnabled && !dynamicTypeSize.isAccessibilitySize {
+                        ActivityTabletGrid(minimumCardWidth: 180, maximumColumns: 3) {
+                            trainingObservations
+                        }
+                    } else {
+                        trainingObservations
                     }
                     Text("These records provide context; they are not all risk factors.")
                         .font(.caption2)
@@ -124,6 +116,25 @@ struct InjuryRiskCard: View {
                     }
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var trainingObservations: some View {
+        if let volume = weeklyStats.first(where: { $0.id == "volume" }) {
+            observation("Strength Volume", icon: "chart.bar.fill",
+                        value: "\(volume.value) \(volume.unit)", detail: volume.change)
+        }
+        if let streak {
+            observation("Consecutive Training", icon: "calendar",
+                        value: String(localized: "\(streak.currentStreak) days"))
+        }
+        let observed = fatigueStates.filter { $0.fatigueLevel != .noData }
+        let recovering = observed.filter { !$0.isRecovered }
+        if !observed.isEmpty {
+            observation("Muscle Recovery", icon: "figure.stand",
+                        value: recovering.isEmpty ? String(localized: "Recovered") : String(localized: "Recovering"),
+                        detail: recovering.prefix(2).map { $0.muscle.displayName }.joined(separator: " · "))
         }
     }
 

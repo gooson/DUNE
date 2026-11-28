@@ -324,7 +324,7 @@ struct TodayBriefCard: View {
         if humidityPercent > 70 {
             return EnvironmentAlert(
                 icon: "humidity.fill",
-                message: String(localized: "High humidity \(humidityPercent)% — stay hydrated during outdoor exercise"),
+                message: String(localized: "High humidity \(humidityPercent.formatted(.percent)) — stay hydrated during outdoor exercise"),
                 color: DS.Color.caution
             )
         }

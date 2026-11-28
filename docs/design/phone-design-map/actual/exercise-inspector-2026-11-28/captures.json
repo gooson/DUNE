@@ -1,0 +1,80 @@
+{
+  "runtime": "iOS 27.2",
+  "fixture": "activity-exercise-seeded, mock-workout-running-tempo",
+  "captures": [
+    {
+      "screen": "W01",
+      "file": "iphone-w01.png",
+      "device": "iPhone18Pro-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "A8CF574A-2783-42A8-A615-61825E76EE24",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T08:31:32.959000+00:00",
+      "sha256": "b649b74369b927d8a1813722240040d892a3576360c5e406a8786f5055ec6a23"
+    },
+    {
+      "screen": "W28",
+      "file": "iphone-w28.png",
+      "device": "iPhone18Pro-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "A8CF574A-2783-42A8-A615-61825E76EE24",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T08:31:30.901000+00:00",
+      "sha256": "d298fa5aeb20fb126319ed0e5bf5c969cc4277569f2bc506e345092eadcff144"
+    },
+    {
+      "screen": "W01",
+      "file": "ipad-w01.png",
+      "device": "iPadPro13-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "AB395495-116C-4985-97D4-FB6E4EBBC3A6",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T08:29:39.330000+00:00",
+      "sha256": "83220ac86eeeb285057e2dcb5abfb39f4843f95c823e443bf3a72e751b846394"
+    },
+    {
+      "screen": "W28",
+      "file": "ipad-w28.png",
+      "device": "iPadPro13-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "AB395495-116C-4985-97D4-FB6E4EBBC3A6",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T08:29:37.119000+00:00",
+      "sha256": "6188334c7d65a7884306e8881916dcc2650e0890af6b42cb9e6e0abec1426eed"
+    },
+    {
+      "screen": "W01",
+      "file": "duo-close-w01.png",
+      "device": "iPhoneDuo-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "174F9AC9-9B45-4EEC-AC16-4E18DB731DB8",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T08:32:47.448000+00:00",
+      "sha256": "c358af4108906e618f992502f0cd3c66a514e3c403814066b97014e4db3c67b0"
+    },
+    {
+      "screen": "W28",
+      "file": "duo-close-w28.png",
+      "device": "iPhoneDuo-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "174F9AC9-9B45-4EEC-AC16-4E18DB731DB8",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T08:32:45.362000+00:00",
+      "sha256": "04ffb3791599356d66371abbee28acdfdf91d92a16953be9825075ae79e1d346"
+    },
+    {
+      "screen": "W01",
+      "file": "duo-open-w01.png",
+      "device": "iPhoneDuo-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "174F9AC9-9B45-4EEC-AC16-4E18DB731DB8",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T08:35:10.776810+00:00",
+      "sha256": "1cec8dbbec6d1fd7006cab0cea25eabde70867f59c3153acc7f7ce4f1e6aadb1",
+      "capture_source": "CoreSimulator LCD-1 (active), native screenshot during XCTest"
+    },
+    {
+      "screen": "W28",
+      "file": "duo-open-w28.png",
+      "device": "iPhoneDuo-wt-DUNE-Work-bb6f0f69c57e",
+      "udid": "174F9AC9-9B45-4EEC-AC16-4E18DB731DB8",
+      "test": "ActivityExerciseRegressionTests/testImportedRunInspectorSurvivesPartialDismissalAndReopens()",
+      "captured_at": "2026-11-28T08:35:08.954362+00:00",
+      "sha256": "bad4cc00bd1b906f924ba6ae5899e8046345660202593e89609360e9abaf575c",
+      "capture_source": "CoreSimulator LCD-1 (active), native screenshot during XCTest"
+    }
+  ]
+}
