@@ -137,6 +137,40 @@ struct NearbyWorkoutRestoreTests {
         #expect(try await restored.workouts(start: .distantPast, end: now, scope: "owner").isEmpty)
     }
 
+    @Test func committedPlaceRefreshesOnlyTheMatchingWorkout() async throws {
+        let root = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let cache = NearbyWorkoutCache(root: root)
+        let source = UUID(), firstID = UUID(), secondID = UUID(), unrelated = UUID()
+        let first = try entry(id: firstID)
+        let second = try entry(id: secondID)
+        let noPin = NearbyWorkoutHistory.Entry(workout: first.workout, location: nil)
+        try await cache.accept(packet(from: source, at: -2, entries: [noPin]), scope: "owner")
+        #expect(try await cache.location(id: firstID.uuidString, scope: "owner") == nil)
+
+        let page = try packet(from: source, at: -1, entries: [first, second])
+        try await confirmation(expectedCount: 1) { committed in
+            let observer = NotificationCenter.default.addObserver(
+                forName: NearbyWorkoutCache.didChange, object: nil, queue: nil
+            ) { notification in
+                guard let ids = notification.object as? Set<UUID>, ids.contains(firstID) else { return }
+                #expect(ids == [firstID, secondID])
+                #expect(!ids.contains(unrelated))
+                committed()
+            }
+            defer { NotificationCenter.default.removeObserver(observer) }
+            try await cache.accept(page, scope: "owner")
+        }
+        for item in [first, second] {
+            let location = try await cache.location(id: item.workout.id, scope: "owner")
+            #expect(location == item.location)
+            #expect(location?.place != nil)
+        }
+        let edits = NearbyWorkoutHistory(version: 3, fetchedAt: now, entries: [], deletedIDs: [firstID],
+            placeEdits: [.init(cursor: .init(date: now, id: secondID), location: .init(isIndoor: true))])
+        #expect(edits.affectedWorkoutIDs == [firstID, secondID])
+    }
+
     @Test func olderSavedPlaceEditsPropagateWithoutWorkoutMutation() async throws {
         let root = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: root) }

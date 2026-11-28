@@ -47,6 +47,13 @@ struct NearbyWorkoutHistory: Codable, Sendable {
     var placeEdits: [PlaceEdit]?
 
 
+    var affectedWorkoutIDs: Set<UUID> {
+        var ids = deletedIDs
+        ids.formUnion(entries.compactMap { UUID(uuidString: $0.workout.id) })
+        ids.formUnion((placeEdits ?? []).map { $0.cursor.id })
+        return ids
+    }
+
     static let maxEntries = 2_000
     static let maxBytes = 16 * 1_024 * 1_024
     static func capture(
@@ -312,7 +319,9 @@ actor NearbyWorkoutCache {
     func accept(_ data: Data, scope: String) throws {
         let history = try NearbyWorkoutHistory.decode(data)
         guard let db = try store(scope: scope, create: true) else { throw CocoaError(.fileWriteUnknown) }
-        if try apply(history, to: db) { NotificationCenter.default.post(name: Self.didChange, object: nil) }
+        if try apply(history, to: db) {
+            NotificationCenter.default.post(name: Self.didChange, object: history.affectedWorkoutIDs)
+        }
     }
 
     private func apply(_ history: NearbyWorkoutHistory, to db: Store) throws -> Bool {

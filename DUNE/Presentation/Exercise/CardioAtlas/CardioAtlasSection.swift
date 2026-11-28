@@ -41,6 +41,12 @@ struct CardioAtlasSection: View {
     @State private var mapRevision = UUID()
     @State private var isPreparingLocation = true
     @State private var isLoadingRoute = false
+    @State private var locationRevision = 0
+
+    private struct LocationLoad: Equatable {
+        let workoutID: String?
+        let revision: Int
+    }
 
     init(session: CardioAtlasSession, localRecordID: UUID? = nil, healthKitWorkoutID: String? = nil) {
         self.session = session
@@ -120,7 +126,7 @@ struct CardioAtlasSection: View {
                 ProgressView("Loading recorded history")
                     .font(.caption)
             } else if routeUnavailable, displayLocation.route.isEmpty {
-                Button("Try again") { Task { await loadHistory() } }
+                Button("Try again") { locationRevision += 1 }
             }
             if let place = displayLocation.place {
                 Label(place.displayName, systemImage: "mappin.and.ellipse")
@@ -145,6 +151,23 @@ struct CardioAtlasSection: View {
         .onChange(of: distanceGoal) { prepareProgressGoal() }
         .onChange(of: durationGoal) { prepareProgressGoal() }
         .task(id: healthKitWorkoutID) { await loadHistory() }
+        .task(id: LocationLoad(workoutID: healthKitWorkoutID, revision: locationRevision)) {
+            await loadLocation()
+        }
+#if os(iOS)
+        .onReceive(NotificationCenter.default.mainThreadPublisher(for: NearbyWorkoutCache.didChange)) { change in
+            guard ProcessInfo.processInfo.isiOSAppOnMac, let healthKitWorkoutID,
+                  let id = UUID(uuidString: healthKitWorkoutID) else { return }
+            // A nil object invalidates the account. A committed page invalidates only its workouts.
+            if let affected = change.object as? Set<UUID>, !affected.contains(id) { return }
+            if change.object == nil {
+                healthKitPlace = nil
+                healthKitRoute = []
+                prepareLocation()
+            }
+            locationRevision += 1
+        }
+#endif
         .sheet(isPresented: $showPlacePicker) {
             CardioAtlasPlacePicker(initialPlace: displayLocation.place, onSave: savePlace)
         }
@@ -286,11 +309,19 @@ struct CardioAtlasSection: View {
     @MainActor
     private func loadHistory() async {
         isLoading = true
-        routeUnavailable = false
         historyUnavailable = false
+        let result = await loadWorkouts()
+        guard !Task.isCancelled else { return }
+        workouts = result.workouts
+        historyUnavailable = result.failed
+        prepareProgress()
+        isLoading = false
+    }
+
+    @MainActor
+    private func loadLocation() async {
+        routeUnavailable = false
         isLoadingRoute = healthKitWorkoutID != nil && locationRecords.first?.payload?.route.isEmpty != false
-        // Existing Activity history uses the same ten-year authorized window.
-        async let loadedWorkouts = loadWorkouts()
         if let healthKitWorkoutID, locationRecords.first?.payload?.route.isEmpty != false {
             do {
                 let location = try await WorkoutRouteQueryService().fetchLocation(workoutID: healthKitWorkoutID)
@@ -304,12 +335,6 @@ struct CardioAtlasSection: View {
         }
         isLoadingRoute = false
         prepareLocation()
-        let result = await loadedWorkouts
-        guard !Task.isCancelled else { return }
-        workouts = result.workouts
-        historyUnavailable = result.failed
-        prepareProgress()
-        isLoading = false
     }
 
     private func loadWorkouts() async -> (workouts: [WorkoutSummary], failed: Bool) {
