@@ -20,10 +20,17 @@ struct ExerciseHistoryView: View {
     }
 
     let exerciseName: String
+    private let navigationName: String
     let isPresentedInSheet: Bool
 
-    init(exerciseDefinitionID: String, exerciseName: String, isPresentedInSheet: Bool = false) {
+    init(
+        exerciseDefinitionID: String,
+        exerciseName: String,
+        navigationName: String? = nil,
+        isPresentedInSheet: Bool = false
+    ) {
         self.exerciseName = exerciseName
+        self.navigationName = navigationName ?? exerciseName
         self.isPresentedInSheet = isPresentedInSheet
         self._viewModel = State(initialValue: ExerciseHistoryViewModel(
             exerciseDefinitionID: exerciseDefinitionID,
@@ -45,7 +52,7 @@ struct ExerciseHistoryView: View {
             .padding(.horizontal, DS.Spacing.lg)
         }
         .accessibilityIdentifier("exercise-history-screen")
-        .englishNavigationTitle(exerciseName)
+        .englishNavigationTitle(navigationName)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             rebuildRecordIndex()

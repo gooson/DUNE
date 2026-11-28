@@ -68,7 +68,8 @@ struct ExerciseSessionDetailView: View {
                 NavigationStack {
                     ExerciseHistoryView(
                         exerciseDefinitionID: defID,
-                        exerciseName: resolvedTitle,
+                        exerciseName: record.exerciseType,
+                        navigationName: resolvedTitle,
                         isPresentedInSheet: true
                     )
                         .toolbar {
@@ -373,7 +374,11 @@ struct ExerciseSessionDetailView: View {
 
             } else {
                 NavigationLink {
-                    ExerciseHistoryView(exerciseDefinitionID: defID, exerciseName: resolvedTitle)
+                    ExerciseHistoryView(
+                        exerciseDefinitionID: defID,
+                        exerciseName: record.exerciseType,
+                        navigationName: resolvedTitle
+                    )
                 } label: { historyLinkLabel }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("exercise-session-view-history")

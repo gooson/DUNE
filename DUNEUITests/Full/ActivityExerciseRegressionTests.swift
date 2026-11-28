@@ -3804,10 +3804,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         benchPressRow.auditTap()
         let detailScroll = app.scrollViews["exercise-session-detail-scroll"].firstMatch
         XCTAssertTrue(detailScroll.waitForExistence(timeout: 5), "Selected workout details should appear\n\(app.debugDescription)")
-        let workoutTitle = app.navigationBars.matching(NSPredicate(
+        let workoutBars = app.navigationBars.matching(NSPredicate(
             format: "identifier IN %@", [Fixture.benchPressLocalizedName, "Barbell Bench Press", "バーベルベンチプレス"]
-        )).firstMatch
-        XCTAssertTrue(workoutTitle.waitForExistence(timeout: 5), "The navigation title must show the recorded exercise")
+        ))
+        XCTAssertTrue(workoutBars.firstMatch.waitForExistence(timeout: 5),
+                      "The navigation title must show the recorded exercise")
         addScreenshotAttachment(named: "W27 native workout title")
         for _ in 0..<6 where !historyLink.isHittable { detailScroll.swipeUp() }
         XCTAssertTrue(historyLink.exists && historyLink.isHittable,
@@ -3818,6 +3819,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.exerciseHistoryScreen].firstMatch.waitForExistence(timeout: 10),
             "Exercise history screen should open"
         )
+        if app.windows.firstMatch.horizontalSizeClass == .compact {
+            let historyBar = workoutBars.containing(.button, identifier: "exercise-history-close").firstMatch
+            XCTAssertTrue(historyBar.waitForExistence(timeout: 5), "Exercise history should use the same workout name")
+        }
+        addScreenshotAttachment(named: "W26 native history title")
     }
 
     func testVisualAuditExerciseHistoryFromSelectedWorkout() throws {
