@@ -47,10 +47,10 @@ final class CardioAtlasUITests: ActivityExerciseSeededUITestBaseCase {
         element("cardio-atlas-expand-map").tap()
 
         let mapBar = app.navigationBars.matching(
-            NSPredicate(format: "label IN %@", ["Workout map", "운동 지도"])
+            NSPredicate(format: "identifier IN %@", ["Workout map", "운동 지도", "ワークアウトマップ"])
         ).firstMatch
         XCTAssertTrue(mapBar.waitForExistence(timeout: 8), "Expanded map should own its navigation title")
-        let done = mapBar.buttons.matching(NSPredicate(format: "label IN %@", ["Done", "완료"])).firstMatch
+        let done = mapBar.buttons.matching(NSPredicate(format: "label IN %@", ["Done", "완료", "完了"])).firstMatch
         XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable)
         atlasScreenshot(named: "Cardio Atlas recorded route expanded map")
 

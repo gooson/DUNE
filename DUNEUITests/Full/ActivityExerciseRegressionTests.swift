@@ -3804,6 +3804,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         benchPressRow.auditTap()
         let detailScroll = app.scrollViews["exercise-session-detail-scroll"].firstMatch
         XCTAssertTrue(detailScroll.waitForExistence(timeout: 5), "Selected workout details should appear\n\(app.debugDescription)")
+        let workoutTitle = app.navigationBars.matching(NSPredicate(
+            format: "identifier IN %@", [Fixture.benchPressLocalizedName, "Barbell Bench Press", "バーベルベンチプレス"]
+        )).firstMatch
+        XCTAssertTrue(workoutTitle.waitForExistence(timeout: 5), "The navigation title must show the recorded exercise")
+        addScreenshotAttachment(named: "W27 native workout title")
         for _ in 0..<6 where !historyLink.isHittable { detailScroll.swipeUp() }
         XCTAssertTrue(historyLink.exists && historyLink.isHittable,
                       "Reopening the same workout should make its history reachable\n\(app.debugDescription)")
