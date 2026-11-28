@@ -11,7 +11,7 @@ status: complete
 
 iOS 설정에서 Dune, Ocean, Forest, Sakura, Arctic, Solar, Contour, Water Lilies, Pâtisserie를 선택한다. 각 테마는 팔레트 JSON, 정지 원화 JPG와 무음 반복 MP4를 앱 번들에서 읽는다. Today·Activity·Wellness·Life는 네이티브 제목 뒤에 원화를 그린다. Forest와 Ocean의 기존 카드 장식 영역은 새 원화를 사용할 때 본문 폭으로 돌아간다. [아홉 작가 테마 방향 시안](themes/artist-editions.html)
 
-일반 상세는 짧은 그림 배경을 사용한다. 대표 경로는 컨디션 T04, 운동 준비도 A02, 가져온 운동 기록 W28, 웰니스 점수 H02, 관측 수면 T06, 습관 주간 보고서 L08이다. 설정 미리보기와 시트는 정지 원화를 사용한다. 화면 이탈, 앱 비활성화, 동작 줄이기, 저전력 모드에서는 영상 재생을 중단한다. [화면 배치 계약](../layout-map/README.md)
+일반 상세는 짧은 그림 배경을 사용한다. 대표 경로는 컨디션 T04, 운동 준비도 A02, 가져온 운동 기록 W28, 웰니스 점수 H02, 관측 수면 T06, 습관 주간 보고서 L08이다. 설정 미리보기와 시트는 정지 원화를 사용한다. 공용 시트 배경은 일반 상세와 같은 세로 음영으로 제목부터 본문까지 이어진다. 화면 이탈, 앱 비활성화, 동작 줄이기, 저전력 모드에서는 영상 재생을 중단한다. [화면 배치 계약](../layout-map/README.md)
 
 점수판의 밝은 링과 어두운 표면은 테마 팔레트에서 가져온다. 건강 상태색과 축·기간·수치는 각 화면의 데이터 표현을 따른다. Watch는 공유 테마 색을 기본 배경과 운동 카드 윤곽에 쓰고, Pâtisserie는 옅은 하이라이트와 그림자로 배경을 표현한다. [공용 적용 구조](../../solutions/architecture/2026-11-19-artist-theme-native-rollout.md)
 
