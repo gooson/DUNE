@@ -42,11 +42,6 @@ protocol BedtimeReminderWatchAvailabilityProviding {
 }
 
 @MainActor
-protocol WatchBedtimeReminderRechecking: Sendable {
-    func cancelPendingReminderIfWatchIsWorn() async
-}
-
-@MainActor
 struct WatchConnectivityBedtimeReminderWatchAvailabilityProvider: BedtimeReminderWatchAvailabilityProviding {
     var isPaired: Bool {
         guard WCSession.isSupported() else { return false }

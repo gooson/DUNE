@@ -22,7 +22,8 @@ enum WatchWorkoutWriter {
         exerciseName: String,
         startDate: Date,
         duration: TimeInterval,
-        calories: Double?
+        calories: Double?,
+        strengthArchive: WorkoutStrengthArchive?
     ) async -> String? {
         guard duration > 0, duration <= 28800 else {
             logger.warning("Invalid duration \(duration, privacy: .private) for exercise")
@@ -71,6 +72,10 @@ enum WatchWorkoutWriter {
             if !metadata.isEmpty {
                 try await builder.addMetadata(metadata)
             }
+
+            try await WorkoutBackupWarning.attach(archive: strengthArchive, place: nil, write: { metadata in
+                try await builder.addMetadata(metadata)
+            })
 
             try await builder.endCollection(at: endDate)
 

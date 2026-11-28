@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import Testing
 @testable import DUNE
 
@@ -22,6 +23,58 @@ struct WatchWorkoutUpdateValidationTests {
             heartRateSamples: heartRateSamples,
             rpe: rpe
         )
+    }
+
+    @MainActor
+    @Test("The phone stores simultaneous Watch completions once and honors deletions on replay")
+    func phonePersistsDistinctCompletions() throws {
+        let schema = Schema([ExerciseRecord.self, WorkoutSet.self])
+        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+        let container = try ModelContainer(for: schema, configurations: config)
+        let suite = UUID().uuidString
+        let defaults = try #require(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let tombstones = DeletedWorkoutTombstoneStore(defaults: defaults)
+        func receive(_ update: WatchWorkoutUpdate) -> Bool {
+            DUNEApp.persistWatchCompletion(update, includesEffortEdit: true, context: container.mainContext, tombstones: tombstones)
+        }
+        var first = makeBaseUpdate()
+        let id = UUID()
+        first.recordID = id
+        first.completedSets[0].id = UUID()
+        var other = first
+        other.recordID = UUID()
+        other.completedSets[0].id = UUID()
+        #expect(receive(first))
+        first.rpe = 8
+        #expect(receive(first))
+        #expect(receive(other))
+        let saved = try container.mainContext.fetch(FetchDescriptor<ExerciseRecord>())
+        #expect(saved.count == 2)
+        let record = try #require(saved.first { $0.id == id })
+        #expect(record.rpe == 8)
+        #expect(record.sets?.first?.id == first.completedSets.first?.id)
+        tombstones.recordDeletion(recordID: id)
+        container.mainContext.delete(record)
+        try container.mainContext.save()
+        #expect(receive(first))
+        #expect(try container.mainContext.fetchCount(FetchDescriptor<ExerciseRecord>()) == 1)
+    }
+
+    @Test("Watch completions retain distinct record and set identities without HealthKit")
+    func completionIdentities() throws {
+        var first = makeBaseUpdate()
+        first.recordID = UUID()
+        first.completedSets[0].id = UUID()
+        var second = first
+        second.recordID = UUID()
+        let decoder = JSONDecoder()
+        let replay = try decoder.decode(WatchWorkoutUpdate.self, from: JSONEncoder().encode(first)).validated()
+        #expect(replay.recordID == first.recordID && replay.recordID != second.recordID)
+        #expect(replay.completedSets[0].id == first.completedSets[0].id)
+        #expect(replay.startTime == second.startTime && replay.healthKitWorkoutID == nil)
+        let old = try decoder.decode(WatchWorkoutUpdate.self, from: JSONEncoder().encode(makeBaseUpdate()))
+        #expect(old.recordID == nil)
     }
 
     @Test("validated filters out invalid set and heart rate samples")

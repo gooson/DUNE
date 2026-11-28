@@ -27,16 +27,15 @@ final class WatchSessionManager: NSObject {
     private(set) var receivedPostureSummary: DailyPostureSummary?
 
     /// Callback for when Watch sends a completed workout
-    var onWorkoutReceived: ((WatchWorkoutUpdate) -> Void)?
+    var onWorkoutReceived: ((WatchWorkoutUpdate, Bool) -> Bool)?
 
     /// Terminal state is independent of HealthKit mirroring and record synchronization.
     var onWorkoutEnded: ((WatchWorkoutSnapshot) -> Void)?
     private var workoutLifecycleOrdering = WatchWorkoutLifecycleOrdering()
 
     /// Serializes delegate message handling — cancel-before-spawn
-    private var messageHandlerTask: Task<Void, Never>?
     /// Last template snapshot pushed to Watch (used to respond to pull-requests).
-    private var cachedWorkoutTemplates: [WatchWorkoutTemplateInfo] = []
+    private var cachedWorkoutTemplates: [WatchWorkoutTemplateInfo]?
     /// Last exercise library snapshot pushed to Watch (used for cache fallback).
     private var cachedExerciseLibrary: [WatchExerciseInfo] = []
     /// Persistent source for watch re-sync requests after reinstall/background relaunch.
@@ -168,24 +167,24 @@ final class WatchSessionManager: NSObject {
 
     /// Fetches latest templates from SwiftData and transfers them to Watch.
     func syncWorkoutTemplatesToWatch(using modelContext: ModelContext) {
-        transferWorkoutTemplates(Self.makeWorkoutTemplatePayload(using: modelContext))
+        if let payload = Self.makeWorkoutTemplatePayload(using: modelContext) { transferWorkoutTemplates(payload) }
     }
 
     /// Fetches latest templates off the main actor and transfers them to Watch.
     func syncWorkoutTemplatesToWatch(using modelContainer: ModelContainer) {
         Task(priority: .utility) {
             let payload = await Self.makeWorkoutTemplatePayload(using: modelContainer)
-            guard !Task.isCancelled else { return }
+            guard !Task.isCancelled, let payload else { return }
             transferWorkoutTemplates(payload)
         }
     }
 
-    private nonisolated static func makeWorkoutTemplatePayload(using modelContainer: ModelContainer) async -> [WatchWorkoutTemplateInfo] {
+    private nonisolated static func makeWorkoutTemplatePayload(using modelContainer: ModelContainer) async -> [WatchWorkoutTemplateInfo]? {
         let context = ModelContext(modelContainer)
         return makeWorkoutTemplatePayload(using: context)
     }
 
-    private nonisolated static func makeWorkoutTemplatePayload(using modelContext: ModelContext) -> [WatchWorkoutTemplateInfo] {
+    private nonisolated static func makeWorkoutTemplatePayload(using modelContext: ModelContext) -> [WatchWorkoutTemplateInfo]? {
         let descriptor = FetchDescriptor<WorkoutTemplate>(
             sortBy: [SortDescriptor(\.updatedAt, order: .reverse)]
         )
@@ -220,7 +219,7 @@ final class WatchSessionManager: NSObject {
             }
         } catch {
             AppLogger.ui.error("Failed to fetch workout templates for Watch sync: \(error.localizedDescription)")
-            return []
+            return nil
         }
     }
 
@@ -400,7 +399,7 @@ extension WatchSessionManager: WCSessionDelegate {
                 syncExerciseLibraryToWatch()
                 if let registeredModelContainer {
                     syncWorkoutTemplatesToWatch(using: registeredModelContainer)
-                } else {
+                } else if let cachedWorkoutTemplates {
                     transferWorkoutTemplates(cachedWorkoutTemplates)
                 }
             }
@@ -428,10 +427,7 @@ extension WatchSessionManager: WCSessionDelegate {
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
         let messageCopy = ParsedWatchIncomingMessage(from: message)
         Task { @MainActor in
-            messageHandlerTask?.cancel()
-            messageHandlerTask = Task { @MainActor in
-                handleDecodedMessage(messageCopy)
-            }
+            handleDecodedMessage(messageCopy)
         }
     }
 
@@ -443,20 +439,14 @@ extension WatchSessionManager: WCSessionDelegate {
         let messageCopy = ParsedWatchIncomingMessage(from: message)
         replyHandler(["status": "received"])
         Task { @MainActor in
-            messageHandlerTask?.cancel()
-            messageHandlerTask = Task { @MainActor in
-                handleDecodedMessage(messageCopy)
-            }
+            handleDecodedMessage(messageCopy)
         }
     }
 
     nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
         let messageCopy = ParsedWatchIncomingMessage(from: userInfo)
         Task { @MainActor in
-            messageHandlerTask?.cancel()
-            messageHandlerTask = Task { @MainActor in
-                handleDecodedMessage(messageCopy)
-            }
+            handleDecodedMessage(messageCopy)
         }
     }
 
@@ -499,7 +489,7 @@ extension WatchSessionManager {
         if message.requestWorkoutTemplateSync {
             if let registeredModelContainer {
                 syncWorkoutTemplatesToWatch(using: registeredModelContainer)
-            } else {
+            } else if let cachedWorkoutTemplates {
                 transferWorkoutTemplates(cachedWorkoutTemplates)
             }
         }
@@ -534,7 +524,10 @@ extension WatchSessionManager {
                 var update = try JSONDecoder().decode(WatchWorkoutUpdate.self, from: data)
                 update = update.validated()
                 receivedWorkoutUpdate = update
-                onWorkoutReceived?(update)
+                if onWorkoutReceived?(update, message.completionTicket != nil) == true, let id = update.recordID,
+                   let ticket = message.completionTicket {
+                    WCSession.default.transferUserInfo(["completedRecordID": id.uuidString, "completionTicket": ticket])
+                }
             } catch {
                 AppLogger.ui.error("Failed to decode Watch workout: \(error.localizedDescription)")
             }
@@ -558,7 +551,7 @@ extension WatchSessionManager {
                 AppLogger.data.debug("[WatchSync] Received bulk sync: \(updates.count) workouts")
                 for var update in updates {
                     update = update.validated()
-                    onWorkoutReceived?(update)
+                    _ = onWorkoutReceived?(update, false)
                 }
             } catch {
                 AppLogger.data.error("[WatchSync] Failed to decode bulk workouts: \(error.localizedDescription)")
@@ -569,6 +562,7 @@ extension WatchSessionManager {
 
 struct ParsedWatchIncomingMessage: Sendable {
     let workoutContext: ParsedWatchIncomingContext
+    let completionTicket: String?
     let workoutCompleteData: Data?
     let setCompletedData: Data?
     let postureSummaryData: Data?
@@ -578,6 +572,7 @@ struct ParsedWatchIncomingMessage: Sendable {
 
     init(from message: [String: Any]) {
         workoutContext = ParsedWatchIncomingContext(from: message)
+        completionTicket = message["completionTicket"] as? String
         workoutCompleteData = message["workoutComplete"] as? Data
         setCompletedData = message["setCompleted"] as? Data
         postureSummaryData = message["postureSummary"] as? Data

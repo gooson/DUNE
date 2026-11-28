@@ -5,106 +5,37 @@ import HealthKit
 @main
 struct DUNEVisionApp: App {
     @AppStorage(AppTheme.storageKey) private var selectedTheme: AppTheme = .desertWarm
+    @Environment(\.scenePhase) private var scenePhase
     @State private var immersionStyle: ImmersionStyle = .progressive
 
-    private let modelContainer: ModelContainer
-    private let sharedHealthDataService: SharedHealthDataService
-    private let refreshCoordinator: AppRefreshCoordinating
-    private let observerManager: HealthKitObserverManager?
-    private var workoutService: WorkoutQuerying
-    private let historyModelContainer: ModelContainer
-
-    private static func makeInMemoryFallbackContainer() -> ModelContainer {
-        do {
-            AppLogger.data.error("visionOS: Falling back to in-memory ModelContainer")
-            return try HealthSnapshotMirrorContainerFactory.makeInMemoryContainer()
-        } catch {
-            fatalError("Failed to create fallback in-memory ModelContainer: \(error)")
-        }
+    private struct Runtime {
+        let modelContainer: ModelContainer
+        let historyModelContainer: ModelContainer
+        let sharedHealthDataService: any SharedHealthDataService
+        let refreshCoordinator: any AppRefreshCoordinating
+        let observerManager: HealthKitObserverManager?
+        let workoutService: any WorkoutQuerying
     }
 
-    private static func recoverModelContainer(
-        after error: Error,
-        cloudSyncEnabled: Bool
-    ) -> ModelContainer {
-        guard PersistentStoreRecovery.shouldDeleteStore(after: error) else {
-            AppLogger.data.error("visionOS: Skipping store deletion for non-migration error")
-            return makeInMemoryFallbackContainer()
-        }
+    @State private var storeOpening: PersistentStoreOpening<Runtime>
 
-        AppLogger.data.error("visionOS: Deleting persistent store after migration failure")
-        HealthSnapshotMirrorContainerFactory.deleteStoreFiles()
-
-        do {
-            return try HealthSnapshotMirrorContainerFactory.makeContainer(
-                cloudSyncEnabled: cloudSyncEnabled
-            )
-        } catch {
-            AppLogger.data.error("visionOS: ModelContainer retry failed: \(error)")
-            return makeInMemoryFallbackContainer()
-        }
-    }
-
-    private static func makeMirroredSnapshotContainer(
-        cloudSyncEnabled: Bool
-    ) -> ModelContainer {
-        do {
-            return try HealthSnapshotMirrorContainerFactory.makeContainer(
-                cloudSyncEnabled: cloudSyncEnabled
-            )
-        } catch {
-            AppLogger.data.error("visionOS ModelContainer failed: \(error)")
-            return recoverModelContainer(
-                after: error,
-                cloudSyncEnabled: cloudSyncEnabled
-            )
-        }
-    }
-
-    private static func makeExerciseHistoryFallbackContainer() -> ModelContainer {
-        do {
-            AppLogger.data.error("visionOS: Falling back to in-memory exercise history container")
-            return try VisionExerciseHistoryContainerFactory.makeInMemoryContainer()
-        } catch {
-            fatalError("Failed to create fallback exercise history container: \(error)")
-        }
-    }
-
-    private static func recoverExerciseHistoryModelContainer(
-        after error: Error,
-        cloudSyncEnabled: Bool
-    ) -> ModelContainer {
-        guard PersistentStoreRecovery.shouldDeleteStore(after: error) else {
-            AppLogger.data.error("visionOS: Skipping exercise history store deletion for non-migration error")
-            return makeExerciseHistoryFallbackContainer()
-        }
-
-        AppLogger.data.error("visionOS: Deleting exercise history store after migration failure")
-        VisionExerciseHistoryContainerFactory.deleteStoreFiles()
-
-        do {
-            return try VisionExerciseHistoryContainerFactory.makeContainer(
-                cloudSyncEnabled: cloudSyncEnabled
-            )
-        } catch {
-            AppLogger.data.error("visionOS: Exercise history container retry failed: \(error)")
-            return makeExerciseHistoryFallbackContainer()
-        }
-    }
-
-    private static func makeExerciseHistoryModelContainer(
-        cloudSyncEnabled: Bool
-    ) -> ModelContainer {
-        do {
-            return try VisionExerciseHistoryContainerFactory.makeContainer(
-                cloudSyncEnabled: cloudSyncEnabled
-            )
-        } catch {
-            AppLogger.data.error("visionOS exercise history ModelContainer failed: \(error)")
-            return recoverExerciseHistoryModelContainer(
-                after: error,
-                cloudSyncEnabled: cloudSyncEnabled
-            )
+    private static func openRuntime() -> PersistentStoreOpening<Runtime> {
+        PersistentStoreOpening {
+            let mirror = try HealthSnapshotMirrorContainerFactory.makeContainer()
+            let history = try VisionExerciseHistoryContainerFactory.makeContainer()
+            let healthAvailable = HKHealthStore.isHealthDataAvailable()
+            let service: any SharedHealthDataService
+            if healthAvailable {
+                service = SharedHealthDataServiceImpl(healthKitManager: .shared)
+            } else {
+                service = CloudMirroredSharedHealthDataService(modelContainer: mirror)
+            }
+            let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: service)
+            let observer = healthAvailable ? HealthKitObserverManager(
+                store: HKHealthStore(), coordinator: coordinator, notificationEvaluator: nil
+            ) : nil
+            return Runtime(modelContainer: mirror, historyModelContainer: history, sharedHealthDataService: service,
+                           refreshCoordinator: coordinator, observerManager: observer, workoutService: WorkoutQueryService(manager: .shared))
         }
     }
 
@@ -163,61 +94,43 @@ struct DUNEVisionApp: App {
             _selectedTheme = AppStorage(wrappedValue: normalizedTheme, AppTheme.storageKey)
         }
 
-        let cloudSyncEnabled = UserDefaults.standard.bool(forKey: "isCloudSyncEnabled")
-        let healthKitAvailable = HKHealthStore.isHealthDataAvailable()
-        let mirroredContainer = Self.makeMirroredSnapshotContainer(
-            cloudSyncEnabled: cloudSyncEnabled
-        )
-        self.modelContainer = mirroredContainer
+        _storeOpening = State(initialValue: Self.openRuntime())
+    }
 
-        let sharedService: SharedHealthDataService
-        if healthKitAvailable {
-            sharedService = SharedHealthDataServiceImpl(healthKitManager: .shared)
-        } else {
-            AppLogger.healthKit.info("HealthKit unavailable on visionOS. Using mirrored snapshot service.")
-            sharedService = CloudMirroredSharedHealthDataService(modelContainer: mirroredContainer)
-        }
-        self.sharedHealthDataService = sharedService
-        self.workoutService = WorkoutQueryService(manager: .shared)
-        self.historyModelContainer = Self.makeExerciseHistoryModelContainer(
-            cloudSyncEnabled: cloudSyncEnabled
-        )
-        self.workoutService = WorkoutQueryService(manager: .shared)
-
-        let coordinator = AppRefreshCoordinatorImpl(sharedHealthDataService: sharedService)
-        self.refreshCoordinator = coordinator
-
-        if healthKitAvailable {
-            let hkStore = HKHealthStore()
-            self.observerManager = HealthKitObserverManager(
-                store: hkStore,
-                coordinator: coordinator,
-                notificationEvaluator: nil
-            )
-        } else {
-            self.observerManager = nil
-        }
+    @ViewBuilder
+    private func loaded<Content: View>(@ViewBuilder _ content: (Runtime) -> Content) -> some View {
+        storeOpening.content(retry: { storeOpening = Self.openRuntime() }, ready: content)
     }
 
     var body: some Scene {
         WindowGroup {
-            VisionContentView(
-                modelContainer: modelContainer,
-                sharedHealthDataService: sharedHealthDataService,
-                refreshCoordinator: refreshCoordinator,
-                workoutService: workoutService
-            )
-            .tint(VisionThemePalette.accentColor(for: selectedTheme))
-            .modelContainer(historyModelContainer)
+            loaded { runtime in
+                VisionContentView(
+                    modelContainer: runtime.modelContainer,
+                    sharedHealthDataService: runtime.sharedHealthDataService,
+                    refreshCoordinator: runtime.refreshCoordinator,
+                    workoutService: runtime.workoutService
+                )
+                .onChange(of: scenePhase) { _, phase in
+                    if phase == .background {
+                        HealthStoreBackupPolicy.refresh(runtime.modelContainer)
+                        HealthStoreBackupPolicy.refresh(runtime.historyModelContainer)
+                    }
+                }
+                .tint(VisionThemePalette.accentColor(for: selectedTheme))
+                .modelContainer(runtime.historyModelContainer)
+            }
         }
 
         WindowGroup(id: VisionDashboardWindowKind.condition.windowID) {
-            VisionDashboardWindowScene(
-                kind: .condition,
-                sharedHealthDataService: sharedHealthDataService,
-                workoutService: workoutService
-            )
-            .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            loaded { runtime in
+                VisionDashboardWindowScene(
+                    kind: .condition,
+                    sharedHealthDataService: runtime.sharedHealthDataService,
+                    workoutService: runtime.workoutService
+                )
+                .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            }
         }
         .defaultSize(width: 760, height: 560)
         .defaultWindowPlacement { _, context in
@@ -225,12 +138,14 @@ struct DUNEVisionApp: App {
         }
 
         WindowGroup(id: VisionDashboardWindowKind.activity.windowID) {
-            VisionDashboardWindowScene(
-                kind: .activity,
-                sharedHealthDataService: sharedHealthDataService,
-                workoutService: workoutService
-            )
-            .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            loaded { runtime in
+                VisionDashboardWindowScene(
+                    kind: .activity,
+                    sharedHealthDataService: runtime.sharedHealthDataService,
+                    workoutService: runtime.workoutService
+                )
+                .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            }
         }
         .defaultSize(width: 860, height: 620)
         .defaultWindowPlacement { _, context in
@@ -238,12 +153,14 @@ struct DUNEVisionApp: App {
         }
 
         WindowGroup(id: VisionDashboardWindowKind.sleep.windowID) {
-            VisionDashboardWindowScene(
-                kind: .sleep,
-                sharedHealthDataService: sharedHealthDataService,
-                workoutService: workoutService
-            )
-            .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            loaded { runtime in
+                VisionDashboardWindowScene(
+                    kind: .sleep,
+                    sharedHealthDataService: runtime.sharedHealthDataService,
+                    workoutService: runtime.workoutService
+                )
+                .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            }
         }
         .defaultSize(width: 760, height: 560)
         .defaultWindowPlacement { _, context in
@@ -251,12 +168,14 @@ struct DUNEVisionApp: App {
         }
 
         WindowGroup(id: VisionDashboardWindowKind.body.windowID) {
-            VisionDashboardWindowScene(
-                kind: .body,
-                sharedHealthDataService: sharedHealthDataService,
-                workoutService: workoutService
-            )
-            .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            loaded { runtime in
+                VisionDashboardWindowScene(
+                    kind: .body,
+                    sharedHealthDataService: runtime.sharedHealthDataService,
+                    workoutService: runtime.workoutService
+                )
+                .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            }
         }
         .defaultSize(width: 760, height: 560)
         .defaultWindowPlacement { _, context in
@@ -264,10 +183,12 @@ struct DUNEVisionApp: App {
         }
 
         WindowGroup(id: VisionWindowPlacementPlanner.settingsWindowID) {
-            NavigationStack {
-                VisionSettingsView(modelContainer: modelContainer)
+            loaded { runtime in
+                NavigationStack {
+                    VisionSettingsView(modelContainer: runtime.modelContainer)
+                }
+                .tint(VisionThemePalette.accentColor(for: selectedTheme))
             }
-            .tint(VisionThemePalette.accentColor(for: selectedTheme))
         }
         .defaultSize(width: 520, height: 620)
         .defaultWindowPlacement { _, context in
@@ -276,8 +197,10 @@ struct DUNEVisionApp: App {
 
         // 3D Charts window — opened via openWindow(id:)
         WindowGroup(id: "chart3d") {
-            Chart3DContainerView(sharedHealthDataService: sharedHealthDataService, workoutService: workoutService)
-                .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            loaded { runtime in
+                Chart3DContainerView(sharedHealthDataService: runtime.sharedHealthDataService, workoutService: runtime.workoutService)
+                    .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            }
         }
         .defaultSize(width: 800, height: 600, depth: 400)
         .defaultWindowPlacement { _, context in
@@ -285,15 +208,19 @@ struct DUNEVisionApp: App {
         }
 
         WindowGroup(id: "spatial-volume") {
-            VisionVolumetricExperienceView(sharedHealthDataService: sharedHealthDataService)
-                .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            loaded { runtime in
+                VisionVolumetricExperienceView(sharedHealthDataService: runtime.sharedHealthDataService)
+                    .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            }
         }
         .windowStyle(.volumetric)
         .defaultSize(width: 1.4, height: 0.95, depth: 0.85, in: .meters)
 
         ImmersiveSpace(id: "immersive-recovery") {
-            VisionImmersiveExperienceView(sharedHealthDataService: sharedHealthDataService)
-                .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            loaded { runtime in
+                VisionImmersiveExperienceView(sharedHealthDataService: runtime.sharedHealthDataService)
+                    .tint(VisionThemePalette.accentColor(for: selectedTheme))
+            }
         }
         .immersionStyle(selection: $immersionStyle, in: .mixed, .progressive, .full)
     }

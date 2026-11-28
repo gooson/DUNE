@@ -24,6 +24,8 @@ struct WorkoutWriteInput: Sendable {
     let floorsAscended: Double?
     /// Activity type for distance type resolution (nil uses category-based fallback).
     let activityType: WorkoutActivityType?
+    let strengthArchive: WorkoutStrengthArchive?
+    let place: WorkoutPlace?
     let isIndoor: Bool?
     let routePoints: [WorkoutRoutePoint]
     let endDate: Date?
@@ -43,6 +45,8 @@ struct WorkoutWriteInput: Sendable {
         elevationGainMeters: Double? = nil,
         floorsAscended: Double? = nil,
         activityType: WorkoutActivityType? = nil,
+        strengthArchive: WorkoutStrengthArchive? = nil,
+        place: WorkoutPlace? = nil,
         isIndoor: Bool? = nil,
         routePoints: [WorkoutRoutePoint] = [],
         endDate: Date? = nil,
@@ -61,6 +65,8 @@ struct WorkoutWriteInput: Sendable {
         self.elevationGainMeters = elevationGainMeters
         self.floorsAscended = floorsAscended
         self.activityType = activityType
+        self.strengthArchive = strengthArchive
+        self.place = place
         self.isIndoor = isIndoor
         self.routePoints = isIndoor == true ? [] : WorkoutLocationPayload.normalizedRoute(routePoints)
         self.endDate = endDate
@@ -216,6 +222,10 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
             try await builder.addMetadata(metadata)
         }
 
+        try await WorkoutBackupWarning.attach(archive: input.strengthArchive, place: input.place, write: { metadata in
+            try await builder.addMetadata(metadata)
+        })
+
         try await builder.endCollection(at: endDate)
 
         guard let workout = try await builder.finishWorkout() else {
@@ -224,11 +234,15 @@ struct WorkoutWriteService: WorkoutWriting, Sendable {
 
         // A route is optional enrichment. Once the workout is saved, route failures must
         // never trigger a workout retry (which would create a duplicate).
-        if !input.routePoints.isEmpty,
-           store.authorizationStatus(for: HKSeriesType.workoutRoute()) == .sharingAuthorized {
+        if !input.routePoints.isEmpty {
+            guard store.authorizationStatus(for: HKSeriesType.workoutRoute()) == .sharingAuthorized else {
+                WorkoutBackupWarning.record()
+                return workout.uuid.uuidString
+            }
             do {
                 try await saveRoutes(input.routePoints, workout: workout, store: store)
             } catch {
+                WorkoutBackupWarning.record()
                 AppLogger.healthKit.warning("Workout saved; optional route write failed: \(error)")
             }
         }

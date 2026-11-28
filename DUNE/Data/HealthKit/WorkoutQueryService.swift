@@ -40,14 +40,14 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
             let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) ?? endDate
             return mockData.workoutSummaries(start: startDate, end: endDate)
         }
-        guard manager.isAvailable else { return [] }
-        try await manager.ensureNotDenied(for: HKObjectType.workoutType())
         let calendar = Calendar.current
         let endDate = Date()
         guard let startDate = calendar.date(byAdding: .day, value: -days, to: endDate) else {
             return []
         }
 
+        guard manager.isAvailable else { return try await macWorkoutHistory(start: startDate, end: endDate) }
+        try await manager.ensureNotDenied(for: HKObjectType.workoutType())
         let predicate = HKQuery.predicateForSamples(
             withStart: startDate,
             end: endDate,
@@ -70,7 +70,7 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
         if let mockData = SimulatorAdvancedMockDataProvider.current() {
             return mockData.workoutSummaries(start: start, end: end)
         }
-        guard manager.isAvailable else { return [] }
+        guard manager.isAvailable else { return try await macWorkoutHistory(start: start, end: end) }
         try await manager.ensureNotDenied(for: HKObjectType.workoutType())
 
         let predicate = HKQuery.predicateForSamples(
@@ -98,7 +98,7 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
             return Array(mockData.workoutSummaries(start: start, end: end)
                 .sorted { $0.date > $1.date }.prefix(boundedLimit))
         }
-        guard manager.isAvailable else { return [] }
+        guard manager.isAvailable else { return Array(try await macWorkoutHistory(start: start, end: end).prefix(boundedLimit)) }
         try await manager.ensureNotDenied(for: HKObjectType.workoutType())
         let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)
         let descriptor = HKSampleQueryDescriptor(
@@ -107,6 +107,17 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
             limit: boundedLimit
         )
         return try await manager.execute(descriptor).map(toSummary)
+    }
+
+    private func macWorkoutHistory(start: Date, end: Date) async throws -> [WorkoutSummary] {
+#if os(iOS)
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            return try await NearbyWorkoutCache.shared.workouts(
+                start: start, end: end, scope: try? await NearbyWorkoutTransfer.accountScope()
+            )
+        }
+#endif
+        return []
     }
 
     var isReminderHealthDataAvailable: Bool {
@@ -138,7 +149,7 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
 
     // MARK: - HKWorkout → WorkoutSummary
 
-    private func toSummary(_ workout: HKWorkout) -> WorkoutSummary {
+    func toSummary(_ workout: HKWorkout) -> WorkoutSummary {
         let activityType = WorkoutActivityType(healthKit: workout.workoutActivityType)
 
         // Calories
@@ -176,6 +187,9 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
         // Milestone detection
         let milestone = MilestoneDistance.detect(from: distance)
 
+        let isDUNEWorkout = WorkoutSourceClassifier.isFromAppFamily(
+            sourceBundleIdentifier: workout.sourceRevision.source.bundleIdentifier
+        )
         return WorkoutSummary(
             id: workout.uuid.uuidString,
             type: HealthKitWorkoutTitle.resolveTitle(
@@ -187,9 +201,8 @@ struct WorkoutQueryService: WorkoutQuerying, Sendable {
             calories: calories,
             distance: distance,
             date: workout.startDate,
-            isFromThisApp: WorkoutSourceClassifier.isFromAppFamily(
-                sourceBundleIdentifier: workout.sourceRevision.source.bundleIdentifier
-            ),
+            isFromThisApp: isDUNEWorkout,
+            strengthArchive: WorkoutStrengthArchive.read(from: workout.metadata, isDUNEWorkout: isDUNEWorkout),
             heartRateAvg: hrAvg,
             heartRateMax: hrMax,
             heartRateMin: hrMin,

@@ -103,25 +103,22 @@ enum HealthSnapshotMirrorContainerFactory {
     static let schema = Schema([HealthSnapshotMirrorRecord.self])
 
     static func configuration(
-        cloudSyncEnabled: Bool,
         url: URL? = nil
     ) -> ModelConfiguration {
         ModelConfiguration(
             storeName,
             schema: schema,
             url: url ?? defaultStoreURL(),
-            cloudKitDatabase: cloudSyncEnabled ? .automatic : .none
+            cloudKitDatabase: .none
         )
     }
 
     static func makeContainer(
-        cloudSyncEnabled: Bool,
         url: URL? = nil
     ) throws -> ModelContainer {
-        try ModelContainer(
-            for: schema,
-            configurations: configuration(cloudSyncEnabled: cloudSyncEnabled, url: url)
-        )
+        let container = try ModelContainer(for: schema, configurations: configuration(url: url))
+        HealthStoreBackupPolicy.refresh(container)
+        return container
     }
 
     static func makeInMemoryContainer() throws -> ModelContainer {
@@ -132,15 +129,6 @@ enum HealthSnapshotMirrorContainerFactory {
             cloudKitDatabase: .none
         )
         return try ModelContainer(for: schema, configurations: configuration)
-    }
-
-    static func deleteStoreFiles(at url: URL? = nil) {
-        let storeURL = url ?? defaultStoreURL()
-        let fileManager = FileManager.default
-        for suffix in ["", "-wal", "-shm"] {
-            let fileURL = URL(fileURLWithPath: storeURL.path + suffix)
-            try? fileManager.removeItem(at: fileURL)
-        }
     }
 
     static func defaultStoreURL() -> URL {

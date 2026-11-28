@@ -152,7 +152,7 @@ struct ExerciseListSection: View {
 
     // MARK: - Build Items + Index Atomically
 
-    private func buildItemsAndIndex() -> ([ExerciseListItem], [UUID: ExerciseRecord]) {
+    func buildItemsAndIndex() -> (items: [ExerciseListItem], recordsByID: [UUID: ExerciseRecord]) {
         let localRecords = workouts.localRecordsForDisplay(
             against: exerciseRecords,
             tombstonedIDs: tombstonedIDs

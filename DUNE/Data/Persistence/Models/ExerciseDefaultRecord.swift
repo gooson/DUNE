@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-/// Stores per-exercise default values (weight, reps) synced via CloudKit.
+/// Stores per-exercise default values locally; only the Quick Start favorite flag syncs.
 /// Priority: manual override > auto-remembered (last used) > global default.
 @Model
 final class ExerciseDefaultRecord {

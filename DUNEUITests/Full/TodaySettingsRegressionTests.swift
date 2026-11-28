@@ -1582,9 +1582,9 @@ final class CloudSyncConsentRegressionTests: UITestBaseCase {
         let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
         XCTAssertTrue(consentView.waitForExistence(timeout: 5), "Consent hook should present cloud sync consent sheet")
         XCTAssertTrue(app.staticTexts["iCloud Sync"].exists, "Consent title should identify the decision")
-        XCTAssertTrue(app.staticTexts["Private storage"].exists, "Privacy explanation should be visible")
-        XCTAssertTrue(app.staticTexts["Across devices"].exists, "Sync explanation should be visible")
-        XCTAssertTrue(app.staticTexts["Use without iCloud"].exists, "Local option should be visible")
+        XCTAssertTrue(app.staticTexts["Exercise Library"].exists, "Privacy explanation should be visible")
+        XCTAssertTrue(app.staticTexts["Apple Health"].exists, "Sync explanation should be visible")
+        XCTAssertTrue(app.staticTexts["On this device"].exists, "Local option should be visible")
         for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
             let choice = app.buttons[identifier].firstMatch
             XCTAssertTrue(choice.waitForExistence(timeout: 5))
@@ -1592,6 +1592,7 @@ final class CloudSyncConsentRegressionTests: UITestBaseCase {
                                         "Each choice needs a 44-point minimum touch target")
             XCTAssertTrue(choice.isHittable)
         }
+        addScreenshotAttachment(named: "T02-workout-restore-consent")
         VisualAudit.capture("Cloud sync consent before dismissal")
 
         let button = app.buttons[AXID.cloudSyncConsentLocalOnly].firstMatch
@@ -1626,7 +1627,7 @@ final class CloudSyncConsentRegressionTests: UITestBaseCase {
         let consentView = app.descendants(matching: .any)[AXID.cloudSyncConsentView].firstMatch
         XCTAssertTrue(consentView.waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["iCloud Sync"].exists)
-        for title in ["Private storage", "Across devices", "Use without iCloud"] {
+        for title in ["Exercise Library", "Apple Health", "On this device"] {
             XCTAssertTrue(app.staticTexts[title].exists, "\(title) should remain readable in dark appearance")
         }
         for identifier in [AXID.cloudSyncConsentEnable, AXID.cloudSyncConsentLocalOnly] {
@@ -1667,7 +1668,7 @@ final class CloudSyncConsentRegressionTests: UITestBaseCase {
         let end = consentView.coordinate(withNormalizedOffset: CGVector(
             dx: 0.5, dy: (contentTop - scrollFrame.minY) / scrollFrame.height
         ))
-        for title in ["Private storage", "Across devices", "Use without iCloud"] {
+        for title in ["Exercise Library", "Apple Health", "On this device"] {
             let rowTitle = app.staticTexts[title].firstMatch
             XCTAssertTrue(rowTitle.exists, "\(title) should remain in the scrollable content")
             for _ in 0..<8 {

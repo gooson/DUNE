@@ -132,6 +132,7 @@ struct PreferredExercisesListView: View {
             defaultsByExerciseID[exercise.id] = record
         }
 
+        QuickStartFavoriteSync.didEdit(isPreferred, exerciseID: exercise.id, in: modelContext)
         WatchSessionManager.shared.syncExerciseLibraryDefaultsToWatch(using: modelContext)
     }
 

@@ -948,7 +948,7 @@ final class ActivityViewModel {
     // MARK: - Personal Record Helpers
 
     /// Updates cardio PR cache from fresh HealthKit workouts.
-    private func refreshCardioPersonalRecords(with workouts: [WorkoutSummary]) {
+    func refreshCardioPersonalRecords(with workouts: [WorkoutSummary]) {
         for workout in workouts.sorted(by: { $0.date < $1.date }) {
             let newPRTypes: [PersonalRecordType]
             if isCardioCandidate(workout) {
@@ -1238,7 +1238,7 @@ final class ActivityViewModel {
         }
         #endif
 
-        guard canQueryHealthKit else { return [] }
+        guard canQueryHealthKit || ProcessInfo.processInfo.isiOSAppOnMac else { return [] }
         do {
             return try await workoutService.fetchWorkouts(days: 7)
         } catch {
@@ -1253,7 +1253,7 @@ final class ActivityViewModel {
     }
 
     private func safeExerciseMixWorkoutsFetch(canQueryHealthKit: Bool) async -> ExerciseMixWorkoutResult {
-        guard canQueryHealthKit else { return .init(workouts: [], didFail: false) }
+        guard canQueryHealthKit || ProcessInfo.processInfo.isiOSAppOnMac else { return .init(workouts: [], didFail: false) }
         let today = Calendar.current.startOfDay(for: Date())
         guard let start = Calendar.current.date(byAdding: .day, value: -27, to: today) else {
             return .init(workouts: [], didFail: true)

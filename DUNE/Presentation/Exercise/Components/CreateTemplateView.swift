@@ -557,6 +557,7 @@ struct TemplateFormView: View {
             template.exerciseEntries = clampedEntries
             template.updatedAt = Date()
         }
+        ExerciseLibraryBackup.didSaveRoutine(in: modelContext)
         dismiss()
     }
 }

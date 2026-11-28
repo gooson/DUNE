@@ -112,6 +112,7 @@ final class WatchConnectivityManager: NSObject {
     /// Cached exact-ID lookup for routine cards and preview resolution.
     private(set) var exerciseLibraryByID: [String: WatchExerciseInfo] = [:]
     /// Workout templates transferred from iPhone (fallback path when CloudKit is delayed/disabled).
+    private(set) var receivedTemplateSnapshot = false
     private(set) var workoutTemplates: [WatchWorkoutTemplateInfo] = []
 
     /// Global rest time (seconds) synced from iPhone settings.
@@ -340,31 +341,42 @@ final class WatchConnectivityManager: NSObject {
         }
     }
 
-    /// Send completed workout back to iPhone.
-    /// Uses sendMessage for immediate delivery, transferUserInfo as background fallback.
-    func sendWorkoutCompletion(_ update: WatchWorkoutUpdate) {
+    private let completionOutbox = WatchCompletionOutbox()
+
+    /// The Watch database owns the values. The outbox contains only identities and delivery tickets.
+    func queueWorkoutCompletion(recordID: UUID) throws {
+        try completionOutbox.enqueue(recordID)
+    }
+
+    func flushWorkoutCompletions() {
         let session = WCSession.default
-        guard session.activationState == .activated else { return }
-
-        if update.healthKitWorkoutID == nil {
-            Self.logger.debug("[WC] No healthKitWorkoutID for \(update.exerciseName, privacy: .public) — iPhone record will lack HK link")
+        guard session.activationState == .activated, let container = registeredModelContainer else { return }
+        let outstanding = Set(session.outstandingUserInfoTransfers.compactMap { $0.userInfo["completionTicket"] as? String })
+        let context = ModelContext(container)
+        let entries: [String: String]
+        do { entries = try completionOutbox.pending() } catch {
+            Self.logger.error("Could not load pending workout deliveries: \(error.localizedDescription)")
+            return
         }
-
-        do {
-            let data = try JSONEncoder().encode(update)
-            let message: [String: Any] = ["workoutComplete": data]
-
-            if session.isReachable {
-                session.sendMessage(
-                    message,
-                    replyHandler: nil,
-                    errorHandler: Self.makeWCErrorHandler("Failed to send workout completion")
-                )
-            } else {
-                session.transferUserInfo(message)
+        for (key, ticket) in entries where !outstanding.contains(ticket) {
+            guard let id = UUID(uuidString: key) else { continue }
+            var query = FetchDescriptor<ExerciseRecord>(predicate: #Predicate { $0.id == id })
+            query.fetchLimit = 1
+            do {
+                guard let record = try context.fetch(query).first else { continue }
+                var update = WatchWorkoutRecordBuilder.makeUpdate(from: record)
+                if update.cardio != nil {
+                    var places = FetchDescriptor<WorkoutLocationRecord>(predicate: #Predicate { $0.localRecordID == id })
+                    places.fetchLimit = 1
+                    let location = try context.fetch(places).first?.payload
+                    update.cardio?.isIndoor = location?.isIndoor
+                    update.cardio?.place = location?.place
+                }
+                let data = try JSONEncoder().encode(update)
+                session.transferUserInfo(["workoutComplete": data, "completionTicket": ticket])
+            } catch {
+                Self.logger.error("Workout transfer pending: \(error.localizedDescription, privacy: .public)")
             }
-        } catch {
-            Self.logger.error("Failed to encode workout: \(error.localizedDescription, privacy: .public)")
         }
     }
 
@@ -471,6 +483,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
                 lastReachability = session.isReachable
                 syncStatus = .syncing
                 loadCachedContext()
+                flushWorkoutCompletions()
                 if exerciseLibrary.isEmpty {
                     requestExerciseLibrarySyncIfNeeded(force: false)
                 }
@@ -485,6 +498,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
         let reachable = session.isReachable
         Task { @MainActor in
             observeReachability(reachable)
+            if reachable { flushWorkoutCompletions() }
             let needsLibrary = exerciseLibrary.isEmpty
             let needsTemplates = workoutTemplates.isEmpty
             guard needsLibrary || needsTemplates else { return }
@@ -542,6 +556,8 @@ extension WatchConnectivityManager: WCSessionDelegate {
 
 /// Extracts Sendable fields from a WCSession message in a nonisolated context.
 private struct ParsedWatchMessage: Sendable {
+    let completedRecordID: String?
+    let completionTicket: String?
     let workoutStateData: Data?
     let globalRestSeconds: Double?
     let appTheme: String?
@@ -550,6 +566,8 @@ private struct ParsedWatchMessage: Sendable {
     let requestBulkSyncSince: TimeInterval?
 
     init(from message: [String: Any]) {
+        completedRecordID = message["completedRecordID"] as? String
+        completionTicket = message["completionTicket"] as? String
         workoutStateData = message["workoutState"] as? Data
         globalRestSeconds = message["globalRestSeconds"] as? Double
         appTheme = message["appTheme"] as? String
@@ -601,6 +619,11 @@ extension WatchConnectivityManager {
     }
 
     private func handleParsedMessage(_ parsed: ParsedWatchMessage) {
+        if let id = parsed.completedRecordID, let ticket = parsed.completionTicket {
+            do { try completionOutbox.acknowledge(recordID: id, ticket: ticket) } catch {
+                Self.logger.error("Could not record workout delivery: \(error.localizedDescription)")
+            }
+        }
         if let data = parsed.workoutStateData {
             do {
                 let state = try JSONDecoder().decode(WatchWorkoutState.self, from: data)
@@ -720,6 +743,7 @@ extension WatchConnectivityManager {
         if let data = parsed.workoutTemplatesData {
             do {
                 workoutTemplates = try JSONDecoder().decode([WatchWorkoutTemplateInfo].self, from: data)
+                receivedTemplateSnapshot = true
             } catch {
                 Self.logger.error("Failed to decode workout templates: \(error.localizedDescription, privacy: .public)")
             }
@@ -826,5 +850,47 @@ extension WatchExerciseInfo: Hashable {
 
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
+    }
+}
+
+/// Contains opaque IDs only. A late receipt must never acknowledge a newer edit.
+@MainActor
+struct WatchCompletionOutbox {
+    private let directory: URL
+
+    init(directory: URL = URL.applicationSupportDirectory.appending(path: "WatchWorkoutDelivery", directoryHint: .isDirectory)) {
+        self.directory = directory
+    }
+
+    private var file: URL { directory.appending(path: "pending.json") }
+
+    func pending() throws -> [String: String] {
+        do {
+            return try JSONDecoder().decode([String: String].self, from: Data(contentsOf: file))
+        } catch let error as CocoaError where error.code == .fileReadNoSuchFile {
+            return [:]
+        }
+    }
+
+    func enqueue(_ recordID: UUID) throws {
+        var entries = try pending()
+        entries[recordID.uuidString] = UUID().uuidString
+        try write(entries)
+    }
+
+    func acknowledge(recordID: String, ticket: String) throws {
+        var entries = try pending()
+        guard entries[recordID] == ticket else { return }
+        entries.removeValue(forKey: recordID)
+        try write(entries)
+    }
+
+    private func write(_ entries: [String: String]) throws {
+        var destination = directory
+        try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
+        var attributes = URLResourceValues()
+        attributes.isExcludedFromBackup = true
+        try destination.setResourceValues(attributes)
+        try JSONEncoder().encode(entries).write(to: file, options: .atomic)
     }
 }

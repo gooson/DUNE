@@ -1,7 +1,7 @@
 import Foundation
 
 /// A single personal record entry for a specific workout activity type.
-struct PersonalRecord: Codable, Sendable {
+struct PersonalRecord: Codable, Sendable, Equatable {
     let type: PersonalRecordType
     let value: Double
     let date: Date
@@ -44,6 +44,28 @@ struct PersonalRecord: Codable, Sendable {
         self.weatherHumidity = weatherHumidity
         self.isIndoor = isIndoor
     }
+
+    /// Only enrich the same winner. During a live query the stored nonnil reading has precedence;
+    /// archive merges require competing nonnil values to be explicitly reconciled.
+    func supplementingContext(from other: Self, preserveExistingOnConflict: Bool = false) -> Self? {
+        guard type == other.type, value == other.value, date == other.date, workoutID == other.workoutID else { return nil }
+        var conflict = false
+        func union<T: Equatable>(_ current: T?, _ incoming: T?) -> T? {
+            if let current, let incoming, current != incoming { conflict = true }
+            return current ?? incoming
+        }
+        let result = Self(type: type, value: value, date: date, workoutID: workoutID,
+                          heartRateAvg: union(heartRateAvg, other.heartRateAvg),
+                          heartRateMax: union(heartRateMax, other.heartRateMax),
+                          heartRateMin: union(heartRateMin, other.heartRateMin),
+                          stepCount: union(stepCount, other.stepCount),
+                          weatherTemperature: union(weatherTemperature, other.weatherTemperature),
+                          weatherCondition: union(weatherCondition, other.weatherCondition),
+                          weatherHumidity: union(weatherHumidity, other.weatherHumidity),
+                          isIndoor: union(isIndoor, other.isIndoor))
+        return conflict && !preserveExistingOnConflict ? nil : result
+    }
+
 }
 
 /// Training Load data point for a single day.

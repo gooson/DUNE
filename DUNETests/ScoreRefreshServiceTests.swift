@@ -6,6 +6,33 @@ import Testing
 @Suite("ScoreRefreshService Tests")
 @MainActor
 struct ScoreRefreshServiceTests {
+    @Test("A mirror reader preserves received scores and never creates a local score")
+    func mirroredScoresAreReadOnly() async throws {
+        let container = try ModelContainer(
+            for: HourlyScoreSnapshot.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+        )
+        let service = ScoreRefreshService(modelContainer: container, canWriteSnapshots: false)
+        await service.recordSnapshot(conditionScore: 90, wellnessScore: 80, readinessScore: 75)
+        #expect(try container.mainContext.fetchCount(FetchDescriptor<HourlyScoreSnapshot>()) == 0)
+
+        let now = Date()
+        container.mainContext.insert(HourlyScoreSnapshot(
+            date: HourlyScoreSnapshot.hourTruncated(now), conditionScore: 61, readinessScore: 52, stressScore: 33
+        ))
+        try container.mainContext.save()
+        await service.recordSnapshot(conditionScore: 90, wellnessScore: 80, readinessScore: 75)
+        await service.invalidateCurrentReadinessSnapshot()
+        await service.invalidateCurrentStressSnapshot()
+        let invalidated = await service.invalidateVisibleConditionHistory()
+        #expect(!invalidated)
+        let scores = await service.fetchSnapshots(for: now)
+        #expect(scores.count == 1)
+        let score = try #require(scores.first)
+        #expect(score.conditionScore == 61 && score.readinessScore == 52 && score.stressScore == 33)
+        #expect(score.wellnessScore == nil)
+    }
+
     @Test("Missing readiness clears only the current hour score")
     func missingReadinessClearsCurrentHour() async throws {
         let container = try ModelContainer(

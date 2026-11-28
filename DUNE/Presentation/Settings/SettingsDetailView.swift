@@ -14,8 +14,10 @@ struct SettingsDetailView: View {
         sharedHealthDataService: SharedHealthDataService? = nil,
         canLoadHealthKitData: Bool = true,
         hasFailedHealthKitAuthorization: Bool = false,
+        recovery: SettingsWorkoutRecovery = SettingsWorkoutRecovery(),
         onOpen: @escaping (SettingsHubRoute) -> Void
     ) {
+        self._recovery = State(initialValue: recovery)
         self.route = route
         self.sharedHealthDataService = sharedHealthDataService
         self.canLoadHealthKitData = canLoadHealthKitData
@@ -24,6 +26,7 @@ struct SettingsDetailView: View {
     }
 
     @AppStorage(CloudSyncPreferenceStore.storageKey) private var isCloudSyncEnabled = false
+    @AppStorage(NearbyWorkoutTransfer.preferenceKey) private var nearbyWorkoutTransferEnabled = false
     @AppStorage(SimulatorAdvancedMockDataModeStore.storageKey) private var isSimulatorMockEnabled = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.openURL) private var openURL
@@ -37,6 +40,7 @@ struct SettingsDetailView: View {
     @State private var liveActivityPreferences = WorkoutLiveActivityPreferences.read()
     @State private var isProcessingSimulatorMockData = false
     @State private var simulatorMockStatusMessage: String?
+    @State private var recovery: SettingsWorkoutRecovery
     @State private var isSyncing = false
     @State private var lastCloudSyncDate: Date?
 
@@ -386,6 +390,16 @@ struct SettingsDetailView: View {
             }
             .accessibilityIdentifier("settings-row-icloud-sync")
 
+            Toggle(isOn: $nearbyWorkoutTransferEnabled) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text("Nearby Workout Sync")
+                    Text("Turn this on in DUNE on both devices. Workouts, metrics and recorded locations transfer directly to a nearby Mac using the same Apple Account and iCloud Keychain.")
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+            }
+            .accessibilityIdentifier("settings-row-nearby-workouts")
+
             Button {
                 triggerCloudKitSync()
             } label: {
@@ -402,8 +416,40 @@ struct SettingsDetailView: View {
                     Image(systemName: "arrow.triangle.2.circlepath.icloud")
                 }
             }
-            .disabled(isSyncing)
+            .disabled(isSyncing || !isCloudSyncEnabled)
             .accessibilityIdentifier("settings-row-force-sync")
+
+            NavigationLink {
+                CloudRecoverySettingsView()
+            } label: {
+                Label("Encrypted Backup File", systemImage: "lock.document")
+            }
+            .accessibilityIdentifier("settings-row-encrypted-backup")
+
+            Button {
+                Task {
+                    await recovery.restore {
+                        let container = modelContext.container
+                        let result = try await LegacyWorkoutRecovery.restore(into: container)
+                        NotificationCenter.default.post(name: BackupFileWorkflow.didRestoreRecords, object: container)
+                        return result
+                    }
+                }
+            } label: {
+                Label("Restore DUNE records from an earlier iCloud backup", systemImage: "icloud.and.arrow.down")
+            }
+            .disabled(recovery.isRestoring)
+            .accessibilityIdentifier("settings-row-restore-legacy-workouts")
+
+            if recovery.isRestoring {
+                ProgressView("Reading your earlier iCloud backup…")
+            } else if let message = recovery.message {
+                Text(verbatim: message)
+                    .font(.footnote)
+                    .foregroundStyle(DS.Color.textSecondary)
+                    .accessibilityIdentifier("settings-legacy-workout-recovery-status")
+            }
+
 
             Button {
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
@@ -430,6 +476,7 @@ struct SettingsDetailView: View {
         }
     }
 
+
     private var locationStatusText: String {
         switch locationStatus {
         case .authorizedWhenInUse: String(localized: "When In Use")
@@ -455,18 +502,11 @@ struct SettingsDetailView: View {
         guard !isSyncing else { return }
         isSyncing = true
 
-        // Dummy write + delete triggers CloudKit sync cycle
-        let marker = ExerciseRecord(
-            date: .distantPast,
-            exerciseType: "__cloudkit_sync_trigger__",
-            duration: 0
-        )
-        modelContext.insert(marker)
-        try? modelContext.save()
-        modelContext.delete(marker)
-        try? modelContext.save()
-
-        lastCloudSyncDate = Date()
+        let favoritesSynced = QuickStartFavoriteSync.synchronize(in: modelContext)
+        let routinesSynced = ExerciseLibraryBackup.synchronize(in: modelContext)
+        if favoritesSynced && routinesSynced {
+            lastCloudSyncDate = Date()
+        }
 
         Task {
             try? await Task.sleep(nanoseconds: 2_000_000_000)
@@ -561,5 +601,37 @@ struct SettingsDetailView: View {
 #Preview {
     NavigationStack {
         SettingsDetailView(route: .workout, onOpen: { _ in })
+    }
+}
+
+@Observable
+@MainActor
+final class SettingsWorkoutRecovery {
+    private(set) var isRestoring = false
+    private(set) var message: String?
+
+    func restore(using operation: () async throws -> LegacyWorkoutRecovery.Result) async {
+        guard !isRestoring else { return }
+        isRestoring = true
+        message = nil
+        defer { isRestoring = false }
+        do {
+            let result = try await operation()
+            if result.workouts + result.sets + result.locations + result.otherRecords == 0 {
+                message = String(localized: "Recovery finished. No new records were added.")
+            } else {
+                let heading = String(localized: "Restored to this device")
+                let exercise = String(localized: "Workouts · \(result.workouts)    Sets · \(result.sets)")
+                let other = String(localized: "Workout locations · \(result.locations)    Other records · \(result.otherRecords)")
+                message = [heading, exercise, other].joined(separator: "\n")
+            }
+        } catch LegacyWorkoutRecovery.Failure.duplicateIdentity,
+                LegacyWorkoutRecovery.Failure.invalidRelationship,
+                LegacyWorkoutRecovery.Failure.localConflict,
+                LegacyWorkoutRecovery.Failure.invalidRecord {
+            message = String(localized: "Some backup records conflict with this device or could not be read. Recovery stopped before saving changes.")
+        } catch {
+            message = String(localized: "Couldn’t finish recovery. Check your iCloud connection and try again.")
+        }
     }
 }
