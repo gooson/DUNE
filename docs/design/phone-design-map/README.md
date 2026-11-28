@@ -81,6 +81,8 @@ Watch의 [68개 상태별 맵](actual/watch/index.html)에는 기본 글자 크�
 
 ## 화면 수정 시 갱신
 
+2026-11-29 운동 상세(W28)와 공용 모달의 테마 내비게이션을 정리했다. [새 실제 화면과 기기별 캡처 범위](actual/modal-navigation-2026-11-29/index.html)에 라이트·다크 원본 PNG와 XCTest 출처를 등록했다. [모달 레이아웃 기준](../layout-map/modal-navigation.md)을 따른다.
+
 2026-11-28 [암호화 백업 파일과 복구 키 보관 화면](actual/workout-restore-2026-11-28/index.html)을 전용 iPhone 18 Pro 시뮬레이터에서 확인했다. 전체 기록의 기기·외장 저장과 화면 설정·단위의 파일 내보내기를 구별하는 UI 검사 1건이 통과했다. 키는 캡처에서 가려져 있다.
 
 2026-11-28 [iCloud 동의 T02와 설정 S01 개인정보](actual/workout-restore-2026-11-28/index.html)를 전용 iPhone 18 Pro 시뮬레이터의 실제 캡처로 갱신했다. 두 UI 검사가 통과했고 iPad·Duo·저장소 오류 화면은 미검증이다.

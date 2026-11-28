@@ -107,6 +107,8 @@ struct CardioAtlasPlacePicker: View {
                         }
                     }
                 }
+                .scrollContentBackground(.hidden)
+                .background { SheetWaveBackground() }
                 .navigationTitle("Choose place")
                 .navigationBarTitleDisplayMode(.inline)
                 .searchable(text: $query, isPresented: $isSearchPresented,

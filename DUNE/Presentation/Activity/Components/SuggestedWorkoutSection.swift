@@ -653,8 +653,11 @@ private struct RecommendationEquipmentSheet: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background { SheetWaveBackground() }
             .accessibilityIdentifier("activity-recommendation-equipment-sheet")
             .englishNavigationTitle(title)
+            .navigationBarTitleDisplayMode(dynamicTypeSize.isAccessibilitySize ? .inline : .automatic)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button("Done") {

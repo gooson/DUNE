@@ -57,7 +57,7 @@ struct ExerciseSessionDetailView: View {
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("exercise-session-detail-scroll")
         .background { DetailWaveBackground() }
-        .englishNavigationTitle(record.exerciseType)
+        .englishNavigationTitle(resolvedTitle)
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await loadHeartRate()
@@ -69,6 +69,7 @@ struct ExerciseSessionDetailView: View {
                     ExerciseHistoryView(
                         exerciseDefinitionID: defID,
                         exerciseName: record.exerciseType,
+                        navigationName: resolvedTitle,
                         isPresentedInSheet: true
                     )
                         .toolbar {
@@ -373,7 +374,11 @@ struct ExerciseSessionDetailView: View {
 
             } else {
                 NavigationLink {
-                    ExerciseHistoryView(exerciseDefinitionID: defID, exerciseName: record.exerciseType)
+                    ExerciseHistoryView(
+                        exerciseDefinitionID: defID,
+                        exerciseName: record.exerciseType,
+                        navigationName: resolvedTitle
+                    )
                 } label: { historyLinkLabel }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("exercise-session-view-history")

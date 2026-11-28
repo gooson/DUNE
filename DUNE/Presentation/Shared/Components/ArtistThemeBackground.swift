@@ -43,39 +43,18 @@ struct ArtistThemeBackground: View {
                 .clipped()
                 .opacity(scheme == .dark ? 0.70 : 0.96)
                 .overlay {
-                    if placement == .sheet {
-                        LinearGradient(stops: [
-                            .init(color: ground.opacity(0.93), location: 0),
-                            .init(color: ground.opacity(0.58), location: 0.32),
-                            .init(color: .clear, location: 0.68)
-                        ], startPoint: .leading, endPoint: .trailing)
-                    } else {
-                        // Keep native titles legible without obscuring one side of the artwork.
-                        LinearGradient(stops: [
-                            .init(color: ground.opacity(0.32), location: 0),
-                            .init(color: ground.opacity(0.12), location: 0.4),
-                            .init(color: ground.opacity(0.32), location: 1)
-                        ], startPoint: .top, endPoint: .bottom)
-                    }
+                    // Keep the artwork continuous behind the title and the content.
+                    LinearGradient(stops: [
+                        .init(color: ground.opacity(0.32), location: 0),
+                        .init(color: ground.opacity(0.12), location: 0.4),
+                        .init(color: ground.opacity(0.32), location: 1)
+                    ], startPoint: .top, endPoint: .bottom)
                 }
                 .overlay {
                     LinearGradient(stops: [
                         .init(color: .clear, location: placement == .tab ? 0.69 : 0.80),
                         .init(color: ground, location: 1)
                     ], startPoint: .top, endPoint: .bottom)
-                }
-                .overlay(alignment: .top) {
-                    if placement == .sheet {
-                        let chromeHeight: CGFloat = 52
-                        let fadeHeight = chromeHeight + 28
-                        let scrim = ground.opacity(scheme == .dark ? 0.89 : 0.78)
-                        LinearGradient(stops: [
-                            .init(color: scrim, location: 0),
-                            .init(color: scrim, location: chromeHeight / fadeHeight),
-                            .init(color: .clear, location: 1)
-                        ], startPoint: .top, endPoint: .bottom)
-                        .frame(height: fadeHeight)
-                    }
                 }
                 .clipped()
             }

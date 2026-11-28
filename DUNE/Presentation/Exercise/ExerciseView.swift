@@ -121,15 +121,24 @@ struct ExerciseView: View {
             .confirmDeleteRecord($recordToDelete, context: modelContext)
             .sheet(item: $sheetExercise) { selected in
                 // The sheet owns its item until dismissal, including a cancelled drag.
-                workoutInspector(for: ExerciseListItem.Selection(selected).resolve(in: viewModel.allExercises) ?? selected) {
-                    sheetExercise = nil
+                let item = ExerciseListItem.Selection(selected).resolve(in: viewModel.allExercises) ?? selected
+                NavigationStack {
+                    exerciseDetail(item)
+                        .id(item.id)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Close", systemImage: "xmark") { sheetExercise = nil }
+                                    .labelStyle(.iconOnly)
+                                    .accessibilityIdentifier("exercise-inspector-close")
+                            }
+                        }
                 }
             }
             .inspector(isPresented: Binding(
                 get: { inspectedExercise != nil },
                 set: { if !$0 { inspectedExercise = nil } }
             )) {
-                workoutInspector(for: inspectedExercise?.resolve(in: viewModel.allExercises), closeEdge: .bottom) {
+                workoutInspector(for: inspectedExercise?.resolve(in: viewModel.allExercises)) {
                     inspectedExercise = nil
                 }
                 .inspectorColumnWidth(min: 320, ideal: 420, max: 540)
@@ -138,24 +147,20 @@ struct ExerciseView: View {
 
     private func workoutInspector(
         for item: ExerciseListItem?,
-        closeEdge: VerticalEdge = .top,
         close: @escaping () -> Void
     ) -> some View {
-        let closeRow = HStack {
-            Spacer()
-            Button("Done", action: close)
-                .accessibilityIdentifier("exercise-inspector-close")
-        }
-        .padding()
-
-        return NavigationStack {
+        NavigationStack {
             VStack(spacing: 0) {
-                if closeEdge == .top { closeRow }
                 if let item {
                     exerciseDetail(item)
                         .id(item.id)
                 }
-                if closeEdge == .bottom { closeRow }
+                HStack {
+                    Spacer()
+                    Button("Done", action: close)
+                        .accessibilityIdentifier("exercise-inspector-close")
+                }
+                .padding()
             }
         }
     }

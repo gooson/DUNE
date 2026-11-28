@@ -89,9 +89,9 @@ SwiftUI View와 인라인 프레젠테이션 **111개**를 화면 단위로 대�
 | W23 | 유산소 시작 설정 | 운동 선택 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/CardioSession/CardioStartSheet.swift:5` |
 | W24 | 유산소 운동 중 | 유산소 시작 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Exercise/CardioSession/CardioSessionView.swift:5` |
 | W25 | 유산소 완료 | 유산소 운동 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Exercise/CardioSession/CardioSessionSummaryView.swift:5` |
-| W26 | 운동 기록 목록 | 운동 목록·활동 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Exercise/ExerciseHistoryView.swift:5` |
-| W27 | 근력 기록 상세 | 운동 기록 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Exercise/ExerciseSessionDetailView.swift:5` |
-| W28 | HealthKit 운동 상세 | 활동 최근 운동 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Exercise/HealthKitWorkoutDetailView.swift:5` |
+| W26 | 운동 기록 목록 | 운동 목록·활동 | push/sheet | 운동 상세에서는 시트 · 기타 진입은 push | 상세 콘텐츠 | 좁은 자세에서 시트 | `DUNE/Presentation/Exercise/ExerciseHistoryView.swift:5` |
+| W27 | 근력 기록 상세 | 운동 기록 | push/sheet/inspector | 운동 목록에서는 시트 · 기타 진입은 push | 운동 목록 선택 상세 패널 | 접힘 시트 · 펼침 상세 패널 | `DUNE/Presentation/Exercise/ExerciseSessionDetailView.swift:5` |
+| W28 | HealthKit 운동 상세 | 활동 최근 운동 | push/sheet/inspector | 운동 목록에서는 시트 · 기타 진입은 push | 운동 목록 선택 상세 패널 | 접힘 시트 · 펼침 상세 패널 | `DUNE/Presentation/Exercise/HealthKitWorkoutDetailView.swift:5` |
 | W29 | 운동 분류 관리 | 운동 목록 | push | 상세 push · 한 열 | 상세 콘텐츠 | 선택·스크롤 유지 | `DUNE/Presentation/Exercise/Components/UserCategoryManagementView.swift:5` |
 | W30 | 운동 분류 편집 | 분류 관리 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/Components/UserCategoryManagementView.swift:113` |
 | W31 | 마지막 세트 선택 | 운동 중 | sheet | 화면 내 시트 | 시트 · 보조 패널 | 닫힘/내부 시트 | `DUNE/Presentation/Exercise/WorkoutSessionView.swift` |

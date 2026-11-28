@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DUNE iOS 모달 내비게이션 실제 화면</title>
+<style>
+:root { color-scheme: light dark; }
+body { font: 16px system-ui, sans-serif; margin: 0; }
+main { margin: auto; max-width: 68rem; padding: 1.5rem; }
+.gallery { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+figure { margin: 0; }
+figcaption { margin-bottom: .6rem; }
+small { display: block; }
+img { width: 100%; height: auto; display: block; }
+.duo-landscape a { display: block; position: relative; aspect-ratio: 2852 / 2006; }
+.duo-landscape img { position: absolute; top: 50%; left: 50%; width: 70.34%; transform: translate(-50%, -50%) rotate(90deg); }
+</style>
+<main>
+<p><a href="../index.html">전체 실제 화면 디자인맵</a></p>
+<h1>iOS 모달 내비게이션</h1>
+<p>원본은 전용 QA 앱의 XCTest 첨부 이미지다. 운동 기록은 재현용 샘플을 사용했다. Duo는 활성 LCD·LCD-1과 앱 화면을 확인했고, 펼침 미리보기는 읽는 방향으로 표시한다. <a href="captures.json">기기, 빌드 기준, XCTest 및 PNG 해시</a></p>
+<section class="gallery" aria-label="실제 화면">
+  <figure><figcaption>W28 운동 상세 · 라이트<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w28-light.png"><img src="w28-light.png" alt="W28 운동 상세 · 라이트 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>W28 운동 상세 · 다크<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w28-dark.png"><img src="w28-dark.png" alt="W28 운동 상세 · 다크 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>W33 운동 이름 편집 · 라이트<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w33-light.png"><img src="w33-light.png" alt="W33 운동 이름 편집 · 라이트 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>W33 운동 이름 편집 · 다크<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w33-dark.png"><img src="w33-dark.png" alt="W33 운동 이름 편집 · 다크 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>CA03 아틀라스 저니 · 라이트<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="atlas-journey-light.png"><img src="atlas-journey-light.png" alt="CA03 아틀라스 저니 · 라이트 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>CA03 아틀라스 저니 · 다크<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="atlas-journey-dark.png"><img src="atlas-journey-dark.png" alt="CA03 아틀라스 저니 · 다크 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>CA04 아틀라스 패스포트 · 라이트<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="atlas-passport-light.png"><img src="atlas-passport-light.png" alt="CA04 아틀라스 패스포트 · 라이트 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>CA04 아틀라스 패스포트 · 다크<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="atlas-passport-dark.png"><img src="atlas-passport-dark.png" alt="CA04 아틀라스 패스포트 · 다크 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>W27 아틀라스 확대 지도<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="atlas-expanded-map.png"><img src="atlas-expanded-map.png" alt="W27 아틀라스 확대 지도 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>CA02 아틀라스 장소 편집<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="atlas-place.png"><img src="atlas-place.png" alt="CA02 아틀라스 장소 편집 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>CA05–CA07 아틀라스 공유 · 라이트<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="atlas-share-light.png"><img src="atlas-share-light.png" alt="CA05–CA07 아틀라스 공유 · 라이트 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>CA05–CA07 아틀라스 공유 · 다크<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="atlas-share-dark.png"><img src="atlas-share-dark.png" alt="CA05–CA07 아틀라스 공유 · 다크 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>CA05–CA07 공유 본문 스크롤 후 · 라이트<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="atlas-share-light-scrolled.png"><img src="atlas-share-light-scrolled.png" alt="CA05–CA07 공유 본문 스크롤 후 · 라이트 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>CA05–CA07 공유 본문 스크롤 후 · 다크<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="atlas-share-dark-scrolled.png"><img src="atlas-share-dark-scrolled.png" alt="CA05–CA07 공유 본문 스크롤 후 · 다크 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>T06 비교 그룹 선택<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="peer-criteria.png"><img src="peer-criteria.png" alt="T06 비교 그룹 선택 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>W32 운동 분석<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w32.png"><img src="w32.png" alt="W32 운동 분석 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>W02 운동 선택 · 다크<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w02-dark.png"><img src="w02-dark.png" alt="W02 운동 선택 · 다크 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>H05 신체 기록 · 다크<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="h05-dark.png"><img src="h05-dark.png" alt="H05 신체 기록 · 다크 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>L02 습관 추가 · 다크<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="l02-dark.png"><img src="l02-dark.png" alt="L02 습관 추가 · 다크 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>H04 지표 비교<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="metric-comparison.png"><img src="metric-comparison.png" alt="H04 지표 비교 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>A20 추천 장비 · 최대 글자 크기<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="equipment-max.png"><img src="equipment-max.png" alt="A20 추천 장비 · 최대 글자 크기 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>W27 수동 운동 상세<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w27.png"><img src="w27.png" alt="W27 수동 운동 상세 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>W26 운동 이력<small>iPhone 18 Pro Max 시뮬레이터 · iOS 27.2</small></figcaption><a href="w26.png"><img src="w26.png" alt="W26 운동 이력 실제 앱 화면" width="1320" height="2868" loading="lazy"></a></figure>
+  <figure><figcaption>W28 운동 상세 · 넓은 패널<small>iPad Pro 13형 (M5) 시뮬레이터 · iPadOS 27.2</small></figcaption><a href="ipad-w28.png"><img src="ipad-w28.png" alt="W28 운동 상세 · 넓은 패널 실제 앱 화면" width="2064" height="2752" loading="lazy"></a></figure>
+  <figure><figcaption>W32 운동 분석 · 시트<small>iPad Pro 13형 (M5) 시뮬레이터 · iPadOS 27.2</small></figcaption><a href="ipad-w32.png"><img src="ipad-w32.png" alt="W32 운동 분석 · 시트 실제 앱 화면" width="2064" height="2752" loading="lazy"></a></figure>
+  <figure><figcaption>W28 운동 상세 · 접힘<small>iPhone Duo 시뮬레이터 · LCD 활성</small></figcaption><a href="duo-close-w28.png"><img src="duo-close-w28.png" alt="W28 운동 상세 · 접힘 실제 앱 화면" width="1398" height="2034" loading="lazy"></a></figure>
+  <figure class="duo-landscape"><figcaption>W28 운동 상세 · 펼침<small>iPhone Duo 시뮬레이터 · LCD-1 활성</small></figcaption><a href="duo-open-w28.png"><img src="duo-open-w28.png" alt="W28 운동 상세 · 펼침 실제 앱 화면" width="2006" height="2852" loading="lazy"></a></figure>
+</section>
+<h2>추가 캡처 범위</h2><ul><li>W28·W33과 아틀라스의 실물 iPhone 캡처는 아직 없다.</li><li>iPad의 W27·W33·A20 및 다른 공용 시트는 새로 캡처하지 않았다.</li><li>Duo의 W26·W27·W32·W33·A20 및 공용 시트는 새로 캡처하지 않았다. W28은 원본이 등록된 자세에서 확인했다.</li><li>공용 배경을 쓰는 iPhone 화면 중 T02·T09·T17–T18, A13–A19, W03–W05·W09–W14·W19–W20·W23·W30, H08·H12–H14, P03, L03·L05–L06·L09는 이 갤러리에 새 원본을 등록하지 않았다. T18과 L05에서의 동작 확인은 UI 실행 결과에 포함된다.</li></ul>
+</main>
+</html>

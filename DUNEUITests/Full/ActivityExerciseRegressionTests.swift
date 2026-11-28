@@ -516,7 +516,7 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         VisualAudit.capture("W32 iPad sheet fallback normal top")
         let done = app.buttons["workout-insights-close"].firstMatch
         XCTAssertTrue(done.waitForExistence(timeout: 5) && done.isHittable,
-                      "W32 fallback sheet must keep Done reachable")
+                      "W32 fallback sheet must keep Close reachable")
         XCTAssertTrue(app.windows.firstMatch.frame.insetBy(dx: 4, dy: 4).contains(done.frame),
                       "W32 Done must fit fully within the iPad window")
         done.auditTap()
@@ -3735,13 +3735,33 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         XCTAssertTrue(done.wait(for: \.isHittable, toEqual: true, timeout: 5),
                       "The inspector close control should be reachable")
 
-        let header = done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-            .withOffset(CGVector(dx: -80, dy: 0))
-        if compact {
+        let edit = app.buttons["healthkit-workout-edit-title"].firstMatch
+        func sheetHeader() -> XCUICoordinate {
+            done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                .withOffset(CGVector(dx: (edit.frame.midX - done.frame.midX) / 2, dy: 0))
+        }
+        let sideToolbar = app.toolbars
+            .containing(.button, identifier: "exercise-inspector-close")
+            .containing(.button, identifier: "healthkit-workout-edit-title")
+            .firstMatch
+        let bar = app.navigationBars["Tempo Run"].firstMatch
+        let closePoint = CGPoint(x: done.frame.midX, y: done.frame.midY)
+        // The Duo cover display places native toolbar actions in its system rail.
+        let usesSideToolbar = compact && sideToolbar.exists && bar.exists && !bar.frame.contains(closePoint)
+        if usesSideToolbar {
+            XCTAssertTrue(edit.isHittable)
+            XCTAssertEqual(done.frame.midX, edit.frame.midX, accuracy: 4)
+            XCTAssertLessThan(done.frame.midY, edit.frame.midY)
+        } else if compact {
+            XCTAssertTrue(edit.isHittable)
+            XCTAssertEqual(done.frame.midY, edit.frame.midY, accuracy: 4)
+            let header = sheetHeader()
             header.press(forDuration: 0.15, thenDragTo: header.withOffset(CGVector(dx: 0, dy: 32)),
                          withVelocity: .slow, thenHoldForDuration: 0.4)
             XCTAssertTrue(detail.isHittable && done.isHittable, "A partial drag must keep the detail visible")
-            XCTAssertLessThan(done.frame.midY, detail.frame.minY)
+            XCTAssertTrue(bar.exists)
+            XCTAssertTrue(bar.frame.contains(CGPoint(x: done.frame.midX, y: done.frame.midY)),
+                          "The close action should remain in the workout navigation bar")
         } else {
             XCTAssertGreaterThanOrEqual(done.frame.minY, detail.frame.maxY)
         }
@@ -3753,7 +3773,8 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         row.auditTap()
         XCTAssertTrue(detail.waitForExistence(timeout: 8) && detail.isHittable)
         XCTAssertTrue(done.isHittable)
-        if compact {
+        if compact && !usesSideToolbar {
+            let header = sheetHeader()
             header.press(forDuration: 0.1, thenDragTo: header.withOffset(CGVector(dx: 0, dy: app.frame.height * 0.65)))
         } else {
             done.auditTap()
@@ -3794,6 +3815,12 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
         benchPressRow.auditTap()
         let detailScroll = app.scrollViews["exercise-session-detail-scroll"].firstMatch
         XCTAssertTrue(detailScroll.waitForExistence(timeout: 5), "Selected workout details should appear\n\(app.debugDescription)")
+        let workoutBars = app.navigationBars.matching(NSPredicate(
+            format: "identifier IN %@", [Fixture.benchPressLocalizedName, "Barbell Bench Press", "バーベルベンチプレス"]
+        ))
+        XCTAssertTrue(workoutBars.firstMatch.waitForExistence(timeout: 5),
+                      "The navigation title must show the recorded exercise")
+        addScreenshotAttachment(named: "W27 native workout title")
         for _ in 0..<6 where !historyLink.isHittable { detailScroll.swipeUp() }
         XCTAssertTrue(historyLink.exists && historyLink.isHittable,
                       "Reopening the same workout should make its history reachable\n\(app.debugDescription)")
@@ -3803,6 +3830,11 @@ final class ActivityExerciseRegressionTests: ActivityExerciseSeededUITestBaseCas
             app.descendants(matching: .any)[AXID.exerciseHistoryScreen].firstMatch.waitForExistence(timeout: 10),
             "Exercise history screen should open"
         )
+        if app.windows.firstMatch.horizontalSizeClass == .compact {
+            let historyBar = workoutBars.containing(.button, identifier: "exercise-history-close").firstMatch
+            XCTAssertTrue(historyBar.waitForExistence(timeout: 5), "Exercise history should use the same workout name")
+        }
+        addScreenshotAttachment(named: "W26 native history title")
     }
 
     func testVisualAuditExerciseHistoryFromSelectedWorkout() throws {
